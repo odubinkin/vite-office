@@ -29,12 +29,26 @@ describe("App" /**
       screen.getByText(/Untitled Writer Document is a serializable new document/),
     ).toBeInTheDocument();
     const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    const undoButton = screen.getByRole("button", { name: "Undo" });
+    const redoButton = screen.getByRole("button", { name: "Redo" });
     expect(editor).toHaveValue("");
+    expect(undoButton).toBeDisabled();
+    expect(redoButton).toBeDisabled();
     expect(screen.getByRole("status")).toHaveTextContent("New document · revision 0");
     fireEvent.change(editor, { target: { value: "A browser-authored paragraph." } });
     expect(editor).toHaveValue("A browser-authored paragraph.");
+    expect(undoButton).toBeEnabled();
+    fireEvent.click(undoButton);
+    expect(editor).toHaveValue("");
+    expect(redoButton).toBeEnabled();
+    fireEvent.click(redoButton);
+    expect(editor).toHaveValue("A browser-authored paragraph.");
+    fireEvent.click(undoButton);
+    fireEvent.change(editor, { target: { value: "A branched paragraph." } });
+    expect(redoButton).toBeDisabled();
+    fireEvent.change(editor, { target: { value: "A branched paragraph." } });
     expect(screen.getByRole("status")).toHaveTextContent("Unsaved changes · revision 1");
-    expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length);
+    expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length + 2);
   });
 
   it("updates the preview and live status when a suite is selected" /**

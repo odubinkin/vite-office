@@ -7,26 +7,42 @@ import type { WriterParagraph } from "../domain/writer";
 
 /** Defines the immutable state and callback required by the Writer plain-text editor. */
 export interface WriterPlainTextEditorProps {
+  /** Whether a following snapshot exists for the Redo control. */
+  readonly canRedo: boolean;
+  /** Whether a preceding snapshot exists for the Undo control. */
+  readonly canUndo: boolean;
   /** Shared Writer header whose lifecycle feedback is rendered without mutation. */
   readonly document: OfficeDocument;
   /** Immutable paragraph whose complete text is bound to the editing control. */
   readonly paragraph: WriterParagraph;
   /** Receives the complete next paragraph text after a user editing event. */
   readonly onTextChange: (text: string) => void;
+  /** Requests restoration of the following immutable Writer snapshot. */
+  readonly onRedo: () => void;
+  /** Requests restoration of the preceding immutable Writer snapshot. */
+  readonly onUndo: () => void;
 }
 
 /**
  * Renders one labelled textarea backed by an immutable Writer paragraph model.
  *
  * @param props - Immutable Writer state and callback for a complete-text replacement.
+ * @param props.canRedo - Whether the forward-history control is enabled.
+ * @param props.canUndo - Whether the backward-history control is enabled.
  * @param props.document - Header providing lifecycle and revision feedback.
+ * @param props.onRedo - Callback that restores the following history snapshot.
  * @param props.paragraph - First Writer paragraph displayed by this bounded editor.
  * @param props.onTextChange - Callback receiving complete user-entered paragraph text.
+ * @param props.onUndo - Callback that restores the preceding history snapshot.
  * @returns A Writer-only accessible editing region without formatting or persistence controls.
  */
 export function WriterPlainTextEditor({
+  canRedo,
+  canUndo,
   document,
+  onRedo,
   onTextChange,
+  onUndo,
   paragraph,
 }: WriterPlainTextEditorProps): React.JSX.Element {
   const lifecycleLabel = document.lifecycle === "new" ? "New document" : "Unsaved changes";
@@ -58,6 +74,25 @@ export function WriterPlainTextEditor({
         <p aria-live="polite" className="text-sm font-medium text-slate-700" role="status">
           {lifecycleLabel} · revision {document.revision}
         </p>
+      </div>
+
+      <div aria-label="Writer history controls" className="mt-5 flex flex-wrap gap-2" role="group">
+        <button
+          className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-indigo-400 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={!canUndo}
+          onClick={onUndo}
+          type="button"
+        >
+          Undo
+        </button>
+        <button
+          className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-indigo-400 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={!canRedo}
+          onClick={onRedo}
+          type="button"
+        >
+          Redo
+        </button>
       </div>
 
       <label
