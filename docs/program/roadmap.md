@@ -83,6 +83,13 @@ core build-module inventory has exact core-commit provenance and explicit
 `unmapped` status. It is a structural handoff for later atomic source, test, and
 documentation extractors; it does not change a parity-matrix capability status.
 
+### Task 0.4c — Core test-constructor extractor
+
+Completed by AgentPlane task `202608100905-Q9AWEJ`. The generated 565-record
+core test inventory covers exact gbuild constructor invocations: 415 CppUnit,
+58 JUnit, 13 Python, and 79 UI tests. Records are provenance-only and
+`unmapped`; assertion, fixture, and documentation mapping remains separate work.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:
