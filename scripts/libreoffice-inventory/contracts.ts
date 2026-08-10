@@ -210,6 +210,38 @@ export interface HelpTopicInventory {
   readonly summary: Readonly<Record<string, number>>;
 }
 
+/** Describes one pinned LibreOffice PO catalog path without copying translated message content. */
+export interface TranslationCatalogRecord {
+  /** Pinned translations repository commit that makes the catalog path reproducible. */
+  readonly commit: string;
+  /** Corpus identity proving the catalog belongs to the LibreOffice translations repository. */
+  readonly corpusId: "translations";
+  /** Stable identifier derived only from the exact repository-relative PO catalog path. */
+  readonly id: string;
+  /** Locale derived from source/<locale>/ in the repository-relative catalog path. */
+  readonly locale: string;
+  /** Explicit handoff state until a later task maps catalog content to implemented localization behavior. */
+  readonly mappingStatus: "unmapped";
+  /** Exact translations-repository-relative PO catalog path. */
+  readonly referencePath: string;
+}
+
+/** Defines the canonical generated inventory for pinned LibreOffice PO catalog paths. */
+export interface TranslationCatalogInventory {
+  /** Always translations because core and other auxiliary corpora are outside this extraction. */
+  readonly corpusId: "translations";
+  /** Stable generator identifier distinguishing generated catalog metadata from authored source. */
+  readonly generatedBy: "inventory:translations";
+  /** Deterministically sorted PO catalog records. */
+  readonly records: readonly TranslationCatalogRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+  /** Exact per-locale catalog counts used as a pinned completeness guard. */
+  readonly summary: Readonly<Record<string, number>>;
+  /** Pinned translations commit shared by every generated catalog record. */
+  readonly translationsCommit: string;
+}
+
 /** Holds an error collection produced when a manifest or local checkout violates the inventory contract. */
 export class BaselineValidationError extends Error {
   /** Machine-readable validation failures collected before execution stopped. */

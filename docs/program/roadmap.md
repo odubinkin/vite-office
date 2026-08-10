@@ -98,6 +98,14 @@ the `helpcontent2` corpus. Its records retain only path-level provenance and
 explicit `unmapped` status; topic-content, license, local-documentation, and
 behavioral mappings remain separate work.
 
+### Task 0.4e — Translation PO catalog extractor
+
+Completed by AgentPlane task `202608100934-CXVVNV`. The generated 25,699-record
+translation-catalog inventory covers every pinned `source/<locale>/**/*.po`
+path across 131 locale directories in the `translations` corpus. Its records
+retain only path-level provenance and explicit `unmapped` status; message-level,
+locale-behavior, license, and local-UI mappings remain separate work.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:

@@ -116,6 +116,8 @@ The following documents form the program control plane:
   declarations awaiting assertion, fixture, and parity-ID mapping.
 - [Help topic inventory](help-topic-inventory.md): generated XHP help-path
   provenance awaiting topic, license, and local-documentation mapping.
+- [Translation catalog inventory](translation-catalog-inventory.md): generated
+  PO catalog provenance awaiting message, locale, license, and local-UI mapping.
 - [Architecture](architecture.md): browser domain boundaries and constraints.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
