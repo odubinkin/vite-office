@@ -1,10 +1,11 @@
 ---
 id: "202608101030-KVFYSK"
 title: "Extract pinned LibreOffice JunitTest source targets into atomic records"
-status: "DOING"
+result_summary: "verified-202608101030-KVFYSK"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-10T10:42:00.725Z"
-  updated_by: "REVIEWER"
-  note: "Verified: full npm verify passed; regeneration was byte-identical; all 160 Junit Java targets link to constructor IDs with 156 tracked and 4 explicit missing paths."
+  updated_at: "2026-08-10T10:42:32.168Z"
+  updated_by: "CODER"
+  note: "verified-202608101030-KVFYSK"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "No defects found; full verification, path classification, and deterministic regeneration passed."
-commit: null
+commit:
+  hash: "ad537db032404d9f381b28044380bc5988c5c438"
+  message: "🚧 KVFYSK task: record Java target verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: extract deterministic linked Java source-target provenance from pinned JunitTest declarations."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608101030-KVFYSK. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: full npm verify passed; regeneration was byte-identical; all 160 Junit Java targets link to constructor IDs with 156 tracked and 4 explicit missing paths."
+  -
+    type: "verify"
+    at: "2026-08-10T10:42:32.168Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608101030-KVFYSK"
+  -
+    type: "status"
+    at: "2026-08-10T10:42:32.426Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608101030-KVFYSK. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-10T10:42:00.840Z"
+doc_updated_at: "2026-08-10T10:42:32.427Z"
 doc_updated_by: "CODER"
 description: "Parse pinned gb_JunitTest_add_sourcefiles declarations into deterministic provenance-only Java source-target records linked to existing JunitTest constructor IDs without copying source content or claiming test parity."
 sections:
@@ -103,9 +122,43 @@ sections:
     - runner_failure_means: runner_infrastructure_or_task_unknown
     - risks: runner_rail_confusion
 
+    ### 2026-08-10T10:42:32.168Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608101030-KVFYSK
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T10:42:00.840Z, excerpt_hash=sha256:ee46a39c937640e5458bf76d2edf3bae134e83bdc578303bb220d162a5157ab0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608101030-KVFYSK/blueprint/resolved-snapshot.json
+    - old_digest: 6b9e210e69711dd1ef1a775da95d558c86f3ff48713ebe6ae318f571f775971e
+    - current_digest: 6b9e210e69711dd1ef1a775da95d558c86f3ff48713ebe6ae318f571f775971e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608101030-KVFYSK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608101030-KVFYSK --result verified-202608101030-KVFYSK --commit ad537db032404d9f381b28044380bc5988c5c438
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task commits and rerun npm run verify; no ignored reference content is modified."
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "a8d1ebac24d3843235a0c50a532b71aa23e03c54"
+    message: "🚧 KVFYSK task: extract JunitTest Java source target inventory"
 id_source: "generated"
 ---
 ## Summary
@@ -160,6 +213,36 @@ DecisionContextRef:
 - runner_required: true
 - runner_failure_means: runner_infrastructure_or_task_unknown
 - risks: runner_rail_confusion
+
+### 2026-08-10T10:42:32.168Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608101030-KVFYSK
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T10:42:00.840Z, excerpt_hash=sha256:ee46a39c937640e5458bf76d2edf3bae134e83bdc578303bb220d162a5157ab0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608101030-KVFYSK/blueprint/resolved-snapshot.json
+- old_digest: 6b9e210e69711dd1ef1a775da95d558c86f3ff48713ebe6ae318f571f775971e
+- current_digest: 6b9e210e69711dd1ef1a775da95d558c86f3ff48713ebe6ae318f571f775971e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608101030-KVFYSK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608101030-KVFYSK --result verified-202608101030-KVFYSK --commit ad537db032404d9f381b28044380bc5988c5c438
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
 
 <!-- END VERIFICATION RESULTS -->
 
