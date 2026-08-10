@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101134-P983VK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T11:48:12.186Z",
+  "verdict": "pass",
+  "summary": "Approved Writer paragraph-body slice matches task scope and has complete deterministic evidence.",
+  "evaluated_sha": "8be0b6fda382edbee7606a66fb06bcbfa31979b8",
+  "blueprint_digest": "c2134b196ae4966bd021eff36dc7621944e169fdc95bcc5d2763c94134dee89a",
+  "findings": [
+    "No confirmed defect: create, insertion, replacement, immutable no-op, invalid inputs, Writer-only preview, and Calc transition are covered."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101134-P983VK/README.md",
+    "npm run verify (exit 0); ap doctor; node .agentplane/policy/check-routing.mjs; commit 8be0b6f"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
