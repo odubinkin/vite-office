@@ -68,6 +68,14 @@ dictionaries, and fail below the acquisition counts in the
 atomic records and report all unmapped items. Generated results must be diffable
 and validated in CI.
 
+### Task 0.4a — Baseline contract validator
+
+Task `202608100830-MT7ETT` establishes the TypeScript validator and deterministic
+JSON report that gate all later inventory generation. It validates the complete
+four-corpus pinned checkout and its acquisition floors, but intentionally does
+not create atomic inventory records or advance parity status. The remaining Task
+0.4 extractors will use this contract as their input boundary.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:

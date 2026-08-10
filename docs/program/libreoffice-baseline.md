@@ -160,4 +160,5 @@ trees. Its acquisition floor is 2,746 XHP help topics, 25,699 PO catalogs across
 131 locale directories, and 859 dictionary files. Every generated source, test,
 fixture, documentation, or localization record must name its corpus and pinned
 commit. The ignored checkout and its `.git` directories must never enter
-generated tracked artifacts.
+generated tracked artifacts. The executable input gate and stable report shape
+are defined by the [inventory contract](inventory-contract.md).

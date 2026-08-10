@@ -108,6 +108,8 @@ The following documents form the program control plane:
 - [Parity matrix](parity-matrix.md): status and traceability source of truth.
 - [LibreOffice baseline](libreoffice-baseline.md): immutable upstream identity,
   acquisition, provenance, and licensing boundary.
+- [Inventory contract](inventory-contract.md): deterministic validation of the
+  pinned four-corpus research input before atomic inventory generation.
 - [Architecture](architecture.md): browser domain boundaries and constraints.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and

@@ -16,13 +16,16 @@
     "dev": "npm run dev --workspace @vite-office/office",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "inventory:validate": "tsx scripts/libreoffice-inventory/cli.ts",
     "lint": "eslint . --max-warnings 0",
     "preview": "npm run preview --workspace @vite-office/office",
+    "test:inventory:coverage": "vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage",
     "test:coverage": "npm run test:coverage --workspace @vite-office/office",
     "test:e2e": "npm run build && playwright test --config apps/office/playwright.config.ts",
     "test:static": "npm run build && node scripts/check-static-build.mjs",
-    "typecheck": "npm run typecheck --workspace @vite-office/office",
-    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size"
+    "typecheck": "npm run typecheck:tools && npm run typecheck --workspace @vite-office/office",
+    "typecheck:tools": "tsc --project tsconfig.tools.json",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",
@@ -44,6 +47,7 @@
     "jsdom": "29.1.1",
     "prettier": "3.9.6",
     "tailwindcss": "4.3.3",
+    "tsx": "4.23.12",
     "typescript": "6.0.3",
     "typescript-eslint": "8.66.0",
     "vite": "8.2.1",

@@ -4,7 +4,7 @@ title: "Create deterministic LibreOffice inventory contracts and baseline valida
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -44,7 +44,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved typed inventory contract with deterministic validation evidence, without runners or upstream copying."
 doc_version: 3
-doc_updated_at: "2026-08-10T08:32:02.231Z"
+doc_updated_at: "2026-08-10T08:49:25.990Z"
 doc_updated_by: "CODER"
 description: "Implement a typed, documented, fully covered Node-side inventory foundation that reads the pinned baseline manifest, validates the four local Git corpora and acquisition floors, emits deterministic JSON, and establishes the next atomic inventory tasks without claiming parity."
 sections:
@@ -71,7 +71,7 @@ sections:
   Verify Steps: |-
     1. npm run typecheck:tools && npm run lint && npm run check:docs && npm run check:file-size — all new TypeScript modules, JSDoc enforcement, linting, and size policy pass.
     2. npm run test:inventory:coverage — unit tests cover every branch, function, line, and statement in scripts/libreoffice-inventory at 100%.
-    3. npm run inventory:validate -- --baseline docs/program/libreoffice-baseline.json --reference-root vendor/libreoffice-reference — validates every live core/dictionaries/helpcontent2/translations origin, annotated tag object, commit, shallow/clean state, exact tracked-file acquisition floor, 2,746 XHP topics, 25,699 PO catalogs, and 131 locales; stdout parses as deterministic JSON.
+    3. npm run --silent inventory:validate -- --baseline docs/program/libreoffice-baseline.json --reference-root vendor/libreoffice-reference — validates every live core/dictionaries/helpcontent2/translations origin, annotated tag object, commit, shallow/clean state, exact tracked-file acquisition floor, 2,746 XHP topics, 25,699 PO catalogs, and 131 locales; stdout parses as deterministic JSON.
     4. Run the command in step 3 twice and byte-compare canonical output — the inventory report is stable for unchanged input.
     5. npm run verify — the existing static-app build, unit/E2E/accessibility, docs, and size gates remain green with the inventory checks included.
     6. Resolve every changed local Markdown link; inspect git diff --check, git status --short --untracked-files=all, and git ls-files vendor/libreoffice-reference — documentation is linked, no whitespace defects or generated corpus content is tracked.
@@ -113,7 +113,7 @@ Out of scope:
 
 1. npm run typecheck:tools && npm run lint && npm run check:docs && npm run check:file-size — all new TypeScript modules, JSDoc enforcement, linting, and size policy pass.
 2. npm run test:inventory:coverage — unit tests cover every branch, function, line, and statement in scripts/libreoffice-inventory at 100%.
-3. npm run inventory:validate -- --baseline docs/program/libreoffice-baseline.json --reference-root vendor/libreoffice-reference — validates every live core/dictionaries/helpcontent2/translations origin, annotated tag object, commit, shallow/clean state, exact tracked-file acquisition floor, 2,746 XHP topics, 25,699 PO catalogs, and 131 locales; stdout parses as deterministic JSON.
+3. npm run --silent inventory:validate -- --baseline docs/program/libreoffice-baseline.json --reference-root vendor/libreoffice-reference — validates every live core/dictionaries/helpcontent2/translations origin, annotated tag object, commit, shallow/clean state, exact tracked-file acquisition floor, 2,746 XHP topics, 25,699 PO catalogs, and 131 locales; stdout parses as deterministic JSON.
 4. Run the command in step 3 twice and byte-compare canonical output — the inventory report is stable for unchanged input.
 5. npm run verify — the existing static-app build, unit/E2E/accessibility, docs, and size gates remain green with the inventory checks included.
 6. Resolve every changed local Markdown link; inspect git diff --check, git status --short --untracked-files=all, and git ls-files vendor/libreoffice-reference — documentation is linked, no whitespace defects or generated corpus content is tracked.
