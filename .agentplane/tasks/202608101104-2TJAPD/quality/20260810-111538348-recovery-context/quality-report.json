@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101104-2TJAPD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T11:15:38.348Z",
+  "verdict": "pass",
+  "summary": "Scoped UITest Python source-target provenance extraction is complete and independently verified.",
+  "evaluated_sha": "069bc80ba4348bdedde363120836e50dd844f7c1",
+  "blueprint_digest": "91c8e4f5d8ffe3012fcec291511c014f6c63f4541aeb2d4718667c6eef3f331d",
+  "findings": [
+    "649 Git-tracked physical Python paths are linked to inventoried UITest constructor IDs through 79 declared module roots."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101104-2TJAPD/README.md",
+    "069bc80; npm run test:inventory:coverage; npm run test:e2e; npm run test:static; f51b54cbc8335227fe3b59732de88ab89bf86e61be15c4ad1ac677676f4efedd"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
