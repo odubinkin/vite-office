@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101158-363KQ8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T12:02:32.623Z",
+  "verdict": "pass",
+  "summary": "Immutable transaction-history foundation matches the approved bounded scope.",
+  "evaluated_sha": "f18f81f85198eecd69e5647376638703c6955f31",
+  "blueprint_digest": "b377d825d9f85bcef7d52253b298d963c73d051a9513249db89f5e0f6ea6275d",
+  "findings": [
+    "No confirmed defect: pure cursor selection, apply/undo/redo boundaries, redo truncation, serialization, and explicit non-goals have evidence."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101158-363KQ8/README.md",
+    "npm run verify (exit 0); commits cb2923e and f18f81f"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
