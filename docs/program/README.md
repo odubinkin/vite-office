@@ -152,6 +152,8 @@ The following documents form the program control plane:
   migration limits.
 - [Browser autosave recovery orchestration](autosave-recovery.md): deterministic
   recovery state and save outcomes without timers or browser UI policy.
+- [Browser worker request cancellation protocol](worker-cancellation-protocol.md):
+  versioned request sequencing and stale/cancelled result classification.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
   publication requirements.
