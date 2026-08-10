@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101043-PBNYCF",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T11:01:38.392Z",
+  "verdict": "pass",
+  "summary": "Scoped PythonTest module provenance extraction is complete and independently verified.",
+  "evaluated_sha": "5d21c2b9b8b4d03048d5434cc7f671c13c595c59",
+  "blueprint_digest": "241da40eaa45249636891036c22f5c734d8e79b3408ebba53f1c95306f4073b2",
+  "findings": [
+    "59 module declarations link to existing constructor IDs and derive to tracked pinned Python paths."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101043-PBNYCF/README.md",
+    "5d21c2b; npm run test:inventory:coverage; npm run test:e2e; npm run test:static; d813cca54fccfc00a47689fa138a7c5b21a9a95cfc72b15b074fff690b4094e6"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
