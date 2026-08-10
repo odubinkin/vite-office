@@ -142,6 +142,8 @@ The following documents form the program control plane:
   paragraph model and pure edit transitions implemented on the lifecycle contract.
 - [Browser command registry](command-registry.md): typed, browser-independent
   command definitions, shortcut lookup, and dispatch outcomes.
+- [Browser transaction history](transaction-history.md): immutable snapshot
+  history, cursor selection, and pure apply/undo/redo transitions.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
   publication requirements.
