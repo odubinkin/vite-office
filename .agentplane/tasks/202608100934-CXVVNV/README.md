@@ -4,7 +4,7 @@ title: "Inventory pinned LibreOffice translation catalogs into atomic records"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -22,10 +22,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-08-10T09:44:21.908Z"
+  updated_by: "REVIEWER"
+  note: "Full verification, byte-stability, and exact pinned PO path comparison passed."
   attempts: 0
 commit: null
 comments:
@@ -60,8 +60,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: resume deterministic translation catalog extraction after Git write access was restored."
+  -
+    type: "verify"
+    at: "2026-08-10T09:44:21.908Z"
+    author: "REVIEWER"
+    state: "ok"
+    note: "Full verification, byte-stability, and exact pinned PO path comparison passed."
 doc_version: 3
-doc_updated_at: "2026-08-10T09:39:36.098Z"
+doc_updated_at: "2026-08-10T09:44:21.976Z"
 doc_updated_by: "CODER"
 description: "Create deterministic provenance-only records for every pinned translations .po catalog, preserving exact paths and corpus identity without copying message content or claiming localization parity."
 sections:
@@ -91,12 +97,50 @@ sections:
     5. Run `npm run verify`, `agentplane doctor`, and `node .agentplane/policy/check-routing.mjs`. Expected: full project and AgentPlane routing checks pass, and no ignored reference path is tracked.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-08-10T09:44:21.908Z — VERIFY — ok
+
+    By: REVIEWER
+
+    Note: Full verification, byte-stability, and exact pinned PO path comparison passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T09:39:36.098Z, excerpt_hash=sha256:57e577226b934bea840b3de0f1c695668b1897cec216932a5b3a9c747d5f90b7
+
+    Details:
+
+    npm run verify passed: format, lint, tool and app type checks, app and inventory coverage at 100%, Playwright E2E, static build, JSDoc, and file-size checks. Regeneration twice produced SHA-256 7a50f67e0d407682070e1a9e68c31212526fd110619d425bf3625b84f29ccd37; exact Git comparison confirmed 25,699 source/<locale> PO paths across 131 locales at translations commit 362fd2cb41c5404e3712db9fad55b2357001e1f3. ap doctor and policy routing also passed.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100934-CXVVNV/blueprint/resolved-snapshot.json
+    - old_digest: e9bd09035b6f88c7dfd9708ad6ad8c0c7e4768abca76667f47e94687ded0d255
+    - current_digest: e9bd09035b6f88c7dfd9708ad6ad8c0c7e4768abca76667f47e94687ded0d255
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608100934-CXVVNV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task run 202608100934-CXVVNV
+    - diagnostic_command: agentplane task run status 202608100934-CXVVNV
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the implementation and task-artifact commits for this task, remove the generated translation-catalog inventory with that revert, then rerun `npm run verify`. The pinned ignored checkout and existing core-module, core-test, and help-topic inventories are not modified by this task."
   Findings: |-
     - Observation: AgentPlane artifact-persistence commit could not create .git/index.lock under the restricted execution sandbox.
       Impact: No implementation files were staged or committed; task start artifacts remain unpersisted.
       Resolution: Use the permitted local Git staging path for the active task and retry the AgentPlane commit without changing scope.
+
+    - Observation: The deterministic catalog inventory contains every tracked PO path in the pinned translations corpus.
+      Impact: Message content, licensing, locale behavior, and local UI mappings remain intentionally unmapped.
+      Resolution: A later atomic message-mapping task must resolve every LO-TRANSLATION-CATALOG record.
 id_source: "generated"
 ---
 ## Summary
@@ -134,6 +178,40 @@ Out of scope:
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-08-10T09:44:21.908Z — VERIFY — ok
+
+By: REVIEWER
+
+Note: Full verification, byte-stability, and exact pinned PO path comparison passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T09:39:36.098Z, excerpt_hash=sha256:57e577226b934bea840b3de0f1c695668b1897cec216932a5b3a9c747d5f90b7
+
+Details:
+
+npm run verify passed: format, lint, tool and app type checks, app and inventory coverage at 100%, Playwright E2E, static build, JSDoc, and file-size checks. Regeneration twice produced SHA-256 7a50f67e0d407682070e1a9e68c31212526fd110619d425bf3625b84f29ccd37; exact Git comparison confirmed 25,699 source/<locale> PO paths across 131 locales at translations commit 362fd2cb41c5404e3712db9fad55b2357001e1f3. ap doctor and policy routing also passed.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100934-CXVVNV/blueprint/resolved-snapshot.json
+- old_digest: e9bd09035b6f88c7dfd9708ad6ad8c0c7e4768abca76667f47e94687ded0d255
+- current_digest: e9bd09035b6f88c7dfd9708ad6ad8c0c7e4768abca76667f47e94687ded0d255
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608100934-CXVVNV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task run 202608100934-CXVVNV
+- diagnostic_command: agentplane task run status 202608100934-CXVVNV
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -145,3 +223,7 @@ Revert only the implementation and task-artifact commits for this task, remove t
 - Observation: AgentPlane artifact-persistence commit could not create .git/index.lock under the restricted execution sandbox.
   Impact: No implementation files were staged or committed; task start artifacts remain unpersisted.
   Resolution: Use the permitted local Git staging path for the active task and retry the AgentPlane commit without changing scope.
+
+- Observation: The deterministic catalog inventory contains every tracked PO path in the pinned translations corpus.
+  Impact: Message content, licensing, locale behavior, and local UI mappings remain intentionally unmapped.
+  Resolution: A later atomic message-mapping task must resolve every LO-TRANSLATION-CATALOG record.
