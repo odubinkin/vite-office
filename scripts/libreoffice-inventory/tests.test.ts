@@ -97,6 +97,7 @@ describe("createCoreTestInventory" /**
  * Determines whether a generated record accidentally originated from a gbuild macro definition.
  *
  * @param record - Generated test record with its exact declaration path.
+ * @param record.referencePath - Exact repository-relative path used to identify a gbuild definition directory.
  * @returns True only when the record comes from the gbuild macro-definition directory.
  */
 function isMacroDefinitionRecord(record: { readonly referencePath: string }): boolean {
