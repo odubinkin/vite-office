@@ -1,10 +1,12 @@
 ---
 id: "202608101302-WM206Q"
 title: "Add Writer undo redo keyboard shortcuts"
-status: "DOING"
+result_summary: "Writer shortcut routing contract verified."
+risk_level: "low"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +42,16 @@ quality_review:
     - "npm run verify passed"
   findings:
     - "No confirmed defects: canonical shortcut adaptation, typed dispatch, enabled-state gating, browser default handling, tests, and documentation are present."
-commit: null
+commit:
+  hash: "da9f3d474545fbefdd76efd3fde38c3133e74843"
+  message: "✅ WM206Q task: record Writer shortcut verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Writer undo redo keyboard shortcut routing."
+  -
+    author: "CODER"
+    body: "Verified: Writer undo and redo keyboard shortcuts passed all declared checks."
 events:
   -
     type: "status"
@@ -59,8 +66,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified Writer shortcut routing: npm run verify passed (application 30 tests/100% coverage, inventory 67 tests/100% coverage, Playwright 1/1); Ctrl/Meta undo/redo, disabled commands, unrelated shortcuts, and docs are covered."
+  -
+    type: "status"
+    at: "2026-08-10T13:09:23.013Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer undo and redo keyboard shortcuts passed all declared checks."
 doc_version: 3
-doc_updated_at: "2026-08-10T13:09:14.387Z"
+doc_updated_at: "2026-08-10T13:09:23.015Z"
 doc_updated_by: "CODER"
 description: "Route browser Ctrl or Meta Z and Ctrl or Meta Shift Z shortcuts to the existing Writer workbench undo and redo actions through the typed command registry, while preserving text-entry behavior and the static frontend boundary."
 sections:
@@ -117,6 +131,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "464f349437f15d9f741bb232509ff96f432ae026"
+    message: "📝 WM206Q code: document Writer shortcuts"
 id_source: "generated"
 ---
 ## Summary
