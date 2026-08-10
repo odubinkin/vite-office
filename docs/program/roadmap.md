@@ -42,11 +42,13 @@ closure records are the authoritative delivery evidence.
 
 ### Task 0.3 — Pinned LibreOffice reference acquisition
 
-With explicit network approval, clone LibreOffice into the ignored
-`vendor/libreoffice-reference/` path, select an immutable release tag and commit
-SHA, record licensing/attribution constraints, and document reproducible update
-steps. Do not copy upstream assets or fixtures into tracked paths without a
-license and provenance decision.
+Completed by AgentPlane task `202608100753-FYEAQ6`. The ignored research checkout
+uses LibreOffice `libreoffice-26.8.0.2` at commit
+`9bc445578031fecf56086729d8e4940c77e14d65`. The
+[baseline specification](libreoffice-baseline.md) records its tag object,
+reproducible shallow acquisition, local verification, and per-file licensing
+boundary. No upstream asset or fixture was copied into tracked paths, and no
+parity row advances until Task 0.4 inventories the pinned corpus.
 
 ### Task 0.4 — Source, test, and documentation inventory tooling
 

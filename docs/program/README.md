@@ -21,9 +21,9 @@ claim that any LibreOffice feature is already implemented.
   when they reduce risk and do not prevent parity, offline use, static hosting,
   accessibility, or acceptable licensing.
 - A local LibreOffice checkout may be used for research only at
-  `vendor/libreoffice-reference/`. The path must be ignored by Git before any
-  clone begins. Adding that implementation-classified ignore entry, acquisition,
-  baseline selection, and licensing review require their own tasks.
+  `vendor/libreoffice-reference/`. The path is ignored by Git. Acquisition,
+  baseline selection, upgrades, and any decision to copy reference-derived
+  material require separate approved tasks.
 - Repository artifacts are written in English unless a task explicitly
   requires localized output.
 
@@ -47,11 +47,14 @@ completion.
 
 ## Baseline policy
 
-The upstream baseline must be one immutable LibreOffice release tag plus commit
-SHA. Until a dedicated reference-inventory task records both, every matrix entry
-remains `inventory-pending`. Baseline upgrades are explicit program changes that
-must regenerate the feature, test, and documentation inventories and open tasks
-for every detected delta.
+The upstream baseline is LibreOffice `libreoffice-26.8.0.2` at commit
+`9bc445578031fecf56086729d8e4940c77e14d65`. Its provenance, reproducible clone
+procedure, and licensing boundary are recorded in the
+[baseline specification](libreoffice-baseline.md). Every matrix entry remains
+`inventory-pending` until deterministic tooling inventories the pinned source,
+tests, fixtures, and documentation. Baseline upgrades are explicit program
+changes that must regenerate those inventories and open tasks for every detected
+delta.
 
 ## Delivery policy
 
@@ -103,6 +106,8 @@ explicit tooling rule. File-level exemptions require a documented rationale.
 The following documents form the program control plane:
 
 - [Parity matrix](parity-matrix.md): status and traceability source of truth.
+- [LibreOffice baseline](libreoffice-baseline.md): immutable upstream identity,
+  acquisition, provenance, and licensing boundary.
 - [Architecture](architecture.md): browser domain boundaries and constraints.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
@@ -114,13 +119,11 @@ while an approved feature task controls the scope of its own change.
 
 ## Known program gaps
 
-- No immutable LibreOffice baseline has been selected.
 - The upstream source, test, and documentation corpora have not been inventoried.
-- Licensing and attribution rules for reference-derived fixtures or assets have
-  not been recorded.
+- No upstream fixture, asset, sample, or documentation file is approved for
+  copying; each candidate still requires the baseline's per-file provenance and
+  licensing review.
 - Native integrations and backend-dependent features need browser feasibility
   studies; they remain parity requirements until explicitly resolved.
-- Application source, build tooling, and automated quality gates do not yet
-  exist. They are the next bounded task in the [roadmap](roadmap.md).
-- The reference checkout path is not yet present in `.gitignore`; the bootstrap
-  code task must add it before the separately approved clone task runs.
+- The current application is only a verified foundation preview; no LibreOffice
+  feature has been mapped or implemented yet.

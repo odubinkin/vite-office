@@ -11,6 +11,7 @@ the parity matrix.
 ## Program documents
 
 - [Program charter](docs/program/README.md)
+- [LibreOffice baseline](docs/program/libreoffice-baseline.md)
 - [Parity matrix](docs/program/parity-matrix.md)
 - [Architecture](docs/program/architecture.md)
 - [Test strategy](docs/program/test-strategy.md)
@@ -26,9 +27,10 @@ no document-editing capability and advances no LibreOffice parity row.
 
 The bootstrap includes strict TypeScript, ESLint and Prettier, 100% initial Vitest coverage
 thresholds for authored application behavior, a Chromium and axe smoke test, static-distribution
-validation, JSDoc validation, and authored file-size gates. Upstream reference acquisition and every
-office feature remain separate AgentPlane tasks so scope, verification, and parity evidence stay
-auditable.
+validation, JSDoc validation, and authored file-size gates. The ignored research checkout is pinned
+to LibreOffice `libreoffice-26.8.0.2` at commit `9bc445578031fecf56086729d8e4940c77e14d65`; its
+source, test, fixture, and documentation inventory and every office feature remain separate
+AgentPlane tasks so scope, verification, and parity evidence stay auditable.
 
 ## Local development
 

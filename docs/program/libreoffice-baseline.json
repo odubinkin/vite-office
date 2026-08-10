@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "project": "LibreOffice",
+  "repository": "https://github.com/LibreOffice/core.git",
+  "tag": "libreoffice-26.8.0.2",
+  "tagObject": "eb55fbaf423db60b82b7fc8613c290b4849b6ba8",
+  "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "commitDate": "2026-07-31T21:00:31Z",
+  "taggerDate": "2026-07-31T21:00:42Z",
+  "acquiredDate": "2026-08-10",
+  "referencePath": "vendor/libreoffice-reference/",
+  "clone": {
+    "depth": 1,
+    "singleBranch": true,
+    "shallow": true,
+    "detachedHead": true,
+    "submodulesInitialized": false
+  },
+  "observedCheckout": {
+    "trackedFiles": 149172,
+    "diskUsage": "1.8G"
+  },
+  "licenseEvidence": [
+    {
+      "path": "README.md",
+      "description": "Upstream project overview describing LibreOffice as copyleft-licensed"
+    },
+    {
+      "path": "COPYING",
+      "description": "GNU General Public License version 3 text"
+    },
+    {
+      "path": "COPYING.LGPL",
+      "description": "GNU Lesser General Public License version 3 text"
+    },
+    {
+      "path": "COPYING.MPL",
+      "description": "Mozilla Public License version 2.0 text"
+    }
+  ],
+  "licensePolicy": "per-file-review-required-before-copying",
+  "inventoryStatus": "pending",
+  "parityClaim": false
+}

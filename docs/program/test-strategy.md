@@ -11,8 +11,10 @@ reference-inventory and tooling tasks produce reproducible reports.
 
 ## Upstream inventory
 
-An approved network task will pin LibreOffice by release tag and commit SHA in a
-Git-ignored reference checkout. An inventory tool must then collect at least:
+The approved [LibreOffice baseline](libreoffice-baseline.md) pins release tag
+`libreoffice-26.8.0.2` and commit
+`9bc445578031fecf56086729d8e4940c77e14d65` in a Git-ignored reference checkout.
+The next inventory tool must validate that identity and then collect at least:
 
 - test file, suite, case, parameterization, and disabled/quarantined state;
 - fixture paths and provenance;
