@@ -114,6 +114,8 @@ The following documents form the program control plane:
   list of pinned `Module_*.mk` declarations awaiting atomic mapping.
 - [Core test inventory](core-test-inventory.md): generated gbuild test
   declarations awaiting assertion, fixture, and parity-ID mapping.
+- [Help topic inventory](help-topic-inventory.md): generated XHP help-path
+  provenance awaiting topic, license, and local-documentation mapping.
 - [Architecture](architecture.md): browser domain boundaries and constraints.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and

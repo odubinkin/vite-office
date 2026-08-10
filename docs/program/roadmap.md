@@ -90,6 +90,14 @@ core test inventory covers exact gbuild constructor invocations: 415 CppUnit,
 58 JUnit, 13 Python, and 79 UI tests. Records are provenance-only and
 `unmapped`; assertion, fixture, and documentation mapping remains separate work.
 
+### Task 0.4d — Help XHP topic extractor
+
+Completed by AgentPlane task `202608100919-2WRBJ2`. The generated 2,746-record
+help-topic inventory covers every pinned `source/text/<area>/**/*.xhp` path in
+the `helpcontent2` corpus. Its records retain only path-level provenance and
+explicit `unmapped` status; topic-content, license, local-documentation, and
+behavioral mappings remain separate work.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:

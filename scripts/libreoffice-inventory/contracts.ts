@@ -178,6 +178,38 @@ export interface CoreTestInventory {
   readonly summary: Readonly<Record<CoreTestKind, number>>;
 }
 
+/** Describes one pinned LibreOffice XHP help-topic path without copying its documentation text. */
+export interface HelpTopicRecord {
+  /** Help area derived from source/text/<area>/ in the repository-relative topic path. */
+  readonly area: string;
+  /** Pinned help repository commit that makes the path reproducible. */
+  readonly commit: string;
+  /** Corpus identity proving the topic belongs to the LibreOffice help repository. */
+  readonly corpusId: "helpcontent2";
+  /** Stable identifier derived only from the exact repository-relative topic path. */
+  readonly id: string;
+  /** Explicit handoff state until later tasks map topic content to implemented behavior. */
+  readonly mappingStatus: "unmapped";
+  /** Exact help-repository-relative XHP topic path. */
+  readonly referencePath: string;
+}
+
+/** Defines the canonical generated inventory for pinned LibreOffice XHP help-topic paths. */
+export interface HelpTopicInventory {
+  /** Pinned help commit shared by every generated topic record. */
+  readonly helpCommit: string;
+  /** Always helpcontent2 because core and auxiliary corpora are outside this extraction. */
+  readonly corpusId: "helpcontent2";
+  /** Stable generator identifier distinguishing generated topic metadata from authored source. */
+  readonly generatedBy: "inventory:help-topics";
+  /** Deterministically sorted XHP topic records. */
+  readonly records: readonly HelpTopicRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+  /** Exact per-area topic counts used as a pinned completeness guard. */
+  readonly summary: Readonly<Record<string, number>>;
+}
+
 /** Holds an error collection produced when a manifest or local checkout violates the inventory contract. */
 export class BaselineValidationError extends Error {
   /** Machine-readable validation failures collected before execution stopped. */
