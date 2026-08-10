@@ -21,9 +21,10 @@ the parity matrix.
 ## Current status
 
 The repository now contains the initial TypeScript, React, Vite, and Tailwind CSS workspace under
-`apps/office`. It renders an accessible foundation preview, builds with relative asset paths, and
-does not use an application backend. The preview names the planned suites but intentionally provides
-no document-editing capability and advances no LibreOffice parity row.
+`apps/office`. It renders an accessible workbench, builds with relative asset paths, and does not
+use an application backend. Writer includes one bounded in-memory plain-text paragraph editor; the
+other suites remain previews. This does not advance a LibreOffice parity row because its upstream
+behavior, tests, and documentation are not yet atomically mapped.
 
 The bootstrap includes strict TypeScript, ESLint and Prettier, 100% initial Vitest coverage
 thresholds for authored application behavior, a Chromium and axe smoke test, static-distribution
