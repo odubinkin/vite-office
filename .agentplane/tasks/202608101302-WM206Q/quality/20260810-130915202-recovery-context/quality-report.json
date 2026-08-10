@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101302-WM206Q",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T13:09:15.202Z",
+  "verdict": "pass",
+  "summary": "Writer undo and redo shortcuts meet the approved registry-based browser integration scope.",
+  "evaluated_sha": "464f349437f15d9f741bb232509ff96f432ae026",
+  "blueprint_digest": "2275088be7012b8651702301559cd5505604017f2f60c6ffcbb4e7a1df3e69dc",
+  "findings": [
+    "No confirmed defects: canonical shortcut adaptation, typed dispatch, enabled-state gating, browser default handling, tests, and documentation are present."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101302-WM206Q/README.md",
+    "840d0e7c32ed implementation commit",
+    "464f349437f1 documentation commit",
+    "npm run verify passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Ctrl Y, customization, global commands, native selection restoration, rich text, persistence, and full parity remain separate tasks."
+  ]
+}
