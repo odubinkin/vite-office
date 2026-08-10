@@ -4,7 +4,7 @@ title: "Acquire and pin LibreOffice 26.8.0.2 reference baseline"
 status: "DOING"
 priority: "high"
 owner: "CURATOR"
-revision: 13
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -29,11 +29,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-08-10T08:04:18.376Z"
+  updated_by: "CODER"
+  note: "verified-202608100753-FYEAQ6"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-10T08:04:04.204Z"
+  updated_by: "EVALUATOR"
+  note: "Approved baseline acquisition is reproducible, accurately scoped, license-conservative, and supported by passing deterministic evidence at implementation commit 4341ac05a903."
+  evaluated_sha: "4341ac05a90396e6c21879e45dac30f4732d54e8"
+  blueprint_digest: "c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672"
+  evidence_refs:
+    - ".agentplane/tasks/202608100753-FYEAQ6/README.md"
+    - ".agentplane/tasks/202608100753-FYEAQ6/quality/20260810-080404204-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608100753-FYEAQ6/quality/20260810-080404204-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608100753-FYEAQ6/quality/20260810-080404204-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608100753-FYEAQ6/blueprint/resolved-snapshot.json"
+    - "commit:4341ac05a90396e6c21879e45dac30f4732d54e8"
+    - "docs/program/libreoffice-baseline.json"
+    - "docs/program/libreoffice-baseline.md"
+    - "live checks: exact tag/commit, zero tracked vendor paths, clean shallow checkout, git diff --check"
+  findings:
+    - "PASS: the seven committed paths exactly match approved tracked scope; the official annotated tag and peeled commit are recorded consistently; the ignored checkout is shallow, clean, and untracked; documentation explicitly denies inventory or parity completion and requires per-file licensing review."
 commit: null
 comments:
   -
@@ -47,8 +66,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-08-10T08:02:56.123Z"
+    author: "CURATOR"
+    state: "ok"
+    note: "Verified: pinned LibreOffice identity, ignored clean checkout, manifest, licensing boundary, links, formatting, routing, doctor, and scoped diff all pass."
+  -
+    type: "verify"
+    at: "2026-08-10T08:04:18.376Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608100753-FYEAQ6"
 doc_version: 3
-doc_updated_at: "2026-08-10T08:02:21.577Z"
+doc_updated_at: "2026-08-10T08:04:44.098Z"
 doc_updated_by: "CURATOR"
 description: "Clone the official LibreOffice GitHub mirror at the approved immutable release baseline into the ignored vendor reference path, record provenance and licensing boundaries, and document reproducible acquisition for later source, test, and documentation inventories."
 sections:
@@ -120,6 +151,73 @@ sections:
        Evidence: no whitespace errors; pre-commit status contains only the six approved documentation paths and task metadata, while the ignored checkout is absent.
        Scope: full task diff and repository cleanliness boundary.
        Links: all task-scoped paths.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-08-10T08:02:56.123Z — VERIFY — ok
+
+    By: CURATOR
+
+    Note: Verified: pinned LibreOffice identity, ignored clean checkout, manifest, licensing boundary, links, formatting, routing, doctor, and scoped diff all pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:02:21.577Z, excerpt_hash=sha256:4e541d7806713b0f900b301e04b6c934a8c72e3a4b2226cbde893d09583fbdc9
+
+    Details:
+
+    Implementation commit 4341ac05a903 contains only task metadata and the six approved documentation paths. The local reference remains ignored, clean, shallow, and exactly at the approved peeled commit; no upstream file is tracked or copied.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100753-FYEAQ6/blueprint/resolved-snapshot.json
+    - old_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+    - current_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608100753-FYEAQ6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task run 202608100753-FYEAQ6
+    - diagnostic_command: agentplane task run status 202608100753-FYEAQ6
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
+    ### 2026-08-10T08:04:18.376Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608100753-FYEAQ6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:02:56.210Z, excerpt_hash=sha256:4e541d7806713b0f900b301e04b6c934a8c72e3a4b2226cbde893d09583fbdc9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100753-FYEAQ6/blueprint/resolved-snapshot.json
+    - old_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+    - current_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608100753-FYEAQ6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608100753-FYEAQ6 --result verified-202608100753-FYEAQ6 --commit 4341ac05a90396e6c21879e45dac30f4732d54e8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Before task closure, remove only the explicitly resolved ignored directory `vendor/libreoffice-reference/` if acquisition must be abandoned, and restore only this task’s scoped documentation changes. After commits exist, use a normal traceable revert rather than rewriting shared history. Re-acquisition is reproducible from the documented official repository, tag, and peeled commit."
   Findings: |-
     Baseline findings:
@@ -132,6 +230,10 @@ sections:
     - The gateway command `ap task advance <task-id> --agent-json` is not implemented by installed AgentPlane 0.6.26. The CLI returned `E_USAGE` and routed recovery to command help plus `task next-action --explain`.
     - After `start-ready`, the route oracle unconditionally offered the configured managed runner even though the approved task and user instruction explicitly forbid runners. No runner run exists or was launched; execution followed the supported direct-workflow lifecycle manually.
     - One pre-clone shell assertion used an unbraced zsh variable adjacent to `[[:space:]]`, which zsh parsed as a subscript. It failed before directory creation or cloning; the bounded retry used field-based comparison and succeeded without scope change.
+
+    - Observation: Route oracle emitted task complete while the verification record had modified the task README and the recorded evaluator report was still untracked.
+      Impact: The exact closeout command failed with E_GIT before changing task status because deterministic closure requires a clean tracked tree.
+      Resolution: Persist the active task README and quality-report subtree with an allow-tasks AgentPlane commit, recompute next-action, and then retry the exact closeout command.
 id_source: "generated"
 ---
 ## Summary
@@ -213,6 +315,73 @@ Authority and stop rules:
    Scope: full task diff and repository cleanliness boundary.
    Links: all task-scoped paths.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-08-10T08:02:56.123Z — VERIFY — ok
+
+By: CURATOR
+
+Note: Verified: pinned LibreOffice identity, ignored clean checkout, manifest, licensing boundary, links, formatting, routing, doctor, and scoped diff all pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:02:21.577Z, excerpt_hash=sha256:4e541d7806713b0f900b301e04b6c934a8c72e3a4b2226cbde893d09583fbdc9
+
+Details:
+
+Implementation commit 4341ac05a903 contains only task metadata and the six approved documentation paths. The local reference remains ignored, clean, shallow, and exactly at the approved peeled commit; no upstream file is tracked or copied.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100753-FYEAQ6/blueprint/resolved-snapshot.json
+- old_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+- current_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608100753-FYEAQ6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task run 202608100753-FYEAQ6
+- diagnostic_command: agentplane task run status 202608100753-FYEAQ6
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
+### 2026-08-10T08:04:18.376Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608100753-FYEAQ6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:02:56.210Z, excerpt_hash=sha256:4e541d7806713b0f900b301e04b6c934a8c72e3a4b2226cbde893d09583fbdc9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100753-FYEAQ6/blueprint/resolved-snapshot.json
+- old_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+- current_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608100753-FYEAQ6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608100753-FYEAQ6 --result verified-202608100753-FYEAQ6 --commit 4341ac05a90396e6c21879e45dac30f4732d54e8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Before task closure, remove only the explicitly resolved ignored directory `vendor/libreoffice-reference/` if acquisition must be abandoned, and restore only this task’s scoped documentation changes. After commits exist, use a normal traceable revert rather than rewriting shared history. Re-acquisition is reproducible from the documented official repository, tag, and peeled commit.
@@ -229,3 +398,7 @@ Process findings:
 - The gateway command `ap task advance <task-id> --agent-json` is not implemented by installed AgentPlane 0.6.26. The CLI returned `E_USAGE` and routed recovery to command help plus `task next-action --explain`.
 - After `start-ready`, the route oracle unconditionally offered the configured managed runner even though the approved task and user instruction explicitly forbid runners. No runner run exists or was launched; execution followed the supported direct-workflow lifecycle manually.
 - One pre-clone shell assertion used an unbraced zsh variable adjacent to `[[:space:]]`, which zsh parsed as a subscript. It failed before directory creation or cloning; the bounded retry used field-based comparison and succeeded without scope change.
+
+- Observation: Route oracle emitted task complete while the verification record had modified the task README and the recorded evaluator report was still untracked.
+  Impact: The exact closeout command failed with E_GIT before changing task status because deterministic closure requires a clean tracked tree.
+  Resolution: Persist the active task README and quality-report subtree with an allow-tasks AgentPlane commit, recompute next-action, and then retry the exact closeout command.
