@@ -1,10 +1,11 @@
 ---
 id: "202608100959-2TZGN0"
 title: "Extract pinned LibreOffice core test source targets into atomic records"
-status: "DOING"
+result_summary: "verified-202608100959-2TZGN0"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -23,7 +24,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-10T10:27:40.756Z"
+  updated_at: "2026-08-10T10:28:10.346Z"
   updated_by: "CODER"
   note: "verified-202608100959-2TZGN0"
   attempts: 0
@@ -43,11 +44,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "No defects found; full verification and deterministic regeneration passed."
-commit: null
+commit:
+  hash: "001b8d1fc65c42fe93373171c6e67745380735ab"
+  message: "🚧 2TZGN0 task: extract CppunitTest source target inventory"
 comments:
   -
     author: "CODER"
     body: "Start: extract exact pinned core test source targets as deterministic provenance-only records."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608100959-2TZGN0. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -68,8 +74,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202608100959-2TZGN0"
+  -
+    type: "verify"
+    at: "2026-08-10T10:28:10.346Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608100959-2TZGN0"
+  -
+    type: "status"
+    at: "2026-08-10T10:28:10.503Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608100959-2TZGN0. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-10T10:27:40.838Z"
+doc_updated_at: "2026-08-10T10:28:10.504Z"
 doc_updated_by: "CODER"
 description: "Parse pinned gbuild test declarations into deterministic provenance-only test source-target records that connect each inventoried constructor to exact referenced core paths without copying test content or claiming test parity."
 sections:
@@ -137,6 +156,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202608100959-2TZGN0 --result verified-202608100959-2TZGN0 --commit 001b8d1fc65c42fe93373171c6e67745380735ab
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-08-10T10:28:10.346Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608100959-2TZGN0
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T10:27:40.838Z, excerpt_hash=sha256:7f47cec325635eadab40e031a5b7f5966eba2bd8c04b7db825698bf020a0dc68
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100959-2TZGN0/blueprint/resolved-snapshot.json
+    - old_digest: 2db164e240a89a8a53b9f1b1e17d23405288e0a724ea6a8eb7f60f847f354f6e
+    - current_digest: 2db164e240a89a8a53b9f1b1e17d23405288e0a724ea6a8eb7f60f847f354f6e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608100959-2TZGN0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608100959-2TZGN0 --result verified-202608100959-2TZGN0 --commit d03d927070ed4086a8e26e051a2b1eafce454752
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -225,6 +274,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202608100959-2TZGN0 --result verified-202608100959-2TZGN0 --commit 001b8d1fc65c42fe93373171c6e67745380735ab
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-08-10T10:28:10.346Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608100959-2TZGN0
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T10:27:40.838Z, excerpt_hash=sha256:7f47cec325635eadab40e031a5b7f5966eba2bd8c04b7db825698bf020a0dc68
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100959-2TZGN0/blueprint/resolved-snapshot.json
+- old_digest: 2db164e240a89a8a53b9f1b1e17d23405288e0a724ea6a8eb7f60f847f354f6e
+- current_digest: 2db164e240a89a8a53b9f1b1e17d23405288e0a724ea6a8eb7f60f847f354f6e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608100959-2TZGN0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608100959-2TZGN0 --result verified-202608100959-2TZGN0 --commit d03d927070ed4086a8e26e051a2b1eafce454752
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
