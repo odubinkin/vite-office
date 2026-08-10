@@ -41,17 +41,17 @@ describe("transaction history" /**
    * @returns Nothing; assertions validate errors.
    */, function rejectsInvalidHistory(): void {
     expect(
-      /** @returns Invalid history creation result. */ function negative(): unknown {
+      /** Attempts negative selection creation. @returns Invalid history creation result. */ function negative(): unknown {
         return createTransactionHistory("one", { position: -1 });
       },
     ).toThrowError();
     expect(
-      /** @returns Invalid history creation result. */ function fractional(): unknown {
+      /** Attempts fractional selection creation. @returns Invalid history creation result. */ function fractional(): unknown {
         return createTransactionHistory("one", { position: 0.5 });
       },
     ).toThrowError();
     expect(
-      /** @returns Invalid current-state result. */ function malformed(): unknown {
+      /** Attempts malformed current-state access. @returns Invalid current-state result. */ function malformed(): unknown {
         return getCurrentTransactionState({ entries: [], index: 0, selection: { position: 0 } });
       },
     ).toThrowError();
