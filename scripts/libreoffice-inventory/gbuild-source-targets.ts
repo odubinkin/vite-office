@@ -15,6 +15,9 @@ export interface GbuildSourceTarget {
   readonly targetKind: GbuildSourceTargetKind;
 }
 
+/** Describes the trimmed argument list of one complete gbuild macro call without retaining its surrounding makefile content. */
+export type GbuildMacroArguments = readonly string[];
+
 /**
  * Extracts deterministic source-target tokens from one pinned gbuild makefile's selected macro form.
  *
@@ -27,8 +30,23 @@ export function extractGbuildSourceTargets(
   sourceText: string,
   macroName: string,
 ): readonly GbuildSourceTarget[] {
-  const records = extractMacroPayloads(sourceText, macroName).flatMap(createMacroRecords);
+  const records = extractGbuildMacroArguments(sourceText, macroName).flatMap(createMacroRecords);
   return [...new Map(records.map(createRecordEntry)).values()].sort(compareTargets);
+}
+
+/**
+ * Extracts top-level trimmed arguments from each complete selected gbuild macro call.
+ *
+ * @param sourceText - Complete makefile text to scan without evaluating Make expressions.
+ * @param macroName - Exact gbuild macro name whose calls are in scope.
+ * @returns Deterministically source-ordered macro argument lists.
+ * @throws {Error} When a matched macro is unclosed.
+ */
+export function extractGbuildMacroArguments(
+  sourceText: string,
+  macroName: string,
+): readonly GbuildMacroArguments[] {
+  return extractMacroPayloads(sourceText, macroName).map(splitTopLevelArguments);
 }
 
 /**
@@ -82,12 +100,11 @@ function findMacroPayloadEnd(sourceText: string, payloadStart: number, macroName
 /**
  * Converts one macro payload into source-target records using its test name and source-list argument.
  *
- * @param payload - Raw text between the macro prefix and its two outer closing parentheses.
+ * @param argumentsList - Trimmed top-level macro arguments ordered by their gbuild declaration positions.
  * @returns Records for the source-list argument; later macro arguments such as compiler flags are omitted.
  * @throws {Error} When the test name or source-list argument is absent or blank.
  */
-function createMacroRecords(payload: string): readonly GbuildSourceTarget[] {
-  const argumentsList = splitTopLevelArguments(payload);
+function createMacroRecords(argumentsList: GbuildMacroArguments): readonly GbuildSourceTarget[] {
   const testName = argumentsList[0]?.trim();
   const sourceList = argumentsList[1]?.trim();
   if (
@@ -99,7 +116,7 @@ function createMacroRecords(payload: string): readonly GbuildSourceTarget[] {
     throw new Error("Malformed gbuild source-list declaration.");
   }
 
-  return splitTopLevelWords(sourceList).map(
+  return splitGbuildSourceList(sourceList).map(
     /**
      * Converts one source-list token into a canonical provenance record.
      *
@@ -132,7 +149,7 @@ function splitTopLevelArguments(value: string): readonly string[] {
  * @param value - Source-list argument whose values may include nested Make expressions.
  * @returns Non-empty source target tokens in original order.
  */
-function splitTopLevelWords(value: string): readonly string[] {
+export function splitGbuildSourceList(value: string): readonly string[] {
   return splitAtTopLevel(value.replace(/\\\r?\n/gu, " "), "whitespace")
     .map(removeContinuationMarker)
     .filter(isNonEmptyValue);

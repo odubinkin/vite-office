@@ -132,6 +132,16 @@ Git-tracked `.java` paths and preserves 4 declared-but-absent literal paths as
 explicit `missing` evidence; assertion, fixture, platform evaluation, and local
 executable test mappings remain separate work.
 
+### Task 0.4i — Core PythonTest module extractor
+
+Completed by AgentPlane task `202608101043-PBNYCF`. The generated 59-record
+Python module inventory links every `gb_PythonTest_add_modules` declaration to
+an existing PythonTest constructor ID. All 59 derived `.py` paths are
+Git-tracked at the pinned core commit; the extractor retains no unevaluated
+Make expressions and no declared-but-absent paths. It is provenance-only and
+`unmapped`; assertions, fixtures, platform evaluation, and local executable
+test mappings remain separate work.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:

@@ -120,6 +120,9 @@ The following documents form the program control plane:
 - [Core JunitTest source-target inventory](core-junit-source-target-inventory.md):
   generated Java source-target provenance with tracked and explicitly missing
   pinned paths, linked to existing constructor IDs.
+- [Core PythonTest module inventory](core-python-test-module-inventory.md):
+  generated Python module provenance linked to existing constructor IDs and
+  classified against the pinned core Git tree.
 - [Help topic inventory](help-topic-inventory.md): generated XHP help-path
   provenance awaiting topic, license, and local-documentation mapping.
 - [Translation catalog inventory](translation-catalog-inventory.md): generated

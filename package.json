@@ -21,6 +21,7 @@
     "inventory:tests": "tsx scripts/libreoffice-inventory/tests-cli.ts",
     "inventory:test-source-targets": "tsx scripts/libreoffice-inventory/test-source-target-cli.ts",
     "inventory:junit-source-targets": "tsx scripts/libreoffice-inventory/junit-source-target-cli.ts",
+    "inventory:python-test-modules": "tsx scripts/libreoffice-inventory/python-test-module-cli.ts",
     "inventory:help-topics": "tsx scripts/libreoffice-inventory/help-topics-cli.ts",
     "inventory:translations": "tsx scripts/libreoffice-inventory/translations-cli.ts",
     "inventory:dictionaries": "tsx scripts/libreoffice-inventory/dictionaries-cli.ts",

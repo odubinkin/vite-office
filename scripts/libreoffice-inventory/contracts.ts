@@ -260,6 +260,49 @@ export interface CoreJunitSourceTargetInventory {
   readonly summary: Readonly<Record<CoreJunitSourceTargetStatus, number>>;
 }
 
+/** Identifies whether a PythonTest module target is tracked, absent from the pinned tree, or unevaluated Make syntax. */
+export type CorePythonTestModuleStatus = "expression" | "missing" | "tracked";
+
+/** Describes one Python module target declared for an already inventoried pinned PythonTest constructor. */
+export interface CorePythonTestModuleRecord {
+  /** Pinned core commit that makes the declaration and module path reproducible. */
+  readonly commit: string;
+  /** Stable identifier of the exact inventoried PythonTest constructor that owns this module. */
+  readonly constructorId: string;
+  /** Always core because PythonTest declarations are owned by the core repository. */
+  readonly corpusId: "core";
+  /** Exact core-repository-relative makefile path containing the module declaration. */
+  readonly declarationPath: string;
+  /** Raw Python module token from the Make source list. */
+  readonly declaredModule: string;
+  /** Stable identifier derived from constructor provenance and the module token. */
+  readonly id: string;
+  /** Explicit handoff state until a later task maps Python assertions to atomic parity IDs. */
+  readonly mappingStatus: "unmapped";
+  /** Exact physical core-repository-relative `.py` module path for literal tokens, otherwise null. */
+  readonly modulePath: string | null;
+  /** Exact core-repository-relative source directory resolved from the gbuild declaration. */
+  readonly sourceDirectory: string;
+  /** Whether modulePath is tracked, absent, or remains unevaluated Make syntax. */
+  readonly targetStatus: CorePythonTestModuleStatus;
+}
+
+/** Defines the canonical generated inventory of Python module targets linked to pinned PythonTest constructor IDs. */
+export interface CorePythonTestModuleInventory {
+  /** Pinned core commit shared by every generated record. */
+  readonly coreCommit: string;
+  /** Always core because auxiliary corpora are outside this extraction. */
+  readonly corpusId: "core";
+  /** Stable generator identifier distinguishing this provenance inventory from authored source. */
+  readonly generatedBy: "inventory:python-test-modules";
+  /** Deterministically ordered Python module records linked to PythonTest constructors. */
+  readonly records: readonly CorePythonTestModuleRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+  /** Exact per-resolution-status counts used as a pinned completeness guard. */
+  readonly summary: Readonly<Record<CorePythonTestModuleStatus, number>>;
+}
+
 /** Describes one pinned LibreOffice XHP help-topic path without copying its documentation text. */
 export interface HelpTopicRecord {
   /** Help area derived from source/text/<area>/ in the repository-relative topic path. */
