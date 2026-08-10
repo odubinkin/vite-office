@@ -10,6 +10,31 @@ Documentation parity is tracked through stable topic records mapped to the
 [parity matrix](parity-matrix.md). No complete upstream topic inventory exists
 yet; the reference-inventory task owns that evidence.
 
+## Pinned Git-backed documentation corpus
+
+The [LibreOffice baseline](libreoffice-baseline.md) materializes the official
+help repository at the exact gitlink selected by the core release. Acquisition
+contains 2,746 XHP topics and 9,099 media paths distributed as follows:
+
+| Help group | XHP topics |
+| --- | ---: |
+| Shared | 931 |
+| Calc | 513 |
+| Basic and macros | 433 |
+| Writer | 423 |
+| Impress | 182 |
+| Database | 88 |
+| Math | 76 |
+| Chart | 58 |
+| Draw | 42 |
+
+The same release pins 25,699 UI PO catalogs across 131 locale directories and
+47 top-level domains, plus 859 dictionary repository files. These numbers are
+minimum integrity assertions for inventory tooling, not topic mappings or
+documentation-parity evidence. Later tasks must still identify topic IDs,
+titles, help links, locales, assets, source references, license provenance, and
+external documentation surfaces not stored in these four Git repositories.
+
 ## Documentation inventory
 
 The pinned inventory must include, where present upstream:

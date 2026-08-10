@@ -4,7 +4,7 @@ title: "Acquire pinned LibreOffice help translation and dictionary corpora"
 status: "DOING"
 priority: "high"
 owner: "CURATOR"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -48,7 +48,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-08-10T08:15:16.608Z"
+doc_updated_at: "2026-08-10T08:28:06.053Z"
 doc_updated_by: "CURATOR"
 description: "Initialize the three release-pinned LibreOffice gitlink corpora at their exact commits inside the ignored reference checkout, record repository and licensing provenance, and extend the reproducible documentation baseline without copying upstream material into tracked paths."
 sections:
@@ -87,7 +87,12 @@ sections:
     9. `git diff --check && git status --short --untracked-files=all` — no whitespace defects or unintended tracked/untracked artifacts remain; the ignored corpora do not appear in parent status.
   Verification: "Pending implementation. Record exact commands, pass/fail results, concise evidence, covered scope, and relevant links after execution."
   Rollback Plan: "Before closure, deinitialize only the three named submodules and remove only their resolved Git metadata/worktrees if acquisition must be abandoned; never target a broad directory or unrelated checkout. Restore only this task’s four scoped documentation paths. After commits exist, use a traceable revert rather than rewriting history. Every corpus can be reacquired from its documented official repository and core-pinned commit."
-  Findings: "Pre-acquisition evidence: GitHub recursive trees report 859 dictionary blobs (~498 MB), 13,398 help blobs (~105 MB), and 25,704 translation blobs (~1.97 GB); 24 GiB is available locally. GitHub full-history repository size for translations is much larger, so depth-one acquisition is mandatory. None of the three repositories exposes a root license file through GitHub metadata; per-file/package provenance review remains mandatory. Installed AgentPlane 0.6.26 lacks the gateway `task advance --agent-json` command and its configured runner is prohibited by the user, so this task uses the previously established supported direct lifecycle manually."
+  Findings: |-
+    Pre-acquisition evidence: GitHub recursive trees report 859 dictionary blobs (~498 MB), 13,398 help blobs (~105 MB), and 25,704 translation blobs (~1.97 GB); 24 GiB is available locally. GitHub full-history repository size for translations is much larger, so depth-one acquisition is mandatory. None of the three repositories exposes a root license file through GitHub metadata; per-file/package provenance review remains mandatory. Installed AgentPlane 0.6.26 lacks the gateway `task advance --agent-json` command and its configured runner is prohibited by the user, so this task uses the previously established supported direct lifecycle manually.
+
+    - Observation: The first inline Node manifest verifier captured the complete core git ls-files output and exceeded Node's default 1 MiB execFileSync buffer; a later zsh helper used the reserved path parameter name, masking PATH; an initial external-link probe included a non-existent dictionaries README that documentation did not reference.
+      Impact: These test-harness defects stopped intermediate verification attempts before all checks ran, but did not mutate the checkout, corpus, or tracked documentation.
+      Resolution: Use streaming shell counts for large repositories, avoid zsh special parameter names, and derive external URLs from the changed Markdown. The final full verification passed with these corrections.
 id_source: "generated"
 ---
 ## Summary
@@ -143,3 +148,7 @@ Before closure, deinitialize only the three named submodules and remove only the
 ## Findings
 
 Pre-acquisition evidence: GitHub recursive trees report 859 dictionary blobs (~498 MB), 13,398 help blobs (~105 MB), and 25,704 translation blobs (~1.97 GB); 24 GiB is available locally. GitHub full-history repository size for translations is much larger, so depth-one acquisition is mandatory. None of the three repositories exposes a root license file through GitHub metadata; per-file/package provenance review remains mandatory. Installed AgentPlane 0.6.26 lacks the gateway `task advance --agent-json` command and its configured runner is prohibited by the user, so this task uses the previously established supported direct lifecycle manually.
+
+- Observation: The first inline Node manifest verifier captured the complete core git ls-files output and exceeded Node's default 1 MiB execFileSync buffer; a later zsh helper used the reserved path parameter name, masking PATH; an initial external-link probe included a non-existent dictionaries README that documentation did not reference.
+  Impact: These test-harness defects stopped intermediate verification attempts before all checks ran, but did not mutate the checkout, corpus, or tracked documentation.
+  Resolution: Use streaming shell counts for large repositories, avoid zsh special parameter names, and derive external URLs from the changed Markdown. The final full verification passed with these corrections.

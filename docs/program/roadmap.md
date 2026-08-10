@@ -50,10 +50,21 @@ reproducible shallow acquisition, local verification, and per-file licensing
 boundary. No upstream asset or fixture was copied into tracked paths, and no
 parity row advances until Task 0.4 inventories the pinned corpus.
 
+### Task 0.3a — Pinned help, translation, and dictionary corpora
+
+Completed by AgentPlane task `202608100814-2TT1YA`. The three gitlinks in the
+selected core tree are initialized as shallow, exact-commit checkouts and have
+locally verifiable annotated release tags. The baseline now covers 13,398 help
+files, 25,704 translation files, and 859 dictionary files without tracking or
+copying their content into Vite Office. Counts prove acquisition integrity only;
+inventory and parity remain pending.
+
 ### Task 0.4 — Source, test, and documentation inventory tooling
 
-Build deterministic scripts and schemas that inventory upstream modules, tests,
-fixtures, and documentation at the pinned SHA. Expand seed matrix rows into
+Build deterministic scripts and schemas that validate all four pinned corpus
+identities, inventory upstream modules, tests, fixtures, help, translations, and
+dictionaries, and fail below the acquisition counts in the
+[baseline specification](libreoffice-baseline.md). Expand seed matrix rows into
 atomic records and report all unmapped items. Generated results must be diffable
 and validated in CI.
 

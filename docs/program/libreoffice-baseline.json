@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "project": "LibreOffice",
   "repository": "https://github.com/LibreOffice/core.git",
   "tag": "libreoffice-26.8.0.2",
@@ -14,28 +14,94 @@
     "singleBranch": true,
     "shallow": true,
     "detachedHead": true,
-    "submodulesInitialized": false
+    "submodulesInitialized": true,
+    "initializedSubmodules": ["dictionaries", "helpcontent2", "translations"]
   },
   "observedCheckout": {
     "trackedFiles": 149172,
-    "diskUsage": "1.8G"
+    "diskUsage": "4.7G",
+    "diskUsageScope": "Core checkout, three initialized submodules, and their Git metadata",
+    "availableDiskAfterAcquisition": "21G"
   },
+  "corpora": [
+    {
+      "id": "core",
+      "role": "Application source, build declarations, tests, SDK material, and bundled resources",
+      "repository": "https://github.com/LibreOffice/core.git",
+      "referencePath": "vendor/libreoffice-reference/",
+      "tag": "libreoffice-26.8.0.2",
+      "tagObject": "eb55fbaf423db60b82b7fc8613c290b4849b6ba8",
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "trackedFiles": 149172,
+      "licenseEvidence": ["README.md", "COPYING", "COPYING.LGPL", "COPYING.MPL"]
+    },
+    {
+      "id": "dictionaries",
+      "role": "Spelling, hyphenation, thesaurus, and language-package data",
+      "repository": "https://github.com/LibreOffice/dictionaries.git",
+      "referencePath": "vendor/libreoffice-reference/dictionaries/",
+      "tag": "libreoffice-26.8.0.2",
+      "tagObject": "ea2bb4f3593c33f8dd5105eab5a776cde901307c",
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "trackedFiles": 859,
+      "corpusShape": {
+        "affFiles": 98,
+        "dictionaryFiles": 147,
+        "licenseOrReadmeCandidates": 154
+      },
+      "licenseEvidence": ["README", "package-local COPY/LICENSE/README files"],
+      "licenseEvidenceStrategy": "package-local-per-file-review"
+    },
+    {
+      "id": "helpcontent2",
+      "role": "Bundled and online LibreOffice help source plus media",
+      "repository": "https://github.com/LibreOffice/help.git",
+      "referencePath": "vendor/libreoffice-reference/helpcontent2/",
+      "tag": "libreoffice-26.8.0.2",
+      "tagObject": "7f6a507dcaf2c370f27448aa60cf4a7a3af64c3e",
+      "commit": "70c3f30b73ae2cc3e1d2abe0e8c7cf643a56715b",
+      "trackedFiles": 13398,
+      "corpusShape": {
+        "xhpTopics": 2746,
+        "mediaPaths": 9099
+      },
+      "licenseEvidence": ["README.md", "individual XHP headers"],
+      "licenseEvidenceStrategy": "per-file-header-and-provenance-review"
+    },
+    {
+      "id": "translations",
+      "role": "Localized LibreOffice UI message catalogs",
+      "repository": "https://github.com/LibreOffice/translations.git",
+      "referencePath": "vendor/libreoffice-reference/translations/",
+      "tag": "libreoffice-26.8.0.2",
+      "tagObject": "7ea2fd2a1bcaa110743f748943f0ada82408616f",
+      "commit": "362fd2cb41c5404e3712db9fad55b2357001e1f3",
+      "trackedFiles": 25704,
+      "corpusShape": {
+        "poCatalogs": 25699,
+        "localeDirectories": 131,
+        "topLevelDomains": 47
+      },
+      "licenseEvidence": ["README", "individual PO catalog metadata and source provenance"],
+      "licenseEvidenceStrategy": "per-catalog-and-source-provenance-review"
+    }
+  ],
   "licenseEvidence": [
     {
       "path": "README.md",
-      "description": "Upstream project overview describing LibreOffice as copyleft-licensed"
+      "description": "Core project overview describing LibreOffice as copyleft-licensed"
     },
     {
       "path": "COPYING",
-      "description": "GNU General Public License version 3 text"
+      "description": "GNU General Public License version 3 text in core"
     },
     {
       "path": "COPYING.LGPL",
-      "description": "GNU Lesser General Public License version 3 text"
+      "description": "GNU Lesser General Public License version 3 text in core"
     },
     {
       "path": "COPYING.MPL",
-      "description": "Mozilla Public License version 2.0 text"
+      "description": "Mozilla Public License version 2.0 text in core"
     }
   ],
   "licensePolicy": "per-file-review-required-before-copying",
