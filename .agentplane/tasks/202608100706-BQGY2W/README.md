@@ -1,10 +1,11 @@
 ---
 id: "202608100706-BQGY2W"
 title: "Validate and commit corrected AgentPlane policy gateway"
-status: "DOING"
+result_summary: "verified-202608100706-BQGY2W"
+status: "DONE"
 priority: "high"
 owner: "DOCS"
-revision: 16
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-10T07:12:31.790Z"
+  updated_at: "2026-08-10T07:14:24.105Z"
   updated_by: "CODER"
   note: "verified-202608100706-BQGY2W"
   attempts: 0
@@ -44,11 +45,38 @@ quality_review:
     - ".agentplane/tasks/202608100706-BQGY2W/README.md verification record"
   findings:
     - "No blocking or rework findings: AGENTS.md removes the unsupported task advance/agent-json protocol, restores valid direct and branch_pr command references, preserves strict load routing and size budgets, and changes no canonical policy modules."
-commit: null
+runner:
+  run_id: "2026-08-10T07-08-02-785Z"
+  status: "failed"
+  adapter_id: "codex"
+  mode: "execute"
+  updated_at: "2026-08-10T07:16:12.440Z"
+  started_at: "2026-08-10T07:08:02.793Z"
+  ended_at: "2026-08-10T07:16:12.436Z"
+  exit_code: 1
+  target:
+    kind: "task"
+    task_id: "202608100706-BQGY2W"
+  summary: "Codex runner failed; inspect run artifacts for details."
+  output_paths:
+    - "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/bundle.json"
+    - "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/bootstrap.md"
+    - "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/agent-trace.jsonl"
+    - "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/stderr.log"
+    - "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/result.source.json"
+    - "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/codex-last-message.md"
+    - "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/result.invalid.json"
+    - "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/result.json"
+commit:
+  hash: "4902524e9db7ea01211e2fb7e3c613fc2378f0a9"
+  message: "📝 BQGY2W docs: validate corrected policy gateway"
 comments:
   -
     author: "DOCS"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608100706-BQGY2W. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,9 +97,22 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202608100706-BQGY2W"
+  -
+    type: "verify"
+    at: "2026-08-10T07:14:24.105Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608100706-BQGY2W"
+  -
+    type: "status"
+    at: "2026-08-10T07:14:24.278Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608100706-BQGY2W. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-10T07:12:31.885Z"
-doc_updated_by: "DOCS"
+doc_updated_at: "2026-08-10T07:16:12.455Z"
+doc_updated_by: "CODER"
 description: "Validate the user-supplied AGENTS.md replacement against AgentPlane 0.6.26 and canonical policy modules, commit only the corrected gateway and task lifecycle artifacts, and close the dedicated docs/policy task before resuming frontend implementation."
 sections:
   Summary: "Validate and commit the corrected AgentPlane policy gateway supplied by the user. The replacement must match the installed AgentPlane 0.6.26 direct-workflow command surface and remain a compact routing gateway."
@@ -202,12 +243,77 @@ sections:
     - runner_failure_means: runner_infrastructure_or_task_unknown
     - risks: runner_rail_confusion
 
+    ### 2026-08-10T07:14:24.105Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608100706-BQGY2W
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T07:12:31.885Z, excerpt_hash=sha256:998e97a9dd7862cced99338eca3630cf42078e4f6498d92d8f164aba7b6e6c40
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/blueprint/resolved-snapshot.json
+    - old_digest: 07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127
+    - current_digest: 07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608100706-BQGY2W
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: false
+    - safe_command: agentplane task complete 202608100706-BQGY2W --result verified-202608100706-BQGY2W --commit 19d068574d13f97d29c09435d8f58721fca847cd
+    - diagnostic_command: agentplane task run status 202608100706-BQGY2W
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert the task's deterministic commits if the corrected gateway proves incompatible.
     - Restore the preceding tracked AGENTS.md revision and rerun routing plus AgentPlane doctor.
     - Do not alter or delete the independent frontend task artifact during rollback.
-  Findings: "Pre-implementation read-only evidence on 2026-08-10: `node .agentplane/policy/check-routing.mjs` passed, `agentplane doctor` reported zero errors and warnings, AGENTS.md contains 216 lines, referenced policy imports exist, and `git diff --check -- AGENTS.md` passed. The prior gateway described `task advance --agent-json`, which installed AgentPlane 0.6.26 rejects; the user-supplied replacement restores the compatible direct-workflow command surface. Task-document shell quoting briefly expanded Markdown command substitutions while drafting Verify Steps; the malformed text was detected before plan approval, no implementation or policy file was changed by that error, and the section was replaced safely."
+  Findings: |-
+    Pre-implementation read-only evidence on 2026-08-10: `node .agentplane/policy/check-routing.mjs` passed, `agentplane doctor` reported zero errors and warnings, AGENTS.md contains 216 lines, referenced policy imports exist, and `git diff --check -- AGENTS.md` passed. The prior gateway described `task advance --agent-json`, which installed AgentPlane 0.6.26 rejects; the user-supplied replacement restores the compatible direct-workflow command surface. Task-document shell quoting briefly expanded Markdown command substitutions while drafting Verify Steps; the malformed text was detected before plan approval, no implementation or policy file was changed by that error, and the section was replaced safely.
+
+    <!-- BEGIN RUNNER OUTCOME -->
+
+    #### 2026-08-10T07:16:12.440Z — RUNNER — failed
+
+    RunId: 2026-08-10T07-08-02-785Z
+
+    Adapter: codex
+
+    Mode: execute
+
+    Target: task 202608100706-BQGY2W
+
+    UpdatedAt: 2026-08-10T07:16:12.440Z
+
+    RunArtifacts: .agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z
+
+    ExitCode: 1
+
+    StartedAt: 2026-08-10T07:08:02.793Z
+
+    EndedAt: 2026-08-10T07:16:12.436Z
+
+    Summary: Codex runner failed; inspect run artifacts for details.
+
+    Artifacts: bundle=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/bundle.json, bootstrap=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/bootstrap.md, raw-trace=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/agent-trace.jsonl, stderr-log=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/stderr.log, source-result-manifest=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/result.source.json, assistant-last-message=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/codex-last-message.md, invalid-result-manifest=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/result.invalid.json, result-manifest=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/result.json
+
+    Capabilities: codex.exec
+
+    VerificationHint: runner failed; inspect artifacts before retrying or recording verification evidence.
+
+    <!-- END RUNNER OUTCOME -->
 id_source: "generated"
 ---
 ## Summary
@@ -348,6 +454,38 @@ DecisionContextRef:
 - runner_failure_means: runner_infrastructure_or_task_unknown
 - risks: runner_rail_confusion
 
+### 2026-08-10T07:14:24.105Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608100706-BQGY2W
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T07:12:31.885Z, excerpt_hash=sha256:998e97a9dd7862cced99338eca3630cf42078e4f6498d92d8f164aba7b6e6c40
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/blueprint/resolved-snapshot.json
+- old_digest: 07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127
+- current_digest: 07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608100706-BQGY2W
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: false
+- safe_command: agentplane task complete 202608100706-BQGY2W --result verified-202608100706-BQGY2W --commit 19d068574d13f97d29c09435d8f58721fca847cd
+- diagnostic_command: agentplane task run status 202608100706-BQGY2W
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -359,3 +497,35 @@ DecisionContextRef:
 ## Findings
 
 Pre-implementation read-only evidence on 2026-08-10: `node .agentplane/policy/check-routing.mjs` passed, `agentplane doctor` reported zero errors and warnings, AGENTS.md contains 216 lines, referenced policy imports exist, and `git diff --check -- AGENTS.md` passed. The prior gateway described `task advance --agent-json`, which installed AgentPlane 0.6.26 rejects; the user-supplied replacement restores the compatible direct-workflow command surface. Task-document shell quoting briefly expanded Markdown command substitutions while drafting Verify Steps; the malformed text was detected before plan approval, no implementation or policy file was changed by that error, and the section was replaced safely.
+
+<!-- BEGIN RUNNER OUTCOME -->
+
+#### 2026-08-10T07:16:12.440Z — RUNNER — failed
+
+RunId: 2026-08-10T07-08-02-785Z
+
+Adapter: codex
+
+Mode: execute
+
+Target: task 202608100706-BQGY2W
+
+UpdatedAt: 2026-08-10T07:16:12.440Z
+
+RunArtifacts: .agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z
+
+ExitCode: 1
+
+StartedAt: 2026-08-10T07:08:02.793Z
+
+EndedAt: 2026-08-10T07:16:12.436Z
+
+Summary: Codex runner failed; inspect run artifacts for details.
+
+Artifacts: bundle=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/bundle.json, bootstrap=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/bootstrap.md, raw-trace=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/agent-trace.jsonl, stderr-log=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/stderr.log, source-result-manifest=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/result.source.json, assistant-last-message=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/codex-last-message.md, invalid-result-manifest=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/result.invalid.json, result-manifest=/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/result.json
+
+Capabilities: codex.exec
+
+VerificationHint: runner failed; inspect artifacts before retrying or recording verification evidence.
+
+<!-- END RUNNER OUTCOME -->

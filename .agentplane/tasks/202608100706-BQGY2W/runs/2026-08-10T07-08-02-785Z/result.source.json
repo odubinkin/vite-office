@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "success",
+  "summary": "Validated and committed the corrected AgentPlane policy gateway, recorded verification and evaluator evidence, and marked task 202608100706-BQGY2W DONE.",
+  "capabilities_used": [
+    "runner.exec",
+    "file.read",
+    "file.write",
+    "git.commit",
+    "agentplane.verify",
+    "agentplane.evaluator"
+  ],
+  "required_state": {
+    "policy_decision_recorded": true
+  },
+  "policy_decision_evidence": ".agentplane/tasks/202608100706-BQGY2W/runs/2026-08-10T07-08-02-785Z/events.jsonl:runner_prepared.data.policy_decision",
+  "commits": [
+    "4902524e9db7ea01211e2fb7e3c613fc2378f0a9",
+    "19d0685"
+  ],
+  "verification": {
+    "policy_routing": "pass",
+    "agentplane_doctor": "pass: errors=0 warnings=0",
+    "gateway_lines": 216,
+    "references": "pass: all 15 referenced repository paths exist",
+    "whitespace": "pass",
+    "evaluator": "pass"
+  },
+  "artifacts": [
+    "AGENTS.md",
+    ".agentplane/tasks/202608100706-BQGY2W/README.md",
+    ".agentplane/tasks/202608100706-BQGY2W/quality/20260810-071216645-recovery-context/quality-report.json"
+  ],
+  "parent_action": "After this runner exits, execute the refreshed route to commit terminal runner artifacts; the current active runner cannot make its own trace terminal before exit.",
+  "preserved_paths": [
+    ".agentplane/tasks/202608100659-GY449B/README.md"
+  ]
+}
