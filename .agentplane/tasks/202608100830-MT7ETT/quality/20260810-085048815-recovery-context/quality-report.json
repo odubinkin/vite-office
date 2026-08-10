@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202608100830-MT7ETT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T08:50:48.815Z",
+  "verdict": "pass",
+  "summary": "The validator creates a small, typed, fully tested and deterministic acquisition gate without copying upstream content or overstating parity.",
+  "evaluated_sha": "df842527df437d51ba156b2db6d2fd7f5a5c2180",
+  "blueprint_digest": "5880600641ef3f922bc18434a3abfdde18edfb5d7366fea793b94524ec6ec43a",
+  "findings": [
+    "Reviewed manifest parsing, path-containment check, Git identity/provenance/cleanliness checks, exact corpus category floors, canonical report sorting, command wiring, and task documentation against the live pinned checkout."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608100830-MT7ETT/README.md",
+    "scripts/libreoffice-inventory/",
+    "docs/program/inventory-contract.md",
+    "package.json",
+    "npm run verify: passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The report proves corpus acquisition integrity only; the next bounded extractors must still create and map every source, test, help, translation, and dictionary item."
+  ]
+}

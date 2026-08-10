@@ -70,11 +70,11 @@ and validated in CI.
 
 ### Task 0.4a — Baseline contract validator
 
-Task `202608100830-MT7ETT` establishes the TypeScript validator and deterministic
-JSON report that gate all later inventory generation. It validates the complete
-four-corpus pinned checkout and its acquisition floors, but intentionally does
-not create atomic inventory records or advance parity status. The remaining Task
-0.4 extractors will use this contract as their input boundary.
+Completed by AgentPlane task `202608100830-MT7ETT`. The TypeScript validator and
+deterministic JSON report gate all later inventory generation. It validates the
+complete four-corpus pinned checkout and its acquisition floors, but
+intentionally does not create atomic inventory records or advance parity status.
+The remaining Task 0.4 extractors will use this contract as their input boundary.
 
 ## Phase 1: shared office platform
 
