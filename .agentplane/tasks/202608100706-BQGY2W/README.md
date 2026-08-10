@@ -4,7 +4,7 @@ title: "Validate and commit corrected AgentPlane policy gateway"
 status: "DOING"
 priority: "high"
 owner: "DOCS"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,32 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-10T07:10:47.438Z"
-  updated_by: "DOCS"
-  note: "Gateway validation passed against AgentPlane 0.6.26 and canonical policy modules."
+  updated_at: "2026-08-10T07:12:31.790Z"
+  updated_by: "CODER"
+  note: "verified-202608100706-BQGY2W"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-10T07:12:16.645Z"
+  updated_by: "EVALUATOR"
+  note: "Corrected gateway matches the approved docs/policy scope and AgentPlane 0.6.26 runtime contract."
+  evaluated_sha: "4902524e9db7ea01211e2fb7e3c613fc2378f0a9"
+  blueprint_digest: "07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127"
+  evidence_refs:
+    - ".agentplane/tasks/202608100706-BQGY2W/README.md"
+    - ".agentplane/tasks/202608100706-BQGY2W/quality/20260810-071216645-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608100706-BQGY2W/quality/20260810-071216645-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608100706-BQGY2W/quality/20260810-071216645-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608100706-BQGY2W/blueprint/resolved-snapshot.json"
+    - "commit 4902524e9db7"
+    - "git diff -- AGENTS.md"
+    - "node .agentplane/policy/check-routing.mjs: policy routing OK"
+    - "agentplane doctor: errors=0 warnings=0"
+    - "wc -l AGENTS.md: 216"
+    - "git diff --check -- AGENTS.md: clean"
+    - ".agentplane/tasks/202608100706-BQGY2W/README.md verification record"
+  findings:
+    - "No blocking or rework findings: AGENTS.md removes the unsupported task advance/agent-json protocol, restores valid direct and branch_pr command references, preserves strict load routing and size budgets, and changes no canonical policy modules."
 commit: null
 comments:
   -
@@ -41,8 +63,14 @@ events:
     author: "DOCS"
     state: "ok"
     note: "Gateway validation passed against AgentPlane 0.6.26 and canonical policy modules."
+  -
+    type: "verify"
+    at: "2026-08-10T07:12:31.790Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608100706-BQGY2W"
 doc_version: 3
-doc_updated_at: "2026-08-10T07:10:47.563Z"
+doc_updated_at: "2026-08-10T07:12:31.885Z"
 doc_updated_by: "DOCS"
 description: "Validate the user-supplied AGENTS.md replacement against AgentPlane 0.6.26 and canonical policy modules, commit only the corrected gateway and task lifecycle artifacts, and close the dedicated docs/policy task before resuming frontend implementation."
 sections:
@@ -140,6 +168,38 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - runner_required: true
     - runner_failure_means: inspect_runner_artifacts
+    - risks: runner_rail_confusion
+
+    ### 2026-08-10T07:12:31.790Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608100706-BQGY2W
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T07:10:47.563Z, excerpt_hash=sha256:998e97a9dd7862cced99338eca3630cf42078e4f6498d92d8f164aba7b6e6c40
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/blueprint/resolved-snapshot.json
+    - old_digest: 07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127
+    - current_digest: 07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608100706-BQGY2W
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: false
+    - safe_command: agentplane task complete 202608100706-BQGY2W --result verified-202608100706-BQGY2W --commit 4902524e9db7ea01211e2fb7e3c613fc2378f0a9
+    - diagnostic_command: agentplane task run status 202608100706-BQGY2W
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
     - risks: runner_rail_confusion
 
     <!-- END VERIFICATION RESULTS -->
@@ -254,6 +314,38 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - runner_required: true
 - runner_failure_means: inspect_runner_artifacts
+- risks: runner_rail_confusion
+
+### 2026-08-10T07:12:31.790Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608100706-BQGY2W
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T07:10:47.563Z, excerpt_hash=sha256:998e97a9dd7862cced99338eca3630cf42078e4f6498d92d8f164aba7b6e6c40
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100706-BQGY2W/blueprint/resolved-snapshot.json
+- old_digest: 07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127
+- current_digest: 07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608100706-BQGY2W
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: false
+- safe_command: agentplane task complete 202608100706-BQGY2W --result verified-202608100706-BQGY2W --commit 4902524e9db7ea01211e2fb7e3c613fc2378f0a9
+- diagnostic_command: agentplane task run status 202608100706-BQGY2W
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
 - risks: runner_rail_confusion
 
 <!-- END VERIFICATION RESULTS -->

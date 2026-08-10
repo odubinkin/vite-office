@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202608100706-BQGY2W",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T07:12:16.645Z",
+  "verdict": "pass",
+  "summary": "Corrected gateway matches the approved docs/policy scope and AgentPlane 0.6.26 runtime contract.",
+  "evaluated_sha": "4902524e9db7ea01211e2fb7e3c613fc2378f0a9",
+  "blueprint_digest": "07f31dd9fcab28434e25d3ecedf3e9ccc950fee89651b538d7e661e8bd2d6127",
+  "findings": [
+    "No blocking or rework findings: AGENTS.md removes the unsupported task advance/agent-json protocol, restores valid direct and branch_pr command references, preserves strict load routing and size budgets, and changes no canonical policy modules."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608100706-BQGY2W/README.md",
+    "commit 4902524e9db7",
+    "git diff -- AGENTS.md",
+    "node .agentplane/policy/check-routing.mjs: policy routing OK",
+    "agentplane doctor: errors=0 warnings=0",
+    "wc -l AGENTS.md: 216",
+    "git diff --check -- AGENTS.md: clean",
+    ".agentplane/tasks/202608100706-BQGY2W/README.md verification record"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Future AgentPlane command-surface changes may require another dedicated gateway update; current evidence is pinned to installed version 0.6.26."
+  ]
+}
