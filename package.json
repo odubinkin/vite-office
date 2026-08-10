@@ -23,6 +23,7 @@
     "inventory:junit-source-targets": "tsx scripts/libreoffice-inventory/junit-source-target-cli.ts",
     "inventory:python-test-modules": "tsx scripts/libreoffice-inventory/python-test-module-cli.ts",
     "inventory:ui-test-source-targets": "tsx scripts/libreoffice-inventory/ui-test-source-cli.ts",
+    "inventory:cppunit-registrations": "tsx scripts/libreoffice-inventory/cppunit-registration-cli.ts",
     "inventory:help-topics": "tsx scripts/libreoffice-inventory/help-topics-cli.ts",
     "inventory:translations": "tsx scripts/libreoffice-inventory/translations-cli.ts",
     "inventory:dictionaries": "tsx scripts/libreoffice-inventory/dictionaries-cli.ts",

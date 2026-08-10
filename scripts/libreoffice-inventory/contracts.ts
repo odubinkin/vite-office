@@ -348,6 +348,51 @@ export interface CoreUITestSourceTargetInventory {
   readonly summary: Readonly<Record<CoreUITestSourceTargetStatus, number>>;
 }
 
+/** Identifies the supported Cppunit macro family that registers one test case. */
+export type CoreCppunitRegistrationKind = "CPPUNIT_TEST" | "CPPUNIT_TEST_FIXTURE";
+
+/** Describes one registered Cppunit test case linked to existing physical source-target and constructor provenance. */
+export interface CoreCppunitRegistrationRecord {
+  /** Pinned core commit that makes registration provenance reproducible. */
+  readonly commit: string;
+  /** Stable identifier of the exact inventoried CppunitTest constructor that owns the source target. */
+  readonly constructorId: string;
+  /** Always core because Cppunit registrations are declared in the core repository. */
+  readonly corpusId: "core";
+  /** Fixture type supplied by CPPUNIT_TEST_FIXTURE, otherwise null. */
+  readonly fixtureName: string | null;
+  /** Stable identifier derived from physical source-target provenance and source line. */
+  readonly id: string;
+  /** Exact Cppunit registration macro family. */
+  readonly kind: CoreCppunitRegistrationKind;
+  /** Exact one-based line at which the registration macro starts. */
+  readonly line: number;
+  /** Explicit handoff state until a later task maps the registered behavior to atomic parity IDs. */
+  readonly mappingStatus: "unmapped";
+  /** Exact Git-tracked physical C++ path containing the registration. */
+  readonly sourcePath: string;
+  /** Stable identifier of the exact existing Cppunit source-target record that owns sourcePath. */
+  readonly sourceTargetId: string;
+  /** Registered C++ test method identifier. */
+  readonly testName: string;
+}
+
+/** Defines the canonical generated inventory of Cppunit registration macros in pinned physical C++ source targets. */
+export interface CoreCppunitRegistrationInventory {
+  /** Pinned core commit shared by every generated record. */
+  readonly coreCommit: string;
+  /** Always core because auxiliary corpora are outside this extraction. */
+  readonly corpusId: "core";
+  /** Stable generator identifier distinguishing this provenance inventory from authored source. */
+  readonly generatedBy: "inventory:cppunit-registrations";
+  /** Deterministically ordered Cppunit registration records linked to physical source targets. */
+  readonly records: readonly CoreCppunitRegistrationRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+  /** Exact per-macro count used as a pinned completeness guard. */
+  readonly summary: Readonly<Record<CoreCppunitRegistrationKind, number>>;
+}
+
 /** Describes one pinned LibreOffice XHP help-topic path without copying its documentation text. */
 export interface HelpTopicRecord {
   /** Help area derived from source/text/<area>/ in the repository-relative topic path. */

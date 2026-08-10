@@ -4,7 +4,7 @@ title: "Extract pinned LibreOffice Cppunit test registrations into atomic record
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: extract exact pinned Cppunit test registrations with source-target and constructor provenance inside the approved scope."
 doc_version: 3
-doc_updated_at: "2026-08-10T11:17:02.474Z"
+doc_updated_at: "2026-08-10T11:24:49.003Z"
 doc_updated_by: "CODER"
 description: "Parse pinned Cppunit registration macro invocations, link each registered test name to existing Cppunit source-target and constructor provenance, and generate deterministic atomic records without copying test bodies."
 sections:
@@ -60,7 +60,10 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: `scripts/libreoffice-inventory/contracts.ts` is 536 lines and reported as a decomposition review candidate.
+    - Impact: it remains below the mandatory 1,000-line decomposition threshold.
+    - Resolution: retain it as the central serializable inventory-schema registry in this task; splitting only the newly added Cppunit contracts would create cross-module churn without reducing a cohesive contract responsibility. Reassess on the next contract-family addition or before 1,000 lines.
 id_source: "generated"
 ---
 ## Summary
@@ -97,3 +100,7 @@ Parse pinned Cppunit registration macro invocations, link each registered test n
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: `scripts/libreoffice-inventory/contracts.ts` is 536 lines and reported as a decomposition review candidate.
+- Impact: it remains below the mandatory 1,000-line decomposition threshold.
+- Resolution: retain it as the central serializable inventory-schema registry in this task; splitting only the newly added Cppunit contracts would create cross-module churn without reducing a cohesive contract responsibility. Reassess on the next contract-family addition or before 1,000 lines.

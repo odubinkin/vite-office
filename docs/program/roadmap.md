@@ -151,6 +151,15 @@ constructor IDs. It has no unevaluated Make expressions and no empty literal
 module roots. It is provenance-only and `unmapped`; assertions, fixtures,
 platform evaluation, and local executable test mappings remain separate work.
 
+### Task 0.4k — Core Cppunit registration extractor
+
+Completed by AgentPlane task `202608101116-VZH32T`. The generated 8,072-record
+Cppunit registration inventory links each supported `CPPUNIT_TEST` or
+`CPPUNIT_TEST_FIXTURE` invocation to an existing physical Cppunit source-target
+and constructor ID: 3,508 ordinary registrations and 4,564 fixture
+registrations. It is provenance-only and `unmapped`; assertion, fixture,
+platform evaluation, and local executable test mappings remain separate work.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:
