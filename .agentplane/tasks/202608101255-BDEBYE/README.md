@@ -1,10 +1,12 @@
 ---
 id: "202608101255-BDEBYE"
 title: "Add Writer workbench undo and redo controls"
-status: "DOING"
+result_summary: "Writer workbench undo and redo contract verified."
+risk_level: "low"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +41,16 @@ quality_review:
     - "npm run verify passed"
   findings:
     - "No confirmed defects: immutable snapshots, accessible controls, bound states, branch truncation, tests, and documentation are present."
-commit: null
+commit:
+  hash: "9d06f67a071a555134fdda12241f2a9c0074d566"
+  message: "✅ BDEBYE task: record Writer history verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: connect approved transaction history to the Writer workbench controls."
+  -
+    author: "CODER"
+    body: "Verified: Writer undo and redo controls passed all declared checks."
 events:
   -
     type: "status"
@@ -58,8 +65,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified Writer undo/redo workbench: npm run verify passed (application 29 tests/100% coverage, inventory 67 tests/100% coverage, Playwright 1/1); history buttons, bounds, restoration, and redo-branch truncation are covered."
+  -
+    type: "status"
+    at: "2026-08-10T13:02:29.668Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer undo and redo controls passed all declared checks."
 doc_version: 3
-doc_updated_at: "2026-08-10T13:02:16.409Z"
+doc_updated_at: "2026-08-10T13:02:29.672Z"
 doc_updated_by: "CODER"
 description: "Connect the existing immutable transaction history to the one-paragraph Writer workbench with accessible Undo and Redo controls, without adding rich-text editing, keyboard shortcut handling, persistence, or broad LibreOffice parity claims."
 sections:
@@ -116,6 +130,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "6d31e33db3d0d3c801731822ab7773c774ad3b23"
+    message: "✨ BDEBYE code: add Writer undo redo controls"
 id_source: "generated"
 ---
 ## Summary
