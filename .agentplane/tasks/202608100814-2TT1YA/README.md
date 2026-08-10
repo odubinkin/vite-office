@@ -4,7 +4,7 @@ title: "Acquire pinned LibreOffice help translation and dictionary corpora"
 status: "DOING"
 priority: "high"
 owner: "CURATOR"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -29,11 +29,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-08-10T08:28:34.375Z"
+  updated_by: "CURATOR"
+  note: "Verified all four shallow, clean pinned repositories; exact corpus counts; schema v2; ignored-reference boundary; local and pinned GitHub links; format, routing, doctor, and diff checks."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-10T08:28:51.944Z"
+  updated_by: "EVALUATOR"
+  note: "The pinned four-repository baseline is exact, reproducible, ignored by the product repository, and explicitly does not overclaim parity or licensing uniformity."
+  evaluated_sha: "9a5de3a840ca203ff8714555828f7a74e9811611"
+  blueprint_digest: "ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c"
+  evidence_refs:
+    - ".agentplane/tasks/202608100814-2TT1YA/README.md"
+    - ".agentplane/tasks/202608100814-2TT1YA/quality/20260810-082851944-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608100814-2TT1YA/quality/20260810-082851944-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608100814-2TT1YA/quality/20260810-082851944-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608100814-2TT1YA/blueprint/resolved-snapshot.json"
+    - "docs/program/libreoffice-baseline.json"
+    - "docs/program/libreoffice-baseline.md"
+    - "docs/program/documentation-strategy.md"
+    - "docs/program/roadmap.md"
+  findings:
+    - "Reviewed manifest and prose identities against the live checkout: all commits, annotated tags, paths, corpus counts, pending-status guards, and provenance boundaries agree."
 commit: null
 comments:
   -
@@ -47,8 +66,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-08-10T08:28:34.375Z"
+    author: "CURATOR"
+    state: "ok"
+    note: "Verified all four shallow, clean pinned repositories; exact corpus counts; schema v2; ignored-reference boundary; local and pinned GitHub links; format, routing, doctor, and diff checks."
 doc_version: 3
-doc_updated_at: "2026-08-10T08:28:06.053Z"
+doc_updated_at: "2026-08-10T08:28:34.470Z"
 doc_updated_by: "CURATOR"
 description: "Initialize the three release-pinned LibreOffice gitlink corpora at their exact commits inside the ignored reference checkout, record repository and licensing provenance, and extend the reproducible documentation baseline without copying upstream material into tracked paths."
 sections:
@@ -85,7 +110,45 @@ sections:
     7. Resolve all changed local Markdown links and validate pinned GitHub evidence links; require acquisition counts/SHAs to appear in the baseline/strategy and reject statements claiming completed inventory or parity.
     8. `npm run format:check && node .agentplane/policy/check-routing.mjs && ap doctor` — formatting, routing, and AgentPlane health pass.
     9. `git diff --check && git status --short --untracked-files=all` — no whitespace defects or unintended tracked/untracked artifacts remain; the ignored corpora do not appear in parent status.
-  Verification: "Pending implementation. Record exact commands, pass/fail results, concise evidence, covered scope, and relevant links after execution."
+  Verification: |-
+    Pending implementation. Record exact commands, pass/fail results, concise evidence, covered scope, and relevant links after execution.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-08-10T08:28:34.375Z — VERIFY — ok
+
+    By: CURATOR
+
+    Note: Verified all four shallow, clean pinned repositories; exact corpus counts; schema v2; ignored-reference boundary; local and pinned GitHub links; format, routing, doctor, and diff checks.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:28:06.053Z, excerpt_hash=sha256:4246da8b8616fd43da85bec6486b8ee57cafc4524e5d42a5462a57dd9280ef29
+
+    Details:
+
+    Counts: core 149172; dictionaries 859; help 13398 including 2746 XHP; translations 25704 including 25699 PO across 131 locales. Live commits and annotated tag objects match the documented libreoffice-26.8.0.2 baseline.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100814-2TT1YA/blueprint/resolved-snapshot.json
+    - old_digest: ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c
+    - current_digest: ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608100814-2TT1YA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task run 202608100814-2TT1YA
+    - diagnostic_command: agentplane task run status 202608100814-2TT1YA
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Before closure, deinitialize only the three named submodules and remove only their resolved Git metadata/worktrees if acquisition must be abandoned; never target a broad directory or unrelated checkout. Restore only this task’s four scoped documentation paths. After commits exist, use a traceable revert rather than rewriting history. Every corpus can be reacquired from its documented official repository and core-pinned commit."
   Findings: |-
     Pre-acquisition evidence: GitHub recursive trees report 859 dictionary blobs (~498 MB), 13,398 help blobs (~105 MB), and 25,704 translation blobs (~1.97 GB); 24 GiB is available locally. GitHub full-history repository size for translations is much larger, so depth-one acquisition is mandatory. None of the three repositories exposes a root license file through GitHub metadata; per-file/package provenance review remains mandatory. Installed AgentPlane 0.6.26 lacks the gateway `task advance --agent-json` command and its configured runner is prohibited by the user, so this task uses the previously established supported direct lifecycle manually.
@@ -140,6 +203,43 @@ Authority and stop rules:
 ## Verification
 
 Pending implementation. Record exact commands, pass/fail results, concise evidence, covered scope, and relevant links after execution.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-08-10T08:28:34.375Z — VERIFY — ok
+
+By: CURATOR
+
+Note: Verified all four shallow, clean pinned repositories; exact corpus counts; schema v2; ignored-reference boundary; local and pinned GitHub links; format, routing, doctor, and diff checks.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:28:06.053Z, excerpt_hash=sha256:4246da8b8616fd43da85bec6486b8ee57cafc4524e5d42a5462a57dd9280ef29
+
+Details:
+
+Counts: core 149172; dictionaries 859; help 13398 including 2746 XHP; translations 25704 including 25699 PO across 131 locales. Live commits and annotated tag objects match the documented libreoffice-26.8.0.2 baseline.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100814-2TT1YA/blueprint/resolved-snapshot.json
+- old_digest: ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c
+- current_digest: ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608100814-2TT1YA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task run 202608100814-2TT1YA
+- diagnostic_command: agentplane task run status 202608100814-2TT1YA
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

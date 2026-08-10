@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202608100814-2TT1YA",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T08:28:51.944Z",
+  "verdict": "pass",
+  "summary": "The pinned four-repository baseline is exact, reproducible, ignored by the product repository, and explicitly does not overclaim parity or licensing uniformity.",
+  "evaluated_sha": "9a5de3a840ca203ff8714555828f7a74e9811611",
+  "blueprint_digest": "ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c",
+  "findings": [
+    "Reviewed manifest and prose identities against the live checkout: all commits, annotated tags, paths, corpus counts, pending-status guards, and provenance boundaries agree."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608100814-2TT1YA/README.md",
+    "docs/program/libreoffice-baseline.json",
+    "docs/program/libreoffice-baseline.md",
+    "docs/program/documentation-strategy.md",
+    "docs/program/roadmap.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Upstream corpus licenses vary by file or package; no corpus material was copied into tracked product paths."
+  ]
+}
