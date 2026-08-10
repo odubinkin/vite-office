@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202608100853-D91P3V",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T09:04:39.532Z",
+  "verdict": "pass",
+  "summary": "The generated core-module inventory is deterministic, provenance-complete, explicitly unmapped, and does not copy upstream content or overstate parity.",
+  "evaluated_sha": "353f13165653cde69b8397230407df9a42b6a1eb",
+  "blueprint_digest": "78df4eabcf7ed22a6dd6bd1053456bb8561d8c3891fab3d6af8c291b9073c5c4",
+  "findings": [
+    "Reviewed the matcher, code-unit ordering, duplicate rejection, full-baseline prerequisite, generated metadata, exact 237-path comparison, 100% coverage, and documentation handoff."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608100853-D91P3V/README.md",
+    "scripts/libreoffice-inventory/modules.ts",
+    "scripts/libreoffice-inventory/modules-cli.ts",
+    "docs/program/inventory/core-modules.json",
+    "npm run verify: passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The records are structural provenance only; follow-up extractors must still map source symbols, tests, and documentation to atomic parity IDs."
+  ]
+}

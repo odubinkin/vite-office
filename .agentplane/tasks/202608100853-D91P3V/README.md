@@ -1,10 +1,11 @@
 ---
 id: "202608100853-D91P3V"
 title: "Inventory pinned LibreOffice core build modules into atomic records"
-status: "DOING"
+result_summary: "Verified deterministic 237-record pinned core module inventory."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -28,11 +29,35 @@ verification:
   updated_by: "CODER"
   note: "Verified deterministic 237-record core module inventory, exact Git path equality, 100% inventory coverage, and full project verification."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-10T09:04:39.532Z"
+  updated_by: "EVALUATOR"
+  note: "The generated core-module inventory is deterministic, provenance-complete, explicitly unmapped, and does not copy upstream content or overstate parity."
+  evaluated_sha: "353f13165653cde69b8397230407df9a42b6a1eb"
+  blueprint_digest: "78df4eabcf7ed22a6dd6bd1053456bb8561d8c3891fab3d6af8c291b9073c5c4"
+  evidence_refs:
+    - ".agentplane/tasks/202608100853-D91P3V/README.md"
+    - ".agentplane/tasks/202608100853-D91P3V/quality/20260810-090439532-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608100853-D91P3V/quality/20260810-090439532-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608100853-D91P3V/quality/20260810-090439532-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608100853-D91P3V/blueprint/resolved-snapshot.json"
+    - "scripts/libreoffice-inventory/modules.ts"
+    - "scripts/libreoffice-inventory/modules-cli.ts"
+    - "docs/program/inventory/core-modules.json"
+    - "npm run verify: passed"
+  findings:
+    - "Reviewed the matcher, code-unit ordering, duplicate rejection, full-baseline prerequisite, generated metadata, exact 237-path comparison, 100% coverage, and documentation handoff."
+commit:
+  hash: "353f13165653cde69b8397230407df9a42b6a1eb"
+  message: "🧪 D91P3V code: record core module verification"
 comments:
   -
     author: "CODER"
     body: "Start: inventory every pinned core Module_*.mk declaration into deterministic unmapped records with complete provenance and coverage."
+  -
+    author: "CODER"
+    body: "Verified: exact core build-module inventory, complete provenance, deterministic output, and all quality gates are recorded."
 events:
   -
     type: "status"
@@ -47,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified deterministic 237-record core module inventory, exact Git path equality, 100% inventory coverage, and full project verification."
+  -
+    type: "status"
+    at: "2026-08-10T09:04:57.150Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: exact core build-module inventory, complete provenance, deterministic output, and all quality gates are recorded."
 doc_version: 3
-doc_updated_at: "2026-08-10T09:04:17.313Z"
+doc_updated_at: "2026-08-10T09:04:57.152Z"
 doc_updated_by: "CODER"
 description: "Extend the deterministic inventory tool with a fully documented and covered extractor for every pinned core Module_*.mk declaration, generate a canonical tracked module inventory with corpus/commit provenance, and expose unmapped module records for later source, test, and documentation mapping."
 sections:
