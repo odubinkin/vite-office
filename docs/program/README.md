@@ -144,6 +144,9 @@ The following documents form the program control plane:
   command definitions, shortcut lookup, and dispatch outcomes.
 - [Browser transaction history](transaction-history.md): immutable snapshot
   history, cursor selection, and pure apply/undo/redo transitions.
+- [Browser document storage adapter contract](storage-adapter.md):
+  browser-independent JSON snapshot boundary and deterministic load/save
+  orchestration without a persistence implementation.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
   publication requirements.
