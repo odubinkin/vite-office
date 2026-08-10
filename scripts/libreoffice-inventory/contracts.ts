@@ -139,6 +139,45 @@ export interface CoreModuleInventory {
   readonly schemaVersion: 1;
 }
 
+/** Identifies one LibreOffice gbuild test-constructor family inventoried from the pinned core checkout. */
+export type CoreTestKind = "CppunitTest" | "JunitTest" | "PythonTest" | "UITest";
+
+/** Describes one upstream gbuild test constructor without copying its source or assertion content. */
+export interface CoreTestRecord {
+  /** Pinned core commit that makes the declaration location reproducible. */
+  readonly commit: string;
+  /** Always core because all four constructor families are declared in the core repository. */
+  readonly corpusId: "core";
+  /** Stable identifier derived from constructor kind, declaration path, and line number. */
+  readonly id: string;
+  /** Explicit handoff state until a later task maps assertions to atomic parity IDs. */
+  readonly mappingStatus: "unmapped";
+  /** Exact one-based declaration line reported by Git grep. */
+  readonly line: number;
+  /** Constructor family that declares the test. */
+  readonly kind: CoreTestKind;
+  /** Exact core-repository-relative makefile path. */
+  readonly referencePath: string;
+  /** Name passed to the upstream gbuild test constructor. */
+  readonly testName: string;
+}
+
+/** Defines the canonical generated inventory for all four pinned core gbuild test constructor families. */
+export interface CoreTestInventory {
+  /** Pinned core commit shared by every record. */
+  readonly coreCommit: string;
+  /** Always core because auxiliary corpora are not test-constructor inputs here. */
+  readonly corpusId: "core";
+  /** Stable generator identifier distinguishing the data artifact from authored source. */
+  readonly generatedBy: "inventory:tests";
+  /** Deterministically ordered upstream constructor records. */
+  readonly records: readonly CoreTestRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+  /** Exact per-family record counts used as a baseline completeness guard. */
+  readonly summary: Readonly<Record<CoreTestKind, number>>;
+}
+
 /** Holds an error collection produced when a manifest or local checkout violates the inventory contract. */
 export class BaselineValidationError extends Error {
   /** Machine-readable validation failures collected before execution stopped. */

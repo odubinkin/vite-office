@@ -112,6 +112,8 @@ The following documents form the program control plane:
   pinned four-corpus research input before atomic inventory generation.
 - [Core module inventory](core-module-inventory.md): generated provenance-only
   list of pinned `Module_*.mk` declarations awaiting atomic mapping.
+- [Core test inventory](core-test-inventory.md): generated gbuild test
+  declarations awaiting assertion, fixture, and parity-ID mapping.
 - [Architecture](architecture.md): browser domain boundaries and constraints.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
