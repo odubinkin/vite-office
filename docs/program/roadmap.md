@@ -114,6 +114,15 @@ dictionary-file inventory covers every pinned AFF and DIC path in the
 path-level provenance and explicit `unmapped` status; lexical behavior, license,
 and local language-tool mappings remain separate work.
 
+### Task 0.4g — Core CppunitTest source-target extractor
+
+Completed by AgentPlane task `202608100959-2TZGN0`. The generated 686-record
+source-target inventory links every in-scope declaration to an existing
+CppunitTest constructor ID: 684 records resolve to Git-tracked physical `.cxx`
+paths and 2 retain explicit unevaluated Make expressions. It is
+provenance-only and `unmapped`; assertions, fixtures, platform evaluation, and
+local executable test mappings remain separate work.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:

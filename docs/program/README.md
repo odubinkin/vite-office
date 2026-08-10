@@ -114,6 +114,9 @@ The following documents form the program control plane:
   list of pinned `Module_*.mk` declarations awaiting atomic mapping.
 - [Core test inventory](core-test-inventory.md): generated gbuild test
   declarations awaiting assertion, fixture, and parity-ID mapping.
+- [Core test source-target inventory](core-test-source-target-inventory.md):
+  generated CppunitTest source-target provenance linked to existing constructor
+  IDs and awaiting assertion, fixture, and parity-ID mapping.
 - [Help topic inventory](help-topic-inventory.md): generated XHP help-path
   provenance awaiting topic, license, and local-documentation mapping.
 - [Translation catalog inventory](translation-catalog-inventory.md): generated

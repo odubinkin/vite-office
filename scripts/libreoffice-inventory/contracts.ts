@@ -178,6 +178,47 @@ export interface CoreTestInventory {
   readonly summary: Readonly<Record<CoreTestKind, number>>;
 }
 
+/** Identifies whether a CppunitTest source target resolved to a tracked physical C++ file or remains a Make expression. */
+export type CoreTestSourceTargetStatus = "expression" | "tracked";
+
+/** Describes one source target declared for an already inventoried pinned CppunitTest constructor. */
+export interface CoreTestSourceTargetRecord {
+  /** Pinned core commit that makes the declaration and physical path reproducible. */
+  readonly commit: string;
+  /** Stable identifier of the exact inventoried CppunitTest constructor that owns this target. */
+  readonly constructorId: string;
+  /** Always core because CppunitTest declarations are owned by the core repository. */
+  readonly corpusId: "core";
+  /** Exact core-repository-relative makefile path containing the source-target declaration. */
+  readonly declarationPath: string;
+  /** Raw extensionless gbuild source target, preserving the full Make expression when unresolved. */
+  readonly declaredTarget: string;
+  /** Stable identifier derived from constructor provenance and the raw source target. */
+  readonly id: string;
+  /** Explicit handoff state until a later task maps source assertions to atomic parity IDs. */
+  readonly mappingStatus: "unmapped";
+  /** Exact physical core-repository-relative .cxx path for tracked targets, otherwise null. */
+  readonly sourcePath: string | null;
+  /** Whether sourcePath is a tracked physical file or declaredTarget remains an unevaluated Make expression. */
+  readonly targetStatus: CoreTestSourceTargetStatus;
+}
+
+/** Defines the canonical generated inventory of source targets linked to pinned CppunitTest constructor IDs. */
+export interface CoreTestSourceTargetInventory {
+  /** Pinned core commit shared by every generated record. */
+  readonly coreCommit: string;
+  /** Always core because auxiliary corpora are outside this extraction. */
+  readonly corpusId: "core";
+  /** Stable generator identifier distinguishing this provenance inventory from authored source. */
+  readonly generatedBy: "inventory:test-source-targets";
+  /** Deterministically ordered source-target records linked to CppunitTest constructors. */
+  readonly records: readonly CoreTestSourceTargetRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+  /** Exact per-resolution-status counts used as a pinned completeness guard. */
+  readonly summary: Readonly<Record<CoreTestSourceTargetStatus, number>>;
+}
+
 /** Describes one pinned LibreOffice XHP help-topic path without copying its documentation text. */
 export interface HelpTopicRecord {
   /** Help area derived from source/text/<area>/ in the repository-relative topic path. */
