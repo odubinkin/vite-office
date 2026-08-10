@@ -4,7 +4,7 @@ title: "Implement typed command dispatch and key-binding registry"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-08-10T11:57:28.338Z"
+  updated_by: "REVIEWER"
+  note: "Pass: npm run verify completed successfully; app 11/11 and inventory 67/67 tests retain 100% coverage. Registry tests cover order, shortcut normalization, lookup, executed/disabled/missing dispatch, collisions, malformed input, and caller-input preservation."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-10T11:57:34.818Z"
+  updated_by: "EVALUATOR"
+  note: "Command registry matches approved browser-independent scope with complete deterministic checks."
+  evaluated_sha: "129f9cdc4a2d89432603a52c79ce9c792f4abc45"
+  blueprint_digest: "82c8623a9fa95ed47dc8168a52a04df7baf43a79335eb43a16175d72de9de8aa"
+  evidence_refs:
+    - ".agentplane/tasks/202608101149-8H9J6S/README.md"
+    - ".agentplane/tasks/202608101149-8H9J6S/quality/20260810-115734818-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608101149-8H9J6S/quality/20260810-115734818-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608101149-8H9J6S/quality/20260810-115734818-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608101149-8H9J6S/blueprint/resolved-snapshot.json"
+    - "npm run verify (exit 0); commit 129f9cd"
+  findings:
+    - "No confirmed defect: registry copying, canonical shortcuts, validation, explicit dispatch outcomes, and documented non-goals are covered."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement the approved typed command dispatch and key-binding registry with deterministic browser-independent behavior."
+  -
+    type: "verify"
+    at: "2026-08-10T11:57:28.338Z"
+    author: "REVIEWER"
+    state: "ok"
+    note: "Pass: npm run verify completed successfully; app 11/11 and inventory 67/67 tests retain 100% coverage. Registry tests cover order, shortcut normalization, lookup, executed/disabled/missing dispatch, collisions, malformed input, and caller-input preservation."
 doc_version: 3
-doc_updated_at: "2026-08-10T11:50:04.313Z"
+doc_updated_at: "2026-08-10T11:57:28.423Z"
 doc_updated_by: "CODER"
 description: "Add a browser-only typed command registry with deterministic registration, shortcut lookup, dispatch results, tests, and honest program documentation as shared infrastructure for later office features."
 sections:
@@ -56,6 +78,38 @@ sections:
     5. Run npm run verify, agentplane doctor, and policy routing.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-08-10T11:57:28.338Z — VERIFY — ok
+
+    By: REVIEWER
+
+    Note: Pass: npm run verify completed successfully; app 11/11 and inventory 67/67 tests retain 100% coverage. Registry tests cover order, shortcut normalization, lookup, executed/disabled/missing dispatch, collisions, malformed input, and caller-input preservation.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T11:50:04.313Z, excerpt_hash=sha256:578042cf3759fc9522827083046e0f65eefca047fabac87ce2bc139d7e0ac0f0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608101149-8H9J6S/blueprint/resolved-snapshot.json
+    - old_digest: 82c8623a9fa95ed47dc8168a52a04df7baf43a79335eb43a16175d72de9de8aa
+    - current_digest: 82c8623a9fa95ed47dc8168a52a04df7baf43a79335eb43a16175d72de9de8aa
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608101149-8H9J6S
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task run 202608101149-8H9J6S
+    - diagnostic_command: agentplane task run status 202608101149-8H9J6S
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -89,6 +143,38 @@ Add a browser-only typed command registry with deterministic registration, short
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-08-10T11:57:28.338Z — VERIFY — ok
+
+By: REVIEWER
+
+Note: Pass: npm run verify completed successfully; app 11/11 and inventory 67/67 tests retain 100% coverage. Registry tests cover order, shortcut normalization, lookup, executed/disabled/missing dispatch, collisions, malformed input, and caller-input preservation.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T11:50:04.313Z, excerpt_hash=sha256:578042cf3759fc9522827083046e0f65eefca047fabac87ce2bc139d7e0ac0f0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608101149-8H9J6S/blueprint/resolved-snapshot.json
+- old_digest: 82c8623a9fa95ed47dc8168a52a04df7baf43a79335eb43a16175d72de9de8aa
+- current_digest: 82c8623a9fa95ed47dc8168a52a04df7baf43a79335eb43a16175d72de9de8aa
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608101149-8H9J6S
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task run 202608101149-8H9J6S
+- diagnostic_command: agentplane task run status 202608101149-8H9J6S
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

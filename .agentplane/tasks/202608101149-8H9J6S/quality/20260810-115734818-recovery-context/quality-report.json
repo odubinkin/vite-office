@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101149-8H9J6S",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T11:57:34.818Z",
+  "verdict": "pass",
+  "summary": "Command registry matches approved browser-independent scope with complete deterministic checks.",
+  "evaluated_sha": "129f9cdc4a2d89432603a52c79ce9c792f4abc45",
+  "blueprint_digest": "82c8623a9fa95ed47dc8168a52a04df7baf43a79335eb43a16175d72de9de8aa",
+  "findings": [
+    "No confirmed defect: registry copying, canonical shortcuts, validation, explicit dispatch outcomes, and documented non-goals are covered."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101149-8H9J6S/README.md",
+    "npm run verify (exit 0); commit 129f9cd"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
