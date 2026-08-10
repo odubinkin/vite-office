@@ -25,6 +25,9 @@ describe("App" /**
     ).toBeInTheDocument();
     expect(screen.getByText("No editor features enabled")).toBeInTheDocument();
     expect(screen.getByText("Static frontend")).toBeInTheDocument();
+    expect(
+      screen.getByText(/Untitled Writer Document is a serializable new document/),
+    ).toBeInTheDocument();
     expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length);
   });
 
@@ -41,5 +44,8 @@ describe("App" /**
     expect(calcButton).toHaveAttribute("aria-current", "page");
     expect(screen.getByText("Calc: Foundation only")).toBeInTheDocument();
     expect(screen.getByText(/Worksheets, formulas, analysis/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Untitled Calc Document is a serializable new document/),
+    ).toBeInTheDocument();
   });
 });

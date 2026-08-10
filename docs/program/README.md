@@ -136,6 +136,8 @@ The following documents form the program control plane:
 - [Dictionary file inventory](dictionary-file-inventory.md): generated AFF/DIC
   provenance awaiting lexical-data, license, and language-tool mapping.
 - [Architecture](architecture.md): browser domain boundaries and constraints.
+- [Browser document lifecycle contract](document-lifecycle.md): shared serializable
+  document-header states and pure transition boundaries before content editing.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
   publication requirements.

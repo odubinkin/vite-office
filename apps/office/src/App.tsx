@@ -6,6 +6,7 @@ import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "l
 import { useState } from "react";
 
 import { SuiteCard } from "./components/SuiteCard";
+import { createDocument } from "./domain/document";
 import { suiteDefinitions } from "./domain/suites";
 import type { SuiteDefinition } from "./domain/suites";
 
@@ -16,6 +17,11 @@ import type { SuiteDefinition } from "./domain/suites";
  */
 export function App(): React.JSX.Element {
   const [activeSuite, setActiveSuite] = useState<SuiteDefinition>(suiteDefinitions[0]);
+  const previewDocument = createDocument({
+    id: `preview-${activeSuite.id}`,
+    suiteId: activeSuite.id,
+    title: `Untitled ${activeSuite.name} Document`,
+  });
 
   /**
    * Selects the suite whose foundation status is described in the main panel.
@@ -159,6 +165,15 @@ export function App(): React.JSX.Element {
                     <p className="mt-1 text-sm leading-6 text-slate-600">
                       The production build is a relative-path static asset bundle with no
                       application backend.
+                    </p>
+                  </article>
+                  <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                    <FilePlus2 aria-hidden="true" className="text-indigo-700" size={20} />
+                    <h3 className="mt-3 font-bold text-slate-900">Document lifecycle contract</h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      {previewDocument.title} is a serializable {previewDocument.lifecycle} document
+                      preview at revision {previewDocument.revision}; editing and storage are not
+                      yet enabled.
                     </p>
                   </article>
                 </div>
