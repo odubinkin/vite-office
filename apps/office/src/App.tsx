@@ -3,11 +3,13 @@
  */
 
 import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { SuiteCard } from "./components/SuiteCard";
 import { WriterPlainTextEditor } from "./components/WriterPlainTextEditor";
 import { createDocument } from "./domain/document";
+import { getBrowserShortcut } from "./domain/browser-shortcuts";
+import { createCommandRegistry, dispatchCommand, findCommandByShortcut } from "./domain/commands";
 import {
   applyTransaction,
   createTransactionHistory,
@@ -149,6 +151,89 @@ export function App(): React.JSX.Element {
       },
     );
   }
+
+  useEffect(
+    /**
+     * Installs Writer-only keyboard command dispatch and releases it when dependencies change.
+     *
+     * @returns Cleanup that removes the registered browser listener.
+     */
+    function installWriterShortcuts(): () => void {
+      const registry = createCommandRegistry([
+        {
+          execute: handleWriterUndo,
+          id: "writer.undo",
+          isEnabled:
+            /** Determines whether Ctrl Undo can run for the current Writer history. @returns True when a prior snapshot exists in Writer. */
+            function canUndo(): boolean {
+              return activeSuite.id === "writer" && writerHistory.index > 0;
+            },
+          label: "Undo",
+          shortcut: "Ctrl+Z",
+        },
+        {
+          execute: handleWriterRedo,
+          id: "writer.redo",
+          isEnabled:
+            /** Determines whether Ctrl Redo can run for the current Writer history. @returns True when a following snapshot exists in Writer. */
+            function canRedo(): boolean {
+              return (
+                activeSuite.id === "writer" &&
+                writerHistory.index < writerHistory.entries.length - 1
+              );
+            },
+          label: "Redo",
+          shortcut: "Ctrl+Shift+Z",
+        },
+        {
+          execute: handleWriterUndo,
+          id: "writer.metaUndo",
+          isEnabled:
+            /** Determines whether Meta Undo can run for the current Writer history. @returns True when a prior snapshot exists in Writer. */
+            function canUndo(): boolean {
+              return activeSuite.id === "writer" && writerHistory.index > 0;
+            },
+          label: "Undo",
+          shortcut: "Meta+Z",
+        },
+        {
+          execute: handleWriterRedo,
+          id: "writer.metaRedo",
+          isEnabled:
+            /** Determines whether Meta Redo can run for the current Writer history. @returns True when a following snapshot exists in Writer. */
+            function canRedo(): boolean {
+              return (
+                activeSuite.id === "writer" &&
+                writerHistory.index < writerHistory.entries.length - 1
+              );
+            },
+          label: "Redo",
+          shortcut: "Meta+Shift+Z",
+        },
+      ]);
+      /**
+       * Dispatches one recognized browser shortcut and prevents its native default when executed.
+       *
+       * @param event - Browser keyboard event inspected and optionally cancelled.
+       * @returns Nothing; command execution schedules React state updates.
+       */
+      function handleKeyDown(event: KeyboardEvent): void {
+        const shortcut = getBrowserShortcut(event);
+        if (shortcut === undefined) return;
+        const command = findCommandByShortcut(registry, shortcut);
+        if (command === undefined) return;
+        const result = dispatchCommand(registry, command.id, undefined);
+        if (result.status === "executed") event.preventDefault();
+      }
+      window.addEventListener("keydown", handleKeyDown);
+      /** Removes the listener owned by this effect invocation. @returns Nothing. */
+      function removeWriterShortcuts(): void {
+        window.removeEventListener("keydown", handleKeyDown);
+      }
+      return removeWriterShortcuts;
+    },
+    [activeSuite.id, writerHistory],
+  );
 
   /**
    * Converts one immutable suite definition into its navigation card.
