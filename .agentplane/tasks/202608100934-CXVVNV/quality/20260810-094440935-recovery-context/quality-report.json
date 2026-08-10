@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202608100934-CXVVNV",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T09:44:40.935Z",
+  "verdict": "pass",
+  "summary": "The PO catalog inventory is deterministic, provenance-only, complete for the pinned translations corpus, and fully verified.",
+  "evaluated_sha": "270ffb37c23f14bdf508c2008be8d260e5d0eb87",
+  "blueprint_digest": "e9bd09035b6f88c7dfd9708ad6ad8c0c7e4768abca76667f47e94687ded0d255",
+  "findings": [
+    "No blocking defect found; 25,699 generated records exactly match the pinned Git PO path set across 131 locales."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608100934-CXVVNV/README.md",
+    "Commit 270ffb37c23f; npm run verify passed; double regeneration SHA-256 7a50f67e0d407682070e1a9e68c31212526fd110619d425bf3625b84f29ccd37; exact Git comparison, ap doctor, and policy routing passed."
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Every record remains unmapped until later tasks review individual PO message content, licensing, locale behavior, and local UI documentation."
+  ]
+}
