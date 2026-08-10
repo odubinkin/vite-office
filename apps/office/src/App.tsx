@@ -6,24 +6,30 @@ import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "l
 import { useState } from "react";
 
 import { SuiteCard } from "./components/SuiteCard";
-import { createDocument, type OfficeDocument } from "./domain/document";
+import { WriterPlainTextEditor } from "./components/WriterPlainTextEditor";
+import { createDocument } from "./domain/document";
 import { suiteDefinitions } from "./domain/suites";
 import type { SuiteDefinition } from "./domain/suites";
-import { createWriterDocument, insertWriterText, type WriterDocument } from "./domain/writer";
+import {
+  createWriterDocument,
+  replaceWriterParagraph,
+  type WriterDocument,
+  type WriterParagraph,
+} from "./domain/writer";
 
 /**
- * Creates a deliberately static Writer paragraph preview for the Writer workbench only.
+ * Creates the bounded initial Writer document edited by the workbench textarea.
  *
- * @param document - New selected-suite document header to use without mutation.
- * @returns A Writer document with one explanatory paragraph, or undefined for another suite.
+ * @returns An immutable Writer document with a single empty paragraph and new lifecycle state.
  */
-function createWriterPreview(document: OfficeDocument): WriterDocument | undefined {
-  if (document.suiteId !== "writer") return undefined;
-  return insertWriterText(
-    createWriterDocument(document, "preview-paragraph"),
-    "preview-paragraph",
-    0,
-    "This is a serializable plain-text Writer paragraph preview.",
+function createWriterWorkbenchDocument(): WriterDocument {
+  return createWriterDocument(
+    createDocument({
+      id: "writer-workbench",
+      suiteId: "writer",
+      title: "Untitled Writer Document",
+    }),
+    "writer-paragraph-1",
   );
 }
 
@@ -34,12 +40,14 @@ function createWriterPreview(document: OfficeDocument): WriterDocument | undefin
  */
 export function App(): React.JSX.Element {
   const [activeSuite, setActiveSuite] = useState<SuiteDefinition>(suiteDefinitions[0]);
+  const [writerDocument, setWriterDocument] = useState<WriterDocument>(
+    createWriterWorkbenchDocument,
+  );
   const previewDocument = createDocument({
     id: `preview-${activeSuite.id}`,
     suiteId: activeSuite.id,
     title: `Untitled ${activeSuite.name} Document`,
   });
-  const writerPreview = createWriterPreview(previewDocument);
 
   /**
    * Selects the suite whose foundation status is described in the main panel.
@@ -49,6 +57,26 @@ export function App(): React.JSX.Element {
    */
   function handleSuiteSelect(suite: SuiteDefinition): void {
     setActiveSuite(suite);
+  }
+
+  /**
+   * Replaces the selected Writer paragraph text through the immutable domain transition.
+   *
+   * @param text - Complete next plain-text value emitted by the Writer textarea.
+   * @returns Nothing; React schedules the next Writer document state.
+   */
+  function handleWriterTextChange(text: string): void {
+    setWriterDocument(
+      /**
+       * Applies the complete-text replacement to the sole workbench paragraph.
+       *
+       * @param currentDocument - Current immutable Writer workbench state.
+       * @returns Writer state with the paragraph replacement applied.
+       */
+      function replaceWorkbenchParagraph(currentDocument): WriterDocument {
+        return replaceWriterParagraph(currentDocument, "writer-paragraph-1", text);
+      },
+    );
   }
 
   /**
@@ -145,7 +173,9 @@ export function App(): React.JSX.Element {
                 </h1>
               </div>
               <span className="ml-auto rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-900">
-                No editor features enabled
+                {activeSuite.id === "writer"
+                  ? "Plain-text editing enabled"
+                  : "No editor features enabled"}
               </span>
             </div>
 
@@ -194,17 +224,14 @@ export function App(): React.JSX.Element {
                       yet enabled.
                     </p>
                   </article>
-                  {writerPreview === undefined ? null : (
-                    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                      <FilePlus2 aria-hidden="true" className="text-indigo-700" size={20} />
-                      <h3 className="mt-3 font-bold text-slate-900">Writer paragraph preview</h3>
-                      <p className="mt-1 text-sm leading-6 text-slate-600">
-                        {writerPreview.paragraphs[0]?.text} This is a static model preview, not an
-                        editable Writer canvas.
-                      </p>
-                    </article>
-                  )}
                 </div>
+                {activeSuite.id === "writer" ? (
+                  <WriterPlainTextEditor
+                    document={writerDocument.document}
+                    onTextChange={handleWriterTextChange}
+                    paragraph={writerDocument.paragraphs[0] as WriterParagraph}
+                  />
+                ) : null}
               </div>
             </div>
 

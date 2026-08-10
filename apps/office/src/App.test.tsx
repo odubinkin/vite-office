@@ -13,24 +13,27 @@ describe("App" /**
  *
  * @returns Nothing; Vitest registers the enclosed cases.
  */, function defineAppTests(): void {
-  it("labels the shell as a non-parity foundation preview" /**
-   * Verifies honest status text and the complete planned suite inventory.
+  it("renders the Writer plain-text editor and updates its immutable lifecycle feedback" /**
+   * Verifies the accessible editor starts clean, replaces its sole paragraph, and reports dirty state.
    *
    * @returns Nothing; assertions describe the rendered static shell.
-   */, function verifyFoundationStatus(): void {
+   */, function verifyWriterEditing(): void {
     render(<App />);
 
     expect(
       screen.getByRole("heading", { name: "Browser workbench foundation" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("No editor features enabled")).toBeInTheDocument();
+    expect(screen.getByText("Plain-text editing enabled")).toBeInTheDocument();
     expect(screen.getByText("Static frontend")).toBeInTheDocument();
     expect(
       screen.getByText(/Untitled Writer Document is a serializable new document/),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/This is a serializable plain-text Writer paragraph preview/),
-    ).toBeInTheDocument();
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    expect(editor).toHaveValue("");
+    expect(screen.getByRole("status")).toHaveTextContent("New document · revision 0");
+    fireEvent.change(editor, { target: { value: "A browser-authored paragraph." } });
+    expect(editor).toHaveValue("A browser-authored paragraph.");
+    expect(screen.getByRole("status")).toHaveTextContent("Unsaved changes · revision 1");
     expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length);
   });
 
@@ -50,6 +53,7 @@ describe("App" /**
     expect(
       screen.getByText(/Untitled Calc Document is a serializable new document/),
     ).toBeInTheDocument();
-    expect(screen.queryByText(/Writer paragraph preview/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("textbox", { name: "Writer document text" })).not.toBeInTheDocument();
+    expect(screen.getByText("No editor features enabled")).toBeInTheDocument();
   });
 });

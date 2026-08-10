@@ -13,9 +13,11 @@ shared lifecycle transition to become dirty; an identical replacement preserves
 the original Writer document. Blank initial IDs, missing paragraph IDs, and
 invalid insertion offsets throw deterministic errors.
 
-The Writer workbench shows one static paragraph preview only when Writer is the
-selected suite. It exposes the model's current boundary but is not an editable
-canvas and does not save data.
+The Writer workbench now renders one labelled, keyboard-operable textarea only
+when Writer is selected. It replaces the initial paragraph through the same
+immutable contract and reports the resulting dirty lifecycle state and revision.
+The workbench state is local to the current browser page and does not yet save
+data.
 
 This intentionally does not implement formatting, layout, fields, sections,
 lists, tables, selection, undo/redo, storage, ODT import/export,
