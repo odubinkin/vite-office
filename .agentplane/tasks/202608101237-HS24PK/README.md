@@ -1,10 +1,12 @@
 ---
 id: "202608101237-HS24PK"
 title: "Implement browser locale message catalog contract"
-status: "DOING"
+result_summary: "Locale normalization, fallback, and interpolation contract verified."
+risk_level: "low"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +41,16 @@ quality_review:
     - "npm run verify passed"
   findings:
     - "No confirmed defects: canonical locale normalization, deterministic fallback/interpolation, tests, and documentation are present."
-commit: null
+commit:
+  hash: "227d1a8511b10da37c13ce04fcf055ce5a43c4ea"
+  message: "✅ HS24PK task: record locale catalog verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved browser locale message catalog contract."
+  -
+    author: "CODER"
+    body: "Verified: locale catalog contract passed all declared checks."
 events:
   -
     type: "status"
@@ -58,8 +65,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified locale catalog contract: npm run verify passed (application 29 tests/100% coverage, inventory 67 tests/100% coverage, Playwright 1/1); locale normalization, fallback, interpolation, invalid input, and immutable catalogs are covered."
+  -
+    type: "status"
+    at: "2026-08-10T12:43:47.501Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: locale catalog contract passed all declared checks."
 doc_version: 3
-doc_updated_at: "2026-08-10T12:43:22.520Z"
+doc_updated_at: "2026-08-10T12:43:47.503Z"
 doc_updated_by: "CODER"
 description: "Add browser-independent locale normalization, message catalog fallback, and interpolation contract with focused tests and documentation; exclude importing LibreOffice translations, locale-selection UI, plural-rule breadth, date/number formatting, and RTL rendering."
 sections:
@@ -115,6 +129,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "ce2be94bac98e871e7ac8c4611ded61d1902b26e"
+    message: "✨ HS24PK code: add browser locale message catalog contract"
 id_source: "generated"
 ---
 ## Summary
