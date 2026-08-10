@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "task_id": "202608100659-GY449B",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T07:48:42.275Z",
+  "verdict": "pass",
+  "summary": "The committed frontend foundation satisfies the approved browser-only bootstrap scope, all declared deterministic checks, and the documentation and honesty constraints.",
+  "evaluated_sha": "765c4526b6c82817f9c2af6f21702464bac2a722",
+  "blueprint_digest": "857a1af6a80c0c9487654e8391afb79f6928aeb6756db8eba2f8279deb421d44",
+  "findings": [
+    "PASS: Commit 765c4526b6c8 adds the scoped React, TypeScript, Vite, and Tailwind workspace, ignores the future LibreOffice reference checkout, and contains no backend or cloned upstream source.",
+    "PASS: Strict typing, linting, formatting, deterministic JSDoc validation, and the 500/1000-line decomposition gate are implemented and recorded as passing.",
+    "PASS: Vitest reports 100% statements, branches, functions, and lines for authored application behavior; Chromium E2E verifies keyboard suite selection and axe reports no configured violations.",
+    "PASS: Static-build validation proves relative generated assets and rejects application-backend endpoints; program docs retain inventory-pending parity status and explicitly call the UI a non-capability foundation preview.",
+    "PASS: Desktop and full-page narrow screenshots show a readable responsive layout, complete footer, and no visible horizontal overflow."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608100659-GY449B/README.md",
+    "git commit 765c4526b6c8",
+    "npm run verify",
+    "node .agentplane/policy/check-routing.mjs",
+    "agentplane doctor",
+    "apps/office/coverage/coverage-summary.json",
+    "output/playwright/desktop.png",
+    "output/playwright/narrow-full.png"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Only Chromium is claimed by this bootstrap; Firefox and WebKit support remain explicit future work.",
+    "LibreOffice feature, test, and documentation parity remain unmeasured until the separately scoped reference acquisition and inventory tasks."
+  ]
+}
