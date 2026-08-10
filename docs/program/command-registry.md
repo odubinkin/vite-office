@@ -10,3 +10,9 @@ normalizes modifier aliases and ordering deterministically. For example,
 outcome. It does not install browser key listeners, mutate application state,
 or supply menus, toolbars, undo/redo, localization, persistence, macros, or
 suite-specific commands. No upstream parity row is advanced by this foundation.
+
+The Writer workbench uses a separate browser-event adapter before dispatching
+through this registry. Ctrl or Meta Z invokes Undo; Ctrl or Meta Shift Z invokes
+Redo when the matching history command is enabled. A browser default is
+prevented only after a command executes. Custom bindings and other global
+shortcuts remain separate work.
