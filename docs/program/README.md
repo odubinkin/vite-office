@@ -154,6 +154,8 @@ The following documents form the program control plane:
   recovery state and save outcomes without timers or browser UI policy.
 - [Browser worker request cancellation protocol](worker-cancellation-protocol.md):
   versioned request sequencing and stale/cancelled result classification.
+- [Browser locale message catalog contract](locale-message-catalog.md):
+  deterministic locale fallback and lightweight placeholder interpolation.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
   publication requirements.
