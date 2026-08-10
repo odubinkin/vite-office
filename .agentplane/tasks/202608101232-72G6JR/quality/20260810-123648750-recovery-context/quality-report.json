@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101232-72G6JR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T12:36:48.750Z",
+  "verdict": "pass",
+  "summary": "The pure worker protocol is within approved scope and satisfies all declared verification steps.",
+  "evaluated_sha": "45fb9d9dfa0ddf9098d8df23393cde909d6b6894",
+  "blueprint_digest": "3e7b38a1b39ce1811ccbefd9a773a5decd328282cfa0bcb1e7f0697a281efd63",
+  "findings": [
+    "No confirmed defects: versioned messages, immutable sequencing, cancellation, tests, and documentation are present."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101232-72G6JR/README.md",
+    "45fb9d9dfa0d implementation commit",
+    "npm run verify passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Real Worker runtime, transferables, runtime errors, and UI policy remain separate tasks."
+  ]
+}
