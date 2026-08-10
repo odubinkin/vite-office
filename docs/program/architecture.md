@@ -10,6 +10,18 @@ adapters isolate storage, workers, rendering, and platform APIs.
 The deployable boundary is a set of static assets. All document processing runs
 in the user's browser.
 
+## Implemented bootstrap boundary
+
+The initial npm workspace contains `apps/office`, a React view shell built by
+Vite with Tailwind CSS. Its domain inventory lives in
+`apps/office/src/domain`, independently of React components, so the bootstrap
+does not place future document state inside the view layer. The Vite production
+base is relative (`./`), and the static smoke check rejects remote or
+root-absolute asset references and application-backend endpoints.
+
+The remaining package boundaries below are architectural targets. They do not
+exist until their own feature tasks create and verify them.
+
 ## Proposed workspace boundaries
 
 The bootstrap task should create a workspace that can grow into these logical
@@ -128,12 +140,16 @@ Each production dependency must have recorded evidence for:
 - bundle and runtime cost;
 - testability, determinism, accessibility, and localization impact.
 
-No dependency is selected by this document. The bootstrap and feature tasks own
-their decisions and must record them.
+The bootstrap selects React, Vite, Tailwind CSS, Lucide React, Vitest, Testing
+Library, Playwright, and axe for the narrow foundation scope. These choices do
+not pre-authorize format, model, rendering, storage, or office-feature
+dependencies; later tasks must pass the same gates for their own selections.
 
 ## Architecture verification
 
-Future CI should enforce workspace dependency boundaries, TypeScript strictness,
-public API documentation, worker contract tests, static-build smoke tests, file
-size rules, and parity-ID traceability. See the [test strategy](test-strategy.md)
-and [roadmap](roadmap.md).
+The bootstrap enforces TypeScript strictness, linting, formatting, initial unit
+coverage, Chromium/axe smoke behavior, relative-path static builds, authored
+JSDoc, and file-size rules. Future tasks still need package-boundary checks,
+worker contract tests, generated API documentation, cross-browser coverage, and
+parity-ID traceability. See the [test strategy](test-strategy.md) and
+[roadmap](roadmap.md).

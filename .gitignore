@@ -24,3 +24,12 @@ AGENTS.md.bak-*
 CLAUDE.md.bak-*
 .agentplane/agents/*.bak-*
 .agentplane/policy/**/*.bak-*
+
+# Browser-office dependencies, generated output, and local reference sources
+node_modules/
+apps/*/dist/
+coverage/
+playwright-report/
+test-results/
+output/playwright/
+vendor/libreoffice-reference/

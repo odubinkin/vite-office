@@ -12,7 +12,7 @@ This roadmap names task families, not completion claims. The
 
 ## Phase 0: program controls
 
-### Task 0.1 — Program foundation (current)
+### Task 0.1 — Program foundation
 
 Create the charter, initial parity matrix, browser architecture, test strategy,
 documentation strategy, roadmap, and designated reference path. This is
@@ -20,7 +20,7 @@ documentation-only and does not scaffold application code. Repository policy
 classifies `.gitignore` as an implementation path, so its required reference
 entry moves to Task 0.2 rather than widening this task after approval.
 
-### Task 0.2 — Project and quality-tooling bootstrap (next)
+### Task 0.2 — Project and quality-tooling bootstrap
 
 Create the TypeScript + Vite + Tailwind static application and a modular
 workspace baseline. Add strict type checking, formatting/linting, unit tests and
@@ -34,6 +34,11 @@ before any reference acquisition is permitted.
 
 Acceptance must demonstrate that the built application runs from static assets
 without an application backend.
+
+Implementation and verification are tracked by AgentPlane task
+`202608100659-GY449B`. Its application is an explicitly labelled foundation
+preview, not a shared-shell parity implementation. The task's verification and
+closure records are the authoritative delivery evidence.
 
 ### Task 0.3 — Pinned LibreOffice reference acquisition
 

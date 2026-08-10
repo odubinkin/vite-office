@@ -7,9 +7,10 @@ baseline to Vite Office implementation, tests, and documentation. It begins as
 a coarse suite inventory and must be expanded to atomic, testable capabilities
 after the upstream reference checkout is approved and pinned.
 
-No row below claims implementation. All seeded rows use `inventory-pending`
-because authoritative upstream source, test, and help references are not yet
-available in this repository.
+No row below claims a LibreOffice capability implementation. All seeded rows use
+`inventory-pending` because authoritative upstream source, test, and help
+references are not yet available in this repository. The browser workbench
+foundation is infrastructure evidence only and does not change that status.
 
 ## Stable identifier format
 
@@ -56,7 +57,7 @@ does not silently count as equivalent functionality.
 
 | Parity ID | Capability group | Upstream source | Upstream tests | Upstream docs | Local implementation | Local tests | Local docs | Status | Evidence | Gaps |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| LO-SHARED-0001 | Desktop-equivalent shell, commands, menus, dialogs, settings, and lifecycle | Pending baseline inventory | Pending baseline inventory | Pending baseline inventory | Not started | Not started | This program set only | `inventory-pending` | Task 202608100625-NNM998 seeds the group | Must split into atomic shell capabilities |
+| LO-SHARED-0001 | Desktop-equivalent shell, commands, menus, dialogs, settings, and lifecycle | Pending baseline inventory | Pending baseline inventory | Pending baseline inventory | Non-capability foundation preview in `apps/office`; parity implementation not started | Bootstrap unit, browser, accessibility, and static-build smoke checks only | Root README and this program set | `inventory-pending` | Task 202608100625-NNM998 seeds the group; Task 202608100659-GY449B supplies infrastructure only | Must split into atomic shell capabilities before any implementation claim |
 | LO-WRITER-0001 | Writer document authoring and layout | Pending baseline inventory | Pending baseline inventory | Pending baseline inventory | Not started | Not started | Not started | `inventory-pending` | None | Must split by editing, layout, fields, references, review, and output behavior |
 | LO-CALC-0001 | Calc worksheets, formulas, analysis, and calculation | Pending baseline inventory | Pending baseline inventory | Pending baseline inventory | Not started | Not started | Not started | `inventory-pending` | None | Must split by formula, cell, sheet, chart, data, and calculation behavior |
 | LO-IMPRESS-0001 | Impress slide authoring, playback, and export | Pending baseline inventory | Pending baseline inventory | Pending baseline inventory | Not started | Not started | Not started | `inventory-pending` | None | Must split by editing, master, animation, transition, playback, and export behavior |

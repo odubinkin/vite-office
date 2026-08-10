@@ -79,6 +79,27 @@ The program-level parity gate is stricter:
 
 Numeric coverage cannot compensate for missing upstream mappings.
 
+## Bootstrap quality baseline
+
+The initial workspace runs Vitest with 100% line, branch, function, and statement
+thresholds over authored application behavior. The static entry module is
+validated by the production build and browser smoke test; its mount adapter and
+negative missing-root branch are directly unit tested. Thresholds are a ratchet,
+not evidence of LibreOffice test parity.
+
+Playwright currently exercises the built preview in Chromium, including visible
+landmarks, keyboard focus and activation, suite status updates, and configured
+axe checks. Firefox and WebKit remain roadmap work and cannot be represented as
+supported until an approved browser-support task adds and verifies them.
+
+`scripts/check-static-build.mjs` proves that the generated index references
+existing relative assets and that generated JavaScript contains no local
+application-backend endpoint. `scripts/check-jsdoc.mjs` and ESLint validate
+authored file overviews, functions, parameters, returns, and type declarations.
+`scripts/check-file-size.mjs` reports files above 500 lines and rejects authored
+files at or above 1,000 lines, excluding explicit generated, lifecycle, vendor,
+and dependency paths.
+
 ## Fixtures and reproducibility
 
 - Fixtures carry source, license, expected behavior, and parity IDs.
@@ -119,8 +140,8 @@ persists formal verification and decides closure.
 
 ## Quality tooling backlog
 
-The next code task should establish strict TypeScript, unit coverage, browser E2E
-tests, accessibility smoke tests, documentation/JSDoc checks, size checks, and a
+The bootstrap establishes strict TypeScript, unit coverage, Chromium E2E,
+accessibility smoke tests, documentation/JSDoc checks, size checks, and a
 static-build smoke test. Later tasks add generated upstream inventory, format
 fixtures, visual baselines, fuzzing, performance budgets, and cross-browser CI.
 

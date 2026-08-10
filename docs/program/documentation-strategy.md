@@ -110,6 +110,14 @@ The bootstrap and documentation-tooling tasks should add checks for:
 
 Checks must run on the static production output, not only source Markdown.
 
+The bootstrap implements the source-documentation subset through ESLint and
+`scripts/check-jsdoc.mjs`: every authored JavaScript or TypeScript file starts
+with `@fileoverview`; executable functions document every parameter and their
+return; classes, enums, interfaces, and type aliases have attached JSDoc. The
+file-size checker applies the documented 500/1,000-line thresholds. Link,
+topic-count, generated API-reference, screenshot, sample-file, and upstream
+mapping checks remain separate tasks and are not claimed by this baseline.
+
 ## Completion gate
 
 Documentation parity is achieved only when every upstream topic has a reviewed

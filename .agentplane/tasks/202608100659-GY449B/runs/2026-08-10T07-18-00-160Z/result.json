@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "exit_code": 124,
+  "summary": "Codex execution timed out (idle).",
+  "stderr_summary": "Timeout details were captured in stderr.log and agent-trace.jsonl.",
+  "timeout_reason": "idle",
+  "artifacts": [
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100659-GY449B/runs/2026-08-10T07-18-00-160Z/bundle.json",
+      "label": "bundle"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100659-GY449B/runs/2026-08-10T07-18-00-160Z/bootstrap.md",
+      "label": "bootstrap"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100659-GY449B/runs/2026-08-10T07-18-00-160Z/agent-trace.jsonl",
+      "label": "raw-trace"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100659-GY449B/runs/2026-08-10T07-18-00-160Z/stderr.log",
+      "label": "stderr-log"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100659-GY449B/runs/2026-08-10T07-18-00-160Z/codex-last-message.md",
+      "label": "assistant-last-message"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100659-GY449B/runs/2026-08-10T07-18-00-160Z/result.json",
+      "label": "result-manifest"
+    }
+  ],
+  "capabilities_used": ["codex.exec"],
+  "metrics": {
+    "duration_ms": 340590,
+    "stdout_bytes": 160606,
+    "stderr_bytes": 4010,
+    "output_last_message_bytes": null
+  }
+}

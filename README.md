@@ -1,13 +1,12 @@
 # Vite Office
 
-Vite Office is a from-scratch, browser-only office suite targeting functional,
-test, and documentation parity with a pinned LibreOffice baseline. The product
-is delivered as static frontend assets built with TypeScript, Vite, and Tailwind
-CSS; it does not depend on an application backend.
+Vite Office is a from-scratch, browser-only office suite targeting functional, test, and
+documentation parity with a pinned LibreOffice baseline. The product is delivered as static frontend
+assets built with TypeScript, Vite, and Tailwind CSS; it does not depend on an application backend.
 
-The repository is at the program-foundation stage. No application capability
-is considered implemented until its source, upstream behavior, tests, and
-documentation are linked by evidence in the parity matrix.
+The repository is at the program-foundation stage. No application capability is considered
+implemented until its source, upstream behavior, tests, and documentation are linked by evidence in
+the parity matrix.
 
 ## Program documents
 
@@ -20,12 +19,47 @@ documentation are linked by evidence in the parity matrix.
 
 ## Current status
 
-The first implementation task after this documentation foundation will create
-the TypeScript, Vite, Tailwind CSS, test, documentation, and static-build
-toolchain. Upstream reference acquisition and every subsequent feature are
-separate AgentPlane tasks so scope, verification, and parity evidence remain
+The repository now contains the initial TypeScript, React, Vite, and Tailwind CSS workspace under
+`apps/office`. It renders an accessible foundation preview, builds with relative asset paths, and
+does not use an application backend. The preview names the planned suites but intentionally provides
+no document-editing capability and advances no LibreOffice parity row.
+
+The bootstrap includes strict TypeScript, ESLint and Prettier, 100% initial Vitest coverage
+thresholds for authored application behavior, a Chromium and axe smoke test, static-distribution
+validation, JSDoc validation, and authored file-size gates. Upstream reference acquisition and every
+office feature remain separate AgentPlane tasks so scope, verification, and parity evidence stay
 auditable.
 
+## Local development
+
+Prerequisites are Node.js 22 or newer and npm.
+
+```bash
+npm install
+npm run dev
+```
+
+The development server prints its local URL. The production output is generated under
+`apps/office/dist`:
+
+```bash
+npm run build
+npm run preview
+```
+
+Run the complete bootstrap quality contract with:
+
+```bash
+npm run verify
+```
+
+Playwright requires the task-approved Chromium download before the first E2E run:
+
+```bash
+npx playwright install chromium
+npm run test:e2e
+```
+
 The complete LibreOffice parity target is not yet achieved. See the
-[parity matrix](docs/program/parity-matrix.md) for the authoritative status and
-the [roadmap](docs/program/roadmap.md) for the delivery sequence.
+[parity matrix](docs/program/parity-matrix.md) for the authoritative status and the
+[roadmap](docs/program/roadmap.md) for the delivery sequence.

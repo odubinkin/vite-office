@@ -1,0 +1,11 @@
+.agentplane/
+.git/
+AGENTS.md
+apps/*/coverage/
+apps/*/dist/
+docs/program/
+node_modules/
+package-lock.json
+playwright-report/
+test-results/
+vendor/
