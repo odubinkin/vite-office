@@ -123,6 +123,9 @@ The following documents form the program control plane:
 - [Core PythonTest module inventory](core-python-test-module-inventory.md):
   generated Python module provenance linked to existing constructor IDs and
   classified against the pinned core Git tree.
+- [Core UITest Python source-target inventory](core-ui-test-source-target-inventory.md):
+  generated physical Python source provenance under declared module roots,
+  linked to existing UITest constructor IDs.
 - [Help topic inventory](help-topic-inventory.md): generated XHP help-path
   provenance awaiting topic, license, and local-documentation mapping.
 - [Translation catalog inventory](translation-catalog-inventory.md): generated

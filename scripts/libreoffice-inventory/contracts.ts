@@ -303,6 +303,51 @@ export interface CorePythonTestModuleInventory {
   readonly summary: Readonly<Record<CorePythonTestModuleStatus, number>>;
 }
 
+/** Identifies whether a UITest-declared module root resolved to tracked Python files, remained empty, or contains unevaluated Make syntax. */
+export type CoreUITestSourceTargetStatus = "expression" | "missing" | "tracked";
+
+/** Describes one Python source file discovered beneath an already inventoried pinned UITest module-root declaration. */
+export interface CoreUITestSourceTargetRecord {
+  /** Pinned core commit that makes the declaration and physical source path reproducible. */
+  readonly commit: string;
+  /** Stable identifier of the exact inventoried UITest constructor that owns the declared module root. */
+  readonly constructorId: string;
+  /** Always core because UITest declarations are owned by the core repository. */
+  readonly corpusId: "core";
+  /** Exact core-repository-relative makefile path containing the module-root declaration. */
+  readonly declarationPath: string;
+  /** Raw module-root token after trailing-slash normalization, preserving Make syntax when unresolved. */
+  readonly declaredModuleRoot: string;
+  /** Stable identifier derived from constructor provenance, resolution status, and physical source path when available. */
+  readonly id: string;
+  /** Explicit handoff state until a later task maps source assertions to atomic parity IDs. */
+  readonly mappingStatus: "unmapped";
+  /** Exact core-repository-relative directory that scopes discovery below this declaration. */
+  readonly moduleRootPath: string | null;
+  /** Exact Git-tracked physical .py path, or null for missing/unevaluated declarations. */
+  readonly sourcePath: string | null;
+  /** Exact core-repository-relative source directory supplied as the macro's second argument. */
+  readonly sourceDirectory: string;
+  /** Whether sourcePath is tracked, the literal module root contains no Python file, or syntax remains unresolved. */
+  readonly targetStatus: CoreUITestSourceTargetStatus;
+}
+
+/** Defines the canonical generated inventory of Python source targets discovered below pinned UITest module roots. */
+export interface CoreUITestSourceTargetInventory {
+  /** Pinned core commit shared by every generated record. */
+  readonly coreCommit: string;
+  /** Always core because auxiliary corpora are outside this extraction. */
+  readonly corpusId: "core";
+  /** Stable generator identifier distinguishing this provenance inventory from authored source. */
+  readonly generatedBy: "inventory:ui-test-source-targets";
+  /** Deterministically ordered physical Python source-target records linked to UITest constructors. */
+  readonly records: readonly CoreUITestSourceTargetRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+  /** Exact per-resolution-status counts used as a pinned completeness guard. */
+  readonly summary: Readonly<Record<CoreUITestSourceTargetStatus, number>>;
+}
+
 /** Describes one pinned LibreOffice XHP help-topic path without copying its documentation text. */
 export interface HelpTopicRecord {
   /** Help area derived from source/text/<area>/ in the repository-relative topic path. */

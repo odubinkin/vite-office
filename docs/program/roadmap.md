@@ -142,6 +142,15 @@ Make expressions and no declared-but-absent paths. It is provenance-only and
 `unmapped`; assertions, fixtures, platform evaluation, and local executable
 test mappings remain separate work.
 
+### Task 0.4j — Core UITest Python source-target extractor
+
+Completed by AgentPlane task `202608101104-2TJAPD`. The generated 649-record
+Python source-target inventory expands all 79 `gb_UITest_add_modules` module
+roots into Git-tracked descendant `.py` paths and links them to existing UITest
+constructor IDs. It has no unevaluated Make expressions and no empty literal
+module roots. It is provenance-only and `unmapped`; assertions, fixtures,
+platform evaluation, and local executable test mappings remain separate work.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:
