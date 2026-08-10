@@ -123,6 +123,15 @@ paths and 2 retain explicit unevaluated Make expressions. It is
 provenance-only and `unmapped`; assertions, fixtures, platform evaluation, and
 local executable test mappings remain separate work.
 
+### Task 0.4h — Core JunitTest Java source-target extractor
+
+Completed by AgentPlane task `202608101030-KVFYSK`. The generated 160-record
+Java source-target inventory links every `gb_JunitTest_add_sourcefiles`
+declaration to an existing JunitTest constructor ID. It confirms 156
+Git-tracked `.java` paths and preserves 4 declared-but-absent literal paths as
+explicit `missing` evidence; assertion, fixture, platform evaluation, and local
+executable test mappings remain separate work.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:

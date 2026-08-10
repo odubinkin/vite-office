@@ -219,6 +219,47 @@ export interface CoreTestSourceTargetInventory {
   readonly summary: Readonly<Record<CoreTestSourceTargetStatus, number>>;
 }
 
+/** Identifies whether a JunitTest Java source target is tracked, absent from the pinned tree, or unevaluated. */
+export type CoreJunitSourceTargetStatus = "expression" | "missing" | "tracked";
+
+/** Describes one Java source target declared for an already inventoried pinned JunitTest constructor. */
+export interface CoreJunitSourceTargetRecord {
+  /** Pinned core commit that makes the declaration and physical path reproducible. */
+  readonly commit: string;
+  /** Stable identifier of the exact inventoried JunitTest constructor that owns this target. */
+  readonly constructorId: string;
+  /** Always core because JunitTest declarations are owned by the core repository. */
+  readonly corpusId: "core";
+  /** Exact core-repository-relative makefile path containing the source-target declaration. */
+  readonly declarationPath: string;
+  /** Raw extensionless gbuild source target, preserving the full Make expression when unresolved. */
+  readonly declaredTarget: string;
+  /** Stable identifier derived from constructor provenance and the raw source target. */
+  readonly id: string;
+  /** Explicit handoff state until a later task maps source assertions to atomic parity IDs. */
+  readonly mappingStatus: "unmapped";
+  /** Exact physical core-repository-relative .java path for literal targets, otherwise null. */
+  readonly sourcePath: string | null;
+  /** Whether sourcePath is tracked, absent from the pinned Git tree, or unresolved Make syntax. */
+  readonly targetStatus: CoreJunitSourceTargetStatus;
+}
+
+/** Defines the canonical generated inventory of Java source targets linked to pinned JunitTest constructor IDs. */
+export interface CoreJunitSourceTargetInventory {
+  /** Pinned core commit shared by every generated record. */
+  readonly coreCommit: string;
+  /** Always core because auxiliary corpora are outside this extraction. */
+  readonly corpusId: "core";
+  /** Stable generator identifier distinguishing this provenance inventory from authored source. */
+  readonly generatedBy: "inventory:junit-source-targets";
+  /** Deterministically ordered Java source-target records linked to JunitTest constructors. */
+  readonly records: readonly CoreJunitSourceTargetRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+  /** Exact per-resolution-status counts used as a pinned completeness guard. */
+  readonly summary: Readonly<Record<CoreJunitSourceTargetStatus, number>>;
+}
+
 /** Describes one pinned LibreOffice XHP help-topic path without copying its documentation text. */
 export interface HelpTopicRecord {
   /** Help area derived from source/text/<area>/ in the repository-relative topic path. */
