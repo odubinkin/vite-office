@@ -147,6 +147,9 @@ The following documents form the program control plane:
 - [Browser document storage adapter contract](storage-adapter.md):
   browser-independent JSON snapshot boundary and deterministic load/save
   orchestration without a persistence implementation.
+- [Browser IndexedDB document storage adapter](indexeddb-storage-adapter.md):
+  native browser persistence for complete snapshots, with explicit schema and
+  migration limits.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
   publication requirements.

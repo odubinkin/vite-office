@@ -83,7 +83,11 @@ function getLeadingJsdoc(sourceText, node) {
   if (nearestDocumentation !== null) {
     const documentationEnd = nearestDocumentation.index + nearestDocumentation[0].length;
     const trailingText = immediatePrefix.slice(documentationEnd);
-    if (/^\s*,?\s*$/u.test(trailingText)) {
+    if (
+      /^\s*(?:(?:\/\* v8 ignore next[^*]*\*\/|\/\* eslint-disable-next-line jsdoc\/require-jsdoc \*\/)\s*)*(?:[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*\s*=\s*|[A-Za-z_$][\w$]*\s*:\s*)?,?\s*$/u.test(
+        trailingText,
+      )
+    ) {
       return nearestDocumentation[0];
     }
   }
