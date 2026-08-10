@@ -78,10 +78,10 @@ The remaining Task 0.4 extractors will use this contract as their input boundary
 
 ### Task 0.4b — Core build-module extractor
 
-Task `202608100853-D91P3V` generates the 237-record core build-module inventory
-with exact core-commit provenance and explicit `unmapped` status. It is a
-structural handoff for later atomic source, test, and documentation extractors;
-it does not change a parity-matrix capability status.
+Completed by AgentPlane task `202608100853-D91P3V`. The generated 237-record
+core build-module inventory has exact core-commit provenance and explicit
+`unmapped` status. It is a structural handoff for later atomic source, test, and
+documentation extractors; it does not change a parity-matrix capability status.
 
 ## Phase 1: shared office platform
 
