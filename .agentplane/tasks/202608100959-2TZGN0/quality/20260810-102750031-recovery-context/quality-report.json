@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608100959-2TZGN0",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T10:27:50.031Z",
+  "verdict": "pass",
+  "summary": "Pinned CppunitTest source-target inventory matches the approved provenance-only scope.",
+  "evaluated_sha": "001b8d1fc65c42fe93373171c6e67745380735ab",
+  "blueprint_digest": "2db164e240a89a8a53b9f1b1e17d23405288e0a724ea6a8eb7f60f847f354f6e",
+  "findings": [
+    "No defects found; full verification and deterministic regeneration passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608100959-2TZGN0/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
