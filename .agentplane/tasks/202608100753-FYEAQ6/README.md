@@ -1,10 +1,11 @@
 ---
 id: "202608100753-FYEAQ6"
 title: "Acquire and pin LibreOffice 26.8.0.2 reference baseline"
-status: "DOING"
+result_summary: "verified-202608100753-FYEAQ6"
+status: "DONE"
 priority: "high"
 owner: "CURATOR"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -30,7 +31,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-10T08:04:18.376Z"
+  updated_at: "2026-08-10T08:05:15.677Z"
   updated_by: "CODER"
   note: "verified-202608100753-FYEAQ6"
   attempts: 0
@@ -53,11 +54,16 @@ quality_review:
     - "live checks: exact tag/commit, zero tracked vendor paths, clean shallow checkout, git diff --check"
   findings:
     - "PASS: the seven committed paths exactly match approved tracked scope; the official annotated tag and peeled commit are recorded consistently; the ignored checkout is shallow, clean, and untracked; documentation explicitly denies inventory or parity completion and requires per-file licensing review."
-commit: null
+commit:
+  hash: "8170938bc30eddde4750cf9175ad03679635dbfe"
+  message: "🧪 FYEAQ6 docs: persist verification evidence"
 comments:
   -
     author: "CURATOR"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608100753-FYEAQ6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -78,9 +84,22 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202608100753-FYEAQ6"
+  -
+    type: "verify"
+    at: "2026-08-10T08:05:15.677Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608100753-FYEAQ6"
+  -
+    type: "status"
+    at: "2026-08-10T08:05:15.906Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608100753-FYEAQ6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-10T08:04:44.098Z"
-doc_updated_by: "CURATOR"
+doc_updated_at: "2026-08-10T08:05:15.906Z"
+doc_updated_by: "CODER"
 description: "Clone the official LibreOffice GitHub mirror at the approved immutable release baseline into the ignored vendor reference path, record provenance and licensing boundaries, and document reproducible acquisition for later source, test, and documentation inventories."
 sections:
   Summary: "Acquire the official LibreOffice GitHub mirror at the user-approved immutable baseline `libreoffice-26.8.0.2`, verify its peeled commit `9bc445578031fecf56086729d8e4940c77e14d65`, and make the reference reproducible for later source, test, and documentation inventories. The checkout is research-only and remains ignored; this task does not claim any LibreOffice feature, test, or documentation parity."
@@ -217,6 +236,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-08-10T08:05:15.677Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608100753-FYEAQ6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:04:44.098Z, excerpt_hash=sha256:4e541d7806713b0f900b301e04b6c934a8c72e3a4b2226cbde893d09583fbdc9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100753-FYEAQ6/blueprint/resolved-snapshot.json
+    - old_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+    - current_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608100753-FYEAQ6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608100753-FYEAQ6 --result verified-202608100753-FYEAQ6 --commit 8170938bc30eddde4750cf9175ad03679635dbfe
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Before task closure, remove only the explicitly resolved ignored directory `vendor/libreoffice-reference/` if acquisition must be abandoned, and restore only this task’s scoped documentation changes. After commits exist, use a normal traceable revert rather than rewriting shared history. Re-acquisition is reproducible from the documented official repository, tag, and peeled commit."
   Findings: |-
@@ -234,6 +283,10 @@ sections:
     - Observation: Route oracle emitted task complete while the verification record had modified the task README and the recorded evaluator report was still untracked.
       Impact: The exact closeout command failed with E_GIT before changing task status because deterministic closure requires a clean tracked tree.
       Resolution: Persist the active task README and quality-report subtree with an allow-tasks AgentPlane commit, recompute next-action, and then retry the exact closeout command.
+extensions:
+  implementation_commit:
+    hash: "4341ac05a90396e6c21879e45dac30f4732d54e8"
+    message: "📚 FYEAQ6 docs: pin LibreOffice 26.8.0.2 baseline"
 id_source: "generated"
 ---
 ## Summary
@@ -373,6 +426,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202608100753-FYEAQ6 --result verified-202608100753-FYEAQ6 --commit 4341ac05a90396e6c21879e45dac30f4732d54e8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-08-10T08:05:15.677Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608100753-FYEAQ6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:04:44.098Z, excerpt_hash=sha256:4e541d7806713b0f900b301e04b6c934a8c72e3a4b2226cbde893d09583fbdc9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100753-FYEAQ6/blueprint/resolved-snapshot.json
+- old_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+- current_digest: c739c851862841394b744eb72999ad0b4fe45ac4b1c23bb5211dd42d83d7f672
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608100753-FYEAQ6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608100753-FYEAQ6 --result verified-202608100753-FYEAQ6 --commit 8170938bc30eddde4750cf9175ad03679635dbfe
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
