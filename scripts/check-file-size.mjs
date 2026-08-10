@@ -20,6 +20,7 @@ const excludedDirectories = new Set([
   "vendor",
 ]);
 const excludedFiles = new Set(["package-lock.json"]);
+const generatedPathPrefixes = ["docs/program/inventory/"];
 
 /**
  * Determines whether a directory is generated, vendored, or lifecycle-owned and therefore excluded.
@@ -29,6 +30,26 @@ const excludedFiles = new Set(["package-lock.json"]);
  */
 function isExcludedDirectory(directoryName) {
   return excludedDirectories.has(directoryName);
+}
+
+/**
+ * Determines whether a tracked generated inventory artifact is intentionally excluded from authored-module size policy.
+ *
+ * @param relativePath - Repository-relative path considered by the size scanner.
+ * @returns True only for documented generated inventory artifacts, never authored source or prose.
+ */
+function isGeneratedInventoryArtifact(relativePath) {
+  return generatedPathPrefixes.some(
+    /**
+     * Checks one explicit generated-artifact prefix against the current relative path.
+     *
+     * @param prefix - Repository-relative generated-artifact prefix.
+     * @returns True when the current path begins with the configured prefix.
+     */
+    function hasGeneratedPrefix(prefix) {
+      return relativePath.startsWith(prefix);
+    },
+  );
 }
 
 /**
@@ -95,9 +116,13 @@ async function main() {
   const failures = [];
 
   for (const filePath of files) {
+    const relativePath = path.relative(repositoryRoot, filePath);
+    if (isGeneratedInventoryArtifact(relativePath)) {
+      continue;
+    }
+
     const sourceText = await readFile(filePath, "utf8");
     const lineCount = countPhysicalLines(sourceText);
-    const relativePath = path.relative(repositoryRoot, filePath);
 
     if (lineCount >= failureThreshold) {
       failures.push(`${relativePath}: ${lineCount} lines`);

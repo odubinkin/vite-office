@@ -109,6 +109,36 @@ export interface InventoryReport {
   readonly status: "valid";
 }
 
+/** Describes one unmapped pinned core build-module declaration without copying its upstream file content. */
+export interface CoreModuleRecord {
+  /** Pinned corpus that owns the declaration. */
+  readonly corpusId: "core";
+  /** Pinned core commit that makes the path reproducible. */
+  readonly commit: string;
+  /** Stable identifier derived only from the exact reference-relative declaration path. */
+  readonly id: string;
+  /** Explicit handoff state; later tasks must map the module to atomic capabilities. */
+  readonly mappingStatus: "unmapped";
+  /** Module name derived from the Module_<name>.mk filename. */
+  readonly moduleName: string;
+  /** Exact core-repository-relative path to the module declaration. */
+  readonly referencePath: string;
+}
+
+/** Defines the canonical generated inventory document for pinned core Module_*.mk declarations. */
+export interface CoreModuleInventory {
+  /** Immutable core commit shared by every generated module record. */
+  readonly coreCommit: string;
+  /** Corpus identity proving the records came from LibreOffice core rather than an auxiliary corpus. */
+  readonly corpusId: "core";
+  /** Stable generator identifier that visibly distinguishes this data artifact from authored source. */
+  readonly generatedBy: "inventory:modules";
+  /** Deterministically lexicographically ordered module records. */
+  readonly records: readonly CoreModuleRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+}
+
 /** Holds an error collection produced when a manifest or local checkout violates the inventory contract. */
 export class BaselineValidationError extends Error {
   /** Machine-readable validation failures collected before execution stopped. */

@@ -1,0 +1,1904 @@
+{
+  "coreCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "corpusId": "core",
+  "generatedBy": "inventory:modules",
+  "records": [
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:UnoControls/Module_UnoControls.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "UnoControls",
+      "referencePath": "UnoControls/Module_UnoControls.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:android/Module_android.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "android",
+      "referencePath": "android/Module_android.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:animations/Module_animations.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "animations",
+      "referencePath": "animations/Module_animations.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:apple_remote/Module_apple_remote.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "apple_remote",
+      "referencePath": "apple_remote/Module_apple_remote.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:avmedia/Module_avmedia.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "avmedia",
+      "referencePath": "avmedia/Module_avmedia.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:basctl/Module_basctl.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "basctl",
+      "referencePath": "basctl/Module_basctl.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:basegfx/Module_basegfx.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "basegfx",
+      "referencePath": "basegfx/Module_basegfx.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:basic/Module_basic.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "basic",
+      "referencePath": "basic/Module_basic.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:bean/Module_bean.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "bean",
+      "referencePath": "bean/Module_bean.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:binaryurp/Module_binaryurp.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "binaryurp",
+      "referencePath": "binaryurp/Module_binaryurp.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:bridges/Module_bridges.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "bridges",
+      "referencePath": "bridges/Module_bridges.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:canvas/Module_canvas.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "canvas",
+      "referencePath": "canvas/Module_canvas.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:chart2/Module_chart2.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "chart2",
+      "referencePath": "chart2/Module_chart2.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:cli_ure/Module_cli_ure.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "cli_ure",
+      "referencePath": "cli_ure/Module_cli_ure.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:codemaker/Module_codemaker.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "codemaker",
+      "referencePath": "codemaker/Module_codemaker.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:comphelper/Module_comphelper.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "comphelper",
+      "referencePath": "comphelper/Module_comphelper.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:configmgr/Module_configmgr.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "configmgr",
+      "referencePath": "configmgr/Module_configmgr.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:connectivity/Module_connectivity.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "connectivity",
+      "referencePath": "connectivity/Module_connectivity.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:cppcanvas/Module_cppcanvas.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "cppcanvas",
+      "referencePath": "cppcanvas/Module_cppcanvas.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:cppu/Module_cppu.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "cppu",
+      "referencePath": "cppu/Module_cppu.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:cppuhelper/Module_cppuhelper.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "cppuhelper",
+      "referencePath": "cppuhelper/Module_cppuhelper.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:cpputools/Module_cpputools.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "cpputools",
+      "referencePath": "cpputools/Module_cpputools.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:cui/Module_cui.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "cui",
+      "referencePath": "cui/Module_cui.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:dbaccess/Module_dbaccess.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "dbaccess",
+      "referencePath": "dbaccess/Module_dbaccess.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:desktop/Module_desktop.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "desktop",
+      "referencePath": "desktop/Module_desktop.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:docmodel/Module_docmodel.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "docmodel",
+      "referencePath": "docmodel/Module_docmodel.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:drawinglayer/Module_drawinglayer.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "drawinglayer",
+      "referencePath": "drawinglayer/Module_drawinglayer.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:editeng/Module_editeng.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "editeng",
+      "referencePath": "editeng/Module_editeng.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:embeddedobj/Module_embeddedobj.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "embeddedobj",
+      "referencePath": "embeddedobj/Module_embeddedobj.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:embedserv/Module_embedserv.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "embedserv",
+      "referencePath": "embedserv/Module_embedserv.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:emfio/Module_emfio.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "emfio",
+      "referencePath": "emfio/Module_emfio.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:eventattacher/Module_eventattacher.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "eventattacher",
+      "referencePath": "eventattacher/Module_eventattacher.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:extensions/Module_extensions.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "extensions",
+      "referencePath": "extensions/Module_extensions.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/IAccessible2/Module_IAccessible2.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "IAccessible2",
+      "referencePath": "external/IAccessible2/Module_IAccessible2.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/Module_external.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "external",
+      "referencePath": "external/Module_external.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/afdko/Module_afdko.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "afdko",
+      "referencePath": "external/afdko/Module_afdko.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/argon2/Module_argon2.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "argon2",
+      "referencePath": "external/argon2/Module_argon2.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/beanshell/Module_beanshell.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "beanshell",
+      "referencePath": "external/beanshell/Module_beanshell.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/boost/Module_boost.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "boost",
+      "referencePath": "external/boost/Module_boost.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/box2d/Module_box2d.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "box2d",
+      "referencePath": "external/box2d/Module_box2d.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/breakpad/Module_breakpad.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "breakpad",
+      "referencePath": "external/breakpad/Module_breakpad.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/bzip2/Module_bzip2.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "bzip2",
+      "referencePath": "external/bzip2/Module_bzip2.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/cairo/Module_cairo.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "cairo",
+      "referencePath": "external/cairo/Module_cairo.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/clew/Module_clew.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "clew",
+      "referencePath": "external/clew/Module_clew.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/clucene/Module_clucene.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "clucene",
+      "referencePath": "external/clucene/Module_clucene.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/coinmp/Module_coinmp.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "coinmp",
+      "referencePath": "external/coinmp/Module_coinmp.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/cppunit/Module_cppunit.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "cppunit",
+      "referencePath": "external/cppunit/Module_cppunit.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/curl/Module_curl.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "curl",
+      "referencePath": "external/curl/Module_curl.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/dragonbox/Module_dragonbox.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "dragonbox",
+      "referencePath": "external/dragonbox/Module_dragonbox.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/epm/Module_epm.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "epm",
+      "referencePath": "external/epm/Module_epm.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/epoxy/Module_epoxy.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "epoxy",
+      "referencePath": "external/epoxy/Module_epoxy.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/expat/Module_expat.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "expat",
+      "referencePath": "external/expat/Module_expat.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/fast_float/Module_fast_float.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "fast_float",
+      "referencePath": "external/fast_float/Module_fast_float.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/firebird/Module_firebird.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "firebird",
+      "referencePath": "external/firebird/Module_firebird.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/fontconfig/Module_fontconfig.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "fontconfig",
+      "referencePath": "external/fontconfig/Module_fontconfig.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/freetype/Module_freetype.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "freetype",
+      "referencePath": "external/freetype/Module_freetype.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/frozen/Module_frozen.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "frozen",
+      "referencePath": "external/frozen/Module_frozen.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/glm/Module_glm.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "glm",
+      "referencePath": "external/glm/Module_glm.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/gpgmepp/Module_gpgmepp.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "gpgmepp",
+      "referencePath": "external/gpgmepp/Module_gpgmepp.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/graphite/Module_graphite.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "graphite",
+      "referencePath": "external/graphite/Module_graphite.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/harfbuzz/Module_harfbuzz.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "harfbuzz",
+      "referencePath": "external/harfbuzz/Module_harfbuzz.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/hsqldb/Module_hsqldb.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "hsqldb",
+      "referencePath": "external/hsqldb/Module_hsqldb.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/hunspell/Module_hunspell.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "hunspell",
+      "referencePath": "external/hunspell/Module_hunspell.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/hyphen/Module_hyphen.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "hyphen",
+      "referencePath": "external/hyphen/Module_hyphen.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/icu/Module_icu.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "icu",
+      "referencePath": "external/icu/Module_icu.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/java_websocket/Module_java_websocket.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "java_websocket",
+      "referencePath": "external/java_websocket/Module_java_websocket.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/jfreereport/Module_jfreereport.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "jfreereport",
+      "referencePath": "external/jfreereport/Module_jfreereport.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/lcms2/Module_lcms2.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "lcms2",
+      "referencePath": "external/lcms2/Module_lcms2.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libabw/Module_libabw.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libabw",
+      "referencePath": "external/libabw/Module_libabw.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libassuan/Module_libassuan.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libassuan",
+      "referencePath": "external/libassuan/Module_libassuan.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libatomic_ops/Module_libatomic_ops.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libatomic_ops",
+      "referencePath": "external/libatomic_ops/Module_libatomic_ops.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libcdr/Module_libcdr.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libcdr",
+      "referencePath": "external/libcdr/Module_libcdr.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libcmis/Module_libcmis.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libcmis",
+      "referencePath": "external/libcmis/Module_libcmis.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libebook/Module_libebook.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libebook",
+      "referencePath": "external/libebook/Module_libebook.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libeot/Module_libeot.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libeot",
+      "referencePath": "external/libeot/Module_libeot.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libepubgen/Module_libepubgen.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libepubgen",
+      "referencePath": "external/libepubgen/Module_libepubgen.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libetonyek/Module_libetonyek.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libetonyek",
+      "referencePath": "external/libetonyek/Module_libetonyek.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libexttextcat/Module_libexttextcat.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libexttextcat",
+      "referencePath": "external/libexttextcat/Module_libexttextcat.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libffi/Module_libffi.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libffi",
+      "referencePath": "external/libffi/Module_libffi.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libfreehand/Module_libfreehand.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libfreehand",
+      "referencePath": "external/libfreehand/Module_libfreehand.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libgpg-error/Module_libgpg-error.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libgpg-error",
+      "referencePath": "external/libgpg-error/Module_libgpg-error.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libjpeg-turbo/Module_libjpeg-turbo.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libjpeg-turbo",
+      "referencePath": "external/libjpeg-turbo/Module_libjpeg-turbo.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/liblangtag/Module_liblangtag.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "liblangtag",
+      "referencePath": "external/liblangtag/Module_liblangtag.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libmspub/Module_libmspub.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libmspub",
+      "referencePath": "external/libmspub/Module_libmspub.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libmwaw/Module_libmwaw.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libmwaw",
+      "referencePath": "external/libmwaw/Module_libmwaw.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libnumbertext/Module_libnumbertext.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libnumbertext",
+      "referencePath": "external/libnumbertext/Module_libnumbertext.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libodfgen/Module_libodfgen.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libodfgen",
+      "referencePath": "external/libodfgen/Module_libodfgen.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/liborcus/Module_liborcus.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "liborcus",
+      "referencePath": "external/liborcus/Module_liborcus.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libpagemaker/Module_libpagemaker.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libpagemaker",
+      "referencePath": "external/libpagemaker/Module_libpagemaker.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libpng/Module_libpng.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libpng",
+      "referencePath": "external/libpng/Module_libpng.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libqxp/Module_libqxp.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libqxp",
+      "referencePath": "external/libqxp/Module_libqxp.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/librevenge/Module_librevenge.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "librevenge",
+      "referencePath": "external/librevenge/Module_librevenge.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libstaroffice/Module_libstaroffice.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libstaroffice",
+      "referencePath": "external/libstaroffice/Module_libstaroffice.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libtiff/Module_libtiff.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libtiff",
+      "referencePath": "external/libtiff/Module_libtiff.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libtommath/Module_libtommath.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libtommath",
+      "referencePath": "external/libtommath/Module_libtommath.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libvisio/Module_libvisio.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libvisio",
+      "referencePath": "external/libvisio/Module_libvisio.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libwebp/Module_libwebp.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libwebp",
+      "referencePath": "external/libwebp/Module_libwebp.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libwpd/Module_libwpd.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libwpd",
+      "referencePath": "external/libwpd/Module_libwpd.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libwpg/Module_libwpg.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libwpg",
+      "referencePath": "external/libwpg/Module_libwpg.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libwps/Module_libwps.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libwps",
+      "referencePath": "external/libwps/Module_libwps.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libxml2/Module_libxml2.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libxml2",
+      "referencePath": "external/libxml2/Module_libxml2.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libxslt/Module_libxslt.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libxslt",
+      "referencePath": "external/libxslt/Module_libxslt.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/libzmf/Module_libzmf.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libzmf",
+      "referencePath": "external/libzmf/Module_libzmf.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/lpsolve/Module_lpsolve.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "lpsolve",
+      "referencePath": "external/lpsolve/Module_lpsolve.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/lxml/Module_lxml.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "lxml",
+      "referencePath": "external/lxml/Module_lxml.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/lzma/Module_lzma.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "lzma",
+      "referencePath": "external/lzma/Module_lzma.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/mariadb-connector-c/Module_mariadb-connector-c.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "mariadb-connector-c",
+      "referencePath": "external/mariadb-connector-c/Module_mariadb-connector-c.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/md4c/Module_md4c.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "md4c",
+      "referencePath": "external/md4c/Module_md4c.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/mdds/Module_mdds.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "mdds",
+      "referencePath": "external/mdds/Module_mdds.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/mdnsresponder/Module_mdnsresponder.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "mdnsresponder",
+      "referencePath": "external/mdnsresponder/Module_mdnsresponder.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/meson/Module_meson.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "meson",
+      "referencePath": "external/meson/Module_meson.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/more_fonts/Module_more_fonts.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "more_fonts",
+      "referencePath": "external/more_fonts/Module_more_fonts.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/mythes/Module_mythes.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "mythes",
+      "referencePath": "external/mythes/Module_mythes.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/nss/Module_nss.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "nss",
+      "referencePath": "external/nss/Module_nss.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/onlineupdate/Module_onlineupdate.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "onlineupdate",
+      "referencePath": "external/onlineupdate/Module_onlineupdate.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/openldap/Module_openldap.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "openldap",
+      "referencePath": "external/openldap/Module_openldap.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/openssl/Module_openssl.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "openssl",
+      "referencePath": "external/openssl/Module_openssl.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/pdfium/Module_pdfium.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "pdfium",
+      "referencePath": "external/pdfium/Module_pdfium.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/poppler/Module_poppler.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "poppler",
+      "referencePath": "external/poppler/Module_poppler.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/postgresql/Module_postgresql.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "postgresql",
+      "referencePath": "external/postgresql/Module_postgresql.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/python3/Module_python3.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "python3",
+      "referencePath": "external/python3/Module_python3.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/quickjs/Module_quickjs.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "quickjs",
+      "referencePath": "external/quickjs/Module_quickjs.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/redland/Module_redland.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "redland",
+      "referencePath": "external/redland/Module_redland.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/rhino/Module_rhino.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "rhino",
+      "referencePath": "external/rhino/Module_rhino.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/skia/Module_skia.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "skia",
+      "referencePath": "external/skia/Module_skia.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/sqlite3/Module_sqlite3.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sqlite3",
+      "referencePath": "external/sqlite3/Module_sqlite3.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/twain_dsm/Module_twain_dsm.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "twain_dsm",
+      "referencePath": "external/twain_dsm/Module_twain_dsm.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/xmlsec/Module_xmlsec.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "xmlsec",
+      "referencePath": "external/xmlsec/Module_xmlsec.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/xsltml/Module_xsltml.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "xsltml",
+      "referencePath": "external/xsltml/Module_xsltml.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/y-crdt/Module_y-crdt.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "y-crdt",
+      "referencePath": "external/y-crdt/Module_y-crdt.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/zlib/Module_zlib.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "zlib",
+      "referencePath": "external/zlib/Module_zlib.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/zstd/Module_zstd.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "zstd",
+      "referencePath": "external/zstd/Module_zstd.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/zxcvbn-c/Module_zxcvbn-c.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "zxcvbn-c",
+      "referencePath": "external/zxcvbn-c/Module_zxcvbn-c.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:external/zxing/Module_zxing.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "zxing",
+      "referencePath": "external/zxing/Module_zxing.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:extras/Module_extras.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "extras",
+      "referencePath": "extras/Module_extras.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:filter/Module_filter.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "filter",
+      "referencePath": "filter/Module_filter.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:forms/Module_forms.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "forms",
+      "referencePath": "forms/Module_forms.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:formula/Module_formula.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "formula",
+      "referencePath": "formula/Module_formula.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:fpicker/Module_fpicker.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "fpicker",
+      "referencePath": "fpicker/Module_fpicker.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:framework/Module_framework.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "framework",
+      "referencePath": "framework/Module_framework.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:helpcompiler/Module_helpcompiler.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "helpcompiler",
+      "referencePath": "helpcompiler/Module_helpcompiler.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:hwpfilter/Module_hwpfilter.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "hwpfilter",
+      "referencePath": "hwpfilter/Module_hwpfilter.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:i18nlangtag/Module_i18nlangtag.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "i18nlangtag",
+      "referencePath": "i18nlangtag/Module_i18nlangtag.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:i18npool/Module_i18npool.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "i18npool",
+      "referencePath": "i18npool/Module_i18npool.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:i18nutil/Module_i18nutil.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "i18nutil",
+      "referencePath": "i18nutil/Module_i18nutil.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:idl/Module_idl.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "idl",
+      "referencePath": "idl/Module_idl.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:instsetoo_native/Module_instsetoo_native.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "instsetoo_native",
+      "referencePath": "instsetoo_native/Module_instsetoo_native.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:io/Module_io.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "io",
+      "referencePath": "io/Module_io.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:ios/Module_ios.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "ios",
+      "referencePath": "ios/Module_ios.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:javaunohelper/Module_javaunohelper.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "javaunohelper",
+      "referencePath": "javaunohelper/Module_javaunohelper.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:jsuno/Module_jsuno.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "jsuno",
+      "referencePath": "jsuno/Module_jsuno.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:jurt/Module_jurt.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "jurt",
+      "referencePath": "jurt/Module_jurt.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:jvmaccess/Module_jvmaccess.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "jvmaccess",
+      "referencePath": "jvmaccess/Module_jvmaccess.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:jvmfwk/Module_jvmfwk.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "jvmfwk",
+      "referencePath": "jvmfwk/Module_jvmfwk.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:l10ntools/Module_l10ntools.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "l10ntools",
+      "referencePath": "l10ntools/Module_l10ntools.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:librelogo/Module_librelogo.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "librelogo",
+      "referencePath": "librelogo/Module_librelogo.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:libreofficekit/Module_libreofficekit.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "libreofficekit",
+      "referencePath": "libreofficekit/Module_libreofficekit.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:lingucomponent/Module_lingucomponent.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "lingucomponent",
+      "referencePath": "lingucomponent/Module_lingucomponent.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:linguistic/Module_linguistic.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "linguistic",
+      "referencePath": "linguistic/Module_linguistic.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:lotuswordpro/Module_lotuswordpro.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "lotuswordpro",
+      "referencePath": "lotuswordpro/Module_lotuswordpro.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:net_ure/Module_net_ure.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "net_ure",
+      "referencePath": "net_ure/Module_net_ure.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:nlpsolver/Module_nlpsolver.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "nlpsolver",
+      "referencePath": "nlpsolver/Module_nlpsolver.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:o3tl/Module_o3tl.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "o3tl",
+      "referencePath": "o3tl/Module_o3tl.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:odk/Module_odk.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "odk",
+      "referencePath": "odk/Module_odk.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:offapi/Module_offapi.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "offapi",
+      "referencePath": "offapi/Module_offapi.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:officecfg/Module_officecfg.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "officecfg",
+      "referencePath": "officecfg/Module_officecfg.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:oovbaapi/Module_oovbaapi.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "oovbaapi",
+      "referencePath": "oovbaapi/Module_oovbaapi.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:oox/Module_oox.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "oox",
+      "referencePath": "oox/Module_oox.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:opencl/Module_opencl.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "opencl",
+      "referencePath": "opencl/Module_opencl.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:package/Module_package.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "package",
+      "referencePath": "package/Module_package.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:pch/Module_pch.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "pch",
+      "referencePath": "pch/Module_pch.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:postprocess/Module_postprocess.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "postprocess",
+      "referencePath": "postprocess/Module_postprocess.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:pyuno/Module_pyuno.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "pyuno",
+      "referencePath": "pyuno/Module_pyuno.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:qadevOOo/Module_qadevOOo.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "qadevOOo",
+      "referencePath": "qadevOOo/Module_qadevOOo.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:readlicense_oo/Module_readlicense_oo.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "readlicense_oo",
+      "referencePath": "readlicense_oo/Module_readlicense_oo.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:registry/Module_registry.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "registry",
+      "referencePath": "registry/Module_registry.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:remotebridges/Module_remotebridges.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "remotebridges",
+      "referencePath": "remotebridges/Module_remotebridges.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:reportbuilder/Module_reportbuilder.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "reportbuilder",
+      "referencePath": "reportbuilder/Module_reportbuilder.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:reportdesign/Module_reportdesign.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "reportdesign",
+      "referencePath": "reportdesign/Module_reportdesign.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:ridljar/Module_ridljar.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "ridljar",
+      "referencePath": "ridljar/Module_ridljar.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:rust_uno/Module_rust_uno.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "rust_uno",
+      "referencePath": "rust_uno/Module_rust_uno.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sal/Module_sal.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sal",
+      "referencePath": "sal/Module_sal.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:salhelper/Module_salhelper.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "salhelper",
+      "referencePath": "salhelper/Module_salhelper.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sax/Module_sax.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sax",
+      "referencePath": "sax/Module_sax.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sc/Module_sc.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sc",
+      "referencePath": "sc/Module_sc.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:scaddins/Module_scaddins.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "scaddins",
+      "referencePath": "scaddins/Module_scaddins.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sccomp/Module_sccomp.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sccomp",
+      "referencePath": "sccomp/Module_sccomp.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:scp2/Module_scp2.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "scp2",
+      "referencePath": "scp2/Module_scp2.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:scripting/Module_scripting.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "scripting",
+      "referencePath": "scripting/Module_scripting.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sd/Module_sd.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sd",
+      "referencePath": "sd/Module_sd.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sdext/Module_sdext.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sdext",
+      "referencePath": "sdext/Module_sdext.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:setup_native/Module_setup_native.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "setup_native",
+      "referencePath": "setup_native/Module_setup_native.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sfx2/Module_sfx2.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sfx2",
+      "referencePath": "sfx2/Module_sfx2.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:shell/Module_shell.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "shell",
+      "referencePath": "shell/Module_shell.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:slideshow/Module_slideshow.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "slideshow",
+      "referencePath": "slideshow/Module_slideshow.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:smoketest/Module_smoketest.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "smoketest",
+      "referencePath": "smoketest/Module_smoketest.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:solenv/Module_solenv.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "solenv",
+      "referencePath": "solenv/Module_solenv.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:solenv/qa/python/selftest/Module_selftest.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "selftest",
+      "referencePath": "solenv/qa/python/selftest/Module_selftest.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:soltools/Module_soltools.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "soltools",
+      "referencePath": "soltools/Module_soltools.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sot/Module_sot.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sot",
+      "referencePath": "sot/Module_sot.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:starmath/Module_starmath.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "starmath",
+      "referencePath": "starmath/Module_starmath.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:static/Module_static.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "static",
+      "referencePath": "static/Module_static.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:stoc/Module_stoc.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "stoc",
+      "referencePath": "stoc/Module_stoc.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:store/Module_store.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "store",
+      "referencePath": "store/Module_store.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:svgio/Module_svgio.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "svgio",
+      "referencePath": "svgio/Module_svgio.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:svl/Module_svl.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "svl",
+      "referencePath": "svl/Module_svl.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:svtools/Module_svtools.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "svtools",
+      "referencePath": "svtools/Module_svtools.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:svx/Module_svx.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "svx",
+      "referencePath": "svx/Module_svx.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sw/Module_sw.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sw",
+      "referencePath": "sw/Module_sw.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:swext/Module_swext.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "swext",
+      "referencePath": "swext/Module_swext.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:sysui/Module_sysui.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "sysui",
+      "referencePath": "sysui/Module_sysui.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:test/Module_test.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "test",
+      "referencePath": "test/Module_test.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:testtools/Module_testtools.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "testtools",
+      "referencePath": "testtools/Module_testtools.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:toolkit/Module_toolkit.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "toolkit",
+      "referencePath": "toolkit/Module_toolkit.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:tools/Module_tools.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "tools",
+      "referencePath": "tools/Module_tools.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:ucb/Module_ucb.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "ucb",
+      "referencePath": "ucb/Module_ucb.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:ucbhelper/Module_ucbhelper.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "ucbhelper",
+      "referencePath": "ucbhelper/Module_ucbhelper.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:udkapi/Module_udkapi.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "udkapi",
+      "referencePath": "udkapi/Module_udkapi.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:uitest/Module_uitest.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "uitest",
+      "referencePath": "uitest/Module_uitest.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:unodevtools/Module_unodevtools.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "unodevtools",
+      "referencePath": "unodevtools/Module_unodevtools.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:unoidl/Module_unoidl.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "unoidl",
+      "referencePath": "unoidl/Module_unoidl.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:unoil/Module_unoil.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "unoil",
+      "referencePath": "unoil/Module_unoil.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:unotest/Module_unotest.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "unotest",
+      "referencePath": "unotest/Module_unotest.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:unotools/Module_unotools.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "unotools",
+      "referencePath": "unotools/Module_unotools.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:unoxml/Module_unoxml.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "unoxml",
+      "referencePath": "unoxml/Module_unoxml.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:ure/Module_ure.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "ure",
+      "referencePath": "ure/Module_ure.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:uui/Module_uui.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "uui",
+      "referencePath": "uui/Module_uui.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:vbahelper/Module_vbahelper.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "vbahelper",
+      "referencePath": "vbahelper/Module_vbahelper.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:vcl/Module_vcl.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "vcl",
+      "referencePath": "vcl/Module_vcl.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:winaccessibility/Module_winaccessibility.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "winaccessibility",
+      "referencePath": "winaccessibility/Module_winaccessibility.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:wizards/Module_wizards.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "wizards",
+      "referencePath": "wizards/Module_wizards.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:writerperfect/Module_writerperfect.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "writerperfect",
+      "referencePath": "writerperfect/Module_writerperfect.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:xmlhelp/Module_xmlhelp.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "xmlhelp",
+      "referencePath": "xmlhelp/Module_xmlhelp.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:xmloff/Module_xmloff.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "xmloff",
+      "referencePath": "xmloff/Module_xmloff.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:xmlreader/Module_xmlreader.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "xmlreader",
+      "referencePath": "xmlreader/Module_xmlreader.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:xmlscript/Module_xmlscript.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "xmlscript",
+      "referencePath": "xmlscript/Module_xmlscript.mk"
+    },
+    {
+      "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+      "corpusId": "core",
+      "id": "LO-CORE-MODULE:xmlsecurity/Module_xmlsecurity.mk",
+      "mappingStatus": "unmapped",
+      "moduleName": "xmlsecurity",
+      "referencePath": "xmlsecurity/Module_xmlsecurity.mk"
+    }
+  ],
+  "schemaVersion": 1
+}

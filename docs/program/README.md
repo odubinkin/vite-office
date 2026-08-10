@@ -110,6 +110,8 @@ The following documents form the program control plane:
   acquisition, provenance, and licensing boundary.
 - [Inventory contract](inventory-contract.md): deterministic validation of the
   pinned four-corpus research input before atomic inventory generation.
+- [Core module inventory](core-module-inventory.md): generated provenance-only
+  list of pinned `Module_*.mk` declarations awaiting atomic mapping.
 - [Architecture](architecture.md): browser domain boundaries and constraints.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and

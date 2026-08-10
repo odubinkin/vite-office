@@ -17,6 +17,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "inventory:validate": "tsx scripts/libreoffice-inventory/cli.ts",
+    "inventory:modules": "tsx scripts/libreoffice-inventory/modules-cli.ts",
     "lint": "eslint . --max-warnings 0",
     "preview": "npm run preview --workspace @vite-office/office",
     "test:inventory:coverage": "vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage",
