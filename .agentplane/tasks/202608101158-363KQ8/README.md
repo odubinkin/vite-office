@@ -1,10 +1,11 @@
 ---
 id: "202608101158-363KQ8"
 title: "Implement immutable transaction history with selection and undo/redo"
-status: "DOING"
+result_summary: "verified-202608101158-363KQ8"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-10T12:02:31.875Z"
-  updated_by: "REVIEWER"
-  note: "Pass: npm run verify passed with app 13/13 and inventory 67/67 tests at 100% coverage; history tests cover immutable apply, undo, redo, bounds, selection validation, and branch truncation."
+  updated_at: "2026-08-10T12:02:48.160Z"
+  updated_by: "CODER"
+  note: "verified-202608101158-363KQ8"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify (exit 0); commits cb2923e and f18f81f"
   findings:
     - "No confirmed defect: pure cursor selection, apply/undo/redo boundaries, redo truncation, serialization, and explicit non-goals have evidence."
-commit: null
+commit:
+  hash: "9ff80227f12f2e1863d43bdb6a0a72188c8cb379"
+  message: "🔍 363KQ8 task: record history verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved immutable transaction history, selection, undo, and redo infrastructure."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608101158-363KQ8. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Pass: npm run verify passed with app 13/13 and inventory 67/67 tests at 100% coverage; history tests cover immutable apply, undo, redo, bounds, selection validation, and branch truncation."
+  -
+    type: "verify"
+    at: "2026-08-10T12:02:48.160Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608101158-363KQ8"
+  -
+    type: "status"
+    at: "2026-08-10T12:02:48.354Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608101158-363KQ8. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-10T12:02:31.960Z"
+doc_updated_at: "2026-08-10T12:02:48.354Z"
 doc_updated_by: "CODER"
 description: "Add browser-independent immutable transaction history and selection state with deterministic apply, undo, redo, branch truncation, bounds validation, focused tests, and honest local documentation."
 sections:
@@ -109,11 +128,45 @@ sections:
     - runner_failure_means: runner_infrastructure_or_task_unknown
     - risks: runner_rail_confusion
 
+    ### 2026-08-10T12:02:48.160Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608101158-363KQ8
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T12:02:31.960Z, excerpt_hash=sha256:f7f1d87dc094a74121ca86bb87e1f1d20c9ab7a367a30feff8ca20dad968bfc4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608101158-363KQ8/blueprint/resolved-snapshot.json
+    - old_digest: b377d825d9f85bcef7d52253b298d963c73d051a9513249db89f5e0f6ea6275d
+    - current_digest: b377d825d9f85bcef7d52253b298d963c73d051a9513249db89f5e0f6ea6275d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608101158-363KQ8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608101158-363KQ8 --result verified-202608101158-363KQ8 --commit 9ff80227f12f2e1863d43bdb6a0a72188c8cb379
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "f18f81f85198eecd69e5647376638703c6955f31"
+    message: "🔧 363KQ8 code: document history error tests"
 id_source: "generated"
 ---
 ## Summary
@@ -172,6 +225,36 @@ DecisionContextRef:
 - runner_required: true
 - runner_failure_means: runner_infrastructure_or_task_unknown
 - risks: runner_rail_confusion
+
+### 2026-08-10T12:02:48.160Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608101158-363KQ8
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T12:02:31.960Z, excerpt_hash=sha256:f7f1d87dc094a74121ca86bb87e1f1d20c9ab7a367a30feff8ca20dad968bfc4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608101158-363KQ8/blueprint/resolved-snapshot.json
+- old_digest: b377d825d9f85bcef7d52253b298d963c73d051a9513249db89f5e0f6ea6275d
+- current_digest: b377d825d9f85bcef7d52253b298d963c73d051a9513249db89f5e0f6ea6275d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608101158-363KQ8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608101158-363KQ8 --result verified-202608101158-363KQ8 --commit 9ff80227f12f2e1863d43bdb6a0a72188c8cb379
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
 
 <!-- END VERIFICATION RESULTS -->
 
