@@ -140,6 +140,8 @@ The following documents form the program control plane:
   document-header states and pure transition boundaries before content editing.
 - [Browser Writer paragraph body](writer-paragraph-body.md): bounded plain-text
   paragraph model and pure edit transitions implemented on the lifecycle contract.
+- [Browser command registry](command-registry.md): typed, browser-independent
+  command definitions, shortcut lookup, and dispatch outcomes.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
   publication requirements.
