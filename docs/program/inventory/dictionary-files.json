@@ -1,0 +1,2217 @@
+{
+  "corpusId": "dictionaries",
+  "dictionariesCommit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+  "generatedBy": "inventory:dictionaries",
+  "records": [
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:af_ZA/af_ZA.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "af_ZA",
+      "referencePath": "af_ZA/af_ZA.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:af_ZA/af_ZA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "af_ZA",
+      "referencePath": "af_ZA/af_ZA.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:af_ZA/hyph_af_ZA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "af_ZA",
+      "referencePath": "af_ZA/hyph_af_ZA.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:an_ES/an_ES.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "an_ES",
+      "referencePath": "an_ES/an_ES.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:an_ES/an_ES.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "an_ES",
+      "referencePath": "an_ES/an_ES.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ar/ar.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "ar",
+      "referencePath": "ar/ar.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ar/ar.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ar",
+      "referencePath": "ar/ar.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:as_IN/as_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "as_IN",
+      "referencePath": "as_IN/as_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:as_IN/as_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "as_IN",
+      "referencePath": "as_IN/as_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:as_IN/hyph_as_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "as_IN",
+      "referencePath": "as_IN/hyph_as_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:be_BY/be-official.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "be_BY",
+      "referencePath": "be_BY/be-official.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:be_BY/be-official.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "be_BY",
+      "referencePath": "be_BY/be-official.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:be_BY/hyph_be_BY.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "be_BY",
+      "referencePath": "be_BY/hyph_be_BY.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:bg_BG/bg_BG.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "bg_BG",
+      "referencePath": "bg_BG/bg_BG.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:bg_BG/bg_BG.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "bg_BG",
+      "referencePath": "bg_BG/bg_BG.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:bg_BG/hyph_bg_BG.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "bg_BG",
+      "referencePath": "bg_BG/hyph_bg_BG.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:bn_BD/bn_BD.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "bn_BD",
+      "referencePath": "bn_BD/bn_BD.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:bn_BD/bn_BD.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "bn_BD",
+      "referencePath": "bn_BD/bn_BD.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:bo/bo.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "bo",
+      "referencePath": "bo/bo.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:bo/bo.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "bo",
+      "referencePath": "bo/bo.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:br_FR/br_FR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "br_FR",
+      "referencePath": "br_FR/br_FR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:br_FR/br_FR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "br_FR",
+      "referencePath": "br_FR/br_FR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:bs_BA/bs_BA.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "bs_BA",
+      "referencePath": "bs_BA/bs_BA.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:bs_BA/bs_BA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "bs_BA",
+      "referencePath": "bs_BA/bs_BA.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ca/dictionaries/ca-valencia.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "ca",
+      "referencePath": "ca/dictionaries/ca-valencia.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ca/dictionaries/ca-valencia.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ca",
+      "referencePath": "ca/dictionaries/ca-valencia.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ca/dictionaries/ca.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "ca",
+      "referencePath": "ca/dictionaries/ca.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ca/dictionaries/ca.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ca",
+      "referencePath": "ca/dictionaries/ca.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ca/dictionaries/hyph_ca.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ca",
+      "referencePath": "ca/dictionaries/hyph_ca.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ckb/dictionaries/ckb.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "ckb",
+      "referencePath": "ckb/dictionaries/ckb.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ckb/dictionaries/ckb.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ckb",
+      "referencePath": "ckb/dictionaries/ckb.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:cs_CZ/cs_CZ.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "cs_CZ",
+      "referencePath": "cs_CZ/cs_CZ.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:cs_CZ/cs_CZ.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "cs_CZ",
+      "referencePath": "cs_CZ/cs_CZ.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:cs_CZ/hyph_cs_CZ.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "cs_CZ",
+      "referencePath": "cs_CZ/hyph_cs_CZ.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:da_DK/da_DK.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "da_DK",
+      "referencePath": "da_DK/da_DK.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:da_DK/da_DK.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "da_DK",
+      "referencePath": "da_DK/da_DK.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:da_DK/hyph_da_DK.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "da_DK",
+      "referencePath": "da_DK/hyph_da_DK.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:de/de_AT_frami.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "de",
+      "referencePath": "de/de_AT_frami.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:de/de_AT_frami.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "de",
+      "referencePath": "de/de_AT_frami.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:de/de_CH_frami.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "de",
+      "referencePath": "de/de_CH_frami.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:de/de_CH_frami.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "de",
+      "referencePath": "de/de_CH_frami.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:de/de_DE_frami.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "de",
+      "referencePath": "de/de_DE_frami.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:de/de_DE_frami.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "de",
+      "referencePath": "de/de_DE_frami.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:de/hyph_de_AT.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "de",
+      "referencePath": "de/hyph_de_AT.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:de/hyph_de_CH.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "de",
+      "referencePath": "de/hyph_de_CH.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:de/hyph_de_DE.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "de",
+      "referencePath": "de/hyph_de_DE.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:el_GR/el_GR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "el_GR",
+      "referencePath": "el_GR/el_GR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:el_GR/el_GR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "el_GR",
+      "referencePath": "el_GR/el_GR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:el_GR/hyph_el_GR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "el_GR",
+      "referencePath": "el_GR/hyph_el_GR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_AU.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_AU.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_AU.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_AU.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_CA.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_CA.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_CA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_CA.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_GB.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_GB.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_GB.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_GB.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_US.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_US.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_US.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_US.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_ZA.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_ZA.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/en_ZA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/en_ZA.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/hyph_en_GB.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/hyph_en_GB.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:en/hyph_en_US.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "en",
+      "referencePath": "en/hyph_en_US.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:eo/eo.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "eo",
+      "referencePath": "eo/eo.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:eo/eo.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "eo",
+      "referencePath": "eo/eo.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:eo/hyph_eo.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "eo",
+      "referencePath": "eo/hyph_eo.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_AR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_AR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_AR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_AR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_BO.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_BO.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_BO.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_BO.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_CL.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_CL.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_CL.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_CL.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_CO.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_CO.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_CO.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_CO.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_CR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_CR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_CR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_CR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_CU.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_CU.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_CU.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_CU.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_DO.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_DO.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_DO.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_DO.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_EC.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_EC.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_EC.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_EC.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_ES.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_ES.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_ES.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_ES.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_GQ.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_GQ.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_GQ.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_GQ.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_GT.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_GT.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_GT.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_GT.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_HN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_HN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_HN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_HN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_MX.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_MX.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_MX.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_MX.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_NI.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_NI.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_NI.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_NI.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PA.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PA.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PA.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PE.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PE.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PE.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PE.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PH.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PH.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PH.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PH.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PY.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PY.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_PY.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_PY.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_SV.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_SV.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_SV.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_SV.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_US.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_US.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_US.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_US.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_UY.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_UY.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_UY.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_UY.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_VE.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_VE.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/es_VE.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/es_VE.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:es/hyph_es.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "es",
+      "referencePath": "es/hyph_es.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:et_EE/et_EE.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "et_EE",
+      "referencePath": "et_EE/et_EE.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:et_EE/et_EE.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "et_EE",
+      "referencePath": "et_EE/et_EE.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:et_EE/hyph_et_EE.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "et_EE",
+      "referencePath": "et_EE/hyph_et_EE.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:fa_IR/fa-IR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "fa_IR",
+      "referencePath": "fa_IR/fa-IR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:fa_IR/fa-IR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "fa_IR",
+      "referencePath": "fa_IR/fa-IR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:fr_FR/dictionaries/fr.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "fr_FR",
+      "referencePath": "fr_FR/dictionaries/fr.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:fr_FR/dictionaries/fr.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "fr_FR",
+      "referencePath": "fr_FR/dictionaries/fr.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:fr_FR/dictionaries/hyph_fr.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "fr_FR",
+      "referencePath": "fr_FR/dictionaries/hyph_fr.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:gd_GB/gd_GB.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "gd_GB",
+      "referencePath": "gd_GB/gd_GB.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:gd_GB/gd_GB.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "gd_GB",
+      "referencePath": "gd_GB/gd_GB.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:gl/gl_ES.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "gl",
+      "referencePath": "gl/gl_ES.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:gl/gl_ES.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "gl",
+      "referencePath": "gl/gl_ES.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:gl/hyph_gl.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "gl",
+      "referencePath": "gl/hyph_gl.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:gu_IN/gu_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "gu_IN",
+      "referencePath": "gu_IN/gu_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:gu_IN/gu_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "gu_IN",
+      "referencePath": "gu_IN/gu_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:gug/gug.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "gug",
+      "referencePath": "gug/gug.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:gug/gug.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "gug",
+      "referencePath": "gug/gug.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:he_IL/he_IL.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "he_IL",
+      "referencePath": "he_IL/he_IL.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:he_IL/he_IL.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "he_IL",
+      "referencePath": "he_IL/he_IL.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:hi_IN/hi_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "hi_IN",
+      "referencePath": "hi_IN/hi_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:hi_IN/hi_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "hi_IN",
+      "referencePath": "hi_IN/hi_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:hr_HR/hr_HR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "hr_HR",
+      "referencePath": "hr_HR/hr_HR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:hr_HR/hr_HR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "hr_HR",
+      "referencePath": "hr_HR/hr_HR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:hr_HR/hyph_hr_HR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "hr_HR",
+      "referencePath": "hr_HR/hyph_hr_HR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:hu_HU/hu_HU.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "hu_HU",
+      "referencePath": "hu_HU/hu_HU.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:hu_HU/hu_HU.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "hu_HU",
+      "referencePath": "hu_HU/hu_HU.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:hu_HU/hyph_hu_HU.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "hu_HU",
+      "referencePath": "hu_HU/hyph_hu_HU.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:id/hyph_id_ID.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "id",
+      "referencePath": "id/hyph_id_ID.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:id/id_ID.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "id",
+      "referencePath": "id/id_ID.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:id/id_ID.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "id",
+      "referencePath": "id/id_ID.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:is/hyph_is.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "is",
+      "referencePath": "is/hyph_is.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:is/is.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "is",
+      "referencePath": "is/is.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:is/is.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "is",
+      "referencePath": "is/is.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:it_IT/hyph_it_IT.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "it_IT",
+      "referencePath": "it_IT/hyph_it_IT.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:it_IT/it_IT.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "it_IT",
+      "referencePath": "it_IT/it_IT.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:it_IT/it_IT.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "it_IT",
+      "referencePath": "it_IT/it_IT.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:kmr_Latn/kmr_Latn.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "kmr_Latn",
+      "referencePath": "kmr_Latn/kmr_Latn.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:kmr_Latn/kmr_Latn.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "kmr_Latn",
+      "referencePath": "kmr_Latn/kmr_Latn.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:kn_IN/hyph_kn_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "kn_IN",
+      "referencePath": "kn_IN/hyph_kn_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:kn_IN/kn_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "kn_IN",
+      "referencePath": "kn_IN/kn_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:kn_IN/kn_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "kn_IN",
+      "referencePath": "kn_IN/kn_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ko_KR/ko_KR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "ko_KR",
+      "referencePath": "ko_KR/ko_KR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ko_KR/ko_KR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ko_KR",
+      "referencePath": "ko_KR/ko_KR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:lo_LA/lo_LA.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "lo_LA",
+      "referencePath": "lo_LA/lo_LA.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:lo_LA/lo_LA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "lo_LA",
+      "referencePath": "lo_LA/lo_LA.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:lt_LT/hyph_lt.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "lt_LT",
+      "referencePath": "lt_LT/hyph_lt.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:lt_LT/lt.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "lt_LT",
+      "referencePath": "lt_LT/lt.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:lt_LT/lt.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "lt_LT",
+      "referencePath": "lt_LT/lt.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:lv_LV/hyph_lv_LV.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "lv_LV",
+      "referencePath": "lv_LV/hyph_lv_LV.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:lv_LV/lv_LV.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "lv_LV",
+      "referencePath": "lv_LV/lv_LV.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:lv_LV/lv_LV.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "lv_LV",
+      "referencePath": "lv_LV/lv_LV.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:mn_MN/hyph_mn_MN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "mn_MN",
+      "referencePath": "mn_MN/hyph_mn_MN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:mn_MN/mn_MN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "mn_MN",
+      "referencePath": "mn_MN/mn_MN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:mn_MN/mn_MN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "mn_MN",
+      "referencePath": "mn_MN/mn_MN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:mr_IN/hyph_mr_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "mr_IN",
+      "referencePath": "mr_IN/hyph_mr_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:mr_IN/mr_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "mr_IN",
+      "referencePath": "mr_IN/mr_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:mr_IN/mr_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "mr_IN",
+      "referencePath": "mr_IN/mr_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ne_NP/ne_NP.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "ne_NP",
+      "referencePath": "ne_NP/ne_NP.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ne_NP/ne_NP.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ne_NP",
+      "referencePath": "ne_NP/ne_NP.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:nl_NL/hyph_nl_NL.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "nl_NL",
+      "referencePath": "nl_NL/hyph_nl_NL.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:nl_NL/nl_NL.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "nl_NL",
+      "referencePath": "nl_NL/nl_NL.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:nl_NL/nl_NL.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "nl_NL",
+      "referencePath": "nl_NL/nl_NL.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:no/hyph_nb_NO.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "no",
+      "referencePath": "no/hyph_nb_NO.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:no/hyph_nn_NO.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "no",
+      "referencePath": "no/hyph_nn_NO.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:no/nb_NO.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "no",
+      "referencePath": "no/nb_NO.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:no/nb_NO.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "no",
+      "referencePath": "no/nb_NO.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:no/nn_NO.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "no",
+      "referencePath": "no/nn_NO.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:no/nn_NO.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "no",
+      "referencePath": "no/nn_NO.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:oc_FR/oc_FR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "oc_FR",
+      "referencePath": "oc_FR/oc_FR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:oc_FR/oc_FR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "oc_FR",
+      "referencePath": "oc_FR/oc_FR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:or_IN/hyph_or_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "or_IN",
+      "referencePath": "or_IN/hyph_or_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:or_IN/or_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "or_IN",
+      "referencePath": "or_IN/or_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:or_IN/or_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "or_IN",
+      "referencePath": "or_IN/or_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pa_IN/hyph_pa_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "pa_IN",
+      "referencePath": "pa_IN/hyph_pa_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pa_IN/pa_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "pa_IN",
+      "referencePath": "pa_IN/pa_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pa_IN/pa_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "pa_IN",
+      "referencePath": "pa_IN/pa_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pl_PL/hyph_pl_PL.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "pl_PL",
+      "referencePath": "pl_PL/hyph_pl_PL.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pl_PL/pl_PL.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "pl_PL",
+      "referencePath": "pl_PL/pl_PL.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pl_PL/pl_PL.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "pl_PL",
+      "referencePath": "pl_PL/pl_PL.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pt_BR/hyph_pt_BR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "pt_BR",
+      "referencePath": "pt_BR/hyph_pt_BR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pt_BR/pt_BR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "pt_BR",
+      "referencePath": "pt_BR/pt_BR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pt_BR/pt_BR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "pt_BR",
+      "referencePath": "pt_BR/pt_BR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pt_PT/hyph_pt_PT.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "pt_PT",
+      "referencePath": "pt_PT/hyph_pt_PT.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pt_PT/pt_PT.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "pt_PT",
+      "referencePath": "pt_PT/pt_PT.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:pt_PT/pt_PT.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "pt_PT",
+      "referencePath": "pt_PT/pt_PT.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ro/hyph_ro_RO.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ro",
+      "referencePath": "ro/hyph_ro_RO.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ro/ro_RO.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "ro",
+      "referencePath": "ro/ro_RO.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ro/ro_RO.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ro",
+      "referencePath": "ro/ro_RO.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ru_RU/hyph_ru_RU.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ru_RU",
+      "referencePath": "ru_RU/hyph_ru_RU.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ru_RU/ru_RU.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "ru_RU",
+      "referencePath": "ru_RU/ru_RU.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ru_RU/ru_RU.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ru_RU",
+      "referencePath": "ru_RU/ru_RU.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sa_IN/hyph_sa_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sa_IN",
+      "referencePath": "sa_IN/hyph_sa_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sa_IN/sa_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "sa_IN",
+      "referencePath": "sa_IN/sa_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sa_IN/sa_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sa_IN",
+      "referencePath": "sa_IN/sa_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:si_LK/si_LK.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "si_LK",
+      "referencePath": "si_LK/si_LK.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:si_LK/si_LK.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "si_LK",
+      "referencePath": "si_LK/si_LK.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sk_SK/hyph_sk_SK.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sk_SK",
+      "referencePath": "sk_SK/hyph_sk_SK.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sk_SK/sk_SK.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "sk_SK",
+      "referencePath": "sk_SK/sk_SK.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sk_SK/sk_SK.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sk_SK",
+      "referencePath": "sk_SK/sk_SK.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sl_SI/hyph_sl_SI.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sl_SI",
+      "referencePath": "sl_SI/hyph_sl_SI.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sl_SI/sl_SI.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "sl_SI",
+      "referencePath": "sl_SI/sl_SI.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sl_SI/sl_SI.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sl_SI",
+      "referencePath": "sl_SI/sl_SI.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sq_AL/hyph_sq_AL.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sq_AL",
+      "referencePath": "sq_AL/hyph_sq_AL.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sq_AL/sq_AL.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "sq_AL",
+      "referencePath": "sq_AL/sq_AL.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sq_AL/sq_AL.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sq_AL",
+      "referencePath": "sq_AL/sq_AL.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sr/hyph_sr-Latn.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sr",
+      "referencePath": "sr/hyph_sr-Latn.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sr/hyph_sr.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sr",
+      "referencePath": "sr/hyph_sr.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sr/sr-Latn.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "sr",
+      "referencePath": "sr/sr-Latn.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sr/sr-Latn.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sr",
+      "referencePath": "sr/sr-Latn.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sr/sr.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "sr",
+      "referencePath": "sr/sr.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sr/sr.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sr",
+      "referencePath": "sr/sr.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sv_SE/dictionaries/sv_FI.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "sv_SE",
+      "referencePath": "sv_SE/dictionaries/sv_FI.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sv_SE/dictionaries/sv_FI.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sv_SE",
+      "referencePath": "sv_SE/dictionaries/sv_FI.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sv_SE/dictionaries/sv_SE.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "sv_SE",
+      "referencePath": "sv_SE/dictionaries/sv_SE.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sv_SE/dictionaries/sv_SE.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sv_SE",
+      "referencePath": "sv_SE/dictionaries/sv_SE.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sv_SE/hyph_sv.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sv_SE",
+      "referencePath": "sv_SE/hyph_sv.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sw_TZ/sw_TZ.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "sw_TZ",
+      "referencePath": "sw_TZ/sw_TZ.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:sw_TZ/sw_TZ.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "sw_TZ",
+      "referencePath": "sw_TZ/sw_TZ.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ta_IN/ta_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "ta_IN",
+      "referencePath": "ta_IN/ta_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:ta_IN/ta_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "ta_IN",
+      "referencePath": "ta_IN/ta_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:te_IN/hyph_te_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "te_IN",
+      "referencePath": "te_IN/hyph_te_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:te_IN/te_IN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "te_IN",
+      "referencePath": "te_IN/te_IN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:te_IN/te_IN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "te_IN",
+      "referencePath": "te_IN/te_IN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:th_TH/hyph_th_TH.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "th_TH",
+      "referencePath": "th_TH/hyph_th_TH.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:th_TH/th_TH.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "th_TH",
+      "referencePath": "th_TH/th_TH.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:th_TH/th_TH.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "th_TH",
+      "referencePath": "th_TH/th_TH.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:tr_TR/tr_TR.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "tr_TR",
+      "referencePath": "tr_TR/tr_TR.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:tr_TR/tr_TR.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "tr_TR",
+      "referencePath": "tr_TR/tr_TR.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:uk_UA/hyph_uk_UA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "uk_UA",
+      "referencePath": "uk_UA/hyph_uk_UA.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:uk_UA/uk_UA.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "uk_UA",
+      "referencePath": "uk_UA/uk_UA.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:uk_UA/uk_UA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "uk_UA",
+      "referencePath": "uk_UA/uk_UA.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:vi/vi_VN.aff",
+      "kind": "aff",
+      "mappingStatus": "unmapped",
+      "packageName": "vi",
+      "referencePath": "vi/vi_VN.aff"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:vi/vi_VN.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "vi",
+      "referencePath": "vi/vi_VN.dic"
+    },
+    {
+      "commit": "3324dee0a221a5cb67525c533216d33b0aed08e9",
+      "corpusId": "dictionaries",
+      "id": "LO-DICTIONARY-FILE:zu_ZA/hyph_zu_ZA.dic",
+      "kind": "dic",
+      "mappingStatus": "unmapped",
+      "packageName": "zu_ZA",
+      "referencePath": "zu_ZA/hyph_zu_ZA.dic"
+    }
+  ],
+  "schemaVersion": 1,
+  "summary": {
+    "aff": 98,
+    "dic": 147
+  }
+}

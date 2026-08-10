@@ -106,6 +106,14 @@ path across 131 locale directories in the `translations` corpus. Its records
 retain only path-level provenance and explicit `unmapped` status; message-level,
 locale-behavior, license, and local-UI mappings remain separate work.
 
+### Task 0.4f — Dictionary AFF/DIC file extractor
+
+Completed by AgentPlane task `202608100946-H1P6AN`. The generated 245-record
+dictionary-file inventory covers every pinned AFF and DIC path in the
+`dictionaries` corpus: 98 AFF files and 147 DIC files. Records retain only
+path-level provenance and explicit `unmapped` status; lexical behavior, license,
+and local language-tool mappings remain separate work.
+
 ## Phase 1: shared office platform
 
 Deliver each item as its own task or smaller bounded tasks:

@@ -242,6 +242,43 @@ export interface TranslationCatalogInventory {
   readonly translationsCommit: string;
 }
 
+/** Identifies one lexical-data file type in the pinned dictionaries corpus. */
+export type DictionaryFileKind = "aff" | "dic";
+
+/** Describes one pinned dictionary file path without copying lexical data. */
+export interface DictionaryFileRecord {
+  /** Pinned dictionaries commit that makes the path reproducible. */
+  readonly commit: string;
+  /** Corpus identity proving the record came from the dictionaries repository. */
+  readonly corpusId: "dictionaries";
+  /** Stable identifier derived only from the exact repository-relative file path. */
+  readonly id: string;
+  /** AFF or DIC file kind derived from the filename extension. */
+  readonly kind: DictionaryFileKind;
+  /** Explicit handoff state until a later task maps lexical behavior. */
+  readonly mappingStatus: "unmapped";
+  /** First path segment identifying the dictionary package. */
+  readonly packageName: string;
+  /** Exact dictionaries-repository-relative file path. */
+  readonly referencePath: string;
+}
+
+/** Defines the canonical generated inventory for pinned LibreOffice dictionary files. */
+export interface DictionaryFileInventory {
+  /** Always dictionaries because no other corpus is an input to this extraction. */
+  readonly corpusId: "dictionaries";
+  /** Pinned dictionaries commit shared by every generated record. */
+  readonly dictionariesCommit: string;
+  /** Stable generator identifier distinguishing generated metadata from authored source. */
+  readonly generatedBy: "inventory:dictionaries";
+  /** Deterministically sorted AFF and DIC file records. */
+  readonly records: readonly DictionaryFileRecord[];
+  /** Static generated-file schema version. */
+  readonly schemaVersion: 1;
+  /** Exact per-kind counts used as pinned completeness guards. */
+  readonly summary: Readonly<Record<DictionaryFileKind, number>>;
+}
+
 /** Holds an error collection produced when a manifest or local checkout violates the inventory contract. */
 export class BaselineValidationError extends Error {
   /** Machine-readable validation failures collected before execution stopped. */

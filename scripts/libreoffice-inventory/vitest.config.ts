@@ -19,6 +19,7 @@ export default defineConfig({
       },
     },
     environment: "node",
+    fileParallelism: false,
     include: ["scripts/libreoffice-inventory/**/*.test.ts"],
   },
 });

@@ -118,6 +118,8 @@ The following documents form the program control plane:
   provenance awaiting topic, license, and local-documentation mapping.
 - [Translation catalog inventory](translation-catalog-inventory.md): generated
   PO catalog provenance awaiting message, locale, license, and local-UI mapping.
+- [Dictionary file inventory](dictionary-file-inventory.md): generated AFF/DIC
+  provenance awaiting lexical-data, license, and language-tool mapping.
 - [Architecture](architecture.md): browser domain boundaries and constraints.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and

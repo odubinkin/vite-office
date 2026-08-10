@@ -21,6 +21,7 @@
     "inventory:tests": "tsx scripts/libreoffice-inventory/tests-cli.ts",
     "inventory:help-topics": "tsx scripts/libreoffice-inventory/help-topics-cli.ts",
     "inventory:translations": "tsx scripts/libreoffice-inventory/translations-cli.ts",
+    "inventory:dictionaries": "tsx scripts/libreoffice-inventory/dictionaries-cli.ts",
     "lint": "eslint . --max-warnings 0",
     "preview": "npm run preview --workspace @vite-office/office",
     "test:inventory:coverage": "vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage",
