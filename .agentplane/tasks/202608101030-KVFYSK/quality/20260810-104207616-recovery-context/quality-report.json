@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101030-KVFYSK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T10:42:07.616Z",
+  "verdict": "pass",
+  "summary": "Pinned JunitTest Java source-target inventory satisfies the approved provenance-only scope.",
+  "evaluated_sha": "a8d1ebac24d3843235a0c50a532b71aa23e03c54",
+  "blueprint_digest": "6b9e210e69711dd1ef1a775da95d558c86f3ff48713ebe6ae318f571f775971e",
+  "findings": [
+    "No defects found; full verification, path classification, and deterministic regeneration passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101030-KVFYSK/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
