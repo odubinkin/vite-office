@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101214-X1DZXP",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T12:27:43.945Z",
+  "verdict": "pass",
+  "summary": "The browser-only IndexedDB adapter stays within approved scope and satisfies all declared verification steps.",
+  "evaluated_sha": "cdee2794c509da6625f57fb8aa88aef94e3ff3b0",
+  "blueprint_digest": "2fd42c2150a546592750c78b18b3fa5847b0a80ec158ea22722eb26fc49fba83",
+  "findings": [
+    "No confirmed defects: native storage boundary, deterministic key replacement, tests, and documentation are present."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101214-X1DZXP/README.md",
+    "cdee2794c509 implementation commit",
+    "npm run verify passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Autosave, recovery, migrations, quotas, and file UI are deferred to separate tasks."
+  ]
+}
