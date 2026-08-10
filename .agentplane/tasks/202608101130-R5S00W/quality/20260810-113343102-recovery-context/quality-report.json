@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101130-R5S00W",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T11:33:43.102Z",
+  "verdict": "pass",
+  "summary": "Shared browser document lifecycle infrastructure is complete and independently verified.",
+  "evaluated_sha": "b5113927c978ad7ea04cbab4bd8ee93aa967a972",
+  "blueprint_digest": "14d4b7832935024e2b3e5aa43b3018de448f200eff422c8649f49cd2bf09ee7a",
+  "findings": [
+    "Pure serializable lifecycle transitions and an honest static preview are implemented without persistence or unsupported parity claims."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101130-R5S00W/README.md",
+    "b511392; npm run test:coverage --workspace @vite-office/office; npm run test:e2e; npm run test:static"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
