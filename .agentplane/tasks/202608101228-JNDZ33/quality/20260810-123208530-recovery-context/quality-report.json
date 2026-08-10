@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101228-JNDZ33",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T12:32:08.530Z",
+  "verdict": "pass",
+  "summary": "The pure browser recovery contract remains within approved scope and satisfies all verification steps.",
+  "evaluated_sha": "6263bd1317b91330b248da96af76373054e37287",
+  "blueprint_digest": "c57ea9969dabb7eb7e280754552e663f04932ddc3224d756f0d85ab5a5090580",
+  "findings": [
+    "No confirmed defects: recovery state, idempotent version behavior, tests, and documentation are present."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101228-JNDZ33/README.md",
+    "6263bd1317b9 implementation commit",
+    "npm run verify passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Timer scheduling, recovery UI, quotas, migrations, and cross-tab policy remain separate tasks."
+  ]
+}
