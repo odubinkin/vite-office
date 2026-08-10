@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202608100905-Q9AWEJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T09:18:31.762Z",
+  "verdict": "pass",
+  "summary": "The core test inventory is deterministic, exact to the pinned gbuild constructor set, provenance-complete, and explicitly not a parity completion claim.",
+  "evaluated_sha": "0b955aae0f84dc0b8c74749bbc443a975c80f058",
+  "blueprint_digest": "089cc1ed84bdf46026787f9bb61ec01463838e843c80210a38d91b2c05532881",
+  "findings": [
+    "Reviewed macro-definition filtering, exact per-kind guards, duplicate rejection, full baseline prerequisite, live regenerated record counts, 100% coverage, and generated-artifact documentation."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608100905-Q9AWEJ/README.md",
+    "docs/program/inventory/core-tests.json",
+    "scripts/libreoffice-inventory/tests.ts",
+    "scripts/libreoffice-inventory/tests-cli.ts",
+    "npm run verify: passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The inventory records declarations only; later tasks must map every upstream test's assertions, fixtures, help, and local executable coverage."
+  ]
+}

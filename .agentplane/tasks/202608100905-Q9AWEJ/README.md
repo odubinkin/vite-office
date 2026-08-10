@@ -1,10 +1,11 @@
 ---
 id: "202608100905-Q9AWEJ"
 title: "Inventory pinned LibreOffice test declarations into atomic records"
-status: "DOING"
+result_summary: "Verified deterministic 565-record pinned core test inventory."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -28,11 +29,35 @@ verification:
   updated_by: "CODER"
   note: "Verified exact deterministic 565-record pinned core test inventory, 100% inventory coverage, and full project verification."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-10T09:18:31.762Z"
+  updated_by: "EVALUATOR"
+  note: "The core test inventory is deterministic, exact to the pinned gbuild constructor set, provenance-complete, and explicitly not a parity completion claim."
+  evaluated_sha: "0b955aae0f84dc0b8c74749bbc443a975c80f058"
+  blueprint_digest: "089cc1ed84bdf46026787f9bb61ec01463838e843c80210a38d91b2c05532881"
+  evidence_refs:
+    - ".agentplane/tasks/202608100905-Q9AWEJ/README.md"
+    - ".agentplane/tasks/202608100905-Q9AWEJ/quality/20260810-091831762-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608100905-Q9AWEJ/quality/20260810-091831762-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608100905-Q9AWEJ/quality/20260810-091831762-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608100905-Q9AWEJ/blueprint/resolved-snapshot.json"
+    - "docs/program/inventory/core-tests.json"
+    - "scripts/libreoffice-inventory/tests.ts"
+    - "scripts/libreoffice-inventory/tests-cli.ts"
+    - "npm run verify: passed"
+  findings:
+    - "Reviewed macro-definition filtering, exact per-kind guards, duplicate rejection, full baseline prerequisite, live regenerated record counts, 100% coverage, and generated-artifact documentation."
+commit:
+  hash: "0b955aae0f84dc0b8c74749bbc443a975c80f058"
+  message: "🧪 Q9AWEJ code: record test inventory verification"
 comments:
   -
     author: "CODER"
     body: "Start: extract all pinned upstream test declarations into deterministic provenance-complete unmapped inventory records."
+  -
+    author: "CODER"
+    body: "Verified: deterministic exact core test declarations, complete provenance, coverage, and full quality evidence are recorded."
 events:
   -
     type: "status"
@@ -47,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified exact deterministic 565-record pinned core test inventory, 100% inventory coverage, and full project verification."
+  -
+    type: "status"
+    at: "2026-08-10T09:18:46.199Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: deterministic exact core test declarations, complete provenance, coverage, and full quality evidence are recorded."
 doc_version: 3
-doc_updated_at: "2026-08-10T09:18:15.110Z"
+doc_updated_at: "2026-08-10T09:18:46.201Z"
 doc_updated_by: "CODER"
 description: "Extend deterministic inventory tooling to extract every pinned LibreOffice CppunitTest, JunitTest, PythonTest, and UITest declaration into canonical provenance-complete unmapped records, with exact category counts and no parity overclaim."
 sections:
