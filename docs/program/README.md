@@ -150,6 +150,8 @@ The following documents form the program control plane:
 - [Browser IndexedDB document storage adapter](indexeddb-storage-adapter.md):
   native browser persistence for complete snapshots, with explicit schema and
   migration limits.
+- [Browser autosave recovery orchestration](autosave-recovery.md): deterministic
+  recovery state and save outcomes without timers or browser UI policy.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
   publication requirements.
