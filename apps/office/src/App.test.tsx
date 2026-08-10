@@ -28,6 +28,9 @@ describe("App" /**
     expect(
       screen.getByText(/Untitled Writer Document is a serializable new document/),
     ).toBeInTheDocument();
+    expect(
+      screen.getByText(/This is a serializable plain-text Writer paragraph preview/),
+    ).toBeInTheDocument();
     expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length);
   });
 
@@ -47,5 +50,6 @@ describe("App" /**
     expect(
       screen.getByText(/Untitled Calc Document is a serializable new document/),
     ).toBeInTheDocument();
+    expect(screen.queryByText(/Writer paragraph preview/)).not.toBeInTheDocument();
   });
 });

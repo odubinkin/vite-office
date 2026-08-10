@@ -138,6 +138,8 @@ The following documents form the program control plane:
 - [Architecture](architecture.md): browser domain boundaries and constraints.
 - [Browser document lifecycle contract](document-lifecycle.md): shared serializable
   document-header states and pure transition boundaries before content editing.
+- [Browser Writer paragraph body](writer-paragraph-body.md): bounded plain-text
+  paragraph model and pure edit transitions implemented on the lifecycle contract.
 - [Test strategy](test-strategy.md): upstream-to-local behavioral evidence.
 - [Documentation strategy](documentation-strategy.md): topic inventory and
   publication requirements.

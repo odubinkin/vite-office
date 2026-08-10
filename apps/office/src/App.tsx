@@ -6,9 +6,26 @@ import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "l
 import { useState } from "react";
 
 import { SuiteCard } from "./components/SuiteCard";
-import { createDocument } from "./domain/document";
+import { createDocument, type OfficeDocument } from "./domain/document";
 import { suiteDefinitions } from "./domain/suites";
 import type { SuiteDefinition } from "./domain/suites";
+import { createWriterDocument, insertWriterText, type WriterDocument } from "./domain/writer";
+
+/**
+ * Creates a deliberately static Writer paragraph preview for the Writer workbench only.
+ *
+ * @param document - New selected-suite document header to use without mutation.
+ * @returns A Writer document with one explanatory paragraph, or undefined for another suite.
+ */
+function createWriterPreview(document: OfficeDocument): WriterDocument | undefined {
+  if (document.suiteId !== "writer") return undefined;
+  return insertWriterText(
+    createWriterDocument(document, "preview-paragraph"),
+    "preview-paragraph",
+    0,
+    "This is a serializable plain-text Writer paragraph preview.",
+  );
+}
 
 /**
  * Renders the browser-only office workbench foundation without exposing unfinished editing actions.
@@ -22,6 +39,7 @@ export function App(): React.JSX.Element {
     suiteId: activeSuite.id,
     title: `Untitled ${activeSuite.name} Document`,
   });
+  const writerPreview = createWriterPreview(previewDocument);
 
   /**
    * Selects the suite whose foundation status is described in the main panel.
@@ -176,6 +194,16 @@ export function App(): React.JSX.Element {
                       yet enabled.
                     </p>
                   </article>
+                  {writerPreview === undefined ? null : (
+                    <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                      <FilePlus2 aria-hidden="true" className="text-indigo-700" size={20} />
+                      <h3 className="mt-3 font-bold text-slate-900">Writer paragraph preview</h3>
+                      <p className="mt-1 text-sm leading-6 text-slate-600">
+                        {writerPreview.paragraphs[0]?.text} This is a static model preview, not an
+                        editable Writer canvas.
+                      </p>
+                    </article>
+                  )}
                 </div>
               </div>
             </div>
