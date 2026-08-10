@@ -1,10 +1,12 @@
 ---
 id: "202608100919-2WRBJ2"
 title: "Inventory pinned LibreOffice XHP help topics into atomic records"
-status: "DOING"
+result_summary: "Added deterministic provenance-only inventory for all 2,746 pinned LibreOffice XHP help topics."
+risk_level: "low"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -28,11 +30,32 @@ verification:
   updated_by: "REVIEWER"
   note: "Full verification and exact pinned XHP path comparison passed."
   attempts: 0
-commit: null
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-10T09:30:40.068Z"
+  updated_by: "EVALUATOR"
+  note: "The XHP inventory is deterministic, provenance-only, complete for the pinned help corpus, and fully verified."
+  evaluated_sha: "897567f5535f0930a0964ced00660e6dded3fe70"
+  blueprint_digest: "aaeda2f460060647d4107452fb6ba4a7149b7b60e02686246043bb675f8b4b8e"
+  evidence_refs:
+    - ".agentplane/tasks/202608100919-2WRBJ2/README.md"
+    - ".agentplane/tasks/202608100919-2WRBJ2/quality/20260810-093040068-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608100919-2WRBJ2/quality/20260810-093040068-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608100919-2WRBJ2/quality/20260810-093040068-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608100919-2WRBJ2/blueprint/resolved-snapshot.json"
+    - "Commit 897567f5535f; npm run verify passed; double regeneration SHA-256 67150ccf3c459581fff6363ca541831341ee4b5ec9c948adbfa9d617f97f7567; exact Git comparison passed."
+  findings:
+    - "No blocking defect found; 2746 generated records exactly match the pinned Git XHP path set."
+commit:
+  hash: "36b4dfeb206deaba41d74e3d510186ee790f3962"
+  message: "🧪 2WRBJ2 code: record help topic verification"
 comments:
   -
     author: "CODER"
     body: "Start: extract every pinned XHP help topic into deterministic provenance-only unmapped records."
+  -
+    author: "CODER"
+    body: "Verified: npm run verify passed; regenerated output is byte-stable and exactly matches all 2,746 pinned XHP paths."
 events:
   -
     type: "status"
@@ -47,8 +70,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Full verification and exact pinned XHP path comparison passed."
+  -
+    type: "status"
+    at: "2026-08-10T09:30:49.733Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: npm run verify passed; regenerated output is byte-stable and exactly matches all 2,746 pinned XHP paths."
 doc_version: 3
-doc_updated_at: "2026-08-10T09:30:13.241Z"
+doc_updated_at: "2026-08-10T09:30:49.734Z"
 doc_updated_by: "CODER"
 description: "Extend deterministic inventory tooling to extract every pinned LibreOffice help XHP topic into canonical provenance-complete unmapped documentation records with exact corpus and topic counts, without copying help content or claiming documentation parity."
 sections:
@@ -114,6 +144,10 @@ sections:
     - Observation: The deterministic XHP inventory contains all 2746 tracked pinned paths.
       Impact: Topic-content, license, behavior, and local documentation mapping remains intentionally unmapped.
       Resolution: A later atomic mapping task must resolve every LO-HELP-TOPIC record.
+extensions:
+  implementation_commit:
+    hash: "897567f5535f0930a0964ced00660e6dded3fe70"
+    message: "🧩 2WRBJ2 code: inventory pinned help XHP topics"
 id_source: "generated"
 ---
 ## Summary

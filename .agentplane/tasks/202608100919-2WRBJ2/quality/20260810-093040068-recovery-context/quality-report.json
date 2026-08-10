@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202608100919-2WRBJ2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T09:30:40.068Z",
+  "verdict": "pass",
+  "summary": "The XHP inventory is deterministic, provenance-only, complete for the pinned help corpus, and fully verified.",
+  "evaluated_sha": "897567f5535f0930a0964ced00660e6dded3fe70",
+  "blueprint_digest": "aaeda2f460060647d4107452fb6ba4a7149b7b60e02686246043bb675f8b4b8e",
+  "findings": [
+    "No blocking defect found; 2746 generated records exactly match the pinned Git XHP path set."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608100919-2WRBJ2/README.md",
+    "Commit 897567f5535f; npm run verify passed; double regeneration SHA-256 67150ccf3c459581fff6363ca541831341ee4b5ec9c948adbfa9d617f97f7567; exact Git comparison passed."
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Every record remains unmapped until later tasks review individual XHP content, licensing, and local documentation parity."
+  ]
+}
