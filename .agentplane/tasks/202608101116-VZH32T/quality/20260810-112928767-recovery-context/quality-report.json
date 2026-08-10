@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101116-VZH32T",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-10T11:29:28.767Z",
+  "verdict": "pass",
+  "summary": "Scoped Cppunit registration provenance extraction is complete and independently verified.",
+  "evaluated_sha": "690f34f2abf3f6f2894fd44296f0257cf732ca8d",
+  "blueprint_digest": "e4b9048c18fa5f1fc301bdef91d692682c8163d58b06cca301f011c74c359855",
+  "findings": [
+    "8,072 Cppunit registration macros link to existing physical source-target and constructor IDs."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101116-VZH32T/README.md",
+    "fc21a5c; npm run test:inventory:coverage; npm run test:e2e; npm run test:static; 65066c64253099f98338889d8aaabd07643312845dcac7af5b8a94014a071866"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
