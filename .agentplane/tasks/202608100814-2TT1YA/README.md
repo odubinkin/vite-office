@@ -1,10 +1,11 @@
 ---
 id: "202608100814-2TT1YA"
 title: "Acquire pinned LibreOffice help translation and dictionary corpora"
-status: "DOING"
+result_summary: "verified-202608100814-2TT1YA"
+status: "DONE"
 priority: "high"
 owner: "CURATOR"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -30,9 +31,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-10T08:28:34.375Z"
-  updated_by: "CURATOR"
-  note: "Verified all four shallow, clean pinned repositories; exact corpus counts; schema v2; ignored-reference boundary; local and pinned GitHub links; format, routing, doctor, and diff checks."
+  updated_at: "2026-08-10T08:29:18.586Z"
+  updated_by: "CODER"
+  note: "verified-202608100814-2TT1YA"
   attempts: 0
 quality_review:
   state: "pass"
@@ -53,11 +54,16 @@ quality_review:
     - "docs/program/roadmap.md"
   findings:
     - "Reviewed manifest and prose identities against the live checkout: all commits, annotated tags, paths, corpus counts, pending-status guards, and provenance boundaries agree."
-commit: null
+commit:
+  hash: "e8b76626804dc6898ab52ab1d84910200af1e07e"
+  message: "🧪 2TT1YA docs: persist corpus verification evidence"
 comments:
   -
     author: "CURATOR"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608100814-2TT1YA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -72,9 +78,22 @@ events:
     author: "CURATOR"
     state: "ok"
     note: "Verified all four shallow, clean pinned repositories; exact corpus counts; schema v2; ignored-reference boundary; local and pinned GitHub links; format, routing, doctor, and diff checks."
+  -
+    type: "verify"
+    at: "2026-08-10T08:29:18.586Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608100814-2TT1YA"
+  -
+    type: "status"
+    at: "2026-08-10T08:29:18.779Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608100814-2TT1YA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-10T08:28:34.470Z"
-doc_updated_by: "CURATOR"
+doc_updated_at: "2026-08-10T08:29:18.780Z"
+doc_updated_by: "CODER"
 description: "Initialize the three release-pinned LibreOffice gitlink corpora at their exact commits inside the ignored reference checkout, record repository and licensing provenance, and extend the reproducible documentation baseline without copying upstream material into tracked paths."
 sections:
   Summary: "Materialize the three Git-backed corpora pinned by the approved LibreOffice `libreoffice-26.8.0.2` core tree: dictionaries at `3324dee0a221a5cb67525c533216d33b0aed08e9`, helpcontent2 at `70c3f30b73ae2cc3e1d2abe0e8c7cf643a56715b`, and translations at `362fd2cb41c5404e3712db9fad55b2357001e1f3`. Extend the baseline contract so later inventory tooling can prove source, test, help, localization, and dictionary coverage. Acquisition alone advances no parity row."
@@ -148,6 +167,36 @@ sections:
     - runner_failure_means: runner_infrastructure_or_task_unknown
     - risks: runner_rail_confusion
 
+    ### 2026-08-10T08:29:18.586Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608100814-2TT1YA
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:28:34.470Z, excerpt_hash=sha256:4246da8b8616fd43da85bec6486b8ee57cafc4524e5d42a5462a57dd9280ef29
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100814-2TT1YA/blueprint/resolved-snapshot.json
+    - old_digest: ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c
+    - current_digest: ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608100814-2TT1YA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608100814-2TT1YA --result verified-202608100814-2TT1YA --commit e8b76626804dc6898ab52ab1d84910200af1e07e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Before closure, deinitialize only the three named submodules and remove only their resolved Git metadata/worktrees if acquisition must be abandoned; never target a broad directory or unrelated checkout. Restore only this task’s four scoped documentation paths. After commits exist, use a traceable revert rather than rewriting history. Every corpus can be reacquired from its documented official repository and core-pinned commit."
   Findings: |-
@@ -156,6 +205,10 @@ sections:
     - Observation: The first inline Node manifest verifier captured the complete core git ls-files output and exceeded Node's default 1 MiB execFileSync buffer; a later zsh helper used the reserved path parameter name, masking PATH; an initial external-link probe included a non-existent dictionaries README that documentation did not reference.
       Impact: These test-harness defects stopped intermediate verification attempts before all checks ran, but did not mutate the checkout, corpus, or tracked documentation.
       Resolution: Use streaming shell counts for large repositories, avoid zsh special parameter names, and derive external URLs from the changed Markdown. The final full verification passed with these corrections.
+extensions:
+  implementation_commit:
+    hash: "9a5de3a840ca203ff8714555828f7a74e9811611"
+    message: "📚 2TT1YA docs: pin LibreOffice auxiliary corpora"
 id_source: "generated"
 ---
 ## Summary
@@ -238,6 +291,36 @@ DecisionContextRef:
 - runner_required: true
 - runner_failure_means: runner_infrastructure_or_task_unknown
 - risks: runner_rail_confusion
+
+### 2026-08-10T08:29:18.586Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608100814-2TT1YA
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-10T08:28:34.470Z, excerpt_hash=sha256:4246da8b8616fd43da85bec6486b8ee57cafc4524e5d42a5462a57dd9280ef29
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608100814-2TT1YA/blueprint/resolved-snapshot.json
+- old_digest: ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c
+- current_digest: ca220c74c7b89f2e3d8d42b9a93e894281467dc2b61b21ff6e3567ba3749ea3c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608100814-2TT1YA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608100814-2TT1YA --result verified-202608100814-2TT1YA --commit e8b76626804dc6898ab52ab1d84910200af1e07e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
 
 <!-- END VERIFICATION RESULTS -->
 
