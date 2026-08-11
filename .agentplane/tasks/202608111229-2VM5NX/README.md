@@ -1,10 +1,12 @@
 ---
 id: "202608111229-2VM5NX"
 title: "Render Writer paragraphs as an integrated document canvas"
-status: "DOING"
+result_summary: "Writer paragraphs render as integrated editable document content."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "npm run test:coverage --workspace @vite-office/office (49 passed; 100% all thresholds); npm run test:e2e (1 passed with axe); npm run format:check; npm run lint; npm run typecheck; npm run check:docs; npm run check:file-size; git diff --check; ap doctor; node .agentplane/policy/check-routing.mjs"
   findings:
     - "No blocking defect found. The pure remove transition remains documented but has no browser UI until a dedicated caret/range-editing task."
-commit: null
+commit:
+  hash: "17e919ae24df120b1117069a99de0ad44972edc7"
+  message: "✅ 2VM5NX task: record integrated canvas evidence"
 comments:
   -
     author: "CODER"
     body: "Start: render bounded Writer paragraphs as accessible editable content integrated into the existing document canvas."
+  -
+    author: "CODER"
+    body: "Verified: integrated editable document paragraphs, Writer-inspired paragraph action placement, strict coverage, production accessibility, documentation, and policy gates passed."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: format, lint, TypeScript, JSDoc, file-size, strict unit coverage, targeted production Playwright accessibility, diff, doctor, and policy-routing checks passed. Full static, inventory, and aggregate verify remain deferred under the user-approved every-ten-task cadence."
+  -
+    type: "status"
+    at: "2026-08-11T12:43:03.619Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: integrated editable document paragraphs, Writer-inspired paragraph action placement, strict coverage, production accessibility, documentation, and policy gates passed."
 doc_version: 3
-doc_updated_at: "2026-08-11T12:42:40.316Z"
+doc_updated_at: "2026-08-11T12:43:03.621Z"
 doc_updated_by: "CODER"
 description: "Replace card-like paragraph textareas and persistent paragraph action buttons with document-integrated editable paragraph blocks placed inside the existing Writer page canvas. Preserve the bounded Writer model, formatting, undo/redo, save/load, accessibility, and tests; use LibreOffice Writer placement conventions without pixel-perfect visual copying."
 sections:
@@ -118,6 +132,10 @@ sections:
     - Observation: Command: npm run test:coverage --workspace @vite-office/office; npm run test:e2e. Result: pass. Evidence: 49 unit tests and 1 production Playwright test passed; coverage is 100% for statements, branches, functions, and lines; axe reported no violations. Scope: integrated document paragraphs, formatting-toolbar movement, browser accessibility.
       Impact: Residual risk: static test inventory and full aggregate verification have not run since the cadence checkpoint.
       Resolution: Run the deferred aggregate suite at the next tenth closed feature task or earlier if foundational test infrastructure changes.
+extensions:
+  implementation_commit:
+    hash: "93d48e243d2876234598bf139616328c2b5daa72"
+    message: "✨ 2VM5NX code: integrate Writer document paragraphs"
 id_source: "generated"
 ---
 ## Summary
