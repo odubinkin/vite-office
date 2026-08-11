@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111315-4CJGWQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T13:19:05.958Z",
+  "verdict": "pass",
+  "summary": "Writer module decomposition meets the approved structural scope.",
+  "evaluated_sha": "55b3ca03aef029f9d0cb3243c6277804be861330",
+  "blueprint_digest": "493264745c62b7b1edd92b816de6b5e866df26e59c1e525fee7b3c4399107ffd",
+  "findings": [
+    "No blocking defects found."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111315-4CJGWQ/README.md",
+    "55b3ca03aef029f9d0cb3243c6277804be861330"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
