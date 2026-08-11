@@ -1,10 +1,12 @@
 ---
 id: "202608111209-6MDRK9"
 title: "Implement Writer paragraph style selection"
-status: "DOING"
+result_summary: "Writer paragraph style selection verified."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "Implementation commit da725b0828c680ba725abb4ab0d9e7d98fac68a2; Prettier, lint, typecheck, JSDoc validation (108 files), file-size review, and diff check passed; 48 focused app tests passed at 100% coverage; targeted production Playwright and axe passed; ap doctor and routing validation passed."
   findings:
     - "No defects found in the approved scope: Default Paragraph Style and Heading 1 are validated, focus-targeted, undoable, serializable, legacy-safe, visibly rendered, described to assistive technology, and covered in the production browser."
-commit: null
+commit:
+  hash: "0465410fb9ae5b317c0a6f79d0253b15400feb26"
+  message: "✅ 6MDRK9 task: record Writer style evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implementing the approved bounded Writer paragraph style selection with immutable history, local storage compatibility, visible editing semantics, provenance documentation, and focused evidence."
+  -
+    author: "CODER"
+    body: "Verified: focused Writer paragraph styles passed strict coverage, browser accessibility, documentation, and policy checks."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: focused Writer paragraphs now support Default Paragraph Style and Heading 1 through immutable history, undo/redo, browser-local snapshots, safe legacy defaults, visible textarea styling, accessible descriptions, and properties-sidebar feedback. Passed Prettier, lint, typecheck, JSDoc (108 files), file-size review, diff check, 48 focused app tests at 100% coverage, and targeted production Playwright plus axe. Static smoke, inventory, and full aggregation remain deferred under the user-approved every-ten-tasks cadence; targeted Playwright built production assets."
+  -
+    type: "status"
+    at: "2026-08-11T12:19:47.459Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: focused Writer paragraph styles passed strict coverage, browser accessibility, documentation, and policy checks."
 doc_version: 3
-doc_updated_at: "2026-08-11T12:19:26.805Z"
+doc_updated_at: "2026-08-11T12:19:47.461Z"
 doc_updated_by: "CODER"
 description: "Enable a bounded Writer paragraph-style capability in the existing formatting-toolbar selector. Support Default Paragraph Style and Heading 1 for the focused paragraph through immutable history and browser-local snapshots, with visible browser rendering and properties feedback. Map the narrow behavior to pinned .uno:StyleApply and ParaStyleName evidence without claiming style inheritance, outline/list semantics, ODT/OOXML, or full Writer parity."
 sections:
@@ -115,6 +129,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "da725b0828c680ba725abb4ab0d9e7d98fac68a2"
+    message: "✨ 6MDRK9 code: add Writer paragraph styles"
 id_source: "generated"
 ---
 ## Summary
