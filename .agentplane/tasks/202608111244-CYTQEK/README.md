@@ -4,7 +4,7 @@ title: "Place implemented Writer commands in native-style menus"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-08-11T12:51:34.378Z"
+  updated_by: "REVIEWER"
+  note: "Verified: Writer menu placement, toolbar cleanup, strict coverage, targeted production Playwright accessibility, documentation, and policy checks passed. Static, inventory, and aggregate verification remain deferred under the approved cadence."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-11T12:51:43.573Z"
+  updated_by: "EVALUATOR"
+  note: "Implemented Writer commands are now reachable from their pinned File, Edit, Format, and Styles menu locations, with only upstream-precedented toolbar controls retained."
+  evaluated_sha: "068ea3c96130df69d409a5993e6ab18c41e396eb"
+  blueprint_digest: "edf2ac4257e0d171fd993bfef6c3cf490600ba960f734081d2a6557eaf0db839"
+  evidence_refs:
+    - ".agentplane/tasks/202608111244-CYTQEK/README.md"
+    - ".agentplane/tasks/202608111244-CYTQEK/quality/20260811-125143573-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608111244-CYTQEK/quality/20260811-125143573-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608111244-CYTQEK/quality/20260811-125143573-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608111244-CYTQEK/blueprint/resolved-snapshot.json"
+    - "npm run test:coverage --workspace @vite-office/office (48 passed; 100% thresholds); npm run test:e2e (1 passed with axe); npm run format:check; npm run lint; npm run typecheck; npm run check:docs; npm run check:file-size; git diff --check; ap doctor; node .agentplane/policy/check-routing.mjs"
+  findings:
+    - "No blocking defect found. The standalone paragraph append UI was removed because Writer creates ordinary paragraphs through caret/Enter behavior, which needs its own feature task."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: map existing browser Writer commands to pinned menu locations and remove non-native toolbar placement."
+  -
+    type: "verify"
+    at: "2026-08-11T12:51:34.378Z"
+    author: "REVIEWER"
+    state: "ok"
+    note: "Verified: Writer menu placement, toolbar cleanup, strict coverage, targeted production Playwright accessibility, documentation, and policy checks passed. Static, inventory, and aggregate verification remain deferred under the approved cadence."
 doc_version: 3
-doc_updated_at: "2026-08-11T12:45:07.846Z"
+doc_updated_at: "2026-08-11T12:51:34.432Z"
 doc_updated_by: "CODER"
 description: "Make the Writer menu bar expose every currently implemented command in its matching LibreOffice Writer menu location: browser-local open/save/plain-text export in File, undo/redo in Edit, alignment and bounded paragraph movement in Format, and bounded paragraph styles in Styles. Remove the non-Writer Add paragraph toolbar button while retaining only toolbar placement that has upstream precedent. Preserve browser-only behavior, accessibility, history, and existing visual language."
 sections:
@@ -59,12 +81,47 @@ sections:
     5. Do not run npm run test:static, inventory checks, or npm run verify. Reason: user-approved every-ten-closed-tasks cadence; targeted Playwright performs the production build. Record residual risk in Verification.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-08-11T12:51:34.378Z — VERIFY — ok
+
+    By: REVIEWER
+
+    Note: Verified: Writer menu placement, toolbar cleanup, strict coverage, targeted production Playwright accessibility, documentation, and policy checks passed. Static, inventory, and aggregate verification remain deferred under the approved cadence.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-11T12:45:07.846Z, excerpt_hash=sha256:d66715bf5013620f156b48a93a29472b00aa5b1b3d9ee2c9755c87e4ab152096
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608111244-CYTQEK/blueprint/resolved-snapshot.json
+    - old_digest: edf2ac4257e0d171fd993bfef6c3cf490600ba960f734081d2a6557eaf0db839
+    - current_digest: edf2ac4257e0d171fd993bfef6c3cf490600ba960f734081d2a6557eaf0db839
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608111244-CYTQEK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task run 202608111244-CYTQEK
+    - diagnostic_command: agentplane task run status 202608111244-CYTQEK
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert only the implementation and task-evidence commits for 202608111244-CYTQEK.
     - Restore the previous static menu bar and Add paragraph toolbar button only if accessible menu dispatch regresses existing Writer command behavior.
     - Re-run the declared task checks after the revert.
-  Findings: ""
+  Findings: |-
+    - Observation: Command: npm run test:coverage --workspace @vite-office/office; npm run test:e2e. Result: pass. Evidence: 48 unit tests at 100% statements, branches, functions, and lines; one production Playwright test passed with axe clean. Scope: File/Edit/Format/Styles command placement, disabled state, toolbar cleanup.
+      Impact: Residual risk: deferred static inventory and aggregate verification have not run since the cadence checkpoint.
+      Resolution: Run the deferred aggregate suite at the next tenth closed feature task or earlier after foundational test infrastructure changes.
 id_source: "generated"
 ---
 ## Summary
@@ -96,6 +153,38 @@ Make the Writer menu bar expose every currently implemented command in its match
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-08-11T12:51:34.378Z — VERIFY — ok
+
+By: REVIEWER
+
+Note: Verified: Writer menu placement, toolbar cleanup, strict coverage, targeted production Playwright accessibility, documentation, and policy checks passed. Static, inventory, and aggregate verification remain deferred under the approved cadence.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-11T12:45:07.846Z, excerpt_hash=sha256:d66715bf5013620f156b48a93a29472b00aa5b1b3d9ee2c9755c87e4ab152096
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608111244-CYTQEK/blueprint/resolved-snapshot.json
+- old_digest: edf2ac4257e0d171fd993bfef6c3cf490600ba960f734081d2a6557eaf0db839
+- current_digest: edf2ac4257e0d171fd993bfef6c3cf490600ba960f734081d2a6557eaf0db839
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608111244-CYTQEK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task run 202608111244-CYTQEK
+- diagnostic_command: agentplane task run status 202608111244-CYTQEK
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -105,3 +194,7 @@ Make the Writer menu bar expose every currently implemented command in its match
 - Re-run the declared task checks after the revert.
 
 ## Findings
+
+- Observation: Command: npm run test:coverage --workspace @vite-office/office; npm run test:e2e. Result: pass. Evidence: 48 unit tests at 100% statements, branches, functions, and lines; one production Playwright test passed with axe clean. Scope: File/Edit/Format/Styles command placement, disabled state, toolbar cleanup.
+  Impact: Residual risk: deferred static inventory and aggregate verification have not run since the cadence checkpoint.
+  Resolution: Run the deferred aggregate suite at the next tenth closed feature task or earlier after foundational test infrastructure changes.
