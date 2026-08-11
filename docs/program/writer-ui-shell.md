@@ -25,6 +25,11 @@ each enabled command in its matching Writer menu. See
 complete current page-integrated document body without changing its serialized
 paragraph model, transaction history, or browser-local snapshot. It has no
 standard-toolbar control in this bounded Writer slice.
+**Edit → Copy** and the standard-toolbar **Copy** button send the current native
+selection to the browser clipboard without an application backend. They first
+use the asynchronous browser Clipboard API and then use a local legacy fallback
+when the browser denies or omits that API; neither path changes the document,
+history, or local snapshot.
 When the user hides the properties sidebar from **View → Sidebar**, the canvas
 uses the released workspace width and the document, toolbars, and status bar
 remain available. The preference is transient workspace chrome state: it does

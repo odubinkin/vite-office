@@ -92,6 +92,16 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
       },
     ),
   ).resolves.toContain("A browser-authored paragraph.");
+  await expect(
+    page
+      .getByRole("toolbar", { name: "Writer standard toolbar" })
+      .getByRole("button", { name: "Copy" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("menuitem", { name: "Copy" }).click();
+  await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
+    "Copied selection.",
+  );
   await page.getByRole("button", { name: "Styles" }).click();
   await page.getByRole("menuitem", { name: "Heading 1" }).click();
   await expect(writerEditor).toHaveCSS("font-size", "24px");

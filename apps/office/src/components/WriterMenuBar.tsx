@@ -37,6 +37,8 @@ export interface WriterMenuBarProps {
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
   /** Starts the current plain-text browser download. */
   readonly onDownload: () => void;
+  /** Requests copying the current native Writer selection to the browser clipboard. */
+  readonly onCopy: () => void;
   /** Requests browser selection of the complete rendered Writer document. */
   readonly onSelectAll: () => void;
   /** Loads the existing document identity from browser-local storage. */
@@ -98,6 +100,7 @@ const writerMenuLabels: readonly WriterMenuLabel[] = [
  * @param props.isStatusBarVisible - Whether the View Status Bar check item is currently checked.
  * @param props.onAlignmentChange - Callback used by Format alignment entries.
  * @param props.onDownload - Callback used by File Save As Text entry.
+ * @param props.onCopy - Callback used by Edit Copy entry.
  * @param props.onHorizontalRulerVisibilityChange - Callback used by the View Rulers horizontal item.
  * @param props.onLoad - Callback used by File Open Local Copy entry.
  * @param props.onMoveParagraph - Callback used by Format list movement entries.
@@ -123,6 +126,7 @@ export function WriterMenuBar({
   isStoragePending,
   onAlignmentChange,
   onDownload,
+  onCopy,
   onHorizontalRulerVisibilityChange,
   onLoad,
   onMoveParagraph,
@@ -338,6 +342,7 @@ export function WriterMenuBar({
           {renderMenuItem("Undo", invokeMenuAction.bind(undefined, onUndo), !canUndo)}
           {renderMenuItem("Redo", invokeMenuAction.bind(undefined, onRedo), !canRedo)}
           <div aria-hidden="true" className="my-1 border-t border-slate-200" />
+          {renderMenuItem("Copy", invokeMenuAction.bind(undefined, onCopy))}
           {renderMenuItem("Select All", invokeMenuAction.bind(undefined, onSelectAll))}
         </div>
       );

@@ -158,6 +158,8 @@ The following documents form the program control plane:
   toolbar, ruler, document canvas, sidebar, and status-bar placement contract.
 - [Browser Writer command placement](writer-command-placement.md): pinned
   menu and toolbar locations for every currently enabled Writer command.
+- [Browser Writer clipboard copy](writer-clipboard.md): browser-only plain-text
+  Copy behavior at the pinned Edit and standard-toolbar locations.
 - [Browser command registry](command-registry.md): typed, browser-independent
   command definitions, shortcut lookup, and dispatch outcomes.
 - [Browser transaction history](transaction-history.md): immutable snapshot

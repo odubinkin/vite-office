@@ -2,7 +2,7 @@
  * @fileoverview Renders the implemented Writer commands in a compact standard-toolbar presentation.
  */
 
-import { FolderOpen, Redo2, Save, Undo2 } from "lucide-react";
+import { Copy, FolderOpen, Redo2, Save, Undo2 } from "lucide-react";
 
 /** Defines the implemented command state and callbacks placed in the Writer standard toolbar. */
 export interface WriterCommandToolbarProps {
@@ -12,6 +12,8 @@ export interface WriterCommandToolbarProps {
   readonly canUndo: boolean;
   /** Whether browser-local storage actions are currently pending. */
   readonly isStoragePending: boolean;
+  /** Requests copying the current native Writer selection to the browser clipboard. */
+  readonly onCopy: () => void;
   /** Requests loading the Writer document from browser-local storage. */
   readonly onLoad: () => void;
   /** Requests restoration of the following Writer history snapshot. */
@@ -29,6 +31,7 @@ export interface WriterCommandToolbarProps {
  * @param props.canRedo - Whether Redo is available.
  * @param props.canUndo - Whether Undo is available.
  * @param props.isStoragePending - Whether Save and Load should be disabled temporarily.
+ * @param props.onCopy - Callback starting browser-local Writer selection copy.
  * @param props.onLoad - Callback starting browser-local load.
  * @param props.onRedo - Callback restoring the following history entry.
  * @param props.onSave - Callback starting browser-local save.
@@ -39,6 +42,7 @@ export function WriterCommandToolbar({
   canRedo,
   canUndo,
   isStoragePending,
+  onCopy,
   onLoad,
   onRedo,
   onSave,
@@ -65,6 +69,16 @@ export function WriterCommandToolbar({
         type="button"
       >
         <FolderOpen aria-hidden="true" size={18} />
+      </button>
+      <span aria-hidden="true" className="mx-1 h-6 border-l border-slate-200" />
+      <button
+        aria-label="Copy"
+        className="grid size-9 place-items-center rounded-lg text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800"
+        onClick={onCopy}
+        title="Copy"
+        type="button"
+      >
+        <Copy aria-hidden="true" size={18} />
       </button>
       <span aria-hidden="true" className="mx-1 h-6 border-l border-slate-200" />
       <button

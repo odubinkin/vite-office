@@ -28,6 +28,7 @@ import {
   type WriterSnapshotState,
 } from "../domain/writer-storage";
 import { downloadPlainText } from "../platform/browser-download";
+import { copyPlainText } from "../platform/browser-clipboard";
 import { IndexedDbDocumentStorageAdapter } from "../platform/indexeddb-storage";
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterMenuBar } from "./WriterMenuBar";
@@ -404,6 +405,25 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     }
   }
 
+  /**
+   * Copies the current native Writer selection to the browser clipboard without changing the document model.
+   *
+   * @returns A promise resolved after copy feedback is recorded.
+   */
+  async function handleWriterCopy(): Promise<void> {
+    const selectedText = globalThis.getSelection()?.toString() ?? "";
+    if (selectedText === "") {
+      setStorageStatus("Select text to copy.");
+      return;
+    }
+    try {
+      await copyPlainText(selectedText);
+      setStorageStatus("Copied selection.");
+    } catch {
+      setStorageStatus("Could not copy selection.");
+    }
+  }
+
   useWriterHistoryShortcuts({
     history: writerHistory,
     isActive,
@@ -427,6 +447,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             isSidebarVisible={isPropertiesSidebarVisible}
             isStatusBarVisible={isStatusBarVisible}
             onAlignmentChange={handleWriterParagraphAlignment}
+            onCopy={handleWriterCopy}
             onDownload={handleWriterDownload}
             onHorizontalRulerVisibilityChange={setIsHorizontalRulerVisible}
             onLoad={handleWriterLoad}
@@ -475,6 +496,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             canRedo={writerHistory.index < writerHistory.entries.length - 1}
             canUndo={writerHistory.index > 0}
             isStoragePending={storagePending}
+            onCopy={handleWriterCopy}
             onLoad={handleWriterLoad}
             onRedo={handleWriterRedo}
             onSave={handleWriterSave}

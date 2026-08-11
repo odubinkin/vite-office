@@ -257,6 +257,56 @@ describe("App" /**
     );
   });
 
+  it("copies the selected Writer body through Edit and the standard toolbar" /**
+   * Verifies empty-selection feedback, successful browser clipboard writes, and rejected clipboard feedback without document mutation.
+   *
+   * @returns A promise resolved after the asynchronous copy feedback is asserted.
+   */, async function copiesWriterSelection(): Promise<void> {
+    const originalClipboard = Object.getOwnPropertyDescriptor(navigator, "clipboard");
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+    try {
+      render(<App />);
+      const editor = screen.getByRole("textbox", { name: "Writer document text" });
+      const getSelection = vi.spyOn(window, "getSelection").mockReturnValue(null);
+      fireEvent.click(screen.getByRole("button", { name: "Copy" }));
+      getSelection.mockRestore();
+      expect(screen.getByText("Select text to copy.")).toBeInTheDocument();
+      enterWriterParagraphText(editor, "Copied Writer body");
+      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      const copyMenuItem = screen.getByRole("menuitem", { name: "Copy" });
+      await act(
+        /** Requests native Copy from the Writer Edit menu. @returns A fulfilled React act promise. */
+        async function copiesSelectedText(): Promise<void> {
+          fireEvent.click(copyMenuItem);
+        },
+      );
+      expect(writeText).toHaveBeenCalledWith("Copied Writer body");
+      expect(screen.getByText("Copied selection.")).toBeInTheDocument();
+      writeText.mockRejectedValueOnce(new Error("Denied"));
+      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      const rejectedCopyMenuItem = screen.getByRole("menuitem", { name: "Copy" });
+      await act(
+        /** Requests a rejected native copy that must surface deterministic status feedback. @returns A fulfilled React act promise. */
+        async function rejectsSelectedTextCopy(): Promise<void> {
+          fireEvent.click(rejectedCopyMenuItem);
+        },
+      );
+      expect(screen.getByText("Could not copy selection.")).toBeInTheDocument();
+    } finally {
+      if (originalClipboard === undefined)
+        delete (navigator as unknown as { clipboard?: unknown }).clipboard;
+      else Object.defineProperty(navigator, "clipboard", originalClipboard);
+    }
+  });
+
   it("saves and restores a Writer paragraph through browser-local IndexedDB" /**
    * Verifies Save persists the current body and Load restores it after a later in-memory edit.
    * @returns A promise resolved after the asynchronous storage feedback is asserted.
