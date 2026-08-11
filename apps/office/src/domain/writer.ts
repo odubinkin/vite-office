@@ -68,6 +68,48 @@ export function appendWriterParagraph(
 }
 
 /**
+ * Removes one named paragraph while preserving the non-empty Writer body invariant.
+ *
+ * @param writerDocument - Immutable prior Writer document state.
+ * @param paragraphId - Stable identity of the paragraph to remove.
+ * @returns New Writer document without the selected paragraph and with a dirty lifecycle header.
+ * @throws {Error} When paragraphId is absent or the document has only one paragraph.
+ */
+export function removeWriterParagraph(
+  writerDocument: WriterDocument,
+  paragraphId: string,
+): WriterDocument {
+  const paragraph = writerDocument.paragraphs.find(
+    /**
+     * Finds the paragraph selected by the requested stable identity.
+     *
+     * @param candidate - Immutable paragraph candidate to inspect.
+     * @returns True only when candidate owns paragraphId.
+     */
+    function hasParagraphId(candidate): boolean {
+      return candidate.id === paragraphId;
+    },
+  );
+  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  if (writerDocument.paragraphs.length === 1)
+    throw new Error("Writer document must retain one paragraph.");
+  return {
+    document: markDocumentDirty(writerDocument.document),
+    paragraphs: writerDocument.paragraphs.filter(
+      /**
+       * Omits only the selected paragraph while preserving sibling order and references.
+       *
+       * @param candidate - Immutable paragraph candidate to retain or remove.
+       * @returns True only when candidate is not the paragraph selected for removal.
+       */
+      function omitsSelectedParagraph(candidate): boolean {
+        return candidate.id !== paragraphId;
+      },
+    ),
+  };
+}
+
+/**
  * Inserts text at one zero-based UTF-16 offset in a named paragraph and marks the document dirty.
  *
  * @param writerDocument - Immutable prior Writer document state.

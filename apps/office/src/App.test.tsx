@@ -88,6 +88,27 @@ describe("App" /**
     );
   });
 
+  it("removes an eligible Writer paragraph through undoable immutable history" /**
+   * Verifies the final paragraph has no removal action and removed content can be restored exactly.
+   *
+   * @returns Nothing; assertions cover removal visibility and history behavior.
+   */, function removesWriterParagraphs(): void {
+    render(<App />);
+
+    expect(screen.queryByRole("button", { name: "Remove paragraph 1" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
+    const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
+    fireEvent.change(secondParagraph, { target: { value: "Removable paragraph" } });
+    fireEvent.click(screen.getByRole("button", { name: "Remove paragraph 2" }));
+    expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveValue(
+      "Removable paragraph",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
+  });
+
   it("updates the preview and live status when a suite is selected" /**
    * Exercises the suite-selection state transition through an accessible button.
    *
@@ -348,6 +369,9 @@ describe("App" /**
     fireEvent.click(screen.getByRole("button", { name: "Download text" }));
     expect(screen.getByText("Plain-text download started.")).toBeInTheDocument();
     expect(await downloadedBlob?.text()).toBe("Download body\nSecond download body");
+    fireEvent.click(screen.getByRole("button", { name: "Remove paragraph 2" }));
+    fireEvent.click(screen.getByRole("button", { name: "Download text" }));
+    expect(await downloadedBlob?.text()).toBe("Download body");
     createObjectUrl.mockImplementationOnce(
       /** Simulates unsupported browser object URL creation. @returns No URL because this call throws. */
       function rejectsObjectUrl(): string {

@@ -18,6 +18,7 @@ import {
 import {
   appendWriterParagraph,
   createWriterDocument,
+  removeWriterParagraph,
   replaceWriterParagraph,
   type WriterDocument,
   type WriterParagraph,
@@ -165,6 +166,34 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         const nextDocument = appendWriterParagraph(
           currentDocument,
           getNextWriterParagraphId(currentDocument),
+        );
+        return applyTransaction(currentHistory, nextDocument, {
+          position: getWorkbenchSelectionPosition(nextDocument),
+        });
+      },
+    );
+  }
+
+  /**
+   * Removes one eligible Writer paragraph through an immutable history transaction.
+   *
+   * @param paragraphId - Stable identity of the paragraph to remove.
+   * @returns Nothing; React schedules the reduced document state.
+   */
+  function handleWriterRemoveParagraph(paragraphId: string): void {
+    setWriterHistory(
+      /**
+       * Removes the selected paragraph from the current immutable history document.
+       *
+       * @param currentHistory - Immutable Writer history before paragraph removal.
+       * @returns History containing the reduced paragraph body as its latest snapshot.
+       */
+      function removeWorkbenchParagraph(
+        currentHistory: TransactionHistory<WriterDocument>,
+      ): TransactionHistory<WriterDocument> {
+        const nextDocument = removeWriterParagraph(
+          getCurrentTransactionState(currentHistory),
+          paragraphId,
         );
         return applyTransaction(currentHistory, nextDocument, {
           position: getWorkbenchSelectionPosition(nextDocument),
@@ -365,6 +394,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         document={writerDocument.document}
         onAppendParagraph={handleWriterAppendParagraph}
         onRedo={handleWriterRedo}
+        onRemoveParagraph={handleWriterRemoveParagraph}
         onTextChange={handleWriterTextChange}
         onUndo={handleWriterUndo}
         paragraphs={writerDocument.paragraphs}

@@ -9,6 +9,7 @@ import {
   appendWriterParagraph,
   createWriterDocument,
   insertWriterText,
+  removeWriterParagraph,
   replaceWriterParagraph,
   type WriterDocument,
 } from "./writer";
@@ -53,6 +54,26 @@ function appendDuplicateParagraph(writer: WriterDocument): WriterDocument {
  */
 function appendBlankParagraph(writer: WriterDocument): WriterDocument {
   return appendWriterParagraph(writer, " ");
+}
+
+/**
+ * Attempts to remove a paragraph that does not exist.
+ *
+ * @param writer - Valid Writer document to inspect without mutation.
+ * @returns An invalid removal result; the call always throws.
+ */
+function removeMissingParagraph(writer: WriterDocument): WriterDocument {
+  return removeWriterParagraph(writer, "missing");
+}
+
+/**
+ * Attempts to remove the only remaining paragraph in a Writer document.
+ *
+ * @param writer - Valid Writer document containing one paragraph.
+ * @returns An invalid removal result; the call always throws.
+ */
+function removeOnlyParagraph(writer: WriterDocument): WriterDocument {
+  return removeWriterParagraph(writer, "p-1");
 }
 
 /**
@@ -171,6 +192,41 @@ describe("Writer paragraph body" /**
        */
       function appendsBlankParagraph(): WriterDocument {
         return appendBlankParagraph(writer);
+      },
+    ).toThrowError();
+  });
+
+  it("removes one non-final paragraph immutably and protects the non-empty body invariant" /**
+   * Verifies valid removal preserves sibling order and invalid removal cannot erase the document body.
+   *
+   * @returns Nothing; assertions validate removal and all error branches.
+   */, function removesParagraphs(): void {
+    const writer = appendWriterParagraph(createFixture(), "p-2");
+    const removed = removeWriterParagraph(writer, "p-1");
+
+    expect(writer.paragraphs).toHaveLength(2);
+    expect(removed).toMatchObject({
+      document: { lifecycle: "dirty", revision: 1 },
+      paragraphs: [{ id: "p-2", text: "" }],
+    });
+    expect(
+      /**
+       * Executes the missing-paragraph removal failure case for Vitest.
+       *
+       * @returns Invalid Writer removal result; the delegated call always throws.
+       */
+      function removesMissingParagraph(): WriterDocument {
+        return removeMissingParagraph(writer);
+      },
+    ).toThrowError();
+    expect(
+      /**
+       * Executes the final-paragraph removal failure case for Vitest.
+       *
+       * @returns Invalid Writer removal result; the delegated call always throws.
+       */
+      function removesOnlyParagraph(): WriterDocument {
+        return removeOnlyParagraph(createFixture());
       },
     ).toThrowError();
   });

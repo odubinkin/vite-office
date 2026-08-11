@@ -17,6 +17,8 @@ export interface WriterPlainTextEditorProps {
   readonly paragraphs: readonly WriterParagraph[];
   /** Requests an immutable append of one empty paragraph. */
   readonly onAppendParagraph: () => void;
+  /** Requests immutable removal of the paragraph identified by the supplied stable ID. */
+  readonly onRemoveParagraph: (paragraphId: string) => void;
   /** Receives a stable paragraph identity and its complete next text after an editing event. */
   readonly onTextChange: (paragraphId: string, text: string) => void;
   /** Requests restoration of the following immutable Writer snapshot. */
@@ -33,6 +35,7 @@ export interface WriterPlainTextEditorProps {
  * @param props.canUndo - Whether the backward-history control is enabled.
  * @param props.document - Header providing lifecycle and revision feedback.
  * @param props.onAppendParagraph - Callback that adds an empty paragraph to the immutable body.
+ * @param props.onRemoveParagraph - Callback that removes an eligible paragraph from the immutable body.
  * @param props.onRedo - Callback that restores the following history snapshot.
  * @param props.paragraphs - Ordered Writer paragraphs displayed by this bounded editor.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
@@ -44,12 +47,14 @@ export function WriterPlainTextEditor({
   canUndo,
   document,
   onAppendParagraph,
+  onRemoveParagraph,
   onRedo,
   onTextChange,
   onUndo,
   paragraphs,
 }: WriterPlainTextEditorProps): React.JSX.Element {
   const lifecycleLabel = document.lifecycle === "new" ? "New document" : "Unsaved changes";
+  const canRemoveParagraph = paragraphs.length > 1;
 
   /**
    * Passes one complete textarea value to the owning immutable document state.
@@ -99,6 +104,24 @@ export function WriterPlainTextEditor({
           placeholder={isFirstParagraph ? "Start writing…" : "Continue writing…"}
           value={paragraph.text}
         />
+        {canRemoveParagraph ? (
+          <button
+            className="mt-2 rounded-lg border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-800 shadow-sm transition hover:border-rose-500"
+            onClick={
+              /**
+               * Connects this paragraph removal control to its immutable identity.
+               *
+               * @returns Nothing; the owning workbench schedules the removal.
+               */
+              function removeParagraph(): void {
+                onRemoveParagraph(paragraph.id);
+              }
+            }
+            type="button"
+          >
+            Remove paragraph {index + 1}
+          </button>
+        ) : null}
       </div>
     );
   }

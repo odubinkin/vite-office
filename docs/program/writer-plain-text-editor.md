@@ -16,8 +16,8 @@ value becomes dirty at revision one. Changing to another suite hides the
 workbench while retaining the in-memory Writer session for the page session.
 
 This is a bounded browser workbench, not a LibreOffice Writer parity claim. It
-does not provide rich text, selection, deletion or reordering, layout, spelling,
-accessibility parity for authored content, ODT import/export, or any other
-document format behavior. The pinned upstream `sw/qa/core/text/text.cxx`
+does not provide rich text, selection, range deletion or reordering, layout,
+spelling, accessibility parity for authored content, ODT import/export, or any
+other document format behavior. The pinned upstream `sw/qa/core/text/text.cxx`
 fixture records `APPEND_PARAGRAPH` behavior as limited append provenance; its
 layout, PDF, and list assertions are not mapped by this feature.

@@ -7,6 +7,8 @@ plain-text paragraphs. `createWriterDocument` establishes an empty first
 paragraph, `insertWriterText` inserts text at a validated UTF-16 offset, and
 `replaceWriterParagraph` replaces one paragraph's complete text.
 `appendWriterParagraph` appends one uniquely identified empty paragraph.
+`removeWriterParagraph` removes one identified paragraph while protecting the
+non-empty body invariant.
 
 Each operation is pure: it does not mutate its input, keeps unedited paragraph
 objects intact, and produces JSON-serializable output. A changed body uses the
@@ -20,7 +22,7 @@ to the same immutable append contract; all paragraph changes participate in
 history, browser-local snapshots, and line-separated plain-text download.
 
 This intentionally does not implement formatting, layout, fields, sections,
-lists, tables, selection, deletion, reordering, ODT import/export,
+lists, tables, selection, range deletion, reordering, ODT import/export,
 collaboration, accessibility parity, or LibreOffice Writer parity. The append
 intent is traceable to `APPEND_PARAGRAPH` calls in pinned
 `sw/qa/core/text/text.cxx`; its bibliography, PDF, and layout assertions are
