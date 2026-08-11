@@ -1,10 +1,12 @@
 ---
 id: "202608101309-8EXRAE"
 title: "Add Writer IndexedDB save and load workbench controls"
-status: "DOING"
+result_summary: "Writer browser-local storage controls verified."
+risk_level: "low"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +42,16 @@ quality_review:
     - "npm run verify passed"
   findings:
     - "No confirmed defects: snapshot orchestration, accessible controls, non-destructive outcomes, test coverage, and documentation are present."
-commit: null
+commit:
+  hash: "40975cbc401edc196a98fdd4be39643ad45f35f7"
+  message: "✅ 8EXRAE task: record Writer storage verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Writer browser-local IndexedDB save and load controls."
+  -
+    author: "CODER"
+    body: "Verified: Writer browser-local save and load controls passed all declared checks."
 events:
   -
     type: "status"
@@ -59,8 +66,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified Writer browser-local save/load: npm run verify passed (application 33 tests/100% coverage, inventory 67 tests/100% coverage, Playwright 1/1); saved, loaded, missing, unavailable, and failing IndexedDB paths are covered."
+  -
+    type: "status"
+    at: "2026-08-11T11:15:28.959Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer browser-local save and load controls passed all declared checks."
 doc_version: 3
-doc_updated_at: "2026-08-11T11:15:20.454Z"
+doc_updated_at: "2026-08-11T11:15:28.961Z"
 doc_updated_by: "CODER"
 description: "Connect the existing browser-native IndexedDB snapshot adapter to the Writer workbench through accessible explicit Save and Load controls, preserving the static frontend boundary and excluding formats, autosave, and file-picker policy."
 sections:
@@ -117,6 +131,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "443c04dd9a34a3886d66b3d08513527afc068695"
+    message: "🐛 8EXRAE code: disambiguate Writer storage status E2E"
 id_source: "generated"
 ---
 ## Summary
