@@ -83,6 +83,26 @@ describe("App" /**
     expect(screen.getByText("No editor features enabled")).toBeInTheDocument();
   });
 
+  it("retains the Writer session and disables its shortcuts while another suite is selected" /**
+   * Verifies that hiding the workbench neither discards text nor lets Writer commands run outside Writer.
+   *
+   * @returns Nothing; assertions cover workbench visibility and retained state.
+   */, function retainsHiddenWriterSession(): void {
+    render(<App />);
+
+    fireEvent.change(screen.getByRole("textbox", { name: "Writer document text" }), {
+      target: { value: "Retained Writer body" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Calc, Foundation only" }));
+    fireEvent.keyDown(window, { ctrlKey: true, key: "z" });
+    expect(screen.queryByRole("textbox", { name: "Writer document text" })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Writer, Foundation only" }));
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveValue(
+      "Retained Writer body",
+    );
+  });
+
   it("saves and restores a Writer paragraph through browser-local IndexedDB" /**
    * Verifies Save persists the current body and Load restores it after a later in-memory edit.
    * @returns A promise resolved after the asynchronous storage feedback is asserted.

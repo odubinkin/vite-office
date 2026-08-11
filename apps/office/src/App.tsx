@@ -3,63 +3,13 @@
  */
 
 import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { SuiteCard } from "./components/SuiteCard";
-import { WriterPlainTextEditor } from "./components/WriterPlainTextEditor";
-import { WriterStorageControls } from "./components/WriterStorageControls";
+import { WriterWorkbench } from "./components/WriterWorkbench";
 import { createDocument } from "./domain/document";
-import { getBrowserShortcut } from "./domain/browser-shortcuts";
-import { createCommandRegistry, dispatchCommand, findCommandByShortcut } from "./domain/commands";
-import {
-  applyTransaction,
-  createTransactionHistory,
-  getCurrentTransactionState,
-  redoTransaction,
-  undoTransaction,
-  type TransactionHistory,
-} from "./domain/history";
 import { suiteDefinitions } from "./domain/suites";
 import type { SuiteDefinition } from "./domain/suites";
-import {
-  createWriterDocument,
-  replaceWriterParagraph,
-  type WriterDocument,
-  type WriterParagraph,
-} from "./domain/writer";
-import {
-  loadWriterDocument,
-  saveWriterDocument,
-  type WriterSnapshotState,
-} from "./domain/writer-storage";
-import { IndexedDbDocumentStorageAdapter } from "./platform/indexeddb-storage";
-import { downloadPlainText } from "./platform/browser-download";
-
-/**
- * Creates the bounded initial Writer document edited by the workbench textarea.
- *
- * @returns An immutable Writer document with a single empty paragraph and new lifecycle state.
- */
-function createWriterWorkbenchDocument(): WriterDocument {
-  return createWriterDocument(
-    createDocument({
-      id: "writer-workbench",
-      suiteId: "writer",
-      title: "Untitled Writer Document",
-    }),
-    "writer-paragraph-1",
-  );
-}
-
-/**
- * Reads the initial paragraph length from the Writer workbench invariant.
- *
- * @param writerDocument - Immutable Writer document inspected without mutation.
- * @returns UTF-16 text length used as a deterministic history selection.
- */
-function getWorkbenchSelectionPosition(writerDocument: WriterDocument): number {
-  return (writerDocument.paragraphs[0] as WriterParagraph).text.length;
-}
 
 /**
  * Renders the browser-only office workbench foundation without exposing unfinished editing actions.
@@ -68,26 +18,6 @@ function getWorkbenchSelectionPosition(writerDocument: WriterDocument): number {
  */
 export function App(): React.JSX.Element {
   const [activeSuite, setActiveSuite] = useState<SuiteDefinition>(suiteDefinitions[0]);
-  const [storagePending, setStoragePending] = useState(false);
-  const [storageStatus, setStorageStatus] = useState("Not saved in this browser.");
-  const [writerHistory, setWriterHistory] = useState<TransactionHistory<WriterDocument>>(
-    /**
-     * Creates the Writer history once for the browser workbench session.
-     *
-     * @returns Initial history containing the new Writer document.
-     */
-    function createWriterHistory(): TransactionHistory<WriterDocument> {
-      const initialDocument = createWriterWorkbenchDocument();
-      return createTransactionHistory(initialDocument, {
-        position: getWorkbenchSelectionPosition(initialDocument),
-      });
-    },
-  );
-  const writerDocument = getCurrentTransactionState(writerHistory);
-  const writerStorage =
-    globalThis.indexedDB === undefined
-      ? undefined
-      : new IndexedDbDocumentStorageAdapter<WriterSnapshotState>("vite-office-writer-workbench");
   const previewDocument = createDocument({
     id: `preview-${activeSuite.id}`,
     suiteId: activeSuite.id,
@@ -103,206 +33,6 @@ export function App(): React.JSX.Element {
   function handleSuiteSelect(suite: SuiteDefinition): void {
     setActiveSuite(suite);
   }
-
-  /**
-   * Replaces the selected Writer paragraph text through the immutable domain transition.
-   *
-   * @param text - Complete next plain-text value emitted by the Writer textarea.
-   * @returns Nothing; React schedules the next Writer document state.
-   */
-  function handleWriterTextChange(text: string): void {
-    setWriterHistory(
-      /**
-       * Applies the complete-text replacement to the sole workbench paragraph.
-       *
-       * @param currentHistory - Current immutable Writer workbench history state.
-       * @returns History with the paragraph replacement applied as a new snapshot.
-       */
-      function replaceWorkbenchParagraph(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        const currentDocument = getCurrentTransactionState(currentHistory);
-        const nextDocument = replaceWriterParagraph(currentDocument, "writer-paragraph-1", text);
-        return applyTransaction(currentHistory, nextDocument, { position: text.length });
-      },
-    );
-  }
-
-  /** Restores the preceding Writer snapshot. @returns Nothing; React schedules an undo. */
-  function handleWriterUndo(): void {
-    setWriterHistory(
-      /**
-       * Moves history backward and derives its deterministic selection from the restored text.
-       * @param currentHistory - Immutable history before undo.
-       * @returns History positioned at the preceding snapshot when one exists.
-       */
-      function undoWriterHistory(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        const candidate = undoTransaction(currentHistory, { position: 0 });
-        return undoTransaction(currentHistory, {
-          position: getWorkbenchSelectionPosition(getCurrentTransactionState(candidate)),
-        });
-      },
-    );
-  }
-
-  /** Restores the following Writer snapshot. @returns Nothing; React schedules a redo. */
-  function handleWriterRedo(): void {
-    setWriterHistory(
-      /**
-       * Moves history forward and derives its deterministic selection from the restored text.
-       * @param currentHistory - Immutable history before redo.
-       * @returns History positioned at the following snapshot when one exists.
-       */
-      function redoWriterHistory(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        const candidate = redoTransaction(currentHistory, { position: 0 });
-        return redoTransaction(currentHistory, {
-          position: getWorkbenchSelectionPosition(getCurrentTransactionState(candidate)),
-        });
-      },
-    );
-  }
-
-  /** Saves the current Writer snapshot to native browser storage. @returns A promise resolved after feedback is updated. */
-  async function handleWriterSave(): Promise<void> {
-    if (writerStorage === undefined) {
-      setStorageStatus("Browser storage is unavailable.");
-      return;
-    }
-    setStoragePending(true);
-    try {
-      await saveWriterDocument(writerStorage, writerDocument);
-      setStorageStatus("Saved locally in this browser.");
-    } catch {
-      setStorageStatus("Could not save locally.");
-    } finally {
-      setStoragePending(false);
-    }
-  }
-
-  /** Loads the current Writer identity from native browser storage. @returns A promise resolved after feedback is updated. */
-  async function handleWriterLoad(): Promise<void> {
-    if (writerStorage === undefined) {
-      setStorageStatus("Browser storage is unavailable.");
-      return;
-    }
-    setStoragePending(true);
-    try {
-      const result = await loadWriterDocument(writerStorage, writerDocument.document.id);
-      if (result.status === "missing") setStorageStatus("No local saved copy exists.");
-      else {
-        setWriterHistory(
-          createTransactionHistory(result.writerDocument, {
-            position: getWorkbenchSelectionPosition(result.writerDocument),
-          }),
-        );
-        setStorageStatus("Loaded local saved copy.");
-      }
-    } catch {
-      setStorageStatus("Could not load local copy.");
-    } finally {
-      setStoragePending(false);
-    }
-  }
-
-  /** Downloads the current Writer paragraph as a UTF-8 plain-text file. @returns Nothing; browser download ownership begins after dispatch. */
-  function handleWriterDownload(): void {
-    try {
-      downloadPlainText(
-        (writerDocument.paragraphs[0] as WriterParagraph).text,
-        `${writerDocument.document.title}.txt`,
-      );
-      setStorageStatus("Plain-text download started.");
-    } catch {
-      setStorageStatus("Could not start plain-text download.");
-    }
-  }
-
-  useEffect(
-    /**
-     * Installs Writer-only keyboard command dispatch and releases it when dependencies change.
-     *
-     * @returns Cleanup that removes the registered browser listener.
-     */
-    function installWriterShortcuts(): () => void {
-      const registry = createCommandRegistry([
-        {
-          execute: handleWriterUndo,
-          id: "writer.undo",
-          isEnabled:
-            /** Determines whether Ctrl Undo can run for the current Writer history. @returns True when a prior snapshot exists in Writer. */
-            function canUndo(): boolean {
-              return activeSuite.id === "writer" && writerHistory.index > 0;
-            },
-          label: "Undo",
-          shortcut: "Ctrl+Z",
-        },
-        {
-          execute: handleWriterRedo,
-          id: "writer.redo",
-          isEnabled:
-            /** Determines whether Ctrl Redo can run for the current Writer history. @returns True when a following snapshot exists in Writer. */
-            function canRedo(): boolean {
-              return (
-                activeSuite.id === "writer" &&
-                writerHistory.index < writerHistory.entries.length - 1
-              );
-            },
-          label: "Redo",
-          shortcut: "Ctrl+Shift+Z",
-        },
-        {
-          execute: handleWriterUndo,
-          id: "writer.metaUndo",
-          isEnabled:
-            /** Determines whether Meta Undo can run for the current Writer history. @returns True when a prior snapshot exists in Writer. */
-            function canUndo(): boolean {
-              return activeSuite.id === "writer" && writerHistory.index > 0;
-            },
-          label: "Undo",
-          shortcut: "Meta+Z",
-        },
-        {
-          execute: handleWriterRedo,
-          id: "writer.metaRedo",
-          isEnabled:
-            /** Determines whether Meta Redo can run for the current Writer history. @returns True when a following snapshot exists in Writer. */
-            function canRedo(): boolean {
-              return (
-                activeSuite.id === "writer" &&
-                writerHistory.index < writerHistory.entries.length - 1
-              );
-            },
-          label: "Redo",
-          shortcut: "Meta+Shift+Z",
-        },
-      ]);
-      /**
-       * Dispatches one recognized browser shortcut and prevents its native default when executed.
-       *
-       * @param event - Browser keyboard event inspected and optionally cancelled.
-       * @returns Nothing; command execution schedules React state updates.
-       */
-      function handleKeyDown(event: KeyboardEvent): void {
-        const shortcut = getBrowserShortcut(event);
-        if (shortcut === undefined) return;
-        const command = findCommandByShortcut(registry, shortcut);
-        if (command === undefined) return;
-        const result = dispatchCommand(registry, command.id, undefined);
-        if (result.status === "executed") event.preventDefault();
-      }
-      window.addEventListener("keydown", handleKeyDown);
-      /** Removes the listener owned by this effect invocation. @returns Nothing. */
-      function removeWriterShortcuts(): void {
-        window.removeEventListener("keydown", handleKeyDown);
-      }
-      return removeWriterShortcuts;
-    },
-    [activeSuite.id, writerHistory],
-  );
 
   /**
    * Converts one immutable suite definition into its navigation card.
@@ -450,26 +180,7 @@ export function App(): React.JSX.Element {
                     </p>
                   </article>
                 </div>
-                {activeSuite.id === "writer" ? (
-                  <>
-                    <WriterPlainTextEditor
-                      canRedo={writerHistory.index < writerHistory.entries.length - 1}
-                      canUndo={writerHistory.index > 0}
-                      document={writerDocument.document}
-                      onRedo={handleWriterRedo}
-                      onTextChange={handleWriterTextChange}
-                      onUndo={handleWriterUndo}
-                      paragraph={writerDocument.paragraphs[0] as WriterParagraph}
-                    />
-                    <WriterStorageControls
-                      isPending={storagePending}
-                      onDownload={handleWriterDownload}
-                      onLoad={handleWriterLoad}
-                      onSave={handleWriterSave}
-                      status={storageStatus}
-                    />
-                  </>
-                ) : null}
+                <WriterWorkbench isActive={activeSuite.id === "writer"} />
               </div>
             </div>
 
