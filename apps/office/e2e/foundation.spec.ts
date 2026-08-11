@@ -28,6 +28,21 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await expect(
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "View" }).click();
+  const sidebarMenuItem = page.getByRole("menuitemcheckbox", { name: "Sidebar" });
+  await expect(sidebarMenuItem).toHaveAttribute("aria-checked", "true");
+  await sidebarMenuItem.click();
+  await expect(page.getByRole("complementary", { name: "Writer properties sidebar" })).toHaveCount(
+    0,
+  );
+  await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+  await page.getByRole("button", { name: "View" }).click();
+  const hiddenSidebarMenuItem = page.getByRole("menuitemcheckbox", { name: "Sidebar" });
+  await expect(hiddenSidebarMenuItem).toHaveAttribute("aria-checked", "false");
+  await hiddenSidebarMenuItem.click();
+  await expect(
+    page.getByRole("complementary", { name: "Writer properties sidebar" }),
+  ).toBeVisible();
   await expect(page.getByRole("status", { name: "Writer status bar" })).toBeVisible();
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await expect(writerEditor).toBeVisible();

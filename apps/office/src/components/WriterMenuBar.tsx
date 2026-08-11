@@ -11,7 +11,7 @@ import type {
 } from "../domain/writer";
 
 /** Identifies the Writer top-level menu that currently has an implemented popup. */
-type ImplementedWriterMenu = "edit" | "file" | "format" | "styles";
+type ImplementedWriterMenu = "edit" | "file" | "format" | "styles" | "view";
 
 /** Describes enabled state and immutable action callbacks exposed from the stateful Writer workbench. */
 export interface WriterMenuBarProps {
@@ -27,6 +27,8 @@ export interface WriterMenuBarProps {
   readonly canUndo: boolean;
   /** Whether browser-local storage operations are temporarily unavailable. */
   readonly isStoragePending: boolean;
+  /** Whether the contextual Writer properties sidebar is currently visible. */
+  readonly isSidebarVisible: boolean;
   /** Applies a focused-paragraph horizontal alignment. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
   /** Starts the current plain-text browser download. */
@@ -39,6 +41,8 @@ export interface WriterMenuBarProps {
   readonly onRedo: () => void;
   /** Saves the current Writer document in browser-local storage. */
   readonly onSave: () => void;
+  /** Requests the next visibility state for the Writer properties sidebar. */
+  readonly onSidebarVisibilityChange: (isVisible: boolean) => void;
   /** Applies a bounded paragraph style to the focused Writer paragraph. */
   readonly onStyleChange: (style: WriterParagraphStyle) => void;
   /** Restores the preceding immutable Writer history snapshot. */
@@ -59,7 +63,7 @@ interface WriterMenuLabel {
 const writerMenuLabels: readonly WriterMenuLabel[] = [
   { id: "file", label: "File" },
   { id: "edit", label: "Edit" },
-  { label: "View" },
+  { id: "view", label: "View" },
   { label: "Insert" },
   { id: "format", label: "Format" },
   { id: "styles", label: "Styles" },
@@ -79,12 +83,14 @@ const writerMenuLabels: readonly WriterMenuLabel[] = [
  * @param props.canRedo - Whether the Edit Redo menu entry is enabled.
  * @param props.canUndo - Whether the Edit Undo menu entry is enabled.
  * @param props.isStoragePending - Whether File storage entries are temporarily disabled.
+ * @param props.isSidebarVisible - Whether the View Sidebar check item is currently checked.
  * @param props.onAlignmentChange - Callback used by Format alignment entries.
  * @param props.onDownload - Callback used by File Save As Text entry.
  * @param props.onLoad - Callback used by File Open Local Copy entry.
  * @param props.onMoveParagraph - Callback used by Format list movement entries.
  * @param props.onRedo - Callback used by Edit Redo entry.
  * @param props.onSave - Callback used by File Save entry.
+ * @param props.onSidebarVisibilityChange - Callback used by the View Sidebar check item.
  * @param props.onStyleChange - Callback used by Styles entries.
  * @param props.onUndo - Callback used by Edit Undo entry.
  * @param props.style - Current focused-paragraph style.
@@ -96,6 +102,7 @@ export function WriterMenuBar({
   canMoveUp,
   canRedo,
   canUndo,
+  isSidebarVisible,
   isStoragePending,
   onAlignmentChange,
   onDownload,
@@ -103,6 +110,7 @@ export function WriterMenuBar({
   onMoveParagraph,
   onRedo,
   onSave,
+  onSidebarVisibilityChange,
   onStyleChange,
   onUndo,
   style,
@@ -174,6 +182,32 @@ export function WriterMenuBar({
   }
 
   /**
+   * Renders one checked menu command whose action represents mutable workspace visibility rather than document history.
+   *
+   * @param label - Stable accessible label for the visible Writer toggle command.
+   * @param onClick - Existing workbench callback to invoke after activation.
+   * @param isChecked - Whether the workspace feature is currently visible or enabled.
+   * @returns One semantic checkable menu item button.
+   */
+  function renderToggleMenuItem(
+    label: string,
+    onClick: () => void,
+    isChecked: boolean,
+  ): React.JSX.Element {
+    return (
+      <button
+        aria-checked={isChecked}
+        className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
+        onClick={onClick}
+        role="menuitemcheckbox"
+        type="button"
+      >
+        {label}
+      </button>
+    );
+  }
+
+  /**
    * Renders the contextual command popup for one implemented Writer top-level menu.
    *
    * @param menu - Implemented menu whose command group should be rendered.
@@ -181,6 +215,25 @@ export function WriterMenuBar({
    */
   function renderPopup(menu: ImplementedWriterMenu): React.JSX.Element {
     const menuId = `writer-${menu}-menu`;
+    if (menu === "view") {
+      return (
+        <div
+          aria-label="View menu"
+          className="absolute left-0 top-full z-20 mt-1 w-48 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
+          id={menuId}
+          role="menu"
+        >
+          {renderToggleMenuItem(
+            "Sidebar",
+            invokeMenuAction.bind(
+              undefined,
+              onSidebarVisibilityChange.bind(undefined, !isSidebarVisible),
+            ),
+            isSidebarVisible,
+          )}
+        </div>
+      );
+    }
     if (menu === "file") {
       return (
         <div

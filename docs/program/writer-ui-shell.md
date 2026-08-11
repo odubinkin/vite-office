@@ -12,15 +12,19 @@ defines the durable UI placement contract:
 - standard and formatting toolbars;
 - a horizontal ruler region;
 - a central page-like document canvas;
-- a right properties sidebar; and
+- a right properties sidebar that the **View → Sidebar** command can hide; and
 - a Writer status bar.
 
 Implemented commands are placed in the standard toolbar through
 [`WriterCommandToolbar`](../../apps/office/src/components/WriterCommandToolbar.tsx):
-browser-local save/load, plain-text download, and undo/redo. The functional
+browser-local save/load and undo/redo. The functional
 [`WriterMenuBar`](../../apps/office/src/components/WriterMenuBar.tsx) also puts
 each enabled command in its matching Writer menu. See
 [Writer command placement](writer-command-placement.md) for pinned provenance.
+When the user hides the properties sidebar from **View → Sidebar**, the canvas
+uses the released workspace width and the document, toolbars, and status bar
+remain available. The preference is transient workspace chrome state: it does
+not change the Writer document, its history, or browser-local snapshot.
 The existing editor renders as integrated editable paragraph blocks in the document canvas. The formatting toolbar now
 contains real left, center, right, and justified controls for the focused
 paragraph; their current value appears in the properties sidebar. The existing
@@ -31,7 +35,7 @@ Format menu, which follows Writer menubar placement without claiming
 LibreOffice drag, range, or tracked-change movement. Whole-paragraph removal
 has no browser UI until keyboard/range editing is explicitly implemented.
 
-The menu items, remaining character-format controls, ruler, page count,
+The remaining character-format controls, ruler, page count,
 language indicator, and most Writer commands are visual placement contracts
 only. They do not currently open menus, measure layout, or provide native
 LibreOffice behavior. Each enabled capability must receive its own mapped

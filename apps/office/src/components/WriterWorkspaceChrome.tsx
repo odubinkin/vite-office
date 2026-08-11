@@ -14,6 +14,8 @@ export interface WriterWorkspaceChromeProps {
   readonly menuBar: ReactNode;
   /** Implemented controls placed in the Writer formatting toolbar. */
   readonly formattingToolbar: ReactNode;
+  /** Whether the Writer properties sidebar is rendered beside the document canvas. */
+  readonly isPropertiesSidebarVisible: boolean;
   /** Current contextual controls and feedback placed in the Writer properties sidebar. */
   readonly propertiesSidebar: ReactNode;
   /** Current operation result shown in the Writer status bar. */
@@ -29,6 +31,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.children - Current document editing surface.
  * @param props.documentTitle - Title shown in the workspace title row.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
+ * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
  * @param props.menuBar - Functional Writer menus located below the document title row.
  * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
  * @param props.status - Current storage or download feedback.
@@ -39,6 +42,7 @@ export function WriterWorkspaceChrome({
   children,
   documentTitle,
   formattingToolbar,
+  isPropertiesSidebarVisible,
   menuBar,
   propertiesSidebar,
   status,
@@ -91,7 +95,11 @@ export function WriterWorkspaceChrome({
         </div>
       </header>
 
-      <div className="grid min-h-[620px] lg:grid-cols-[minmax(0,1fr)_240px]">
+      <div
+        className={`min-h-[620px] ${
+          isPropertiesSidebarVisible ? "grid lg:grid-cols-[minmax(0,1fr)_240px]" : "block"
+        }`}
+      >
         <div
           aria-label="Writer document canvas"
           className="overflow-auto bg-slate-200/70 p-5 sm:p-8"
@@ -101,12 +109,14 @@ export function WriterWorkspaceChrome({
             {children}
           </div>
         </div>
-        <aside
-          aria-label="Writer properties sidebar"
-          className="border-l border-slate-200 bg-white p-4"
-        >
-          {propertiesSidebar}
-        </aside>
+        {isPropertiesSidebarVisible ? (
+          <aside
+            aria-label="Writer properties sidebar"
+            className="border-l border-slate-200 bg-white p-4"
+          >
+            {propertiesSidebar}
+          </aside>
+        ) : null}
       </div>
 
       <footer

@@ -11,6 +11,9 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
   **File**. Browser-local load, save, and plain-text download are the bounded
   counterparts.
 - The same file places Undo and Redo in **Edit**.
+- It places `.uno:Sidebar` in **View**. The bounded browser **Sidebar** check
+  item controls the existing properties-sidebar chrome and has no standard
+  toolbar counterpart in this slice.
 - It places alignment under **Format → Alignment** and Move Up/Down under
   **Format → Bullets and Numbering**. The latter remains a bounded adjacent
   paragraph operation until list semantics exist.

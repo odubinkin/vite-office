@@ -93,7 +93,7 @@ describe("App" /**
   });
 
   it("places implemented Writer commands in accessible top-level menus" /**
-   * Verifies File, Edit, Format, and Styles open their Writer-positioned command popups while Add paragraph is absent.
+   * Verifies File, Edit, View, Format, and Styles open their Writer-positioned command popups while Add paragraph is absent.
    *
    * @returns Nothing; assertions cover bounded command placement and disabled state.
    */, function rendersWriterMenus(): void {
@@ -104,6 +104,20 @@ describe("App" /**
     expect(screen.getByRole("menuitem", { name: "Save" })).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     expect(screen.queryByRole("menu", { name: "File menu" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    expect(screen.getByRole("menu", { name: "View menu" })).toBeVisible();
+    const sidebarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
+    expect(sidebarMenuItem).toHaveAttribute("aria-checked", "true");
+    fireEvent.click(sidebarMenuItem);
+    expect(
+      screen.queryByRole("complementary", { name: "Writer properties sidebar" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    const hiddenSidebarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
+    expect(hiddenSidebarMenuItem).toHaveAttribute("aria-checked", "false");
+    fireEvent.click(hiddenSidebarMenuItem);
+    expect(screen.getByRole("complementary", { name: "Writer properties sidebar" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
     expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
     expect(screen.getByRole("menuitem", { name: "Undo" })).toBeDisabled();
