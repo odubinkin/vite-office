@@ -51,11 +51,18 @@ Format menu, which follows Writer menubar placement without claiming
 LibreOffice drag, range, or tracked-change movement. Whole-paragraph removal
 has no browser UI until keyboard/range editing is explicitly implemented.
 
-The remaining character-format controls, ruler, page count,
-language indicator, and most Writer commands are visual placement contracts
-only. They do not currently open menus, measure layout, or provide native
-LibreOffice behavior. Each enabled capability must receive its own mapped
-feature task and tests.
+Every visible top-level menu is an interactive trigger. File, Edit, View,
+Format, and Styles expose their bounded commands; Insert, Table, Tools, Window,
+and Help instead open an explicit unavailable-command state until a separately
+mapped feature task implements a command in that location. This prevents a
+visible Writer menu label from becoming a dead control or implying an
+unimplemented LibreOffice command. The menu bar deliberately keeps overflow
+visible so positioned popups are not clipped below the toolbar row.
+
+The remaining character-format controls, ruler, page count, language indicator,
+and most Writer commands are visual placement contracts only. They do not yet
+measure layout or provide native LibreOffice behavior. Each enabled capability
+must receive its own mapped feature task and tests.
 
 The Writer integration and Playwright tests assert named structural landmarks
 and command placement rather than a brittle screenshot baseline. A separate

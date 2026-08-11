@@ -166,6 +166,18 @@ describe("App" /**
     );
     fireEvent.click(screen.getByRole("button", { name: "Styles" }));
     expect(screen.getByRole("menu", { name: "Styles menu" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Insert" }));
+    expect(screen.getByRole("menu", { name: "Insert menu" })).toHaveTextContent(
+      "No browser command is implemented here yet.",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Table" }));
+    expect(screen.getByRole("menu", { name: "Table menu" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Tools" }));
+    expect(screen.getByRole("menu", { name: "Tools menu" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Window" }));
+    expect(screen.getByRole("menu", { name: "Window menu" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Help" }));
+    expect(screen.getByRole("menu", { name: "Help menu" })).toBeVisible();
     expect(screen.queryByRole("button", { name: "Add paragraph" })).not.toBeInTheDocument();
   });
 

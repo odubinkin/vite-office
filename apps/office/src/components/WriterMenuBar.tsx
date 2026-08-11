@@ -10,8 +10,9 @@ import type {
   WriterParagraphStyle,
 } from "../domain/writer";
 
-/** Identifies the Writer top-level menu that currently has an implemented popup. */
-type ImplementedWriterMenu = "edit" | "file" | "format" | "styles" | "view";
+/** Identifies a visible top-level Writer menu in the pinned Writer menu-bar order. */
+type WriterTopLevelMenu =
+  "edit" | "file" | "format" | "help" | "insert" | "styles" | "table" | "tools" | "view" | "window";
 
 /** Describes enabled state and immutable action callbacks exposed from the stateful Writer workbench. */
 export interface WriterMenuBarProps {
@@ -63,30 +64,30 @@ export interface WriterMenuBarProps {
   readonly style: WriterParagraphStyle;
 }
 
-/** Defines one top-level Writer label retained as structural placement chrome. */
+/** Defines one interactive top-level Writer menu placement. */
 interface WriterMenuLabel {
-  /** Stable literal used to identify the menu whose popup is implemented, when any. */
-  readonly id?: ImplementedWriterMenu;
+  /** Stable literal used to identify the Writer menu and its popup. */
+  readonly id: WriterTopLevelMenu;
   /** Reader-facing top-level Writer menu title. */
   readonly label: string;
 }
 
-/** Lists the pinned Writer top-level menu order while identifying the enabled subset. */
+/** Lists the pinned Writer top-level menu order. */
 const writerMenuLabels: readonly WriterMenuLabel[] = [
   { id: "file", label: "File" },
   { id: "edit", label: "Edit" },
   { id: "view", label: "View" },
-  { label: "Insert" },
+  { id: "insert", label: "Insert" },
   { id: "format", label: "Format" },
   { id: "styles", label: "Styles" },
-  { label: "Table" },
-  { label: "Tools" },
-  { label: "Window" },
-  { label: "Help" },
+  { id: "table", label: "Table" },
+  { id: "tools", label: "Tools" },
+  { id: "window", label: "Window" },
+  { id: "help", label: "Help" },
 ];
 
 /**
- * Renders accessible popups for implemented Writer commands and static placement labels for the remaining menus.
+ * Renders accessible popups for every visible Writer menu, retaining honest unavailable states where no commands exist.
  *
  * @param props - Current Writer command state and immutable transition callbacks.
  * @param props.alignment - Current focused-paragraph alignment.
@@ -112,7 +113,7 @@ const writerMenuLabels: readonly WriterMenuLabel[] = [
  * @param props.onStyleChange - Callback used by Styles entries.
  * @param props.onUndo - Callback used by Edit Undo entry.
  * @param props.style - Current focused-paragraph style.
- * @returns A Writer-style menu bar whose enabled commands have semantic popup menus.
+ * @returns A Writer-style menu bar whose visible menus have semantic popup menus.
  */
 export function WriterMenuBar({
   alignment,
@@ -139,7 +140,7 @@ export function WriterMenuBar({
   onUndo,
   style,
 }: WriterMenuBarProps): React.JSX.Element {
-  const [openMenu, setOpenMenu] = useState<ImplementedWriterMenu | undefined>();
+  const [openMenu, setOpenMenu] = useState<WriterTopLevelMenu | undefined>();
   const [isRulersMenuOpen, setIsRulersMenuOpen] = useState(false);
 
   /**
@@ -155,21 +156,21 @@ export function WriterMenuBar({
   }
 
   /**
-   * Toggles a single implemented popup while ensuring no other popup remains open.
+   * Toggles a single Writer popup while ensuring no other popup remains open.
    *
-   * @param menu - Implemented Writer menu requested by its top-level trigger.
+   * @param menu - Writer menu requested by its top-level trigger.
    * @returns Nothing; React records the next visible popup.
    */
-  function toggleMenu(menu: ImplementedWriterMenu): void {
+  function toggleMenu(menu: WriterTopLevelMenu): void {
     setIsRulersMenuOpen(false);
     setOpenMenu(
       /**
        * Derives the next popup identity from the current open menu.
        *
-       * @param currentMenu - Current implemented popup identity or no open popup.
+       * @param currentMenu - Current popup identity or no open popup.
        * @returns No menu when the same trigger closes it, otherwise the requested menu.
        */
-      function getNextOpenMenu(currentMenu): ImplementedWriterMenu | undefined {
+      function getNextOpenMenu(currentMenu): WriterTopLevelMenu | undefined {
         return currentMenu === menu ? undefined : menu;
       },
     );
@@ -249,12 +250,12 @@ export function WriterMenuBar({
   }
 
   /**
-   * Renders the contextual command popup for one implemented Writer top-level menu.
+   * Renders the contextual popup for one visible Writer top-level menu.
    *
-   * @param menu - Implemented menu whose command group should be rendered.
-   * @returns A positioned popup containing only commands available in this bounded workbench.
+   * @param menu - Writer menu whose command group or unavailable state should be rendered.
+   * @returns A positioned popup containing bounded commands or an honest unavailable-command state.
    */
-  function renderPopup(menu: ImplementedWriterMenu): React.JSX.Element {
+  function renderPopup(menu: WriterTopLevelMenu): React.JSX.Element {
     const menuId = `writer-${menu}-menu`;
     if (menu === "view") {
       return (
@@ -399,25 +400,37 @@ export function WriterMenuBar({
         </div>
       );
     }
+    if (menu === "styles") {
+      return (
+        <div
+          aria-label="Styles menu"
+          className="absolute left-0 top-full z-20 mt-1 w-60 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
+          id={menuId}
+          role="menu"
+        >
+          {renderMenuItem(
+            "Default Paragraph Style",
+            invokeMenuAction.bind(undefined, onStyleChange.bind(undefined, "default")),
+            false,
+            style === "default",
+          )}
+          {renderMenuItem(
+            "Heading 1",
+            invokeMenuAction.bind(undefined, onStyleChange.bind(undefined, "heading-1")),
+            false,
+            style === "heading-1",
+          )}
+        </div>
+      );
+    }
     return (
       <div
-        aria-label="Styles menu"
-        className="absolute left-0 top-full z-20 mt-1 w-60 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
+        aria-label={`${menu.charAt(0).toUpperCase()}${menu.slice(1)} menu`}
+        className="absolute left-0 top-full z-20 mt-1 w-64 rounded-lg border border-slate-200 bg-white p-3 shadow-lg"
         id={menuId}
         role="menu"
       >
-        {renderMenuItem(
-          "Default Paragraph Style",
-          invokeMenuAction.bind(undefined, onStyleChange.bind(undefined, "default")),
-          false,
-          style === "default",
-        )}
-        {renderMenuItem(
-          "Heading 1",
-          invokeMenuAction.bind(undefined, onStyleChange.bind(undefined, "heading-1")),
-          false,
-          style === "heading-1",
-        )}
+        <p className="text-sm text-slate-500">No browser command is implemented here yet.</p>
       </div>
     );
   }
@@ -425,26 +438,16 @@ export function WriterMenuBar({
   return (
     <nav
       aria-label="Writer menu bar"
-      className="flex overflow-x-auto border-b border-slate-200 px-2 py-1"
+      className="flex overflow-visible border-b border-slate-200 px-2 py-1"
     >
       {writerMenuLabels.map(
         /**
-         * Renders one top-level Writer label and its popup only when bounded functionality exists.
+         * Renders one top-level Writer trigger and its popup.
          *
          * @param menu - Immutable top-level Writer menu placement metadata.
-         * @returns A static placement label or an interactive popup trigger.
+         * @returns An interactive popup trigger in the pinned Writer menu-bar order.
          */
         function renderMenuLabel(menu): React.JSX.Element {
-          if (menu.id === undefined) {
-            return (
-              <span
-                className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-500"
-                key={menu.label}
-              >
-                {menu.label}
-              </span>
-            );
-          }
           const isOpen = openMenu === menu.id;
           return (
             <div className="relative" key={menu.id}>

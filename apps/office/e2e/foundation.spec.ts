@@ -15,7 +15,23 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await page.goto("/");
 
   await expect(page.getByRole("region", { name: "Writer workspace" })).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Writer menu bar" })).toBeVisible();
+  const writerMenuBar = page.getByRole("navigation", { name: "Writer menu bar" });
+  await expect(writerMenuBar).toBeVisible();
+  await expect(writerMenuBar).toHaveCSS("overflow-x", "visible");
+  await page.getByRole("button", { name: "File" }).click();
+  await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
+  await page.getByRole("button", { name: "Insert" }).click();
+  await expect(page.getByRole("menu", { name: "Insert menu" })).toContainText(
+    "No browser command is implemented here yet.",
+  );
+  await page.getByRole("button", { name: "Table" }).click();
+  await expect(page.getByRole("menu", { name: "Table menu" })).toBeVisible();
+  await page.getByRole("button", { name: "Tools" }).click();
+  await expect(page.getByRole("menu", { name: "Tools menu" })).toBeVisible();
+  await page.getByRole("button", { name: "Window" }).click();
+  await expect(page.getByRole("menu", { name: "Window menu" })).toBeVisible();
+  await page.getByRole("button", { name: "Help" }).click();
+  await expect(page.getByRole("menu", { name: "Help menu" })).toBeVisible();
   await expect(page.getByRole("toolbar", { name: "Writer standard toolbar" })).toBeVisible();
   await expect(
     page
