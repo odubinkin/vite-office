@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import { SuiteCard } from "./components/SuiteCard";
 import { WriterPlainTextEditor } from "./components/WriterPlainTextEditor";
+import { WriterStorageControls } from "./components/WriterStorageControls";
 import { createDocument } from "./domain/document";
 import { getBrowserShortcut } from "./domain/browser-shortcuts";
 import { createCommandRegistry, dispatchCommand, findCommandByShortcut } from "./domain/commands";
@@ -26,6 +27,12 @@ import {
   type WriterDocument,
   type WriterParagraph,
 } from "./domain/writer";
+import {
+  loadWriterDocument,
+  saveWriterDocument,
+  type WriterSnapshotState,
+} from "./domain/writer-storage";
+import { IndexedDbDocumentStorageAdapter } from "./platform/indexeddb-storage";
 
 /**
  * Creates the bounded initial Writer document edited by the workbench textarea.
@@ -60,6 +67,8 @@ function getWorkbenchSelectionPosition(writerDocument: WriterDocument): number {
  */
 export function App(): React.JSX.Element {
   const [activeSuite, setActiveSuite] = useState<SuiteDefinition>(suiteDefinitions[0]);
+  const [storagePending, setStoragePending] = useState(false);
+  const [storageStatus, setStorageStatus] = useState("Not saved in this browser.");
   const [writerHistory, setWriterHistory] = useState<TransactionHistory<WriterDocument>>(
     /**
      * Creates the Writer history once for the browser workbench session.
@@ -74,6 +83,10 @@ export function App(): React.JSX.Element {
     },
   );
   const writerDocument = getCurrentTransactionState(writerHistory);
+  const writerStorage =
+    globalThis.indexedDB === undefined
+      ? undefined
+      : new IndexedDbDocumentStorageAdapter<WriterSnapshotState>("vite-office-writer-workbench");
   const previewDocument = createDocument({
     id: `preview-${activeSuite.id}`,
     suiteId: activeSuite.id,
@@ -150,6 +163,48 @@ export function App(): React.JSX.Element {
         });
       },
     );
+  }
+
+  /** Saves the current Writer snapshot to native browser storage. @returns A promise resolved after feedback is updated. */
+  async function handleWriterSave(): Promise<void> {
+    if (writerStorage === undefined) {
+      setStorageStatus("Browser storage is unavailable.");
+      return;
+    }
+    setStoragePending(true);
+    try {
+      await saveWriterDocument(writerStorage, writerDocument);
+      setStorageStatus("Saved locally in this browser.");
+    } catch {
+      setStorageStatus("Could not save locally.");
+    } finally {
+      setStoragePending(false);
+    }
+  }
+
+  /** Loads the current Writer identity from native browser storage. @returns A promise resolved after feedback is updated. */
+  async function handleWriterLoad(): Promise<void> {
+    if (writerStorage === undefined) {
+      setStorageStatus("Browser storage is unavailable.");
+      return;
+    }
+    setStoragePending(true);
+    try {
+      const result = await loadWriterDocument(writerStorage, writerDocument.document.id);
+      if (result.status === "missing") setStorageStatus("No local saved copy exists.");
+      else {
+        setWriterHistory(
+          createTransactionHistory(result.writerDocument, {
+            position: getWorkbenchSelectionPosition(result.writerDocument),
+          }),
+        );
+        setStorageStatus("Loaded local saved copy.");
+      }
+    } catch {
+      setStorageStatus("Could not load local copy.");
+    } finally {
+      setStoragePending(false);
+    }
   }
 
   useEffect(
@@ -382,15 +437,23 @@ export function App(): React.JSX.Element {
                   </article>
                 </div>
                 {activeSuite.id === "writer" ? (
-                  <WriterPlainTextEditor
-                    canRedo={writerHistory.index < writerHistory.entries.length - 1}
-                    canUndo={writerHistory.index > 0}
-                    document={writerDocument.document}
-                    onRedo={handleWriterRedo}
-                    onTextChange={handleWriterTextChange}
-                    onUndo={handleWriterUndo}
-                    paragraph={writerDocument.paragraphs[0] as WriterParagraph}
-                  />
+                  <>
+                    <WriterPlainTextEditor
+                      canRedo={writerHistory.index < writerHistory.entries.length - 1}
+                      canUndo={writerHistory.index > 0}
+                      document={writerDocument.document}
+                      onRedo={handleWriterRedo}
+                      onTextChange={handleWriterTextChange}
+                      onUndo={handleWriterUndo}
+                      paragraph={writerDocument.paragraphs[0] as WriterParagraph}
+                    />
+                    <WriterStorageControls
+                      isPending={storagePending}
+                      onLoad={handleWriterLoad}
+                      onSave={handleWriterSave}
+                      status={storageStatus}
+                    />
+                  </>
                 ) : null}
               </div>
             </div>
