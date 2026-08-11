@@ -33,3 +33,4 @@ playwright-report/
 test-results/
 output/playwright/
 vendor/libreoffice-reference/
+.playwright-cli
