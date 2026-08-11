@@ -4,7 +4,7 @@ title: "Render Writer paragraphs as an integrated document canvas"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-08-11T12:42:40.226Z"
+  updated_by: "REVIEWER"
+  note: "Verified: format, lint, TypeScript, JSDoc, file-size, strict unit coverage, targeted production Playwright accessibility, diff, doctor, and policy-routing checks passed. Full static, inventory, and aggregate verify remain deferred under the user-approved every-ten-task cadence."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-11T12:42:48.208Z"
+  updated_by: "EVALUATOR"
+  note: "Integrated Writer document paragraphs match the approved placement scope: page-integrated editable blocks, toolbar-based paragraph movement, and no persistent paragraph action chrome."
+  evaluated_sha: "93d48e243d2876234598bf139616328c2b5daa72"
+  blueprint_digest: "7e2985af50f2c8c23fe590cf5c9ee9091abfc4824f423c9070103201d789895f"
+  evidence_refs:
+    - ".agentplane/tasks/202608111229-2VM5NX/README.md"
+    - ".agentplane/tasks/202608111229-2VM5NX/quality/20260811-124248208-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608111229-2VM5NX/quality/20260811-124248208-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608111229-2VM5NX/quality/20260811-124248208-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608111229-2VM5NX/blueprint/resolved-snapshot.json"
+    - "npm run test:coverage --workspace @vite-office/office (49 passed; 100% all thresholds); npm run test:e2e (1 passed with axe); npm run format:check; npm run lint; npm run typecheck; npm run check:docs; npm run check:file-size; git diff --check; ap doctor; node .agentplane/policy/check-routing.mjs"
+  findings:
+    - "No blocking defect found. The pure remove transition remains documented but has no browser UI until a dedicated caret/range-editing task."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: render bounded Writer paragraphs as accessible editable content integrated into the existing document canvas."
+  -
+    type: "verify"
+    at: "2026-08-11T12:42:40.226Z"
+    author: "REVIEWER"
+    state: "ok"
+    note: "Verified: format, lint, TypeScript, JSDoc, file-size, strict unit coverage, targeted production Playwright accessibility, diff, doctor, and policy-routing checks passed. Full static, inventory, and aggregate verify remain deferred under the user-approved every-ten-task cadence."
 doc_version: 3
-doc_updated_at: "2026-08-11T12:30:04.228Z"
+doc_updated_at: "2026-08-11T12:42:40.316Z"
 doc_updated_by: "CODER"
 description: "Replace card-like paragraph textareas and persistent paragraph action buttons with document-integrated editable paragraph blocks placed inside the existing Writer page canvas. Preserve the bounded Writer model, formatting, undo/redo, save/load, accessibility, and tests; use LibreOffice Writer placement conventions without pixel-perfect visual copying."
 sections:
@@ -56,11 +78,46 @@ sections:
     5. Do not run npm run test:static, inventory checks, or npm run verify. Reason: user-approved every-ten-closed-tasks cadence; targeted Playwright performs the production build. Record this residual risk in Verification.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-08-11T12:42:40.226Z — VERIFY — ok
+
+    By: REVIEWER
+
+    Note: Verified: format, lint, TypeScript, JSDoc, file-size, strict unit coverage, targeted production Playwright accessibility, diff, doctor, and policy-routing checks passed. Full static, inventory, and aggregate verify remain deferred under the user-approved every-ten-task cadence.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-11T12:30:04.228Z, excerpt_hash=sha256:b150f444c1e91dd93c33c087d7f75430e905f8ab26690ecd78795f753a5f6fd6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608111229-2VM5NX/blueprint/resolved-snapshot.json
+    - old_digest: 7e2985af50f2c8c23fe590cf5c9ee9091abfc4824f423c9070103201d789895f
+    - current_digest: 7e2985af50f2c8c23fe590cf5c9ee9091abfc4824f423c9070103201d789895f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608111229-2VM5NX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task run 202608111229-2VM5NX
+    - diagnostic_command: agentplane task run status 202608111229-2VM5NX
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: Command: npm run test:coverage --workspace @vite-office/office; npm run test:e2e. Result: pass. Evidence: 49 unit tests and 1 production Playwright test passed; coverage is 100% for statements, branches, functions, and lines; axe reported no violations. Scope: integrated document paragraphs, formatting-toolbar movement, browser accessibility.
+      Impact: Residual risk: static test inventory and full aggregate verification have not run since the cadence checkpoint.
+      Resolution: Run the deferred aggregate suite at the next tenth closed feature task or earlier if foundational test infrastructure changes.
 id_source: "generated"
 ---
 ## Summary
@@ -89,6 +146,38 @@ Replace card-like paragraph textareas and persistent paragraph action buttons wi
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-08-11T12:42:40.226Z — VERIFY — ok
+
+By: REVIEWER
+
+Note: Verified: format, lint, TypeScript, JSDoc, file-size, strict unit coverage, targeted production Playwright accessibility, diff, doctor, and policy-routing checks passed. Full static, inventory, and aggregate verify remain deferred under the user-approved every-ten-task cadence.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-11T12:30:04.228Z, excerpt_hash=sha256:b150f444c1e91dd93c33c087d7f75430e905f8ab26690ecd78795f753a5f6fd6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608111229-2VM5NX/blueprint/resolved-snapshot.json
+- old_digest: 7e2985af50f2c8c23fe590cf5c9ee9091abfc4824f423c9070103201d789895f
+- current_digest: 7e2985af50f2c8c23fe590cf5c9ee9091abfc4824f423c9070103201d789895f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608111229-2VM5NX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task run 202608111229-2VM5NX
+- diagnostic_command: agentplane task run status 202608111229-2VM5NX
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -97,3 +186,7 @@ Replace card-like paragraph textareas and persistent paragraph action buttons wi
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: Command: npm run test:coverage --workspace @vite-office/office; npm run test:e2e. Result: pass. Evidence: 49 unit tests and 1 production Playwright test passed; coverage is 100% for statements, branches, functions, and lines; axe reported no violations. Scope: integrated document paragraphs, formatting-toolbar movement, browser accessibility.
+  Impact: Residual risk: static test inventory and full aggregate verification have not run since the cadence checkpoint.
+  Resolution: Run the deferred aggregate suite at the next tenth closed feature task or earlier if foundational test infrastructure changes.
