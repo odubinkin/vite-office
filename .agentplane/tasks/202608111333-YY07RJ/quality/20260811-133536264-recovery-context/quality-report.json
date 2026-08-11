@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111333-YY07RJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T13:35:36.264Z",
+  "verdict": "pass",
+  "summary": "The bounded View Status Bar implementation matches the approved Writer chrome scope with complete local and production-browser evidence.",
+  "evaluated_sha": "1fc5407a4644cdf66a7755fe02e8c4363c970dab",
+  "blueprint_digest": "f441ea860a2d8cf9df94be21b2824d1e60c75e66507b46f40f804f125de06238",
+  "findings": [
+    "The View menu uses a menuitemcheckbox for the pinned Status Bar command and the visibility preference is not stored in Writer document history."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111333-YY07RJ/README.md",
+    "1fc5407a4644cdf66a7755fe02e8c4363c970dab",
+    "npm run test:coverage --workspace @vite-office/office: 51 tests, 100 percent",
+    "npm run test:e2e: 1 production Chromium test passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The next feature task must run static smoke, LibreOffice inventory, and aggregate verify at the agreed tenth-task checkpoint."
+  ]
+}
