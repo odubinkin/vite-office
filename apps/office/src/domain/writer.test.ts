@@ -9,9 +9,12 @@ import {
   appendWriterParagraph,
   createWriterDocument,
   insertWriterText,
+  normalizeWriterParagraphAlignments,
   removeWriterParagraph,
   replaceWriterParagraph,
+  setWriterParagraphAlignment,
   type WriterDocument,
+  type WriterParagraphAlignment,
 } from "./writer";
 
 /**
@@ -126,6 +129,26 @@ function replaceMissingParagraph(writer: WriterDocument): WriterDocument {
   return replaceWriterParagraph(writer, "missing", "x");
 }
 
+/**
+ * Attempts to set an unsupported paragraph alignment through an untyped boundary value.
+ *
+ * @param writer - Valid Writer document to inspect without mutation.
+ * @returns An invalid alignment transition; the delegated call always throws.
+ */
+function setUnsupportedAlignment(writer: WriterDocument): WriterDocument {
+  return setWriterParagraphAlignment(writer, "p-1", "diagonal" as WriterParagraphAlignment);
+}
+
+/**
+ * Attempts to align a paragraph identity that is absent from the Writer body.
+ *
+ * @param writer - Valid Writer document to inspect without mutation.
+ * @returns An invalid alignment transition; the delegated call always throws.
+ */
+function setMissingParagraphAlignment(writer: WriterDocument): WriterDocument {
+  return setWriterParagraphAlignment(writer, "missing", "center");
+}
+
 describe("Writer paragraph body" /**
  * Groups paragraph creation and pure insertion behavior.
  *
@@ -137,9 +160,9 @@ describe("Writer paragraph body" /**
    * @returns Nothing; assertions validate successful paragraph operations.
    */, function editsParagraphs(): void {
     const writer = createFixture();
-    const withSecondParagraph = {
+    const withSecondParagraph: WriterDocument = {
       ...writer,
-      paragraphs: [...writer.paragraphs, { id: "p-2", text: "unchanged" }],
+      paragraphs: [...writer.paragraphs, { alignment: "left", id: "p-2", text: "unchanged" }],
     };
     const inserted = insertWriterText(withSecondParagraph, "p-1", 0, "hello");
     const middle = insertWriterText(inserted, "p-1", 2, "!");
@@ -147,7 +170,7 @@ describe("Writer paragraph body" /**
     const unchanged = replaceWriterParagraph(replaced, "p-2", "updated");
     expect(writer).toMatchObject({
       document: { lifecycle: "new", revision: 0 },
-      paragraphs: [{ id: "p-1", text: "" }],
+      paragraphs: [{ alignment: "left", id: "p-1", text: "" }],
     });
     expect(inserted.document).toMatchObject({ lifecycle: "dirty", revision: 1 });
     expect(inserted.paragraphs[0]?.text).toBe("hello");
@@ -166,12 +189,12 @@ describe("Writer paragraph body" /**
     const writer = createFixture();
     const appended = appendWriterParagraph(writer, "p-2");
 
-    expect(writer.paragraphs).toEqual([{ id: "p-1", text: "" }]);
+    expect(writer.paragraphs).toEqual([{ alignment: "left", id: "p-1", text: "" }]);
     expect(appended).toMatchObject({
       document: { lifecycle: "dirty", revision: 1 },
       paragraphs: [
-        { id: "p-1", text: "" },
-        { id: "p-2", text: "" },
+        { alignment: "left", id: "p-1", text: "" },
+        { alignment: "left", id: "p-2", text: "" },
       ],
     });
     expect(
@@ -207,7 +230,7 @@ describe("Writer paragraph body" /**
     expect(writer.paragraphs).toHaveLength(2);
     expect(removed).toMatchObject({
       document: { lifecycle: "dirty", revision: 1 },
-      paragraphs: [{ id: "p-2", text: "" }],
+      paragraphs: [{ alignment: "left", id: "p-2", text: "" }],
     });
     expect(
       /**
@@ -227,6 +250,42 @@ describe("Writer paragraph body" /**
        */
       function removesOnlyParagraph(): WriterDocument {
         return removeOnlyParagraph(createFixture());
+      },
+    ).toThrowError();
+  });
+
+  it("changes one paragraph alignment immutably and normalizes legacy stored values" /**
+   * Verifies alignment uses the shared dirty transition, preserves no-op references, and restores old snapshots safely.
+   *
+   * @returns Nothing; assertions validate valid, invalid, and legacy alignment behavior.
+   */, function alignsParagraphs(): void {
+    const writer = appendWriterParagraph(createFixture(), "p-2");
+    const aligned = setWriterParagraphAlignment(writer, "p-2", "center");
+    const unchanged = setWriterParagraphAlignment(aligned, "p-2", "center");
+    const legacyWriter = {
+      ...writer,
+      paragraphs: [{ id: "p-1", text: "Legacy" }] as unknown as WriterDocument["paragraphs"],
+    };
+    const normalized = normalizeWriterParagraphAlignments(legacyWriter);
+
+    expect(writer.paragraphs[1]).toEqual({ alignment: "left", id: "p-2", text: "" });
+    expect(aligned.paragraphs[0]).toBe(writer.paragraphs[0]);
+    expect(aligned.paragraphs[1]).toEqual({ alignment: "center", id: "p-2", text: "" });
+    expect(unchanged).toBe(aligned);
+    expect(normalized).toMatchObject({
+      paragraphs: [{ alignment: "left", id: "p-1", text: "Legacy" }],
+    });
+    expect(normalizeWriterParagraphAlignments(aligned)).toBe(aligned);
+    expect(
+      /** Executes the unsupported-alignment failure case for Vitest. @returns Invalid alignment transition; delegated call always throws. */
+      function setsUnsupportedAlignment(): WriterDocument {
+        return setUnsupportedAlignment(writer);
+      },
+    ).toThrowError();
+    expect(
+      /** Executes the missing-paragraph alignment failure case for Vitest. @returns Invalid alignment transition; delegated call always throws. */
+      function alignsMissingParagraph(): WriterDocument {
+        return setMissingParagraphAlignment(writer);
       },
     ).toThrowError();
   });

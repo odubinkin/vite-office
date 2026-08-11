@@ -6,10 +6,11 @@ document's stable browser-local ID through the native IndexedDB adapter; no
 application server, account, or network request is involved.
 
 Save replaces the previous local snapshot for that ID. Load restores the saved
-Writer document, including its ordered plain-text paragraph body, into the
-current in-memory workbench history. A missing copy, unavailable browser
-storage, and native storage failures leave the current text unchanged and
-report deterministic feedback.
+Writer document, including its ordered plain-text paragraph body and paragraph
+alignment values, into the current in-memory workbench history. A missing copy,
+unavailable browser storage, and native storage failures leave the current text
+unchanged and report deterministic feedback. Snapshots created before paragraph
+alignment was introduced receive the safe left-alignment default when loaded.
 
 This feature does not implement autosave, recovery prompts, downloads, file
 pickers, cross-tab coordination, encryption, ODT or OOXML import/export, or

@@ -140,6 +140,9 @@ The following documents form the program control plane:
   document-header states and pure transition boundaries before content editing.
 - [Browser Writer paragraph body](writer-paragraph-body.md): bounded plain-text
   paragraph model and pure edit transitions implemented on the lifecycle contract.
+- [Browser Writer paragraph alignment](writer-paragraph-alignment.md): bounded
+  left, center, right, and justified formatting state, focused controls, and
+  browser-local snapshot compatibility behavior.
 - [Browser Writer plain-text editor workbench](writer-plain-text-editor.md):
   accessible in-memory textareas backed by the Writer paragraph model.
 - [LibreOffice-style Writer UI shell](writer-ui-shell.md): durable menu,

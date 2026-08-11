@@ -10,6 +10,10 @@ export interface WriterWorkspaceChromeProps {
   readonly children: ReactNode;
   /** Human-readable title of the open Writer document. */
   readonly documentTitle: string;
+  /** Implemented controls placed in the Writer formatting toolbar. */
+  readonly formattingToolbar: ReactNode;
+  /** Current contextual controls and feedback placed in the Writer properties sidebar. */
+  readonly propertiesSidebar: ReactNode;
   /** Current operation result shown in the Writer status bar. */
   readonly status: string;
   /** Implemented commands placed in the Writer standard toolbar. */
@@ -22,6 +26,8 @@ export interface WriterWorkspaceChromeProps {
  * @param props - Stable Writer chrome content supplied by the stateful workbench.
  * @param props.children - Current document editing surface.
  * @param props.documentTitle - Title shown in the workspace title row.
+ * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
+ * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
  * @param props.status - Current storage or download feedback.
  * @param props.toolbar - Implemented command buttons in the standard toolbar.
  * @returns A browser-only Writer workspace that preserves Vite Office visual language.
@@ -29,6 +35,8 @@ export interface WriterWorkspaceChromeProps {
 export function WriterWorkspaceChrome({
   children,
   documentTitle,
+  formattingToolbar,
+  propertiesSidebar,
   status,
   toolbar,
 }: WriterWorkspaceChromeProps): React.JSX.Element {
@@ -126,45 +134,7 @@ export function WriterWorkspaceChrome({
           className="flex min-h-12 flex-wrap items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5"
           role="toolbar"
         >
-          <label className="sr-only" htmlFor="writer-style">
-            Paragraph style
-          </label>
-          <select
-            className="h-8 min-w-44 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-600 disabled:cursor-not-allowed"
-            disabled
-            id="writer-style"
-            value="Default Paragraph Style"
-          >
-            <option>Default Paragraph Style</option>
-          </select>
-          <label className="sr-only" htmlFor="writer-font">
-            Font name
-          </label>
-          <select
-            className="h-8 min-w-36 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-600 disabled:cursor-not-allowed"
-            disabled
-            id="writer-font"
-            value="System font"
-          >
-            <option>System font</option>
-          </select>
-          <button
-            aria-label="Bold"
-            className="grid size-8 place-items-center rounded-md border border-slate-300 bg-white font-black text-slate-400"
-            disabled
-            type="button"
-          >
-            B
-          </button>
-          <button
-            aria-label="Italic"
-            className="grid size-8 place-items-center rounded-md border border-slate-300 bg-white text-lg font-serif italic text-slate-400"
-            disabled
-            type="button"
-          >
-            I
-          </button>
-          <span className="text-xs font-medium text-slate-500">Formatting is planned</span>
+          {formattingToolbar}
         </div>
 
         <div
@@ -195,18 +165,7 @@ export function WriterWorkspaceChrome({
           aria-label="Writer properties sidebar"
           className="border-l border-slate-200 bg-white p-4"
         >
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-700">
-            Properties
-          </p>
-          <h2 className="mt-1 text-base font-bold text-slate-950">Paragraph</h2>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            Writer properties will appear here as formatting capabilities are implemented.
-          </p>
-          <div className="mt-5 space-y-3">
-            <div className="h-9 rounded-lg bg-slate-100" />
-            <div className="h-9 rounded-lg bg-slate-100" />
-            <div className="h-9 rounded-lg bg-slate-100" />
-          </div>
+          {propertiesSidebar}
         </aside>
       </div>
 

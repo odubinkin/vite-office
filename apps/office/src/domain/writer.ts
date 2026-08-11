@@ -4,8 +4,16 @@
 
 import { markDocumentDirty, type OfficeDocument } from "./document";
 
+/** Enumerates the bounded paragraph alignments available in the Writer workbench. */
+export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"] as const;
+
+/** Identifies one supported horizontal paragraph alignment. */
+export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[number];
+
 /** Describes one immutable plain-text Writer paragraph. */
 export interface WriterParagraph {
+  /** Horizontal presentation alignment applied to the complete paragraph. */
+  readonly alignment: WriterParagraphAlignment;
   /** Stable caller-provided paragraph identity. */
   readonly id: string;
   /** Plain Unicode text; inline formatting remains out of scope. */
@@ -33,7 +41,7 @@ export function createWriterDocument(
   paragraphId: string,
 ): WriterDocument {
   if (paragraphId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
-  return { document, paragraphs: [{ id: paragraphId, text: "" }] };
+  return { document, paragraphs: [{ alignment: "left", id: paragraphId, text: "" }] };
 }
 
 /**
@@ -63,7 +71,7 @@ export function appendWriterParagraph(
   if (existingParagraph !== undefined) throw new Error(`Duplicate paragraph: ${paragraphId}`);
   return {
     document: markDocumentDirty(writerDocument.document),
-    paragraphs: [...writerDocument.paragraphs, { id: paragraphId, text: "" }],
+    paragraphs: [...writerDocument.paragraphs, { alignment: "left", id: paragraphId, text: "" }],
   };
 }
 
@@ -201,4 +209,93 @@ export function replaceWriterParagraph(
       },
     ),
   };
+}
+
+/**
+ * Changes one paragraph's horizontal alignment and marks a changed document dirty.
+ *
+ * @param writerDocument - Immutable prior Writer document state.
+ * @param paragraphId - Existing paragraph identity whose alignment changes.
+ * @param alignment - Supported next alignment applied to the complete paragraph.
+ * @returns Original document for an identical alignment, otherwise a dirty document with one updated paragraph.
+ * @throws {Error} When paragraphId is absent or alignment is unsupported.
+ */
+export function setWriterParagraphAlignment(
+  writerDocument: WriterDocument,
+  paragraphId: string,
+  alignment: WriterParagraphAlignment,
+): WriterDocument {
+  const paragraph = writerDocument.paragraphs.find(
+    /**
+     * Finds the paragraph selected by the requested stable identity.
+     *
+     * @param candidate - Immutable paragraph candidate to inspect.
+     * @returns True only when candidate owns paragraphId.
+     */
+    function hasParagraphId(candidate): boolean {
+      return candidate.id === paragraphId;
+    },
+  );
+  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  if (!isWriterParagraphAlignment(alignment))
+    throw new Error(`Unsupported Writer paragraph alignment: ${alignment}`);
+  if (paragraph.alignment === alignment) return writerDocument;
+  return {
+    document: markDocumentDirty(writerDocument.document),
+    paragraphs: writerDocument.paragraphs.map(
+      /**
+       * Replaces only the selected paragraph alignment while preserving sibling object references.
+       *
+       * @param candidate - Immutable paragraph candidate to preserve or update.
+       * @returns Updated selected paragraph or the original sibling reference.
+       */
+      function updateSelectedParagraph(candidate): WriterParagraph {
+        return candidate.id === paragraphId ? { ...candidate, alignment } : candidate;
+      },
+    ),
+  };
+}
+
+/**
+ * Restores a default left alignment for legacy or malformed stored paragraph alignment values.
+ *
+ * @param writerDocument - Writer document read from a prior browser-local snapshot.
+ * @returns The original document when every alignment is supported, otherwise a normalized immutable copy.
+ */
+export function normalizeWriterParagraphAlignments(writerDocument: WriterDocument): WriterDocument {
+  let containsUnsupportedAlignment = false;
+  const paragraphs = writerDocument.paragraphs.map(
+    /**
+     * Preserves supported values and supplies the legacy default for an unsupported value.
+     *
+     * @param paragraph - Stored paragraph whose alignment requires validation.
+     * @returns Original paragraph for a supported value or a left-aligned immutable replacement.
+     */
+    function normalizeParagraphAlignment(paragraph): WriterParagraph {
+      if (isWriterParagraphAlignment(paragraph.alignment)) return paragraph;
+      containsUnsupportedAlignment = true;
+      return { ...paragraph, alignment: "left" };
+    },
+  );
+  return containsUnsupportedAlignment ? { ...writerDocument, paragraphs } : writerDocument;
+}
+
+/**
+ * Checks whether an unknown runtime value is a supported Writer paragraph alignment.
+ *
+ * @param value - Runtime candidate supplied by a storage snapshot or a boundary caller.
+ * @returns True only when value is one of the declared alignment literals.
+ */
+export function isWriterParagraphAlignment(value: unknown): value is WriterParagraphAlignment {
+  return WRITER_PARAGRAPH_ALIGNMENTS.some(
+    /**
+     * Compares one supported literal with the supplied runtime candidate.
+     *
+     * @param alignment - Supported alignment literal to compare.
+     * @returns True only when the supplied value matches alignment exactly.
+     */
+    function matchesAlignment(alignment): boolean {
+      return alignment === value;
+    },
+  );
 }

@@ -18,14 +18,17 @@ defines the durable UI placement contract:
 Implemented commands are placed in the standard toolbar through
 [`WriterCommandToolbar`](../../apps/office/src/components/WriterCommandToolbar.tsx):
 browser-local save/load, plain-text download, undo/redo, and paragraph append.
-The existing editor renders in the document canvas. Paragraph removal remains a
-contextual control because keyboard/range editing is not implemented yet.
+The existing editor renders in the document canvas. The formatting toolbar now
+contains real left, center, right, and justified controls for the focused
+paragraph; their current value appears in the properties sidebar. Paragraph
+removal remains a contextual control because keyboard/range editing is not
+implemented yet.
 
-The menu items, formatting controls, ruler, sidebar property values, page count,
+The menu items, remaining character-format controls, ruler, page count,
 language indicator, and most Writer commands are visual placement contracts
-only. They do not currently open menus, alter formatting, measure layout, or
-provide native LibreOffice behavior. Each enabled capability must receive its
-own mapped feature task and tests.
+only. They do not currently open menus, measure layout, or provide native
+LibreOffice behavior. Each enabled capability must receive its own mapped
+feature task and tests.
 
 The Writer integration and Playwright tests assert named structural landmarks
 and command placement rather than a brittle screenshot baseline. A separate

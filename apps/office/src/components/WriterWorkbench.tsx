@@ -20,8 +20,10 @@ import {
   createWriterDocument,
   removeWriterParagraph,
   replaceWriterParagraph,
+  setWriterParagraphAlignment,
   type WriterDocument,
   type WriterParagraph,
+  type WriterParagraphAlignment,
 } from "../domain/writer";
 import {
   loadWriterDocument,
@@ -31,8 +33,11 @@ import {
 import { downloadPlainText } from "../platform/browser-download";
 import { IndexedDbDocumentStorageAdapter } from "../platform/indexeddb-storage";
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
+import { WriterParagraphFormattingToolbar } from "./WriterParagraphFormattingToolbar";
+import { WriterParagraphProperties } from "./WriterParagraphProperties";
 import { WriterPlainTextEditor } from "./WriterPlainTextEditor";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
+import { getActiveWriterParagraph, getNextWriterParagraphId } from "./writer-workbench-helpers";
 
 /**
  * Creates the bounded initial Writer document edited by the workbench textarea.
@@ -60,34 +65,6 @@ function getWorkbenchSelectionPosition(writerDocument: WriterDocument): number {
   return (writerDocument.paragraphs[0] as WriterParagraph).text.length;
 }
 
-/**
- * Derives the first available numeric paragraph identity for the bounded workbench document.
- *
- * @param writerDocument - Immutable Writer document whose existing identities are inspected.
- * @returns Stable next paragraph identity that does not collide with the current body.
- */
-function getNextWriterParagraphId(writerDocument: WriterDocument): string {
-  let ordinal = writerDocument.paragraphs.length + 1;
-  let candidate = `writer-paragraph-${ordinal}`;
-  while (
-    writerDocument.paragraphs.some(
-      /**
-       * Detects whether an existing paragraph owns the candidate identity.
-       *
-       * @param paragraph - Immutable paragraph candidate to inspect.
-       * @returns True only when the candidate identity is already occupied.
-       */
-      function hasCandidateId(paragraph): boolean {
-        return paragraph.id === candidate;
-      },
-    )
-  ) {
-    ordinal += 1;
-    candidate = `writer-paragraph-${ordinal}`;
-  }
-  return candidate;
-}
-
 /** Describes the suite-selection visibility controlled by the application shell. */
 export interface WriterWorkbenchProps {
   /** Whether Writer is the current suite and its workbench should be interactable. */
@@ -102,6 +79,7 @@ export interface WriterWorkbenchProps {
  * @returns The editor, history controls, and browser-local storage actions for Writer.
  */
 export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.Element {
+  const [activeParagraphId, setActiveParagraphId] = useState("writer-paragraph-1");
   const [storagePending, setStoragePending] = useState(false);
   const [storageStatus, setStorageStatus] = useState("Not saved in this browser.");
   const [writerHistory, setWriterHistory] = useState<TransactionHistory<WriterDocument>>(
@@ -118,6 +96,8 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     },
   );
   const writerDocument = getCurrentTransactionState(writerHistory);
+  const activeParagraph = getActiveWriterParagraph(writerDocument, activeParagraphId);
+  const activeParagraphIndex = writerDocument.paragraphs.indexOf(activeParagraph);
   const writerStorage =
     globalThis.indexedDB === undefined
       ? undefined
@@ -131,6 +111,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
    * @returns Nothing; React schedules the next Writer document state.
    */
   function handleWriterTextChange(paragraphId: string, text: string): void {
+    setActiveParagraphId(paragraphId);
     setWriterHistory(
       /**
        * Applies the complete-text replacement to the selected workbench paragraph.
@@ -151,8 +132,53 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     );
   }
 
+  /**
+   * Records the paragraph whose textarea is currently focused for subsequent formatting commands.
+   *
+   * @param paragraphId - Existing Writer paragraph identity emitted by the focused textarea.
+   * @returns Nothing; React schedules focused-paragraph state.
+   */
+  function handleWriterParagraphFocus(paragraphId: string): void {
+    setActiveParagraphId(paragraphId);
+  }
+
+  /**
+   * Changes the active Writer paragraph alignment through an immutable history transaction.
+   *
+   * @param alignment - Supported next horizontal alignment selected from the formatting toolbar.
+   * @returns Nothing; React schedules the next Writer document history state.
+   */
+  function handleWriterParagraphAlignment(alignment: WriterParagraphAlignment): void {
+    setWriterHistory(
+      /**
+       * Applies alignment to the still-existing active paragraph or the deterministic first-paragraph fallback.
+       *
+       * @param currentHistory - Current immutable Writer workbench history state.
+       * @returns History with the requested alignment represented by a new snapshot when it changed.
+       */
+      function alignActiveWorkbenchParagraph(
+        currentHistory: TransactionHistory<WriterDocument>,
+      ): TransactionHistory<WriterDocument> {
+        const currentDocument = getCurrentTransactionState(currentHistory);
+        const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
+        const nextDocument = setWriterParagraphAlignment(
+          currentDocument,
+          currentParagraph.id,
+          alignment,
+        );
+        return nextDocument === currentDocument
+          ? currentHistory
+          : applyTransaction(currentHistory, nextDocument, {
+              position: getWorkbenchSelectionPosition(nextDocument),
+            });
+      },
+    );
+  }
+
   /** Appends an empty Writer paragraph through an immutable history transaction. @returns Nothing; React schedules the appended document state. */
   function handleWriterAppendParagraph(): void {
+    const nextParagraphId = getNextWriterParagraphId(writerDocument);
+    setActiveParagraphId(nextParagraphId);
     setWriterHistory(
       /**
        * Appends one uniquely identified paragraph to the current history document.
@@ -164,10 +190,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         currentHistory: TransactionHistory<WriterDocument>,
       ): TransactionHistory<WriterDocument> {
         const currentDocument = getCurrentTransactionState(currentHistory);
-        const nextDocument = appendWriterParagraph(
-          currentDocument,
-          getNextWriterParagraphId(currentDocument),
-        );
+        const nextDocument = appendWriterParagraph(currentDocument, nextParagraphId);
         return applyTransaction(currentHistory, nextDocument, {
           position: getWorkbenchSelectionPosition(nextDocument),
         });
@@ -182,6 +205,23 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
    * @returns Nothing; React schedules the reduced document state.
    */
   function handleWriterRemoveParagraph(paragraphId: string): void {
+    if (paragraphId === activeParagraphId) {
+      const removedParagraphIndex = writerDocument.paragraphs.findIndex(
+        /**
+         * Finds the visible body position of the paragraph being removed.
+         *
+         * @param paragraph - Immutable paragraph candidate inspected without mutation.
+         * @returns True only when paragraph owns the removed identity.
+         */
+        function hasRemovedIdentity(paragraph): boolean {
+          return paragraph.id === paragraphId;
+        },
+      );
+      const replacementParagraph = writerDocument.paragraphs[
+        removedParagraphIndex === 0 ? 1 : removedParagraphIndex - 1
+      ] as WriterParagraph;
+      setActiveParagraphId(replacementParagraph.id);
+    }
     setWriterHistory(
       /**
        * Removes the selected paragraph from the current immutable history document.
@@ -271,6 +311,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       const result = await loadWriterDocument(writerStorage, writerDocument.document.id);
       if (result.status === "missing") setStorageStatus("No local saved copy exists.");
       else {
+        setActiveParagraphId((result.writerDocument.paragraphs[0] as WriterParagraph).id);
         setWriterHistory(
           createTransactionHistory(result.writerDocument, {
             position: getWorkbenchSelectionPosition(result.writerDocument),
@@ -391,6 +432,18 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     <div hidden={!isActive}>
       <WriterWorkspaceChrome
         documentTitle={writerDocument.document.title}
+        formattingToolbar={
+          <WriterParagraphFormattingToolbar
+            alignment={activeParagraph.alignment}
+            onAlignmentChange={handleWriterParagraphAlignment}
+          />
+        }
+        propertiesSidebar={
+          <WriterParagraphProperties
+            alignment={activeParagraph.alignment}
+            paragraphNumber={activeParagraphIndex + 1}
+          />
+        }
         status={storageStatus}
         toolbar={
           <WriterCommandToolbar
@@ -407,7 +460,9 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         }
       >
         <WriterPlainTextEditor
+          activeParagraphId={activeParagraph.id}
           document={writerDocument.document}
+          onParagraphFocus={handleWriterParagraphFocus}
           onRemoveParagraph={handleWriterRemoveParagraph}
           onTextChange={handleWriterTextChange}
           paragraphs={writerDocument.paragraphs}

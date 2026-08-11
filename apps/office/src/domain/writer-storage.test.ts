@@ -4,7 +4,12 @@ import { describe, expect, it } from "vitest";
 
 import { createDocument } from "./document";
 import type { DocumentSnapshot, DocumentStorageAdapter } from "./storage";
-import { createWriterDocument, insertWriterText, type WriterDocument } from "./writer";
+import {
+  createWriterDocument,
+  insertWriterText,
+  type WriterDocument,
+  type WriterParagraph,
+} from "./writer";
 import { loadWriterDocument, saveWriterDocument, type WriterSnapshotState } from "./writer-storage";
 
 /** Creates a serializable Writer fixture with a dirty text body. @returns Immutable Writer document fixture. */
@@ -54,6 +59,37 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
     await expect(loadWriterDocument(adapter, "missing")).resolves.toEqual({
       id: "missing",
       status: "missing",
+    });
+  });
+
+  it("restores left alignment for a snapshot written before paragraph alignment existed" /**
+   * Verifies browser-local documents from the previous Writer body shape remain editable after the model evolves.
+   *
+   * @returns A promise resolved after the normalized loaded document is asserted.
+   */, async function migratesLegacyAlignment(): Promise<void> {
+    const adapter = createAdapter();
+    const writerDocument = createWriterFixture();
+    const legacyDocument = {
+      ...writerDocument,
+      paragraphs: writerDocument.paragraphs.map(
+        /**
+         * Omits the newly introduced alignment field to emulate a previously saved document.
+         *
+         * @param paragraph - Current serializable paragraph whose text and identity are retained.
+         * @returns Legacy-shaped paragraph without alignment.
+         */
+        function omitAlignment(paragraph): WriterParagraph {
+          return { id: paragraph.id, text: paragraph.text } as unknown as WriterParagraph;
+        },
+      ),
+    };
+    await saveWriterDocument(adapter, legacyDocument);
+
+    await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
+      status: "found",
+      writerDocument: {
+        paragraphs: [{ alignment: "left", id: "p-1", text: "Saved text" }],
+      },
     });
   });
 });

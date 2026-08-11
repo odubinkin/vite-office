@@ -7,8 +7,12 @@ import type { WriterParagraph } from "../domain/writer";
 
 /** Defines the immutable state and callback required by the Writer plain-text editor. */
 export interface WriterPlainTextEditorProps {
+  /** Stable identity of the textarea whose paragraph formatting controls are currently active. */
+  readonly activeParagraphId: string;
   /** Shared Writer header whose lifecycle feedback is rendered without mutation. */
   readonly document: OfficeDocument;
+  /** Receives a stable paragraph identity when a paragraph textarea gains focus. */
+  readonly onParagraphFocus: (paragraphId: string) => void;
   /** Ordered immutable Writer paragraphs bound to accessible editing controls. */
   readonly paragraphs: readonly WriterParagraph[];
   /** Requests immutable removal of the paragraph identified by the supplied stable ID. */
@@ -21,14 +25,18 @@ export interface WriterPlainTextEditorProps {
  * Renders labelled textareas backed by an immutable ordered Writer paragraph model.
  *
  * @param props - Immutable Writer state and callback for a complete-text replacement.
+ * @param props.activeParagraphId - Stable identity of the paragraph targeted by formatting controls.
  * @param props.document - Header providing lifecycle and revision feedback.
+ * @param props.onParagraphFocus - Callback that selects a paragraph for formatting after textarea focus.
  * @param props.onRemoveParagraph - Callback that removes an eligible paragraph from the immutable body.
  * @param props.paragraphs - Ordered Writer paragraphs displayed by this bounded editor.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
  * @returns A Writer-only accessible editing region without formatting or persistence controls.
  */
 export function WriterPlainTextEditor({
+  activeParagraphId,
   document,
+  onParagraphFocus,
   onRemoveParagraph,
   onTextChange,
   paragraphs,
@@ -59,16 +67,18 @@ export function WriterPlainTextEditor({
    */
   function renderParagraph(paragraph: WriterParagraph, index: number): React.JSX.Element {
     const isFirstParagraph = index === 0;
+    const isActiveParagraph = paragraph.id === activeParagraphId;
     const textareaId = `writer-editor-text-${index + 1}`;
     const label = isFirstParagraph ? "Writer document text" : `Writer paragraph ${index + 1}`;
     return (
-      <div className="mt-5" key={paragraph.id}>
+      <div className="mt-5" data-active={isActiveParagraph} key={paragraph.id}>
         <label className="block text-sm font-semibold text-slate-800" htmlFor={textareaId}>
           {label}
         </label>
         <textarea
           aria-describedby="writer-editor-help"
           className="mt-2 min-h-40 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-base leading-7 text-slate-950 shadow-sm outline-none transition focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100"
+          data-alignment={paragraph.alignment}
           id={textareaId}
           onChange={
             /**
@@ -81,7 +91,18 @@ export function WriterPlainTextEditor({
               handleTextChange(paragraph.id, event);
             }
           }
+          onFocus={
+            /**
+             * Selects this paragraph so formatting controls target its immutable identity.
+             *
+             * @returns Nothing; the owning workbench records the active paragraph identity.
+             */
+            function selectParagraph(): void {
+              onParagraphFocus(paragraph.id);
+            }
+          }
           placeholder={isFirstParagraph ? "Start writing…" : "Continue writing…"}
+          style={{ textAlign: paragraph.alignment }}
           value={paragraph.text}
         />
         {canRemoveParagraph ? (
@@ -127,8 +148,9 @@ export function WriterPlainTextEditor({
 
       {paragraphs.map(renderParagraph)}
       <p className="mt-3 text-sm leading-6 text-slate-600" id="writer-editor-help">
-        This workbench edits ordered plain-text paragraphs in memory. Formatting, deletion,
-        reordering, and document file formats are separate features.
+        This workbench edits ordered plain-text paragraphs in memory. Paragraph alignment is
+        available; range formatting, deletion, reordering, and document file formats are separate
+        features.
       </p>
     </section>
   );

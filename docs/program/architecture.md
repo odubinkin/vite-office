@@ -22,7 +22,9 @@ root-absolute asset references and application-backend endpoints.
 The Writer view uses a separate structural chrome component for its menu,
 toolbars, ruler, document canvas, properties sidebar, and status bar. This
 placement boundary keeps application navigation and suite state outside Writer
-while giving later Writer features stable UI regions to extend.
+while giving later Writer features stable UI regions to extend. The workbench
+keeps focused-paragraph state in its React owner; the serializable Writer domain
+keeps paragraph alignment separate from that ephemeral UI focus.
 
 The remaining package boundaries below are architectural targets. They do not
 exist until their own feature tasks create and verify them.

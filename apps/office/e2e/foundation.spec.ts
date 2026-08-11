@@ -27,6 +27,13 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await expect(writerEditor).toBeVisible();
   await writerEditor.fill("A browser-authored paragraph.");
   await expect(page.getByText("Unsaved changes · revision 1")).toBeVisible();
+  await page.getByRole("button", { name: "Align center" }).click();
+  await expect(writerEditor).toHaveCSS("text-align", "center");
+  await expect(page.getByRole("button", { name: "Align center" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByText("Centered")).toBeVisible();
 
   const calcButton = page.getByRole("button", { name: "Calc, Foundation only" });
   await calcButton.focus();

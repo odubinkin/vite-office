@@ -91,6 +91,41 @@ describe("App" /**
     );
   });
 
+  it("formats the focused Writer paragraph through the formatting toolbar and history" /**
+   * Verifies alignment targets the focused textarea, updates the properties sidebar, and restores through undo/redo.
+   *
+   * @returns Nothing; assertions cover visible alignment state and immutable history behavior.
+   */, function alignsFocusedWriterParagraph(): void {
+    render(<App />);
+
+    const firstParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    const formattingToolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
+    expect(within(formattingToolbar).getByRole("button", { name: "Align left" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align left" }));
+    expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align center" }));
+    expect(firstParagraph).toHaveStyle({ textAlign: "center" });
+    expect(screen.getByText("Centered")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
+    const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
+    fireEvent.focus(secondParagraph);
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align right" }));
+    expect(firstParagraph).toHaveStyle({ textAlign: "center" });
+    expect(secondParagraph).toHaveStyle({ textAlign: "right" });
+    expect(screen.getByText("Paragraph 2 is active.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(secondParagraph).toHaveStyle({ textAlign: "left" });
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    expect(secondParagraph).toHaveStyle({ textAlign: "right" });
+    fireEvent.focus(firstParagraph);
+    fireEvent.click(screen.getByRole("button", { name: "Remove paragraph 1" }));
+    expect(screen.getByText("Paragraph 1 is active.")).toBeInTheDocument();
+  });
+
   it("removes an eligible Writer paragraph through undoable immutable history" /**
    * Verifies the final paragraph has no removal action and removed content can be restored exactly.
    *
@@ -110,6 +145,21 @@ describe("App" /**
     );
     fireEvent.click(screen.getByRole("button", { name: "Redo" }));
     expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
+  });
+
+  it("retains an active paragraph when a different Writer paragraph is removed" /**
+   * Verifies paragraph removal does not steal formatting focus from the textarea that remains in the body.
+   *
+   * @returns Nothing; assertions cover active-paragraph preservation for a non-active removal.
+   */, function retainsActiveParagraphAfterSiblingRemoval(): void {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
+    const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
+    fireEvent.focus(secondParagraph);
+    fireEvent.click(screen.getByRole("button", { name: "Remove paragraph 1" }));
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toBe(secondParagraph);
+    expect(screen.getByText("Paragraph 1 is active.")).toBeInTheDocument();
   });
 
   it("updates the preview and live status when a suite is selected" /**
@@ -168,6 +218,7 @@ describe("App" /**
       fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
       const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
       fireEvent.change(secondParagraph, { target: { value: "Stored second body" } });
+      fireEvent.click(screen.getByRole("button", { name: "Align right" }));
       await act(
         /** Starts the asynchronous save interaction. @returns A fulfilled React act promise. */
         async function savesDocument(): Promise<void> {
@@ -193,6 +244,7 @@ describe("App" /**
         async function verifiesLoadedDocument(): Promise<void> {
           expect(editor).toHaveValue("Stored body");
           expect(secondParagraph).toHaveValue("Stored second body");
+          expect(secondParagraph).toHaveStyle({ textAlign: "right" });
           expect(screen.getByText("Loaded local saved copy.")).toBeInTheDocument();
         },
       );
@@ -225,8 +277,8 @@ describe("App" /**
           title: "Untitled Writer Document",
         }),
         paragraphs: [
-          { id: "writer-paragraph-1", text: "First stored paragraph" },
-          { id: "writer-paragraph-3", text: "Third stored paragraph" },
+          { alignment: "left", id: "writer-paragraph-1", text: "First stored paragraph" },
+          { alignment: "left", id: "writer-paragraph-3", text: "Third stored paragraph" },
         ],
       });
       render(<App />);
