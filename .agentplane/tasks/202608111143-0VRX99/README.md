@@ -1,0 +1,112 @@
+---
+id: "202608111143-0VRX99"
+title: "Establish LibreOffice-style Writer UI shell"
+status: "DOING"
+priority: "high"
+owner: "CODER"
+revision: 4
+origin:
+  system: "manual"
+depends_on: []
+tags:
+  - "code"
+verify: []
+plan_approval:
+  state: "approved"
+  updated_at: "2026-08-11T11:45:52.018Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "pending"
+  updated_at: null
+  updated_by: null
+  note: null
+  attempts: 0
+commit: null
+comments:
+  -
+    author: "CODER"
+    body: "Start: replacing the temporary Writer presentation with a durable LibreOffice-style structural workspace while preserving Vite Office visual language."
+events:
+  -
+    type: "status"
+    at: "2026-08-11T11:46:04.524Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: replacing the temporary Writer presentation with a durable LibreOffice-style structural workspace while preserving Vite Office visual language."
+doc_version: 3
+doc_updated_at: "2026-08-11T11:46:04.524Z"
+doc_updated_by: "CODER"
+description: "Replace the temporary foundation Writer presentation with a browser-only Writer structural shell that preserves Vite Office visual language while placing existing controls in durable LibreOffice Writer-style regions and establishing targetable UI parity contracts."
+sections:
+  Summary: |-
+    Establish an OpenOffice-style Writer UI shell
+
+    Replace the temporary foundation Writer presentation with a browser-only Writer structural shell that places existing editing, history, storage, and download capabilities in durable OpenOffice-style regions and establishes targetable UI parity contracts.
+  Scope: |-
+    - In scope: Replace the temporary foundation Writer presentation with a browser-only Writer structural shell that places existing editing, history, storage, and download capabilities in durable OpenOffice-style regions and establishes targetable UI parity contracts.
+    - Out of scope: unrelated refactors not required for "Establish an OpenOffice-style Writer UI shell".
+  Plan: |-
+    1. Document a bounded Writer UI placement contract based on LibreOffice Writer regions: menu bar, standard toolbar, formatting toolbar, horizontal ruler, document canvas, optional properties/sidebar region, and status bar. This is structural placement, not a pixel-perfect clone or a claim that every LibreOffice command is implemented.
+    2. Refactor the current Writer-selected workspace so it retains Vite Office typography, colors, spacing, and accessibility patterns while presenting those durable Writer regions. The existing plain-text document, history, save/load/download, and paragraph controls must stay operational and move into semantically appropriate regions.
+    3. Define targetable accessible landmarks and names for Writer chrome so later feature tasks extend permanent placement rather than temporary foundation cards. Preserve the suite selector as application-level navigation, not as a Writer feature.
+    4. Add focused integration tests plus a targeted Playwright UI contract test for the Writer structural regions and existing control placement. Do not introduce brittle pixel-perfect screenshots at this stage; visual tolerance/snapshot policy belongs to a separate visual-regression task.
+    5. Update architecture and Writer UI documentation with the placement contract and explicit omissions. Run the fast test contour plus targeted Playwright because this task changes browser-visible workspace structure; defer the full aggregation under the user-approved cadence unless the task changes build infrastructure.
+
+    Acceptance: Writer is recognizably organized like LibreOffice Writer while retaining the project design language; currently implemented operations are still usable, targetable, and documented. Menus, most toolbar commands, ruler interaction, sidebar functions, pagination, and full UI parity remain separate tasks.
+  Verify Steps: |-
+    PLANNER fallback scaffold. Replace with task-specific acceptance checks when PLANNER context is available.
+
+    1. Review the changed artifact or behavior for the `code` task. Expected: the requested outcome is visible and matches the approved scope.
+    2. Run the most relevant validation step for the `code` task. Expected: it succeeds without unexpected regressions in touched scope.
+    3. Compare the final result against the task summary and scope. Expected: any remaining follow-up is explicit in ## Findings.
+  Verification: |-
+    <!-- BEGIN VERIFICATION RESULTS -->
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: |-
+    - Revert task-related commit(s).
+    - Re-run required checks to confirm rollback safety.
+  Findings: ""
+id_source: "generated"
+---
+## Summary
+
+Establish an OpenOffice-style Writer UI shell
+
+Replace the temporary foundation Writer presentation with a browser-only Writer structural shell that places existing editing, history, storage, and download capabilities in durable OpenOffice-style regions and establishes targetable UI parity contracts.
+
+## Scope
+
+- In scope: Replace the temporary foundation Writer presentation with a browser-only Writer structural shell that places existing editing, history, storage, and download capabilities in durable OpenOffice-style regions and establishes targetable UI parity contracts.
+- Out of scope: unrelated refactors not required for "Establish an OpenOffice-style Writer UI shell".
+
+## Plan
+
+1. Document a bounded Writer UI placement contract based on LibreOffice Writer regions: menu bar, standard toolbar, formatting toolbar, horizontal ruler, document canvas, optional properties/sidebar region, and status bar. This is structural placement, not a pixel-perfect clone or a claim that every LibreOffice command is implemented.
+2. Refactor the current Writer-selected workspace so it retains Vite Office typography, colors, spacing, and accessibility patterns while presenting those durable Writer regions. The existing plain-text document, history, save/load/download, and paragraph controls must stay operational and move into semantically appropriate regions.
+3. Define targetable accessible landmarks and names for Writer chrome so later feature tasks extend permanent placement rather than temporary foundation cards. Preserve the suite selector as application-level navigation, not as a Writer feature.
+4. Add focused integration tests plus a targeted Playwright UI contract test for the Writer structural regions and existing control placement. Do not introduce brittle pixel-perfect screenshots at this stage; visual tolerance/snapshot policy belongs to a separate visual-regression task.
+5. Update architecture and Writer UI documentation with the placement contract and explicit omissions. Run the fast test contour plus targeted Playwright because this task changes browser-visible workspace structure; defer the full aggregation under the user-approved cadence unless the task changes build infrastructure.
+
+Acceptance: Writer is recognizably organized like LibreOffice Writer while retaining the project design language; currently implemented operations are still usable, targetable, and documented. Menus, most toolbar commands, ruler interaction, sidebar functions, pagination, and full UI parity remain separate tasks.
+
+## Verify Steps
+
+PLANNER fallback scaffold. Replace with task-specific acceptance checks when PLANNER context is available.
+
+1. Review the changed artifact or behavior for the `code` task. Expected: the requested outcome is visible and matches the approved scope.
+2. Run the most relevant validation step for the `code` task. Expected: it succeeds without unexpected regressions in touched scope.
+3. Compare the final result against the task summary and scope. Expected: any remaining follow-up is explicit in ## Findings.
+
+## Verification
+
+<!-- BEGIN VERIFICATION RESULTS -->
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+- Revert task-related commit(s).
+- Re-run required checks to confirm rollback safety.
+
+## Findings
