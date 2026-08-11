@@ -17,7 +17,10 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
   browser-only clipboard adapter; it has no document-history transition.
 - It places `.uno:SelectAll` in **Edit**. The browser **Select All** command
   requests a native selection range over the current integrated Writer body; it
-  has no standard-toolbar counterpart in this bounded slice.
+  has no standard-toolbar counterpart in this bounded slice. Native
+  **Ctrl/Cmd+A** routes to this same action; arrow movement at paragraph
+  boundaries and pointer drags crossing paragraphs continue through the
+  bounded document body.
 - It places `.uno:Sidebar` in **View**. The bounded browser **Sidebar** check
   item controls the existing properties-sidebar chrome and has no standard
   toolbar counterpart in this slice.

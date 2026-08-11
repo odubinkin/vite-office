@@ -7,12 +7,32 @@ import { useEffect, useRef } from "react";
 import type { WriterParagraph } from "../domain/writer";
 import { createWriterClipboardSelection } from "./writer-clipboard-selection";
 
+/** Stores one browser caret endpoint used to extend a pointer selection across Writer paragraph editing hosts. */
+interface WriterPointerCaret {
+  /** Paragraph that owns the browser caret endpoint. */
+  readonly paragraph: HTMLParagraphElement;
+  /** DOM node that owns the browser caret endpoint. */
+  readonly node: Node;
+  /** UTF-16 offset within the caret endpoint node. */
+  readonly offset: number;
+}
+
+/** Stores the text offset that must survive React's immutable paragraph re-render after browser input. */
+interface WriterPendingCaret {
+  /** Stable identity of the paragraph that owns the browser caret. */
+  readonly paragraphId: string;
+  /** UTF-16 caret offset to restore after the paragraph text is committed. */
+  readonly offset: number;
+}
+
 /** Defines the immutable state and callback required by the integrated Writer document editor. */
 export interface WriterPlainTextEditorProps {
   /** Stable identity of the paragraph whose formatting controls are currently active. */
   readonly activeParagraphId: string;
   /** Stable identity of a newly inserted paragraph that should receive browser focus at its beginning. */
   readonly focusParagraphId: string | undefined;
+  /** UTF-16 offset where a requested post-transaction paragraph focus must place its caret. */
+  readonly focusParagraphOffset: number | undefined;
   /** Receives a paragraph identity and collapsed caret offset when native Enter requests a paragraph break. */
   readonly onParagraphBreak: (paragraphId: string, offset: number) => void;
   /** Receives a non-first paragraph identity when Backspace requests removal of its preceding paragraph break. */
@@ -23,6 +43,8 @@ export interface WriterPlainTextEditorProps {
   readonly onParagraphFocus: (paragraphId: string) => void;
   /** Explicit request identity that asks the mounted editor to select its complete body. */
   readonly selectAllRequestId: number | undefined;
+  /** Requests the same complete-document selection used by Edit Select All. */
+  readonly onSelectAll: () => void;
   /** Ordered immutable Writer paragraphs bound to document-integrated editable controls. */
   readonly paragraphs: readonly WriterParagraph[];
   /** Receives a stable paragraph identity and its complete next text after a browser input event. */
@@ -35,11 +57,13 @@ export interface WriterPlainTextEditorProps {
  * @param props - Immutable Writer state and callbacks for complete-text replacement and focused formatting.
  * @param props.activeParagraphId - Stable identity of the paragraph targeted by formatting controls.
  * @param props.focusParagraphId - Newly inserted paragraph that should receive browser focus at offset zero.
+ * @param props.focusParagraphOffset - Caret offset restored after a split or paragraph-boundary merge.
  * @param props.onParagraphBreak - Callback that creates a new paragraph from a collapsed native Enter caret.
  * @param props.onParagraphMerge - Callback that merges a non-first paragraph into its preceding sibling.
  * @param props.onParagraphMergeNext - Callback that merges a following paragraph into the selected paragraph.
  * @param props.onParagraphFocus - Callback that selects a paragraph for formatting after it gains focus.
  * @param props.selectAllRequestId - Explicit request identity for browser selection of all rendered paragraphs.
+ * @param props.onSelectAll - Callback that requests the document-wide browser selection.
  * @param props.paragraphs - Ordered Writer paragraphs displayed in the bounded document body.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
  * @returns A page-integrated accessible Writer document body without contextual paragraph buttons.
@@ -47,16 +71,21 @@ export interface WriterPlainTextEditorProps {
 export function WriterPlainTextEditor({
   activeParagraphId,
   focusParagraphId,
+  focusParagraphOffset,
   onParagraphBreak,
   onParagraphMerge,
   onParagraphMergeNext,
   onParagraphFocus,
+  onSelectAll,
   onTextChange,
   paragraphs,
   selectAllRequestId,
 }: WriterPlainTextEditorProps): React.JSX.Element {
   const paragraphElements = useRef(new Map<string, HTMLParagraphElement>());
   const paragraphsRef = useRef(paragraphs);
+  const pendingInputCaret = useRef<WriterPendingCaret | undefined>(undefined);
+  const pointerSelectionAnchor = useRef<WriterPointerCaret | undefined>(undefined);
+  const pointerSelectionFocus = useRef<WriterPointerCaret | undefined>(undefined);
 
   useEffect(
     /**
@@ -72,14 +101,35 @@ export function WriterPlainTextEditor({
 
   useEffect(
     /**
-     * Focuses a newly inserted paragraph after React has mounted its document-integrated editable block.
+     * Restores a typing caret after React commits immutable paragraph text, preventing it from jumping to the line start.
      *
-     * @returns Nothing; browser focus is moved only when the requested paragraph is present.
+     * @returns Nothing; the pending caret is consumed whether or not the browser can restore it safely.
+     */
+    function restorePendingInputCaret(): void {
+      const pendingCaret = pendingInputCaret.current;
+      pendingInputCaret.current = undefined;
+      if (pendingCaret === undefined) return;
+      const paragraph = paragraphElements.current.get(pendingCaret.paragraphId);
+      /* c8 ignore next -- the pending identity belongs to the rendered paragraph that emitted the input event. */
+      if (paragraph !== undefined) restoreCollapsedCaret(paragraph, pendingCaret.offset);
+    },
+    [paragraphs],
+  );
+
+  /* c8 ignore next -- Post-transaction focus is exercised in production Chromium because JSDOM does not model empty contenteditable caret focus. */
+  useEffect(
+    /**
+     * Focuses a transaction-target paragraph after React has mounted its document-integrated editable block.
+     *
+     * @returns Nothing; browser focus and its requested caret offset are restored only when the paragraph is present.
      */
     function focusInsertedParagraph(): void {
-      if (focusParagraphId !== undefined) paragraphElements.current.get(focusParagraphId)?.focus();
+      if (focusParagraphId === undefined || focusParagraphOffset === undefined) return;
+      const paragraph = paragraphElements.current.get(focusParagraphId);
+      /* c8 ignore next -- a transaction target remains rendered after Writer split or merge operations. */
+      if (paragraph !== undefined) restoreCollapsedCaret(paragraph, focusParagraphOffset);
     },
-    [focusParagraphId],
+    [focusParagraphId, focusParagraphOffset],
   );
 
   useEffect(
@@ -122,6 +172,8 @@ export function WriterPlainTextEditor({
     paragraphId: string,
     event: React.FormEvent<HTMLParagraphElement>,
   ): void {
+    const offset = getCollapsedCaretOffset(event.currentTarget);
+    if (offset !== undefined) pendingInputCaret.current = { paragraphId, offset };
     onTextChange(paragraphId, event.currentTarget.textContent);
   }
 
@@ -158,6 +210,69 @@ export function WriterPlainTextEditor({
   }
 
   /**
+   * Focuses one Writer paragraph and restores a bounded collapsed caret offset inside its plain-text body.
+   *
+   * @param paragraph - Rendered Writer paragraph that should receive browser focus.
+   * @param offset - Requested UTF-16 caret offset, clamped to the currently rendered text length.
+   * @returns Nothing; selection is left unchanged when the browser cannot safely restore a text caret.
+   */
+  function restoreCollapsedCaret(paragraph: HTMLParagraphElement, offset: number): void {
+    const textNode = paragraph.firstChild;
+    const selection = globalThis.getSelection();
+    /* c8 ignore next -- Writer requires browser selection support to mount its editable document body. */
+    if (selection === null) return;
+    paragraph.focus();
+    const range = document.createRange();
+    if (textNode instanceof Text) range.setStart(textNode, Math.min(offset, textNode.length));
+    else range.setStart(paragraph, 0);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  /**
+   * Moves a collapsed boundary caret into an adjacent Writer paragraph without creating a document-history transaction.
+   *
+   * @param paragraphId - Stable identity of the paragraph that currently owns the boundary caret.
+   * @param offset - Current UTF-16 caret offset inside the source paragraph.
+   * @param key - Native arrow key that requested movement through the bounded document body.
+   * @returns True when a neighboring paragraph accepts the browser caret; otherwise false so native in-paragraph movement remains available.
+   */
+  function moveCaretAcrossParagraphBoundary(
+    paragraphId: string,
+    offset: number,
+    key: string,
+  ): boolean {
+    const paragraphIndex = paragraphsRef.current.findIndex(
+      /**
+       * Finds the rendered paragraph position that owns the arrow-key boundary caret.
+       *
+       * @param paragraph - Immutable Writer paragraph inspected in document order.
+       * @returns True only for the paragraph that received the arrow key.
+       */
+      function hasParagraphId(paragraph): boolean {
+        return paragraph.id === paragraphId;
+      },
+    );
+    const sourceParagraph = paragraphsRef.current[paragraphIndex];
+    /* c8 ignore next -- a rendered keyboard event always names a current Writer paragraph. */
+    if (sourceParagraph === undefined) return false;
+    const movesBackward = (key === "ArrowLeft" || key === "ArrowUp") && offset === 0;
+    const movesForward =
+      (key === "ArrowRight" || key === "ArrowDown") && offset === sourceParagraph.text.length;
+    if (!movesBackward && !movesForward) return false;
+    const targetParagraph = paragraphsRef.current[paragraphIndex + (movesBackward ? -1 : 1)] as
+      WriterParagraph | undefined;
+    /* c8 ignore next -- adjacent-boundary movement has no target only at document edges, where the browser retains native behavior. */
+    if (targetParagraph === undefined) return false;
+    const targetElement = paragraphElements.current.get(targetParagraph.id);
+    /* c8 ignore next -- paragraph refs exist for every paragraph rendered into the active Writer document. */
+    if (targetElement === undefined) return false;
+    restoreCollapsedCaret(targetElement, movesBackward ? targetParagraph.text.length : 0);
+    return true;
+  }
+
+  /**
    * Intercepts an unmodified Enter key only when the browser exposes a safe collapsed caret for paragraph splitting.
    *
    * @param paragraphId - Stable identity of the paragraph that received the keyboard event.
@@ -168,9 +283,18 @@ export function WriterPlainTextEditor({
     paragraphId: string,
     event: React.KeyboardEvent<HTMLParagraphElement>,
   ): void {
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && event.key.toLowerCase() === "a") {
+      event.preventDefault();
+      onSelectAll();
+      return;
+    }
     if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey) return;
     const offset = getCollapsedCaretOffset(event.currentTarget);
     if (offset === undefined) return;
+    if (moveCaretAcrossParagraphBoundary(paragraphId, offset, event.key)) {
+      event.preventDefault();
+      return;
+    }
     if (event.key === "Enter") {
       event.preventDefault();
       onParagraphBreak(paragraphId, offset);
@@ -182,6 +306,99 @@ export function WriterPlainTextEditor({
       onParagraphMergeNext(paragraphId);
     }
   }
+
+  /* c8 ignore start -- Pointer geometry APIs are unavailable in JSDOM; both drag directions are covered in production Chromium E2E. */
+  /**
+   * Resolves a browser caret position only when a pointer event targets one rendered Writer paragraph.
+   *
+   * @param event - Browser mouse event used to read a caret from the current viewport coordinates.
+   * @returns Writer caret endpoint, or undefined when the browser cannot map the point into a Writer paragraph.
+   */
+  function getPointerCaret(event: React.MouseEvent<HTMLElement>): WriterPointerCaret | undefined {
+    const caretRange = document.caretRangeFromPoint?.(event.clientX, event.clientY);
+    if (caretRange === null || caretRange === undefined) return undefined;
+    const caretElement =
+      caretRange.startContainer instanceof HTMLElement
+        ? caretRange.startContainer
+        : caretRange.startContainer.parentElement;
+    const paragraph = caretElement?.closest<HTMLParagraphElement>("[data-writer-paragraph-id]");
+    if (paragraph === null || paragraph === undefined) return undefined;
+    return { node: caretRange.startContainer, offset: caretRange.startOffset, paragraph };
+  }
+
+  /**
+   * Captures the initial Writer caret before a pointer drag can leave its originating paragraph editing host.
+   *
+   * @param event - Browser mouse-down event emitted by one editable Writer paragraph.
+   * @returns Nothing; a left-button Writer caret is retained for a later cross-paragraph drag.
+   */
+  function handleParagraphMouseDown(event: React.MouseEvent<HTMLParagraphElement>): void {
+    pointerSelectionAnchor.current = event.button === 0 ? getPointerCaret(event) : undefined;
+    pointerSelectionFocus.current = undefined;
+  }
+
+  /**
+   * Extends a left-button pointer drag from one Writer paragraph into another without changing document text.
+   *
+   * @param event - Browser mouse-move event bubbled through the document body.
+   * @returns Nothing; a cross-paragraph native selection replaces the browser's isolated editing-host selection.
+   */
+  function handleDocumentMouseMove(event: React.MouseEvent<HTMLElement>): void {
+    const anchor = pointerSelectionAnchor.current;
+    const focus = getPointerCaret(event);
+    if (anchor === undefined || focus === undefined || anchor.paragraph === focus.paragraph) return;
+    pointerSelectionFocus.current = focus;
+    const selection = globalThis.getSelection();
+    if (selection === null) return;
+    event.preventDefault();
+    const range = document.createRange();
+    range.setStartBefore(anchor.paragraph);
+    range.setEndAfter(focus.paragraph);
+    if (range.collapsed) {
+      range.setStartBefore(focus.paragraph);
+      range.setEndAfter(anchor.paragraph);
+    }
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  /**
+   * Clears the transient pointer-drag anchor after selection interaction ends anywhere in the Writer body.
+   *
+   * @returns Nothing; a later mouse drag always captures a fresh Writer caret anchor.
+   */
+  function clearPointerSelectionAnchor(): void {
+    pointerSelectionAnchor.current = undefined;
+    pointerSelectionFocus.current = undefined;
+  }
+
+  /**
+   * Reapplies a cross-paragraph pointer range on mouse-up so native isolated editing-host selection cannot replace it.
+   *
+   * @param event - Browser mouse-up event ending a Writer pointer interaction.
+   * @returns Nothing; a completed cross-paragraph selection is retained and transient pointer state is cleared.
+   */
+  function finalizePointerSelection(event: React.MouseEvent<HTMLElement>): void {
+    const anchor = pointerSelectionAnchor.current;
+    const focus = pointerSelectionFocus.current;
+    if (anchor !== undefined && focus !== undefined) {
+      const selection = globalThis.getSelection();
+      if (selection !== null) {
+        event.preventDefault();
+        const range = document.createRange();
+        range.setStartBefore(anchor.paragraph);
+        range.setEndAfter(focus.paragraph);
+        if (range.collapsed) {
+          range.setStartBefore(focus.paragraph);
+          range.setEndAfter(anchor.paragraph);
+        }
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+    clearPointerSelectionAnchor();
+  }
+  /* c8 ignore stop */
 
   /**
    * Renders one stable Writer paragraph as an editable block inside the document page.
@@ -209,24 +426,13 @@ export function WriterPlainTextEditor({
           aria-describedby={styleDescriptionId}
           aria-label={label}
           aria-multiline="true"
-          className={`min-h-7 -mx-1 rounded-sm px-1 text-slate-950 outline-none transition focus:bg-indigo-50 focus:ring-2 focus:ring-indigo-200 ${
+          className={`min-h-7 text-slate-950 outline-none ${
             paragraph.style === "heading-1" ? "text-2xl font-bold leading-9" : "text-base leading-7"
           }`}
           contentEditable
           data-alignment={paragraph.alignment}
           data-writer-paragraph-id={paragraph.id}
           data-style={paragraph.style}
-          onKeyDown={
-            /**
-             * Routes a native paragraph-break key event through the stable paragraph identity.
-             *
-             * @param event - Browser keyboard event emitted by the rendered editable paragraph.
-             * @returns Nothing; the owner receives a split request when appropriate.
-             */
-            function breakParagraph(event: React.KeyboardEvent<HTMLParagraphElement>): void {
-              handleParagraphKeyDown(paragraph.id, event);
-            }
-          }
           onFocus={
             /**
              * Selects this paragraph so formatting controls target its immutable identity.
@@ -248,6 +454,20 @@ export function WriterPlainTextEditor({
               handleTextChange(paragraph.id, event);
             }
           }
+          onKeyDown={
+            /**
+             * Routes a native paragraph command or Ctrl/Cmd+A through the stable paragraph identity.
+             *
+             * @param event - Browser keyboard event emitted by the rendered editable paragraph.
+             * @returns Nothing; the owner receives the matching bounded Writer action when appropriate.
+             */
+            function handleWriterParagraphKeyDown(
+              event: React.KeyboardEvent<HTMLParagraphElement>,
+            ): void {
+              handleParagraphKeyDown(paragraph.id, event);
+            }
+          }
+          onMouseDown={handleParagraphMouseDown}
           role="textbox"
           ref={
             /**
@@ -275,6 +495,8 @@ export function WriterPlainTextEditor({
       aria-label="Writer document body"
       className="min-h-[600px] text-slate-950"
       onCopy={handleNativeWriterCopy}
+      onMouseMove={handleDocumentMouseMove}
+      onMouseUp={finalizePointerSelection}
     >
       {paragraphs.map(renderParagraph)}
     </article>

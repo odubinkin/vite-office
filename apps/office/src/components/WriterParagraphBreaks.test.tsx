@@ -37,6 +37,40 @@ function placeWriterCaret(paragraph: HTMLElement, offset: number): void {
 }
 
 describe("Writer paragraph breaks" /** Groups native Enter interaction and guarded browser-selection behavior. @returns Nothing; Vitest registers the enclosed case. */, function defineWriterParagraphBreakTests(): void {
+  it("keeps the typing caret stable and routes Ctrl/Cmd+A to Writer Select All" /** Verifies immutable input commits preserve a mid-paragraph caret while both platform Select All shortcuts select every Writer paragraph. @returns Nothing; the browser selection and visible paragraph contents are asserted. */, function handlesDocumentSelectionShortcuts(): void {
+    render(<App />);
+    const firstParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    enterWriterParagraphText(firstParagraph, "Before after");
+    firstParagraph.textContent = "Before Xafter";
+    placeWriterCaret(firstParagraph, 8);
+    fireEvent.input(firstParagraph);
+    expect(window.getSelection()?.getRangeAt(0).startOffset).toBe(8);
+    expect(window.getSelection()?.isCollapsed).toBe(true);
+    fireEvent.keyDown(firstParagraph, { ctrlKey: true, key: "a" });
+    expect(window.getSelection()?.toString()).toContain("Before Xafter");
+    fireEvent.keyDown(firstParagraph, { metaKey: true, key: "a" });
+    expect(window.getSelection()?.toString()).toContain("Before Xafter");
+    placeWriterCaret(firstParagraph, "Before Xafter".length);
+    fireEvent.keyDown(firstParagraph, { key: "Enter" });
+    const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
+    enterWriterParagraphText(secondParagraph, "Second paragraph");
+    placeWriterCaret(firstParagraph, "Before Xafter".length);
+    fireEvent.keyDown(firstParagraph, { key: "ArrowRight" });
+    expect(secondParagraph).toHaveFocus();
+    expect(window.getSelection()?.getRangeAt(0).startOffset).toBe(0);
+    fireEvent.keyDown(secondParagraph, { key: "ArrowLeft" });
+    expect(firstParagraph).toHaveFocus();
+    expect(window.getSelection()?.getRangeAt(0).startOffset).toBe("Before Xafter".length);
+    fireEvent.keyDown(firstParagraph, { key: "ArrowDown" });
+    expect(secondParagraph).toHaveFocus();
+    placeWriterCaret(secondParagraph, 0);
+    fireEvent.keyDown(secondParagraph, { key: "ArrowUp" });
+    expect(firstParagraph).toHaveFocus();
+    fireEvent.keyDown(secondParagraph, { ctrlKey: true, key: "a" });
+    expect(window.getSelection()?.toString()).toContain("Before Xafter");
+    expect(window.getSelection()?.toString()).toContain("Second paragraph");
+  });
+
   it("creates and focuses an adjacent Writer paragraph through Enter" /** Verifies Enter splits text at a caret, inherits formatting, ignores unsafe modifiers/selections, and retains undo/redo. @returns Nothing; assertions cover the browser-visible paragraph-break flow. */, function createsParagraphThroughEnter(): void {
     render(<App />);
 
@@ -95,6 +129,7 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
     expect(firstParagraph).toHaveTextContent("Before after");
     expect(firstParagraph).toHaveFocus();
+    expect(window.getSelection()?.getRangeAt(0).startOffset).toBe("Before ".length);
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveTextContent("after");
     firstParagraph.focus();

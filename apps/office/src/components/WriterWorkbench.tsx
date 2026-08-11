@@ -64,6 +64,7 @@ export interface WriterWorkbenchProps {
 export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.Element {
   const [activeParagraphId, setActiveParagraphId] = useState("writer-paragraph-1");
   const [focusParagraphId, setFocusParagraphId] = useState<string>();
+  const [focusParagraphOffset, setFocusParagraphOffset] = useState<number>();
   const {
     isHorizontalRulerVisible,
     isPropertiesSidebarVisible,
@@ -150,6 +151,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     const nextParagraphId = getNextWriterParagraphId(writerDocument);
     setActiveParagraphId(nextParagraphId);
     setFocusParagraphId(nextParagraphId);
+    setFocusParagraphOffset(0);
     setWriterHistory(
       /**
        * Applies the paragraph break to the current immutable history snapshot.
@@ -189,6 +191,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     const joinOffset = precedingParagraph.text.length;
     setActiveParagraphId(precedingParagraph.id);
     setFocusParagraphId(precedingParagraph.id);
+    setFocusParagraphOffset(joinOffset);
     setWriterHistory(
       /** Applies the paragraph merge to the current immutable history snapshot. @param currentHistory - Current Writer history. @returns History containing the merged Writer body. */
       function mergeWorkbenchParagraph(currentHistory): TransactionHistory<WriterDocument> {
@@ -215,6 +218,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     const joinOffset = currentParagraph.text.length;
     setActiveParagraphId(currentParagraph.id);
     setFocusParagraphId(currentParagraph.id);
+    setFocusParagraphOffset(joinOffset);
     setWriterHistory(
       /** Applies the existing preceding-sibling merge with the following paragraph as its selected node. @param currentHistory - Current Writer history. @returns History containing the forward merged body. */
       function mergeNextWorkbenchParagraph(currentHistory): TransactionHistory<WriterDocument> {
@@ -466,10 +470,12 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         <WriterPlainTextEditor
           activeParagraphId={activeParagraph.id}
           focusParagraphId={focusParagraphId}
+          focusParagraphOffset={focusParagraphOffset}
           onParagraphBreak={handleWriterParagraphBreak}
           onParagraphMerge={handleWriterParagraphMerge}
           onParagraphMergeNext={handleWriterParagraphMergeNext}
           onParagraphFocus={handleWriterParagraphFocus}
+          onSelectAll={requestSelectAll}
           onTextChange={handleWriterTextChange}
           paragraphs={writerDocument.paragraphs}
           selectAllRequestId={selectAllRequestId}

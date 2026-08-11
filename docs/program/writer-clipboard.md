@@ -12,6 +12,21 @@ sanitized `text/plain` and `text/html` pair, so browser-native selection cannot
 leak the invisible `Paragraph style: …` screen-reader description into another
 editor.
 
+## Document selection and caret continuity
+
+**Edit → Select All** and native **Ctrl/Cmd+A** select the complete bounded
+Writer document. Individual editable paragraphs retain reliable browser text
+entry: Enter creates and focuses the following paragraph, and immutable React
+updates restore the current typing caret rather than moving it to the line
+start. Backspace and Delete paragraph joins restore the caret at their join
+boundary. Arrow Left/Up at a paragraph start and Arrow Right/Down at its end
+continue into an adjacent rendered paragraph.
+
+Mouse dragging from one paragraph into another selects the full crossed
+paragraph interval in either direction. This intentionally uses paragraph
+boundaries once a drag crosses separate browser editing hosts, while native
+selection remains responsible for partial text selection inside one paragraph.
+
 The Writer selection adapter emits paired `text/plain` and `text/html` values.
 The rich HTML uses portable inline styles for the bounded model's paragraph
 alignment plus Default Paragraph Style or Heading 1 sizing, weight, and line

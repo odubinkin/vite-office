@@ -95,12 +95,15 @@
       "local": {
         "implementation": [
           { "path": "apps/office/src/platform/browser-clipboard.ts", "marker": "copyRichText" },
-          { "path": "apps/office/src/components/writer-clipboard-selection.ts", "marker": "createWriterClipboardSelection" }
+          { "path": "apps/office/src/components/writer-clipboard-selection.ts", "marker": "createWriterClipboardSelection" },
+          { "path": "apps/office/src/components/WriterPlainTextEditor.tsx", "marker": "moveCaretAcrossParagraphBoundary" }
         ],
         "tests": [
           { "path": "apps/office/src/components/WriterMenuBar.test.tsx", "marker": "replaces native keyboard Copy data" },
+          { "path": "apps/office/src/components/WriterParagraphBreaks.test.tsx", "marker": "keeps the typing caret stable" },
           { "path": "apps/office/src/components/writer-clipboard-selection.test.ts", "marker": "omits accessibility descriptions" },
           { "path": "apps/office/e2e/writer-clipboard.spec.ts", "marker": "copies visible formatted Writer content" },
+          { "path": "apps/office/e2e/writer-document-selection.spec.ts", "marker": "supports document-wide selection" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Copied selection" }
         ],
         "docs": [
