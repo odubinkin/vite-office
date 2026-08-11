@@ -33,6 +33,7 @@ import {
   type WriterSnapshotState,
 } from "./domain/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "./platform/indexeddb-storage";
+import { downloadPlainText } from "./platform/browser-download";
 
 /**
  * Creates the bounded initial Writer document edited by the workbench textarea.
@@ -204,6 +205,19 @@ export function App(): React.JSX.Element {
       setStorageStatus("Could not load local copy.");
     } finally {
       setStoragePending(false);
+    }
+  }
+
+  /** Downloads the current Writer paragraph as a UTF-8 plain-text file. @returns Nothing; browser download ownership begins after dispatch. */
+  function handleWriterDownload(): void {
+    try {
+      downloadPlainText(
+        (writerDocument.paragraphs[0] as WriterParagraph).text,
+        `${writerDocument.document.title}.txt`,
+      );
+      setStorageStatus("Plain-text download started.");
+    } catch {
+      setStorageStatus("Could not start plain-text download.");
     }
   }
 
@@ -449,6 +463,7 @@ export function App(): React.JSX.Element {
                     />
                     <WriterStorageControls
                       isPending={storagePending}
+                      onDownload={handleWriterDownload}
                       onLoad={handleWriterLoad}
                       onSave={handleWriterSave}
                       status={storageStatus}

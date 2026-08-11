@@ -4,7 +4,7 @@
 
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
 import { suiteDefinitions } from "./domain/suites";
@@ -60,7 +60,7 @@ describe("App" /**
     expect(redoButton).toBeDisabled();
     fireEvent.change(editor, { target: { value: "A branched paragraph." } });
     expect(screen.getByText("Unsaved changes · revision 1")).toBeInTheDocument();
-    expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length + 4);
+    expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length + 5);
   });
 
   it("updates the preview and live status when a suite is selected" /**
@@ -208,5 +208,42 @@ describe("App" /**
       configurable: true,
       value: originalIndexedDb,
     });
+  });
+
+  it("starts a plain-text download and reports adapter failures" /**
+   * Verifies the user-visible result for successful and rejected browser download capabilities.
+   * @returns Nothing; assertions validate both synchronous outcomes.
+   */, function downloadsWriterText(): void {
+    const createObjectUrl = vi.fn(
+      /** Produces the deterministic test object URL. @returns Fixed object URL. */
+      function createObjectUrl(): string {
+        return "blob:writer";
+      },
+    );
+    const revokeObjectUrl = vi.fn(
+      /** Records URL cleanup without external side effects. @returns Nothing. */
+      function revokeObjectUrl(): void {},
+    );
+    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(
+      /** Simulates browser download activation. @returns Nothing. */
+      function clickAnchor(): void {},
+    );
+    Object.defineProperty(URL, "createObjectURL", { configurable: true, value: createObjectUrl });
+    Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: revokeObjectUrl });
+    render(<App />);
+    fireEvent.change(screen.getByRole("textbox", { name: "Writer document text" }), {
+      target: { value: "Download body" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Download text" }));
+    expect(screen.getByText("Plain-text download started.")).toBeInTheDocument();
+    createObjectUrl.mockImplementationOnce(
+      /** Simulates unsupported browser object URL creation. @returns No URL because this call throws. */
+      function rejectsObjectUrl(): string {
+        throw new Error("unsupported");
+      },
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Download text" }));
+    expect(screen.getByText("Could not start plain-text download.")).toBeInTheDocument();
+    click.mockRestore();
   });
 });

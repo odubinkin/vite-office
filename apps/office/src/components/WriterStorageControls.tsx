@@ -8,6 +8,8 @@ export interface WriterStorageControlsProps {
   readonly isPending: boolean;
   /** Requests loading the current Writer document identity from browser-local storage. */
   readonly onLoad: () => void;
+  /** Requests a browser download of the current Writer plain-text body. */
+  readonly onDownload: () => void;
   /** Requests saving the current Writer document to browser-local storage. */
   readonly onSave: () => void;
   /** Deterministic user-visible result of the most recent storage operation. */
@@ -20,12 +22,14 @@ export interface WriterStorageControlsProps {
  * @param props - Immutable storage control state and callbacks.
  * @param props.isPending - Whether actions are temporarily disabled.
  * @param props.onLoad - Callback starting document loading.
+ * @param props.onDownload - Callback starting plain-text download.
  * @param props.onSave - Callback starting document saving.
  * @param props.status - Current operation result for assistive technology and visual users.
  * @returns A compact browser-local storage control region.
  */
 export function WriterStorageControls({
   isPending,
+  onDownload,
   onLoad,
   onSave,
   status,
@@ -47,6 +51,13 @@ export function WriterStorageControls({
         type="button"
       >
         Load locally
+      </button>
+      <button
+        className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-indigo-400"
+        onClick={onDownload}
+        type="button"
+      >
+        Download text
       </button>
       <p aria-live="polite" className="text-sm text-slate-600" role="status">
         {status}
