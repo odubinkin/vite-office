@@ -2,13 +2,12 @@
  * @fileoverview Verifies the visible foundation status, suite navigation, and selection behavior of the workbench.
  */
 
-import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
 import { createDocument } from "./domain/document";
-import { suiteDefinitions } from "./domain/suites";
 import { saveWriterDocument, type WriterSnapshotState } from "./domain/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "./platform/indexeddb-storage";
 
@@ -24,14 +23,14 @@ describe("App" /**
    */, function verifyWriterEditing(): void {
     render(<App />);
 
-    expect(
-      screen.getByRole("heading", { name: "Browser workbench foundation" }),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Plain-text editing enabled")).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Writer workspace" })).toBeVisible();
+    expect(screen.getByRole("navigation", { name: "Writer menu bar" })).toBeVisible();
+    expect(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).toBeVisible();
+    expect(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).toBeVisible();
+    expect(screen.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+    expect(screen.getByRole("complementary", { name: "Writer properties sidebar" })).toBeVisible();
+    expect(screen.getByRole("status", { name: "Writer status bar" })).toBeVisible();
     expect(screen.getByText("Static frontend")).toBeInTheDocument();
-    expect(
-      screen.getByText(/Untitled Writer Document is a serializable new document/),
-    ).toBeInTheDocument();
     const editor = screen.getByRole("textbox", { name: "Writer document text" });
     const undoButton = screen.getByRole("button", { name: "Undo" });
     const redoButton = screen.getByRole("button", { name: "Redo" });
@@ -63,7 +62,11 @@ describe("App" /**
     expect(redoButton).toBeDisabled();
     fireEvent.change(editor, { target: { value: "A branched paragraph." } });
     expect(screen.getByText("Unsaved changes · revision 1")).toBeInTheDocument();
-    expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length + 6);
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).getByRole("button", {
+        name: "Undo",
+      }),
+    ).toBeEnabled();
   });
 
   it("appends ordered Writer paragraphs through undoable immutable history" /**

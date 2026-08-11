@@ -140,8 +140,10 @@ The following documents form the program control plane:
   document-header states and pure transition boundaries before content editing.
 - [Browser Writer paragraph body](writer-paragraph-body.md): bounded plain-text
   paragraph model and pure edit transitions implemented on the lifecycle contract.
-- [Browser Writer plain-text editor workbench](writer-plain-text-editor.md): one
-  accessible in-memory textarea backed by the Writer paragraph model.
+- [Browser Writer plain-text editor workbench](writer-plain-text-editor.md):
+  accessible in-memory textareas backed by the Writer paragraph model.
+- [LibreOffice-style Writer UI shell](writer-ui-shell.md): durable menu,
+  toolbar, ruler, document canvas, sidebar, and status-bar placement contract.
 - [Browser command registry](command-registry.md): typed, browser-independent
   command definitions, shortcut lookup, and dispatch outcomes.
 - [Browser transaction history](transaction-history.md): immutable snapshot

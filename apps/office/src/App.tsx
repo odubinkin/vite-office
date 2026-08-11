@@ -69,7 +69,7 @@ export function App(): React.JSX.Element {
             <div>
               <p className="font-bold tracking-tight text-slate-950">Vite Office</p>
               <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-slate-500">
-                Foundation preview
+                {activeSuite.id === "writer" ? "Writer workbench" : "Foundation preview"}
               </p>
             </div>
           </div>
@@ -117,7 +117,11 @@ export function App(): React.JSX.Element {
         </aside>
 
         <main className="min-w-0" id="workspace">
-          <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60">
+          <WriterWorkbench isActive={activeSuite.id === "writer"} />
+          <section
+            className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60"
+            hidden={activeSuite.id === "writer"}
+          >
             <div className="flex flex-wrap items-center gap-3 border-b border-slate-200 bg-slate-50/80 px-5 py-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-700">
@@ -180,7 +184,6 @@ export function App(): React.JSX.Element {
                     </p>
                   </article>
                 </div>
-                <WriterWorkbench isActive={activeSuite.id === "writer"} />
               </div>
             </div>
 

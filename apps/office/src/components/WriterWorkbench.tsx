@@ -30,8 +30,9 @@ import {
 } from "../domain/writer-storage";
 import { downloadPlainText } from "../platform/browser-download";
 import { IndexedDbDocumentStorageAdapter } from "../platform/indexeddb-storage";
+import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterPlainTextEditor } from "./WriterPlainTextEditor";
-import { WriterStorageControls } from "./WriterStorageControls";
+import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 
 /**
  * Creates the bounded initial Writer document edited by the workbench textarea.
@@ -388,24 +389,30 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
 
   return (
     <div hidden={!isActive}>
-      <WriterPlainTextEditor
-        canRedo={writerHistory.index < writerHistory.entries.length - 1}
-        canUndo={writerHistory.index > 0}
-        document={writerDocument.document}
-        onAppendParagraph={handleWriterAppendParagraph}
-        onRedo={handleWriterRedo}
-        onRemoveParagraph={handleWriterRemoveParagraph}
-        onTextChange={handleWriterTextChange}
-        onUndo={handleWriterUndo}
-        paragraphs={writerDocument.paragraphs}
-      />
-      <WriterStorageControls
-        isPending={storagePending}
-        onDownload={handleWriterDownload}
-        onLoad={handleWriterLoad}
-        onSave={handleWriterSave}
+      <WriterWorkspaceChrome
+        documentTitle={writerDocument.document.title}
         status={storageStatus}
-      />
+        toolbar={
+          <WriterCommandToolbar
+            canRedo={writerHistory.index < writerHistory.entries.length - 1}
+            canUndo={writerHistory.index > 0}
+            isStoragePending={storagePending}
+            onAppendParagraph={handleWriterAppendParagraph}
+            onDownload={handleWriterDownload}
+            onLoad={handleWriterLoad}
+            onRedo={handleWriterRedo}
+            onSave={handleWriterSave}
+            onUndo={handleWriterUndo}
+          />
+        }
+      >
+        <WriterPlainTextEditor
+          document={writerDocument.document}
+          onRemoveParagraph={handleWriterRemoveParagraph}
+          onTextChange={handleWriterTextChange}
+          paragraphs={writerDocument.paragraphs}
+        />
+      </WriterWorkspaceChrome>
     </div>
   );
 }

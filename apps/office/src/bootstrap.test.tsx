@@ -16,7 +16,7 @@ describe("mountApplication" /**
   it("mounts and returns a controllable React root" /**
    * Mounts the workbench into a detached test container and unmounts it cleanly.
    *
-   * @returns Nothing; assertions verify the mounted application heading.
+   * @returns Nothing; assertions verify the mounted Writer workspace.
    */, function verifyMount(): void {
     const container = document.createElement("div");
     document.body.append(container);
@@ -41,9 +41,7 @@ describe("mountApplication" /**
     }
 
     act(performMount);
-    expect(
-      screen.getByRole("heading", { name: "Browser workbench foundation" }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Writer workspace" })).toBeInTheDocument();
     act(performUnmount);
     container.remove();
   });
