@@ -1,10 +1,12 @@
 ---
 id: "202608111333-YY07RJ"
 title: "Toggle Writer status bar from View"
-status: "DOING"
+result_summary: "View Status Bar now controls bounded Writer status chrome at its pinned menu placement."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +42,16 @@ quality_review:
     - "npm run test:e2e: 1 production Chromium test passed"
   findings:
     - "The View menu uses a menuitemcheckbox for the pinned Status Bar command and the visibility preference is not stored in Writer document history."
-commit: null
+commit:
+  hash: "c9b9126846c930c09b5b27115e16ce2ecf3e4291"
+  message: "🧩 YY07RJ task: record status verification"
 comments:
   -
     author: "CODER"
     body: "Start: implementing the bounded Writer View Status Bar command at its pinned menu location."
+  -
+    author: "CODER"
+    body: "Verified: View Status Bar exposes a checked Writer menu command that hides and restores only the status bar while retaining accessible document editing."
 events:
   -
     type: "status"
@@ -59,8 +66,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified View Status Bar follows pinned Writer placement, exposes accessible checked state, hides and restores only workspace chrome, and keeps document editing available."
+  -
+    type: "status"
+    at: "2026-08-11T13:35:48.559Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: View Status Bar exposes a checked Writer menu command that hides and restores only the status bar while retaining accessible document editing."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:35:36.003Z"
+doc_updated_at: "2026-08-11T13:35:48.561Z"
 doc_updated_by: "CODER"
 description: "Implement the pinned LibreOffice Writer .uno:StatusBarVisible command in the static browser workbench: expose a View menu check item that toggles the existing status bar without changing document data, retain accessible state and document-canvas availability, and add focused documentation and browser evidence."
 sections:
@@ -117,6 +131,10 @@ sections:
     - Observation: This is the ninth feature task after the full checkpoint; the next task must run static smoke, LibreOffice inventory, and aggregate verify.
       Impact: Broader cross-workspace regression evidence is not refreshed for this individual task.
       Resolution: Execute the deferred full aggregate checks with the next tenth feature task.
+extensions:
+  implementation_commit:
+    hash: "1fc5407a4644cdf66a7755fe02e8c4363c970dab"
+    message: "✨ YY07RJ code: Toggle Writer status bar"
 id_source: "generated"
 ---
 ## Summary
