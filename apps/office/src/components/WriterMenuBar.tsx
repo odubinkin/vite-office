@@ -29,6 +29,8 @@ export interface WriterMenuBarProps {
   readonly isStoragePending: boolean;
   /** Whether the contextual Writer properties sidebar is currently visible. */
   readonly isSidebarVisible: boolean;
+  /** Whether the horizontal Writer ruler is currently visible. */
+  readonly isHorizontalRulerVisible: boolean;
   /** Applies a focused-paragraph horizontal alignment. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
   /** Starts the current plain-text browser download. */
@@ -43,6 +45,8 @@ export interface WriterMenuBarProps {
   readonly onSave: () => void;
   /** Requests the next visibility state for the Writer properties sidebar. */
   readonly onSidebarVisibilityChange: (isVisible: boolean) => void;
+  /** Requests the next visibility state for the Writer horizontal ruler. */
+  readonly onHorizontalRulerVisibilityChange: (isVisible: boolean) => void;
   /** Applies a bounded paragraph style to the focused Writer paragraph. */
   readonly onStyleChange: (style: WriterParagraphStyle) => void;
   /** Restores the preceding immutable Writer history snapshot. */
@@ -82,10 +86,12 @@ const writerMenuLabels: readonly WriterMenuLabel[] = [
  * @param props.canMoveUp - Whether the Move Item Up menu entry is enabled.
  * @param props.canRedo - Whether the Edit Redo menu entry is enabled.
  * @param props.canUndo - Whether the Edit Undo menu entry is enabled.
+ * @param props.isHorizontalRulerVisible - Whether the View Rulers horizontal item is currently checked.
  * @param props.isStoragePending - Whether File storage entries are temporarily disabled.
  * @param props.isSidebarVisible - Whether the View Sidebar check item is currently checked.
  * @param props.onAlignmentChange - Callback used by Format alignment entries.
  * @param props.onDownload - Callback used by File Save As Text entry.
+ * @param props.onHorizontalRulerVisibilityChange - Callback used by the View Rulers horizontal item.
  * @param props.onLoad - Callback used by File Open Local Copy entry.
  * @param props.onMoveParagraph - Callback used by Format list movement entries.
  * @param props.onRedo - Callback used by Edit Redo entry.
@@ -102,10 +108,12 @@ export function WriterMenuBar({
   canMoveUp,
   canRedo,
   canUndo,
+  isHorizontalRulerVisible,
   isSidebarVisible,
   isStoragePending,
   onAlignmentChange,
   onDownload,
+  onHorizontalRulerVisibilityChange,
   onLoad,
   onMoveParagraph,
   onRedo,
@@ -116,6 +124,7 @@ export function WriterMenuBar({
   style,
 }: WriterMenuBarProps): React.JSX.Element {
   const [openMenu, setOpenMenu] = useState<ImplementedWriterMenu | undefined>();
+  const [isRulersMenuOpen, setIsRulersMenuOpen] = useState(false);
 
   /**
    * Closes the active popup after one enabled menu action invokes its immutable transition.
@@ -125,6 +134,7 @@ export function WriterMenuBar({
    */
   function invokeMenuAction(action: () => void): void {
     action();
+    setIsRulersMenuOpen(false);
     setOpenMenu(undefined);
   }
 
@@ -135,6 +145,7 @@ export function WriterMenuBar({
    * @returns Nothing; React records the next visible popup.
    */
   function toggleMenu(menu: ImplementedWriterMenu): void {
+    setIsRulersMenuOpen(false);
     setOpenMenu(
       /**
        * Derives the next popup identity from the current open menu.
@@ -144,6 +155,20 @@ export function WriterMenuBar({
        */
       function getNextOpenMenu(currentMenu): ImplementedWriterMenu | undefined {
         return currentMenu === menu ? undefined : menu;
+      },
+    );
+  }
+
+  /**
+   * Toggles the nested View Rulers popup while the enclosing View menu remains visible.
+   *
+   * @returns Nothing; React records the next visible Rulers popup state.
+   */
+  function toggleRulersMenu(): void {
+    setIsRulersMenuOpen(
+      /** Derives whether the View Rulers nested menu should become visible. @param isOpen - Current nested popup visibility. @returns The inverse visible state. */
+      function getNextRulersMenuOpen(isOpen): boolean {
+        return !isOpen;
       },
     );
   }
@@ -223,6 +248,35 @@ export function WriterMenuBar({
           id={menuId}
           role="menu"
         >
+          <div className="relative">
+            <button
+              aria-expanded={isRulersMenuOpen}
+              aria-haspopup="menu"
+              className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
+              onClick={toggleRulersMenu}
+              role="menuitem"
+              type="button"
+            >
+              Rulers
+              <span aria-hidden="true">›</span>
+            </button>
+            {isRulersMenuOpen ? (
+              <div
+                aria-label="Rulers menu"
+                className="absolute left-full top-0 z-30 ml-1 w-52 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
+                role="menu"
+              >
+                {renderToggleMenuItem(
+                  "Horizontal ruler",
+                  invokeMenuAction.bind(
+                    undefined,
+                    onHorizontalRulerVisibilityChange.bind(undefined, !isHorizontalRulerVisible),
+                  ),
+                  isHorizontalRulerVisible,
+                )}
+              </div>
+            ) : null}
+          </div>
           {renderToggleMenuItem(
             "Sidebar",
             invokeMenuAction.bind(

@@ -14,6 +14,8 @@ export interface WriterWorkspaceChromeProps {
   readonly menuBar: ReactNode;
   /** Implemented controls placed in the Writer formatting toolbar. */
   readonly formattingToolbar: ReactNode;
+  /** Whether the horizontal Writer ruler is rendered below the formatting toolbar. */
+  readonly isHorizontalRulerVisible: boolean;
   /** Whether the Writer properties sidebar is rendered beside the document canvas. */
   readonly isPropertiesSidebarVisible: boolean;
   /** Current contextual controls and feedback placed in the Writer properties sidebar. */
@@ -31,6 +33,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.children - Current document editing surface.
  * @param props.documentTitle - Title shown in the workspace title row.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
+ * @param props.isHorizontalRulerVisible - Whether the horizontal measurement ruler remains visible.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
  * @param props.menuBar - Functional Writer menus located below the document title row.
  * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
@@ -42,6 +45,7 @@ export function WriterWorkspaceChrome({
   children,
   documentTitle,
   formattingToolbar,
+  isHorizontalRulerVisible,
   isPropertiesSidebarVisible,
   menuBar,
   propertiesSidebar,
@@ -81,18 +85,20 @@ export function WriterWorkspaceChrome({
           {formattingToolbar}
         </div>
 
-        <div
-          aria-label="Writer horizontal ruler"
-          className="relative h-7 overflow-hidden border-b border-slate-300 bg-white px-12 text-[10px] text-slate-400"
-        >
-          <div className="absolute inset-x-12 top-3 border-t border-slate-300" />
-          <span className="absolute left-[14%] top-0.5">1</span>
-          <span className="absolute left-[28%] top-0.5">2</span>
-          <span className="absolute left-[42%] top-0.5">3</span>
-          <span className="absolute left-[56%] top-0.5">4</span>
-          <span className="absolute left-[70%] top-0.5">5</span>
-          <span className="absolute left-[84%] top-0.5">6</span>
-        </div>
+        {isHorizontalRulerVisible ? (
+          <div
+            aria-label="Writer horizontal ruler"
+            className="relative h-7 overflow-hidden border-b border-slate-300 bg-white px-12 text-[10px] text-slate-400"
+          >
+            <div className="absolute inset-x-12 top-3 border-t border-slate-300" />
+            <span className="absolute left-[14%] top-0.5">1</span>
+            <span className="absolute left-[28%] top-0.5">2</span>
+            <span className="absolute left-[42%] top-0.5">3</span>
+            <span className="absolute left-[56%] top-0.5">4</span>
+            <span className="absolute left-[70%] top-0.5">5</span>
+            <span className="absolute left-[84%] top-0.5">6</span>
+          </div>
+        ) : null}
       </header>
 
       <div

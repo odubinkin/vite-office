@@ -43,6 +43,25 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await expect(
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "View" }).click();
+  const rulersMenuItem = page.getByRole("menuitem", { name: "Rulers" });
+  await expect(rulersMenuItem).toHaveAttribute("aria-expanded", "false");
+  await rulersMenuItem.click();
+  const horizontalRulerMenuItem = page.getByRole("menuitemcheckbox", {
+    name: "Horizontal ruler",
+  });
+  await expect(horizontalRulerMenuItem).toHaveAttribute("aria-checked", "true");
+  await horizontalRulerMenuItem.click();
+  await expect(page.getByLabel("Writer horizontal ruler")).toHaveCount(0);
+  await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+  await page.getByRole("button", { name: "View" }).click();
+  await page.getByRole("menuitem", { name: "Rulers" }).click();
+  const hiddenHorizontalRulerMenuItem = page.getByRole("menuitemcheckbox", {
+    name: "Horizontal ruler",
+  });
+  await expect(hiddenHorizontalRulerMenuItem).toHaveAttribute("aria-checked", "false");
+  await hiddenHorizontalRulerMenuItem.click();
+  await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
   await expect(page.getByRole("status", { name: "Writer status bar" })).toBeVisible();
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await expect(writerEditor).toBeVisible();

@@ -60,6 +60,7 @@ export interface WriterWorkbenchProps {
 export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.Element {
   const [activeParagraphId, setActiveParagraphId] = useState("writer-paragraph-1");
   const [focusParagraphId, setFocusParagraphId] = useState<string>();
+  const [isHorizontalRulerVisible, setIsHorizontalRulerVisible] = useState(true);
   const [isPropertiesSidebarVisible, setIsPropertiesSidebarVisible] = useState(true);
   const [storagePending, setStoragePending] = useState(false);
   const [storageStatus, setStorageStatus] = useState("Not saved in this browser.");
@@ -121,16 +122,6 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
    */
   function handleWriterParagraphFocus(paragraphId: string): void {
     setActiveParagraphId(paragraphId);
-  }
-
-  /**
-   * Changes the workspace-only visibility of the Writer properties sidebar without changing the document.
-   *
-   * @param isVisible - Whether the sidebar should be rendered beside the document canvas.
-   * @returns Nothing; React records only the ephemeral workspace preference.
-   */
-  function handleWriterSidebarVisibilityChange(isVisible: boolean): void {
-    setIsPropertiesSidebarVisible(isVisible);
   }
 
   /**
@@ -420,10 +411,12 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             canMoveUp={activeParagraphIndex > 0}
             canRedo={writerHistory.index < writerHistory.entries.length - 1}
             canUndo={writerHistory.index > 0}
+            isHorizontalRulerVisible={isHorizontalRulerVisible}
             isStoragePending={storagePending}
             isSidebarVisible={isPropertiesSidebarVisible}
             onAlignmentChange={handleWriterParagraphAlignment}
             onDownload={handleWriterDownload}
+            onHorizontalRulerVisibilityChange={setIsHorizontalRulerVisible}
             onLoad={handleWriterLoad}
             onMoveParagraph={
               /**
@@ -438,7 +431,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             }
             onRedo={handleWriterRedo}
             onSave={handleWriterSave}
-            onSidebarVisibilityChange={handleWriterSidebarVisibilityChange}
+            onSidebarVisibilityChange={setIsPropertiesSidebarVisible}
             onStyleChange={handleWriterParagraphStyle}
             onUndo={handleWriterUndo}
             style={activeParagraph.style}
@@ -452,6 +445,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             style={activeParagraph.style}
           />
         }
+        isHorizontalRulerVisible={isHorizontalRulerVisible}
         isPropertiesSidebarVisible={isPropertiesSidebarVisible}
         propertiesSidebar={
           <WriterParagraphProperties

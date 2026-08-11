@@ -10,7 +10,7 @@ defines the durable UI placement contract:
 
 - a Writer menu bar with the expected top-level menu locations;
 - standard and formatting toolbars;
-- a horizontal ruler region;
+- a horizontal ruler region that **View → Rulers → Horizontal ruler** can hide;
 - a central page-like document canvas;
 - a right properties sidebar that the **View → Sidebar** command can hide; and
 - a Writer status bar.
@@ -25,6 +25,10 @@ When the user hides the properties sidebar from **View → Sidebar**, the canvas
 uses the released workspace width and the document, toolbars, and status bar
 remain available. The preference is transient workspace chrome state: it does
 not change the Writer document, its history, or browser-local snapshot.
+The nested **View → Rulers → Horizontal ruler** check item similarly controls
+only the existing measurement-ruler chrome and releases its row when hidden.
+It does not add a toolbar control or alter document history, content, or local
+snapshots.
 The existing editor renders as integrated editable paragraph blocks in the document canvas. The formatting toolbar now
 contains real left, center, right, and justified controls for the focused
 paragraph; their current value appears in the properties sidebar. The existing
