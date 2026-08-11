@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111311-BFCRET",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T13:14:45.533Z",
+  "verdict": "pass",
+  "summary": "Backspace paragraph merge meets its approved bounded Writer scope.",
+  "evaluated_sha": "06430f44d429e7852ef078b8d846e898e0b629c9",
+  "blueprint_digest": "2566476f85ceccb27ca39d37006909329fb4a6d53fb5097abf183900e0b6213a",
+  "findings": [
+    "No blocking defects found."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111311-BFCRET/README.md",
+    "06430f44d429e7852ef078b8d846e898e0b629c9"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
