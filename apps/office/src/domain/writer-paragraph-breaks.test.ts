@@ -7,6 +7,7 @@ import {
   appendWriterParagraph,
   createWriterDocument,
   insertWriterText,
+  mergeWriterParagraphWithPrevious,
   setWriterParagraphAlignment,
   setWriterParagraphStyle,
   splitWriterParagraph,
@@ -57,6 +58,28 @@ function splitOversizedOffset(writer: WriterDocument): WriterDocument {
 }
 
 describe("Writer paragraph breaks" /** Groups normal and rejected immutable paragraph split behavior. @returns Nothing; Vitest registers the enclosed case. */, function defineWriterParagraphBreakTests(): void {
+  it("joins a non-first paragraph into its predecessor while preserving the predecessor formatting" /** Verifies Backspace paragraph-boundary semantics retain the preceding identity and properties. @returns Nothing; assertions validate successful and rejected joins. */, function mergesParagraphs(): void {
+    const writer = appendWriterParagraph(createParagraphBreakFixture(), "p-4");
+    const joined = mergeWriterParagraphWithPrevious(writer, "p-3");
+
+    expect(joined.paragraphs).toEqual([
+      { alignment: "center", id: "p-1", style: "heading-1", text: "before after" },
+      { alignment: "left", id: "p-4", style: "default", text: "" },
+    ]);
+    expect(
+      /** Executes the first-paragraph join rejection. @returns Invalid merge transition that always throws. */
+      function mergesFirstParagraph(): WriterDocument {
+        return mergeWriterParagraphWithPrevious(writer, "p-1");
+      },
+    ).toThrowError();
+    expect(
+      /** Executes the missing-paragraph join rejection. @returns Invalid merge transition that always throws. */
+      function mergesMissingParagraph(): WriterDocument {
+        return mergeWriterParagraphWithPrevious(writer, "missing");
+      },
+    ).toThrowError();
+  });
+
   it("splits a paragraph at its caret while preserving ordered formatting and identity" /** Verifies source-prefix text, adjacent trailing text, property inheritance, sibling preservation, and invalid input rejection. @returns Nothing; assertions validate the complete pure transition. */, function splitsParagraphs(): void {
     const writer = createParagraphBreakFixture();
     const split = splitWriterParagraph(writer, "p-1", 7, "p-2");

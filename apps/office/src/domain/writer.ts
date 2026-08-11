@@ -163,6 +163,54 @@ export function splitWriterParagraph(
 }
 
 /**
+ * Joins one non-first Writer paragraph into its preceding sibling and removes the paragraph-break boundary.
+ *
+ * The preceding paragraph remains the surviving paragraph and therefore retains its stable identity and bounded
+ * formatting while the selected paragraph's complete text is appended.
+ *
+ * @param writerDocument - Immutable prior Writer document state.
+ * @param paragraphId - Existing non-first paragraph identity selected at its start-caret boundary.
+ * @returns New dirty Writer document with paragraphId removed and its text appended to the preceding paragraph.
+ * @throws {Error} When paragraphId is absent or identifies the first paragraph, which has no preceding sibling.
+ */
+export function mergeWriterParagraphWithPrevious(
+  writerDocument: WriterDocument,
+  paragraphId: string,
+): WriterDocument {
+  const paragraphIndex = writerDocument.paragraphs.findIndex(
+    /**
+     * Finds the ordered paragraph selected for removal of its preceding break.
+     *
+     * @param candidate - Immutable paragraph candidate inspected without mutation.
+     * @returns True only when candidate owns paragraphId.
+     */
+    function hasParagraphId(candidate): boolean {
+      return candidate.id === paragraphId;
+    },
+  );
+  if (paragraphIndex < 0) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  if (paragraphIndex === 0) throw new Error("First Writer paragraph has no preceding paragraph.");
+  const precedingParagraph = writerDocument.paragraphs[paragraphIndex - 1] as WriterParagraph;
+  const selectedParagraph = writerDocument.paragraphs[paragraphIndex] as WriterParagraph;
+  return {
+    document: markDocumentDirty(writerDocument.document),
+    paragraphs: writerDocument.paragraphs.flatMap(
+      /**
+       * Keeps unrelated entries, replaces the preceding paragraph with joined text, and omits the selected paragraph.
+       *
+       * @param candidate - Immutable paragraph candidate preserved, updated, or omitted without mutation.
+       * @returns One retained paragraph, one updated preceding paragraph, or no paragraph for the removed selected entry.
+       */
+      function joinAdjacentParagraphs(candidate): readonly WriterParagraph[] {
+        if (candidate.id === precedingParagraph.id)
+          return [{ ...candidate, text: `${candidate.text}${selectedParagraph.text}` }];
+        return candidate.id === paragraphId ? [] : [candidate];
+      },
+    ),
+  };
+}
+
+/**
  * Removes one named paragraph while preserving the non-empty Writer body invariant.
  *
  * @param writerDocument - Immutable prior Writer document state.

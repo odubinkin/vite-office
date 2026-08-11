@@ -44,6 +44,10 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     enterWriterParagraphText(firstParagraph, "Before after");
     fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "heading-1" } });
     fireEvent.click(screen.getByRole("button", { name: "Align center" }));
+    firstParagraph.focus();
+    placeWriterCaret(firstParagraph, 0);
+    fireEvent.keyDown(firstParagraph, { key: "Backspace" });
+    expect(screen.getAllByRole("textbox")).toHaveLength(1);
     window.getSelection()?.removeAllRanges();
     fireEvent.keyDown(firstParagraph, { key: "Enter" });
     const getSelection = vi.spyOn(window, "getSelection").mockReturnValue(null);
@@ -75,6 +79,13 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Redo" }));
-    expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveTextContent("after");
+    const restoredSecondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
+    expect(restoredSecondParagraph).toHaveTextContent("after");
+    restoredSecondParagraph.focus();
+    placeWriterCaret(restoredSecondParagraph, 0);
+    fireEvent.keyDown(restoredSecondParagraph, { key: "Backspace" });
+    expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
+    expect(firstParagraph).toHaveTextContent("Before after");
+    expect(firstParagraph).toHaveFocus();
   });
 });

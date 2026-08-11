@@ -75,6 +75,12 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await expect(trailingWriterParagraph).toBeFocused();
   await expect(trailingWriterParagraph).toHaveCSS("font-size", "24px");
   await expect(trailingWriterParagraph).toHaveCSS("text-align", "center");
+  await trailingWriterParagraph.press("Backspace");
+  await expect(trailingWriterParagraph).toHaveCount(0);
+  await expect(writerEditor).toHaveText("A browser-authored paragraph.");
+  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("menuitem", { name: "Undo" }).click();
+  await expect(trailingWriterParagraph).toBeVisible();
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(trailingWriterParagraph).toHaveCount(0);

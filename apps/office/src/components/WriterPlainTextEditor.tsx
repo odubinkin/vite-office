@@ -14,6 +14,8 @@ export interface WriterPlainTextEditorProps {
   readonly focusParagraphId: string | undefined;
   /** Receives a paragraph identity and collapsed caret offset when native Enter requests a paragraph break. */
   readonly onParagraphBreak: (paragraphId: string, offset: number) => void;
+  /** Receives a non-first paragraph identity when Backspace requests removal of its preceding paragraph break. */
+  readonly onParagraphMerge: (paragraphId: string) => void;
   /** Receives a stable paragraph identity when an editable paragraph gains focus. */
   readonly onParagraphFocus: (paragraphId: string) => void;
   /** Ordered immutable Writer paragraphs bound to document-integrated editable controls. */
@@ -29,6 +31,7 @@ export interface WriterPlainTextEditorProps {
  * @param props.activeParagraphId - Stable identity of the paragraph targeted by formatting controls.
  * @param props.focusParagraphId - Newly inserted paragraph that should receive browser focus at offset zero.
  * @param props.onParagraphBreak - Callback that creates a new paragraph from a collapsed native Enter caret.
+ * @param props.onParagraphMerge - Callback that merges a non-first paragraph into its preceding sibling.
  * @param props.onParagraphFocus - Callback that selects a paragraph for formatting after it gains focus.
  * @param props.paragraphs - Ordered Writer paragraphs displayed in the bounded document body.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
@@ -38,6 +41,7 @@ export function WriterPlainTextEditor({
   activeParagraphId,
   focusParagraphId,
   onParagraphBreak,
+  onParagraphMerge,
   onParagraphFocus,
   onTextChange,
   paragraphs,
@@ -99,12 +103,16 @@ export function WriterPlainTextEditor({
     paragraphId: string,
     event: React.KeyboardEvent<HTMLParagraphElement>,
   ): void {
-    if (event.key !== "Enter" || event.shiftKey || event.altKey || event.ctrlKey || event.metaKey)
-      return;
+    if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey) return;
     const offset = getCollapsedCaretOffset(event.currentTarget);
     if (offset === undefined) return;
-    event.preventDefault();
-    onParagraphBreak(paragraphId, offset);
+    if (event.key === "Enter") {
+      event.preventDefault();
+      onParagraphBreak(paragraphId, offset);
+    } else if (event.key === "Backspace" && offset === 0) {
+      event.preventDefault();
+      onParagraphMerge(paragraphId);
+    }
   }
 
   /**

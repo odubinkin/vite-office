@@ -29,9 +29,15 @@ production browser flow.
 
 ## Deliberate limits
 
+Unmodified Backspace at offset zero of a non-first collapsed paragraph merges
+it into the preceding paragraph, retaining the preceding paragraph's identity,
+style, and alignment. This is the bounded browser counterpart of deleting a
+paragraph break; it is not exposed as a menu or toolbar action.
+
 Only unmodified Enter with a collapsed selection is modeled. Shift+Enter,
 modified Enter shortcuts, replacing a non-collapsed selection, rich-text
 boundaries, list continuation, table-cell behavior, page breaks, and Backspace
-paragraph merging remain separate future features. When the browser selection
-is not a collapsed caret inside the editable paragraph, this slice leaves the
-native event untouched rather than guessing at a document transformation.
+inside text or in the first paragraph remain separate future features. When the
+browser selection is not a collapsed caret inside the editable paragraph, this
+slice leaves the native event untouched rather than guessing at a document
+transformation.

@@ -16,6 +16,7 @@ import {
 } from "../domain/history";
 import {
   replaceWriterParagraph,
+  mergeWriterParagraphWithPrevious,
   setWriterParagraphAlignment,
   setWriterParagraphStyle,
   splitWriterParagraph,
@@ -151,6 +152,36 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
           nextParagraphId,
         );
         return applyTransaction(currentHistory, nextDocument, { position: 0 });
+      },
+    );
+  }
+
+  /**
+   * Removes the preceding paragraph break and focuses the surviving paragraph at the original join boundary.
+   *
+   * @param paragraphId - Existing non-first Writer paragraph that received Backspace at offset zero.
+   * @returns Nothing; React schedules the immutable join history transition and post-render browser focus.
+   */
+  function handleWriterParagraphMerge(paragraphId: string): void {
+    const paragraphIndex = writerDocument.paragraphs.findIndex(
+      /** Finds the requested current paragraph index. @param paragraph - Writer paragraph being inspected. @returns True only for paragraphId. */
+      function hasParagraphId(paragraph): boolean {
+        return paragraph.id === paragraphId;
+      },
+    );
+    if (paragraphIndex <= 0) return;
+    const precedingParagraph = writerDocument.paragraphs[paragraphIndex - 1] as WriterParagraph;
+    const joinOffset = precedingParagraph.text.length;
+    setActiveParagraphId(precedingParagraph.id);
+    setFocusParagraphId(precedingParagraph.id);
+    setWriterHistory(
+      /** Applies the paragraph merge to the current immutable history snapshot. @param currentHistory - Current Writer history. @returns History containing the merged Writer body. */
+      function mergeWorkbenchParagraph(currentHistory): TransactionHistory<WriterDocument> {
+        const nextDocument = mergeWriterParagraphWithPrevious(
+          getCurrentTransactionState(currentHistory),
+          paragraphId,
+        );
+        return applyTransaction(currentHistory, nextDocument, { position: joinOffset });
       },
     );
   }
@@ -478,6 +509,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
           activeParagraphId={activeParagraph.id}
           focusParagraphId={focusParagraphId}
           onParagraphBreak={handleWriterParagraphBreak}
+          onParagraphMerge={handleWriterParagraphMerge}
           onParagraphFocus={handleWriterParagraphFocus}
           onTextChange={handleWriterTextChange}
           paragraphs={writerDocument.paragraphs}
