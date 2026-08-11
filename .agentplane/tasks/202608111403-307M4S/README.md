@@ -1,10 +1,12 @@
 ---
 id: "202608111403-307M4S"
 title: "Create verifiable Writer command parity mappings"
-status: "DOING"
+result_summary: "Implemented and verified machine-readable Writer command parity mappings."
+risk_level: "low"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "670254a; npm run inventory:parity; npm run test:inventory:coverage; npm run test:coverage --workspace @vite-office/office"
   findings:
     - "The manifest reports eight visible gaps and supports approved per-capability or per-test exceptions; no record is falsely marked verified."
-commit: null
+commit:
+  hash: "13a342f5a38cdb83009d65764c473eb76c13bd30"
+  message: "🧩 307M4S task: record parity verification"
 comments:
   -
     author: "CODER"
     body: "Start: add a machine-validated atomic Writer mapping surface tied to the pinned baseline and explicitly record unmatched browser parity gaps."
+  -
+    author: "CODER"
+    body: "Verified: atomic Writer command mappings resolve against the pinned baseline, retain every visible gap, and support auditable browser exceptions."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified the Writer mapping contract: every recorded upstream/local path and marker resolves at the pinned baseline; explicit gaps and exception evidence prevent unsupported parity claims."
+  -
+    type: "status"
+    at: "2026-08-11T14:18:47.925Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: atomic Writer command mappings resolve against the pinned baseline, retain every visible gap, and support auditable browser exceptions."
 doc_version: 3
-doc_updated_at: "2026-08-11T14:18:38.802Z"
+doc_updated_at: "2026-08-11T14:18:47.926Z"
 doc_updated_by: "CODER"
 description: "Introduce a machine-validated atomic mapping manifest for implemented Writer commands, linking pinned LibreOffice sources, upstream tests and docs to local implementation, executable tests, documentation, and explicit gaps without claiming full parity."
 sections:
@@ -126,6 +140,10 @@ sections:
     Reason: the user approved a full aggregate checkpoint after every ten closed feature tasks; the prior Select All task was that checkpoint.
     Risk: static asset and aggregate combined-suite regressions were not rerun for this documentation and tooling increment.
     Approval: user.
+extensions:
+  implementation_commit:
+    hash: "670254a4dee1d2fc8fe74230506dd873e89ff925"
+    message: "✨ 307M4S code: Map Writer command parity evidence"
 id_source: "generated"
 ---
 ## Summary
