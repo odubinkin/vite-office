@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111336-2QSR3F",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T13:42:45.742Z",
+  "verdict": "pass",
+  "summary": "The bounded Edit Select All implementation and required tenth-task full checkpoint satisfy the approved scope.",
+  "evaluated_sha": "d41156478b63ca7904864a9e46f2f8443d0a3dd1",
+  "blueprint_digest": "37238aa0109b899faad72715fff95a7b276cd9b2434841b154a24a5b34e550af",
+  "findings": [
+    "Select All is a one-shot browser selection request, so it does not reselect document content after later paragraph edits or disturb native caret operations."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111336-2QSR3F/README.md",
+    "d41156478b63ca7904864a9e46f2f8443d0a3dd1",
+    "npm run verify: passed full aggregate including static build, inventory coverage, office coverage, and Playwright",
+    "npm run inventory:validate: passed pinned LibreOffice corpus contracts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Select All is bounded to browser selection; range replacement, clipboard operations, and rich-text selection semantics remain separate Writer feature tasks."
+  ]
+}
