@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202608101309-8EXRAE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T11:15:21.122Z",
+  "verdict": "pass",
+  "summary": "Writer browser-local save and load controls meet the bounded approved IndexedDB snapshot scope.",
+  "evaluated_sha": "443c04dd9a34a3886d66b3d08513527afc068695",
+  "blueprint_digest": "57e11c2f60de848e3069fcd6d9ad739efffa2aa5bc23afd14475c30f63abe533",
+  "findings": [
+    "No confirmed defects: snapshot orchestration, accessible controls, non-destructive outcomes, test coverage, and documentation are present."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608101309-8EXRAE/README.md",
+    "ea8ca9ea89f4 implementation commit",
+    "443c04dd9a34 E2E correction commit",
+    "npm run verify passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Autosave, recovery prompts, file formats, downloads, cross-tab conflicts, encryption, and complete parity remain separate tasks."
+  ]
+}
