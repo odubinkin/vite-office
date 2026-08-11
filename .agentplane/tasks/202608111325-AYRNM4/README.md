@@ -1,10 +1,12 @@
 ---
 id: "202608111325-AYRNM4"
 title: "Toggle Writer properties sidebar from View"
-status: "DOING"
+result_summary: "View Sidebar now controls bounded Writer properties chrome at its pinned menu placement."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +42,16 @@ quality_review:
     - "npm run test:e2e: 1 production Chromium test passed"
   findings:
     - "The View menu uses a menuitemcheckbox for the pinned Sidebar command and the visibility preference is not stored in Writer document history."
-commit: null
+commit:
+  hash: "c45a4692f08ffb1c7d4d5f39e38f332024566d41"
+  message: "🧩 AYRNM4 task: record sidebar verification"
 comments:
   -
     author: "CODER"
     body: "Start: implementing the bounded Writer View Sidebar command at its pinned menu location."
+  -
+    author: "CODER"
+    body: "Verified: View Sidebar exposes a checked Writer menu command that hides and restores only the properties sidebar while retaining accessible document editing."
 events:
   -
     type: "status"
@@ -59,8 +66,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified View Sidebar follows pinned Writer placement, exposes accessible checked state, hides and restores only workspace chrome, and keeps the document canvas available."
+  -
+    type: "status"
+    at: "2026-08-11T13:28:56.905Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: View Sidebar exposes a checked Writer menu command that hides and restores only the properties sidebar while retaining accessible document editing."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:28:48.900Z"
+doc_updated_at: "2026-08-11T13:28:56.906Z"
 doc_updated_by: "CODER"
 description: "Implement the pinned Writer .uno:Sidebar capability in the static browser workbench: expose View as a functional menu, toggle the existing properties sidebar without changing document data, retain accessible state and responsive canvas layout, and add focused documentation and browser evidence."
 sections:
@@ -117,6 +131,10 @@ sections:
     - Observation: Static smoke, LibreOffice inventory, and aggregate verify were intentionally deferred under the agreed ten-task cadence.
       Impact: Broader cross-workspace regression evidence is not refreshed for this individual task.
       Resolution: Run the deferred aggregate checks at the next cadence checkpoint.
+extensions:
+  implementation_commit:
+    hash: "e87f581c4533489351a0790b48ad3c929783708b"
+    message: "✨ AYRNM4 code: Toggle Writer sidebar from View"
 id_source: "generated"
 ---
 ## Summary
