@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111308-A38HWR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T13:10:19.420Z",
+  "verdict": "pass",
+  "summary": "Toolbar placement now matches pinned Writer standardbar evidence.",
+  "evaluated_sha": "96c794617ceab21087e905f0725f41000e29bb73",
+  "blueprint_digest": "f02308bc070fda8a55099ba658bc63443b4c4db8fd04647422e31785215f3bc6",
+  "findings": [
+    "No blocking defects found."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111308-A38HWR/README.md",
+    "96c794617ceab21087e905f0725f41000e29bb73"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

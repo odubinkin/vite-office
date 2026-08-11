@@ -4,7 +4,7 @@ title: "Remove non-Writer text download toolbar command"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-08-11T13:10:19.062Z"
+  updated_by: "REVIEWER"
+  note: "Verified text download was removed from the standard toolbar, remains available in File, and has complete focused evidence."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-11T13:10:19.420Z"
+  updated_by: "EVALUATOR"
+  note: "Toolbar placement now matches pinned Writer standardbar evidence."
+  evaluated_sha: "96c794617ceab21087e905f0725f41000e29bb73"
+  blueprint_digest: "f02308bc070fda8a55099ba658bc63443b4c4db8fd04647422e31785215f3bc6"
+  evidence_refs:
+    - ".agentplane/tasks/202608111308-A38HWR/README.md"
+    - ".agentplane/tasks/202608111308-A38HWR/quality/20260811-131019420-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608111308-A38HWR/quality/20260811-131019420-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608111308-A38HWR/quality/20260811-131019420-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608111308-A38HWR/blueprint/resolved-snapshot.json"
+    - "96c794617ceab21087e905f0725f41000e29bb73"
+  findings:
+    - "No blocking defects found."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: removing only the non-upstream text-download toolbar surface while retaining File export."
+  -
+    type: "verify"
+    at: "2026-08-11T13:10:19.062Z"
+    author: "REVIEWER"
+    state: "ok"
+    note: "Verified text download was removed from the standard toolbar, remains available in File, and has complete focused evidence."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:08:32.275Z"
+doc_updated_at: "2026-08-11T13:10:19.143Z"
 doc_updated_by: "CODER"
 description: "Remove the browser-only Download text control from the Writer standard toolbar because pinned LibreOffice Writer standardbar has no corresponding generic text-download command. Keep the existing bounded export only under File as Save as text, update tests and placement documentation, and preserve the underlying browser download capability."
 sections:
@@ -59,11 +81,50 @@ sections:
     4. Defer static smoke, inventory, and aggregate verification to the user-approved ten-task cadence; record the residual risk in Findings.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-08-11T13:10:19.062Z — VERIFY — ok
+
+    By: REVIEWER
+
+    Note: Verified text download was removed from the standard toolbar, remains available in File, and has complete focused evidence.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-11T13:10:18.567Z, excerpt_hash=sha256:a4f329473a95e212682cd4716cd3e27bdb76506a0c5b50936d238fc86f2206c3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608111308-A38HWR/blueprint/resolved-snapshot.json
+    - old_digest: f02308bc070fda8a55099ba658bc63443b4c4db8fd04647422e31785215f3bc6
+    - current_digest: f02308bc070fda8a55099ba658bc63443b4c4db8fd04647422e31785215f3bc6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608111308-A38HWR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task run 202608111308-A38HWR
+    - diagnostic_command: agentplane task run status 202608111308-A38HWR
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert the task implementation commit to restore the prior standard-toolbar button.
     - Re-run the focused suite to confirm the previous placement is restored.
-  Findings: ""
+  Findings: |-
+    Command: fast project checks and office coverage. Result: pass. Evidence: 18 test files and 50 tests passed at 100 percent coverage; JSDoc covered 111 files; only pre-existing inventory contracts remains a size-review candidate. Scope: toolbar command removal and File export preservation.
+
+    Command: focused production Playwright. Result: pass. Evidence: Vite production build and Chromium scenario passed with axe; standard toolbar has no Download text button. Scope: Writer chrome placement.
+
+    Command: git diff --check; ap doctor; policy routing check. Result: pass. Evidence: no whitespace errors; doctor has only two informational configuration notes; policy routing passed.
+
+    Skipped: static smoke, inventory, aggregate verify. Reason: user-approved ten-task cadence. Risk: aggregate checks have not rerun. Approval: user.
 id_source: "generated"
 ---
 ## Summary
@@ -94,6 +155,38 @@ Remove the browser-only Download text control from the Writer standard toolbar b
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-08-11T13:10:19.062Z — VERIFY — ok
+
+By: REVIEWER
+
+Note: Verified text download was removed from the standard toolbar, remains available in File, and has complete focused evidence.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-11T13:10:18.567Z, excerpt_hash=sha256:a4f329473a95e212682cd4716cd3e27bdb76506a0c5b50936d238fc86f2206c3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608111308-A38HWR/blueprint/resolved-snapshot.json
+- old_digest: f02308bc070fda8a55099ba658bc63443b4c4db8fd04647422e31785215f3bc6
+- current_digest: f02308bc070fda8a55099ba658bc63443b4c4db8fd04647422e31785215f3bc6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608111308-A38HWR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task run 202608111308-A38HWR
+- diagnostic_command: agentplane task run status 202608111308-A38HWR
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -102,3 +195,11 @@ Remove the browser-only Download text control from the Writer standard toolbar b
 - Re-run the focused suite to confirm the previous placement is restored.
 
 ## Findings
+
+Command: fast project checks and office coverage. Result: pass. Evidence: 18 test files and 50 tests passed at 100 percent coverage; JSDoc covered 111 files; only pre-existing inventory contracts remains a size-review candidate. Scope: toolbar command removal and File export preservation.
+
+Command: focused production Playwright. Result: pass. Evidence: Vite production build and Chromium scenario passed with axe; standard toolbar has no Download text button. Scope: Writer chrome placement.
+
+Command: git diff --check; ap doctor; policy routing check. Result: pass. Evidence: no whitespace errors; doctor has only two informational configuration notes; policy routing passed.
+
+Skipped: static smoke, inventory, aggregate verify. Reason: user-approved ten-task cadence. Risk: aggregate checks have not rerun. Approval: user.
