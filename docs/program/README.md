@@ -154,6 +154,8 @@ The following documents form the program control plane:
   migration limits.
 - [Writer browser-local save and load](writer-local-storage.md): explicit
   IndexedDB snapshots for the bounded in-memory Writer workbench.
+- [Writer plain-text download](writer-plain-text-download.md): browser-only
+  UTF-8 Blob export for the current bounded Writer paragraph.
 - [Browser autosave recovery orchestration](autosave-recovery.md): deterministic
   recovery state and save outcomes without timers or browser UI policy.
 - [Browser worker request cancellation protocol](worker-cancellation-protocol.md):
