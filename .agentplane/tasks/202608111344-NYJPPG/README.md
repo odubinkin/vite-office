@@ -1,10 +1,12 @@
 ---
 id: "202608111344-NYJPPG"
 title: "Copy Writer selection through Edit and standard toolbar"
-status: "DOING"
+result_summary: "Implemented and verified Writer Copy command."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "1d3ff1c; npm run test:coverage --workspace @vite-office/office; npm run test:e2e --workspace @vite-office/office"
   findings:
     - "Residual decomposition candidates are documented for a follow-up structural task; aggregate verification is cadence-deferred with user approval."
-commit: null
+commit:
+  hash: "1d7be085eebb957e57d0285888cf346780103d7e"
+  message: "🧩 NYJPPG task: record Copy verification"
 comments:
   -
     author: "CODER"
     body: "Start: implementing bounded Writer Copy in its pinned Edit and standard-toolbar locations."
+  -
+    author: "CODER"
+    body: "Verified: Copy is placed in the Writer Edit menu and standard toolbar with native and fallback clipboard coverage."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified Copy implementation: declared fast checks and targeted production Playwright flow passed; full aggregate remains deferred under the approved ten-task cadence."
+  -
+    type: "status"
+    at: "2026-08-11T13:52:09.651Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Copy is placed in the Writer Edit menu and standard toolbar with native and fallback clipboard coverage."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:51:58.424Z"
+doc_updated_at: "2026-08-11T13:52:09.652Z"
 doc_updated_by: "CODER"
 description: "Implement the pinned LibreOffice Writer .uno:Copy command in the static browser workbench: expose Copy in Edit and the standard toolbar, copy current native browser selection through a browser-only platform adapter with a safe fallback, retain document data/history, and add focused tests and documentation."
 sections:
@@ -126,6 +140,10 @@ sections:
     Reason: the user approved a full aggregate checkpoint after every ten closed feature tasks; the prior Select All task was that checkpoint.
     Risk: static smoke and inventory parity were not rerun for this one-feature increment.
     Approval: user.
+extensions:
+  implementation_commit:
+    hash: "1d3ff1c02291080e14d2116f078e9c2783e564a9"
+    message: "✨ NYJPPG code: Copy Writer selection"
 id_source: "generated"
 ---
 ## Summary
