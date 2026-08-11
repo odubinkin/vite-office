@@ -13,7 +13,7 @@ defines the durable UI placement contract:
 - a horizontal ruler region that **View → Rulers → Horizontal ruler** can hide;
 - a central page-like document canvas;
 - a right properties sidebar that the **View → Sidebar** command can hide; and
-- a Writer status bar.
+- a Writer status bar that **View → Status Bar** can hide.
 
 Implemented commands are placed in the standard toolbar through
 [`WriterCommandToolbar`](../../apps/office/src/components/WriterCommandToolbar.tsx):
@@ -29,6 +29,9 @@ The nested **View → Rulers → Horizontal ruler** check item similarly control
 only the existing measurement-ruler chrome and releases its row when hidden.
 It does not add a toolbar control or alter document history, content, or local
 snapshots.
+The direct **View → Status Bar** check item controls only the existing status
+feedback row. Hiding it leaves the document canvas and editing controls intact,
+and it does not alter document history, content, or browser-local snapshots.
 The existing editor renders as integrated editable paragraph blocks in the document canvas. The formatting toolbar now
 contains real left, center, right, and justified controls for the focused
 paragraph; their current value appears in the properties sidebar. The existing

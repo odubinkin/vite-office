@@ -18,6 +18,8 @@ export interface WriterWorkspaceChromeProps {
   readonly isHorizontalRulerVisible: boolean;
   /** Whether the Writer properties sidebar is rendered beside the document canvas. */
   readonly isPropertiesSidebarVisible: boolean;
+  /** Whether the Writer status bar is rendered below the document canvas. */
+  readonly isStatusBarVisible: boolean;
   /** Current contextual controls and feedback placed in the Writer properties sidebar. */
   readonly propertiesSidebar: ReactNode;
   /** Current operation result shown in the Writer status bar. */
@@ -35,6 +37,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
  * @param props.isHorizontalRulerVisible - Whether the horizontal measurement ruler remains visible.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
+ * @param props.isStatusBarVisible - Whether the status feedback row remains visible below the canvas.
  * @param props.menuBar - Functional Writer menus located below the document title row.
  * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
  * @param props.status - Current storage or download feedback.
@@ -47,6 +50,7 @@ export function WriterWorkspaceChrome({
   formattingToolbar,
   isHorizontalRulerVisible,
   isPropertiesSidebarVisible,
+  isStatusBarVisible,
   menuBar,
   propertiesSidebar,
   status,
@@ -125,18 +129,20 @@ export function WriterWorkspaceChrome({
         ) : null}
       </div>
 
-      <footer
-        aria-label="Writer status bar"
-        className="flex flex-wrap items-center gap-x-5 gap-y-1 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
-        role="status"
-      >
-        <span className="font-semibold text-white">Page 1 of 1</span>
-        <span>Plain text</span>
-        <span>English (USA)</span>
-        <span aria-live="polite" className="sm:ml-auto">
-          {status}
-        </span>
-      </footer>
+      {isStatusBarVisible ? (
+        <footer
+          aria-label="Writer status bar"
+          className="flex flex-wrap items-center gap-x-5 gap-y-1 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
+          role="status"
+        >
+          <span className="font-semibold text-white">Page 1 of 1</span>
+          <span>Plain text</span>
+          <span>English (USA)</span>
+          <span aria-live="polite" className="sm:ml-auto">
+            {status}
+          </span>
+        </footer>
+      ) : null}
     </section>
   );
 }

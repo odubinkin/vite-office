@@ -62,6 +62,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
   const [focusParagraphId, setFocusParagraphId] = useState<string>();
   const [isHorizontalRulerVisible, setIsHorizontalRulerVisible] = useState(true);
   const [isPropertiesSidebarVisible, setIsPropertiesSidebarVisible] = useState(true);
+  const [isStatusBarVisible, setIsStatusBarVisible] = useState(true);
   const [storagePending, setStoragePending] = useState(false);
   const [storageStatus, setStorageStatus] = useState("Not saved in this browser.");
   const [writerHistory, setWriterHistory] = useState<TransactionHistory<WriterDocument>>(
@@ -414,6 +415,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             isHorizontalRulerVisible={isHorizontalRulerVisible}
             isStoragePending={storagePending}
             isSidebarVisible={isPropertiesSidebarVisible}
+            isStatusBarVisible={isStatusBarVisible}
             onAlignmentChange={handleWriterParagraphAlignment}
             onDownload={handleWriterDownload}
             onHorizontalRulerVisibilityChange={setIsHorizontalRulerVisible}
@@ -432,6 +434,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             onRedo={handleWriterRedo}
             onSave={handleWriterSave}
             onSidebarVisibilityChange={setIsPropertiesSidebarVisible}
+            onStatusBarVisibilityChange={setIsStatusBarVisible}
             onStyleChange={handleWriterParagraphStyle}
             onUndo={handleWriterUndo}
             style={activeParagraph.style}
@@ -447,6 +450,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         }
         isHorizontalRulerVisible={isHorizontalRulerVisible}
         isPropertiesSidebarVisible={isPropertiesSidebarVisible}
+        isStatusBarVisible={isStatusBarVisible}
         propertiesSidebar={
           <WriterParagraphProperties
             alignment={activeParagraph.alignment}

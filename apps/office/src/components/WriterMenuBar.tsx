@@ -29,6 +29,8 @@ export interface WriterMenuBarProps {
   readonly isStoragePending: boolean;
   /** Whether the contextual Writer properties sidebar is currently visible. */
   readonly isSidebarVisible: boolean;
+  /** Whether the Writer status bar is currently visible. */
+  readonly isStatusBarVisible: boolean;
   /** Whether the horizontal Writer ruler is currently visible. */
   readonly isHorizontalRulerVisible: boolean;
   /** Applies a focused-paragraph horizontal alignment. */
@@ -45,6 +47,8 @@ export interface WriterMenuBarProps {
   readonly onSave: () => void;
   /** Requests the next visibility state for the Writer properties sidebar. */
   readonly onSidebarVisibilityChange: (isVisible: boolean) => void;
+  /** Requests the next visibility state for the Writer status bar. */
+  readonly onStatusBarVisibilityChange: (isVisible: boolean) => void;
   /** Requests the next visibility state for the Writer horizontal ruler. */
   readonly onHorizontalRulerVisibilityChange: (isVisible: boolean) => void;
   /** Applies a bounded paragraph style to the focused Writer paragraph. */
@@ -89,6 +93,7 @@ const writerMenuLabels: readonly WriterMenuLabel[] = [
  * @param props.isHorizontalRulerVisible - Whether the View Rulers horizontal item is currently checked.
  * @param props.isStoragePending - Whether File storage entries are temporarily disabled.
  * @param props.isSidebarVisible - Whether the View Sidebar check item is currently checked.
+ * @param props.isStatusBarVisible - Whether the View Status Bar check item is currently checked.
  * @param props.onAlignmentChange - Callback used by Format alignment entries.
  * @param props.onDownload - Callback used by File Save As Text entry.
  * @param props.onHorizontalRulerVisibilityChange - Callback used by the View Rulers horizontal item.
@@ -97,6 +102,7 @@ const writerMenuLabels: readonly WriterMenuLabel[] = [
  * @param props.onRedo - Callback used by Edit Redo entry.
  * @param props.onSave - Callback used by File Save entry.
  * @param props.onSidebarVisibilityChange - Callback used by the View Sidebar check item.
+ * @param props.onStatusBarVisibilityChange - Callback used by the View Status Bar check item.
  * @param props.onStyleChange - Callback used by Styles entries.
  * @param props.onUndo - Callback used by Edit Undo entry.
  * @param props.style - Current focused-paragraph style.
@@ -110,6 +116,7 @@ export function WriterMenuBar({
   canUndo,
   isHorizontalRulerVisible,
   isSidebarVisible,
+  isStatusBarVisible,
   isStoragePending,
   onAlignmentChange,
   onDownload,
@@ -119,6 +126,7 @@ export function WriterMenuBar({
   onRedo,
   onSave,
   onSidebarVisibilityChange,
+  onStatusBarVisibilityChange,
   onStyleChange,
   onUndo,
   style,
@@ -248,6 +256,14 @@ export function WriterMenuBar({
           id={menuId}
           role="menu"
         >
+          {renderToggleMenuItem(
+            "Status Bar",
+            invokeMenuAction.bind(
+              undefined,
+              onStatusBarVisibilityChange.bind(undefined, !isStatusBarVisible),
+            ),
+            isStatusBarVisible,
+          )}
           <div className="relative">
             <button
               aria-expanded={isRulersMenuOpen}

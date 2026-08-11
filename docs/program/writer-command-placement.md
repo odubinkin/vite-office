@@ -14,6 +14,9 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 - It places `.uno:Sidebar` in **View**. The bounded browser **Sidebar** check
   item controls the existing properties-sidebar chrome and has no standard
   toolbar counterpart in this slice.
+- It places `.uno:StatusBarVisible` directly in **View**. The browser **Status
+  Bar** check item controls the existing status-bar chrome and has no standard
+  toolbar counterpart in this slice.
 - It nests `.uno:Ruler` under **View → Rulers**. The browser **Horizontal
   ruler** check item controls the existing horizontal-ruler chrome and likewise
   has no standard toolbar counterpart in this slice.

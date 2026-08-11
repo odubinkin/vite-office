@@ -137,6 +137,19 @@ describe("App" /**
     expect(hiddenHorizontalRulerMenuItem).toHaveAttribute("aria-checked", "false");
     fireEvent.click(hiddenHorizontalRulerMenuItem);
     expect(screen.getByLabelText("Writer horizontal ruler")).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    const statusBarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
+    expect(statusBarMenuItem).toHaveAttribute("aria-checked", "true");
+    fireEvent.click(statusBarMenuItem);
+    expect(screen.queryByRole("status", { name: "Writer status bar" })).not.toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    const hiddenStatusBarMenuItem = screen.getByRole("menuitemcheckbox", {
+      name: "Status Bar",
+    });
+    expect(hiddenStatusBarMenuItem).toHaveAttribute("aria-checked", "false");
+    fireEvent.click(hiddenStatusBarMenuItem);
+    expect(screen.getByRole("status", { name: "Writer status bar" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
     expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
     expect(screen.getByRole("menuitem", { name: "Undo" })).toBeDisabled();
