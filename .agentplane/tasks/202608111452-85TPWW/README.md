@@ -1,10 +1,11 @@
 ---
 id: "202608111452-85TPWW"
 title: "Support document-wide Writer selection shortcuts"
-status: "DOING"
+result_summary: "Implemented bounded document-wide Writer selection and caret navigation."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "f4998f4; coverage; production E2E; parity inventory; static checks"
   findings:
     - "Cross-paragraph pointer selection is bounded to complete crossed paragraphs because browser contenteditable hosts cannot natively preserve partial ranges across host boundaries."
-commit: null
+commit:
+  hash: "f4998f4e3c39ba9a4047e53399f6075ba5d0d1f7"
+  message: "✨ 85TPWW code: support Writer document selection"
 comments:
   -
     author: "CODER"
     body: "Start: route document-wide native selection through Writer controls and permit cross-paragraph pointer selection with focused parity coverage."
+  -
+    author: "CODER"
+    body: "Verified: Ctrl/Cmd+A, cross-paragraph pointer selection in both directions, caret restoration after input and joins, and boundary arrow navigation are covered and passing."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: Writer keyboard selection, pointer drags in both directions, caret restoration, and cross-paragraph boundary arrows pass coverage, production E2E, parity, and static checks."
+  -
+    type: "status"
+    at: "2026-08-11T15:21:18.869Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Ctrl/Cmd+A, cross-paragraph pointer selection in both directions, caret restoration after input and joins, and boundary arrow navigation are covered and passing."
 doc_version: 3
-doc_updated_at: "2026-08-11T15:21:08.668Z"
+doc_updated_at: "2026-08-11T15:21:18.871Z"
 doc_updated_by: "CODER"
 description: "Make Ctrl/Cmd+A invoke Writer Select All and allow native mouse selections to span visible Writer paragraphs while preserving the sanitized clipboard selection contract."
 sections:
