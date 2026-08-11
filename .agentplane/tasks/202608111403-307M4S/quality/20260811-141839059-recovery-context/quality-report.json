@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111403-307M4S",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T14:18:39.059Z",
+  "verdict": "pass",
+  "summary": "Atomic Writer command mappings are machine-validated against pinned LibreOffice evidence and local tests/docs.",
+  "evaluated_sha": "670254a4dee1d2fc8fe74230506dd873e89ff925",
+  "blueprint_digest": "d5b0ea6eb22900f3ee75a153b6e274d27f80c6b33e362becae66e3206b84d9cd",
+  "findings": [
+    "The manifest reports eight visible gaps and supports approved per-capability or per-test exceptions; no record is falsely marked verified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111403-307M4S/README.md",
+    "670254a; npm run inventory:parity; npm run test:inventory:coverage; npm run test:coverage --workspace @vite-office/office"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
