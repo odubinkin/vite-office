@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111344-NYJPPG",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T13:51:58.683Z",
+  "verdict": "pass",
+  "summary": "Copy command is available in the Writer Edit menu and standard toolbar with covered clipboard outcomes.",
+  "evaluated_sha": "1d3ff1c02291080e14d2116f078e9c2783e564a9",
+  "blueprint_digest": "48045140fd105c12e2127d96d8875ebbdd3eabf3800e45a9dba0a183e22cd6fa",
+  "findings": [
+    "Residual decomposition candidates are documented for a follow-up structural task; aggregate verification is cadence-deferred with user approval."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111344-NYJPPG/README.md",
+    "1d3ff1c; npm run test:coverage --workspace @vite-office/office; npm run test:e2e --workspace @vite-office/office"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
