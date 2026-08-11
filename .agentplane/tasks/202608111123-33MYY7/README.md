@@ -1,10 +1,12 @@
 ---
 id: "202608111123-33MYY7"
 title: "Extract Writer workbench from application shell"
-status: "DOING"
+result_summary: "Writer workbench extracted from the application shell."
+risk_level: "low"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +41,16 @@ quality_review:
     - "npm run verify passed: 36 app tests, 67 inventory tests, Playwright, static build, JSDoc, and size check"
   findings:
     - "No confirmed defects: App retains suite navigation, Writer owns its browser-only session, hidden state persists across suite changes, shortcut dispatch is disabled outside Writer, and full coverage remains complete."
-commit: null
+commit:
+  hash: "77c3cf5498774887e06b4063a6fbed71ce7a83fa"
+  message: "✅ 33MYY7 task: record Writer workbench verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: extracting the current bounded Writer workbench from the application shell while preserving all visible browser behavior and coverage."
+  -
+    author: "CODER"
+    body: "Verified: Writer workbench extraction preserved browser behavior, full coverage, and complete documentation while reducing the application shell below the decomposition threshold."
 events:
   -
     type: "status"
@@ -58,8 +65,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: Writer workbench extraction preserves editing, history, shortcuts, browser storage, download feedback, and retained state while reducing App.tsx to 201 lines; the full verification suite passed."
+  -
+    type: "status"
+    at: "2026-08-11T11:32:45.521Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer workbench extraction preserved browser behavior, full coverage, and complete documentation while reducing the application shell below the decomposition threshold."
 doc_version: 3
-doc_updated_at: "2026-08-11T11:32:33.332Z"
+doc_updated_at: "2026-08-11T11:32:45.523Z"
 doc_updated_by: "CODER"
 description: "Move Writer-specific document history, persistence, browser download, and shortcut orchestration out of App.tsx into a dedicated component while preserving the current static UI behavior and coverage."
 sections:
@@ -123,6 +137,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "6da68357e011954c5f50441c6603ac377040379f"
+    message: "♻️ 33MYY7 code: extract Writer workbench component"
 id_source: "generated"
 ---
 ## Summary
