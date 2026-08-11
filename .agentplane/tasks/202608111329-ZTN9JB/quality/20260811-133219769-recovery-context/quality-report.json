@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111329-ZTN9JB",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T13:32:19.769Z",
+  "verdict": "pass",
+  "summary": "The bounded View Rulers implementation matches the approved Writer chrome scope with complete local and production-browser evidence.",
+  "evaluated_sha": "d42f390bf8e19b42d492e4acde21a9fdfd50cb6e",
+  "blueprint_digest": "0498fec78e647b0a93176f9b02ae9a98fe5830a56e27f1c1b80a10263d446b1c",
+  "findings": [
+    "The nested Rulers popup uses the pinned View hierarchy and a menuitemcheckbox for Horizontal ruler without placing a non-upstream control on a toolbar."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111329-ZTN9JB/README.md",
+    "d42f390bf8e19b42d492e4acde21a9fdfd50cb6e",
+    "npm run test:coverage --workspace @vite-office/office: 51 tests, 100 percent",
+    "npm run test:e2e: 1 production Chromium test passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Static smoke, LibreOffice inventory, and aggregate verify are deferred to the user-approved ten-task cadence."
+  ]
+}
