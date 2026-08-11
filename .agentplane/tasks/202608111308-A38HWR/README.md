@@ -1,10 +1,12 @@
 ---
 id: "202608111308-A38HWR"
 title: "Remove non-Writer text download toolbar command"
-status: "DOING"
+result_summary: "Removed non-Writer text download from the standard toolbar while preserving File export."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "96c794617ceab21087e905f0725f41000e29bb73"
   findings:
     - "No blocking defects found."
-commit: null
+commit:
+  hash: "75bc2ac50ab1be2c3b1673b792caa82ce99861c3"
+  message: "🧩 A38HWR task: record toolbar verification"
 comments:
   -
     author: "CODER"
     body: "Start: removing only the non-upstream text-download toolbar surface while retaining File export."
+  -
+    author: "CODER"
+    body: "Verified: the standard toolbar now excludes browser-only text download while File retains the bounded text export, with passing focused evidence."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified text download was removed from the standard toolbar, remains available in File, and has complete focused evidence."
+  -
+    type: "status"
+    at: "2026-08-11T13:10:46.292Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: the standard toolbar now excludes browser-only text download while File retains the bounded text export, with passing focused evidence."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:10:19.143Z"
+doc_updated_at: "2026-08-11T13:10:46.293Z"
 doc_updated_by: "CODER"
 description: "Remove the browser-only Download text control from the Writer standard toolbar because pinned LibreOffice Writer standardbar has no corresponding generic text-download command. Keep the existing bounded export only under File as Save as text, update tests and placement documentation, and preserve the underlying browser download capability."
 sections:
@@ -125,6 +139,10 @@ sections:
     Command: git diff --check; ap doctor; policy routing check. Result: pass. Evidence: no whitespace errors; doctor has only two informational configuration notes; policy routing passed.
 
     Skipped: static smoke, inventory, aggregate verify. Reason: user-approved ten-task cadence. Risk: aggregate checks have not rerun. Approval: user.
+extensions:
+  implementation_commit:
+    hash: "96c794617ceab21087e905f0725f41000e29bb73"
+    message: "✨ A38HWR code: Remove non-Writer download toolbar command"
 id_source: "generated"
 ---
 ## Summary
