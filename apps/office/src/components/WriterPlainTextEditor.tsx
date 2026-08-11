@@ -16,6 +16,8 @@ export interface WriterPlainTextEditorProps {
   readonly onParagraphBreak: (paragraphId: string, offset: number) => void;
   /** Receives a non-first paragraph identity when Backspace requests removal of its preceding paragraph break. */
   readonly onParagraphMerge: (paragraphId: string) => void;
+  /** Receives a non-last paragraph identity when Delete requests removal of its following paragraph break. */
+  readonly onParagraphMergeNext: (paragraphId: string) => void;
   /** Receives a stable paragraph identity when an editable paragraph gains focus. */
   readonly onParagraphFocus: (paragraphId: string) => void;
   /** Ordered immutable Writer paragraphs bound to document-integrated editable controls. */
@@ -32,6 +34,7 @@ export interface WriterPlainTextEditorProps {
  * @param props.focusParagraphId - Newly inserted paragraph that should receive browser focus at offset zero.
  * @param props.onParagraphBreak - Callback that creates a new paragraph from a collapsed native Enter caret.
  * @param props.onParagraphMerge - Callback that merges a non-first paragraph into its preceding sibling.
+ * @param props.onParagraphMergeNext - Callback that merges a following paragraph into the selected paragraph.
  * @param props.onParagraphFocus - Callback that selects a paragraph for formatting after it gains focus.
  * @param props.paragraphs - Ordered Writer paragraphs displayed in the bounded document body.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
@@ -42,6 +45,7 @@ export function WriterPlainTextEditor({
   focusParagraphId,
   onParagraphBreak,
   onParagraphMerge,
+  onParagraphMergeNext,
   onParagraphFocus,
   onTextChange,
   paragraphs,
@@ -112,6 +116,9 @@ export function WriterPlainTextEditor({
     } else if (event.key === "Backspace" && offset === 0) {
       event.preventDefault();
       onParagraphMerge(paragraphId);
+    } else if (event.key === "Delete" && offset === event.currentTarget.textContent.length) {
+      event.preventDefault();
+      onParagraphMergeNext(paragraphId);
     }
   }
 

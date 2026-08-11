@@ -87,5 +87,17 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
     expect(firstParagraph).toHaveTextContent("Before after");
     expect(firstParagraph).toHaveFocus();
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveTextContent("after");
+    firstParagraph.focus();
+    placeWriterCaret(firstParagraph, 7);
+    fireEvent.keyDown(firstParagraph, { key: "Delete" });
+    expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
+    expect(firstParagraph).toHaveTextContent("Before after");
+    expect(firstParagraph).toHaveFocus();
+    placeWriterCaret(firstParagraph, "Before after".length);
+    fireEvent.keyDown(firstParagraph, { key: "Delete" });
+    expect(screen.getAllByRole("textbox")).toHaveLength(1);
+    expect(firstParagraph).toHaveTextContent("Before after");
   });
 });

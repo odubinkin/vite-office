@@ -81,6 +81,30 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(trailingWriterParagraph).toBeVisible();
+  await writerEditor.evaluate(
+    /**
+     * Restores the leading paragraph's end caret before checking Delete removes its following paragraph break.
+     *
+     * @param element - Browser-rendered leading Writer paragraph that owns the collapsed caret.
+     * @returns Nothing; the document selection receives the collapsed end-of-paragraph range.
+     */
+    function placeCaretAtLeadingParagraphEnd(element: HTMLElement): void {
+      const selection = window.getSelection();
+      if (selection === null)
+        throw new Error("Browser selection must be available for Writer E2E coverage.");
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    },
+  );
+  await writerEditor.press("Delete");
+  await expect(trailingWriterParagraph).toHaveCount(0);
+  await expect(writerEditor).toHaveText("A browser-authored paragraph.");
+  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("menuitem", { name: "Undo" }).click();
+  await expect(trailingWriterParagraph).toBeVisible();
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(trailingWriterParagraph).toHaveCount(0);

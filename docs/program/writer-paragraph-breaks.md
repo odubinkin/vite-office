@@ -34,10 +34,16 @@ it into the preceding paragraph, retaining the preceding paragraph's identity,
 style, and alignment. This is the bounded browser counterpart of deleting a
 paragraph break; it is not exposed as a menu or toolbar action.
 
+Unmodified Delete at the end of a non-last collapsed paragraph performs the
+same transition in the forward direction: it retains the leading paragraph's
+identity, style, and alignment, and merges its following sibling into it. Like
+Backspace, this is direct document editing rather than an independent Writer
+command, so it has no menu item or toolbar button.
+
 Only unmodified Enter with a collapsed selection is modeled. Shift+Enter,
 modified Enter shortcuts, replacing a non-collapsed selection, rich-text
 boundaries, list continuation, table-cell behavior, page breaks, and Backspace
-inside text or in the first paragraph remain separate future features. When the
-browser selection is not a collapsed caret inside the editable paragraph, this
-slice leaves the native event untouched rather than guessing at a document
-transformation.
+or Delete inside text, Backspace in the first paragraph, and Delete in the last
+paragraph remain separate future features. When the browser selection is not a
+collapsed caret inside the editable paragraph, this slice leaves the native
+event untouched rather than guessing at a document transformation.

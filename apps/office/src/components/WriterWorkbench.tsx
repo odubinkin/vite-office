@@ -184,6 +184,32 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     );
   }
 
+  /** Merges the following paragraph into this one after Delete at its end caret. @param paragraphId - Existing non-last Writer paragraph identity. @returns Nothing; React schedules a merge and restores focus at the join. */
+  function handleWriterParagraphMergeNext(paragraphId: string): void {
+    const paragraphIndex = writerDocument.paragraphs.findIndex(
+      /** Finds the paragraph selected for forward merge. @param paragraph - Writer paragraph being inspected. @returns True only for paragraphId. */
+      function hasParagraphId(paragraph): boolean {
+        return paragraph.id === paragraphId;
+      },
+    );
+    if (paragraphIndex < 0 || paragraphIndex === writerDocument.paragraphs.length - 1) return;
+    const currentParagraph = writerDocument.paragraphs[paragraphIndex] as WriterParagraph;
+    const nextParagraph = writerDocument.paragraphs[paragraphIndex + 1] as WriterParagraph;
+    const joinOffset = currentParagraph.text.length;
+    setActiveParagraphId(currentParagraph.id);
+    setFocusParagraphId(currentParagraph.id);
+    setWriterHistory(
+      /** Applies the existing preceding-sibling merge with the following paragraph as its selected node. @param currentHistory - Current Writer history. @returns History containing the forward merged body. */
+      function mergeNextWorkbenchParagraph(currentHistory): TransactionHistory<WriterDocument> {
+        const nextDocument = mergeWriterParagraphWithPrevious(
+          getCurrentTransactionState(currentHistory),
+          nextParagraph.id,
+        );
+        return applyTransaction(currentHistory, nextDocument, { position: joinOffset });
+      },
+    );
+  }
+
   /**
    * Changes the active Writer paragraph alignment through an immutable history transaction.
    *
@@ -438,6 +464,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
           focusParagraphId={focusParagraphId}
           onParagraphBreak={handleWriterParagraphBreak}
           onParagraphMerge={handleWriterParagraphMerge}
+          onParagraphMergeNext={handleWriterParagraphMergeNext}
           onParagraphFocus={handleWriterParagraphFocus}
           onTextChange={handleWriterTextChange}
           paragraphs={writerDocument.paragraphs}
