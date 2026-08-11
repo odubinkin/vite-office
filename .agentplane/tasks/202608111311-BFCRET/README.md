@@ -1,10 +1,12 @@
 ---
 id: "202608111311-BFCRET"
 title: "Merge Writer paragraphs through Backspace"
-status: "DOING"
+result_summary: "Implemented bounded Writer paragraph merge through Backspace."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "06430f44d429e7852ef078b8d846e898e0b629c9"
   findings:
     - "No blocking defects found."
-commit: null
+commit:
+  hash: "2579a855cf717f66e9cfebce1dfaf8cfce09eb54"
+  message: "🧩 BFCRET task: record merge verification"
 comments:
   -
     author: "CODER"
     body: "Start: implementing bounded Writer Backspace paragraph merge at an eligible document caret without new command UI."
+  -
+    author: "CODER"
+    body: "Verified: Backspace at a non-first paragraph start merges it into its predecessor with retained formatting, focus, history, tests, and documentation."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified bounded Backspace merge behavior, inherited preceding formatting, history focus, documentation, and passing evidence."
+  -
+    type: "status"
+    at: "2026-08-11T13:14:54.067Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Backspace at a non-first paragraph start merges it into its predecessor with retained formatting, focus, history, tests, and documentation."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:14:45.276Z"
+doc_updated_at: "2026-08-11T13:14:54.068Z"
 doc_updated_by: "CODER"
 description: "Implement bounded native Backspace behavior in the integrated Writer document canvas: at a collapsed caret offset zero in a non-first plain-text paragraph, merge its text into the preceding paragraph, retain history and browser-local persistence, and focus the merged paragraph at the join offset. Do not add a toolbar or menu control."
 sections:
@@ -124,6 +138,10 @@ sections:
     Review: writer.ts at 544 lines and WriterWorkbench.tsx at 521 lines are decomposition candidates, not mandatory splits. A separate structural task is needed to keep this feature task focused.
 
     Skipped: static smoke, inventory, aggregate verify. Reason: user-approved ten-task cadence. Risk: aggregate checks have not rerun. Approval: user.
+extensions:
+  implementation_commit:
+    hash: "06430f44d429e7852ef078b8d846e898e0b629c9"
+    message: "✨ BFCRET code: Merge Writer paragraphs through Backspace"
 id_source: "generated"
 ---
 ## Summary
