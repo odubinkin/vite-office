@@ -1,10 +1,12 @@
 ---
 id: "202608111244-CYTQEK"
 title: "Place implemented Writer commands in native-style menus"
-status: "DOING"
+result_summary: "Implemented Writer commands are placed in functional native-style menus."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "npm run test:coverage --workspace @vite-office/office (48 passed; 100% thresholds); npm run test:e2e (1 passed with axe); npm run format:check; npm run lint; npm run typecheck; npm run check:docs; npm run check:file-size; git diff --check; ap doctor; node .agentplane/policy/check-routing.mjs"
   findings:
     - "No blocking defect found. The standalone paragraph append UI was removed because Writer creates ordinary paragraphs through caret/Enter behavior, which needs its own feature task."
-commit: null
+commit:
+  hash: "786fb94b3dde6a7bf147d4362c0cb110a7ff02f5"
+  message: "✅ CYTQEK task: record Writer menu evidence"
 comments:
   -
     author: "CODER"
     body: "Start: map existing browser Writer commands to pinned menu locations and remove non-native toolbar placement."
+  -
+    author: "CODER"
+    body: "Verified: native-style menu placement, upstream-precedented toolbar cleanup, strict coverage, production accessibility, documentation, and policy gates passed."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: Writer menu placement, toolbar cleanup, strict coverage, targeted production Playwright accessibility, documentation, and policy checks passed. Static, inventory, and aggregate verification remain deferred under the approved cadence."
+  -
+    type: "status"
+    at: "2026-08-11T12:51:45.931Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native-style menu placement, upstream-precedented toolbar cleanup, strict coverage, production accessibility, documentation, and policy gates passed."
 doc_version: 3
-doc_updated_at: "2026-08-11T12:51:34.432Z"
+doc_updated_at: "2026-08-11T12:51:45.932Z"
 doc_updated_by: "CODER"
 description: "Make the Writer menu bar expose every currently implemented command in its matching LibreOffice Writer menu location: browser-local open/save/plain-text export in File, undo/redo in Edit, alignment and bounded paragraph movement in Format, and bounded paragraph styles in Styles. Remove the non-Writer Add paragraph toolbar button while retaining only toolbar placement that has upstream precedent. Preserve browser-only behavior, accessibility, history, and existing visual language."
 sections:
@@ -122,6 +136,10 @@ sections:
     - Observation: Command: npm run test:coverage --workspace @vite-office/office; npm run test:e2e. Result: pass. Evidence: 48 unit tests at 100% statements, branches, functions, and lines; one production Playwright test passed with axe clean. Scope: File/Edit/Format/Styles command placement, disabled state, toolbar cleanup.
       Impact: Residual risk: deferred static inventory and aggregate verification have not run since the cadence checkpoint.
       Resolution: Run the deferred aggregate suite at the next tenth closed feature task or earlier after foundational test infrastructure changes.
+extensions:
+  implementation_commit:
+    hash: "068ea3c96130df69d409a5993e6ab18c41e396eb"
+    message: "✨ CYTQEK code: place Writer commands in menus"
 id_source: "generated"
 ---
 ## Summary
