@@ -20,6 +20,8 @@ export interface WriterPlainTextEditorProps {
   readonly onParagraphMergeNext: (paragraphId: string) => void;
   /** Receives a stable paragraph identity when an editable paragraph gains focus. */
   readonly onParagraphFocus: (paragraphId: string) => void;
+  /** Explicit request identity that asks the mounted editor to select its complete body. */
+  readonly selectAllRequestId: number | undefined;
   /** Ordered immutable Writer paragraphs bound to document-integrated editable controls. */
   readonly paragraphs: readonly WriterParagraph[];
   /** Receives a stable paragraph identity and its complete next text after a browser input event. */
@@ -36,6 +38,7 @@ export interface WriterPlainTextEditorProps {
  * @param props.onParagraphMerge - Callback that merges a non-first paragraph into its preceding sibling.
  * @param props.onParagraphMergeNext - Callback that merges a following paragraph into the selected paragraph.
  * @param props.onParagraphFocus - Callback that selects a paragraph for formatting after it gains focus.
+ * @param props.selectAllRequestId - Explicit request identity for browser selection of all rendered paragraphs.
  * @param props.paragraphs - Ordered Writer paragraphs displayed in the bounded document body.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
  * @returns A page-integrated accessible Writer document body without contextual paragraph buttons.
@@ -49,8 +52,22 @@ export function WriterPlainTextEditor({
   onParagraphFocus,
   onTextChange,
   paragraphs,
+  selectAllRequestId,
 }: WriterPlainTextEditorProps): React.JSX.Element {
   const paragraphElements = useRef(new Map<string, HTMLParagraphElement>());
+  const paragraphsRef = useRef(paragraphs);
+
+  useEffect(
+    /**
+     * Retains the latest immutable paragraph list for a later explicit browser-selection request.
+     *
+     * @returns Nothing; the non-rendering ref tracks the current displayed paragraph identities.
+     */
+    function retainCurrentParagraphs(): void {
+      paragraphsRef.current = paragraphs;
+    },
+    [paragraphs],
+  );
 
   useEffect(
     /**
@@ -62,6 +79,35 @@ export function WriterPlainTextEditor({
       if (focusParagraphId !== undefined) paragraphElements.current.get(focusParagraphId)?.focus();
     },
     [focusParagraphId],
+  );
+
+  useEffect(
+    /**
+     * Selects the rendered Writer body after an explicit Edit Select All request without mutating paragraph state.
+     *
+     * @returns Nothing; the browser selection covers the first through last editable paragraph when available.
+     */
+    function selectCompleteWriterDocument(): void {
+      if (selectAllRequestId === undefined) return;
+      const selection = globalThis.getSelection();
+      if (selection === null) return;
+      const firstWriterParagraph = paragraphsRef.current[0] as WriterParagraph;
+      const lastWriterParagraph = paragraphsRef.current[
+        paragraphsRef.current.length - 1
+      ] as WriterParagraph;
+      const firstParagraph = paragraphElements.current.get(
+        firstWriterParagraph.id,
+      ) as HTMLParagraphElement;
+      const lastParagraph = paragraphElements.current.get(
+        lastWriterParagraph.id,
+      ) as HTMLParagraphElement;
+      const range = document.createRange();
+      range.setStartBefore(firstParagraph);
+      range.setEndAfter(lastParagraph);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    },
+    [selectAllRequestId],
   );
 
   /**

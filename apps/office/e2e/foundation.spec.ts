@@ -78,6 +78,20 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await expect(writerEditor).toHaveAttribute("contenteditable", "true");
   await writerEditor.fill("A browser-authored paragraph.");
   await expect(page.getByRole("button", { name: "Undo" })).toBeEnabled();
+  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("menuitem", { name: "Select All" }).click();
+  await expect(
+    writerEditor.evaluate(
+      /**
+       * Reads the browser's selected Writer text after Edit Select All requests the complete document range.
+       *
+       * @returns The current browser selection text or an empty string when no selection exists.
+       */
+      function readWriterSelection(): string {
+        return window.getSelection()?.toString() ?? "";
+      },
+    ),
+  ).resolves.toContain("A browser-authored paragraph.");
   await page.getByRole("button", { name: "Styles" }).click();
   await page.getByRole("menuitem", { name: "Heading 1" }).click();
   await expect(writerEditor).toHaveCSS("font-size", "24px");

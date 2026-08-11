@@ -70,6 +70,14 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(secondParagraph).toHaveClass("text-2xl", "font-bold");
     expect(secondParagraph).toHaveStyle({ textAlign: "center" });
     expect(screen.getByText("Paragraph 2 is active.")).toBeInTheDocument();
+    firstParagraph.focus();
+    placeWriterCaret(firstParagraph, 1);
+    fireEvent.keyDown(firstParagraph, { key: "Delete" });
+    expect(screen.getAllByRole("textbox")).toHaveLength(2);
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+    expect(window.getSelection()?.toString()).toContain("Before");
+    expect(window.getSelection()?.toString()).toContain("after");
     fireEvent.keyDown(secondParagraph, { key: "Escape" });
     fireEvent.keyDown(secondParagraph, { key: "Enter", shiftKey: true });
     fireEvent.keyDown(secondParagraph, { altKey: true, key: "Enter" });

@@ -21,6 +21,10 @@ browser-local save/load and undo/redo. The functional
 [`WriterMenuBar`](../../apps/office/src/components/WriterMenuBar.tsx) also puts
 each enabled command in its matching Writer menu. See
 [Writer command placement](writer-command-placement.md) for pinned provenance.
+**Edit → Select All** is a direct browser selection action: it selects the
+complete current page-integrated document body without changing its serialized
+paragraph model, transaction history, or browser-local snapshot. It has no
+standard-toolbar control in this bounded Writer slice.
 When the user hides the properties sidebar from **View → Sidebar**, the canvas
 uses the released workspace width and the document, toolbars, and status bar
 remain available. The preference is transient workspace chrome state: it does

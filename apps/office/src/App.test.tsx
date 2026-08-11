@@ -153,6 +153,11 @@ describe("App" /**
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
     expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
     expect(screen.getByRole("menuitem", { name: "Undo" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+    const getSelection = vi.spyOn(window, "getSelection").mockReturnValue(null);
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+    getSelection.mockRestore();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     expect(screen.getByRole("menu", { name: "Format menu" })).toBeVisible();
     expect(screen.getByRole("menuitem", { name: "Align left" })).toHaveAttribute(

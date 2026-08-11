@@ -37,6 +37,10 @@ import { WriterPlainTextEditor } from "./WriterPlainTextEditor";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { useWriterHistoryShortcuts } from "./use-writer-history-shortcuts";
 import {
+  useWriterDocumentSelection,
+  useWriterWorkspaceChrome,
+} from "./use-writer-workspace-chrome";
+import {
   getActiveWriterParagraph,
   createWriterWorkbenchDocument,
   getNextWriterParagraphId,
@@ -60,9 +64,15 @@ export interface WriterWorkbenchProps {
 export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.Element {
   const [activeParagraphId, setActiveParagraphId] = useState("writer-paragraph-1");
   const [focusParagraphId, setFocusParagraphId] = useState<string>();
-  const [isHorizontalRulerVisible, setIsHorizontalRulerVisible] = useState(true);
-  const [isPropertiesSidebarVisible, setIsPropertiesSidebarVisible] = useState(true);
-  const [isStatusBarVisible, setIsStatusBarVisible] = useState(true);
+  const {
+    isHorizontalRulerVisible,
+    isPropertiesSidebarVisible,
+    isStatusBarVisible,
+    setIsHorizontalRulerVisible,
+    setIsPropertiesSidebarVisible,
+    setIsStatusBarVisible,
+  } = useWriterWorkspaceChrome();
+  const { requestSelectAll, selectAllRequestId } = useWriterDocumentSelection();
   const [storagePending, setStoragePending] = useState(false);
   const [storageStatus, setStorageStatus] = useState("Not saved in this browser.");
   const [writerHistory, setWriterHistory] = useState<TransactionHistory<WriterDocument>>(
@@ -433,6 +443,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             }
             onRedo={handleWriterRedo}
             onSave={handleWriterSave}
+            onSelectAll={requestSelectAll}
             onSidebarVisibilityChange={setIsPropertiesSidebarVisible}
             onStatusBarVisibilityChange={setIsStatusBarVisible}
             onStyleChange={handleWriterParagraphStyle}
@@ -480,6 +491,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
           onParagraphFocus={handleWriterParagraphFocus}
           onTextChange={handleWriterTextChange}
           paragraphs={writerDocument.paragraphs}
+          selectAllRequestId={selectAllRequestId}
         />
       </WriterWorkspaceChrome>
     </div>

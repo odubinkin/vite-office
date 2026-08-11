@@ -11,6 +11,9 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
   **File**. Browser-local load, save, and plain-text download are the bounded
   counterparts.
 - The same file places Undo and Redo in **Edit**.
+- It places `.uno:SelectAll` in **Edit**. The browser **Select All** command
+  requests a native selection range over the current integrated Writer body; it
+  has no standard-toolbar counterpart in this bounded slice.
 - It places `.uno:Sidebar` in **View**. The bounded browser **Sidebar** check
   item controls the existing properties-sidebar chrome and has no standard
   toolbar counterpart in this slice.

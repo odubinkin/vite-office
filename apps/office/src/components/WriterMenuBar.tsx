@@ -37,6 +37,8 @@ export interface WriterMenuBarProps {
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
   /** Starts the current plain-text browser download. */
   readonly onDownload: () => void;
+  /** Requests browser selection of the complete rendered Writer document. */
+  readonly onSelectAll: () => void;
   /** Loads the existing document identity from browser-local storage. */
   readonly onLoad: () => void;
   /** Moves the focused paragraph by one valid adjacent position. */
@@ -101,6 +103,7 @@ const writerMenuLabels: readonly WriterMenuLabel[] = [
  * @param props.onMoveParagraph - Callback used by Format list movement entries.
  * @param props.onRedo - Callback used by Edit Redo entry.
  * @param props.onSave - Callback used by File Save entry.
+ * @param props.onSelectAll - Callback used by Edit Select All entry.
  * @param props.onSidebarVisibilityChange - Callback used by the View Sidebar check item.
  * @param props.onStatusBarVisibilityChange - Callback used by the View Status Bar check item.
  * @param props.onStyleChange - Callback used by Styles entries.
@@ -125,6 +128,7 @@ export function WriterMenuBar({
   onMoveParagraph,
   onRedo,
   onSave,
+  onSelectAll,
   onSidebarVisibilityChange,
   onStatusBarVisibilityChange,
   onStyleChange,
@@ -333,6 +337,8 @@ export function WriterMenuBar({
         >
           {renderMenuItem("Undo", invokeMenuAction.bind(undefined, onUndo), !canUndo)}
           {renderMenuItem("Redo", invokeMenuAction.bind(undefined, onRedo), !canRedo)}
+          <div aria-hidden="true" className="my-1 border-t border-slate-200" />
+          {renderMenuItem("Select All", invokeMenuAction.bind(undefined, onSelectAll))}
         </div>
       );
     }
