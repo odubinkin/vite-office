@@ -1,10 +1,12 @@
 ---
 id: "202608111319-NNS85F"
 title: "Merge Writer paragraphs through Delete"
-status: "DOING"
+result_summary: "Native Delete merges an eligible following Writer paragraph while preserving Writer document history and properties."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +42,16 @@ quality_review:
     - "npm run test:e2e: 1 production Chromium test passed"
   findings:
     - "Delete uses the established paragraph merge transition, retaining the leading paragraph properties and avoiding a non-Writer UI command."
-commit: null
+commit:
+  hash: "61376d8311522744b6880f2a4cdc179b59d7c886"
+  message: "🧩 NNS85F task: record Delete verification"
 comments:
   -
     author: "CODER"
     body: "Start: implementing bounded Writer forward Delete paragraph merge at an eligible document caret."
+  -
+    author: "CODER"
+    body: "Verified: native Delete removes the following Writer paragraph boundary only from a collapsed end caret; fast checks, 100 percent coverage, and production Chromium evidence passed."
 events:
   -
     type: "status"
@@ -59,8 +66,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified native Delete merges a following Writer paragraph only at an eligible collapsed end caret; unit coverage is 100 percent and the production Chromium flow passes."
+  -
+    type: "status"
+    at: "2026-08-11T13:24:12.399Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Delete removes the following Writer paragraph boundary only from a collapsed end caret; fast checks, 100 percent coverage, and production Chromium evidence passed."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:23:59.808Z"
+doc_updated_at: "2026-08-11T13:24:12.401Z"
 doc_updated_by: "CODER"
 description: "Implement bounded native Delete behavior in the integrated Writer document canvas: at a collapsed caret at the end of a non-last plain-text paragraph, merge the following paragraph into it, retain the preceding paragraph properties, preserve immutable history and browser-local persistence, and focus the join boundary without adding a UI command."
 sections:
@@ -122,6 +136,10 @@ sections:
     - Observation: Static smoke, LibreOffice inventory, and aggregate verify were intentionally deferred under the agreed ten-task cadence.
       Impact: Broader cross-workspace regression evidence is not refreshed for this individual task.
       Resolution: Run the deferred aggregate checks at the next cadence checkpoint.
+extensions:
+  implementation_commit:
+    hash: "51a4c61a8693acb21c43ebaabb82bdad311264f2"
+    message: "✨ NNS85F code: Merge Writer paragraphs through Delete"
 id_source: "generated"
 ---
 ## Summary
