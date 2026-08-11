@@ -1,10 +1,12 @@
 ---
 id: "202608111220-0Y8VC6"
 title: "Implement Writer paragraph reordering"
-status: "DOING"
+result_summary: "Writer paragraph reordering verified."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "Implementation commit aaad1b11b055631af1d87f17101b4162bffb8e14; Prettier, lint, typecheck, JSDoc validation (109 files), file-size review, and diff check passed; 50 focused app tests passed at 100% coverage; targeted production Playwright and axe passed; ap doctor and routing validation passed."
   findings:
     - "No defects found in the approved scope: movement validates direction and bounds, preserves paragraph identity and formatting, retains active focus, participates in history and storage, and is covered by accessibility and production-browser evidence."
-commit: null
+commit:
+  hash: "837f437596a6f249898285a05ff5dee9566359ce"
+  message: "✅ 0Y8VC6 task: record Writer reorder evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implementing the approved bounded Writer adjacent-paragraph reordering model, contextual controls, history and storage behavior, provenance documentation, and focused evidence."
+  -
+    author: "CODER"
+    body: "Verified: adjacent Writer paragraph reordering passed strict coverage, production browser accessibility, documentation, and policy checks."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: Writer can move one paragraph adjacent up or down while retaining paragraph identity, text, alignment, and style. First/last controls enforce boundaries, the moved paragraph remains active, history restores order, and browser-local snapshots retain the body order. Passed Prettier, lint, typecheck, JSDoc (109 files), file-size review, diff check, 50 focused app tests at 100% coverage, and targeted production Playwright plus axe. Static smoke, inventory, and full aggregation remain deferred under the user-approved every-ten-tasks cadence; targeted Playwright built production assets."
+  -
+    type: "status"
+    at: "2026-08-11T12:27:50.542Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: adjacent Writer paragraph reordering passed strict coverage, production browser accessibility, documentation, and policy checks."
 doc_version: 3
-doc_updated_at: "2026-08-11T12:27:32.280Z"
+doc_updated_at: "2026-08-11T12:27:50.544Z"
 doc_updated_by: "CODER"
 description: "Add a bounded immutable Writer paragraph reordering capability that moves one selected paragraph one position up or down while preserving its text, style, alignment, identity, browser-local persistence, and undo/redo behavior. Expose contextual accessible movement controls in the Writer document canvas and map the narrow operation to pinned Writer MoveParagraph evidence without claiming change tracking, range selection, or layout parity."
 sections:
@@ -115,6 +129,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "aaad1b11b055631af1d87f17101b4162bffb8e14"
+    message: "✨ 0Y8VC6 code: reorder Writer paragraphs"
 id_source: "generated"
 ---
 ## Summary
