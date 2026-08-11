@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111435-5W664B",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T14:48:40.539Z",
+  "verdict": "pass",
+  "summary": "Clipboard behavior now preserves modeled paragraph formatting without leaking accessibility-only style descriptions.",
+  "evaluated_sha": "f73b02aee23e6a254a6fceb4901d313ddb1714e7",
+  "blueprint_digest": "143ad6092c0ebeae0441c65669f2a1e3d2cb7febef2397524a84336b83cd9589",
+  "findings": [
+    "Native Writer copy overrides default DOM serialization with visible paragraph-only text/plain and text/html; a Heading 1 uses Heading 1 styling rather than Default Paragraph Style."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111435-5W664B/README.md",
+    "f73b02a; npm run test:coverage; npm run test:e2e; npm run inventory:parity; format/lint/typecheck/JSDoc/file-size/diff/doctor/routing"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
