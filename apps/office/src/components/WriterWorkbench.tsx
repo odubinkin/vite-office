@@ -467,7 +467,6 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             canRedo={writerHistory.index < writerHistory.entries.length - 1}
             canUndo={writerHistory.index > 0}
             isStoragePending={storagePending}
-            onDownload={handleWriterDownload}
             onLoad={handleWriterLoad}
             onRedo={handleWriterRedo}
             onSave={handleWriterSave}

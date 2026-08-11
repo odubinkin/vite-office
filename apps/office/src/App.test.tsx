@@ -38,6 +38,12 @@ describe("App" /**
     expect(screen.getByRole("region", { name: "Writer workspace" })).toBeVisible();
     expect(screen.getByRole("navigation", { name: "Writer menu bar" })).toBeVisible();
     expect(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).toBeVisible();
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).queryByRole(
+        "button",
+        { name: "Download text" },
+      ),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).toBeVisible();
     const documentCanvas = screen.getByRole("region", { name: "Writer document canvas" });
     expect(documentCanvas).toBeVisible();
@@ -427,7 +433,8 @@ describe("App" /**
       screen.getByRole("textbox", { name: "Writer document text" }),
       "Download body",
     );
-    fireEvent.click(screen.getByRole("button", { name: "Download text" }));
+    fireEvent.click(screen.getByRole("button", { name: "File" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Save as text…" }));
     expect(screen.getByText("Plain-text download started.")).toBeInTheDocument();
     expect(await downloadedBlob?.text()).toBe("Download body");
     createObjectUrl.mockImplementationOnce(
@@ -436,7 +443,8 @@ describe("App" /**
         throw new Error("unsupported");
       },
     );
-    fireEvent.click(screen.getByRole("button", { name: "Download text" }));
+    fireEvent.click(screen.getByRole("button", { name: "File" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Save as text…" }));
     expect(screen.getByText("Could not start plain-text download.")).toBeInTheDocument();
     click.mockRestore();
   });

@@ -17,8 +17,11 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 - `WriterCommands.xcu` declares Default Paragraph and Heading 1 style commands;
   the bounded browser style choices are available in **Styles**.
 
-The standard toolbar retains Save, Open, text download, Undo, and Redo. The
-former **Add paragraph** toolbar control was removed: normal Writer paragraph
+`sw/uiconfig/swriter/toolbar/standardbar.xml` supplies Open, Save, Undo, and
+Redo, but no generic plain-text download command. Accordingly, the standard
+toolbar retains only the bounded Save, Open, Undo, and Redo controls; the
+browser text export remains **File → Save as text…**. The former **Add
+paragraph** toolbar control was removed: normal Writer paragraph
 creation is caret/Enter behavior, not a standalone toolbar command. The
 implemented browser equivalent now intercepts unmodified **Enter** at a
 collapsed editable-paragraph caret, splits the text into an adjacent paragraph,

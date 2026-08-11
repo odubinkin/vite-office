@@ -17,6 +17,11 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await expect(page.getByRole("region", { name: "Writer workspace" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Writer menu bar" })).toBeVisible();
   await expect(page.getByRole("toolbar", { name: "Writer standard toolbar" })).toBeVisible();
+  await expect(
+    page
+      .getByRole("toolbar", { name: "Writer standard toolbar" })
+      .getByRole("button", { name: "Download text" }),
+  ).toHaveCount(0);
   await expect(page.getByRole("toolbar", { name: "Writer formatting toolbar" })).toBeVisible();
   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
   await expect(page.getByRole("article", { name: "Writer document body" })).toBeVisible();

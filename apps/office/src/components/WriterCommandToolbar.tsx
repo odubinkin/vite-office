@@ -2,7 +2,7 @@
  * @fileoverview Renders the implemented Writer commands in a compact standard-toolbar presentation.
  */
 
-import { Download, FolderOpen, Redo2, Save, Undo2 } from "lucide-react";
+import { FolderOpen, Redo2, Save, Undo2 } from "lucide-react";
 
 /** Defines the implemented command state and callbacks placed in the Writer standard toolbar. */
 export interface WriterCommandToolbarProps {
@@ -12,8 +12,6 @@ export interface WriterCommandToolbarProps {
   readonly canUndo: boolean;
   /** Whether browser-local storage actions are currently pending. */
   readonly isStoragePending: boolean;
-  /** Requests browser plain-text download of the ordered paragraph body. */
-  readonly onDownload: () => void;
   /** Requests loading the Writer document from browser-local storage. */
   readonly onLoad: () => void;
   /** Requests restoration of the following Writer history snapshot. */
@@ -31,7 +29,6 @@ export interface WriterCommandToolbarProps {
  * @param props.canRedo - Whether Redo is available.
  * @param props.canUndo - Whether Undo is available.
  * @param props.isStoragePending - Whether Save and Load should be disabled temporarily.
- * @param props.onDownload - Callback starting text download.
  * @param props.onLoad - Callback starting browser-local load.
  * @param props.onRedo - Callback restoring the following history entry.
  * @param props.onSave - Callback starting browser-local save.
@@ -42,7 +39,6 @@ export function WriterCommandToolbar({
   canRedo,
   canUndo,
   isStoragePending,
-  onDownload,
   onLoad,
   onRedo,
   onSave,
@@ -69,15 +65,6 @@ export function WriterCommandToolbar({
         type="button"
       >
         <FolderOpen aria-hidden="true" size={18} />
-      </button>
-      <button
-        aria-label="Download text"
-        className="grid size-9 place-items-center rounded-lg text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800"
-        onClick={onDownload}
-        title="Download text"
-        type="button"
-      >
-        <Download aria-hidden="true" size={18} />
       </button>
       <span aria-hidden="true" className="mx-1 h-6 border-l border-slate-200" />
       <button
