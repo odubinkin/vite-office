@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111253-HPNK5X",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T13:06:39.603Z",
+  "verdict": "pass",
+  "summary": "Caret-based Writer paragraph breaks meet the approved bounded scope with complete fast and focused browser evidence.",
+  "evaluated_sha": "dd5e601ca76678060ae349de8ab42d0c74950e72",
+  "blueprint_digest": "40aeab6e2e2e746b9051595efc15b64bbb689ed55b6e5dac8fd3c7719fbe9c51",
+  "findings": [
+    "No blocking defects found in the reviewed immutable split, focus, history, documentation, or targeted UI flow."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111253-HPNK5X/README.md",
+    "dd5e601ca76678060ae349de8ab42d0c74950e72"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
