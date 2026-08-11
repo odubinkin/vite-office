@@ -18,14 +18,15 @@ defines the durable UI placement contract:
 Implemented commands are placed in the standard toolbar through
 [`WriterCommandToolbar`](../../apps/office/src/components/WriterCommandToolbar.tsx):
 browser-local save/load, plain-text download, undo/redo, and paragraph append.
-The existing editor renders in the document canvas. The formatting toolbar now
+The existing editor renders as integrated editable paragraph blocks in the document canvas. The formatting toolbar now
 contains real left, center, right, and justified controls for the focused
 paragraph; their current value appears in the properties sidebar. The existing
 Paragraph style selector likewise applies Default Paragraph Style or Heading 1
-to the focused paragraph. Paragraph removal remains a contextual control
-because keyboard/range editing is not implemented yet. Adjacent paragraph
-movement is also contextual in the document canvas rather than a claim of
-LibreOffice drag, range, or tracked-change movement.
+to the focused paragraph. The page does not display persistent paragraph action
+buttons. Adjacent paragraph movement is in the formatting toolbar's Paragraph
+actions menu, which follows Writer notebookbar placement without claiming
+LibreOffice drag, range, or tracked-change movement. Whole-paragraph removal
+has no browser UI until keyboard/range editing is explicitly implemented.
 
 The menu items, remaining character-format controls, ruler, page count,
 language indicator, and most Writer commands are visual placement contracts

@@ -19,14 +19,16 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await expect(page.getByRole("toolbar", { name: "Writer standard toolbar" })).toBeVisible();
   await expect(page.getByRole("toolbar", { name: "Writer formatting toolbar" })).toBeVisible();
   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+  await expect(page.getByRole("article", { name: "Writer document body" })).toBeVisible();
   await expect(
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toBeVisible();
   await expect(page.getByRole("status", { name: "Writer status bar" })).toBeVisible();
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await expect(writerEditor).toBeVisible();
+  await expect(writerEditor).toHaveAttribute("contenteditable", "true");
   await writerEditor.fill("A browser-authored paragraph.");
-  await expect(page.getByText("Unsaved changes · revision 1")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Undo" })).toBeEnabled();
   await page.getByLabel("Paragraph style").selectOption("heading-1");
   await expect(writerEditor).toHaveCSS("font-size", "24px");
   await expect(writerEditor).toHaveCSS("font-weight", "700");
@@ -43,11 +45,16 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await page.getByRole("button", { name: "Add paragraph" }).click();
   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
   await secondParagraph.fill("Second browser-authored paragraph.");
-  await expect(page.getByRole("button", { name: "Move paragraph 1 up" })).toBeDisabled();
-  await page.getByRole("button", { name: "Move paragraph 2 up" }).click();
-  await expect(page.getByRole("textbox", { name: "Writer document text" })).toHaveValue(
+  const paragraphActions = page.getByLabel("Paragraph actions");
+  await expect(paragraphActions.getByRole("option", { name: "Move paragraph up" })).toBeEnabled();
+  await expect(
+    paragraphActions.getByRole("option", { name: "Move paragraph down" }),
+  ).toBeDisabled();
+  await paragraphActions.selectOption("up");
+  await expect(page.getByRole("textbox", { name: "Writer document text" })).toHaveText(
     "Second browser-authored paragraph.",
   );
+  await expect(page.getByRole("button", { name: "Move paragraph 1 up" })).toHaveCount(0);
 
   const calcButton = page.getByRole("button", { name: "Calc, Foundation only" });
   await calcButton.focus();

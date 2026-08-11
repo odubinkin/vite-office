@@ -6,13 +6,14 @@ named paragraph, swaps its existing object with its adjacent neighbor, and
 returns a dirty immutable document. Because the same paragraph object moves,
 its text, identity, alignment, and bounded paragraph style are retained.
 
-The document canvas provides contextual **Move up** and **Move down** controls
-for every paragraph when more than one exists. The first paragraph cannot move
-up and the last cannot move down. A successful movement keeps the moved
-paragraph as the active formatting target and is recorded in existing undo/redo
-history. Complete ordered bodies already persist through the browser-local
-snapshot contract, so reordering survives save and load without a new storage
-format.
+The formatting toolbar provides a **Paragraph actions** menu for the focused
+paragraph. Its Move paragraph up/down items map the upstream notebookbar's
+paragraph menu placement without adding persistent controls beside document
+text. The first paragraph cannot move up and the last cannot move down. A
+successful movement keeps the moved paragraph as the active formatting target
+and is recorded in existing undo/redo history. Complete ordered bodies already
+persist through the browser-local snapshot contract, so reordering survives
+save and load without a new storage format.
 
 ## Pinned LibreOffice provenance
 
@@ -21,6 +22,11 @@ The pinned `libreoffice-26.8.0.2` source calls `SwEditShell::MoveParagraph` in
 changes. The local feature maps only the adjacent, non-tracked ordered-body
 operation; it intentionally does not map redline semantics, cursor/range
 selection, or the upstream test's layout consequences.
+
+`sw/uiconfig/swriter/ui/notebookbar_groupedbar_compact.ui` and
+`notebookbar_groupedbar_full.ui` also declare `MenuParagraph-MoveUp` and
+`MenuParagraph-MoveDown`. The browser action menu is a placement-equivalent
+control, not a native notebookbar reproduction.
 
 ## Deliberate limits
 

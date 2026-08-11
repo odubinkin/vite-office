@@ -4,7 +4,11 @@
 
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight, type LucideIcon } from "lucide-react";
 
-import type { WriterParagraphAlignment, WriterParagraphStyle } from "../domain/writer";
+import type {
+  WriterParagraphAlignment,
+  WriterParagraphMoveDirection,
+  WriterParagraphStyle,
+} from "../domain/writer";
 
 /** Describes one labelled formatting-toolbar command for a supported paragraph alignment. */
 interface ParagraphAlignmentControl {
@@ -28,8 +32,14 @@ const paragraphAlignmentControls: readonly ParagraphAlignmentControl[] = [
 export interface WriterParagraphFormattingToolbarProps {
   /** Alignment of the currently focused Writer paragraph. */
   readonly alignment: WriterParagraphAlignment;
+  /** Whether moving the focused Writer paragraph one position down is possible. */
+  readonly canMoveDown: boolean;
+  /** Whether moving the focused Writer paragraph one position up is possible. */
+  readonly canMoveUp: boolean;
   /** Requests a new alignment for the currently focused Writer paragraph. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
+  /** Requests one upstream-placed adjacent movement for the focused Writer paragraph. */
+  readonly onMoveParagraph: (direction: WriterParagraphMoveDirection) => void;
   /** Requests a new style for the currently focused Writer paragraph. */
   readonly onStyleChange: (style: WriterParagraphStyle) => void;
   /** Style of the currently focused Writer paragraph. */
@@ -41,14 +51,20 @@ export interface WriterParagraphFormattingToolbarProps {
  *
  * @param props - Focused paragraph formatting and callbacks owned by the Writer workbench.
  * @param props.alignment - Alignment currently applied to the active Writer paragraph.
+ * @param props.canMoveDown - Whether the downstream paragraph-menu item is enabled.
+ * @param props.canMoveUp - Whether the upstream paragraph-menu item is enabled.
  * @param props.onAlignmentChange - Callback that records the requested paragraph alignment.
+ * @param props.onMoveParagraph - Callback that records a focused-paragraph adjacent movement.
  * @param props.onStyleChange - Callback that records the requested paragraph style.
  * @param props.style - Style currently applied to the active Writer paragraph.
  * @returns A semantic formatting toolbar with four usable paragraph-alignment controls.
  */
 export function WriterParagraphFormattingToolbar({
   alignment,
+  canMoveDown,
+  canMoveUp,
   onAlignmentChange,
+  onMoveParagraph,
   onStyleChange,
   style,
 }: WriterParagraphFormattingToolbarProps): React.JSX.Element {
@@ -144,6 +160,35 @@ export function WriterParagraphFormattingToolbar({
           },
         )}
       </div>
+      <label className="sr-only" htmlFor="writer-paragraph-actions">
+        Paragraph actions
+      </label>
+      <select
+        className="h-8 min-w-36 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700 outline-none transition focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100"
+        id="writer-paragraph-actions"
+        onChange={
+          /**
+           * Routes a notebookbar-equivalent paragraph menu item to the active paragraph.
+           *
+           * @param event - Browser selection event emitted by the paragraph action menu.
+           * @returns Nothing; the workbench schedules a history transition when an action is selected.
+           */
+          function changeParagraphAction(event: React.ChangeEvent<HTMLSelectElement>): void {
+            if (event.target.value === "up" || event.target.value === "down") {
+              onMoveParagraph(event.target.value);
+            }
+          }
+        }
+        value="none"
+      >
+        <option value="none">Paragraph actions</option>
+        <option disabled={!canMoveUp} value="up">
+          Move paragraph up
+        </option>
+        <option disabled={!canMoveDown} value="down">
+          Move paragraph down
+        </option>
+      </select>
       <span className="text-xs font-medium text-slate-500">Paragraph alignment</span>
     </>
   );

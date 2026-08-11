@@ -22,8 +22,9 @@ shared lifecycle transition to become dirty; an identical replacement preserves
 the original Writer document. Blank initial IDs, missing paragraph IDs, and
 invalid insertion offsets throw deterministic errors.
 
-The Writer workbench renders ordered, labelled, keyboard-operable plain-text
-textareas only when Writer is selected. Its **Add paragraph** action delegates
+The Writer workbench renders ordered, keyboard-operable plain-text editable
+paragraph blocks directly in the document page only when Writer is selected.
+Its **Add paragraph** action delegates
 to the same immutable append contract; all paragraph changes participate in
 history, browser-local snapshots, and line-separated plain-text download.
 

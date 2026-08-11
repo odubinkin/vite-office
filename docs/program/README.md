@@ -147,8 +147,10 @@ The following documents form the program control plane:
   Paragraph Style and Heading 1 state, focused selection, and snapshot defaults.
 - [Browser Writer paragraph reordering](writer-paragraph-reordering.md): bounded
   adjacent movement that preserves paragraph content and formatting state.
+- [Browser Writer integrated document canvas](writer-document-canvas.md):
+  page-integrated editable paragraphs and Writer-inspired paragraph-control placement.
 - [Browser Writer plain-text editor workbench](writer-plain-text-editor.md):
-  accessible in-memory textareas backed by the Writer paragraph model.
+  accessible in-memory editable paragraphs backed by the Writer paragraph model.
 - [LibreOffice-style Writer UI shell](writer-ui-shell.md): durable menu,
   toolbar, ruler, document canvas, sidebar, and status-bar placement contract.
 - [Browser command registry](command-registry.md): typed, browser-independent

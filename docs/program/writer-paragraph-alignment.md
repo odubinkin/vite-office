@@ -8,11 +8,11 @@ changes exactly one named paragraph, marks a changed document dirty, preserves
 an identical state by reference, and participates in the existing immutable
 undo/redo history.
 
-The active textarea determines the target paragraph. The four controls are in
+The active editable paragraph determines the target paragraph. The four controls are in
 the Writer formatting toolbar, and their pressed state uses accessible toggle
 semantics. The same active alignment appears in the right properties sidebar.
-The browser textarea receives the corresponding CSS `text-align` value, so the
-result remains visible without pretending that browser textareas implement
+The browser editable paragraph receives the corresponding CSS `text-align` value, so the
+result remains visible without pretending that browser editing implements
 LibreOffice line layout or justification algorithms.
 
 New and appended paragraphs default to left alignment. Browser-local snapshots

@@ -16,7 +16,6 @@ import {
 } from "../domain/history";
 import {
   appendWriterParagraph,
-  removeWriterParagraph,
   replaceWriterParagraph,
   setWriterParagraphAlignment,
   setWriterParagraphStyle,
@@ -87,7 +86,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
    * Replaces the selected Writer paragraph text through the immutable domain transition.
    *
    * @param paragraphId - Stable identity of the Writer paragraph being edited.
-   * @param text - Complete next plain-text value emitted by the Writer textarea.
+   * @param text - Complete next plain-text value emitted by the Writer editable paragraph.
    * @returns Nothing; React schedules the next Writer document state.
    */
   function handleWriterTextChange(paragraphId: string, text: string): void {
@@ -113,9 +112,9 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
   }
 
   /**
-   * Records the paragraph whose textarea is currently focused for subsequent formatting commands.
+   * Records the paragraph whose editable block is currently focused for subsequent formatting commands.
    *
-   * @param paragraphId - Existing Writer paragraph identity emitted by the focused textarea.
+   * @param paragraphId - Existing Writer paragraph identity emitted by the focused editable block.
    * @returns Nothing; React schedules focused-paragraph state.
    */
   function handleWriterParagraphFocus(paragraphId: string): void {
@@ -214,51 +213,6 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       /** Swaps the requested paragraph in current immutable history. @param currentHistory - Current Writer workbench history state. @returns History containing the reordered body as its latest snapshot. */
       function moveWorkbenchParagraph(currentHistory): TransactionHistory<WriterDocument> {
         return moveWriterParagraphInHistory(currentHistory, paragraphId, direction);
-      },
-    );
-  }
-
-  /**
-   * Removes one eligible Writer paragraph through an immutable history transaction.
-   *
-   * @param paragraphId - Stable identity of the paragraph to remove.
-   * @returns Nothing; React schedules the reduced document state.
-   */
-  function handleWriterRemoveParagraph(paragraphId: string): void {
-    if (paragraphId === activeParagraphId) {
-      const removedParagraphIndex = writerDocument.paragraphs.findIndex(
-        /**
-         * Finds the visible body position of the paragraph being removed.
-         *
-         * @param paragraph - Immutable paragraph candidate inspected without mutation.
-         * @returns True only when paragraph owns the removed identity.
-         */
-        function hasRemovedIdentity(paragraph): boolean {
-          return paragraph.id === paragraphId;
-        },
-      );
-      const replacementParagraph = writerDocument.paragraphs[
-        removedParagraphIndex === 0 ? 1 : removedParagraphIndex - 1
-      ] as WriterParagraph;
-      setActiveParagraphId(replacementParagraph.id);
-    }
-    setWriterHistory(
-      /**
-       * Removes the selected paragraph from the current immutable history document.
-       *
-       * @param currentHistory - Immutable Writer history before paragraph removal.
-       * @returns History containing the reduced paragraph body as its latest snapshot.
-       */
-      function removeWorkbenchParagraph(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        const nextDocument = removeWriterParagraph(
-          getCurrentTransactionState(currentHistory),
-          paragraphId,
-        );
-        return applyTransaction(currentHistory, nextDocument, {
-          position: getWorkbenchSelectionPosition(nextDocument),
-        });
       },
     );
   }
@@ -455,7 +409,20 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         formattingToolbar={
           <WriterParagraphFormattingToolbar
             alignment={activeParagraph.alignment}
+            canMoveDown={activeParagraphIndex < writerDocument.paragraphs.length - 1}
+            canMoveUp={activeParagraphIndex > 0}
             onAlignmentChange={handleWriterParagraphAlignment}
+            onMoveParagraph={
+              /**
+               * Moves the currently focused paragraph through the placement-equivalent toolbar menu.
+               *
+               * @param direction - Requested adjacent movement direction from the paragraph menu.
+               * @returns Nothing; the workbench records a reordered history snapshot.
+               */
+              function moveActiveParagraph(direction): void {
+                handleWriterMoveParagraph(activeParagraph.id, direction);
+              }
+            }
             onStyleChange={handleWriterParagraphStyle}
             style={activeParagraph.style}
           />
@@ -484,10 +451,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       >
         <WriterPlainTextEditor
           activeParagraphId={activeParagraph.id}
-          document={writerDocument.document}
-          onMoveParagraph={handleWriterMoveParagraph}
           onParagraphFocus={handleWriterParagraphFocus}
-          onRemoveParagraph={handleWriterRemoveParagraph}
           onTextChange={handleWriterTextChange}
           paragraphs={writerDocument.paragraphs}
         />

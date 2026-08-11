@@ -8,7 +8,7 @@ existing lifecycle, transaction history, browser-local snapshot, undo, and redo
 contracts.
 
 The existing **Paragraph style** select in the formatting toolbar applies its
-value to the focused textarea. `Heading 1` is visibly larger and bold in the
+value to the focused editable paragraph. `Heading 1` is visibly larger and bold in the
 bounded browser editing surface, and its accessible description and properties
 sidebar state identify the style. This is paragraph-level styling, not an HTML
 heading tree or a replacement for Writer's document semantics.
