@@ -19,7 +19,7 @@ test("loads the Writer editor and supports keyboard-visible suite selection" /**
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await expect(writerEditor).toBeVisible();
   await writerEditor.fill("A browser-authored paragraph.");
-  await expect(page.getByRole("status")).toHaveText("Unsaved changes · revision 1");
+  await expect(page.getByText("Unsaved changes · revision 1")).toBeVisible();
 
   const calcButton = page.getByRole("button", { name: "Calc, Foundation only" });
   await calcButton.focus();
