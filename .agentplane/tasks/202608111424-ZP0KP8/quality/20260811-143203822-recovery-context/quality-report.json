@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111424-ZP0KP8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T14:32:03.822Z",
+  "verdict": "pass",
+  "summary": "Browser-runtime parity exceptions are explicitly auditable and cannot count as implementation coverage.",
+  "evaluated_sha": "778c839e58b7464d2a4874f98522b5cf57150784",
+  "blueprint_digest": "6df790a9ded818fd4ae4fbd4d6193cfc4105809abc4063b1877d0dd374748183",
+  "findings": [
+    "The deterministic report exposes capability and upstream-test exceptions separately with count zero for the current Writer slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111424-ZP0KP8/README.md",
+    "778c839; npm run test:inventory:coverage; npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference; npm run check:docs; npm run typecheck"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
