@@ -86,26 +86,30 @@ describe("App" /**
     ).toBeEnabled();
   });
 
-  it("appends ordered Writer paragraphs through undoable immutable history" /**
-   * Verifies paragraph append, text editing, and history restoration preserve each paragraph position.
+  it("places implemented Writer commands in accessible top-level menus" /**
+   * Verifies File, Edit, Format, and Styles open their Writer-positioned command popups while Add paragraph is absent.
    *
-   * @returns Nothing; assertions cover visible multi-paragraph editing behavior.
-   */, function appendsWriterParagraphs(): void {
+   * @returns Nothing; assertions cover bounded command placement and disabled state.
+   */, function rendersWriterMenus(): void {
     render(<App />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
-    const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
-    enterWriterParagraphText(secondParagraph, "Second plain-text paragraph");
-    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
-    expect(secondParagraph).toHaveTextContent("");
-    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
-    expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
-    expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveTextContent("");
-    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
-    expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveTextContent(
-      "Second plain-text paragraph",
+    fireEvent.click(screen.getByRole("button", { name: "File" }));
+    expect(screen.getByRole("menu", { name: "File menu" })).toBeVisible();
+    expect(screen.getByRole("menuitem", { name: "Save" })).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: "File" }));
+    expect(screen.queryByRole("menu", { name: "File menu" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
+    expect(screen.getByRole("menuitem", { name: "Undo" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    expect(screen.getByRole("menu", { name: "Format menu" })).toBeVisible();
+    expect(screen.getByRole("menuitem", { name: "Align left" })).toHaveAttribute(
+      "aria-current",
+      "true",
     );
+    fireEvent.click(screen.getByRole("button", { name: "Styles" }));
+    expect(screen.getByRole("menu", { name: "Styles menu" })).toBeVisible();
+    expect(screen.queryByRole("button", { name: "Add paragraph" })).not.toBeInTheDocument();
   });
 
   it("formats the focused Writer paragraph through the formatting toolbar and history" /**
@@ -139,32 +143,20 @@ describe("App" /**
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align center" }));
     expect(firstParagraph).toHaveStyle({ textAlign: "center" });
     expect(screen.getByText("Centered")).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
-    const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
-    fireEvent.focus(secondParagraph);
-    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align right" }));
-    expect(firstParagraph).toHaveStyle({ textAlign: "center" });
-    expect(secondParagraph).toHaveStyle({ textAlign: "right" });
-    expect(screen.getByText("Paragraph 2 is active.")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
-    expect(secondParagraph).toHaveStyle({ textAlign: "left" });
-    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
-    expect(secondParagraph).toHaveStyle({ textAlign: "right" });
   });
 
   it("does not put structural paragraph actions in the document page" /**
-   * Verifies page-integrated text has no persistent removal or movement buttons; movement lives in the formatting toolbar.
+   * Verifies page-integrated text has no persistent removal or movement buttons; movement belongs to Format.
    *
    * @returns Nothing; assertions cover Writer-consistent action placement.
    */, function keepsParagraphActionsOutOfCanvas(): void {
     render(<App />);
 
     expect(screen.queryByRole("button", { name: "Remove paragraph 1" })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
     expect(screen.queryByRole("button", { name: "Move paragraph 1 up" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Remove paragraph 2" })).not.toBeInTheDocument();
-    expect(screen.getByLabelText("Paragraph actions")).toBeInTheDocument();
+    expect(screen.queryByLabelText("Paragraph actions")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    expect(screen.getByRole("menuitem", { name: "Move item up" })).toBeDisabled();
   });
 
   it("updates the preview and live status when a suite is selected" /**
@@ -224,10 +216,6 @@ describe("App" /**
       fireEvent.change(screen.getByLabelText("Paragraph style"), {
         target: { value: "heading-1" },
       });
-      fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
-      const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
-      enterWriterParagraphText(secondParagraph, "Stored second body");
-      fireEvent.click(screen.getByRole("button", { name: "Align right" }));
       await act(
         /** Starts the asynchronous save interaction. @returns A fulfilled React act promise. */
         async function savesDocument(): Promise<void> {
@@ -241,7 +229,6 @@ describe("App" /**
         },
       );
       enterWriterParagraphText(editor, "Changed body");
-      enterWriterParagraphText(secondParagraph, "Changed second body");
       await act(
         /** Starts the asynchronous load interaction. @returns A fulfilled React act promise. */
         async function loadsDocument(): Promise<void> {
@@ -253,8 +240,6 @@ describe("App" /**
         async function verifiesLoadedDocument(): Promise<void> {
           expect(editor).toHaveTextContent("Stored body");
           expect(editor).toHaveClass("text-2xl", "font-bold");
-          expect(secondParagraph).toHaveTextContent("Stored second body");
-          expect(secondParagraph).toHaveStyle({ textAlign: "right" });
           expect(screen.getByText("Loaded local saved copy.")).toBeInTheDocument();
         },
       );
@@ -269,8 +254,8 @@ describe("App" /**
   it("assigns a non-colliding paragraph identity after loading an irregular saved body" /**
    * Verifies the workbench skips an occupied generated identity when historical local data has a gap.
    *
-   * @returns A promise resolved after the loaded body and appended control are asserted.
-   */, async function appendsAfterIrregularLoad(): Promise<void> {
+   * @returns A promise resolved after the loaded body and menu-based move are asserted.
+   */, async function loadsAndMovesIrregularBody(): Promise<void> {
     const originalIndexedDb = globalThis.indexedDB;
     Object.defineProperty(globalThis, "indexedDB", {
       configurable: true,
@@ -316,8 +301,12 @@ describe("App" /**
           );
         },
       );
-      fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
-      expect(screen.getByRole("textbox", { name: "Writer paragraph 3" })).toHaveTextContent("");
+      fireEvent.focus(screen.getByRole("textbox", { name: "Writer paragraph 2" }));
+      fireEvent.click(screen.getByRole("button", { name: "Format" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Move item up" }));
+      expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
+        "Third stored paragraph",
+      );
     } finally {
       Object.defineProperty(globalThis, "indexedDB", {
         configurable: true,
@@ -438,14 +427,9 @@ describe("App" /**
       screen.getByRole("textbox", { name: "Writer document text" }),
       "Download body",
     );
-    fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
-    enterWriterParagraphText(
-      screen.getByRole("textbox", { name: "Writer paragraph 2" }),
-      "Second download body",
-    );
     fireEvent.click(screen.getByRole("button", { name: "Download text" }));
     expect(screen.getByText("Plain-text download started.")).toBeInTheDocument();
-    expect(await downloadedBlob?.text()).toBe("Download body\nSecond download body");
+    expect(await downloadedBlob?.text()).toBe("Download body");
     createObjectUrl.mockImplementationOnce(
       /** Simulates unsupported browser object URL creation. @returns No URL because this call throws. */
       function rejectsObjectUrl(): string {

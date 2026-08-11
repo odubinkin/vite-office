@@ -15,7 +15,6 @@ import {
   type TransactionHistory,
 } from "../domain/history";
 import {
-  appendWriterParagraph,
   replaceWriterParagraph,
   setWriterParagraphAlignment,
   setWriterParagraphStyle,
@@ -32,6 +31,7 @@ import {
 import { downloadPlainText } from "../platform/browser-download";
 import { IndexedDbDocumentStorageAdapter } from "../platform/indexeddb-storage";
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
+import { WriterMenuBar } from "./WriterMenuBar";
 import { WriterParagraphFormattingToolbar } from "./WriterParagraphFormattingToolbar";
 import { WriterParagraphProperties } from "./WriterParagraphProperties";
 import { WriterPlainTextEditor } from "./WriterPlainTextEditor";
@@ -39,7 +39,6 @@ import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import {
   getActiveWriterParagraph,
   createWriterWorkbenchDocument,
-  getNextWriterParagraphId,
   getWorkbenchSelectionPosition,
   moveWriterParagraphInHistory,
 } from "./writer-workbench-helpers";
@@ -179,29 +178,6 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
           : applyTransaction(currentHistory, nextDocument, {
               position: getWorkbenchSelectionPosition(nextDocument),
             });
-      },
-    );
-  }
-
-  /** Appends an empty Writer paragraph through an immutable history transaction. @returns Nothing; React schedules the appended document state. */
-  function handleWriterAppendParagraph(): void {
-    const nextParagraphId = getNextWriterParagraphId(writerDocument);
-    setActiveParagraphId(nextParagraphId);
-    setWriterHistory(
-      /**
-       * Appends one uniquely identified paragraph to the current history document.
-       *
-       * @param currentHistory - Immutable Writer history before paragraph append.
-       * @returns History containing the appended empty paragraph as its latest snapshot.
-       */
-      function appendWorkbenchParagraph(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        const currentDocument = getCurrentTransactionState(currentHistory);
-        const nextDocument = appendWriterParagraph(currentDocument, nextParagraphId);
-        return applyTransaction(currentHistory, nextDocument, {
-          position: getWorkbenchSelectionPosition(nextDocument),
-        });
       },
     );
   }
@@ -406,23 +382,39 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     <div hidden={!isActive}>
       <WriterWorkspaceChrome
         documentTitle={writerDocument.document.title}
-        formattingToolbar={
-          <WriterParagraphFormattingToolbar
+        menuBar={
+          <WriterMenuBar
             alignment={activeParagraph.alignment}
             canMoveDown={activeParagraphIndex < writerDocument.paragraphs.length - 1}
             canMoveUp={activeParagraphIndex > 0}
+            canRedo={writerHistory.index < writerHistory.entries.length - 1}
+            canUndo={writerHistory.index > 0}
+            isStoragePending={storagePending}
             onAlignmentChange={handleWriterParagraphAlignment}
+            onDownload={handleWriterDownload}
+            onLoad={handleWriterLoad}
             onMoveParagraph={
               /**
-               * Moves the currently focused paragraph through the placement-equivalent toolbar menu.
+               * Moves the currently focused paragraph through the matching Format menu entry.
                *
-               * @param direction - Requested adjacent movement direction from the paragraph menu.
+               * @param direction - Requested adjacent movement direction from the Format menu.
                * @returns Nothing; the workbench records a reordered history snapshot.
                */
-              function moveActiveParagraph(direction): void {
+              function moveActiveParagraphFromMenu(direction): void {
                 handleWriterMoveParagraph(activeParagraph.id, direction);
               }
             }
+            onRedo={handleWriterRedo}
+            onSave={handleWriterSave}
+            onStyleChange={handleWriterParagraphStyle}
+            onUndo={handleWriterUndo}
+            style={activeParagraph.style}
+          />
+        }
+        formattingToolbar={
+          <WriterParagraphFormattingToolbar
+            alignment={activeParagraph.alignment}
+            onAlignmentChange={handleWriterParagraphAlignment}
             onStyleChange={handleWriterParagraphStyle}
             style={activeParagraph.style}
           />
@@ -440,7 +432,6 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             canRedo={writerHistory.index < writerHistory.entries.length - 1}
             canUndo={writerHistory.index > 0}
             isStoragePending={storagePending}
-            onAppendParagraph={handleWriterAppendParagraph}
             onDownload={handleWriterDownload}
             onLoad={handleWriterLoad}
             onRedo={handleWriterRedo}

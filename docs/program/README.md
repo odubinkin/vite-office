@@ -153,6 +153,8 @@ The following documents form the program control plane:
   accessible in-memory editable paragraphs backed by the Writer paragraph model.
 - [LibreOffice-style Writer UI shell](writer-ui-shell.md): durable menu,
   toolbar, ruler, document canvas, sidebar, and status-bar placement contract.
+- [Browser Writer command placement](writer-command-placement.md): pinned
+  menu and toolbar locations for every currently enabled Writer command.
 - [Browser command registry](command-registry.md): typed, browser-independent
   command definitions, shortcut lookup, and dispatch outcomes.
 - [Browser transaction history](transaction-history.md): immutable snapshot

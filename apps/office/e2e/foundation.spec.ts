@@ -29,32 +29,25 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await expect(writerEditor).toHaveAttribute("contenteditable", "true");
   await writerEditor.fill("A browser-authored paragraph.");
   await expect(page.getByRole("button", { name: "Undo" })).toBeEnabled();
-  await page.getByLabel("Paragraph style").selectOption("heading-1");
+  await page.getByRole("button", { name: "Styles" }).click();
+  await page.getByRole("menuitem", { name: "Heading 1" }).click();
   await expect(writerEditor).toHaveCSS("font-size", "24px");
   await expect(writerEditor).toHaveCSS("font-weight", "700");
   await expect(
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toContainText("Heading 1");
-  await page.getByRole("button", { name: "Align center" }).click();
+  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Align center" }).click();
   await expect(writerEditor).toHaveCSS("text-align", "center");
   await expect(page.getByRole("button", { name: "Align center" })).toHaveAttribute(
     "aria-pressed",
     "true",
   );
   await expect(page.getByText("Centered")).toBeVisible();
-  await page.getByRole("button", { name: "Add paragraph" }).click();
-  const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
-  await secondParagraph.fill("Second browser-authored paragraph.");
-  const paragraphActions = page.getByLabel("Paragraph actions");
-  await expect(paragraphActions.getByRole("option", { name: "Move paragraph up" })).toBeEnabled();
-  await expect(
-    paragraphActions.getByRole("option", { name: "Move paragraph down" }),
-  ).toBeDisabled();
-  await paragraphActions.selectOption("up");
-  await expect(page.getByRole("textbox", { name: "Writer document text" })).toHaveText(
-    "Second browser-authored paragraph.",
-  );
-  await expect(page.getByRole("button", { name: "Move paragraph 1 up" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Add paragraph" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("menuitem", { name: "Undo" }).click();
+  await expect(writerEditor).toHaveCSS("text-align", "left");
 
   const calcButton = page.getByRole("button", { name: "Calc, Foundation only" });
   await calcButton.focus();

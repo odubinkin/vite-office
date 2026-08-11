@@ -10,6 +10,8 @@ export interface WriterWorkspaceChromeProps {
   readonly children: ReactNode;
   /** Human-readable title of the open Writer document. */
   readonly documentTitle: string;
+  /** Implemented Writer menu popups placed in the standard top-level menu order. */
+  readonly menuBar: ReactNode;
   /** Implemented controls placed in the Writer formatting toolbar. */
   readonly formattingToolbar: ReactNode;
   /** Current contextual controls and feedback placed in the Writer properties sidebar. */
@@ -27,6 +29,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.children - Current document editing surface.
  * @param props.documentTitle - Title shown in the workspace title row.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
+ * @param props.menuBar - Functional Writer menus located below the document title row.
  * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
  * @param props.status - Current storage or download feedback.
  * @param props.toolbar - Implemented command buttons in the standard toolbar.
@@ -36,6 +39,7 @@ export function WriterWorkspaceChrome({
   children,
   documentTitle,
   formattingToolbar,
+  menuBar,
   propertiesSidebar,
   status,
   toolbar,
@@ -55,71 +59,7 @@ export function WriterWorkspaceChrome({
           </span>
         </div>
 
-        <nav
-          aria-label="Writer menu bar"
-          className="flex overflow-x-auto border-b border-slate-200 px-2 py-1"
-        >
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            File
-          </button>
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            Edit
-          </button>
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            View
-          </button>
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            Insert
-          </button>
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            Format
-          </button>
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            Styles
-          </button>
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            Table
-          </button>
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            Tools
-          </button>
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            Window
-          </button>
-          <button
-            className="rounded-md px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-            type="button"
-          >
-            Help
-          </button>
-        </nav>
+        {menuBar}
 
         <div
           aria-label="Writer standard toolbar"
