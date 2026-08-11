@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111325-AYRNM4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T13:28:49.152Z",
+  "verdict": "pass",
+  "summary": "The bounded View Sidebar implementation matches the approved Writer chrome scope with complete local and production-browser evidence.",
+  "evaluated_sha": "e87f581c4533489351a0790b48ad3c929783708b",
+  "blueprint_digest": "ba71455bda8166c3834d7765eebc09fac238cf5449ce0cc1e8b9b93fd1f2c0a0",
+  "findings": [
+    "The View menu uses a menuitemcheckbox for the pinned Sidebar command and the visibility preference is not stored in Writer document history."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111325-AYRNM4/README.md",
+    "e87f581c4533489351a0790b48ad3c929783708b",
+    "npm run test:coverage --workspace @vite-office/office: 51 tests, 100 percent",
+    "npm run test:e2e: 1 production Chromium test passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Static smoke, LibreOffice inventory, and aggregate verify are deferred to the user-approved ten-task cadence."
+  ]
+}
