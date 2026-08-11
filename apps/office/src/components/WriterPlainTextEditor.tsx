@@ -69,16 +69,27 @@ export function WriterPlainTextEditor({
     const isFirstParagraph = index === 0;
     const isActiveParagraph = paragraph.id === activeParagraphId;
     const textareaId = `writer-editor-text-${index + 1}`;
+    const styleDescriptionId = `writer-paragraph-style-${index + 1}`;
     const label = isFirstParagraph ? "Writer document text" : `Writer paragraph ${index + 1}`;
     return (
       <div className="mt-5" data-active={isActiveParagraph} key={paragraph.id}>
-        <label className="block text-sm font-semibold text-slate-800" htmlFor={textareaId}>
+        <label
+          className={`block font-semibold text-slate-800 ${
+            paragraph.style === "heading-1" ? "text-xl" : "text-sm"
+          }`}
+          htmlFor={textareaId}
+        >
           {label}
         </label>
+        <span className="sr-only" id={styleDescriptionId}>
+          Paragraph style:{" "}
+          {paragraph.style === "heading-1" ? "Heading 1" : "Default Paragraph Style"}
+        </span>
         <textarea
-          aria-describedby="writer-editor-help"
+          aria-describedby={`writer-editor-help ${styleDescriptionId}`}
           className="mt-2 min-h-40 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-base leading-7 text-slate-950 shadow-sm outline-none transition focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100"
           data-alignment={paragraph.alignment}
+          data-style={paragraph.style}
           id={textareaId}
           onChange={
             /**
@@ -102,7 +113,11 @@ export function WriterPlainTextEditor({
             }
           }
           placeholder={isFirstParagraph ? "Start writing…" : "Continue writing…"}
-          style={{ textAlign: paragraph.alignment }}
+          style={{
+            fontSize: paragraph.style === "heading-1" ? "1.5rem" : undefined,
+            fontWeight: paragraph.style === "heading-1" ? 700 : undefined,
+            textAlign: paragraph.alignment,
+          }}
           value={paragraph.text}
         />
         {canRemoveParagraph ? (

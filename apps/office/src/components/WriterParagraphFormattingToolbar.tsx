@@ -4,7 +4,7 @@
 
 import { AlignCenter, AlignJustify, AlignLeft, AlignRight, type LucideIcon } from "lucide-react";
 
-import type { WriterParagraphAlignment } from "../domain/writer";
+import type { WriterParagraphAlignment, WriterParagraphStyle } from "../domain/writer";
 
 /** Describes one labelled formatting-toolbar command for a supported paragraph alignment. */
 interface ParagraphAlignmentControl {
@@ -30,19 +30,27 @@ export interface WriterParagraphFormattingToolbarProps {
   readonly alignment: WriterParagraphAlignment;
   /** Requests a new alignment for the currently focused Writer paragraph. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
+  /** Requests a new style for the currently focused Writer paragraph. */
+  readonly onStyleChange: (style: WriterParagraphStyle) => void;
+  /** Style of the currently focused Writer paragraph. */
+  readonly style: WriterParagraphStyle;
 }
 
 /**
  * Renders Writer alignment commands beside intentionally disabled character-format placeholders.
  *
- * @param props - Focused paragraph alignment and a callback owned by the Writer workbench.
+ * @param props - Focused paragraph formatting and callbacks owned by the Writer workbench.
  * @param props.alignment - Alignment currently applied to the active Writer paragraph.
  * @param props.onAlignmentChange - Callback that records the requested paragraph alignment.
+ * @param props.onStyleChange - Callback that records the requested paragraph style.
+ * @param props.style - Style currently applied to the active Writer paragraph.
  * @returns A semantic formatting toolbar with four usable paragraph-alignment controls.
  */
 export function WriterParagraphFormattingToolbar({
   alignment,
   onAlignmentChange,
+  onStyleChange,
+  style,
 }: WriterParagraphFormattingToolbarProps): React.JSX.Element {
   return (
     <>
@@ -50,12 +58,23 @@ export function WriterParagraphFormattingToolbar({
         Paragraph style
       </label>
       <select
-        className="h-8 min-w-44 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-600 disabled:cursor-not-allowed"
-        disabled
+        className="h-8 min-w-44 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700 outline-none transition focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100"
         id="writer-style"
-        value="Default Paragraph Style"
+        onChange={
+          /**
+           * Validates a browser select value before requesting its immutable paragraph-style transition.
+           *
+           * @param event - Browser change event emitted by the paragraph-style select.
+           * @returns Nothing; the domain transition validates the browser-supplied value.
+           */
+          function changeParagraphStyle(event: React.ChangeEvent<HTMLSelectElement>): void {
+            onStyleChange(event.target.value as WriterParagraphStyle);
+          }
+        }
+        value={style}
       >
-        <option>Default Paragraph Style</option>
+        <option value="default">Default Paragraph Style</option>
+        <option value="heading-1">Heading 1</option>
       </select>
       <label className="sr-only" htmlFor="writer-font">
         Font name

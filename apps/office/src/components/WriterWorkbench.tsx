@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 
 import { getBrowserShortcut } from "../domain/browser-shortcuts";
 import { createCommandRegistry, dispatchCommand, findCommandByShortcut } from "../domain/commands";
-import { createDocument } from "../domain/document";
 import {
   applyTransaction,
   createTransactionHistory,
@@ -17,13 +16,14 @@ import {
 } from "../domain/history";
 import {
   appendWriterParagraph,
-  createWriterDocument,
   removeWriterParagraph,
   replaceWriterParagraph,
   setWriterParagraphAlignment,
+  setWriterParagraphStyle,
   type WriterDocument,
   type WriterParagraph,
   type WriterParagraphAlignment,
+  type WriterParagraphStyle,
 } from "../domain/writer";
 import {
   loadWriterDocument,
@@ -37,33 +37,12 @@ import { WriterParagraphFormattingToolbar } from "./WriterParagraphFormattingToo
 import { WriterParagraphProperties } from "./WriterParagraphProperties";
 import { WriterPlainTextEditor } from "./WriterPlainTextEditor";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
-import { getActiveWriterParagraph, getNextWriterParagraphId } from "./writer-workbench-helpers";
-
-/**
- * Creates the bounded initial Writer document edited by the workbench textarea.
- *
- * @returns An immutable Writer document with a single empty paragraph and new lifecycle state.
- */
-function createWriterWorkbenchDocument(): WriterDocument {
-  return createWriterDocument(
-    createDocument({
-      id: "writer-workbench",
-      suiteId: "writer",
-      title: "Untitled Writer Document",
-    }),
-    "writer-paragraph-1",
-  );
-}
-
-/**
- * Reads the initial paragraph length from the Writer workbench invariant.
- *
- * @param writerDocument - Immutable Writer document inspected without mutation.
- * @returns UTF-16 text length used as a deterministic history selection.
- */
-function getWorkbenchSelectionPosition(writerDocument: WriterDocument): number {
-  return (writerDocument.paragraphs[0] as WriterParagraph).text.length;
-}
+import {
+  getActiveWriterParagraph,
+  createWriterWorkbenchDocument,
+  getNextWriterParagraphId,
+  getWorkbenchSelectionPosition,
+} from "./writer-workbench-helpers";
 
 /** Describes the suite-selection visibility controlled by the application shell. */
 export interface WriterWorkbenchProps {
@@ -166,6 +145,35 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
           currentParagraph.id,
           alignment,
         );
+        return nextDocument === currentDocument
+          ? currentHistory
+          : applyTransaction(currentHistory, nextDocument, {
+              position: getWorkbenchSelectionPosition(nextDocument),
+            });
+      },
+    );
+  }
+
+  /**
+   * Changes the active Writer paragraph style through an immutable history transaction.
+   *
+   * @param style - Supported next paragraph style selected from the formatting toolbar.
+   * @returns Nothing; React schedules the next Writer document history state.
+   */
+  function handleWriterParagraphStyle(style: WriterParagraphStyle): void {
+    setWriterHistory(
+      /**
+       * Applies a bounded style to the still-existing active paragraph or its deterministic fallback.
+       *
+       * @param currentHistory - Current immutable Writer workbench history state.
+       * @returns History with a new style snapshot only when the requested style changed.
+       */
+      function styleActiveWorkbenchParagraph(
+        currentHistory: TransactionHistory<WriterDocument>,
+      ): TransactionHistory<WriterDocument> {
+        const currentDocument = getCurrentTransactionState(currentHistory);
+        const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
+        const nextDocument = setWriterParagraphStyle(currentDocument, currentParagraph.id, style);
         return nextDocument === currentDocument
           ? currentHistory
           : applyTransaction(currentHistory, nextDocument, {
@@ -436,12 +444,15 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
           <WriterParagraphFormattingToolbar
             alignment={activeParagraph.alignment}
             onAlignmentChange={handleWriterParagraphAlignment}
+            onStyleChange={handleWriterParagraphStyle}
+            style={activeParagraph.style}
           />
         }
         propertiesSidebar={
           <WriterParagraphProperties
             alignment={activeParagraph.alignment}
             paragraphNumber={activeParagraphIndex + 1}
+            style={activeParagraph.style}
           />
         }
         status={storageStatus}

@@ -9,12 +9,14 @@ import {
   appendWriterParagraph,
   createWriterDocument,
   insertWriterText,
-  normalizeWriterParagraphAlignments,
+  normalizeWriterParagraphFormatting,
   removeWriterParagraph,
   replaceWriterParagraph,
   setWriterParagraphAlignment,
+  setWriterParagraphStyle,
   type WriterDocument,
   type WriterParagraphAlignment,
+  type WriterParagraphStyle,
 } from "./writer";
 
 /**
@@ -149,6 +151,11 @@ function setMissingParagraphAlignment(writer: WriterDocument): WriterDocument {
   return setWriterParagraphAlignment(writer, "missing", "center");
 }
 
+/** Attempts an unsupported style through an untyped boundary. @param writer - Valid Writer document. @returns Invalid style transition that always throws. */
+function setUnsupportedStyle(writer: WriterDocument): WriterDocument {
+  return setWriterParagraphStyle(writer, "p-1", "caption" as WriterParagraphStyle);
+}
+
 describe("Writer paragraph body" /**
  * Groups paragraph creation and pure insertion behavior.
  *
@@ -162,7 +169,10 @@ describe("Writer paragraph body" /**
     const writer = createFixture();
     const withSecondParagraph: WriterDocument = {
       ...writer,
-      paragraphs: [...writer.paragraphs, { alignment: "left", id: "p-2", text: "unchanged" }],
+      paragraphs: [
+        ...writer.paragraphs,
+        { alignment: "left", id: "p-2", style: "default", text: "unchanged" },
+      ],
     };
     const inserted = insertWriterText(withSecondParagraph, "p-1", 0, "hello");
     const middle = insertWriterText(inserted, "p-1", 2, "!");
@@ -170,7 +180,7 @@ describe("Writer paragraph body" /**
     const unchanged = replaceWriterParagraph(replaced, "p-2", "updated");
     expect(writer).toMatchObject({
       document: { lifecycle: "new", revision: 0 },
-      paragraphs: [{ alignment: "left", id: "p-1", text: "" }],
+      paragraphs: [{ alignment: "left", id: "p-1", style: "default", text: "" }],
     });
     expect(inserted.document).toMatchObject({ lifecycle: "dirty", revision: 1 });
     expect(inserted.paragraphs[0]?.text).toBe("hello");
@@ -189,12 +199,14 @@ describe("Writer paragraph body" /**
     const writer = createFixture();
     const appended = appendWriterParagraph(writer, "p-2");
 
-    expect(writer.paragraphs).toEqual([{ alignment: "left", id: "p-1", text: "" }]);
+    expect(writer.paragraphs).toEqual([
+      { alignment: "left", id: "p-1", style: "default", text: "" },
+    ]);
     expect(appended).toMatchObject({
       document: { lifecycle: "dirty", revision: 1 },
       paragraphs: [
-        { alignment: "left", id: "p-1", text: "" },
-        { alignment: "left", id: "p-2", text: "" },
+        { alignment: "left", id: "p-1", style: "default", text: "" },
+        { alignment: "left", id: "p-2", style: "default", text: "" },
       ],
     });
     expect(
@@ -230,7 +242,7 @@ describe("Writer paragraph body" /**
     expect(writer.paragraphs).toHaveLength(2);
     expect(removed).toMatchObject({
       document: { lifecycle: "dirty", revision: 1 },
-      paragraphs: [{ alignment: "left", id: "p-2", text: "" }],
+      paragraphs: [{ alignment: "left", id: "p-2", style: "default", text: "" }],
     });
     expect(
       /**
@@ -266,16 +278,26 @@ describe("Writer paragraph body" /**
       ...writer,
       paragraphs: [{ id: "p-1", text: "Legacy" }] as unknown as WriterDocument["paragraphs"],
     };
-    const normalized = normalizeWriterParagraphAlignments(legacyWriter);
+    const normalized = normalizeWriterParagraphFormatting(legacyWriter);
 
-    expect(writer.paragraphs[1]).toEqual({ alignment: "left", id: "p-2", text: "" });
+    expect(writer.paragraphs[1]).toEqual({
+      alignment: "left",
+      id: "p-2",
+      style: "default",
+      text: "",
+    });
     expect(aligned.paragraphs[0]).toBe(writer.paragraphs[0]);
-    expect(aligned.paragraphs[1]).toEqual({ alignment: "center", id: "p-2", text: "" });
+    expect(aligned.paragraphs[1]).toEqual({
+      alignment: "center",
+      id: "p-2",
+      style: "default",
+      text: "",
+    });
     expect(unchanged).toBe(aligned);
     expect(normalized).toMatchObject({
-      paragraphs: [{ alignment: "left", id: "p-1", text: "Legacy" }],
+      paragraphs: [{ alignment: "left", id: "p-1", style: "default", text: "Legacy" }],
     });
-    expect(normalizeWriterParagraphAlignments(aligned)).toBe(aligned);
+    expect(normalizeWriterParagraphFormatting(aligned)).toBe(aligned);
     expect(
       /** Executes the unsupported-alignment failure case for Vitest. @returns Invalid alignment transition; delegated call always throws. */
       function setsUnsupportedAlignment(): WriterDocument {
@@ -286,6 +308,25 @@ describe("Writer paragraph body" /**
       /** Executes the missing-paragraph alignment failure case for Vitest. @returns Invalid alignment transition; delegated call always throws. */
       function alignsMissingParagraph(): WriterDocument {
         return setMissingParagraphAlignment(writer);
+      },
+    ).toThrowError();
+  });
+
+  it("changes one paragraph style immutably and rejects unsupported styles" /** Verifies style state mirrors the alignment transition's identity, no-op, and validation contract. @returns Nothing; assertions validate bounded styles. */, function stylesParagraphs(): void {
+    const writer = appendWriterParagraph(createFixture(), "p-2");
+    const styled = setWriterParagraphStyle(writer, "p-1", "heading-1");
+    expect(styled.paragraphs[0]).toMatchObject({ style: "heading-1" });
+    expect(setWriterParagraphStyle(styled, "p-1", "heading-1")).toBe(styled);
+    expect(
+      /** Executes the unsupported-style failure case. @returns Invalid transition that always throws. */
+      function stylesUnsupportedParagraph(): WriterDocument {
+        return setUnsupportedStyle(writer);
+      },
+    ).toThrowError();
+    expect(
+      /** Executes the missing-paragraph style failure case. @returns Invalid transition that always throws. */
+      function stylesMissingParagraph(): WriterDocument {
+        return setWriterParagraphStyle(writer, "missing", "heading-1");
       },
     ).toThrowError();
   });

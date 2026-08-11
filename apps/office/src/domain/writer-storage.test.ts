@@ -88,7 +88,7 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
     await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
       status: "found",
       writerDocument: {
-        paragraphs: [{ alignment: "left", id: "p-1", text: "Saved text" }],
+        paragraphs: [{ alignment: "left", id: "p-1", style: "default", text: "Saved text" }],
       },
     });
   });

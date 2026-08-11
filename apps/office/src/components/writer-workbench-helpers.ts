@@ -3,6 +3,34 @@
  */
 
 import type { WriterDocument, WriterParagraph } from "../domain/writer";
+import { createDocument } from "../domain/document";
+import { createWriterDocument } from "../domain/writer";
+
+/**
+ * Creates the bounded initial Writer document used by the browser workbench session.
+ *
+ * @returns Immutable Writer document with one empty default-styled paragraph and new lifecycle state.
+ */
+export function createWriterWorkbenchDocument(): WriterDocument {
+  return createWriterDocument(
+    createDocument({
+      id: "writer-workbench",
+      suiteId: "writer",
+      title: "Untitled Writer Document",
+    }),
+    "writer-paragraph-1",
+  );
+}
+
+/**
+ * Reads the first paragraph length used as the bounded workbench history selection position.
+ *
+ * @param writerDocument - Immutable Writer document with the non-empty body invariant.
+ * @returns UTF-16 length of the first paragraph text for deterministic history selection.
+ */
+export function getWorkbenchSelectionPosition(writerDocument: WriterDocument): number {
+  return (writerDocument.paragraphs[0] as WriterParagraph).text.length;
+}
 
 /**
  * Derives the first available numeric paragraph identity for the bounded Writer workbench document.

@@ -20,9 +20,10 @@ Implemented commands are placed in the standard toolbar through
 browser-local save/load, plain-text download, undo/redo, and paragraph append.
 The existing editor renders in the document canvas. The formatting toolbar now
 contains real left, center, right, and justified controls for the focused
-paragraph; their current value appears in the properties sidebar. Paragraph
-removal remains a contextual control because keyboard/range editing is not
-implemented yet.
+paragraph; their current value appears in the properties sidebar. The existing
+Paragraph style selector likewise applies Default Paragraph Style or Heading 1
+to the focused paragraph. Paragraph removal remains a contextual control
+because keyboard/range editing is not implemented yet.
 
 The menu items, remaining character-format controls, ruler, page count,
 language indicator, and most Writer commands are visual placement contracts

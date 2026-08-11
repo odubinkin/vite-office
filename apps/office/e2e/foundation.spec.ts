@@ -27,6 +27,12 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   await expect(writerEditor).toBeVisible();
   await writerEditor.fill("A browser-authored paragraph.");
   await expect(page.getByText("Unsaved changes · revision 1")).toBeVisible();
+  await page.getByLabel("Paragraph style").selectOption("heading-1");
+  await expect(writerEditor).toHaveCSS("font-size", "24px");
+  await expect(writerEditor).toHaveCSS("font-weight", "700");
+  await expect(
+    page.getByRole("complementary", { name: "Writer properties sidebar" }),
+  ).toContainText("Heading 1");
   await page.getByRole("button", { name: "Align center" }).click();
   await expect(writerEditor).toHaveCSS("text-align", "center");
   await expect(page.getByRole("button", { name: "Align center" })).toHaveAttribute(

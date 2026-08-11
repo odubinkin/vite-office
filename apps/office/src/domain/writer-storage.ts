@@ -8,7 +8,7 @@ import {
   type DocumentStorageAdapter,
   type SerializableValue,
 } from "./storage";
-import { normalizeWriterParagraphAlignments, type WriterDocument } from "./writer";
+import { normalizeWriterParagraphFormatting, type WriterDocument } from "./writer";
 
 /** Describes the JSON snapshot shape persisted by the bounded Writer workbench. */
 export type WriterSnapshotState = {
@@ -56,7 +56,7 @@ export async function loadWriterDocument(
     ? result
     : {
         status: "found",
-        writerDocument: normalizeWriterParagraphAlignments(
+        writerDocument: normalizeWriterParagraphFormatting(
           result.snapshot.state.writerDocument as unknown as WriterDocument,
         ),
       };

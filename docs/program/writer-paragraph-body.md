@@ -10,7 +10,9 @@ paragraph, `insertWriterText` inserts text at a validated UTF-16 offset, and
 `removeWriterParagraph` removes one identified paragraph while protecting the
 non-empty body invariant. Every paragraph also stores an explicit horizontal
 alignment; [`setWriterParagraphAlignment`](../../apps/office/src/domain/writer.ts)
-changes that one property without changing its text or sibling paragraphs.
+changes that one property without changing its text or sibling paragraphs. Each
+paragraph also retains a bounded direct style; `setWriterParagraphStyle` applies
+Default Paragraph Style or Heading 1 without modeling inheritance.
 
 Each operation is pure: it does not mutate its input, keeps unedited paragraph
 objects intact, and produces JSON-serializable output. A changed body uses the

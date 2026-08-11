@@ -106,6 +106,19 @@ describe("App" /**
     );
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align left" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+    fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "default" } });
+    expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+    fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "heading-1" } });
+    expect(firstParagraph).toHaveStyle({ fontSize: "1.5rem", fontWeight: "700" });
+    expect(firstParagraph).toHaveAccessibleDescription(/Paragraph style: Heading 1/);
+    expect(
+      within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByText(
+        "Heading 1",
+      ),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(screen.getByLabelText("Paragraph style")).toHaveValue("default");
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align center" }));
     expect(firstParagraph).toHaveStyle({ textAlign: "center" });
     expect(screen.getByText("Centered")).toBeInTheDocument();
@@ -215,6 +228,9 @@ describe("App" /**
       render(<App />);
       const editor = screen.getByRole("textbox", { name: "Writer document text" });
       fireEvent.change(editor, { target: { value: "Stored body" } });
+      fireEvent.change(screen.getByLabelText("Paragraph style"), {
+        target: { value: "heading-1" },
+      });
       fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
       const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
       fireEvent.change(secondParagraph, { target: { value: "Stored second body" } });
@@ -243,6 +259,7 @@ describe("App" /**
         /** Waits for restored text and load feedback. @returns A fulfilled polling promise. */
         async function verifiesLoadedDocument(): Promise<void> {
           expect(editor).toHaveValue("Stored body");
+          expect(editor).toHaveStyle({ fontSize: "1.5rem", fontWeight: "700" });
           expect(secondParagraph).toHaveValue("Stored second body");
           expect(secondParagraph).toHaveStyle({ textAlign: "right" });
           expect(screen.getByText("Loaded local saved copy.")).toBeInTheDocument();
@@ -277,8 +294,18 @@ describe("App" /**
           title: "Untitled Writer Document",
         }),
         paragraphs: [
-          { alignment: "left", id: "writer-paragraph-1", text: "First stored paragraph" },
-          { alignment: "left", id: "writer-paragraph-3", text: "Third stored paragraph" },
+          {
+            alignment: "left",
+            id: "writer-paragraph-1",
+            style: "default",
+            text: "First stored paragraph",
+          },
+          {
+            alignment: "left",
+            id: "writer-paragraph-3",
+            style: "default",
+            text: "Third stored paragraph",
+          },
         ],
       });
       render(<App />);
