@@ -1,10 +1,12 @@
 ---
 id: "202608111329-ZTN9JB"
 title: "Toggle Writer horizontal ruler from View"
-status: "DOING"
+result_summary: "View Rulers now controls the bounded horizontal Writer ruler at its pinned nested menu placement."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +42,16 @@ quality_review:
     - "npm run test:e2e: 1 production Chromium test passed"
   findings:
     - "The nested Rulers popup uses the pinned View hierarchy and a menuitemcheckbox for Horizontal ruler without placing a non-upstream control on a toolbar."
-commit: null
+commit:
+  hash: "212736a74ef4d0178b0d8c977ae5d143e4b34b52"
+  message: "🧩 ZTN9JB task: record ruler verification"
 comments:
   -
     author: "CODER"
     body: "Start: implementing the bounded Writer View Rulers command at its pinned menu location."
+  -
+    author: "CODER"
+    body: "Verified: View Rulers exposes a checked Horizontal ruler Writer command that hides and restores only the ruler chrome while preserving accessible document editing."
 events:
   -
     type: "status"
@@ -59,8 +66,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified View Rulers follows the pinned nested Writer placement, exposes an accessible checked Horizontal ruler command, hides and restores only workspace chrome, and keeps document editing available."
+  -
+    type: "status"
+    at: "2026-08-11T13:32:32.098Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: View Rulers exposes a checked Horizontal ruler Writer command that hides and restores only the ruler chrome while preserving accessible document editing."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:32:19.516Z"
+doc_updated_at: "2026-08-11T13:32:32.099Z"
 doc_updated_by: "CODER"
 description: "Implement the pinned LibreOffice Writer .uno:Ruler command in the static browser workbench: add the nested View Rulers menu, toggle the existing horizontal ruler without changing document data, retain accessible state and canvas layout, and add focused documentation and browser evidence."
 sections:
@@ -117,6 +131,10 @@ sections:
     - Observation: Static smoke, LibreOffice inventory, and aggregate verify were intentionally deferred under the agreed ten-task cadence.
       Impact: Broader cross-workspace regression evidence is not refreshed for this individual task.
       Resolution: Run the deferred aggregate checks at the next cadence checkpoint.
+extensions:
+  implementation_commit:
+    hash: "d42f390bf8e19b42d492e4acde21a9fdfd50cb6e"
+    message: "✨ ZTN9JB code: Toggle Writer horizontal ruler"
 id_source: "generated"
 ---
 ## Summary
