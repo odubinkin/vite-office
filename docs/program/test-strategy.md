@@ -55,7 +55,11 @@ Every inventoried upstream test receives one of these outcomes:
 3. **Covered by stronger evidence** only when the replacement test clearly
    documents why it subsumes every original assertion.
 4. **Blocked** by a concrete platform constraint with an approved follow-up.
-5. **Exception-approved** by the user with rationale and retained visible debt.
+5. **Exception-approved** as `not-implementable`, with a user decision,
+   browser-runtime reason (`browser-runtime-supersedes` or
+   `browser-runtime-inapplicable`), rationale, and retained visible debt. It may
+   apply to a whole feature or one `upstream.tests` reference only; the parity
+   report lists it separately from implementation coverage.
 
 The first executable surface is
 [`parity/writer-command-slice.json`](parity/writer-command-slice.json). Run

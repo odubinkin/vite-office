@@ -75,6 +75,8 @@ describe("parity mappings" /**
     );
     expect(report).toEqual({
       baselineCommit: "pinned-commit",
+      exceptionCount: 0,
+      exceptions: [],
       gapCount: 1,
       resolvedEvidence: [
         { kind: "implementation", path: "local-implementation.ts", side: "local" },
@@ -147,7 +149,12 @@ describe("parity mappings" /**
    *
    * @returns Nothing; accepted and rejected exception shapes are asserted.
    */, function validatesExceptionEvidence(): void {
-    const exception = { approvedBy: "user decision", rationale: "Browser API is stronger." };
+    const exception = {
+      approvedBy: "user decision",
+      disposition: "not-implementable",
+      rationale: "Browser API is stronger.",
+      reason: "browser-runtime-supersedes",
+    };
     expect(
       parseParityMappingManifest(
         createManifestSource({
@@ -156,6 +163,7 @@ describe("parity mappings" /**
               ...createRecord("LO-WRITER-0101"),
               exception,
               gaps: ["Explicitly approved."],
+              local: { ...createEvidence("local"), implementation: [], tests: [] },
               status: "exception-approved",
             },
           ],
@@ -181,6 +189,37 @@ describe("parity mappings" /**
     ).toEqual(exception);
     expectInvalid(
       createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            exception: { ...exception, disposition: "implemented" },
+            gaps: ["Explicitly approved."],
+            status: "exception-approved",
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            upstream: {
+              ...createEvidence("upstream"),
+              implementation: [
+                {
+                  exception,
+                  marker: "upstream-implementation",
+                  path: "upstream-implementation.ts",
+                },
+              ],
+            },
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
         records: [{ ...createRecord("LO-WRITER-0101"), status: "exception-approved" }],
       }),
     );
@@ -192,7 +231,31 @@ describe("parity mappings" /**
         records: [
           {
             ...createRecord("LO-WRITER-0101"),
-            exception: { approvedBy: "", rationale: "x" },
+            exception,
+            gaps: [],
+            status: "exception-approved",
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            exception: { ...exception, approvedBy: "" },
+            status: "exception-approved",
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            exception: { ...exception, reason: "not-a-browser-reason" },
+            gaps: ["Explicitly approved."],
             status: "exception-approved",
           },
         ],
@@ -205,6 +268,72 @@ describe("parity mappings" /**
         ],
       }),
     );
+  });
+
+  it("reports non-implementable capabilities and upstream tests separately from resolved coverage" /**
+   * Verifies auditable exception counts retain the approved metadata and the upstream test identity.
+   *
+   * @returns A promise resolving after deterministic exception reporting is asserted.
+   */, async function reportsExceptions(): Promise<void> {
+    const capabilityException = {
+      approvedBy: "Task 42",
+      disposition: "not-implementable",
+      rationale: "The browser owns this lifecycle.",
+      reason: "browser-runtime-inapplicable",
+    } as const;
+    const testException = {
+      approvedBy: "Task 43",
+      disposition: "not-implementable",
+      rationale: "The Clipboard API subsumes native clipboard plumbing.",
+      reason: "browser-runtime-supersedes",
+    } as const;
+    const manifest = parseParityMappingManifest(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            exception: capabilityException,
+            gaps: ["Browser runtime exception."],
+            local: { ...createEvidence("local"), implementation: [], tests: [] },
+            status: "exception-approved",
+            upstream: {
+              ...createEvidence("upstream"),
+              tests: [
+                { exception: testException, marker: "upstream-tests", path: "upstream-tests.ts" },
+              ],
+            },
+          },
+        ],
+      }),
+      baseline,
+    );
+    const report = await validateParityMappingEvidence(
+      manifest,
+      /**
+       * Returns evidence text whose marker is derived from the requested synthetic path.
+       *
+       * @param path - Rooted synthetic local or upstream evidence path.
+       * @returns A promise resolving to text that contains the declared marker.
+       */
+      async function readSyntheticEvidence(path: string): Promise<string> {
+        return path.replace(/^(local-root|upstream-root)\//, "").replace(/\.(md|ts)$/, "");
+      },
+      { local: "local-root", upstream: "upstream-root" },
+    );
+    expect(report.exceptionCount).toBe(2);
+    expect(report.exceptions).toEqual([
+      { exception: capabilityException, id: "LO-WRITER-0101", scope: "capability" },
+      {
+        exception: testException,
+        id: "LO-WRITER-0101",
+        reference: {
+          exception: testException,
+          marker: "upstream-tests",
+          path: "upstream-tests.ts",
+        },
+        scope: "upstream-test",
+      },
+    ]);
   });
 
   it("reports an absent evidence marker after the path reader succeeds" /**

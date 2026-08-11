@@ -29,7 +29,7 @@
           { "path": "apps/office/src/components/WriterCommandToolbar.tsx", "marker": "Writer standard toolbar" }
         ],
         "tests": [
-          { "path": "apps/office/src/App.test.tsx", "marker": "places implemented Writer commands" },
+          { "path": "apps/office/src/components/WriterMenuBar.test.tsx", "marker": "places implemented Writer commands" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "File menu" }
         ],
         "docs": [
@@ -133,7 +133,7 @@
           { "path": "apps/office/src/components/WriterMenuBar.tsx", "marker": "Status Bar" }
         ],
         "tests": [
-          { "path": "apps/office/src/App.test.tsx", "marker": "Horizontal ruler" },
+          { "path": "apps/office/src/components/WriterMenuBar.test.tsx", "marker": "Horizontal ruler" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Status Bar" }
         ],
         "docs": [

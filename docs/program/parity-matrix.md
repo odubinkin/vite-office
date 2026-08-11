@@ -60,9 +60,15 @@ Only `verified` counts toward parity. `exception-approved` is visible debt and
 does not silently count as equivalent functionality.
 
 An exception may apply to a whole capability or to one upstream test reference.
-It must include a concrete browser rationale and an `approvedBy` decision
-reference. This permits a browser primitive to subsume a native low-level
-mechanism without erasing the upstream test from traceability.
+It is an explicit `not-implementable` disposition, not an implementation claim,
+and must include a concrete browser rationale, an `approvedBy` decision
+reference, and one reason: `browser-runtime-supersedes` when a browser primitive
+subsumes native low-level plumbing, or `browser-runtime-inapplicable` when the
+desktop behavior has no meaningful browser counterpart. A whole-capability
+exception may leave local implementation and test evidence empty, but must retain
+all upstream evidence and local documentation of the decision. A test exception
+is allowed only on an `upstream.tests` reference. The parity report lists both
+forms separately, so neither can count as mapped or verified coverage.
 
 ## Seed inventory
 

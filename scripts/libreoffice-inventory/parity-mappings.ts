@@ -7,10 +7,17 @@ import type { BaselineManifest } from "./contracts";
 /** Identifies the evidence category whose referenced paths must resolve. */
 export type ParityEvidenceKind = "docs" | "implementation" | "source" | "tests";
 
+/** Identifies the browser-runtime reason that makes an upstream behavior non-implementable locally. */
+export type ParityExceptionReason = "browser-runtime-inapplicable" | "browser-runtime-supersedes";
+
 /** Defines the auditable basis for an explicitly approved browser-environment exception. */
 export interface ParityException {
   /** Task, user decision, or governing record that explicitly approved the exception. */
   readonly approvedBy: string;
+  /** Explicit disposition that prevents this exception from counting as equivalent implementation. */
+  readonly disposition: "not-implementable";
+  /** Browser-runtime classification explaining why the upstream behavior is not locally implemented. */
+  readonly reason: ParityExceptionReason;
   /** Concrete reason the upstream behavior is unnecessary or infeasible in the browser architecture. */
   readonly rationale: string;
 }
@@ -75,10 +82,26 @@ export interface ResolvedParityEvidence {
   readonly path: string;
 }
 
+/** Describes one approved non-implementable capability or upstream test for audit reports. */
+export interface ParityExceptionReportEntry {
+  /** Immutable Writer parity identifier that owns the approved exception. */
+  readonly id: string;
+  /** Approved reason, disposition, rationale, and decision reference. */
+  readonly exception: ParityException;
+  /** Upstream test evidence when this is a test-level exception. */
+  readonly reference?: ParityEvidenceReference;
+  /** Whether the exception applies to an entire capability or one upstream test. */
+  readonly scope: "capability" | "upstream-test";
+}
+
 /** Defines the deterministic report produced after all mapping references resolve. */
 export interface ParityMappingReport {
   /** Shared baseline commit verified against the parsed baseline manifest. */
   readonly baselineCommit: string;
+  /** Explicitly approved non-implementable capabilities and upstream tests, kept separate from mapped evidence. */
+  readonly exceptions: readonly ParityExceptionReportEntry[];
+  /** Number of explicitly approved non-implementable capability or test records. */
+  readonly exceptionCount: number;
   /** Number of visible unsupported differences across all records. */
   readonly gapCount: number;
   /** Successfully resolved evidence paths in stable record and evidence order. */
@@ -131,12 +154,16 @@ export async function validateParityMappingEvidence(
   roots: Readonly<{ local: string; upstream: string }>,
 ): Promise<ParityMappingReport> {
   const resolvedEvidence: ResolvedParityEvidence[] = [];
+  const exceptions: ParityExceptionReportEntry[] = [];
   for (const record of manifest.records) {
     await validateSide(record.local, "local", roots.local, readEvidence, resolvedEvidence);
     await validateSide(record.upstream, "upstream", roots.upstream, readEvidence, resolvedEvidence);
+    collectExceptions(record, exceptions);
   }
   return {
     baselineCommit: manifest.baselineCommit,
+    exceptionCount: exceptions.length,
+    exceptions,
     gapCount: manifest.records.flatMap(selectGaps).length,
     resolvedEvidence,
     schemaVersion: 1,
@@ -167,6 +194,8 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
       : parseException(candidate.exception, `${id}.exception`);
   if (status === "exception-approved" && exception === undefined)
     throw new Error(`Exception-approved parity record ${id} requires exception evidence.`);
+  if (status === "exception-approved" && gaps.length === 0)
+    throw new Error(`Exception-approved parity record ${id} requires a visible gap.`);
   if (status !== "exception-approved" && exception !== undefined)
     throw new Error(`Only exception-approved parity record ${id} may declare exception evidence.`);
   return {
@@ -174,9 +203,9 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
     ...(exception === undefined ? {} : { exception }),
     gaps,
     id,
-    local: parseEvidence(candidate.local, `${id}.local`),
+    local: parseEvidence(candidate.local, `${id}.local`, status === "exception-approved"),
     status,
-    upstream: parseEvidence(candidate.upstream, `${id}.upstream`),
+    upstream: parseEvidence(candidate.upstream, `${id}.upstream`, false, true),
   };
 }
 
@@ -185,15 +214,31 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
  *
  * @param candidate - Unknown JSON evidence object.
  * @param location - Human-readable record side used in errors.
+ * @param allowMissingImplementationAndTests - Whether a whole-capability exception may omit local implementation and test evidence.
+ * @param allowTestExceptions - Whether exception metadata is valid on these test references.
  * @returns Strict evidence groups with non-empty references.
  * @throws {Error} When any evidence category is absent or malformed.
  */
-function parseEvidence(candidate: unknown, location: string): ParityEvidence {
+function parseEvidence(
+  candidate: unknown,
+  location: string,
+  allowMissingImplementationAndTests: boolean,
+  allowTestExceptions = false,
+): ParityEvidence {
   if (!isRecord(candidate)) throw new Error(`${location} must be an object.`);
   return {
-    docs: parseReferences(candidate.docs, `${location}.docs`),
-    implementation: parseReferences(candidate.implementation, `${location}.implementation`),
-    tests: parseReferences(candidate.tests, `${location}.tests`),
+    docs: parseReferences(candidate.docs, `${location}.docs`, false),
+    implementation: parseReferences(
+      candidate.implementation,
+      `${location}.implementation`,
+      allowMissingImplementationAndTests,
+    ),
+    tests: parseReferences(
+      candidate.tests,
+      `${location}.tests`,
+      allowMissingImplementationAndTests,
+      allowTestExceptions,
+    ),
   };
 }
 
@@ -202,11 +247,18 @@ function parseEvidence(candidate: unknown, location: string): ParityEvidence {
  *
  * @param candidate - Unknown JSON candidate expected to be an array of references.
  * @param location - Human-readable field location used in errors.
+ * @param allowEmpty - Whether this evidence category may be empty for a whole-capability exception.
+ * @param allowExceptions - Whether evidence references in this category may carry test exceptions.
  * @returns Strict path-and-marker references in authored order.
  * @throws {Error} When a reference omits a non-empty path or marker.
  */
-function parseReferences(candidate: unknown, location: string): readonly ParityEvidenceReference[] {
-  if (!Array.isArray(candidate) || candidate.length === 0)
+function parseReferences(
+  candidate: unknown,
+  location: string,
+  allowEmpty: boolean,
+  allowExceptions = false,
+): readonly ParityEvidenceReference[] {
+  if (!Array.isArray(candidate) || (!allowEmpty && candidate.length === 0))
     throw new Error(`${location} must be a non-empty array.`);
   return candidate.map(
     /**
@@ -222,6 +274,8 @@ function parseReferences(candidate: unknown, location: string): readonly ParityE
         reference.exception === undefined
           ? undefined
           : parseException(reference.exception, `${location}[${index}].exception`);
+      if (exception !== undefined && !allowExceptions)
+        throw new Error(`${location}[${index}] may not declare a parity exception.`);
       return {
         ...(exception === undefined ? {} : { exception }),
         marker: requireString(reference, "marker"),
@@ -241,10 +295,41 @@ function parseReferences(candidate: unknown, location: string): readonly ParityE
  */
 function parseException(candidate: unknown, location: string): ParityException {
   if (!isRecord(candidate)) throw new Error(`${location} must be an object.`);
+  if (candidate.disposition !== "not-implementable")
+    throw new Error(`${location}.disposition must equal not-implementable.`);
+  const reason = candidate.reason;
+  if (reason !== "browser-runtime-inapplicable" && reason !== "browser-runtime-supersedes")
+    throw new Error(`${location}.reason must name a browser-runtime exception reason.`);
   return {
     approvedBy: requireString(candidate, "approvedBy"),
+    disposition: "not-implementable",
+    reason,
     rationale: requireString(candidate, "rationale"),
   };
+}
+
+/**
+ * Collects visible whole-capability and upstream-test exceptions in deterministic evidence order.
+ *
+ * @param record - Parsed atomic parity record that may own exception metadata.
+ * @param exceptions - Mutable report collection owned by the caller.
+ * @returns Nothing; exception report entries are appended in stable order.
+ */
+function collectExceptions(
+  record: ParityMappingRecord,
+  exceptions: ParityExceptionReportEntry[],
+): void {
+  if (record.exception !== undefined)
+    exceptions.push({ exception: record.exception, id: record.id, scope: "capability" });
+  for (const reference of record.upstream.tests) {
+    if (reference.exception !== undefined)
+      exceptions.push({
+        exception: reference.exception,
+        id: record.id,
+        reference,
+        scope: "upstream-test",
+      });
+  }
 }
 
 /**
