@@ -1,10 +1,12 @@
 ---
 id: "202608111336-2QSR3F"
 title: "Select all Writer document text from Edit"
-status: "DOING"
+result_summary: "Edit Select All now selects the bounded Writer document through native browser selection at its pinned menu placement."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +42,16 @@ quality_review:
     - "npm run inventory:validate: passed pinned LibreOffice corpus contracts"
   findings:
     - "Select All is a one-shot browser selection request, so it does not reselect document content after later paragraph edits or disturb native caret operations."
-commit: null
+commit:
+  hash: "c793b888b0f96f9131de880dfc3ad8c34a3290b1"
+  message: "🧩 2QSR3F task: record select all verification"
 comments:
   -
     author: "CODER"
     body: "Start: implementing bounded Writer Edit Select All with the tenth-task full verification checkpoint."
+  -
+    author: "CODER"
+    body: "Verified: Edit Select All requests one browser selection over the current Writer body without changing document state, and the tenth-task full quality and inventory checkpoint passed."
 events:
   -
     type: "status"
@@ -59,8 +66,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified Edit Select All follows pinned Writer placement, selects the complete current browser document range without serializing selection or changing history, and the tenth-task full checkpoint passed."
+  -
+    type: "status"
+    at: "2026-08-11T13:42:59.488Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Edit Select All requests one browser selection over the current Writer body without changing document state, and the tenth-task full quality and inventory checkpoint passed."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:42:45.480Z"
+doc_updated_at: "2026-08-11T13:42:59.489Z"
 doc_updated_by: "CODER"
 description: "Implement the pinned LibreOffice Writer .uno:SelectAll command in the static browser workbench: expose Edit Select All, select the complete integrated Writer document body through the browser selection API without mutating document history, retain accessibility, and add focused documentation and production evidence. This tenth post-checkpoint feature task also runs the full aggregate and inventory validation suite."
 sections:
@@ -112,6 +126,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: "Implementation commit d411564 adds the pinned Edit Select All command, a one-shot browser selection effect over the current Writer body, and a workspace-chrome hook that keeps WriterWorkbench at 499 lines. Evidence: format check, lint, TypeScript, JSDoc (114 authored files), file-size check (only existing contracts.ts candidate), office coverage (51 tests; 100 percent), targeted production Playwright (1 passed), full npm run verify, npm run inventory:validate, diff check, doctor, and policy routing all passed. This completes the required tenth-task full checkpoint."
+extensions:
+  implementation_commit:
+    hash: "d41156478b63ca7904864a9e46f2f8443d0a3dd1"
+    message: "✨ 2QSR3F code: Select all Writer document text"
 id_source: "generated"
 ---
 ## Summary
