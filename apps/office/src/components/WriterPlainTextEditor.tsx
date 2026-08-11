@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 
 import type { WriterParagraph } from "../domain/writer";
+import { createWriterClipboardSelection } from "./writer-clipboard-selection";
 
 /** Defines the immutable state and callback required by the integrated Writer document editor. */
 export interface WriterPlainTextEditorProps {
@@ -125,6 +126,20 @@ export function WriterPlainTextEditor({
   }
 
   /**
+   * Replaces browser-native copy data with the bounded Writer selection payload before it reaches another editor.
+   *
+   * @param event - Native copy event bubbled from the integrated Writer document body.
+   * @returns Nothing; default browser serialization is prevented only for a visible Writer selection.
+   */
+  function handleNativeWriterCopy(event: React.ClipboardEvent<HTMLElement>): void {
+    const selection = createWriterClipboardSelection(globalThis.getSelection());
+    if (selection === undefined) return;
+    event.preventDefault();
+    event.clipboardData.setData("text/plain", selection.plainText);
+    event.clipboardData.setData("text/html", selection.html);
+  }
+
+  /**
    * Reads a collapsed browser selection as a UTF-16 offset relative to one editable Writer paragraph.
    *
    * @param paragraphElement - Editable paragraph that must contain the selection's caret endpoint.
@@ -199,6 +214,7 @@ export function WriterPlainTextEditor({
           }`}
           contentEditable
           data-alignment={paragraph.alignment}
+          data-writer-paragraph-id={paragraph.id}
           data-style={paragraph.style}
           onKeyDown={
             /**
@@ -255,7 +271,11 @@ export function WriterPlainTextEditor({
   }
 
   return (
-    <article aria-label="Writer document body" className="min-h-[600px] text-slate-950">
+    <article
+      aria-label="Writer document body"
+      className="min-h-[600px] text-slate-950"
+      onCopy={handleNativeWriterCopy}
+    >
       {paragraphs.map(renderParagraph)}
     </article>
   );

@@ -2,7 +2,13 @@
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { copyPlainText, type BrowserClipboardEnvironment } from "./browser-clipboard";
+import {
+  copyPlainText,
+  copyRichText,
+  type BrowserClipboardEnvironment,
+  type BrowserClipboardItemConstructor,
+  type BrowserRichClipboardEnvironment,
+} from "./browser-clipboard";
 
 afterEach(
   /** Restores the legacy document command after each clipboard adapter scenario. @returns Nothing; the temporary test command is removed. */
@@ -21,6 +27,36 @@ function createClipboardEnvironment(
   clipboard: Pick<Clipboard, "writeText"> | undefined,
 ): BrowserClipboardEnvironment {
   return { clipboard, document };
+}
+
+/** Provides a deterministic ClipboardItem fixture that retains MIME-typed blobs for assertions. */
+class ClipboardItemFixture {
+  /** MIME-typed blobs provided by the tested rich clipboard adapter. */
+  readonly items: Record<string, Blob>;
+
+  /**
+   * Creates a fixture rich clipboard item.
+   *
+   * @param items - MIME-typed blobs supplied by the rich clipboard adapter.
+   * @returns A rich ClipboardItem fixture that retains the supplied MIME blobs.
+   */
+  constructor(items: Record<string, Blob>) {
+    this.items = items;
+  }
+}
+
+/**
+ * Creates the browser environment passed to deterministic rich clipboard adapter tests.
+ *
+ * @param clipboard - Native rich/plain clipboard writer, or undefined when legacy fallback must run.
+ * @param clipboardItem - ClipboardItem constructor exposed by the simulated browser, or undefined when rich write is unsupported.
+ * @returns Browser capability object with test-owned clipboard boundaries.
+ */
+function createRichClipboardEnvironment(
+  clipboard: Pick<Clipboard, "write" | "writeText"> | undefined,
+  clipboardItem: BrowserClipboardItemConstructor | undefined,
+): BrowserRichClipboardEnvironment {
+  return { Blob: globalThis.Blob, ClipboardItem: clipboardItem, clipboard, document };
 }
 
 describe("copyPlainText" /** Groups native clipboard and legacy fallback behaviors. @returns Nothing; Vitest registers the enclosed clipboard cases. */, function defineClipboardTests(): void {
@@ -48,5 +84,52 @@ describe("copyPlainText" /** Groups native clipboard and legacy fallback behavio
     await expect(
       copyPlainText("Blocked text", createClipboardEnvironment(undefined)),
     ).rejects.toThrow("Browser clipboard fallback rejected the copy operation.");
+  });
+
+  it("writes rich HTML and matching plain text through ClipboardItem when supported" /** Verifies rich-capable target editors receive portable inline HTML rather than Tailwind class names. @returns A promise resolved after MIME payload assertions pass. */, async function writesRichClipboardItem(): Promise<void> {
+    const write = vi.fn().mockResolvedValue(undefined);
+    const writeText = vi.fn();
+    await copyRichText(
+      { html: '<p style="font-weight: 700;">Heading</p>', plainText: "Heading" },
+      createRichClipboardEnvironment(
+        { write, writeText } as unknown as Pick<Clipboard, "write" | "writeText">,
+        ClipboardItemFixture as unknown as BrowserClipboardItemConstructor,
+      ),
+    );
+    const clipboardItems = write.mock.calls[0]?.[0] as readonly ClipboardItemFixture[];
+    const clipboardItem = clipboardItems[0] as ClipboardItemFixture;
+    expect(await clipboardItem.items["text/html"]?.text()).toBe(
+      '<p style="font-weight: 700;">Heading</p>',
+    );
+    expect(await clipboardItem.items["text/plain"]?.text()).toBe("Heading");
+    expect(writeText).not.toHaveBeenCalled();
+  });
+
+  it("falls back to correct plain text when rich clipboard writing is unsupported or rejected" /** Verifies a rejected rich capability never loses the visible Writer text. @returns A promise resolved after plain-text fallback assertions pass. */, async function fallsBackFromRichClipboard(): Promise<void> {
+    const rejectedWrite = vi.fn().mockRejectedValue(new Error("Denied"));
+    const rejectedWriteText = vi.fn().mockResolvedValue(undefined);
+    await copyRichText(
+      { html: "<p>Visible</p>", plainText: "Visible" },
+      createRichClipboardEnvironment(
+        { write: rejectedWrite, writeText: rejectedWriteText } as unknown as Pick<
+          Clipboard,
+          "write" | "writeText"
+        >,
+        ClipboardItemFixture as unknown as BrowserClipboardItemConstructor,
+      ),
+    );
+    const unsupportedWriteText = vi.fn().mockResolvedValue(undefined);
+    await copyRichText(
+      { html: "<p>Fallback</p>", plainText: "Fallback" },
+      createRichClipboardEnvironment(
+        { write: vi.fn(), writeText: unsupportedWriteText } as unknown as Pick<
+          Clipboard,
+          "write" | "writeText"
+        >,
+        undefined,
+      ),
+    );
+    expect(rejectedWriteText).toHaveBeenCalledWith("Visible");
+    expect(unsupportedWriteText).toHaveBeenCalledWith("Fallback");
   });
 });

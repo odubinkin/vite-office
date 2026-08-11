@@ -5,8 +5,9 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import type { WriterDocument } from "../domain/writer";
-import { copyPlainText } from "../platform/browser-clipboard";
+import { copyRichText } from "../platform/browser-clipboard";
 import { downloadPlainText } from "../platform/browser-download";
+import { createWriterClipboardSelection } from "./writer-clipboard-selection";
 
 /** Describes the document session and status outlet used by browser-owned Writer commands. */
 export interface WriterBrowserCommandOptions {
@@ -71,13 +72,13 @@ export function useWriterBrowserCommands({
    * @returns A promise resolved after copy feedback is recorded.
    */
   async function handleWriterCopy(): Promise<void> {
-    const selectedText = globalThis.getSelection()?.toString() ?? "";
-    if (selectedText === "") {
+    const selection = createWriterClipboardSelection(globalThis.getSelection());
+    if (selection === undefined) {
       setStorageStatus("Select text to copy.");
       return;
     }
     try {
-      await copyPlainText(selectedText);
+      await copyRichText(selection);
       setStorageStatus("Copied selection.");
     } catch {
       setStorageStatus("Could not copy selection.");

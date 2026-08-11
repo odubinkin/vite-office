@@ -19,6 +19,22 @@ function enterWriterParagraphText(paragraph: HTMLElement, text: string): void {
   fireEvent.input(paragraph);
 }
 
+/** Provides a test-owned rich ClipboardItem that retains its MIME blobs for Writer UI assertions. */
+class WriterClipboardItemFixture {
+  /** MIME-typed blobs passed by the browser clipboard adapter. */
+  readonly items: Record<string, Blob>;
+
+  /**
+   * Creates the test-owned rich clipboard item.
+   *
+   * @param items - MIME-typed clipboard blobs produced by the Writer command.
+   * @returns A rich ClipboardItem fixture that retains the supplied MIME blobs.
+   */
+  constructor(items: Record<string, Blob>) {
+    this.items = items;
+  }
+}
+
 describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests. @returns Nothing; Vitest registers the enclosed cases. */, function defineWriterMenuBarTests(): void {
   it("places implemented Writer commands in accessible top-level menus" /**
    * Verifies File, Edit, View, Format, and Styles open their Writer-positioned command popups while Add paragraph is absent.
@@ -152,5 +168,89 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
         delete (navigator as unknown as { clipboard?: unknown }).clipboard;
       else Object.defineProperty(navigator, "clipboard", originalClipboard);
     }
+  });
+
+  it("copies selected visible Writer content as bounded rich HTML through the standard toolbar" /**
+   * Verifies Copy excludes accessibility descriptions while preserving the implemented heading and alignment presentation for rich target editors.
+   *
+   * @returns A promise resolved after the ClipboardItem MIME payloads are asserted.
+   */, async function copiesFormattedWriterSelection(): Promise<void> {
+    const originalClipboard = Object.getOwnPropertyDescriptor(navigator, "clipboard");
+    const originalClipboardItem = Object.getOwnPropertyDescriptor(globalThis, "ClipboardItem");
+    const write = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { write, writeText: vi.fn() },
+    });
+    Object.defineProperty(globalThis, "ClipboardItem", {
+      configurable: true,
+      value: WriterClipboardItemFixture,
+    });
+    try {
+      render(<App />);
+      const editor = screen.getByRole("textbox", { name: "Writer document text" });
+      enterWriterParagraphText(editor, "Formatted Writer body");
+      fireEvent.change(screen.getByLabelText("Paragraph style"), {
+        target: { value: "heading-1" },
+      });
+      fireEvent.click(screen.getByRole("button", { name: "Align center" }));
+      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+      await act(
+        /** Activates the Writer standard-toolbar Copy command. @returns A fulfilled React act promise. */
+        async function copiesRichWriterSelection(): Promise<void> {
+          fireEvent.click(screen.getByRole("button", { name: "Copy" }));
+        },
+      );
+      const clipboardItems = write.mock.calls[0]?.[0] as readonly WriterClipboardItemFixture[];
+      const clipboardItem = clipboardItems[0] as WriterClipboardItemFixture;
+      expect(await clipboardItem.items["text/plain"]?.text()).toBe("Formatted Writer body");
+      expect(await clipboardItem.items["text/html"]?.text()).toBe(
+        '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;">Formatted Writer body</p>',
+      );
+      expect(await clipboardItem.items["text/plain"]?.text()).not.toContain("Paragraph style:");
+    } finally {
+      if (originalClipboard === undefined)
+        delete (navigator as unknown as { clipboard?: unknown }).clipboard;
+      else Object.defineProperty(navigator, "clipboard", originalClipboard);
+      if (originalClipboardItem === undefined)
+        delete (globalThis as { ClipboardItem?: unknown }).ClipboardItem;
+      else Object.defineProperty(globalThis, "ClipboardItem", originalClipboardItem);
+    }
+  });
+
+  it("replaces native keyboard Copy data with sanitized formatted Writer clipboard types" /**
+   * Verifies Ctrl/Cmd+C cannot serialize hidden paragraph-style descriptions even though the browser selection crosses their DOM siblings.
+   *
+   * @returns Nothing; native ClipboardEvent payload types are asserted synchronously.
+   */, function interceptsNativeWriterCopy(): void {
+    render(<App />);
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    const documentBody = screen.getByRole("article", { name: "Writer document body" });
+    const emptySelectionSetData = vi.fn();
+    globalThis.getSelection()?.removeAllRanges();
+    fireEvent.copy(documentBody, { clipboardData: { setData: emptySelectionSetData } });
+    expect(emptySelectionSetData).not.toHaveBeenCalled();
+    enterWriterParagraphText(editor, "Keyboard copied heading");
+    fireEvent.change(screen.getByLabelText("Paragraph style"), {
+      target: { value: "heading-1" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Align center" }));
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+    const setData = vi.fn();
+    fireEvent.copy(documentBody, {
+      clipboardData: { setData },
+    });
+    expect(setData).toHaveBeenNthCalledWith(1, "text/plain", "Keyboard copied heading");
+    expect(setData).toHaveBeenNthCalledWith(
+      2,
+      "text/html",
+      '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;">Keyboard copied heading</p>',
+    );
+    expect(setData).not.toHaveBeenCalledWith(
+      "text/plain",
+      expect.stringContaining("Paragraph style:"),
+    );
   });
 });

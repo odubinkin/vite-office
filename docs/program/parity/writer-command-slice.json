@@ -77,7 +77,7 @@
       "capability": "Select All and Copy of browser-native Writer selection",
       "status": "implemented",
       "gaps": [
-        "Copy supports browser plain text only; rich clipboard formats, Paste, object selection, cross-document content, and Writer transfer semantics are not implemented.",
+        "Copy preserves only the browser text/plain and bounded paragraph-level text/html representations; inline character formatting, objects, tables, tracked changes, Paste, and full Writer transfer semantics are not implemented.",
         "Select All covers the bounded rendered document body, not every Writer document object or selection mode."
       ],
       "upstream": {
@@ -94,11 +94,13 @@
       },
       "local": {
         "implementation": [
-          { "path": "apps/office/src/platform/browser-clipboard.ts", "marker": "copyPlainText" },
-          { "path": "apps/office/src/components/WriterPlainTextEditor.tsx", "marker": "selectAllRequestId" }
+          { "path": "apps/office/src/platform/browser-clipboard.ts", "marker": "copyRichText" },
+          { "path": "apps/office/src/components/writer-clipboard-selection.ts", "marker": "createWriterClipboardSelection" }
         ],
         "tests": [
-          { "path": "apps/office/src/platform/browser-clipboard.test.ts", "marker": "native Clipboard API" },
+          { "path": "apps/office/src/components/WriterMenuBar.test.tsx", "marker": "replaces native keyboard Copy data" },
+          { "path": "apps/office/src/components/writer-clipboard-selection.test.ts", "marker": "omits accessibility descriptions" },
+          { "path": "apps/office/e2e/writer-clipboard.spec.ts", "marker": "copies visible formatted Writer content" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Copied selection" }
         ],
         "docs": [

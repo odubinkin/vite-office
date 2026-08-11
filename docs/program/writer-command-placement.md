@@ -12,8 +12,9 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
   counterparts.
 - The same file places Undo and Redo in **Edit**.
 - It places `.uno:Copy` in **Edit** and the standard toolbar. The browser
-  **Copy** command writes the current native selection through a browser-only
-  clipboard adapter; it has no document-history transition.
+  **Copy** command writes sanitized visible plain text and, where supported,
+  inline-styled HTML for the bounded paragraph presentation through a
+  browser-only clipboard adapter; it has no document-history transition.
 - It places `.uno:SelectAll` in **Edit**. The browser **Select All** command
   requests a native selection range over the current integrated Writer body; it
   has no standard-toolbar counterpart in this bounded slice.
