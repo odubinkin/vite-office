@@ -19,5 +19,11 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 
 The standard toolbar retains Save, Open, text download, Undo, and Redo. The
 former **Add paragraph** toolbar control was removed: normal Writer paragraph
-creation is caret/Enter behavior, not a standalone toolbar command. A later
-feature must implement that editing behavior at its native interaction point.
+creation is caret/Enter behavior, not a standalone toolbar command. The
+implemented browser equivalent now intercepts unmodified **Enter** at a
+collapsed editable-paragraph caret, splits the text into an adjacent paragraph,
+inherits its bounded style and alignment, and focuses the trailing paragraph.
+It intentionally has no menu or toolbar item. This follows Writer's normal
+editing interaction; pinned upstream tests use
+`ControlCharacter::PARAGRAPH_BREAK` in `sw/qa/**` to create the corresponding
+document-model break.

@@ -147,6 +147,9 @@ The following documents form the program control plane:
   Paragraph Style and Heading 1 state, focused selection, and snapshot defaults.
 - [Browser Writer paragraph reordering](writer-paragraph-reordering.md): bounded
   adjacent movement that preserves paragraph content and formatting state.
+- [Browser Writer paragraph breaks](writer-paragraph-breaks.md): caret-based
+  Enter behavior that splits one editable plain-text paragraph into two ordered
+  paragraphs while inheriting bounded paragraph formatting.
 - [Browser Writer integrated document canvas](writer-document-canvas.md):
   page-integrated editable paragraphs and Writer-inspired paragraph-control placement.
 - [Browser Writer plain-text editor workbench](writer-plain-text-editor.md):

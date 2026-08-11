@@ -45,6 +45,34 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
   );
   await expect(page.getByText("Centered")).toBeVisible();
   await expect(page.getByRole("button", { name: "Add paragraph" })).toHaveCount(0);
+  await writerEditor.evaluate(
+    /**
+     * Places the Chromium selection at the end of the controlled contenteditable paragraph before testing Enter.
+     *
+     * @param element - Browser-rendered Writer paragraph whose contents own the desired collapsed caret.
+     * @returns Nothing; the document selection receives the collapsed end-of-paragraph range.
+     */
+    function placeCaretAtParagraphEnd(element: HTMLElement): void {
+      const selection = window.getSelection();
+      if (selection === null)
+        throw new Error("Browser selection must be available for Writer E2E coverage.");
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    },
+  );
+  await writerEditor.press("Enter");
+  const trailingWriterParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
+  await expect(trailingWriterParagraph).toBeVisible();
+  await expect(trailingWriterParagraph).toHaveText("");
+  await expect(trailingWriterParagraph).toBeFocused();
+  await expect(trailingWriterParagraph).toHaveCSS("font-size", "24px");
+  await expect(trailingWriterParagraph).toHaveCSS("text-align", "center");
+  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("menuitem", { name: "Undo" }).click();
+  await expect(trailingWriterParagraph).toHaveCount(0);
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(writerEditor).toHaveCSS("text-align", "left");

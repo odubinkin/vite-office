@@ -93,6 +93,76 @@ export function appendWriterParagraph(
 }
 
 /**
+ * Splits one plain-text Writer paragraph at a UTF-16 caret offset and inserts the trailing text as its adjacent sibling.
+ *
+ * The inserted paragraph inherits the source paragraph's bounded alignment and style, which mirrors ordinary Writer
+ * paragraph-break editing within this plain-text model.
+ *
+ * @param writerDocument - Immutable prior Writer document state.
+ * @param paragraphId - Existing stable identity of the paragraph that contains the caret.
+ * @param offset - Integer UTF-16 caret offset from zero through the source paragraph text length.
+ * @param nextParagraphId - Stable non-empty identity reserved for the newly inserted adjacent paragraph.
+ * @returns New dirty Writer document with source-prefix text and an immediately following inherited-format paragraph.
+ * @throws {Error} When either paragraph identity is invalid or duplicated, the source paragraph is absent, or offset is outside the permitted integer range.
+ */
+export function splitWriterParagraph(
+  writerDocument: WriterDocument,
+  paragraphId: string,
+  offset: number,
+  nextParagraphId: string,
+): WriterDocument {
+  const paragraph = writerDocument.paragraphs.find(
+    /**
+     * Finds the paragraph selected by the requested stable identity.
+     *
+     * @param candidate - Immutable paragraph candidate to inspect.
+     * @returns True only when candidate owns paragraphId.
+     */
+    function hasParagraphId(candidate): boolean {
+      return candidate.id === paragraphId;
+    },
+  );
+  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  if (nextParagraphId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
+  if (
+    writerDocument.paragraphs.some(
+      /**
+       * Detects a collision between an existing paragraph and the requested inserted identity.
+       *
+       * @param candidate - Immutable paragraph candidate to inspect.
+       * @returns True only when candidate owns nextParagraphId.
+       */
+      function hasNextParagraphId(candidate): boolean {
+        return candidate.id === nextParagraphId;
+      },
+    )
+  ) {
+    throw new Error(`Duplicate paragraph: ${nextParagraphId}`);
+  }
+  if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.text.length)
+    throw new Error("Split offset is outside the paragraph.");
+  return {
+    document: markDocumentDirty(writerDocument.document),
+    paragraphs: writerDocument.paragraphs.flatMap(
+      /**
+       * Replaces only the source paragraph with its prefix and inherited-format trailing sibling.
+       *
+       * @param candidate - Immutable paragraph candidate preserved or split without mutation.
+       * @returns One preserved paragraph or the two immutable paragraphs produced by the split.
+       */
+      function splitSelectedParagraph(candidate): readonly WriterParagraph[] {
+        return candidate.id === paragraphId
+          ? [
+              { ...candidate, text: candidate.text.slice(0, offset) },
+              { ...candidate, id: nextParagraphId, text: candidate.text.slice(offset) },
+            ]
+          : [candidate];
+      },
+    ),
+  };
+}
+
+/**
  * Removes one named paragraph while preserving the non-empty Writer body invariant.
  *
  * @param writerDocument - Immutable prior Writer document state.

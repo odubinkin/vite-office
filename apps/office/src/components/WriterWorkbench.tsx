@@ -18,6 +18,7 @@ import {
   replaceWriterParagraph,
   setWriterParagraphAlignment,
   setWriterParagraphStyle,
+  splitWriterParagraph,
   type WriterDocument,
   type WriterParagraph,
   type WriterParagraphAlignment,
@@ -39,6 +40,7 @@ import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import {
   getActiveWriterParagraph,
   createWriterWorkbenchDocument,
+  getNextWriterParagraphId,
   getWorkbenchSelectionPosition,
   moveWriterParagraphInHistory,
 } from "./writer-workbench-helpers";
@@ -58,6 +60,7 @@ export interface WriterWorkbenchProps {
  */
 export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.Element {
   const [activeParagraphId, setActiveParagraphId] = useState("writer-paragraph-1");
+  const [focusParagraphId, setFocusParagraphId] = useState<string>();
   const [storagePending, setStoragePending] = useState(false);
   const [storageStatus, setStorageStatus] = useState("Not saved in this browser.");
   const [writerHistory, setWriterHistory] = useState<TransactionHistory<WriterDocument>>(
@@ -118,6 +121,38 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
    */
   function handleWriterParagraphFocus(paragraphId: string): void {
     setActiveParagraphId(paragraphId);
+  }
+
+  /**
+   * Splits the editable Writer paragraph at an unmodified Enter caret and targets the trailing paragraph.
+   *
+   * @param paragraphId - Existing Writer paragraph identity that received the native Enter key.
+   * @param offset - Collapsed UTF-16 caret offset within that paragraph's current plain text.
+   * @returns Nothing; React schedules the immutable split history transition and post-render browser focus.
+   */
+  function handleWriterParagraphBreak(paragraphId: string, offset: number): void {
+    const nextParagraphId = getNextWriterParagraphId(writerDocument);
+    setActiveParagraphId(nextParagraphId);
+    setFocusParagraphId(nextParagraphId);
+    setWriterHistory(
+      /**
+       * Applies the paragraph break to the current immutable history snapshot.
+       *
+       * @param currentHistory - Current Writer workbench history state.
+       * @returns History containing the split document with the caret position reset for the trailing paragraph.
+       */
+      function splitWorkbenchParagraph(
+        currentHistory: TransactionHistory<WriterDocument>,
+      ): TransactionHistory<WriterDocument> {
+        const nextDocument = splitWriterParagraph(
+          getCurrentTransactionState(currentHistory),
+          paragraphId,
+          offset,
+          nextParagraphId,
+        );
+        return applyTransaction(currentHistory, nextDocument, { position: 0 });
+      },
+    );
   }
 
   /**
@@ -442,6 +477,8 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       >
         <WriterPlainTextEditor
           activeParagraphId={activeParagraph.id}
+          focusParagraphId={focusParagraphId}
+          onParagraphBreak={handleWriterParagraphBreak}
           onParagraphFocus={handleWriterParagraphFocus}
           onTextChange={handleWriterTextChange}
           paragraphs={writerDocument.paragraphs}

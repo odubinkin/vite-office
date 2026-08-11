@@ -2,12 +2,18 @@
  * @fileoverview Renders ordered Writer paragraphs as accessible editable blocks integrated directly into the document page.
  */
 
+import { useEffect, useRef } from "react";
+
 import type { WriterParagraph } from "../domain/writer";
 
 /** Defines the immutable state and callback required by the integrated Writer document editor. */
 export interface WriterPlainTextEditorProps {
   /** Stable identity of the paragraph whose formatting controls are currently active. */
   readonly activeParagraphId: string;
+  /** Stable identity of a newly inserted paragraph that should receive browser focus at its beginning. */
+  readonly focusParagraphId: string | undefined;
+  /** Receives a paragraph identity and collapsed caret offset when native Enter requests a paragraph break. */
+  readonly onParagraphBreak: (paragraphId: string, offset: number) => void;
   /** Receives a stable paragraph identity when an editable paragraph gains focus. */
   readonly onParagraphFocus: (paragraphId: string) => void;
   /** Ordered immutable Writer paragraphs bound to document-integrated editable controls. */
@@ -21,6 +27,8 @@ export interface WriterPlainTextEditorProps {
  *
  * @param props - Immutable Writer state and callbacks for complete-text replacement and focused formatting.
  * @param props.activeParagraphId - Stable identity of the paragraph targeted by formatting controls.
+ * @param props.focusParagraphId - Newly inserted paragraph that should receive browser focus at offset zero.
+ * @param props.onParagraphBreak - Callback that creates a new paragraph from a collapsed native Enter caret.
  * @param props.onParagraphFocus - Callback that selects a paragraph for formatting after it gains focus.
  * @param props.paragraphs - Ordered Writer paragraphs displayed in the bounded document body.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
@@ -28,10 +36,26 @@ export interface WriterPlainTextEditorProps {
  */
 export function WriterPlainTextEditor({
   activeParagraphId,
+  focusParagraphId,
+  onParagraphBreak,
   onParagraphFocus,
   onTextChange,
   paragraphs,
 }: WriterPlainTextEditorProps): React.JSX.Element {
+  const paragraphElements = useRef(new Map<string, HTMLParagraphElement>());
+
+  useEffect(
+    /**
+     * Focuses a newly inserted paragraph after React has mounted its document-integrated editable block.
+     *
+     * @returns Nothing; browser focus is moved only when the requested paragraph is present.
+     */
+    function focusInsertedParagraph(): void {
+      if (focusParagraphId !== undefined) paragraphElements.current.get(focusParagraphId)?.focus();
+    },
+    [focusParagraphId],
+  );
+
   /**
    * Passes one complete editable paragraph text value to the owning immutable document state.
    *
@@ -44,6 +68,43 @@ export function WriterPlainTextEditor({
     event: React.FormEvent<HTMLParagraphElement>,
   ): void {
     onTextChange(paragraphId, event.currentTarget.textContent);
+  }
+
+  /**
+   * Reads a collapsed browser selection as a UTF-16 offset relative to one editable Writer paragraph.
+   *
+   * @param paragraphElement - Editable paragraph that must contain the selection's caret endpoint.
+   * @returns Caret offset for a collapsed in-paragraph selection, or undefined when the browser selection cannot be safely split.
+   */
+  function getCollapsedCaretOffset(paragraphElement: HTMLParagraphElement): number | undefined {
+    const selection = globalThis.getSelection();
+    if (selection === null || !selection.isCollapsed || selection.rangeCount !== 1)
+      return undefined;
+    const caretRange = selection.getRangeAt(0);
+    if (!paragraphElement.contains(caretRange.startContainer)) return undefined;
+    const precedingRange = caretRange.cloneRange();
+    precedingRange.selectNodeContents(paragraphElement);
+    precedingRange.setEnd(caretRange.startContainer, caretRange.startOffset);
+    return precedingRange.toString().length;
+  }
+
+  /**
+   * Intercepts an unmodified Enter key only when the browser exposes a safe collapsed caret for paragraph splitting.
+   *
+   * @param paragraphId - Stable identity of the paragraph that received the keyboard event.
+   * @param event - Browser keyboard event emitted by that editable paragraph.
+   * @returns Nothing; native Enter is prevented only for the modeled paragraph-break transition.
+   */
+  function handleParagraphKeyDown(
+    paragraphId: string,
+    event: React.KeyboardEvent<HTMLParagraphElement>,
+  ): void {
+    if (event.key !== "Enter" || event.shiftKey || event.altKey || event.ctrlKey || event.metaKey)
+      return;
+    const offset = getCollapsedCaretOffset(event.currentTarget);
+    if (offset === undefined) return;
+    event.preventDefault();
+    onParagraphBreak(paragraphId, offset);
   }
 
   /**
@@ -78,6 +139,17 @@ export function WriterPlainTextEditor({
           contentEditable
           data-alignment={paragraph.alignment}
           data-style={paragraph.style}
+          onKeyDown={
+            /**
+             * Routes a native paragraph-break key event through the stable paragraph identity.
+             *
+             * @param event - Browser keyboard event emitted by the rendered editable paragraph.
+             * @returns Nothing; the owner receives a split request when appropriate.
+             */
+            function breakParagraph(event: React.KeyboardEvent<HTMLParagraphElement>): void {
+              handleParagraphKeyDown(paragraph.id, event);
+            }
+          }
           onFocus={
             /**
              * Selects this paragraph so formatting controls target its immutable identity.
@@ -100,6 +172,18 @@ export function WriterPlainTextEditor({
             }
           }
           role="textbox"
+          ref={
+            /**
+             * Retains the mounted paragraph element so a completed split can focus its trailing sibling.
+             *
+             * @param element - Mounted editable paragraph or null when React unmounts it.
+             * @returns Nothing; the ref map is updated without document-state mutation.
+             */
+            function retainParagraphElement(element: HTMLParagraphElement | null): void {
+              if (element === null) paragraphElements.current.delete(paragraph.id);
+              else paragraphElements.current.set(paragraph.id, element);
+            }
+          }
           style={{ textAlign: paragraph.alignment }}
           suppressContentEditableWarning
         >

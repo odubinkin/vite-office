@@ -18,13 +18,10 @@ selection, caret behavior, and line wrapping remain browser-owned.
 ## Paragraph command placement
 
 The active paragraph's Default Paragraph Style, Heading 1, and alignment
-controls stay in the formatting toolbar. Adjacent movement stays implemented
-but is exposed through the toolbar's **Paragraph actions** menu rather than
-beside text. The pinned LibreOffice sources provide `MenuParagraph-MoveUp` and
-`MenuParagraph-MoveDown` in
-`sw/uiconfig/swriter/ui/notebookbar_groupedbar_compact.ui` and
-`notebookbar_groupedbar_full.ui`; this browser control is a compact placement
-equivalent, not a pixel-perfect notebookbar clone.
+controls stay in the formatting toolbar. Adjacent movement is exposed through
+**Format → Bullets and Numbering**, not beside text. Its bounded browser
+semantics and pinned menu provenance are recorded in
+[Writer command placement](writer-command-placement.md).
 
 No browser UI removes a whole paragraph in this slice. Native Writer deletion
 is tied to caret and range behavior, which this bounded workbench has not yet
@@ -34,8 +31,8 @@ domain capability for a later keyboard/range-editing feature.
 ## Deliberate limits
 
 This is not native LibreOffice rendering, WYSIWYG pagination, a rich-text or
-range editor, a custom selection model, clipboard semantics, Enter/Backspace
-paragraph splitting or merging, context menus, track changes, lists, tables,
+range editor, a custom selection model, clipboard semantics, Backspace
+paragraph merging, context menus, track changes, lists, tables,
 ODT/OOXML import/export, or complete Writer parity. It preserves the existing
 indigo, slate, rounded, and accessible application design rather than copying
 LibreOffice pixels or theme assets.
