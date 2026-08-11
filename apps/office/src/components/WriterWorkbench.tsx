@@ -27,8 +27,6 @@ import {
   saveWriterDocument,
   type WriterSnapshotState,
 } from "../domain/writer-storage";
-import { downloadPlainText } from "../platform/browser-download";
-import { copyPlainText } from "../platform/browser-clipboard";
 import { IndexedDbDocumentStorageAdapter } from "../platform/indexeddb-storage";
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterMenuBar } from "./WriterMenuBar";
@@ -37,6 +35,7 @@ import { WriterParagraphProperties } from "./WriterParagraphProperties";
 import { WriterPlainTextEditor } from "./WriterPlainTextEditor";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { useWriterHistoryShortcuts } from "./use-writer-history-shortcuts";
+import { useWriterBrowserCommands } from "./use-writer-browser-commands";
 import {
   useWriterDocumentSelection,
   useWriterWorkspaceChrome,
@@ -92,6 +91,10 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
   const writerDocument = getCurrentTransactionState(writerHistory);
   const activeParagraph = getActiveWriterParagraph(writerDocument, activeParagraphId);
   const activeParagraphIndex = writerDocument.paragraphs.indexOf(activeParagraph);
+  const { handleWriterCopy, handleWriterDownload } = useWriterBrowserCommands({
+    setStorageStatus,
+    writerDocument,
+  });
   const writerStorage =
     globalThis.indexedDB === undefined
       ? undefined
@@ -377,50 +380,6 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       setStorageStatus("Could not load local copy.");
     } finally {
       setStoragePending(false);
-    }
-  }
-
-  /** Downloads the ordered Writer paragraph body as a UTF-8 plain-text file. @returns Nothing; browser download ownership begins after dispatch. */
-  function handleWriterDownload(): void {
-    try {
-      downloadPlainText(
-        writerDocument.paragraphs
-          .map(
-            /**
-             * Extracts one paragraph body in document order for plain-text serialization.
-             *
-             * @param paragraph - Immutable paragraph whose text is serialized unchanged.
-             * @returns The paragraph plain-text body.
-             */
-            function extractParagraphText(paragraph): string {
-              return paragraph.text;
-            },
-          )
-          .join("\n"),
-        `${writerDocument.document.title}.txt`,
-      );
-      setStorageStatus("Plain-text download started.");
-    } catch {
-      setStorageStatus("Could not start plain-text download.");
-    }
-  }
-
-  /**
-   * Copies the current native Writer selection to the browser clipboard without changing the document model.
-   *
-   * @returns A promise resolved after copy feedback is recorded.
-   */
-  async function handleWriterCopy(): Promise<void> {
-    const selectedText = globalThis.getSelection()?.toString() ?? "";
-    if (selectedText === "") {
-      setStorageStatus("Select text to copy.");
-      return;
-    }
-    try {
-      await copyPlainText(selectedText);
-      setStorageStatus("Copied selection.");
-    } catch {
-      setStorageStatus("Could not copy selection.");
     }
   }
 
