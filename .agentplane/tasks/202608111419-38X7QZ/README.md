@@ -1,10 +1,11 @@
 ---
 id: "202608111419-38X7QZ"
 title: "Decompose Writer workbench and application tests"
-status: "DOING"
+result_summary: "Decomposed Writer workbench browser commands and App tests; all required focused checks passed."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "923b502; npm run test:coverage --workspace @vite-office/office; npm run test:e2e; npm run check:docs; npm run check:file-size; ap doctor; node .agentplane/policy/check-routing.mjs"
   findings:
     - "WriterWorkbench.tsx and App.test.tsx now fall below the repository review threshold."
-commit: null
+commit:
+  hash: "923b5027965f0d8f3ffbf700a396aea94c9e0b20"
+  message: "✨ 38X7QZ code: decompose Writer workbench tests"
 comments:
   -
     author: "CODER"
     body: "Start: extract focused Writer browser commands and tests while preserving exact UI behavior and full coverage."
+  -
+    author: "CODER"
+    body: "Verified: focused commands and tests extracted with passing evidence."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: extraction preserves Writer menu and clipboard behavior; fast checks, 100 percent coverage, targeted production E2E, documentation, size, diff, doctor, and routing all pass."
+  -
+    type: "status"
+    at: "2026-08-11T14:24:29.949Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: focused commands and tests extracted with passing evidence."
 doc_version: 3
-doc_updated_at: "2026-08-11T14:24:17.299Z"
+doc_updated_at: "2026-08-11T14:24:29.950Z"
 doc_updated_by: "CODER"
 description: "Move browser command handlers out of the oversized Writer workbench and extract feature-specific Writer UI tests from App.test.tsx without changing behavior or coverage."
 sections:
