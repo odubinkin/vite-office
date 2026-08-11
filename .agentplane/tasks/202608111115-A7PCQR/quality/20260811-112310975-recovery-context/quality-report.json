@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111115-A7PCQR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T11:23:10.975Z",
+  "verdict": "pass",
+  "summary": "Writer text download meets the bounded browser Blob export scope.",
+  "evaluated_sha": "1ebaae738b02be8213eedefbf70fdc6f3603f064",
+  "blueprint_digest": "0774def7d8ce0e67599e276dceae5dd5c2bca25dfa45a8bcfe1e9d2475771bf1",
+  "findings": [
+    "No confirmed defects: UTF-8 Blob creation, object-URL cleanup, accessible action, status feedback, tests, and documentation are present."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111115-A7PCQR/README.md",
+    "3418e57cbeca adapter implementation commit",
+    "c3a9f188b219 UI implementation commit",
+    "1ebaae7f0c06 documentation commit",
+    "npm run verify passed: 35 app tests, 67 inventory tests, Playwright, static build, JSDoc, and size check"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "ODT, OOXML, PDF, multi-paragraph serialization, File System Access, download history, printing, and broad LibreOffice parity remain separate tasks."
+  ]
+}
