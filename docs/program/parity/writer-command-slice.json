@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "records": [
+    {
+      "id": "LO-WRITER-0101",
+      "capability": "Writer command placement for bounded File, Edit, View, Format, and Styles controls",
+      "status": "implemented",
+      "gaps": [
+        "The browser shell provides only implemented commands and an explicit unavailable state; LibreOffice menu groups and command enablement remain much broader.",
+        "Native Writer menus, accelerators, dialogs, extensions, and UNO dispatch are not equivalent browser features."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/uiconfig/swriter/menubar/menubar.xml", "marker": ".uno:Copy" },
+          { "path": "sw/uiconfig/swriter/toolbar/standardbar.xml", "marker": ".uno:Copy" }
+        ],
+        "tests": [
+          { "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx", "marker": "testTdf115088" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/swriter/01/04060100.xhp", "marker": "<helpdocument" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/components/WriterMenuBar.tsx", "marker": "export function WriterMenuBar" },
+          { "path": "apps/office/src/components/WriterCommandToolbar.tsx", "marker": "Writer standard toolbar" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/App.test.tsx", "marker": "places implemented Writer commands" },
+          { "path": "apps/office/e2e/foundation.spec.ts", "marker": "File menu" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-command-placement.md", "marker": "Browser Writer command placement" },
+          { "path": "docs/program/writer-ui-shell.md", "marker": "Every visible top-level menu" }
+        ]
+      }
+    },
+    {
+      "id": "LO-WRITER-0102",
+      "capability": "Undo and Redo of bounded Writer paragraph history",
+      "status": "implemented",
+      "gaps": [
+        "The local immutable snapshot history covers bounded plain-text paragraphs only, not Writer's full document, style, frame, table, tracked-change, or repair semantics.",
+        "The mapped upstream test exercises tiled rendering invalidation behavior that browser history does not expose."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/uiconfig/swriter/menubar/menubar.xml", "marker": ".uno:Undo" }
+        ],
+        "tests": [
+          { "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx", "marker": "testUndoReorderingRedo" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/swriter/01/04060100.xhp", "marker": "<helpdocument" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/domain/history.ts", "marker": "undoTransaction" },
+          { "path": "apps/office/src/components/WriterMenuBar.tsx", "marker": "onUndo" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/domain/history.test.ts", "marker": "undo" },
+          { "path": "apps/office/src/App.test.tsx", "marker": "Undo" }
+        ],
+        "docs": [
+          { "path": "docs/program/transaction-history.md", "marker": "Undo and Redo" },
+          { "path": "docs/program/writer-command-placement.md", "marker": "Undo and Redo" }
+        ]
+      }
+    },
+    {
+      "id": "LO-WRITER-0103",
+      "capability": "Select All and Copy of browser-native Writer selection",
+      "status": "implemented",
+      "gaps": [
+        "Copy supports browser plain text only; rich clipboard formats, Paste, object selection, cross-document content, and Writer transfer semantics are not implemented.",
+        "Select All covers the bounded rendered document body, not every Writer document object or selection mode."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/uiconfig/swriter/menubar/menubar.xml", "marker": ".uno:SelectAll" },
+          { "path": "sw/uiconfig/swriter/toolbar/standardbar.xml", "marker": ".uno:Copy" }
+        ],
+        "tests": [
+          { "path": "sw/qa/extras/uiwriter/uiwriter6.cxx", "marker": "testNestedGroupTextBoxCopyCrash" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/swriter/01/select_text.xhp", "marker": "<helpdocument" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/platform/browser-clipboard.ts", "marker": "copyPlainText" },
+          { "path": "apps/office/src/components/WriterPlainTextEditor.tsx", "marker": "selectAllRequestId" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/platform/browser-clipboard.test.ts", "marker": "native Clipboard API" },
+          { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Copied selection" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-clipboard.md", "marker": "Browser Writer clipboard copy" },
+          { "path": "docs/program/writer-command-placement.md", "marker": "Select All" }
+        ]
+      }
+    },
+    {
+      "id": "LO-WRITER-0104",
+      "capability": "View visibility toggles for the bounded sidebar, horizontal ruler, and status bar",
+      "status": "implemented",
+      "gaps": [
+        "The browser state controls presentational workspace chrome only; it does not model Writer layout, pages, vertical rulers, panels, per-document preferences, or all View commands.",
+        "The upstream status-bar test asserts page-number behavior, while the local status bar remains static placement chrome."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/uiconfig/swriter/menubar/menubar.xml", "marker": ".uno:StatusBarVisible" },
+          { "path": "sw/uiconfig/swriter/menubar/menubar.xml", "marker": ".uno:Sidebar" }
+        ],
+        "tests": [
+          { "path": "sw/qa/extras/tiledrendering/tiledrendering2.cxx", "marker": "testStatusBarPageNumber" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/swriter/01/05150000.xhp", "marker": "<helpdocument" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/components/use-writer-workspace-chrome.ts", "marker": "isPropertiesSidebarVisible" },
+          { "path": "apps/office/src/components/WriterMenuBar.tsx", "marker": "Status Bar" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/App.test.tsx", "marker": "Horizontal ruler" },
+          { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Status Bar" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-ui-shell.md", "marker": "View → Sidebar" },
+          { "path": "docs/program/writer-command-placement.md", "marker": ".uno:StatusBarVisible" }
+        ]
+      }
+    }
+  ]
+}

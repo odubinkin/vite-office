@@ -106,6 +106,9 @@ explicit tooling rule. File-level exemptions require a documented rationale.
 The following documents form the program control plane:
 
 - [Parity matrix](parity-matrix.md): status and traceability source of truth.
+- [Writer command parity mappings](parity/writer-command-slice.json):
+  machine-validated upstream-to-local evidence for the first bounded Writer
+  command slices, with explicit unresolved gaps and approved exceptions.
 - [LibreOffice baseline](libreoffice-baseline.md): immutable upstream identity,
   acquisition, provenance, and licensing boundary.
 - [Inventory contract](inventory-contract.md): deterministic validation of the

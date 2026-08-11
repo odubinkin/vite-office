@@ -12,6 +12,12 @@ No row below claims a LibreOffice capability implementation. All seeded rows use
 references are not yet available in this repository. The browser workbench
 foundation is infrastructure evidence only and does not change that status.
 
+The first authored atomic records live in
+[`parity/writer-command-slice.json`](parity/writer-command-slice.json). They
+cover four bounded Writer command slices and are machine-validated by
+`npm run inventory:parity`. Each remains `implemented`, not `verified`: every
+known browser difference stays visible and no gap counts as parity.
+
 ## Stable identifier format
 
 Identifiers use `LO-<DOMAIN>-<NNNN>` and never change after publication. Domain
@@ -52,6 +58,11 @@ Each atomic capability record must contain:
 
 Only `verified` counts toward parity. `exception-approved` is visible debt and
 does not silently count as equivalent functionality.
+
+An exception may apply to a whole capability or to one upstream test reference.
+It must include a concrete browser rationale and an `approvedBy` decision
+reference. This permits a browser primitive to subsume a native low-level
+mechanism without erasing the upstream test from traceability.
 
 ## Seed inventory
 

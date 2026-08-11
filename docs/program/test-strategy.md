@@ -57,6 +57,14 @@ Every inventoried upstream test receives one of these outcomes:
 4. **Blocked** by a concrete platform constraint with an approved follow-up.
 5. **Exception-approved** by the user with rationale and retained visible debt.
 
+The first executable surface is
+[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Run
+`npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json
+--mappings docs/program/parity/writer-command-slice.json --local-root .
+--upstream-root vendor/libreoffice-reference` to verify its exact paths and
+markers. Its non-zero `gapCount` is intentional until each bounded browser
+slice is behaviorally equivalent.
+
 Deletion, disablement, quarantine, or weakened assertions require matrix updates
 and review. An upstream test is not covered by an unrelated local test that only
 executes the same code path.
