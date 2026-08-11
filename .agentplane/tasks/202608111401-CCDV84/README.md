@@ -1,10 +1,12 @@
 ---
 id: "202608111401-CCDV84"
 title: "Ignore local Playwright CLI artifacts"
-status: "DOING"
+result_summary: "Ignored generated Playwright CLI diagnostics."
+risk_level: "low"
+status: "DONE"
 priority: "low"
 owner: "DOCS"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "bc9fee1; git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor"
   findings:
     - "The task uses a one-line narrow ignore rule; full application tests are correctly not applicable to Git metadata only."
-commit: null
+commit:
+  hash: "bb27ab9fe8b5a02227f9f146098cc03d6eee508c"
+  message: "🧩 CCDV84 task: record ignore-rule verification"
 comments:
   -
     author: "DOCS"
     body: "Start: verify and persist the narrow local Playwright CLI artifact ignore rule without changing application or test behavior."
+  -
+    author: "DOCS"
+    body: "Verified: the local Playwright CLI artifact rule is narrow, policy-valid, and does not affect application behavior."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified the narrow Playwright CLI ignore rule: only generated local diagnostics are ignored, and policy checks pass."
+  -
+    type: "status"
+    at: "2026-08-11T14:02:20.906Z"
+    author: "DOCS"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: the local Playwright CLI artifact rule is narrow, policy-valid, and does not affect application behavior."
 doc_version: 3
-doc_updated_at: "2026-08-11T14:02:12.230Z"
+doc_updated_at: "2026-08-11T14:02:20.907Z"
 doc_updated_by: "DOCS"
 description: "Commit the existing narrow gitignore rule for local Playwright CLI inspection artifacts so browser diagnostics do not pollute task verification state."
 sections:
@@ -126,6 +140,10 @@ sections:
     Reason: this task changes only Git ignore metadata and cannot alter application runtime or test behavior.
     Risk: none to runtime behavior.
     Approval: user.
+extensions:
+  implementation_commit:
+    hash: "bc9fee14e366b1f154bc43d94e974d3967fdbbed"
+    message: "🧹 CCDV84 docs: Ignore local Playwright CLI artifacts"
 id_source: "generated"
 ---
 ## Summary
