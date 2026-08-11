@@ -1,10 +1,12 @@
 ---
 id: "202608111352-S6ES13"
 title: "Make Writer top-level menus open reliably"
-status: "DOING"
+result_summary: "Implemented and verified reliable Writer top-level menus."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "85077ef; npm run test:coverage --workspace @vite-office/office; npm run test:e2e"
   findings:
     - "The former overflow clipping root cause is covered by a production CSS regression assertion; documented file-size candidates remain a separate structural follow-up."
-commit: null
+commit:
+  hash: "ac4be018acccca7030ba8f7dcf980feb440da6eb"
+  message: "🧩 S6ES13 task: record menu verification"
 comments:
   -
     author: "CODER"
     body: "Start: reproduce the Writer menu interaction and make every visible top-level menu affordance open an explicit popup without creating unimplemented commands."
+  -
+    author: "CODER"
+    body: "Verified: all visible Writer menus now reveal unclipped, semantic popups and retain honest bounded command availability."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified Writer menu popup behavior: production browser coverage confirms visible, unclipped File and every other top-level menu; declared fast checks passed."
+  -
+    type: "status"
+    at: "2026-08-11T14:00:42.699Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: all visible Writer menus now reveal unclipped, semantic popups and retain honest bounded command availability."
 doc_version: 3
-doc_updated_at: "2026-08-11T14:00:30.523Z"
+doc_updated_at: "2026-08-11T14:00:42.700Z"
 doc_updated_by: "CODER"
 description: "Fix the Writer menu bar so visible top-level menu triggers respond to clicks in the production browser UI and expose an honest popup for unimplemented command groups without inventing commands."
 sections:
@@ -136,6 +150,10 @@ sections:
     Reason: the user approved a full aggregate checkpoint after every ten closed feature tasks; the prior Select All task was that checkpoint.
     Risk: static smoke and inventory validation were not rerun for this one-feature increment.
     Approval: user.
+extensions:
+  implementation_commit:
+    hash: "85077ef1cb1d8494805fe10c9e27a929c34e5a07"
+    message: "🐛 S6ES13 code: Reveal Writer menu popups"
 id_source: "generated"
 ---
 ## Summary
