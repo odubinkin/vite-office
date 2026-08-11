@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111419-38X7QZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T14:24:17.550Z",
+  "verdict": "pass",
+  "summary": "Focused browser commands and menu tests were extracted without behavior drift.",
+  "evaluated_sha": "923b5027965f0d8f3ffbf700a396aea94c9e0b20",
+  "blueprint_digest": "f9c547596363985f3fb1fc99b5f5e85142665abd0f45607cf75fc1ada05503fd",
+  "findings": [
+    "WriterWorkbench.tsx and App.test.tsx now fall below the repository review threshold."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111419-38X7QZ/README.md",
+    "923b502; npm run test:coverage --workspace @vite-office/office; npm run test:e2e; npm run check:docs; npm run check:file-size; ap doctor; node .agentplane/policy/check-routing.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
