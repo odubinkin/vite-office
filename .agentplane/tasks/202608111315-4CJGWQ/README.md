@@ -1,10 +1,12 @@
 ---
 id: "202608111315-4CJGWQ"
 title: "Decompose oversized Writer domain and workbench modules"
-status: "DOING"
+result_summary: "Decomposed oversized Writer domain and workbench modules."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "55b3ca03aef029f9d0cb3243c6277804be861330"
   findings:
     - "No blocking defects found."
-commit: null
+commit:
+  hash: "324123f1eceb7c28fbc41843e35088a68b267423"
+  message: "🧩 4CJGWQ task: record decomposition verification"
 comments:
   -
     author: "CODER"
     body: "Start: decomposing oversized Writer domain and workbench modules without changing behavior."
+  -
+    author: "CODER"
+    body: "Verified: Writer domain and workbench responsibilities are decomposed below the review threshold with unchanged browser behavior and complete evidence."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified decomposition preserves Writer behavior and removes both active file-size candidates with complete evidence."
+  -
+    type: "status"
+    at: "2026-08-11T13:19:14.625Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer domain and workbench responsibilities are decomposed below the review threshold with unchanged browser behavior and complete evidence."
 doc_version: 3
-doc_updated_at: "2026-08-11T13:19:05.704Z"
+doc_updated_at: "2026-08-11T13:19:14.626Z"
 doc_updated_by: "CODER"
 description: "Split the Writer pure paragraph operations and workbench editing handlers into cohesive documented modules so the current 543-line writer domain and 520-line WriterWorkbench are no longer file-size decomposition candidates. Preserve public behavior, test coverage, browser-local storage, command placement, and immutable history contracts."
 sections:
@@ -123,6 +137,10 @@ sections:
     Command: diff check, doctor, policy routing. Result: pass. Evidence: no whitespace errors; doctor only has informational configuration notes; routing passed.
 
     Skipped: static smoke, inventory, aggregate verify. Reason: user-approved ten-task cadence. Risk: aggregate checks have not rerun. Approval: user.
+extensions:
+  implementation_commit:
+    hash: "55b3ca03aef029f9d0cb3243c6277804be861330"
+    message: "♻️ 4CJGWQ code: Decompose Writer domain and workbench modules"
 id_source: "generated"
 ---
 ## Summary
