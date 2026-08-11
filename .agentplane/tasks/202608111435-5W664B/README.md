@@ -1,10 +1,11 @@
 ---
 id: "202608111435-5W664B"
 title: "Preserve formatted Writer selections on copy"
-status: "DOING"
+result_summary: "Implemented and verified sanitized native Copy output with paired rich HTML and plain text."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "f73b02a; npm run test:coverage; npm run test:e2e; npm run inventory:parity; format/lint/typecheck/JSDoc/file-size/diff/doctor/routing"
   findings:
     - "Native Writer copy overrides default DOM serialization with visible paragraph-only text/plain and text/html; a Heading 1 uses Heading 1 styling rather than Default Paragraph Style."
-commit: null
+commit:
+  hash: "f73b02aee23e6a254a6fceb4901d313ddb1714e7"
+  message: "✨ 5W664B code: preserve Writer copy formatting"
 comments:
   -
     author: "CODER"
     body: "Start: fix Writer copy payload fidelity and preserve bounded paragraph formatting."
+  -
+    author: "CODER"
+    body: "Verified: native Writer copy now serializes only visible selected paragraphs, preserving modeled Heading 1 and alignment formatting without accessibility-only paragraph-style labels."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: Writer menu, toolbar, and native Ctrl/Cmd copy emit sanitized visible plain text and bounded rich HTML; coverage, production E2E, parity inventory, and static checks pass."
+  -
+    type: "status"
+    at: "2026-08-11T14:48:53.476Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Writer copy now serializes only visible selected paragraphs, preserving modeled Heading 1 and alignment formatting without accessibility-only paragraph-style labels."
 doc_version: 3
-doc_updated_at: "2026-08-11T14:48:40.162Z"
+doc_updated_at: "2026-08-11T14:48:53.478Z"
 doc_updated_by: "CODER"
 description: "Fix Writer clipboard copy so hidden accessibility descriptions never enter plain text and supported browsers receive sanitized rich HTML with bounded paragraph alignment and style when copying into another editor."
 sections:
