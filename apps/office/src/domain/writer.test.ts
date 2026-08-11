@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 
 import { createDocument } from "./document";
 import {
+  appendWriterParagraph,
   createWriterDocument,
   insertWriterText,
   replaceWriterParagraph,
@@ -32,6 +33,26 @@ function createFixture(): WriterDocument {
  */
 function createBlankParagraph(writer: WriterDocument): WriterDocument {
   return createWriterDocument(writer.document, " ");
+}
+
+/**
+ * Attempts to append a paragraph with an identity that already belongs to the document.
+ *
+ * @param writer - Valid Writer document to inspect without mutation.
+ * @returns An invalid append result; the call always throws.
+ */
+function appendDuplicateParagraph(writer: WriterDocument): WriterDocument {
+  return appendWriterParagraph(writer, "p-1");
+}
+
+/**
+ * Attempts to append a paragraph with a blank identity.
+ *
+ * @param writer - Valid Writer document to inspect without mutation.
+ * @returns An invalid append result; the call always throws.
+ */
+function appendBlankParagraph(writer: WriterDocument): WriterDocument {
+  return appendWriterParagraph(writer, " ");
 }
 
 /**
@@ -114,6 +135,44 @@ describe("Writer paragraph body" /**
     expect(replaced.paragraphs[1]?.text).toBe("updated");
     expect(unchanged).toBe(replaced);
     expect(JSON.parse(JSON.stringify(replaced))).toEqual(replaced);
+  });
+
+  it("appends an ordered empty paragraph immutably and rejects duplicate identities" /**
+   * Verifies append uses the shared dirty lifecycle transition without mutating the original body.
+   *
+   * @returns Nothing; assertions validate the appended body and invalid-identity branch.
+   */, function appendsParagraphs(): void {
+    const writer = createFixture();
+    const appended = appendWriterParagraph(writer, "p-2");
+
+    expect(writer.paragraphs).toEqual([{ id: "p-1", text: "" }]);
+    expect(appended).toMatchObject({
+      document: { lifecycle: "dirty", revision: 1 },
+      paragraphs: [
+        { id: "p-1", text: "" },
+        { id: "p-2", text: "" },
+      ],
+    });
+    expect(
+      /**
+       * Executes the duplicate-identity failure case for Vitest.
+       *
+       * @returns Invalid Writer append result; the delegated call always throws.
+       */
+      function appendsDuplicateParagraph(): WriterDocument {
+        return appendDuplicateParagraph(writer);
+      },
+    ).toThrowError();
+    expect(
+      /**
+       * Executes the blank append-identity failure case for Vitest.
+       *
+       * @returns Invalid Writer append result; the delegated call always throws.
+       */
+      function appendsBlankParagraph(): WriterDocument {
+        return appendBlankParagraph(writer);
+      },
+    ).toThrowError();
   });
 
   it("rejects blank paragraph IDs, missing paragraphs, negative, oversized, and fractional offsets" /**

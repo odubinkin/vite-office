@@ -37,6 +37,37 @@ export function createWriterDocument(
 }
 
 /**
+ * Appends one empty plain-text paragraph to the ordered Writer body and marks the document dirty.
+ *
+ * @param writerDocument - Immutable prior Writer document state.
+ * @param paragraphId - Stable non-empty identity for the appended paragraph.
+ * @returns New Writer document with the appended empty paragraph and dirty lifecycle header.
+ * @throws {Error} When paragraphId is blank or already exists in the document.
+ */
+export function appendWriterParagraph(
+  writerDocument: WriterDocument,
+  paragraphId: string,
+): WriterDocument {
+  if (paragraphId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
+  const existingParagraph = writerDocument.paragraphs.find(
+    /**
+     * Finds an existing paragraph whose identity would collide with the requested append.
+     *
+     * @param candidate - Immutable paragraph candidate to inspect.
+     * @returns True only when candidate owns paragraphId.
+     */
+    function hasParagraphId(candidate): boolean {
+      return candidate.id === paragraphId;
+    },
+  );
+  if (existingParagraph !== undefined) throw new Error(`Duplicate paragraph: ${paragraphId}`);
+  return {
+    document: markDocumentDirty(writerDocument.document),
+    paragraphs: [...writerDocument.paragraphs, { id: paragraphId, text: "" }],
+  };
+}
+
+/**
  * Inserts text at one zero-based UTF-16 offset in a named paragraph and marks the document dirty.
  *
  * @param writerDocument - Immutable prior Writer document state.

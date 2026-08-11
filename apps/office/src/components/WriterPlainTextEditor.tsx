@@ -1,5 +1,5 @@
 /**
- * @fileoverview Renders the bounded, accessible plain-text editing surface for one Writer paragraph without implementing layout or rich-text behavior.
+ * @fileoverview Renders the bounded, accessible plain-text editing surface for an ordered Writer paragraph body without implementing layout or rich-text behavior.
  */
 
 import type { OfficeDocument } from "../domain/document";
@@ -13,10 +13,12 @@ export interface WriterPlainTextEditorProps {
   readonly canUndo: boolean;
   /** Shared Writer header whose lifecycle feedback is rendered without mutation. */
   readonly document: OfficeDocument;
-  /** Immutable paragraph whose complete text is bound to the editing control. */
-  readonly paragraph: WriterParagraph;
-  /** Receives the complete next paragraph text after a user editing event. */
-  readonly onTextChange: (text: string) => void;
+  /** Ordered immutable Writer paragraphs bound to accessible editing controls. */
+  readonly paragraphs: readonly WriterParagraph[];
+  /** Requests an immutable append of one empty paragraph. */
+  readonly onAppendParagraph: () => void;
+  /** Receives a stable paragraph identity and its complete next text after an editing event. */
+  readonly onTextChange: (paragraphId: string, text: string) => void;
   /** Requests restoration of the following immutable Writer snapshot. */
   readonly onRedo: () => void;
   /** Requests restoration of the preceding immutable Writer snapshot. */
@@ -24,15 +26,16 @@ export interface WriterPlainTextEditorProps {
 }
 
 /**
- * Renders one labelled textarea backed by an immutable Writer paragraph model.
+ * Renders labelled textareas backed by an immutable ordered Writer paragraph model.
  *
  * @param props - Immutable Writer state and callback for a complete-text replacement.
  * @param props.canRedo - Whether the forward-history control is enabled.
  * @param props.canUndo - Whether the backward-history control is enabled.
  * @param props.document - Header providing lifecycle and revision feedback.
+ * @param props.onAppendParagraph - Callback that adds an empty paragraph to the immutable body.
  * @param props.onRedo - Callback that restores the following history snapshot.
- * @param props.paragraph - First Writer paragraph displayed by this bounded editor.
- * @param props.onTextChange - Callback receiving complete user-entered paragraph text.
+ * @param props.paragraphs - Ordered Writer paragraphs displayed by this bounded editor.
+ * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
  * @param props.onUndo - Callback that restores the preceding history snapshot.
  * @returns A Writer-only accessible editing region without formatting or persistence controls.
  */
@@ -40,21 +43,64 @@ export function WriterPlainTextEditor({
   canRedo,
   canUndo,
   document,
+  onAppendParagraph,
   onRedo,
   onTextChange,
   onUndo,
-  paragraph,
+  paragraphs,
 }: WriterPlainTextEditorProps): React.JSX.Element {
   const lifecycleLabel = document.lifecycle === "new" ? "New document" : "Unsaved changes";
 
   /**
-   * Passes the complete textarea value to the owning immutable document state.
+   * Passes one complete textarea value to the owning immutable document state.
    *
+   * @param paragraphId - Stable identity of the paragraph edited by the textarea.
    * @param event - Browser change event emitted by the controlled textarea.
    * @returns Nothing; the parent schedules the immutable state transition.
    */
-  function handleTextChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
-    onTextChange(event.target.value);
+  function handleTextChange(
+    paragraphId: string,
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ): void {
+    onTextChange(paragraphId, event.target.value);
+  }
+
+  /**
+   * Renders one stable Writer paragraph as a labelled controlled textarea.
+   *
+   * @param paragraph - Immutable Writer paragraph rendered without mutation.
+   * @param index - Zero-based paragraph position used only for human-facing labels.
+   * @returns Accessible paragraph editing controls for the supplied body entry.
+   */
+  function renderParagraph(paragraph: WriterParagraph, index: number): React.JSX.Element {
+    const isFirstParagraph = index === 0;
+    const textareaId = `writer-editor-text-${index + 1}`;
+    const label = isFirstParagraph ? "Writer document text" : `Writer paragraph ${index + 1}`;
+    return (
+      <div className="mt-5" key={paragraph.id}>
+        <label className="block text-sm font-semibold text-slate-800" htmlFor={textareaId}>
+          {label}
+        </label>
+        <textarea
+          aria-describedby="writer-editor-help"
+          className="mt-2 min-h-40 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-base leading-7 text-slate-950 shadow-sm outline-none transition focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100"
+          id={textareaId}
+          onChange={
+            /**
+             * Connects the current textarea event to its immutable paragraph identity.
+             *
+             * @param event - Browser change event emitted for this paragraph textarea.
+             * @returns Nothing; the owning workbench schedules the update.
+             */
+            function updateParagraph(event: React.ChangeEvent<HTMLTextAreaElement>): void {
+              handleTextChange(paragraph.id, event);
+            }
+          }
+          placeholder={isFirstParagraph ? "Start writing…" : "Continue writing…"}
+          value={paragraph.text}
+        />
+      </div>
+    );
   }
 
   return (
@@ -93,25 +139,19 @@ export function WriterPlainTextEditor({
         >
           Redo
         </button>
+        <button
+          className="rounded-lg border border-indigo-300 bg-indigo-700 px-3 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-800"
+          onClick={onAppendParagraph}
+          type="button"
+        >
+          Add paragraph
+        </button>
       </div>
 
-      <label
-        className="mt-5 block text-sm font-semibold text-slate-800"
-        htmlFor="writer-editor-text"
-      >
-        Writer document text
-      </label>
-      <textarea
-        aria-describedby="writer-editor-help"
-        className="mt-2 min-h-40 w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-base leading-7 text-slate-950 shadow-sm outline-none transition focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100"
-        id="writer-editor-text"
-        onChange={handleTextChange}
-        placeholder="Start writing…"
-        value={paragraph.text}
-      />
+      {paragraphs.map(renderParagraph)}
       <p className="mt-3 text-sm leading-6 text-slate-600" id="writer-editor-help">
-        This workbench edits one plain-text paragraph in memory. Formatting, additional paragraphs,
-        save, and file formats are separate features.
+        This workbench edits ordered plain-text paragraphs in memory. Formatting, deletion,
+        reordering, and document file formats are separate features.
       </p>
     </section>
   );

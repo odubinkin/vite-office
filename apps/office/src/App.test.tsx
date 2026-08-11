@@ -7,7 +7,10 @@ import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
+import { createDocument } from "./domain/document";
 import { suiteDefinitions } from "./domain/suites";
+import { saveWriterDocument, type WriterSnapshotState } from "./domain/writer-storage";
+import { IndexedDbDocumentStorageAdapter } from "./platform/indexeddb-storage";
 
 describe("App" /**
  * Groups user-observable workbench foundation tests.
@@ -60,7 +63,29 @@ describe("App" /**
     expect(redoButton).toBeDisabled();
     fireEvent.change(editor, { target: { value: "A branched paragraph." } });
     expect(screen.getByText("Unsaved changes · revision 1")).toBeInTheDocument();
-    expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length + 5);
+    expect(screen.getAllByRole("button")).toHaveLength(suiteDefinitions.length + 6);
+  });
+
+  it("appends ordered Writer paragraphs through undoable immutable history" /**
+   * Verifies paragraph append, text editing, and history restoration preserve each paragraph position.
+   *
+   * @returns Nothing; assertions cover visible multi-paragraph editing behavior.
+   */, function appendsWriterParagraphs(): void {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
+    const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
+    fireEvent.change(secondParagraph, { target: { value: "Second plain-text paragraph" } });
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(secondParagraph).toHaveValue("");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveValue("");
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveValue(
+      "Second plain-text paragraph",
+    );
   });
 
   it("updates the preview and live status when a suite is selected" /**
@@ -116,6 +141,9 @@ describe("App" /**
       render(<App />);
       const editor = screen.getByRole("textbox", { name: "Writer document text" });
       fireEvent.change(editor, { target: { value: "Stored body" } });
+      fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
+      const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
+      fireEvent.change(secondParagraph, { target: { value: "Stored second body" } });
       await act(
         /** Starts the asynchronous save interaction. @returns A fulfilled React act promise. */
         async function savesDocument(): Promise<void> {
@@ -129,6 +157,7 @@ describe("App" /**
         },
       );
       fireEvent.change(editor, { target: { value: "Changed body" } });
+      fireEvent.change(secondParagraph, { target: { value: "Changed second body" } });
       await act(
         /** Starts the asynchronous load interaction. @returns A fulfilled React act promise. */
         async function loadsDocument(): Promise<void> {
@@ -139,9 +168,60 @@ describe("App" /**
         /** Waits for restored text and load feedback. @returns A fulfilled polling promise. */
         async function verifiesLoadedDocument(): Promise<void> {
           expect(editor).toHaveValue("Stored body");
+          expect(secondParagraph).toHaveValue("Stored second body");
           expect(screen.getByText("Loaded local saved copy.")).toBeInTheDocument();
         },
       );
+    } finally {
+      Object.defineProperty(globalThis, "indexedDB", {
+        configurable: true,
+        value: originalIndexedDb,
+      });
+    }
+  });
+
+  it("assigns a non-colliding paragraph identity after loading an irregular saved body" /**
+   * Verifies the workbench skips an occupied generated identity when historical local data has a gap.
+   *
+   * @returns A promise resolved after the loaded body and appended control are asserted.
+   */, async function appendsAfterIrregularLoad(): Promise<void> {
+    const originalIndexedDb = globalThis.indexedDB;
+    Object.defineProperty(globalThis, "indexedDB", {
+      configurable: true,
+      value: new IDBFactory(),
+    });
+    try {
+      const adapter = new IndexedDbDocumentStorageAdapter<WriterSnapshotState>(
+        "vite-office-writer-workbench",
+      );
+      await saveWriterDocument(adapter, {
+        document: createDocument({
+          id: "writer-workbench",
+          suiteId: "writer",
+          title: "Untitled Writer Document",
+        }),
+        paragraphs: [
+          { id: "writer-paragraph-1", text: "First stored paragraph" },
+          { id: "writer-paragraph-3", text: "Third stored paragraph" },
+        ],
+      });
+      render(<App />);
+      await act(
+        /** Starts the asynchronous load of the irregular saved body. @returns A fulfilled React act promise. */
+        async function loadsIrregularBody(): Promise<void> {
+          fireEvent.click(screen.getByRole("button", { name: "Load locally" }));
+        },
+      );
+      await waitFor(
+        /** Waits for the loaded body to become visible. @returns A fulfilled polling promise. */
+        async function verifiesIrregularBody(): Promise<void> {
+          expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveValue(
+            "Third stored paragraph",
+          );
+        },
+      );
+      fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
+      expect(screen.getByRole("textbox", { name: "Writer paragraph 3" })).toHaveValue("");
     } finally {
       Object.defineProperty(globalThis, "indexedDB", {
         configurable: true,
@@ -230,13 +310,20 @@ describe("App" /**
     });
   });
 
-  it("starts a plain-text download and reports adapter failures" /**
+  it("starts a multi-paragraph plain-text download and reports adapter failures" /**
    * Verifies the user-visible result for successful and rejected browser download capabilities.
-   * @returns Nothing; assertions validate both synchronous outcomes.
-   */, function downloadsWriterText(): void {
+   * @returns A promise resolved after Blob text serialization is asserted.
+   */, async function downloadsWriterText(): Promise<void> {
+    let downloadedBlob: Blob | undefined;
     const createObjectUrl = vi.fn(
-      /** Produces the deterministic test object URL. @returns Fixed object URL. */
-      function createObjectUrl(): string {
+      /**
+       * Captures the generated Blob and produces the deterministic test object URL.
+       *
+       * @param blob - Plain-text Blob supplied by the browser download adapter.
+       * @returns Fixed object URL.
+       */
+      function createObjectUrl(blob: Blob): string {
+        downloadedBlob = blob;
         return "blob:writer";
       },
     );
@@ -254,8 +341,13 @@ describe("App" /**
     fireEvent.change(screen.getByRole("textbox", { name: "Writer document text" }), {
       target: { value: "Download body" },
     });
+    fireEvent.click(screen.getByRole("button", { name: "Add paragraph" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Writer paragraph 2" }), {
+      target: { value: "Second download body" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Download text" }));
     expect(screen.getByText("Plain-text download started.")).toBeInTheDocument();
+    expect(await downloadedBlob?.text()).toBe("Download body\nSecond download body");
     createObjectUrl.mockImplementationOnce(
       /** Simulates unsupported browser object URL creation. @returns No URL because this call throws. */
       function rejectsObjectUrl(): string {

@@ -16,6 +16,7 @@ import {
   type TransactionHistory,
 } from "../domain/history";
 import {
+  appendWriterParagraph,
   createWriterDocument,
   replaceWriterParagraph,
   type WriterDocument,
@@ -57,6 +58,34 @@ function getWorkbenchSelectionPosition(writerDocument: WriterDocument): number {
   return (writerDocument.paragraphs[0] as WriterParagraph).text.length;
 }
 
+/**
+ * Derives the first available numeric paragraph identity for the bounded workbench document.
+ *
+ * @param writerDocument - Immutable Writer document whose existing identities are inspected.
+ * @returns Stable next paragraph identity that does not collide with the current body.
+ */
+function getNextWriterParagraphId(writerDocument: WriterDocument): string {
+  let ordinal = writerDocument.paragraphs.length + 1;
+  let candidate = `writer-paragraph-${ordinal}`;
+  while (
+    writerDocument.paragraphs.some(
+      /**
+       * Detects whether an existing paragraph owns the candidate identity.
+       *
+       * @param paragraph - Immutable paragraph candidate to inspect.
+       * @returns True only when the candidate identity is already occupied.
+       */
+      function hasCandidateId(paragraph): boolean {
+        return paragraph.id === candidate;
+      },
+    )
+  ) {
+    ordinal += 1;
+    candidate = `writer-paragraph-${ordinal}`;
+  }
+  return candidate;
+}
+
 /** Describes the suite-selection visibility controlled by the application shell. */
 export interface WriterWorkbenchProps {
   /** Whether Writer is the current suite and its workbench should be interactable. */
@@ -95,13 +124,14 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
   /**
    * Replaces the selected Writer paragraph text through the immutable domain transition.
    *
+   * @param paragraphId - Stable identity of the Writer paragraph being edited.
    * @param text - Complete next plain-text value emitted by the Writer textarea.
    * @returns Nothing; React schedules the next Writer document state.
    */
-  function handleWriterTextChange(text: string): void {
+  function handleWriterTextChange(paragraphId: string, text: string): void {
     setWriterHistory(
       /**
-       * Applies the complete-text replacement to the sole workbench paragraph.
+       * Applies the complete-text replacement to the selected workbench paragraph.
        *
        * @param currentHistory - Current immutable Writer workbench history state.
        * @returns History with the paragraph replacement applied as a new snapshot.
@@ -111,10 +141,34 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       ): TransactionHistory<WriterDocument> {
         const nextDocument = replaceWriterParagraph(
           getCurrentTransactionState(currentHistory),
-          "writer-paragraph-1",
+          paragraphId,
           text,
         );
         return applyTransaction(currentHistory, nextDocument, { position: text.length });
+      },
+    );
+  }
+
+  /** Appends an empty Writer paragraph through an immutable history transaction. @returns Nothing; React schedules the appended document state. */
+  function handleWriterAppendParagraph(): void {
+    setWriterHistory(
+      /**
+       * Appends one uniquely identified paragraph to the current history document.
+       *
+       * @param currentHistory - Immutable Writer history before paragraph append.
+       * @returns History containing the appended empty paragraph as its latest snapshot.
+       */
+      function appendWorkbenchParagraph(
+        currentHistory: TransactionHistory<WriterDocument>,
+      ): TransactionHistory<WriterDocument> {
+        const currentDocument = getCurrentTransactionState(currentHistory);
+        const nextDocument = appendWriterParagraph(
+          currentDocument,
+          getNextWriterParagraphId(currentDocument),
+        );
+        return applyTransaction(currentHistory, nextDocument, {
+          position: getWorkbenchSelectionPosition(nextDocument),
+        });
       },
     );
   }
@@ -201,11 +255,23 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     }
   }
 
-  /** Downloads the current Writer paragraph as a UTF-8 plain-text file. @returns Nothing; browser download ownership begins after dispatch. */
+  /** Downloads the ordered Writer paragraph body as a UTF-8 plain-text file. @returns Nothing; browser download ownership begins after dispatch. */
   function handleWriterDownload(): void {
     try {
       downloadPlainText(
-        (writerDocument.paragraphs[0] as WriterParagraph).text,
+        writerDocument.paragraphs
+          .map(
+            /**
+             * Extracts one paragraph body in document order for plain-text serialization.
+             *
+             * @param paragraph - Immutable paragraph whose text is serialized unchanged.
+             * @returns The paragraph plain-text body.
+             */
+            function extractParagraphText(paragraph): string {
+              return paragraph.text;
+            },
+          )
+          .join("\n"),
         `${writerDocument.document.title}.txt`,
       );
       setStorageStatus("Plain-text download started.");
@@ -297,10 +363,11 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         canRedo={writerHistory.index < writerHistory.entries.length - 1}
         canUndo={writerHistory.index > 0}
         document={writerDocument.document}
+        onAppendParagraph={handleWriterAppendParagraph}
         onRedo={handleWriterRedo}
         onTextChange={handleWriterTextChange}
         onUndo={handleWriterUndo}
-        paragraph={writerDocument.paragraphs[0] as WriterParagraph}
+        paragraphs={writerDocument.paragraphs}
       />
       <WriterStorageControls
         isPending={storagePending}
