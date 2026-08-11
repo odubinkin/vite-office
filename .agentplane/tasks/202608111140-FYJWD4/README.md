@@ -1,10 +1,12 @@
 ---
 id: "202608111140-FYJWD4"
 title: "Add Writer plain-text paragraph removal"
-status: "DOING"
+result_summary: "Writer plain-text paragraph removal verified."
+risk_level: "low"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +42,16 @@ quality_review:
     - "ap doctor and routing validation passed"
   findings:
     - "No confirmed defects: the domain rejects invalid removal, UI exposes removal only when eligible, history restores removed content, and plain-text export reflects the reduced body."
-commit: null
+commit:
+  hash: "ea4d102dcd2a59ba31b6ad8aa8ae82a831b52261"
+  message: "✅ FYJWD4 task: record Writer paragraph removal evidence"
 comments:
   -
     author: "CODER"
     body: "Start: adding safe Writer paragraph removal while preserving the non-empty document body invariant."
+  -
+    author: "CODER"
+    body: "Verified: Writer safe paragraph removal passed focused complete coverage and the approved fast verification contour."
 events:
   -
     type: "status"
@@ -59,8 +66,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: immutable non-final paragraph removal, inaccessible final-paragraph removal, undo/redo restoration, and updated download output passed 41 application tests at 100% coverage. Per approved cadence, Playwright/static/full verification were deferred because the UI is covered by focused integration tests and build configuration is unchanged."
+  -
+    type: "status"
+    at: "2026-08-11T11:43:07.463Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer safe paragraph removal passed focused complete coverage and the approved fast verification contour."
 doc_version: 3
-doc_updated_at: "2026-08-11T11:42:49.199Z"
+doc_updated_at: "2026-08-11T11:43:07.465Z"
 doc_updated_by: "CODER"
 description: "Add immutable removal of non-final Writer paragraphs and accessible controls while preserving ordered text, undo/redo, browser-local storage, and plain-text export."
 sections:
@@ -124,6 +138,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "66d5cf70b97a0bb914e0a450028b296a4ce0ffc1"
+    message: "✨ FYJWD4 code: add Writer paragraph removal"
 id_source: "generated"
 ---
 ## Summary
