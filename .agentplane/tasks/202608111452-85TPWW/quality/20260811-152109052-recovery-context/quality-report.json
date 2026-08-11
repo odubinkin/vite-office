@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111452-85TPWW",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T15:21:09.052Z",
+  "verdict": "pass",
+  "summary": "Writer document selection and caret navigation now work across bounded paragraphs.",
+  "evaluated_sha": "f4998f4e3c39ba9a4047e53399f6075ba5d0d1f7",
+  "blueprint_digest": "cf5f3d659b100d4681a70623a50e8f04abbb2dbb19b84ea74d19bc2361ca8681",
+  "findings": [
+    "Cross-paragraph pointer selection is bounded to complete crossed paragraphs because browser contenteditable hosts cannot natively preserve partial ranges across host boundaries."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111452-85TPWW/README.md",
+    "f4998f4; coverage; production E2E; parity inventory; static checks"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
