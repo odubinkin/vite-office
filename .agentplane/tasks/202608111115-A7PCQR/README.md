@@ -1,10 +1,12 @@
 ---
 id: "202608111115-A7PCQR"
 title: "Add Writer plain-text browser download"
-status: "DOING"
+result_summary: "Writer plain-text browser download contract verified."
+risk_level: "low"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +43,16 @@ quality_review:
     - "npm run verify passed: 35 app tests, 67 inventory tests, Playwright, static build, JSDoc, and size check"
   findings:
     - "No confirmed defects: UTF-8 Blob creation, object-URL cleanup, accessible action, status feedback, tests, and documentation are present."
-commit: null
+commit:
+  hash: "27312b2a1fce314fd0adf7376a8b6613cba14522"
+  message: "✅ A7PCQR task: record Writer download verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Writer plain-text browser download."
+  -
+    author: "CODER"
+    body: "Verified: Writer plain-text browser download passed the declared checks and independent evaluator review."
 events:
   -
     type: "status"
@@ -60,8 +67,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: UTF-8 plain-text Blob download, object-URL cleanup, accessible Writer action, success/failure feedback, documentation, and the full project verification suite passed."
+  -
+    type: "status"
+    at: "2026-08-11T11:23:28.140Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer plain-text browser download passed the declared checks and independent evaluator review."
 doc_version: 3
-doc_updated_at: "2026-08-11T11:23:00.978Z"
+doc_updated_at: "2026-08-11T11:23:28.143Z"
 doc_updated_by: "CODER"
 description: "Provide an accessible Writer workbench action that exports the current bounded plain-text paragraph through a browser Blob download adapter, without a backend or OpenDocument format claim."
 sections:
@@ -118,6 +132,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "1ebaae738b02be8213eedefbf70fdc6f3603f064"
+    message: "📝 A7PCQR code: document Writer text download"
 id_source: "generated"
 ---
 ## Summary
