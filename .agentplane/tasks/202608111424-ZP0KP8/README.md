@@ -1,10 +1,11 @@
 ---
 id: "202608111424-ZP0KP8"
 title: "Record browser-runtime parity exceptions"
-status: "DOING"
+result_summary: "Added strict non-implementable feature and upstream-test exception records with deterministic report visibility."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "778c839; npm run test:inventory:coverage; npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference; npm run check:docs; npm run typecheck"
   findings:
     - "The deterministic report exposes capability and upstream-test exceptions separately with count zero for the current Writer slice."
-commit: null
+commit:
+  hash: "778c839e58b7464d2a4874f98522b5cf57150784"
+  message: "✨ ZP0KP8 code: record browser parity exceptions"
 comments:
   -
     author: "CODER"
     body: "Start: make browser-runtime feature and test exceptions explicit, validated, and visibly reported."
+  -
+    author: "CODER"
+    body: "Verified: browser-runtime exceptions are explicit and auditable."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified: non-implementable feature and upstream-test exceptions are strict, separately reported, documented, and covered at 100 percent; current Writer parity evidence remains valid."
+  -
+    type: "status"
+    at: "2026-08-11T14:32:12.356Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: browser-runtime exceptions are explicit and auditable."
 doc_version: 3
-doc_updated_at: "2026-08-11T14:32:03.568Z"
+doc_updated_at: "2026-08-11T14:32:12.357Z"
 doc_updated_by: "CODER"
 description: "Allow feature and test parity records to be explicitly excepted when browser capabilities supersede or make an upstream LibreOffice behavior inapplicable, with mandatory rationale, classification, approval, documentation, and manifest validation."
 sections:
