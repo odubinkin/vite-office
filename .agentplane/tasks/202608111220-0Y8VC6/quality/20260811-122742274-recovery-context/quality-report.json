@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111220-0Y8VC6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T12:27:42.274Z",
+  "verdict": "pass",
+  "summary": "The Writer reordering slice implements a bounded immutable adjacent-paragraph move that preserves complete paragraph state and uses the durable document-canvas interaction region.",
+  "evaluated_sha": "aaad1b11b055631af1d87f17101b4162bffb8e14",
+  "blueprint_digest": "fce3a7c19f6d02c9bb0a27c3ba3ce9eeee7c19812d529c691c473651d2122088",
+  "findings": [
+    "No defects found in the approved scope: movement validates direction and bounds, preserves paragraph identity and formatting, retains active focus, participates in history and storage, and is covered by accessibility and production-browser evidence."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111220-0Y8VC6/README.md",
+    "Implementation commit aaad1b11b055631af1d87f17101b4162bffb8e14; Prettier, lint, typecheck, JSDoc validation (109 files), file-size review, and diff check passed; 50 focused app tests passed at 100% coverage; targeted production Playwright and axe passed; ap doctor and routing validation passed."
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Static smoke, inventory, and full aggregation remain deferred under the user-approved every-ten-tasks cadence. Change tracking, range/drag/keyboard movement, list/table/section/frame movement, layout/pagination, collaboration, ODT/OOXML, print/PDF, and complete Writer parity remain separate tasks."
+  ]
+}
