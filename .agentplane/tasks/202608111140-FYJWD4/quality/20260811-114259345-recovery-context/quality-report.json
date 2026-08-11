@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111140-FYJWD4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T11:42:59.345Z",
+  "verdict": "pass",
+  "summary": "Bounded Writer paragraph removal preserves the non-empty body invariant and existing browser behavior.",
+  "evaluated_sha": "66d5cf70b97a0bb914e0a450028b296a4ce0ffc1",
+  "blueprint_digest": "f9b3a378f2a342283650e092b2f233e2bf26b874dbb6690d5dff5f6aaafaa749",
+  "findings": [
+    "No confirmed defects: the domain rejects invalid removal, UI exposes removal only when eligible, history restores removed content, and plain-text export reflects the reduced body."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111140-FYJWD4/README.md",
+    "66d5cf70b97a implementation and documentation commit",
+    "fast contour passed: format, lint, typecheck, JSDoc, 41 application tests, 100% coverage",
+    "ap doctor and routing validation passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Playwright, static smoke, inventory tests, and full verification remain deferred under the user-approved cadence. Range deletion, rich text, reordering, layout, ODT, PDF, and broad Writer parity remain separate tasks."
+  ]
+}
