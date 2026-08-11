@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608111401-CCDV84",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-11T14:02:12.494Z",
+  "verdict": "pass",
+  "summary": "Local Playwright CLI output is ignored without changing product files or test-report paths.",
+  "evaluated_sha": "bc9fee14e366b1f154bc43d94e974d3967fdbbed",
+  "blueprint_digest": "a263600d0bad86cc35e5b31a5e0e727405226f8a966887029ed6e32c5c101c3c",
+  "findings": [
+    "The task uses a one-line narrow ignore rule; full application tests are correctly not applicable to Git metadata only."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608111401-CCDV84/README.md",
+    "bc9fee1; git diff --check; node .agentplane/policy/check-routing.mjs; ap doctor"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
