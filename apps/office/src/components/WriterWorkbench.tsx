@@ -2,10 +2,7 @@
  * @fileoverview Owns the bounded Writer document workbench state and browser-only editing controls.
  */
 
-import { useEffect, useState } from "react";
-
-import { getBrowserShortcut } from "../domain/browser-shortcuts";
-import { createCommandRegistry, dispatchCommand, findCommandByShortcut } from "../domain/commands";
+import { useState } from "react";
 import {
   applyTransaction,
   createTransactionHistory,
@@ -38,6 +35,7 @@ import { WriterParagraphFormattingToolbar } from "./WriterParagraphFormattingToo
 import { WriterParagraphProperties } from "./WriterParagraphProperties";
 import { WriterPlainTextEditor } from "./WriterPlainTextEditor";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
+import { useWriterHistoryShortcuts } from "./use-writer-history-shortcuts";
 import {
   getActiveWriterParagraph,
   createWriterWorkbenchDocument,
@@ -367,82 +365,12 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     }
   }
 
-  useEffect(
-    /**
-     * Installs Writer-only keyboard command dispatch and releases it when history changes.
-     *
-     * @returns Cleanup that removes the registered browser listener.
-     */
-    function installWriterShortcuts(): () => void {
-      const registry = createCommandRegistry([
-        {
-          execute: handleWriterUndo,
-          id: "writer.undo",
-          isEnabled:
-            /** Determines whether Ctrl Undo can run for the current Writer history. @returns True when a prior snapshot exists in Writer. */
-            function canUndo(): boolean {
-              return isActive && writerHistory.index > 0;
-            },
-          label: "Undo",
-          shortcut: "Ctrl+Z",
-        },
-        {
-          execute: handleWriterRedo,
-          id: "writer.redo",
-          isEnabled:
-            /** Determines whether Ctrl Redo can run for the current Writer history. @returns True when a following snapshot exists in Writer. */
-            function canRedo(): boolean {
-              return isActive && writerHistory.index < writerHistory.entries.length - 1;
-            },
-          label: "Redo",
-          shortcut: "Ctrl+Shift+Z",
-        },
-        {
-          execute: handleWriterUndo,
-          id: "writer.metaUndo",
-          isEnabled:
-            /** Determines whether Meta Undo can run for the current Writer history. @returns True when a prior snapshot exists in Writer. */
-            function canUndo(): boolean {
-              return isActive && writerHistory.index > 0;
-            },
-          label: "Undo",
-          shortcut: "Meta+Z",
-        },
-        {
-          execute: handleWriterRedo,
-          id: "writer.metaRedo",
-          isEnabled:
-            /** Determines whether Meta Redo can run for the current Writer history. @returns True when a following snapshot exists in Writer. */
-            function canRedo(): boolean {
-              return isActive && writerHistory.index < writerHistory.entries.length - 1;
-            },
-          label: "Redo",
-          shortcut: "Meta+Shift+Z",
-        },
-      ]);
-      /**
-       * Dispatches one recognized browser shortcut and prevents its native default when executed.
-       *
-       * @param event - Browser keyboard event inspected and optionally cancelled.
-       * @returns Nothing; command execution schedules React state updates.
-       */
-      function handleKeyDown(event: KeyboardEvent): void {
-        const shortcut = getBrowserShortcut(event);
-        if (shortcut === undefined) return;
-        const command = findCommandByShortcut(registry, shortcut);
-        if (command === undefined) return;
-        const result = dispatchCommand(registry, command.id, undefined);
-        if (result.status === "executed") event.preventDefault();
-      }
-      window.addEventListener("keydown", handleKeyDown);
-      /** Removes the listener owned by this effect invocation. @returns Nothing. */
-      function removeWriterShortcuts(): void {
-        window.removeEventListener("keydown", handleKeyDown);
-      }
-      return removeWriterShortcuts;
-    },
-    [isActive, writerHistory],
-  );
+  useWriterHistoryShortcuts({
+    history: writerHistory,
+    isActive,
+    onRedo: handleWriterRedo,
+    onUndo: handleWriterUndo,
+  });
 
   return (
     <div hidden={!isActive}>
