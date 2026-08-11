@@ -9,6 +9,7 @@ import {
   appendWriterParagraph,
   createWriterDocument,
   insertWriterText,
+  moveWriterParagraph,
   normalizeWriterParagraphFormatting,
   removeWriterParagraph,
   replaceWriterParagraph,
@@ -17,6 +18,7 @@ import {
   type WriterDocument,
   type WriterParagraphAlignment,
   type WriterParagraphStyle,
+  type WriterParagraphMoveDirection,
 } from "./writer";
 
 /**
@@ -154,6 +156,11 @@ function setMissingParagraphAlignment(writer: WriterDocument): WriterDocument {
 /** Attempts an unsupported style through an untyped boundary. @param writer - Valid Writer document. @returns Invalid style transition that always throws. */
 function setUnsupportedStyle(writer: WriterDocument): WriterDocument {
   return setWriterParagraphStyle(writer, "p-1", "caption" as WriterParagraphStyle);
+}
+
+/** Attempts an unsupported movement through an untyped boundary. @param writer - Valid Writer document. @returns Invalid movement that always throws. */
+function moveUnsupportedDirection(writer: WriterDocument): WriterDocument {
+  return moveWriterParagraph(writer, "p-1", "sideways" as WriterParagraphMoveDirection);
 }
 
 describe("Writer paragraph body" /**
@@ -327,6 +334,50 @@ describe("Writer paragraph body" /**
       /** Executes the missing-paragraph style failure case. @returns Invalid transition that always throws. */
       function stylesMissingParagraph(): WriterDocument {
         return setWriterParagraphStyle(writer, "missing", "heading-1");
+      },
+    ).toThrowError();
+  });
+
+  it("moves a paragraph by one adjacent position without losing its properties" /** Verifies exact ordering, identity retention, dirty lifecycle behavior, and every invalid movement boundary. @returns Nothing; assertions validate adjacent paragraph movement. */, function movesParagraphs(): void {
+    const writer = appendWriterParagraph(appendWriterParagraph(createFixture(), "p-2"), "p-3");
+    const styled = setWriterParagraphStyle(
+      setWriterParagraphAlignment(writer, "p-2", "right"),
+      "p-2",
+      "heading-1",
+    );
+    const movedUp = moveWriterParagraph(styled, "p-2", "up");
+    const movedDown = moveWriterParagraph(movedUp, "p-2", "down");
+
+    expect(movedUp.paragraphs[0]?.id).toBe("p-2");
+    expect(movedUp.paragraphs[1]?.id).toBe("p-1");
+    expect(movedUp.paragraphs[2]?.id).toBe("p-3");
+    expect(movedUp.paragraphs[0]).toBe(styled.paragraphs[1]);
+    expect(movedUp.paragraphs[0]).toMatchObject({ alignment: "right", style: "heading-1" });
+    expect(movedDown.paragraphs[0]?.id).toBe("p-1");
+    expect(movedDown.paragraphs[1]?.id).toBe("p-2");
+    expect(movedDown.paragraphs[2]?.id).toBe("p-3");
+    expect(
+      /** Executes the upper-boundary failure. @returns Invalid movement that always throws. */
+      function movesFirstParagraphUp(): WriterDocument {
+        return moveWriterParagraph(styled, "p-1", "up");
+      },
+    ).toThrowError();
+    expect(
+      /** Executes the lower-boundary failure. @returns Invalid movement that always throws. */
+      function movesLastParagraphDown(): WriterDocument {
+        return moveWriterParagraph(styled, "p-3", "down");
+      },
+    ).toThrowError();
+    expect(
+      /** Executes the missing-paragraph failure. @returns Invalid movement that always throws. */
+      function movesMissingParagraph(): WriterDocument {
+        return moveWriterParagraph(styled, "missing", "down");
+      },
+    ).toThrowError();
+    expect(
+      /** Executes the unsupported-direction failure. @returns Invalid movement that always throws. */
+      function movesUnsupportedDirection(): WriterDocument {
+        return moveUnsupportedDirection(styled);
       },
     ).toThrowError();
   });

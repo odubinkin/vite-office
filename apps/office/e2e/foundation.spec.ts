@@ -40,6 +40,14 @@ test("loads the Writer structural workspace and supports keyboard-visible suite 
     "true",
   );
   await expect(page.getByText("Centered")).toBeVisible();
+  await page.getByRole("button", { name: "Add paragraph" }).click();
+  const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
+  await secondParagraph.fill("Second browser-authored paragraph.");
+  await expect(page.getByRole("button", { name: "Move paragraph 1 up" })).toBeDisabled();
+  await page.getByRole("button", { name: "Move paragraph 2 up" }).click();
+  await expect(page.getByRole("textbox", { name: "Writer document text" })).toHaveValue(
+    "Second browser-authored paragraph.",
+  );
 
   const calcButton = page.getByRole("button", { name: "Calc, Foundation only" });
   await calcButton.focus();

@@ -23,7 +23,9 @@ contains real left, center, right, and justified controls for the focused
 paragraph; their current value appears in the properties sidebar. The existing
 Paragraph style selector likewise applies Default Paragraph Style or Heading 1
 to the focused paragraph. Paragraph removal remains a contextual control
-because keyboard/range editing is not implemented yet.
+because keyboard/range editing is not implemented yet. Adjacent paragraph
+movement is also contextual in the document canvas rather than a claim of
+LibreOffice drag, range, or tracked-change movement.
 
 The menu items, remaining character-format controls, ruler, page count,
 language indicator, and most Writer commands are visual placement contracts

@@ -42,6 +42,7 @@ import {
   createWriterWorkbenchDocument,
   getNextWriterParagraphId,
   getWorkbenchSelectionPosition,
+  moveWriterParagraphInHistory,
 } from "./writer-workbench-helpers";
 
 /** Describes the suite-selection visibility controlled by the application shell. */
@@ -202,6 +203,17 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         return applyTransaction(currentHistory, nextDocument, {
           position: getWorkbenchSelectionPosition(nextDocument),
         });
+      },
+    );
+  }
+
+  /** Moves an existing Writer paragraph one adjacent position. @param paragraphId - Stable identity selected by the contextual movement control. @param direction - Requested adjacent movement direction. @returns Nothing; React schedules the immutable reordered history state. */
+  function handleWriterMoveParagraph(paragraphId: string, direction: "up" | "down"): void {
+    setActiveParagraphId(paragraphId);
+    setWriterHistory(
+      /** Swaps the requested paragraph in current immutable history. @param currentHistory - Current Writer workbench history state. @returns History containing the reordered body as its latest snapshot. */
+      function moveWorkbenchParagraph(currentHistory): TransactionHistory<WriterDocument> {
+        return moveWriterParagraphInHistory(currentHistory, paragraphId, direction);
       },
     );
   }
@@ -473,6 +485,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         <WriterPlainTextEditor
           activeParagraphId={activeParagraph.id}
           document={writerDocument.document}
+          onMoveParagraph={handleWriterMoveParagraph}
           onParagraphFocus={handleWriterParagraphFocus}
           onRemoveParagraph={handleWriterRemoveParagraph}
           onTextChange={handleWriterTextChange}

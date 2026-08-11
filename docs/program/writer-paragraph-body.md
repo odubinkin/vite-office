@@ -13,6 +13,8 @@ alignment; [`setWriterParagraphAlignment`](../../apps/office/src/domain/writer.t
 changes that one property without changing its text or sibling paragraphs. Each
 paragraph also retains a bounded direct style; `setWriterParagraphStyle` applies
 Default Paragraph Style or Heading 1 without modeling inheritance.
+`moveWriterParagraph` swaps one named paragraph with an adjacent sibling while
+retaining every paragraph object's full serializable state.
 
 Each operation is pure: it does not mutate its input, keeps unedited paragraph
 objects intact, and produces JSON-serializable output. A changed body uses the
@@ -26,7 +28,7 @@ to the same immutable append contract; all paragraph changes participate in
 history, browser-local snapshots, and line-separated plain-text download.
 
 This intentionally does not implement range or character formatting, layout,
-fields, sections, lists, tables, selection, range deletion, reordering, ODT import/export,
+fields, sections, lists, tables, selection, range deletion, drag-and-drop or range reordering, ODT import/export,
 collaboration, accessibility parity, or LibreOffice Writer parity. The append
 intent is traceable to `APPEND_PARAGRAPH` calls in pinned
 `sw/qa/core/text/text.cxx`; its bibliography, PDF, and layout assertions are

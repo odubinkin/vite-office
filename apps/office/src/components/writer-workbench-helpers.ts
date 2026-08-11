@@ -2,9 +2,19 @@
  * @fileoverview Provides pure Writer workbench paragraph identity and focus-resolution helpers without React state or browser dependencies.
  */
 
-import type { WriterDocument, WriterParagraph } from "../domain/writer";
+import {
+  moveWriterParagraph,
+  type WriterDocument,
+  type WriterParagraph,
+  type WriterParagraphMoveDirection,
+} from "../domain/writer";
 import { createDocument } from "../domain/document";
 import { createWriterDocument } from "../domain/writer";
+import {
+  applyTransaction,
+  getCurrentTransactionState,
+  type TransactionHistory,
+} from "../domain/history";
 
 /**
  * Creates the bounded initial Writer document used by the browser workbench session.
@@ -30,6 +40,30 @@ export function createWriterWorkbenchDocument(): WriterDocument {
  */
 export function getWorkbenchSelectionPosition(writerDocument: WriterDocument): number {
   return (writerDocument.paragraphs[0] as WriterParagraph).text.length;
+}
+
+/**
+ * Applies one adjacent paragraph movement to immutable Writer workbench history.
+ *
+ * @param history - Current immutable Writer workbench history state.
+ * @param paragraphId - Existing paragraph identity selected for movement.
+ * @param direction - One-position direction requested by a contextual control.
+ * @returns History containing the reordered Writer body as its latest snapshot.
+ * @throws {Error} When the delegated move crosses a document boundary or has invalid input.
+ */
+export function moveWriterParagraphInHistory(
+  history: TransactionHistory<WriterDocument>,
+  paragraphId: string,
+  direction: WriterParagraphMoveDirection,
+): TransactionHistory<WriterDocument> {
+  const nextDocument = moveWriterParagraph(
+    getCurrentTransactionState(history),
+    paragraphId,
+    direction,
+  );
+  return applyTransaction(history, nextDocument, {
+    position: getWorkbenchSelectionPosition(nextDocument),
+  });
 }
 
 /**

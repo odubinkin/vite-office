@@ -16,6 +16,9 @@ export const WRITER_PARAGRAPH_STYLES = ["default", "heading-1"] as const;
 /** Identifies one supported Writer paragraph style without modeling style inheritance. */
 export type WriterParagraphStyle = (typeof WRITER_PARAGRAPH_STYLES)[number];
 
+/** Identifies a one-position movement direction in an ordered Writer paragraph body. */
+export type WriterParagraphMoveDirection = "up" | "down";
+
 /** Describes one immutable plain-text Writer paragraph. */
 export interface WriterParagraph {
   /** Horizontal presentation alignment applied to the complete paragraph. */
@@ -129,6 +132,44 @@ export function removeWriterParagraph(
       },
     ),
   };
+}
+
+/**
+ * Moves one named Writer paragraph by one adjacent position without changing any paragraph content.
+ *
+ * @param writerDocument - Immutable prior Writer document state.
+ * @param paragraphId - Existing paragraph identity selected for movement.
+ * @param direction - One-position movement direction in the ordered paragraph body.
+ * @returns Dirty Writer document with the selected paragraph swapped with its adjacent neighbor.
+ * @throws {Error} When paragraphId is absent, direction is unsupported, or movement crosses a body boundary.
+ */
+export function moveWriterParagraph(
+  writerDocument: WriterDocument,
+  paragraphId: string,
+  direction: WriterParagraphMoveDirection,
+): WriterDocument {
+  const currentIndex = writerDocument.paragraphs.findIndex(
+    /**
+     * Finds the current body position of the paragraph selected for movement.
+     *
+     * @param paragraph - Immutable Writer paragraph inspected without mutation.
+     * @returns True only when paragraph owns paragraphId.
+     */
+    function hasParagraphId(paragraph): boolean {
+      return paragraph.id === paragraphId;
+    },
+  );
+  if (currentIndex < 0) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  if (direction !== "up" && direction !== "down")
+    throw new Error(`Unsupported Writer paragraph direction: ${direction}`);
+  const nextIndex = currentIndex + (direction === "up" ? -1 : 1);
+  if (nextIndex < 0 || nextIndex >= writerDocument.paragraphs.length)
+    throw new Error("Writer paragraph movement crosses the document boundary.");
+  const paragraphs = [...writerDocument.paragraphs];
+  const movedParagraph = paragraphs[currentIndex] as WriterParagraph;
+  paragraphs[currentIndex] = paragraphs[nextIndex] as WriterParagraph;
+  paragraphs[nextIndex] = movedParagraph;
+  return { document: markDocumentDirty(writerDocument.document), paragraphs };
 }
 
 /**

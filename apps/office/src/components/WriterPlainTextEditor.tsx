@@ -3,7 +3,7 @@
  */
 
 import type { OfficeDocument } from "../domain/document";
-import type { WriterParagraph } from "../domain/writer";
+import type { WriterParagraph, WriterParagraphMoveDirection } from "../domain/writer";
 
 /** Defines the immutable state and callback required by the Writer plain-text editor. */
 export interface WriterPlainTextEditorProps {
@@ -13,6 +13,8 @@ export interface WriterPlainTextEditorProps {
   readonly document: OfficeDocument;
   /** Receives a stable paragraph identity when a paragraph textarea gains focus. */
   readonly onParagraphFocus: (paragraphId: string) => void;
+  /** Requests movement of an existing paragraph by one adjacent position. */
+  readonly onMoveParagraph: (paragraphId: string, direction: WriterParagraphMoveDirection) => void;
   /** Ordered immutable Writer paragraphs bound to accessible editing controls. */
   readonly paragraphs: readonly WriterParagraph[];
   /** Requests immutable removal of the paragraph identified by the supplied stable ID. */
@@ -28,6 +30,7 @@ export interface WriterPlainTextEditorProps {
  * @param props.activeParagraphId - Stable identity of the paragraph targeted by formatting controls.
  * @param props.document - Header providing lifecycle and revision feedback.
  * @param props.onParagraphFocus - Callback that selects a paragraph for formatting after textarea focus.
+ * @param props.onMoveParagraph - Callback that moves a paragraph one position through immutable document state.
  * @param props.onRemoveParagraph - Callback that removes an eligible paragraph from the immutable body.
  * @param props.paragraphs - Ordered Writer paragraphs displayed by this bounded editor.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
@@ -36,6 +39,7 @@ export interface WriterPlainTextEditorProps {
 export function WriterPlainTextEditor({
   activeParagraphId,
   document,
+  onMoveParagraph,
   onParagraphFocus,
   onRemoveParagraph,
   onTextChange,
@@ -67,6 +71,7 @@ export function WriterPlainTextEditor({
    */
   function renderParagraph(paragraph: WriterParagraph, index: number): React.JSX.Element {
     const isFirstParagraph = index === 0;
+    const isLastParagraph = index === paragraphs.length - 1;
     const isActiveParagraph = paragraph.id === activeParagraphId;
     const textareaId = `writer-editor-text-${index + 1}`;
     const styleDescriptionId = `writer-paragraph-style-${index + 1}`;
@@ -121,22 +126,52 @@ export function WriterPlainTextEditor({
           value={paragraph.text}
         />
         {canRemoveParagraph ? (
-          <button
-            className="mt-2 rounded-lg border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-800 shadow-sm transition hover:border-rose-500"
-            onClick={
-              /**
-               * Connects this paragraph removal control to its immutable identity.
-               *
-               * @returns Nothing; the owning workbench schedules the removal.
-               */
-              function removeParagraph(): void {
-                onRemoveParagraph(paragraph.id);
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button
+              aria-label={`Move paragraph ${index + 1} up`}
+              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-indigo-400 disabled:cursor-not-allowed disabled:opacity-40"
+              disabled={isFirstParagraph}
+              onClick={
+                /** Moves this paragraph one position earlier in the Writer body. @returns Nothing; the workbench schedules movement. */
+                function moveParagraphUp(): void {
+                  onMoveParagraph(paragraph.id, "up");
+                }
               }
-            }
-            type="button"
-          >
-            Remove paragraph {index + 1}
-          </button>
+              type="button"
+            >
+              Move up
+            </button>
+            <button
+              aria-label={`Move paragraph ${index + 1} down`}
+              className="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-indigo-400 disabled:cursor-not-allowed disabled:opacity-40"
+              disabled={isLastParagraph}
+              onClick={
+                /** Moves this paragraph one position later in the Writer body. @returns Nothing; the workbench schedules movement. */
+                function moveParagraphDown(): void {
+                  onMoveParagraph(paragraph.id, "down");
+                }
+              }
+              type="button"
+            >
+              Move down
+            </button>
+            <button
+              className="rounded-lg border border-rose-300 bg-white px-3 py-2 text-sm font-semibold text-rose-800 shadow-sm transition hover:border-rose-500"
+              onClick={
+                /**
+                 * Connects this paragraph removal control to its immutable identity.
+                 *
+                 * @returns Nothing; the owning workbench schedules the removal.
+                 */
+                function removeParagraph(): void {
+                  onRemoveParagraph(paragraph.id);
+                }
+              }
+              type="button"
+            >
+              Remove paragraph {index + 1}
+            </button>
+          </div>
         ) : null}
       </div>
     );
@@ -164,8 +199,7 @@ export function WriterPlainTextEditor({
       {paragraphs.map(renderParagraph)}
       <p className="mt-3 text-sm leading-6 text-slate-600" id="writer-editor-help">
         This workbench edits ordered plain-text paragraphs in memory. Paragraph alignment is
-        available; range formatting, deletion, reordering, and document file formats are separate
-        features.
+        available; range formatting, deletion, and document file formats are separate features.
       </p>
     </section>
   );

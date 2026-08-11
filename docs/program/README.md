@@ -145,6 +145,8 @@ The following documents form the program control plane:
   browser-local snapshot compatibility behavior.
 - [Browser Writer paragraph styles](writer-paragraph-styles.md): bounded Default
   Paragraph Style and Heading 1 state, focused selection, and snapshot defaults.
+- [Browser Writer paragraph reordering](writer-paragraph-reordering.md): bounded
+  adjacent movement that preserves paragraph content and formatting state.
 - [Browser Writer plain-text editor workbench](writer-plain-text-editor.md):
   accessible in-memory textareas backed by the Writer paragraph model.
 - [LibreOffice-style Writer UI shell](writer-ui-shell.md): durable menu,
