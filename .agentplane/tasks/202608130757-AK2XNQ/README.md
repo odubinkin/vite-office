@@ -1,10 +1,11 @@
 ---
 id: "202608130757-AK2XNQ"
 title: "Align Framework desktop path with LibreOffice"
-status: "DOING"
+result_summary: "verified-202608130757-AK2XNQ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-13T08:00:55.317Z"
+  updated_at: "2026-08-13T08:01:02.606Z"
   updated_by: "CODER"
-  note: "Verified: the Framework desktop module and its React composition export now match the pinned desktop ownership boundary; 83 fast tests retain 100% coverage and all declared quality gates pass."
+  note: "verified-202608130757-AK2XNQ"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "5d5b44b"
   findings:
     - "Fast coverage and all formatting, type, provenance, source-tree, documentation, and size gates passed."
-commit: null
+commit:
+  hash: "178e4dc130996af6faf1284b9d31b8bdc1ecb429"
+  message: "🧾 AK2XNQ task: record desktop verification"
 comments:
   -
     author: "CODER"
     body: "Start: align the Framework desktop module path and retain an honest browser bootstrap boundary."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608130757-AK2XNQ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: the Framework desktop module and its React composition export now match the pinned desktop ownership boundary; 83 fast tests retain 100% coverage and all declared quality gates pass."
+  -
+    type: "verify"
+    at: "2026-08-13T08:01:02.606Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608130757-AK2XNQ"
+  -
+    type: "status"
+    at: "2026-08-13T08:01:02.800Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608130757-AK2XNQ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-13T08:00:55.405Z"
+doc_updated_at: "2026-08-13T08:01:02.801Z"
 doc_updated_by: "CODER"
 description: "Rename the static React application shell from App.tsx to desktop.tsx and its focused test accordingly, matching pinned LibreOffice framework/source/services/desktop.cxx. Retain bootstrap.tsx as the browser-specific mounting boundary, update direct imports, provenance, source-tree validation, and documentation, and preserve behavior and coverage."
 sections:
@@ -105,6 +124,36 @@ sections:
     - runner_failure_means: runner_infrastructure_or_task_unknown
     - risks: runner_rail_confusion
 
+    ### 2026-08-13T08:01:02.606Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608130757-AK2XNQ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T08:00:55.405Z, excerpt_hash=sha256:cdd21c52b2dca4d50fd51bdf608f2dc7c671e87fd6cc9ee820940163b3109972
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130757-AK2XNQ/blueprint/resolved-snapshot.json
+    - old_digest: 9aaa240aa9c4aa71607926b96b0a7488f02f1538acc16493c122fb47820dfbb0
+    - current_digest: 9aaa240aa9c4aa71607926b96b0a7488f02f1538acc16493c122fb47820dfbb0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608130757-AK2XNQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608130757-AK2XNQ --result verified-202608130757-AK2XNQ --commit 178e4dc130996af6faf1284b9d31b8bdc1ecb429
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -113,6 +162,10 @@ sections:
     - Observation: bootstrap.tsx is now explicitly browser-only rather than a duplicate desktop.cxx mapping, while writer parity test records follow the renamed desktop test file.
       Impact: The provenance manifest is exhaustive and unambiguous without changing visible application behavior; full e2e/static/inventory cadence remains deferred until the tenth post-baseline task.
       Resolution: The structural gate requires desktop.tsx, and stale App path references were searched and eliminated.
+extensions:
+  implementation_commit:
+    hash: "5d5b44b881031c52efcb6b8774a421c37c39d9b7"
+    message: "♻️ AK2XNQ code: align Framework desktop path"
 id_source: "generated"
 ---
 ## Summary
@@ -168,6 +221,36 @@ DecisionContextRef:
 - runner_required: true
 - runner_failure_means: runner_infrastructure_or_task_unknown
 - risks: runner_rail_confusion
+
+### 2026-08-13T08:01:02.606Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608130757-AK2XNQ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T08:00:55.405Z, excerpt_hash=sha256:cdd21c52b2dca4d50fd51bdf608f2dc7c671e87fd6cc9ee820940163b3109972
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130757-AK2XNQ/blueprint/resolved-snapshot.json
+- old_digest: 9aaa240aa9c4aa71607926b96b0a7488f02f1538acc16493c122fb47820dfbb0
+- current_digest: 9aaa240aa9c4aa71607926b96b0a7488f02f1538acc16493c122fb47820dfbb0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608130757-AK2XNQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608130757-AK2XNQ --result verified-202608130757-AK2XNQ --commit 178e4dc130996af6faf1284b9d31b8bdc1ecb429
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
 
 <!-- END VERIFICATION RESULTS -->
 
