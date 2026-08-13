@@ -4,7 +4,7 @@ title: "Align Writer menu and toolbar modules with LibreOffice uiconfig paths"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Moving the remaining Writer menu and standard-toolbar controls into their concrete uiconfig ownership paths while preserving current command behavior and traceability."
 doc_version: 3
-doc_updated_at: "2026-08-13T06:29:46.523Z"
+doc_updated_at: "2026-08-13T06:32:28.282Z"
 doc_updated_by: "CODER"
 description: "Move the remaining implemented Writer menu and toolbar declarations and React controls from generic uibase/utlui names into concrete sw/uiconfig/swriter ownership paths, update imports, source-tree enforcement, parity evidence, and focused tests."
 sections:
@@ -55,7 +55,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "Verification note: npm run test:e2e -- --grep File menu initially returned No tests found because the existing foundation scenario asserted the File menu locator but its title did not contain that focused filter. The task keeps the same E2E behavior and updates only the scenario title so the declared focused command executes it."
 id_source: "generated"
 ---
 ## Summary
@@ -88,3 +88,5 @@ Move the remaining implemented Writer menu and toolbar declarations and React co
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Verification note: npm run test:e2e -- --grep File menu initially returned No tests found because the existing foundation scenario asserted the File menu locator but its title did not contain that focused filter. The task keeps the same E2E behavior and updates only the scenario title so the declared focused command executes it.
