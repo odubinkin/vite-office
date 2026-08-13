@@ -7,8 +7,8 @@ import { useState } from "react";
 
 import { WriterWorkbench } from "../../../sw/source/uibase/uiview/view";
 import { createDocument } from "../../../sfx2/source/doc/docfac";
-import { suiteDefinitions } from "./suites";
-import type { SuiteDefinition } from "./suites";
+import { suiteDefinitions } from "./modulemanager";
+import type { SuiteDefinition } from "./modulemanager";
 import { SuiteCard } from "./SuiteCard";
 
 /**

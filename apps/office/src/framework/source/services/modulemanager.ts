@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines the suite inventory presented by the foundation workbench without claiming feature parity.
+ * @fileoverview Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity.
  */
 
 /** Identifies a planned office-suite domain with a stable browser-facing key. */
@@ -17,7 +17,7 @@ export interface SuiteDefinition {
   readonly status: "Foundation only";
 }
 
-/** Ordered suite inventory used by the static application shell. */
+/** Ordered suite inventory resolved by the static browser module manager. */
 export const suiteDefinitions = [
   {
     description: "Text documents, page layout, review, and publishing workflows.",

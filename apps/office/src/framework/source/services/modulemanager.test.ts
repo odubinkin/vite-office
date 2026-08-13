@@ -1,10 +1,10 @@
 /**
- * @fileoverview Verifies the stable, honest suite inventory consumed by the foundation navigation.
+ * @fileoverview Verifies the stable, honest browser module-manager suite inventory consumed by the foundation navigation.
  */
 
 import { describe, expect, it } from "vitest";
 
-import { suiteDefinitions } from "./suites";
+import { suiteDefinitions } from "./modulemanager";
 
 describe("suiteDefinitions" /**
  * Groups invariants for the initial suite inventory.

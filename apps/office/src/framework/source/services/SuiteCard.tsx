@@ -13,7 +13,7 @@ import {
   Shapes,
 } from "lucide-react";
 
-import type { SuiteDefinition, SuiteId } from "./suites";
+import type { SuiteDefinition, SuiteId } from "./modulemanager";
 
 /** Defines the data and selection callback required by a suite navigation card. */
 export interface SuiteCardProps {

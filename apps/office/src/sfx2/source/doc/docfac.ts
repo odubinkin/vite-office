@@ -2,7 +2,7 @@
  * @fileoverview Defines pure, JSON-serializable document identity and lifecycle transitions at the LibreOffice `sfx2/source/doc/docfac.cxx` ownership boundary.
  */
 
-import type { SuiteId } from "../../../framework/source/services/suites";
+import type { SuiteId } from "../../../framework/source/services/modulemanager";
 
 /** Identifies the permitted lifecycle states for a locally held browser document. */
 export type DocumentLifecycle = "closed" | "dirty" | "new" | "saved";
