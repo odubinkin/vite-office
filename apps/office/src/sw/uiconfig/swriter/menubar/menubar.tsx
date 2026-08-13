@@ -4,18 +4,13 @@
 
 import { useState } from "react";
 
-import {
-  writerBulletsAndNumberingMenuCommands,
-  writerListLevelMenuCommands,
-  writerMenuPlacements,
-  type WriterTopLevelMenu,
-} from "./menubar-commands";
+import { writerMenuPlacements, type WriterTopLevelMenu } from "./menubar-commands";
+import { WriterFormatMenu } from "./format-menu";
 import type {
   WriterParagraphAlignment,
   WriterParagraphListKind,
   WriterParagraphStyle,
 } from "../../../source/core/doc/writer";
-import { WRITER_MAX_LIST_LEVEL } from "../../../source/core/doc/list";
 
 /** Describes enabled state and immutable action callbacks exposed from the stateful Writer workbench. */
 export interface WriterMenuBarProps {
@@ -126,7 +121,6 @@ export function WriterMenuBar({
   style,
 }: WriterMenuBarProps): React.JSX.Element {
   const [openMenu, setOpenMenu] = useState<WriterTopLevelMenu | undefined>();
-  const [isBulletsAndNumberingMenuOpen, setIsBulletsAndNumberingMenuOpen] = useState(false);
   const [isRulersMenuOpen, setIsRulersMenuOpen] = useState(false);
 
   /**
@@ -137,7 +131,6 @@ export function WriterMenuBar({
    */
   function invokeMenuAction(action: () => void): void {
     action();
-    setIsBulletsAndNumberingMenuOpen(false);
     setIsRulersMenuOpen(false);
     setOpenMenu(undefined);
   }
@@ -149,7 +142,6 @@ export function WriterMenuBar({
    * @returns Nothing; React records the next visible popup.
    */
   function toggleMenu(menu: WriterTopLevelMenu): void {
-    setIsBulletsAndNumberingMenuOpen(false);
     setIsRulersMenuOpen(false);
     setOpenMenu(
       /**
@@ -336,116 +328,18 @@ export function WriterMenuBar({
         </div>
       );
     }
-    if (menu === "format") {
+    if (menu === "format")
       return (
-        <div
-          aria-label="Format menu"
-          className="absolute left-0 top-full z-20 mt-1 w-64 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
-          id={menuId}
-          role="menu"
-        >
-          <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Alignment
-          </p>
-          {renderMenuItem(
-            "Align left",
-            invokeMenuAction.bind(undefined, onAlignmentChange.bind(undefined, "left")),
-            false,
-            alignment === "left",
-          )}
-          {renderMenuItem(
-            "Align center",
-            invokeMenuAction.bind(undefined, onAlignmentChange.bind(undefined, "center")),
-            false,
-            alignment === "center",
-          )}
-          {renderMenuItem(
-            "Align right",
-            invokeMenuAction.bind(undefined, onAlignmentChange.bind(undefined, "right")),
-            false,
-            alignment === "right",
-          )}
-          {renderMenuItem(
-            "Justify paragraph",
-            invokeMenuAction.bind(undefined, onAlignmentChange.bind(undefined, "justify")),
-            false,
-            alignment === "justify",
-          )}
-          <div aria-hidden="true" className="my-1 border-t border-slate-200" />
-          <div className="relative">
-            <button
-              aria-expanded={isBulletsAndNumberingMenuOpen}
-              aria-haspopup="menu"
-              className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
-              onClick={
-                /** Toggles the pinned Format submenu without closing its parent menu. @returns Nothing; React records the submenu state. */
-                function toggleBulletsAndNumberingMenu(): void {
-                  setIsBulletsAndNumberingMenuOpen(
-                    /** Inverts the current nested Writer list menu state. @param isOpen - Existing nested menu visibility. @returns Next visibility. */
-                    function invertBulletsAndNumberingMenu(isOpen): boolean {
-                      return !isOpen;
-                    },
-                  );
-                }
-              }
-              role="menuitem"
-              type="button"
-            >
-              Bullets and Numbering
-              <span aria-hidden="true">›</span>
-            </button>
-            {isBulletsAndNumberingMenuOpen ? (
-              <div
-                aria-label="Bullets and Numbering menu"
-                className="absolute left-full top-0 z-30 ml-1 w-56 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
-                role="menu"
-              >
-                {writerBulletsAndNumberingMenuCommands.map(
-                  /** Renders one pinned first-layer Writer list command. @param command - Immutable menu command placement. @returns One active-aware list menu item wrapper. */
-                  function renderListMenuCommand(command): React.JSX.Element {
-                    return (
-                      <div key={command.unoCommand}>
-                        {renderMenuItem(
-                          command.label,
-                          invokeMenuAction.bind(
-                            undefined,
-                            onListKindChange.bind(undefined, command.listKind),
-                          ),
-                          false,
-                          listKind === command.listKind,
-                        )}
-                      </div>
-                    );
-                  },
-                )}
-                <div aria-hidden="true" className="my-1 border-t border-slate-200" />
-                {writerListLevelMenuCommands.map(
-                  /** Renders one pinned Writer Promote or Demote command. @param command - Immutable Writer list-level menu placement. @returns One disabled-aware list-level menu item wrapper. */
-                  function renderListLevelMenuCommand(command): React.JSX.Element {
-                    const isDisabled =
-                      listKind === "none" ||
-                      (command.command === "demote" && listLevel === WRITER_MAX_LIST_LEVEL) ||
-                      (command.command === "promote" && listLevel === 0);
-                    return (
-                      <div key={command.unoCommand}>
-                        {renderMenuItem(
-                          command.label,
-                          invokeMenuAction.bind(
-                            undefined,
-                            onListLevelChange.bind(undefined, command.command),
-                          ),
-                          isDisabled,
-                        )}
-                      </div>
-                    );
-                  },
-                )}
-              </div>
-            ) : null}
-          </div>
-        </div>
+        <WriterFormatMenu
+          alignment={alignment}
+          listKind={listKind}
+          listLevel={listLevel}
+          onAlignmentChange={onAlignmentChange}
+          onInvoke={invokeMenuAction}
+          onListKindChange={onListKindChange}
+          onListLevelChange={onListLevelChange}
+        />
       );
-    }
     if (menu === "styles") {
       return (
         <div

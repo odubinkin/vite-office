@@ -38,6 +38,7 @@
     { "localPath": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/uiview/viewfunc.hxx" },
     { "localPath": "apps/office/src/sw/source/uibase/uiview/viewstat.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/uiview/viewstat.cxx" },
     { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml" },
+    { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml" },
     { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml" },
     { "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/toolbar/numobjectbar.xml" },
     { "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/toolbar/standardbar.xml" },
