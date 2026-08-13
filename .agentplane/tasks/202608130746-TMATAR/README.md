@@ -1,10 +1,11 @@
 ---
 id: "202608130746-TMATAR"
 title: "Align framework shortcut and dispatch paths with LibreOffice"
-status: "DOING"
+result_summary: "verified-202608130746-TMATAR"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-13T07:48:25.583Z"
+  updated_at: "2026-08-13T07:48:32.904Z"
   updated_by: "CODER"
-  note: "Verified: keymapping and dispatchprovider path alignment preserves 83 fast tests at 100% coverage; provenance, source-tree, JSDoc, formatting, lint, types, stale-path search, and diff checks passed."
+  note: "verified-202608130746-TMATAR"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "HEAD"
   findings:
     - "Fast coverage and every declared structural quality gate passed."
-commit: null
+commit:
+  hash: "0ac77f3d737af7c9be2fe40198a900be278bdd8d"
+  message: "🧾 TMATAR task: record framework path verification"
 comments:
   -
     author: "CODER"
     body: "Start: align bounded framework shortcut and dispatch modules with pinned LibreOffice paths."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608130746-TMATAR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: keymapping and dispatchprovider path alignment preserves 83 fast tests at 100% coverage; provenance, source-tree, JSDoc, formatting, lint, types, stale-path search, and diff checks passed."
+  -
+    type: "verify"
+    at: "2026-08-13T07:48:32.904Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608130746-TMATAR"
+  -
+    type: "status"
+    at: "2026-08-13T07:48:33.080Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608130746-TMATAR. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-13T07:48:25.665Z"
+doc_updated_at: "2026-08-13T07:48:33.081Z"
 doc_updated_by: "CODER"
 description: "Move the existing browser shortcut and typed command-dispatch modules to exact pinned LibreOffice-like keymapping and dispatchprovider paths; update imports, tests, provenance, source-tree documentation, and path enforcement without changing behavior."
 sections:
@@ -105,6 +124,36 @@ sections:
     - runner_failure_means: runner_infrastructure_or_task_unknown
     - risks: runner_rail_confusion
 
+    ### 2026-08-13T07:48:32.904Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608130746-TMATAR
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T07:48:25.665Z, excerpt_hash=sha256:e18e6ec1b262c46d9c29a1b7fa5e6ca3317d60b219864af31257f9df7c8c53e3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130746-TMATAR/blueprint/resolved-snapshot.json
+    - old_digest: f102f134d784cd9143e0b1769646eb01633fe1fa78fd72b54aa4ea775a0e36ab
+    - current_digest: f102f134d784cd9143e0b1769646eb01633fe1fa78fd72b54aa4ea775a0e36ab
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608130746-TMATAR
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608130746-TMATAR --result verified-202608130746-TMATAR --commit 0ac77f3d737af7c9be2fe40198a900be278bdd8d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -113,6 +162,10 @@ sections:
     - Observation: The bounded browser shortcut adapter and typed dispatch provider now occupy their exact pinned framework source paths.
       Impact: Framework runtime imports, documentation, provenance, and source-tree enforcement agree with keymapping.cxx and dispatchprovider.cxx.
       Resolution: No command behavior changed; full suite remains deferred until the agreed next ten-task cadence.
+extensions:
+  implementation_commit:
+    hash: "ced8b38702e50a6a01d6d9267d50368c5d6340fb"
+    message: "♻️ TMATAR code: align framework module paths"
 id_source: "generated"
 ---
 ## Summary
@@ -168,6 +221,36 @@ DecisionContextRef:
 - runner_required: true
 - runner_failure_means: runner_infrastructure_or_task_unknown
 - risks: runner_rail_confusion
+
+### 2026-08-13T07:48:32.904Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608130746-TMATAR
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T07:48:25.665Z, excerpt_hash=sha256:e18e6ec1b262c46d9c29a1b7fa5e6ca3317d60b219864af31257f9df7c8c53e3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130746-TMATAR/blueprint/resolved-snapshot.json
+- old_digest: f102f134d784cd9143e0b1769646eb01633fe1fa78fd72b54aa4ea775a0e36ab
+- current_digest: f102f134d784cd9143e0b1769646eb01633fe1fa78fd72b54aa4ea775a0e36ab
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608130746-TMATAR
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608130746-TMATAR --result verified-202608130746-TMATAR --commit 0ac77f3d737af7c9be2fe40198a900be278bdd8d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
 
 <!-- END VERIFICATION RESULTS -->
 
