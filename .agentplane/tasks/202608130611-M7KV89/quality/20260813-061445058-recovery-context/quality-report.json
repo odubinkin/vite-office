@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130611-M7KV89",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T06:14:45.058Z",
+  "verdict": "pass",
+  "summary": "Existing Writer modules now use concrete pinned LibreOffice file identities while retaining the verified import graph and browser behavior.",
+  "evaluated_sha": "0eeba1838b9547d3dbdf493f884969811c26af3c",
+  "blueprint_digest": "50c4ed0a10b0258fefb26e6c770f7db6a91ef5205da41c434d6c0c267e1bdf0c",
+  "findings": [
+    "view, viewfunc, viewstat, mainwn, edtwin, inputwin, and WriterInspectorTextPanel replace the prior generic file identities; the source-tree gate enforces them."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130611-M7KV89/README.md",
+    "npm run test:coverage; npm run build; npm run check:source-tree; npm run format:check; npm run lint; npm run typecheck; npm run check:docs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
