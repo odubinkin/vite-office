@@ -1,10 +1,11 @@
 ---
 id: "202608130736-KHXZ6N"
 title: "Update parity CLI gap-count oracle for current Writer mapping"
-status: "DOING"
+result_summary: "verified-202608130736-KHXZ6N"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-13T07:41:35.227Z"
+  updated_at: "2026-08-13T07:41:42.810Z"
   updated_by: "CODER"
-  note: "Verified: the parity CLI oracle now expects 16 documented gaps; focused test passes, and the full ten-task cadence passed with 100% application and inventory coverage, 5 Chromium e2e tests, static smoke, quality checks, and doctor."
+  note: "verified-202608130736-KHXZ6N"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "d123237"
   findings:
     - "Focused CLI test and all full verification stages passed."
-commit: null
+commit:
+  hash: "5360d7c0b6c49b6224a82480ed94d47db3f86f36"
+  message: "🧾 KHXZ6N task: record full verification"
 comments:
   -
     author: "CODER"
     body: "Start: update the parity CLI oracle and complete the mandated full verification cadence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608130736-KHXZ6N. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: the parity CLI oracle now expects 16 documented gaps; focused test passes, and the full ten-task cadence passed with 100% application and inventory coverage, 5 Chromium e2e tests, static smoke, quality checks, and doctor."
+  -
+    type: "verify"
+    at: "2026-08-13T07:41:42.810Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608130736-KHXZ6N"
+  -
+    type: "status"
+    at: "2026-08-13T07:41:42.991Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608130736-KHXZ6N. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-13T07:41:35.306Z"
+doc_updated_at: "2026-08-13T07:41:42.991Z"
 doc_updated_by: "CODER"
 description: "Align the production parity-mapping CLI test expectation with the documented gap count after completed Writer mapping records, then run the full ten-task verification cadence."
 sections:
@@ -105,6 +124,36 @@ sections:
     - runner_failure_means: runner_infrastructure_or_task_unknown
     - risks: runner_rail_confusion
 
+    ### 2026-08-13T07:41:42.810Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608130736-KHXZ6N
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T07:41:35.306Z, excerpt_hash=sha256:62c60e9a9d0d366f8911796444005a2be5da0f6d735b4307dd67ba0b5bbef41e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130736-KHXZ6N/blueprint/resolved-snapshot.json
+    - old_digest: a39a2a3508b137afa9abb664da7b9a39b4803927ef8ef73509f7bc2bacf94af6
+    - current_digest: a39a2a3508b137afa9abb664da7b9a39b4803927ef8ef73509f7bc2bacf94af6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608130736-KHXZ6N
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608130736-KHXZ6N --result verified-202608130736-KHXZ6N --commit 5360d7c0b6c49b6224a82480ed94d47db3f86f36
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -113,6 +162,10 @@ sections:
     - Observation: The previous oracle expected eight gaps even though the current mapping contains eight implemented records with two explicit gaps each.
       Impact: Full verification can now distinguish actual mapping changes from a stale fixture expectation.
       Resolution: Updated the explicit count to 16 and captured the complete validation cadence.
+extensions:
+  implementation_commit:
+    hash: "d123237caa57aa0988f53decd29bfa7df5067fa3"
+    message: "✅ KHXZ6N code: update parity gap-count oracle"
 id_source: "generated"
 ---
 ## Summary
@@ -168,6 +221,36 @@ DecisionContextRef:
 - runner_required: true
 - runner_failure_means: runner_infrastructure_or_task_unknown
 - risks: runner_rail_confusion
+
+### 2026-08-13T07:41:42.810Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608130736-KHXZ6N
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T07:41:35.306Z, excerpt_hash=sha256:62c60e9a9d0d366f8911796444005a2be5da0f6d735b4307dd67ba0b5bbef41e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130736-KHXZ6N/blueprint/resolved-snapshot.json
+- old_digest: a39a2a3508b137afa9abb664da7b9a39b4803927ef8ef73509f7bc2bacf94af6
+- current_digest: a39a2a3508b137afa9abb664da7b9a39b4803927ef8ef73509f7bc2bacf94af6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608130736-KHXZ6N
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608130736-KHXZ6N --result verified-202608130736-KHXZ6N --commit 5360d7c0b6c49b6224a82480ed94d47db3f86f36
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
 
 <!-- END VERIFICATION RESULTS -->
 
