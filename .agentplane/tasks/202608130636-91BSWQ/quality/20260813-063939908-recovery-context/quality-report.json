@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130636-91BSWQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T06:39:39.908Z",
+  "verdict": "pass",
+  "summary": "The remaining browser command hook now has a concrete Writer text-shell path and preserves Copy behavior.",
+  "evaluated_sha": "347205a4ed0eaa4495615408e06188cb5512a515",
+  "blueprint_digest": "a2f85f0de1aadcdf6ec74fd69f59e0d479cfa852fb766a0fbe87881bc89b2acf",
+  "findings": [
+    "No correctness finding: the retired generic hook is forbidden by the source-tree gate and parity now names textsh."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130636-91BSWQ/README.md",
+    "coverage, focused native Copy E2E, parity inventory, static checks"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full verification suite and browser matrix remain deferred under the approved cadence."
+  ]
+}
