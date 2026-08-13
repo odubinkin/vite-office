@@ -4,7 +4,7 @@ title: "Decompose Writer Format menu within LibreOffice uiconfig hierarchy"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-08-13T07:52:16.094Z"
+  updated_by: "CODER"
+  note: "Verified: Format menu extraction retains 83 fast tests at 100% coverage, targeted Writer list Chromium e2e, JSDoc, format, lint, types, source tree, provenance, and file-size gates."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-13T07:52:16.525Z"
+  updated_by: "EVALUATOR"
+  note: "Writer Format menu decomposition preserves pinned command behavior and size constraints."
+  evaluated_sha: "4467bc1c15fbc2c605a4aa95426184bb2d2302f4"
+  blueprint_digest: "72214c34c64f3232ae74892843b2b5113d81404e4d1644717c19f837ad35a463"
+  evidence_refs:
+    - ".agentplane/tasks/202608130748-DYREYF/README.md"
+    - ".agentplane/tasks/202608130748-DYREYF/quality/20260813-075216525-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608130748-DYREYF/quality/20260813-075216525-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608130748-DYREYF/quality/20260813-075216525-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608130748-DYREYF/blueprint/resolved-snapshot.json"
+    - "HEAD"
+  findings:
+    - "Fast coverage, targeted Chromium flow, and all declared quality checks passed."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: decompose the Writer Format menu within the pinned uiconfig hierarchy."
+  -
+    type: "verify"
+    at: "2026-08-13T07:52:16.094Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: Format menu extraction retains 83 fast tests at 100% coverage, targeted Writer list Chromium e2e, JSDoc, format, lint, types, source tree, provenance, and file-size gates."
 doc_version: 3
-doc_updated_at: "2026-08-13T07:49:00.942Z"
+doc_updated_at: "2026-08-13T07:52:16.177Z"
 doc_updated_by: "CODER"
 description: "Extract the growing Writer Format and Bullets and Numbering popup rendering from sw/uiconfig/swriter/menubar/menubar.tsx into documented co-located modules while preserving the pinned menu placement, accessibility, behavior, and test coverage."
 sections:
@@ -51,11 +73,46 @@ sections:
   Verify Steps: "1. Run npm run test:coverage. Expected: the menu decomposition retains 100 percent fast-test coverage. 2. Run npm run test:e2e -- --grep 'Writer bullets and numbering'. Expected: the browser still exposes and executes the Format list menu flow. 3. Run npm run check:file-size && npm run check:docs && npm run format:check && npm run lint && npm run typecheck && npm run check:source-tree && npm run check:source-provenance && git diff --check. Expected: menubar.tsx falls below the decomposition-candidate threshold and all quality gates pass. 4. Defer npm run verify/full browser matrix under the agreed ten-task cadence; record residual risk."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-08-13T07:52:16.094Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: Format menu extraction retains 83 fast tests at 100% coverage, targeted Writer list Chromium e2e, JSDoc, format, lint, types, source tree, provenance, and file-size gates.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T07:49:00.942Z, excerpt_hash=sha256:2bf447b725bbdddffc9f57d03bc9dc01f850988d5003e41424e1dec090d2cb49
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130748-DYREYF/blueprint/resolved-snapshot.json
+    - old_digest: 72214c34c64f3232ae74892843b2b5113d81404e4d1644717c19f837ad35a463
+    - current_digest: 72214c34c64f3232ae74892843b2b5113d81404e4d1644717c19f837ad35a463
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608130748-DYREYF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task run 202608130748-DYREYF
+    - diagnostic_command: agentplane task run status 202608130748-DYREYF
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: menubar.tsx is now 411 lines and Format/Bullets rendering is a 198-line co-located mapped module.
+      Impact: The Writer uiconfig menu hierarchy remains behaviorally identical while its primary renderer is below the decomposition-candidate threshold.
+      Resolution: Mapped format-menu.tsx to the same pinned menubar.xml boundary; full suite remains deferred until the next ten-task cadence.
 id_source: "generated"
 ---
 ## Summary
@@ -80,6 +137,38 @@ Extract the growing Writer Format and Bullets and Numbering popup rendering from
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-08-13T07:52:16.094Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: Format menu extraction retains 83 fast tests at 100% coverage, targeted Writer list Chromium e2e, JSDoc, format, lint, types, source tree, provenance, and file-size gates.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T07:49:00.942Z, excerpt_hash=sha256:2bf447b725bbdddffc9f57d03bc9dc01f850988d5003e41424e1dec090d2cb49
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130748-DYREYF/blueprint/resolved-snapshot.json
+- old_digest: 72214c34c64f3232ae74892843b2b5113d81404e4d1644717c19f837ad35a463
+- current_digest: 72214c34c64f3232ae74892843b2b5113d81404e4d1644717c19f837ad35a463
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608130748-DYREYF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task run 202608130748-DYREYF
+- diagnostic_command: agentplane task run status 202608130748-DYREYF
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -88,3 +177,7 @@ Extract the growing Writer Format and Bullets and Numbering popup rendering from
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: menubar.tsx is now 411 lines and Format/Bullets rendering is a 198-line co-located mapped module.
+  Impact: The Writer uiconfig menu hierarchy remains behaviorally identical while its primary renderer is below the decomposition-candidate threshold.
+  Resolution: Mapped format-menu.tsx to the same pinned menubar.xml boundary; full suite remains deferred until the next ten-task cadence.
