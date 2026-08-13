@@ -97,11 +97,11 @@
         "implementation": [
           { "path": "apps/office/src/vcl/browser/browser-clipboard.ts", "marker": "copyRichText" },
           { "path": "apps/office/src/sw/source/uibase/utlui/writer-clipboard-selection.ts", "marker": "createWriterClipboardSelection" },
-          { "path": "apps/office/src/sw/source/uibase/docvw/WriterPlainTextEditor.tsx", "marker": "moveCaretAcrossParagraphBoundary" }
+          { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx", "marker": "moveCaretAcrossParagraphBoundary" }
         ],
         "tests": [
           { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.test.tsx", "marker": "replaces native keyboard Copy data" },
-          { "path": "apps/office/src/sw/source/uibase/docvw/WriterParagraphBreaks.test.tsx", "marker": "keeps the typing caret stable" },
+          { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx", "marker": "keeps the typing caret stable" },
           { "path": "apps/office/src/sw/source/uibase/utlui/writer-clipboard-selection.test.ts", "marker": "omits accessibility descriptions" },
           { "path": "apps/office/e2e/writer-clipboard.spec.ts", "marker": "copies visible formatted Writer content" },
           { "path": "apps/office/e2e/writer-document-selection.spec.ts", "marker": "supports document-wide selection" },
@@ -135,7 +135,7 @@
       },
       "local": {
         "implementation": [
-          { "path": "apps/office/src/sw/source/uibase/uiview/use-writer-workspace-chrome.ts", "marker": "isPropertiesSidebarVisible" },
+          { "path": "apps/office/src/sw/source/uibase/uiview/viewstat.ts", "marker": "isPropertiesSidebarVisible" },
           { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx", "marker": "Status Bar" }
         ],
         "tests": [
@@ -180,9 +180,9 @@
           { "path": "apps/office/src/sw/source/core/doc/list.ts", "marker": "WriterParagraphList" },
           { "path": "apps/office/src/sw/source/core/doc/number.ts", "marker": "getWriterParagraphListMarker" },
           { "path": "apps/office/src/sw/source/uibase/shells/txtnum.ts", "marker": "setWriterParagraphListKind" },
-          { "path": "apps/office/src/sw/source/uibase/docvw/WriterEditableParagraph.tsx", "marker": "data-writer-list-marker" },
+          { "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "marker": "data-writer-list-marker" },
           { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx", "marker": "Bullets and Numbering" },
-          { "path": "apps/office/src/sw/source/uibase/ribbar/WriterParagraphFormattingToolbar.tsx", "marker": "Paragraph lists" },
+          { "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx", "marker": "Paragraph lists" },
           { "path": "apps/office/src/sw/uiconfig/swriter/menubar.ts", "marker": "writerBulletsAndNumberingMenuCommands" },
           { "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts", "marker": "writerTextObjectBarListCommands" }
         ],

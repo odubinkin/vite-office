@@ -4,7 +4,7 @@ title: "Repair Writer parity mappings after module identity migration"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: repair stale local Writer parity paths after the audited module identity migration."
 doc_version: 3
-doc_updated_at: "2026-08-13T06:16:04.142Z"
+doc_updated_at: "2026-08-13T06:16:44.409Z"
 doc_updated_by: "CODER"
 description: "Update all local Writer implementation and test paths in machine-readable parity records after the concrete LibreOffice-derived module rename, then validate inventory resolution."
 sections:
@@ -58,7 +58,21 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    Command: npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference
+    Result: pass
+    Evidence: every Writer record resolves current local and pinned upstream evidence; 0 exceptions.
+    Scope: stale local module paths in Writer parity mappings.
+
+    Command: npm run check:source-tree && npm run check:docs && git diff --check && ap doctor && node .agentplane/policy/check-routing.mjs
+    Result: pass
+    Evidence: source-tree identity, documentation, diff, AgentPlane doctor, and policy routing checks pass.
+    Scope: parity-record repair.
+
+    Skipped: npm run verify and full browser matrix.
+    Reason: user-approved full-run cadence is every ten closed tasks.
+    Risk: no executable behavior changed; broad aggregate checks remain deferred.
+    Approval: user blanket approval and explicit cadence instruction.
 id_source: "generated"
 ---
 ## Summary
@@ -93,3 +107,18 @@ Update all local Writer implementation and test paths in machine-readable parity
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Command: npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference
+Result: pass
+Evidence: every Writer record resolves current local and pinned upstream evidence; 0 exceptions.
+Scope: stale local module paths in Writer parity mappings.
+
+Command: npm run check:source-tree && npm run check:docs && git diff --check && ap doctor && node .agentplane/policy/check-routing.mjs
+Result: pass
+Evidence: source-tree identity, documentation, diff, AgentPlane doctor, and policy routing checks pass.
+Scope: parity-record repair.
+
+Skipped: npm run verify and full browser matrix.
+Reason: user-approved full-run cadence is every ten closed tasks.
+Risk: no executable behavior changed; broad aggregate checks remain deferred.
+Approval: user blanket approval and explicit cadence instruction.
