@@ -1,10 +1,11 @@
 ---
 id: "202608130934-F1JT8K"
 title: "Remove stale Writer foundation labels"
-status: "DOING"
+result_summary: "verified-202608130934-F1JT8K"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-13T09:41:59.221Z"
+  updated_at: "2026-08-13T09:42:17.557Z"
   updated_by: "CODER"
   note: "verified-202608130934-F1JT8K"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "d2610a0; npm run test:e2e -- --grep document-wide selection; npm run test:coverage"
   findings:
     - "Fast coverage, targeted Chromium pointer-selection coverage, formatting, lint, JSDoc, file-size, and whitespace checks pass."
-commit: null
+commit:
+  hash: "2f09942125323c78d59dd69faa19dec7450cdd36"
+  message: "🧪 F1JT8K close: record label and selection verification"
 comments:
   -
     author: "CODER"
     body: "Start: Removing superseded Writer status labels and restoring pointer selection endpoint fidelity with focused coverage."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608130934-F1JT8K. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202608130934-F1JT8K"
+  -
+    type: "verify"
+    at: "2026-08-13T09:42:17.557Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608130934-F1JT8K"
+  -
+    type: "status"
+    at: "2026-08-13T09:42:17.749Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608130934-F1JT8K. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-13T09:41:59.304Z"
+doc_updated_at: "2026-08-13T09:42:17.750Z"
 doc_updated_by: "CODER"
 description: "Remove the obsolete Plain text badge from the Writer workbench and the Foundation only label from the Writer suite selector card, retaining current accessible product naming and UI coverage."
 sections:
@@ -159,6 +178,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-08-13T09:42:17.557Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608130934-F1JT8K
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T09:41:59.304Z, excerpt_hash=sha256:a21ab622eb19b0c86655eb0d77064beeac96a7f4ac2eb457a93d11b759145e7e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130934-F1JT8K/blueprint/resolved-snapshot.json
+    - old_digest: 543df907c358da74e4bfd1567c159eabdb4d76799184ce80c8e40e958b03e147
+    - current_digest: 543df907c358da74e4bfd1567c159eabdb4d76799184ce80c8e40e958b03e147
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608130934-F1JT8K
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608130934-F1JT8K --result verified-202608130934-F1JT8K --commit 2f09942125323c78d59dd69faa19dec7450cdd36
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation commit to restore the previous labels and pointer-selection implementation. No persisted document data, external systems, or schema are changed."
   Findings: |-
@@ -167,6 +216,10 @@ sections:
     Writer no longer presents the stale Plain text title badge or the Foundation only state in its suite selector. Other unavailable suite cards retain their Foundation only status.
 
     Verification used local commands only, per the user's explicit no-runner instruction. File-size reporting retains existing decomposition candidates: desktop.test.tsx (525), writer.test.ts (555), writer.ts (670), view.tsx (702), and scripts/libreoffice-inventory/contracts.ts (536); none reaches the mandatory 1000-line threshold.
+extensions:
+  implementation_commit:
+    hash: "d2610a08391694b177f2c80cf8d36bfccb185b59"
+    message: "🐛 F1JT8K code: remove stale labels and preserve drag endpoints"
 id_source: "generated"
 ---
 ## Summary
@@ -264,6 +317,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202608130934-F1JT8K --result verified-202608130934-F1JT8K --commit d2610a08391694b177f2c80cf8d36bfccb185b59
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-08-13T09:42:17.557Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608130934-F1JT8K
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T09:41:59.304Z, excerpt_hash=sha256:a21ab622eb19b0c86655eb0d77064beeac96a7f4ac2eb457a93d11b759145e7e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130934-F1JT8K/blueprint/resolved-snapshot.json
+- old_digest: 543df907c358da74e4bfd1567c159eabdb4d76799184ce80c8e40e958b03e147
+- current_digest: 543df907c358da74e4bfd1567c159eabdb4d76799184ce80c8e40e958b03e147
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608130934-F1JT8K
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608130934-F1JT8K --result verified-202608130934-F1JT8K --commit 2f09942125323c78d59dd69faa19dec7450cdd36
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
