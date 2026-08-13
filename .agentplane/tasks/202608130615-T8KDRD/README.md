@@ -1,10 +1,11 @@
 ---
 id: "202608130615-T8KDRD"
 title: "Repair Writer parity mappings after module identity migration"
-status: "DOING"
+result_summary: "Repaired stale local Writer module paths in the machine-readable parity record."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference"
   findings:
     - "All five stale local paths were repaired and the mapping inventory resolves with no exceptions."
-commit: null
+commit:
+  hash: "1da0629842841b9f0c85f00cc8a1046eeec04bd6"
+  message: "📝 T8KDRD docs: repair Writer parity module paths"
 comments:
   -
     author: "CODER"
     body: "Start: repair stale local Writer parity paths after the audited module identity migration."
+  -
+    author: "CODER"
+    body: "Verified: Writer parity mappings now reference current audited source modules and resolve against the pinned baseline."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified current Writer parity paths resolve against the pinned baseline and source-tree/documentation/routing gates pass; aggregate suite deferred under approved cadence."
+  -
+    type: "status"
+    at: "2026-08-13T06:16:55.532Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer parity mappings now reference current audited source modules and resolve against the pinned baseline."
 doc_version: 3
-doc_updated_at: "2026-08-13T06:16:47.021Z"
+doc_updated_at: "2026-08-13T06:16:55.534Z"
 doc_updated_by: "CODER"
 description: "Update all local Writer implementation and test paths in machine-readable parity records after the concrete LibreOffice-derived module rename, then validate inventory resolution."
 sections:
