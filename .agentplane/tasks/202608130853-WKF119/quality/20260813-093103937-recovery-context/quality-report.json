@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130853-WKF119",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T09:31:03.937Z",
+  "verdict": "pass",
+  "summary": "LO-WRITER-0110 is bounded, documented, and verified with mapped upstream evidence.",
+  "evaluated_sha": "d767b0bb7fc55cbbf481c4709753c1638941272e",
+  "blueprint_digest": "195c1dad008b498d9227a5de59462aaba6c9d9e57311d2b72350cf31aaaa713b",
+  "findings": [
+    "Same-paragraph Cut/Paste preserves safe direct runs and placement; unsupported transfer formats and cross-paragraph behavior are explicit."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130853-WKF119/README.md",
+    "npm run test:coverage; npm run test:e2e -- --grep \"Writer Cut and Paste\"; npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
