@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130712-3CJ01C",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T07:25:03.430Z",
+  "verdict": "pass",
+  "summary": "Nested Writer clipboard export meets the approved bounded scope.",
+  "evaluated_sha": "46c85931e84856bd56d882cfdff39dd3716619c4",
+  "blueprint_digest": "72b8e774fd6281da70bbc387c483c77ae817433b26c933d0cfcbbdc9df8878d6",
+  "findings": [
+    "All declared fast, targeted browser, parity, provenance, source-tree, and policy checks passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130712-3CJ01C/README.md",
+    "46c8593"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
