@@ -11,8 +11,8 @@ describe("suiteDefinitions" /**
  *
  * @returns Nothing; Vitest registers the enclosed cases.
  */, function defineSuiteInventoryTests(): void {
-  it("contains every planned suite exactly once with foundation-only status" /**
-   * Verifies stable identifiers, ordering, uniqueness, and non-capability status.
+  it("contains every planned suite exactly once and reserves foundation-only status for unavailable suites" /**
+   * Verifies stable identifiers, ordering, uniqueness, and that Writer no longer claims the obsolete foundation-only state.
    *
    * @returns Nothing; assertions protect the inventory contract.
    */, function verifySuiteInventory(): void {
@@ -30,18 +30,26 @@ describe("suiteDefinitions" /**
 
     expect(ids).toEqual(["writer", "calc", "impress", "draw", "base", "math", "chart"]);
     expect(new Set(ids).size).toBe(ids.length);
+    expect("status" in (suiteDefinitions[0] as object)).toBe(false);
     expect(
-      suiteDefinitions.every(
-        /**
-         * Checks that one suite retains the explicit non-capability status.
-         *
-         * @param suite - Immutable suite definition under test.
-         * @returns True only when the suite remains a foundation placeholder.
-         */
-        function hasFoundationStatus(suite) {
-          return suite.status === "Foundation only";
-        },
-      ),
+      suiteDefinitions
+        .filter(
+          /** Excludes Writer because its implemented workbench has no unavailable-suite status. @param suite - Immutable suite definition inspected by stable identity. @returns True only for a suite other than Writer. */
+          function isUnavailableSuite(suite): boolean {
+            return suite.id !== "writer";
+          },
+        )
+        .every(
+          /**
+           * Checks that one suite retains the explicit non-capability status.
+           *
+           * @param suite - Immutable suite definition under test.
+           * @returns True only when the suite remains a foundation placeholder.
+           */
+          function hasFoundationStatus(suite) {
+            return "status" in suite && suite.status === "Foundation only";
+          },
+        ),
     ).toBe(true);
   });
 });

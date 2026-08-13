@@ -270,7 +270,7 @@ describe("App" /**
     fireEvent.keyDown(window, { ctrlKey: true, key: "z" });
     expect(screen.queryByRole("textbox", { name: "Writer document text" })).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole("button", { name: "Writer, Foundation only" }));
+    fireEvent.click(screen.getByRole("button", { name: "Writer" }));
     expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
       "Retained Writer body",
     );

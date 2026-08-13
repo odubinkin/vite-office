@@ -37,7 +37,7 @@ const suiteIcons: Readonly<Record<SuiteId, LucideIcon>> = {
 };
 
 /**
- * Renders a keyboard-operable suite selector with explicit foundation status.
+ * Renders a keyboard-operable suite selector with an optional foundation status.
  *
  * @param props - Immutable suite data, selection state, and selection callback.
  * @param props.isSelected - Whether the suite owns the main preview panel.
@@ -60,7 +60,7 @@ export function SuiteCard({ isSelected, onSelect, suite }: SuiteCardProps): Reac
   return (
     <button
       aria-current={isSelected ? "page" : undefined}
-      aria-label={`${suite.name}, ${suite.status}`}
+      aria-label={suite.status === undefined ? suite.name : `${suite.name}, ${suite.status}`}
       className="group flex w-full items-center gap-3 rounded-2xl border border-transparent px-3 py-3 text-left transition hover:border-slate-200 hover:bg-white/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 data-[selected=true]:border-indigo-200 data-[selected=true]:bg-white data-[selected=true]:shadow-sm"
       data-selected={isSelected}
       onClick={handleSelect}
@@ -71,7 +71,9 @@ export function SuiteCard({ isSelected, onSelect, suite }: SuiteCardProps): Reac
       </span>
       <span className="min-w-0 flex-1">
         <span className="block font-semibold text-slate-900">{suite.name}</span>
-        <span className="block truncate text-xs text-slate-500">{suite.status}</span>
+        {suite.status === undefined ? null : (
+          <span className="block truncate text-xs text-slate-500">{suite.status}</span>
+        )}
       </span>
     </button>
   );

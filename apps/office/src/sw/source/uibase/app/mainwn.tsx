@@ -66,9 +66,6 @@ export function WriterWorkspaceChrome({
               Writer · browser workbench
             </p>
           </div>
-          <span className="ml-auto rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-800">
-            Plain text
-          </span>
         </div>
 
         {menuBar}

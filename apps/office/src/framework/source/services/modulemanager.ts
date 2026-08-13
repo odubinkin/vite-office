@@ -5,7 +5,7 @@
 /** Identifies a planned office-suite domain with a stable browser-facing key. */
 export type SuiteId = "base" | "calc" | "chart" | "draw" | "impress" | "math" | "writer";
 
-/** Describes one planned suite entry and its intentionally unavailable foundation state. */
+/** Describes one suite entry and an optional unavailable-foundation status. */
 export interface SuiteDefinition {
   /** Short statement of the future document domain. */
   readonly description: string;
@@ -13,8 +13,8 @@ export interface SuiteDefinition {
   readonly id: SuiteId;
   /** Human-readable suite name aligned with the LibreOffice product vocabulary. */
   readonly name: string;
-  /** Explicit non-capability status shown to users. */
-  readonly status: "Foundation only";
+  /** Explicit non-capability status shown only for suites without an implemented workbench. */
+  readonly status?: "Foundation only";
 }
 
 /** Ordered suite inventory resolved by the static browser module manager. */
@@ -23,7 +23,6 @@ export const suiteDefinitions = [
     description: "Text documents, page layout, review, and publishing workflows.",
     id: "writer",
     name: "Writer",
-    status: "Foundation only",
   },
   {
     description: "Worksheets, formulas, analysis, and calculation workflows.",

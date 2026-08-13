@@ -29,6 +29,30 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
   const secondBox = await secondParagraph.boundingBox();
   if (firstBox === null || secondBox === null)
     throw new Error("Writer paragraphs must have measurable boxes for pointer selection coverage.");
+  await page.evaluate(
+    /**
+     * Makes pointer geometry deterministic so the browser-facing selection bridge can be checked at partial text offsets.
+     *
+     * @param coordinates - Vertical paragraph bounds used to select the deterministic text endpoint.
+     * @returns Nothing; the page-local caret resolver is replaced for this isolated test page.
+     */
+    function installDeterministicCaretRanges(
+      coordinates: Readonly<{ secondParagraphY: number }>,
+    ): void {
+      document.caretRangeFromPoint =
+        /** Resolves a repeatable Writer paragraph endpoint from the drag row. @param _x - Ignored horizontal coordinate. @param y - Viewport vertical coordinate that determines the test paragraph. @returns Collapsed range at the asserted partial offset. */
+        function resolveWriterTestCaret(_x, y): Range {
+          const paragraph = document.querySelectorAll<HTMLParagraphElement>(
+            "[data-writer-paragraph-id]",
+          )[y < coordinates.secondParagraphY ? 0 : 1] as HTMLParagraphElement;
+          const range = document.createRange();
+          range.setStart(paragraph.firstChild as Text, y < coordinates.secondParagraphY ? 5 : 6);
+          range.collapse(true);
+          return range;
+        };
+    },
+    { secondParagraphY: secondBox.y },
+  );
   await page.mouse.move(firstBox.x + 8, firstBox.y + firstBox.height / 2);
   await page.mouse.down();
   await page.mouse.move(
@@ -45,12 +69,15 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
      *
      * @returns Visible browser selection text or an empty string when no selection exists.
      */
-    function readPointerWriterSelection(): string {
-      return window.getSelection()?.toString() ?? "";
+    function readPointerWriterSelection(): Readonly<{ anchorOffset: number; focusOffset: number }> {
+      const selection = window.getSelection();
+      return {
+        anchorOffset: selection?.anchorOffset ?? -1,
+        focusOffset: selection?.focusOffset ?? -1,
+      };
     },
   );
-  expect(pointerSelection).toContain("First Writer");
-  expect(pointerSelection).toContain("Second Writer");
+  expect(pointerSelection).toEqual({ anchorOffset: 5, focusOffset: 6 });
   await page.mouse.move(secondBox.x + 8, secondBox.y + secondBox.height / 2);
   await page.mouse.down();
   await page.mouse.move(
@@ -67,10 +94,16 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
      *
      * @returns Visible browser selection text or an empty string when no selection exists.
      */
-    function readReversePointerWriterSelection(): string {
-      return window.getSelection()?.toString() ?? "";
+    function readReversePointerWriterSelection(): Readonly<{
+      anchorOffset: number;
+      focusOffset: number;
+    }> {
+      const selection = window.getSelection();
+      return {
+        anchorOffset: selection?.anchorOffset ?? -1,
+        focusOffset: selection?.focusOffset ?? -1,
+      };
     },
   );
-  expect(reversePointerSelection).toContain("First Writer");
-  expect(reversePointerSelection).toContain("Second Writer");
+  expect(reversePointerSelection).toEqual({ anchorOffset: 6, focusOffset: 5 });
 });

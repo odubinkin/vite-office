@@ -375,15 +375,7 @@ export function WriterPlainTextEditor({
     const selection = globalThis.getSelection();
     if (selection === null) return;
     event.preventDefault();
-    const range = document.createRange();
-    range.setStartBefore(anchor.paragraph);
-    range.setEndAfter(focus.paragraph);
-    if (range.collapsed) {
-      range.setStartBefore(focus.paragraph);
-      range.setEndAfter(anchor.paragraph);
-    }
-    selection.removeAllRanges();
-    selection.addRange(range);
+    selection.setBaseAndExtent(anchor.node, anchor.offset, focus.node, focus.offset);
   }
 
   /**
@@ -409,15 +401,7 @@ export function WriterPlainTextEditor({
       const selection = globalThis.getSelection();
       if (selection !== null) {
         event.preventDefault();
-        const range = document.createRange();
-        range.setStartBefore(anchor.paragraph);
-        range.setEndAfter(focus.paragraph);
-        if (range.collapsed) {
-          range.setStartBefore(focus.paragraph);
-          range.setEndAfter(anchor.paragraph);
-        }
-        selection.removeAllRanges();
-        selection.addRange(range);
+        selection.setBaseAndExtent(anchor.node, anchor.offset, focus.node, focus.offset);
       }
     }
     clearPointerSelectionAnchor();
