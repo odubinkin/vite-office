@@ -3,7 +3,7 @@
  */
 
 import { access, readdir, readFile } from "node:fs/promises";
-import { dirname, relative, resolve } from "node:path";
+import { basename, dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /** Declares the current strict JSON schema version for local source provenance. */
@@ -32,6 +32,14 @@ export interface BrowserOnlySourceProvenanceEntry {
 /** Defines one exhaustive authored runtime source mapping. */
 export type SourceProvenanceEntry = MappedSourceProvenanceEntry | BrowserOnlySourceProvenanceEntry;
 
+/** Documents one intentional local filename difference from its concrete upstream mapped counterpart. */
+export interface FilenameDivergence {
+  /** Local mapped runtime module whose filename intentionally differs from the upstream filename. */
+  readonly localPath: string;
+  /** Specific architectural reason the local filename cannot or should not equal its upstream counterpart. */
+  readonly rationale: string;
+}
+
 /** Defines the pinned baseline identity and exhaustive runtime mapping set. */
 export interface SourceProvenanceManifest {
   /** Pinned LibreOffice core commit used to resolve mapped upstream paths. */
@@ -40,6 +48,8 @@ export interface SourceProvenanceManifest {
   readonly baselineTag: string;
   /** Exactly one mapping or explicit browser-only exception for every authored runtime module. */
   readonly entries: readonly SourceProvenanceEntry[];
+  /** Exactly one reviewed explanation for every mapped local/upstream filename divergence. */
+  readonly filenameDivergences: readonly FilenameDivergence[];
   /** Strict source-provenance JSON schema version. */
   readonly schemaVersion: typeof SOURCE_PROVENANCE_SCHEMA_VERSION;
 }
@@ -89,7 +99,14 @@ export function parseSourceProvenanceManifest(
       return parseSourceProvenanceEntry(entry, index);
     },
   );
-  return { baselineCommit, baselineTag, entries, schemaVersion: SOURCE_PROVENANCE_SCHEMA_VERSION };
+  const filenameDivergences = parseFilenameDivergences(candidate.filenameDivergences);
+  return {
+    baselineCommit,
+    baselineTag,
+    entries,
+    filenameDivergences,
+    schemaVersion: SOURCE_PROVENANCE_SCHEMA_VERSION,
+  };
 }
 
 /**
@@ -136,6 +153,34 @@ export async function validateSourceProvenanceManifest(
     if (entry.status === "mapped" && !(await upstreamPathExists(entry.upstreamPath)))
       throw new Error(`Source provenance upstream path does not exist: ${entry.upstreamPath}.`);
   }
+  const expectedDivergences = manifest.entries
+    .filter(
+      /** Retains mapped modules whose portable basename differs from the pinned upstream source basename. @param entry - Provenance entry to compare. @returns True only for an intentional filename divergence candidate. */
+      function hasFilenameDivergence(entry): entry is MappedSourceProvenanceEntry {
+        return (
+          entry.status === "mapped" &&
+          getFilenameStem(entry.localPath) !== getFilenameStem(entry.upstreamPath)
+        );
+      },
+    )
+    .map(
+      /** Selects one local path that requires exactly one filename-divergence record. @param entry - Mapped divergent module. @returns Its local module path. */
+      function selectDivergentLocalPath(entry): string {
+        return entry.localPath;
+      },
+    );
+  const documentedDivergences = manifest.filenameDivergences.map(
+    /** Selects one documented divergent local path. @param divergence - Reviewed divergence entry. @returns Its local module path. */
+    function selectDocumentedDivergencePath(divergence): string {
+      return divergence.localPath;
+    },
+  );
+  assertUnique(documentedDivergences, "Source provenance filenameDivergence localPath");
+  assertSamePaths(
+    expectedDivergences,
+    documentedDivergences,
+    "Source provenance filename divergences",
+  );
   return {
     browserOnlyCount: manifest.entries.filter(
       /** Identifies explicit browser-only exceptions for reporting. @param entry - Strict provenance entry. @returns True only for browser-only entries. */
@@ -220,6 +265,26 @@ function parseSourceProvenanceEntry(candidate: unknown, index: number): SourcePr
   throw new Error(`Source provenance entries[${index}] has an invalid status.`);
 }
 
+/** Parses the complete reviewed filename-divergence set from one strict manifest candidate. @param candidate - Unknown manifest field. @returns Strict filename-divergence records. @throws {Error} When records are absent or malformed. */
+function parseFilenameDivergences(candidate: unknown): readonly FilenameDivergence[] {
+  if (!Array.isArray(candidate))
+    throw new Error("Source provenance filenameDivergences must be an array.");
+  return candidate.map(
+    /** Parses one reviewed divergence with deterministic index diagnostics. @param divergence - Unknown divergence record. @param index - Zero-based record index. @returns Strict reviewed divergence. */
+    function parseDivergenceAtIndex(divergence: unknown, index: number): FilenameDivergence {
+      if (!isRecord(divergence))
+        throw new Error(`Source provenance filenameDivergences[${index}] must be an object.`);
+      const localPath = requireRuntimeModulePath(divergence, "localPath");
+      const rationale = requireString(divergence, "rationale");
+      if (rationale.length < 80)
+        throw new Error(
+          `Source provenance filename divergence rationale for ${localPath} must be at least 80 characters.`,
+        );
+      return { localPath, rationale };
+    },
+  );
+}
+
 /** Validates a repository-relative authored runtime module path. @param record - Parsed entry object. @param field - Required path field name. @returns Strict source path. */
 function requireRuntimeModulePath(record: Record<string, unknown>, field: string): string {
   const value = requireString(record, field);
@@ -247,6 +312,39 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function assertUnique(paths: readonly string[], description: string): void {
   if (new Set(paths).size !== paths.length)
     throw new Error(`${description} values must be unique.`);
+}
+
+/** Compares two path sets and rejects missing or stale records with an explicit diagnostic. @param expectedPaths - Determined paths that must be documented. @param actualPaths - Declared paths to validate. @param description - Human-readable diagnostic prefix. @returns Nothing; a mismatch throws. */
+function assertSamePaths(
+  expectedPaths: readonly string[],
+  actualPaths: readonly string[],
+  description: string,
+): void {
+  const expected = new Set(expectedPaths);
+  const actual = new Set(actualPaths);
+  const missing = expectedPaths.filter(
+    /** Identifies a computed divergence omitted from documentation. @param path - Computed local path. @returns True only when absent from declarations. */
+    function isMissing(path): boolean {
+      return !actual.has(path);
+    },
+  );
+  const stale = actualPaths.filter(
+    /** Identifies a declared divergence no longer computed from a mapped entry. @param path - Declared local path. @returns True only when no longer divergent. */
+    function isStale(path): boolean {
+      return !expected.has(path);
+    },
+  );
+  if (missing.length > 0 || stale.length > 0)
+    throw new Error(
+      `${description} must exactly match mapped basename differences; missing: ${missing.join(", ") || "none"}; stale: ${stale.join(", ") || "none"}.`,
+    );
+}
+
+/** Converts a source or configuration path to its case-normalized extensionless basename. @param filePath - Local or upstream source path. @returns Comparable lowercase filename stem. */
+function getFilenameStem(filePath: string): string {
+  return basename(filePath)
+    .replace(/\.[^.]+$/u, "")
+    .toLowerCase();
 }
 
 /** Executes the repository-local provenance check only when this module is the TypeScript CLI entrypoint. @returns A promise resolved after a successful check. */

@@ -22,6 +22,13 @@ function createManifestSource(overrides: Readonly<Record<string, unknown>> = {})
   return JSON.stringify({
     baselineCommit: baseline.commit,
     baselineTag: baseline.tag,
+    filenameDivergences: [
+      {
+        localPath: "apps/office/src/sw/source/core/doc/writer.ts",
+        rationale:
+          "The browser Writer document aggregate owns broader immutable state than upstream document creation, so its honest local filename differs while the concrete ownership mapping remains auditable.",
+      },
+    ],
     entries: [
       {
         localPath: "apps/office/src/sw/source/core/doc/writer.ts",
@@ -75,6 +82,17 @@ describe("source provenance" /** Groups complete current runtime source-provenan
     expectInvalidManifest(createManifestSource({ baselineCommit: "other" }));
     expectInvalidManifest(createManifestSource({ schemaVersion: 2 }));
     expectInvalidManifest(createManifestSource({ entries: [] }));
+    expectInvalidManifest(createManifestSource({ filenameDivergences: undefined }));
+    expectInvalidManifest(
+      createManifestSource({
+        filenameDivergences: [
+          {
+            localPath: "apps/office/src/sw/source/core/doc/writer.ts",
+            rationale: "Too short.",
+          },
+        ],
+      }),
+    );
     expectInvalidManifest(
       createManifestSource({
         entries: [
@@ -132,5 +150,46 @@ describe("source provenance" /** Groups complete current runtime source-provenan
         },
       ),
     ).rejects.toThrowError(/upstream path does not exist/u);
+    const missingDivergenceManifest = parseSourceProvenanceManifest(
+      createManifestSource({ filenameDivergences: [] }),
+      baseline,
+    );
+    await expect(
+      validateSourceProvenanceManifest(
+        missingDivergenceManifest,
+        ["apps/office/src/main.tsx", "apps/office/src/sw/source/core/doc/writer.ts"],
+        /** Accepts the mapped fixture source so only missing divergence evidence is observed. @returns Promise resolving true. */
+        async function acceptsMappedFixture(): Promise<boolean> {
+          return true;
+        },
+      ),
+    ).rejects.toThrowError(/filename divergences/u);
+    const staleDivergenceManifest = parseSourceProvenanceManifest(
+      createManifestSource({
+        filenameDivergences: [
+          {
+            localPath: "apps/office/src/main.tsx",
+            rationale:
+              "This deliberately stale browser entry demonstrates that filename-divergence records may only document a concrete mapped local-to-upstream basename mismatch.",
+          },
+          {
+            localPath: "apps/office/src/sw/source/core/doc/writer.ts",
+            rationale:
+              "The browser Writer document aggregate owns broader immutable state than upstream document creation, so its honest local filename differs while the concrete ownership mapping remains auditable.",
+          },
+        ],
+      }),
+      baseline,
+    );
+    await expect(
+      validateSourceProvenanceManifest(
+        staleDivergenceManifest,
+        ["apps/office/src/main.tsx", "apps/office/src/sw/source/core/doc/writer.ts"],
+        /** Accepts the mapped fixture source so only stale divergence evidence is observed. @returns Promise resolving true. */
+        async function acceptsMappedFixture(): Promise<boolean> {
+          return true;
+        },
+      ),
+    ).rejects.toThrowError(/filename divergences/u);
   });
 });

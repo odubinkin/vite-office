@@ -273,7 +273,7 @@
           { "path": "apps/office/src/sw/source/uibase/shells/listsh.ts", "marker": "changeWriterParagraphListLevel" },
           { "path": "apps/office/src/sw/source/uibase/uiview/view.tsx", "marker": "handleWriterParagraphListLevel" },
           { "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts", "marker": "applyWriterListLevelTransaction" },
-          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "marker": "renderListLevelMenuCommand" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx", "marker": "renderListLevelMenuCommand" },
           { "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts", "marker": "writerNumObjectBarListLevelCommands" },
           { "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "marker": "data-list-level" }
         ],

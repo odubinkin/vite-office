@@ -56,6 +56,22 @@ capability parity: a source mapping records ownership and exceptions, while a
 capability may remain incomplete until its implementation, upstream tests, and
 documentation have dedicated parity evidence.
 
+## Intentional mapped filename divergences
+
+Mapped modules ordinarily use the exact LibreOffice filename. The exhaustive
+`filenameDivergences` manifest field and provenance gate allow the following
+six cases only; adding, removing, or renaming one must update both the table and
+machine-checked record.
+
+| Local browser module | Pinned upstream module | Reason |
+| --- | --- | --- |
+| `svl/source/misc/recovery.ts` | `svl/source/misc/lockfilecommon.cxx` | Browser recovery coordinator at the shared lockfile ownership boundary |
+| `sw/source/core/doc/writer.ts` | `sw/source/core/doc/docnew.cxx` | Browser Writer aggregate rather than only document creation |
+| `sw/source/uibase/docvw/edtwin-paragraph.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | React paragraph decomposition beneath the one editor boundary |
+| `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Typed command declaration extracted from XML configuration |
+| `sw/uiconfig/swriter/menubar/format-menu.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | React Format-popup decomposition of the same menu hierarchy |
+| `vcl/browser/browser-clipboard.ts` | `vcl/source/app/ClipboardBase.cxx` | Explicit static-browser clipboard platform adapter |
+
 ## File-level provenance in the active Writer list slice
 
 | Local browser module | Pinned LibreOffice source/configuration module | Responsibility |

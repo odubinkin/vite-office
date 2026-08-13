@@ -2,6 +2,14 @@
   "schemaVersion": 1,
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
+  "filenameDivergences": [
+    { "localPath": "apps/office/src/svl/source/misc/recovery.ts", "rationale": "The browser recovery coordinator has a distinct semantic name from LibreOffice's shared lockfile helper, while the mapped source records the nearest ownership boundary rather than claiming a lockfile port." },
+    { "localPath": "apps/office/src/sw/source/core/doc/writer.ts", "rationale": "The browser document model is named for the Writer aggregate it owns; the pinned docnew.cxx counterpart owns document creation, so preserving its basename would falsely narrow the local model's responsibility." },
+    { "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "rationale": "This React paragraph leaf deliberately decomposes the browser editor beneath the single edtwin.cxx ownership boundary; it is documented as one component of that mapped editor rather than a nonexistent upstream module." },
+    { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts", "rationale": "The typed declarative command subset is extracted from the pinned menubar.xml configuration so browser controls can share ordering and labels without pretending that a TypeScript file is the XML resource itself." },
+    { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx", "rationale": "The React Format popup is an intentional decomposition of the same pinned menubar.xml hierarchy, separating a growing browser render branch while retaining the upstream configuration file as its ownership source." },
+    { "localPath": "apps/office/src/vcl/browser/browser-clipboard.ts", "rationale": "The browser platform adapter is named for its Web Clipboard responsibility and maps to ClipboardBase.cxx by capability ownership; using the native base-class filename would obscure the required static-browser boundary." }
+  ],
   "entries": [
     { "localPath": "apps/office/src/framework/source/accelerators/keymapping.ts", "status": "mapped", "upstreamPath": "framework/source/accelerators/keymapping.cxx" },
     { "localPath": "apps/office/src/framework/source/dispatch/dispatchprovider.ts", "status": "mapped", "upstreamPath": "framework/source/dispatch/dispatchprovider.cxx" },
