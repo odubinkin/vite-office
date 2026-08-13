@@ -11,7 +11,7 @@ import {
   findCommandByShortcut,
   normalizeCommandShortcut,
   type CommandDefinition,
-} from "./commands";
+} from "./dispatchprovider";
 
 /** Describes immutable context supplied to representative command handlers. */
 interface CommandContext {

@@ -12,7 +12,8 @@ const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 /** Files that prove every currently instantiated LibreOffice-derived source area remains present. */
 const requiredFiles = [
   "apps/office/src/framework/source/services/App.tsx",
-  "apps/office/src/framework/source/dispatch/commands.ts",
+  "apps/office/src/framework/source/accelerators/keymapping.ts",
+  "apps/office/src/framework/source/dispatch/dispatchprovider.ts",
   "apps/office/src/sfx2/source/doc/docfac.ts",
   "apps/office/src/sfx2/source/doc/docfile.ts",
   "apps/office/src/sfx2/source/doc/docundomanager.ts",

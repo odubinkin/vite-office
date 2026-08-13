@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { getBrowserShortcut, type BrowserShortcutEvent } from "./browser-shortcuts";
+import { getBrowserShortcut, type BrowserShortcutEvent } from "./keymapping";
 
 /** Creates a keyboard event fixture with no modifiers by default. @param event - Partial event override. @returns Complete shortcut fixture. */
 function createEvent(event: Partial<BrowserShortcutEvent>): BrowserShortcutEvent {

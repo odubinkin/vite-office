@@ -3,8 +3,8 @@
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "entries": [
-    { "localPath": "apps/office/src/framework/source/accelerators/browser-shortcuts.ts", "status": "mapped", "upstreamPath": "framework/source/accelerators/keymapping.cxx" },
-    { "localPath": "apps/office/src/framework/source/dispatch/commands.ts", "status": "mapped", "upstreamPath": "framework/source/dispatch/dispatchprovider.cxx" },
+    { "localPath": "apps/office/src/framework/source/accelerators/keymapping.ts", "status": "mapped", "upstreamPath": "framework/source/accelerators/keymapping.cxx" },
+    { "localPath": "apps/office/src/framework/source/dispatch/dispatchprovider.ts", "status": "mapped", "upstreamPath": "framework/source/dispatch/dispatchprovider.cxx" },
     { "localPath": "apps/office/src/framework/source/services/App.tsx", "status": "mapped", "upstreamPath": "framework/source/services/desktop.cxx" },
     { "localPath": "apps/office/src/framework/source/services/SuiteCard.tsx", "status": "browser-only", "rationale": "This is a small React composition leaf for the static suite chooser. LibreOffice has no corresponding reusable native widget source file, and browser DOM semantics replace that desktop control boundary." },
     { "localPath": "apps/office/src/framework/source/services/bootstrap.tsx", "status": "mapped", "upstreamPath": "framework/source/services/desktop.cxx" },

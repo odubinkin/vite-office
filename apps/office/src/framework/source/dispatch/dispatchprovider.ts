@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes without React or global keyboard listeners.
+ * @fileoverview Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes at the LibreOffice `framework/source/dispatch/dispatchprovider.cxx` ownership boundary.
  */
 
 /** Describes one immutable executable command with a context-specific handler. */

@@ -2,12 +2,12 @@
 
 import { useEffect } from "react";
 
-import { getBrowserShortcut } from "../../../../framework/source/accelerators/browser-shortcuts";
+import { getBrowserShortcut } from "../../../../framework/source/accelerators/keymapping";
 import {
   createCommandRegistry,
   dispatchCommand,
   findCommandByShortcut,
-} from "../../../../framework/source/dispatch/commands";
+} from "../../../../framework/source/dispatch/dispatchprovider";
 import type { TransactionHistory } from "../../../../sfx2/source/doc/docundomanager";
 import type { WriterDocument } from "../../core/doc/writer";
 
