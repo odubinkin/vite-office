@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130702-JBPZ8C",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T07:11:19.844Z",
+  "verdict": "pass",
+  "summary": "Every current browser runtime module now has validated LibreOffice file provenance or a detailed browser-only exception.",
+  "evaluated_sha": "dcb53609af6b74dd57641274674bf8f126818e16",
+  "blueprint_digest": "c652756cab3e529e753c318fdbf88bf3cc37190bfdd7105bbe6ea2cb6dcef72b",
+  "findings": [
+    "Focused provenance tests, the exhaustive source gate, fast application coverage, parity inventory, and static quality checks passed; full suite remains deferred under the approved ten-task cadence."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130702-JBPZ8C/README.md",
+    "dcb53609af6b"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
