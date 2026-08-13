@@ -5,6 +5,9 @@
 /** Enumerates list variants currently mapped to LibreOffice Writer's default bullet and numbering commands. */
 export const WRITER_PARAGRAPH_LIST_KINDS = ["none", "bullet", "numbered"] as const;
 
+/** Defines the deepest bounded list nesting level currently supported by the browser Writer document model. */
+export const WRITER_MAX_LIST_LEVEL = 9;
+
 /** Identifies the list presentation currently applied to one Writer paragraph. */
 export type WriterParagraphListKind = (typeof WRITER_PARAGRAPH_LIST_KINDS)[number];
 
@@ -13,7 +16,7 @@ export type WriterParagraphListKind = (typeof WRITER_PARAGRAPH_LIST_KINDS)[numbe
 export interface WriterParagraphList {
   /** Default list presentation applied by the current Writer command slice. */
   readonly kind: WriterParagraphListKind;
-  /** Zero-based nesting level; only level zero is currently executable. */
+  /** Zero-based nesting level bounded by WRITER_MAX_LIST_LEVEL. */
   readonly level: number;
   /** Future Writer list-style identity; undefined until named-list-style parity is implemented. */
   readonly styleId?: string;
@@ -55,7 +58,7 @@ export function normalizeWriterParagraphList(value: unknown): WriterParagraphLis
   const kind = isWriterParagraphListKind(candidate.kind) ? candidate.kind : "none";
   const level =
     Number.isInteger(candidate.level) && (candidate.level as number) >= 0
-      ? (candidate.level as number)
+      ? Math.min(candidate.level as number, WRITER_MAX_LIST_LEVEL)
       : 0;
   const styleId =
     typeof candidate.styleId === "string" && candidate.styleId.trim().length > 0

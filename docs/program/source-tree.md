@@ -44,6 +44,7 @@ source, test, and Help evidence remains in the machine-readable
 | `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Serializable list metadata and legacy normalization |
 | `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Deterministic visible bullet and numbering marker calculation |
 | `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
+| `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Active-list Promote and Demote level transition |
 | `sw/source/uibase/shells/textsh.ts` | `sw/source/uibase/shells/textsh.cxx` | Browser-owned Copy and plain-text download command shell |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
@@ -53,13 +54,14 @@ source, test, and Help evidence remains in the machine-readable
 | `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Declarative Writer menu order and list command definitions |
 | `sw/uiconfig/swriter/toolbar/standardbar.tsx` | `sw/uiconfig/swriter/toolbar/standardbar.xml` | Browser Writer standard-toolbar control |
 | `sw/uiconfig/swriter/toolbar/textobjectbar.ts` | `sw/uiconfig/swriter/toolbar/textobjectbar.xml` | Text-object toolbar list command declaration |
+| `sw/uiconfig/swriter/toolbar/numobjectbar.ts` | `sw/uiconfig/swriter/toolbar/numobjectbar.xml` | Numbering-toolbar Promote and Demote command declaration |
 
 ## Existing Writer view-module identities
 
 | Local browser module | Pinned LibreOffice module | Responsibility |
 | --- | --- | --- |
 | `sw/source/uibase/uiview/view.tsx` | `sw/source/uibase/uiview/view.cxx` | Browser Writer view/workbench ownership |
-| `sw/source/uibase/uiview/viewfunc.ts` | `sw/source/uibase/uiview/viewfunc.hxx` | Pure focused-document and identity helpers |
+| `sw/source/uibase/uiview/viewfunc.ts` | `sw/source/uibase/uiview/viewfunc.hxx` | Pure focused-document, identity, formatting-command, and command-history helpers |
 | `sw/source/uibase/uiview/viewstat.ts` | `sw/source/uibase/uiview/viewstat.cxx` | Browser view-status and visibility state |
 | `sw/source/uibase/app/mainwn.tsx` | `sw/source/uibase/app/mainwn.cxx` | Main Writer window/chrome regions |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Editable browser document-view orchestration |

@@ -61,6 +61,7 @@ export function WriterEditableParagraph({
 }: WriterEditableParagraphProps): React.JSX.Element {
   const styleDescriptionId = `writer-paragraph-style-${index + 1}`;
   const label = index === 0 ? "Writer document text" : `Writer paragraph ${index + 1}`;
+  const listIndent = listMarker === undefined ? undefined : `${paragraph.list.level * 2}rem`;
   return (
     <div className={isLast ? "" : "mb-4"} data-active={isActive}>
       <span className="sr-only" id={styleDescriptionId}>
@@ -69,7 +70,10 @@ export function WriterEditableParagraph({
           ? ""
           : ` Paragraph list: ${paragraph.list.kind === "bullet" ? "Unordered List" : "Ordered List"}.`}
       </span>
-      <div className={listMarker === undefined ? "" : "flex items-start gap-3"}>
+      <div
+        className={listMarker === undefined ? "" : "flex items-start gap-3"}
+        style={{ marginInlineStart: listIndent }}
+      >
         {listMarker === undefined ? null : (
           <span
             aria-hidden="true"
@@ -90,6 +94,7 @@ export function WriterEditableParagraph({
           contentEditable
           data-alignment={paragraph.alignment}
           data-list-kind={paragraph.list.kind}
+          data-list-level={paragraph.list.level}
           data-list-marker={listMarker}
           data-style={paragraph.style}
           data-writer-paragraph-id={paragraph.id}

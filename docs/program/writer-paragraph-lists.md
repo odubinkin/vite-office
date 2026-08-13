@@ -17,10 +17,20 @@ that description to selected or copied paragraph text. Enter inherits the
 source paragraph list state. Merging paragraphs keeps the preceding paragraph's
 list state.
 
+The same submenu also implements `.uno:DecrementLevel` (**Demote**) and
+`.uno:IncrementLevel` (**Promote**) for the active list paragraph. Their pure
+transition lives in [`listsh.ts`](../../apps/office/src/sw/source/uibase/shells/listsh.ts),
+matching `sw/source/uibase/shells/listsh.cxx`. Demote raises the bounded nesting
+level by one; Promote lowers it by one. The browser allows levels 0 through 9,
+preserves text, list kind, paragraph style, and sibling identity, and disables
+the commands where they would be no-ops. A list level adds a visible document
+indent outside `textContent`, so native editing and Copy continue to contain
+only paragraph text.
+
 ## Deliberate current boundary
 
-This is not full Writer list parity. Range and table-cell selection, nesting,
-level changes, named list styles, restart/continue numbering, automatic list
+This is not full Writer list parity. Range and table-cell selection, nested
+list rendering and numbering semantics, named list styles, restart/continue numbering, automatic list
 detection, outline numbering, RTF clipboard transfer, Paste, and ODT/DOCX
 import/export remain separately mapped follow-up capabilities. The bounded
 semantic HTML and plain-text Copy path is documented in

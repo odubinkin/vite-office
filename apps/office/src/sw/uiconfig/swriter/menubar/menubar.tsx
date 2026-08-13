@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import {
   writerBulletsAndNumberingMenuCommands,
+  writerListLevelMenuCommands,
   writerMenuPlacements,
   type WriterTopLevelMenu,
 } from "./menubar-commands";
@@ -14,6 +15,7 @@ import type {
   WriterParagraphListKind,
   WriterParagraphStyle,
 } from "../../../source/core/doc/writer";
+import { WRITER_MAX_LIST_LEVEL } from "../../../source/core/doc/list";
 
 /** Describes enabled state and immutable action callbacks exposed from the stateful Writer workbench. */
 export interface WriterMenuBarProps {
@@ -33,10 +35,14 @@ export interface WriterMenuBarProps {
   readonly isHorizontalRulerVisible: boolean;
   /** List presentation currently applied to the focused Writer paragraph. */
   readonly listKind: WriterParagraphListKind;
+  /** Zero-based nesting level currently applied to the focused Writer paragraph. */
+  readonly listLevel: number;
   /** Applies a focused-paragraph horizontal alignment. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
   /** Applies a focused-paragraph default list presentation. */
   readonly onListKindChange: (listKind: WriterParagraphListKind) => void;
+  /** Applies a focused-paragraph Promote or Demote list-level transition. */
+  readonly onListLevelChange: (command: "demote" | "promote") => void;
   /** Starts the current plain-text browser download. */
   readonly onDownload: () => void;
   /** Requests copying the current native Writer selection to the browser clipboard. */
@@ -72,11 +78,13 @@ export interface WriterMenuBarProps {
  * @param props.canUndo - Whether the Edit Undo menu entry is enabled.
  * @param props.isHorizontalRulerVisible - Whether the View Rulers horizontal item is currently checked.
  * @param props.listKind - Current focused-paragraph default list presentation.
+ * @param props.listLevel - Current focused-paragraph list nesting level.
  * @param props.isStoragePending - Whether File storage entries are temporarily disabled.
  * @param props.isSidebarVisible - Whether the View Sidebar check item is currently checked.
  * @param props.isStatusBarVisible - Whether the View Status Bar check item is currently checked.
  * @param props.onAlignmentChange - Callback used by Format alignment entries.
  * @param props.onListKindChange - Callback used by Format Bullets and Numbering entries.
+ * @param props.onListLevelChange - Callback used by Format Promote and Demote entries.
  * @param props.onDownload - Callback used by File Save As Text entry.
  * @param props.onCopy - Callback used by Edit Copy entry.
  * @param props.onHorizontalRulerVisibilityChange - Callback used by the View Rulers horizontal item.
@@ -97,11 +105,13 @@ export function WriterMenuBar({
   canUndo,
   isHorizontalRulerVisible,
   listKind,
+  listLevel,
   isSidebarVisible,
   isStatusBarVisible,
   isStoragePending,
   onAlignmentChange,
   onListKindChange,
+  onListLevelChange,
   onDownload,
   onCopy,
   onHorizontalRulerVisibilityChange,
@@ -403,6 +413,28 @@ export function WriterMenuBar({
                           ),
                           false,
                           listKind === command.listKind,
+                        )}
+                      </div>
+                    );
+                  },
+                )}
+                <div aria-hidden="true" className="my-1 border-t border-slate-200" />
+                {writerListLevelMenuCommands.map(
+                  /** Renders one pinned Writer Promote or Demote command. @param command - Immutable Writer list-level menu placement. @returns One disabled-aware list-level menu item wrapper. */
+                  function renderListLevelMenuCommand(command): React.JSX.Element {
+                    const isDisabled =
+                      listKind === "none" ||
+                      (command.command === "demote" && listLevel === WRITER_MAX_LIST_LEVEL) ||
+                      (command.command === "promote" && listLevel === 0);
+                    return (
+                      <div key={command.unoCommand}>
+                        {renderMenuItem(
+                          command.label,
+                          invokeMenuAction.bind(
+                            undefined,
+                            onListLevelChange.bind(undefined, command.command),
+                          ),
+                          isDisabled,
                         )}
                       </div>
                     );

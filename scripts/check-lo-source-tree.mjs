@@ -24,6 +24,7 @@ const requiredFiles = [
   "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
   "apps/office/src/sw/source/filter/ascii/ascatr.ts",
   "apps/office/src/sw/source/uibase/shells/txtnum.ts",
+  "apps/office/src/sw/source/uibase/shells/listsh.ts",
   "apps/office/src/sw/source/uibase/shells/textsh.ts",
   "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx",
   "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx",
@@ -35,6 +36,7 @@ const requiredFiles = [
   "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
   "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
   "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
+  "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
 ];
 
 /** Former generic source roots that must not reappear after the LO-structure migration. */

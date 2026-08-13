@@ -34,7 +34,9 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
   `.uno:FormatBulletsMenu` contains `.uno:RemoveBullets`, `.uno:DefaultBullet`,
   and `.uno:DefaultNumbering`. The browser follows that nesting through
   **Format → Bullets and Numbering**. Its initial active-paragraph commands are
-  **Remove Bullets**, **Unordered List**, and **Ordered List**.
+  **Remove Bullets**, **Unordered List**, **Ordered List**, **Demote**, and
+  **Promote**. Demote and Promote are disabled outside a list and at the root or
+  bounded deepest level respectively.
 - `WriterCommands.xcu` declares Default Paragraph and Heading 1 style commands;
   the bounded browser style choices are available in **Styles**.
 
@@ -59,3 +61,9 @@ movement control in the browser toolbar or menu: the previous adjacent-body
 operation was not a placement-equivalent implementation of Writer list-item
 movement and is now retained only as an unmapped document-model primitive for a
 future, properly mapped capability.
+
+`sw/uiconfig/swriter/toolbar/numobjectbar.xml` places `.uno:DecrementLevel`
+and `.uno:IncrementLevel`. The browser renders their bounded equivalents next
+to the default-list controls only as active-list commands: **Demote** increases
+the active paragraph's zero-based nesting level, while **Promote** decreases
+it. This preserves Writer placement without claiming its full list-level model.

@@ -14,8 +14,6 @@ import {
 import {
   replaceWriterParagraph,
   mergeWriterParagraphWithPrevious,
-  setWriterParagraphAlignment,
-  setWriterParagraphStyle,
   splitWriterParagraph,
   type WriterDocument,
   type WriterParagraph,
@@ -36,11 +34,15 @@ import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
 import { WriterPlainTextEditor } from "../docvw/edtwin";
 import { WriterWorkspaceChrome } from "../app/mainwn";
 import { useWriterHistoryShortcuts } from "../shells/use-writer-history-shortcuts";
-import { setWriterParagraphListKind } from "../shells/txtnum";
+import type { WriterListLevelCommand } from "../shells/listsh";
 import { useWriterBrowserCommands } from "../shells/textsh";
 import { useWriterDocumentSelection, useWriterWorkspaceChrome } from "./viewstat";
 import {
   getActiveWriterParagraph,
+  applyWriterAlignmentTransaction,
+  applyWriterListKindTransaction,
+  applyWriterListLevelTransaction,
+  applyWriterStyleTransaction,
   createWriterWorkbenchDocument,
   getNextWriterParagraphId,
   getWorkbenchSelectionPosition,
@@ -246,18 +248,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       function alignActiveWorkbenchParagraph(
         currentHistory: TransactionHistory<WriterDocument>,
       ): TransactionHistory<WriterDocument> {
-        const currentDocument = getCurrentTransactionState(currentHistory);
-        const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
-        const nextDocument = setWriterParagraphAlignment(
-          currentDocument,
-          currentParagraph.id,
-          alignment,
-        );
-        return nextDocument === currentDocument
-          ? currentHistory
-          : applyTransaction(currentHistory, nextDocument, {
-              position: getWorkbenchSelectionPosition(nextDocument),
-            });
+        return applyWriterAlignmentTransaction(currentHistory, activeParagraphId, alignment);
       },
     );
   }
@@ -279,14 +270,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       function styleActiveWorkbenchParagraph(
         currentHistory: TransactionHistory<WriterDocument>,
       ): TransactionHistory<WriterDocument> {
-        const currentDocument = getCurrentTransactionState(currentHistory);
-        const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
-        const nextDocument = setWriterParagraphStyle(currentDocument, currentParagraph.id, style);
-        return nextDocument === currentDocument
-          ? currentHistory
-          : applyTransaction(currentHistory, nextDocument, {
-              position: getWorkbenchSelectionPosition(nextDocument),
-            });
+        return applyWriterStyleTransaction(currentHistory, activeParagraphId, style);
       },
     );
   }
@@ -299,22 +283,28 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
    */
   function handleWriterParagraphListKind(listKind: WriterParagraphListKind): void {
     setWriterHistory(
-      /** Applies the requested default list to the still-active paragraph in the current history state. @param currentHistory - Current Writer workbench history state. @returns Unchanged history or a new snapshot containing the command result. */
+      /** Delegates list-kind history changes to the `viewfunc.hxx`-derived pure workbench helper. @param currentHistory - Current Writer history. @returns Existing or command-adjusted history. */
       function listActiveWorkbenchParagraph(
         currentHistory: TransactionHistory<WriterDocument>,
       ): TransactionHistory<WriterDocument> {
-        const currentDocument = getCurrentTransactionState(currentHistory);
-        const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
-        const nextDocument = setWriterParagraphListKind(
-          currentDocument,
-          currentParagraph.id,
-          listKind,
-        );
-        return nextDocument === currentDocument
-          ? currentHistory
-          : applyTransaction(currentHistory, nextDocument, {
-              position: getWorkbenchSelectionPosition(nextDocument),
-            });
+        return applyWriterListKindTransaction(currentHistory, activeParagraphId, listKind);
+      },
+    );
+  }
+
+  /**
+   * Executes the active paragraph's Writer Promote or Demote command through the list shell.
+   *
+   * @param command - Bounded list-level action selected from a Writer-positioned menu or numbering toolbar.
+   * @returns Nothing; React schedules immutable history only when the requested level changes.
+   */
+  function handleWriterParagraphListLevel(command: WriterListLevelCommand): void {
+    setWriterHistory(
+      /** Delegates list-level history changes to the `viewfunc.hxx`-derived pure workbench helper. @param currentHistory - Current Writer history. @returns Existing or command-adjusted history. */
+      function changeActiveWorkbenchListLevel(
+        currentHistory: TransactionHistory<WriterDocument>,
+      ): TransactionHistory<WriterDocument> {
+        return applyWriterListLevelTransaction(currentHistory, activeParagraphId, command);
       },
     );
   }
@@ -428,6 +418,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             onHorizontalRulerVisibilityChange={setIsHorizontalRulerVisible}
             onLoad={handleWriterLoad}
             onListKindChange={handleWriterParagraphListKind}
+            onListLevelChange={handleWriterParagraphListLevel}
             onRedo={handleWriterRedo}
             onSave={handleWriterSave}
             onSelectAll={requestSelectAll}
@@ -436,6 +427,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             onStyleChange={handleWriterParagraphStyle}
             onUndo={handleWriterUndo}
             listKind={activeParagraph.list.kind}
+            listLevel={activeParagraph.list.level}
             style={activeParagraph.style}
           />
         }
@@ -444,8 +436,10 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             alignment={activeParagraph.alignment}
             onAlignmentChange={handleWriterParagraphAlignment}
             onListKindChange={handleWriterParagraphListKind}
+            onListLevelChange={handleWriterParagraphListLevel}
             onStyleChange={handleWriterParagraphStyle}
             listKind={activeParagraph.list.kind}
+            listLevel={activeParagraph.list.level}
             style={activeParagraph.style}
           />
         }

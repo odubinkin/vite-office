@@ -34,5 +34,9 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
       kind: "numbered",
       level: 0,
     });
+    expect(normalizeWriterParagraphList({ kind: "bullet", level: 99 })).toEqual({
+      kind: "bullet",
+      level: 9,
+    });
   });
 });

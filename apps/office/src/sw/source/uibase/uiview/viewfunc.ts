@@ -1,10 +1,25 @@
 /**
- * @fileoverview Provides pure Writer workbench paragraph identity and focus-resolution helpers without React state or browser dependencies.
+ * @fileoverview Provides pure Writer workbench paragraph, selection, and list-command history helpers without React state or browser dependencies.
  */
 
-import { type WriterDocument, type WriterParagraph } from "../../core/doc/writer";
+import {
+  applyTransaction,
+  getCurrentTransactionState,
+  type TransactionHistory,
+} from "../../../../sfx2/source/doc/history";
+import {
+  setWriterParagraphAlignment,
+  setWriterParagraphStyle,
+  type WriterDocument,
+  type WriterParagraph,
+  type WriterParagraphAlignment,
+  type WriterParagraphStyle,
+} from "../../core/doc/writer";
 import { createDocument } from "../../../../sfx2/source/doc/document";
 import { createWriterDocument } from "../../core/doc/writer";
+import type { WriterParagraphListKind } from "../../core/doc/list";
+import { changeWriterParagraphListLevel, type WriterListLevelCommand } from "../shells/listsh";
+import { setWriterParagraphListKind } from "../shells/txtnum";
 
 /**
  * Creates the bounded initial Writer document used by the browser workbench session.
@@ -84,4 +99,100 @@ export function getActiveWriterParagraph(
       },
     ) ?? (writerDocument.paragraphs[0] as WriterParagraph)
   );
+}
+
+/**
+ * Applies one paragraph-alignment command to the active paragraph through immutable workbench history.
+ *
+ * @param currentHistory - Immutable workbench history before the requested alignment.
+ * @param activeParagraphId - Focused paragraph identity, with the standard first-paragraph fallback retained.
+ * @param alignment - Supported horizontal alignment selected from the formatting toolbar.
+ * @returns Original history for a no-op or a history with exactly one alignment-adjusted snapshot.
+ */
+export function applyWriterAlignmentTransaction(
+  currentHistory: TransactionHistory<WriterDocument>,
+  activeParagraphId: string,
+  alignment: WriterParagraphAlignment,
+): TransactionHistory<WriterDocument> {
+  const currentDocument = getCurrentTransactionState(currentHistory);
+  const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
+  const nextDocument = setWriterParagraphAlignment(currentDocument, currentParagraph.id, alignment);
+  return nextDocument === currentDocument
+    ? currentHistory
+    : applyTransaction(currentHistory, nextDocument, {
+        position: getWorkbenchSelectionPosition(nextDocument),
+      });
+}
+
+/**
+ * Applies one paragraph-style command to the active paragraph through immutable workbench history.
+ *
+ * @param currentHistory - Immutable workbench history before the requested paragraph style.
+ * @param activeParagraphId - Focused paragraph identity, with the standard first-paragraph fallback retained.
+ * @param style - Supported paragraph style selected from the formatting toolbar.
+ * @returns Original history for a no-op or a history with exactly one style-adjusted snapshot.
+ */
+export function applyWriterStyleTransaction(
+  currentHistory: TransactionHistory<WriterDocument>,
+  activeParagraphId: string,
+  style: WriterParagraphStyle,
+): TransactionHistory<WriterDocument> {
+  const currentDocument = getCurrentTransactionState(currentHistory);
+  const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
+  const nextDocument = setWriterParagraphStyle(currentDocument, currentParagraph.id, style);
+  return nextDocument === currentDocument
+    ? currentHistory
+    : applyTransaction(currentHistory, nextDocument, {
+        position: getWorkbenchSelectionPosition(nextDocument),
+      });
+}
+
+/**
+ * Applies one default-list command to the active paragraph through the immutable Writer history boundary.
+ *
+ * @param currentHistory - Immutable workbench history before the requested list presentation.
+ * @param activeParagraphId - Focused paragraph identity, with the standard first-paragraph fallback retained.
+ * @param listKind - Next supported bullet, numbered, or no-list presentation.
+ * @returns Original history for a no-op or a history with exactly one list-presentation snapshot.
+ */
+export function applyWriterListKindTransaction(
+  currentHistory: TransactionHistory<WriterDocument>,
+  activeParagraphId: string,
+  listKind: WriterParagraphListKind,
+): TransactionHistory<WriterDocument> {
+  const currentDocument = getCurrentTransactionState(currentHistory);
+  const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
+  const nextDocument = setWriterParagraphListKind(currentDocument, currentParagraph.id, listKind);
+  return nextDocument === currentDocument
+    ? currentHistory
+    : applyTransaction(currentHistory, nextDocument, {
+        position: getWorkbenchSelectionPosition(nextDocument),
+      });
+}
+
+/**
+ * Applies one Writer Promote or Demote command to the active paragraph through immutable workbench history.
+ *
+ * @param currentHistory - Immutable workbench history before the command.
+ * @param activeParagraphId - Focused paragraph identity, with the standard first-paragraph fallback retained.
+ * @param command - Bounded Writer list-level command selected by the UI.
+ * @returns Original history for a disabled-command no-op or a history with exactly one level-adjusted snapshot.
+ */
+export function applyWriterListLevelTransaction(
+  currentHistory: TransactionHistory<WriterDocument>,
+  activeParagraphId: string,
+  command: WriterListLevelCommand,
+): TransactionHistory<WriterDocument> {
+  const currentDocument = getCurrentTransactionState(currentHistory);
+  const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
+  const nextDocument = changeWriterParagraphListLevel(
+    currentDocument,
+    currentParagraph.id,
+    command,
+  );
+  return nextDocument === currentDocument
+    ? currentHistory
+    : applyTransaction(currentHistory, nextDocument, {
+        position: getWorkbenchSelectionPosition(nextDocument),
+      });
 }

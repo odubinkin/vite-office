@@ -7,12 +7,16 @@ import {
   AlignJustify,
   AlignLeft,
   AlignRight,
+  IndentIncrease,
   List,
   ListOrdered,
+  Outdent,
   type LucideIcon,
 } from "lucide-react";
 
 import { writerTextObjectBarListCommands } from "../../../uiconfig/swriter/toolbar/textobjectbar";
+import { writerNumObjectBarListLevelCommands } from "../../../uiconfig/swriter/toolbar/numobjectbar";
+import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type {
   WriterParagraphAlignment,
   WriterParagraphListKind,
@@ -45,12 +49,16 @@ export interface WriterParagraphFormattingToolbarProps {
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
   /** Requests a new default list presentation for the currently focused Writer paragraph. */
   readonly onListKindChange: (listKind: WriterParagraphListKind) => void;
+  /** Requests one Promote or Demote list-level transition for the focused Writer paragraph. */
+  readonly onListLevelChange: (command: "demote" | "promote") => void;
   /** Requests a new style for the currently focused Writer paragraph. */
   readonly onStyleChange: (style: WriterParagraphStyle) => void;
   /** Style of the currently focused Writer paragraph. */
   readonly style: WriterParagraphStyle;
   /** List presentation currently applied to the focused Writer paragraph. */
   readonly listKind: WriterParagraphListKind;
+  /** Zero-based list nesting level currently applied to the focused Writer paragraph. */
+  readonly listLevel: number;
 }
 
 /**
@@ -60,18 +68,22 @@ export interface WriterParagraphFormattingToolbarProps {
  * @param props.alignment - Alignment currently applied to the active Writer paragraph.
  * @param props.onAlignmentChange - Callback that records the requested paragraph alignment.
  * @param props.onListKindChange - Callback that records the requested default list presentation.
+ * @param props.onListLevelChange - Callback that records a requested list-level transition.
  * @param props.onStyleChange - Callback that records the requested paragraph style.
  * @param props.style - Style currently applied to the active Writer paragraph.
  * @param props.listKind - List presentation currently applied to the active Writer paragraph.
+ * @param props.listLevel - List nesting level currently applied to the active Writer paragraph.
  * @returns A semantic formatting toolbar with paragraph-alignment and default-list controls.
  */
 export function WriterParagraphFormattingToolbar({
   alignment,
   onAlignmentChange,
   onListKindChange,
+  onListLevelChange,
   onStyleChange,
   style,
   listKind,
+  listLevel,
 }: WriterParagraphFormattingToolbarProps): React.JSX.Element {
   return (
     <>
@@ -186,6 +198,36 @@ export function WriterParagraphFormattingToolbar({
                   /** Toggles the active list kind off or requests the command's list kind. @returns Nothing; the parent records immutable history. */
                   function toggleParagraphList(): void {
                     onListKindChange(isActive ? "none" : command.listKind);
+                  }
+                }
+                title={command.label}
+                type="button"
+              >
+                <Icon aria-hidden="true" size={17} />
+              </button>
+            );
+          },
+        )}
+      </div>
+      <div aria-label="List level" className="flex items-center gap-1" role="group">
+        {writerNumObjectBarListLevelCommands.map(
+          /** Renders a pinned numbering-toolbar list-level control. @param command - Immutable Writer list-level command placement. @returns One accessible list-level button. */
+          function renderListLevelControl(command): React.JSX.Element {
+            const Icon = command.command === "demote" ? IndentIncrease : Outdent;
+            const isDisabled =
+              listKind === "none" ||
+              (command.command === "demote" && listLevel === WRITER_MAX_LIST_LEVEL) ||
+              (command.command === "promote" && listLevel === 0);
+            return (
+              <button
+                aria-label={command.label}
+                className="grid size-8 place-items-center rounded-md border border-slate-300 bg-white text-slate-700 transition hover:border-indigo-400 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-45"
+                disabled={isDisabled}
+                key={command.unoCommand}
+                onClick={
+                  /** Delegates the requested Writer list-level transition to the history-owning workbench. @returns Nothing; the parent validates the immutable state transition. */
+                  function changeListLevel(): void {
+                    onListLevelChange(command.command);
                   }
                 }
                 title={command.label}

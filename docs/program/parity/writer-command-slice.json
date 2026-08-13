@@ -155,7 +155,7 @@
       "status": "implemented",
       "gaps": [
         "This first command layer applies to the active paragraph only; multi-paragraph, range, and table-cell selection remain separate mapped work.",
-        "Nesting and level commands, named list styles, restart/continue numbering, outline numbering, automatic lists, RTF transfer, and ODT/DOCX import/export remain separate mapped work."
+        "Nested list rendering, named list styles, restart/continue numbering, outline numbering, automatic lists, RTF transfer, and ODT/DOCX import/export remain separate mapped work."
       ],
       "upstream": {
         "implementation": [
@@ -242,6 +242,51 @@
           { "path": "docs/program/writer-clipboard.md", "marker": "complete adjacent list paragraphs" },
           { "path": "docs/program/writer-paragraph-lists.md", "marker": "semantic HTML and plain-text Copy path" },
           { "path": "docs/program/source-tree.md", "marker": "htmlnumwriter.ts" }
+        ]
+      }
+    },
+    {
+      "id": "LO-WRITER-0107",
+      "capability": "Writer Promote and Demote change the active list paragraph nesting level",
+      "status": "implemented",
+      "gaps": [
+        "The browser supports one active root-to-level-nine paragraph transition only; range, table-cell, multi-level selection, and native Writer outline behavior remain unmapped.",
+        "Nested list rendering, inherited numbering formats, restart/continue semantics, named styles, RTF, Paste, and ODT/DOCX interchange remain separate capabilities."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/source/uibase/shells/listsh.cxx", "marker": "FN_NUM_BULLET_DOWN" },
+          { "path": "sw/sdi/swriter.sdi", "marker": "DecrementLevel FN_NUM_BULLET_DOWN" },
+          { "path": "sw/uiconfig/swriter/menubar/menubar.xml", "marker": ".uno:DecrementLevel" },
+          { "path": "sw/uiconfig/swriter/toolbar/numobjectbar.xml", "marker": ".uno:IncrementLevel" }
+        ],
+        "tests": [
+          { "path": "sw/qa/uitest/writer_tests2/formatBulletsNumbering.py", "marker": "test_bullets_and_numbering_button_move" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/shared/02/06050000.xhp", "marker": ".uno:DecrementLevel" },
+          { "path": "helpcontent2/source/text/shared/02/06060000.xhp", "marker": ".uno:IncrementLevel" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/sw/source/uibase/shells/listsh.ts", "marker": "changeWriterParagraphListLevel" },
+          { "path": "apps/office/src/sw/source/uibase/uiview/view.tsx", "marker": "handleWriterParagraphListLevel" },
+          { "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts", "marker": "applyWriterListLevelTransaction" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "marker": "renderListLevelMenuCommand" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts", "marker": "writerNumObjectBarListLevelCommands" },
+          { "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "marker": "data-list-level" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/sw/source/uibase/shells/listsh.test.ts", "marker": "promotes and demotes" },
+          { "path": "apps/office/src/sw/source/core/doc/list.test.ts", "marker": "normalizes legacy" },
+          { "path": "apps/office/src/framework/source/services/App.test.tsx", "marker": "applies and toggles Writer list commands" },
+          { "path": "apps/office/e2e/writer-lists.spec.ts", "marker": "Writer bullets and numbering" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-paragraph-lists.md", "marker": "DecrementLevel" },
+          { "path": "docs/program/writer-command-placement.md", "marker": "toolbar/numobjectbar.xml" },
+          { "path": "docs/program/source-tree.md", "marker": "listsh.ts" }
         ]
       }
     }

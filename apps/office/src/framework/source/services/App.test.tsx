@@ -158,6 +158,15 @@ describe("App" /**
     expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Ordered List" }));
     expect(screen.getByTestId("writer-list-marker-writer-paragraph-1")).toHaveTextContent("1.");
+    expect(within(formattingToolbar).getByRole("button", { name: "Promote" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+    expect(screen.getByRole("menuitem", { name: "Demote" })).toBeEnabled();
+    fireEvent.click(screen.getByRole("menuitem", { name: "Demote" }));
+    expect(paragraph).toHaveAttribute("data-list-level", "1");
+    expect(paragraph.parentElement).toHaveStyle({ marginInlineStart: "2rem" });
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Promote" }));
+    expect(paragraph).toHaveAttribute("data-list-level", "0");
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
     expect(screen.getByRole("menu", { name: "Bullets and Numbering menu" })).toBeVisible();
