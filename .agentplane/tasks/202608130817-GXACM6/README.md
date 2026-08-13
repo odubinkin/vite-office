@@ -1,10 +1,11 @@
 ---
 id: "202608130817-GXACM6"
 title: "Implement Writer direct character formatting"
-status: "DOING"
+result_summary: "Implemented LO-WRITER-0109 with immutable Writer text runs and exact LibreOffice ownership mappings."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "apps/office/e2e/writer-character-formatting.spec.ts"
   findings:
     - "Full inventory coverage hangs before any test execution; targeted parity mapping coverage passed."
-commit: null
+commit:
+  hash: "0e50ee06acb1a51b52e0f75dede0b537df36cbe5"
+  message: "🚧 GXACM6 task: record direct formatting verification"
 comments:
   -
     author: "CODER"
     body: "Start: implement bounded Writer direct Bold, Italic, and Underline formatting with upstream evidence and browser-safe text runs."
+  -
+    author: "CODER"
+    body: "Verified: direct Bold, Italic, Underline, semantic Copy, upstream parity evidence, and targeted Chromium flow are complete; inventory-runner hang is recorded."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: fast Writer coverage passed at 100% across 94 tests; targeted Chromium LO-WRITER-0109 E2E passed; lint, typecheck, docs, provenance, source-tree, size, static build, and parity CLI passed. Full inventory coverage was attempted twice but hung before test execution; targeted parity test passed and the task finding records the infrastructure limitation under the approved long-test cadence."
+  -
+    type: "status"
+    at: "2026-08-13T08:50:33.282Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: direct Bold, Italic, Underline, semantic Copy, upstream parity evidence, and targeted Chromium flow are complete; inventory-runner hang is recorded."
 doc_version: 3
-doc_updated_at: "2026-08-13T08:50:18.739Z"
+doc_updated_at: "2026-08-13T08:50:33.283Z"
 doc_updated_by: "CODER"
 description: "Implement LO-WRITER-0109: direct Bold, Italic, and single Underline formatting for a collapsed Writer caret and one selected range within a paragraph. Add a serializable immutable text-run model at the pinned txtnode ownership boundary, Writer txtattr command handling, formatting-toolbar and Format → Text placement, semantic rich-copy output, tests, documentation, and exact parity evidence. Preserve existing plain paragraph behavior and make all unsupported formatting/selection/interchange behavior explicit."
 sections:
@@ -117,6 +130,10 @@ sections:
     Command: npm run test:inventory:coverage. Result: blocked by test infrastructure. Evidence: two full invocations remained at Vitest startup with no test execution and orphaned worker processes; targeted parity-mapping-cli.test.ts passed after updating its intentional gapCount from 16 to 18. Scope: inventory runner, not Writer implementation.
 
     Command: npm run check:file-size. Result: pass with review candidates. Evidence: writer.ts is 670 lines and view.tsx is 619 lines; both remain below the mandatory 1000-line decomposition threshold. Scope: record candidate review; direct formatting is isolated in txtnode/ndtxt.ts and shells/txtattr.ts for the next decomposition task.
+extensions:
+  implementation_commit:
+    hash: "25eea36695a5989c514cff570f304de1711d05b4"
+    message: "🚧 GXACM6 task: implement Writer direct character formatting"
 id_source: "generated"
 ---
 ## Summary
