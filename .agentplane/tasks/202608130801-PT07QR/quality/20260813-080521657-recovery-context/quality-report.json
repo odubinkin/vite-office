@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130801-PT07QR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T08:05:21.657Z",
+  "verdict": "pass",
+  "summary": "Writer text shell now has one exact upstream-mapped local owner for Copy, download, and history shortcut dispatch.",
+  "evaluated_sha": "f70d70009d4fae3b2c39745a88606f7d54e42cb3",
+  "blueprint_digest": "e08d5d58ea0078707200193b0e0ef213804d275942d90b97fff15326b3ad3362",
+  "findings": [
+    "Repeated fast coverage passed with 100% metrics; all source, type, documentation, lint, format, and size gates passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130801-PT07QR/README.md",
+    "f70d700"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
