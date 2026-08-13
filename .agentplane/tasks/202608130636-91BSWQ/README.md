@@ -1,10 +1,12 @@
 ---
 id: "202608130636-91BSWQ"
 title: "Align Writer browser command shell with textsh ownership"
-status: "DOING"
+result_summary: "Writer browser command shell aligned to textsh ownership and verified."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "coverage, focused native Copy E2E, parity inventory, static checks"
   findings:
     - "No correctness finding: the retired generic hook is forbidden by the source-tree gate and parity now names textsh."
-commit: null
+commit:
+  hash: "dbed1f7479cbae9e16374d7d0b6bc31007bcdfba"
+  message: "🧩 91BSWQ task: record command shell verification"
 comments:
   -
     author: "CODER"
     body: "Start: Relocating the browser-owned Writer command hook to the concrete textsh command-shell boundary without changing its bounded Copy and download behavior."
+  -
+    author: "CODER"
+    body: "Verified: The remaining Writer browser command hook now uses sw/source/uibase/shells/textsh.ts, its generic predecessor is forbidden, and Copy behavior plus parity evidence remain intact."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Writer text-shell relocation with coverage, focused Copy E2E, parity inventory, and static quality gates."
+  -
+    type: "status"
+    at: "2026-08-13T06:39:48.354Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: The remaining Writer browser command hook now uses sw/source/uibase/shells/textsh.ts, its generic predecessor is forbidden, and Copy behavior plus parity evidence remain intact."
 doc_version: 3
-doc_updated_at: "2026-08-13T06:39:40.456Z"
+doc_updated_at: "2026-08-13T06:39:48.356Z"
 doc_updated_by: "CODER"
 description: "Move the remaining generic Writer browser command hook from uibase/utlui into the concrete sw/source/uibase/shells/textsh ownership path, update imports and source-tree parity evidence, and prohibit the retired generic module path."
 sections:
@@ -133,6 +147,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "347205a4ed0eaa4495615408e06188cb5512a515"
+    message: "🗂️ 91BSWQ code: update text shell provenance"
 id_source: "generated"
 ---
 ## Summary
