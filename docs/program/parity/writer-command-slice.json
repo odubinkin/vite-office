@@ -65,7 +65,7 @@
         ],
         "tests": [
           { "path": "apps/office/src/sfx2/source/doc/docundomanager.test.ts", "marker": "undo" },
-          { "path": "apps/office/src/framework/source/services/App.test.tsx", "marker": "Undo" }
+          { "path": "apps/office/src/framework/source/services/desktop.test.tsx", "marker": "Undo" }
         ],
         "docs": [
           { "path": "docs/program/transaction-history.md", "marker": "Undo and Redo" },
@@ -191,7 +191,7 @@
           { "path": "apps/office/src/sw/source/core/doc/list.test.ts", "marker": "normalizes legacy" },
           { "path": "apps/office/src/sw/source/core/doc/number.test.ts", "marker": "renders bullets" },
           { "path": "apps/office/src/sw/source/uibase/shells/txtnum.test.ts", "marker": "changes only the selected" },
-          { "path": "apps/office/src/framework/source/services/App.test.tsx", "marker": "applies and toggles Writer list commands" },
+          { "path": "apps/office/src/framework/source/services/desktop.test.tsx", "marker": "applies and toggles Writer list commands" },
           { "path": "apps/office/e2e/writer-lists.spec.ts", "marker": "Writer bullets and numbering" }
         ],
         "docs": [
@@ -280,7 +280,7 @@
         "tests": [
           { "path": "apps/office/src/sw/source/uibase/shells/listsh.test.ts", "marker": "promotes and demotes" },
           { "path": "apps/office/src/sw/source/core/doc/list.test.ts", "marker": "normalizes legacy" },
-          { "path": "apps/office/src/framework/source/services/App.test.tsx", "marker": "applies and toggles Writer list commands" },
+          { "path": "apps/office/src/framework/source/services/desktop.test.tsx", "marker": "applies and toggles Writer list commands" },
           { "path": "apps/office/e2e/writer-lists.spec.ts", "marker": "Writer bullets and numbering" }
         ],
         "docs": [

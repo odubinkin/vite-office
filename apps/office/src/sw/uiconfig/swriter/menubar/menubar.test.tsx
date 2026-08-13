@@ -5,7 +5,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { App } from "../../../../framework/source/services/App";
+import { Desktop as App } from "../../../../framework/source/services/desktop";
 
 /**
  * Replaces the complete text content of one document-integrated editable Writer paragraph.

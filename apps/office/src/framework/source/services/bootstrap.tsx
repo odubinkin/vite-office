@@ -5,7 +5,7 @@
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 
-import { App } from "./App";
+import { Desktop } from "./desktop";
 
 /**
  * Mounts the office foundation into an existing DOM element.
@@ -20,6 +20,6 @@ export function mountApplication(rootElement: HTMLElement | null): Root {
   }
 
   const root = createRoot(rootElement);
-  root.render(<App />);
+  root.render(<Desktop />);
   return root;
 }

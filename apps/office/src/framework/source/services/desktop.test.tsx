@@ -6,7 +6,7 @@ import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testi
 import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
-import { App } from "./App";
+import { Desktop as App } from "./desktop";
 import { createDocument } from "../../../sfx2/source/doc/docfac";
 import {
   saveWriterDocument,

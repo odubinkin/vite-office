@@ -1,5 +1,5 @@
 /**
- * @fileoverview Composes the responsive browser-office foundation shell and suite preview state.
+ * @fileoverview Composes the responsive browser-office desktop shell and suite preview state at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary.
  */
 
 import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "lucide-react";
@@ -16,7 +16,7 @@ import { SuiteCard } from "./SuiteCard";
  *
  * @returns The complete responsive application shell and selected suite preview.
  */
-export function App(): React.JSX.Element {
+export function Desktop(): React.JSX.Element {
   const [activeSuite, setActiveSuite] = useState<SuiteDefinition>(suiteDefinitions[0]);
   const previewDocument = createDocument({
     id: `preview-${activeSuite.id}`,

@@ -3,7 +3,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { App } from "../../../../framework/source/services/App";
+import { Desktop as App } from "../../../../framework/source/services/desktop";
 
 /**
  * Replaces one document-integrated editable Writer paragraph with complete plain text.

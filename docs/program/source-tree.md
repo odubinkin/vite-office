@@ -10,7 +10,7 @@ runtime of this static application.
 
 | Local browser path | Pinned LibreOffice region | Current responsibility |
 | --- | --- | --- |
-| `apps/office/src/framework/source/services` | `framework/source/services` | Static React desktop composition, module-manager suite inventory, and browser worker protocol contracts |
+| `apps/office/src/framework/source/services` | `framework/source/services` | Static React desktop composition, module-manager suite inventory, and explicit browser bootstrap/worker protocol contracts |
 | `apps/office/src/framework/source/dispatch` | `framework/source/dispatch` | Typed command dispatch |
 | `apps/office/src/framework/source/accelerators` | `framework/source/accelerators` | Browser shortcut normalization |
 | `apps/office/src/sfx2/source/doc` | `sfx2/source/doc` | Shared document identity, document undo manager, and bounded browser document-medium contract |
