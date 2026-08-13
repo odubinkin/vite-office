@@ -3,7 +3,7 @@
 The Writer workbench supports one direct paragraph-formatting property: left,
 center, right, or justified alignment. Each `WriterParagraph` stores a serializable
 `alignment` literal. The pure
-[`setWriterParagraphAlignment`](../../apps/office/src/domain/writer.ts) transition
+[`setWriterParagraphAlignment`](../../apps/office/src/sw/source/core/doc/writer.ts) transition
 changes exactly one named paragraph, marks a changed document dirty, preserves
 an identical state by reference, and participates in the existing immutable
 undo/redo history.

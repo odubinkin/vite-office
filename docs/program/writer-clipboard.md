@@ -30,7 +30,7 @@ selection remains responsible for partial text selection inside one paragraph.
 The Writer selection adapter emits paired `text/plain` and `text/html` values.
 The rich HTML uses portable inline styles for the bounded model's paragraph
 alignment plus Default Paragraph Style or Heading 1 sizing, weight, and line
-height. [`copyRichText`](../../apps/office/src/platform/browser-clipboard.ts)
+height. [`copyRichText`](../../apps/office/src/vcl/browser/browser-clipboard.ts)
 prefers `navigator.clipboard.write` with `ClipboardItem`; another rich-text
 editor can therefore retain the currently implemented paragraph formatting.
 When that API is absent or rejects the write, `copyPlainText` uses

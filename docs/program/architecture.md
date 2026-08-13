@@ -10,54 +10,59 @@ adapters isolate storage, workers, rendering, and platform APIs.
 The deployable boundary is a set of static assets. All document processing runs
 in the user's browser.
 
-## Implemented bootstrap boundary
+## Implemented source boundary
 
-The initial npm workspace contains `apps/office`, a React view shell built by
-Vite with Tailwind CSS. Its domain inventory lives in
-`apps/office/src/domain`, independently of React components, so the bootstrap
-does not place future document state inside the view layer. The Vite production
-base is relative (`./`), and the static smoke check rejects remote or
-root-absolute asset references and application-backend endpoints.
+The current `apps/office/src` tree is a browser-native realization of the
+target boundaries, not a source-level port of LibreOffice C++. Its names and
+nesting deliberately follow the corresponding pinned LibreOffice modules:
 
-The Writer view uses a separate structural chrome component for its menu,
-toolbars, ruler, document canvas, properties sidebar, and status bar. This
-placement boundary keeps application navigation and suite state outside Writer
-while giving later Writer features stable UI regions to extend. The workbench
-keeps focused-paragraph state in its React owner; the serializable Writer domain
-keeps paragraph alignment separate from that ephemeral UI focus.
+| Source area | Responsibility | LibreOffice continuity |
+| --- | --- | --- |
+| `framework/source/services`, `dispatch`, and `accelerators` | React composition, suite services, command dispatch, and browser shortcut adaptation | `framework` shell and dispatch ownership |
+| `sfx2/source/doc` | Suite-neutral document identity, history, and storage contracts | `sfx2` document framework |
+| `svl/source/misc` | Generic recovery orchestration | `svl` shared utility layer |
+| `vcl/browser` | Tested adapters around IndexedDB, downloads, clipboard, and browser styling | `vcl` platform/widget layer, specialized for static-browser runtime |
+| `sw/source/core/doc` | Serializable Writer document state and pure paragraph transitions | `sw` Writer core document layer |
+| `sw/source/uibase/docvw`, `ribbar`, `sidebar`, `shells`, `uiview`, and `utlui` | Writer document view, formatting bar, sidebar, command shells, workbench view, and common Writer UI helpers | Matching `sw/source/uibase` regions |
+| `sw/uiconfig/swriter` | Browser declarations for Writer menu/toolbar placement | Writer UI configuration ownership |
+
+The browser implementation keeps React and browser objects out of
+`sw/source/core/doc`. Its document editor separates DOM caret primitives and
+single editable-paragraph presentation in `docvw` from document-body
+orchestration. These boundaries make later Writer command, layout, and format
+layers independently traceable without pretending that TypeScript files are
+LibreOffice C++ source files.
+
+The Vite production base is relative (`./`), and the static smoke check rejects
+remote or root-absolute asset references and application-backend endpoints.
+The [source-tree map](source-tree.md) records every currently instantiated
+LibreOffice-derived browser area and its responsibility.
 
 The remaining package boundaries below are architectural targets. They do not
 exist until their own feature tasks create and verify them.
 
-## Proposed workspace boundaries
+## Planned top-level module boundaries
 
-The bootstrap task should create a workspace that can grow into these logical
-packages. Exact library choices require an architecture decision record and a
-license/maintenance review.
+The current source tree keeps LibreOffice-derived top-level ownership as later
+static-browser modules are added. Exact library choices still require an
+architecture decision record and a license/maintenance review.
 
 | Boundary | Responsibility | LibreOffice continuity |
 | --- | --- | --- |
-| `apps/office` | Static application entry, routing, workbench, suite selection | Desktop/frame shell concepts |
-| `packages/core` | Document identity, lifecycle, transactions, events, errors | Shared office framework concepts |
-| `packages/commands` | Typed commands, dispatch, undo/redo, key bindings | Command/dispatch model |
-| `packages/model` | Shared immutable or transactional document primitives | Shared document model concepts |
-| `packages/writer` | Writer model, layout semantics, editing operations | Writer domain |
-| `packages/calc` | Spreadsheet model, dependency graph, formulas, recalculation | Calc domain |
-| `packages/impress` | Presentation model, masters, animations, playback | Impress domain |
-| `packages/draw` | Vector page, shape, layer, and connector behavior | Draw domain |
-| `packages/base` | Browser-feasible database documents and tools | Base domain |
-| `packages/math` | Formula syntax tree, editing, layout, and embedding | Math domain |
-| `packages/chart` | Shared chart model, editor, and renderer | Chart domain |
-| `packages/formats` | Import/export and conformance adapters | Filter and storage domains |
-| `packages/rendering` | Layout primitives, canvas/SVG/DOM/WebGL adapters | View and rendering boundaries |
-| `packages/platform` | Storage, clipboard, printing, workers, feature detection | Platform abstraction |
-| `packages/ui` | Accessible primitives and Tailwind-backed design tokens | Shared widget/toolkit role |
-| `packages/i18n` | Messages, locale data, writing direction, formatting | Localization infrastructure |
-| `packages/testing` | Fixtures, parity helpers, visual and format assertions | Shared test infrastructure |
+| `framework`, `sfx2`, `svl`, `vcl` | Browser shell, shared document services, utilities, and platform adapters | Corresponding LibreOffice shared modules |
+| `sw` | Writer model, layout semantics, editing, UI, configuration, and tests | Writer domain |
+| `sc` | Spreadsheet model, dependency graph, formulas, recalculation, UI, and tests | Calc domain |
+| `sd` | Presentation and drawing pages, masters, animation, playback, and tests | Impress/Draw domain |
+| `dbaccess` | Browser-feasible database documents and tools | Base domain |
+| `starmath` | Formula syntax tree, editing, layout, and embedding | Math domain |
+| `chart2` | Shared chart model, editor, renderer, and embedding | Chart domain |
+| `filter` | Import/export and conformance adapters | Filter and storage domains |
+| `i18nlangtag`, `linguistic`, `translations`, `dictionaries` | Locale, language, and message resources | Localization infrastructure |
+| `qa` | Fixtures, parity helpers, visual and format assertions | Test ownership regions |
 
-Suite packages must depend on shared contracts, not application-shell internals.
-Format adapters must translate through stable document contracts and must not
-silently encode UI state.
+Suite modules depend on shared contracts, never browser shell internals. Format
+adapters translate through stable document contracts and never silently encode
+UI state.
 
 ## Runtime layers
 

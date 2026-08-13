@@ -139,6 +139,7 @@ The following documents form the program control plane:
 - [Dictionary file inventory](dictionary-file-inventory.md): generated AFF/DIC
   provenance awaiting lexical-data, license, and language-tool mapping.
 - [Architecture](architecture.md): browser domain boundaries and constraints.
+- [LibreOffice-derived source tree](source-tree.md): current local module-to-upstream ownership map.
 - [Browser document lifecycle contract](document-lifecycle.md): shared serializable
   document-header states and pure transition boundaries before content editing.
 - [Browser Writer paragraph body](writer-paragraph-body.md): bounded plain-text

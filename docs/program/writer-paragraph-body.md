@@ -1,7 +1,7 @@
 # Browser Writer Paragraph Body
 
 The initial Writer body contract is implemented in
-[`apps/office/src/domain/writer.ts`](../../apps/office/src/domain/writer.ts). It
+[`apps/office/src/sw/source/core/doc/writer.ts`](../../apps/office/src/sw/source/core/doc/writer.ts). It
 pairs the shared serializable document header with a non-empty, ordered list of
 plain-text paragraphs. `createWriterDocument` establishes an empty first
 paragraph, `insertWriterText` inserts text at a validated UTF-16 offset, and
@@ -9,7 +9,7 @@ paragraph, `insertWriterText` inserts text at a validated UTF-16 offset, and
 `appendWriterParagraph` appends one uniquely identified empty paragraph.
 `removeWriterParagraph` removes one identified paragraph while protecting the
 non-empty body invariant. Every paragraph also stores an explicit horizontal
-alignment; [`setWriterParagraphAlignment`](../../apps/office/src/domain/writer.ts)
+alignment; [`setWriterParagraphAlignment`](../../apps/office/src/sw/source/core/doc/writer.ts)
 changes that one property without changing its text or sibling paragraphs. Each
 paragraph also retains a bounded direct style; `setWriterParagraphStyle` applies
 Default Paragraph Style or Heading 1 without modeling inheritance.

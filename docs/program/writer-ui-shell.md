@@ -5,7 +5,7 @@ LibreOffice Writer while retaining Vite Office's existing indigo, slate, rounded
 and accessible design language. It is not a pixel-perfect copy of the native
 application and does not claim visual or command parity.
 
-[`WriterWorkspaceChrome`](../../apps/office/src/components/WriterWorkspaceChrome.tsx)
+[`WriterWorkspaceChrome`](../../apps/office/src/sw/source/uibase/uiview/WriterWorkspaceChrome.tsx)
 defines the durable UI placement contract:
 
 - a Writer menu bar with the expected top-level menu locations;
@@ -16,9 +16,9 @@ defines the durable UI placement contract:
 - a Writer status bar that **View → Status Bar** can hide.
 
 Implemented commands are placed in the standard toolbar through
-[`WriterCommandToolbar`](../../apps/office/src/components/WriterCommandToolbar.tsx):
+[`WriterCommandToolbar`](../../apps/office/src/sw/source/uibase/utlui/WriterCommandToolbar.tsx):
 browser-local save/load and undo/redo. The functional
-[`WriterMenuBar`](../../apps/office/src/components/WriterMenuBar.tsx) also puts
+[`WriterMenuBar`](../../apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx) also puts
 each enabled command in its matching Writer menu. See
 [Writer command placement](writer-command-placement.md) for pinned provenance.
 **Edit → Select All** is a direct browser selection action: it selects the

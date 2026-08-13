@@ -25,11 +25,12 @@
       },
       "local": {
         "implementation": [
-          { "path": "apps/office/src/components/WriterMenuBar.tsx", "marker": "export function WriterMenuBar" },
-          { "path": "apps/office/src/components/WriterCommandToolbar.tsx", "marker": "Writer standard toolbar" }
+          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx", "marker": "export function WriterMenuBar" },
+          { "path": "apps/office/src/sw/source/uibase/utlui/WriterCommandToolbar.tsx", "marker": "Writer standard toolbar" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar.ts", "marker": "writerMenuPlacements" }
         ],
         "tests": [
-          { "path": "apps/office/src/components/WriterMenuBar.test.tsx", "marker": "places implemented Writer commands" },
+          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.test.tsx", "marker": "places implemented Writer commands" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "File menu" }
         ],
         "docs": [
@@ -59,12 +60,12 @@
       },
       "local": {
         "implementation": [
-          { "path": "apps/office/src/domain/history.ts", "marker": "undoTransaction" },
-          { "path": "apps/office/src/components/WriterMenuBar.tsx", "marker": "onUndo" }
+          { "path": "apps/office/src/sfx2/source/doc/history.ts", "marker": "undoTransaction" },
+          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx", "marker": "onUndo" }
         ],
         "tests": [
-          { "path": "apps/office/src/domain/history.test.ts", "marker": "undo" },
-          { "path": "apps/office/src/App.test.tsx", "marker": "Undo" }
+          { "path": "apps/office/src/sfx2/source/doc/history.test.ts", "marker": "undo" },
+          { "path": "apps/office/src/framework/source/services/App.test.tsx", "marker": "Undo" }
         ],
         "docs": [
           { "path": "docs/program/transaction-history.md", "marker": "Undo and Redo" },
@@ -94,14 +95,14 @@
       },
       "local": {
         "implementation": [
-          { "path": "apps/office/src/platform/browser-clipboard.ts", "marker": "copyRichText" },
-          { "path": "apps/office/src/components/writer-clipboard-selection.ts", "marker": "createWriterClipboardSelection" },
-          { "path": "apps/office/src/components/WriterPlainTextEditor.tsx", "marker": "moveCaretAcrossParagraphBoundary" }
+          { "path": "apps/office/src/vcl/browser/browser-clipboard.ts", "marker": "copyRichText" },
+          { "path": "apps/office/src/sw/source/uibase/utlui/writer-clipboard-selection.ts", "marker": "createWriterClipboardSelection" },
+          { "path": "apps/office/src/sw/source/uibase/docvw/WriterPlainTextEditor.tsx", "marker": "moveCaretAcrossParagraphBoundary" }
         ],
         "tests": [
-          { "path": "apps/office/src/components/WriterMenuBar.test.tsx", "marker": "replaces native keyboard Copy data" },
-          { "path": "apps/office/src/components/WriterParagraphBreaks.test.tsx", "marker": "keeps the typing caret stable" },
-          { "path": "apps/office/src/components/writer-clipboard-selection.test.ts", "marker": "omits accessibility descriptions" },
+          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.test.tsx", "marker": "replaces native keyboard Copy data" },
+          { "path": "apps/office/src/sw/source/uibase/docvw/WriterParagraphBreaks.test.tsx", "marker": "keeps the typing caret stable" },
+          { "path": "apps/office/src/sw/source/uibase/utlui/writer-clipboard-selection.test.ts", "marker": "omits accessibility descriptions" },
           { "path": "apps/office/e2e/writer-clipboard.spec.ts", "marker": "copies visible formatted Writer content" },
           { "path": "apps/office/e2e/writer-document-selection.spec.ts", "marker": "supports document-wide selection" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Copied selection" }
@@ -134,11 +135,11 @@
       },
       "local": {
         "implementation": [
-          { "path": "apps/office/src/components/use-writer-workspace-chrome.ts", "marker": "isPropertiesSidebarVisible" },
-          { "path": "apps/office/src/components/WriterMenuBar.tsx", "marker": "Status Bar" }
+          { "path": "apps/office/src/sw/source/uibase/uiview/use-writer-workspace-chrome.ts", "marker": "isPropertiesSidebarVisible" },
+          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx", "marker": "Status Bar" }
         ],
         "tests": [
-          { "path": "apps/office/src/components/WriterMenuBar.test.tsx", "marker": "Horizontal ruler" },
+          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.test.tsx", "marker": "Horizontal ruler" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Status Bar" }
         ],
         "docs": [

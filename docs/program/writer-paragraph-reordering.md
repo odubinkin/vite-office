@@ -1,7 +1,7 @@
 # Browser Writer paragraph reordering
 
 The Writer workbench can move one complete paragraph one adjacent position up or
-down. [`moveWriterParagraph`](../../apps/office/src/domain/writer.ts) finds the
+down. [`moveWriterParagraph`](../../apps/office/src/sw/source/core/doc/writer.ts) finds the
 named paragraph, swaps its existing object with its adjacent neighbor, and
 returns a dirty immutable document. Because the same paragraph object moves,
 its text, identity, alignment, and bounded paragraph style are retained.

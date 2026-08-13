@@ -13,6 +13,7 @@
     "build": "npm run build --workspace @vite-office/office",
     "check:docs": "node scripts/check-jsdoc.mjs",
     "check:file-size": "node scripts/check-file-size.mjs",
+    "check:source-tree": "node scripts/check-lo-source-tree.mjs",
     "dev": "npm run dev --workspace @vite-office/office",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

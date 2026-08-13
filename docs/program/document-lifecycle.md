@@ -1,7 +1,7 @@
 # Browser Document Lifecycle Contract
 
 The initial browser document lifecycle contract is implemented in
-[`apps/office/src/domain/document.ts`](../../apps/office/src/domain/document.ts).
+[`apps/office/src/sfx2/source/doc/document.ts`](../../apps/office/src/sfx2/source/doc/document.ts).
 It defines a JSON-serializable document header with a caller-provided identity,
 suite ID, title, lifecycle state, and monotonic local revision.
 

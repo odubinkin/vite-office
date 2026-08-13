@@ -4,7 +4,7 @@
 
 The storage adapter contract defines the browser-office domain boundary for
 loading and saving one versioned, JSON-compatible document snapshot. It is
-implemented in `apps/office/src/domain/storage.ts`. The contract makes no
+implemented in `apps/office/src/sfx2/source/doc/storage.ts`. The contract makes no
 choice of IndexedDB, Origin Private File System (OPFS), File System Access,
 download, Service Worker, cloud service, or backend.
 

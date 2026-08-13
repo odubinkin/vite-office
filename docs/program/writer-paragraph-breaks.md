@@ -5,14 +5,14 @@ direct document interaction as Writer: the user presses unmodified **Enter**
 at a collapsed caret in an editable paragraph. There is intentionally no menu
 item, toolbar button, or canvas action button for paragraph creation.
 
-[`WriterPlainTextEditor`](../../apps/office/src/components/WriterPlainTextEditor.tsx)
+[`WriterPlainTextEditor`](../../apps/office/src/sw/source/uibase/docvw/WriterPlainTextEditor.tsx)
 uses the browser selection API to calculate the UTF-16 caret offset relative to
 the editable paragraph. When that selection is collapsed and belongs to the
 paragraph, it prevents the browser's uncontrolled DOM mutation and asks
-[`WriterWorkbench`](../../apps/office/src/components/WriterWorkbench.tsx) to
+[`WriterWorkbench`](../../apps/office/src/sw/source/uibase/uiview/WriterWorkbench.tsx) to
 apply a pure immutable transition.
 
-[`splitWriterParagraph`](../../apps/office/src/domain/writer.ts) replaces the
+[`splitWriterParagraph`](../../apps/office/src/sw/source/core/doc/writer.ts) replaces the
 source text with the prefix, inserts an adjacent paragraph containing the
 suffix, marks the document dirty, and preserves the source paragraph's bounded
 alignment and style on both results. The workbench allocates a collision-free
