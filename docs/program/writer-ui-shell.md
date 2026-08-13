@@ -16,9 +16,9 @@ defines the durable UI placement contract:
 - a Writer status bar that **View → Status Bar** can hide.
 
 Implemented commands are placed in the standard toolbar through
-[`WriterCommandToolbar`](../../apps/office/src/sw/source/uibase/utlui/WriterCommandToolbar.tsx):
+[`standardbar`](../../apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx):
 browser-local save/load and undo/redo. The functional
-[`WriterMenuBar`](../../apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx) also puts
+[`menubar`](../../apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx) also puts
 each enabled command in its matching Writer menu. See
 [Writer command placement](writer-command-placement.md) for pinned provenance.
 **Edit → Select All** is a direct browser selection action: it selects the

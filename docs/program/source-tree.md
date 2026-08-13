@@ -26,7 +26,8 @@ runtime of this static application.
 | `apps/office/src/sw/source/uibase/shells` | `sw/source/uibase/shells` | Writer command-shell shortcut adapters |
 | `apps/office/src/sw/source/uibase/uiview` | `sw/source/uibase/uiview` | Writer workbench state and workspace view chrome |
 | `apps/office/src/sw/source/uibase/utlui` | `sw/source/uibase/utlui` | Writer menus, standard toolbar, and browser command hooks |
-| `apps/office/src/sw/uiconfig/swriter` | `sw/uiconfig/swriter` | Declarative browser command-placement data |
+| `apps/office/src/sw/uiconfig/swriter/menubar` | `sw/uiconfig/swriter/menubar` | Writer menu declaration and browser menu control |
+| `apps/office/src/sw/uiconfig/swriter/toolbar` | `sw/uiconfig/swriter/toolbar` | Writer toolbar declaration and browser toolbar controls |
 
 Tests remain colocated with the module they protect, matching the local source
 ownership rather than imitating LibreOffice's CppUnit/Python harnesses. Browser
@@ -48,7 +49,9 @@ source, test, and Help evidence remains in the machine-readable
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
 | `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Semantic `ul`/`ol`/`li` clipboard HTML serialization |
 | `sw/source/filter/ascii/ascatr.ts` | `sw/source/filter/ascii/ascatr.cxx` | Plain-text list-marker clipboard serialization |
-| `sw/uiconfig/swriter/menubar.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Format → Bullets and Numbering submenu declaration |
+| `sw/uiconfig/swriter/menubar/menubar.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | Writer menu control and Format → Bullets and Numbering declaration |
+| `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Declarative Writer menu order and list command definitions |
+| `sw/uiconfig/swriter/toolbar/standardbar.tsx` | `sw/uiconfig/swriter/toolbar/standardbar.xml` | Browser Writer standard-toolbar control |
 | `sw/uiconfig/swriter/toolbar/textobjectbar.ts` | `sw/uiconfig/swriter/toolbar/textobjectbar.xml` | Text-object toolbar list command declaration |
 
 ## Existing Writer view-module identities

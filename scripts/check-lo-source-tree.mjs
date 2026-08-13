@@ -30,8 +30,9 @@ const requiredFiles = [
   "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
   "apps/office/src/sw/source/uibase/uiview/viewstat.ts",
   "apps/office/src/sw/source/uibase/app/mainwn.tsx",
-  "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx",
-  "apps/office/src/sw/uiconfig/swriter/menubar.ts",
+  "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+  "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+  "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
   "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
 ];
 
@@ -43,6 +44,9 @@ const forbiddenPaths = [
   "apps/office/src/features",
   "apps/office/src/platform",
   "apps/office/src/shared",
+  "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx",
+  "apps/office/src/sw/source/uibase/utlui/WriterCommandToolbar.tsx",
+  "apps/office/src/sw/uiconfig/swriter/menubar.ts",
 ];
 
 /**

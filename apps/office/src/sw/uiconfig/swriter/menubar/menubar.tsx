@@ -8,12 +8,12 @@ import {
   writerBulletsAndNumberingMenuCommands,
   writerMenuPlacements,
   type WriterTopLevelMenu,
-} from "../../../uiconfig/swriter/menubar";
+} from "./menubar-commands";
 import type {
   WriterParagraphAlignment,
   WriterParagraphListKind,
   WriterParagraphStyle,
-} from "../../core/doc/writer";
+} from "../../../source/core/doc/writer";
 
 /** Describes enabled state and immutable action callbacks exposed from the stateful Writer workbench. */
 export interface WriterMenuBarProps {

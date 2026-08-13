@@ -29,8 +29,8 @@ import {
   type WriterSnapshotState,
 } from "../../core/doc/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "../../../../vcl/browser/indexeddb-storage";
-import { WriterCommandToolbar } from "../utlui/WriterCommandToolbar";
-import { WriterMenuBar } from "../utlui/WriterMenuBar";
+import { WriterMenuBar } from "../../../uiconfig/swriter/menubar/menubar";
+import { WriterCommandToolbar } from "../../../uiconfig/swriter/toolbar/standardbar";
 import { WriterParagraphFormattingToolbar } from "../ribbar/inputwin";
 import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
 import { WriterPlainTextEditor } from "../docvw/edtwin";

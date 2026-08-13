@@ -25,12 +25,12 @@
       },
       "local": {
         "implementation": [
-          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx", "marker": "export function WriterMenuBar" },
-          { "path": "apps/office/src/sw/source/uibase/utlui/WriterCommandToolbar.tsx", "marker": "Writer standard toolbar" },
-          { "path": "apps/office/src/sw/uiconfig/swriter/menubar.ts", "marker": "writerMenuPlacements" }
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "marker": "export function WriterMenuBar" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx", "marker": "Writer standard toolbar" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts", "marker": "writerMenuPlacements" }
         ],
         "tests": [
-          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.test.tsx", "marker": "places implemented Writer commands" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx", "marker": "places implemented Writer commands" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "File menu" }
         ],
         "docs": [
@@ -61,7 +61,7 @@
       "local": {
         "implementation": [
           { "path": "apps/office/src/sfx2/source/doc/history.ts", "marker": "undoTransaction" },
-          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx", "marker": "onUndo" }
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "marker": "onUndo" }
         ],
         "tests": [
           { "path": "apps/office/src/sfx2/source/doc/history.test.ts", "marker": "undo" },
@@ -100,7 +100,7 @@
           { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx", "marker": "moveCaretAcrossParagraphBoundary" }
         ],
         "tests": [
-          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.test.tsx", "marker": "replaces native keyboard Copy data" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx", "marker": "replaces native keyboard Copy data" },
           { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx", "marker": "keeps the typing caret stable" },
           { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts", "marker": "omits accessibility descriptions" },
           { "path": "apps/office/e2e/writer-clipboard.spec.ts", "marker": "copies visible formatted Writer content" },
@@ -136,10 +136,10 @@
       "local": {
         "implementation": [
           { "path": "apps/office/src/sw/source/uibase/uiview/viewstat.ts", "marker": "isPropertiesSidebarVisible" },
-          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx", "marker": "Status Bar" }
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "marker": "Status Bar" }
         ],
         "tests": [
-          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.test.tsx", "marker": "Horizontal ruler" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx", "marker": "Horizontal ruler" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Status Bar" }
         ],
         "docs": [
@@ -181,9 +181,9 @@
           { "path": "apps/office/src/sw/source/core/doc/number.ts", "marker": "getWriterParagraphListMarker" },
           { "path": "apps/office/src/sw/source/uibase/shells/txtnum.ts", "marker": "setWriterParagraphListKind" },
           { "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "marker": "data-writer-list-marker" },
-          { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx", "marker": "Bullets and Numbering" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "marker": "Bullets and Numbering" },
           { "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx", "marker": "Paragraph lists" },
-          { "path": "apps/office/src/sw/uiconfig/swriter/menubar.ts", "marker": "writerBulletsAndNumberingMenuCommands" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts", "marker": "writerBulletsAndNumberingMenuCommands" },
           { "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts", "marker": "writerTextObjectBarListCommands" }
         ],
         "tests": [

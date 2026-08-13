@@ -5,7 +5,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-test("loads the Writer structural workspace and supports keyboard-visible suite selection" /**
+test("File menu loads the Writer structural workspace and supports keyboard-visible suite selection" /**
  * Verifies the production bundle, targetable Writer chrome, accessible editing, keyboard suite selection, and configured axe rules.
  *
  * @param root0 - Playwright fixture object provided for the isolated test.
