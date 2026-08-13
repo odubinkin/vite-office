@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "runner_api_version": "1",
+  "run_id": "2026-08-13T09-44-12-934Z",
+  "adapter_id": "codex",
+  "target": {
+    "kind": "task",
+    "task_id": "202608130943-Y5EH7Q"
+  },
+  "status": "failed",
+  "mode": "execute",
+  "bundle_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bundle.json",
+  "result_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.json",
+  "bootstrap_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bootstrap.md",
+  "events_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/events.jsonl",
+  "trace_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/agent-trace.jsonl",
+  "stderr_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/stderr.log",
+  "trace_policy": {
+    "mode": "raw",
+    "max_tail_bytes": 65536,
+    "capture_stderr": true,
+    "retention": "keep",
+    "compression": "none",
+    "redact_patterns": []
+  },
+  "timeout_policy": {
+    "wall_clock_ms": 900000,
+    "idle_ms": 180000,
+    "terminate_grace_ms": 1500
+  },
+  "policy_decision": {
+    "adapter_id": "codex",
+    "requested": {},
+    "effective": {},
+    "fields": {
+      "sandbox": {
+        "status": "not_requested",
+        "capability_level": "native",
+        "channel": "argv",
+        "supported_values": [
+          "read-only",
+          "workspace-write",
+          "danger-full-access"
+        ],
+        "note": "Recipe sandbox is enforced through codex --sandbox argv mapping."
+      },
+      "writes_artifacts_to": {
+        "status": "not_requested",
+        "capability_level": "advisory",
+        "channel": "env",
+        "note": "Recipe artifact prefixes are exported through env and enforced post-run against external manifest artifacts and evidence paths."
+      }
+    },
+    "refusal_reason": null
+  },
+  "created_at": "2026-08-13T09:44:12.939Z",
+  "updated_at": "2026-08-13T09:45:49.150Z",
+  "prepared_metadata": {
+    "prompt_count": 3,
+    "bundle_bytes": 122719,
+    "bootstrap_bytes": 6325,
+    "bundle_sha256": "bb6ab917981e2ad5422311aaaa2aa8ae95deba766a231eeb7990d07486464975",
+    "bootstrap_sha256": "2d0aff3a292de5e5300ab0eb1aff048bcf62de45671cba5b1b7da033a6f7f155",
+    "has_task_context": true,
+    "has_recipe_context": false,
+    "trace_policy": {
+      "mode": "raw",
+      "max_tail_bytes": 65536,
+      "capture_stderr": true,
+      "retention": "keep",
+      "compression": "none",
+      "redact_patterns": []
+    },
+    "timeout_policy": {
+      "wall_clock_ms": 900000,
+      "idle_ms": 180000,
+      "terminate_grace_ms": 1500
+    },
+    "adapter_capabilities": {
+      "adapter_id": "codex",
+      "fields": {
+        "sandbox": {
+          "level": "native",
+          "channel": "argv",
+          "supported_values": [
+            "read-only",
+            "workspace-write",
+            "danger-full-access"
+          ],
+          "note": "Recipe sandbox is enforced through codex --sandbox argv mapping."
+        },
+        "writes_artifacts_to": {
+          "level": "advisory",
+          "channel": "env",
+          "note": "Recipe artifact prefixes are exported through env and enforced post-run against external manifest artifacts and evidence paths."
+        }
+      }
+    },
+    "adapter_capability_registry": {
+      "entries": [
+        {
+          "id": "runner.adapter.codex",
+          "kind": "runner_adapter",
+          "availability": "available",
+          "source": {
+            "id": "runner_adapter",
+            "detail": "codex"
+          },
+          "summary": "Runner adapter codex",
+          "metadata": {
+            "adapter_id": "codex",
+            "declared_fields": [
+              "sandbox",
+              "writes_artifacts_to"
+            ]
+          }
+        },
+        {
+          "id": "runner.adapter.codex.policy_field.sandbox",
+          "kind": "runner_policy_field",
+          "availability": "available",
+          "source": {
+            "id": "runner_adapter",
+            "detail": "codex"
+          },
+          "summary": "Runner policy field sandbox",
+          "supported_values": [
+            "danger-full-access",
+            "read-only",
+            "workspace-write"
+          ],
+          "metadata": {
+            "adapter_id": "codex",
+            "field": "sandbox",
+            "level": "native",
+            "channel": "argv",
+            "note": "Recipe sandbox is enforced through codex --sandbox argv mapping."
+          }
+        },
+        {
+          "id": "runner.adapter.codex.policy_field.writes_artifacts_to",
+          "kind": "runner_policy_field",
+          "availability": "available",
+          "source": {
+            "id": "runner_adapter",
+            "detail": "codex"
+          },
+          "summary": "Runner policy field writes_artifacts_to",
+          "metadata": {
+            "adapter_id": "codex",
+            "field": "writes_artifacts_to",
+            "level": "advisory",
+            "channel": "env",
+            "note": "Recipe artifact prefixes are exported through env and enforced post-run against external manifest artifacts and evidence paths."
+          }
+        }
+      ]
+    },
+    "policy_decision": {
+      "adapter_id": "codex",
+      "requested": {},
+      "effective": {},
+      "fields": {
+        "sandbox": {
+          "status": "not_requested",
+          "capability_level": "native",
+          "channel": "argv",
+          "supported_values": [
+            "read-only",
+            "workspace-write",
+            "danger-full-access"
+          ],
+          "note": "Recipe sandbox is enforced through codex --sandbox argv mapping."
+        },
+        "writes_artifacts_to": {
+          "status": "not_requested",
+          "capability_level": "advisory",
+          "channel": "env",
+          "note": "Recipe artifact prefixes are exported through env and enforced post-run against external manifest artifacts and evidence paths."
+        }
+      },
+      "refusal_reason": null
+    },
+    "invocation": {
+      "executable": "codex",
+      "argv": [
+        "codex",
+        "-a",
+        "never",
+        "exec",
+        "--json",
+        "--output-last-message",
+        "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/codex-last-message.md",
+        "-C",
+        "/Users/odubinkin/Projects/vite-office",
+        "-s",
+        "danger-full-access",
+        "-"
+      ],
+      "argv_count": 12,
+      "env_keys": [
+        "AGENTPLANE_RUNNER_ADAPTER",
+        "AGENTPLANE_RUNNER_API_VERSION",
+        "AGENTPLANE_RUNNER_MODE",
+        "AGENTPLANE_RUNNER_RESULT_PATH",
+        "AGENTPLANE_RUNNER_TARGET"
+      ],
+      "cwd": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z",
+      "run_dir": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z",
+      "bundle_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bundle.json",
+      "state_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/run-state.json",
+      "events_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/events.jsonl",
+      "result_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.json",
+      "trace_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/agent-trace.jsonl",
+      "stderr_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/stderr.log",
+      "bootstrap_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bootstrap.md",
+      "output_last_message_path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/codex-last-message.md",
+      "dry_run": false,
+      "has_result_path": true,
+      "has_output_last_message_path": true
+    }
+  },
+  "supervision": {
+    "pid": 72307,
+    "command": "codex -a never exec --json --output-last-message /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/codex-last-message.md -C /Users/odubinkin/Projects/vite-office -s danger-full-access -",
+    "started_at": "2026-08-13T09:44:12.971Z",
+    "heartbeat_at": "2026-08-13T09:44:12.971Z",
+    "exit_signal": null,
+    "timeout_reason": null
+  },
+  "result": {
+    "status": "failed",
+    "exit_code": 1,
+    "started_at": "2026-08-13T09:44:12.943Z",
+    "ended_at": "2026-08-13T09:45:49.148Z",
+    "summary": "Codex execution failed before producing a valid result manifest.",
+    "stderr_summary": "Invalid runner result manifest at /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.json: successful manifests must include evidence paths, tests, verification candidates, or artifacts",
+    "output_paths": [
+      "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bundle.json",
+      "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bootstrap.md",
+      "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/agent-trace.jsonl",
+      "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/stderr.log",
+      "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.source.json",
+      "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/codex-last-message.md",
+      "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.invalid.json",
+      "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.json"
+    ],
+    "artifacts": [
+      {
+        "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bundle.json",
+        "label": "bundle"
+      },
+      {
+        "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bootstrap.md",
+        "label": "bootstrap"
+      },
+      {
+        "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/agent-trace.jsonl",
+        "label": "raw-trace"
+      },
+      {
+        "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/stderr.log",
+        "label": "stderr-log"
+      },
+      {
+        "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.source.json",
+        "label": "source-result-manifest"
+      },
+      {
+        "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/codex-last-message.md",
+        "label": "assistant-last-message"
+      },
+      {
+        "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.invalid.json",
+        "label": "invalid-result-manifest"
+      },
+      {
+        "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.json",
+        "label": "result-manifest"
+      }
+    ],
+    "capabilities_used": [
+      "codex.exec"
+    ]
+  }
+}

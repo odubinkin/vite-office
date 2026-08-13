@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "status": "success",
+  "summary": "README.md documents Vite Office as a TypeScript LibreOffice reimplementation experiment and records the current partial Writer status and unstarted status of the other LibreOffice applications.",
+  "capabilities_used": [
+    "runner.exec",
+    "file.read",
+    "file.write",
+    "process.exec"
+  ]
+}

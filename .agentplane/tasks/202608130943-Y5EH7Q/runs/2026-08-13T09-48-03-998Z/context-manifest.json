@@ -1,0 +1,38 @@
+[
+  {
+    "id": "base.policy_gateway",
+    "kind": "policy_module",
+    "reason": "Resolved from AGENTS.md.",
+    "source": "AGENTS.md"
+  },
+  {
+    "id": "base.execution_profile",
+    "kind": "prompt",
+    "reason": "Resolved from runtime:execution-profile:balanced.",
+    "source": "runtime:execution-profile:balanced"
+  },
+  {
+    "id": "base.owner_profile",
+    "kind": "prompt",
+    "reason": "Resolved from .agentplane/agents/ORCHESTRATOR.json.",
+    "source": ".agentplane/agents/ORCHESTRATOR.json"
+  },
+  {
+    "id": ".agentplane/policy/security.must.md",
+    "kind": "policy_module",
+    "reason": "Allowed by the resolved blueprint policy module budget.",
+    "source": ".agentplane/policy/security.must.md"
+  },
+  {
+    "id": ".agentplane/policy/dod.core.md",
+    "kind": "policy_module",
+    "reason": "Allowed by the resolved blueprint policy module budget.",
+    "source": ".agentplane/policy/dod.core.md"
+  },
+  {
+    "id": ".agentplane/policy/dod.docs.md",
+    "kind": "policy_module",
+    "reason": "Allowed by the resolved blueprint policy module budget.",
+    "source": ".agentplane/policy/dod.docs.md"
+  }
+]

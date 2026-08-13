@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "status": "failed",
+  "exit_code": 1,
+  "summary": "Codex execution failed before producing a valid result manifest.",
+  "stderr_summary": "Invalid runner result manifest at /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.json: successful manifests must include evidence paths, tests, verification candidates, or artifacts",
+  "artifacts": [
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bundle.json",
+      "label": "bundle"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/bootstrap.md",
+      "label": "bootstrap"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/agent-trace.jsonl",
+      "label": "raw-trace"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/stderr.log",
+      "label": "stderr-log"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.source.json",
+      "label": "source-result-manifest"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/codex-last-message.md",
+      "label": "assistant-last-message"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.invalid.json",
+      "label": "invalid-result-manifest"
+    },
+    {
+      "path": "/Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130943-Y5EH7Q/runs/2026-08-13T09-44-12-934Z/result.json",
+      "label": "result-manifest"
+    }
+  ],
+  "capabilities_used": [
+    "codex.exec"
+  ]
+}

@@ -1,8 +1,12 @@
 # Vite Office
 
-Vite Office is a from-scratch, browser-only office suite targeting functional, test, and
-documentation parity with a pinned LibreOffice baseline. The product is delivered as static frontend
-assets built with TypeScript, Vite, and Tailwind CSS; it does not depend on an application backend.
+Vite Office is an experiment to reimplement LibreOffice as a TypeScript package. It is a
+browser-only office suite targeting functional, test, and documentation parity with a pinned
+LibreOffice baseline. The product is delivered as static frontend assets built with TypeScript,
+Vite, and Tailwind CSS; it does not depend on an application backend.
+
+The project is currently under development. Only part of Writer's functionality has been implemented
+so far; implementation of the other LibreOffice applications has not yet started.
 
 The repository is at the program-foundation stage. No application capability is considered
 implemented until its source, upstream behavior, tests, and documentation are linked by evidence in
@@ -22,9 +26,10 @@ the parity matrix.
 
 The repository now contains the initial TypeScript, React, Vite, and Tailwind CSS workspace under
 `apps/office`. It renders an accessible workbench, builds with relative asset paths, and does not
-use an application backend. Writer includes one bounded in-memory plain-text paragraph editor; the
-other suites remain previews. This does not advance a LibreOffice parity row because its upstream
-behavior, tests, and documentation are not yet atomically mapped.
+use an application backend. Writer includes an early, bounded in-memory plain-text paragraph editor,
+but its functionality is only partially implemented. Implementation of the other LibreOffice
+applications has not yet started. This does not advance a LibreOffice parity row because its
+upstream behavior, tests, and documentation are not yet atomically mapped.
 
 The bootstrap includes strict TypeScript, ESLint and Prettier, 100% initial Vitest coverage
 thresholds for authored application behavior, a Chromium and axe smoke test, static-distribution
