@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130742-YNRPC9",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T07:46:03.772Z",
+  "verdict": "pass",
+  "summary": "Sfx document module paths now match pinned LibreOffice ownership.",
+  "evaluated_sha": "9441fd2f53ccf4cec6f06ff62b530786909f2a4b",
+  "blueprint_digest": "466addc1d3ad7d9304745c59a31533c6f538b608df2a675b2bf46257bdaf56ca",
+  "findings": [
+    "Fast coverage and every declared structural quality check passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130742-YNRPC9/README.md",
+    "HEAD"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
