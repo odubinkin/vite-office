@@ -1,10 +1,11 @@
 ---
 id: "202608130726-S29A2K"
 title: "Align active Writer source paths with LibreOffice module boundaries"
-status: "DOING"
+result_summary: "verified-202608130726-S29A2K"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-08-13T07:33:19.141Z"
+  updated_at: "2026-08-13T07:33:35.616Z"
   updated_by: "CODER"
-  note: "Verified: exact-path refactor preserves 83 fast tests at 100% coverage; source provenance, source-tree, JSDoc, format, lint, types, stale-path search, diff, doctor, and routing checks passed."
+  note: "verified-202608130726-S29A2K"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "7b542f7"
   findings:
     - "The fast suite and every specified structural/provenance quality gate passed."
-commit: null
+commit:
+  hash: "432517a1961e534db63c58c9c86d6779a1f4868c"
+  message: "🧾 S29A2K task: record source-path verification"
 comments:
   -
     author: "CODER"
     body: "Start: move the approved active-module paths to their pinned LibreOffice boundaries, preserving behavior and traceability."
+  -
+    author: "CODER"
+    body: "Verified: verified-202608130726-S29A2K. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: exact-path refactor preserves 83 fast tests at 100% coverage; source provenance, source-tree, JSDoc, format, lint, types, stale-path search, diff, doctor, and routing checks passed."
+  -
+    type: "verify"
+    at: "2026-08-13T07:33:35.616Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202608130726-S29A2K"
+  -
+    type: "status"
+    at: "2026-08-13T07:33:35.801Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202608130726-S29A2K. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-08-13T07:33:19.223Z"
+doc_updated_at: "2026-08-13T07:33:35.801Z"
 doc_updated_by: "CODER"
 description: "Rename the current browser implementations of docfac, Writer document nodes, and selection shell to their pinned LibreOffice-like paths; update imports, co-located tests, provenance, and source-tree documentation without changing behavior."
 sections:
@@ -103,6 +122,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-08-13T07:33:35.616Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202608130726-S29A2K
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T07:33:19.223Z, excerpt_hash=sha256:a62210a6e6348fac6d09ee2e9a0f192355ee7dd04a552a6650f0f1ea12bbb344
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130726-S29A2K/blueprint/resolved-snapshot.json
+    - old_digest: dbf7f439124a4622a2ca23142a91760d95081e1a28e0a32c58a0d2b27a2863db
+    - current_digest: dbf7f439124a4622a2ca23142a91760d95081e1a28e0a32c58a0d2b27a2863db
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608130726-S29A2K
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202608130726-S29A2K --result verified-202608130726-S29A2K --commit 432517a1961e534db63c58c9c86d6779a1f4868c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -111,6 +160,10 @@ sections:
     - Observation: Four browser modules now occupy exact pinned LibreOffice-like paths: docfac, docnode/node, and wrtsh/select, with co-located document-factory test.
       Impact: Runtime ownership, imports, source-tree enforcement, and provenance now agree on active LO directory and file names.
       Resolution: No behavior changed; full suite remains deferred under the agreed ten-task cadence.
+extensions:
+  implementation_commit:
+    hash: "7b542f7500bd1b72c303595180044a340a7f4cf4"
+    message: "♻️ S29A2K code: align active source paths with LibreOffice"
 id_source: "generated"
 ---
 ## Summary
@@ -162,6 +215,36 @@ DecisionContextRef:
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-08-13T07:33:35.616Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202608130726-S29A2K
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T07:33:19.223Z, excerpt_hash=sha256:a62210a6e6348fac6d09ee2e9a0f192355ee7dd04a552a6650f0f1ea12bbb344
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130726-S29A2K/blueprint/resolved-snapshot.json
+- old_digest: dbf7f439124a4622a2ca23142a91760d95081e1a28e0a32c58a0d2b27a2863db
+- current_digest: dbf7f439124a4622a2ca23142a91760d95081e1a28e0a32c58a0d2b27a2863db
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608130726-S29A2K
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202608130726-S29A2K --result verified-202608130726-S29A2K --commit 432517a1961e534db63c58c9c86d6779a1f4868c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
