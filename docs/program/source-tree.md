@@ -18,11 +18,14 @@ runtime of this static application.
 | `apps/office/src/vcl/browser` | `vcl` | Browser-only clipboard, download, IndexedDB, and styling adapters |
 | `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | Serializable Writer document and paragraph transitions |
 | `apps/office/src/sw/source/uibase/docvw` | `sw/source/uibase/docvw` | Document-page editor, DOM selection, and editable paragraphs |
+| `apps/office/src/sw/source/uibase/dochdl` | `sw/source/uibase/dochdl` | Selection transfer-document preparation and clipboard ownership |
+| `apps/office/src/sw/source/filter/html` | `sw/source/filter/html` | Writer HTML transfer serialization |
+| `apps/office/src/sw/source/filter/ascii` | `sw/source/filter/ascii` | Writer plain-text transfer serialization |
 | `apps/office/src/sw/source/uibase/ribbar` | `sw/source/uibase/ribbar` | Writer formatting toolbar |
 | `apps/office/src/sw/source/uibase/sidebar` | `sw/source/uibase/sidebar` | Writer properties sidebar |
 | `apps/office/src/sw/source/uibase/shells` | `sw/source/uibase/shells` | Writer command-shell shortcut adapters |
 | `apps/office/src/sw/source/uibase/uiview` | `sw/source/uibase/uiview` | Writer workbench state and workspace view chrome |
-| `apps/office/src/sw/source/uibase/utlui` | `sw/source/uibase/utlui` | Writer menus, standard toolbar, clipboard-selection helpers |
+| `apps/office/src/sw/source/uibase/utlui` | `sw/source/uibase/utlui` | Writer menus, standard toolbar, and browser command hooks |
 | `apps/office/src/sw/uiconfig/swriter` | `sw/uiconfig/swriter` | Declarative browser command-placement data |
 
 Tests remain colocated with the module they protect, matching the local source
@@ -42,6 +45,9 @@ source, test, and Help evidence remains in the machine-readable
 | `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Deterministic visible bullet and numbering marker calculation |
 | `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
+| `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
+| `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Semantic `ul`/`ol`/`li` clipboard HTML serialization |
+| `sw/source/filter/ascii/ascatr.ts` | `sw/source/filter/ascii/ascatr.cxx` | Plain-text list-marker clipboard serialization |
 | `sw/uiconfig/swriter/menubar.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Format → Bullets and Numbering submenu declaration |
 | `sw/uiconfig/swriter/toolbar/textobjectbar.ts` | `sw/uiconfig/swriter/toolbar/textobjectbar.xml` | Text-object toolbar list command declaration |
 

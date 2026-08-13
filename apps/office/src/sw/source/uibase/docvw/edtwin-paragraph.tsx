@@ -90,6 +90,7 @@ export function WriterEditableParagraph({
           contentEditable
           data-alignment={paragraph.alignment}
           data-list-kind={paragraph.list.kind}
+          data-list-marker={listMarker}
           data-style={paragraph.style}
           data-writer-paragraph-id={paragraph.id}
           onFocus={

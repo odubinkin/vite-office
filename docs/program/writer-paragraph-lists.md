@@ -21,6 +21,8 @@ list state.
 
 This is not full Writer list parity. Range and table-cell selection, nesting,
 level changes, named list styles, restart/continue numbering, automatic list
-detection, outline numbering, semantic list clipboard/export, and ODT/DOCX
-import/export remain separately mapped follow-up capabilities. They are
-deferred, not marked browser-runtime exceptions.
+detection, outline numbering, RTF clipboard transfer, Paste, and ODT/DOCX
+import/export remain separately mapped follow-up capabilities. The bounded
+semantic HTML and plain-text Copy path is documented in
+[Browser Writer clipboard copy](writer-clipboard.md); it is deliberately not a
+claim of full list export/import parity.

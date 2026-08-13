@@ -2,7 +2,7 @@
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createWriterClipboardSelection } from "./writer-clipboard-selection";
+import { createWriterClipboardSelection } from "./swdtflvr";
 
 afterEach(
   /**
@@ -72,6 +72,55 @@ describe("createWriterClipboardSelection" /** Groups selected Writer paragraph c
     expect(createWriterClipboardSelection(selection)).toEqual({
       html: '<p style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">&amp;&lt;&gt;&quot;&#39;</p>',
       plainText: `&<>"'`,
+    });
+  });
+
+  it("delegates contiguous complete list items to semantic HTML and list-aware plain-text writers" /** Verifies the transfer handler sends only complete list paragraphs through list serialization. @returns Nothing; semantic markup and visible plain-text labels are asserted. */, function serializesSemanticLists(): void {
+    document.body.innerHTML = `
+      <span data-writer-auxiliary-description="true">Paragraph list: Ordered List</span>
+      <p data-alignment="left" data-list-kind="numbered" data-list-marker="1." data-style="default" data-writer-paragraph-id="p-1">First</p>
+      <p data-alignment="left" data-list-kind="numbered" data-list-marker="2." data-style="default" data-writer-paragraph-id="p-2">Second</p>
+      <p data-alignment="left" data-list-kind="none" data-style="default" data-writer-paragraph-id="p-3">Body</p>
+      <p data-alignment="left" data-list-kind="bullet" data-list-marker="•" data-style="default" data-writer-paragraph-id="p-4">Third</p>
+      <p data-alignment="left" data-list-kind="bullet" data-list-marker="•" data-style="default" data-writer-paragraph-id="p-5">Fourth</p>
+    `;
+    const paragraphs = document.querySelectorAll("p");
+    const selection = selectCompleteNodes(
+      paragraphs[0] as HTMLParagraphElement,
+      paragraphs[4] as HTMLParagraphElement,
+    );
+
+    expect(createWriterClipboardSelection(selection)).toEqual({
+      html: '<ol><li style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">First</li><li style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">Second</li></ol><p style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">Body</p><ul><li style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">Third</li><li style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">Fourth</li></ul>',
+      plainText: "    1. First\n    2. Second\nBody\n    • Third\n    • Fourth",
+    });
+  });
+
+  it("keeps a partial list paragraph ordinary and preserves an ordered fragment start value" /** Verifies that text-range precision prevents accidental semantic list expansion. @returns Nothing; partial and suffix selection output is asserted. */, function preservesPartialListSelectionBoundaries(): void {
+    document.body.innerHTML = `
+      <p data-alignment="left" data-list-kind="numbered" data-list-marker="2." data-style="default" data-writer-paragraph-id="p-1">Second item</p>
+      <p data-alignment="left" data-list-kind="numbered" data-list-marker="3." data-style="default" data-writer-paragraph-id="p-2">Third item</p>
+    `;
+    const paragraphs = document.querySelectorAll("p");
+    const selection = selectCompleteNodes(
+      paragraphs[0] as HTMLParagraphElement,
+      paragraphs[1] as HTMLParagraphElement,
+    );
+    expect(createWriterClipboardSelection(selection)).toEqual({
+      html: '<ol start="2"><li style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">Second item</li><li style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">Third item</li></ol>',
+      plainText: "    2. Second item\n    3. Third item",
+    });
+
+    const textNode = (paragraphs[0] as HTMLParagraphElement).firstChild as Text;
+    const partialRange = document.createRange();
+    partialRange.setStart(textNode, 1);
+    partialRange.setEnd(textNode, 7);
+    const partialSelection = globalThis.getSelection() as Selection;
+    partialSelection.removeAllRanges();
+    partialSelection.addRange(partialRange);
+    expect(createWriterClipboardSelection(partialSelection)).toEqual({
+      html: '<p style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">econd </p>',
+      plainText: "econd ",
     });
   });
 

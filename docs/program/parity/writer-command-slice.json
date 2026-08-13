@@ -96,13 +96,13 @@
       "local": {
         "implementation": [
           { "path": "apps/office/src/vcl/browser/browser-clipboard.ts", "marker": "copyRichText" },
-          { "path": "apps/office/src/sw/source/uibase/utlui/writer-clipboard-selection.ts", "marker": "createWriterClipboardSelection" },
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts", "marker": "createWriterClipboardSelection" },
           { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx", "marker": "moveCaretAcrossParagraphBoundary" }
         ],
         "tests": [
           { "path": "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.test.tsx", "marker": "replaces native keyboard Copy data" },
           { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx", "marker": "keeps the typing caret stable" },
-          { "path": "apps/office/src/sw/source/uibase/utlui/writer-clipboard-selection.test.ts", "marker": "omits accessibility descriptions" },
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts", "marker": "omits accessibility descriptions" },
           { "path": "apps/office/e2e/writer-clipboard.spec.ts", "marker": "copies visible formatted Writer content" },
           { "path": "apps/office/e2e/writer-document-selection.spec.ts", "marker": "supports document-wide selection" },
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Copied selection" }
@@ -154,7 +154,7 @@
       "status": "implemented",
       "gaps": [
         "This first command layer applies to the active paragraph only; multi-paragraph, range, and table-cell selection remain separate mapped work.",
-        "Nesting and level commands, named list styles, restart/continue numbering, outline numbering, automatic lists, semantic clipboard/export, and ODT/DOCX import/export remain separate mapped work."
+        "Nesting and level commands, named list styles, restart/continue numbering, outline numbering, automatic lists, RTF transfer, and ODT/DOCX import/export remain separate mapped work."
       ],
       "upstream": {
         "implementation": [
@@ -197,6 +197,50 @@
           { "path": "docs/program/writer-paragraph-lists.md", "marker": "Browser Writer paragraph lists" },
           { "path": "docs/program/writer-command-placement.md", "marker": "FormatBulletsMenu" },
           { "path": "docs/program/source-tree.md", "marker": "File-level provenance in the active Writer list slice" }
+        ]
+      }
+    },
+    {
+      "id": "LO-WRITER-0106",
+      "capability": "Writer Copy serializes complete browser list selections as semantic HTML and readable plain text",
+      "status": "implemented",
+      "gaps": [
+        "The browser implementation serializes root-level complete adjacent list items only; multi-range selection, nesting, custom list styles, restarts, and non-text Writer objects remain unmapped.",
+        "RTF, Paste, ODT/DOCX import/export, and the full Writer transfer-flavor matrix are not implemented by this static browser slice."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/source/uibase/dochdl/swdtflvr.cxx", "marker": "PrepareForCopyTextRange" },
+          { "path": "sw/source/filter/html/htmlnumwriter.cxx", "marker": "OutHTML_NumberBulletListStart" },
+          { "path": "sw/source/filter/ascii/ascatr.cxx", "marker": "GetNumString" }
+        ],
+        "tests": [
+          { "path": "sw/qa/extras/uiwriter/uiwriter9.cxx", "marker": "testTdf135083" },
+          { "path": "sw/qa/filter/html/html.cxx", "marker": "testMailmergeCopy" },
+          { "path": "sw/qa/extras/htmlimport/htmlimport.cxx", "marker": "testNestedListMixedType" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/shared/01/02050000.xhp", "marker": ".uno:Copy" },
+          { "path": "helpcontent2/source/text/swriter/02/02110000.xhp", "marker": ".uno:DefaultNumbering" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts", "marker": "createWriterClipboardSelection" },
+          { "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts", "marker": "serializeWriterClipboardHtml" },
+          { "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts", "marker": "serializeWriterClipboardPlainText" },
+          { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx", "marker": "handleNativeWriterCopy" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts", "marker": "delegates contiguous complete list items" },
+          { "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.test.ts", "marker": "separates ordinary paragraphs" },
+          { "path": "apps/office/src/sw/source/filter/ascii/ascatr.test.ts", "marker": "exports labels only" },
+          { "path": "apps/office/e2e/writer-clipboard.spec.ts", "marker": "Writer list clipboard" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-clipboard.md", "marker": "complete adjacent list paragraphs" },
+          { "path": "docs/program/writer-paragraph-lists.md", "marker": "semantic HTML and plain-text Copy path" },
+          { "path": "docs/program/source-tree.md", "marker": "htmlnumwriter.ts" }
         ]
       }
     }

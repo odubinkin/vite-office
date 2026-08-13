@@ -39,6 +39,19 @@ When that API is absent or rejects the write, `copyPlainText` uses
 removed; if all mechanisms fail, the Writer status row reports that copying
 failed.
 
+When a selection contains complete adjacent list paragraphs, Writer prepares a
+transfer document in
+[`swdtflvr.ts`](../../apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts), then
+the matching format writers serialize it. The HTML writer
+[`htmlnumwriter.ts`](../../apps/office/src/sw/source/filter/html/htmlnumwriter.ts)
+emits semantic `ul`/`ol`/`li` markup, including an `ol start` value for a
+selected numbered-list suffix. The ASCII writer
+[`ascatr.ts`](../../apps/office/src/sw/source/filter/ascii/ascatr.ts) emits four
+spaces followed by a visible marker for a multi-item list transfer. A single or
+partial list item copies only its selected text, preventing a fragment from
+being falsely promoted to a complete list. Neither path serializes screen-reader
+descriptions nor the marker-only DOM sibling.
+
 Copy does not alter the immutable Writer document, transaction history,
 properties, or browser-local snapshot. A missing selection reports **Select
 text to copy.** rather than serializing the whole document implicitly.
@@ -49,4 +62,6 @@ declares the same command in the standard toolbar. This browser slice maps the
 placement and bounded browser behavior only. Rich copy covers just the
 implemented paragraph-level styles; Cut, Paste, Paste Special, inline character
 formatting, objects, tables, tracked changes, and full LibreOffice transfer
-semantics remain separate feature tasks.
+semantics remain separate feature tasks. RTF, Paste, nesting, named styles,
+ODT/DOCX import/export, and full Writer transfer semantics remain separate
+feature tasks.

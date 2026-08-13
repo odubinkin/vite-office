@@ -7,7 +7,7 @@ import type { Dispatch, SetStateAction } from "react";
 import type { WriterDocument } from "../../core/doc/writer";
 import { copyRichText } from "../../../../vcl/browser/browser-clipboard";
 import { downloadPlainText } from "../../../../vcl/browser/browser-download";
-import { createWriterClipboardSelection } from "./writer-clipboard-selection";
+import { createWriterClipboardSelection } from "../dochdl/swdtflvr";
 
 /** Describes the document session and status outlet used by browser-owned Writer commands. */
 export interface WriterBrowserCommandOptions {

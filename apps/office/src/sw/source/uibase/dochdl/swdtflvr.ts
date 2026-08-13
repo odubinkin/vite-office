@@ -1,6 +1,9 @@
 /**
- * @fileoverview Converts a native Writer selection into visible plain text and bounded rich HTML without accessibility-only descriptions.
+ * @fileoverview Prepares an isolated browser Writer transfer document from a native selection, mirroring LibreOffice Writer's `sw/source/uibase/dochdl/swdtflvr.cxx` ownership boundary.
  */
+
+import { serializeWriterClipboardHtml } from "../../filter/html/htmlnumwriter";
+import { serializeWriterClipboardPlainText } from "../../filter/ascii/ascatr";
 
 /** Describes the two clipboard representations emitted for a visible Writer selection. */
 export interface WriterClipboardSelection {
@@ -8,6 +11,18 @@ export interface WriterClipboardSelection {
   readonly html: string;
   /** Sanitized plain text containing only visible selected paragraph text. */
   readonly plainText: string;
+}
+
+/** Describes one selected Writer paragraph in the transfer document before a format writer serializes it. */
+export interface WriterClipboardParagraph {
+  /** Complete list selection kind, or none when the selection is partial or the paragraph is ordinary body text. */
+  readonly listKind: "bullet" | "none" | "numbered";
+  /** Browser-visible list marker used only by the ASCII writer. */
+  readonly marker: string | undefined;
+  /** Portable paragraph-level presentation CSS. */
+  readonly style: string;
+  /** Visible selected paragraph text. */
+  readonly text: string;
 }
 
 /** Identifies rendered editable paragraphs eligible for Writer clipboard serialization. */
@@ -26,9 +41,7 @@ export function createWriterClipboardSelection(
 ): WriterClipboardSelection | undefined {
   if (selection === null || selection.isCollapsed || selection.rangeCount !== 1) return undefined;
   const selectionRange = selection.getRangeAt(0);
-  const selectedParagraphs = Array.from(
-    document.querySelectorAll<HTMLElement>(writerParagraphSelector),
-  )
+  const paragraphs = Array.from(document.querySelectorAll<HTMLElement>(writerParagraphSelector))
     .filter(
       /**
        * Retains only visible Writer paragraph nodes intersected by the native selection range.
@@ -42,24 +55,59 @@ export function createWriterClipboardSelection(
     )
     .map(
       /**
-       * Converts one selected Writer paragraph into its visible text and bounded inline HTML.
+       * Converts one selected Writer paragraph into a format-neutral transfer record.
        *
        * @param paragraph - Rendered editable Writer paragraph intersected by the selection.
-       * @returns Clipboard-ready visible text and the matching paragraph HTML.
+       * @returns Clipboard-ready visible paragraph data for an HTML or ASCII writer.
        */
-      function serializeParagraph(paragraph): { html: string; text: string } {
+      function serializeParagraph(paragraph): WriterClipboardParagraph {
         const text = getSelectedParagraphText(selectionRange, paragraph);
         return {
-          html: `<p style="${getParagraphInlineStyle(paragraph)}">${escapeHtml(text)}</p>`,
+          listKind: isCompleteListParagraph(selectionRange, paragraph, text)
+            ? getWriterListKind(paragraph)
+            : "none",
+          marker: paragraph.dataset.listMarker,
+          style: getParagraphInlineStyle(paragraph),
           text,
         };
       },
     );
-  if (selectedParagraphs.length === 0) return undefined;
+  if (paragraphs.length === 0) return undefined;
   return {
-    html: selectedParagraphs.map(selectHtml).join(""),
-    plainText: selectedParagraphs.map(selectText).join("\n"),
+    html: serializeWriterClipboardHtml(paragraphs),
+    plainText: serializeWriterClipboardPlainText(paragraphs),
   };
+}
+
+/**
+ * Checks whether a selected paragraph is a complete list item eligible for semantic list transfer.
+ *
+ * @param selectionRange - Native range intersecting the paragraph.
+ * @param paragraph - Editable Writer paragraph inspected without mutation.
+ * @param selectedText - Already clipped visible selection text.
+ * @returns True only for a complete selected bullet or numbered Writer paragraph.
+ */
+function isCompleteListParagraph(
+  selectionRange: Range,
+  paragraph: HTMLElement,
+  selectedText: string,
+): boolean {
+  return (
+    getWriterListKind(paragraph) !== "none" &&
+    selectedText === paragraph.textContent &&
+    selectionRange.intersectsNode(paragraph)
+  );
+}
+
+/**
+ * Reads the bounded list kind from one browser Writer paragraph.
+ *
+ * @param paragraph - Editable paragraph exposing serialized list state through a data attribute.
+ * @returns Supported list kind or none for absent and unsupported values.
+ */
+function getWriterListKind(paragraph: HTMLElement): WriterClipboardParagraph["listKind"] {
+  const kind = paragraph.dataset.listKind;
+  return kind === "bullet" || kind === "numbered" ? kind : "none";
 }
 
 /**
@@ -94,39 +142,4 @@ function getParagraphInlineStyle(paragraph: HTMLElement): string {
   return isHeading
     ? `text-align: ${textAlign}; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;`
     : `text-align: ${textAlign}; font-size: 1rem; font-weight: 400; line-height: 1.75rem;`;
-}
-
-/**
- * Escapes selected plain text before it becomes clipboard HTML content.
- *
- * @param text - Visible Writer text selected by the user.
- * @returns HTML-safe text that preserves every visible character literally.
- */
-function escapeHtml(text: string): string {
-  return text
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
-/**
- * Extracts serialized rich HTML from one selected Writer paragraph.
- *
- * @param paragraph - Clipboard-ready paragraph serialization.
- * @returns Inline-styled HTML paragraph string.
- */
-function selectHtml(paragraph: Readonly<{ html: string; text: string }>): string {
-  return paragraph.html;
-}
-
-/**
- * Extracts visible plain text from one selected Writer paragraph.
- *
- * @param paragraph - Clipboard-ready paragraph serialization.
- * @returns Visible selected Writer text.
- */
-function selectText(paragraph: Readonly<{ html: string; text: string }>): string {
-  return paragraph.text;
 }
