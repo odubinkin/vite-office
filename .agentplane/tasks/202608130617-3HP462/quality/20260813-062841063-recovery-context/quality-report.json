@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130617-3HP462",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T06:28:41.063Z",
+  "verdict": "pass",
+  "summary": "Semantic list clipboard transfer follows the mapped Writer ownership layers and passes all declared focused evidence.",
+  "evaluated_sha": "5fce5465deecea4ef4394415f6fa8cc7d7c36da5",
+  "blueprint_digest": "a4dc10c224f2ff427138a2fa7cf40d1eb3e2216f32f19215c397d5a92f1ee2ca",
+  "findings": [
+    "No correctness finding: selection preparation, HTML list serialization, ASCII label behavior, documentation, and parity mapping are covered."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130617-3HP462/README.md",
+    "5fce5465deec semantic implementation; npm run test:coverage; focused Writer list clipboard E2E; inventory parity; static checks"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full verification suite, static smoke, inventory coverage, and browser matrix remain deferred under the approved ten-task cadence."
+  ]
+}
