@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130934-F1JT8K",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T09:41:49.046Z",
+  "verdict": "pass",
+  "summary": "Implementation removes superseded Writer labels and restores exact endpoint-preserving pointer selection.",
+  "evaluated_sha": "d2610a08391694b177f2c80cf8d36bfccb185b59",
+  "blueprint_digest": "543df907c358da74e4bfd1567c159eabdb4d76799184ce80c8e40e958b03e147",
+  "findings": [
+    "Fast coverage, targeted Chromium pointer-selection coverage, formatting, lint, JSDoc, file-size, and whitespace checks pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130934-F1JT8K/README.md",
+    "d2610a0; npm run test:e2e -- --grep document-wide selection; npm run test:coverage"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
