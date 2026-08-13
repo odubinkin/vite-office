@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130817-GXACM6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T08:50:19.097Z",
+  "verdict": "pass",
+  "summary": "Direct character formatting has bounded domain, UI, Copy, parity, and targeted browser evidence.",
+  "evaluated_sha": "25eea36695a5989c514cff570f304de1711d05b4",
+  "blueprint_digest": "7fd4431815bc6a72283a30b72f3a58ac97b5b9ab2cb666b9a086ece61c073b31",
+  "findings": [
+    "Full inventory coverage hangs before any test execution; targeted parity mapping coverage passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130817-GXACM6/README.md",
+    "apps/office/e2e/writer-character-formatting.spec.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
