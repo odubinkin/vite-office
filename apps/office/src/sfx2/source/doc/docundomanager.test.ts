@@ -6,7 +6,7 @@ import {
   getCurrentTransactionState,
   redoTransaction,
   undoTransaction,
-} from "./history";
+} from "./docundomanager";
 
 describe("transaction history" /**
  * Groups pure history transition tests.

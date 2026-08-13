@@ -7,7 +7,7 @@ import {
   saveSnapshot,
   type DocumentStorageAdapter,
   type SerializableValue,
-} from "../../../../sfx2/source/doc/storage";
+} from "../../../../sfx2/source/doc/docfile";
 import { normalizeWriterParagraphFormatting, type WriterDocument } from "./writer";
 
 /** Describes the JSON snapshot shape persisted by the bounded Writer workbench. */

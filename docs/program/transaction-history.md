@@ -1,6 +1,6 @@
 # Browser Transaction History
 
-[`apps/office/src/sfx2/source/doc/history.ts`](../../apps/office/src/sfx2/source/doc/history.ts)
+[`apps/office/src/sfx2/source/doc/docundomanager.ts`](../../apps/office/src/sfx2/source/doc/docundomanager.ts)
 provides a serializable, immutable sequence of caller-owned state snapshots with
 a zero-based cursor selection. `applyTransaction` appends a snapshot after the
 current entry and discards any redo branch. `undoTransaction` and

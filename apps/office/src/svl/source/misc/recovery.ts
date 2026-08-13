@@ -6,7 +6,7 @@ import {
   type DocumentSnapshot,
   type DocumentStorageAdapter,
   type SerializableValue,
-} from "../../../sfx2/source/doc/storage";
+} from "../../../sfx2/source/doc/docfile";
 
 /** Describes the durable recovery state for one caller-chosen document identity. */
 export interface RecoveryState<State extends SerializableValue> {

@@ -14,6 +14,8 @@ const requiredFiles = [
   "apps/office/src/framework/source/services/App.tsx",
   "apps/office/src/framework/source/dispatch/commands.ts",
   "apps/office/src/sfx2/source/doc/docfac.ts",
+  "apps/office/src/sfx2/source/doc/docfile.ts",
+  "apps/office/src/sfx2/source/doc/docundomanager.ts",
   "apps/office/src/svl/source/misc/recovery.ts",
   "apps/office/src/vcl/browser/browser-clipboard.ts",
   "apps/office/src/sw/source/core/doc/writer.ts",

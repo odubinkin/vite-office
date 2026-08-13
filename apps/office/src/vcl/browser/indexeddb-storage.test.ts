@@ -5,7 +5,7 @@
 import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it } from "vitest";
 
-import type { DocumentSnapshot } from "../../sfx2/source/doc/storage";
+import type { DocumentSnapshot } from "../../sfx2/source/doc/docfile";
 import { IndexedDbDocumentStorageAdapter, type IndexedDbFactory } from "./indexeddb-storage";
 
 /** Describes the JSON-compatible snapshot body used by the IndexedDB fixtures. */

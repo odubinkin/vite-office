@@ -6,7 +6,7 @@ import type {
   DocumentSnapshot,
   DocumentStorageAdapter,
   SerializableValue,
-} from "../../sfx2/source/doc/storage";
+} from "../../sfx2/source/doc/docfile";
 
 /* eslint-disable jsdoc/require-jsdoc -- V8 ignore annotations must sit immediately before native event-handler expressions; detailed JSDoc remains enforced by check-jsdoc.mjs. */
 

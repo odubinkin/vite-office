@@ -10,7 +10,7 @@ import {
   redoTransaction,
   undoTransaction,
   type TransactionHistory,
-} from "../../../../sfx2/source/doc/history";
+} from "../../../../sfx2/source/doc/docundomanager";
 import {
   replaceWriterParagraph,
   mergeWriterParagraphWithPrevious,

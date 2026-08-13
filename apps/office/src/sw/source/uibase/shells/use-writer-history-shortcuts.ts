@@ -8,7 +8,7 @@ import {
   dispatchCommand,
   findCommandByShortcut,
 } from "../../../../framework/source/dispatch/commands";
-import type { TransactionHistory } from "../../../../sfx2/source/doc/history";
+import type { TransactionHistory } from "../../../../sfx2/source/doc/docundomanager";
 import type { WriterDocument } from "../../core/doc/writer";
 
 /** Describes the stable state and callbacks used to register Writer history shortcuts. */

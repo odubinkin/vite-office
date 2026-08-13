@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines pure serializable transaction history and cursor selection transitions for browser-office document models without React or persistence coupling.
+ * @fileoverview Defines pure serializable browser transaction history and cursor selection transitions at the LibreOffice `sfx2/source/doc/docundomanager.cxx` ownership boundary.
  */
 
 /** Describes one immutable cursor selection using a zero-based position. */

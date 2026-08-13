@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 import { autosaveDocument, recoverDocument, type RecoveryState } from "./recovery";
-import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../sfx2/source/doc/storage";
+import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../sfx2/source/doc/docfile";
 
 /** Describes JSON-compatible state used by recovery fixtures. */
 type FixtureState = { readonly text: string };

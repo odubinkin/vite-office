@@ -8,7 +8,7 @@ import {
   type WriterDocument,
 } from "../../core/doc/writer";
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
-import { createTransactionHistory } from "../../../../sfx2/source/doc/history";
+import { createTransactionHistory } from "../../../../sfx2/source/doc/docundomanager";
 import {
   applyWriterAlignmentTransaction,
   applyWriterListKindTransaction,

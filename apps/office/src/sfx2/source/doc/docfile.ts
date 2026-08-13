@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines browser-independent, JSON-compatible document snapshot storage boundaries and pure load/save orchestration without selecting a browser persistence API.
+ * @fileoverview Defines the bounded browser document-medium persistence contract at the LibreOffice `sfx2/source/doc/docfile.cxx` ownership boundary without selecting a browser persistence API.
  */
 
 /**

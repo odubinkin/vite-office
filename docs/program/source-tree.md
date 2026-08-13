@@ -13,7 +13,7 @@ runtime of this static application.
 | `apps/office/src/framework/source/services` | `framework/source/services` | Static React application composition, suite services, and worker protocol contracts |
 | `apps/office/src/framework/source/dispatch` | `framework/source/dispatch` | Typed command dispatch |
 | `apps/office/src/framework/source/accelerators` | `framework/source/accelerators` | Browser shortcut normalization |
-| `apps/office/src/sfx2/source/doc` | `sfx2/source/doc` | Shared document identity, transactions, and storage contracts |
+| `apps/office/src/sfx2/source/doc` | `sfx2/source/doc` | Shared document identity, document undo manager, and bounded browser document-medium contract |
 | `apps/office/src/svl/source/misc` | `svl/source/misc` | Recovery orchestration |
 | `apps/office/src/vcl/browser` | `vcl` | Browser-only clipboard, download, IndexedDB, and styling adapters |
 | `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | Serializable Writer document transitions |

@@ -9,7 +9,7 @@ import {
   saveSnapshot,
   type DocumentSnapshot,
   type DocumentStorageAdapter,
-} from "./storage";
+} from "./docfile";
 
 /** Describes the JSON-compatible document body used by storage contract fixtures. */
 type StorageFixtureState = { readonly text: string };

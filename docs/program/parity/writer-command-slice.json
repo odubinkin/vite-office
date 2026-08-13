@@ -60,11 +60,11 @@
       },
       "local": {
         "implementation": [
-          { "path": "apps/office/src/sfx2/source/doc/history.ts", "marker": "undoTransaction" },
+          { "path": "apps/office/src/sfx2/source/doc/docundomanager.ts", "marker": "undoTransaction" },
           { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "marker": "onUndo" }
         ],
         "tests": [
-          { "path": "apps/office/src/sfx2/source/doc/history.test.ts", "marker": "undo" },
+          { "path": "apps/office/src/sfx2/source/doc/docundomanager.test.ts", "marker": "undo" },
           { "path": "apps/office/src/framework/source/services/App.test.tsx", "marker": "Undo" }
         ],
         "docs": [
