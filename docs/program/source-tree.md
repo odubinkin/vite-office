@@ -25,7 +25,6 @@ runtime of this static application.
 | `apps/office/src/sw/source/uibase/sidebar` | `sw/source/uibase/sidebar` | Writer properties sidebar |
 | `apps/office/src/sw/source/uibase/shells` | `sw/source/uibase/shells` | Writer command-shell shortcut adapters |
 | `apps/office/src/sw/source/uibase/uiview` | `sw/source/uibase/uiview` | Writer workbench state and workspace view chrome |
-| `apps/office/src/sw/source/uibase/utlui` | `sw/source/uibase/utlui` | Writer menus, standard toolbar, and browser command hooks |
 | `apps/office/src/sw/uiconfig/swriter/menubar` | `sw/uiconfig/swriter/menubar` | Writer menu declaration and browser menu control |
 | `apps/office/src/sw/uiconfig/swriter/toolbar` | `sw/uiconfig/swriter/toolbar` | Writer toolbar declaration and browser toolbar controls |
 
@@ -45,6 +44,7 @@ source, test, and Help evidence remains in the machine-readable
 | `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Serializable list metadata and legacy normalization |
 | `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Deterministic visible bullet and numbering marker calculation |
 | `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
+| `sw/source/uibase/shells/textsh.ts` | `sw/source/uibase/shells/textsh.cxx` | Browser-owned Copy and plain-text download command shell |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
 | `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Semantic `ul`/`ol`/`li` clipboard HTML serialization |

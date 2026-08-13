@@ -24,6 +24,7 @@ const requiredFiles = [
   "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
   "apps/office/src/sw/source/filter/ascii/ascatr.ts",
   "apps/office/src/sw/source/uibase/shells/txtnum.ts",
+  "apps/office/src/sw/source/uibase/shells/textsh.ts",
   "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx",
   "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx",
   "apps/office/src/sw/source/uibase/uiview/view.tsx",
@@ -46,6 +47,7 @@ const forbiddenPaths = [
   "apps/office/src/shared",
   "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx",
   "apps/office/src/sw/source/uibase/utlui/WriterCommandToolbar.tsx",
+  "apps/office/src/sw/source/uibase/utlui/use-writer-browser-commands.ts",
   "apps/office/src/sw/uiconfig/swriter/menubar.ts",
 ];
 

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Provides browser-owned Writer commands that do not mutate the document model.
+ * @fileoverview Provides browser-owned Writer text-shell commands that do not mutate the document model, at the LibreOffice `sw/source/uibase/shells/textsh.cxx` ownership boundary.
  */
 
 import type { Dispatch, SetStateAction } from "react";

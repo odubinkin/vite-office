@@ -37,7 +37,7 @@ import { WriterPlainTextEditor } from "../docvw/edtwin";
 import { WriterWorkspaceChrome } from "../app/mainwn";
 import { useWriterHistoryShortcuts } from "../shells/use-writer-history-shortcuts";
 import { setWriterParagraphListKind } from "../shells/txtnum";
-import { useWriterBrowserCommands } from "../utlui/use-writer-browser-commands";
+import { useWriterBrowserCommands } from "../shells/textsh";
 import { useWriterDocumentSelection, useWriterWorkspaceChrome } from "./viewstat";
 import {
   getActiveWriterParagraph,

@@ -96,6 +96,7 @@
       "local": {
         "implementation": [
           { "path": "apps/office/src/vcl/browser/browser-clipboard.ts", "marker": "copyRichText" },
+          { "path": "apps/office/src/sw/source/uibase/shells/textsh.ts", "marker": "useWriterBrowserCommands" },
           { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts", "marker": "createWriterClipboardSelection" },
           { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx", "marker": "moveCaretAcrossParagraphBoundary" }
         ],
