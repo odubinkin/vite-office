@@ -1,10 +1,10 @@
 /**
- * @fileoverview Verifies deterministic document identity validation, lifecycle transitions, immutability, and serializability.
+ * @fileoverview Verifies deterministic document-factory identity validation, lifecycle transitions, immutability, and serializability.
  */
 
 import { describe, expect, it } from "vitest";
 
-import { closeDocument, createDocument, markDocumentDirty, markDocumentSaved } from "./document";
+import { closeDocument, createDocument, markDocumentDirty, markDocumentSaved } from "./docfac";
 
 /**
  * Creates a valid Writer document fixture for lifecycle tests.

@@ -7,7 +7,7 @@ import {
   createWriterDocument,
   type WriterDocument,
 } from "../../core/doc/writer";
-import { createDocument } from "../../../../sfx2/source/doc/document";
+import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import { createTransactionHistory } from "../../../../sfx2/source/doc/history";
 import {
   applyWriterAlignmentTransaction,

@@ -15,7 +15,7 @@ import {
   type WriterParagraphAlignment,
   type WriterParagraphStyle,
 } from "../../core/doc/writer";
-import { createDocument } from "../../../../sfx2/source/doc/document";
+import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import { createWriterDocument } from "../../core/doc/writer";
 import type { WriterParagraphListKind } from "../../core/doc/list";
 import { changeWriterParagraphListLevel, type WriterListLevelCommand } from "../shells/listsh";

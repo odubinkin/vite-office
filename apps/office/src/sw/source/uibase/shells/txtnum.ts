@@ -2,7 +2,7 @@
  * @fileoverview Implements the browser Writer equivalents of `FN_NUM_BULLET_ON`, `FN_NUM_NUMBERING_ON`, and `FN_NUM_BULLET_OFF` from LibreOffice `sw/source/uibase/shells/txtnum.cxx`.
  */
 
-import { markDocumentDirty } from "../../../../sfx2/source/doc/document";
+import { markDocumentDirty } from "../../../../sfx2/source/doc/docfac";
 import type { WriterDocument, WriterParagraph } from "../../core/doc/writer";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
 

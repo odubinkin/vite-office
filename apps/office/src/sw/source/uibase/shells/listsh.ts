@@ -2,7 +2,7 @@
  * @fileoverview Implements bounded Writer list-level commands at the LibreOffice `sw/source/uibase/shells/listsh.cxx` ownership boundary.
  */
 
-import { markDocumentDirty } from "../../../../sfx2/source/doc/document";
+import { markDocumentDirty } from "../../../../sfx2/source/doc/docfac";
 import type { WriterDocument, WriterParagraph } from "../../core/doc/writer";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 

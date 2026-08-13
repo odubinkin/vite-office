@@ -7,7 +7,7 @@ import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
 import { App } from "./App";
-import { createDocument } from "../../../sfx2/source/doc/document";
+import { createDocument } from "../../../sfx2/source/doc/docfac";
 import {
   saveWriterDocument,
   type WriterSnapshotState,

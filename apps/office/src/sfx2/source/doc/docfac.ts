@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines pure, JSON-serializable document identity and lifecycle transitions for browser-office features without coupling state to React or browser storage.
+ * @fileoverview Defines pure, JSON-serializable document identity and lifecycle transitions at the LibreOffice `sfx2/source/doc/docfac.cxx` ownership boundary.
  */
 
 import type { SuiteId } from "../../../framework/source/services/suites";

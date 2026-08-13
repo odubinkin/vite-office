@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { createDocument } from "../../../../sfx2/source/doc/document";
+import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import {
   appendWriterParagraph,
   createWriterDocument,

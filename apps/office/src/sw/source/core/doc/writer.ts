@@ -2,13 +2,13 @@
  * @fileoverview Defines a narrow serializable Writer paragraph body and pure editing operations without layout, formatting, or browser coupling.
  */
 
-import { markDocumentDirty, type OfficeDocument } from "../../../../sfx2/source/doc/document";
+import { markDocumentDirty, type OfficeDocument } from "../../../../sfx2/source/doc/docfac";
 import {
   createDefaultWriterParagraphList,
   normalizeWriterParagraphList,
   type WriterParagraphList,
 } from "./list";
-export { moveWriterParagraph, removeWriterParagraph } from "./writer-paragraph-structure";
+export { moveWriterParagraph, removeWriterParagraph } from "../docnode/node";
 export { isWriterParagraphListKind, WRITER_PARAGRAPH_LIST_KINDS } from "./list";
 export type { WriterParagraphList, WriterParagraphListKind } from "./list";
 export { getWriterParagraphListMarker } from "./number";

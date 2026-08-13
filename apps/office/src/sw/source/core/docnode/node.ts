@@ -1,7 +1,7 @@
-/** @fileoverview Provides immutable Writer paragraph structure transitions without browser or layout dependencies. */
+/** @fileoverview Provides immutable Writer paragraph-node transitions at the LibreOffice `sw/source/core/docnode/node.cxx` ownership boundary without browser or layout dependencies. */
 
-import { markDocumentDirty } from "../../../../sfx2/source/doc/document";
-import type { WriterDocument, WriterParagraph, WriterParagraphMoveDirection } from "./writer";
+import { markDocumentDirty } from "../../../../sfx2/source/doc/docfac";
+import type { WriterDocument, WriterParagraph, WriterParagraphMoveDirection } from "../doc/writer";
 
 /**
  * Moves one named Writer paragraph by one adjacent position without changing paragraph content.

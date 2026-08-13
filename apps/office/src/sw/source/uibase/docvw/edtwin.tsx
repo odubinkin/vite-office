@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 import { getWriterParagraphListMarker, type WriterParagraph } from "../../core/doc/writer";
 import { WriterEditableParagraph } from "./edtwin-paragraph";
 import { createWriterClipboardSelection } from "../dochdl/swdtflvr";
-import { getWriterCollapsedCaretOffset, restoreWriterCollapsedCaret } from "./writer-dom-selection";
+import { getWriterCollapsedCaretOffset, restoreWriterCollapsedCaret } from "../wrtsh/select";
 
 /** Stores one browser caret endpoint used to extend a pointer selection across Writer paragraph editing hosts. */
 interface WriterPointerCaret {

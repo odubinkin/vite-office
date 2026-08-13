@@ -16,8 +16,10 @@ runtime of this static application.
 | `apps/office/src/sfx2/source/doc` | `sfx2/source/doc` | Shared document identity, transactions, and storage contracts |
 | `apps/office/src/svl/source/misc` | `svl/source/misc` | Recovery orchestration |
 | `apps/office/src/vcl/browser` | `vcl` | Browser-only clipboard, download, IndexedDB, and styling adapters |
-| `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | Serializable Writer document and paragraph transitions |
-| `apps/office/src/sw/source/uibase/docvw` | `sw/source/uibase/docvw` | Document-page editor, DOM selection, and editable paragraphs |
+| `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | Serializable Writer document transitions |
+| `apps/office/src/sw/source/core/docnode` | `sw/source/core/docnode` | Serializable Writer paragraph-node transitions |
+| `apps/office/src/sw/source/uibase/docvw` | `sw/source/uibase/docvw` | Document-page editor and editable paragraphs |
+| `apps/office/src/sw/source/uibase/wrtsh` | `sw/source/uibase/wrtsh` | Writer selection shell and browser DOM caret bridge |
 | `apps/office/src/sw/source/uibase/dochdl` | `sw/source/uibase/dochdl` | Selection transfer-document preparation and clipboard ownership |
 | `apps/office/src/sw/source/filter/html` | `sw/source/filter/html` | Writer HTML transfer serialization |
 | `apps/office/src/sw/source/filter/ascii` | `sw/source/filter/ascii` | Writer plain-text transfer serialization |
@@ -83,5 +85,6 @@ documentation have dedicated parity evidence.
 | `sw/source/uibase/app/mainwn.tsx` | `sw/source/uibase/app/mainwn.cxx` | Main Writer window/chrome regions |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Editable browser document-view orchestration |
 | `sw/source/uibase/docvw/edtwin-paragraph.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser-only editable paragraph leaf beneath the matching editor module |
+| `sw/source/uibase/wrtsh/select.ts` | `sw/source/uibase/wrtsh/select.cxx` | Browser selection shell and collapsed-caret bridge |
 | `sw/source/uibase/ribbar/inputwin.tsx` | `sw/source/uibase/ribbar/inputwin.cxx` | Formatting-toolbar controls |
 | `sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx` | `sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx` | Focused Writer paragraph inspector |

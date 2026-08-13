@@ -1,5 +1,5 @@
 /**
- * @fileoverview Provides browser-DOM selection and collapsed-caret primitives used by the Writer document editor without coupling them to React state.
+ * @fileoverview Provides browser-DOM selection and collapsed-caret primitives at the LibreOffice `sw/source/uibase/wrtsh/select.cxx` ownership boundary without coupling them to React state.
  */
 
 /**

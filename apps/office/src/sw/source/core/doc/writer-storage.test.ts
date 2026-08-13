@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { createDocument } from "../../../../sfx2/source/doc/document";
+import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../../sfx2/source/doc/storage";
 import {
   createWriterDocument,

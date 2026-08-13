@@ -6,7 +6,7 @@ import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "l
 import { useState } from "react";
 
 import { WriterWorkbench } from "../../../sw/source/uibase/uiview/view";
-import { createDocument } from "../../../sfx2/source/doc/document";
+import { createDocument } from "../../../sfx2/source/doc/docfac";
 import { suiteDefinitions } from "./suites";
 import type { SuiteDefinition } from "./suites";
 import { SuiteCard } from "./SuiteCard";
