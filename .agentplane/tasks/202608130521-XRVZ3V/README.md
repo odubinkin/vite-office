@@ -1,10 +1,10 @@
 ---
 id: "202608130521-XRVZ3V"
 title: "Add bounded Writer bullets and numbering"
-status: "DOING"
+status: "BLOCKED"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -27,6 +27,9 @@ comments:
   -
     author: "CODER"
     body: "Start: implement bounded Writer bullets and numbering with pinned upstream placement and parity evidence."
+  -
+    author: "CODER"
+    body: "Blocked: The user reprioritized a LibreOffice-aligned project-structure migration before further Writer feature additions. No implementation code was started; this task remains the follow-up list capability after the structural prerequisite is complete."
 events:
   -
     type: "status"
@@ -35,8 +38,15 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement bounded Writer bullets and numbering with pinned upstream placement and parity evidence."
+  -
+    type: "status"
+    at: "2026-08-13T05:25:56.820Z"
+    author: "CODER"
+    from: "DOING"
+    to: "BLOCKED"
+    note: "Blocked: The user reprioritized a LibreOffice-aligned project-structure migration before further Writer feature additions. No implementation code was started; this task remains the follow-up list capability after the structural prerequisite is complete."
 doc_version: 3
-doc_updated_at: "2026-08-13T05:22:29.330Z"
+doc_updated_at: "2026-08-13T05:25:56.820Z"
 doc_updated_by: "CODER"
 description: "Implement Default Bullet, Default Numbering, and Remove Bullets for the active Writer paragraph with pinned LibreOffice menu and formatting-toolbar placement, history, tests, documentation, and parity evidence."
 sections:
