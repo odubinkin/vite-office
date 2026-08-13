@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130521-XRVZ3V",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T06:10:14.789Z",
+  "verdict": "pass",
+  "summary": "Bounded Writer list commands satisfy the approved active-paragraph scope with exact source, test, Help, and file-level provenance.",
+  "evaluated_sha": "f6c6fb3545667daf4ddd4f7b87d222d0765e6ae2",
+  "blueprint_digest": "c6e2649b9607657fff765235168b573dee7e3fdc69ef1e04eb1f6a8501c6aa8d",
+  "findings": [
+    "Default bullet, default numbering, and removal execute through list.ts, number.ts, and txtnum.ts; UI placement and marker behavior are covered."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130521-XRVZ3V/README.md",
+    "npm run test:coverage; npm run test:e2e -- --grep Writer bullets and numbering; npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
