@@ -50,7 +50,7 @@ test("copies visible formatted Writer content through the native browser copy ev
 });
 
 test("Writer list clipboard" /**
- * Verifies Select All transfers complete ordered Writer paragraphs as semantic HTML and readable plain text.
+ * Verifies Select All transfers a demoted Writer list item as nested semantic HTML and level-indented plain text.
  *
  * @param root0 - Playwright fixture object provided for the isolated browser flow.
  * @param root0.page - Isolated Chromium page used for Writer and native ClipboardEvent interactions.
@@ -78,14 +78,18 @@ test("Writer list clipboard" /**
   await firstParagraph.press("Enter");
   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
   await secondParagraph.fill("Second item");
+  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Bullets and Numbering" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Demote" }).click();
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await firstParagraph.evaluate(
-    /** Dispatches a native copy event and checks that a detached rich target parses a real ordered list. @param element - Rendered Writer paragraph beneath the copy-event owner. @returns MIME data plus a detached target's semantic list count. */
+    /** Dispatches a native copy event and checks that a detached rich target parses nested ordered lists. @param element - Rendered Writer paragraph beneath the copy-event owner. @returns MIME data plus detached target counts for outer and nested list items. */
     function readNativeWriterListCopyPayload(element: HTMLElement): {
       html: string;
       plainText: string;
       orderedListItemCount: number;
+      nestedOrderedListItemCount: number;
     } {
       const clipboardData = new DataTransfer();
       const copyEvent = new ClipboardEvent("copy", {
@@ -100,14 +104,16 @@ test("Writer list clipboard" /**
       return {
         html: clipboardData.getData("text/html"),
         plainText: clipboardData.getData("text/plain"),
-        orderedListItemCount: target.querySelectorAll("ol > li").length,
+        orderedListItemCount: target.querySelectorAll(":scope > ol > li").length,
+        nestedOrderedListItemCount: target.querySelectorAll("ol > li > ol > li").length,
       };
     },
   );
   expect(clipboardPayload.html).toContain("<ol>");
   expect(clipboardPayload.html).toContain("<li");
-  expect(clipboardPayload.orderedListItemCount).toBe(2);
-  expect(clipboardPayload.plainText).toBe("    1. First item\n    2. Second item");
+  expect(clipboardPayload.orderedListItemCount).toBe(1);
+  expect(clipboardPayload.nestedOrderedListItemCount).toBe(1);
+  expect(clipboardPayload.plainText).toBe("    1. First item\n        1. Second item");
   expect(clipboardPayload.plainText).not.toContain("Paragraph style:");
   expect(clipboardPayload.plainText).not.toContain("Paragraph list:");
 });

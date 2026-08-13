@@ -5,7 +5,7 @@
 import type { WriterClipboardParagraph } from "../../uibase/dochdl/swdtflvr";
 
 /**
- * Serializes a prepared Writer transfer document to HTML, grouping adjacent complete equal-kind list items into semantic lists.
+ * Serializes a prepared Writer transfer document to HTML, grouping adjacent complete list items into balanced semantic nested lists.
  *
  * @param paragraphs - Ordered selected Writer paragraphs prepared by the transfer handler.
  * @returns Portable rich HTML that preserves ordinary paragraph and semantic list boundaries.
@@ -23,11 +23,14 @@ export function serializeWriterClipboardHtml(
       continue;
     }
     const listItems: WriterClipboardParagraph[] = [];
-    while (paragraphs[index]?.listKind === paragraph.listKind) {
+    while (
+      paragraphs[index] !== undefined &&
+      (paragraphs[index] as WriterClipboardParagraph).listKind !== "none"
+    ) {
       listItems.push(paragraphs[index] as WriterClipboardParagraph);
       index += 1;
     }
-    html += serializeListHtml(paragraph.listKind, listItems);
+    html += serializeListHtml(listItems);
   }
   return html;
 }
@@ -43,30 +46,112 @@ function serializeParagraphHtml(paragraph: WriterClipboardParagraph): string {
 }
 
 /**
- * Serializes one contiguous Writer list transfer group with its original list semantics.
+ * Serializes one contiguous Writer list transfer group with its bounded kind and level semantics.
  *
- * @param listKind - Bullet or numbered list kind represented by every list item.
  * @param paragraphs - Ordered complete list items in the group.
  * @returns Semantic unordered or ordered list HTML.
  */
-function serializeListHtml(
-  listKind: "bullet" | "numbered",
-  paragraphs: readonly WriterClipboardParagraph[],
-): string {
-  const items = paragraphs.map(serializeListItemHtml).join("");
-  if (listKind === "bullet") return `<ul>${items}</ul>`;
-  const start = getOrderedListStart(paragraphs[0]?.marker);
-  return start === 1 ? `<ol>${items}</ol>` : `<ol start="${start}">${items}</ol>`;
+function serializeListHtml(paragraphs: readonly WriterClipboardParagraph[]): string {
+  const firstParagraph = paragraphs[0] as WriterClipboardParagraph;
+  const baseLevel = firstParagraph.listLevel;
+  const listFrames: WriterListFrame[] = [];
+  let html = "";
+  let previousLevel = 0;
+  paragraphs.forEach(
+    /** Serializes one list item while preserving valid nesting and bounded mixed-kind transitions. @param paragraph - Complete selected list item. @param index - Zero-based position inside the contiguous transfer group. @returns Nothing; serialized markup is appended to the enclosing writer. */
+    function serializeNestedListItem(paragraph, index): void {
+      const level = getRelativeListLevel(
+        paragraph.listLevel,
+        baseLevel,
+        previousLevel,
+        index === 0,
+      );
+      while (listFrames.length > level + 1)
+        html += closeListFrame(listFrames.pop() as WriterListFrame);
+      const currentFrame = listFrames[listFrames.length - 1];
+      if (
+        currentFrame !== undefined &&
+        listFrames.length === level + 1 &&
+        currentFrame.kind !== paragraph.listKind
+      ) {
+        html += closeListFrame(listFrames.pop() as WriterListFrame);
+      }
+      if (listFrames.length === level + 1) {
+        html += "</li>";
+      } else {
+        const frame = createListFrame(paragraph);
+        listFrames.push(frame);
+        html += frame.openingTag;
+      }
+      html += openListItemHtml(paragraph);
+      previousLevel = level;
+    },
+  );
+  while (listFrames.length > 0) html += closeListFrame(listFrames.pop() as WriterListFrame);
+  return html;
+}
+
+/** Describes one open semantic list writer frame. */
+interface WriterListFrame {
+  /** List presentation used by every direct item in this semantic frame. */
+  readonly kind: "bullet" | "numbered";
+  /** Opening HTML tag, including a numbered-fragment start when needed. */
+  readonly openingTag: string;
 }
 
 /**
- * Converts one complete list item into portable semantic list-item HTML.
+ * Creates one semantic list writer frame for a selected Writer list item.
+ *
+ * @param paragraph - First direct item written into the newly opened list frame.
+ * @returns Immutable list frame with a valid semantic opening tag.
+ */
+function createListFrame(paragraph: WriterClipboardParagraph): WriterListFrame {
+  if (paragraph.listKind === "bullet") return { kind: "bullet", openingTag: "<ul>" };
+  const start = getOrderedListStart(paragraph.marker);
+  return { kind: "numbered", openingTag: start === 1 ? "<ol>" : `<ol start="${start}">` };
+}
+
+/**
+ * Closes the current list item and its containing semantic list frame.
+ *
+ * @param frame - Open semantic list frame being completed.
+ * @returns Balanced closing HTML for the direct item and list container.
+ */
+function closeListFrame(frame: WriterListFrame): string {
+  return `</li>${frame.kind === "bullet" ? "</ul>" : "</ol>"}`;
+}
+
+/**
+ * Normalizes one stored Writer level to the valid semantic depth for the current selected list fragment.
+ *
+ * The browser paragraph model permits a user to demote an item without materializing empty intermediate list items.
+ * Clipboard HTML cannot represent an empty ancestor list item semantically, so upward jumps are limited to one level.
+ *
+ * @param storedLevel - Raw non-negative list level stored by the Writer paragraph.
+ * @param baseLevel - First selected list item's raw level, treated as the fragment root.
+ * @param previousLevel - Previous normalized semantic level in this contiguous transfer group.
+ * @param isFirst - Whether this item starts the selected semantic list group.
+ * @returns Non-negative semantic nesting level with no unrepresentable empty ancestor jump.
+ */
+function getRelativeListLevel(
+  storedLevel: number,
+  baseLevel: number,
+  previousLevel: number,
+  isFirst: boolean,
+): number {
+  if (isFirst) return 0;
+  const relativeLevel = Math.max(0, storedLevel - baseLevel);
+  return Math.min(relativeLevel, previousLevel + 1);
+}
+
+/**
+ * Opens one complete list item without closing it, allowing a following nested semantic list to remain inside the item.
  *
  * @param paragraph - Selected Writer list item with bounded inline presentation.
- * @returns Escaped semantic list-item HTML.
+ * @returns Escaped opening semantic list-item HTML.
  */
-function serializeListItemHtml(paragraph: WriterClipboardParagraph): string {
-  return `<li style="${paragraph.style}">${escapeHtml(paragraph.text)}</li>`;
+function openListItemHtml(paragraph: WriterClipboardParagraph): string {
+  return `<li style="${paragraph.style}">${escapeHtml(paragraph.text)}`;
 }
 
 /**

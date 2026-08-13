@@ -4,6 +4,7 @@
 
 import { serializeWriterClipboardHtml } from "../../filter/html/htmlnumwriter";
 import { serializeWriterClipboardPlainText } from "../../filter/ascii/ascatr";
+import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 
 /** Describes the two clipboard representations emitted for a visible Writer selection. */
 export interface WriterClipboardSelection {
@@ -17,6 +18,8 @@ export interface WriterClipboardSelection {
 export interface WriterClipboardParagraph {
   /** Complete list selection kind, or none when the selection is partial or the paragraph is ordinary body text. */
   readonly listKind: "bullet" | "none" | "numbered";
+  /** Zero-based bounded Writer list level used by nested HTML and ASCII format writers. */
+  readonly listLevel: number;
   /** Browser-visible list marker used only by the ASCII writer. */
   readonly marker: string | undefined;
   /** Portable paragraph-level presentation CSS. */
@@ -62,10 +65,10 @@ export function createWriterClipboardSelection(
        */
       function serializeParagraph(paragraph): WriterClipboardParagraph {
         const text = getSelectedParagraphText(selectionRange, paragraph);
+        const isCompleteList = isCompleteListParagraph(selectionRange, paragraph, text);
         return {
-          listKind: isCompleteListParagraph(selectionRange, paragraph, text)
-            ? getWriterListKind(paragraph)
-            : "none",
+          listKind: isCompleteList ? getWriterListKind(paragraph) : "none",
+          listLevel: isCompleteList ? getWriterListLevel(paragraph) : 0,
           marker: paragraph.dataset.listMarker,
           style: getParagraphInlineStyle(paragraph),
           text,
@@ -108,6 +111,17 @@ function isCompleteListParagraph(
 function getWriterListKind(paragraph: HTMLElement): WriterClipboardParagraph["listKind"] {
   const kind = paragraph.dataset.listKind;
   return kind === "bullet" || kind === "numbered" ? kind : "none";
+}
+
+/**
+ * Reads a safe non-negative list level from one browser Writer paragraph.
+ *
+ * @param paragraph - Editable paragraph exposing serialized list state through a data attribute.
+ * @returns Zero for missing or malformed browser values, otherwise the stored integer clamped to the document-model bound.
+ */
+function getWriterListLevel(paragraph: HTMLElement): number {
+  const level = Number(paragraph.dataset.listLevel);
+  return Number.isInteger(level) && level >= 0 ? Math.min(level, WRITER_MAX_LIST_LEVEL) : 0;
 }
 
 /**

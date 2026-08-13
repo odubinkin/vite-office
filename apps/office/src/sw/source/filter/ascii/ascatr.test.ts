@@ -7,6 +7,7 @@ import { serializeWriterClipboardPlainText } from "./ascatr";
 /** Defines a compact prepared Writer paragraph for ASCII format-writer tests. */
 const paragraph = {
   listKind: "none",
+  listLevel: 0,
   marker: undefined,
   style: "",
   text: "Body",
@@ -29,5 +30,14 @@ describe("serializeWriterClipboardPlainText" /** Groups Writer ASCII list transf
         paragraph,
       ]),
     ).toBe("    1. One\n    • Two\nBody");
+  });
+
+  it("adds four spaces for each bounded nested list level" /** Verifies the Writer ASCII writer preserves the readable depth of a complete nested item. @returns Nothing; level-aware indentation is asserted. */, function indentsNestedListLevels(): void {
+    expect(
+      serializeWriterClipboardPlainText([
+        { ...paragraph, listKind: "numbered", listLevel: 0, marker: "1.", text: "Parent" },
+        { ...paragraph, listKind: "bullet", listLevel: 1, marker: "•", text: "Child" },
+      ]),
+    ).toBe("    1. Parent\n        • Child");
   });
 });

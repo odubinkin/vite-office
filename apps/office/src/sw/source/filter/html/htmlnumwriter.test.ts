@@ -7,6 +7,7 @@ import { serializeWriterClipboardHtml } from "./htmlnumwriter";
 /** Defines a compact prepared Writer paragraph for HTML format-writer tests. */
 const paragraph = {
   listKind: "none",
+  listLevel: 0,
   marker: undefined,
   style: "text-align: left;",
   text: "Body",
@@ -41,5 +42,19 @@ describe("serializeWriterClipboardHtml" /** Groups semantic Writer HTML list tra
         { ...paragraph, listKind: "numbered", marker: "0.", text: "First" },
       ]),
     ).toBe('<ol><li style="text-align: left;">First</li></ol>');
+  });
+
+  it("writes balanced nested mixed-kind lists and normalizes unsupported level jumps" /** Verifies a browser Writer list fragment has real nested semantics without emitting empty ancestor items. @returns Nothing; nested HTML output is asserted. */, function serializesNestedLists(): void {
+    expect(
+      serializeWriterClipboardHtml([
+        { ...paragraph, listKind: "numbered", listLevel: 0, marker: "1.", text: "Parent" },
+        { ...paragraph, listKind: "bullet", listLevel: 1, marker: "•", text: "Child" },
+        { ...paragraph, listKind: "numbered", listLevel: 1, marker: "1.", text: "Nested number" },
+        { ...paragraph, listKind: "numbered", listLevel: 0, marker: "2.", text: "Sibling" },
+        { ...paragraph, listKind: "bullet", listLevel: 3, marker: "•", text: "Jump" },
+      ]),
+    ).toBe(
+      '<ol><li style="text-align: left;">Parent<ul><li style="text-align: left;">Child</li></ul><ol><li style="text-align: left;">Nested number</li></ol></li><li style="text-align: left;">Sibling<ul><li style="text-align: left;">Jump</li></ul></li></ol>',
+    );
   });
 });

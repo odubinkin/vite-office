@@ -206,7 +206,7 @@
       "capability": "Writer Copy serializes complete browser list selections as semantic HTML and readable plain text",
       "status": "implemented",
       "gaps": [
-        "The browser implementation serializes root-level complete adjacent list items only; multi-range selection, nesting, custom list styles, restarts, and non-text Writer objects remain unmapped.",
+        "The browser implementation serializes complete contiguous list fragments; multi-range selection, custom list styles, restarts, and non-text Writer objects remain unmapped.",
         "RTF, Paste, ODT/DOCX import/export, and the full Writer transfer-flavor matrix are not implemented by this static browser slice."
       ],
       "upstream": {
@@ -240,7 +240,7 @@
         ],
         "docs": [
           { "path": "docs/program/writer-clipboard.md", "marker": "complete adjacent list paragraphs" },
-          { "path": "docs/program/writer-paragraph-lists.md", "marker": "semantic HTML and plain-text Copy path" },
+          { "path": "docs/program/writer-paragraph-lists.md", "marker": "semantic nested-HTML" },
           { "path": "docs/program/source-tree.md", "marker": "htmlnumwriter.ts" }
         ]
       }
@@ -287,6 +287,48 @@
           { "path": "docs/program/writer-paragraph-lists.md", "marker": "DecrementLevel" },
           { "path": "docs/program/writer-command-placement.md", "marker": "toolbar/numobjectbar.xml" },
           { "path": "docs/program/source-tree.md", "marker": "listsh.ts" }
+        ]
+      }
+    },
+    {
+      "id": "LO-WRITER-0108",
+      "capability": "Writer Copy serializes bounded nested list fragments as semantic HTML and level-indented plain text",
+      "status": "implemented",
+      "gaps": [
+        "The browser supports complete contiguous level-zero-through-nine list fragments only. The first selected list item is re-rooted and malformed upward level jumps are collapsed to one level so the clipboard fragment has no synthetic empty list items; Writer list identity, restarts, named styles, and arbitrary multi-range selection remain unmapped.",
+        "RTF, Paste, ODT/DOCX import/export, custom numbering formats, and the full Writer transfer-flavor matrix remain separate browser capabilities."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/source/uibase/dochdl/swdtflvr.cxx", "marker": "PrepareForCopyTextRange" },
+          { "path": "sw/source/filter/html/htmlnumwriter.cxx", "marker": "OutHTML_NumberBulletListStart" },
+          { "path": "sw/source/filter/ascii/ascatr.cxx", "marker": "GetNumString" }
+        ],
+        "tests": [
+          { "path": "sw/qa/extras/htmlexport/htmlexport2.cxx", "marker": "testNestedBullets" },
+          { "path": "sw/qa/extras/htmlimport/htmlimport.cxx", "marker": "testNestedListMixedType" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/shared/01/02050000.xhp", "marker": ".uno:Copy" },
+          { "path": "helpcontent2/source/text/swriter/02/02110000.xhp", "marker": ".uno:DefaultNumbering" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts", "marker": "getWriterListLevel" },
+          { "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts", "marker": "serializeListHtml" },
+          { "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts", "marker": "repeat(paragraph.listLevel + 1)" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts", "marker": "delegates bounded list levels" },
+          { "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.test.ts", "marker": "writes balanced nested mixed-kind" },
+          { "path": "apps/office/src/sw/source/filter/ascii/ascatr.test.ts", "marker": "adds four spaces" },
+          { "path": "apps/office/e2e/writer-clipboard.spec.ts", "marker": "Writer list clipboard" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-clipboard.md", "marker": "Complete contiguous list fragments" },
+          { "path": "docs/program/writer-paragraph-lists.md", "marker": "semantic nested-HTML" },
+          { "path": "docs/program/source-tree.md", "marker": "Bounded nested semantic" }
         ]
       }
     }

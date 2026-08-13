@@ -24,7 +24,7 @@ export function serializeWriterClipboardPlainText(
        */
       function serializeParagraph(paragraph): string {
         if (completeListItemCount < 2 || !isCompleteListItem(paragraph)) return paragraph.text;
-        return `    ${paragraph.marker ?? getFallbackListMarker(paragraph)} ${paragraph.text}`;
+        return `${"    ".repeat(paragraph.listLevel + 1)}${paragraph.marker ?? getFallbackListMarker(paragraph)} ${paragraph.text}`;
       },
     )
     .join("\n");

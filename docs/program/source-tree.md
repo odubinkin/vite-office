@@ -65,8 +65,8 @@ documentation have dedicated parity evidence.
 | `sw/source/uibase/shells/textsh.ts` | `sw/source/uibase/shells/textsh.cxx` | Browser-owned Copy and plain-text download command shell |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
-| `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Semantic `ul`/`ol`/`li` clipboard HTML serialization |
-| `sw/source/filter/ascii/ascatr.ts` | `sw/source/filter/ascii/ascatr.cxx` | Plain-text list-marker clipboard serialization |
+| `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Bounded nested semantic `ul`/`ol`/`li` clipboard HTML serialization |
+| `sw/source/filter/ascii/ascatr.ts` | `sw/source/filter/ascii/ascatr.cxx` | Level-indented plain-text list-marker clipboard serialization |
 | `sw/uiconfig/swriter/menubar/menubar.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | Writer menu control and Format → Bullets and Numbering declaration |
 | `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Declarative Writer menu order and list command definitions |
 | `sw/uiconfig/swriter/toolbar/standardbar.tsx` | `sw/uiconfig/swriter/toolbar/standardbar.xml` | Browser Writer standard-toolbar control |

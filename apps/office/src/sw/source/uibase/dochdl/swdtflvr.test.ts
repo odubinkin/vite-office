@@ -124,6 +124,41 @@ describe("createWriterClipboardSelection" /** Groups selected Writer paragraph c
     });
   });
 
+  it("delegates bounded list levels as nested HTML and level-indented plain text" /** Verifies transfer records read data-list-level without copying DOM-only marker or accessibility nodes. @returns Nothing; nested semantic output is asserted. */, function serializesNestedListLevels(): void {
+    document.body.innerHTML = `
+      <span data-writer-auxiliary-description="true">Paragraph list: Ordered List</span>
+      <p data-alignment="left" data-list-kind="numbered" data-list-level="0" data-list-marker="1." data-style="default" data-writer-paragraph-id="p-1">Parent</p>
+      <p data-alignment="left" data-list-kind="bullet" data-list-level="1" data-list-marker="•" data-style="default" data-writer-paragraph-id="p-2">Child</p>
+      <p data-alignment="left" data-list-kind="numbered" data-list-level="0" data-list-marker="2." data-style="default" data-writer-paragraph-id="p-3">Sibling</p>
+    `;
+    const paragraphs = document.querySelectorAll("p");
+    const selection = selectCompleteNodes(
+      paragraphs[0] as HTMLParagraphElement,
+      paragraphs[2] as HTMLParagraphElement,
+    );
+
+    expect(createWriterClipboardSelection(selection)).toEqual({
+      html: '<ol><li style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">Parent<ul><li style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">Child</li></ul></li><li style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;">Sibling</li></ol>',
+      plainText: "    1. Parent\n        • Child\n    2. Sibling",
+    });
+  });
+
+  it("normalizes malformed and oversized DOM list levels before format writers consume them" /** Verifies a malformed browser attribute cannot leak an unbounded indent into clipboard serialization. @returns Nothing; normalized nested output is asserted. */, function normalizesClipboardListLevels(): void {
+    document.body.innerHTML = `
+      <p data-alignment="left" data-list-kind="numbered" data-list-level="not-a-level" data-list-marker="1." data-style="default" data-writer-paragraph-id="p-1">Parent</p>
+      <p data-alignment="left" data-list-kind="bullet" data-list-level="999" data-list-marker="•" data-style="default" data-writer-paragraph-id="p-2">Child</p>
+    `;
+    const paragraphs = document.querySelectorAll("p");
+    const selection = selectCompleteNodes(
+      paragraphs[0] as HTMLParagraphElement,
+      paragraphs[1] as HTMLParagraphElement,
+    );
+
+    expect(createWriterClipboardSelection(selection)?.plainText).toBe(
+      `    1. Parent\n${"    ".repeat(10)}• Child`,
+    );
+  });
+
   it("rejects absent, collapsed, multi-range-shaped, and non-Writer selections" /** Verifies copy feedback can distinguish a visible Writer selection from unsupported browser selection state. @returns Nothing; unsupported states produce no clipboard payload. */, function rejectsUnsupportedSelections(): void {
     expect(createWriterClipboardSelection(null)).toBeUndefined();
     const paragraph = document.createElement("p");

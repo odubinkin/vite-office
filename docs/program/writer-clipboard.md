@@ -44,13 +44,17 @@ transfer document in
 [`swdtflvr.ts`](../../apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts), then
 the matching format writers serialize it. The HTML writer
 [`htmlnumwriter.ts`](../../apps/office/src/sw/source/filter/html/htmlnumwriter.ts)
-emits semantic `ul`/`ol`/`li` markup, including an `ol start` value for a
-selected numbered-list suffix. The ASCII writer
+emits semantic nested `ul`/`ol`/`li` markup, including an `ol start` value for
+a selected numbered-list suffix. The ASCII writer
 [`ascatr.ts`](../../apps/office/src/sw/source/filter/ascii/ascatr.ts) emits four
-spaces followed by a visible marker for a multi-item list transfer. A single or
-partial list item copies only its selected text, preventing a fragment from
-being falsely promoted to a complete list. Neither path serializes screen-reader
-descriptions nor the marker-only DOM sibling.
+spaces per list level, including the root level, followed by a visible marker
+for a multi-item list transfer. Complete contiguous list fragments support
+levels zero through nine. The first selected list item is re-rooted for a valid
+clipboard fragment; a malformed upward level jump is limited to one nested
+level, avoiding synthetic empty list items. A single or partial list item copies
+only its selected text, preventing a fragment from being falsely promoted to a
+complete list. Neither path serializes screen-reader descriptions nor the
+marker-only DOM sibling.
 
 Copy does not alter the immutable Writer document, transaction history,
 properties, or browser-local snapshot. A missing selection reports **Select
@@ -62,6 +66,6 @@ declares the same command in the standard toolbar. This browser slice maps the
 placement and bounded browser behavior only. Rich copy covers just the
 implemented paragraph-level styles; Cut, Paste, Paste Special, inline character
 formatting, objects, tables, tracked changes, and full LibreOffice transfer
-semantics remain separate feature tasks. RTF, Paste, nesting, named styles,
-ODT/DOCX import/export, and full Writer transfer semantics remain separate
-feature tasks.
+semantics remain separate feature tasks. RTF, Paste, named list styles,
+restart/continue semantics, ODT/DOCX import/export, arbitrary multi-range
+selections, and full Writer transfer semantics remain separate feature tasks.

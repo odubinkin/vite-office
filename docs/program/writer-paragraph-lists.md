@@ -30,9 +30,10 @@ only paragraph text.
 ## Deliberate current boundary
 
 This is not full Writer list parity. Range and table-cell selection, nested
-list rendering and numbering semantics, named list styles, restart/continue numbering, automatic list
-detection, outline numbering, RTF clipboard transfer, Paste, and ODT/DOCX
-import/export remain separately mapped follow-up capabilities. The bounded
-semantic HTML and plain-text Copy path is documented in
+document rendering and numbering semantics, named list styles, restart/continue
+numbering, automatic list detection, outline numbering, RTF clipboard transfer,
+Paste, and ODT/DOCX import/export remain separately mapped follow-up
+capabilities. The bounded semantic nested-HTML and level-indented plain-text
+Copy path is documented in
 [Browser Writer clipboard copy](writer-clipboard.md); it is deliberately not a
 claim of full list export/import parity.
