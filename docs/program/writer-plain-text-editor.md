@@ -2,9 +2,9 @@
 
 The Writer workbench exposes ordered editable paragraph blocks for the
 plain-text body of an in-memory `WriterDocument`. The
-[`WriterPlainTextEditor`](../../apps/office/src/sw/source/uibase/docvw/WriterPlainTextEditor.tsx)
+[`edtwin`](../../apps/office/src/sw/source/uibase/docvw/edtwin.tsx)
 is a browser-owned `contenteditable` view: each input event passes the complete text to its
-[`WriterWorkbench`](../../apps/office/src/sw/source/uibase/uiview/WriterWorkbench.tsx) owner,
+[`view`](../../apps/office/src/sw/source/uibase/uiview/view.tsx) owner,
 which uses `replaceWriterParagraph` and `splitWriterParagraph` from the pure
 Writer domain model.
 

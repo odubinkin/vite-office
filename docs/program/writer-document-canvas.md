@@ -7,7 +7,7 @@ browser workbench the same information placement as Writer: document content
 lives on the page, paragraph formatting lives in the formatting toolbar, and
 focused properties live in the right sidebar.
 
-[`WriterPlainTextEditor`](../../apps/office/src/sw/source/uibase/docvw/WriterPlainTextEditor.tsx)
+[`edtwin`](../../apps/office/src/sw/source/uibase/docvw/edtwin.tsx)
 uses one accessible `contenteditable` paragraph block per immutable
 `WriterParagraph`. Each block retains a stable accessible name, exposes its
 bounded paragraph style through an assistive description, identifies focus to

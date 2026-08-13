@@ -5,7 +5,7 @@
 import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 
-import { WriterWorkbench } from "../../../sw/source/uibase/uiview/WriterWorkbench";
+import { WriterWorkbench } from "../../../sw/source/uibase/uiview/view";
 import { createDocument } from "../../../sfx2/source/doc/document";
 import { suiteDefinitions } from "./suites";
 import type { SuiteDefinition } from "./suites";

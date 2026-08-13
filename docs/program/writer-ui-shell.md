@@ -5,7 +5,7 @@ LibreOffice Writer while retaining Vite Office's existing indigo, slate, rounded
 and accessible design language. It is not a pixel-perfect copy of the native
 application and does not claim visual or command parity.
 
-[`WriterWorkspaceChrome`](../../apps/office/src/sw/source/uibase/uiview/WriterWorkspaceChrome.tsx)
+[`mainwn`](../../apps/office/src/sw/source/uibase/app/mainwn.tsx)
 defines the durable UI placement contract:
 
 - a Writer menu bar with the expected top-level menu locations;

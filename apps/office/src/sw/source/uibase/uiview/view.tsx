@@ -31,23 +31,20 @@ import {
 import { IndexedDbDocumentStorageAdapter } from "../../../../vcl/browser/indexeddb-storage";
 import { WriterCommandToolbar } from "../utlui/WriterCommandToolbar";
 import { WriterMenuBar } from "../utlui/WriterMenuBar";
-import { WriterParagraphFormattingToolbar } from "../ribbar/WriterParagraphFormattingToolbar";
-import { WriterParagraphProperties } from "../sidebar/WriterParagraphProperties";
-import { WriterPlainTextEditor } from "../docvw/WriterPlainTextEditor";
-import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
+import { WriterParagraphFormattingToolbar } from "../ribbar/inputwin";
+import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
+import { WriterPlainTextEditor } from "../docvw/edtwin";
+import { WriterWorkspaceChrome } from "../app/mainwn";
 import { useWriterHistoryShortcuts } from "../shells/use-writer-history-shortcuts";
 import { setWriterParagraphListKind } from "../shells/txtnum";
 import { useWriterBrowserCommands } from "../utlui/use-writer-browser-commands";
-import {
-  useWriterDocumentSelection,
-  useWriterWorkspaceChrome,
-} from "./use-writer-workspace-chrome";
+import { useWriterDocumentSelection, useWriterWorkspaceChrome } from "./viewstat";
 import {
   getActiveWriterParagraph,
   createWriterWorkbenchDocument,
   getNextWriterParagraphId,
   getWorkbenchSelectionPosition,
-} from "./writer-workbench-helpers";
+} from "./viewfunc";
 
 /** Describes the suite-selection visibility controlled by the application shell. */
 export interface WriterWorkbenchProps {

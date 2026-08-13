@@ -41,6 +41,19 @@ source, test, and Help evidence remains in the machine-readable
 | `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Serializable list metadata and legacy normalization |
 | `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Deterministic visible bullet and numbering marker calculation |
 | `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
-| `sw/source/uibase/docvw/WriterPlainTextEditor.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
+| `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
 | `sw/uiconfig/swriter/menubar.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Format → Bullets and Numbering submenu declaration |
 | `sw/uiconfig/swriter/toolbar/textobjectbar.ts` | `sw/uiconfig/swriter/toolbar/textobjectbar.xml` | Text-object toolbar list command declaration |
+
+## Existing Writer view-module identities
+
+| Local browser module | Pinned LibreOffice module | Responsibility |
+| --- | --- | --- |
+| `sw/source/uibase/uiview/view.tsx` | `sw/source/uibase/uiview/view.cxx` | Browser Writer view/workbench ownership |
+| `sw/source/uibase/uiview/viewfunc.ts` | `sw/source/uibase/uiview/viewfunc.hxx` | Pure focused-document and identity helpers |
+| `sw/source/uibase/uiview/viewstat.ts` | `sw/source/uibase/uiview/viewstat.cxx` | Browser view-status and visibility state |
+| `sw/source/uibase/app/mainwn.tsx` | `sw/source/uibase/app/mainwn.cxx` | Main Writer window/chrome regions |
+| `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Editable browser document-view orchestration |
+| `sw/source/uibase/docvw/edtwin-paragraph.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser-only editable paragraph leaf beneath the matching editor module |
+| `sw/source/uibase/ribbar/inputwin.tsx` | `sw/source/uibase/ribbar/inputwin.cxx` | Formatting-toolbar controls |
+| `sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx` | `sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx` | Focused Writer paragraph inspector |

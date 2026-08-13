@@ -5,7 +5,7 @@
 import { useEffect, useRef } from "react";
 
 import { getWriterParagraphListMarker, type WriterParagraph } from "../../core/doc/writer";
-import { WriterEditableParagraph } from "./WriterEditableParagraph";
+import { WriterEditableParagraph } from "./edtwin-paragraph";
 import { createWriterClipboardSelection } from "../utlui/writer-clipboard-selection";
 import { getWriterCollapsedCaretOffset, restoreWriterCollapsedCaret } from "./writer-dom-selection";
 

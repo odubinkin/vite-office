@@ -8,7 +8,7 @@ import {
   type WriterDocument,
 } from "../../core/doc/writer";
 import { createDocument } from "../../../../sfx2/source/doc/document";
-import { getActiveWriterParagraph, getNextWriterParagraphId } from "./writer-workbench-helpers";
+import { getActiveWriterParagraph, getNextWriterParagraphId } from "./viewfunc";
 
 /** Creates a two-paragraph Writer fixture whose identities expose a generated-ID collision. @returns Immutable Writer fixture. */
 function createWriterFixture(): WriterDocument {

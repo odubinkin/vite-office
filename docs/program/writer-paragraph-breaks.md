@@ -5,11 +5,11 @@ direct document interaction as Writer: the user presses unmodified **Enter**
 at a collapsed caret in an editable paragraph. There is intentionally no menu
 item, toolbar button, or canvas action button for paragraph creation.
 
-[`WriterPlainTextEditor`](../../apps/office/src/sw/source/uibase/docvw/WriterPlainTextEditor.tsx)
+[`edtwin`](../../apps/office/src/sw/source/uibase/docvw/edtwin.tsx)
 uses the browser selection API to calculate the UTF-16 caret offset relative to
 the editable paragraph. When that selection is collapsed and belongs to the
 paragraph, it prevents the browser's uncontrolled DOM mutation and asks
-[`WriterWorkbench`](../../apps/office/src/sw/source/uibase/uiview/WriterWorkbench.tsx) to
+[`view`](../../apps/office/src/sw/source/uibase/uiview/view.tsx) to
 apply a pure immutable transition.
 
 [`splitWriterParagraph`](../../apps/office/src/sw/source/core/doc/writer.ts) replaces the
