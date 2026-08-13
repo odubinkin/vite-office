@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130757-AK2XNQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T08:00:55.779Z",
+  "verdict": "pass",
+  "summary": "Framework desktop path alignment preserves browser behavior while removing a false duplicate upstream mapping.",
+  "evaluated_sha": "5d5b44b881031c52efcb6b8774a421c37c39d9b7",
+  "blueprint_digest": "9aaa240aa9c4aa71607926b96b0a7488f02f1538acc16493c122fb47820dfbb0",
+  "findings": [
+    "Fast coverage and all formatting, type, provenance, source-tree, documentation, and size gates passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130757-AK2XNQ/README.md",
+    "5d5b44b"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
