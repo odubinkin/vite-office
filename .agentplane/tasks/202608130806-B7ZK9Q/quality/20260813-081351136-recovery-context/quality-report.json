@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130806-B7ZK9Q",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T08:13:51.136Z",
+  "verdict": "pass",
+  "summary": "Mapped filename divergences and the post-decomposition parity locator are now explicit and guarded.",
+  "evaluated_sha": "7f261125004693fae3443853b5ad77e8f91782af",
+  "blueprint_digest": "8f635de96c6abfe4ca16db9ad374f6c3d08bda00fb8ab8e6b134a833e204e817",
+  "findings": [
+    "All fast app and source-provenance tests plus static quality gates passed; targeted parity inventory test passes."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130806-B7ZK9Q/README.md",
+    "HEAD"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
