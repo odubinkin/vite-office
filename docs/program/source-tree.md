@@ -37,6 +37,23 @@ This mapping is architectural provenance, not a parity claim. Capability-level
 source, test, and Help evidence remains in the machine-readable
 [Writer command mappings](parity/writer-command-slice.json).
 
+## Complete current runtime provenance
+
+[`source-provenance.json`](source-provenance.json) is the authoritative,
+machine-readable exhaustive mapping for every current non-test TypeScript or
+TSX runtime module in `apps/office/src`. Each entry is either `mapped`, with an
+existing concrete path in the pinned LibreOffice checkout, or `browser-only`,
+with a detailed explanation of why a browser entrypoint, DOM component, Web
+Worker protocol, download adapter, or IndexedDB adapter has no honest native
+source-file implementation.
+
+`npm run check:source-provenance` collects the runtime tree at validation time,
+rejects missing, stale, and duplicate entries, verifies every declared upstream
+path, and checks the pinned commit and tag. It is deliberately separate from
+capability parity: a source mapping records ownership and exceptions, while a
+capability may remain incomplete until its implementation, upstream tests, and
+documentation have dedicated parity evidence.
+
 ## File-level provenance in the active Writer list slice
 
 | Local browser module | Pinned LibreOffice source/configuration module | Responsibility |
