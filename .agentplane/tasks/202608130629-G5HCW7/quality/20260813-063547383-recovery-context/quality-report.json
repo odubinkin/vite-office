@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130629-G5HCW7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T06:35:47.383Z",
+  "verdict": "pass",
+  "summary": "Writer menu and toolbar ownership now matches concrete pinned uiconfig paths without changing established browser behavior.",
+  "evaluated_sha": "022a220b157046a2f89fcdcae13aad4d27e1863c",
+  "blueprint_digest": "2dc923055426684e35d61ec53a5f57cd7569087895ec2e846315752aa5b40d4b",
+  "findings": [
+    "No correctness finding: source-tree enforcement blocks restored generic Writer menu and toolbar paths, and the moved parity evidence resolves."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130629-G5HCW7/README.md",
+    "83c054f and 022a220 migrations; unit coverage; focused File menu Chromium E2E; parity inventory; static gates"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full verification suite, static smoke, inventory coverage, and browser matrix remain deferred under the approved ten-task cadence."
+  ]
+}
