@@ -1,10 +1,12 @@
 ---
 id: "202608130629-G5HCW7"
 title: "Align Writer menu and toolbar modules with LibreOffice uiconfig paths"
-status: "DOING"
+result_summary: "Writer menu and toolbar modules aligned to LibreOffice uiconfig source paths and verified."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "83c054f and 022a220 migrations; unit coverage; focused File menu Chromium E2E; parity inventory; static gates"
   findings:
     - "No correctness finding: source-tree enforcement blocks restored generic Writer menu and toolbar paths, and the moved parity evidence resolves."
-commit: null
+commit:
+  hash: "601c35b99451ab66fe053beaff5afca758009dc5"
+  message: "🧩 G5HCW7 task: record UI migration verification"
 comments:
   -
     author: "CODER"
     body: "Start: Moving the remaining Writer menu and standard-toolbar controls into their concrete uiconfig ownership paths while preserving current command behavior and traceability."
+  -
+    author: "CODER"
+    body: "Verified: Writer menu and toolbar React modules now use concrete sw/uiconfig/swriter ownership paths, enforced against restoration of the generic uibase paths, with matching parity evidence."
 events:
   -
     type: "status"
@@ -57,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Writer uiconfig relocation with full unit coverage, focused File menu Chromium E2E, parity inventory, and static quality gates."
+  -
+    type: "status"
+    at: "2026-08-13T06:36:04.760Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer menu and toolbar React modules now use concrete sw/uiconfig/swriter ownership paths, enforced against restoration of the generic uibase paths, with matching parity evidence."
 doc_version: 3
-doc_updated_at: "2026-08-13T06:35:48.562Z"
+doc_updated_at: "2026-08-13T06:36:04.763Z"
 doc_updated_by: "CODER"
 description: "Move the remaining implemented Writer menu and toolbar declarations and React controls from generic uibase/utlui names into concrete sw/uiconfig/swriter ownership paths, update imports, source-tree enforcement, parity evidence, and focused tests."
 sections:
@@ -133,6 +147,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: "Verification note: npm run test:e2e -- --grep File menu initially returned No tests found because the existing foundation scenario asserted the File menu locator but its title did not contain that focused filter. The task keeps the same E2E behavior and updates only the scenario title so the declared focused command executes it."
+extensions:
+  implementation_commit:
+    hash: "022a220b157046a2f89fcdcae13aad4d27e1863c"
+    message: "🗂️ G5HCW7 code: update Writer UI provenance"
 id_source: "generated"
 ---
 ## Summary
