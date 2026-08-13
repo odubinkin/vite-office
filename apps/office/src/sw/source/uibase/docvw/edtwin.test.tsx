@@ -37,6 +37,37 @@ function placeWriterCaret(paragraph: HTMLElement, offset: number): void {
 }
 
 describe("Writer paragraph breaks" /** Groups native Enter interaction and guarded browser-selection behavior. @returns Nothing; Vitest registers the enclosed case. */, function defineWriterParagraphBreakTests(): void {
+  it("routes a native same-paragraph Paste event through the immutable Writer document body" /** Verifies React's document-body clipboard listener replaces selected text with safe direct-format runs instead of allowing editable-host HTML mutation. @returns Nothing; browser-visible pasted markup is asserted. */, function routesNativePasteThroughDocumentBody(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    const documentBody = screen.getByRole("article", { name: "Writer document body" });
+    window.getSelection()?.removeAllRanges();
+    fireEvent.paste(documentBody, {
+      clipboardData: {
+        /** Supplies visible test text that must be ignored without a Writer selection or caret. @returns Plain clipboard text. */
+        getData: (): string => "Ignored",
+      },
+    });
+    expect(paragraph).toHaveTextContent("");
+    enterWriterParagraphText(paragraph, "Replace me");
+    const range = document.createRange();
+    range.selectNodeContents(paragraph);
+    const selection = window.getSelection() as Selection;
+    selection.removeAllRanges();
+    selection.addRange(range);
+    fireEvent.paste(documentBody, {
+      clipboardData: {
+        /** Supplies safe rich HTML plus plain text for the test-owned native Paste event. @param type - Requested clipboard MIME type. @returns Bounded rich HTML or plain fallback text. */
+        getData(type: string): string {
+          return type === "text/html" ? "<strong>Inserted</strong>" : "Inserted";
+        },
+      },
+    });
+    const pastedParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    expect(pastedParagraph).toHaveTextContent("Inserted");
+    expect(pastedParagraph.querySelector("strong")).toHaveTextContent("Inserted");
+  });
+
   it("keeps the typing caret stable and routes Ctrl/Cmd+A to Writer Select All" /** Verifies immutable input commits preserve a mid-paragraph caret while both platform Select All shortcuts select every Writer paragraph. @returns Nothing; the browser selection and visible paragraph contents are asserted. */, function handlesDocumentSelectionShortcuts(): void {
     render(<App />);
     const firstParagraph = screen.getByRole("textbox", { name: "Writer document text" });
@@ -142,5 +173,55 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     fireEvent.keyDown(firstParagraph, { key: "Delete" });
     expect(screen.getAllByRole("textbox")).toHaveLength(1);
     expect(firstParagraph).toHaveTextContent("Before after");
+  });
+
+  it("intercepts native Cut and Paste without allowing browser contenteditable mutation" /** Verifies one same-paragraph selection transfers rich MIME data, deletes only after Cut, restores semantic direct formatting on Paste, and remains reversible. @returns Nothing; bounded browser clipboard transitions are asserted. */, function handlesNativeClipboardEditing(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    const emptyCutClipboardData = { getData: vi.fn(), setData: vi.fn() };
+    window.getSelection()?.removeAllRanges();
+    fireEvent.cut(paragraph, { clipboardData: emptyCutClipboardData });
+    expect(emptyCutClipboardData.setData).not.toHaveBeenCalled();
+    enterWriterParagraphText(paragraph, "Cut me");
+    const selection = window.getSelection() as Selection;
+    const cutRange = document.createRange();
+    cutRange.selectNodeContents(paragraph);
+    selection.removeAllRanges();
+    selection.addRange(cutRange);
+    const cutClipboardData = { getData: vi.fn(), setData: vi.fn() };
+    fireEvent.cut(paragraph, { clipboardData: cutClipboardData });
+    expect(cutClipboardData.setData).toHaveBeenNthCalledWith(1, "text/plain", "Cut me");
+    expect(cutClipboardData.setData).toHaveBeenNthCalledWith(
+      2,
+      "text/html",
+      expect.stringContaining("Cut me"),
+    );
+    expect(paragraph).toHaveTextContent("");
+    const cutParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    fireEvent.paste(cutParagraph, {
+      clipboardData: {
+        getData: vi.fn(
+          /** Supplies test-owned HTML and plain-text MIME values for native Writer Paste. @param type - Requested clipboard MIME type. @returns Rich Writer markup for HTML or visible plain text otherwise. */
+          function getClipboardData(type: string): string {
+            return type === "text/html" ? "<strong>Pasted</strong>" : "Pasted";
+          },
+        ),
+      },
+    });
+    const pastedParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    expect(pastedParagraph).toHaveTextContent("Pasted");
+    expect(pastedParagraph.querySelector("strong")).toHaveTextContent("Pasted");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent("");
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    const restoredParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    expect(restoredParagraph.querySelector("strong")).toHaveTextContent("Pasted");
+    fireEvent.paste(restoredParagraph, {
+      clipboardData: {
+        /** Supplies no MIME text for the deterministic empty-Paste feedback branch. @returns Empty clipboard value. */
+        getData: (): string => "",
+      },
+    });
+    expect(screen.getByText("Clipboard has no text to paste.")).toBeInTheDocument();
   });
 });

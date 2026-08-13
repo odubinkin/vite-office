@@ -94,6 +94,27 @@ export function getWriterSameParagraphSelection(
   };
 }
 
+/**
+ * Resolves a collapsed native selection to one editable Writer paragraph caret.
+ *
+ * @param selection - Current browser selection or null when the browser exposes none.
+ * @returns Stable Writer paragraph identity and UTF-16 caret offset, or undefined outside one editable Writer paragraph.
+ */
+export function getWriterCollapsedParagraphCaret(
+  selection: Selection | null,
+): Readonly<{ offset: number; paragraphId: string }> | undefined {
+  if (selection === null || !selection.isCollapsed || selection.rangeCount !== 1) return undefined;
+  const range = selection.getRangeAt(0);
+  const paragraph = getWriterSelectionParagraph(range.startContainer);
+  if (paragraph === undefined) return undefined;
+  const paragraphRange = paragraph.ownerDocument.createRange();
+  paragraphRange.selectNodeContents(paragraph);
+  const offset = getWriterRangeOffset(paragraphRange, range.startContainer, range.startOffset);
+  return offset === undefined
+    ? undefined
+    : { offset, paragraphId: paragraph.dataset.writerParagraphId as string };
+}
+
 /** Finds the Writer editable paragraph enclosing one selection container. @param node - Browser text or element node from a selection endpoint. @returns Enclosing Writer paragraph, or undefined outside the editor. */
 function getWriterSelectionParagraph(node: Node): HTMLParagraphElement | undefined {
   const element = node instanceof HTMLElement ? node : node.parentElement;

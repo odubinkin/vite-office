@@ -26,6 +26,7 @@
     { "localPath": "apps/office/src/svl/source/misc/recovery.ts", "status": "mapped", "upstreamPath": "svl/source/misc/lockfilecommon.cxx" },
     { "localPath": "apps/office/src/sw/source/core/doc/list.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/list.cxx" },
     { "localPath": "apps/office/src/sw/source/core/doc/number.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/number.cxx" },
+    { "localPath": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx" },
     { "localPath": "apps/office/src/sw/source/core/docnode/node.ts", "status": "mapped", "upstreamPath": "sw/source/core/docnode/node.cxx" },
     { "localPath": "apps/office/src/sw/source/core/doc/writer-storage.ts", "status": "browser-only", "rationale": "This module serializes bounded Writer snapshots for browser-local persistence. LibreOffice document-filter and storage layers cannot be copied as a direct static IndexedDB implementation and remain separately mapped compatibility work." },
     { "localPath": "apps/office/src/sw/source/core/doc/writer.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/docnew.cxx" },

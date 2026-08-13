@@ -109,7 +109,7 @@
           { "path": "apps/office/e2e/foundation.spec.ts", "marker": "Copied selection" }
         ],
         "docs": [
-          { "path": "docs/program/writer-clipboard.md", "marker": "Browser Writer clipboard copy" },
+          { "path": "docs/program/writer-clipboard.md", "marker": "Browser Writer clipboard" },
           { "path": "docs/program/writer-command-placement.md", "marker": "Select All" }
         ]
       }
@@ -197,7 +197,7 @@
         "docs": [
           { "path": "docs/program/writer-paragraph-lists.md", "marker": "Browser Writer paragraph lists" },
           { "path": "docs/program/writer-command-placement.md", "marker": "FormatBulletsMenu" },
-          { "path": "docs/program/source-tree.md", "marker": "File-level provenance in the active Writer list slice" }
+          { "path": "docs/program/source-tree.md", "marker": "File-level provenance in active Writer list" }
         ]
       }
     },
@@ -379,6 +379,54 @@
           { "path": "docs/program/writer-command-placement.md", "marker": ".uno:UnderlineSingle" },
           { "path": "docs/program/writer-clipboard.md", "marker": "direct character formatting" },
           { "path": "docs/program/source-tree.md", "marker": "txtattr.ts" }
+        ]
+      }
+    },
+    {
+      "id": "LO-WRITER-0110",
+      "capability": "Writer cuts and pastes plain text plus a bounded safe HTML character-format subset at the Edit menu and standard toolbar",
+      "status": "implemented",
+      "gaps": [
+        "The browser supports a single same-paragraph range for Cut and Paste; cross-paragraph, multi-range, table, object, and tracked-change transfer remain unmapped.",
+        "Paste accepts only visible plain text and the bounded strong/em/single-underline HTML subset. RTF, images, embedded objects, list or paragraph reconstruction, Paste Special, and ODT/DOCX transfer filters are explicitly unsupported."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/source/uibase/dochdl/swdtflvr.cxx", "marker": "SwTransferable::Cut" },
+          { "path": "sw/source/uibase/dochdl/swdtflvr.cxx", "marker": "SwTransferable::Paste" },
+          { "path": "sw/source/core/doc/DocumentContentOperationsManager.cxx", "marker": "DocumentContentOperationsManager::ReplaceRange" },
+          { "path": "sw/uiconfig/swriter/menubar/menubar.xml", "marker": ".uno:Paste" },
+          { "path": "sw/uiconfig/swriter/toolbar/standardbar.xml", "marker": ".uno:Cut" }
+        ],
+        "tests": [
+          { "path": "sw/qa/extras/uiwriter/uiwriter8.cxx", "marker": "dispatchCommand(mxComponent, u\".uno:Cut\"" },
+          { "path": "sw/qa/uitest/writer_tests2/tdf133299.py", "marker": ".uno:Paste" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/shared/01/02040000.xhp", "marker": ".uno:Cut" },
+          { "path": "helpcontent2/source/text/shared/01/02060000.xhp", "marker": ".uno:Paste" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts", "marker": "replaceWriterParagraphTextRange" },
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts", "marker": "parseWriterClipboardPaste" },
+          { "path": "apps/office/src/sw/source/uibase/shells/textsh.ts", "marker": "handleWriterPaste" },
+          { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx", "marker": "handleNativeWriterCut" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "marker": "renderMenuItem(\"Paste\"" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx", "marker": "aria-label=\"Paste\"" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.test.ts", "marker": "replaces, removes" },
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts", "marker": "parses only bounded" },
+          { "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx", "marker": "intercepts native Cut and Paste" },
+          { "path": "apps/office/src/vcl/browser/browser-clipboard.test.ts", "marker": "reads the first text-capable" },
+          { "path": "apps/office/e2e/writer-cut-paste.spec.ts", "marker": "Writer Cut and Paste" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-clipboard.md", "marker": "Browser Writer clipboard" },
+          { "path": "docs/program/writer-command-placement.md", "marker": ".uno:Cut" },
+          { "path": "docs/program/source-tree.md", "marker": "DocumentContentOperationsManager.ts" }
         ]
       }
     }

@@ -46,8 +46,12 @@ export interface WriterMenuBarProps {
   readonly onListLevelChange: (command: "demote" | "promote") => void;
   /** Starts the current plain-text browser download. */
   readonly onDownload: () => void;
+  /** Requests cutting the current native Writer selection after successful clipboard write. */
+  readonly onCut: () => void;
   /** Requests copying the current native Writer selection to the browser clipboard. */
   readonly onCopy: () => void;
+  /** Requests pasting browser clipboard text at the current Writer selection or caret. */
+  readonly onPaste: () => void;
   /** Requests browser selection of the complete rendered Writer document. */
   readonly onSelectAll: () => void;
   /** Loads the existing document identity from browser-local storage. */
@@ -86,12 +90,14 @@ export interface WriterMenuBarProps {
  * @param props.isStatusBarVisible - Whether the View Status Bar check item is currently checked.
  * @param props.onAlignmentChange - Callback used by Format alignment entries.
  * @param props.onCharacterFormatChange - Callback used by Format Text entries.
+ * @param props.onCut - Callback used by Edit Cut entry.
  * @param props.onListKindChange - Callback used by Format Bullets and Numbering entries.
  * @param props.onListLevelChange - Callback used by Format Promote and Demote entries.
  * @param props.onDownload - Callback used by File Save As Text entry.
  * @param props.onCopy - Callback used by Edit Copy entry.
  * @param props.onHorizontalRulerVisibilityChange - Callback used by the View Rulers horizontal item.
  * @param props.onLoad - Callback used by File Open Local Copy entry.
+ * @param props.onPaste - Callback used by Edit Paste entry.
  * @param props.onRedo - Callback used by Edit Redo entry.
  * @param props.onSave - Callback used by File Save entry.
  * @param props.onSelectAll - Callback used by Edit Select All entry.
@@ -115,12 +121,14 @@ export function WriterMenuBar({
   isStoragePending,
   onAlignmentChange,
   onCharacterFormatChange,
+  onCut,
   onListKindChange,
   onListLevelChange,
   onDownload,
   onCopy,
   onHorizontalRulerVisibilityChange,
   onLoad,
+  onPaste,
   onRedo,
   onSave,
   onSelectAll,
@@ -333,7 +341,9 @@ export function WriterMenuBar({
           {renderMenuItem("Undo", invokeMenuAction.bind(undefined, onUndo), !canUndo)}
           {renderMenuItem("Redo", invokeMenuAction.bind(undefined, onRedo), !canRedo)}
           <div aria-hidden="true" className="my-1 border-t border-slate-200" />
+          {renderMenuItem("Cut", invokeMenuAction.bind(undefined, onCut))}
           {renderMenuItem("Copy", invokeMenuAction.bind(undefined, onCopy))}
+          {renderMenuItem("Paste", invokeMenuAction.bind(undefined, onPaste))}
           {renderMenuItem("Select All", invokeMenuAction.bind(undefined, onSelectAll))}
         </div>
       );

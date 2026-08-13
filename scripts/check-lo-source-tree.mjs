@@ -24,6 +24,7 @@ const requiredFiles = [
   "apps/office/src/sw/source/core/docnode/node.ts",
   "apps/office/src/sw/source/core/doc/list.ts",
   "apps/office/src/sw/source/core/doc/number.ts",
+  "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
   "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
   "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
   "apps/office/src/sw/source/uibase/wrtsh/select.ts",

@@ -11,10 +11,13 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
   **File**. Browser-local load, save, and plain-text download are the bounded
   counterparts.
 - The same file places Undo and Redo in **Edit**.
-- It places `.uno:Copy` in **Edit** and the standard toolbar. The browser
-  **Copy** command writes sanitized visible plain text and, where supported,
-  inline-styled HTML for the bounded paragraph presentation through a
-  browser-only clipboard adapter; it has no document-history transition.
+- It places `.uno:Cut`, `.uno:Copy`, and `.uno:Paste` in **Edit** and the
+  standard toolbar. The browser **Copy** command writes sanitized visible plain
+  text and bounded inline HTML through a browser-only clipboard adapter; it has
+  no document-history transition. **Cut** writes that same data and then deletes
+  a same-paragraph selection as one history transition. **Paste** reads only
+  plain text or the bounded `strong`/`em`/single-underline HTML subset and
+  inserts it at a same-paragraph selection or caret.
 - It places `.uno:SelectAll` in **Edit**. The browser **Select All** command
   requests a native selection range over the current integrated Writer body; it
   has no standard-toolbar counterpart in this bounded slice. Native
@@ -45,10 +48,10 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 - `WriterCommands.xcu` declares Default Paragraph and Heading 1 style commands;
   the bounded browser style choices are available in **Styles**.
 
-`sw/uiconfig/swriter/toolbar/standardbar.xml` supplies Open, Save, Undo, and
-Redo, but no generic plain-text download command. Accordingly, the standard
-toolbar retains only the bounded Save, Open, Undo, and Redo controls; the
-browser text export remains **File → Save as text…**. The former **Add
+`sw/uiconfig/swriter/toolbar/standardbar.xml` supplies Open, Save, Cut, Copy,
+Paste, Undo, and Redo, but no generic plain-text download command. Accordingly,
+the standard toolbar retains the bounded Save, Open, Cut, Copy, Paste, Undo,
+and Redo controls; the browser text export remains **File → Save as text…**. The former **Add
 paragraph** toolbar control was removed: normal Writer paragraph
 creation is caret/Enter behavior, not a standalone toolbar command. The
 implemented browser equivalent now intercepts unmodified **Enter** at a

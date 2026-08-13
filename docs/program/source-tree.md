@@ -73,15 +73,16 @@ machine-checked record.
 | `sw/uiconfig/swriter/menubar/format-menu.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | React Format-popup decomposition of the same menu hierarchy |
 | `vcl/browser/browser-clipboard.ts` | `vcl/source/app/ClipboardBase.cxx` | Explicit static-browser clipboard platform adapter |
 
-## File-level provenance in the active Writer list slice and direct-character formatting slice
+## File-level provenance in active Writer list, character-formatting, and clipboard slices
 
 | Local browser module | Pinned LibreOffice source/configuration module | Responsibility |
 | --- | --- | --- |
 | `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Serializable list metadata and legacy normalization |
 | `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Deterministic visible bullet and numbering marker calculation |
+| `sw/source/core/doc/DocumentContentOperationsManager.ts` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Bounded immutable same-paragraph text-range replacement for Cut and Paste |
 | `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
 | `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Active-list Promote and Demote level transition |
-| `sw/source/uibase/shells/textsh.ts` | `sw/source/uibase/shells/textsh.cxx` | Browser-owned Copy, plain-text download, and Undo/Redo shortcut command shell |
+| `sw/source/uibase/shells/textsh.ts` | `sw/source/uibase/shells/textsh.cxx` | Browser-owned Cut, Copy, Paste, download, and Undo/Redo command shell |
 | `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Immutable direct-character text runs, split/merge, and normalization |
 | `sw/source/uibase/shells/txtattr.ts` | `sw/source/uibase/shells/txtattr.cxx` | Bold, Italic, and single Underline command transition |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |

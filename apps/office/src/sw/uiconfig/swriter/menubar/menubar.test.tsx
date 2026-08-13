@@ -95,6 +95,8 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
     expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
     expect(screen.getByRole("menuitem", { name: "Undo" })).toBeDisabled();
+    expect(screen.getByRole("menuitem", { name: "Cut" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "Paste" })).toBeEnabled();
     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
     const getSelection = vi.spyOn(window, "getSelection").mockReturnValue(null);
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
@@ -216,6 +218,122 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       if (originalClipboardItem === undefined)
         delete (globalThis as { ClipboardItem?: unknown }).ClipboardItem;
       else Object.defineProperty(globalThis, "ClipboardItem", originalClipboardItem);
+    }
+  });
+
+  it("cuts and pastes through Writer menu and toolbar browser commands" /** Verifies Cut copies before deletion, Paste resolves selected, collapsed, and fallback targets, and both failure paths report deterministic feedback. @returns A promise resolved after browser command interactions are asserted. */, async function cutsAndPastesWriterSelection(): Promise<void> {
+    const originalClipboard = Object.getOwnPropertyDescriptor(navigator, "clipboard");
+    const originalExecCommand = Object.getOwnPropertyDescriptor(document, "execCommand");
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    const read = vi.fn();
+    const readText = vi.fn().mockResolvedValue("Plain clipboard");
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { read, readText, writeText },
+    });
+    try {
+      render(<App />);
+      const editor = screen.getByRole("textbox", { name: "Writer document text" });
+      fireEvent.click(screen.getByRole("button", { name: "Cut" }));
+      expect(screen.getByText("Select text in one paragraph to cut.")).toBeInTheDocument();
+      enterWriterParagraphText(editor, "Cut me");
+      const selection = window.getSelection() as Selection;
+      const selectedRange = document.createRange();
+      selectedRange.selectNodeContents(editor);
+      selection.removeAllRanges();
+      selection.addRange(selectedRange);
+      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      await act(
+        /** Executes the menu Cut command after preparing one same-paragraph selection. @returns A fulfilled React act promise. */
+        async function cutsSelectedWriterText(): Promise<void> {
+          fireEvent.click(screen.getByRole("menuitem", { name: "Cut" }));
+        },
+      );
+      expect(writeText).toHaveBeenCalledWith("Cut me");
+      expect(editor).toHaveTextContent("");
+      read.mockResolvedValue([
+        {
+          /** Returns bounded rich or plain test clipboard text. @param type - Requested clipboard MIME type. @returns MIME-typed Blob with deterministic text. */
+          async getType(type: string): Promise<Blob> {
+            return new Blob([type === "text/html" ? "<strong>Pasted</strong>" : "Pasted"], {
+              type,
+            });
+          },
+          types: ["text/html", "text/plain"],
+        } as unknown as ClipboardItem,
+      ]);
+      await act(
+        /** Executes toolbar Paste at the collapsed caret restored by the successful Cut transition. @returns A fulfilled React act promise. */
+        async function pastesAtCollapsedCaret(): Promise<void> {
+          fireEvent.click(screen.getByRole("button", { name: "Paste" }));
+        },
+      );
+      const pastedEditor = screen.getByRole("textbox", { name: "Writer document text" });
+      expect(pastedEditor.querySelector("strong")).toHaveTextContent("Pasted");
+      const replaceRange = document.createRange();
+      replaceRange.selectNodeContents(pastedEditor);
+      selection.removeAllRanges();
+      selection.addRange(replaceRange);
+      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      await act(
+        /** Replaces a same-paragraph selection through the Edit Paste command. @returns A fulfilled React act promise. */
+        async function pastesOverSelection(): Promise<void> {
+          fireEvent.click(screen.getByRole("menuitem", { name: "Paste" }));
+        },
+      );
+      const replacedEditor = screen.getByRole("textbox", { name: "Writer document text" });
+      expect(replacedEditor).toHaveTextContent("Pasted");
+      selection.removeAllRanges();
+      await act(
+        /** Pastes with no browser selection, exercising the deterministic active-paragraph fallback. @returns A fulfilled React act promise. */
+        async function pastesAtActiveParagraphEnd(): Promise<void> {
+          fireEvent.click(screen.getByRole("button", { name: "Paste" }));
+        },
+      );
+      const duplicatedEditor = screen.getByRole("textbox", { name: "Writer document text" });
+      expect(duplicatedEditor).toHaveTextContent("PastedPasted");
+      read.mockResolvedValue([]);
+      await act(
+        /** Executes Paste with no browser text payload. @returns A fulfilled React act promise. */
+        async function rejectsEmptyBrowserClipboard(): Promise<void> {
+          fireEvent.click(screen.getByRole("button", { name: "Paste" }));
+        },
+      );
+      expect(screen.getByText("Clipboard has no text to paste.")).toBeInTheDocument();
+      const failedCutRange = document.createRange();
+      failedCutRange.selectNodeContents(duplicatedEditor);
+      const failedCutSelection = window.getSelection() as Selection;
+      failedCutSelection.removeAllRanges();
+      failedCutSelection.addRange(failedCutRange);
+      expect(failedCutSelection.toString()).toBe("PastedPasted");
+      writeText.mockRejectedValueOnce(new Error("Denied"));
+      Object.defineProperty(document, "execCommand", {
+        configurable: true,
+        value: vi.fn().mockReturnValue(false),
+      });
+      await act(
+        /** Executes a denied Cut that must retain document text. @returns A fulfilled React act promise. */
+        async function rejectsCutClipboardWrite(): Promise<void> {
+          fireEvent.click(screen.getByRole("button", { name: "Cut" }));
+        },
+      );
+      expect(duplicatedEditor).toHaveTextContent("PastedPasted");
+      read.mockRejectedValueOnce(new Error("Denied"));
+      readText.mockRejectedValueOnce(new Error("Denied"));
+      await act(
+        /** Executes a denied Paste read that must retain document text. @returns A fulfilled React act promise. */
+        async function rejectsPasteClipboardRead(): Promise<void> {
+          fireEvent.click(screen.getByRole("button", { name: "Paste" }));
+        },
+      );
+      expect(screen.getByText("Could not read browser clipboard.")).toBeInTheDocument();
+    } finally {
+      if (originalClipboard === undefined)
+        delete (navigator as unknown as { clipboard?: unknown }).clipboard;
+      else Object.defineProperty(navigator, "clipboard", originalClipboard);
+      if (originalExecCommand === undefined)
+        delete (document as unknown as { execCommand?: unknown }).execCommand;
+      else Object.defineProperty(document, "execCommand", originalExecCommand);
     }
   });
 

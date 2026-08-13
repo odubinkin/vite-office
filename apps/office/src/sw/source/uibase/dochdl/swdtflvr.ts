@@ -5,6 +5,12 @@
 import { serializeWriterClipboardHtml } from "../../filter/html/htmlnumwriter";
 import { serializeWriterClipboardPlainText } from "../../filter/ascii/ascatr";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
+import {
+  createWriterTextRuns,
+  normalizeWriterTextRuns,
+  type WriterCharacterAttributes,
+  type WriterTextRun,
+} from "../../core/txtnode/ndtxt";
 
 /** Describes the two clipboard representations emitted for a visible Writer selection. */
 export interface WriterClipboardSelection {
@@ -12,6 +18,14 @@ export interface WriterClipboardSelection {
   readonly html: string;
   /** Sanitized plain text containing only visible selected paragraph text. */
   readonly plainText: string;
+}
+
+/** Describes bounded Writer text extracted from one browser clipboard transfer for a Paste operation. */
+export interface WriterClipboardPaste {
+  /** Normalized Writer direct-format runs safe to insert into a paragraph. */
+  readonly runs: readonly WriterTextRun[];
+  /** MIME representation selected by the transfer parser. */
+  readonly source: "html" | "plain-text";
 }
 
 /** Describes one selected Writer paragraph in the transfer document before a format writer serializes it. */
@@ -32,6 +46,107 @@ export interface WriterClipboardParagraph {
 
 /** Identifies rendered editable paragraphs eligible for Writer clipboard serialization. */
 const writerParagraphSelector = "[data-writer-paragraph-id]";
+
+/** Stores the direct-format state inherited by a parsed clipboard HTML descendant. */
+const defaultPasteCharacterAttributes: WriterCharacterAttributes = {
+  bold: false,
+  italic: false,
+  underline: false,
+};
+
+/**
+ * Reads one browser clipboard transfer into safe bounded Writer text runs without inserting arbitrary HTML into the editing host.
+ *
+ * @param clipboardData - Browser clipboard boundary exposing text/plain and optional text/html representations.
+ * @param document - Document used to parse detached HTML safely in the current browser realm.
+ * @returns Parsed Writer direct-format runs and selected source, or undefined when no usable textual clipboard representation exists.
+ */
+export function readWriterClipboardPaste(
+  clipboardData: Pick<DataTransfer, "getData">,
+  document: Document = globalThis.document,
+): WriterClipboardPaste | undefined {
+  return parseWriterClipboardPaste(
+    clipboardData.getData("text/html"),
+    clipboardData.getData("text/plain"),
+    document,
+  );
+}
+
+/**
+ * Parses browser clipboard MIME strings into safe bounded Writer text runs.
+ *
+ * @param html - Optional rich HTML representation supplied by the browser clipboard API.
+ * @param plainText - Optional plain-text fallback supplied by the browser clipboard API.
+ * @param document - Document used to parse detached HTML safely in the current browser realm.
+ * @returns Parsed Writer direct-format runs and selected source, or undefined when neither representation has text.
+ */
+export function parseWriterClipboardPaste(
+  html: string,
+  plainText: string,
+  document: Document = globalThis.document,
+): WriterClipboardPaste | undefined {
+  if (html.trim().length > 0) {
+    const container = document.createElement("div");
+    container.innerHTML = html;
+    const runs = parseWriterClipboardHtml(container, defaultPasteCharacterAttributes);
+    if (runs.length > 0 || container.textContent === "") return { runs, source: "html" };
+  }
+  return plainText.length === 0
+    ? undefined
+    : { runs: createWriterTextRuns(plainText), source: "plain-text" };
+}
+
+/**
+ * Recursively extracts browser clipboard descendants as direct Writer text runs under a strict semantic formatting whitelist.
+ *
+ * @param parent - Detached HTML element whose child nodes are parsed.
+ * @param inheritedAttributes - Bounded direct character attributes inherited from permitted semantic ancestors.
+ * @returns Normalized visible text runs with untrusted markup flattened rather than retained.
+ */
+function parseWriterClipboardHtml(
+  parent: HTMLElement,
+  inheritedAttributes: WriterCharacterAttributes,
+): readonly WriterTextRun[] {
+  const runs: WriterTextRun[] = [];
+  parent.childNodes.forEach(
+    /** Parses one detached clipboard node without retaining attributes, URLs, event handlers, or non-text browser markup. @param node - Clipboard child node. @returns Nothing; safe visible runs are accumulated. */
+    function parseClipboardNode(node): void {
+      if (node instanceof Text) {
+        runs.push({ attributes: inheritedAttributes, text: node.data });
+        return;
+      }
+      if (!(node instanceof HTMLElement)) return;
+      if (node.tagName === "SCRIPT" || node.tagName === "STYLE") return;
+      if (node.tagName === "BR") {
+        runs.push({ attributes: inheritedAttributes, text: "\n" });
+        return;
+      }
+      const attributes = getWriterClipboardNodeAttributes(node, inheritedAttributes);
+      runs.push(...parseWriterClipboardHtml(node, attributes));
+    },
+  );
+  return normalizeWriterTextRuns(runs);
+}
+
+/**
+ * Derives direct Writer attributes from an allowlisted clipboard semantic tag while ignoring arbitrary style declarations.
+ *
+ * @param element - Detached clipboard HTML element inspected without mounting it into the Writer editing host.
+ * @param inheritedAttributes - Bounded attributes inherited from permitted ancestors.
+ * @returns Next immutable direct-format attributes for visible descendant text.
+ */
+function getWriterClipboardNodeAttributes(
+  element: HTMLElement,
+  inheritedAttributes: WriterCharacterAttributes,
+): WriterCharacterAttributes {
+  return {
+    bold: inheritedAttributes.bold || element.tagName === "STRONG",
+    italic: inheritedAttributes.italic || element.tagName === "EM",
+    underline:
+      inheritedAttributes.underline ||
+      (element.tagName === "SPAN" && element.style.textDecoration === "underline"),
+  };
+}
 
 /**
  * Builds clipboard data from selected visible Writer paragraphs while deliberately excluding adjacent accessibility descriptions.

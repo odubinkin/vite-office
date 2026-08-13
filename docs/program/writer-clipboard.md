@@ -1,10 +1,10 @@
-# Browser Writer clipboard copy
+# Browser Writer clipboard
 
-The bounded browser Writer workbench implements **Copy** at both pinned Writer
-locations: **Edit → Copy** and the standard toolbar. The command reads the
-browser's current native selection and writes visible paragraph text with no
-server, account, or network request. Accessibility-only descriptions are never
-serialized into either clipboard representation.
+The bounded browser Writer workbench implements **Cut**, **Copy**, and **Paste**
+at their pinned Writer locations: **Edit** and the standard toolbar. The commands
+use only browser clipboard APIs; they do not require a server, account, or network
+request. Accessibility-only descriptions are never serialized into either clipboard
+representation.
 
 Both the Writer **Copy** command and native **Ctrl/Cmd+C** are covered. The
 document body intercepts the browser's `copy` event and writes the same
@@ -61,14 +61,23 @@ marker-only DOM sibling.
 
 Copy does not alter the immutable Writer document, transaction history,
 properties, or browser-local snapshot. A missing selection reports **Select
-text to copy.** rather than serializing the whole document implicitly.
+text to copy.** rather than serializing the whole document implicitly. Cut first
+writes the same paired clipboard data, then removes one non-empty selection inside
+one Writer paragraph as an undoable immutable text-range transition. Paste replaces
+one same-paragraph selection or inserts at a collapsed Writer caret. Native Paste
+reads its `ClipboardEvent` synchronously; menu and toolbar Paste use a
+user-initiated `navigator.clipboard.read` request, with `readText` fallback.
+
+Paste accepts plain text and a strict rich subset: `strong`, `em`, and a single
+underline `span`. Other tags are reduced to their visible text; scripts and styles
+are discarded, and no clipboard HTML is mounted in the editable document. The
+browser slice deliberately does not yet support cross-paragraph Cut/Paste, lists or
+paragraph structure on Paste, RTF, images, objects, tables, Paste Special,
+multi-range transfer, or ODT/DOCX transfer filters.
 
 The pinned LibreOffice `sw/uiconfig/swriter/menubar/menubar.xml` declares
-`.uno:Copy` in **Edit**, and `sw/uiconfig/swriter/toolbar/standardbar.xml`
-declares the same command in the standard toolbar. This browser slice maps the
-placement and bounded browser behavior only. Rich copy covers just the
-implemented paragraph-level styles; Cut, Paste, Paste Special, inline character
-formatting, objects, tables, tracked changes, and full LibreOffice transfer
-semantics remain separate feature tasks. Cut, Paste, named list styles,
-restart/continue semantics, ODT/DOCX import/export, arbitrary multi-range
-selections, and full Writer transfer semantics remain separate feature tasks.
+`.uno:Cut`, `.uno:Copy`, and `.uno:Paste` in **Edit**, and
+`sw/uiconfig/swriter/toolbar/standardbar.xml` declares the same commands in the
+standard toolbar. This browser slice maps placement and bounded browser behavior
+only. Rich transfer covers just the implemented direct character formatting; full
+Writer transfer semantics remain future work.

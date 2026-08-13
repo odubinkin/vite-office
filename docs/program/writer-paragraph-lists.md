@@ -35,5 +35,5 @@ numbering, automatic list detection, outline numbering, RTF clipboard transfer,
 Paste, and ODT/DOCX import/export remain separately mapped follow-up
 capabilities. The bounded semantic nested-HTML and level-indented plain-text
 Copy path is documented in
-[Browser Writer clipboard copy](writer-clipboard.md); it is deliberately not a
+[Browser Writer clipboard](writer-clipboard.md); it is deliberately not a
 claim of full list export/import parity.

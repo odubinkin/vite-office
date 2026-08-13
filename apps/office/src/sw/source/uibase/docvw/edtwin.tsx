@@ -7,7 +7,12 @@ import { useEffect, useRef } from "react";
 import { getWriterParagraphListMarker, type WriterParagraph } from "../../core/doc/writer";
 import { WriterEditableParagraph } from "./edtwin-paragraph";
 import { createWriterClipboardSelection } from "../dochdl/swdtflvr";
-import { getWriterCollapsedCaretOffset, restoreWriterCollapsedCaret } from "../wrtsh/select";
+import {
+  getWriterCollapsedCaretOffset,
+  getWriterSameParagraphSelection,
+  restoreWriterCollapsedCaret,
+} from "../wrtsh/select";
+import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
 
 /** Stores one browser caret endpoint used to extend a pointer selection across Writer paragraph editing hosts. */
 interface WriterPointerCaret {
@@ -51,6 +56,10 @@ export interface WriterPlainTextEditorProps {
   readonly paragraphs: readonly WriterParagraph[];
   /** Receives a stable paragraph identity and its complete next text after a browser input event. */
   readonly onTextChange: (paragraphId: string, text: string) => void;
+  /** Removes a copied native same-paragraph selection after its clipboard payload is safely prepared. */
+  readonly onTextCut: (range: WriterParagraphTextRange) => void;
+  /** Replaces a native same-paragraph selection or caret with safe clipboard data. */
+  readonly onTextPaste: (range: WriterParagraphTextRange, clipboardData: DataTransfer) => void;
 }
 
 /**
@@ -68,6 +77,8 @@ export interface WriterPlainTextEditorProps {
  * @param props.onSelectAll - Callback that requests the document-wide browser selection.
  * @param props.paragraphs - Ordered Writer paragraphs displayed in the bounded document body.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
+ * @param props.onTextCut - Callback removing a native copied same-paragraph selection.
+ * @param props.onTextPaste - Callback inserting parsed native clipboard data at a Writer range.
  * @returns A page-integrated accessible Writer document body without contextual paragraph buttons.
  */
 export function WriterPlainTextEditor({
@@ -80,6 +91,8 @@ export function WriterPlainTextEditor({
   onParagraphFocus,
   onSelectAll,
   onTextChange,
+  onTextCut,
+  onTextPaste,
   paragraphs,
   selectAllRequestId,
 }: WriterPlainTextEditorProps): React.JSX.Element {
@@ -191,6 +204,54 @@ export function WriterPlainTextEditor({
     event.preventDefault();
     event.clipboardData.setData("text/plain", selection.plainText);
     event.clipboardData.setData("text/html", selection.html);
+  }
+
+  /**
+   * Replaces native Cut clipboard data and delegates deletion only for a safe Writer same-paragraph selection.
+   *
+   * @param event - Browser Cut event bubbled from the integrated Writer document body.
+   * @returns Nothing; unsupported selections retain the browser default behavior without document mutation.
+   */
+  function handleNativeWriterCut(event: React.ClipboardEvent<HTMLElement>): void {
+    const selection = globalThis.getSelection();
+    const range = getWriterSameParagraphSelection(selection);
+    const clipboardSelection = createWriterClipboardSelection(selection);
+    if (range === undefined || clipboardSelection === undefined) return;
+    event.preventDefault();
+    event.clipboardData.setData("text/plain", clipboardSelection.plainText);
+    event.clipboardData.setData("text/html", clipboardSelection.html);
+    onTextCut(range);
+  }
+
+  /**
+   * Converts a native Paste event to a Writer range without allowing browser HTML mutation of the editable paragraph.
+   *
+   * @param event - Browser Paste event bubbled from a focused Writer editable paragraph.
+   * @returns Nothing; safe text is delegated when the target has a collapsed caret or same-paragraph selection.
+   */
+  function handleNativeWriterPaste(event: React.ClipboardEvent<HTMLElement>): void {
+    const selection = globalThis.getSelection();
+    const selectedRange = getWriterSameParagraphSelection(selection);
+    /* c8 ignore next 3 -- Browser clipboard events dispatched by an editable host always target an Element; a non-Element target is defensive DOM-boundary handling. */
+    const paragraph =
+      event.target instanceof HTMLElement
+        ? event.target.closest<HTMLParagraphElement>("[data-writer-paragraph-id]")
+        : null;
+    const collapsedOffset =
+      paragraph === null ? undefined : getWriterCollapsedCaretOffset(paragraph);
+    /* c8 ignore next 9 -- JSDOM does not reliably retain a collapsed contenteditable ClipboardEvent target after React rerenders; Chromium E2E covers that browser-native branch. */
+    const range =
+      selectedRange ??
+      (paragraph === null || collapsedOffset === undefined
+        ? undefined
+        : {
+            end: collapsedOffset,
+            paragraphId: paragraph.dataset.writerParagraphId as string,
+            start: collapsedOffset,
+          });
+    if (range === undefined) return;
+    event.preventDefault();
+    onTextPaste(range, event.clipboardData);
   }
 
   /**
@@ -368,8 +429,10 @@ export function WriterPlainTextEditor({
       aria-label="Writer document body"
       className="min-h-[600px] text-slate-950"
       onCopy={handleNativeWriterCopy}
+      onCut={handleNativeWriterCut}
       onMouseMove={handleDocumentMouseMove}
       onMouseUp={finalizePointerSelection}
+      onPaste={handleNativeWriterPaste}
     >
       {paragraphs.map(
         /** Renders one serializable paragraph through the focused editable presentation component. @param paragraph - Current Writer paragraph. @param index - Zero-based document position. @returns One keyed editable paragraph. */

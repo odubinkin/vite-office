@@ -22,7 +22,12 @@ import {
   type WriterParagraphStyle,
   type WriterCharacterAttributes,
   type WriterCharacterFormat,
+  type WriterTextRun,
 } from "../../core/doc/writer";
+import {
+  replaceWriterParagraphTextRange,
+  type WriterParagraphTextRange,
+} from "../../core/doc/DocumentContentOperationsManager";
 import {
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
   getWriterTextAttributesAtOffset,
@@ -43,6 +48,7 @@ import { WriterWorkspaceChrome } from "../app/mainwn";
 import type { WriterListLevelCommand } from "../shells/listsh";
 import { toggleWriterCharacterFormat } from "../shells/txtattr";
 import { useWriterBrowserCommands, useWriterHistoryShortcuts } from "../shells/textsh";
+import { readWriterClipboardPaste } from "../dochdl/swdtflvr";
 import { getWriterSameParagraphSelection } from "../wrtsh/select";
 import { useWriterDocumentSelection, useWriterWorkspaceChrome } from "./viewstat";
 import {
@@ -102,10 +108,14 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
   const writerDocument = getCurrentTransactionState(writerHistory);
   const activeParagraph = getActiveWriterParagraph(writerDocument, activeParagraphId);
   const activeParagraphIndex = writerDocument.paragraphs.indexOf(activeParagraph);
-  const { handleWriterCopy, handleWriterDownload } = useWriterBrowserCommands({
-    setStorageStatus,
-    writerDocument,
-  });
+  const { handleWriterCopy, handleWriterCut, handleWriterDownload, handleWriterPaste } =
+    useWriterBrowserCommands({
+      activeParagraph,
+      onCut: handleWriterTextCut,
+      onPaste: handleWriterPasteRuns,
+      setStorageStatus,
+      writerDocument,
+    });
   const writerStorage =
     globalThis.indexedDB === undefined
       ? undefined
@@ -144,6 +154,73 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
                 pendingCharacterAttributes,
               );
         return applyTransaction(currentHistory, nextDocument, { position: text.length });
+      },
+    );
+  }
+
+  /**
+   * Deletes a same-paragraph native Writer selection after its Cut payload reaches the browser clipboard.
+   *
+   * @param range - Existing Writer text range copied by the Cut command.
+   * @returns Nothing; React schedules deletion and restores the caret at the former selection start.
+   */
+  function handleWriterTextCut(range: WriterParagraphTextRange): void {
+    handleWriterPasteRuns(range, []);
+  }
+
+  /**
+   * Parses native browser clipboard MIME data before applying its bounded Writer text runs.
+   *
+   * @param range - Same-paragraph target selection or collapsed caret resolved by the editable Writer body.
+   * @param clipboardData - Browser clipboard data read synchronously from the native Paste event.
+   * @returns Nothing; React records safe text insertion or deterministic empty-clipboard feedback.
+   */
+  function handleWriterTextPaste(
+    range: WriterParagraphTextRange,
+    clipboardData: DataTransfer,
+  ): void {
+    const paste = readWriterClipboardPaste(clipboardData);
+    if (paste === undefined) {
+      setStorageStatus("Clipboard has no text to paste.");
+      return;
+    }
+    handleWriterPasteRuns(range, paste.runs);
+    setStorageStatus("Pasted clipboard text.");
+  }
+
+  /**
+   * Replaces one immutable Writer range with safe direct-format runs from either native or toolbar Paste.
+   *
+   * @param range - Same-paragraph target selection or collapsed caret.
+   * @param runs - Normalized bounded Writer text runs that replace range.
+   * @returns Nothing; React schedules one history transition and post-render caret restoration.
+   */
+  function handleWriterPasteRuns(
+    range: WriterParagraphTextRange,
+    runs: readonly WriterTextRun[],
+  ): void {
+    const insertionLength = runs.reduce(
+      /** Counts visible UTF-16 code units inserted at the range start. @param total - Count so far. @param run - Inserted formatted run. @returns Updated visible text length. */
+      function addRunLength(total, run): number {
+        return total + run.text.length;
+      },
+      0,
+    );
+    setActiveParagraphId(range.paragraphId);
+    setFocusParagraphId(range.paragraphId);
+    setFocusParagraphOffset(range.start + insertionLength);
+    setWriterHistory(
+      /** Applies bounded Cut or Paste runs to the latest Writer snapshot. @param currentHistory - Current immutable Writer history. @returns Existing or replacement history with a deterministic caret position. */
+      function replaceWriterClipboardRange(
+        currentHistory: TransactionHistory<WriterDocument>,
+      ): TransactionHistory<WriterDocument> {
+        const currentDocument = getCurrentTransactionState(currentHistory);
+        const nextDocument = replaceWriterParagraphTextRange(currentDocument, range, runs);
+        return nextDocument === currentDocument
+          ? currentHistory
+          : applyTransaction(currentHistory, nextDocument, {
+              position: range.start + insertionLength,
+            });
       },
     );
   }
@@ -501,9 +578,11 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             onAlignmentChange={handleWriterParagraphAlignment}
             onCharacterFormatChange={handleWriterCharacterFormat}
             onCopy={handleWriterCopy}
+            onCut={handleWriterCut}
             onDownload={handleWriterDownload}
             onHorizontalRulerVisibilityChange={setIsHorizontalRulerVisible}
             onLoad={handleWriterLoad}
+            onPaste={handleWriterPaste}
             onListKindChange={handleWriterParagraphListKind}
             onListLevelChange={handleWriterParagraphListLevel}
             onRedo={handleWriterRedo}
@@ -550,7 +629,9 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             canUndo={writerHistory.index > 0}
             isStoragePending={storagePending}
             onCopy={handleWriterCopy}
+            onCut={handleWriterCut}
             onLoad={handleWriterLoad}
+            onPaste={handleWriterPaste}
             onRedo={handleWriterRedo}
             onSave={handleWriterSave}
             onUndo={handleWriterUndo}
@@ -567,6 +648,8 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
           onParagraphFocus={handleWriterParagraphFocus}
           onSelectAll={requestSelectAll}
           onTextChange={handleWriterTextChange}
+          onTextCut={handleWriterTextCut}
+          onTextPaste={handleWriterTextPaste}
           paragraphs={writerDocument.paragraphs}
           selectAllRequestId={selectAllRequestId}
         />

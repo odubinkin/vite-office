@@ -23,6 +23,12 @@ export interface BrowserRichClipboardEnvironment {
   readonly document: Document;
 }
 
+/** Describes browser capabilities needed to read safe rich or plain clipboard text after an explicit user command. */
+export interface BrowserClipboardReadEnvironment {
+  /** Native clipboard reader when the browser permits a user-initiated read. */
+  readonly clipboard: Pick<Clipboard, "read" | "readText"> | undefined;
+}
+
 /** Defines one portable rich clipboard pair. */
 export interface RichClipboardPayload {
   /** Sanitized HTML representation for rich-text-capable target editors. */
@@ -91,6 +97,38 @@ export async function copyRichText(
     clipboard: environment.clipboard,
     document: environment.document,
   });
+}
+
+/**
+ * Reads the first browser clipboard item that exposes Writer-relevant HTML or plain text without mounting its markup.
+ *
+ * @param environment - Browser clipboard capability used by a click-initiated Writer Paste command.
+ * @returns Rich and plain MIME strings, with either value empty when that MIME type is unavailable.
+ * @throws {Error} When the browser does not expose a readable clipboard or rejects the user-initiated request.
+ */
+export async function readRichClipboard(
+  environment: BrowserClipboardReadEnvironment = {
+    clipboard: globalThis.navigator.clipboard,
+  },
+): Promise<RichClipboardPayload> {
+  if (environment.clipboard === undefined)
+    throw new Error("Browser clipboard read is unavailable.");
+  try {
+    const items = await environment.clipboard.read();
+    for (const item of items) {
+      const html = item.types.includes("text/html")
+        ? await (await item.getType("text/html")).text()
+        : "";
+      const plainText = item.types.includes("text/plain")
+        ? await (await item.getType("text/plain")).text()
+        : "";
+      if (html.length > 0 || plainText.length > 0) return { html, plainText };
+    }
+  } catch {
+    const plainText = await environment.clipboard.readText();
+    return { html: "", plainText };
+  }
+  return { html: "", plainText: "" };
 }
 
 /**

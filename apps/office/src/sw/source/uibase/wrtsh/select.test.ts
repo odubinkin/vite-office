@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 
 import {
   getWriterCollapsedCaretOffset,
+  getWriterCollapsedParagraphCaret,
   getWriterSameParagraphSelection,
   restoreWriterCollapsedCaret,
 } from "./select";
@@ -69,5 +70,35 @@ describe("Writer selection shell" /** Groups nested Writer DOM selection bridge 
     crossParagraph.setEnd(second.firstChild as Text, 1);
     expect(getWriterSameParagraphSelection(selectRange(crossParagraph))).toBeUndefined();
     expect(getWriterSameParagraphSelection(null)).toBeUndefined();
+  });
+
+  it("reads a collapsed Writer paragraph caret and rejects an outside caret" /** Verifies toolbar Paste can retain the browser caret instead of appending to the active paragraph. @returns Nothing; caret ownership and offset are asserted. */, function resolvesCollapsedPasteCaret(): void {
+    const { first } = createSelectionFixture();
+    const italicText = first.querySelector("em")?.firstChild as Text;
+    const range = document.createRange();
+    range.setStart(italicText, 1);
+    range.collapse(true);
+    expect(getWriterCollapsedParagraphCaret(selectRange(range))).toEqual({
+      offset: 3,
+      paragraphId: "p-1",
+    });
+    const outside = document.createElement("p");
+    outside.textContent = "Outside";
+    document.body.append(outside);
+    const outsideRange = document.createRange();
+    outsideRange.setStart(outside.firstChild as Text, 1);
+    outsideRange.collapse(true);
+    expect(getWriterCollapsedParagraphCaret(selectRange(outsideRange))).toBeUndefined();
+    expect(
+      getWriterCollapsedParagraphCaret({
+        /** Returns a malformed collapsed range endpoint to exercise defensive browser Range handling. @returns A range-like selection endpoint with an invalid offset. */
+        getRangeAt(): Range {
+          return { startContainer: first.firstChild as Text, startOffset: 999 } as unknown as Range;
+        },
+        isCollapsed: true,
+        rangeCount: 1,
+      } as unknown as Selection),
+    ).toBeUndefined();
+    expect(getWriterCollapsedParagraphCaret(null)).toBeUndefined();
   });
 });

@@ -5,6 +5,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   copyPlainText,
   copyRichText,
+  readRichClipboard,
+  type BrowserClipboardReadEnvironment,
   type BrowserClipboardEnvironment,
   type BrowserClipboardItemConstructor,
   type BrowserRichClipboardEnvironment,
@@ -57,6 +59,18 @@ function createRichClipboardEnvironment(
   clipboardItem: BrowserClipboardItemConstructor | undefined,
 ): BrowserRichClipboardEnvironment {
   return { Blob: globalThis.Blob, ClipboardItem: clipboardItem, clipboard, document };
+}
+
+/**
+ * Creates a browser clipboard reader environment for rich Paste adapter tests.
+ *
+ * @param clipboard - Native browser read capability or no capability when the adapter must reject.
+ * @returns Browser-only clipboard read environment with no unrelated DOM dependency.
+ */
+function createClipboardReadEnvironment(
+  clipboard: Pick<Clipboard, "read" | "readText"> | undefined,
+): BrowserClipboardReadEnvironment {
+  return { clipboard };
 }
 
 describe("copyPlainText" /** Groups native clipboard and legacy fallback behaviors. @returns Nothing; Vitest registers the enclosed clipboard cases. */, function defineClipboardTests(): void {
@@ -131,5 +145,46 @@ describe("copyPlainText" /** Groups native clipboard and legacy fallback behavio
     );
     expect(rejectedWriteText).toHaveBeenCalledWith("Visible");
     expect(unsupportedWriteText).toHaveBeenCalledWith("Fallback");
+  });
+
+  it("reads the first text-capable rich clipboard item and falls back to plain text" /** Verifies browser Paste sees both supported MIME representations while rejected rich reads retain plain visible text. @returns A promise resolved after read payloads are asserted. */, async function readsRichClipboard(): Promise<void> {
+    const getType = vi.fn(
+      /** Returns a deterministic MIME blob for one test clipboard item. @param type - Requested MIME type. @returns Rich or plain visible-text Blob. */
+      async function getClipboardType(type: string): Promise<Blob> {
+        return new Blob([type === "text/html" ? "<strong>Bold</strong>" : "Bold"], { type });
+      },
+    );
+    await expect(
+      readRichClipboard(
+        createClipboardReadEnvironment({
+          read: vi
+            .fn()
+            .mockResolvedValue([
+              { getType, types: ["text/html", "text/plain"] } as unknown as ClipboardItem,
+            ]),
+          readText: vi.fn(),
+        }),
+      ),
+    ).resolves.toEqual({ html: "<strong>Bold</strong>", plainText: "Bold" });
+    const readText = vi.fn().mockResolvedValue("Plain fallback");
+    await expect(
+      readRichClipboard(
+        createClipboardReadEnvironment({
+          read: vi.fn().mockRejectedValue(new Error("Denied")),
+          readText,
+        }),
+      ),
+    ).resolves.toEqual({ html: "", plainText: "Plain fallback" });
+    await expect(
+      readRichClipboard(
+        createClipboardReadEnvironment({
+          read: vi.fn().mockResolvedValue([{ getType, types: [] } as unknown as ClipboardItem]),
+          readText: vi.fn(),
+        }),
+      ),
+    ).resolves.toEqual({ html: "", plainText: "" });
+    await expect(readRichClipboard(createClipboardReadEnvironment(undefined))).rejects.toThrow(
+      "Browser clipboard read is unavailable.",
+    );
   });
 });

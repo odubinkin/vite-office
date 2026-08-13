@@ -2,7 +2,7 @@
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createWriterClipboardSelection } from "./swdtflvr";
+import { createWriterClipboardSelection, readWriterClipboardPaste } from "./swdtflvr";
 
 afterEach(
   /**
@@ -34,6 +34,61 @@ function selectCompleteNodes(firstNode: Node, lastNode: Node): Selection {
 }
 
 describe("createWriterClipboardSelection" /** Groups selected Writer paragraph clipboard serialization tests. @returns Nothing; Vitest registers the enclosed cases. */, function defineWriterClipboardSelectionTests(): void {
+  it("parses only bounded Writer direct formats from rich or plain clipboard text" /** Verifies Paste consumes visible text while discarding unsafe clipboard HTML behavior and attributes. @returns Nothing; normalized source-aware text runs are asserted. */, function parsesWriterClipboardPaste(): void {
+    const htmlClipboard = {
+      /** Returns test-owned MIME values. @param type - Requested clipboard MIME type. @returns Rich HTML only for text/html. */
+      getData(type: string): string {
+        return type === "text/html"
+          ? '<strong>Bold <em>italic</em></strong><span style="text-decoration: underline">under</span><br><!--ignored--><a href="https://invalid.example" onclick="alert(1)">link</a><script>ignored</script>'
+          : "plain fallback";
+      },
+    } as Pick<DataTransfer, "getData">;
+    expect(readWriterClipboardPaste(htmlClipboard)).toEqual({
+      runs: [
+        { attributes: { bold: true, italic: false, underline: false }, text: "Bold " },
+        { attributes: { bold: true, italic: true, underline: false }, text: "italic" },
+        { attributes: { bold: false, italic: false, underline: true }, text: "under" },
+        { attributes: { bold: false, italic: false, underline: false }, text: "\nlink" },
+      ],
+      source: "html",
+    });
+    const plainClipboard = {
+      /** Returns only the requested test-owned plain-text MIME payload. @param type - Requested clipboard MIME type. @returns Plain text only for text/plain. */
+      getData(type: string): string {
+        return type === "text/plain" ? "plain\ntext" : "";
+      },
+    } as Pick<DataTransfer, "getData">;
+    expect(readWriterClipboardPaste(plainClipboard)).toEqual({
+      runs: [{ attributes: { bold: false, italic: false, underline: false }, text: "plain\ntext" }],
+      source: "plain-text",
+    });
+    expect(
+      readWriterClipboardPaste({
+        /** Returns no values for an empty clipboard fixture. @returns Empty browser clipboard value. */
+        getData: (): string => "",
+      }),
+    ).toBeUndefined();
+    expect(
+      readWriterClipboardPaste({
+        /** Returns an empty ignored script as HTML. @param type - Requested clipboard MIME type. @returns Empty script HTML or no plain text. */
+        getData(type: string): string {
+          return type === "text/html" ? "<script></script>" : "";
+        },
+      }),
+    ).toEqual({ runs: [], source: "html" });
+    expect(
+      readWriterClipboardPaste({
+        /** Returns ignored script HTML and a visible plain fallback. @param type - Requested clipboard MIME type. @returns Script HTML or fallback text. */
+        getData(type: string): string {
+          return type === "text/html" ? "<script>ignored</script>" : "fallback";
+        },
+      }),
+    ).toEqual({
+      runs: [{ attributes: { bold: false, italic: false, underline: false }, text: "fallback" }],
+      source: "plain-text",
+    });
+  });
+
   it("omits accessibility descriptions and preserves every bounded paragraph style in rich HTML" /** Verifies only rendered editable paragraph bodies become clipboard data. @returns Nothing; visible plain text and portable HTML are asserted. */, function serializesVisibleParagraphs(): void {
     document.body.innerHTML = `
       <span data-writer-auxiliary-description="true">Paragraph style: Heading 1</span>
