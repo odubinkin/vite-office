@@ -62,7 +62,7 @@ describe("Writer paragraph breaks" /** Groups normal and rejected immutable para
     const writer = appendWriterParagraph(createParagraphBreakFixture(), "p-4");
     const joined = mergeWriterParagraphWithPrevious(writer, "p-3");
 
-    expect(joined.paragraphs).toEqual([
+    expect(joined.paragraphs).toMatchObject([
       {
         alignment: "center",
         id: "p-1",
@@ -96,7 +96,7 @@ describe("Writer paragraph breaks" /** Groups normal and rejected immutable para
     const writer = createParagraphBreakFixture();
     const split = splitWriterParagraph(writer, "p-1", 7, "p-2");
 
-    expect(writer.paragraphs).toEqual([
+    expect(writer.paragraphs).toMatchObject([
       {
         alignment: "center",
         id: "p-1",

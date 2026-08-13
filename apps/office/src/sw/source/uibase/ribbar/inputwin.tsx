@@ -18,6 +18,8 @@ import { writerTextObjectBarListCommands } from "../../../uiconfig/swriter/toolb
 import { writerNumObjectBarListLevelCommands } from "../../../uiconfig/swriter/toolbar/numobjectbar";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type {
+  WriterCharacterAttributes,
+  WriterCharacterFormat,
   WriterParagraphAlignment,
   WriterParagraphListKind,
   WriterParagraphStyle,
@@ -43,10 +45,14 @@ const paragraphAlignmentControls: readonly ParagraphAlignmentControl[] = [
 
 /** Defines current Writer paragraph formatting state and its requested transition. */
 export interface WriterParagraphFormattingToolbarProps {
+  /** Direct character attributes currently active at the Writer selection or caret. */
+  readonly characterAttributes: WriterCharacterAttributes;
   /** Alignment of the currently focused Writer paragraph. */
   readonly alignment: WriterParagraphAlignment;
   /** Requests a new alignment for the currently focused Writer paragraph. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
+  /** Toggles one direct character format over the current Writer selection or pending caret state. */
+  readonly onCharacterFormatChange: (format: WriterCharacterFormat) => void;
   /** Requests a new default list presentation for the currently focused Writer paragraph. */
   readonly onListKindChange: (listKind: WriterParagraphListKind) => void;
   /** Requests one Promote or Demote list-level transition for the focused Writer paragraph. */
@@ -62,22 +68,26 @@ export interface WriterParagraphFormattingToolbarProps {
 }
 
 /**
- * Renders Writer alignment and default-list commands beside intentionally disabled character-format placeholders.
+ * Renders Writer direct-character, alignment, and default-list commands in their pinned text-object toolbar order.
  *
  * @param props - Focused paragraph formatting and callbacks owned by the Writer workbench.
  * @param props.alignment - Alignment currently applied to the active Writer paragraph.
+ * @param props.characterAttributes - Direct character attributes active at the Writer selection or caret.
  * @param props.onAlignmentChange - Callback that records the requested paragraph alignment.
+ * @param props.onCharacterFormatChange - Callback that records the requested direct character attribute.
  * @param props.onListKindChange - Callback that records the requested default list presentation.
  * @param props.onListLevelChange - Callback that records a requested list-level transition.
  * @param props.onStyleChange - Callback that records the requested paragraph style.
  * @param props.style - Style currently applied to the active Writer paragraph.
  * @param props.listKind - List presentation currently applied to the active Writer paragraph.
  * @param props.listLevel - List nesting level currently applied to the active Writer paragraph.
- * @returns A semantic formatting toolbar with paragraph-alignment and default-list controls.
+ * @returns A semantic formatting toolbar with direct-character, paragraph-alignment, and default-list controls.
  */
 export function WriterParagraphFormattingToolbar({
   alignment,
+  characterAttributes,
   onAlignmentChange,
+  onCharacterFormatChange,
   onListKindChange,
   onListLevelChange,
   onStyleChange,
@@ -120,22 +130,30 @@ export function WriterParagraphFormattingToolbar({
       >
         <option>System font</option>
       </select>
-      <button
-        aria-label="Bold"
-        className="grid size-8 place-items-center rounded-md border border-slate-300 bg-white font-black text-slate-400"
-        disabled
-        type="button"
-      >
-        B
-      </button>
-      <button
-        aria-label="Italic"
-        className="grid size-8 place-items-center rounded-md border border-slate-300 bg-white text-lg font-serif italic text-slate-400"
-        disabled
-        type="button"
-      >
-        I
-      </button>
+      {(["bold", "italic", "underline"] as const).map(
+        /** Renders one pinned direct character-format toggle. @param format - Supported Writer direct character format. @returns One active-aware Writer toolbar control. */
+        function renderCharacterFormatControl(format): React.JSX.Element {
+          const label = format === "bold" ? "Bold" : format === "italic" ? "Italic" : "Underline";
+          return (
+            <button
+              aria-label={label}
+              aria-pressed={characterAttributes[format]}
+              className={`grid size-8 place-items-center rounded-md border border-slate-300 bg-white text-slate-800 transition hover:border-indigo-400 hover:text-indigo-800 ${format === "bold" ? "font-black" : format === "italic" ? "text-lg font-serif italic" : "underline"}`}
+              key={format}
+              onClick={
+                /** Requests this direct Writer attribute without moving ownership from the workbench. @returns Nothing; parent records immutable selection or pending-caret state. */
+                function toggleCharacterFormat(): void {
+                  onCharacterFormatChange(format);
+                }
+              }
+              title={label}
+              type="button"
+            >
+              {format === "bold" ? "B" : format === "italic" ? "I" : "U"}
+            </button>
+          );
+        },
+      )}
       <span aria-hidden="true" className="h-6 border-l border-slate-300" />
       <div aria-label="Paragraph alignment" className="flex items-center gap-1" role="group">
         {paragraphAlignmentControls.map(

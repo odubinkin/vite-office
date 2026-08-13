@@ -9,17 +9,20 @@ import {
   appendWriterParagraph,
   createWriterDocument,
   insertWriterText,
+  insertWriterTextWithAttributes,
   moveWriterParagraph,
   normalizeWriterParagraphFormatting,
   removeWriterParagraph,
   replaceWriterParagraph,
   setWriterParagraphAlignment,
   setWriterParagraphStyle,
+  toggleWriterParagraphCharacterFormat,
   type WriterDocument,
   type WriterParagraphAlignment,
   type WriterParagraphStyle,
   type WriterParagraphMoveDirection,
 } from "./writer";
+import { createWriterTextRuns } from "../txtnode/ndtxt";
 
 /**
  * Creates a valid Writer document fixture.
@@ -113,6 +116,29 @@ function insertOversizedOffset(writer: WriterDocument): WriterDocument {
   return insertWriterText(writer, "p-1", 1, "x");
 }
 
+/** Attempts direct-format insertion beyond a valid paragraph boundary. @param writer - Valid Writer document to inspect without mutation. @returns An invalid insertion result; the call always throws. */
+function insertFormattedTextBeyondParagraph(writer: WriterDocument): WriterDocument {
+  return insertWriterTextWithAttributes(writer, "p-1", 1, "x", {
+    bold: true,
+    italic: false,
+    underline: false,
+  });
+}
+
+/** Attempts direct-format insertion into a paragraph that is absent from the Writer body. @param writer - Valid Writer document to inspect without mutation. @returns An invalid insertion result; the call always throws. */
+function insertFormattedTextIntoMissingParagraph(writer: WriterDocument): WriterDocument {
+  return insertWriterTextWithAttributes(writer, "missing", 0, "x", {
+    bold: true,
+    italic: false,
+    underline: false,
+  });
+}
+
+/** Attempts direct character formatting for a missing paragraph. @param writer - Valid Writer document to inspect without mutation. @returns An invalid formatting result; the call always throws. */
+function formatMissingParagraph(writer: WriterDocument): WriterDocument {
+  return toggleWriterParagraphCharacterFormat(writer, "missing", 0, 1, "bold");
+}
+
 /**
  * Attempts to insert text at a non-integer UTF-16 offset.
  *
@@ -182,6 +208,7 @@ describe("Writer paragraph body" /**
           alignment: "left",
           id: "p-2",
           list: { kind: "none", level: 0 },
+          runs: createWriterTextRuns("unchanged"),
           style: "default",
           text: "unchanged",
         },
@@ -207,6 +234,10 @@ describe("Writer paragraph body" /**
     expect(inserted.paragraphs[0]?.text).toBe("hello");
     expect(middle.paragraphs[0]?.text).toBe("he!llo");
     expect(middle.paragraphs[1]?.text).toBe("unchanged");
+    expect(toggleWriterParagraphCharacterFormat(middle, "p-1", 2, 2, "bold")).toBe(middle);
+    expect(toggleWriterParagraphCharacterFormat(middle, "p-1", 0, 2, "bold").paragraphs[1]).toBe(
+      middle.paragraphs[1],
+    );
     expect(replaced.paragraphs[1]?.text).toBe("updated");
     expect(unchanged).toBe(replaced);
     expect(JSON.parse(JSON.stringify(replaced))).toEqual(replaced);
@@ -225,6 +256,7 @@ describe("Writer paragraph body" /**
         alignment: "left",
         id: "p-1",
         list: { kind: "none", level: 0 },
+        runs: [],
         style: "default",
         text: "",
       },
@@ -331,6 +363,7 @@ describe("Writer paragraph body" /**
       alignment: "left",
       id: "p-2",
       list: { kind: "none", level: 0 },
+      runs: [],
       style: "default",
       text: "",
     });
@@ -339,6 +372,7 @@ describe("Writer paragraph body" /**
       alignment: "center",
       id: "p-2",
       list: { kind: "none", level: 0 },
+      runs: [],
       style: "default",
       text: "",
     });
@@ -478,6 +512,24 @@ describe("Writer paragraph body" /**
         return insertOversizedOffset(writer);
       },
     ).toThrowError();
+    expect(
+      /** Executes the direct-format insertion boundary failure case for Vitest. @returns Invalid Writer insertion result; the delegated call always throws. */
+      function insertsFormattedTextBeyondParagraph(): WriterDocument {
+        return insertFormattedTextBeyondParagraph(writer);
+      },
+    ).toThrowError("Insertion offset is outside the paragraph.");
+    expect(
+      /** Executes the missing direct-format insertion paragraph failure case for Vitest. @returns Invalid Writer insertion result; the delegated call always throws. */
+      function insertsFormattedTextIntoMissingParagraph(): WriterDocument {
+        return insertFormattedTextIntoMissingParagraph(writer);
+      },
+    ).toThrowError("Unknown paragraph: missing");
+    expect(
+      /** Executes the missing direct-format paragraph failure case for Vitest. @returns Invalid Writer formatting result; the delegated call always throws. */
+      function formatsMissingParagraph(): WriterDocument {
+        return formatMissingParagraph(writer);
+      },
+    ).toThrowError("Unknown paragraph: missing");
     expect(
       /**
        * Executes the fractional-offset insertion failure case for Vitest.

@@ -8,6 +8,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { Desktop as App } from "./desktop";
 import { createDocument } from "../../../sfx2/source/doc/docfac";
+import { createWriterTextRuns } from "../../../sw/source/core/txtnode/ndtxt";
 import {
   saveWriterDocument,
   type WriterSnapshotState,
@@ -24,6 +25,21 @@ import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-
 function enterWriterParagraphText(paragraph: HTMLElement, text: string): void {
   paragraph.textContent = text;
   fireEvent.input(paragraph);
+}
+
+/**
+ * Selects a visible Writer paragraph range for a direct character-format command.
+ *
+ * @param paragraph - Editable Writer paragraph whose complete visible text is selected.
+ * @returns Nothing; the browser selection is replaced with the paragraph text range.
+ */
+function selectWriterParagraphText(paragraph: HTMLElement): void {
+  const range = document.createRange();
+  range.selectNodeContents(paragraph);
+  const selection = globalThis.getSelection();
+  if (selection === null) throw new Error("Browser selection must be available in Writer tests.");
+  selection.removeAllRanges();
+  selection.addRange(range);
 }
 
 describe("App" /**
@@ -126,6 +142,47 @@ describe("App" /**
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align center" }));
     expect(firstParagraph).toHaveStyle({ textAlign: "center" });
     expect(screen.getByText("Centered")).toBeInTheDocument();
+  });
+
+  it("formats same-paragraph text through Writer toolbar, Format Text, shortcuts, pending typing, history, and Copy" /**
+   * Verifies the pinned LO Writer locations all use the same direct-character command shell and semantic output.
+   *
+   * @returns Nothing; browser-visible semantic formatting and history state are asserted.
+   */, function formatsWriterCharacters(): void {
+    render(<App />);
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    const formattingToolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
+    enterWriterParagraphText(editor, "Body");
+    selectWriterParagraphText(editor);
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Bold" }));
+    expect(editor.querySelector("strong")).toHaveTextContent("Body");
+    expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    selectWriterParagraphText(editor);
+    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Text" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Italic" }));
+    expect(editor.querySelector("strong em")).toHaveTextContent("Body");
+    selectWriterParagraphText(editor);
+    fireEvent.keyDown(window, { ctrlKey: true, key: "u" });
+    expect(editor.querySelector("strong em span")).toHaveStyle({ textDecoration: "underline" });
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(editor.querySelector("strong em span")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    expect(editor.querySelector("strong em span")).toBeInTheDocument();
+  });
+
+  it("applies a collapsed Writer character command to subsequent typed text" /** Verifies a pending direct attribute creates semantic character runs without a native range selection. @returns Nothing; the browser-visible inserted run is asserted. */, function formatsSubsequentWriterTyping(): void {
+    render(<App />);
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    fireEvent.keyDown(window, { ctrlKey: true, key: "b" });
+    fireEvent.keyDown(window, { ctrlKey: true, key: "b" });
+    fireEvent.keyDown(window, { ctrlKey: true, key: "i" });
+    enterWriterParagraphText(editor, "Typed");
+    expect(editor.querySelector("strong")).not.toBeInTheDocument();
+    expect(editor.querySelector("em")).toHaveTextContent("Typed");
   });
 
   it("does not put structural paragraph actions in the document page" /**
@@ -295,6 +352,7 @@ describe("App" /**
             alignment: "left",
             id: "writer-paragraph-1",
             list: { kind: "none", level: 0 },
+            runs: createWriterTextRuns("First stored paragraph"),
             style: "default",
             text: "First stored paragraph",
           },
@@ -302,6 +360,7 @@ describe("App" /**
             alignment: "left",
             id: "writer-paragraph-3",
             list: { kind: "none", level: 0 },
+            runs: createWriterTextRuns("Third stored paragraph"),
             style: "default",
             text: "Third stored paragraph",
           },

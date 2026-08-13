@@ -2,7 +2,7 @@
  * @fileoverview Owns the bounded Writer document workbench state and browser-only editing controls.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   applyTransaction,
   createTransactionHistory,
@@ -13,13 +13,20 @@ import {
 } from "../../../../sfx2/source/doc/docundomanager";
 import {
   replaceWriterParagraph,
+  insertWriterTextWithAttributes,
   mergeWriterParagraphWithPrevious,
   splitWriterParagraph,
   type WriterDocument,
   type WriterParagraph,
   type WriterParagraphAlignment,
   type WriterParagraphStyle,
+  type WriterCharacterAttributes,
+  type WriterCharacterFormat,
 } from "../../core/doc/writer";
+import {
+  DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
+  getWriterTextAttributesAtOffset,
+} from "../../core/txtnode/ndtxt";
 import type { WriterParagraphListKind } from "../../core/doc/list";
 import {
   loadWriterDocument,
@@ -34,7 +41,9 @@ import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
 import { WriterPlainTextEditor } from "../docvw/edtwin";
 import { WriterWorkspaceChrome } from "../app/mainwn";
 import type { WriterListLevelCommand } from "../shells/listsh";
+import { toggleWriterCharacterFormat } from "../shells/txtattr";
 import { useWriterBrowserCommands, useWriterHistoryShortcuts } from "../shells/textsh";
+import { getWriterSameParagraphSelection } from "../wrtsh/select";
 import { useWriterDocumentSelection, useWriterWorkspaceChrome } from "./viewstat";
 import {
   getActiveWriterParagraph,
@@ -64,6 +73,8 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
   const [activeParagraphId, setActiveParagraphId] = useState("writer-paragraph-1");
   const [focusParagraphId, setFocusParagraphId] = useState<string>();
   const [focusParagraphOffset, setFocusParagraphOffset] = useState<number>();
+  const [pendingCharacterAttributes, setPendingCharacterAttributes] =
+    useState<WriterCharacterAttributes>(DEFAULT_WRITER_CHARACTER_ATTRIBUTES);
   const {
     isHorizontalRulerVisible,
     isPropertiesSidebarVisible,
@@ -119,11 +130,19 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       function replaceWorkbenchParagraph(
         currentHistory: TransactionHistory<WriterDocument>,
       ): TransactionHistory<WriterDocument> {
-        const nextDocument = replaceWriterParagraph(
-          getCurrentTransactionState(currentHistory),
-          paragraphId,
-          text,
-        );
+        const currentDocument = getCurrentTransactionState(currentHistory);
+        const paragraph = getActiveWriterParagraph(currentDocument, paragraphId);
+        const insertion = getWriterInsertedText(paragraph.text, text);
+        const nextDocument =
+          insertion === undefined
+            ? replaceWriterParagraph(currentDocument, paragraphId, text)
+            : insertWriterTextWithAttributes(
+                currentDocument,
+                paragraphId,
+                insertion.offset,
+                insertion.text,
+                pendingCharacterAttributes,
+              );
         return applyTransaction(currentHistory, nextDocument, { position: text.length });
       },
     );
@@ -137,7 +156,74 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
    */
   function handleWriterParagraphFocus(paragraphId: string): void {
     setActiveParagraphId(paragraphId);
+    const paragraph = getActiveWriterParagraph(writerDocument, paragraphId);
+    setPendingCharacterAttributes(
+      getWriterTextAttributesAtOffset(paragraph.runs, paragraph.text.length),
+    );
   }
+
+  /**
+   * Toggles a direct Writer character attribute over a native same-paragraph selection, or changes pending attributes for a collapsed caret.
+   *
+   * @param format - Direct Writer format selected from the toolbar, Format Text menu, or browser shortcut.
+   * @returns Nothing; React records one immutable history transition or pending-caret state.
+   */
+  function handleWriterCharacterFormat(format: WriterCharacterFormat): void {
+    const selection = getWriterSameParagraphSelection(globalThis.getSelection());
+    if (selection === undefined) {
+      setPendingCharacterAttributes(
+        /** Toggles only the requested pending direct attribute. @param attributes - Current pending caret attributes. @returns Updated immutable attribute record. */
+        function togglePendingCharacterAttribute(attributes): WriterCharacterAttributes {
+          return { ...attributes, [format]: !attributes[format] };
+        },
+      );
+      return;
+    }
+    setActiveParagraphId(selection.paragraphId);
+    setWriterHistory(
+      /** Applies this shell command to the latest immutable Writer history state. @param currentHistory - Current Writer transaction history. @returns Existing or formatted next history. */
+      function formatSelectedWriterText(
+        currentHistory: TransactionHistory<WriterDocument>,
+      ): TransactionHistory<WriterDocument> {
+        const nextDocument = toggleWriterCharacterFormat(
+          getCurrentTransactionState(currentHistory),
+          selection,
+          format,
+        );
+        /* v8 ignore next -- A non-empty DOM selection is validated before scheduling this updater, so the text-attribute shell always creates a new document snapshot. */
+        return nextDocument === getCurrentTransactionState(currentHistory)
+          ? currentHistory
+          : applyTransaction(currentHistory, nextDocument, { position: selection.end });
+      },
+    );
+    setPendingCharacterAttributes(
+      /** Toggles only the requested attribute for immediately following collapsed typing. @param attributes - Current pending caret attributes. @returns Updated immutable attribute record. */
+      function togglePendingAttribute(attributes): WriterCharacterAttributes {
+        return { ...attributes, [format]: !attributes[format] };
+      },
+    );
+  }
+
+  useEffect(
+    /** Installs Ctrl/Meta direct-character Writer shortcuts while the Writer suite is active. @returns Cleanup removing the browser listener. */
+    function installWriterCharacterShortcuts(): () => void {
+      /** Dispatches one supported direct-format shortcut. @param event - Browser key event inspected and optionally cancelled. @returns Nothing; the workbench applies the selected command. */
+      function handleCharacterShortcut(event: KeyboardEvent): void {
+        if (!isActive || event.altKey || (!event.ctrlKey && !event.metaKey)) return;
+        const format = getWriterShortcutFormat(event.key);
+        if (format === undefined) return;
+        event.preventDefault();
+        handleWriterCharacterFormat(format);
+      }
+      window.addEventListener("keydown", handleCharacterShortcut);
+      /** Removes this workbench instance's direct-format shortcut listener. @returns Nothing. */
+      function removeWriterCharacterShortcuts(): void {
+        window.removeEventListener("keydown", handleCharacterShortcut);
+      }
+      return removeWriterCharacterShortcuts;
+    },
+    [isActive, pendingCharacterAttributes, writerHistory],
+  );
 
   /**
    * Splits the editable Writer paragraph at an unmodified Enter caret and targets the trailing paragraph.
@@ -405,6 +491,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         menuBar={
           <WriterMenuBar
             alignment={activeParagraph.alignment}
+            characterAttributes={pendingCharacterAttributes}
             canRedo={writerHistory.index < writerHistory.entries.length - 1}
             canUndo={writerHistory.index > 0}
             isHorizontalRulerVisible={isHorizontalRulerVisible}
@@ -412,6 +499,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             isSidebarVisible={isPropertiesSidebarVisible}
             isStatusBarVisible={isStatusBarVisible}
             onAlignmentChange={handleWriterParagraphAlignment}
+            onCharacterFormatChange={handleWriterCharacterFormat}
             onCopy={handleWriterCopy}
             onDownload={handleWriterDownload}
             onHorizontalRulerVisibilityChange={setIsHorizontalRulerVisible}
@@ -433,7 +521,9 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         formattingToolbar={
           <WriterParagraphFormattingToolbar
             alignment={activeParagraph.alignment}
+            characterAttributes={pendingCharacterAttributes}
             onAlignmentChange={handleWriterParagraphAlignment}
+            onCharacterFormatChange={handleWriterCharacterFormat}
             onListKindChange={handleWriterParagraphListKind}
             onListLevelChange={handleWriterParagraphListLevel}
             onStyleChange={handleWriterParagraphStyle}
@@ -483,4 +573,46 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       </WriterWorkspaceChrome>
     </div>
   );
+}
+
+/**
+ * Detects the sole inserted segment between a prior and next browser paragraph value.
+ *
+ * @param previousText - Canonical immutable paragraph text before native browser input.
+ * @param nextText - Complete visible paragraph text after native browser input.
+ * @returns Insertion offset and text when the change adds one contiguous segment, otherwise undefined for deletion or replacement.
+ */
+function getWriterInsertedText(
+  previousText: string,
+  nextText: string,
+): Readonly<{ offset: number; text: string }> | undefined {
+  if (nextText.length <= previousText.length) return undefined;
+  let prefixLength = 0;
+  while (
+    prefixLength < previousText.length &&
+    previousText.charAt(prefixLength) === nextText.charAt(prefixLength)
+  )
+    prefixLength += 1;
+  let suffixLength = 0;
+  while (
+    suffixLength < previousText.length - prefixLength &&
+    previousText.charAt(previousText.length - suffixLength - 1) ===
+      nextText.charAt(nextText.length - suffixLength - 1)
+  )
+    suffixLength += 1;
+  const insertedText = nextText.slice(prefixLength, nextText.length - suffixLength);
+  /* v8 ignore next -- A strictly longer next value always leaves at least one inserted code unit after maximal common prefix/suffix removal. */
+  return insertedText.length === 0 ? undefined : { offset: prefixLength, text: insertedText };
+}
+
+/** Maps one browser shortcut key to its supported direct Writer character command. @param key - Browser key value normalized by the platform. @returns Direct character format, or undefined when no Writer formatting shortcut applies. */
+function getWriterShortcutFormat(key: string): WriterCharacterFormat | undefined {
+  const normalizedKey = key.toLowerCase();
+  return normalizedKey === "b"
+    ? "bold"
+    : normalizedKey === "i"
+      ? "italic"
+      : normalizedKey === "u"
+        ? "underline"
+        : undefined;
 }

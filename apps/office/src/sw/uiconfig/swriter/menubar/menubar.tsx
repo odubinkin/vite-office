@@ -7,6 +7,8 @@ import { useState } from "react";
 import { writerMenuPlacements, type WriterTopLevelMenu } from "./menubar-commands";
 import { WriterFormatMenu } from "./format-menu";
 import type {
+  WriterCharacterAttributes,
+  WriterCharacterFormat,
   WriterParagraphAlignment,
   WriterParagraphListKind,
   WriterParagraphStyle,
@@ -16,6 +18,8 @@ import type {
 export interface WriterMenuBarProps {
   /** Alignment currently applied to the focused Writer paragraph. */
   readonly alignment: WriterParagraphAlignment;
+  /** Direct character attributes currently active at the Writer selection or caret. */
+  readonly characterAttributes: WriterCharacterAttributes;
   /** Whether a following history snapshot exists for Redo. */
   readonly canRedo: boolean;
   /** Whether a preceding history snapshot exists for Undo. */
@@ -34,6 +38,8 @@ export interface WriterMenuBarProps {
   readonly listLevel: number;
   /** Applies a focused-paragraph horizontal alignment. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
+  /** Toggles one direct character format over the current Writer selection or pending caret state. */
+  readonly onCharacterFormatChange: (format: WriterCharacterFormat) => void;
   /** Applies a focused-paragraph default list presentation. */
   readonly onListKindChange: (listKind: WriterParagraphListKind) => void;
   /** Applies a focused-paragraph Promote or Demote list-level transition. */
@@ -69,6 +75,7 @@ export interface WriterMenuBarProps {
  *
  * @param props - Current Writer command state and immutable transition callbacks.
  * @param props.alignment - Current focused-paragraph alignment.
+ * @param props.characterAttributes - Direct character attributes active at the Writer selection or caret.
  * @param props.canRedo - Whether the Edit Redo menu entry is enabled.
  * @param props.canUndo - Whether the Edit Undo menu entry is enabled.
  * @param props.isHorizontalRulerVisible - Whether the View Rulers horizontal item is currently checked.
@@ -78,6 +85,7 @@ export interface WriterMenuBarProps {
  * @param props.isSidebarVisible - Whether the View Sidebar check item is currently checked.
  * @param props.isStatusBarVisible - Whether the View Status Bar check item is currently checked.
  * @param props.onAlignmentChange - Callback used by Format alignment entries.
+ * @param props.onCharacterFormatChange - Callback used by Format Text entries.
  * @param props.onListKindChange - Callback used by Format Bullets and Numbering entries.
  * @param props.onListLevelChange - Callback used by Format Promote and Demote entries.
  * @param props.onDownload - Callback used by File Save As Text entry.
@@ -96,6 +104,7 @@ export interface WriterMenuBarProps {
  */
 export function WriterMenuBar({
   alignment,
+  characterAttributes,
   canRedo,
   canUndo,
   isHorizontalRulerVisible,
@@ -105,6 +114,7 @@ export function WriterMenuBar({
   isStatusBarVisible,
   isStoragePending,
   onAlignmentChange,
+  onCharacterFormatChange,
   onListKindChange,
   onListLevelChange,
   onDownload,
@@ -332,9 +342,11 @@ export function WriterMenuBar({
       return (
         <WriterFormatMenu
           alignment={alignment}
+          characterAttributes={characterAttributes}
           listKind={listKind}
           listLevel={listLevel}
           onAlignmentChange={onAlignmentChange}
+          onCharacterFormatChange={onCharacterFormatChange}
           onInvoke={invokeMenuAction}
           onListKindChange={onListKindChange}
           onListLevelChange={onListLevelChange}

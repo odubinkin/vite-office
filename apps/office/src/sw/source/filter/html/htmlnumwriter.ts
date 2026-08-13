@@ -42,7 +42,7 @@ export function serializeWriterClipboardHtml(
  * @returns Escaped inline-styled paragraph HTML.
  */
 function serializeParagraphHtml(paragraph: WriterClipboardParagraph): string {
-  return `<p style="${paragraph.style}">${escapeHtml(paragraph.text)}</p>`;
+  return `<p style="${paragraph.style}">${paragraph.html ?? escapeHtml(paragraph.text)}</p>`;
 }
 
 /**
@@ -151,7 +151,7 @@ function getRelativeListLevel(
  * @returns Escaped opening semantic list-item HTML.
  */
 function openListItemHtml(paragraph: WriterClipboardParagraph): string {
-  return `<li style="${paragraph.style}">${escapeHtml(paragraph.text)}`;
+  return `<li style="${paragraph.style}">${paragraph.html ?? escapeHtml(paragraph.text)}`;
 }
 
 /**

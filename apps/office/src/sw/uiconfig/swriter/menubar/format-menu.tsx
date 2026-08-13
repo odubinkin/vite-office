@@ -9,6 +9,8 @@ import {
   writerListLevelMenuCommands,
 } from "./menubar-commands";
 import type {
+  WriterCharacterAttributes,
+  WriterCharacterFormat,
   WriterParagraphAlignment,
   WriterParagraphListKind,
 } from "../../../source/core/doc/writer";
@@ -16,6 +18,8 @@ import { WRITER_MAX_LIST_LEVEL } from "../../../source/core/doc/list";
 
 /** Describes immutable Writer state and callbacks needed by the Format popup. */
 export interface WriterFormatMenuProps {
+  /** Direct character attributes currently active at the Writer selection or caret. */
+  readonly characterAttributes: WriterCharacterAttributes;
   /** Focused paragraph horizontal alignment. */
   readonly alignment: WriterParagraphAlignment;
   /** Focused paragraph list presentation. */
@@ -24,6 +28,8 @@ export interface WriterFormatMenuProps {
   readonly listLevel: number;
   /** Applies a focused-paragraph alignment command. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
+  /** Toggles one direct character format over the current Writer selection or pending caret state. */
+  readonly onCharacterFormatChange: (format: WriterCharacterFormat) => void;
   /** Applies a focused-paragraph list presentation command. */
   readonly onListKindChange: (listKind: WriterParagraphListKind) => void;
   /** Applies a focused-paragraph list-level command. */
@@ -37,9 +43,11 @@ export interface WriterFormatMenuProps {
  *
  * @param props - Focused paragraph command state and callbacks owned by the enclosing Writer menu bar.
  * @param props.alignment - Current focused-paragraph horizontal alignment.
+ * @param props.characterAttributes - Direct character attributes active at the Writer selection or caret.
  * @param props.listKind - Current focused-paragraph list presentation.
  * @param props.listLevel - Current focused-paragraph list nesting level.
  * @param props.onAlignmentChange - Alignment transition callback.
+ * @param props.onCharacterFormatChange - Direct character-format transition callback.
  * @param props.onListKindChange - List-kind transition callback.
  * @param props.onListLevelChange - List-level transition callback.
  * @param props.onInvoke - Parent callback that runs and closes one enabled menu command.
@@ -47,14 +55,17 @@ export interface WriterFormatMenuProps {
  */
 export function WriterFormatMenu({
   alignment,
+  characterAttributes,
   listKind,
   listLevel,
   onAlignmentChange,
+  onCharacterFormatChange,
   onListKindChange,
   onListLevelChange,
   onInvoke,
 }: WriterFormatMenuProps): React.JSX.Element {
   const [isBulletsAndNumberingMenuOpen, setIsBulletsAndNumberingMenuOpen] = useState(false);
+  const [isTextMenuOpen, setIsTextMenuOpen] = useState(false);
 
   /**
    * Renders an enabled or disabled Format menu command with standard Writer browser popup semantics.
@@ -137,6 +148,55 @@ export function WriterFormatMenu({
         false,
         alignment === "justify",
       )}
+      <div aria-hidden="true" className="my-1 border-t border-slate-200" />
+      <div className="relative">
+        <button
+          aria-expanded={isTextMenuOpen}
+          aria-haspopup="menu"
+          className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
+          onClick={
+            /** Toggles the pinned Format Text submenu without closing the enclosing popup. @returns Nothing; React records nested menu visibility. */
+            function toggleTextMenu(): void {
+              setIsTextMenuOpen(
+                /** Inverts nested Text menu visibility. @param isOpen - Current nested menu state. @returns Inverted menu state. */
+                function invertTextMenu(isOpen): boolean {
+                  return !isOpen;
+                },
+              );
+            }
+          }
+          role="menuitem"
+          type="button"
+        >
+          Text
+          <span aria-hidden="true">›</span>
+        </button>
+        {isTextMenuOpen ? (
+          <div
+            aria-label="Text menu"
+            className="absolute left-full top-0 z-30 ml-1 w-56 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
+            role="menu"
+          >
+            {(["bold", "italic", "underline"] as const).map(
+              /** Renders a pinned Format Text direct-character command. @param format - Direct Writer character format. @returns One active-aware submenu command. */
+              function renderTextFormatCommand(format): React.JSX.Element {
+                const label =
+                  format === "bold" ? "Bold" : format === "italic" ? "Italic" : "Underline";
+                return (
+                  <div key={format}>
+                    {renderMenuItem(
+                      label,
+                      onInvoke.bind(undefined, onCharacterFormatChange.bind(undefined, format)),
+                      false,
+                      characterAttributes[format],
+                    )}
+                  </div>
+                );
+              },
+            )}
+          </div>
+        ) : null}
+      </div>
       <div aria-hidden="true" className="my-1 border-t border-slate-200" />
       <div className="relative">
         <button

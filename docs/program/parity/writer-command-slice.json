@@ -331,6 +331,56 @@
           { "path": "docs/program/source-tree.md", "marker": "Bounded nested semantic" }
         ]
       }
+    },
+    {
+      "id": "LO-WRITER-0109",
+      "capability": "Writer applies direct Bold, Italic, and single Underline to same-paragraph text and exports semantic Copy HTML",
+      "status": "implemented",
+      "gaps": [
+        "The browser supports one native non-empty same-paragraph range and collapsed-caret pending attributes only; cross-paragraph, table, multi-range, character-style, and full IME behavior remain unmapped.",
+        "Font family, size, colour, double underline, strikeout, overline, Paste, RTF, and ODT/DOCX interchange remain separate capabilities rather than browser-runtime exceptions."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/source/uibase/shells/txtattr.cxx", "marker": "SwTextShell::ExecCharAttr" },
+          { "path": "sw/source/core/txtnode/ndtxt.cxx", "marker": "SwTextNode" },
+          { "path": "sw/uiconfig/swriter/menubar/menubar.xml", "marker": ".uno:UnderlineSingle" },
+          { "path": "sw/uiconfig/swriter/toolbar/textobjectbar.xml", "marker": ".uno:Bold" }
+        ],
+        "tests": [
+          { "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx", "marker": "testIMEFormattingAtEndOfParagraph" },
+          { "path": "sw/qa/uitest/writer_tests2/formatCharacter.py", "marker": "formatCharacter" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/swriter/04/01020000.xhp", "marker": "Shortcut Keys for %PRODUCTNAME Writer" },
+          { "path": "helpcontent2/source/text/swriter/guide/shortcut_writing.xhp", "marker": "Ctrl" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts", "marker": "toggleWriterTextRangeFormat" },
+          { "path": "apps/office/src/sw/source/uibase/shells/txtattr.ts", "marker": "toggleWriterCharacterFormat" },
+          { "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts", "marker": "getWriterSameParagraphSelection" },
+          { "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "marker": "renderWriterTextRun" },
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts", "marker": "wrapUniformWriterInlineFormatting" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx", "marker": "renderTextFormatCommand" },
+          { "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx", "marker": "renderCharacterFormatControl" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/sw/source/core/txtnode/ndtxt.test.ts", "marker": "toggles a selected range" },
+          { "path": "apps/office/src/sw/source/uibase/shells/txtattr.test.ts", "marker": "toggles a non-empty" },
+          { "path": "apps/office/src/sw/source/uibase/wrtsh/select.test.ts", "marker": "reads and restores" },
+          { "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts", "marker": "preserves only supported direct" },
+          { "path": "apps/office/src/framework/source/services/desktop.test.tsx", "marker": "formats same-paragraph text" },
+          { "path": "apps/office/e2e/writer-character-formatting.spec.ts", "marker": "Writer direct character formatting" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-character-formatting.md", "marker": "Browser Writer direct character formatting" },
+          { "path": "docs/program/writer-command-placement.md", "marker": ".uno:UnderlineSingle" },
+          { "path": "docs/program/writer-clipboard.md", "marker": "direct character formatting" },
+          { "path": "docs/program/source-tree.md", "marker": "txtattr.ts" }
+        ]
+      }
     }
   ]
 }

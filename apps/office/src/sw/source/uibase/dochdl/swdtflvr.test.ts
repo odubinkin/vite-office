@@ -75,6 +75,52 @@ describe("createWriterClipboardSelection" /** Groups selected Writer paragraph c
     });
   });
 
+  it("preserves only supported direct character semantics in rich Writer clipboard HTML" /** Verifies strong, emphasis, and single underline survive selection Copy while arbitrary editable markup is flattened. @returns Nothing; bounded semantic HTML and plain text are asserted. */, function serializesDirectCharacterFormatting(): void {
+    document.body.innerHTML =
+      '<p data-alignment="left" data-style="default" data-writer-paragraph-id="p-1"><strong>Bold <em>italic</em></strong><span style="text-decoration: underline">under</span><mark>plain</mark></p>';
+    const paragraph = document.querySelector("p") as HTMLParagraphElement;
+    const selection = selectCompleteNodes(paragraph, paragraph);
+    expect(createWriterClipboardSelection(selection)).toEqual({
+      html: '<p style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;"><strong>Bold <em>italic</em></strong><span style="text-decoration: underline">under</span>plain</p>',
+      plainText: "Bold italicunderplain",
+    });
+    const textNode = paragraph.querySelector("strong")?.firstChild as Text;
+    const partialRange = document.createRange();
+    partialRange.setStart(textNode, 1);
+    partialRange.setEnd(textNode, 4);
+    selection.removeAllRanges();
+    selection.addRange(partialRange);
+    expect(createWriterClipboardSelection(selection)?.html).toContain("<strong>old</strong>");
+  });
+
+  it("retains a uniform partial emphasis or underline ancestor and flattens mixed-format endpoints" /** Verifies partial Range cloning restores each safe shared ancestor without wrapping a selection that crosses formats. @returns Nothing; portable HTML fragments are asserted. */, function serializesPartialDirectFormats(): void {
+    document.body.innerHTML =
+      '<p data-alignment="left" data-style="default" data-writer-paragraph-id="p-1"><em>italic</em><span style="text-decoration: underline">under</span><!--ignored--></p>';
+    const paragraph = document.querySelector("p") as HTMLParagraphElement;
+    const italicText = paragraph.querySelector("em")?.firstChild as Text;
+    const underlineText = paragraph.querySelector("span")?.firstChild as Text;
+    const selection = globalThis.getSelection() as Selection;
+    const italicRange = document.createRange();
+    italicRange.setStart(italicText, 1);
+    italicRange.setEnd(italicText, 4);
+    selection.addRange(italicRange);
+    expect(createWriterClipboardSelection(selection)?.html).toContain("<em>tal</em>");
+    selection.removeAllRanges();
+    const underlineRange = document.createRange();
+    underlineRange.setStart(underlineText, 1);
+    underlineRange.setEnd(underlineText, 4);
+    selection.addRange(underlineRange);
+    expect(createWriterClipboardSelection(selection)?.html).toContain(
+      '<span style="text-decoration: underline">nde</span>',
+    );
+    selection.removeAllRanges();
+    const mixedRange = document.createRange();
+    mixedRange.setStart(italicText, 0);
+    mixedRange.setEnd(underlineText, 2);
+    selection.addRange(mixedRange);
+    expect(createWriterClipboardSelection(selection)?.html).not.toContain("<em><span");
+  });
+
   it("delegates contiguous complete list items to semantic HTML and list-aware plain-text writers" /** Verifies the transfer handler sends only complete list paragraphs through list serialization. @returns Nothing; semantic markup and visible plain-text labels are asserted. */, function serializesSemanticLists(): void {
     document.body.innerHTML = `
       <span data-writer-auxiliary-description="true">Paragraph list: Ordered List</span>

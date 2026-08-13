@@ -30,7 +30,10 @@ selection remains responsible for partial text selection inside one paragraph.
 The Writer selection adapter emits paired `text/plain` and `text/html` values.
 The rich HTML uses portable inline styles for the bounded model's paragraph
 alignment plus Default Paragraph Style or Heading 1 sizing, weight, and line
-height. [`copyRichText`](../../apps/office/src/vcl/browser/browser-clipboard.ts)
+height. It also retains implemented direct character formatting as semantic
+`strong`, `em`, and single-underline `span` elements, including a selected
+partial span whose shared semantic ancestor would otherwise be lost by browser
+range cloning. [`copyRichText`](../../apps/office/src/vcl/browser/browser-clipboard.ts)
 prefers `navigator.clipboard.write` with `ClipboardItem`; another rich-text
 editor can therefore retain the currently implemented paragraph formatting.
 When that API is absent or rejects the write, `copyPlainText` uses
@@ -66,6 +69,6 @@ declares the same command in the standard toolbar. This browser slice maps the
 placement and bounded browser behavior only. Rich copy covers just the
 implemented paragraph-level styles; Cut, Paste, Paste Special, inline character
 formatting, objects, tables, tracked changes, and full LibreOffice transfer
-semantics remain separate feature tasks. RTF, Paste, named list styles,
+semantics remain separate feature tasks. Cut, Paste, named list styles,
 restart/continue semantics, ODT/DOCX import/export, arbitrary multi-range
 selections, and full Writer transfer semantics remain separate feature tasks.

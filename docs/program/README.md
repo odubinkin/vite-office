@@ -151,6 +151,9 @@ The following documents form the program control plane:
   Paragraph Style and Heading 1 state, focused selection, and snapshot defaults.
 - [Browser Writer paragraph lists](writer-paragraph-lists.md): bounded default
   bullets, numbering, removal, serializable state, and pinned command placement.
+- [Browser Writer direct character formatting](writer-character-formatting.md):
+  bounded Bold, Italic, and single Underline text runs, command placement, and
+  semantic clipboard export.
 - [Browser Writer paragraph reordering](writer-paragraph-reordering.md): bounded
   adjacent movement that preserves paragraph content and formatting state.
 - [Browser Writer paragraph breaks](writer-paragraph-breaks.md): caret-based

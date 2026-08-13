@@ -37,6 +37,11 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
   **Remove Bullets**, **Unordered List**, **Ordered List**, **Demote**, and
   **Promote**. Demote and Promote are disabled outside a list and at the root or
   bounded deepest level respectively.
+- It nests `.uno:Bold`, `.uno:Italic`, and `.uno:UnderlineSingle` under
+  **Format → Text**. The browser provides the same three commands there and
+  applies them to a native non-empty same-paragraph selection, or records a
+  pending direct attribute at a collapsed caret. **Ctrl/Cmd+B**,
+  **Ctrl/Cmd+I**, and **Ctrl/Cmd+U** invoke the same command shell.
 - `WriterCommands.xcu` declares Default Paragraph and Heading 1 style commands;
   the bounded browser style choices are available in **Styles**.
 
@@ -56,7 +61,8 @@ document-model break.
 
 `sw/uiconfig/swriter/toolbar/textobjectbar.xml` places `.uno:DefaultBullet`
 and `.uno:DefaultNumbering` after the paragraph alignment controls. The same
-order is used by the browser formatting toolbar. There is no generic paragraph
+toolbar also places `.uno:Bold`, `.uno:Italic`, and `.uno:UnderlineSingle`
+before those paragraph controls; the browser keeps that order. There is no generic paragraph
 movement control in the browser toolbar or menu: the previous adjacent-body
 operation was not a placement-equivalent implementation of Writer list-item
 movement and is now retained only as an unmapped document-model primitive for a

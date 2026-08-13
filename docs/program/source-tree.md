@@ -18,6 +18,7 @@ runtime of this static application.
 | `apps/office/src/vcl/browser` | `vcl` | Browser-only clipboard, download, IndexedDB, and styling adapters |
 | `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | Serializable Writer document transitions |
 | `apps/office/src/sw/source/core/docnode` | `sw/source/core/docnode` | Serializable Writer paragraph-node transitions |
+| `apps/office/src/sw/source/core/txtnode` | `sw/source/core/txtnode` | Writer text-node runs and bounded direct character attributes |
 | `apps/office/src/sw/source/uibase/docvw` | `sw/source/uibase/docvw` | Document-page editor and editable paragraphs |
 | `apps/office/src/sw/source/uibase/wrtsh` | `sw/source/uibase/wrtsh` | Writer selection shell and browser DOM caret bridge |
 | `apps/office/src/sw/source/uibase/dochdl` | `sw/source/uibase/dochdl` | Selection transfer-document preparation and clipboard ownership |
@@ -72,7 +73,7 @@ machine-checked record.
 | `sw/uiconfig/swriter/menubar/format-menu.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | React Format-popup decomposition of the same menu hierarchy |
 | `vcl/browser/browser-clipboard.ts` | `vcl/source/app/ClipboardBase.cxx` | Explicit static-browser clipboard platform adapter |
 
-## File-level provenance in the active Writer list slice
+## File-level provenance in the active Writer list slice and direct-character formatting slice
 
 | Local browser module | Pinned LibreOffice source/configuration module | Responsibility |
 | --- | --- | --- |
@@ -81,6 +82,8 @@ machine-checked record.
 | `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
 | `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Active-list Promote and Demote level transition |
 | `sw/source/uibase/shells/textsh.ts` | `sw/source/uibase/shells/textsh.cxx` | Browser-owned Copy, plain-text download, and Undo/Redo shortcut command shell |
+| `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Immutable direct-character text runs, split/merge, and normalization |
+| `sw/source/uibase/shells/txtattr.ts` | `sw/source/uibase/shells/txtattr.cxx` | Bold, Italic, and single Underline command transition |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
 | `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Bounded nested semantic `ul`/`ol`/`li` clipboard HTML serialization |

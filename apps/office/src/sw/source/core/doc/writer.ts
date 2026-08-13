@@ -8,11 +8,27 @@ import {
   normalizeWriterParagraphList,
   type WriterParagraphList,
 } from "./list";
+import {
+  createWriterTextRuns,
+  getWriterTextAttributesAtOffset,
+  getWriterTextFromRuns,
+  insertWriterTextRun,
+  normalizeWriterTextRuns,
+  splitWriterTextRuns,
+  toggleWriterTextRangeFormat,
+  type WriterCharacterFormat,
+  type WriterTextRun,
+} from "../txtnode/ndtxt";
 export { moveWriterParagraph, removeWriterParagraph } from "../docnode/node";
 export { isWriterParagraphListKind, WRITER_PARAGRAPH_LIST_KINDS } from "./list";
 export type { WriterParagraphList, WriterParagraphListKind } from "./list";
 export { getWriterParagraphListMarker } from "./number";
 export type { WriterNumberingParagraph } from "./number";
+export type {
+  WriterCharacterAttributes,
+  WriterCharacterFormat,
+  WriterTextRun,
+} from "../txtnode/ndtxt";
 
 /** Enumerates the bounded paragraph alignments available in the Writer workbench. */
 export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"] as const;
@@ -37,9 +53,11 @@ export interface WriterParagraph {
   readonly id: string;
   /** Serializable list state retained independently from paragraph text and style. */
   readonly list: WriterParagraphList;
+  /** Canonical direct-format text runs from which the compatibility text projection is derived. */
+  readonly runs: readonly WriterTextRun[];
   /** Bounded direct paragraph-style choice applied to the complete paragraph. */
   readonly style: WriterParagraphStyle;
-  /** Plain Unicode text; inline formatting remains out of scope. */
+  /** Visible plain Unicode text deterministically derived from runs for existing plain-text consumers. */
   readonly text: string;
 }
 
@@ -71,6 +89,7 @@ export function createWriterDocument(
         alignment: "left",
         id: paragraphId,
         list: createDefaultWriterParagraphList(),
+        runs: [],
         style: "default",
         text: "",
       },
@@ -111,6 +130,7 @@ export function appendWriterParagraph(
         alignment: "left",
         id: paragraphId,
         list: createDefaultWriterParagraphList(),
+        runs: [],
         style: "default",
         text: "",
       },
@@ -178,10 +198,7 @@ export function splitWriterParagraph(
        */
       function splitSelectedParagraph(candidate): readonly WriterParagraph[] {
         return candidate.id === paragraphId
-          ? [
-              { ...candidate, text: candidate.text.slice(0, offset) },
-              { ...candidate, id: nextParagraphId, text: candidate.text.slice(offset) },
-            ]
+          ? [...splitWriterParagraphRuns(candidate, offset, nextParagraphId)]
           : [candidate];
       },
     ),
@@ -228,8 +245,10 @@ export function mergeWriterParagraphWithPrevious(
        * @returns One retained paragraph, one updated preceding paragraph, or no paragraph for the removed selected entry.
        */
       function joinAdjacentParagraphs(candidate): readonly WriterParagraph[] {
-        if (candidate.id === precedingParagraph.id)
-          return [{ ...candidate, text: `${candidate.text}${selectedParagraph.text}` }];
+        if (candidate.id === precedingParagraph.id) {
+          const runs = normalizeWriterTextRuns([...candidate.runs, ...selectedParagraph.runs]);
+          return [{ ...candidate, runs, text: getWriterTextFromRuns(runs) }];
+        }
         return candidate.id === paragraphId ? [] : [candidate];
       },
     ),
@@ -279,8 +298,55 @@ export function insertWriterText(
         return candidate.id === paragraphId
           ? {
               ...candidate,
+              runs: insertWriterTextRun(
+                candidate.runs,
+                offset,
+                text,
+                getWriterTextAttributes(candidate),
+              ),
               text: `${candidate.text.slice(0, offset)}${text}${candidate.text.slice(offset)}`,
             }
+          : candidate;
+      },
+    ),
+  };
+}
+
+/**
+ * Inserts text with explicit direct character attributes at one Writer paragraph offset.
+ *
+ * @param writerDocument - Immutable prior Writer document state.
+ * @param paragraphId - Existing paragraph identity that owns the insertion.
+ * @param offset - Integer UTF-16 insertion offset from zero through paragraph text length.
+ * @param text - Text to insert without formatting interpretation.
+ * @param attributes - Direct character attributes applied to the inserted text.
+ * @returns New immutable Writer document with updated runs and a dirty lifecycle header.
+ * @throws {Error} When paragraph is absent or offset is outside the permitted integer range.
+ */
+export function insertWriterTextWithAttributes(
+  writerDocument: WriterDocument,
+  paragraphId: string,
+  offset: number,
+  text: string,
+  attributes: import("../txtnode/ndtxt").WriterCharacterAttributes,
+): WriterDocument {
+  const paragraph = writerDocument.paragraphs.find(
+    /** Finds the paragraph selected by the requested stable identity. @param candidate - Immutable paragraph candidate to inspect. @returns True only when candidate owns paragraphId. */
+    function hasParagraphId(candidate): boolean {
+      return candidate.id === paragraphId;
+    },
+  );
+  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.text.length)
+    throw new Error("Insertion offset is outside the paragraph.");
+  const runs = insertWriterTextRun(paragraph.runs, offset, text, attributes);
+  return {
+    document: markDocumentDirty(writerDocument.document),
+    paragraphs: writerDocument.paragraphs.map(
+      /** Replaces only the selected paragraph runs. @param candidate - Immutable paragraph candidate. @returns Updated selected paragraph or original sibling. */
+      function updateSelectedParagraph(candidate): WriterParagraph {
+        return candidate.id === paragraphId
+          ? { ...candidate, runs, text: getWriterTextFromRuns(runs) }
           : candidate;
       },
     ),
@@ -324,7 +390,9 @@ export function replaceWriterParagraph(
        * @returns Updated selected paragraph or the original sibling reference.
        */
       function updateSelectedParagraph(candidate): WriterParagraph {
-        return candidate.id === paragraphId ? { ...candidate, text } : candidate;
+        return candidate.id === paragraphId
+          ? { ...candidate, runs: createWriterTextRuns(text), text }
+          : candidate;
       },
     ),
   };
@@ -396,16 +464,25 @@ export function normalizeWriterParagraphFormatting(writerDocument: WriterDocumen
         : "left";
       const style = isWriterParagraphStyle(paragraph.style) ? paragraph.style : "default";
       const list = normalizeWriterParagraphList(paragraph.list);
+      const runs = normalizeWriterTextRuns(paragraph.runs);
+      const text =
+        runs.length === 0 && paragraph.text.length > 0
+          ? paragraph.text
+          : getWriterTextFromRuns(runs);
+      const normalizedRuns =
+        runs.length === 0 && text.length > 0 ? createWriterTextRuns(text) : runs;
       if (
         alignment === paragraph.alignment &&
         style === paragraph.style &&
         list.kind === paragraph.list?.kind &&
         list.level === paragraph.list?.level &&
-        list.styleId === paragraph.list?.styleId
+        list.styleId === paragraph.list?.styleId &&
+        text === paragraph.text &&
+        areWriterTextRunsEquivalent(normalizedRuns, paragraph.runs)
       )
         return paragraph;
       containsUnsupportedFormatting = true;
-      return { ...paragraph, alignment, list, style };
+      return { ...paragraph, alignment, list, runs: normalizedRuns, style, text };
     },
   );
   return containsUnsupportedFormatting ? { ...writerDocument, paragraphs } : writerDocument;
@@ -477,6 +554,46 @@ export function setWriterParagraphStyle(
 }
 
 /**
+ * Toggles one direct character format over a non-empty same-paragraph range and marks a changed document dirty.
+ *
+ * @param writerDocument - Immutable prior Writer document state.
+ * @param paragraphId - Existing paragraph identity that owns the selected range.
+ * @param start - Inclusive UTF-16 range start inside the paragraph.
+ * @param end - Exclusive UTF-16 range end inside the paragraph.
+ * @param format - Direct character format selected from a Writer command.
+ * @returns Original document for a no-op normalized run sequence, otherwise a dirty document with formatted runs.
+ * @throws {Error} When paragraphId is absent or range bounds are invalid.
+ */
+export function toggleWriterParagraphCharacterFormat(
+  writerDocument: WriterDocument,
+  paragraphId: string,
+  start: number,
+  end: number,
+  format: WriterCharacterFormat,
+): WriterDocument {
+  const paragraph = writerDocument.paragraphs.find(
+    /** Finds the paragraph selected for direct character formatting. @param candidate - Immutable paragraph candidate. @returns True only when it owns paragraphId. */
+    function hasParagraphId(candidate): boolean {
+      return candidate.id === paragraphId;
+    },
+  );
+  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  if (start === end) return writerDocument;
+  const runs = toggleWriterTextRangeFormat(paragraph.runs, start, end, format);
+  return {
+    document: markDocumentDirty(writerDocument.document),
+    paragraphs: writerDocument.paragraphs.map(
+      /** Replaces exactly one formatted paragraph while retaining all siblings. @param candidate - Immutable paragraph candidate. @returns Updated selected paragraph or original sibling. */
+      function updateFormattedParagraph(candidate): WriterParagraph {
+        return candidate.id === paragraphId
+          ? { ...candidate, runs, text: getWriterTextFromRuns(runs) }
+          : candidate;
+      },
+    ),
+  };
+}
+
+/**
  * Checks whether an unknown runtime value is a supported Writer paragraph style.
  *
  * @param value - Runtime candidate supplied by a storage snapshot or a boundary caller.
@@ -493,5 +610,60 @@ export function isWriterParagraphStyle(value: unknown): value is WriterParagraph
     function matchesStyle(style): boolean {
       return style === value;
     },
+  );
+}
+
+/**
+ * Splits one Writer paragraph while retaining direct character runs on both adjacent output paragraphs.
+ *
+ * @param paragraph - Immutable source paragraph selected for a paragraph-break split.
+ * @param offset - Valid UTF-16 split offset inside paragraph.text.
+ * @param nextParagraphId - Reserved stable identity for the trailing output paragraph.
+ * @returns Prefix and suffix paragraphs with text compatibility projections derived from their runs.
+ */
+function splitWriterParagraphRuns(
+  paragraph: WriterParagraph,
+  offset: number,
+  nextParagraphId: string,
+): readonly WriterParagraph[] {
+  const split = splitWriterTextRuns(paragraph.runs, offset);
+  return [
+    { ...paragraph, runs: split.prefix, text: getWriterTextFromRuns(split.prefix) },
+    {
+      ...paragraph,
+      id: nextParagraphId,
+      runs: split.suffix,
+      text: getWriterTextFromRuns(split.suffix),
+    },
+  ];
+}
+
+/**
+ * Reads collapsed-caret attributes at a Writer paragraph end for the legacy plain-text insertion helper.
+ *
+ * @param paragraph - Immutable paragraph that owns the requested insertion.
+ * @returns Direct attributes inherited at the end of paragraph text.
+ */
+function getWriterTextAttributes(paragraph: WriterParagraph) {
+  return getWriterTextAttributesAtOffset(paragraph.runs, paragraph.text.length);
+}
+
+/** Compares normalized and stored Writer run sequences without relying on object identity. @param left - Normalized direct-format run sequence. @param right - Stored candidate run sequence. @returns True only when stored runs already have identical normalized text and attributes. */
+function areWriterTextRunsEquivalent(left: readonly WriterTextRun[], right: unknown): boolean {
+  const normalizedRight = normalizeWriterTextRuns(right);
+  return (
+    left.length === normalizedRight.length &&
+    left.every(
+      /** Compares one run at its deterministic ordered index. @param run - Expected normalized run. @param index - Ordered run position. @returns True only when the stored run matches every bounded attribute and text. */
+      function matchesStoredRun(run, index): boolean {
+        const storedRun = normalizedRight[index] as WriterTextRun;
+        return (
+          run.text === storedRun.text &&
+          run.attributes.bold === storedRun.attributes.bold &&
+          run.attributes.italic === storedRun.attributes.italic &&
+          run.attributes.underline === storedRun.attributes.underline
+        );
+      },
+    )
   );
 }

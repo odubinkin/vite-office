@@ -62,6 +62,11 @@ export function WriterEditableParagraph({
   const styleDescriptionId = `writer-paragraph-style-${index + 1}`;
   const label = index === 0 ? "Writer document text" : `Writer paragraph ${index + 1}`;
   const listIndent = listMarker === undefined ? undefined : `${paragraph.list.level * 2}rem`;
+  const hasOnlyDefaultRun =
+    paragraph.runs.length === 1 &&
+    paragraph.runs[0]?.attributes.bold === false &&
+    paragraph.runs[0]?.attributes.italic === false &&
+    paragraph.runs[0]?.attributes.underline === false;
   return (
     <div className={isLast ? "" : "mb-4"} data-active={isActive}>
       <span className="sr-only" id={styleDescriptionId}>
@@ -129,7 +134,23 @@ export function WriterEditableParagraph({
           style={{ textAlign: paragraph.alignment }}
           suppressContentEditableWarning
         >
-          {paragraph.text}
+          {hasOnlyDefaultRun
+            ? paragraph.text
+            : paragraph.runs.map(
+                /** Renders one semantic direct-format run without exposing editor metadata in visible text. @param run - Immutable normalized Writer text run. @param runIndex - Stable in-paragraph render position. @returns Text node or semantic formatting element. */
+                function renderWriterTextRun(run, runIndex): React.ReactNode {
+                  const key = `${runIndex}-${run.text}`;
+                  let content: React.ReactNode = run.text;
+                  if (run.attributes.underline)
+                    content = <span style={{ textDecoration: "underline" }}>{content}</span>;
+                  if (run.attributes.italic) content = <em>{content}</em>;
+                  return run.attributes.bold ? (
+                    <strong key={key}>{content}</strong>
+                  ) : (
+                    <span key={key}>{content}</span>
+                  );
+                },
+              )}
         </p>
       </div>
     </div>
