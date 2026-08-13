@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130746-TMATAR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T07:48:26.038Z",
+  "verdict": "pass",
+  "summary": "Framework shortcut and dispatch paths match pinned LibreOffice ownership.",
+  "evaluated_sha": "ced8b38702e50a6a01d6d9267d50368c5d6340fb",
+  "blueprint_digest": "f102f134d784cd9143e0b1769646eb01633fe1fa78fd72b54aa4ea775a0e36ab",
+  "findings": [
+    "Fast coverage and every declared structural quality gate passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130746-TMATAR/README.md",
+    "HEAD"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
