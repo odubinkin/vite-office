@@ -1,10 +1,11 @@
 ---
 id: "202608130521-XRVZ3V"
 title: "Add bounded Writer bullets and numbering"
-status: "DOING"
+result_summary: "Implemented active-paragraph bullets, numbering, and removal with tests, parity mapping, and documentation."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -38,7 +39,9 @@ quality_review:
     - "npm run test:coverage; npm run test:e2e -- --grep Writer bullets and numbering; npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference"
   findings:
     - "Default bullet, default numbering, and removal execute through list.ts, number.ts, and txtnum.ts; UI placement and marker behavior are covered."
-commit: null
+commit:
+  hash: "f6c6fb3545667daf4ddd4f7b87d222d0765e6ae2"
+  message: "✨ XRVZ3V code: implement Writer bullets and numbering"
 comments:
   -
     author: "CODER"
@@ -52,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: apply file-level LibreOffice module provenance to the active Writer list capability."
+  -
+    author: "CODER"
+    body: "Verified: bounded Writer bullets and numbering ship with exact file-level LibreOffice provenance and recorded targeted evidence."
 events:
   -
     type: "status"
@@ -87,8 +93,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified 100% unit coverage, focused production Chromium list flow, parity mapping, formatting, lint, types, JSDoc, source-tree, and policy checks; aggregate suite deferred under approved ten-task cadence."
+  -
+    type: "status"
+    at: "2026-08-13T06:10:54.527Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: bounded Writer bullets and numbering ship with exact file-level LibreOffice provenance and recorded targeted evidence."
 doc_version: 3
-doc_updated_at: "2026-08-13T06:10:14.440Z"
+doc_updated_at: "2026-08-13T06:10:54.529Z"
 doc_updated_by: "CODER"
 description: "Implement Default Bullet, Default Numbering, and Remove Bullets for the active Writer paragraph with pinned LibreOffice menu and formatting-toolbar placement, history, tests, documentation, and parity evidence."
 sections:
