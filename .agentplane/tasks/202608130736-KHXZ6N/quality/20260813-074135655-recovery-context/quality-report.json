@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130736-KHXZ6N",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T07:41:35.655Z",
+  "verdict": "pass",
+  "summary": "Parity CLI gap-count oracle reflects the current documented Writer mapping.",
+  "evaluated_sha": "d123237caa57aa0988f53decd29bfa7df5067fa3",
+  "blueprint_digest": "a39a2a3508b137afa9abb664da7b9a39b4803927ef8ef73509f7bc2bacf94af6",
+  "findings": [
+    "Focused CLI test and all full verification stages passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130736-KHXZ6N/README.md",
+    "d123237"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
