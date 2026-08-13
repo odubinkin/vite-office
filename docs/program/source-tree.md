@@ -2,8 +2,10 @@
 
 The browser project uses LibreOffice-derived module names to make each local
 implementation, test, and parity record easy to locate against the pinned
-`libreoffice-26.8.0.2` checkout. The tree preserves ownership boundaries, not
-C++ implementation details: React, TypeScript, and browser APIs remain the
+`libreoffice-26.8.0.2` checkout. Every newly implemented capability must map
+to a concrete upstream file as well as an ownership directory; a similar
+directory name alone is insufficient. The tree preserves ownership boundaries,
+not C++ implementation details: React, TypeScript, and browser APIs remain the
 runtime of this static application.
 
 | Local browser path | Pinned LibreOffice region | Current responsibility |
@@ -31,3 +33,14 @@ entrypoints rather than implementations of an upstream C++ module.
 This mapping is architectural provenance, not a parity claim. Capability-level
 source, test, and Help evidence remains in the machine-readable
 [Writer command mappings](parity/writer-command-slice.json).
+
+## File-level provenance in the active Writer list slice
+
+| Local browser module | Pinned LibreOffice source/configuration module | Responsibility |
+| --- | --- | --- |
+| `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Serializable list metadata and legacy normalization |
+| `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Deterministic visible bullet and numbering marker calculation |
+| `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
+| `sw/source/uibase/docvw/WriterPlainTextEditor.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
+| `sw/uiconfig/swriter/menubar.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Format → Bullets and Numbering submenu declaration |
+| `sw/uiconfig/swriter/toolbar/textobjectbar.ts` | `sw/uiconfig/swriter/toolbar/textobjectbar.xml` | Text-object toolbar list command declaration |

@@ -129,7 +129,7 @@ describe("App" /**
   });
 
   it("does not put structural paragraph actions in the document page" /**
-   * Verifies page-integrated text has no persistent removal or movement buttons; movement belongs to Format.
+   * Verifies page-integrated text has no persistent structural controls; list commands belong to Format's pinned submenu.
    *
    * @returns Nothing; assertions cover Writer-consistent action placement.
    */, function keepsParagraphActionsOutOfCanvas(): void {
@@ -139,7 +139,34 @@ describe("App" /**
     expect(screen.queryByRole("button", { name: "Move paragraph 1 up" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Paragraph actions")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    expect(screen.getByRole("menuitem", { name: "Move item up" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+    expect(screen.getByRole("menuitem", { name: "Remove Bullets" })).toHaveAttribute(
+      "aria-current",
+      "true",
+    );
+  });
+
+  it("applies and toggles Writer list commands from their pinned toolbar and Format submenu" /** Verifies visible list markers, active command state, accessible list descriptions, and no-op removal history behavior. @returns Nothing; assertions cover both list command placements. */, function appliesWriterLists(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    const formattingToolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Unordered List" }));
+    expect(screen.getByTestId("writer-list-marker-writer-paragraph-1")).toHaveTextContent("•");
+    expect(paragraph).toHaveAccessibleDescription(/Paragraph list: Unordered List/);
+    expect(paragraph.textContent).not.toContain("•");
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Unordered List" }));
+    expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Ordered List" }));
+    expect(screen.getByTestId("writer-list-marker-writer-paragraph-1")).toHaveTextContent("1.");
+    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+    expect(screen.getByRole("menu", { name: "Bullets and Numbering menu" })).toBeVisible();
+    fireEvent.click(screen.getByRole("menuitem", { name: "Remove Bullets" }));
+    expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Remove Bullets" }));
+    expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
   });
 
   it("updates the preview and live status when a suite is selected" /**
@@ -237,8 +264,8 @@ describe("App" /**
   it("assigns a non-colliding paragraph identity after loading an irregular saved body" /**
    * Verifies the workbench skips an occupied generated identity when historical local data has a gap.
    *
-   * @returns A promise resolved after the loaded body and menu-based move are asserted.
-   */, async function loadsAndMovesIrregularBody(): Promise<void> {
+   * @returns A promise resolved after the loaded body and focused-list command are asserted.
+   */, async function loadsIrregularBody(): Promise<void> {
     const originalIndexedDb = globalThis.indexedDB;
     Object.defineProperty(globalThis, "indexedDB", {
       configurable: true,
@@ -258,12 +285,14 @@ describe("App" /**
           {
             alignment: "left",
             id: "writer-paragraph-1",
+            list: { kind: "none", level: 0 },
             style: "default",
             text: "First stored paragraph",
           },
           {
             alignment: "left",
             id: "writer-paragraph-3",
+            list: { kind: "none", level: 0 },
             style: "default",
             text: "Third stored paragraph",
           },
@@ -286,10 +315,9 @@ describe("App" /**
       );
       fireEvent.focus(screen.getByRole("textbox", { name: "Writer paragraph 2" }));
       fireEvent.click(screen.getByRole("button", { name: "Format" }));
-      fireEvent.click(screen.getByRole("menuitem", { name: "Move item up" }));
-      expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
-        "Third stored paragraph",
-      );
+      fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: /^Unordered List$/ }));
+      expect(screen.getByTestId("writer-list-marker-writer-paragraph-3")).toHaveTextContent("•");
     } finally {
       Object.defineProperty(globalThis, "indexedDB", {
         configurable: true,

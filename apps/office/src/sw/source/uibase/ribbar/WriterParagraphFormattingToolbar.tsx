@@ -2,9 +2,22 @@
  * @fileoverview Renders the implemented Writer paragraph-alignment commands in the durable formatting toolbar while retaining placeholders for later character formatting.
  */
 
-import { AlignCenter, AlignJustify, AlignLeft, AlignRight, type LucideIcon } from "lucide-react";
+import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
+  List,
+  ListOrdered,
+  type LucideIcon,
+} from "lucide-react";
 
-import type { WriterParagraphAlignment, WriterParagraphStyle } from "../../core/doc/writer";
+import { writerTextObjectBarListCommands } from "../../../uiconfig/swriter/toolbar/textobjectbar";
+import type {
+  WriterParagraphAlignment,
+  WriterParagraphListKind,
+  WriterParagraphStyle,
+} from "../../core/doc/writer";
 
 /** Describes one labelled formatting-toolbar command for a supported paragraph alignment. */
 interface ParagraphAlignmentControl {
@@ -30,27 +43,35 @@ export interface WriterParagraphFormattingToolbarProps {
   readonly alignment: WriterParagraphAlignment;
   /** Requests a new alignment for the currently focused Writer paragraph. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
+  /** Requests a new default list presentation for the currently focused Writer paragraph. */
+  readonly onListKindChange: (listKind: WriterParagraphListKind) => void;
   /** Requests a new style for the currently focused Writer paragraph. */
   readonly onStyleChange: (style: WriterParagraphStyle) => void;
   /** Style of the currently focused Writer paragraph. */
   readonly style: WriterParagraphStyle;
+  /** List presentation currently applied to the focused Writer paragraph. */
+  readonly listKind: WriterParagraphListKind;
 }
 
 /**
- * Renders Writer alignment commands beside intentionally disabled character-format placeholders.
+ * Renders Writer alignment and default-list commands beside intentionally disabled character-format placeholders.
  *
  * @param props - Focused paragraph formatting and callbacks owned by the Writer workbench.
  * @param props.alignment - Alignment currently applied to the active Writer paragraph.
  * @param props.onAlignmentChange - Callback that records the requested paragraph alignment.
+ * @param props.onListKindChange - Callback that records the requested default list presentation.
  * @param props.onStyleChange - Callback that records the requested paragraph style.
  * @param props.style - Style currently applied to the active Writer paragraph.
- * @returns A semantic formatting toolbar with four usable paragraph-alignment controls.
+ * @param props.listKind - List presentation currently applied to the active Writer paragraph.
+ * @returns A semantic formatting toolbar with paragraph-alignment and default-list controls.
  */
 export function WriterParagraphFormattingToolbar({
   alignment,
   onAlignmentChange,
+  onListKindChange,
   onStyleChange,
   style,
+  listKind,
 }: WriterParagraphFormattingToolbarProps): React.JSX.Element {
   return (
     <>
@@ -144,7 +165,38 @@ export function WriterParagraphFormattingToolbar({
           },
         )}
       </div>
-      <span className="text-xs font-medium text-slate-500">Paragraph alignment</span>
+      <span aria-hidden="true" className="h-6 border-l border-slate-300" />
+      <div aria-label="Paragraph lists" className="flex items-center gap-1" role="group">
+        {writerTextObjectBarListCommands.map(
+          /** Renders a pinned default-list control with toggle semantics. @param command - Immutable Writer toolbar list command. @returns One accessible default-list button. */
+          function renderListControl(command): React.JSX.Element {
+            const isActive = listKind === command.listKind;
+            const Icon = command.listKind === "bullet" ? List : ListOrdered;
+            return (
+              <button
+                aria-label={command.label}
+                aria-pressed={isActive}
+                className={`grid size-8 place-items-center rounded-md border transition ${
+                  isActive
+                    ? "border-indigo-700 bg-indigo-700 text-white"
+                    : "border-slate-300 bg-white text-slate-700 hover:border-indigo-400 hover:text-indigo-800"
+                }`}
+                key={command.unoCommand}
+                onClick={
+                  /** Toggles the active list kind off or requests the command's list kind. @returns Nothing; the parent records immutable history. */
+                  function toggleParagraphList(): void {
+                    onListKindChange(isActive ? "none" : command.listKind);
+                  }
+                }
+                title={command.label}
+                type="button"
+              >
+                <Icon aria-hidden="true" size={17} />
+              </button>
+            );
+          },
+        )}
+      </div>
     </>
   );
 }

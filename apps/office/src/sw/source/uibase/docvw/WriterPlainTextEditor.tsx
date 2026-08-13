@@ -4,7 +4,7 @@
 
 import { useEffect, useRef } from "react";
 
-import type { WriterParagraph } from "../../core/doc/writer";
+import { getWriterParagraphListMarker, type WriterParagraph } from "../../core/doc/writer";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { createWriterClipboardSelection } from "../utlui/writer-clipboard-selection";
 import { getWriterCollapsedCaretOffset, restoreWriterCollapsedCaret } from "./writer-dom-selection";
@@ -380,6 +380,7 @@ export function WriterPlainTextEditor({
               isActive={paragraph.id === activeParagraphId}
               isLast={index === paragraphs.length - 1}
               key={paragraph.id}
+              listMarker={getWriterParagraphListMarker(paragraphs, paragraph.id)}
               onFocus={onParagraphFocus}
               onKeyDown={handleParagraphKeyDown}
               onMouseDown={handleParagraphMouseDown}

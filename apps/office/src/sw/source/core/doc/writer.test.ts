@@ -178,7 +178,13 @@ describe("Writer paragraph body" /**
       ...writer,
       paragraphs: [
         ...writer.paragraphs,
-        { alignment: "left", id: "p-2", style: "default", text: "unchanged" },
+        {
+          alignment: "left",
+          id: "p-2",
+          list: { kind: "none", level: 0 },
+          style: "default",
+          text: "unchanged",
+        },
       ],
     };
     const inserted = insertWriterText(withSecondParagraph, "p-1", 0, "hello");
@@ -187,7 +193,15 @@ describe("Writer paragraph body" /**
     const unchanged = replaceWriterParagraph(replaced, "p-2", "updated");
     expect(writer).toMatchObject({
       document: { lifecycle: "new", revision: 0 },
-      paragraphs: [{ alignment: "left", id: "p-1", style: "default", text: "" }],
+      paragraphs: [
+        {
+          alignment: "left",
+          id: "p-1",
+          list: { kind: "none", level: 0 },
+          style: "default",
+          text: "",
+        },
+      ],
     });
     expect(inserted.document).toMatchObject({ lifecycle: "dirty", revision: 1 });
     expect(inserted.paragraphs[0]?.text).toBe("hello");
@@ -207,13 +221,31 @@ describe("Writer paragraph body" /**
     const appended = appendWriterParagraph(writer, "p-2");
 
     expect(writer.paragraphs).toEqual([
-      { alignment: "left", id: "p-1", style: "default", text: "" },
+      {
+        alignment: "left",
+        id: "p-1",
+        list: { kind: "none", level: 0 },
+        style: "default",
+        text: "",
+      },
     ]);
     expect(appended).toMatchObject({
       document: { lifecycle: "dirty", revision: 1 },
       paragraphs: [
-        { alignment: "left", id: "p-1", style: "default", text: "" },
-        { alignment: "left", id: "p-2", style: "default", text: "" },
+        {
+          alignment: "left",
+          id: "p-1",
+          list: { kind: "none", level: 0 },
+          style: "default",
+          text: "",
+        },
+        {
+          alignment: "left",
+          id: "p-2",
+          list: { kind: "none", level: 0 },
+          style: "default",
+          text: "",
+        },
       ],
     });
     expect(
@@ -249,7 +281,15 @@ describe("Writer paragraph body" /**
     expect(writer.paragraphs).toHaveLength(2);
     expect(removed).toMatchObject({
       document: { lifecycle: "dirty", revision: 1 },
-      paragraphs: [{ alignment: "left", id: "p-2", style: "default", text: "" }],
+      paragraphs: [
+        {
+          alignment: "left",
+          id: "p-2",
+          list: { kind: "none", level: 0 },
+          style: "default",
+          text: "",
+        },
+      ],
     });
     expect(
       /**
@@ -290,6 +330,7 @@ describe("Writer paragraph body" /**
     expect(writer.paragraphs[1]).toEqual({
       alignment: "left",
       id: "p-2",
+      list: { kind: "none", level: 0 },
       style: "default",
       text: "",
     });
@@ -297,12 +338,21 @@ describe("Writer paragraph body" /**
     expect(aligned.paragraphs[1]).toEqual({
       alignment: "center",
       id: "p-2",
+      list: { kind: "none", level: 0 },
       style: "default",
       text: "",
     });
     expect(unchanged).toBe(aligned);
     expect(normalized).toMatchObject({
-      paragraphs: [{ alignment: "left", id: "p-1", style: "default", text: "Legacy" }],
+      paragraphs: [
+        {
+          alignment: "left",
+          id: "p-1",
+          list: { kind: "none", level: 0 },
+          style: "default",
+          text: "Legacy",
+        },
+      ],
     });
     expect(normalizeWriterParagraphFormatting(aligned)).toBe(aligned);
     expect(

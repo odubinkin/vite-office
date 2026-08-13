@@ -15,7 +15,7 @@ apply a pure immutable transition.
 [`splitWriterParagraph`](../../apps/office/src/sw/source/core/doc/writer.ts) replaces the
 source text with the prefix, inserts an adjacent paragraph containing the
 suffix, marks the document dirty, and preserves the source paragraph's bounded
-alignment and style on both results. The workbench allocates a collision-free
+alignment, style, and list state on both results. The workbench allocates a collision-free
 paragraph identity, adds one history entry, makes the new paragraph active, and
 focuses it at offset zero after React mounts it. Browser-local save/load and
 plain-text download therefore retain the new ordered body without a separate
@@ -42,7 +42,7 @@ command, so it has no menu item or toolbar button.
 
 Only unmodified Enter with a collapsed selection is modeled. Shift+Enter,
 modified Enter shortcuts, replacing a non-collapsed selection, rich-text
-boundaries, list continuation, table-cell behavior, page breaks, and Backspace
+boundaries, list continuation beyond this inherited first list state, table-cell behavior, page breaks, and Backspace
 or Delete inside text, Backspace in the first paragraph, and Delete in the last
 paragraph remain separate future features. When the browser selection is not a
 collapsed caret inside the editable paragraph, this slice leaves the native

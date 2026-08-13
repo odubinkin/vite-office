@@ -22,6 +22,7 @@ import {
   type WriterParagraphAlignment,
   type WriterParagraphStyle,
 } from "../../core/doc/writer";
+import type { WriterParagraphListKind } from "../../core/doc/list";
 import {
   loadWriterDocument,
   saveWriterDocument,
@@ -35,6 +36,7 @@ import { WriterParagraphProperties } from "../sidebar/WriterParagraphProperties"
 import { WriterPlainTextEditor } from "../docvw/WriterPlainTextEditor";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { useWriterHistoryShortcuts } from "../shells/use-writer-history-shortcuts";
+import { setWriterParagraphListKind } from "../shells/txtnum";
 import { useWriterBrowserCommands } from "../utlui/use-writer-browser-commands";
 import {
   useWriterDocumentSelection,
@@ -45,7 +47,6 @@ import {
   createWriterWorkbenchDocument,
   getNextWriterParagraphId,
   getWorkbenchSelectionPosition,
-  moveWriterParagraphInHistory,
 } from "./writer-workbench-helpers";
 
 /** Describes the suite-selection visibility controlled by the application shell. */
@@ -293,13 +294,30 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     );
   }
 
-  /** Moves an existing Writer paragraph one adjacent position. @param paragraphId - Stable identity selected by the contextual movement control. @param direction - Requested adjacent movement direction. @returns Nothing; React schedules the immutable reordered history state. */
-  function handleWriterMoveParagraph(paragraphId: string, direction: "up" | "down"): void {
-    setActiveParagraphId(paragraphId);
+  /**
+   * Executes the active paragraph's default-list command through the Writer numbering shell.
+   *
+   * @param listKind - Next supported bullet, numbered, or no-list state.
+   * @returns Nothing; React schedules an immutable history transition only when the command changes state.
+   */
+  function handleWriterParagraphListKind(listKind: WriterParagraphListKind): void {
     setWriterHistory(
-      /** Swaps the requested paragraph in current immutable history. @param currentHistory - Current Writer workbench history state. @returns History containing the reordered body as its latest snapshot. */
-      function moveWorkbenchParagraph(currentHistory): TransactionHistory<WriterDocument> {
-        return moveWriterParagraphInHistory(currentHistory, paragraphId, direction);
+      /** Applies the requested default list to the still-active paragraph in the current history state. @param currentHistory - Current Writer workbench history state. @returns Unchanged history or a new snapshot containing the command result. */
+      function listActiveWorkbenchParagraph(
+        currentHistory: TransactionHistory<WriterDocument>,
+      ): TransactionHistory<WriterDocument> {
+        const currentDocument = getCurrentTransactionState(currentHistory);
+        const currentParagraph = getActiveWriterParagraph(currentDocument, activeParagraphId);
+        const nextDocument = setWriterParagraphListKind(
+          currentDocument,
+          currentParagraph.id,
+          listKind,
+        );
+        return nextDocument === currentDocument
+          ? currentHistory
+          : applyTransaction(currentHistory, nextDocument, {
+              position: getWorkbenchSelectionPosition(nextDocument),
+            });
       },
     );
   }
@@ -401,8 +419,6 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         menuBar={
           <WriterMenuBar
             alignment={activeParagraph.alignment}
-            canMoveDown={activeParagraphIndex < writerDocument.paragraphs.length - 1}
-            canMoveUp={activeParagraphIndex > 0}
             canRedo={writerHistory.index < writerHistory.entries.length - 1}
             canUndo={writerHistory.index > 0}
             isHorizontalRulerVisible={isHorizontalRulerVisible}
@@ -414,17 +430,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             onDownload={handleWriterDownload}
             onHorizontalRulerVisibilityChange={setIsHorizontalRulerVisible}
             onLoad={handleWriterLoad}
-            onMoveParagraph={
-              /**
-               * Moves the currently focused paragraph through the matching Format menu entry.
-               *
-               * @param direction - Requested adjacent movement direction from the Format menu.
-               * @returns Nothing; the workbench records a reordered history snapshot.
-               */
-              function moveActiveParagraphFromMenu(direction): void {
-                handleWriterMoveParagraph(activeParagraph.id, direction);
-              }
-            }
+            onListKindChange={handleWriterParagraphListKind}
             onRedo={handleWriterRedo}
             onSave={handleWriterSave}
             onSelectAll={requestSelectAll}
@@ -432,6 +438,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             onStatusBarVisibilityChange={setIsStatusBarVisible}
             onStyleChange={handleWriterParagraphStyle}
             onUndo={handleWriterUndo}
+            listKind={activeParagraph.list.kind}
             style={activeParagraph.style}
           />
         }
@@ -439,7 +446,9 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
           <WriterParagraphFormattingToolbar
             alignment={activeParagraph.alignment}
             onAlignmentChange={handleWriterParagraphAlignment}
+            onListKindChange={handleWriterParagraphListKind}
             onStyleChange={handleWriterParagraphStyle}
+            listKind={activeParagraph.list.kind}
             style={activeParagraph.style}
           />
         }
@@ -449,6 +458,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
         propertiesSidebar={
           <WriterParagraphProperties
             alignment={activeParagraph.alignment}
+            listKind={activeParagraph.list.kind}
             paragraphNumber={activeParagraphIndex + 1}
             style={activeParagraph.style}
           />

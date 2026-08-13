@@ -4,10 +4,14 @@
 
 import { useState } from "react";
 
-import { writerMenuPlacements, type WriterTopLevelMenu } from "../../../uiconfig/swriter/menubar";
+import {
+  writerBulletsAndNumberingMenuCommands,
+  writerMenuPlacements,
+  type WriterTopLevelMenu,
+} from "../../../uiconfig/swriter/menubar";
 import type {
   WriterParagraphAlignment,
-  WriterParagraphMoveDirection,
+  WriterParagraphListKind,
   WriterParagraphStyle,
 } from "../../core/doc/writer";
 
@@ -15,10 +19,6 @@ import type {
 export interface WriterMenuBarProps {
   /** Alignment currently applied to the focused Writer paragraph. */
   readonly alignment: WriterParagraphAlignment;
-  /** Whether moving the focused Writer paragraph toward the document end is valid. */
-  readonly canMoveDown: boolean;
-  /** Whether moving the focused Writer paragraph toward the document start is valid. */
-  readonly canMoveUp: boolean;
   /** Whether a following history snapshot exists for Redo. */
   readonly canRedo: boolean;
   /** Whether a preceding history snapshot exists for Undo. */
@@ -31,8 +31,12 @@ export interface WriterMenuBarProps {
   readonly isStatusBarVisible: boolean;
   /** Whether the horizontal Writer ruler is currently visible. */
   readonly isHorizontalRulerVisible: boolean;
+  /** List presentation currently applied to the focused Writer paragraph. */
+  readonly listKind: WriterParagraphListKind;
   /** Applies a focused-paragraph horizontal alignment. */
   readonly onAlignmentChange: (alignment: WriterParagraphAlignment) => void;
+  /** Applies a focused-paragraph default list presentation. */
+  readonly onListKindChange: (listKind: WriterParagraphListKind) => void;
   /** Starts the current plain-text browser download. */
   readonly onDownload: () => void;
   /** Requests copying the current native Writer selection to the browser clipboard. */
@@ -41,8 +45,6 @@ export interface WriterMenuBarProps {
   readonly onSelectAll: () => void;
   /** Loads the existing document identity from browser-local storage. */
   readonly onLoad: () => void;
-  /** Moves the focused paragraph by one valid adjacent position. */
-  readonly onMoveParagraph: (direction: WriterParagraphMoveDirection) => void;
   /** Restores the following immutable Writer history snapshot. */
   readonly onRedo: () => void;
   /** Saves the current Writer document in browser-local storage. */
@@ -66,20 +68,19 @@ export interface WriterMenuBarProps {
  *
  * @param props - Current Writer command state and immutable transition callbacks.
  * @param props.alignment - Current focused-paragraph alignment.
- * @param props.canMoveDown - Whether the Move Item Down menu entry is enabled.
- * @param props.canMoveUp - Whether the Move Item Up menu entry is enabled.
  * @param props.canRedo - Whether the Edit Redo menu entry is enabled.
  * @param props.canUndo - Whether the Edit Undo menu entry is enabled.
  * @param props.isHorizontalRulerVisible - Whether the View Rulers horizontal item is currently checked.
+ * @param props.listKind - Current focused-paragraph default list presentation.
  * @param props.isStoragePending - Whether File storage entries are temporarily disabled.
  * @param props.isSidebarVisible - Whether the View Sidebar check item is currently checked.
  * @param props.isStatusBarVisible - Whether the View Status Bar check item is currently checked.
  * @param props.onAlignmentChange - Callback used by Format alignment entries.
+ * @param props.onListKindChange - Callback used by Format Bullets and Numbering entries.
  * @param props.onDownload - Callback used by File Save As Text entry.
  * @param props.onCopy - Callback used by Edit Copy entry.
  * @param props.onHorizontalRulerVisibilityChange - Callback used by the View Rulers horizontal item.
  * @param props.onLoad - Callback used by File Open Local Copy entry.
- * @param props.onMoveParagraph - Callback used by Format list movement entries.
  * @param props.onRedo - Callback used by Edit Redo entry.
  * @param props.onSave - Callback used by File Save entry.
  * @param props.onSelectAll - Callback used by Edit Select All entry.
@@ -92,20 +93,19 @@ export interface WriterMenuBarProps {
  */
 export function WriterMenuBar({
   alignment,
-  canMoveDown,
-  canMoveUp,
   canRedo,
   canUndo,
   isHorizontalRulerVisible,
+  listKind,
   isSidebarVisible,
   isStatusBarVisible,
   isStoragePending,
   onAlignmentChange,
+  onListKindChange,
   onDownload,
   onCopy,
   onHorizontalRulerVisibilityChange,
   onLoad,
-  onMoveParagraph,
   onRedo,
   onSave,
   onSelectAll,
@@ -116,6 +116,7 @@ export function WriterMenuBar({
   style,
 }: WriterMenuBarProps): React.JSX.Element {
   const [openMenu, setOpenMenu] = useState<WriterTopLevelMenu | undefined>();
+  const [isBulletsAndNumberingMenuOpen, setIsBulletsAndNumberingMenuOpen] = useState(false);
   const [isRulersMenuOpen, setIsRulersMenuOpen] = useState(false);
 
   /**
@@ -126,6 +127,7 @@ export function WriterMenuBar({
    */
   function invokeMenuAction(action: () => void): void {
     action();
+    setIsBulletsAndNumberingMenuOpen(false);
     setIsRulersMenuOpen(false);
     setOpenMenu(undefined);
   }
@@ -137,6 +139,7 @@ export function WriterMenuBar({
    * @returns Nothing; React records the next visible popup.
    */
   function toggleMenu(menu: WriterTopLevelMenu): void {
+    setIsBulletsAndNumberingMenuOpen(false);
     setIsRulersMenuOpen(false);
     setOpenMenu(
       /**
@@ -359,19 +362,55 @@ export function WriterMenuBar({
             alignment === "justify",
           )}
           <div aria-hidden="true" className="my-1 border-t border-slate-200" />
-          <p className="px-3 pb-1 pt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            Bullets and numbering
-          </p>
-          {renderMenuItem(
-            "Move item up",
-            invokeMenuAction.bind(undefined, onMoveParagraph.bind(undefined, "up")),
-            !canMoveUp,
-          )}
-          {renderMenuItem(
-            "Move item down",
-            invokeMenuAction.bind(undefined, onMoveParagraph.bind(undefined, "down")),
-            !canMoveDown,
-          )}
+          <div className="relative">
+            <button
+              aria-expanded={isBulletsAndNumberingMenuOpen}
+              aria-haspopup="menu"
+              className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
+              onClick={
+                /** Toggles the pinned Format submenu without closing its parent menu. @returns Nothing; React records the submenu state. */
+                function toggleBulletsAndNumberingMenu(): void {
+                  setIsBulletsAndNumberingMenuOpen(
+                    /** Inverts the current nested Writer list menu state. @param isOpen - Existing nested menu visibility. @returns Next visibility. */
+                    function invertBulletsAndNumberingMenu(isOpen): boolean {
+                      return !isOpen;
+                    },
+                  );
+                }
+              }
+              role="menuitem"
+              type="button"
+            >
+              Bullets and Numbering
+              <span aria-hidden="true">›</span>
+            </button>
+            {isBulletsAndNumberingMenuOpen ? (
+              <div
+                aria-label="Bullets and Numbering menu"
+                className="absolute left-full top-0 z-30 ml-1 w-56 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
+                role="menu"
+              >
+                {writerBulletsAndNumberingMenuCommands.map(
+                  /** Renders one pinned first-layer Writer list command. @param command - Immutable menu command placement. @returns One active-aware list menu item wrapper. */
+                  function renderListMenuCommand(command): React.JSX.Element {
+                    return (
+                      <div key={command.unoCommand}>
+                        {renderMenuItem(
+                          command.label,
+                          invokeMenuAction.bind(
+                            undefined,
+                            onListKindChange.bind(undefined, command.listKind),
+                          ),
+                          false,
+                          listKind === command.listKind,
+                        )}
+                      </div>
+                    );
+                  },
+                )}
+              </div>
+            ) : null}
+          </div>
         </div>
       );
     }

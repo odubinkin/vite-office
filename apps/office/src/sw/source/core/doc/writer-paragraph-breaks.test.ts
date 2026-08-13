@@ -63,8 +63,20 @@ describe("Writer paragraph breaks" /** Groups normal and rejected immutable para
     const joined = mergeWriterParagraphWithPrevious(writer, "p-3");
 
     expect(joined.paragraphs).toEqual([
-      { alignment: "center", id: "p-1", style: "heading-1", text: "before after" },
-      { alignment: "left", id: "p-4", style: "default", text: "" },
+      {
+        alignment: "center",
+        id: "p-1",
+        list: { kind: "none", level: 0 },
+        style: "heading-1",
+        text: "before after",
+      },
+      {
+        alignment: "left",
+        id: "p-4",
+        list: { kind: "none", level: 0 },
+        style: "default",
+        text: "",
+      },
     ]);
     expect(
       /** Executes the first-paragraph join rejection. @returns Invalid merge transition that always throws. */
@@ -85,15 +97,45 @@ describe("Writer paragraph breaks" /** Groups normal and rejected immutable para
     const split = splitWriterParagraph(writer, "p-1", 7, "p-2");
 
     expect(writer.paragraphs).toEqual([
-      { alignment: "center", id: "p-1", style: "heading-1", text: "before after" },
-      { alignment: "left", id: "p-3", style: "default", text: "" },
+      {
+        alignment: "center",
+        id: "p-1",
+        list: { kind: "none", level: 0 },
+        style: "heading-1",
+        text: "before after",
+      },
+      {
+        alignment: "left",
+        id: "p-3",
+        list: { kind: "none", level: 0 },
+        style: "default",
+        text: "",
+      },
     ]);
     expect(split).toMatchObject({
       document: { lifecycle: "dirty", revision: writer.document.revision },
       paragraphs: [
-        { alignment: "center", id: "p-1", style: "heading-1", text: "before " },
-        { alignment: "center", id: "p-2", style: "heading-1", text: "after" },
-        { alignment: "left", id: "p-3", style: "default", text: "" },
+        {
+          alignment: "center",
+          id: "p-1",
+          list: { kind: "none", level: 0 },
+          style: "heading-1",
+          text: "before ",
+        },
+        {
+          alignment: "center",
+          id: "p-2",
+          list: { kind: "none", level: 0 },
+          style: "heading-1",
+          text: "after",
+        },
+        {
+          alignment: "left",
+          id: "p-3",
+          list: { kind: "none", level: 0 },
+          style: "default",
+          text: "",
+        },
       ],
     });
     expect(

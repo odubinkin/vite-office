@@ -17,12 +17,16 @@ const requiredFiles = [
   "apps/office/src/svl/source/misc/recovery.ts",
   "apps/office/src/vcl/browser/browser-clipboard.ts",
   "apps/office/src/sw/source/core/doc/writer.ts",
+  "apps/office/src/sw/source/core/doc/list.ts",
+  "apps/office/src/sw/source/core/doc/number.ts",
   "apps/office/src/sw/source/uibase/docvw/WriterPlainTextEditor.tsx",
+  "apps/office/src/sw/source/uibase/shells/txtnum.ts",
   "apps/office/src/sw/source/uibase/ribbar/WriterParagraphFormattingToolbar.tsx",
   "apps/office/src/sw/source/uibase/sidebar/WriterParagraphProperties.tsx",
   "apps/office/src/sw/source/uibase/uiview/WriterWorkbench.tsx",
   "apps/office/src/sw/source/uibase/utlui/WriterMenuBar.tsx",
   "apps/office/src/sw/uiconfig/swriter/menubar.ts",
+  "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
 ];
 
 /** Former generic source roots that must not reappear after the LO-structure migration. */

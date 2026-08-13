@@ -10,6 +10,7 @@ import {
   type WriterDocument,
   type WriterParagraph,
 } from "./writer";
+import { setWriterParagraphListKind } from "../../uibase/shells/txtnum";
 import { loadWriterDocument, saveWriterDocument, type WriterSnapshotState } from "./writer-storage";
 
 /** Creates a serializable Writer fixture with a dirty text body. @returns Immutable Writer document fixture. */
@@ -90,6 +91,35 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
       writerDocument: {
         paragraphs: [{ alignment: "left", id: "p-1", style: "default", text: "Saved text" }],
       },
+    });
+  });
+
+  it("round-trips list state and defaults a legacy list-less snapshot" /** Verifies storage retains executable lists while evolving prior browser-local bodies. @returns A promise resolved after both snapshot outcomes are asserted. */, async function storesAndMigratesLists(): Promise<void> {
+    const adapter = createAdapter();
+    const listedWriter = setWriterParagraphListKind(createWriterFixture(), "p-1", "numbered");
+    await saveWriterDocument(adapter, listedWriter);
+    await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
+      status: "found",
+      writerDocument: { paragraphs: [{ list: { kind: "numbered", level: 0 } }] },
+    });
+    const legacyWriter = {
+      ...listedWriter,
+      paragraphs: listedWriter.paragraphs.map(
+        /** Omits list metadata to emulate the previous serialized Writer body. @param paragraph - Current stored paragraph. @returns Legacy-shaped paragraph. */
+        function omitList(paragraph): WriterParagraph {
+          return {
+            alignment: paragraph.alignment,
+            id: paragraph.id,
+            style: paragraph.style,
+            text: paragraph.text,
+          } as WriterParagraph;
+        },
+      ),
+    };
+    await saveWriterDocument(adapter, legacyWriter);
+    await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
+      status: "found",
+      writerDocument: { paragraphs: [{ list: { kind: "none", level: 0 } }] },
     });
   });
 });

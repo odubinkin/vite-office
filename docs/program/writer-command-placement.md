@@ -30,9 +30,11 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 - It nests `.uno:Ruler` under **View → Rulers**. The browser **Horizontal
   ruler** check item controls the existing horizontal-ruler chrome and likewise
   has no standard toolbar counterpart in this slice.
-- It places alignment under **Format → Alignment** and Move Up/Down under
-  **Format → Bullets and Numbering**. The latter remains a bounded adjacent
-  paragraph operation until list semantics exist.
+- It places alignment under **Format → Alignment**, and the nested
+  `.uno:FormatBulletsMenu` contains `.uno:RemoveBullets`, `.uno:DefaultBullet`,
+  and `.uno:DefaultNumbering`. The browser follows that nesting through
+  **Format → Bullets and Numbering**. Its initial active-paragraph commands are
+  **Remove Bullets**, **Unordered List**, and **Ordered List**.
 - `WriterCommands.xcu` declares Default Paragraph and Heading 1 style commands;
   the bounded browser style choices are available in **Styles**.
 
@@ -44,8 +46,16 @@ paragraph** toolbar control was removed: normal Writer paragraph
 creation is caret/Enter behavior, not a standalone toolbar command. The
 implemented browser equivalent now intercepts unmodified **Enter** at a
 collapsed editable-paragraph caret, splits the text into an adjacent paragraph,
-inherits its bounded style and alignment, and focuses the trailing paragraph.
+inherits its bounded style, alignment, and list state, and focuses the trailing paragraph.
 It intentionally has no menu or toolbar item. This follows Writer's normal
 editing interaction; pinned upstream tests use
 `ControlCharacter::PARAGRAPH_BREAK` in `sw/qa/**` to create the corresponding
 document-model break.
+
+`sw/uiconfig/swriter/toolbar/textobjectbar.xml` places `.uno:DefaultBullet`
+and `.uno:DefaultNumbering` after the paragraph alignment controls. The same
+order is used by the browser formatting toolbar. There is no generic paragraph
+movement control in the browser toolbar or menu: the previous adjacent-body
+operation was not a placement-equivalent implementation of Writer list-item
+movement and is now retained only as an unmapped document-model primitive for a
+future, properly mapped capability.

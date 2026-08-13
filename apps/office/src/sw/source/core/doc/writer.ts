@@ -3,7 +3,16 @@
  */
 
 import { markDocumentDirty, type OfficeDocument } from "../../../../sfx2/source/doc/document";
+import {
+  createDefaultWriterParagraphList,
+  normalizeWriterParagraphList,
+  type WriterParagraphList,
+} from "./list";
 export { moveWriterParagraph, removeWriterParagraph } from "./writer-paragraph-structure";
+export { isWriterParagraphListKind, WRITER_PARAGRAPH_LIST_KINDS } from "./list";
+export type { WriterParagraphList, WriterParagraphListKind } from "./list";
+export { getWriterParagraphListMarker } from "./number";
+export type { WriterNumberingParagraph } from "./number";
 
 /** Enumerates the bounded paragraph alignments available in the Writer workbench. */
 export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"] as const;
@@ -26,6 +35,8 @@ export interface WriterParagraph {
   readonly alignment: WriterParagraphAlignment;
   /** Stable caller-provided paragraph identity. */
   readonly id: string;
+  /** Serializable list state retained independently from paragraph text and style. */
+  readonly list: WriterParagraphList;
   /** Bounded direct paragraph-style choice applied to the complete paragraph. */
   readonly style: WriterParagraphStyle;
   /** Plain Unicode text; inline formatting remains out of scope. */
@@ -55,7 +66,15 @@ export function createWriterDocument(
   if (paragraphId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
   return {
     document,
-    paragraphs: [{ alignment: "left", id: paragraphId, style: "default", text: "" }],
+    paragraphs: [
+      {
+        alignment: "left",
+        id: paragraphId,
+        list: createDefaultWriterParagraphList(),
+        style: "default",
+        text: "",
+      },
+    ],
   };
 }
 
@@ -88,7 +107,13 @@ export function appendWriterParagraph(
     document: markDocumentDirty(writerDocument.document),
     paragraphs: [
       ...writerDocument.paragraphs,
-      { alignment: "left", id: paragraphId, style: "default", text: "" },
+      {
+        alignment: "left",
+        id: paragraphId,
+        list: createDefaultWriterParagraphList(),
+        style: "default",
+        text: "",
+      },
     ],
   };
 }
@@ -370,9 +395,17 @@ export function normalizeWriterParagraphFormatting(writerDocument: WriterDocumen
         ? paragraph.alignment
         : "left";
       const style = isWriterParagraphStyle(paragraph.style) ? paragraph.style : "default";
-      if (alignment === paragraph.alignment && style === paragraph.style) return paragraph;
+      const list = normalizeWriterParagraphList(paragraph.list);
+      if (
+        alignment === paragraph.alignment &&
+        style === paragraph.style &&
+        list.kind === paragraph.list?.kind &&
+        list.level === paragraph.list?.level &&
+        list.styleId === paragraph.list?.styleId
+      )
+        return paragraph;
       containsUnsupportedFormatting = true;
-      return { ...paragraph, alignment, style };
+      return { ...paragraph, alignment, list, style };
     },
   );
   return containsUnsupportedFormatting ? { ...writerDocument, paragraphs } : writerDocument;
