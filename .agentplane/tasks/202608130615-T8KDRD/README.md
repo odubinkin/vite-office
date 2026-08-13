@@ -4,7 +4,7 @@ title: "Repair Writer parity mappings after module identity migration"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-08-13T06:16:46.939Z"
+  updated_by: "CODER"
+  note: "Verified current Writer parity paths resolve against the pinned baseline and source-tree/documentation/routing gates pass; aggregate suite deferred under approved cadence."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-08-13T06:16:47.370Z"
+  updated_by: "EVALUATOR"
+  note: "Writer parity records now name the current concrete local modules after the structural migration."
+  evaluated_sha: "1da0629842841b9f0c85f00cc8a1046eeec04bd6"
+  blueprint_digest: "c7b04b0f4fd169299818a6859132346410ff10848a86a3220f03b0c7b1884c70"
+  evidence_refs:
+    - ".agentplane/tasks/202608130615-T8KDRD/README.md"
+    - ".agentplane/tasks/202608130615-T8KDRD/quality/20260813-061647370-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202608130615-T8KDRD/quality/20260813-061647370-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202608130615-T8KDRD/quality/20260813-061647370-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202608130615-T8KDRD/blueprint/resolved-snapshot.json"
+    - "npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference"
+  findings:
+    - "All five stale local paths were repaired and the mapping inventory resolves with no exceptions."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: repair stale local Writer parity paths after the audited module identity migration."
+  -
+    type: "verify"
+    at: "2026-08-13T06:16:46.939Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified current Writer parity paths resolve against the pinned baseline and source-tree/documentation/routing gates pass; aggregate suite deferred under approved cadence."
 doc_version: 3
-doc_updated_at: "2026-08-13T06:16:44.409Z"
+doc_updated_at: "2026-08-13T06:16:47.021Z"
 doc_updated_by: "CODER"
 description: "Update all local Writer implementation and test paths in machine-readable parity records after the concrete LibreOffice-derived module rename, then validate inventory resolution."
 sections:
@@ -54,6 +76,38 @@ sections:
     3. Defer npm run verify and full browser matrix under the user-approved ten-task cadence; record residual risk.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-08-13T06:16:46.939Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified current Writer parity paths resolve against the pinned baseline and source-tree/documentation/routing gates pass; aggregate suite deferred under approved cadence.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T06:16:44.409Z, excerpt_hash=sha256:91e69de2101b8745a970734eab9cbcd04d9743ea74bcfdac4cfb8a5b912fe417
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130615-T8KDRD/blueprint/resolved-snapshot.json
+    - old_digest: c7b04b0f4fd169299818a6859132346410ff10848a86a3220f03b0c7b1884c70
+    - current_digest: c7b04b0f4fd169299818a6859132346410ff10848a86a3220f03b0c7b1884c70
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202608130615-T8KDRD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task run 202608130615-T8KDRD
+    - diagnostic_command: agentplane task run status 202608130615-T8KDRD
+    - source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - runner_required: true
+    - runner_failure_means: runner_infrastructure_or_task_unknown
+    - risks: runner_rail_confusion
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -99,6 +153,38 @@ Update all local Writer implementation and test paths in machine-readable parity
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-08-13T06:16:46.939Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified current Writer parity paths resolve against the pinned baseline and source-tree/documentation/routing gates pass; aggregate suite deferred under approved cadence.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-08-13T06:16:44.409Z, excerpt_hash=sha256:91e69de2101b8745a970734eab9cbcd04d9743ea74bcfdac4cfb8a5b912fe417
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202608130615-T8KDRD/blueprint/resolved-snapshot.json
+- old_digest: c7b04b0f4fd169299818a6859132346410ff10848a86a3220f03b0c7b1884c70
+- current_digest: c7b04b0f4fd169299818a6859132346410ff10848a86a3220f03b0c7b1884c70
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202608130615-T8KDRD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task run 202608130615-T8KDRD
+- diagnostic_command: agentplane task run status 202608130615-T8KDRD
+- source_of_truth: route=task_next_action diagnostic=runner_status remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- runner_required: true
+- runner_failure_means: runner_infrastructure_or_task_unknown
+- risks: runner_rail_confusion
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
