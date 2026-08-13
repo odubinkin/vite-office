@@ -1,10 +1,11 @@
 ---
 id: "202608130611-M7KV89"
 title: "Normalize existing Writer module identities to LibreOffice files"
-status: "DOING"
+result_summary: "Normalized Writer view, document view, toolbar, sidebar, and main-window module identities without changing behavior."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "npm run test:coverage; npm run build; npm run check:source-tree; npm run format:check; npm run lint; npm run typecheck; npm run check:docs"
   findings:
     - "view, viewfunc, viewstat, mainwn, edtwin, inputwin, and WriterInspectorTextPanel replace the prior generic file identities; the source-tree gate enforces them."
-commit: null
+commit:
+  hash: "0eeba1838b9547d3dbdf493f884969811c26af3c"
+  message: "♻️ M7KV89 code: normalize Writer module identities"
 comments:
   -
     author: "CODER"
     body: "Start: normalize existing Writer modules to audited concrete LibreOffice file identities."
+  -
+    author: "CODER"
+    body: "Verified: existing Writer modules now use audited concrete LibreOffice file identities with enforced source-tree provenance."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified 100% coverage, production build, concrete source-tree gate, format, lint, types, JSDoc, file-size, diff, doctor, and routing checks after the module identity migration; aggregate suite deferred under approved cadence."
+  -
+    type: "status"
+    at: "2026-08-13T06:14:58.976Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: existing Writer modules now use audited concrete LibreOffice file identities with enforced source-tree provenance."
 doc_version: 3
-doc_updated_at: "2026-08-13T06:14:44.710Z"
+doc_updated_at: "2026-08-13T06:14:58.978Z"
 doc_updated_by: "CODER"
 description: "Rename and relocate existing Writer browser modules from generic local names to concrete pinned LibreOffice-derived module names, update imports/tests/docs/source-tree gate, and preserve behavior."
 sections:
