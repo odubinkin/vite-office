@@ -33,9 +33,8 @@ import { WriterParagraphFormattingToolbar } from "../ribbar/inputwin";
 import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
 import { WriterPlainTextEditor } from "../docvw/edtwin";
 import { WriterWorkspaceChrome } from "../app/mainwn";
-import { useWriterHistoryShortcuts } from "../shells/use-writer-history-shortcuts";
 import type { WriterListLevelCommand } from "../shells/listsh";
-import { useWriterBrowserCommands } from "../shells/textsh";
+import { useWriterBrowserCommands, useWriterHistoryShortcuts } from "../shells/textsh";
 import { useWriterDocumentSelection, useWriterWorkspaceChrome } from "./viewstat";
 import {
   getActiveWriterParagraph,

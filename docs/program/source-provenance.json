@@ -32,7 +32,6 @@
     { "localPath": "apps/office/src/sw/source/uibase/shells/listsh.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/shells/listsh.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/shells/textsh.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/shells/txtnum.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/shells/txtnum.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/shells/use-writer-history-shortcuts.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/shells/textsh.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/uiview/view.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/uiview/view.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/uiview/viewfunc.hxx" },
