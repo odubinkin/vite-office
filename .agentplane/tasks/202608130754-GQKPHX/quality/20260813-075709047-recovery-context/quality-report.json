@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202608130754-GQKPHX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-08-13T07:57:09.047Z",
+  "verdict": "pass",
+  "summary": "Framework module-manager rename preserves the static suite inventory while matching the pinned LibreOffice ownership path.",
+  "evaluated_sha": "d4d2400acf9e102e74725cd8ee75e862aa3b4f23",
+  "blueprint_digest": "e4e0d679ca8cc61c4e3f302174ff628e3d1cf48f5791af5e955d67b110bf811d",
+  "findings": [
+    "All fast coverage and structural quality checks pass; no obsolete suites module import remains."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202608130754-GQKPHX/README.md",
+    "d4d2400"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
