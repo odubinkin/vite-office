@@ -1,0 +1,21 @@
+services:
+  app:
+    build:
+      context: .
+    image: vite-office:latest
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-dokploy-network}"
+      - "traefik.http.routers.vite-office.rule=Host(`${APP_DOMAIN:?Set APP_DOMAIN}`)"
+      - "traefik.http.routers.vite-office.entrypoints=websecure"
+      - "traefik.http.routers.vite-office.tls=true"
+      - "traefik.http.routers.vite-office.tls.certresolver=letsencrypt"
+      - "traefik.http.services.vite-office.loadbalancer.server.port=80"
+
+networks:
+  traefik:
+    external: true
+    name: ${TRAEFIK_NETWORK:-dokploy-network}
