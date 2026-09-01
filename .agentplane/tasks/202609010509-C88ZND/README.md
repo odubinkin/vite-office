@@ -1,10 +1,11 @@
 ---
 id: "202609010509-C88ZND"
 title: "Add Docker deployment files"
-status: "DOING"
+result_summary: "Added a multi-stage Vite-to-Nginx Docker image, Docker context exclusions, and Traefik-enabled Compose deployment configuration."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "npm run build; APP_DOMAIN=example.test docker compose config"
   findings:
     - "Vite build succeeds and Compose renders Traefik routing to the Nginx port 80 service."
-commit: null
+commit:
+  hash: "c1a842721f536ebbc57f462769982ef1cde30c30"
+  message: "🚧 C88ZND task: add Docker deployment configuration"
 comments:
   -
     author: "CODER"
     body: "Start: implementing the approved Docker and Traefik deployment configuration in the current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Vite build and rendered Compose configuration pass; Docker deployment files are committed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Docker configuration: npm run build completed successfully; APP_DOMAIN=example.test docker compose config rendered the Traefik service and external network; Dockerfile uses a multi-stage Vite build with an Nginx runtime image."
+  -
+    type: "status"
+    at: "2026-09-01T05:16:15.315Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Vite build and rendered Compose configuration pass; Docker deployment files are committed."
 doc_version: 3
-doc_updated_at: "2026-09-01T05:15:26.324Z"
+doc_updated_at: "2026-09-01T05:16:15.317Z"
 doc_updated_by: "CODER"
 description: "Add a production Docker image and Traefik-enabled Compose configuration for the Vite office application, modeled on delfin-platform-site."
 sections:
