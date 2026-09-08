@@ -5,10 +5,26 @@
 import { describe, expect, it } from "vitest";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  FontItalic,
+  FontLineStyle,
+  FontWeight,
+  SvxPostureItem,
+  SvxUnderlineItem,
+  SvxWeightItem,
+} from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
 import { DEFAULT_ZIP_FILE_LIMITS, ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
-import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
+import {
+  RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_WEIGHT,
+  RES_PARATR_NUMRULE,
+} from "../../../inc/hintids";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { createWriterDocument } from "../../core/doc/writer";
 import { readOdtDocument, SwXMLReader } from "./swxml";
@@ -60,7 +76,26 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const writer = createWriterDocument(metadata("Round & Trip"), "source-1");
     writer.GetDfltTextFormatColl().SetFormatName("Body < text");
     writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center));
+    writer.GetDfltTextFormatColl().SetFormatAttr(new SvxWeightItem(FontWeight.BOLD));
+    writer
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_CJK_WEIGHT));
+    writer
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_CTL_WEIGHT));
+    writer.GetDfltTextFormatColl().SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL));
+    writer
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_CJK_POSTURE));
+    writer
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_CTL_POSTURE));
+    writer.GetDfltTextFormatColl().SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE));
     writer.GetTextFormatColl("heading-1").SetFormatName("Heading & one");
+    for (const which of [undefined, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+      writer
+        .GetTextFormatColl("heading-1")
+        .SetFormatAttr(new SvxWeightItem(FontWeight.NORMAL, which));
     const first = writer.paragraphs[0];
     first?.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     first?.SetParagraphAlignment("right");
@@ -76,6 +111,13 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     ]);
     const second = writer.nodes.MakeTextNode("source-2", "plain");
     second.SetParagraphAlignment("justify");
+    for (const which of [undefined, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+      second.SetAttr(new SvxWeightItem(FontWeight.NORMAL, which));
+    for (const which of [undefined, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
+      second.SetAttr(new SvxPostureItem(FontItalic.NONE, which));
+    second.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE));
+    const third = writer.nodes.MakeTextNode("source-3", "not underlined");
+    third.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE));
 
     const bytes = writeOdtDocument(writer);
     expect(new SwXMLWriter().Write(writer)).toEqual(bytes);
@@ -91,6 +133,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(archive.hasEntry("missing")).toBe(false);
     const content = await archive.readTextEntry("content.xml");
     expect(content).toContain('office:version="1.3"');
+    expect(await archive.readTextEntry("styles.xml")).toContain('fo:font-weight="bold"');
+    expect(content).toContain('fo:font-weight="normal"');
     expect(content).toContain('<text:s text:c="2"/>');
     expect(content).toContain("<text:tab/>");
     expect(content).toContain("<text:line-break/>");
@@ -101,6 +145,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     );
     expect(restored.document.title).toBe("Round & Trip");
     expect(restored.GetDfltTextFormatColl().GetName()).toBe("Body < text");
+    expect(restored.GetDfltTextFormatColl().GetAttrSet().GetWeight().GetBoolValue()).toBe(true);
+    expect(restored.GetDfltTextFormatColl().GetAttrSet().GetPosture().GetBoolValue()).toBe(true);
+    expect(restored.GetDfltTextFormatColl().GetAttrSet().GetUnderline().GetBoolValue()).toBe(true);
     expect(restored.GetTextFormatColl("heading-1").GetName()).toBe("Heading & one");
     expect(
       restored.paragraphs.map(
@@ -152,6 +199,25 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportContentXml(unknownRule),
     ).toThrow(`WhichId ${RES_PARATR_NUMRULE}`);
+    const invalidCharacter = createWriterDocument(metadata(), "p1");
+    const invalidCharacterSet = invalidCharacter
+      .GetDfltTextFormatColl()
+      .GetAttrSet() as unknown as {
+      items: Map<number, unknown>;
+    };
+    invalidCharacterSet.items.set(RES_CHRATR_WEIGHT, new SfxInt16Item(RES_CHRATR_WEIGHT, 1));
+    expect(
+      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
+      () => exportStylesXml(invalidCharacter),
+    ).toThrow("ODT character item is invalid");
+    const scriptSpecificCharacter = createWriterDocument(metadata(), "p1");
+    scriptSpecificCharacter
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD));
+    expect(
+      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
+      () => exportStylesXml(scriptSpecificCharacter),
+    ).toThrow("script-specific character formatting");
     const styleItem = createWriterDocument(metadata(), "p1");
     styleItem.GetTextFormatColl("heading-1").SetFormatAttr(new SwNumRuleItem("Rule"));
     expect(
@@ -328,10 +394,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         "Duplicate ODF style",
       ],
       [
-        styles.replace("</style:style>", "<style:text-properties/></style:style>"),
-        "text properties on ODF paragraph",
-      ],
-      [
         styles
           .replace('style:family="paragraph"', 'style:family="text"')
           .replace("</style:style>", "<style:paragraph-properties/></style:style>"),
@@ -389,6 +451,30 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => importWriterXml(styles, unknown, metadata(), meta),
     ).toThrow("Unsupported ODF style property");
+    const mismatchedScript = styledContent.replace(
+      'fo:font-weight="bold"',
+      'fo:font-weight="bold" style:font-weight-asian="normal"',
+    );
+    expect(
+      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
+      () => importWriterXml(styles, mismatchedScript, metadata(), meta),
+    ).toThrow("script-specific ODF font weight");
+    const mismatchedComplexWeight = styledContent.replace(
+      'fo:font-weight="bold"',
+      'fo:font-weight="bold" style:font-weight-complex="normal"',
+    );
+    expect(
+      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
+      () => importWriterXml(styles, mismatchedComplexWeight, metadata(), meta),
+    ).toThrow("script-specific ODF font weight");
+    const mismatchedPosture = styledContent.replace(
+      'fo:font-weight="bold"',
+      'fo:font-weight="bold" fo:font-style="italic" style:font-style-complex="normal"',
+    );
+    expect(
+      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
+      () => importWriterXml(styles, mismatchedPosture, metadata(), meta),
+    ).toThrow("script-specific ODF font style");
   });
 
   it("imports normal character values and every ODF alignment spelling" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {

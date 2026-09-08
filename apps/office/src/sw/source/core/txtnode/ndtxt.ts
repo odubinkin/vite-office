@@ -367,7 +367,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Returns an existing hint container or creates it lazily. @returns Owned hints. */
   public GetOrCreateSwpHints(): SwpHints {
-    this.pSwpHints ??= new SwpHints();
+    this.pSwpHints ??= new SwpHints(this.GetDoc().GetAttrPool());
     return this.pSwpHints;
   }
 
@@ -405,8 +405,8 @@ export class SwTextNode extends SwContentNode {
   /** Derives complete rendering runs from canonical text and range hints. @returns Complete rendering projection. */
   public get runs(): readonly WriterTextRun[] {
     return this.pSwpHints === undefined
-      ? createWriterTextRuns(this.mText)
-      : this.pSwpHints.toTextRuns(this.mText);
+      ? new SwpHints(this.GetDoc().GetAttrPool()).toTextRuns(this.mText, this.GetSwAttrSet())
+      : this.pSwpHints.toTextRuns(this.mText, this.GetSwAttrSet());
   }
 
   /** Sets the paragraph adjustment item. @param alignment - New paragraph alignment. @returns Nothing. */
@@ -481,8 +481,12 @@ export class SwTextNode extends SwContentNode {
   /** Reads direct attributes inherited by a collapsed caret. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
   public getCharacterAttributesAt(offset: number): WriterCharacterAttributes {
     return this.pSwpHints === undefined
-      ? getWriterTextAttributesAtOffset(this.runs, offset)
-      : this.pSwpHints.getCharacterAttributes(this.mText, offset);
+      ? new SwpHints(this.GetDoc().GetAttrPool()).getCharacterAttributes(
+          this.mText,
+          offset,
+          this.GetSwAttrSet(),
+        )
+      : this.pSwpHints.getCharacterAttributes(this.mText, offset, this.GetSwAttrSet());
   }
 
   /** Splits this node at one content offset and returns an uninserted trailing sibling. @param offset - UTF-16 split offset. @param nextId - Trailing node identity. @returns Prepared trailing text node. */
@@ -539,7 +543,7 @@ export class SwTextNode extends SwContentNode {
         node.SetAttr(nodes.GetDoc().GetAttrPool().CreateItem(itemSnapshot));
       },
     );
-    const hints = createSwpHintsFromSnapshot(snapshot.hints);
+    const hints = createSwpHintsFromSnapshot(nodes.GetDoc().GetAttrPool(), snapshot.hints);
     node.pSwpHints = hints.Count() === 0 ? undefined : hints;
     return node;
   }
@@ -553,8 +557,8 @@ export class SwTextNode extends SwContentNode {
 
   /** Stores only non-default range hints for complete text runs. @param runs - Complete text runs. @returns Nothing. */
   private setHintsFromRuns(runs: readonly WriterTextRun[]): void {
-    const hints = new SwpHints();
-    hints.setTextRuns(runs);
+    const hints = new SwpHints(this.GetDoc().GetAttrPool());
+    hints.setTextRuns(runs, this.GetSwAttrSet());
     this.pSwpHints = hints.Count() === 0 ? undefined : hints;
   }
 

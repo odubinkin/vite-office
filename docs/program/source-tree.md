@@ -88,6 +88,7 @@ machine-checked record.
 | Local browser module | Pinned LibreOffice source/configuration module | Responsibility |
 | --- | --- | --- |
 | `editeng/source/items/paraitem.ts` | `editeng/source/items/paraitem.cxx` | `SvxAdjustItem` paragraph-alignment value |
+| `editeng/source/items/textitem.ts` | `editeng/source/items/textitem.cxx` | `SvxWeightItem`, `SvxPostureItem`, and `SvxUnderlineItem` character values |
 | `svl/source/items/poolitem.ts` | `svl/source/items/poolitem.cxx` | Base and primitive pooled item values |
 | `svl/source/items/itempool.ts` | `svl/source/items/itempool.cxx` | Pool defaults and persisted-item factories |
 | `svl/source/items/itemset.ts` | `svl/source/items/itemset.cxx` | Direct item deltas, parent/default lookup, state, clone, and clear operations |
@@ -107,8 +108,8 @@ machine-checked record.
 | `sw/source/core/doc/doc.ts` | `sw/source/core/doc/doc.cxx` | `SwDoc` owner of `SwNodes` plus explicit browser snapshot conversion |
 | `sw/source/core/docnode/nodes.ts` | `sw/source/core/docnode/nodes.cxx` | Ordered nodes and LibreOffice-matching fixed section sentinels |
 | `sw/source/core/crsr/pam.ts` | `sw/source/core/crsr/pam.cxx` | Model positions and directional point/mark ranges |
-| `sw/source/core/txtnode/ndhints.ts` | `sw/source/core/txtnode/ndhints.cxx` | Start-sorted text attribute hints and derived rendering runs |
-| `sw/source/core/txtnode/txatbase.ts` | `sw/source/core/txtnode/txatbase.cxx` | Bounded `SwTextAttr` ranges and auto-format items |
+| `sw/source/core/txtnode/ndhints.ts` | `sw/source/core/txtnode/ndhints.cxx` | Start-sorted item-set-backed text attribute hints and derived browser runs |
+| `sw/source/core/txtnode/txatbase.ts` | `sw/source/core/txtnode/txatbase.cxx` | `SwTextAttr` ranges and `SfxItemSet`-backed `SwFormatAutoFormat` items |
 | `sw/source/core/doc/DocumentContentOperationsManager.ts` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Bounded same-text-node Insert, Delete, and Replace operations through `SwPaM` |
 | `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
 | `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Active-list Promote and Demote level transition |

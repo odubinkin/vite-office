@@ -3,6 +3,15 @@
  */
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  FontItalic,
+  FontLineStyle,
+  FontWeight,
+  SvxPostureItem,
+  SvxUnderlineItem,
+  SvxWeightItem,
+} from "../../../../editeng/source/items/textitem";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
 import {
   ODF_NAMESPACES,
@@ -14,6 +23,14 @@ import {
   type OdfStyleDefinition,
 } from "../../../../xmloff/source/text/txtparai";
 import { SwDoc } from "../../core/doc/doc";
+import {
+  RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_WEIGHT,
+} from "../../../inc/hintids";
 
 /** Imports styles.xml followed by content.xml into a canonical SwDoc. @param stylesXml - Named styles stream. @param contentXml - Body stream. @param metadata - Caller document identity. @param metaXml - Optional metadata stream. @returns Imported document. */
 export function importWriterXml(
@@ -38,6 +55,12 @@ export function importWriterXml(
       const node = document.nodes.MakeTextNode(`paragraph-${index + 1}`);
       node.ChgFormatColl(document.GetTextFormatColl(paragraph.style));
       if (paragraph.alignment !== undefined) node.SetParagraphAlignment(paragraph.alignment);
+      if (paragraph.properties !== undefined)
+        putCharacterProperties(
+          paragraph.properties,
+          /** Stores one imported direct character item. @param item - Pooled item. @returns Nothing. */
+          (item) => node.SetAttr(item),
+        );
       if (paragraph.runs.length > 0)
         node.ReplaceRange(
           0,
@@ -79,8 +102,6 @@ function collectStyles(document: XMLDocument): ReadonlyMap<string, OdfStyleDefin
     const displayName = element.getAttributeNS(ODF_NAMESPACES.style, "display-name") ?? undefined;
     const paragraphProperties = directChild(element, ODF_NAMESPACES.style, "paragraph-properties");
     const textProperties = directChild(element, ODF_NAMESPACES.style, "text-properties");
-    if (family === "paragraph" && textProperties !== undefined)
-      throw new Error(`Unsupported text properties on ODF paragraph style: ${name}`);
     if (family === "text" && paragraphProperties !== undefined)
       throw new Error(`Unsupported paragraph properties on ODF text style: ${name}`);
     const alignment =
@@ -121,6 +142,18 @@ function applyNamedParagraphStyles(
     document
       .GetTextFormatColl("heading-1")
       .SetFormatAttr(new SvxAdjustItem(toSvxAdjust(heading.alignment)));
+  if (standard.properties !== undefined)
+    putCharacterProperties(
+      standard.properties,
+      /** Stores one imported default-style character item. @param item - Pooled item. @returns Nothing. */
+      (item) => document.GetDfltTextFormatColl().SetFormatAttr(item),
+    );
+  if (heading.properties !== undefined)
+    putCharacterProperties(
+      heading.properties,
+      /** Stores one imported heading-style character item. @param item - Pooled item. @returns Nothing. */
+      (item) => document.GetTextFormatColl("heading-1").SetFormatAttr(item),
+    );
 }
 
 /** Reads dc:title from meta.xml. @param xml - Metadata stream. @returns Title when present. */
@@ -165,6 +198,10 @@ function importCharacterProperties(element: Element): Partial<OdfCharacterProper
   assertPropertyAttributes(element, [
     [ODF_NAMESPACES.fo, "font-weight"],
     [ODF_NAMESPACES.fo, "font-style"],
+    [ODF_NAMESPACES.style, "font-weight-asian"],
+    [ODF_NAMESPACES.style, "font-weight-complex"],
+    [ODF_NAMESPACES.style, "font-style-asian"],
+    [ODF_NAMESPACES.style, "font-style-complex"],
     [ODF_NAMESPACES.style, "text-underline-style"],
     [ODF_NAMESPACES.style, "text-underline-width"],
   ]);
@@ -172,6 +209,10 @@ function importCharacterProperties(element: Element): Partial<OdfCharacterProper
   const posture = element.getAttributeNS(ODF_NAMESPACES.fo, "font-style");
   const underline = element.getAttributeNS(ODF_NAMESPACES.style, "text-underline-style");
   const underlineWidth = element.getAttributeNS(ODF_NAMESPACES.style, "text-underline-width");
+  const asianWeight = element.getAttributeNS(ODF_NAMESPACES.style, "font-weight-asian");
+  const complexWeight = element.getAttributeNS(ODF_NAMESPACES.style, "font-weight-complex");
+  const asianPosture = element.getAttributeNS(ODF_NAMESPACES.style, "font-style-asian");
+  const complexPosture = element.getAttributeNS(ODF_NAMESPACES.style, "font-style-complex");
   if (weight !== null && weight !== "normal" && weight !== "bold")
     throw new Error(`Unsupported ODF font weight: ${weight}`);
   if (posture !== null && posture !== "normal" && posture !== "italic")
@@ -180,11 +221,40 @@ function importCharacterProperties(element: Element): Partial<OdfCharacterProper
     throw new Error(`Unsupported ODF underline style: ${underline}`);
   if (underlineWidth !== null && underlineWidth !== "auto")
     throw new Error(`Unsupported ODF underline width: ${underlineWidth}`);
+  assertScriptPropertyAgreement("font weight", weight, asianWeight, complexWeight);
+  assertScriptPropertyAgreement("font style", posture, asianPosture, complexPosture);
   return {
     ...(weight === null ? {} : { bold: weight === "bold" }),
     ...(posture === null ? {} : { italic: posture === "italic" }),
     ...(underline === null ? {} : { underline: underline === "solid" }),
   };
+}
+
+/** Applies synchronized Western/CJK/CTL character deltas as pooled items. @param properties - ODF deltas. @param put - Destination item-set operation. @returns Nothing. */
+function putCharacterProperties(
+  properties: Partial<OdfCharacterProperties>,
+  put: (item: SfxPoolItem) => unknown,
+): void {
+  if (properties.bold !== undefined)
+    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+      put(new SvxWeightItem(properties.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
+  if (properties.italic !== undefined)
+    for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
+      put(new SvxPostureItem(properties.italic ? FontItalic.NORMAL : FontItalic.NONE, which));
+  if (properties.underline !== undefined)
+    put(new SvxUnderlineItem(properties.underline ? FontLineStyle.SINGLE : FontLineStyle.NONE));
+}
+
+/** Rejects script-specific values that the bounded browser projection cannot distinguish. @param property - Property label. @param western - Western value. @param asian - Asian value. @param complex - Complex value. @returns Nothing. */
+function assertScriptPropertyAgreement(
+  property: string,
+  western: string | null,
+  asian: string | null,
+  complex: string | null,
+): void {
+  for (const value of [asian, complex])
+    if (value !== null && western !== value)
+      throw new Error(`Unsupported script-specific ODF ${property}.`);
 }
 
 /** Rejects silently lossy style-property attributes. @param element - Property element. @param allowed - Supported namespace/name pairs. @returns Nothing. */

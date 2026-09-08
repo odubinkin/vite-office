@@ -12,6 +12,7 @@
   ],
   "entries": [
     { "localPath": "apps/office/src/editeng/source/items/paraitem.ts", "status": "mapped", "upstreamPath": "editeng/source/items/paraitem.cxx" },
+    { "localPath": "apps/office/src/editeng/source/items/textitem.ts", "status": "mapped", "upstreamPath": "editeng/source/items/textitem.cxx" },
     { "localPath": "apps/office/src/framework/source/accelerators/keymapping.ts", "status": "mapped", "upstreamPath": "framework/source/accelerators/keymapping.cxx" },
     { "localPath": "apps/office/src/framework/source/dispatch/dispatchprovider.ts", "status": "mapped", "upstreamPath": "framework/source/dispatch/dispatchprovider.cxx" },
     { "localPath": "apps/office/src/framework/source/services/desktop.tsx", "status": "mapped", "upstreamPath": "framework/source/services/desktop.cxx" },

@@ -3,10 +3,25 @@
  */
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  FontItalic,
+  FontLineStyle,
+  FontWeight,
+  SvxPostureItem,
+  SvxUnderlineItem,
+  SvxWeightItem,
+} from "../../../../editeng/source/items/textitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
+  RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_UNDERLINE,
+  RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
@@ -20,6 +35,23 @@ export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
+      this.RegisterDefaultItem(
+        new SvxPostureItem(FontItalic.NONE, which),
+        /** Restores a posture item. @param value - Persisted enum value. @returns Concrete posture item. */
+        (value) => new SvxPostureItem(Number(value) as FontItalic, which),
+      );
+    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+      this.RegisterDefaultItem(
+        new SvxWeightItem(FontWeight.NORMAL, which),
+        /** Restores a weight item. @param value - Persisted enum value. @returns Concrete weight item. */
+        (value) => new SvxWeightItem(Number(value) as FontWeight, which),
+      );
+    this.RegisterDefaultItem(
+      new SvxUnderlineItem(FontLineStyle.NONE),
+      /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */
+      (value) => new SvxUnderlineItem(Number(value) as FontLineStyle),
+    );
     this.RegisterDefaultItem(
       new SvxAdjustItem(),
       /** Restores an adjustment item. @param value - Persisted enum value. @returns Concrete adjustment item. */
@@ -76,6 +108,21 @@ export class SwAttrSet extends SfxItemSet {
   /** Returns the effective paragraph adjustment item. @param inParent - Whether style inheritance participates. @returns Adjustment item. */
   public GetAdjust(inParent = true): SvxAdjustItem {
     return this.Get(RES_PARATR_ADJUST, inParent) as SvxAdjustItem;
+  }
+
+  /** Returns the effective Western posture item. @param inParent - Whether inheritance participates. @returns Posture item. */
+  public GetPosture(inParent = true): SvxPostureItem {
+    return this.Get(RES_CHRATR_POSTURE, inParent) as SvxPostureItem;
+  }
+
+  /** Returns the effective underline item. @param inParent - Whether inheritance participates. @returns Underline item. */
+  public GetUnderline(inParent = true): SvxUnderlineItem {
+    return this.Get(RES_CHRATR_UNDERLINE, inParent) as SvxUnderlineItem;
+  }
+
+  /** Returns the effective Western weight item. @param inParent - Whether inheritance participates. @returns Weight item. */
+  public GetWeight(inParent = true): SvxWeightItem {
+    return this.Get(RES_CHRATR_WEIGHT, inParent) as SvxWeightItem;
   }
 
   /** Returns the effective numbering-rule item. @param inParent - Whether style inheritance participates. @returns Numbering-rule item. */

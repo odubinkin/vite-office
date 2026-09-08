@@ -3,11 +3,22 @@
 import { describe, expect, it } from "vitest";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  FontItalic,
+  FontLineStyle,
+  FontWeight,
+  SvxPostureItem,
+  SvxUnderlineItem,
+  SvxWeightItem,
+} from "../../../../editeng/source/items/textitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import {
   RES_PARATR_ADJUST,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_UNDERLINE,
+  RES_CHRATR_WEIGHT,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_NUMRULE,
@@ -198,6 +209,40 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
           ),
       ),
     ).toThrow("another document");
+  });
+
+  it("inherits pooled character items and stores only range deltas in auto formats" /** Verifies style-to-node-to-hint character lookup. @returns Nothing. */, function inheritsCharacterItems(): void {
+    const writer = createFixture();
+    const style = writer.GetDfltTextFormatColl();
+    const node = writer.paragraphs[0];
+    if (node === undefined) throw new Error("Writer fixture has no text node.");
+    style.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD));
+    style.SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL));
+    style.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE));
+    expect(style.GetAttrSet().GetWeight().GetBoolValue()).toBe(true);
+    expect(style.GetAttrSet().GetPosture().GetBoolValue()).toBe(true);
+    expect(style.GetAttrSet().GetUnderline().GetBoolValue()).toBe(true);
+    node.InsertText("ab", 0);
+    expect(node.runs).toEqual([
+      { attributes: { bold: true, italic: true, underline: true }, text: "ab" },
+    ]);
+    expect(node.GetpSwpHints()).toBeUndefined();
+    node.ReplaceRange(0, 1, [
+      { attributes: { bold: false, italic: false, underline: false }, text: "a" },
+    ]);
+    expect(node.runs).toEqual([
+      { attributes: { bold: false, italic: false, underline: false }, text: "a" },
+      { attributes: { bold: true, italic: true, underline: true }, text: "b" },
+    ]);
+    const handle = node.GetpSwpHints()?.Get(0).format.GetStyleHandle();
+    expect(handle?.Get(RES_CHRATR_WEIGHT)).toBeInstanceOf(SvxWeightItem);
+    expect(handle?.Get(RES_CHRATR_POSTURE)).toBeInstanceOf(SvxPostureItem);
+    expect(handle?.Get(RES_CHRATR_UNDERLINE)).toBeInstanceOf(SvxUnderlineItem);
+    const restored = writer.clone();
+    expect(restored.paragraphs[0]?.runs).toEqual(node.runs);
+    expect(restored.paragraphs[0]?.GetpSwpHints()?.Get(0).format).not.toBe(
+      node.GetpSwpHints()?.Get(0).format,
+    );
   });
 });
 

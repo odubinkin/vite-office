@@ -2,12 +2,15 @@
  * @fileoverview Reimplements the bounded SfxPoolItem value hierarchy from pinned `svl/source/items/poolitem.cxx`.
  */
 
+/** JSON-compatible persisted value of one pooled item. */
+export type SfxPoolItemValue = boolean | number | string | readonly SfxPoolItemSnapshot[];
+
 /** JSON-compatible persisted form of one pooled item. */
 export interface SfxPoolItemSnapshot {
   /** Runtime item class discriminator. */
   readonly type: string;
   /** Persisted item value. */
-  readonly value: boolean | number | string;
+  readonly value: SfxPoolItemValue;
   /** Writer/SVL WhichId. */
   readonly which: number;
 }

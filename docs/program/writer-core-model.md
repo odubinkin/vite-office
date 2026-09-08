@@ -16,7 +16,8 @@ LibreOffice `sw` sources as follows:
 | `SwNode`, `SwStartNode`, `SwEndNode`, `SwContentNode` | `sw/inc/node.hxx`, `sw/source/core/docnode/node.cxx` | Represent section boundaries and content nodes; content nodes register in a format collection and lazily own direct attributes |
 | `SwTextNode` | `sw/inc/ndtxt.hxx`, `sw/source/core/txtnode/ndtxt.cxx` | Owns paragraph text, optional hints, and item-backed paragraph properties |
 | `SwNumRule`, `SwNumRuleItem` | `sw/source/core/doc/number.cxx`, `sw/source/core/para/paratr.cxx` | Separate document-owned numbering definitions from the rule name stored on a paragraph |
-| `SwTextAttr`, `SwpHints` | `sw/source/core/txtnode/txatbase.cxx`, `ndhints.cxx`, `thints.cxx` | Store start-sorted character-attribute ranges |
+| `SvxWeightItem`, `SvxPostureItem`, `SvxUnderlineItem` | `editeng/source/items/textitem.cxx` | Preserve the exact font enum ordering and boolean interpretation used by Writer character commands |
+| `SwTextAttr`, `SwFormatAutoFormat`, `SwpHints` | `sw/source/core/txtnode/txatbase.cxx`, `ndhints.cxx`, `thints.cxx` | Store start-sorted character-attribute ranges whose auto-format item owns a character `SfxItemSet` |
 | `SwNodeIndex`, `SwPosition`, `SwPaM` | `sw/inc/pam.hxx`, `sw/source/core/crsr/pam.cxx` | Address nodes, content offsets, and directional point/mark selections |
 | `DocumentContentOperationsManager` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Applies bounded Insert, Delete, and Replace operations through a `SwPaM` |
 
@@ -43,9 +44,12 @@ needed for later sections, redlines, tables, fields, and layout work.
 ## Text, attributes, and ranges
 
 Visible paragraph text lives only in `SwTextNode`. Direct Bold, Italic, and
-single Underline are represented by `RES_TXTATR_AUTOFMT`-like `SwTextAttr`
-ranges stored in an optional start-sorted `SwpHints`. Insert, erase, replace,
-split, and append operations update both text and applicable hint ranges.
+single Underline are represented by `SwTextAttr` ranges carrying the exact
+`RES_TXTATR_AUTOFMT` WhichId. Each `SwFormatAutoFormat` owns an independent
+`SfxItemSet` of `SvxWeightItem`, `SvxPostureItem`, and `SvxUnderlineItem`
+deltas, including synchronized Western, CJK, and complex-text weight/posture
+items. Insert, erase, replace, split, and append operations update both text and
+applicable hint ranges.
 
 Paragraph properties are not stored as parallel TypeScript fields. The pinned
 numeric WhichIds from `sw/inc/hintids.hxx` identify `RES_PARATR_ADJUST`,
@@ -62,8 +66,13 @@ and level while the corresponding bounded `SwNumRule` is owned by `SwDoc`.
 The browser-facing `alignment`, `style`, and `list` properties are derived
 projections, like `runs`; they are not canonical storage.
 
-The `runs` consumed by React and clipboard code are a derived projection of the
-text and hints. They are not duplicated canonical state. `SwPosition` combines
+Character items may also live on `SwTextFormatColl` or a node-local
+`SwAttrSet`; browser runs resolve hint, node, style-parent, and pool-default
+values in that order. Explicit normal values therefore override inherited
+bold/italic/underline formatting without introducing a parallel boolean store.
+
+The `runs` consumed by React and clipboard code are a derived boolean projection of the
+text and pooled hints. They are not duplicated canonical state. `SwPosition` combines
 a node with a UTF-16 content offset; `SwPaM` preserves LibreOffice's independent
 point and optional mark, including selection direction, while exposing ordered
 bounds for content operations.
@@ -85,8 +94,9 @@ either immediately into the item-backed graph.
 
 ## Deliberate remaining gaps
 
-The bounded pool supports only the paragraph items required by current browser
-commands. It does not yet reproduce pool ranges for the complete Writer item
+The bounded pool supports the paragraph items required by current browser
+commands plus Western/CJK/CTL weight and posture and common underline. It does
+not yet reproduce pool ranges for the complete Writer item
 universe, invalid/disabled item payloads, item sharing/reference counts,
 `SfxBroadcaster` notifications, conditional styles, automatic-style caches, or
 the complete built-in style and numbering tables. Registered index correction,

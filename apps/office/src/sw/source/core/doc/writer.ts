@@ -330,8 +330,11 @@ function restoreVersionOneWriterDocument(candidate: Record<string, unknown>): Wr
       node.SetParagraphList(
         normalizeWriterParagraphList(value.list ?? createDefaultWriterParagraphList()),
       );
-      const hints = createSwpHintsFromSnapshot(Array.isArray(value.hints) ? value.hints : []);
-      const runs = hints.toTextRuns(value.text);
+      const hints = createSwpHintsFromSnapshot(
+        document.GetAttrPool(),
+        Array.isArray(value.hints) ? value.hints : [],
+      );
+      const runs = hints.toTextRuns(value.text, node.GetSwAttrSet());
       if (runs.length > 0) node.ReplaceRange(0, node.Len(), runs);
     },
   );

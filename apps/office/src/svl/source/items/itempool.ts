@@ -2,10 +2,10 @@
  * @fileoverview Reimplements the bounded default-item registry and item restoration responsibilities from pinned `svl/source/items/itempool.cxx`.
  */
 
-import type { SfxPoolItem, SfxPoolItemSnapshot } from "./poolitem";
+import type { SfxPoolItem, SfxPoolItemSnapshot, SfxPoolItemValue } from "./poolitem";
 
 /** Restores a concrete pooled item from its persisted primitive value. */
-export type SfxPoolItemFactory = (value: boolean | number | string) => SfxPoolItem;
+export type SfxPoolItemFactory = (value: SfxPoolItemValue) => SfxPoolItem;
 
 /** Owns defaults and factories for the bounded WhichId space. */
 export class SfxItemPool {

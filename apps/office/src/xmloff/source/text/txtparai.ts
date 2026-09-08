@@ -41,9 +41,11 @@ export function importTextParagraphs(
     const styleName = child.getAttributeNS(ODF_NAMESPACES.text, "style-name") ?? "";
     const resolved = resolveParagraphStyle(styleName, child.localName === "h", styles);
     const runs: OdfTextRun[] = [];
-    appendInlineContent(child, DEFAULT_CHARACTER_PROPERTIES, styles, runs);
+    const inherited = { ...DEFAULT_CHARACTER_PROPERTIES, ...resolved.effectiveProperties };
+    appendInlineContent(child, inherited, styles, runs);
     paragraphs.push({
       ...(resolved.alignment === undefined ? {} : { alignment: resolved.alignment }),
+      ...(resolved.properties === undefined ? {} : { properties: resolved.properties }),
       runs: normalizeRuns(runs),
       style: resolved.style,
     });
@@ -58,9 +60,37 @@ function resolveParagraphStyle(
   heading: boolean,
   styles: ReadonlyMap<string, OdfStyleDefinition>,
   seen = new Set<string>(),
-): Readonly<{ alignment?: OdfParagraphAlignment; style: OdfParagraphStyle }> {
-  if (name === "" || name === "Standard") return { style: heading ? "heading-1" : "default" };
-  if (name === "Heading_20_1") return { style: "heading-1" };
+): Readonly<{
+  alignment?: OdfParagraphAlignment;
+  effectiveProperties?: Partial<OdfCharacterProperties>;
+  properties?: Partial<OdfCharacterProperties>;
+  style: OdfParagraphStyle;
+}> {
+  if (name === "") return { style: heading ? "heading-1" : "default" };
+  if (name === "Standard") {
+    const definition = styles.get(name);
+    return {
+      ...(definition?.properties === undefined
+        ? {}
+        : { effectiveProperties: definition.properties }),
+      style: heading ? "heading-1" : "default",
+    };
+  }
+  if (name === "Heading_20_1") {
+    const standard = resolveParagraphStyle("Standard", false, styles, seen);
+    const definition = styles.get(name);
+    return {
+      ...(standard.effectiveProperties === undefined && definition?.properties === undefined
+        ? {}
+        : {
+            effectiveProperties: {
+              ...standard.effectiveProperties,
+              ...definition?.properties,
+            },
+          }),
+      style: "heading-1",
+    };
+  }
   if (seen.has(name)) throw new Error(`Cyclic ODF paragraph style: ${name}`);
   seen.add(name);
   const definition = styles.get(name);
@@ -74,6 +104,19 @@ function resolveParagraphStyle(
   );
   return {
     ...(definition.alignment === undefined ? {} : { alignment: definition.alignment }),
+    ...(parent.effectiveProperties === undefined && definition.properties === undefined
+      ? {}
+      : {
+          effectiveProperties: {
+            ...parent.effectiveProperties,
+            ...definition.properties,
+          },
+        }),
+    ...(definition.properties === undefined
+      ? parent.properties === undefined
+        ? {}
+        : { properties: parent.properties }
+      : { properties: { ...parent.properties, ...definition.properties } }),
     style: parent.style,
   };
 }

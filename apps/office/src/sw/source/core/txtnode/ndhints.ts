@@ -1,10 +1,15 @@
 /**
- * @fileoverview Implements the ordered Writer text-attribute container from the pinned LibreOffice `sw/source/core/txtnode/ndhints.cxx` boundary.
+ * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+import type { SwAttrPool } from "../attr/swatrset";
 import {
   createSwFormatAutoFormat,
+  projectWriterCharacterAttributes,
   RES_TXTATR_AUTOFMT,
+  restoreSwFormatAutoFormat,
   SwTextAttr,
   type SwTextAttrSnapshot,
   type WriterCharacterAttributes,
@@ -14,8 +19,11 @@ import {
 export class SwpHints {
   private hintsByStart: SwTextAttr[] = [];
 
-  /** Creates a hint container from optional persisted attributes. @param hints - Initial ranged attributes. @returns Nothing. */
-  public constructor(hints: readonly SwTextAttr[] = []) {
+  /** Creates a hint container. @param pool - Owning document pool. @param hints - Initial ranged attributes. @returns Nothing. */
+  public constructor(
+    private readonly pool: SwAttrPool,
+    hints: readonly SwTextAttr[] = [],
+  ) {
     this.replace(hints);
   }
 
@@ -36,171 +44,184 @@ export class SwpHints {
     return this.hintsByStart;
   }
 
-  /** Replaces all hints, removing empty/default spans and merging adjacent equal auto formats. @param hints - Replacement hints. @returns Nothing. */
+  /** Replaces all hints, removing empty item sets and merging adjacent equal auto formats. @param hints - Replacement hints. @returns Nothing. */
   public replace(hints: readonly SwTextAttr[]): void {
     const sorted = hints
       .filter(
-        /** Keeps only non-empty supported hints. @param hint - Candidate Writer attribute. @returns True for a meaningful auto-format range. */
-        function isMeaningfulHint(hint): boolean {
-          return (
-            hint.Which() === RES_TXTATR_AUTOFMT &&
-            hint.end > hint.start &&
-            !isDefaultWriterCharacterAttributes(hint.format.items)
-          );
-        },
+        /** Keeps only non-empty supported hints. @param hint - Candidate attribute. @returns Whether meaningful. */
+        (hint) =>
+          hint.Which() === RES_TXTATR_AUTOFMT &&
+          hint.end > hint.start &&
+          hint.format.GetStyleHandle().Count() > 0,
       )
       .map(
-        /** Clones caller-owned hints before normalization. @param hint - Supported source hint. @returns Independent hint. */
-        function cloneHint(hint): SwTextAttr {
-          return hint.clone();
-        },
+        /** Clones caller-owned hints. @param hint - Source hint. @returns Independent hint. */
+        (hint) => hint.clone(),
       )
       .sort(compareHints);
     const normalized: SwTextAttr[] = [];
     sorted.forEach(
-      /** Appends or merges one ordered non-overlapping hint. @param hint - Sorted source hint. @returns Nothing. */
-      function appendHint(hint): void {
+      /** Appends or merges one ordered non-overlapping hint. @param hint - Sorted hint. @returns Nothing. */
+      (hint) => {
         const previous = normalized[normalized.length - 1];
         if (previous !== undefined && hint.start < previous.end)
           throw new Error("Overlapping Writer auto-format hints are not normalized.");
         if (
           previous !== undefined &&
           previous.end === hint.start &&
-          areWriterCharacterAttributesEqual(previous.format.items, hint.format.items)
-        ) {
+          previous.format.equals(hint.format)
+        )
           previous.SetEnd(hint.end);
-        } else {
-          normalized.push(hint);
-        }
+        else normalized.push(hint);
       },
     );
     this.hintsByStart = normalized;
   }
 
-  /** Rebuilds auto-format hints from complete view text runs. @param runs - Complete view projection. @returns Nothing. */
-  public setTextRuns(runs: readonly WriterTextRunLike[]): void {
+  /** Rebuilds direct item-set hints from complete browser runs. @param runs - Complete text portions. @param inherited - Node/style item set. @returns Nothing. */
+  public setTextRuns(runs: readonly WriterTextRunLike[], inherited: SfxItemSet): void {
     let offset = 0;
     const hints: SwTextAttr[] = [];
+    const inheritedAttributes = this.projectInherited(inherited);
     runs.forEach(
-      /** Converts one non-default run to a ranged auto-format hint. @param run - Complete text portion. @returns Nothing. */
-      function appendRun(run): void {
+      /** Converts one run to a direct item-set delta. @param run - Complete run. @returns Nothing. */
+      (run) => {
         const start = offset;
         offset += run.text.length;
-        if (run.text.length > 0 && !isDefaultWriterCharacterAttributes(run.attributes)) {
-          hints.push(new SwTextAttr(createSwFormatAutoFormat(run.attributes), start, offset));
-        }
+        if (run.text.length === 0) return;
+        const format = createSwFormatAutoFormat(this.pool, run.attributes, inheritedAttributes);
+        if (format.GetStyleHandle().Count() > 0) hints.push(new SwTextAttr(format, start, offset));
       },
     );
     this.replace(hints);
   }
 
-  /** Projects stored hints into complete text runs, including default-format gaps. @param text - Canonical node text. @returns Complete rendering runs. */
-  public toTextRuns(text: string): readonly WriterTextRunLike[] {
+  /** Projects item-set hints into complete browser text runs. @param text - Canonical node text. @param inherited - Node/style item set. @returns Complete runs. */
+  public toTextRuns(text: string, inherited: SfxItemSet): readonly WriterTextRunLike[] {
     if (text.length === 0) return [];
     const runs: WriterTextRunLike[] = [];
+    const inheritedAttributes = this.projectInherited(inherited);
     let offset = 0;
     this.hintsByStart.forEach(
-      /** Emits default gaps and one hinted portion. @param hint - Ordered non-overlapping hint. @returns Nothing. */
-      function appendHintRun(hint): void {
+      /** Emits an inherited gap and one hinted portion. @param hint - Ordered hint. @returns Nothing. */
+      (hint) => {
         const start = Math.min(text.length, hint.start);
         const end = Math.min(text.length, hint.end);
         if (start > offset)
-          runs.push({ attributes: DEFAULT_CHARACTER_ATTRIBUTES, text: text.slice(offset, start) });
-        if (end > start) runs.push({ attributes: hint.format.items, text: text.slice(start, end) });
+          runs.push({ attributes: inheritedAttributes, text: text.slice(offset, start) });
+        if (end > start)
+          runs.push({
+            attributes: projectWriterCharacterAttributes(hint.format.GetStyleHandle(), inherited),
+            text: text.slice(start, end),
+          });
         offset = Math.max(offset, end);
       },
     );
     if (offset < text.length)
-      runs.push({ attributes: DEFAULT_CHARACTER_ATTRIBUTES, text: text.slice(offset) });
+      runs.push({ attributes: inheritedAttributes, text: text.slice(offset) });
     return mergeTextRuns(runs);
   }
 
-  /** Reads attributes inherited by a caret, preferring the preceding character like Writer. @param text - Canonical node text. @param offset - Caret offset. @returns Effective direct attributes. */
-  public getCharacterAttributes(text: string, offset: number): WriterCharacterAttributes {
+  /** Reads effective attributes inherited by a caret. @param text - Canonical node text. @param offset - Caret offset. @param inherited - Node/style item set. @returns Effective properties. */
+  public getCharacterAttributes(
+    text: string,
+    offset: number,
+    inherited: SfxItemSet,
+  ): WriterCharacterAttributes {
     if (!Number.isInteger(offset) || offset < 0 || offset > text.length)
       throw new Error("Writer character-format caret is outside the text node.");
-    if (text.length === 0) return DEFAULT_CHARACTER_ATTRIBUTES;
+    if (text.length === 0) return this.projectInherited(inherited);
     const characterOffset = offset === 0 ? 0 : offset - 1;
     const hint = this.hintsByStart.find(
-      /** Finds the auto-format hint containing the inherited character. @param candidate - Ordered hint. @returns True when it covers characterOffset. */
-      function containsCharacter(candidate): boolean {
-        return candidate.start <= characterOffset && characterOffset < candidate.end;
-      },
+      /** Finds the hint covering the inherited character. @param candidate - Ordered hint. @returns Whether it covers the offset. */
+      (candidate) => candidate.start <= characterOffset && characterOffset < candidate.end,
     );
-    return hint?.format.items ?? DEFAULT_CHARACTER_ATTRIBUTES;
+    return hint === undefined
+      ? this.projectInherited(inherited)
+      : projectWriterCharacterAttributes(hint.format.GetStyleHandle(), inherited);
   }
 
-  /** Creates a deep copy safe for another SwTextNode. @returns Independent hints. */
+  /** Creates a deep copy safe for another text node in the same document. @returns Independent hints. */
   public clone(): SwpHints {
-    return new SwpHints(this.hintsByStart);
+    return new SwpHints(this.pool, this.hintsByStart);
   }
 
-  /** Converts the hint vector to cycle-free persisted records. @returns Ordered hint snapshots. */
+  /** Converts the hint vector to cycle-free persisted records. @returns Ordered snapshots. */
   public toSnapshot(): readonly SwTextAttrSnapshot[] {
     return this.hintsByStart.map(
-      /** Serializes one ranged hint. @param hint - Writer text attribute. @returns Persisted record. */
-      function serializeHint(hint): SwTextAttrSnapshot {
-        return hint.toSnapshot();
-      },
+      /** Serializes one hint. @param hint - Writer text attribute. @returns Snapshot. */
+      (hint) => hint.toSnapshot(),
+    );
+  }
+
+  /** Projects inherited character defaults through the item model. @param inherited - Node/style set. @returns Browser properties. */
+  private projectInherited(inherited: SfxItemSet): WriterCharacterAttributes {
+    return projectWriterCharacterAttributes(
+      new SfxItemSet(this.pool, WRITER_CHARACTER_WHICH_RANGES),
+      inherited,
     );
   }
 }
 
-/** Minimal complete run shape used only for rendering and boundary conversion. */
+/** Minimal complete run shape used by browser boundaries. */
 export interface WriterTextRunLike {
-  /** Direct character attributes effective for this portion. */
+  /** Effective character attributes for this portion. */
   readonly attributes: WriterCharacterAttributes;
   /** Visible text in this portion. */
   readonly text: string;
 }
 
-const DEFAULT_CHARACTER_ATTRIBUTES: WriterCharacterAttributes = {
-  bold: false,
-  italic: false,
-  underline: false,
-};
-
-/** Restores a hint collection from persisted records. @param candidate - Unknown persisted value. @returns Normalized hints. */
-export function createSwpHintsFromSnapshot(candidate: unknown): SwpHints {
-  if (!Array.isArray(candidate)) return new SwpHints();
+/** Restores current nested snapshots and legacy boolean snapshots. @param pool - Destination pool. @param candidate - Persisted value. @returns Normalized hints. */
+export function createSwpHintsFromSnapshot(pool: SwAttrPool, candidate: unknown): SwpHints {
+  if (!Array.isArray(candidate)) return new SwpHints(pool);
   const hints = candidate.flatMap(
-    /** Parses one persisted auto-format hint. @param value - Unknown stored record. @returns Zero or one valid hint. */
-    function parseHint(value): readonly SwTextAttr[] {
+    /** Parses one persisted auto-format hint. @param value - Unknown record. @returns Zero or one hint. */
+    (value): readonly SwTextAttr[] => {
       if (typeof value !== "object" || value === null) return [];
-      const record = value as Partial<SwTextAttrSnapshot>;
-      const items = record.format?.items;
+      const record = value as Record<string, unknown>;
       if (
         !Number.isInteger(record.start) ||
         !Number.isInteger(record.end) ||
         (record.start as number) < 0 ||
         (record.end as number) <= (record.start as number) ||
-        typeof items !== "object" ||
-        items === null
+        typeof record.format !== "object" ||
+        record.format === null
       )
         return [];
-      return [
-        new SwTextAttr(
-          createSwFormatAutoFormat({
-            bold: items.bold === true,
-            italic: items.italic === true,
-            underline: items.underline === true,
-          }),
-          record.start as number,
-          record.end as number,
-        ),
-      ];
+      const formatRecord = record.format as Record<string, unknown>;
+      const format =
+        "items" in formatRecord
+          ? createSwFormatAutoFormat(pool, normalizeLegacyAttributes(formatRecord.items))
+          : restoreSwFormatAutoFormat(pool, record.format as SwTextAttrSnapshot["format"]);
+      return [new SwTextAttr(format, record.start as number, record.end as number)];
     },
   );
-  return new SwpHints(hints);
+  return new SwpHints(pool, hints);
 }
 
-/** Compares hints using LibreOffice's start, end, and item ordering requirements. @param left - First hint. @param right - Second hint. @returns Signed ordering result. */
+/** Compares hints using LibreOffice start, end, and item ordering. @param left - First. @param right - Second. @returns Signed ordering. */
 function compareHints(left: SwTextAttr, right: SwTextAttr): number {
   return left.start - right.start || right.end - left.end;
 }
 
-/** Tests equality for the bounded auto-format item set. @param left - First item set. @param right - Second item set. @returns True when equal. */
-function areWriterCharacterAttributesEqual(
+/** Copies and merges adjacent equal browser runs. @param runs - Generated runs. @returns Independent normalized runs. */
+function mergeTextRuns(runs: readonly WriterTextRunLike[]): readonly WriterTextRunLike[] {
+  const merged: WriterTextRunLike[] = [];
+  runs.forEach(
+    /** Appends or merges one projection run. @param run - Source run. @returns Nothing. */
+    (run) => {
+      const copy = { attributes: { ...run.attributes }, text: run.text };
+      const previous = merged[merged.length - 1];
+      if (previous !== undefined && equalAttributes(previous.attributes, copy.attributes))
+        merged[merged.length - 1] = { ...previous, text: previous.text + copy.text };
+      else merged.push(copy);
+    },
+  );
+  return merged;
+}
+
+/** Compares browser character projections. @param left - First properties. @param right - Second properties. @returns Whether equal. */
+function equalAttributes(
   left: WriterCharacterAttributes,
   right: WriterCharacterAttributes,
 ): boolean {
@@ -209,17 +230,13 @@ function areWriterCharacterAttributesEqual(
   );
 }
 
-/** Detects the default direct-format item set. @param attributes - Candidate item set. @returns True when every direct property is disabled. */
-function isDefaultWriterCharacterAttributes(attributes: WriterCharacterAttributes): boolean {
-  return !attributes.bold && !attributes.italic && !attributes.underline;
-}
-
-/** Copies generated view runs with independent attribute records. @param runs - Canonically generated runs. @returns Independent view projection. */
-function mergeTextRuns(runs: readonly WriterTextRunLike[]): readonly WriterTextRunLike[] {
-  return runs.map(
-    /** Copies one non-empty projection run. @param run - Canonically generated view run. @returns Independent run. */
-    function copyRun(run): WriterTextRunLike {
-      return { attributes: { ...run.attributes }, text: run.text };
-    },
-  );
+/** Normalizes a legacy boolean auto-format payload. @param value - Legacy items field. @returns Browser properties. */
+function normalizeLegacyAttributes(value: unknown): WriterCharacterAttributes {
+  const record =
+    typeof value === "object" && value !== null ? (value as Record<string, unknown>) : {};
+  return {
+    bold: record.bold === true,
+    italic: record.italic === true,
+    underline: record.underline === true,
+  };
 }

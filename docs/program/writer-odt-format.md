@@ -25,10 +25,12 @@ before content, matching the ordering in the pinned Writer XML filter.
 
 The implemented ODF subset preserves ordered `SwTextNode` paragraphs, Default
 Paragraph Style and Heading 1 collection membership and names, style inheritance,
-style-level and node-local alignment, title metadata, and direct bold, italic,
-and single-underline `SwTextAttr` ranges. ODF automatic paragraph and text styles
-represent direct formatting; they are converted back into item-set deltas and
-text hints rather than becoming parallel view fields.
+style-level and node-local alignment, title metadata, and bold, italic, and
+single-underline pooled items. Named and automatic paragraph styles may carry
+character properties. ODF automatic paragraph and text styles are converted
+into node `SwAttrSet` deltas and `SfxItemSet`-backed `SwFormatAutoFormat` hints
+rather than becoming parallel view fields. Explicit normal text properties can
+override inherited formatting and survive a package round trip.
 
 Spaces are emitted as `text:s`, including `text:c` for runs, while tabs and
 in-paragraph line breaks use `text:tab` and `text:line-break`. This retains exact
@@ -44,10 +46,12 @@ and archive structure. It rejects encryption, ZIP64, multi-disk archives,
 path traversal, invalid DEFLATE, and packages exceeding configurable archive,
 entry-count, entry-size, total-size, or expansion-ratio ceilings. XML parsing
 rejects document type declarations, malformed or incorrect roots, invalid
-manifests, duplicate styles, and unsupported semantic style properties.
+manifests, duplicate styles, unsupported semantic style properties, and
+differing Western/CJK/CTL weight or posture values until script-specific
+browser projections are implemented.
 
 Lossy export is not permitted. Writer list state and paragraph item IDs outside
-the implemented alignment subset fail explicitly. Imported tables, lists,
+the implemented alignment and character subset fail explicitly. Imported tables, lists,
 images, fields, annotations, tracked changes, sections, page styles, objects,
 scripts, signatures, encryption, RDF, and arbitrary style properties likewise
 remain unsupported rather than being silently discarded.

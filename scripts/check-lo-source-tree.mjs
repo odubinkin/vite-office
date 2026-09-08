@@ -19,6 +19,7 @@ const requiredFiles = [
   "apps/office/src/sfx2/source/doc/docfile.ts",
   "apps/office/src/sfx2/source/doc/docundomanager.ts",
   "apps/office/src/editeng/source/items/paraitem.ts",
+  "apps/office/src/editeng/source/items/textitem.ts",
   "apps/office/src/svl/source/items/poolitem.ts",
   "apps/office/src/svl/source/items/itempool.ts",
   "apps/office/src/svl/source/items/itemset.ts",

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   escapeXml,
+  exportCharacterAttributes,
   exportTextParagraphs,
   ODF_NAMESPACES,
   type OdfCharacterProperties,
@@ -81,6 +82,25 @@ describe("ODF text paragraph export" /** Executes the enclosing deterministic te
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportTextParagraphs([{ runs: [{ properties: plain, text: "" }], style: "default" }]),
     ).toThrow("must not be empty");
+  });
+
+  it("emits automatic paragraph character deltas and explicit normal values" /** Covers style-level character serialization. @returns Nothing. */, () => {
+    const inherited = { bold: false, italic: true, underline: false };
+    const output = exportTextParagraphs([
+      {
+        inheritedProperties: inherited,
+        properties: inherited,
+        runs: [{ properties: inherited, text: "styled" }],
+        style: "default",
+      },
+    ]);
+    expect(output.automaticStyles).toContain('style:family="paragraph"');
+    expect(output.automaticStyles).not.toContain("style:paragraph-properties");
+    expect(output.automaticStyles).toContain('fo:font-weight="normal"');
+    expect(output.automaticStyles).toContain('fo:font-style="italic"');
+    expect(output.automaticStyles).toContain('style:text-underline-style="none"');
+    expect(output.automaticStyles).not.toContain('style:name="T1"');
+    expect(exportCharacterAttributes({})).toBe("");
   });
 });
 
@@ -173,5 +193,54 @@ describe("ODF text paragraph import" /** Executes the enclosing deterministic te
           textStyles,
         ),
     ).toThrow("Cyclic ODF text style");
+  });
+
+  it("resolves named and automatic paragraph character inheritance separately" /** Verifies effective runs and direct automatic-style deltas. @returns Nothing. */, () => {
+    const styles = new Map<string, OdfStyleDefinition>([
+      ["Standard", { family: "paragraph", properties: { bold: true } }],
+      [
+        "Heading_20_1",
+        {
+          family: "paragraph",
+          parentStyleName: "Standard",
+          properties: { italic: true },
+        },
+      ],
+      [
+        "P1",
+        {
+          family: "paragraph",
+          parentStyleName: "Heading_20_1",
+          properties: { underline: true },
+        },
+      ],
+      ["P2", { family: "paragraph", parentStyleName: "P1" }],
+    ]);
+    expect(
+      importTextParagraphs(
+        parseText(
+          '<text:p text:style-name="Standard">s</text:p><text:h text:style-name="Standard">d</text:h><text:h text:style-name="Heading_20_1">h</text:h><text:h text:style-name="P2">a</text:h>',
+        ),
+        styles,
+      ),
+    ).toEqual([
+      {
+        runs: [{ properties: { bold: true, italic: false, underline: false }, text: "s" }],
+        style: "default",
+      },
+      {
+        runs: [{ properties: { bold: true, italic: false, underline: false }, text: "d" }],
+        style: "heading-1",
+      },
+      {
+        runs: [{ properties: { bold: true, italic: true, underline: false }, text: "h" }],
+        style: "heading-1",
+      },
+      {
+        properties: { underline: true },
+        runs: [{ properties: { bold: true, italic: true, underline: true }, text: "a" }],
+        style: "heading-1",
+      },
+    ]);
   });
 });

@@ -2,7 +2,11 @@
 
 import { describe, expect, it } from "vitest";
 
+import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
+import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import {
   appendWriterParagraph,
@@ -23,7 +27,10 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import { createSwpHintsFromSnapshot, SwpHints } from "../txtnode/ndhints";
 import {
   createSwFormatAutoFormat,
+  projectWriterCharacterAttributes,
   RES_TXTATR_AUTOFMT,
+  restoreSwFormatAutoFormat,
+  SwFormatAutoFormat,
   SwTextAttr,
   type WriterCharacterAttributes,
 } from "../txtnode/txatbase";
@@ -265,25 +272,53 @@ describe("Writer SwPosition and SwPaM" /** Groups model cursor and range-directi
 
 describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage tests. @returns Nothing; Vitest registers cases. */, function defineHintTests(): void {
   it("sorts, merges, clones, serializes, and projects auto-format hints" /** Verifies the canonical range container independently from rendering. @returns Nothing; assertions inspect hints and runs. */, function managesHints(): void {
-    const first = new SwTextAttr(createSwFormatAutoFormat(bold), 1, 3);
+    const writer = createModelFixture();
+    const pool = writer.GetAttrPool();
+    const inherited = writer.GetDfltTextFormatColl().GetAttrSet();
+    const first = new SwTextAttr(createSwFormatAutoFormat(pool, bold), 1, 3);
+    expect(first.format.GetStyleHandle()).toBeInstanceOf(SfxItemSet);
+    expect(first.format.Clone()).not.toBe(first.format);
+    expect(first.format.Clone().equals(first.format)).toBe(true);
+    expect(first.format.equals(createSwFormatAutoFormat(pool, italic))).toBe(false);
+    expect(first.format.equals(new SfxInt16Item(RES_TXTATR_AUTOFMT, 1))).toBe(false);
+    expect(
+      throwing(
+        /** Creates an auto-format item with another WhichId. @returns Invalid item. */ () =>
+          new SwFormatAutoFormat(first.format.GetStyleHandle(), 52),
+      ),
+    ).toThrow("WhichId is invalid");
+    expect(
+      projectWriterCharacterAttributes(new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES)),
+    ).toEqual(plain);
+    for (const snapshot of [
+      { type: "SwFormatAutoFormat", value: [], which: 52 },
+      { type: "wrong", value: [], which: RES_TXTATR_AUTOFMT },
+      { type: "SwFormatAutoFormat", value: 1, which: RES_TXTATR_AUTOFMT },
+    ])
+      expect(
+        throwing(
+          /** Restores an invalid auto-format snapshot. @returns Invalid item. */ () =>
+            restoreSwFormatAutoFormat(pool, snapshot),
+        ),
+      ).toThrow("snapshot is invalid");
     first.dontExpand = true;
     first.dontExpandStart = true;
     first.dontMoveAttr = true;
-    const second = new SwTextAttr(createSwFormatAutoFormat(bold), 3, 5);
-    const hints = new SwpHints([second, first]);
+    const second = new SwTextAttr(createSwFormatAutoFormat(pool, bold), 3, 5);
+    const hints = new SwpHints(pool, [second, first]);
     expect(hints.Count()).toBe(1);
     expect(hints.Get(0).Which()).toBe(RES_TXTATR_AUTOFMT);
     expect(hints.Get(0).GetStart()).toBe(1);
     expect(hints.Get(0).GetEnd()).toBe(5);
     expect(hints.entries()).toHaveLength(1);
-    expect(hints.toTextRuns("abcdef")).toEqual([
+    expect(hints.toTextRuns("abcdef", inherited)).toEqual([
       { attributes: plain, text: "a" },
       { attributes: bold, text: "bcde" },
       { attributes: plain, text: "f" },
     ]);
-    expect(hints.getCharacterAttributes("abcdef", 0)).toEqual(plain);
-    expect(hints.getCharacterAttributes("abcdef", 3)).toEqual(bold);
-    expect(hints.getCharacterAttributes("abcdef", 6)).toEqual(plain);
+    expect(hints.getCharacterAttributes("abcdef", 0, inherited)).toEqual(plain);
+    expect(hints.getCharacterAttributes("abcdef", 3, inherited)).toEqual(bold);
+    expect(hints.getCharacterAttributes("abcdef", 6, inherited)).toEqual(plain);
     const clone = hints.clone();
     expect(clone).not.toBe(hints);
     expect(clone.toSnapshot()).toEqual(hints.toSnapshot());
@@ -301,65 +336,88 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     expect(
       throwing(
         /** Creates a negative-start hint. @returns Invalid hint. */ () =>
-          new SwTextAttr(createSwFormatAutoFormat(bold), -1, 1),
+          new SwTextAttr(createSwFormatAutoFormat(pool, bold), -1, 1),
       ),
     ).toThrow("range is invalid");
   });
 
   it("normalizes run and snapshot inputs while rejecting overlapping hints" /** Covers default gaps, malformed records, and overlap protection. @returns Nothing; assertions inspect normalized ranges. */, function normalizesHints(): void {
-    const hints = new SwpHints();
-    hints.setTextRuns([
-      { attributes: plain, text: "a" },
-      { attributes: italic, text: "bc" },
-      { attributes: italic, text: "" },
-      { attributes: italic, text: "d" },
-    ]);
-    expect(hints.toTextRuns("abcd")).toEqual([
+    const writer = createModelFixture();
+    const pool = writer.GetAttrPool();
+    const inherited = writer.GetDfltTextFormatColl().GetAttrSet();
+    const hints = new SwpHints(pool);
+    hints.setTextRuns(
+      [
+        { attributes: plain, text: "a" },
+        { attributes: italic, text: "bc" },
+        { attributes: italic, text: "" },
+        { attributes: italic, text: "d" },
+      ],
+      inherited,
+    );
+    expect(hints.toTextRuns("abcd", inherited)).toEqual([
       { attributes: plain, text: "a" },
       { attributes: italic, text: "bcd" },
     ]);
-    expect(new SwpHints().toTextRuns("")).toEqual([]);
-    expect(new SwpHints().getCharacterAttributes("", 0)).toEqual(plain);
+    expect(new SwpHints(pool).toTextRuns("", inherited)).toEqual([]);
+    expect(new SwpHints(pool).getCharacterAttributes("", 0, inherited)).toEqual(plain);
     expect(
       throwing(
         /** Reads attributes before text. @returns Invalid attributes. */ () =>
-          hints.getCharacterAttributes("abcd", -1),
+          hints.getCharacterAttributes("abcd", -1, inherited),
       ),
     ).toThrow("outside the text node");
     expect(
       throwing(
         /** Reads attributes after text. @returns Invalid attributes. */ () =>
-          hints.getCharacterAttributes("abcd", 5),
+          hints.getCharacterAttributes("abcd", 5, inherited),
       ),
     ).toThrow("outside the text node");
-    const restored = createSwpHintsFromSnapshot([
+    const restored = createSwpHintsFromSnapshot(pool, [
       null,
       {},
       { end: 2, format: { items: bold }, start: 0 },
       { end: 0, format: { items: bold }, start: 0 },
       { end: 4, format: { items: null }, start: 2 },
     ]);
-    expect(restored.toTextRuns("ab")).toEqual([{ attributes: bold, text: "ab" }]);
-    expect(createSwpHintsFromSnapshot("invalid").Count()).toBe(0);
+    expect(restored.toTextRuns("ab", inherited)).toEqual([{ attributes: bold, text: "ab" }]);
+    expect(createSwpHintsFromSnapshot(pool, "invalid").Count()).toBe(0);
     expect(
-      new SwpHints([new SwTextAttr(createSwFormatAutoFormat(bold), 5, 6)]).toTextRuns("ab"),
+      createSwpHintsFromSnapshot(pool, [
+        { end: 1, format: { items: 7, which: 51 }, start: 0 },
+      ]).Count(),
+    ).toBe(0);
+    expect(
+      new SwpHints(pool, [new SwTextAttr(createSwFormatAutoFormat(pool, bold), 5, 6)]).toTextRuns(
+        "ab",
+        inherited,
+      ),
     ).toEqual([{ attributes: plain, text: "ab" }]);
     const overlap = [
-      new SwTextAttr(createSwFormatAutoFormat(bold), 0, 2),
-      new SwTextAttr(createSwFormatAutoFormat(italic), 1, 3),
+      new SwTextAttr(createSwFormatAutoFormat(pool, bold), 0, 2),
+      new SwTextAttr(createSwFormatAutoFormat(pool, italic), 1, 3),
     ];
     expect(
       throwing(
         /** Builds overlapping hints. @returns Invalid hint collection. */ () =>
-          new SwpHints(overlap),
+          new SwpHints(pool, overlap),
       ),
     ).toThrow("Overlapping Writer");
+    const inheritedWriter = createModelFixture("hint-inherited");
+    inheritedWriter.GetDfltTextFormatColl().SetFormatAttr(new SvxWeightItem(FontWeight.BOLD));
+    const inheritedPool = inheritedWriter.GetAttrPool();
+    const redundant = new SwpHints(inheritedPool, [
+      new SwTextAttr(createSwFormatAutoFormat(inheritedPool, bold), 1, 2),
+    ]);
+    expect(
+      redundant.toTextRuns("abc", inheritedWriter.GetDfltTextFormatColl().GetAttrSet()),
+    ).toEqual([{ attributes: bold, text: "abc" }]);
     expect(
       throwing(
         /** Builds same-start overlapping hints. @returns Invalid hint collection. */ () =>
-          new SwpHints([
-            new SwTextAttr(createSwFormatAutoFormat(bold), 0, 1),
-            new SwTextAttr(createSwFormatAutoFormat(italic), 0, 2),
+          new SwpHints(pool, [
+            new SwTextAttr(createSwFormatAutoFormat(pool, bold), 0, 1),
+            new SwTextAttr(createSwFormatAutoFormat(pool, italic), 0, 2),
           ]),
       ),
     ).toThrow("Overlapping Writer");
