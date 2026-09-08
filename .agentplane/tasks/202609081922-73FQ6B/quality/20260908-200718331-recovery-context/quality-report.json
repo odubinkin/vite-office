@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202609081922-73FQ6B",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-08T20:07:18.331Z",
+  "verdict": "pass",
+  "summary": "Pooled Writer character attributes preserve LibreOffice WhichId, item-set ownership, inheritance, cloning, snapshot, and bounded ODF semantics without regressions.",
+  "evaluated_sha": "e32c6fa5f04d21dd1eadbec1906827ae374b7e39",
+  "blueprint_digest": "21e5144ba657306dc8477e312be8530564173fb4082dde4da08a3b572d8c55a8",
+  "findings": [
+    "All planned behavior is implemented and fully verified; real LibreOffice ODT fixtures now reach the explicit next unsupported paragraph-margin model boundary."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609081922-73FQ6B/README.md",
+    "npm run verify",
+    "npm run check:source-provenance",
+    "npm run check:source-tree",
+    "npm run inventory:parity"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
