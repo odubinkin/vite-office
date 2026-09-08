@@ -13,14 +13,14 @@ canonical model. `createWriterDocument` establishes an empty first text node,
 `replaceWriterParagraph` replaces one text node's complete text.
 `appendWriterParagraph` appends one uniquely identified empty paragraph.
 `removeWriterParagraph` removes one identified paragraph while protecting the
-non-empty body invariant. Every paragraph also stores an explicit horizontal
-alignment; [`setWriterParagraphAlignment`](../../apps/office/src/sw/source/core/doc/writer.ts)
-changes that one property without changing its text or sibling paragraphs. Each
-paragraph also retains a bounded direct style; `setWriterParagraphStyle` applies
-Default Paragraph Style or Heading 1 without modeling inheritance.
-Each paragraph also serializes a list object with `kind`, root `level`, and an
-optional future `styleId`; new and legacy paragraphs default to `{ kind: "none",
-level: 0 }`. The list transition itself belongs to
+non-empty body invariant. Paragraph alignment, list rule name, list identity,
+and list level are `SfxPoolItem` deltas in a lazy `SwAttrSet`, not parallel node
+fields. Each paragraph registers in a document-owned `SwTextFormatColl`;
+Heading 1 inherits from Default Paragraph Style. The browser-facing alignment,
+style, and `{ kind, level, styleId }` list values are projections from that
+canonical graph. [`setWriterParagraphAlignment`](../../apps/office/src/sw/source/core/doc/writer.ts)
+and `setWriterParagraphStyle` retain the established browser command boundary.
+The list transition itself belongs to
 [`txtnum.ts`](../../apps/office/src/sw/source/uibase/shells/txtnum.ts), matching
 Writer's command-shell ownership rather than placing command policy in the
 document model.

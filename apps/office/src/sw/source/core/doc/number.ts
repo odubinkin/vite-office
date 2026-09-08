@@ -2,7 +2,70 @@
  * @fileoverview Calculates browser-visible Writer list markers at the `sw/source/core/doc/number.cxx` ownership boundary without changing editable paragraph text.
  */
 
-import type { WriterParagraphList } from "./list";
+import type { WriterParagraphList, WriterParagraphListKind } from "./list";
+
+/** Internal rule name used by the bounded default-bullet command. */
+export const DEFAULT_BULLET_RULE_NAME = "__WriterDefaultBullet";
+
+/** Internal rule name used by the bounded default-numbering command. */
+export const DEFAULT_NUMBERING_RULE_NAME = "__WriterDefaultNumbering";
+
+/** Persisted definition of one bounded Writer numbering rule. */
+export interface SwNumRuleSnapshot {
+  /** Browser-supported marker family. */
+  readonly kind: Exclude<WriterParagraphListKind, "none">;
+  /** Default list identity used when the rule is applied. */
+  readonly listId: string;
+  /** Document-unique rule name referenced by SwNumRuleItem. */
+  readonly name: string;
+}
+
+/** Document-owned numbering rule referenced by paragraph item sets. */
+export class SwNumRule {
+  /** Creates one bounded numbering rule. @param name - Document-unique rule name. @param kind - Bullet or numbering marker family. @param defaultListId - Default list identity. @returns Nothing. */
+  public constructor(
+    private readonly name: string,
+    private readonly kind: Exclude<WriterParagraphListKind, "none">,
+    private readonly defaultListId = name,
+  ) {
+    if (name.trim().length === 0 || defaultListId.trim().length === 0)
+      throw new Error("SwNumRule name and list id must not be blank.");
+    if (kind !== "bullet" && kind !== "numbered")
+      throw new Error("SwNumRule kind must be bullet or numbered.");
+  }
+
+  /** Returns the document-unique rule name. @returns Rule name. */
+  public GetName(): string {
+    return this.name;
+  }
+
+  /** Returns the browser-supported marker family. @returns Bullet or numbered kind. */
+  public GetKind(): Exclude<WriterParagraphListKind, "none"> {
+    return this.kind;
+  }
+
+  /** Returns the default list identity. @returns List identity. */
+  public GetDefaultListId(): string {
+    return this.defaultListId;
+  }
+
+  /** Creates an independent numbering rule. @returns Cloned rule. */
+  public clone(): SwNumRule {
+    return new SwNumRule(this.name, this.kind, this.defaultListId);
+  }
+
+  /** Creates a persisted numbering-rule record. @returns Rule snapshot. */
+  public toSnapshot(): SwNumRuleSnapshot {
+    return { kind: this.kind, listId: this.defaultListId, name: this.name };
+  }
+
+  /** Restores a validated bounded numbering rule. @param snapshot - Persisted rule definition. @returns Restored rule. */
+  public static fromSnapshot(snapshot: SwNumRuleSnapshot): SwNumRule {
+    if (snapshot.kind !== "bullet" && snapshot.kind !== "numbered")
+      throw new Error("Stored SwNumRule kind is invalid.");
+    return new SwNumRule(snapshot.name, snapshot.kind, snapshot.listId);
+  }
+}
 
 /** Describes the list subset of a Writer paragraph needed for deterministic marker calculation. */
 export interface WriterNumberingParagraph {

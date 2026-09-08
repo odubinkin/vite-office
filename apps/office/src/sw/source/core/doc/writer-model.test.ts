@@ -23,6 +23,7 @@ import { SwTextNode } from "../txtnode/ndtxt";
 import { createSwpHintsFromSnapshot, SwpHints } from "../txtnode/ndhints";
 import {
   createSwFormatAutoFormat,
+  RES_TXTATR_AUTOFMT,
   SwTextAttr,
   type WriterCharacterAttributes,
 } from "../txtnode/txatbase";
@@ -271,7 +272,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     const second = new SwTextAttr(createSwFormatAutoFormat(bold), 3, 5);
     const hints = new SwpHints([second, first]);
     expect(hints.Count()).toBe(1);
-    expect(hints.Get(0).Which()).toBe("RES_TXTATR_AUTOFMT");
+    expect(hints.Get(0).Which()).toBe(RES_TXTATR_AUTOFMT);
     expect(hints.Get(0).GetStart()).toBe(1);
     expect(hints.Get(0).GetEnd()).toBe(5);
     expect(hints.entries()).toHaveLength(1);
@@ -374,7 +375,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(node.GetpSwpHints()).toBeUndefined();
     expect(node.GetOrCreateSwpHints()).toBe(node.GetpSwpHints());
     node.SetParagraphAlignment("justify");
-    node.ChgFormatColl("heading-1");
+    node.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     node.SetParagraphList({ kind: "numbered", level: 2, styleId: "List 1" });
     expect(node.alignment).toBe("justify");
     expect(node.style).toBe("heading-1");
@@ -401,9 +402,9 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     const restored = SwTextNode.fromSnapshot(
       writer.nodes,
       writer.nodes.GetEndOfContent().StartOfSectionNode(),
-      { ...snapshot, alignment: "invalid" as "left", style: "invalid" as "default" },
+      { ...snapshot, formatCollId: "invalid" as "default" },
     );
-    expect(restored).toMatchObject({ alignment: "left", style: "default", text: "aYZd" });
+    expect(restored).toMatchObject({ alignment: "justify", style: "default", text: "aYZd" });
     node.SetText("plain");
     expect(node.runs).toEqual([{ attributes: plain, text: "plain" }]);
     expect(

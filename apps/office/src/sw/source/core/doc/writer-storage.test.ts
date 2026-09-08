@@ -57,7 +57,7 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
     expect(saved.snapshot).toMatchObject({
       id: "writer-store",
       version: 1,
-      state: { writerDocument: { swModelVersion: 1 } },
+      state: { writerDocument: { swModelVersion: 2 } },
     });
     const loaded = await loadWriterDocument(adapter, "writer-store");
     expect(loaded.status).toBe("found");

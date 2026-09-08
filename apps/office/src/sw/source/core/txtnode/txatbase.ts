@@ -2,8 +2,9 @@
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
 
-/** Identifies the Writer auto-format text attribute used for direct character formatting. */
-export const RES_TXTATR_AUTOFMT = "RES_TXTATR_AUTOFMT" as const;
+import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
+
+export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 
 /** Names the bounded direct character properties currently carried by an auto-format item. */
 export interface WriterCharacterAttributes {

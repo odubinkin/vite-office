@@ -8,10 +8,14 @@ LibreOffice `sw` sources as follows:
 
 | TypeScript model | Pinned LibreOffice source | Preserved responsibility |
 | --- | --- | --- |
-| `SwDoc` | `sw/inc/doc.hxx`, `sw/source/core/doc/docnew.cxx` | Owns the document node array and modified state |
+| `SfxPoolItem`, `SfxItemPool`, `SfxItemSet` | `svl/source/items/poolitem.cxx`, `itempool.cxx`, `itemset.cxx` | Represent WhichId-keyed values, pool defaults, direct deltas, parent lookup, and item state |
+| `SwDoc` | `sw/inc/doc.hxx`, `sw/source/core/doc/docnew.cxx` | Owns the node array, `SwAttrPool`, paragraph-style collections, numbering rules, and modified state |
+| `SwAttrPool`, `SwAttrSet` | `sw/source/core/attr/swatrset.cxx` | Specialize the item pool/set for document-owned Writer attributes |
+| `SwFormat`, `SwFormatColl`, `SwTextFormatColl` | `sw/source/core/attr/format.cxx`, `sw/source/core/doc/fmtcol.cxx` | Own named paragraph-style deltas and their derived-from relationship |
 | `SwNodes` | `sw/inc/ndarr.hxx`, `sw/source/core/docnode/nodes.cxx` | Owns the ordered node array and fixed document sections |
-| `SwNode`, `SwStartNode`, `SwEndNode`, `SwContentNode` | `sw/inc/node.hxx`, `sw/source/core/docnode/node.cxx` | Represent section boundaries and content nodes with array identity |
-| `SwTextNode` | `sw/inc/ndtxt.hxx`, `sw/source/core/txtnode/ndtxt.cxx` | Owns paragraph text, optional hints, and bounded paragraph properties |
+| `SwNode`, `SwStartNode`, `SwEndNode`, `SwContentNode` | `sw/inc/node.hxx`, `sw/source/core/docnode/node.cxx` | Represent section boundaries and content nodes; content nodes register in a format collection and lazily own direct attributes |
+| `SwTextNode` | `sw/inc/ndtxt.hxx`, `sw/source/core/txtnode/ndtxt.cxx` | Owns paragraph text, optional hints, and item-backed paragraph properties |
+| `SwNumRule`, `SwNumRuleItem` | `sw/source/core/doc/number.cxx`, `sw/source/core/para/paratr.cxx` | Separate document-owned numbering definitions from the rule name stored on a paragraph |
 | `SwTextAttr`, `SwpHints` | `sw/source/core/txtnode/txatbase.cxx`, `ndhints.cxx`, `thints.cxx` | Store start-sorted character-attribute ranges |
 | `SwNodeIndex`, `SwPosition`, `SwPaM` | `sw/inc/pam.hxx`, `sw/source/core/crsr/pam.cxx` | Address nodes, content offsets, and directional point/mark selections |
 | `DocumentContentOperationsManager` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Applies bounded Insert, Delete, and Replace operations through a `SwPaM` |
@@ -43,6 +47,21 @@ single Underline are represented by `RES_TXTATR_AUTOFMT`-like `SwTextAttr`
 ranges stored in an optional start-sorted `SwpHints`. Insert, erase, replace,
 split, and append operations update both text and applicable hint ranges.
 
+Paragraph properties are not stored as parallel TypeScript fields. The pinned
+numeric WhichIds from `sw/inc/hintids.hxx` identify `RES_PARATR_ADJUST`,
+`RES_PARATR_NUMRULE`, `RES_PARATR_LIST_ID`, and `RES_PARATR_LIST_LEVEL` items.
+`SwDoc` owns their defaults through `SwAttrPool`. A `SwContentNode` is registered
+in a `SwTextFormatColl`; reads fall through the optional direct `SwAttrSet`, its
+collection and parent collections, and finally the pool default. The direct set
+is allocated on first mutation and released when its last delta is cleared.
+
+The current style table contains Default Paragraph Style and Heading 1, with
+Heading 1 derived from the default collection. Alignment is an
+`SvxAdjustItem`. List application stores a `SwNumRuleItem` name, list identity,
+and level while the corresponding bounded `SwNumRule` is owned by `SwDoc`.
+The browser-facing `alignment`, `style`, and `list` properties are derived
+projections, like `runs`; they are not canonical storage.
+
 The `runs` consumed by React and clipboard code are a derived projection of the
 text and hints. They are not duplicated canonical state. `SwPosition` combines
 a node with a UTF-16 content offset; `SwPaM` preserves LibreOffice's independent
@@ -56,18 +75,23 @@ current browser workbench still needs immutable React roots, so each command
 clones the `SwDoc` graph and then applies the source-shaped mutation to the
 clone. This is a UI/history adapter, not the canonical document representation.
 
-Persistence uses the explicit `swModelVersion: 1` snapshot produced by
-`SwDoc.toSnapshot()`. The snapshot records the shared document header and text
-node snapshots; `SwDoc.fromSnapshot()` reconstructs node ownership, hints, and
-identity. Loading also accepts the earlier `paragraphs`/`runs` DTO as a migration
-input, converting it immediately into the canonical graph.
+Persistence uses the explicit `swModelVersion: 2` snapshot produced by
+`SwDoc.toSnapshot()`. It records the shared document header, document-owned
+style and numbering definitions, text-node collection identities, direct item
+deltas, and text hints. `SwDoc.fromSnapshot()` reconstructs those ownership and
+inheritance links. Loading also accepts both the version-one `SwDoc` snapshot
+with direct paragraph fields and the earlier `paragraphs`/`runs` DTO, converting
+either immediately into the item-backed graph.
 
 ## Deliberate remaining gaps
 
-The model does not yet reproduce the full Sfx item-pool and style inheritance
-system, registered index correction, notification clients, nested non-body
-sections, tables, frames, fields, marks, redlines, content controls, anchored
-objects, layout frames, native undo objects, or Writer's file filters. ODT and
-DOCX support must be reimplemented from the corresponding pinned filter and
-storage sources against this graph; serializing the browser projection is not a
-format implementation.
+The bounded pool supports only the paragraph items required by current browser
+commands. It does not yet reproduce pool ranges for the complete Writer item
+universe, invalid/disabled item payloads, item sharing/reference counts,
+`SfxBroadcaster` notifications, conditional styles, automatic-style caches, or
+the complete built-in style and numbering tables. Registered index correction,
+nested non-body sections, tables, frames, fields, marks, redlines, content
+controls, anchored objects, layout frames, native undo objects, and Writer's
+file filters also remain. ODT and DOCX support must be reimplemented from the
+corresponding pinned filter and storage sources against this graph; serializing
+the browser snapshot is not a format implementation.

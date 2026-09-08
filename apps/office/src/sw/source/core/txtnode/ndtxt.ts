@@ -2,13 +2,32 @@
  * @fileoverview Implements Writer text nodes plus derived browser text runs at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
 
+import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  SfxInt16Item,
+  SfxStringItem,
+  type SfxPoolItemSnapshot,
+} from "../../../../svl/source/items/poolitem";
+import {
+  RES_PARATR_ADJUST,
+  RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_LEVEL,
+  RES_PARATR_NUMRULE,
+} from "../../../inc/hintids";
 import {
   createDefaultWriterParagraphList,
   normalizeWriterParagraphList,
   type WriterParagraphList,
 } from "../doc/list";
+import {
+  isWriterParagraphStyle,
+  type SwTextFormatColl,
+  type WriterParagraphStyle,
+} from "../doc/fmtcol";
+import { DEFAULT_BULLET_RULE_NAME, DEFAULT_NUMBERING_RULE_NAME } from "../doc/number";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
+import { SwNumRuleItem } from "../para/paratr";
 import { createSwpHintsFromSnapshot, SwpHints } from "./ndhints";
 import type { SwTextAttrSnapshot, WriterCharacterAttributes } from "./txatbase";
 export type { WriterCharacterAttributes } from "./txatbase";
@@ -39,12 +58,6 @@ export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"
 
 /** Identifies one supported horizontal paragraph alignment. */
 export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[number];
-
-/** Enumerates the bounded paragraph style collections currently exposed by Writer. */
-export const WRITER_PARAGRAPH_STYLES = ["default", "heading-1"] as const;
-
-/** Identifies one supported Writer text format collection. */
-export type WriterParagraphStyle = (typeof WRITER_PARAGRAPH_STYLES)[number];
 
 /**
  * Creates one unformatted text-run sequence from plain text.
@@ -299,16 +312,14 @@ export function getWriterTextAttributesAtOffset(
 
 /** Cycle-free persisted record for one regular-content SwTextNode. */
 export interface SwTextNodeSnapshot {
-  /** Paragraph adjustment item. */
-  readonly alignment: WriterParagraphAlignment;
+  /** Direct paragraph auto-attribute deltas. */
+  readonly autoAttributes: readonly SfxPoolItemSnapshot[];
+  /** Paragraph text format collection identity. */
+  readonly formatCollId: WriterParagraphStyle;
   /** Ordered direct-format text attributes. */
   readonly hints: readonly SwTextAttrSnapshot[];
   /** Stable browser identity associated with this node. */
   readonly id: string;
-  /** Paragraph numbering/list items. */
-  readonly list: WriterParagraphList;
-  /** Paragraph text format collection identity. */
-  readonly style: WriterParagraphStyle;
   /** Canonical UTF-16 text owned by the node. */
   readonly text: string;
 }
@@ -321,13 +332,16 @@ export interface SwTextNodeSnapshot {
 export class SwTextNode extends SwContentNode {
   private mText: string;
   private pSwpHints: SwpHints | undefined;
-  private paragraphAlignment: WriterParagraphAlignment = "left";
-  private paragraphList: WriterParagraphList = createDefaultWriterParagraphList();
-  private textFormatCollection: WriterParagraphStyle = "default";
 
-  /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param id - Stable node identity. @param startOfSection - Containing section. @param text - Initial canonical text. @returns Nothing. */
-  public constructor(nodes: SwNodes, id: string, startOfSection: SwStartNode, text = "") {
-    super(nodes, id, startOfSection);
+  /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param id - Stable node identity. @param startOfSection - Containing section. @param formatColl - Registered paragraph style. @param text - Initial canonical text. @returns Nothing. */
+  public constructor(
+    nodes: SwNodes,
+    id: string,
+    startOfSection: SwStartNode,
+    formatColl: SwTextFormatColl = nodes.GetDoc().GetDfltTextFormatColl(),
+    text = "",
+  ) {
+    super(nodes, id, startOfSection, formatColl);
     this.mText = text;
   }
 
@@ -359,17 +373,33 @@ export class SwTextNode extends SwContentNode {
 
   /** Returns the paragraph adjustment item as a view-friendly value. @returns Paragraph alignment. */
   public get alignment(): WriterParagraphAlignment {
-    return this.paragraphAlignment;
+    const adjust = (this.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust();
+    return getWriterParagraphAlignment(adjust);
   }
 
   /** Returns a copy of the bounded numbering/list items. @returns Paragraph list items. */
   public get list(): WriterParagraphList {
-    return { ...this.paragraphList };
+    const ruleName = (this.GetAttr(RES_PARATR_NUMRULE) as SwNumRuleItem).GetValue();
+    if (ruleName.length === 0) {
+      const listId = (this.GetAttr(RES_PARATR_LIST_ID) as SfxStringItem).GetValue();
+      const level = (this.GetAttr(RES_PARATR_LIST_LEVEL) as SfxInt16Item).GetValue();
+      return listId.length === 0
+        ? { kind: "none", level }
+        : { kind: "none", level, styleId: listId };
+    }
+    const rule = this.GetDoc().FindNumRulePtr(ruleName);
+    if (rule === undefined) return createDefaultWriterParagraphList();
+    const level = (this.GetAttr(RES_PARATR_LIST_LEVEL) as SfxInt16Item).GetValue();
+    const builtIn =
+      ruleName === DEFAULT_BULLET_RULE_NAME || ruleName === DEFAULT_NUMBERING_RULE_NAME;
+    return builtIn
+      ? { kind: rule.GetKind(), level }
+      : { kind: rule.GetKind(), level, styleId: ruleName };
   }
 
   /** Returns the paragraph's text format collection identity. @returns Paragraph style identity. */
   public get style(): WriterParagraphStyle {
-    return this.textFormatCollection;
+    return this.GetTextFormatColl().id;
   }
 
   /** Derives complete rendering runs from canonical text and range hints. @returns Complete rendering projection. */
@@ -381,17 +411,27 @@ export class SwTextNode extends SwContentNode {
 
   /** Sets the paragraph adjustment item. @param alignment - New paragraph alignment. @returns Nothing. */
   public SetParagraphAlignment(alignment: WriterParagraphAlignment): void {
-    this.paragraphAlignment = alignment;
-  }
-
-  /** Changes the paragraph text format collection. @param style - New collection identity. @returns Nothing. */
-  public ChgFormatColl(style: WriterParagraphStyle): void {
-    this.textFormatCollection = style;
+    this.SetAttr(new SvxAdjustItem(getSvxAdjust(alignment)));
   }
 
   /** Sets the bounded numbering/list items. @param list - New list items. @returns Nothing. */
   public SetParagraphList(list: WriterParagraphList): void {
-    this.paragraphList = normalizeWriterParagraphList(list);
+    const normalized = normalizeWriterParagraphList(list);
+    if (normalized.kind === "none") {
+      this.ResetAttr(RES_PARATR_NUMRULE);
+      if (normalized.styleId === undefined) this.ResetAttr(RES_PARATR_LIST_ID);
+      else this.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, normalized.styleId));
+      if (normalized.level === 0) this.ResetAttr(RES_PARATR_LIST_LEVEL);
+      else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, normalized.level));
+      return;
+    }
+    const ruleName =
+      normalized.styleId ??
+      (normalized.kind === "bullet" ? DEFAULT_BULLET_RULE_NAME : DEFAULT_NUMBERING_RULE_NAME);
+    const rule = this.GetDoc().EnsureNumRule(ruleName, normalized.kind);
+    this.SetAttr(new SwNumRuleItem(rule.GetName()));
+    this.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, rule.GetDefaultListId()));
+    this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, normalized.level));
   }
 
   /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @returns Inserted text. */
@@ -454,11 +494,11 @@ export class SwTextNode extends SwContentNode {
       this.GetNodes(),
       nextId,
       this.StartOfSectionNode(),
+      this.GetTextFormatColl(),
       getWriterTextFromRuns(split.suffix),
     );
-    trailing.SetParagraphAlignment(this.paragraphAlignment);
-    trailing.ChgFormatColl(this.textFormatCollection);
-    trailing.SetParagraphList(this.paragraphList);
+    const directAttributes = this.GetpSwAttrSet();
+    if (directAttributes !== undefined) trailing.SetAttr(directAttributes);
     trailing.setHintsFromRuns(split.suffix);
     this.mText = getWriterTextFromRuns(split.prefix);
     this.setHintsFromRuns(split.prefix);
@@ -473,11 +513,10 @@ export class SwTextNode extends SwContentNode {
   /** Creates a cycle-free persisted record. @returns Text-node snapshot. */
   public toSnapshot(): SwTextNodeSnapshot {
     return {
-      alignment: this.paragraphAlignment,
+      autoAttributes: this.GetpSwAttrSet()?.toSnapshot() ?? [],
+      formatCollId: this.GetTextFormatColl().id,
       hints: this.pSwpHints?.toSnapshot() ?? [],
       id: this.id,
-      list: { ...this.paragraphList },
-      style: this.textFormatCollection,
       text: this.mText,
     };
   }
@@ -488,12 +527,18 @@ export class SwTextNode extends SwContentNode {
     startOfSection: SwStartNode,
     snapshot: SwTextNodeSnapshot,
   ): SwTextNode {
-    const node = new SwTextNode(nodes, snapshot.id, startOfSection, snapshot.text);
-    node.SetParagraphAlignment(
-      isWriterParagraphAlignment(snapshot.alignment) ? snapshot.alignment : "left",
+    const formatColl = nodes
+      .GetDoc()
+      .GetTextFormatColl(
+        isWriterParagraphStyle(snapshot.formatCollId) ? snapshot.formatCollId : "default",
+      );
+    const node = new SwTextNode(nodes, snapshot.id, startOfSection, formatColl, snapshot.text);
+    snapshot.autoAttributes.forEach(
+      /** Restores one direct paragraph item. @param itemSnapshot - Persisted item delta. @returns Nothing. */
+      function restoreAutoAttribute(itemSnapshot): void {
+        node.SetAttr(nodes.GetDoc().GetAttrPool().CreateItem(itemSnapshot));
+      },
     );
-    node.ChgFormatColl(isWriterParagraphStyle(snapshot.style) ? snapshot.style : "default");
-    node.SetParagraphList(snapshot.list);
     const hints = createSwpHintsFromSnapshot(snapshot.hints);
     node.pSwpHints = hints.Count() === 0 ? undefined : hints;
     return node;
@@ -531,9 +576,35 @@ export function isWriterParagraphAlignment(value: unknown): value is WriterParag
   return WRITER_PARAGRAPH_ALIGNMENTS.includes(value as WriterParagraphAlignment);
 }
 
-/** Checks a text format collection identity read from storage or UI. @param value - Unknown runtime value. @returns True for a supported paragraph style. */
-export function isWriterParagraphStyle(value: unknown): value is WriterParagraphStyle {
-  return WRITER_PARAGRAPH_STYLES.includes(value as WriterParagraphStyle);
+/** Converts a UI alignment to Writer's paragraph adjustment enum. @param alignment - Browser alignment. @returns SvxAdjust value. */
+function getSvxAdjust(alignment: WriterParagraphAlignment): SvxAdjust {
+  switch (alignment) {
+    case "center":
+      return SvxAdjust.Center;
+    case "right":
+      return SvxAdjust.Right;
+    case "justify":
+      return SvxAdjust.Block;
+    default:
+      return SvxAdjust.Left;
+  }
+}
+
+/** Converts Writer's paragraph adjustment enum to the current browser projection. @param adjust - Effective SvxAdjust value. @returns Browser alignment. */
+function getWriterParagraphAlignment(adjust: SvxAdjust): WriterParagraphAlignment {
+  switch (adjust) {
+    case SvxAdjust.Center:
+      return "center";
+    case SvxAdjust.Right:
+    case SvxAdjust.ParaEnd:
+    case SvxAdjust.End:
+      return "right";
+    case SvxAdjust.Block:
+    case SvxAdjust.BlockLine:
+      return "justify";
+    default:
+      return "left";
+  }
 }
 
 /** Checks equality of two bounded Writer character attribute records. @param left - First attributes. @param right - Second attributes. @returns True only when every direct attribute matches. */

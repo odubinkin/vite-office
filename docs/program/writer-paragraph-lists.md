@@ -8,6 +8,11 @@ active browser Writer paragraph. The command transition is located in
 calculation live in [`list.ts`](../../apps/office/src/sw/source/core/doc/list.ts)
 and [`number.ts`](../../apps/office/src/sw/source/core/doc/number.ts), matching
 the `sw/source/core/doc/list.cxx` and `number.cxx` ownership boundaries.
+Canonical paragraph state follows Writer's split ownership: a `SwNumRuleItem`
+stores the rule name with `RES_PARATR_NUMRULE`, list identity and level are
+separate items, and `SwDoc` owns the referenced bounded `SwNumRule`. The
+`{ kind, level, styleId }` object consumed by browser controls and marker
+rendering is derived from those items and the rule table.
 
 The browser places the actions in **Format → Bullets and Numbering** and, for
 the two toggles, directly after paragraph alignment in the formatting toolbar.
@@ -30,7 +35,7 @@ only paragraph text.
 ## Deliberate current boundary
 
 This is not full Writer list parity. Range and table-cell selection, nested
-document rendering and numbering semantics, named list styles, restart/continue
+document rendering and numbering semantics, full multi-level named list-style definitions, restart/continue
 numbering, automatic list detection, outline numbering, RTF clipboard transfer,
 Paste, and ODT/DOCX import/export remain separately mapped follow-up
 capabilities. The bounded semantic nested-HTML and level-indented plain-text

@@ -14,10 +14,15 @@ static application runtime.
 | `apps/office/src/framework/source/dispatch` | `framework/source/dispatch` | Typed command dispatch |
 | `apps/office/src/framework/source/accelerators` | `framework/source/accelerators` | Browser shortcut normalization |
 | `apps/office/src/sfx2/source/doc` | `sfx2/source/doc` | Shared document identity, document undo manager, and bounded browser document-medium contract |
+| `apps/office/src/editeng/source/items` | `editeng/source/items` | EditEngine paragraph items, currently `SvxAdjustItem` |
+| `apps/office/src/svl/source/items` | `svl/source/items` | WhichId-keyed pool items, defaults, item-set deltas, state, and parent lookup |
 | `apps/office/src/svl/source/misc` | `svl/source/misc` | Recovery orchestration |
 | `apps/office/src/vcl/browser` | `vcl` | Browser-only clipboard, download, IndexedDB, and styling adapters |
-| `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | `SwDoc` ownership, content operations, Writer command façade, and snapshot conversion |
+| `apps/office/src/sw/inc` | `sw/inc` | Pinned numeric Writer WhichIds and bounded item ranges |
+| `apps/office/src/sw/source/core/attr` | `sw/source/core/attr` | Writer attribute pool/set specialization and format inheritance |
+| `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | `SwDoc` ownership, style collections, numbering rules, content operations, Writer command façade, and snapshot conversion |
 | `apps/office/src/sw/source/core/docnode` | `sw/source/core/docnode` | Ordered `SwNodes` storage, fixed section sentinels, and node types |
+| `apps/office/src/sw/source/core/para` | `sw/source/core/para` | Writer paragraph pool items, currently `SwNumRuleItem` |
 | `apps/office/src/sw/source/core/txtnode` | `sw/source/core/txtnode` | `SwTextNode` text storage and `SwpHints`/`SwTextAttr` character attributes |
 | `apps/office/src/sw/source/core/crsr` | `sw/source/core/crsr` | `SwNodeIndex`, `SwPosition`, and directional `SwPaM` model ranges |
 | `apps/office/src/sw/source/uibase/docvw` | `sw/source/uibase/docvw` | Document-page editor and editable paragraphs |
@@ -74,10 +79,19 @@ machine-checked record.
 | `sw/uiconfig/swriter/menubar/format-menu.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | React Format-popup decomposition of the same menu hierarchy |
 | `vcl/browser/browser-clipboard.ts` | `vcl/source/app/ClipboardBase.cxx` | Explicit static-browser clipboard platform adapter |
 
-## File-level provenance in active Writer list, character-formatting, and clipboard slices
+## File-level provenance in active Writer list, character-formatting, clipboard, and model slices
 
 | Local browser module | Pinned LibreOffice source/configuration module | Responsibility |
 | --- | --- | --- |
+| `editeng/source/items/paraitem.ts` | `editeng/source/items/paraitem.cxx` | `SvxAdjustItem` paragraph-alignment value |
+| `svl/source/items/poolitem.ts` | `svl/source/items/poolitem.cxx` | Base and primitive pooled item values |
+| `svl/source/items/itempool.ts` | `svl/source/items/itempool.cxx` | Pool defaults and persisted-item factories |
+| `svl/source/items/itemset.ts` | `svl/source/items/itemset.cxx` | Direct item deltas, parent/default lookup, state, clone, and clear operations |
+| `sw/inc/hintids.ts` | `sw/inc/hintids.hxx` | Numeric WhichIds and bounded Writer ranges |
+| `sw/source/core/attr/swatrset.ts` | `sw/source/core/attr/swatrset.cxx` | Document-owned `SwAttrPool` and Writer-specialized `SwAttrSet` |
+| `sw/source/core/attr/format.ts` | `sw/source/core/attr/format.cxx` | `SwFormat` attributes and derived-from links |
+| `sw/source/core/doc/fmtcol.ts` | `sw/source/core/doc/fmtcol.cxx` | Named `SwFormatColl` and paragraph `SwTextFormatColl` |
+| `sw/source/core/para/paratr.ts` | `sw/source/core/para/paratr.cxx` | Paragraph `SwNumRuleItem` rule-name value |
 | `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Serializable list metadata and legacy normalization |
 | `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Deterministic visible bullet and numbering marker calculation |
 | `sw/source/core/doc/doc.ts` | `sw/source/core/doc/doc.cxx` | `SwDoc` owner of `SwNodes` plus explicit browser snapshot conversion |

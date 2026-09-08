@@ -6,17 +6,20 @@ import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
 import { SwDoc, type SwDocSnapshot } from "./doc";
 import {
   isWriterParagraphAlignment,
-  isWriterParagraphStyle,
   normalizeWriterTextRuns,
   SwTextNode,
   WRITER_PARAGRAPH_ALIGNMENTS,
-  WRITER_PARAGRAPH_STYLES,
   type WriterCharacterAttributes,
   type WriterCharacterFormat,
   type WriterParagraphAlignment,
-  type WriterParagraphStyle,
   type WriterTextRun,
 } from "../txtnode/ndtxt";
+import {
+  isWriterParagraphStyle,
+  WRITER_PARAGRAPH_STYLES,
+  type WriterParagraphStyle,
+} from "./fmtcol";
+import { createSwpHintsFromSnapshot } from "../txtnode/ndhints";
 import { createDefaultWriterParagraphList, normalizeWriterParagraphList } from "./list";
 
 export { SwDoc } from "./doc";
@@ -32,6 +35,9 @@ export {
 export { SwNodeIndex, SwPaM, SwPosition } from "../crsr/pam";
 export { SwTextAttr, RES_TXTATR_AUTOFMT } from "../txtnode/txatbase";
 export { SwpHints } from "../txtnode/ndhints";
+export { SwAttrPool, SwAttrSet } from "../attr/swatrset";
+export { SwFormat } from "../attr/format";
+export { SwFormatColl, SwTextFormatColl } from "./fmtcol";
 export { isWriterParagraphListKind, WRITER_PARAGRAPH_LIST_KINDS } from "./list";
 export type { WriterParagraphList, WriterParagraphListKind } from "./list";
 export { getWriterParagraphListMarker } from "./number";
@@ -190,7 +196,7 @@ export function setWriterParagraphStyle(
     throw new Error(`Unsupported Writer paragraph style: ${style}`);
   if (source.style === style) return writerDocument;
   const next = writerDocument.clone();
-  getWriterTextNode(next, paragraphId).ChgFormatColl(style);
+  getWriterTextNode(next, paragraphId).ChgFormatColl(next.GetTextFormatColl(style));
   next.SetModified();
   return next;
 }
@@ -216,8 +222,15 @@ export function toggleWriterParagraphCharacterFormat(
 export function normalizeWriterParagraphFormatting(candidate: unknown): WriterDocument {
   if (candidate instanceof SwDoc) return candidate;
   if (!isRecord(candidate)) throw new Error("Stored Writer document is invalid.");
-  if (candidate.swModelVersion === 1 && Array.isArray(candidate.textNodes))
+  if (
+    candidate.swModelVersion === 2 &&
+    Array.isArray(candidate.numRules) &&
+    Array.isArray(candidate.textFormatCollections) &&
+    Array.isArray(candidate.textNodes)
+  )
     return SwDoc.fromSnapshot(candidate as unknown as SwDocSnapshot);
+  if (candidate.swModelVersion === 1 && Array.isArray(candidate.textNodes))
+    return restoreVersionOneWriterDocument(candidate);
   return restoreLegacyWriterDocument(candidate);
 }
 
@@ -277,11 +290,48 @@ function restoreLegacyWriterDocument(candidate: Record<string, unknown>): Writer
       node.SetParagraphAlignment(
         isWriterParagraphAlignment(value.alignment) ? value.alignment : "left",
       );
-      node.ChgFormatColl(isWriterParagraphStyle(value.style) ? value.style : "default");
+      node.ChgFormatColl(
+        document.GetTextFormatColl(isWriterParagraphStyle(value.style) ? value.style : "default"),
+      );
       node.SetParagraphList(
         normalizeWriterParagraphList(value.list ?? createDefaultWriterParagraphList()),
       );
       const runs = normalizeWriterTextRuns(value.runs);
+      if (runs.length > 0) node.ReplaceRange(0, node.Len(), runs);
+    },
+  );
+  return document;
+}
+
+/** Restores the prior version-one SwDoc snapshot into item-backed text nodes. @param candidate - Version-one model record. @returns Canonical document graph. */
+function restoreVersionOneWriterDocument(candidate: Record<string, unknown>): WriterDocument {
+  if (!isRecord(candidate.document) || !Array.isArray(candidate.textNodes))
+    throw new Error("Stored Writer document is invalid.");
+  if (candidate.textNodes.length === 0)
+    throw new Error("Stored Writer document has no paragraphs.");
+  const document = new SwDoc(candidate.document as unknown as OfficeDocument);
+  candidate.textNodes.forEach(
+    /** Restores one version-one text node and converts direct fields to Writer items. @param value - Persisted text-node record. @returns Nothing. */
+    function restoreTextNode(value): void {
+      if (
+        !isRecord(value) ||
+        typeof value.id !== "string" ||
+        value.id.trim().length === 0 ||
+        typeof value.text !== "string"
+      )
+        throw new Error("Stored Writer text node is invalid.");
+      const node = document.nodes.MakeTextNode(value.id, value.text);
+      node.SetParagraphAlignment(
+        isWriterParagraphAlignment(value.alignment) ? value.alignment : "left",
+      );
+      node.ChgFormatColl(
+        document.GetTextFormatColl(isWriterParagraphStyle(value.style) ? value.style : "default"),
+      );
+      node.SetParagraphList(
+        normalizeWriterParagraphList(value.list ?? createDefaultWriterParagraphList()),
+      );
+      const hints = createSwpHintsFromSnapshot(Array.isArray(value.hints) ? value.hints : []);
+      const runs = hints.toTextRuns(value.text);
       if (runs.length > 0) node.ReplaceRange(0, node.Len(), runs);
     },
   );

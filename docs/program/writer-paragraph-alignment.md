@@ -1,8 +1,9 @@
 # Browser Writer paragraph alignment
 
 The Writer workbench supports one direct paragraph-formatting property: left,
-center, right, or justified alignment. Each `WriterParagraph` stores a serializable
-`alignment` literal. The pure
+center, right, or justified alignment. Canonical state is a `SvxAdjustItem`
+stored under the pinned numeric `RES_PARATR_ADJUST` WhichId in the paragraph's
+lazy `SwAttrSet`; `WriterParagraph.alignment` is a derived browser projection. The pure
 [`setWriterParagraphAlignment`](../../apps/office/src/sw/source/core/doc/writer.ts) transition
 changes exactly one named paragraph, marks a changed document dirty, preserves
 an identical state by reference, and participates in the existing immutable
@@ -15,11 +16,11 @@ The browser editable paragraph receives the corresponding CSS `text-align` value
 result remains visible without pretending that browser editing implements
 LibreOffice line layout or justification algorithms.
 
-New and appended paragraphs default to left alignment. Browser-local snapshots
-retain alignment alongside text. When a snapshot created before this property
-is loaded, an absent or unsupported alignment is normalized to left without
-changing its document lifecycle metadata; this is a narrow compatibility bridge
-for the prior Vite Office storage shape, not a general document migration
+New and appended paragraphs resolve the pool's start/left default. Version-two
+browser-local snapshots retain only direct item deltas plus style definitions.
+Version-one and earlier local snapshots with an absent or unsupported alignment
+are migrated to the pool default without changing lifecycle metadata; this is a
+narrow Vite Office compatibility bridge, not a general document migration
 framework.
 
 ## Pinned LibreOffice provenance
@@ -43,7 +44,7 @@ assertion or establish parity for its fixture.
 ## Deliberate limits
 
 This feature has no selection ranges, keyboard paragraph-alignment shortcuts,
-styles, writing-direction-aware start/end behavior, distributed alignment,
+writing-direction-aware start/end behavior, distributed alignment,
 last-line rules, line-breaking, pagination, rich-text runs, ODT/OOXML import or
 export, print/PDF output, localization, or full LibreOffice Writer parity.
 Each remains a separately mapped capability.

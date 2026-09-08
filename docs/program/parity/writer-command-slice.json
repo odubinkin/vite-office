@@ -437,7 +437,7 @@
       "capability": "Writer core uses a bounded SwDoc, SwNodes, SwTextNode, SwPosition, SwPaM, SwTextAttr, and SwpHints document graph",
       "status": "implemented",
       "gaps": [
-        "The fixed body sections, node ownership, text nodes, positions, directional ranges, and bounded auto-format hints are implemented, but the full item pool, registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
+        "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
         "Browser commands clone the graph for React history and persistence uses an explicit snapshot. Native Writer undo objects and ODT/DOCX filters are not yet implemented."
       ],
       "upstream": {
@@ -475,6 +475,54 @@
           { "path": "docs/program/writer-core-model.md", "marker": "Writer core document model" },
           { "path": "docs/program/architecture.md", "marker": "identity-bearing, cyclic object graph" },
           { "path": "docs/program/source-tree.md", "marker": "SwNodeIndex" }
+        ]
+      }
+    },
+    {
+      "id": "LO-WRITER-0112",
+      "capability": "Writer core resolves bounded paragraph properties through SfxItemSet, SwAttrSet, SwTextFormatColl, and document-owned SwNumRule definitions",
+      "status": "implemented",
+      "gaps": [
+        "Only the current alignment and list WhichIds, two paragraph-style collections, and a single-kind bounded numbering rule are implemented; LibreOffice's complete item universe, built-in style pool, conditional styles, automatic-style cache, multi-level numbering formats, broadcasts, and item sharing remain separate work.",
+        "Versioned browser snapshots preserve the implemented ownership graph, but they are not ODT/DOCX style or numbering filters and do not replace native Writer undo, layout, or file-format behavior."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "svl/source/items/itemset.cxx", "marker": "SfxItemSet::Put" },
+          { "path": "svl/source/items/itempool.cxx", "marker": "SfxItemPool::GetUserOrPoolDefaultItem" },
+          { "path": "sw/source/core/attr/swatrset.cxx", "marker": "SwAttrSet::SwAttrSet" },
+          { "path": "sw/source/core/attr/format.cxx", "marker": "SwFormat::SetFormatAttr" },
+          { "path": "sw/source/core/doc/fmtcol.cxx", "marker": "SwTextFormatColl::SwTextFormatColl" },
+          { "path": "sw/source/core/docnode/node.cxx", "marker": "SwContentNode::SetAttr" },
+          { "path": "sw/source/core/para/paratr.cxx", "marker": "SwNumRuleItem::Clone" }
+        ],
+        "tests": [
+          { "path": "sw/qa/core/attr/attr.cxx", "marker": "testSwAttrSet" },
+          { "path": "sw/qa/core/doc/number.cxx", "marker": "testBadHeadingIndent" }
+        ],
+        "docs": [
+          { "path": "sw/README.md", "marker": "The central class for a document is `SwDoc`" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/svl/source/items/itemset.ts", "marker": "export class SfxItemSet" },
+          { "path": "apps/office/src/sw/source/core/attr/swatrset.ts", "marker": "export class SwAttrPool" },
+          { "path": "apps/office/src/sw/source/core/attr/format.ts", "marker": "export class SwFormat" },
+          { "path": "apps/office/src/sw/source/core/doc/fmtcol.ts", "marker": "export class SwTextFormatColl" },
+          { "path": "apps/office/src/sw/source/core/docnode/node.ts", "marker": "export abstract class SwContentNode" },
+          { "path": "apps/office/src/sw/source/core/para/paratr.ts", "marker": "export class SwNumRuleItem" },
+          { "path": "apps/office/src/sw/source/core/doc/doc.ts", "marker": "private readonly attrPool" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/svl/source/items/itemset.test.ts", "marker": "SfxItemPool and SfxItemSet" },
+          { "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts", "marker": "Writer attribute ownership" },
+          { "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts", "marker": "Writer numbering rules and snapshots" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-core-model.md", "marker": "Paragraph properties are not stored as parallel TypeScript fields" },
+          { "path": "docs/program/source-tree.md", "marker": "svl/source/items/itemset.ts" },
+          { "path": "docs/program/architecture.md", "marker": "node-local `SwAttrSet` deltas" }
         ]
       }
     }

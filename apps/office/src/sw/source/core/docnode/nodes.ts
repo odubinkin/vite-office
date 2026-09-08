@@ -103,7 +103,13 @@ export class SwNodes {
   public MakeTextNode(id: string, text = ""): SwTextNode {
     if (id.trim().length === 0) throw new Error("Text node id must not be blank.");
     if (this.findTextNode(id) !== undefined) throw new Error(`Duplicate paragraph: ${id}`);
-    const node = new SwTextNode(this, id, this.endOfContent.StartOfSectionNode(), text);
+    const node = new SwTextNode(
+      this,
+      id,
+      this.endOfContent.StartOfSectionNode(),
+      this.document.GetDfltTextFormatColl(),
+      text,
+    );
     this.nodeArray.splice(this.endOfContent.GetIndex(), 0, node);
     return node;
   }

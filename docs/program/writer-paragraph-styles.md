@@ -1,11 +1,14 @@
 # Browser Writer paragraph styles
 
-The Writer workbench supports two serializable paragraph styles: **Default
-Paragraph Style** and **Heading 1**. Each `WriterParagraph` has a bounded
-`style` literal, and `setWriterParagraphStyle` changes one named paragraph
-immutably. A no-op retains the current document reference; a change shares the
-existing lifecycle, transaction history, browser-local snapshot, undo, and redo
-contracts.
+The Writer workbench supports two document-owned `SwTextFormatColl` instances:
+**Default Paragraph Style** and **Heading 1**. `SwDoc` owns their ordered table;
+Heading 1 derives from the default collection through the same parent item-set
+lookup used by Writer formats. Each `SwContentNode` registers in one collection,
+and its optional direct `SwAttrSet` is reparented when the collection changes.
+`WriterParagraph.style` is the collection ID projected for the browser.
+`setWriterParagraphStyle` changes that registration immutably; a no-op retains
+the current document reference and a change participates in lifecycle, history,
+snapshot, undo, and redo contracts.
 
 The existing **Paragraph style** select in the formatting toolbar applies its
 value to the focused editable paragraph. `Heading 1` is visibly larger and bold in the
@@ -13,10 +16,11 @@ bounded browser editing surface, and its accessible description and properties
 sidebar state identify the style. This is paragraph-level styling, not an HTML
 heading tree or a replacement for Writer's document semantics.
 
-Older local snapshots that lack `style` receive the safe default value during
-load, together with existing alignment normalization. This compatibility rule
-only bridges prior Vite Office snapshots and does not parse or migrate ODT,
-OOXML, or arbitrary third-party documents.
+Version-two snapshots persist collection definitions, their direct item deltas,
+parent IDs, and each node's collection ID. Version-one and older local snapshots
+are migrated to the safe default when their style is absent or unsupported.
+This compatibility rule only bridges prior Vite Office snapshots and does not
+parse or migrate ODT, OOXML, or arbitrary third-party documents.
 
 ## Pinned LibreOffice provenance
 
@@ -31,7 +35,9 @@ layout assertions.
 
 ## Deliberate limits
 
-There is no style hierarchy, custom style creation/editing, inheritance,
-outline numbering, character style, range selection, shortcut, locale-aware
-style names, ODT/OOXML styles, pagination, navigation outline, print/PDF, or
-full Writer compatibility. Each requires an independently mapped feature task.
+The bounded two-style hierarchy is not the complete Writer style system. There
+is no custom style creation/editing UI, conditional style logic, automatic-style
+cache, complete follow-style behavior, outline assignment, character/page/list
+styles, locale-aware built-in style pool, ODT/OOXML style import/export,
+pagination, navigation outline, or print/PDF parity. Each requires an
+independently mapped feature task.

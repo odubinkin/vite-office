@@ -18,7 +18,7 @@ export interface WriterParagraphList {
   readonly kind: WriterParagraphListKind;
   /** Zero-based nesting level bounded by WRITER_MAX_LIST_LEVEL. */
   readonly level: number;
-  /** Future Writer list-style identity; undefined until named-list-style parity is implemented. */
+  /** SwNumRule name projected from the paragraph item set, when one is retained or applied. */
   readonly styleId?: string;
 }
 

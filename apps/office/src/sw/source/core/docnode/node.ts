@@ -2,6 +2,11 @@
  * @fileoverview Implements Writer document model nodes and structural transitions from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary.
  */
 
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { WRITER_TEXT_NODE_WHICH_RANGES } from "../../../inc/hintids";
+import { SwAttrSet } from "../attr/swatrset";
+import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { WriterDocument, WriterParagraphMoveDirection } from "../doc/writer";
 import type { SwNodes } from "./nodes";
 
@@ -99,13 +104,98 @@ export class SwEndNode extends SwNode {
 
 /** Base class for nodes that own indexable content. */
 export abstract class SwContentNode extends SwNode {
-  /** Creates a content node in one Writer section. @param nodes - Owning node array. @param id - Node identity. @param startOfSection - Containing section. @returns Nothing. */
-  protected constructor(nodes: SwNodes, id: string, startOfSection: SwStartNode) {
+  private attributeSet: SwAttrSet | undefined;
+
+  /** Creates a content node in one Writer section. @param nodes - Owning node array. @param id - Node identity. @param startOfSection - Containing section. @param formatColl - Registered format collection. @returns Nothing. */
+  protected constructor(
+    nodes: SwNodes,
+    id: string,
+    startOfSection: SwStartNode,
+    private formatColl: SwFormatColl = nodes.GetDoc().GetDfltTextFormatColl(),
+  ) {
     super(nodes, id, "text", startOfSection);
+    if (formatColl.GetAttrSet().GetPool() !== nodes.GetDoc().GetAttrPool())
+      throw new Error("SwContentNode format collection belongs to another document.");
   }
 
   /** Returns the current content length. @returns UTF-16 content length. */
   public abstract Len(): number;
+
+  /** Returns an effective direct, inherited, or pool-default item. @param which - Queried WhichId. @param inParent - Whether collection inheritance participates. @returns Effective item. */
+  public GetAttr(which: number, inParent = true): SfxPoolItem {
+    return this.GetSwAttrSet().Get(which, inParent);
+  }
+
+  /** Returns the direct auto-attribute set or the current collection set when absent. @returns Effective Writer attribute set. */
+  public GetSwAttrSet(): SwAttrSet {
+    return this.attributeSet ?? this.formatColl.GetAttrSet();
+  }
+
+  /** Returns the optional direct auto-attribute set. @returns Direct Writer attributes, when allocated. */
+  public GetpSwAttrSet(): SwAttrSet | undefined {
+    return this.attributeSet;
+  }
+
+  /** Reports whether direct auto attributes have been allocated. @returns True when a direct set exists. */
+  public HasSwAttrSet(): boolean {
+    return this.attributeSet !== undefined;
+  }
+
+  /** Stores one item or set as direct node attributes. @param itemOrSet - Direct item or item set. @returns True when at least one delta changed. */
+  public SetAttr(itemOrSet: SfxPoolItem | SfxItemSet): boolean {
+    const set = this.GetOrCreateSwAttrSet();
+    return "Which" in itemOrSet ? set.Put(itemOrSet) !== undefined : set.PutSet(itemOrSet);
+  }
+
+  /** Clears one direct item and releases an empty auto-attribute set. @param which - Cleared WhichId. @returns True when removed. */
+  public ResetAttr(which: number): boolean {
+    if (this.attributeSet === undefined) return false;
+    const removed = this.attributeSet.ClearItem(which) !== 0;
+    if (this.attributeSet.Count() === 0) this.attributeSet = undefined;
+    return removed;
+  }
+
+  /** Clears every direct node item and releases the auto-attribute set. @returns Removed item count. */
+  public ResetAllAttr(): number {
+    if (this.attributeSet === undefined) return 0;
+    const removed = this.attributeSet.ClearItem();
+    this.attributeSet = undefined;
+    return removed;
+  }
+
+  /** Changes the registered format collection and reparents direct attributes. @param formatColl - New document-owned collection. @returns Previous collection. */
+  public ChgFormatColl(formatColl: SwFormatColl): SwFormatColl {
+    if (formatColl.GetAttrSet().GetPool() !== this.GetDoc().GetAttrPool())
+      throw new Error("SwContentNode format collection belongs to another document.");
+    const previous = this.formatColl;
+    if (previous !== formatColl) {
+      this.formatColl = formatColl;
+      this.attributeSet?.SetParent(formatColl.GetAttrSet());
+    }
+    return previous;
+  }
+
+  /** Returns the registered format collection. @returns Current collection. */
+  public GetFormatColl(): SwFormatColl {
+    return this.formatColl;
+  }
+
+  /** Returns the registered paragraph style collection. @returns Current text-format collection. */
+  public GetTextFormatColl(): SwTextFormatColl {
+    if (!(this.formatColl instanceof SwTextFormatColl))
+      throw new Error("SwContentNode is not registered in a SwTextFormatColl.");
+    return this.formatColl;
+  }
+
+  /** Creates the node's direct Writer attribute set on first mutation. @returns Direct auto-attribute set. */
+  private GetOrCreateSwAttrSet(): SwAttrSet {
+    this.attributeSet ??= new SwAttrSet(
+      this.GetDoc().GetAttrPool(),
+      WRITER_TEXT_NODE_WHICH_RANGES,
+      this.formatColl.GetAttrSet(),
+    );
+    return this.attributeSet;
+  }
 }
 
 /** Moves one named Writer paragraph by one adjacent body position. @param writerDocument - Prior document graph. @param paragraphId - Text-node identity. @param direction - Adjacent move direction. @returns Changed cloned graph. */

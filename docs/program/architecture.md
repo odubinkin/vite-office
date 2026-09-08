@@ -22,15 +22,17 @@ nesting deliberately follow the corresponding pinned LibreOffice modules:
 | --- | --- | --- |
 | `framework/source/services`, `dispatch`, and `accelerators` | React composition, suite services, command dispatch, and browser shortcut adaptation | `framework` shell and dispatch ownership |
 | `sfx2/source/doc` | Suite-neutral document identity, history, and storage contracts | `sfx2` document framework |
-| `svl/source/misc` | Generic recovery orchestration | `svl` shared utility layer |
+| `svl/source/items` and `svl/source/misc` | WhichId item pool/set primitives and generic recovery orchestration | `svl` item and shared utility layers |
 | `vcl/browser` | Tested adapters around IndexedDB, downloads, clipboard, and browser styling | `vcl` platform/widget layer, specialized for static-browser runtime |
-| `sw/source/core/doc`, `docnode`, `txtnode`, and `crsr` | Writer document graph, ordered node array, text nodes, text attributes, and model ranges | `SwDoc`, `SwNodes`, `SwTextNode`, `SwpHints`, `SwTextAttr`, `SwPosition`, and `SwPaM` ownership |
+| `sw/source/core/attr`, `doc`, `docnode`, `para`, `txtnode`, and `crsr` | Writer document graph, attribute pool, style collections, ordered nodes, text attributes, numbering items, and model ranges | `SwDoc`, `SwAttrSet`, `SwTextFormatColl`, `SwNodes`, `SwTextNode`, `SwpHints`, `SwTextAttr`, `SwPosition`, and `SwPaM` ownership |
 | `sw/source/uibase/docvw`, `ribbar`, `sidebar`, `shells`, `uiview`, and `utlui` | Writer document view, formatting bar, sidebar, command shells, workbench view, and common Writer UI helpers | Matching `sw/source/uibase` regions |
 | `sw/uiconfig/swriter` | Browser declarations for Writer menu/toolbar placement | Writer UI configuration ownership |
 
 The browser implementation keeps React and browser objects out of Writer core.
-`SwDoc` owns `SwNodes`; that array contains the same fixed section sentinels as
-the pinned `SwNodes` constructor and owns `SwTextNode` content. Text attributes
+`SwDoc` owns `SwAttrPool`, paragraph styles, numbering rules, and `SwNodes`; that
+array contains the same fixed section sentinels as the pinned `SwNodes`
+constructor and owns `SwTextNode` content. Paragraph properties resolve through
+node-local `SwAttrSet` deltas, `SwTextFormatColl` parents, and pool defaults. Text attributes
 are stored as `SwTextAttr` ranges in `SwpHints`, while `SwPosition` and `SwPaM`
 identify model positions and selections. React receives derived paragraph and
 run projections from this graph. The document editor separately owns DOM caret
@@ -38,7 +40,7 @@ conversion and editable-paragraph presentation in `docvw`.
 
 The TypeScript core is source-guided rather than ABI-compatible: it preserves
 the applicable LibreOffice model and algorithms, while substituting browser
-transactions and explicit snapshots where C++ pointers, pools, notifications,
+transactions and explicit snapshots where C++ pointers, notifications,
 and native UI services do not yet exist. The exact implemented boundary and its
 remaining gaps are recorded in the [Writer core model](writer-core-model.md).
 
