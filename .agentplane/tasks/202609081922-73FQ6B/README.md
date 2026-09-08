@@ -1,10 +1,11 @@
 ---
 id: "202609081922-73FQ6B"
 title: "Reimplement Writer character attributes as pooled items"
-status: "DOING"
+result_summary: "verified-202609081922-73FQ6B"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-08T20:07:04.139Z"
+  updated_at: "2026-09-08T20:07:58.820Z"
   updated_by: "CODER"
   note: "verified-202609081922-73FQ6B"
   attempts: 0
@@ -41,11 +42,16 @@ quality_review:
     - "npm run inventory:parity"
   findings:
     - "All planned behavior is implemented and fully verified; real LibreOffice ODT fixtures now reach the explicit next unsupported paragraph-margin model boundary."
-commit: null
+commit:
+  hash: "5f76e3dcf48b6be21051701d2f9468ee9728d68e"
+  message: "🧪 73FQ6B task: record verification and quality"
 comments:
   -
     author: "CODER"
     body: "Start: replace Writer boolean canonical character formatting with pooled RES_CHRATR item sets and source-guided ODF mappings while preserving browser runs as derived projections."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609081922-73FQ6B. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609081922-73FQ6B"
+  -
+    type: "verify"
+    at: "2026-09-08T20:07:58.820Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609081922-73FQ6B"
+  -
+    type: "status"
+    at: "2026-09-08T20:07:58.948Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609081922-73FQ6B. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-08T20:07:04.197Z"
+doc_updated_at: "2026-09-08T20:07:58.948Z"
 doc_updated_by: "CODER"
 description: "Replace boolean canonical character formatting with LibreOffice-shaped RES_CHRATR pooled items, SfxItemSet-backed SwFormatAutoFormat hints, paragraph-style character inheritance, and source-guided ODF mapping while preserving browser runs as derived projections."
 sections:
@@ -139,9 +158,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-08T20:07:58.820Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609081922-73FQ6B
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-08T20:07:04.197Z, excerpt_hash=sha256:d1bd78213b3e17e14d766e163ba5a55a84ced99076ff842d3f70bbe6e4aa30ed
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609081922-73FQ6B/blueprint/resolved-snapshot.json
+    - old_digest: 21e5144ba657306dc8477e312be8530564173fb4082dde4da08a3b572d8c55a8
+    - current_digest: 21e5144ba657306dc8477e312be8530564173fb4082dde4da08a3b572d8c55a8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609081922-73FQ6B
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609081922-73FQ6B --result verified-202609081922-73FQ6B --commit 5f76e3dcf48b6be21051701d2f9468ee9728d68e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation and task-close commits. Restore boolean hint snapshots only through the existing migration reader, remove the new character item module and provenance entries, and rerun the complete Writer and ODT verification set."
   Findings: "Audit finding: Writer paragraph items already use SfxItemSet, but RES_TXTATR_AUTOFMT still owns a plain boolean object. This diverges from LibreOffice SwFormatAutoFormat and prevents paragraph-style character properties from participating in the same inherited item graph. Pinned feature_text packages now pass ZIP validation and fail at this semantic boundary."
+extensions:
+  implementation_commit:
+    hash: "e32c6fa5f04d21dd1eadbec1906827ae374b7e39"
+    message: "🧩 73FQ6B code: implement Writer pooled character attributes"
 id_source: "generated"
 ---
 ## Summary
@@ -218,6 +271,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609081922-73FQ6B --result verified-202609081922-73FQ6B --commit e32c6fa5f04d21dd1eadbec1906827ae374b7e39
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-08T20:07:58.820Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609081922-73FQ6B
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-08T20:07:04.197Z, excerpt_hash=sha256:d1bd78213b3e17e14d766e163ba5a55a84ced99076ff842d3f70bbe6e4aa30ed
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609081922-73FQ6B/blueprint/resolved-snapshot.json
+- old_digest: 21e5144ba657306dc8477e312be8530564173fb4082dde4da08a3b572d8c55a8
+- current_digest: 21e5144ba657306dc8477e312be8530564173fb4082dde4da08a3b572d8c55a8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609081922-73FQ6B
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609081922-73FQ6B --result verified-202609081922-73FQ6B --commit 5f76e3dcf48b6be21051701d2f9468ee9728d68e
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
