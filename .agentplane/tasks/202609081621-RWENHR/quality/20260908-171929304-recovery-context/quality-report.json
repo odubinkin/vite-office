@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202609081621-RWENHR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-08T17:19:29.304Z",
+  "verdict": "pass",
+  "summary": "The bounded Writer core realignment preserves the pinned LibreOffice ownership and range model, migrates legacy snapshots, and retains all implemented browser behavior.",
+  "evaluated_sha": "6e1fd9f89fa8050f3f198bf8e1edb0698d76e794",
+  "blueprint_digest": "4a8845316a1b9a3a5f1c7830837685a09744eff54e779232908b775c287c5df4",
+  "findings": [
+    "SwDoc owns SwNodes; fixed section sentinel ordering, SwTextNode ownership, SwPosition/SwPaM direction, and SwTextAttr/SwpHints normalization are directly tested.",
+    "React and clipboard runs are derived projections, while persistence uses an explicit cycle-free versioned snapshot with legacy migration."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609081621-RWENHR/README.md",
+    "npm run verify: 110 office tests and 74 inventory tests at 100% coverage; 7 Playwright tests; build/static/JSDoc/file-size gates passed",
+    "npm run check:source-provenance && npm run check:source-tree",
+    "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+    "docs/program/parity/writer-command-slice.json#LO-WRITER-0111"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full SfxItemPool, registered index correction, native undo objects, layout, tables, fields, redlines, and ODT/DOCX filters remain explicitly out of this bounded task."
+  ]
+}
