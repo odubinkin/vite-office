@@ -154,6 +154,9 @@ The following documents form the program control plane:
 - [Browser Writer direct character formatting](writer-character-formatting.md):
   bounded Bold, Italic, and single Underline text runs, command placement, and
   semantic clipboard export.
+- [Writer ODF 1.3 package slice](writer-odt-format.md): source-guided ZIP and XML
+  import/export for the bounded canonical `SwDoc` graph, including explicit
+  security ceilings and unsupported-feature rejection.
 - [Browser Writer paragraph reordering](writer-paragraph-reordering.md): bounded
   adjacent movement that preserves paragraph content and formatting state.
 - [Browser Writer paragraph breaks](writer-paragraph-breaks.md): caret-based

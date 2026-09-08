@@ -23,8 +23,11 @@ nesting deliberately follow the corresponding pinned LibreOffice modules:
 | `framework/source/services`, `dispatch`, and `accelerators` | React composition, suite services, command dispatch, and browser shortcut adaptation | `framework` shell and dispatch ownership |
 | `sfx2/source/doc` | Suite-neutral document identity, history, and storage contracts | `sfx2` document framework |
 | `svl/source/items` and `svl/source/misc` | WhichId item pool/set primitives and generic recovery orchestration | `svl` item and shared utility layers |
+| `package/source/zipapi` and `package/source/manifest` | Bounded ZIP32 package transport, CRC, resource ceilings, and ODF manifests | LibreOffice package storage boundaries |
 | `vcl/browser` | Tested adapters around IndexedDB, downloads, clipboard, and browser styling | `vcl` platform/widget layer, specialized for static-browser runtime |
+| `xmloff/source/text` | UI-neutral ODF paragraph, automatic-style, inline-format, and whitespace conversion | Shared LibreOffice XML filter ownership |
 | `sw/source/core/attr`, `doc`, `docnode`, `para`, `txtnode`, and `crsr` | Writer document graph, attribute pool, style collections, ordered nodes, text attributes, numbering items, and model ranges | `SwDoc`, `SwAttrSet`, `SwTextFormatColl`, `SwNodes`, `SwTextNode`, `SwpHints`, `SwTextAttr`, `SwPosition`, and `SwPaM` ownership |
+| `sw/source/filter/xml` | ODF styles/content/meta bridges and styles-before-content ODT orchestration | Writer XML filter ownership |
 | `sw/source/uibase/docvw`, `ribbar`, `sidebar`, `shells`, `uiview`, and `utlui` | Writer document view, formatting bar, sidebar, command shells, workbench view, and common Writer UI helpers | Matching `sw/source/uibase` regions |
 | `sw/uiconfig/swriter` | Browser declarations for Writer menu/toolbar placement | Writer UI configuration ownership |
 
@@ -49,8 +52,9 @@ remote or root-absolute asset references and application-backend endpoints.
 The [source-tree map](source-tree.md) records every currently instantiated
 LibreOffice-derived browser area and its responsibility.
 
-The remaining package boundaries below are architectural targets. They do not
-exist until their own feature tasks create and verify them.
+The remaining boundaries below are architectural targets except for the
+implemented `package`, `xmloff`, and bounded Writer XML-filter regions described
+above. A listed target does not imply complete format support.
 
 ## Planned top-level module boundaries
 

@@ -183,6 +183,8 @@ Implement small end-to-end slices that exercise the shared platform:
 
 - Writer: create a document, edit paragraphs, format text, undo/redo, save/open
   a minimal ODT subset, and document the behavior through separate feature tasks.
+  The package/XML filter subset is implemented; browser File Open/Save command
+  wiring and broader ODT semantics remain separate tasks.
 - Calc: create a workbook, edit cells, evaluate a minimal formula set, recalculate,
   save/open a minimal ODS subset, and document each behavior separately.
 - Impress/Draw: create pages/slides, add basic text and shapes, render, reorder,

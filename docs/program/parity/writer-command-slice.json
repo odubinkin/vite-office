@@ -525,6 +525,64 @@
           { "path": "docs/program/architecture.md", "marker": "node-local `SwAttrSet` deltas" }
         ]
       }
+    },
+    {
+      "id": "LO-WRITER-0113",
+      "capability": "Writer imports and exports a bounded ODF 1.3 text package through LibreOffice-shaped package, xmloff, and sw XML filter boundaries",
+      "status": "implemented",
+      "gaps": [
+        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, and direct bold, italic, and single underline formatting; lists, tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, and arbitrary style properties remain explicit unsupported cases.",
+        "Browser File Open and Save command wiring is not part of this filter task, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability fixtures beyond the mapped pinned feature tests remain future work."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "package/source/zipapi/CRC32.cxx", "marker": "CRC32::updateSegment" },
+          { "path": "package/source/zipapi/ZipFile.cxx", "marker": "ZipFile::readLOC" },
+          { "path": "package/source/zipapi/ZipOutputStream.cxx", "marker": "ZipOutputStream::finish" },
+          { "path": "package/source/manifest/ManifestExport.cxx", "marker": "ManifestExport::ManifestExport" },
+          { "path": "xmloff/source/text/txtparae.cxx", "marker": "XMLTextParagraphExport::exportText" },
+          { "path": "xmloff/source/text/txtparai.cxx", "marker": "XMLTextImportHelper" },
+          { "path": "sw/source/filter/xml/wrtxml.cxx", "marker": "SwXMLWriter::WriteThroughComponent" },
+          { "path": "sw/source/filter/xml/swxml.cxx", "marker": "styles.xml" },
+          { "path": "sw/source/filter/xml/swxml.cxx", "marker": "content.xml" }
+        ],
+        "tests": [
+          { "path": "sw/qa/extras/odfimport/odffeatures.cxx", "marker": "testFeatureText" },
+          { "path": "sw/qa/extras/odfimport/odffeatures.cxx", "marker": "testFeatureTextBold" },
+          { "path": "sw/qa/extras/odfimport/odffeatures.cxx", "marker": "testFeatureTextItalic" }
+        ],
+        "docs": [
+          { "path": "helpcontent2/source/text/shared/00/00000021.xhp", "marker": "ODF Text" },
+          { "path": "helpcontent2/source/text/shared/00/00000021.xhp", "marker": "ODF 1.3" },
+          { "path": "helpcontent2/source/text/shared/guide/convertfilters.xhp", "marker": "application/vnd.oasis.opendocument.text (odt)" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/package/source/zipapi/CRC32.ts", "marker": "export class CRC32" },
+          { "path": "apps/office/src/package/source/zipapi/ZipFile.ts", "marker": "export class ZipFile" },
+          { "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts", "marker": "export class ZipOutputStream" },
+          { "path": "apps/office/src/package/source/manifest/ManifestExport.ts", "marker": "createOdtManifestXml" },
+          { "path": "apps/office/src/xmloff/source/text/txtparae.ts", "marker": "exportTextParagraphs" },
+          { "path": "apps/office/src/xmloff/source/text/txtparai.ts", "marker": "importTextParagraphs" },
+          { "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts", "marker": "exportContentXml" },
+          { "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts", "marker": "importWriterXml" },
+          { "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts", "marker": "export class SwXMLWriter" },
+          { "path": "apps/office/src/sw/source/filter/xml/swxml.ts", "marker": "export class SwXMLReader" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/package/source/zipapi/CRC32.test.ts", "marker": "standard ZIP checksum" },
+          { "path": "apps/office/src/package/source/zipapi/ZipFile.test.ts", "marker": "defensive ZIP32 input validation" },
+          { "path": "apps/office/src/package/source/manifest/ManifestExport.test.ts", "marker": "bounded ODF 1.3 manifest" },
+          { "path": "apps/office/src/xmloff/source/text/txtpara.test.ts", "marker": "bounded ODF text paragraph" },
+          { "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts", "marker": "restores canonical formatting" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-odt-format.md", "marker": "Writer ODF 1.3 package slice" },
+          { "path": "docs/program/architecture.md", "marker": "package/source/zipapi" },
+          { "path": "docs/program/source-tree.md", "marker": "sw/source/filter/xml" }
+        ]
+      }
     }
   ]
 }

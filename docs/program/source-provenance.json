@@ -21,6 +21,10 @@
     { "localPath": "apps/office/src/framework/source/services/modulemanager.ts", "status": "mapped", "upstreamPath": "framework/source/services/modulemanager.cxx" },
     { "localPath": "apps/office/src/framework/source/services/worker-protocol.ts", "status": "browser-only", "rationale": "Web Worker message typing is specific to browser isolation and structured clone transport. LibreOffice native threads and UNO do not provide a file-equivalent static-browser protocol to reimplement." },
     { "localPath": "apps/office/src/main.tsx", "status": "browser-only", "rationale": "The Vite React entrypoint performs browser DOM mounting and has no LibreOffice C++ source equivalent. Its only responsibility is static-host bootstrapping supplied by the browser and bundler." },
+    { "localPath": "apps/office/src/package/source/manifest/ManifestExport.ts", "status": "mapped", "upstreamPath": "package/source/manifest/ManifestExport.cxx" },
+    { "localPath": "apps/office/src/package/source/zipapi/CRC32.ts", "status": "mapped", "upstreamPath": "package/source/zipapi/CRC32.cxx" },
+    { "localPath": "apps/office/src/package/source/zipapi/ZipFile.ts", "status": "mapped", "upstreamPath": "package/source/zipapi/ZipFile.cxx" },
+    { "localPath": "apps/office/src/package/source/zipapi/ZipOutputStream.ts", "status": "mapped", "upstreamPath": "package/source/zipapi/ZipOutputStream.cxx" },
     { "localPath": "apps/office/src/sfx2/source/doc/docfac.ts", "status": "mapped", "upstreamPath": "sfx2/source/doc/docfac.cxx" },
     { "localPath": "apps/office/src/sfx2/source/doc/docundomanager.ts", "status": "mapped", "upstreamPath": "sfx2/source/doc/docundomanager.cxx" },
     { "localPath": "apps/office/src/sfx2/source/doc/docfile.ts", "status": "mapped", "upstreamPath": "sfx2/source/doc/docfile.cxx" },
@@ -47,6 +51,10 @@
     { "localPath": "apps/office/src/sw/source/core/txtnode/txatbase.ts", "status": "mapped", "upstreamPath": "sw/source/core/txtnode/txatbase.cxx" },
     { "localPath": "apps/office/src/sw/source/filter/ascii/ascatr.ts", "status": "mapped", "upstreamPath": "sw/source/filter/ascii/ascatr.cxx" },
     { "localPath": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts", "status": "mapped", "upstreamPath": "sw/source/filter/html/htmlnumwriter.cxx" },
+    { "localPath": "apps/office/src/sw/source/filter/xml/swxml.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/swxml.cxx" },
+    { "localPath": "apps/office/src/sw/source/filter/xml/wrtxml.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/wrtxml.cxx" },
+    { "localPath": "apps/office/src/sw/source/filter/xml/xmlexp.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/xmlexp.cxx" },
+    { "localPath": "apps/office/src/sw/source/filter/xml/xmlimp.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/xmlimp.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/app/mainwn.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/app/mainwn.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx" },
@@ -69,6 +77,8 @@
     { "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml" },
     { "localPath": "apps/office/src/vcl/browser/browser-clipboard.ts", "status": "mapped", "upstreamPath": "vcl/source/app/ClipboardBase.cxx" },
     { "localPath": "apps/office/src/vcl/browser/browser-download.ts", "status": "browser-only", "rationale": "Browser download initiation delegates to the user agent's sandboxed download permission model. LibreOffice native file dialogs and filesystem writes cannot be represented by one static browser source-file implementation." },
-    { "localPath": "apps/office/src/vcl/browser/indexeddb-storage.ts", "status": "browser-only", "rationale": "IndexedDB is a browser-native asynchronous persistence API with no LibreOffice file-equivalent implementation. The module is documented as a platform adapter rather than a false reimplementation of native storage." }
+    { "localPath": "apps/office/src/vcl/browser/indexeddb-storage.ts", "status": "browser-only", "rationale": "IndexedDB is a browser-native asynchronous persistence API with no LibreOffice file-equivalent implementation. The module is documented as a platform adapter rather than a false reimplementation of native storage." },
+    { "localPath": "apps/office/src/xmloff/source/text/txtparae.ts", "status": "mapped", "upstreamPath": "xmloff/source/text/txtparae.cxx" },
+    { "localPath": "apps/office/src/xmloff/source/text/txtparai.ts", "status": "mapped", "upstreamPath": "xmloff/source/text/txtparai.cxx" }
   ]
 }

@@ -17,7 +17,10 @@ static application runtime.
 | `apps/office/src/editeng/source/items` | `editeng/source/items` | EditEngine paragraph items, currently `SvxAdjustItem` |
 | `apps/office/src/svl/source/items` | `svl/source/items` | WhichId-keyed pool items, defaults, item-set deltas, state, and parent lookup |
 | `apps/office/src/svl/source/misc` | `svl/source/misc` | Recovery orchestration |
+| `apps/office/src/package/source/zipapi` | `package/source/zipapi` | CRC-32 plus bounded ZIP32 STORE/DEFLATE package input and deterministic STORE output |
+| `apps/office/src/package/source/manifest` | `package/source/manifest` | ODF 1.3 manifest emission and mandatory-stream validation |
 | `apps/office/src/vcl/browser` | `vcl` | Browser-only clipboard, download, IndexedDB, and styling adapters |
+| `apps/office/src/xmloff/source/text` | `xmloff/source/text` | Writer-neutral ODF paragraph, automatic-style, and significant-whitespace conversion |
 | `apps/office/src/sw/inc` | `sw/inc` | Pinned numeric Writer WhichIds and bounded item ranges |
 | `apps/office/src/sw/source/core/attr` | `sw/source/core/attr` | Writer attribute pool/set specialization and format inheritance |
 | `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | `SwDoc` ownership, style collections, numbering rules, content operations, Writer command façade, and snapshot conversion |
@@ -30,6 +33,7 @@ static application runtime.
 | `apps/office/src/sw/source/uibase/dochdl` | `sw/source/uibase/dochdl` | Selection transfer-document preparation and clipboard ownership |
 | `apps/office/src/sw/source/filter/html` | `sw/source/filter/html` | Writer HTML transfer serialization |
 | `apps/office/src/sw/source/filter/ascii` | `sw/source/filter/ascii` | Writer plain-text transfer serialization |
+| `apps/office/src/sw/source/filter/xml` | `sw/source/filter/xml` | ODF package orchestration and `SwDoc` XML import/export bridges |
 | `apps/office/src/sw/source/uibase/ribbar` | `sw/source/uibase/ribbar` | Writer formatting toolbar |
 | `apps/office/src/sw/source/uibase/sidebar` | `sw/source/uibase/sidebar` | Writer properties sidebar |
 | `apps/office/src/sw/source/uibase/shells` | `sw/source/uibase/shells` | Writer command-shell shortcut adapters |
@@ -87,6 +91,12 @@ machine-checked record.
 | `svl/source/items/poolitem.ts` | `svl/source/items/poolitem.cxx` | Base and primitive pooled item values |
 | `svl/source/items/itempool.ts` | `svl/source/items/itempool.cxx` | Pool defaults and persisted-item factories |
 | `svl/source/items/itemset.ts` | `svl/source/items/itemset.cxx` | Direct item deltas, parent/default lookup, state, clone, and clear operations |
+| `package/source/zipapi/CRC32.ts` | `package/source/zipapi/CRC32.cxx` | Incremental ZIP CRC-32 calculation |
+| `package/source/zipapi/ZipFile.ts` | `package/source/zipapi/ZipFile.cxx` | Central/local ZIP32 validation, resource ceilings, and STORE/DEFLATE input |
+| `package/source/zipapi/ZipOutputStream.ts` | `package/source/zipapi/ZipOutputStream.cxx` | Deterministic unencrypted STORE package output |
+| `package/source/manifest/ManifestExport.ts` | `package/source/manifest/ManifestExport.cxx` | ODF 1.3 manifest stream |
+| `xmloff/source/text/txtparae.ts` | `xmloff/source/text/txtparae.cxx` | Neutral ODF paragraph and inline export |
+| `xmloff/source/text/txtparai.ts` | `xmloff/source/text/txtparai.cxx` | Neutral ODF paragraph and inline import |
 | `sw/inc/hintids.ts` | `sw/inc/hintids.hxx` | Numeric WhichIds and bounded Writer ranges |
 | `sw/source/core/attr/swatrset.ts` | `sw/source/core/attr/swatrset.cxx` | Document-owned `SwAttrPool` and Writer-specialized `SwAttrSet` |
 | `sw/source/core/attr/format.ts` | `sw/source/core/attr/format.cxx` | `SwFormat` attributes and derived-from links |
@@ -109,6 +119,10 @@ machine-checked record.
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
 | `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Bounded nested semantic `ul`/`ol`/`li` clipboard HTML serialization |
 | `sw/source/filter/ascii/ascatr.ts` | `sw/source/filter/ascii/ascatr.cxx` | Level-indented plain-text list-marker clipboard serialization |
+| `sw/source/filter/xml/xmlexp.ts` | `sw/source/filter/xml/xmlexp.cxx` | `SwDoc` to ODF styles/content/meta stream bridge |
+| `sw/source/filter/xml/xmlimp.ts` | `sw/source/filter/xml/xmlimp.cxx` | ODF styles/content/meta stream to `SwDoc` bridge |
+| `sw/source/filter/xml/wrtxml.ts` | `sw/source/filter/xml/wrtxml.cxx` | Styles-before-content ODT package writer orchestration |
+| `sw/source/filter/xml/swxml.ts` | `sw/source/filter/xml/swxml.cxx` | Validated ODT package reader orchestration |
 | `sw/uiconfig/swriter/menubar/menubar.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | Writer menu control and Format → Bullets and Numbering declaration |
 | `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Declarative Writer menu order and list command definitions |
 | `sw/uiconfig/swriter/toolbar/standardbar.tsx` | `sw/uiconfig/swriter/toolbar/standardbar.xml` | Browser Writer standard-toolbar control |
