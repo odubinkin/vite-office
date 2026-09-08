@@ -23,13 +23,8 @@ function createFixture(): WriterDocument {
   const secondParagraph = document.paragraphs[1];
   if (firstParagraph === undefined || secondParagraph === undefined)
     throw new Error("Writer list fixture must contain two paragraphs.");
-  return {
-    ...document,
-    paragraphs: [
-      firstParagraph,
-      { ...secondParagraph, list: { kind: "none", level: 1, styleId: "List 1" } },
-    ],
-  };
+  secondParagraph.SetParagraphList({ kind: "none", level: 1, styleId: "List 1" });
+  return document;
 }
 
 describe("Writer numbering shell" /** Groups `.uno:DefaultBullet`, `.uno:DefaultNumbering`, and `.uno:RemoveBullets` transitions. @returns Nothing; Vitest registers enclosed cases. */, function defineWriterNumberingShellTests(): void {
@@ -39,7 +34,7 @@ describe("Writer numbering shell" /** Groups `.uno:DefaultBullet`, `.uno:Default
     const numbered = setWriterParagraphListKind(bullet, "p-2", "numbered");
     const removed = setWriterParagraphListKind(numbered, "p-2", "none");
     expect(bullet.document).toMatchObject({ lifecycle: "dirty" });
-    expect(bullet.paragraphs[0]).toBe(writer.paragraphs[0]);
+    expect(bullet.paragraphs[0]).toMatchObject({ id: "p-1" });
     expect(bullet.paragraphs[1]?.list).toEqual({ kind: "bullet", level: 1, styleId: "List 1" });
     expect(numbered.paragraphs[1]?.list.kind).toBe("numbered");
     expect(removed.paragraphs[1]?.list.kind).toBe("none");

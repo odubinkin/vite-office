@@ -1,569 +1,201 @@
 /**
- * @fileoverview Defines a narrow serializable Writer paragraph body and pure editing operations without layout, formatting, or browser coupling.
+ * @fileoverview Exposes the browser Writer façade over the LibreOffice-shaped SwDoc document model.
  */
 
-import { markDocumentDirty, type OfficeDocument } from "../../../../sfx2/source/doc/docfac";
+import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
+import { SwDoc, type SwDocSnapshot } from "./doc";
 import {
-  createDefaultWriterParagraphList,
-  normalizeWriterParagraphList,
-  type WriterParagraphList,
-} from "./list";
-import {
-  createWriterTextRuns,
-  getWriterTextAttributesAtOffset,
-  getWriterTextFromRuns,
-  insertWriterTextRun,
+  isWriterParagraphAlignment,
+  isWriterParagraphStyle,
   normalizeWriterTextRuns,
-  splitWriterTextRuns,
-  toggleWriterTextRangeFormat,
+  SwTextNode,
+  WRITER_PARAGRAPH_ALIGNMENTS,
+  WRITER_PARAGRAPH_STYLES,
+  type WriterCharacterAttributes,
   type WriterCharacterFormat,
+  type WriterParagraphAlignment,
+  type WriterParagraphStyle,
   type WriterTextRun,
 } from "../txtnode/ndtxt";
-export { moveWriterParagraph, removeWriterParagraph } from "../docnode/node";
+import { createDefaultWriterParagraphList, normalizeWriterParagraphList } from "./list";
+
+export { SwDoc } from "./doc";
+export { SwNodes } from "../docnode/nodes";
+export {
+  SwContentNode,
+  SwEndNode,
+  SwNode,
+  SwStartNode,
+  moveWriterParagraph,
+  removeWriterParagraph,
+} from "../docnode/node";
+export { SwNodeIndex, SwPaM, SwPosition } from "../crsr/pam";
+export { SwTextAttr, RES_TXTATR_AUTOFMT } from "../txtnode/txatbase";
+export { SwpHints } from "../txtnode/ndhints";
 export { isWriterParagraphListKind, WRITER_PARAGRAPH_LIST_KINDS } from "./list";
 export type { WriterParagraphList, WriterParagraphListKind } from "./list";
 export { getWriterParagraphListMarker } from "./number";
 export type { WriterNumberingParagraph } from "./number";
+export {
+  isWriterParagraphAlignment,
+  isWriterParagraphStyle,
+  WRITER_PARAGRAPH_ALIGNMENTS,
+  WRITER_PARAGRAPH_STYLES,
+};
 export type {
   WriterCharacterAttributes,
   WriterCharacterFormat,
+  WriterParagraphAlignment,
+  WriterParagraphStyle,
   WriterTextRun,
-} from "../txtnode/ndtxt";
+};
 
-/** Enumerates the bounded paragraph alignments available in the Writer workbench. */
-export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"] as const;
+/** Canonical Writer document type; SwDoc owns all model content. */
+export type WriterDocument = SwDoc;
 
-/** Identifies one supported horizontal paragraph alignment. */
-export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[number];
+/** Read-only browser projection backed directly by a canonical SwTextNode. */
+export type WriterParagraph = SwTextNode;
 
-/** Enumerates the bounded paragraph styles currently available in the Writer workbench. */
-export const WRITER_PARAGRAPH_STYLES = ["default", "heading-1"] as const;
-
-/** Identifies one supported Writer paragraph style without modeling style inheritance. */
-export type WriterParagraphStyle = (typeof WRITER_PARAGRAPH_STYLES)[number];
-
-/** Identifies a one-position movement direction in an ordered Writer paragraph body. */
+/** Identifies a one-position movement direction in an ordered Writer body. */
 export type WriterParagraphMoveDirection = "up" | "down";
 
-/** Describes one immutable plain-text Writer paragraph. */
-export interface WriterParagraph {
-  /** Horizontal presentation alignment applied to the complete paragraph. */
-  readonly alignment: WriterParagraphAlignment;
-  /** Stable caller-provided paragraph identity. */
-  readonly id: string;
-  /** Serializable list state retained independently from paragraph text and style. */
-  readonly list: WriterParagraphList;
-  /** Canonical direct-format text runs from which the compatibility text projection is derived. */
-  readonly runs: readonly WriterTextRun[];
-  /** Bounded direct paragraph-style choice applied to the complete paragraph. */
-  readonly style: WriterParagraphStyle;
-  /** Visible plain Unicode text deterministically derived from runs for existing plain-text consumers. */
-  readonly text: string;
-}
-
-/** Describes a document header paired with an ordered immutable paragraph body. */
-export interface WriterDocument {
-  /** Shared serializable document lifecycle header. */
-  readonly document: OfficeDocument;
-  /** Non-empty ordered plain-text paragraph body. */
-  readonly paragraphs: readonly WriterParagraph[];
-}
-
-/**
- * Creates a Writer body with one empty paragraph.
- *
- * @param document - Shared Writer document header that remains unmodified.
- * @param paragraphId - Stable non-empty identity for the initial paragraph.
- * @returns Immutable Writer document body with one empty paragraph.
- * @throws {Error} When paragraphId is blank.
- */
+/** Creates a Writer SwDoc with LibreOffice's fixed sections and one empty body text node. @param document - Browser lifecycle metadata. @param paragraphId - Initial text-node identity. @returns New Writer document graph. */
 export function createWriterDocument(
   document: OfficeDocument,
   paragraphId: string,
 ): WriterDocument {
   if (paragraphId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
-  return {
-    document,
-    paragraphs: [
-      {
-        alignment: "left",
-        id: paragraphId,
-        list: createDefaultWriterParagraphList(),
-        runs: [],
-        style: "default",
-        text: "",
-      },
-    ],
-  };
+  return new SwDoc(document, paragraphId);
 }
 
-/**
- * Appends one empty plain-text paragraph to the ordered Writer body and marks the document dirty.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param paragraphId - Stable non-empty identity for the appended paragraph.
- * @returns New Writer document with the appended empty paragraph and dirty lifecycle header.
- * @throws {Error} When paragraphId is blank or already exists in the document.
- */
+/** Appends an empty body SwTextNode before the content end sentinel. @param writerDocument - Prior document graph. @param paragraphId - New node identity. @returns Changed cloned graph. */
 export function appendWriterParagraph(
   writerDocument: WriterDocument,
   paragraphId: string,
 ): WriterDocument {
-  if (paragraphId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
-  const existingParagraph = writerDocument.paragraphs.find(
-    /**
-     * Finds an existing paragraph whose identity would collide with the requested append.
-     *
-     * @param candidate - Immutable paragraph candidate to inspect.
-     * @returns True only when candidate owns paragraphId.
-     */
-    function hasParagraphId(candidate): boolean {
-      return candidate.id === paragraphId;
-    },
-  );
-  if (existingParagraph !== undefined) throw new Error(`Duplicate paragraph: ${paragraphId}`);
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: [
-      ...writerDocument.paragraphs,
-      {
-        alignment: "left",
-        id: paragraphId,
-        list: createDefaultWriterParagraphList(),
-        runs: [],
-        style: "default",
-        text: "",
-      },
-    ],
-  };
+  assertParagraphIdAvailable(writerDocument, paragraphId);
+  const next = writerDocument.clone();
+  next.nodes.MakeTextNode(paragraphId);
+  next.SetModified();
+  return next;
 }
 
-/**
- * Splits one plain-text Writer paragraph at a UTF-16 caret offset and inserts the trailing text as its adjacent sibling.
- *
- * The inserted paragraph inherits the source paragraph's bounded alignment and style, which mirrors ordinary Writer
- * paragraph-break editing within this plain-text model.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param paragraphId - Existing stable identity of the paragraph that contains the caret.
- * @param offset - Integer UTF-16 caret offset from zero through the source paragraph text length.
- * @param nextParagraphId - Stable non-empty identity reserved for the newly inserted adjacent paragraph.
- * @returns New dirty Writer document with source-prefix text and an immediately following inherited-format paragraph.
- * @throws {Error} When either paragraph identity is invalid or duplicated, the source paragraph is absent, or offset is outside the permitted integer range.
- */
+/** Splits one SwTextNode and its range hints at a UTF-16 content offset. @param writerDocument - Prior document graph. @param paragraphId - Split node identity. @param offset - UTF-16 split offset. @param nextParagraphId - Trailing node identity. @returns Changed cloned graph. */
 export function splitWriterParagraph(
   writerDocument: WriterDocument,
   paragraphId: string,
   offset: number,
   nextParagraphId: string,
 ): WriterDocument {
-  const paragraph = writerDocument.paragraphs.find(
-    /**
-     * Finds the paragraph selected by the requested stable identity.
-     *
-     * @param candidate - Immutable paragraph candidate to inspect.
-     * @returns True only when candidate owns paragraphId.
-     */
-    function hasParagraphId(candidate): boolean {
-      return candidate.id === paragraphId;
-    },
-  );
-  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
-  if (nextParagraphId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
-  if (
-    writerDocument.paragraphs.some(
-      /**
-       * Detects a collision between an existing paragraph and the requested inserted identity.
-       *
-       * @param candidate - Immutable paragraph candidate to inspect.
-       * @returns True only when candidate owns nextParagraphId.
-       */
-      function hasNextParagraphId(candidate): boolean {
-        return candidate.id === nextParagraphId;
-      },
-    )
-  ) {
-    throw new Error(`Duplicate paragraph: ${nextParagraphId}`);
-  }
-  if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.text.length)
-    throw new Error("Split offset is outside the paragraph.");
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.flatMap(
-      /**
-       * Replaces only the source paragraph with its prefix and inherited-format trailing sibling.
-       *
-       * @param candidate - Immutable paragraph candidate preserved or split without mutation.
-       * @returns One preserved paragraph or the two immutable paragraphs produced by the split.
-       */
-      function splitSelectedParagraph(candidate): readonly WriterParagraph[] {
-        return candidate.id === paragraphId
-          ? [...splitWriterParagraphRuns(candidate, offset, nextParagraphId)]
-          : [candidate];
-      },
-    ),
-  };
+  const source = getWriterTextNode(writerDocument, paragraphId);
+  assertContentOffset(source, offset, "Split offset is outside the paragraph.");
+  assertParagraphIdAvailable(writerDocument, nextParagraphId);
+  const next = writerDocument.clone();
+  const clonedSource = getWriterTextNode(next, paragraphId);
+  const trailing = clonedSource.SplitContent(offset, nextParagraphId);
+  next.nodes.insertTextNodeAfter(clonedSource, trailing);
+  next.SetModified();
+  return next;
 }
 
-/**
- * Joins one non-first Writer paragraph into its preceding sibling and removes the paragraph-break boundary.
- *
- * The preceding paragraph remains the surviving paragraph and therefore retains its stable identity and bounded
- * formatting while the selected paragraph's complete text is appended.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param paragraphId - Existing non-first paragraph identity selected at its start-caret boundary.
- * @returns New dirty Writer document with paragraphId removed and its text appended to the preceding paragraph.
- * @throws {Error} When paragraphId is absent or identifies the first paragraph, which has no preceding sibling.
- */
+/** Joins one non-first SwTextNode into its preceding body text node. @param writerDocument - Prior document graph. @param paragraphId - Joined node identity. @returns Changed cloned graph. */
 export function mergeWriterParagraphWithPrevious(
   writerDocument: WriterDocument,
   paragraphId: string,
 ): WriterDocument {
-  const paragraphIndex = writerDocument.paragraphs.findIndex(
-    /**
-     * Finds the ordered paragraph selected for removal of its preceding break.
-     *
-     * @param candidate - Immutable paragraph candidate inspected without mutation.
-     * @returns True only when candidate owns paragraphId.
-     */
-    function hasParagraphId(candidate): boolean {
-      return candidate.id === paragraphId;
-    },
-  );
-  if (paragraphIndex < 0) throw new Error(`Unknown paragraph: ${paragraphId}`);
-  if (paragraphIndex === 0) throw new Error("First Writer paragraph has no preceding paragraph.");
-  const precedingParagraph = writerDocument.paragraphs[paragraphIndex - 1] as WriterParagraph;
-  const selectedParagraph = writerDocument.paragraphs[paragraphIndex] as WriterParagraph;
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.flatMap(
-      /**
-       * Keeps unrelated entries, replaces the preceding paragraph with joined text, and omits the selected paragraph.
-       *
-       * @param candidate - Immutable paragraph candidate preserved, updated, or omitted without mutation.
-       * @returns One retained paragraph, one updated preceding paragraph, or no paragraph for the removed selected entry.
-       */
-      function joinAdjacentParagraphs(candidate): readonly WriterParagraph[] {
-        if (candidate.id === precedingParagraph.id) {
-          const runs = normalizeWriterTextRuns([...candidate.runs, ...selectedParagraph.runs]);
-          return [{ ...candidate, runs, text: getWriterTextFromRuns(runs) }];
-        }
-        return candidate.id === paragraphId ? [] : [candidate];
-      },
-    ),
-  };
+  const source = getWriterTextNode(writerDocument, paragraphId);
+  const index = writerDocument.paragraphs.indexOf(source);
+  if (index === 0) throw new Error("First Writer paragraph has no preceding paragraph.");
+  const next = writerDocument.clone();
+  const clonedSource = getWriterTextNode(next, paragraphId);
+  const clonedIndex = next.paragraphs.indexOf(clonedSource);
+  const preceding = next.paragraphs[clonedIndex - 1] as SwTextNode;
+  preceding.AppendTextNode(clonedSource);
+  next.nodes.removeTextNode(clonedSource);
+  next.SetModified();
+  return next;
 }
 
-/**
- * Inserts text at one zero-based UTF-16 offset in a named paragraph and marks the document dirty.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param paragraphId - Existing paragraph identity to edit.
- * @param offset - Integer UTF-16 insertion offset from zero through paragraph text length.
- * @param text - Text to insert without mutation or formatting interpretation.
- * @returns New immutable Writer document with updated paragraph text and dirty lifecycle header.
- * @throws {Error} When paragraph is absent or offset is outside the permitted integer range.
- */
+/** Inserts text using direct attributes inherited at a SwTextNode content position. @param writerDocument - Prior document graph. @param paragraphId - Target node identity. @param offset - UTF-16 insertion offset. @param text - Inserted text. @returns Original graph for empty text, otherwise a changed clone. */
 export function insertWriterText(
   writerDocument: WriterDocument,
   paragraphId: string,
   offset: number,
   text: string,
 ): WriterDocument {
-  const paragraph = writerDocument.paragraphs.find(
-    /**
-     * Finds the paragraph selected by the requested stable identity.
-     *
-     * @param candidate - Immutable paragraph candidate to inspect.
-     * @returns True only when candidate owns paragraphId.
-     */
-    function hasParagraphId(candidate): boolean {
-      return candidate.id === paragraphId;
-    },
-  );
-  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
-  if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.text.length)
-    throw new Error("Insertion offset is outside the paragraph.");
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.map(
-      /**
-       * Replaces only the selected paragraph while preserving every sibling object.
-       *
-       * @param candidate - Immutable paragraph candidate to preserve or update.
-       * @returns Updated selected paragraph or the original sibling reference.
-       */
-      function updateSelectedParagraph(candidate): WriterParagraph {
-        return candidate.id === paragraphId
-          ? {
-              ...candidate,
-              runs: insertWriterTextRun(
-                candidate.runs,
-                offset,
-                text,
-                getWriterTextAttributes(candidate),
-              ),
-              text: `${candidate.text.slice(0, offset)}${text}${candidate.text.slice(offset)}`,
-            }
-          : candidate;
-      },
-    ),
-  };
+  const source = getWriterTextNode(writerDocument, paragraphId);
+  assertContentOffset(source, offset, "Insertion offset is outside the paragraph.");
+  if (text.length === 0) return writerDocument;
+  const next = writerDocument.clone();
+  getWriterTextNode(next, paragraphId).InsertText(text, offset);
+  next.SetModified();
+  return next;
 }
 
-/**
- * Inserts text with explicit direct character attributes at one Writer paragraph offset.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param paragraphId - Existing paragraph identity that owns the insertion.
- * @param offset - Integer UTF-16 insertion offset from zero through paragraph text length.
- * @param text - Text to insert without formatting interpretation.
- * @param attributes - Direct character attributes applied to the inserted text.
- * @returns New immutable Writer document with updated runs and a dirty lifecycle header.
- * @throws {Error} When paragraph is absent or offset is outside the permitted integer range.
- */
+/** Inserts text with an explicit auto-format item set at one SwTextNode position. @param writerDocument - Prior document graph. @param paragraphId - Target node identity. @param offset - UTF-16 insertion offset. @param text - Inserted text. @param attributes - Direct attributes for inserted text. @returns Original graph for empty text, otherwise a changed clone. */
 export function insertWriterTextWithAttributes(
   writerDocument: WriterDocument,
   paragraphId: string,
   offset: number,
   text: string,
-  attributes: import("../txtnode/ndtxt").WriterCharacterAttributes,
+  attributes: WriterCharacterAttributes,
 ): WriterDocument {
-  const paragraph = writerDocument.paragraphs.find(
-    /** Finds the paragraph selected by the requested stable identity. @param candidate - Immutable paragraph candidate to inspect. @returns True only when candidate owns paragraphId. */
-    function hasParagraphId(candidate): boolean {
-      return candidate.id === paragraphId;
-    },
-  );
-  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
-  if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.text.length)
-    throw new Error("Insertion offset is outside the paragraph.");
-  const runs = insertWriterTextRun(paragraph.runs, offset, text, attributes);
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.map(
-      /** Replaces only the selected paragraph runs. @param candidate - Immutable paragraph candidate. @returns Updated selected paragraph or original sibling. */
-      function updateSelectedParagraph(candidate): WriterParagraph {
-        return candidate.id === paragraphId
-          ? { ...candidate, runs, text: getWriterTextFromRuns(runs) }
-          : candidate;
-      },
-    ),
-  };
+  const source = getWriterTextNode(writerDocument, paragraphId);
+  assertContentOffset(source, offset, "Insertion offset is outside the paragraph.");
+  if (text.length === 0) return writerDocument;
+  const next = writerDocument.clone();
+  getWriterTextNode(next, paragraphId).InsertText(text, offset, attributes);
+  next.SetModified();
+  return next;
 }
 
-/**
- * Replaces the complete plain-text content of one named paragraph and marks a changed document dirty.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param paragraphId - Existing paragraph identity to replace.
- * @param text - Complete replacement text without formatting interpretation.
- * @returns The original document when text is unchanged, otherwise a new immutable Writer document.
- * @throws {Error} When paragraphId does not identify a paragraph in writerDocument.
- */
+/** Replaces complete node text and clears its direct-format hints. @param writerDocument - Prior document graph. @param paragraphId - Target node identity. @param text - Replacement text. @returns Original graph for equal text, otherwise a changed clone. */
 export function replaceWriterParagraph(
   writerDocument: WriterDocument,
   paragraphId: string,
   text: string,
 ): WriterDocument {
-  const paragraph = writerDocument.paragraphs.find(
-    /**
-     * Finds the paragraph selected by the requested stable identity.
-     *
-     * @param candidate - Immutable paragraph candidate to inspect.
-     * @returns True only when candidate owns paragraphId.
-     */
-    function hasParagraphId(candidate): boolean {
-      return candidate.id === paragraphId;
-    },
-  );
-  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
-  if (paragraph.text === text) return writerDocument;
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.map(
-      /**
-       * Replaces only the selected paragraph while preserving every sibling object.
-       *
-       * @param candidate - Immutable paragraph candidate to preserve or update.
-       * @returns Updated selected paragraph or the original sibling reference.
-       */
-      function updateSelectedParagraph(candidate): WriterParagraph {
-        return candidate.id === paragraphId
-          ? { ...candidate, runs: createWriterTextRuns(text), text }
-          : candidate;
-      },
-    ),
-  };
+  const source = getWriterTextNode(writerDocument, paragraphId);
+  if (source.text === text) return writerDocument;
+  const next = writerDocument.clone();
+  getWriterTextNode(next, paragraphId).SetText(text);
+  next.SetModified();
+  return next;
 }
 
-/**
- * Changes one paragraph's horizontal alignment and marks a changed document dirty.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param paragraphId - Existing paragraph identity whose alignment changes.
- * @param alignment - Supported next alignment applied to the complete paragraph.
- * @returns Original document for an identical alignment, otherwise a dirty document with one updated paragraph.
- * @throws {Error} When paragraphId is absent or alignment is unsupported.
- */
+/** Changes RES_PARATR_ADJUST for one body SwTextNode. @param writerDocument - Prior document graph. @param paragraphId - Target node identity. @param alignment - New alignment item. @returns Original graph for equal alignment, otherwise a changed clone. */
 export function setWriterParagraphAlignment(
   writerDocument: WriterDocument,
   paragraphId: string,
   alignment: WriterParagraphAlignment,
 ): WriterDocument {
-  const paragraph = writerDocument.paragraphs.find(
-    /**
-     * Finds the paragraph selected by the requested stable identity.
-     *
-     * @param candidate - Immutable paragraph candidate to inspect.
-     * @returns True only when candidate owns paragraphId.
-     */
-    function hasParagraphId(candidate): boolean {
-      return candidate.id === paragraphId;
-    },
-  );
-  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  const source = getWriterTextNode(writerDocument, paragraphId);
   if (!isWriterParagraphAlignment(alignment))
     throw new Error(`Unsupported Writer paragraph alignment: ${alignment}`);
-  if (paragraph.alignment === alignment) return writerDocument;
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.map(
-      /**
-       * Replaces only the selected paragraph alignment while preserving sibling object references.
-       *
-       * @param candidate - Immutable paragraph candidate to preserve or update.
-       * @returns Updated selected paragraph or the original sibling reference.
-       */
-      function updateSelectedParagraph(candidate): WriterParagraph {
-        return candidate.id === paragraphId ? { ...candidate, alignment } : candidate;
-      },
-    ),
-  };
+  if (source.alignment === alignment) return writerDocument;
+  const next = writerDocument.clone();
+  getWriterTextNode(next, paragraphId).SetParagraphAlignment(alignment);
+  next.SetModified();
+  return next;
 }
 
-/**
- * Restores default alignment and style values for legacy or malformed stored paragraph formatting.
- *
- * @param writerDocument - Writer document read from a prior browser-local snapshot.
- * @returns The original document when every formatting value is supported, otherwise a normalized immutable copy.
- */
-export function normalizeWriterParagraphFormatting(writerDocument: WriterDocument): WriterDocument {
-  let containsUnsupportedFormatting = false;
-  const paragraphs = writerDocument.paragraphs.map(
-    /**
-     * Preserves supported values and supplies legacy defaults for absent or unsupported formatting values.
-     *
-     * @param paragraph - Stored paragraph whose alignment requires validation.
-     * @returns Original paragraph for supported values or an immutable replacement with safe defaults.
-     */
-    function normalizeParagraphFormatting(paragraph): WriterParagraph {
-      const alignment = isWriterParagraphAlignment(paragraph.alignment)
-        ? paragraph.alignment
-        : "left";
-      const style = isWriterParagraphStyle(paragraph.style) ? paragraph.style : "default";
-      const list = normalizeWriterParagraphList(paragraph.list);
-      const runs = normalizeWriterTextRuns(paragraph.runs);
-      const text =
-        runs.length === 0 && paragraph.text.length > 0
-          ? paragraph.text
-          : getWriterTextFromRuns(runs);
-      const normalizedRuns =
-        runs.length === 0 && text.length > 0 ? createWriterTextRuns(text) : runs;
-      if (
-        alignment === paragraph.alignment &&
-        style === paragraph.style &&
-        list.kind === paragraph.list?.kind &&
-        list.level === paragraph.list?.level &&
-        list.styleId === paragraph.list?.styleId &&
-        text === paragraph.text &&
-        areWriterTextRunsEquivalent(normalizedRuns, paragraph.runs)
-      )
-        return paragraph;
-      containsUnsupportedFormatting = true;
-      return { ...paragraph, alignment, list, runs: normalizedRuns, style, text };
-    },
-  );
-  return containsUnsupportedFormatting ? { ...writerDocument, paragraphs } : writerDocument;
-}
-
-/**
- * Checks whether an unknown runtime value is a supported Writer paragraph alignment.
- *
- * @param value - Runtime candidate supplied by a storage snapshot or a boundary caller.
- * @returns True only when value is one of the declared alignment literals.
- */
-export function isWriterParagraphAlignment(value: unknown): value is WriterParagraphAlignment {
-  return WRITER_PARAGRAPH_ALIGNMENTS.some(
-    /**
-     * Compares one supported literal with the supplied runtime candidate.
-     *
-     * @param alignment - Supported alignment literal to compare.
-     * @returns True only when the supplied value matches alignment exactly.
-     */
-    function matchesAlignment(alignment): boolean {
-      return alignment === value;
-    },
-  );
-}
-
-/**
- * Changes one paragraph's bounded style and marks a changed document dirty.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param paragraphId - Existing paragraph identity whose style changes.
- * @param style - Supported next style applied to the complete paragraph.
- * @returns Original document for an identical style, otherwise a dirty document with one updated paragraph.
- * @throws {Error} When paragraphId is absent or style is unsupported.
- */
+/** Changes one SwTextNode text format collection. @param writerDocument - Prior document graph. @param paragraphId - Target node identity. @param style - New format collection identity. @returns Original graph for equal style, otherwise a changed clone. */
 export function setWriterParagraphStyle(
   writerDocument: WriterDocument,
   paragraphId: string,
   style: WriterParagraphStyle,
 ): WriterDocument {
-  const paragraph = writerDocument.paragraphs.find(
-    /**
-     * Finds the paragraph selected by the requested stable identity.
-     *
-     * @param candidate - Immutable paragraph candidate to inspect.
-     * @returns True only when candidate owns paragraphId.
-     */
-    function hasParagraphId(candidate): boolean {
-      return candidate.id === paragraphId;
-    },
-  );
-  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  const source = getWriterTextNode(writerDocument, paragraphId);
   if (!isWriterParagraphStyle(style))
     throw new Error(`Unsupported Writer paragraph style: ${style}`);
-  if (paragraph.style === style) return writerDocument;
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.map(
-      /**
-       * Replaces only the selected paragraph style while preserving sibling object references.
-       *
-       * @param candidate - Immutable paragraph candidate to preserve or update.
-       * @returns Updated selected paragraph or the original sibling reference.
-       */
-      function updateSelectedParagraph(candidate): WriterParagraph {
-        return candidate.id === paragraphId ? { ...candidate, style } : candidate;
-      },
-    ),
-  };
+  if (source.style === style) return writerDocument;
+  const next = writerDocument.clone();
+  getWriterTextNode(next, paragraphId).ChgFormatColl(style);
+  next.SetModified();
+  return next;
 }
 
-/**
- * Toggles one direct character format over a non-empty same-paragraph range and marks a changed document dirty.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param paragraphId - Existing paragraph identity that owns the selected range.
- * @param start - Inclusive UTF-16 range start inside the paragraph.
- * @param end - Exclusive UTF-16 range end inside the paragraph.
- * @param format - Direct character format selected from a Writer command.
- * @returns Original document for a no-op normalized run sequence, otherwise a dirty document with formatted runs.
- * @throws {Error} When paragraphId is absent or range bounds are invalid.
- */
+/** Toggles one character item over a same-node range stored as RES_TXTATR_AUTOFMT hints. @param writerDocument - Prior document graph. @param paragraphId - Target node identity. @param start - Inclusive format start. @param end - Exclusive format end. @param format - Toggled direct property. @returns Original graph for an empty range, otherwise a changed clone. */
 export function toggleWriterParagraphCharacterFormat(
   writerDocument: WriterDocument,
   paragraphId: string,
@@ -571,99 +203,92 @@ export function toggleWriterParagraphCharacterFormat(
   end: number,
   format: WriterCharacterFormat,
 ): WriterDocument {
-  const paragraph = writerDocument.paragraphs.find(
-    /** Finds the paragraph selected for direct character formatting. @param candidate - Immutable paragraph candidate. @returns True only when it owns paragraphId. */
-    function hasParagraphId(candidate): boolean {
-      return candidate.id === paragraphId;
-    },
-  );
-  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  const source = getWriterTextNode(writerDocument, paragraphId);
   if (start === end) return writerDocument;
-  const runs = toggleWriterTextRangeFormat(paragraph.runs, start, end, format);
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.map(
-      /** Replaces exactly one formatted paragraph while retaining all siblings. @param candidate - Immutable paragraph candidate. @returns Updated selected paragraph or original sibling. */
-      function updateFormattedParagraph(candidate): WriterParagraph {
-        return candidate.id === paragraphId
-          ? { ...candidate, runs, text: getWriterTextFromRuns(runs) }
-          : candidate;
-      },
-    ),
-  };
+  assertContentRange(source, start, end);
+  const next = writerDocument.clone();
+  getWriterTextNode(next, paragraphId).ToggleTextRangeFormat(start, end, format);
+  next.SetModified();
+  return next;
 }
 
-/**
- * Checks whether an unknown runtime value is a supported Writer paragraph style.
- *
- * @param value - Runtime candidate supplied by a storage snapshot or a boundary caller.
- * @returns True only when value is one of the declared paragraph-style literals.
- */
-export function isWriterParagraphStyle(value: unknown): value is WriterParagraphStyle {
-  return WRITER_PARAGRAPH_STYLES.some(
-    /**
-     * Compares one supported literal with the supplied runtime candidate.
-     *
-     * @param style - Supported paragraph-style literal to compare.
-     * @returns True only when the supplied value matches style exactly.
-     */
-    function matchesStyle(style): boolean {
-      return style === value;
+/** Converts current or legacy persisted Writer data to the canonical SwDoc graph. @param candidate - Runtime or persisted Writer state. @returns Canonical document graph. */
+export function normalizeWriterParagraphFormatting(candidate: unknown): WriterDocument {
+  if (candidate instanceof SwDoc) return candidate;
+  if (!isRecord(candidate)) throw new Error("Stored Writer document is invalid.");
+  if (candidate.swModelVersion === 1 && Array.isArray(candidate.textNodes))
+    return SwDoc.fromSnapshot(candidate as unknown as SwDocSnapshot);
+  return restoreLegacyWriterDocument(candidate);
+}
+
+/** Serializes the canonical document graph without ownership cycles. @param writerDocument - Canonical document graph. @returns Versioned Writer snapshot. */
+export function serializeWriterDocument(writerDocument: WriterDocument): SwDocSnapshot {
+  return writerDocument.toSnapshot();
+}
+
+/** Returns one canonical body text node or throws the established paragraph error. @param writerDocument - Canonical document graph. @param paragraphId - Requested node identity. @returns Matching text node. */
+function getWriterTextNode(writerDocument: WriterDocument, paragraphId: string): SwTextNode {
+  const node = writerDocument.nodes.findTextNode(paragraphId);
+  if (node === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  return node;
+}
+
+/** Validates a new stable body node identity. @param writerDocument - Canonical document graph. @param paragraphId - Candidate identity. @returns Nothing. */
+function assertParagraphIdAvailable(writerDocument: WriterDocument, paragraphId: string): void {
+  if (paragraphId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
+  if (writerDocument.nodes.findTextNode(paragraphId) !== undefined)
+    throw new Error(`Duplicate paragraph: ${paragraphId}`);
+}
+
+/** Validates one content offset with a caller-compatible error. @param node - Target text node. @param offset - Candidate UTF-16 offset. @param message - Error text. @returns Nothing. */
+function assertContentOffset(node: SwTextNode, offset: number, message: string): void {
+  if (!Number.isInteger(offset) || offset < 0 || offset > node.Len()) throw new Error(message);
+}
+
+/** Validates one same-node selection range. @param node - Target text node. @param start - Inclusive range start. @param end - Exclusive range end. @returns Nothing. */
+function assertContentRange(node: SwTextNode, start: number, end: number): void {
+  if (
+    !Number.isInteger(start) ||
+    !Number.isInteger(end) ||
+    start < 0 ||
+    end < start ||
+    end > node.Len()
+  )
+    throw new Error("Writer character-format range is outside the paragraph.");
+}
+
+/** Restores the previous paragraph-array snapshot schema into SwTextNode records. @param candidate - Legacy document record. @returns Canonical document graph. */
+function restoreLegacyWriterDocument(candidate: Record<string, unknown>): WriterDocument {
+  if (!isRecord(candidate.document) || !Array.isArray(candidate.paragraphs))
+    throw new Error("Stored Writer document is invalid.");
+  const paragraphs = candidate.paragraphs;
+  if (paragraphs.length === 0) throw new Error("Stored Writer document has no paragraphs.");
+  const document = new SwDoc(candidate.document as unknown as OfficeDocument);
+  paragraphs.forEach(
+    /** Restores one legacy paragraph as a canonical text node and auto-format hints. @param value - Legacy paragraph record. @param index - Body order. @returns Nothing. */
+    function restoreParagraph(value, index): void {
+      if (!isRecord(value)) throw new Error("Stored Writer paragraph is invalid.");
+      const id =
+        typeof value.id === "string" && value.id.trim().length > 0
+          ? value.id
+          : `paragraph-${index + 1}`;
+      const text = typeof value.text === "string" ? value.text : "";
+      const node = document.nodes.MakeTextNode(id, text);
+      node.SetParagraphAlignment(
+        isWriterParagraphAlignment(value.alignment) ? value.alignment : "left",
+      );
+      node.ChgFormatColl(isWriterParagraphStyle(value.style) ? value.style : "default");
+      node.SetParagraphList(
+        normalizeWriterParagraphList(value.list ?? createDefaultWriterParagraphList()),
+      );
+      const runs = normalizeWriterTextRuns(value.runs);
+      if (runs.length > 0) node.ReplaceRange(0, node.Len(), runs);
     },
   );
+  return document;
 }
 
-/**
- * Splits one Writer paragraph while retaining direct character runs on both adjacent output paragraphs.
- *
- * @param paragraph - Immutable source paragraph selected for a paragraph-break split.
- * @param offset - Valid UTF-16 split offset inside paragraph.text.
- * @param nextParagraphId - Reserved stable identity for the trailing output paragraph.
- * @returns Prefix and suffix paragraphs with text compatibility projections derived from their runs.
- */
-function splitWriterParagraphRuns(
-  paragraph: WriterParagraph,
-  offset: number,
-  nextParagraphId: string,
-): readonly WriterParagraph[] {
-  const split = splitWriterTextRuns(paragraph.runs, offset);
-  return [
-    { ...paragraph, runs: split.prefix, text: getWriterTextFromRuns(split.prefix) },
-    {
-      ...paragraph,
-      id: nextParagraphId,
-      runs: split.suffix,
-      text: getWriterTextFromRuns(split.suffix),
-    },
-  ];
-}
-
-/**
- * Reads collapsed-caret attributes at a Writer paragraph end for the legacy plain-text insertion helper.
- *
- * @param paragraph - Immutable paragraph that owns the requested insertion.
- * @returns Direct attributes inherited at the end of paragraph text.
- */
-function getWriterTextAttributes(paragraph: WriterParagraph) {
-  return getWriterTextAttributesAtOffset(paragraph.runs, paragraph.text.length);
-}
-
-/** Compares normalized and stored Writer run sequences without relying on object identity. @param left - Normalized direct-format run sequence. @param right - Stored candidate run sequence. @returns True only when stored runs already have identical normalized text and attributes. */
-function areWriterTextRunsEquivalent(left: readonly WriterTextRun[], right: unknown): boolean {
-  const normalizedRight = normalizeWriterTextRuns(right);
-  return (
-    left.length === normalizedRight.length &&
-    left.every(
-      /** Compares one run at its deterministic ordered index. @param run - Expected normalized run. @param index - Ordered run position. @returns True only when the stored run matches every bounded attribute and text. */
-      function matchesStoredRun(run, index): boolean {
-        const storedRun = normalizedRight[index] as WriterTextRun;
-        return (
-          run.text === storedRun.text &&
-          run.attributes.bold === storedRun.attributes.bold &&
-          run.attributes.italic === storedRun.attributes.italic &&
-          run.attributes.underline === storedRun.attributes.underline
-        );
-      },
-    )
-  );
+/** Checks whether an unknown value is a non-array record. @param value - Unknown runtime value. @returns True for non-array records. */
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }

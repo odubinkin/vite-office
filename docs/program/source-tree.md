@@ -4,9 +4,9 @@ The browser project uses LibreOffice-derived module names to make each local
 implementation, test, and parity record easy to locate against the pinned
 `libreoffice-26.8.0.2` checkout. Every newly implemented capability must map
 to a concrete upstream file as well as an ownership directory; a similar
-directory name alone is insufficient. The tree preserves ownership boundaries,
-not C++ implementation details: React, TypeScript, and browser APIs remain the
-runtime of this static application.
+directory name alone is insufficient. The tree preserves applicable ownership,
+model structure, and algorithms while using TypeScript and browser APIs for the
+static application runtime.
 
 | Local browser path | Pinned LibreOffice region | Current responsibility |
 | --- | --- | --- |
@@ -16,9 +16,10 @@ runtime of this static application.
 | `apps/office/src/sfx2/source/doc` | `sfx2/source/doc` | Shared document identity, document undo manager, and bounded browser document-medium contract |
 | `apps/office/src/svl/source/misc` | `svl/source/misc` | Recovery orchestration |
 | `apps/office/src/vcl/browser` | `vcl` | Browser-only clipboard, download, IndexedDB, and styling adapters |
-| `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | Serializable Writer document transitions |
-| `apps/office/src/sw/source/core/docnode` | `sw/source/core/docnode` | Serializable Writer paragraph-node transitions |
-| `apps/office/src/sw/source/core/txtnode` | `sw/source/core/txtnode` | Writer text-node runs and bounded direct character attributes |
+| `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | `SwDoc` ownership, content operations, Writer command façade, and snapshot conversion |
+| `apps/office/src/sw/source/core/docnode` | `sw/source/core/docnode` | Ordered `SwNodes` storage, fixed section sentinels, and node types |
+| `apps/office/src/sw/source/core/txtnode` | `sw/source/core/txtnode` | `SwTextNode` text storage and `SwpHints`/`SwTextAttr` character attributes |
+| `apps/office/src/sw/source/core/crsr` | `sw/source/core/crsr` | `SwNodeIndex`, `SwPosition`, and directional `SwPaM` model ranges |
 | `apps/office/src/sw/source/uibase/docvw` | `sw/source/uibase/docvw` | Document-page editor and editable paragraphs |
 | `apps/office/src/sw/source/uibase/wrtsh` | `sw/source/uibase/wrtsh` | Writer selection shell and browser DOM caret bridge |
 | `apps/office/src/sw/source/uibase/dochdl` | `sw/source/uibase/dochdl` | Selection transfer-document preparation and clipboard ownership |
@@ -67,7 +68,7 @@ machine-checked record.
 | Local browser module | Pinned upstream module | Reason |
 | --- | --- | --- |
 | `svl/source/misc/recovery.ts` | `svl/source/misc/lockfilecommon.cxx` | Browser recovery coordinator at the shared lockfile ownership boundary |
-| `sw/source/core/doc/writer.ts` | `sw/source/core/doc/docnew.cxx` | Browser Writer aggregate rather than only document creation |
+| `sw/source/core/doc/writer.ts` | `sw/source/core/doc/docnew.cxx` | Browser command façade around the `SwDoc` graph rather than only document construction |
 | `sw/source/uibase/docvw/edtwin-paragraph.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | React paragraph decomposition beneath the one editor boundary |
 | `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Typed command declaration extracted from XML configuration |
 | `sw/uiconfig/swriter/menubar/format-menu.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | React Format-popup decomposition of the same menu hierarchy |
@@ -79,11 +80,16 @@ machine-checked record.
 | --- | --- | --- |
 | `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Serializable list metadata and legacy normalization |
 | `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Deterministic visible bullet and numbering marker calculation |
-| `sw/source/core/doc/DocumentContentOperationsManager.ts` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Bounded immutable same-paragraph text-range replacement for Cut and Paste |
+| `sw/source/core/doc/doc.ts` | `sw/source/core/doc/doc.cxx` | `SwDoc` owner of `SwNodes` plus explicit browser snapshot conversion |
+| `sw/source/core/docnode/nodes.ts` | `sw/source/core/docnode/nodes.cxx` | Ordered nodes and LibreOffice-matching fixed section sentinels |
+| `sw/source/core/crsr/pam.ts` | `sw/source/core/crsr/pam.cxx` | Model positions and directional point/mark ranges |
+| `sw/source/core/txtnode/ndhints.ts` | `sw/source/core/txtnode/ndhints.cxx` | Start-sorted text attribute hints and derived rendering runs |
+| `sw/source/core/txtnode/txatbase.ts` | `sw/source/core/txtnode/txatbase.cxx` | Bounded `SwTextAttr` ranges and auto-format items |
+| `sw/source/core/doc/DocumentContentOperationsManager.ts` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Bounded same-text-node Insert, Delete, and Replace operations through `SwPaM` |
 | `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
 | `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Active-list Promote and Demote level transition |
 | `sw/source/uibase/shells/textsh.ts` | `sw/source/uibase/shells/textsh.cxx` | Browser-owned Cut, Copy, Paste, download, and Undo/Redo command shell |
-| `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Immutable direct-character text runs, split/merge, and normalization |
+| `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Canonical text-node storage, hint-aware editing, split/append, and derived rendering runs |
 | `sw/source/uibase/shells/txtattr.ts` | `sw/source/uibase/shells/txtattr.cxx` | Bold, Italic, and single Underline command transition |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |

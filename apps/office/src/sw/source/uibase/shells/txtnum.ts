@@ -2,8 +2,7 @@
  * @fileoverview Implements the browser Writer equivalents of `FN_NUM_BULLET_ON`, `FN_NUM_NUMBERING_ON`, and `FN_NUM_BULLET_OFF` from LibreOffice `sw/source/uibase/shells/txtnum.cxx`.
  */
 
-import { markDocumentDirty } from "../../../../sfx2/source/doc/docfac";
-import type { WriterDocument, WriterParagraph } from "../../core/doc/writer";
+import type { WriterDocument } from "../../core/doc/writer";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
 
 /**
@@ -12,7 +11,7 @@ import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../c
  * The transition preserves the current level and future style metadata so later list-level and named-style commands
  * can extend this first command layer without replacing paragraph serialization.
  *
- * @param writerDocument - Immutable prior Writer document state.
+ * @param writerDocument - Prior Writer document graph.
  * @param paragraphId - Existing paragraph identity whose list presentation changes.
  * @param listKind - Supported next bullet, numbered, or no-list presentation.
  * @returns Original document for an identical list kind, otherwise a dirty document with one updated paragraph.
@@ -33,15 +32,9 @@ export function setWriterParagraphListKind(
   if (!isWriterParagraphListKind(listKind))
     throw new Error(`Unsupported Writer paragraph list kind: ${listKind}`);
   if (paragraph.list.kind === listKind) return writerDocument;
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.map(
-      /** Replaces only the selected paragraph list kind. @param candidate - Immutable paragraph candidate. @returns Updated selected paragraph or original sibling. */
-      function updateSelectedParagraph(candidate): WriterParagraph {
-        return candidate.id === paragraphId
-          ? { ...candidate, list: { ...candidate.list, kind: listKind } }
-          : candidate;
-      },
-    ),
-  };
+  const next = writerDocument.clone();
+  const nextParagraph = next.nodes.findTextNode(paragraphId) as typeof paragraph;
+  nextParagraph.SetParagraphList({ ...nextParagraph.list, kind: listKind });
+  next.SetModified();
+  return next;
 }

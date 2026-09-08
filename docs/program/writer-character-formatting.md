@@ -4,11 +4,14 @@
 
 The static Writer workbench supports direct **Bold**, **Italic**, and single
 **Underline** formatting for one non-empty native selection contained in one
-editable paragraph. The immutable Writer paragraph stores canonical text runs
-in [`ndtxt.ts`](../../apps/office/src/sw/source/core/txtnode/ndtxt.ts); its
-legacy `text` field is the exact derived visible-text projection. Adjacent runs
-with identical attributes are normalized together, so browser-local snapshots,
-Undo, Redo, Enter splits, and paragraph joins retain the supported attributes.
+editable paragraph. `SwTextNode` stores canonical text in
+[`ndtxt.ts`](../../apps/office/src/sw/source/core/txtnode/ndtxt.ts), while its
+optional [`SwpHints`](../../apps/office/src/sw/source/core/txtnode/ndhints.ts)
+owns start-sorted [`SwTextAttr`](../../apps/office/src/sw/source/core/txtnode/txatbase.ts)
+ranges. Rendering `runs` are derived from text and hints and are never canonical
+storage. Adjacent equal spans are normalized during hint-to-run conversion, so
+browser-local snapshots, Undo, Redo, Enter splits, and paragraph joins retain
+the supported attributes.
 
 At a collapsed caret, each command toggles the pending attributes used by the
 next contiguous insertion. The command is available at **Format → Text**, on
@@ -20,8 +23,8 @@ placements derive from pinned `sw/uiconfig/swriter/menubar/menubar.xml` and
 The command adapter is
 [`txtattr.ts`](../../apps/office/src/sw/source/uibase/shells/txtattr.ts), mapped
 to `sw/source/uibase/shells/txtattr.cxx`; the model is mapped to
-`sw/source/core/txtnode/ndtxt.cxx`. It deliberately separates pure range
-formatting from browser DOM selection conversion in
+`sw/source/core/txtnode/ndtxt.cxx`, `ndhints.cxx`, and `txatbase.cxx`. It
+deliberately separates model range formatting from browser DOM selection conversion in
 [`select.ts`](../../apps/office/src/sw/source/uibase/wrtsh/select.ts).
 
 ## Clipboard and accessibility

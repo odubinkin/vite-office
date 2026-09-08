@@ -1,116 +1,112 @@
 /**
- * @fileoverview Applies bounded immutable Writer text-range replacements at the LibreOffice `sw/source/core/doc/DocumentContentOperationsManager.cxx` ownership boundary.
+ * @fileoverview Implements bounded SwPaM content operations at the pinned LibreOffice `sw/source/core/doc/DocumentContentOperationsManager.cxx` boundary.
  */
 
-import { markDocumentDirty } from "../../../../sfx2/source/doc/docfac";
-import {
-  getWriterTextFromRuns,
-  normalizeWriterTextRuns,
-  splitWriterTextRuns,
-  type WriterTextRun,
-} from "../txtnode/ndtxt";
-import type { WriterDocument, WriterParagraph } from "./writer";
+import { SwPaM, SwPosition } from "../crsr/pam";
+import { SwTextNode, normalizeWriterTextRuns, type WriterTextRun } from "../txtnode/ndtxt";
+import type { SwDoc, WriterDocument } from "./writer";
 
-/** Describes one non-empty or collapsed UTF-16 range inside a single Writer paragraph. */
+/** Describes one browser range that can be converted to a same-node SwPaM. */
 export interface WriterParagraphTextRange {
-  /** Exclusive UTF-16 range end relative to the visible paragraph text. */
+  /** Exclusive UTF-16 range end relative to the text node. */
   readonly end: number;
-  /** Stable identity of the Writer paragraph containing both range endpoints. */
+  /** Stable identity of the SwTextNode containing both endpoints. */
   readonly paragraphId: string;
-  /** Inclusive UTF-16 range start relative to the visible paragraph text. */
+  /** Inclusive UTF-16 range start relative to the text node. */
   readonly start: number;
 }
 
-/**
- * Replaces one bounded same-paragraph Writer range with immutable direct-format runs.
- *
- * @param writerDocument - Immutable prior Writer document state.
- * @param range - Same-paragraph range to remove before inserting replacement runs.
- * @param replacementRuns - Untrusted or normalized direct-format runs that replace range text.
- * @returns Original document when visible text and normalized runs remain unchanged, otherwise a dirty replacement snapshot.
- * @throws {Error} When paragraphId is unknown or range offsets are not integer paragraph bounds.
- */
+/** Applies Writer content mutations through SwPosition and SwPaM rather than view identities. */
+export class DocumentContentOperationsManager {
+  /** Creates the operations façade for one canonical SwDoc. @param document - Mutated Writer document. @returns Nothing. */
+  public constructor(private readonly document: SwDoc) {}
+
+  /** Replaces a same-node point-and-mark range with normalized text portions. @param range - Model range to replace. @param replacementRuns - Replacement content. @returns Nothing. */
+  public ReplaceRange(range: SwPaM, replacementRuns: unknown): void {
+    const start = range.Start();
+    const end = range.End();
+    const node = start.GetNode();
+    if (!(node instanceof SwTextNode) || end.GetNode() !== node)
+      throw new Error("Writer replacement range must stay inside one SwTextNode.");
+    node.ReplaceRange(start.GetContentIndex(), end.GetContentIndex(), replacementRuns);
+    this.document.SetModified();
+  }
+
+  /** Inserts plain text at one SwPosition using the node's inherited auto-format items. @param position - Model insertion position. @param text - Inserted plain text. @returns Nothing. */
+  public InsertString(position: SwPosition, text: string): void {
+    const node = position.GetNode();
+    if (!(node instanceof SwTextNode)) throw new Error("Writer insertion requires a SwTextNode.");
+    if (text.length === 0) return;
+    node.InsertText(text, position.GetContentIndex());
+    this.document.SetModified();
+  }
+
+  /** Deletes a bounded same-node SwPaM range. @param range - Model range to delete. @returns Nothing. */
+  public DeleteRange(range: SwPaM): void {
+    const start = range.Start();
+    const end = range.End();
+    const node = start.GetNode();
+    if (!(node instanceof SwTextNode) || end.GetNode() !== node)
+      throw new Error("Writer deletion range must stay inside one SwTextNode.");
+    if (start.compare(end) === 0) return;
+    node.EraseText(start.GetContentIndex(), end.GetContentIndex() - start.GetContentIndex());
+    this.document.SetModified();
+  }
+}
+
+/** Replaces one browser-resolved range through a direction-preserving SwPaM. @param writerDocument - Prior document graph. @param range - Browser-resolved range. @param replacementRuns - Replacement content. @returns Original graph for a no-op, otherwise a changed clone. */
 export function replaceWriterParagraphTextRange(
   writerDocument: WriterDocument,
   range: WriterParagraphTextRange,
   replacementRuns: unknown,
 ): WriterDocument {
-  const paragraph = writerDocument.paragraphs.find(
-    /** Finds the paragraph that contains the requested Writer range. @param candidate - Immutable paragraph candidate. @returns True only when candidate has range.paragraphId. */
-    function hasRangeParagraphId(candidate): boolean {
-      return candidate.id === range.paragraphId;
-    },
-  );
-  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${range.paragraphId}`);
+  const source = writerDocument.nodes.findTextNode(range.paragraphId);
+  if (source === undefined) throw new Error(`Unknown paragraph: ${range.paragraphId}`);
+  assertRange(source, range);
+  const normalized = normalizeWriterTextRuns(replacementRuns);
+  if (replacementIsEqual(source, range, normalized)) return writerDocument;
+  const next = writerDocument.clone();
+  const node = next.nodes.findTextNode(range.paragraphId) as SwTextNode;
+  const point = new SwPosition(node, range.end);
+  const mark = new SwPosition(node, range.start);
+  new DocumentContentOperationsManager(next).ReplaceRange(new SwPaM(point, mark), normalized);
+  return next;
+}
+
+/** Validates a browser range before constructing model positions. @param node - Range text node. @param range - Candidate range. @returns Nothing. */
+function assertRange(node: SwTextNode, range: WriterParagraphTextRange): void {
   if (
     !Number.isInteger(range.start) ||
     !Number.isInteger(range.end) ||
     range.start < 0 ||
     range.end < range.start ||
-    range.end > paragraph.text.length
+    range.end > node.Len()
   )
     throw new Error("Writer text range is outside the paragraph.");
-  const runs = replaceWriterTextRuns(paragraph, range, replacementRuns);
-  if (areWriterRunsEqual(paragraph.runs, runs)) return writerDocument;
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.map(
-      /** Replaces only the selected paragraph text-run collection. @param candidate - Existing paragraph. @returns Updated selected paragraph or untouched sibling. */
-      function replaceSelectedParagraph(candidate): WriterParagraph {
-        return candidate.id === range.paragraphId
-          ? { ...candidate, runs, text: getWriterTextFromRuns(runs) }
-          : candidate;
-      },
-    ),
-  };
 }
 
-/**
- * Produces the normalized run sequence around one validated text replacement.
- *
- * @param paragraph - Source paragraph owning the replacement range.
- * @param range - Valid same-paragraph UTF-16 replacement range.
- * @param replacementRuns - Candidate runs supplied by a browser clipboard boundary.
- * @returns Prefix, normalized replacement, and suffix runs merged where attributes match.
- */
-function replaceWriterTextRuns(
-  paragraph: WriterParagraph,
+/** Detects a range replacement that leaves canonical text and auto-format hints unchanged. @param node - Selected text node. @param range - Replaced range. @param replacement - Normalized replacement. @returns True when replacement is a no-op. */
+function replacementIsEqual(
+  node: SwTextNode,
   range: WriterParagraphTextRange,
-  replacementRuns: unknown,
-): readonly WriterTextRun[] {
-  const prefix = splitWriterTextRuns(paragraph.runs, range.start).prefix;
-  const suffix = splitWriterTextRuns(paragraph.runs, range.end).suffix;
-  return normalizeWriterTextRuns([
-    ...prefix,
-    ...normalizeWriterTextRuns(replacementRuns),
-    ...suffix,
-  ]);
-}
-
-/**
- * Compares direct-format run sequences without relying on persisted object identity.
- *
- * @param left - Existing normalized Writer runs.
- * @param right - Candidate normalized Writer runs.
- * @returns True only when visible text and every supported direct attribute match in order.
- */
-function areWriterRunsEqual(
-  left: readonly WriterTextRun[],
-  right: readonly WriterTextRun[],
+  replacement: readonly WriterTextRun[],
 ): boolean {
-  return (
-    left.length === right.length &&
-    left.every(
-      /** Compares one deterministic run position. @param run - Existing Writer run. @param index - Ordered run index. @returns True only when candidate run exactly matches. */
-      function matchesRun(run, index): boolean {
-        const candidate = right[index] as WriterTextRun;
-        return (
-          run.text === candidate.text &&
-          run.attributes.bold === candidate.attributes.bold &&
-          run.attributes.italic === candidate.attributes.italic &&
-          run.attributes.underline === candidate.attributes.underline
-        );
-      },
-    )
+  const selected = node.runs.flatMap(
+    /** Clips one complete view run to the selected range. @param run - Derived node run. @param index - Run order. @returns Selected fragment or nothing. */
+    function clipRun(run, index): readonly WriterTextRun[] {
+      const runStart = node.runs.slice(0, index).reduce(
+        /** Sums preceding run lengths. @param total - Accumulated offset. @param preceding - Earlier run. @returns Updated offset. */
+        function addLength(total, preceding): number {
+          return total + preceding.text.length;
+        },
+        0,
+      );
+      const start = Math.max(range.start, runStart);
+      const end = Math.min(range.end, runStart + run.text.length);
+      return end <= start
+        ? []
+        : [{ attributes: run.attributes, text: run.text.slice(start - runStart, end - runStart) }];
+    },
   );
+  return JSON.stringify(normalizeWriterTextRuns(selected)) === JSON.stringify(replacement);
 }

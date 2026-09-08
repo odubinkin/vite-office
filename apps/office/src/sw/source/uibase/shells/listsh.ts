@@ -2,8 +2,7 @@
  * @fileoverview Implements bounded Writer list-level commands at the LibreOffice `sw/source/uibase/shells/listsh.cxx` ownership boundary.
  */
 
-import { markDocumentDirty } from "../../../../sfx2/source/doc/docfac";
-import type { WriterDocument, WriterParagraph } from "../../core/doc/writer";
+import type { WriterDocument } from "../../core/doc/writer";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 
 /** Identifies the two executable Writer list-level commands. */
@@ -15,7 +14,7 @@ export type WriterListLevelCommand = "demote" | "promote";
  * Demote corresponds to `.uno:DecrementLevel` and increases the zero-based nesting level. Promote corresponds
  * to `.uno:IncrementLevel` and decreases it. Ordinary paragraphs and requests beyond either boundary are no-ops.
  *
- * @param writerDocument - Immutable prior Writer document state.
+ * @param writerDocument - Prior Writer document graph.
  * @param paragraphId - Existing paragraph identity targeted by the Writer list command.
  * @param command - Promote or Demote command requested by the Writer menu or numbering toolbar.
  * @returns Original document for non-list or boundary no-ops, otherwise a dirty document with only the level changed.
@@ -38,15 +37,9 @@ export function changeWriterParagraphListLevel(
   if (paragraph.list.kind === "none") return writerDocument;
   const nextLevel = command === "demote" ? paragraph.list.level + 1 : paragraph.list.level - 1;
   if (nextLevel < 0 || nextLevel > WRITER_MAX_LIST_LEVEL) return writerDocument;
-  return {
-    document: markDocumentDirty(writerDocument.document),
-    paragraphs: writerDocument.paragraphs.map(
-      /** Updates only the active list paragraph while retaining its text, kind, style, and sibling identity. @param candidate - Immutable paragraph candidate. @returns Updated target or preserved sibling. */
-      function updateListLevel(candidate): WriterParagraph {
-        return candidate.id === paragraphId
-          ? { ...candidate, list: { ...candidate.list, level: nextLevel } }
-          : candidate;
-      },
-    ),
-  };
+  const next = writerDocument.clone();
+  const nextParagraph = next.nodes.findTextNode(paragraphId) as typeof paragraph;
+  nextParagraph.SetParagraphList({ ...nextParagraph.list, level: nextLevel });
+  next.SetModified();
+  return next;
 }

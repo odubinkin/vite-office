@@ -16,13 +16,13 @@ import {
   replaceWriterParagraph,
   setWriterParagraphAlignment,
   setWriterParagraphStyle,
+  serializeWriterDocument,
   toggleWriterParagraphCharacterFormat,
   type WriterDocument,
   type WriterParagraphAlignment,
   type WriterParagraphStyle,
   type WriterParagraphMoveDirection,
 } from "./writer";
-import { createWriterTextRuns } from "../txtnode/ndtxt";
 
 /**
  * Creates a valid Writer document fixture.
@@ -33,6 +33,23 @@ function createFixture(): WriterDocument {
   return createWriterDocument(
     createDocument({ id: "writer-1", suiteId: "writer", title: "Writer" }),
     "p-1",
+  );
+}
+
+/** Projects canonical SwTextNodes to stable assertion records. @param writer - Writer document graph. @returns Cycle-free paragraph values. */
+function projectParagraphs(writer: WriterDocument) {
+  return writer.paragraphs.map(
+    /** Projects one text node without its SwNodes ownership graph. @param paragraph - Canonical body node. @returns View assertion record. */
+    function projectParagraph(paragraph) {
+      return {
+        alignment: paragraph.alignment,
+        id: paragraph.id,
+        list: paragraph.list,
+        runs: paragraph.runs,
+        style: paragraph.style,
+        text: paragraph.text,
+      };
+    },
   );
 }
 
@@ -139,6 +156,19 @@ function formatMissingParagraph(writer: WriterDocument): WriterDocument {
   return toggleWriterParagraphCharacterFormat(writer, "missing", 0, 1, "bold");
 }
 
+/** Creates an invalid range-format operation for error assertions. @param writer - Source document. @param start - Invalid range start. @param end - Range end. @returns Deferred operation. */
+function throwingWriterFormat(
+  writer: WriterDocument,
+  start: number,
+  end: number,
+): () => WriterDocument {
+  /** Runs the invalid range operation. @returns The invalid result; this always throws. */
+  function formatInvalidRange(): WriterDocument {
+    return toggleWriterParagraphCharacterFormat(writer, "p-1", start, end, "bold");
+  }
+  return formatInvalidRange;
+}
+
 /**
  * Attempts to insert text at a non-integer UTF-16 offset.
  *
@@ -200,21 +230,20 @@ describe("Writer paragraph body" /**
    * @returns Nothing; assertions validate successful paragraph operations.
    */, function editsParagraphs(): void {
     const writer = createFixture();
-    const withSecondParagraph: WriterDocument = {
-      ...writer,
-      paragraphs: [
-        ...writer.paragraphs,
-        {
-          alignment: "left",
-          id: "p-2",
-          list: { kind: "none", level: 0 },
-          runs: createWriterTextRuns("unchanged"),
-          style: "default",
-          text: "unchanged",
-        },
-      ],
-    };
+    const withSecondParagraph = replaceWriterParagraph(
+      appendWriterParagraph(writer, "p-2"),
+      "p-2",
+      "unchanged",
+    );
     const inserted = insertWriterText(withSecondParagraph, "p-1", 0, "hello");
+    expect(insertWriterText(inserted, "p-1", 0, "")).toBe(inserted);
+    expect(
+      insertWriterTextWithAttributes(inserted, "p-1", 0, "", {
+        bold: true,
+        italic: false,
+        underline: false,
+      }),
+    ).toBe(inserted);
     const middle = insertWriterText(inserted, "p-1", 2, "!");
     const replaced = replaceWriterParagraph(middle, "p-2", "updated");
     const unchanged = replaceWriterParagraph(replaced, "p-2", "updated");
@@ -225,6 +254,7 @@ describe("Writer paragraph body" /**
           alignment: "left",
           id: "p-1",
           list: { kind: "none", level: 0 },
+          runs: [],
           style: "default",
           text: "",
         },
@@ -235,12 +265,15 @@ describe("Writer paragraph body" /**
     expect(middle.paragraphs[0]?.text).toBe("he!llo");
     expect(middle.paragraphs[1]?.text).toBe("unchanged");
     expect(toggleWriterParagraphCharacterFormat(middle, "p-1", 2, 2, "bold")).toBe(middle);
-    expect(toggleWriterParagraphCharacterFormat(middle, "p-1", 0, 2, "bold").paragraphs[1]).toBe(
-      middle.paragraphs[1],
-    );
+    expect(throwingWriterFormat(middle, -1, 2)).toThrow("outside the paragraph");
+    expect(
+      toggleWriterParagraphCharacterFormat(middle, "p-1", 0, 2, "bold").paragraphs[1],
+    ).toMatchObject({ id: "p-2", text: "unchanged" });
     expect(replaced.paragraphs[1]?.text).toBe("updated");
     expect(unchanged).toBe(replaced);
-    expect(JSON.parse(JSON.stringify(replaced))).toEqual(replaced);
+    expect(JSON.parse(JSON.stringify(serializeWriterDocument(replaced)))).toEqual(
+      serializeWriterDocument(replaced),
+    );
   });
 
   it("appends an ordered empty paragraph immutably and rejects duplicate identities" /**
@@ -251,7 +284,7 @@ describe("Writer paragraph body" /**
     const writer = createFixture();
     const appended = appendWriterParagraph(writer, "p-2");
 
-    expect(writer.paragraphs).toEqual([
+    expect(projectParagraphs(writer)).toEqual([
       {
         alignment: "left",
         id: "p-1",
@@ -261,25 +294,25 @@ describe("Writer paragraph body" /**
         text: "",
       },
     ]);
-    expect(appended).toMatchObject({
-      document: { lifecycle: "dirty", revision: 1 },
-      paragraphs: [
-        {
-          alignment: "left",
-          id: "p-1",
-          list: { kind: "none", level: 0 },
-          style: "default",
-          text: "",
-        },
-        {
-          alignment: "left",
-          id: "p-2",
-          list: { kind: "none", level: 0 },
-          style: "default",
-          text: "",
-        },
-      ],
-    });
+    expect(appended.document).toMatchObject({ lifecycle: "dirty", revision: 1 });
+    expect(projectParagraphs(appended)).toEqual([
+      {
+        alignment: "left",
+        id: "p-1",
+        list: { kind: "none", level: 0 },
+        runs: [],
+        style: "default",
+        text: "",
+      },
+      {
+        alignment: "left",
+        id: "p-2",
+        list: { kind: "none", level: 0 },
+        runs: [],
+        style: "default",
+        text: "",
+      },
+    ]);
     expect(
       /**
        * Executes the duplicate-identity failure case for Vitest.
@@ -311,18 +344,17 @@ describe("Writer paragraph body" /**
     const removed = removeWriterParagraph(writer, "p-1");
 
     expect(writer.paragraphs).toHaveLength(2);
-    expect(removed).toMatchObject({
-      document: { lifecycle: "dirty", revision: 1 },
-      paragraphs: [
-        {
-          alignment: "left",
-          id: "p-2",
-          list: { kind: "none", level: 0 },
-          style: "default",
-          text: "",
-        },
-      ],
-    });
+    expect(removed.document).toMatchObject({ lifecycle: "dirty", revision: 1 });
+    expect(projectParagraphs(removed)).toEqual([
+      {
+        alignment: "left",
+        id: "p-2",
+        list: { kind: "none", level: 0 },
+        runs: [],
+        style: "default",
+        text: "",
+      },
+    ]);
     expect(
       /**
        * Executes the missing-paragraph removal failure case for Vitest.
@@ -353,13 +385,10 @@ describe("Writer paragraph body" /**
     const writer = appendWriterParagraph(createFixture(), "p-2");
     const aligned = setWriterParagraphAlignment(writer, "p-2", "center");
     const unchanged = setWriterParagraphAlignment(aligned, "p-2", "center");
-    const legacyWriter = {
-      ...writer,
-      paragraphs: [{ id: "p-1", text: "Legacy" }] as unknown as WriterDocument["paragraphs"],
-    };
+    const legacyWriter = { document: writer.document, paragraphs: [{ id: "p-1", text: "Legacy" }] };
     const normalized = normalizeWriterParagraphFormatting(legacyWriter);
 
-    expect(writer.paragraphs[1]).toEqual({
+    expect(projectParagraphs(writer)[1]).toEqual({
       alignment: "left",
       id: "p-2",
       list: { kind: "none", level: 0 },
@@ -367,8 +396,8 @@ describe("Writer paragraph body" /**
       style: "default",
       text: "",
     });
-    expect(aligned.paragraphs[0]).toBe(writer.paragraphs[0]);
-    expect(aligned.paragraphs[1]).toEqual({
+    expect(aligned.paragraphs[0]).toMatchObject({ id: "p-1", text: "" });
+    expect(projectParagraphs(aligned)[1]).toEqual({
       alignment: "center",
       id: "p-2",
       list: { kind: "none", level: 0 },
@@ -377,17 +406,21 @@ describe("Writer paragraph body" /**
       text: "",
     });
     expect(unchanged).toBe(aligned);
-    expect(normalized).toMatchObject({
-      paragraphs: [
-        {
-          alignment: "left",
-          id: "p-1",
-          list: { kind: "none", level: 0 },
-          style: "default",
-          text: "Legacy",
-        },
-      ],
-    });
+    expect(projectParagraphs(normalized)).toEqual([
+      {
+        alignment: "left",
+        id: "p-1",
+        list: { kind: "none", level: 0 },
+        runs: [
+          {
+            attributes: { bold: false, italic: false, underline: false },
+            text: "Legacy",
+          },
+        ],
+        style: "default",
+        text: "Legacy",
+      },
+    ]);
     expect(normalizeWriterParagraphFormatting(aligned)).toBe(aligned);
     expect(
       /** Executes the unsupported-alignment failure case for Vitest. @returns Invalid alignment transition; delegated call always throws. */
@@ -435,7 +468,6 @@ describe("Writer paragraph body" /**
     expect(movedUp.paragraphs[0]?.id).toBe("p-2");
     expect(movedUp.paragraphs[1]?.id).toBe("p-1");
     expect(movedUp.paragraphs[2]?.id).toBe("p-3");
-    expect(movedUp.paragraphs[0]).toBe(styled.paragraphs[1]);
     expect(movedUp.paragraphs[0]).toMatchObject({ alignment: "right", style: "heading-1" });
     expect(movedDown.paragraphs[0]?.id).toBe("p-1");
     expect(movedDown.paragraphs[1]?.id).toBe("p-2");

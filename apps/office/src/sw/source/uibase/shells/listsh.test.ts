@@ -23,13 +23,8 @@ function createListLevelFixture(): WriterDocument {
   const paragraph = writer.paragraphs[0];
   if (paragraph === undefined)
     throw new Error("List-level fixture requires its initial paragraph.");
-  return {
-    ...writer,
-    paragraphs: [
-      { ...paragraph, list: { kind: "numbered", level: 1 } },
-      ...writer.paragraphs.slice(1),
-    ],
-  };
+  paragraph.SetParagraphList({ kind: "numbered", level: 1 });
+  return writer;
 }
 
 describe("Writer list shell" /** Groups bounded Writer Promote and Demote command tests. @returns Nothing; Vitest registers the enclosed cases. */, function defineWriterListShellTests(): void {
@@ -39,39 +34,15 @@ describe("Writer list shell" /** Groups bounded Writer Promote and Demote comman
     const promoted = changeWriterParagraphListLevel(demoted, "p-1", "promote");
     expect(demoted.document.lifecycle).toBe("dirty");
     expect(demoted.paragraphs[0]?.list).toEqual({ kind: "numbered", level: 2 });
-    expect(demoted.paragraphs[1]).toBe(writer.paragraphs[1]);
+    expect(demoted.paragraphs[1]).toMatchObject({ id: "p-2" });
     expect(promoted.paragraphs[0]?.list).toEqual({ kind: "numbered", level: 1 });
   });
 
   it("keeps non-list and bounded commands as no-ops while rejecting invalid requests" /** Verifies commands cannot create a list or exceed the bounded nesting contract. @returns Nothing; no-op and error paths are asserted. */, function guardsWriterListLevel(): void {
     const writer = createListLevelFixture();
-    const root = {
-      ...writer,
-      paragraphs: [
-        {
-          ...(writer.paragraphs[0] as NonNullable<(typeof writer.paragraphs)[number]>),
-          list: { kind: "bullet" as const, level: 0 },
-        },
-      ],
-    };
-    const deepest = {
-      ...writer,
-      paragraphs: [
-        {
-          ...(writer.paragraphs[0] as NonNullable<(typeof writer.paragraphs)[number]>),
-          list: { kind: "bullet" as const, level: WRITER_MAX_LIST_LEVEL },
-        },
-      ],
-    };
-    const ordinary = {
-      ...writer,
-      paragraphs: [
-        {
-          ...(writer.paragraphs[0] as NonNullable<(typeof writer.paragraphs)[number]>),
-          list: { kind: "none" as const, level: 0 },
-        },
-      ],
-    };
+    const root = withList(writer, "bullet", 0);
+    const deepest = withList(writer, "bullet", WRITER_MAX_LIST_LEVEL);
+    const ordinary = withList(writer, "none", 0);
     expect(changeWriterParagraphListLevel(root, "p-1", "promote")).toBe(root);
     expect(changeWriterParagraphListLevel(deepest, "p-1", "demote")).toBe(deepest);
     expect(changeWriterParagraphListLevel(ordinary, "p-1", "demote")).toBe(ordinary);
@@ -89,3 +60,16 @@ describe("Writer list shell" /** Groups bounded Writer Promote and Demote comman
     ).toThrowError();
   });
 });
+
+/** Clones a list fixture and changes its first SwTextNode list items. @param writer - Source SwDoc. @param kind - List kind. @param level - List level. @returns Independent fixture. */
+function withList(
+  writer: WriterDocument,
+  kind: "bullet" | "none" | "numbered",
+  level: number,
+): WriterDocument {
+  const clone = writer.clone();
+  const paragraph = clone.paragraphs[0];
+  if (paragraph === undefined) throw new Error("List fixture requires one paragraph.");
+  paragraph.SetParagraphList({ kind, level });
+  return clone;
+}

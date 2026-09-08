@@ -44,7 +44,7 @@
       "capability": "Undo and Redo of bounded Writer paragraph history",
       "status": "implemented",
       "gaps": [
-        "The local immutable snapshot history covers bounded plain-text paragraphs only, not Writer's full document, style, frame, table, tracked-change, or repair semantics.",
+        "The local snapshot history clones the bounded SwDoc graph, but it does not yet implement Writer's native undo objects, repair semantics, layout, tables, tracked changes, or full style system.",
         "The mapped upstream test exercises tiled rendering invalidation behavior that browser history does not expose."
       ],
       "upstream": {
@@ -358,7 +358,9 @@
       },
       "local": {
         "implementation": [
-          { "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts", "marker": "toggleWriterTextRangeFormat" },
+          { "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts", "marker": "export class SwTextNode" },
+          { "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts", "marker": "export class SwpHints" },
+          { "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts", "marker": "export class SwTextAttr" },
           { "path": "apps/office/src/sw/source/uibase/shells/txtattr.ts", "marker": "toggleWriterCharacterFormat" },
           { "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts", "marker": "getWriterSameParagraphSelection" },
           { "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "marker": "renderWriterTextRun" },
@@ -427,6 +429,52 @@
           { "path": "docs/program/writer-clipboard.md", "marker": "Browser Writer clipboard" },
           { "path": "docs/program/writer-command-placement.md", "marker": ".uno:Cut" },
           { "path": "docs/program/source-tree.md", "marker": "DocumentContentOperationsManager.ts" }
+        ]
+      }
+    },
+    {
+      "id": "LO-WRITER-0111",
+      "capability": "Writer core uses a bounded SwDoc, SwNodes, SwTextNode, SwPosition, SwPaM, SwTextAttr, and SwpHints document graph",
+      "status": "implemented",
+      "gaps": [
+        "The fixed body sections, node ownership, text nodes, positions, directional ranges, and bounded auto-format hints are implemented, but the full item pool, registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
+        "Browser commands clone the graph for React history and persistence uses an explicit snapshot. Native Writer undo objects and ODT/DOCX filters are not yet implemented."
+      ],
+      "upstream": {
+        "implementation": [
+          { "path": "sw/source/core/doc/docnew.cxx", "marker": "SwDoc::SwDoc" },
+          { "path": "sw/source/core/docnode/nodes.cxx", "marker": "SwNodes::SwNodes" },
+          { "path": "sw/source/core/txtnode/ndtxt.cxx", "marker": "SwTextNode::SwTextNode" },
+          { "path": "sw/source/core/crsr/pam.cxx", "marker": "SwPaM::SwPaM" },
+          { "path": "sw/source/core/txtnode/txatbase.cxx", "marker": "SwTextAttr::SwTextAttr" }
+        ],
+        "tests": [
+          { "path": "sw/qa/core/uwriter.cxx", "marker": "SwNodes& rNds" },
+          { "path": "sw/qa/core/txtnode/txtnode.cxx", "marker": "SwTextAttr* pAttr" }
+        ],
+        "docs": [
+          { "path": "sw/README.md", "marker": "The central class for a document is `SwDoc`" },
+          { "path": "sw/README.md", "marker": "core`: Writer core (document model" }
+        ]
+      },
+      "local": {
+        "implementation": [
+          { "path": "apps/office/src/sw/source/core/doc/doc.ts", "marker": "export class SwDoc" },
+          { "path": "apps/office/src/sw/source/core/docnode/nodes.ts", "marker": "export class SwNodes" },
+          { "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts", "marker": "export class SwTextNode" },
+          { "path": "apps/office/src/sw/source/core/crsr/pam.ts", "marker": "export class SwPaM" },
+          { "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts", "marker": "export class SwTextAttr" },
+          { "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts", "marker": "export class SwpHints" }
+        ],
+        "tests": [
+          { "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts", "marker": "Writer SwNodes graph" },
+          { "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts", "marker": "Writer SwPosition and SwPaM" },
+          { "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts", "marker": "Writer SwTextAttr and SwpHints" }
+        ],
+        "docs": [
+          { "path": "docs/program/writer-core-model.md", "marker": "Writer core document model" },
+          { "path": "docs/program/architecture.md", "marker": "identity-bearing, cyclic object graph" },
+          { "path": "docs/program/source-tree.md", "marker": "SwNodeIndex" }
         ]
       }
     }

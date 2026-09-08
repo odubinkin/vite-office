@@ -9,8 +9,9 @@ item, toolbar button, or canvas action button for paragraph creation.
 uses the browser selection API to calculate the UTF-16 caret offset relative to
 the editable paragraph. When that selection is collapsed and belongs to the
 paragraph, it prevents the browser's uncontrolled DOM mutation and asks
-[`view`](../../apps/office/src/sw/source/uibase/uiview/view.tsx) to
-apply a pure immutable transition.
+[`view`](../../apps/office/src/sw/source/uibase/uiview/view.tsx) to apply a
+browser transaction. That transaction clones the `SwDoc` graph, then performs
+the model mutation through `SwTextNode`/`SwNodes` operations.
 
 [`splitWriterParagraph`](../../apps/office/src/sw/source/core/doc/writer.ts) replaces the
 source text with the prefix, inserts an adjacent paragraph containing the

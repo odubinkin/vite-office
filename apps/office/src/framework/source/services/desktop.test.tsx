@@ -9,6 +9,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Desktop as App } from "./desktop";
 import { createDocument } from "../../../sfx2/source/doc/docfac";
 import { createWriterTextRuns } from "../../../sw/source/core/txtnode/ndtxt";
+import { normalizeWriterParagraphFormatting } from "../../../sw/source/core/doc/writer";
 import {
   saveWriterDocument,
   type WriterSnapshotState,
@@ -341,31 +342,34 @@ describe("App" /**
       const adapter = new IndexedDbDocumentStorageAdapter<WriterSnapshotState>(
         "vite-office-writer-workbench",
       );
-      await saveWriterDocument(adapter, {
-        document: createDocument({
-          id: "writer-workbench",
-          suiteId: "writer",
-          title: "Untitled Writer Document",
+      await saveWriterDocument(
+        adapter,
+        normalizeWriterParagraphFormatting({
+          document: createDocument({
+            id: "writer-workbench",
+            suiteId: "writer",
+            title: "Untitled Writer Document",
+          }),
+          paragraphs: [
+            {
+              alignment: "left",
+              id: "writer-paragraph-1",
+              list: { kind: "none", level: 0 },
+              runs: createWriterTextRuns("First stored paragraph"),
+              style: "default",
+              text: "First stored paragraph",
+            },
+            {
+              alignment: "left",
+              id: "writer-paragraph-3",
+              list: { kind: "none", level: 0 },
+              runs: createWriterTextRuns("Third stored paragraph"),
+              style: "default",
+              text: "Third stored paragraph",
+            },
+          ],
         }),
-        paragraphs: [
-          {
-            alignment: "left",
-            id: "writer-paragraph-1",
-            list: { kind: "none", level: 0 },
-            runs: createWriterTextRuns("First stored paragraph"),
-            style: "default",
-            text: "First stored paragraph",
-          },
-          {
-            alignment: "left",
-            id: "writer-paragraph-3",
-            list: { kind: "none", level: 0 },
-            runs: createWriterTextRuns("Third stored paragraph"),
-            style: "default",
-            text: "Third stored paragraph",
-          },
-        ],
-      });
+      );
       render(<App />);
       await act(
         /** Starts the asynchronous load of the irregular saved body. @returns A fulfilled React act promise. */

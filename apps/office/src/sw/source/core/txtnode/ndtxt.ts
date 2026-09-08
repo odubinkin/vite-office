@@ -1,22 +1,23 @@
 /**
- * @fileoverview Defines immutable Writer text-node runs and direct character attributes at the LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
+ * @fileoverview Implements Writer text nodes plus derived browser text runs at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
+
+import {
+  createDefaultWriterParagraphList,
+  normalizeWriterParagraphList,
+  type WriterParagraphList,
+} from "../doc/list";
+import { SwContentNode, type SwStartNode } from "../docnode/node";
+import type { SwNodes } from "../docnode/nodes";
+import { createSwpHintsFromSnapshot, SwpHints } from "./ndhints";
+import type { SwTextAttrSnapshot, WriterCharacterAttributes } from "./txatbase";
+export type { WriterCharacterAttributes } from "./txatbase";
 
 /** Names the bounded direct character attributes currently supported by the browser Writer. */
 export const WRITER_CHARACTER_FORMATS = ["bold", "italic", "underline"] as const;
 
 /** Identifies one supported direct Writer character attribute. */
 export type WriterCharacterFormat = (typeof WRITER_CHARACTER_FORMATS)[number];
-
-/** Describes direct character attributes applied uniformly to one text run. */
-export interface WriterCharacterAttributes {
-  /** Whether the text run renders with a bold font weight. */
-  readonly bold: boolean;
-  /** Whether the text run renders with an italic font posture. */
-  readonly italic: boolean;
-  /** Whether the text run renders with a single underline. */
-  readonly underline: boolean;
-}
 
 /** Describes one non-empty immutable Writer text fragment and its direct attributes. */
 export interface WriterTextRun {
@@ -32,6 +33,18 @@ export const DEFAULT_WRITER_CHARACTER_ATTRIBUTES: WriterCharacterAttributes = {
   italic: false,
   underline: false,
 };
+
+/** Enumerates the bounded paragraph alignments represented by RES_PARATR_ADJUST. */
+export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"] as const;
+
+/** Identifies one supported horizontal paragraph alignment. */
+export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[number];
+
+/** Enumerates the bounded paragraph style collections currently exposed by Writer. */
+export const WRITER_PARAGRAPH_STYLES = ["default", "heading-1"] as const;
+
+/** Identifies one supported Writer text format collection. */
+export type WriterParagraphStyle = (typeof WRITER_PARAGRAPH_STYLES)[number];
 
 /**
  * Creates one unformatted text-run sequence from plain text.
@@ -282,6 +295,245 @@ export function getWriterTextAttributesAtOffset(
     },
   );
   return run?.attributes ?? DEFAULT_WRITER_CHARACTER_ATTRIBUTES;
+}
+
+/** Cycle-free persisted record for one regular-content SwTextNode. */
+export interface SwTextNodeSnapshot {
+  /** Paragraph adjustment item. */
+  readonly alignment: WriterParagraphAlignment;
+  /** Ordered direct-format text attributes. */
+  readonly hints: readonly SwTextAttrSnapshot[];
+  /** Stable browser identity associated with this node. */
+  readonly id: string;
+  /** Paragraph numbering/list items. */
+  readonly list: WriterParagraphList;
+  /** Paragraph text format collection identity. */
+  readonly style: WriterParagraphStyle;
+  /** Canonical UTF-16 text owned by the node. */
+  readonly text: string;
+}
+
+/**
+ * Owns one Writer paragraph's canonical text, paragraph items, format collection, and range hints.
+ *
+ * The `runs` property is intentionally a derived rendering/clipboard projection and is never stored.
+ */
+export class SwTextNode extends SwContentNode {
+  private mText: string;
+  private pSwpHints: SwpHints | undefined;
+  private paragraphAlignment: WriterParagraphAlignment = "left";
+  private paragraphList: WriterParagraphList = createDefaultWriterParagraphList();
+  private textFormatCollection: WriterParagraphStyle = "default";
+
+  /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param id - Stable node identity. @param startOfSection - Containing section. @param text - Initial canonical text. @returns Nothing. */
+  public constructor(nodes: SwNodes, id: string, startOfSection: SwStartNode, text = "") {
+    super(nodes, id, startOfSection);
+    this.mText = text;
+  }
+
+  /** Returns the canonical node text. @returns Canonical text. */
+  public GetText(): string {
+    return this.mText;
+  }
+
+  /** Exposes canonical text to existing read-only Writer view adapters. @returns Canonical text. */
+  public get text(): string {
+    return this.mText;
+  }
+
+  /** Returns text length in UTF-16 code units, matching Writer content indices. @returns UTF-16 length. */
+  public Len(): number {
+    return this.mText.length;
+  }
+
+  /** Returns the optional direct-format hint container. @returns Owned hints, when allocated. */
+  public GetpSwpHints(): SwpHints | undefined {
+    return this.pSwpHints;
+  }
+
+  /** Returns an existing hint container or creates it lazily. @returns Owned hints. */
+  public GetOrCreateSwpHints(): SwpHints {
+    this.pSwpHints ??= new SwpHints();
+    return this.pSwpHints;
+  }
+
+  /** Returns the paragraph adjustment item as a view-friendly value. @returns Paragraph alignment. */
+  public get alignment(): WriterParagraphAlignment {
+    return this.paragraphAlignment;
+  }
+
+  /** Returns a copy of the bounded numbering/list items. @returns Paragraph list items. */
+  public get list(): WriterParagraphList {
+    return { ...this.paragraphList };
+  }
+
+  /** Returns the paragraph's text format collection identity. @returns Paragraph style identity. */
+  public get style(): WriterParagraphStyle {
+    return this.textFormatCollection;
+  }
+
+  /** Derives complete rendering runs from canonical text and range hints. @returns Complete rendering projection. */
+  public get runs(): readonly WriterTextRun[] {
+    return this.pSwpHints === undefined
+      ? createWriterTextRuns(this.mText)
+      : this.pSwpHints.toTextRuns(this.mText);
+  }
+
+  /** Sets the paragraph adjustment item. @param alignment - New paragraph alignment. @returns Nothing. */
+  public SetParagraphAlignment(alignment: WriterParagraphAlignment): void {
+    this.paragraphAlignment = alignment;
+  }
+
+  /** Changes the paragraph text format collection. @param style - New collection identity. @returns Nothing. */
+  public ChgFormatColl(style: WriterParagraphStyle): void {
+    this.textFormatCollection = style;
+  }
+
+  /** Sets the bounded numbering/list items. @param list - New list items. @returns Nothing. */
+  public SetParagraphList(list: WriterParagraphList): void {
+    this.paragraphList = normalizeWriterParagraphList(list);
+  }
+
+  /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @returns Inserted text. */
+  public InsertText(
+    text: string,
+    offset: number,
+    attributes = this.getCharacterAttributesAt(offset),
+  ): string {
+    const runs = insertWriterTextRun(this.runs, offset, text, attributes);
+    this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
+    this.setHintsFromRuns(runs);
+    return text;
+  }
+
+  /** Erases one bounded text range and adjusts all intersecting hints. @param start - Inclusive erase offset. @param count - Maximum erased length. @returns Nothing. */
+  public EraseText(start: number, count = Number.MAX_SAFE_INTEGER): void {
+    const end = Math.min(this.mText.length, start + count);
+    this.assertRange(start, end);
+    const prefix = splitWriterTextRuns(this.runs, start).prefix;
+    const suffix = splitWriterTextRuns(this.runs, end).suffix;
+    this.mText = `${this.mText.slice(0, start)}${this.mText.slice(end)}`;
+    this.setHintsFromRuns([...prefix, ...suffix]);
+  }
+
+  /** Replaces one text range with caller-normalized direct-format runs. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacementRuns - Replacement content. @returns Nothing. */
+  public ReplaceRange(start: number, end: number, replacementRuns: unknown): void {
+    this.assertRange(start, end);
+    const prefix = splitWriterTextRuns(this.runs, start).prefix;
+    const suffix = splitWriterTextRuns(this.runs, end).suffix;
+    const replacement = normalizeWriterTextRuns(replacementRuns);
+    this.mText = `${this.mText.slice(0, start)}${getWriterTextFromRuns(replacement)}${this.mText.slice(end)}`;
+    this.setHintsFromRuns([...prefix, ...replacement, ...suffix]);
+  }
+
+  /** Replaces the complete node text and clears direct character hints. @param text - New canonical text. @returns Nothing. */
+  public SetText(text: string): void {
+    this.mText = text;
+    this.pSwpHints = undefined;
+  }
+
+  /** Applies or removes one direct format over a non-empty range. @param start - Inclusive format start. @param end - Exclusive format end. @param format - Toggled direct property. @returns Nothing. */
+  public ToggleTextRangeFormat(start: number, end: number, format: WriterCharacterFormat): void {
+    this.assertRange(start, end);
+    this.setTextRuns(toggleWriterTextRangeFormat(this.runs, start, end, format));
+  }
+
+  /** Reads direct attributes inherited by a collapsed caret. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
+  public getCharacterAttributesAt(offset: number): WriterCharacterAttributes {
+    return this.pSwpHints === undefined
+      ? getWriterTextAttributesAtOffset(this.runs, offset)
+      : this.pSwpHints.getCharacterAttributes(this.mText, offset);
+  }
+
+  /** Splits this node at one content offset and returns an uninserted trailing sibling. @param offset - UTF-16 split offset. @param nextId - Trailing node identity. @returns Prepared trailing text node. */
+  public SplitContent(offset: number, nextId: string): SwTextNode {
+    if (nextId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
+    this.assertRange(offset, offset);
+    const split = splitWriterTextRuns(this.runs, offset);
+    const trailing = new SwTextNode(
+      this.GetNodes(),
+      nextId,
+      this.StartOfSectionNode(),
+      getWriterTextFromRuns(split.suffix),
+    );
+    trailing.SetParagraphAlignment(this.paragraphAlignment);
+    trailing.ChgFormatColl(this.textFormatCollection);
+    trailing.SetParagraphList(this.paragraphList);
+    trailing.setHintsFromRuns(split.suffix);
+    this.mText = getWriterTextFromRuns(split.prefix);
+    this.setHintsFromRuns(split.prefix);
+    return trailing;
+  }
+
+  /** Appends another text node's content while preserving its direct attributes. @param source - Appended text node. @returns Nothing. */
+  public AppendTextNode(source: SwTextNode): void {
+    this.setTextRuns([...this.runs, ...source.runs]);
+  }
+
+  /** Creates a cycle-free persisted record. @returns Text-node snapshot. */
+  public toSnapshot(): SwTextNodeSnapshot {
+    return {
+      alignment: this.paragraphAlignment,
+      hints: this.pSwpHints?.toSnapshot() ?? [],
+      id: this.id,
+      list: { ...this.paragraphList },
+      style: this.textFormatCollection,
+      text: this.mText,
+    };
+  }
+
+  /** Restores one text node into an existing SwNodes content section. @param nodes - Owning node array. @param startOfSection - Containing section. @param snapshot - Persisted node state. @returns Restored text node. */
+  public static fromSnapshot(
+    nodes: SwNodes,
+    startOfSection: SwStartNode,
+    snapshot: SwTextNodeSnapshot,
+  ): SwTextNode {
+    const node = new SwTextNode(nodes, snapshot.id, startOfSection, snapshot.text);
+    node.SetParagraphAlignment(
+      isWriterParagraphAlignment(snapshot.alignment) ? snapshot.alignment : "left",
+    );
+    node.ChgFormatColl(isWriterParagraphStyle(snapshot.style) ? snapshot.style : "default");
+    node.SetParagraphList(snapshot.list);
+    const hints = createSwpHintsFromSnapshot(snapshot.hints);
+    node.pSwpHints = hints.Count() === 0 ? undefined : hints;
+    return node;
+  }
+
+  /** Replaces canonical text and derives hints from complete boundary runs. @param runs - Complete text runs. @returns Nothing. */
+  private setTextRuns(runs: readonly WriterTextRun[]): void {
+    const normalized = normalizeWriterTextRuns(runs);
+    this.mText = getWriterTextFromRuns(normalized);
+    this.setHintsFromRuns(normalized);
+  }
+
+  /** Stores only non-default range hints for complete text runs. @param runs - Complete text runs. @returns Nothing. */
+  private setHintsFromRuns(runs: readonly WriterTextRun[]): void {
+    const hints = new SwpHints();
+    hints.setTextRuns(runs);
+    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
+  }
+
+  /** Validates a same-node UTF-16 range. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
+  private assertRange(start: number, end: number): void {
+    if (
+      !Number.isInteger(start) ||
+      !Number.isInteger(end) ||
+      start < 0 ||
+      end < start ||
+      end > this.mText.length
+    )
+      throw new Error("Writer text range is outside the text node.");
+  }
+}
+
+/** Checks a paragraph adjustment item read from storage or UI. @param value - Unknown runtime value. @returns True for a supported alignment. */
+export function isWriterParagraphAlignment(value: unknown): value is WriterParagraphAlignment {
+  return WRITER_PARAGRAPH_ALIGNMENTS.includes(value as WriterParagraphAlignment);
+}
+
+/** Checks a text format collection identity read from storage or UI. @param value - Unknown runtime value. @returns True for a supported paragraph style. */
+export function isWriterParagraphStyle(value: unknown): value is WriterParagraphStyle {
+  return WRITER_PARAGRAPH_STYLES.includes(value as WriterParagraphStyle);
 }
 
 /** Checks equality of two bounded Writer character attribute records. @param left - First attributes. @param right - Second attributes. @returns True only when every direct attribute matches. */

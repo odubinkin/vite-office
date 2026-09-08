@@ -2,10 +2,12 @@
 
 ## Architectural intent
 
-Vite Office preserves LibreOffice's recognizable product and document domains
-without copying its native runtime architecture into the browser. Shared models,
-commands, formats, and services remain independent of suite-specific UI. Browser
-adapters isolate storage, workers, rendering, and platform APIs.
+Vite Office reimplements LibreOffice's recognizable product and document
+domains in TypeScript. Document models, ownership boundaries, algorithms, and
+format semantics follow the pinned LibreOffice sources as closely as the browser
+runtime permits. Rendering, input, storage, workers, and other platform concerns
+use browser adapters and may deliberately differ from VCL or operating-system
+code.
 
 The deployable boundary is a set of static assets. All document processing runs
 in the user's browser.
@@ -22,16 +24,23 @@ nesting deliberately follow the corresponding pinned LibreOffice modules:
 | `sfx2/source/doc` | Suite-neutral document identity, history, and storage contracts | `sfx2` document framework |
 | `svl/source/misc` | Generic recovery orchestration | `svl` shared utility layer |
 | `vcl/browser` | Tested adapters around IndexedDB, downloads, clipboard, and browser styling | `vcl` platform/widget layer, specialized for static-browser runtime |
-| `sw/source/core/doc` | Serializable Writer document state and pure paragraph transitions | `sw` Writer core document layer |
+| `sw/source/core/doc`, `docnode`, `txtnode`, and `crsr` | Writer document graph, ordered node array, text nodes, text attributes, and model ranges | `SwDoc`, `SwNodes`, `SwTextNode`, `SwpHints`, `SwTextAttr`, `SwPosition`, and `SwPaM` ownership |
 | `sw/source/uibase/docvw`, `ribbar`, `sidebar`, `shells`, `uiview`, and `utlui` | Writer document view, formatting bar, sidebar, command shells, workbench view, and common Writer UI helpers | Matching `sw/source/uibase` regions |
 | `sw/uiconfig/swriter` | Browser declarations for Writer menu/toolbar placement | Writer UI configuration ownership |
 
-The browser implementation keeps React and browser objects out of
-`sw/source/core/doc`. Its document editor separates DOM caret primitives and
-single editable-paragraph presentation in `docvw` from document-body
-orchestration. These boundaries make later Writer command, layout, and format
-layers independently traceable without pretending that TypeScript files are
-LibreOffice C++ source files.
+The browser implementation keeps React and browser objects out of Writer core.
+`SwDoc` owns `SwNodes`; that array contains the same fixed section sentinels as
+the pinned `SwNodes` constructor and owns `SwTextNode` content. Text attributes
+are stored as `SwTextAttr` ranges in `SwpHints`, while `SwPosition` and `SwPaM`
+identify model positions and selections. React receives derived paragraph and
+run projections from this graph. The document editor separately owns DOM caret
+conversion and editable-paragraph presentation in `docvw`.
+
+The TypeScript core is source-guided rather than ABI-compatible: it preserves
+the applicable LibreOffice model and algorithms, while substituting browser
+transactions and explicit snapshots where C++ pointers, pools, notifications,
+and native UI services do not yet exist. The exact implemented boundary and its
+remaining gaps are recorded in the [Writer core model](writer-core-model.md).
 
 The Vite production base is relative (`./`), and the static smoke check rejects
 remote or root-absolute asset references and application-backend endpoints.
@@ -69,8 +78,9 @@ UI state.
 1. **Workbench layer** owns tabs, commands, panels, dialogs, focus, and document
    lifecycle presentation.
 2. **Application/domain layer** implements typed use cases and suite behavior.
-3. **Document layer** owns serializable state, transactions, undo/redo, and
-   deterministic calculation or layout inputs.
+3. **Document layer** owns the canonical in-memory object graph, transactions,
+   explicit persistence snapshots, undo/redo inputs, and deterministic
+   calculation or layout inputs.
 4. **Format layer** parses and emits external formats, preferably in workers.
 5. **Rendering layer** projects document state into accessible UI and printable
    or exportable output.
@@ -83,8 +93,11 @@ not called from document-domain code.
 
 - Every user-visible mutation is represented by a typed command with explicit
   preconditions, deterministic state effects, undo information, and parity IDs.
-- Document state must be serializable independently of React or another view
-  library. UI framework objects do not belong in the document model.
+- The canonical document model may be an identity-bearing, cyclic object graph,
+  as in Writer. Persistence and browser history use explicit, versioned snapshot
+  conversion rather than forcing the runtime model into a view DTO.
+- Document snapshots must be serializable independently of React or another
+  view library. UI framework objects do not belong in the document model.
 - Expensive parsing, calculation, layout, and export work should run in Web
   Workers behind versioned message contracts.
 - Worker messages and persistence schemas are documented and compatibility

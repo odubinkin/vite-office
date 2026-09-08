@@ -8,7 +8,11 @@ import {
   type DocumentStorageAdapter,
   type SerializableValue,
 } from "../../../../sfx2/source/doc/docfile";
-import { normalizeWriterParagraphFormatting, type WriterDocument } from "./writer";
+import {
+  normalizeWriterParagraphFormatting,
+  serializeWriterDocument,
+  type WriterDocument,
+} from "./writer";
 
 /** Describes the JSON snapshot shape persisted by the bounded Writer workbench. */
 export type WriterSnapshotState = {
@@ -31,7 +35,9 @@ export async function saveWriterDocument(
 ) {
   return saveSnapshot(adapter, {
     id: writerDocument.document.id,
-    state: { writerDocument: writerDocument as unknown as SerializableValue },
+    state: {
+      writerDocument: serializeWriterDocument(writerDocument) as unknown as SerializableValue,
+    },
     version: writerDocument.document.revision,
   });
 }

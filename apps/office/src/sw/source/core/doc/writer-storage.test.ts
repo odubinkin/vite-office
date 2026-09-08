@@ -3,12 +3,16 @@
 import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
-import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
+import type {
+  DocumentSnapshot,
+  DocumentStorageAdapter,
+  SerializableValue,
+} from "../../../../sfx2/source/doc/docfile";
 import {
   createWriterDocument,
   insertWriterText,
+  serializeWriterDocument,
   type WriterDocument,
-  type WriterParagraph,
 } from "./writer";
 import { setWriterParagraphListKind } from "../../uibase/shells/txtnum";
 import { loadWriterDocument, saveWriterDocument, type WriterSnapshotState } from "./writer-storage";
@@ -26,9 +30,11 @@ function createWriterFixture(): WriterDocument {
   );
 }
 
-/** Creates an in-memory implementation of the generic storage boundary. @returns Mutable test adapter. */
-function createAdapter(): DocumentStorageAdapter<WriterSnapshotState> {
-  let snapshot: DocumentSnapshot<WriterSnapshotState> | undefined;
+/** Creates an in-memory implementation of the generic storage boundary. @param initialSnapshot - Optional initial stored snapshot. @returns Mutable test adapter. */
+function createAdapter(
+  initialSnapshot?: DocumentSnapshot<WriterSnapshotState>,
+): DocumentStorageAdapter<WriterSnapshotState> {
+  let snapshot = initialSnapshot;
   return {
     /** Reads the snapshot only when its identifier matches. @param id - Queried ID. @returns Matching snapshot or undefined. */
     load: async function load(
@@ -51,12 +57,14 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
     expect(saved.snapshot).toMatchObject({
       id: "writer-store",
       version: 1,
-      state: { writerDocument },
+      state: { writerDocument: { swModelVersion: 1 } },
     });
-    await expect(loadWriterDocument(adapter, "writer-store")).resolves.toEqual({
-      status: "found",
-      writerDocument,
-    });
+    const loaded = await loadWriterDocument(adapter, "writer-store");
+    expect(loaded.status).toBe("found");
+    if (loaded.status === "found")
+      expect(serializeWriterDocument(loaded.writerDocument)).toEqual(
+        serializeWriterDocument(writerDocument),
+      );
     await expect(loadWriterDocument(adapter, "missing")).resolves.toEqual({
       id: "missing",
       status: "missing",
@@ -68,23 +76,17 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
    *
    * @returns A promise resolved after the normalized loaded document is asserted.
    */, async function migratesLegacyAlignment(): Promise<void> {
-    const adapter = createAdapter();
     const writerDocument = createWriterFixture();
-    const legacyDocument = {
-      ...writerDocument,
-      paragraphs: writerDocument.paragraphs.map(
-        /**
-         * Omits the newly introduced alignment field to emulate a previously saved document.
-         *
-         * @param paragraph - Current serializable paragraph whose text and identity are retained.
-         * @returns Legacy-shaped paragraph without alignment.
-         */
-        function omitAlignment(paragraph): WriterParagraph {
-          return { id: paragraph.id, text: paragraph.text } as unknown as WriterParagraph;
+    const adapter = createAdapter({
+      id: "writer-store",
+      state: {
+        writerDocument: {
+          document: writerDocument.document as unknown as SerializableValue,
+          paragraphs: [{ id: "p-1", text: "Saved text" }],
         },
-      ),
-    };
-    await saveWriterDocument(adapter, legacyDocument);
+      },
+      version: 1,
+    });
 
     await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
       status: "found",
@@ -102,22 +104,17 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
       status: "found",
       writerDocument: { paragraphs: [{ list: { kind: "numbered", level: 0 } }] },
     });
-    const legacyWriter = {
-      ...listedWriter,
-      paragraphs: listedWriter.paragraphs.map(
-        /** Omits list metadata to emulate the previous serialized Writer body. @param paragraph - Current stored paragraph. @returns Legacy-shaped paragraph. */
-        function omitList(paragraph): WriterParagraph {
-          return {
-            alignment: paragraph.alignment,
-            id: paragraph.id,
-            style: paragraph.style,
-            text: paragraph.text,
-          } as WriterParagraph;
+    const legacyAdapter = createAdapter({
+      id: "writer-store",
+      state: {
+        writerDocument: {
+          document: listedWriter.document as unknown as SerializableValue,
+          paragraphs: [{ alignment: "left", id: "p-1", style: "default", text: "Saved text" }],
         },
-      ),
-    };
-    await saveWriterDocument(adapter, legacyWriter);
-    await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
+      },
+      version: 1,
+    });
+    await expect(loadWriterDocument(legacyAdapter, "writer-store")).resolves.toMatchObject({
       status: "found",
       writerDocument: { paragraphs: [{ list: { kind: "none", level: 0 } }] },
     });
