@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609081724-EXGQKG",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-08T18:16:02.364Z",
+  "verdict": "pass",
+  "summary": "Bounded Writer item pool, paragraph attribute inheritance, style collections, numbering-rule ownership, and snapshot migration are implemented and fully verified.",
+  "evaluated_sha": "2e08ec76bc29ad2499cc30a6faf88302ddcc23fd",
+  "blueprint_digest": "b7bf428799a242113773901bd3b88dbe507add605aa3e3928fbc91110d93c25e",
+  "findings": [
+    "No correctness or scope findings: direct paragraph fields were removed, current UI behavior was preserved through projections, and remaining full Writer item/style/filter work is explicitly recorded."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609081724-EXGQKG/README.md",
+    "npm run verify",
+    "npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --local-root . --upstream-root vendor/libreoffice-reference",
+    "npm run check:source-provenance && npm run check:source-tree"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
