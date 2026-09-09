@@ -1,10 +1,11 @@
 ---
 id: "202609090058-5TPQGK"
 title: "Expose Writer ODT open and save in the web UI"
-status: "DOING"
+result_summary: "verified-202609090058-5TPQGK"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-09T01:28:38.628Z"
+  updated_at: "2026-09-09T01:29:53.726Z"
   updated_by: "CODER"
   note: "verified-202609090058-5TPQGK"
   attempts: 0
@@ -40,11 +41,16 @@ quality_review:
     - "npm run inventory:parity"
   findings:
     - "New, atomic Open ODT, and Save as ODT are implemented in the pinned menu/toolbar placements; local and text actions remain explicit, all planned success and failure paths are tested, both coverage suites are 100 percent, Chromium round-trips text and formatting, and parity reports zero evidence exceptions."
-commit: null
+commit:
+  hash: "cd69ebc5f935d73d3c5c71c35a65e77c079e88f4"
+  message: "🧪 5TPQGK task: record verification and quality"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved SwDocShell ODT boundary, browser file selection and binary download adapters, Writer New/Open/Save UI wiring, deterministic failure handling, tests, and parity documentation."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609090058-5TPQGK. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -65,8 +71,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609090058-5TPQGK"
+  -
+    type: "verify"
+    at: "2026-09-09T01:29:53.726Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609090058-5TPQGK"
+  -
+    type: "status"
+    at: "2026-09-09T01:29:53.852Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609090058-5TPQGK. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-09T01:28:38.679Z"
+doc_updated_at: "2026-09-09T01:29:53.853Z"
 doc_updated_by: "CODER"
 description: "Add a LibreOffice-shaped SwDocShell boundary over the implemented ODT reader/writer, browser file selection and binary download adapters, and wire Writer File/standard-toolbar New, Open ODT, and Save as ODT actions while retaining existing local snapshot and text export commands. Verify supported ODT round trips and explicit unsupported-format feedback in unit and Chromium E2E tests."
 sections:
@@ -138,9 +157,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-09T01:29:53.726Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609090058-5TPQGK
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T01:28:38.679Z, excerpt_hash=sha256:730a0ea1276b0a48ce62c2030810fc74fd21c64226dedc1ccc68ee3f69875001
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090058-5TPQGK/blueprint/resolved-snapshot.json
+    - old_digest: 2e2ecf4ff7efa2afde0ce2a4d1c097e48780c01592e9c8c7f1f19980d167839f
+    - current_digest: 2e2ecf4ff7efa2afde0ce2a4d1c097e48780c01592e9c8c7f1f19980d167839f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609090058-5TPQGK
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609090058-5TPQGK --result verified-202609090058-5TPQGK --commit cd69ebc5f935d73d3c5c71c35a65e77c079e88f4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation commit and its task-record commits. This removes the SwDocShell and browser ODT adapters and restores the existing IndexedDB/text-only File commands without migrating stored browser snapshots."
   Findings: "Initial audit: the core ODT reader/writer exists but has no product UI entry point. Existing Writer UI already exposes character formatting, paragraph styles/alignment, lists, history, clipboard, local IndexedDB snapshots, and plain-text export. The additional unused core capability included here is New document creation; unrelated structural operations remain deferred because LibreOffice does not place persistent paragraph action buttons on the page."
+extensions:
+  implementation_commit:
+    hash: "f343a9d3a2c1dcf8f240933477b54c16c710e4a1"
+    message: "🧩 5TPQGK code: expose Writer ODT file commands"
 id_source: "generated"
 ---
 ## Summary
@@ -217,6 +270,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609090058-5TPQGK --result verified-202609090058-5TPQGK --commit f343a9d3a2c1dcf8f240933477b54c16c710e4a1
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-09T01:29:53.726Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609090058-5TPQGK
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T01:28:38.679Z, excerpt_hash=sha256:730a0ea1276b0a48ce62c2030810fc74fd21c64226dedc1ccc68ee3f69875001
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090058-5TPQGK/blueprint/resolved-snapshot.json
+- old_digest: 2e2ecf4ff7efa2afde0ce2a4d1c097e48780c01592e9c8c7f1f19980d167839f
+- current_digest: 2e2ecf4ff7efa2afde0ce2a4d1c097e48780c01592e9c8c7f1f19980d167839f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609090058-5TPQGK
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609090058-5TPQGK --result verified-202609090058-5TPQGK --commit cd69ebc5f935d73d3c5c71c35a65e77c079e88f4
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
