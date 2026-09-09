@@ -41,7 +41,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   source.paragraphs[0]?.SetParagraphList({ kind: "numbered", level: 1 });
   const sourceBytes = writeOdtDocument(source);
 
-  await page.goto("/");
+  await page.goto("/writer");
   const fileChooserPromise = page.waitForEvent("filechooser");
   await page.getByRole("button", { name: "Open ODT" }).click();
   const fileChooser = await fileChooserPromise;

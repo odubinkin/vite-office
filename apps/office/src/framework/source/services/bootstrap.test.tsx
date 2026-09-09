@@ -14,10 +14,11 @@ describe("mountApplication" /**
  * @returns Nothing; Vitest registers the enclosed cases.
  */, function defineBootstrapTests(): void {
   it("mounts and returns a controllable React root" /**
-   * Mounts the workbench into a detached test container and unmounts it cleanly.
+   * Mounts the launcher into a detached test container and unmounts it cleanly.
    *
-   * @returns Nothing; assertions verify the mounted Writer workspace.
+   * @returns Nothing; assertions verify the mounted office launcher.
    */, function verifyMount(): void {
+    globalThis.history.replaceState(null, "", "/");
     const container = document.createElement("div");
     document.body.append(container);
     let root: Root | undefined;
@@ -41,7 +42,8 @@ describe("mountApplication" /**
     }
 
     act(performMount);
-    expect(screen.getByRole("region", { name: "Writer workspace" })).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "Office applications" })).toBeInTheDocument();
+    expect(document.querySelector("#workspace")).not.toBeInTheDocument();
     act(performUnmount);
     container.remove();
   });

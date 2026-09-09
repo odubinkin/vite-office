@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 test("Writer Cut and Paste" /** Verifies native clipboard shortcuts retain Writer direct formatting, menu placement, and history behavior without a backend. @param root0 - Playwright fixture object. @param root0.page - Chromium page hosting the static Writer workbench. @returns A promise resolved after the bounded clipboard flow is asserted. */, async function cutsAndPastesWriterText({
   page,
 }): Promise<void> {
-  await page.goto("/");
+  await page.goto("/writer");
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await writerEditor.fill("Cut this");
   const cutPayload = await writerEditor.evaluate(

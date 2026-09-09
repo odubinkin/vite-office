@@ -1,7 +1,7 @@
 /** @fileoverview Verifies browser-visible Enter paragraph breaks in the integrated Writer document canvas. */
 
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Desktop as App } from "../../../../framework/source/services/desktop";
 
@@ -57,6 +57,13 @@ function inputWriterParagraphText(
 }
 
 describe("Writer paragraph breaks" /** Groups native Enter interaction and guarded browser-selection behavior. @returns Nothing; Vitest registers the enclosed case. */, function defineWriterParagraphBreakTests(): void {
+  beforeEach(
+    /** Opens the dedicated Writer page used by application-integrated editor tests. @returns Nothing. */
+    function openWriterRoute(): void {
+      globalThis.history.replaceState(null, "", "/writer");
+    },
+  );
+
   it("routes a native same-paragraph Paste event through the immutable Writer document body" /** Verifies React's document-body clipboard listener replaces selected text with safe direct-format runs instead of allowing editable-host HTML mutation. @returns Nothing; browser-visible pasted markup is asserted. */, function routesNativePasteThroughDocumentBody(): void {
     render(<App />);
     const paragraph = screen.getByRole("textbox", { name: "Writer document text" });

@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" /** Verifies real Chromium keeps Enter editing intact while keyboard and pointer selection cover more than one Writer paragraph. @param root0 - Playwright fixture object for the isolated browser flow. @param root0.page - Chromium page used to edit, select, and inspect Writer text. @returns A promise resolved after browser-native document selection behavior is asserted. */, async function verifiesDocumentWideSelection({
   page,
 }): Promise<void> {
-  await page.goto("/");
+  await page.goto("/writer");
   const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
   await firstParagraph.fill("First Writer paragraph");
   await firstParagraph.press("Enter");

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Renders one accessible suite selector for the foundation workbench navigation.
+ * @fileoverview Renders one accessible suite link for the office application launcher.
  */
 
 import {
@@ -15,13 +15,9 @@ import {
 
 import type { SuiteDefinition, SuiteId } from "./modulemanager";
 
-/** Defines the data and selection callback required by a suite navigation card. */
+/** Defines the immutable suite rendered by one launcher card. */
 export interface SuiteCardProps {
-  /** Whether this suite currently owns the main preview panel. */
-  readonly isSelected: boolean;
-  /** Receives the complete selected suite definition without mutating it. */
-  readonly onSelect: (suite: SuiteDefinition) => void;
-  /** Immutable suite metadata rendered by the card. */
+  /** Immutable suite metadata rendered by the link. */
   readonly suite: SuiteDefinition;
 }
 
@@ -37,34 +33,20 @@ const suiteIcons: Readonly<Record<SuiteId, LucideIcon>> = {
 };
 
 /**
- * Renders a keyboard-operable suite selector with an optional foundation status.
+ * Renders a keyboard-operable link to one dedicated suite pathname.
  *
- * @param props - Immutable suite data, selection state, and selection callback.
- * @param props.isSelected - Whether the suite owns the main preview panel.
- * @param props.onSelect - Callback receiving the immutable selected suite.
+ * @param props - Immutable suite data.
  * @param props.suite - Suite metadata rendered without mutation.
- * @returns A button suitable for use inside the workbench suite navigation.
+ * @returns A link suitable for use inside the office application launcher.
  */
-export function SuiteCard({ isSelected, onSelect, suite }: SuiteCardProps): React.JSX.Element {
+export function SuiteCard({ suite }: SuiteCardProps): React.JSX.Element {
   const Icon = suiteIcons[suite.id];
 
-  /**
-   * Reports this card's immutable suite definition to the owning workbench.
-   *
-   * @returns Nothing; the parent callback performs the state transition.
-   */
-  function handleSelect(): void {
-    onSelect(suite);
-  }
-
   return (
-    <button
-      aria-current={isSelected ? "page" : undefined}
+    <a
       aria-label={suite.status === undefined ? suite.name : `${suite.name}, ${suite.status}`}
-      className="group flex w-full items-center gap-3 rounded-2xl border border-transparent px-3 py-3 text-left transition hover:border-slate-200 hover:bg-white/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 data-[selected=true]:border-indigo-200 data-[selected=true]:bg-white data-[selected=true]:shadow-sm"
-      data-selected={isSelected}
-      onClick={handleSelect}
-      type="button"
+      className="group flex w-full items-center gap-3 rounded-2xl border border-transparent px-3 py-3 text-left transition hover:border-slate-200 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      href={`/${suite.id}`}
     >
       <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-slate-900 text-white shadow-sm transition group-hover:bg-indigo-700">
         <Icon aria-hidden="true" size={19} strokeWidth={1.8} />
@@ -75,6 +57,6 @@ export function SuiteCard({ isSelected, onSelect, suite }: SuiteCardProps): Reac
           <span className="block truncate text-xs text-slate-500">{suite.status}</span>
         )}
       </span>
-    </button>
+    </a>
   );
 }

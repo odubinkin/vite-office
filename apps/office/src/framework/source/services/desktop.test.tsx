@@ -4,7 +4,7 @@
 
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Desktop as App } from "./desktop";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
@@ -60,6 +60,13 @@ describe("App" /**
  *
  * @returns Nothing; Vitest registers the enclosed cases.
  */, function defineAppTests(): void {
+  beforeEach(
+    /** Opens the dedicated Writer pathname used by editor-focused tests. @returns Nothing. */
+    function openWriterRoute(): void {
+      globalThis.history.replaceState(null, "", "/writer");
+    },
+  );
+
   it("renders the integrated Writer document editor and updates immutable history" /**
    * Verifies the accessible page-integrated editor starts clean and replaces its sole paragraph through history.
    *
@@ -81,7 +88,10 @@ describe("App" /**
     expect(documentCanvas).toBeVisible();
     expect(screen.getByRole("complementary", { name: "Writer properties sidebar" })).toBeVisible();
     expect(screen.getByRole("status", { name: "Writer status bar" })).toBeVisible();
-    expect(screen.getByText("Static frontend")).toBeInTheDocument();
+    expect(
+      screen.getByRole("region", { name: "Writer workspace" }).closest("main"),
+    ).toHaveAttribute("id", "workspace");
+    expect(screen.queryByText("Vite Office")).not.toBeInTheDocument();
     const editor = screen.getByRole("textbox", { name: "Writer document text" });
     expect(screen.getByRole("article", { name: "Writer document body" })).toContainElement(editor);
     expect(within(documentCanvas).getByRole("textbox", { name: "Writer document text" })).toBe(
@@ -248,17 +258,28 @@ describe("App" /**
     expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
   });
 
-  it("updates the preview and live status when a suite is selected" /**
-   * Exercises the suite-selection state transition through an accessible button.
+  it("renders only the launcher at root and a full-page foundation suite at its route" /**
+   * Exercises root, suite, and unknown pathname presentation without mixing global and suite chrome.
    *
-   * @returns Nothing; assertions verify the resulting main panel and status line.
-   */, function verifySuiteSelection(): void {
+   * @returns Nothing; assertions verify route-specific page composition and launcher links.
+   */, function verifySuiteRoutes(): void {
+    globalThis.history.replaceState(null, "", "/");
     render(<App />);
 
-    const calcButton = screen.getByRole("button", { name: "Calc, Foundation only" });
-    fireEvent.click(calcButton);
+    expect(screen.getByText("Vite Office")).toBeInTheDocument();
+    expect(screen.getByLabelText("Search is unavailable")).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("navigation", { name: "Office applications" })).toBeVisible();
+    expect(screen.getByRole("link", { name: "Writer" })).toHaveAttribute("href", "/writer");
+    expect(screen.getByRole("link", { name: "Calc, Foundation only" })).toHaveAttribute(
+      "href",
+      "/calc",
+    );
+    expect(document.querySelector("#workspace")).not.toBeInTheDocument();
 
-    expect(calcButton).toHaveAttribute("aria-current", "page");
+    cleanup();
+    globalThis.history.replaceState(null, "", "/calc");
+    render(<App />);
+
     expect(screen.getByText("Calc: Foundation only")).toBeInTheDocument();
     expect(screen.getByText(/Worksheets, formulas, analysis/)).toBeInTheDocument();
     expect(
@@ -266,27 +287,14 @@ describe("App" /**
     ).toBeInTheDocument();
     expect(screen.queryByRole("textbox", { name: "Writer document text" })).not.toBeInTheDocument();
     expect(screen.getByText("No editor features enabled")).toBeInTheDocument();
-  });
+    expect(document.querySelector("#workspace")).toHaveClass("min-h-screen");
+    expect(screen.queryByText("Vite Office")).not.toBeInTheDocument();
 
-  it("retains the Writer session and disables its shortcuts while another suite is selected" /**
-   * Verifies that hiding the workbench neither discards text nor lets Writer commands run outside Writer.
-   *
-   * @returns Nothing; assertions cover workbench visibility and retained state.
-   */, function retainsHiddenWriterSession(): void {
+    cleanup();
+    globalThis.history.replaceState(null, "", "/unknown-suite");
     render(<App />);
-
-    enterWriterParagraphText(
-      screen.getByRole("textbox", { name: "Writer document text" }),
-      "Retained Writer body",
-    );
-    fireEvent.click(screen.getByRole("button", { name: "Calc, Foundation only" }));
-    fireEvent.keyDown(window, { ctrlKey: true, key: "z" });
-    expect(screen.queryByRole("textbox", { name: "Writer document text" })).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Writer" }));
-    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
-      "Retained Writer body",
-    );
+    expect(screen.getByRole("navigation", { name: "Office applications" })).toBeVisible();
+    expect(document.querySelector("#workspace")).not.toBeInTheDocument();
   });
 
   it("opens a supported ODT atomically and starts a parseable ODT download" /** Verifies the product File boundary uses the existing Writer package filters. @returns A fulfilled assertion promise. */, async () => {

@@ -5,8 +5,8 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-test("File menu loads the Writer structural workspace and supports keyboard-visible suite selection" /**
- * Verifies the production bundle, targetable Writer chrome, accessible editing, keyboard suite selection, and configured axe rules.
+test("launcher routes to full-page suite workspaces with accessible application chrome" /**
+ * Verifies the launcher, dedicated Writer and Calc pages, accessible editing, keyboard navigation, and configured axe rules.
  *
  * @param root0 - Playwright fixture object provided for the isolated test.
  * @param root0.page - Isolated Chromium page used for navigation and accessibility assertions.
@@ -14,7 +14,19 @@ test("File menu loads the Writer structural workspace and supports keyboard-visi
  */, async function verifyStaticFoundation({ page }): Promise<void> {
   await page.goto("/");
 
+  await expect(page.getByText("Vite Office")).toBeVisible();
+  await expect(page.getByLabel("Search is unavailable")).toHaveAttribute("aria-disabled", "true");
+  await expect(page.getByRole("navigation", { name: "Office applications" })).toBeVisible();
+  await expect(page.locator("#workspace")).toHaveCount(0);
+  const writerLink = page.getByRole("link", { name: "Writer" });
+  await writerLink.focus();
+  await expect(writerLink).toBeFocused();
+  await writerLink.press("Enter");
+  await expect(page).toHaveURL(/\/writer$/u);
+
   await expect(page.getByRole("region", { name: "Writer workspace" })).toBeVisible();
+  await expect(page.locator("main#workspace")).toBeVisible();
+  await expect(page.getByText("Vite Office")).toHaveCount(0);
   const writerMenuBar = page.getByRole("navigation", { name: "Writer menu bar" });
   await expect(writerMenuBar).toBeVisible();
   await expect(writerMenuBar).toHaveCSS("overflow-x", "visible");
@@ -196,13 +208,17 @@ test("File menu loads the Writer structural workspace and supports keyboard-visi
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(writerEditor).toHaveCSS("text-align", "left");
 
-  const calcButton = page.getByRole("button", { name: "Calc, Foundation only" });
-  await calcButton.focus();
-  await expect(calcButton).toBeFocused();
-  await calcButton.press("Enter");
+  await page.goto("/");
+  const calcLink = page.getByRole("link", { name: "Calc, Foundation only" });
+  await calcLink.focus();
+  await expect(calcLink).toBeFocused();
+  await calcLink.press("Enter");
+  await expect(page).toHaveURL(/\/calc$/u);
   await expect(page.getByRole("heading", { name: "Browser workbench foundation" })).toBeVisible();
   await expect(page.getByText("Calc: Foundation only")).toBeVisible();
-  await expect(writerEditor).toBeHidden();
+  await expect(page.locator("main#workspace")).toBeVisible();
+  await expect(page.getByText("Vite Office")).toHaveCount(0);
+  await expect(writerEditor).toHaveCount(0);
   await expect(page.getByText("No editor features enabled")).toBeVisible();
 
   const accessibilityResults = await new AxeBuilder({ page }).analyze();

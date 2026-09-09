@@ -5,7 +5,7 @@ import { expect, test } from "@playwright/test";
 test("Writer bullets and numbering" /** Verifies Format submenu and text-object toolbar list controls retain editable text while rendering Writer markers. @param root0 - Playwright fixture object. @param root0.page - Chromium page exercising the built browser application. @returns A promise resolved after list commands, inheritance, and removal are asserted. */, async function verifiesWriterLists({
   page,
 }): Promise<void> {
-  await page.goto("/");
+  await page.goto("/writer");
   const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
   await firstParagraph.fill("First list item");
   await page.getByRole("button", { name: "Format" }).click();

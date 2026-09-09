@@ -18,7 +18,7 @@ test("Writer direct character formatting" /**
       pageErrors.push(error.message);
     },
   );
-  await page.goto("/");
+  await page.goto("/writer");
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await writerEditor.fill("Formatted Writer body");
   await writerEditor.evaluate(

@@ -3,7 +3,7 @@
  */
 
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Desktop as App } from "../../../../framework/source/services/desktop";
 
@@ -36,6 +36,13 @@ class WriterClipboardItemFixture {
 }
 
 describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests. @returns Nothing; Vitest registers the enclosed cases. */, function defineWriterMenuBarTests(): void {
+  beforeEach(
+    /** Opens the dedicated Writer page used by application-shell menu tests. @returns Nothing. */
+    function openWriterRoute(): void {
+      globalThis.history.replaceState(null, "", "/writer");
+    },
+  );
+
   it("places implemented Writer commands in accessible top-level menus" /**
    * Verifies File, Edit, View, Format, and Styles open their Writer-positioned command popups while Add paragraph is absent.
    *

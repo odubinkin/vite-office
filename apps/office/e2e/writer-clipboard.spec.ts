@@ -9,7 +9,7 @@ test("copies visible formatted Writer content through the native browser copy ev
  * @param root0.page - Isolated Chromium page used for Writer and native ClipboardEvent interactions.
  * @returns A promise that resolves after the copied rich MIME payloads are inspected.
  */, async function copiesFormattedWriterContent({ page }): Promise<void> {
-  await page.goto("/");
+  await page.goto("/writer");
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await writerEditor.fill("Copied Writer heading");
   await page.getByRole("button", { name: "Styles" }).click();
@@ -56,7 +56,7 @@ test("Writer list clipboard" /**
  * @param root0.page - Isolated Chromium page used for Writer and native ClipboardEvent interactions.
  * @returns A promise that resolves after semantic list clipboard data is inspected.
  */, async function copiesSemanticWriterLists({ page }): Promise<void> {
-  await page.goto("/");
+  await page.goto("/writer");
   const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
   await firstParagraph.fill("First item");
   await page.getByRole("button", { name: "Format" }).click();
