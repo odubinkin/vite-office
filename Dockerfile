@@ -13,6 +13,7 @@ RUN npm run build
 
 FROM nginx:1.27-alpine AS runner
 
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/apps/office/dist /usr/share/nginx/html
 
 EXPOSE 80
