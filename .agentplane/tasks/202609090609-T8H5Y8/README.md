@@ -4,7 +4,7 @@ title: "Serve suite routes through nginx SPA fallback"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -26,6 +26,21 @@ verification:
   updated_by: "CODER"
   note: "Command: docker build --tag vite-office:spa-fallback-verify .; Result: pass after Docker daemon restart; production image built successfully. Command: docker run --rm --detach --name vite-office-spa-fallback-verify --publish 127.0.0.1:4180:80 vite-office:spa-fallback-verify; Result: pass. Command: curl probes for /, /writer, and /calc; Result: pass with 200 text/html and identical index.html SHA-256. Asset probes: emitted JavaScript returned 200 application/javascript; /assets/missing.js returned 404. Command: docker exec nginx -t; Result: configuration syntax successful. Command: docker stop; Result: temporary container stopped and removed. Command: git diff --check and git status; Result: pass with only Dockerfile, nginx/default.conf, and task artifacts changed. Unit and E2E tests were intentionally not run per approved verification scope."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-09T06:19:16.999Z"
+  updated_by: "EVALUATOR"
+  note: "Production nginx now serves client-side suite routes through an index.html fallback without masking missing assets."
+  evaluated_sha: "e88b84e319205634062848fe8101d9cdadc3e09a"
+  blueprint_digest: "c8dbfbf3ea833c32938391c974049404ca392bb93988b0f5b91f76d5806f88b0"
+  evidence_refs:
+    - ".agentplane/tasks/202609090609-T8H5Y8/README.md"
+    - ".agentplane/tasks/202609090609-T8H5Y8/quality/20260909-061916999-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609090609-T8H5Y8/quality/20260909-061916999-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609090609-T8H5Y8/quality/20260909-061916999-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609090609-T8H5Y8/blueprint/resolved-snapshot.json"
+  findings:
+    - "A locally built Docker image returned 200 for /, /writer, and /calc with identical index HTML; the emitted JavaScript returned 200, a missing asset returned 404, and nginx -t passed."
 commit: null
 comments:
   -

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "task_id": "202609090609-T8H5Y8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-09T06:19:16.999Z",
+  "verdict": "pass",
+  "summary": "Production nginx now serves client-side suite routes through an index.html fallback without masking missing assets.",
+  "evaluated_sha": "e88b84e319205634062848fe8101d9cdadc3e09a",
+  "blueprint_digest": "c8dbfbf3ea833c32938391c974049404ca392bb93988b0f5b91f76d5806f88b0",
+  "findings": [
+    "A locally built Docker image returned 200 for /, /writer, and /calc with identical index HTML; the emitted JavaScript returned 200, a missing asset returned 404, and nginx -t passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609090609-T8H5Y8/README.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
