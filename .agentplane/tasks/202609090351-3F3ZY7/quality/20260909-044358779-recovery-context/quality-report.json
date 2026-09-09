@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609090351-3F3ZY7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-09T04:43:58.779Z",
+  "verdict": "pass",
+  "summary": "Writer ODT round-trip preserves every currently modeled document semantic and uses canonical SwDoc list ownership without obsolete-schema compatibility.",
+  "evaluated_sha": "6f77bd2daa9267213c256c13bc5954e9a8550954",
+  "blueprint_digest": "440514145ba03248ab5132216bd4a75eefd4a782ed71b1473e8f663e9c410c4f",
+  "findings": [
+    "Nested bullet/decimal lists, rule identities, levels, styles, alignment, whitespace, and direct formatting are covered by unit, package, and browser tests; unsupported ODF semantics and pre-v3 snapshots fail explicitly."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609090351-3F3ZY7/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full ODF/LibreOffice parity remains outside this bounded slice: custom numbering formats, tables, images, annotations, and page layout are intentionally unsupported."
+  ]
+}
