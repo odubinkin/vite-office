@@ -1,10 +1,11 @@
 ---
 id: "202609090458-TRG4A7"
 title: "Fix Writer contenteditable crash and typing stalls"
-status: "DOING"
+result_summary: "Fixed Writer contenteditable deletion crashes and unbounded per-character undo history."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-09T05:36:00.034Z"
+  updated_at: "2026-09-09T05:36:40.817Z"
   updated_by: "CODER"
   note: "verified-202609090458-TRG4A7"
   attempts: 0
@@ -38,11 +39,19 @@ quality_review:
     - "bef72902639e"
   findings:
     - "Focused and full deterministic checks pass; parallel verify exposed only an existing pointer-drag E2E race race that passed 5/5 sequentially and is outside the crash path."
-commit: null
+commit:
+  hash: "f903cfcd4518a4c01bc72620d4c636850ec1229e"
+  message: "🧪 TRG4A7 code: record Writer input evidence"
 comments:
   -
     author: "CODER"
     body: "Start: fix browser-owned editable DOM reconciliation and implement LibreOffice-aligned typing undo grouping with focused regression coverage."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609090458-TRG4A7. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: fixed intermittent Writer tab crashes by isolating browser-owned contenteditable descendants from React reconciliation and aligned bounded typing undo groups with pinned LibreOffice behavior."
 events:
   -
     type: "status"
@@ -63,8 +72,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609090458-TRG4A7"
+  -
+    type: "verify"
+    at: "2026-09-09T05:36:40.817Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609090458-TRG4A7"
+  -
+    type: "status"
+    at: "2026-09-09T05:36:41.018Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609090458-TRG4A7. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-09-09T05:37:37.633Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: fixed intermittent Writer tab crashes by isolating browser-owned contenteditable descendants from React reconciliation and aligned bounded typing undo groups with pinned LibreOffice behavior."
 doc_version: 3
-doc_updated_at: "2026-09-09T05:36:00.116Z"
+doc_updated_at: "2026-09-09T05:37:37.635Z"
 doc_updated_by: "CODER"
 description: "Eliminate intermittent Writer tab hangs and React removeChild NotFoundError during text input/deletion. Preserve implementation proximity to pinned upstream LibreOffice, including typing undo grouping semantics."
 sections:
@@ -165,6 +194,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-09T05:36:40.817Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609090458-TRG4A7
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T05:36:00.116Z, excerpt_hash=sha256:e01bd0c63fe6070ab61e9dad6feee3046109e944d83d2a4b443b8131b9b55c87
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090458-TRG4A7/blueprint/resolved-snapshot.json
+    - old_digest: 3a9a0cbb523873e9d736cfe8b912e7ec15ad114ce9c92ad6896ef6455decd6a1
+    - current_digest: 3a9a0cbb523873e9d736cfe8b912e7ec15ad114ce9c92ad6896ef6455decd6a1
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609090458-TRG4A7
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609090458-TRG4A7 --result verified-202609090458-TRG4A7 --commit f903cfcd4518a4c01bc72620d4c636850ec1229e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -177,6 +236,10 @@ sections:
     - Observation: The browser adapter appended a complete SwDoc snapshot for every character with no action limit.
       Impact: Typing retained unbounded full document graphs and diverged from LibreOffice SwUndoInsert/SwUndoDelete grouping, increasing latency and memory until the tab could stall.
       Resolution: Mirror upstream CanGrouping position/direction/character-class boundaries and the SfxUndoManager default maximum of twenty undo actions while retaining immutable browser snapshots.
+extensions:
+  implementation_commit:
+    hash: "bef72902639e06f9d9d56636e68dc495db45b7dc"
+    message: "🧩 TRG4A7 code: stabilize Writer text input"
 id_source: "generated"
 ---
 ## Summary
@@ -279,6 +342,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609090458-TRG4A7 --result verified-202609090458-TRG4A7 --commit bef72902639e06f9d9d56636e68dc495db45b7dc
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-09T05:36:40.817Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609090458-TRG4A7
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T05:36:00.116Z, excerpt_hash=sha256:e01bd0c63fe6070ab61e9dad6feee3046109e944d83d2a4b443b8131b9b55c87
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090458-TRG4A7/blueprint/resolved-snapshot.json
+- old_digest: 3a9a0cbb523873e9d736cfe8b912e7ec15ad114ce9c92ad6896ef6455decd6a1
+- current_digest: 3a9a0cbb523873e9d736cfe8b912e7ec15ad114ce9c92ad6896ef6455decd6a1
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609090458-TRG4A7
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609090458-TRG4A7 --result verified-202609090458-TRG4A7 --commit f903cfcd4518a4c01bc72620d4c636850ec1229e
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
