@@ -4,7 +4,7 @@ title: "Route office suites to dedicated pages"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -24,10 +24,25 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-09T05:59:13.858Z"
+  updated_at: "2026-09-09T06:00:21.420Z"
   updated_by: "CODER"
-  note: "Command: npm run test:coverage --workspace @vite-office/office. Result: pass after updating two additional Desktop-integrated Writer test setups; 42 files and 167 tests passed with 100% statements, branches, functions, and lines. Command: declared affected-file lint. Result: pass with no errors. Command: npm run typecheck --workspace @vite-office/office. Result: pass. Command: npm run build --workspace @vite-office/office. Result: pass; Vite built 1861 modules. Command: npm run test:e2e. Result: pass; 8 Chromium scenarios including root launcher, /writer, /calc, keyboard routing, and axe. Command: git diff --check and git status --short --untracked-files=all. Result: pass; no whitespace errors or unintended artifacts. Additional evidence: Prettier check, JSDoc check, file-size check, policy routing, Agentplane doctor, and visual screenshots of /, /writer, and /calc all passed."
+  note: "verified-202609090539-29Q2X6"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-09T06:00:03.068Z"
+  updated_by: "EVALUATOR"
+  note: "Dedicated suite routes satisfy the approved launcher and full-page workspace contract."
+  evaluated_sha: "4aa6c2092c145f1149068acba4224f1f545fe034"
+  blueprint_digest: "cada93cc42b4f7ae173fa144f87a7e9ffdafbea08f98ef520ed1f632f8347efb"
+  evidence_refs:
+    - ".agentplane/tasks/202609090539-29Q2X6/README.md"
+    - ".agentplane/tasks/202609090539-29Q2X6/quality/20260909-060003068-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609090539-29Q2X6/quality/20260909-060003068-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609090539-29Q2X6/quality/20260909-060003068-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609090539-29Q2X6/blueprint/resolved-snapshot.json"
+  findings:
+    - "Root renders only the global header and suite links; /writer renders only Writer in main#workspace; other known suite paths render their full-page foundation interfaces; unit and E2E regressions are covered."
 commit: null
 comments:
   -
@@ -47,8 +62,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: npm run test:coverage --workspace @vite-office/office. Result: pass after updating two additional Desktop-integrated Writer test setups; 42 files and 167 tests passed with 100% statements, branches, functions, and lines. Command: declared affected-file lint. Result: pass with no errors. Command: npm run typecheck --workspace @vite-office/office. Result: pass. Command: npm run build --workspace @vite-office/office. Result: pass; Vite built 1861 modules. Command: npm run test:e2e. Result: pass; 8 Chromium scenarios including root launcher, /writer, /calc, keyboard routing, and axe. Command: git diff --check and git status --short --untracked-files=all. Result: pass; no whitespace errors or unintended artifacts. Additional evidence: Prettier check, JSDoc check, file-size check, policy routing, Agentplane doctor, and visual screenshots of /, /writer, and /calc all passed."
+  -
+    type: "verify"
+    at: "2026-09-09T06:00:21.420Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609090539-29Q2X6"
 doc_version: 3
-doc_updated_at: "2026-09-09T05:59:13.942Z"
+doc_updated_at: "2026-09-09T06:00:21.501Z"
 doc_updated_by: "CODER"
 description: "Show only the application menu and disabled global header on the home page, and render each office suite on its own pathname with the selected application interface filling main#workspace."
 sections:
@@ -93,6 +114,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task verify-show 202609090539-29Q2X6
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-09T06:00:21.420Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609090539-29Q2X6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T05:59:13.942Z, excerpt_hash=sha256:0254acccff0e87d462e12305e3e285e5af85278fe7e961efd089170d23283a65
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090539-29Q2X6/blueprint/resolved-snapshot.json
+    - old_digest: cada93cc42b4f7ae173fa144f87a7e9ffdafbea08f98ef520ed1f632f8347efb
+    - current_digest: cada93cc42b4f7ae173fa144f87a7e9ffdafbea08f98ef520ed1f632f8347efb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609090539-29Q2X6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609090539-29Q2X6 --result verified-202609090539-29Q2X6 --commit 4aa6c2092c145f1149068acba4224f1f545fe034
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -156,6 +207,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609090539-29Q2X6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-09T06:00:21.420Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609090539-29Q2X6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T05:59:13.942Z, excerpt_hash=sha256:0254acccff0e87d462e12305e3e285e5af85278fe7e961efd089170d23283a65
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090539-29Q2X6/blueprint/resolved-snapshot.json
+- old_digest: cada93cc42b4f7ae173fa144f87a7e9ffdafbea08f98ef520ed1f632f8347efb
+- current_digest: cada93cc42b4f7ae173fa144f87a7e9ffdafbea08f98ef520ed1f632f8347efb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609090539-29Q2X6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609090539-29Q2X6 --result verified-202609090539-29Q2X6 --commit 4aa6c2092c145f1149068acba4224f1f545fe034
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
