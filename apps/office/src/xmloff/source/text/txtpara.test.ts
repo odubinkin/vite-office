@@ -8,6 +8,7 @@ import {
   exportTextParagraphs,
   ODF_NAMESPACES,
   type OdfCharacterProperties,
+  type OdfListRule,
   type OdfParagraph,
 } from "./txtparae";
 import { importTextParagraphs, type OdfStyleDefinition } from "./txtparai";
@@ -102,6 +103,131 @@ describe("ODF text paragraph export" /** Executes the enclosing deterministic te
     expect(output.automaticStyles).not.toContain('style:name="T1"');
     expect(exportCharacterAttributes({})).toBe("");
   });
+
+  it("exports nested list blocks, per-level rules, and continued list identities" /** Verifies the flat Writer list state becomes canonical ODF containers. @returns Nothing. */, () => {
+    const rule: OdfListRule = {
+      formats: Array.from(
+        { length: 10 },
+        /** Selects the fixture format for a list level. @param _unused - Unused array slot. @param level - Zero-based level. @returns List format kind. */
+        (_unused, level) => (level === 1 ? "numbered" : "bullet"),
+      ),
+      name: "Mixed list",
+    };
+    const list =
+      /** Creates list metadata for one level. @param level - Zero-based list level. @returns Paragraph list metadata. */ (
+        level: number,
+      ) => ({ level, listId: "list-a", rule });
+    const output = exportTextParagraphs([
+      { list: list(0), runs: [{ properties: plain, text: "root" }], style: "default" },
+      { list: list(1), runs: [{ properties: plain, text: "nested" }], style: "default" },
+      { list: list(0), runs: [{ properties: plain, text: "tail" }], style: "default" },
+      { runs: [{ properties: plain, text: "break" }], style: "default" },
+      { list: list(0), runs: [{ properties: plain, text: "continued" }], style: "default" },
+    ]);
+    expect(output.automaticStyles).toContain(
+      '<text:list-style style:name="L1" style:display-name="Mixed list">',
+    );
+    expect(output.automaticStyles).toContain(
+      '<text:list-level-style-number text:level="2" style:num-format="1"/>',
+    );
+    expect(output.body).toContain(
+      '<text:list text:style-name="L1" xml:id="list-a"><text:list-item>',
+    );
+    expect(output.body).toContain(
+      '<text:list text:style-name="L1"><text:list-item><text:p text:style-name="Standard">nested</text:p>',
+    );
+    expect(output.body).toContain('text:continue-list="list-a"');
+    expect(
+      importTextParagraphs(parseText(output.body), new Map(), new Map([["L1", rule]])).map(
+        /** Projects an imported paragraph into assertions. @param paragraph - Imported paragraph. @returns Comparable paragraph state. */
+        (paragraph) => ({
+          list: paragraph.list,
+          text: paragraph.runs
+            .map(
+              /** Reads run text. @param run - Imported text run. @returns Run text. */ (run) =>
+                run.text,
+            )
+            .join(""),
+        }),
+      ),
+    ).toEqual([
+      { list: list(0), text: "root" },
+      { list: list(1), text: "nested" },
+      { list: list(0), text: "tail" },
+      { list: undefined, text: "break" },
+      { list: list(0), text: "continued" },
+    ]);
+  });
+
+  it("rejects inconsistent list metadata and makes encoded XML identities unique" /** Covers strict non-lossy list export guards. @returns Nothing. */, () => {
+    const bulletRule: OdfListRule = {
+      formats: Array.from(
+        { length: 10 },
+        /** Creates a bullet level. @returns Bullet kind. */ () => "bullet",
+      ),
+      name: "Rule",
+    };
+    const paragraph =
+      /** Creates a paragraph containing list metadata. @param list - Canonical list metadata. @returns ODF paragraph. */ (
+        list: NonNullable<OdfParagraph["list"]>,
+      ): OdfParagraph => ({ list, runs: [], style: "default" });
+    const valid = { level: 0, listId: "id", rule: bulletRule };
+    expect(
+      /** Exports conflicting definitions of one named rule. @returns Invalid export. */ () =>
+        exportTextParagraphs([
+          paragraph(valid),
+          paragraph({
+            ...valid,
+            rule: {
+              formats: Array.from(
+                { length: 10 },
+                /** Creates a numbered level. @returns Numbered kind. */ () => "numbered",
+              ),
+              name: "Rule",
+            },
+          }),
+        ]),
+    ).toThrow("Conflicting ODF list rule");
+    for (const level of [-1, 0.5, 10])
+      expect(
+        /** Exports an invalid list level. @returns Invalid export. */ () =>
+          exportTextParagraphs([paragraph({ ...valid, level })]),
+      ).toThrow("outside its numbering rule");
+    expect(
+      /** Exports a missing list identity. @returns Invalid export. */ () =>
+        exportTextParagraphs([paragraph({ ...valid, listId: "" })]),
+    ).toThrow("identity and rule name");
+    expect(
+      /** Exports a missing rule name. @returns Invalid export. */ () =>
+        exportTextParagraphs([paragraph({ ...valid, rule: { ...bulletRule, name: "" } })]),
+    ).toThrow("identity and rule name");
+    expect(
+      /** Exports an incomplete Writer rule. @returns Invalid export. */ () =>
+        exportTextParagraphs([
+          paragraph({ ...valid, rule: { formats: ["bullet"], name: "short" } }),
+        ]),
+    ).toThrow("define ten Writer levels");
+    const output = exportTextParagraphs([
+      paragraph({ level: 0, listId: " ", rule: bulletRule }),
+      { runs: [], style: "default" },
+      paragraph({ level: 0, listId: "list-20", rule: bulletRule }),
+    ]);
+    expect(output.body).toContain('xml:id="list-20"');
+    expect(output.body).toContain('xml:id="list-20-2"');
+    const numberedRule: OdfListRule = {
+      formats: Array.from(
+        { length: 10 },
+        /** Creates a numbered level. @returns Numbered kind. */ () => "numbered",
+      ),
+      name: "Numbers",
+    };
+    expect(
+      exportTextParagraphs([
+        paragraph({ level: 0, listId: "shared", rule: bulletRule }),
+        paragraph({ level: 0, listId: "shared", rule: numberedRule }),
+      ]).body,
+    ).toContain('text:continue-list="shared"');
+  });
 });
 
 describe("ODF text paragraph import" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
@@ -157,6 +283,61 @@ describe("ODF text paragraph import" /** Executes the enclosing deterministic te
       expect(
         /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
         () => importTextParagraphs(parseText(body), styles),
+      ).toThrow("Unsupported ODF");
+  });
+
+  it("validates recursive list structure and synthesizes absent root identities" /** Covers strict list-block import guards and identity fallbacks. @returns Nothing. */, () => {
+    const rule: OdfListRule = {
+      formats: Array.from(
+        { length: 10 },
+        /** Creates a bullet level. @returns Bullet kind. */ () => "bullet",
+      ),
+      name: "Bullets",
+    };
+    const rules = new Map([["L1", rule]]);
+    const importBody =
+      /** Imports an ODF body fragment. @param body - ODF text XML. @param suppliedRules - Available list rules. @returns Imported paragraphs. */ (
+        body: string,
+        suppliedRules = rules,
+      ) => importTextParagraphs(parseText(body), new Map(), suppliedRules);
+    for (const body of ["<foreign/>", "<text:section/>"])
+      expect(
+        /** Imports an unsupported body element. @returns Invalid import. */ () => importBody(body),
+      ).toThrow("Unsupported ODF text element");
+    expect(
+      /** Imports a list with an unresolved style. @returns Invalid import. */ () =>
+        importBody(
+          '<text:list text:style-name="Missing"><text:list-item><text:p>x</text:p></text:list-item></text:list>',
+        ),
+    ).toThrow("Unsupported ODF list style");
+    expect(
+      /** Imports a list beyond its rule table. @returns Invalid import. */ () =>
+        importBody(
+          '<text:list text:style-name="L1"><text:list-item><text:list><text:list-item><text:p>x</text:p></text:list-item></text:list></text:list-item></text:list>',
+          new Map([["L1", { formats: ["bullet"], name: "Short" }]]),
+        ),
+    ).toThrow("Unsupported ODF list level");
+    expect(
+      importBody(
+        '<text:list text:style-name="L1"><text:list-item><text:p>x</text:p></text:list-item></text:list>',
+      )[0]?.list?.listId,
+    ).toBe("Bullets-1");
+    expect(
+      importBody(
+        '<text:list text:style-name="L1" text:continue-list="external"><text:list-item><text:p>x</text:p></text:list-item></text:list>',
+      )[0]?.list?.listId,
+    ).toBe("external");
+    for (const body of [
+      '<text:list text:style-name="L1"><foreign/></text:list>',
+      '<text:list text:style-name="L1"><text:list-header/></text:list>',
+      '<text:list text:style-name="L1"><text:list-item><foreign/></text:list-item></text:list>',
+      '<text:list text:style-name="L1"><text:list-item><text:section/></text:list-item></text:list>',
+      '<text:list text:style-name="L1"><text:list-item><text:p>a</text:p><text:p>b</text:p></text:list-item></text:list>',
+      '<text:list text:style-name="L1" text:continue-numbering="true"><text:list-item><text:p>x</text:p></text:list-item></text:list>',
+    ])
+      expect(
+        /** Imports an unsupported list structure. @returns Invalid import. */ () =>
+          importBody(body),
       ).toThrow("Unsupported ODF");
   });
 

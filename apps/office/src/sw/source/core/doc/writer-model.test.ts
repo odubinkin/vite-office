@@ -373,20 +373,8 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
           hints.getCharacterAttributes("abcd", 5, inherited),
       ),
     ).toThrow("outside the text node");
-    const restored = createSwpHintsFromSnapshot(pool, [
-      null,
-      {},
-      { end: 2, format: { items: bold }, start: 0 },
-      { end: 0, format: { items: bold }, start: 0 },
-      { end: 4, format: { items: null }, start: 2 },
-    ]);
-    expect(restored.toTextRuns("ab", inherited)).toEqual([{ attributes: bold, text: "ab" }]);
-    expect(createSwpHintsFromSnapshot(pool, "invalid").Count()).toBe(0);
-    expect(
-      createSwpHintsFromSnapshot(pool, [
-        { end: 1, format: { items: 7, which: 51 }, start: 0 },
-      ]).Count(),
-    ).toBe(0);
+    const restored = createSwpHintsFromSnapshot(pool, hints.toSnapshot());
+    expect(restored.toSnapshot()).toEqual(hints.toSnapshot());
     expect(
       new SwpHints(pool, [new SwTextAttr(createSwFormatAutoFormat(pool, bold), 5, 6)]).toTextRuns(
         "ab",
@@ -511,7 +499,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(writer.document.lifecycle).toBe("dirty");
   });
 
-  it("round-trips the current SwDoc schema and rejects malformed legacy roots" /** Verifies current snapshot restoration and legacy migration guards. @returns Nothing; assertions inspect serialization. */, function restoresDocuments(): void {
+  it("round-trips the current SwDoc schema and rejects obsolete roots" /** Verifies current snapshot restoration and rejects non-canonical schemas. @returns Nothing; assertions inspect serialization. */, function restoresDocuments(): void {
     const writer = createModelFixture();
     const current = normalizeWriterParagraphFormatting(serializeWriterDocument(writer));
     expect(current).toBeInstanceOf(SwDoc);
@@ -532,33 +520,18 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
         /** Normalizes an empty root. @returns Invalid document. */ () =>
           normalizeWriterParagraphFormatting({}),
       ),
-    ).toThrow("invalid");
+    ).toThrow("schema is unsupported");
     expect(
       throwing(
-        /** Normalizes an empty legacy body. @returns Invalid document. */ () =>
+        /** Rejects an obsolete empty body. @returns Invalid document. */ () =>
           normalizeWriterParagraphFormatting({ document: writer.document, paragraphs: [] }),
       ),
-    ).toThrow("no paragraphs");
+    ).toThrow("schema is unsupported");
     expect(
       throwing(
-        /** Normalizes a malformed legacy paragraph. @returns Invalid document. */ () =>
+        /** Rejects an obsolete malformed paragraph. @returns Invalid document. */ () =>
           normalizeWriterParagraphFormatting({ document: writer.document, paragraphs: [null] }),
       ),
-    ).toThrow("paragraph is invalid");
-    const restored = normalizeWriterParagraphFormatting({
-      document: writer.document,
-      paragraphs: [
-        { id: "", runs: "invalid", text: 4 },
-        { id: "p-2", text: "ok" },
-      ],
-    });
-    expect(
-      restored.paragraphs.map(
-        /** Selects restored identities. @param node - Restored text node. @returns Stable identity. */
-        function selectId(node): string {
-          return node.id;
-        },
-      ),
-    ).toEqual(["paragraph-1", "p-2"]);
+    ).toThrow("schema is unsupported");
   });
 });

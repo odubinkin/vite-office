@@ -9,12 +9,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Desktop as App } from "./desktop";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../sfx2/source/doc/docfac";
-import { createWriterTextRuns } from "../../../sw/source/core/txtnode/ndtxt";
-import {
-  createWriterDocument,
-  insertWriterText,
-  normalizeWriterParagraphFormatting,
-} from "../../../sw/source/core/doc/writer";
+import { createWriterDocument, insertWriterText } from "../../../sw/source/core/doc/writer";
 import { readOdtDocument } from "../../../sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../../sw/source/filter/xml/wrtxml";
 import {
@@ -470,34 +465,17 @@ describe("App" /**
       const adapter = new IndexedDbDocumentStorageAdapter<WriterSnapshotState>(
         "vite-office-writer-workbench",
       );
-      await saveWriterDocument(
-        adapter,
-        normalizeWriterParagraphFormatting({
-          document: createDocument({
-            id: "writer-workbench",
-            suiteId: "writer",
-            title: "Untitled Writer Document",
-          }),
-          paragraphs: [
-            {
-              alignment: "left",
-              id: "writer-paragraph-1",
-              list: { kind: "none", level: 0 },
-              runs: createWriterTextRuns("First stored paragraph"),
-              style: "default",
-              text: "First stored paragraph",
-            },
-            {
-              alignment: "left",
-              id: "writer-paragraph-3",
-              list: { kind: "none", level: 0 },
-              runs: createWriterTextRuns("Third stored paragraph"),
-              style: "default",
-              text: "Third stored paragraph",
-            },
-          ],
+      const irregular = createWriterDocument(
+        createDocument({
+          id: "writer-workbench",
+          suiteId: "writer",
+          title: "Untitled Writer Document",
         }),
+        "writer-paragraph-1",
       );
+      irregular.paragraphs[0]?.SetText("First stored paragraph");
+      irregular.nodes.MakeTextNode("writer-paragraph-3", "Third stored paragraph");
+      await saveWriterDocument(adapter, irregular);
       render(<App />);
       await invokeWriterFileCommand("Open local copy…");
       await waitFor(

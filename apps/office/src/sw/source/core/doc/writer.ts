@@ -6,7 +6,6 @@ import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
 import { SwDoc, type SwDocSnapshot } from "./doc";
 import {
   isWriterParagraphAlignment,
-  normalizeWriterTextRuns,
   SwTextNode,
   WRITER_PARAGRAPH_ALIGNMENTS,
   type WriterCharacterAttributes,
@@ -19,8 +18,6 @@ import {
   WRITER_PARAGRAPH_STYLES,
   type WriterParagraphStyle,
 } from "./fmtcol";
-import { createSwpHintsFromSnapshot } from "../txtnode/ndhints";
-import { createDefaultWriterParagraphList, normalizeWriterParagraphList } from "./list";
 
 export { SwDoc } from "./doc";
 export { SwNodes } from "../docnode/nodes";
@@ -218,20 +215,18 @@ export function toggleWriterParagraphCharacterFormat(
   return next;
 }
 
-/** Converts current or legacy persisted Writer data to the canonical SwDoc graph. @param candidate - Runtime or persisted Writer state. @returns Canonical document graph. */
+/** Restores the current canonical SwDoc snapshot schema. @param candidate - Runtime or persisted Writer state. @returns Canonical document graph. */
 export function normalizeWriterParagraphFormatting(candidate: unknown): WriterDocument {
   if (candidate instanceof SwDoc) return candidate;
   if (!isRecord(candidate)) throw new Error("Stored Writer document is invalid.");
   if (
-    candidate.swModelVersion === 2 &&
+    candidate.swModelVersion === 3 &&
     Array.isArray(candidate.numRules) &&
     Array.isArray(candidate.textFormatCollections) &&
     Array.isArray(candidate.textNodes)
   )
     return SwDoc.fromSnapshot(candidate as unknown as SwDocSnapshot);
-  if (candidate.swModelVersion === 1 && Array.isArray(candidate.textNodes))
-    return restoreVersionOneWriterDocument(candidate);
-  return restoreLegacyWriterDocument(candidate);
+  throw new Error("Stored Writer document schema is unsupported.");
 }
 
 /** Serializes the canonical document graph without ownership cycles. @param writerDocument - Canonical document graph. @returns Versioned Writer snapshot. */
@@ -268,77 +263,6 @@ function assertContentRange(node: SwTextNode, start: number, end: number): void 
     end > node.Len()
   )
     throw new Error("Writer character-format range is outside the paragraph.");
-}
-
-/** Restores the previous paragraph-array snapshot schema into SwTextNode records. @param candidate - Legacy document record. @returns Canonical document graph. */
-function restoreLegacyWriterDocument(candidate: Record<string, unknown>): WriterDocument {
-  if (!isRecord(candidate.document) || !Array.isArray(candidate.paragraphs))
-    throw new Error("Stored Writer document is invalid.");
-  const paragraphs = candidate.paragraphs;
-  if (paragraphs.length === 0) throw new Error("Stored Writer document has no paragraphs.");
-  const document = new SwDoc(candidate.document as unknown as OfficeDocument);
-  paragraphs.forEach(
-    /** Restores one legacy paragraph as a canonical text node and auto-format hints. @param value - Legacy paragraph record. @param index - Body order. @returns Nothing. */
-    function restoreParagraph(value, index): void {
-      if (!isRecord(value)) throw new Error("Stored Writer paragraph is invalid.");
-      const id =
-        typeof value.id === "string" && value.id.trim().length > 0
-          ? value.id
-          : `paragraph-${index + 1}`;
-      const text = typeof value.text === "string" ? value.text : "";
-      const node = document.nodes.MakeTextNode(id, text);
-      node.SetParagraphAlignment(
-        isWriterParagraphAlignment(value.alignment) ? value.alignment : "left",
-      );
-      node.ChgFormatColl(
-        document.GetTextFormatColl(isWriterParagraphStyle(value.style) ? value.style : "default"),
-      );
-      node.SetParagraphList(
-        normalizeWriterParagraphList(value.list ?? createDefaultWriterParagraphList()),
-      );
-      const runs = normalizeWriterTextRuns(value.runs);
-      if (runs.length > 0) node.ReplaceRange(0, node.Len(), runs);
-    },
-  );
-  return document;
-}
-
-/** Restores the prior version-one SwDoc snapshot into item-backed text nodes. @param candidate - Version-one model record. @returns Canonical document graph. */
-function restoreVersionOneWriterDocument(candidate: Record<string, unknown>): WriterDocument {
-  if (!isRecord(candidate.document) || !Array.isArray(candidate.textNodes))
-    throw new Error("Stored Writer document is invalid.");
-  if (candidate.textNodes.length === 0)
-    throw new Error("Stored Writer document has no paragraphs.");
-  const document = new SwDoc(candidate.document as unknown as OfficeDocument);
-  candidate.textNodes.forEach(
-    /** Restores one version-one text node and converts direct fields to Writer items. @param value - Persisted text-node record. @returns Nothing. */
-    function restoreTextNode(value): void {
-      if (
-        !isRecord(value) ||
-        typeof value.id !== "string" ||
-        value.id.trim().length === 0 ||
-        typeof value.text !== "string"
-      )
-        throw new Error("Stored Writer text node is invalid.");
-      const node = document.nodes.MakeTextNode(value.id, value.text);
-      node.SetParagraphAlignment(
-        isWriterParagraphAlignment(value.alignment) ? value.alignment : "left",
-      );
-      node.ChgFormatColl(
-        document.GetTextFormatColl(isWriterParagraphStyle(value.style) ? value.style : "default"),
-      );
-      node.SetParagraphList(
-        normalizeWriterParagraphList(value.list ?? createDefaultWriterParagraphList()),
-      );
-      const hints = createSwpHintsFromSnapshot(
-        document.GetAttrPool(),
-        Array.isArray(value.hints) ? value.hints : [],
-      );
-      const runs = hints.toTextRuns(value.text, node.GetSwAttrSet());
-      if (runs.length > 0) node.ReplaceRange(0, node.Len(), runs);
-    },
-  );
-  return document;
 }
 
 /** Checks whether an unknown value is a non-array record. @param value - Unknown runtime value. @returns True for non-array records. */

@@ -27,7 +27,11 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
+  RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_LEVEL,
+  RES_PARATR_NUMRULE,
 } from "../../../inc/hintids";
+import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 
@@ -73,10 +77,16 @@ export function exportMetaXml(document: SwDoc): string {
 
 /** Projects one canonical text node without leaking Writer ownership into xmloff. @param node - Source text node. @returns Neutral paragraph. */
 function projectParagraph(node: SwTextNode): OdfParagraph {
-  if (node.list.kind !== "none" || node.list.level !== 0 || node.list.styleId !== undefined)
-    throw new Error(`ODT export does not yet support Writer lists: ${node.id}`);
   const directItems = node.GetpSwAttrSet()?.entries() ?? [];
-  assertSupportedItems(directItems, `paragraph ${node.id}`);
+  assertSupportedItems(directItems, `paragraph ${node.id}`, true);
+  const ruleName = node.GetNumRuleName();
+  const rule = node.GetNumRule();
+  if (ruleName.length > 0 && rule === undefined)
+    throw new Error(`ODT export cannot resolve SwNumRule ${ruleName} on paragraph ${node.id}.`);
+  const listId = node.GetListId();
+  const level = node.GetAttrListLevel();
+  if (rule === undefined && (listId.length > 0 || level !== 0))
+    throw new Error(`ODT export found list id or level without SwNumRule on paragraph ${node.id}.`);
   const alignment = getDirectAlignment(
     node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_ADJUST, false),
   );
@@ -87,6 +97,22 @@ function projectParagraph(node: SwTextNode): OdfParagraph {
       node.GetSwAttrSet(),
       true,
     ) as OdfCharacterProperties,
+    ...(rule === undefined
+      ? {}
+      : {
+          list: {
+            listId,
+            level,
+            rule: {
+              formats: Array.from(
+                { length: WRITER_MAX_LIST_LEVEL + 1 },
+                /** Projects one SwNumFormat family. @param _unused - Array value. @param index - Writer list level. @returns Marker family. */
+                (_unused, index) => rule.GetNumFormat(index).GetKind(),
+              ),
+              name: rule.GetName(),
+            },
+          },
+        }),
     ...(directCharacterProperties === undefined ? {} : { properties: directCharacterProperties }),
     runs: node.runs.map(
       /** Projects one canonical direct-format run. @param run - Writer run. @returns Neutral run. */
@@ -96,8 +122,12 @@ function projectParagraph(node: SwTextNode): OdfParagraph {
   };
 }
 
-/** Rejects paragraph items outside this ODT slice. @param items - Direct items. @param owner - Error identity. @returns Nothing. */
-function assertSupportedItems(items: readonly { Which(): number }[], owner: string): void {
+/** Rejects paragraph items outside this ODT slice. @param items - Direct items. @param owner - Error identity. @param allowListItems - Whether paragraph list items are valid. @returns Nothing. */
+function assertSupportedItems(
+  items: readonly { Which(): number }[],
+  owner: string,
+  allowListItems = false,
+): void {
   const supported = new Set<number>([
     RES_CHRATR_POSTURE,
     RES_CHRATR_UNDERLINE,
@@ -108,6 +138,9 @@ function assertSupportedItems(items: readonly { Which(): number }[], owner: stri
     RES_CHRATR_CTL_WEIGHT,
     RES_PARATR_ADJUST,
   ]);
+  if (allowListItems)
+    for (const which of [RES_PARATR_LIST_ID, RES_PARATR_LIST_LEVEL, RES_PARATR_NUMRULE])
+      supported.add(which);
   const unsupported = items.find(
     /** Finds a non-alignment item. @param item - Direct pool item. @returns Whether unsupported. */
     (item) => !supported.has(item.Which()),

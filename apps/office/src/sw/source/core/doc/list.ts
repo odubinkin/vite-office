@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines the serializable first-layer Writer list format and legacy normalization, corresponding to LibreOffice Writer's `sw/source/core/doc/list.cxx` ownership boundary.
+ * @fileoverview Defines the browser projection and command-boundary normalization for Writer list state at LibreOffice's `sw/source/core/doc/list.cxx` ownership boundary.
  */
 
 /** Enumerates list variants currently mapped to LibreOffice Writer's default bullet and numbering commands. */
@@ -23,7 +23,7 @@ export interface WriterParagraphList {
 }
 
 /**
- * Creates the ordinary non-list state assigned to new Writer paragraphs and legacy snapshots.
+ * Creates the ordinary non-list state assigned to new Writer paragraphs.
  *
  * @returns Immutable default list metadata with no marker and the root list level.
  */
@@ -49,7 +49,7 @@ export function isWriterParagraphListKind(value: unknown): value is WriterParagr
 /**
  * Normalizes an unknown stored list value without changing valid current list metadata.
  *
- * @param value - Stored candidate from a legacy or malformed browser-local Writer snapshot.
+ * @param value - Runtime candidate supplied by a browser command boundary.
  * @returns Valid current list metadata, defaulting malformed data to a non-list root state.
  */
 export function normalizeWriterParagraphList(value: unknown): WriterParagraphList {

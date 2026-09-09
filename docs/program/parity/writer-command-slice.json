@@ -155,7 +155,7 @@
       "status": "implemented",
       "gaps": [
         "This first command layer applies to the active paragraph only; multi-paragraph, range, and table-cell selection remain separate mapped work.",
-        "Nested list rendering, named list styles, restart/continue numbering, outline numbering, automatic lists, RTF transfer, and ODT/DOCX import/export remain separate mapped work."
+        "Complete numbering semantics, named-style editing, explicit restart values, outline numbering, automatic lists, RTF transfer, and DOCX import/export remain separate mapped work; bounded ODT list interchange is implemented by LO-WRITER-0113."
       ],
       "upstream": {
         "implementation": [
@@ -188,7 +188,7 @@
           { "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts", "marker": "writerTextObjectBarListCommands" }
         ],
         "tests": [
-          { "path": "apps/office/src/sw/source/core/doc/list.test.ts", "marker": "normalizes legacy" },
+          { "path": "apps/office/src/sw/source/core/doc/list.test.ts", "marker": "normalizes malformed command metadata" },
           { "path": "apps/office/src/sw/source/core/doc/number.test.ts", "marker": "renders bullets" },
           { "path": "apps/office/src/sw/source/uibase/shells/txtnum.test.ts", "marker": "changes only the selected" },
           { "path": "apps/office/src/framework/source/services/desktop.test.tsx", "marker": "applies and toggles Writer list commands" },
@@ -251,7 +251,7 @@
       "status": "implemented",
       "gaps": [
         "The browser supports one active root-to-level-nine paragraph transition only; range, table-cell, multi-level selection, and native Writer outline behavior remain unmapped.",
-        "Nested list rendering, inherited numbering formats, restart/continue semantics, named styles, RTF, Paste, and ODT/DOCX interchange remain separate capabilities."
+        "Complete nested rendering semantics, numbering prefixes and suffixes, explicit restart values, named-style editing, RTF, Paste, and DOCX interchange remain separate capabilities; levels zero through nine round-trip through bounded ODT."
       ],
       "upstream": {
         "implementation": [
@@ -279,7 +279,7 @@
         ],
         "tests": [
           { "path": "apps/office/src/sw/source/uibase/shells/listsh.test.ts", "marker": "promotes and demotes" },
-          { "path": "apps/office/src/sw/source/core/doc/list.test.ts", "marker": "normalizes legacy" },
+          { "path": "apps/office/src/sw/source/core/doc/list.test.ts", "marker": "normalizes malformed command metadata" },
           { "path": "apps/office/src/framework/source/services/desktop.test.tsx", "marker": "applies and toggles Writer list commands" },
           { "path": "apps/office/e2e/writer-lists.spec.ts", "marker": "Writer bullets and numbering" }
         ],
@@ -483,8 +483,8 @@
       "capability": "Writer core resolves bounded paragraph and character properties through pooled items, SfxItemSet, SwAttrSet, SwTextFormatColl, SwFormatAutoFormat, and document-owned SwNumRule definitions",
       "status": "implemented",
       "gaps": [
-        "The current alignment/list WhichIds plus Western/CJK/CTL weight and posture and common underline are implemented. Font family, size, language, color, the complete item universe, built-in style pool, conditional styles, automatic-style cache, multi-level numbering formats, broadcasts, and item sharing remain separate work.",
-        "Versioned browser snapshots preserve the implemented ownership graph, but they do not replace the bounded ODT filter, and ODT numbering plus DOCX style/numbering filters remain unimplemented."
+        "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL weight and posture, and common underline are implemented. Font family, size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, built-in style pool, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
+        "The current version-three browser snapshot preserves the implemented ownership graph; obsolete snapshots from the preceding non-canonical model are deliberately rejected. ODT numbering is mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented."
       ],
       "upstream": {
         "implementation": [
@@ -534,7 +534,7 @@
       "capability": "Writer imports and exports a bounded ODF 1.3 text package through LibreOffice-shaped package, xmloff, and sw XML filter boundaries",
       "status": "implemented",
       "gaps": [
-        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting; lists, tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, and arbitrary style properties remain explicit unsupported cases.",
+        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, non-decimal numbering, and arbitrary style properties remain explicit unsupported cases.",
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability fixtures beyond the mapped pinned feature tests remain future work."
       ],
       "upstream": {

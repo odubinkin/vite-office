@@ -4,7 +4,7 @@ title: "Round-trip all implemented Writer features through ODT"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -38,7 +38,7 @@ events:
     to: "DOING"
     note: "Start: align Writer list contracts with LibreOffice and implement lossless ODT list import/export with full feature round-trip coverage."
 doc_version: 3
-doc_updated_at: "2026-09-09T03:52:07.936Z"
+doc_updated_at: "2026-09-09T04:39:10.633Z"
 doc_updated_by: "CODER"
 description: "Align Writer list core contracts with LibreOffice and implement lossless ODT import/export for every currently implemented document-semantic editor feature, including nested bullet and numbered lists combined with styles, alignment, whitespace, and direct character formatting."
 sections:
@@ -61,21 +61,23 @@ sections:
     - Generated ODT contains valid ODF 1.3 list-style and list block markup accepted by the importer.
     - Representative LibreOffice-shaped nested list XML imports to the same canonical SwDoc state.
     - Unsupported ODF constructs still fail explicitly instead of being silently dropped.
-    - npm test, npm run lint, npm run typecheck, npm run build, and policy routing checks pass.
-    Constraints: no network; no expansion to unimplemented numbering formats, tables, images, annotations, or page layout.
+    - npm run verify and policy routing checks pass.
+    Constraints: no network; no compatibility layer for obsolete or incorrect stored-document schemas; no expansion to unimplemented numbering formats, tables, images, annotations, or page layout.
   Verify Steps: |-
-    PLANNER fallback scaffold for "Round-trip all implemented Writer features through ODT". Replace with task-specific acceptance checks when PLANNER context is available.
-
-    1. Review the requested outcome for "Round-trip all implemented Writer features through ODT". Expected: the visible result matches ## Summary and stays inside approved scope.
-    2. Run the most relevant validation step for this task. Expected: it succeeds without unexpected regressions in touched behavior.
-    3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
+    1. Run npm run verify. Expected: static checks, unit tests with 100% coverage, build, and Writer browser E2E all pass.
+    2. Run node .agentplane/policy/check-routing.mjs. Expected: Agentplane routing policy passes.
+    3. Inspect ODT list round-trip tests. Expected: nested mixed bullet/numbered lists, list continuation, list identities, styles, alignment, whitespace, and direct text formatting preserve canonical SwDoc state.
+    4. Inspect strict rejection tests. Expected: obsolete Writer snapshots and unsupported or lossy ODF list constructs fail explicitly.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    The former saved-document compatibility paths represented the pre-canonical implementation and were removed. Storage now accepts only the current swModelVersion 3 shape. This deliberately follows the clarified scope: architectural cleanliness and LibreOffice-shaped contracts take precedence over backward compatibility at this stage.
+
+    Implemented ODT list interoperability is intentionally limited to editor semantics already modeled by Writer: ten list levels using bullet or decimal numbering. Custom glyphs, alternative number formats, prefixes/suffixes, start values, tables, images, annotations, and page layout remain explicit unsupported boundaries rather than lossy conversions.
 id_source: "generated"
 ---
 ## Summary
@@ -102,16 +104,15 @@ Success criteria:
 - Generated ODT contains valid ODF 1.3 list-style and list block markup accepted by the importer.
 - Representative LibreOffice-shaped nested list XML imports to the same canonical SwDoc state.
 - Unsupported ODF constructs still fail explicitly instead of being silently dropped.
-- npm test, npm run lint, npm run typecheck, npm run build, and policy routing checks pass.
-Constraints: no network; no expansion to unimplemented numbering formats, tables, images, annotations, or page layout.
+- npm run verify and policy routing checks pass.
+Constraints: no network; no compatibility layer for obsolete or incorrect stored-document schemas; no expansion to unimplemented numbering formats, tables, images, annotations, or page layout.
 
 ## Verify Steps
 
-PLANNER fallback scaffold for "Round-trip all implemented Writer features through ODT". Replace with task-specific acceptance checks when PLANNER context is available.
-
-1. Review the requested outcome for "Round-trip all implemented Writer features through ODT". Expected: the visible result matches ## Summary and stays inside approved scope.
-2. Run the most relevant validation step for this task. Expected: it succeeds without unexpected regressions in touched behavior.
-3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
+1. Run npm run verify. Expected: static checks, unit tests with 100% coverage, build, and Writer browser E2E all pass.
+2. Run node .agentplane/policy/check-routing.mjs. Expected: Agentplane routing policy passes.
+3. Inspect ODT list round-trip tests. Expected: nested mixed bullet/numbered lists, list continuation, list identities, styles, alignment, whitespace, and direct text formatting preserve canonical SwDoc state.
+4. Inspect strict rejection tests. Expected: obsolete Writer snapshots and unsupported or lossy ODF list constructs fail explicitly.
 
 ## Verification
 
@@ -124,3 +125,7 @@ PLANNER fallback scaffold for "Round-trip all implemented Writer features throug
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+The former saved-document compatibility paths represented the pre-canonical implementation and were removed. Storage now accepts only the current swModelVersion 3 shape. This deliberately follows the clarified scope: architectural cleanliness and LibreOffice-shaped contracts take precedence over backward compatibility at this stage.
+
+Implemented ODT list interoperability is intentionally limited to editor semantics already modeled by Writer: ten list levels using bullet or decimal numbering. Custom glyphs, alternative number formats, prefixes/suffixes, start values, tables, images, annotations, and page layout remain explicit unsupported boundaries rather than lossy conversions.

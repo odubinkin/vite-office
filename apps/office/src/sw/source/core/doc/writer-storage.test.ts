@@ -3,11 +3,7 @@
 import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
-import type {
-  DocumentSnapshot,
-  DocumentStorageAdapter,
-  SerializableValue,
-} from "../../../../sfx2/source/doc/docfile";
+import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
 import {
   createWriterDocument,
   insertWriterText,
@@ -57,7 +53,7 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
     expect(saved.snapshot).toMatchObject({
       id: "writer-store",
       version: 1,
-      state: { writerDocument: { swModelVersion: 2 } },
+      state: { writerDocument: { swModelVersion: 3 } },
     });
     const loaded = await loadWriterDocument(adapter, "writer-store");
     expect(loaded.status).toBe("found");
@@ -71,52 +67,13 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
     });
   });
 
-  it("restores left alignment for a snapshot written before paragraph alignment existed" /**
-   * Verifies browser-local documents from the previous Writer body shape remain editable after the model evolves.
-   *
-   * @returns A promise resolved after the normalized loaded document is asserted.
-   */, async function migratesLegacyAlignment(): Promise<void> {
-    const writerDocument = createWriterFixture();
-    const adapter = createAdapter({
-      id: "writer-store",
-      state: {
-        writerDocument: {
-          document: writerDocument.document as unknown as SerializableValue,
-          paragraphs: [{ id: "p-1", text: "Saved text" }],
-        },
-      },
-      version: 1,
-    });
-
-    await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
-      status: "found",
-      writerDocument: {
-        paragraphs: [{ alignment: "left", id: "p-1", style: "default", text: "Saved text" }],
-      },
-    });
-  });
-
-  it("round-trips list state and defaults a legacy list-less snapshot" /** Verifies storage retains executable lists while evolving prior browser-local bodies. @returns A promise resolved after both snapshot outcomes are asserted. */, async function storesAndMigratesLists(): Promise<void> {
+  it("round-trips canonical list state" /** Verifies storage retains executable list state in the current schema. @returns A promise resolved after the snapshot is asserted. */, async function storesLists(): Promise<void> {
     const adapter = createAdapter();
     const listedWriter = setWriterParagraphListKind(createWriterFixture(), "p-1", "numbered");
     await saveWriterDocument(adapter, listedWriter);
     await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
       status: "found",
       writerDocument: { paragraphs: [{ list: { kind: "numbered", level: 0 } }] },
-    });
-    const legacyAdapter = createAdapter({
-      id: "writer-store",
-      state: {
-        writerDocument: {
-          document: listedWriter.document as unknown as SerializableValue,
-          paragraphs: [{ alignment: "left", id: "p-1", style: "default", text: "Saved text" }],
-        },
-      },
-      version: 1,
-    });
-    await expect(loadWriterDocument(legacyAdapter, "writer-store")).resolves.toMatchObject({
-      status: "found",
-      writerDocument: { paragraphs: [{ list: { kind: "none", level: 0 } }] },
     });
   });
 });

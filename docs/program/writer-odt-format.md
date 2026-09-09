@@ -32,6 +32,18 @@ into node `SwAttrSet` deltas and `SfxItemSet`-backed `SwFormatAutoFormat` hints
 rather than becoming parallel view fields. Explicit normal text properties can
 override inherited formatting and survive a package round trip.
 
+Default bullets, decimal numbering, and levels zero through nine use the same
+split ownership as Writer: `SwDoc` owns a `SwNumRule` with one `SwNumFormat`
+per level, while each listed `SwTextNode` stores the rule name, list identity,
+and level in `RES_PARATR_NUMRULE`, `RES_PARATR_LIST_ID`, and
+`RES_PARATR_LIST_LEVEL`. The xmloff boundary writes automatic
+`text:list-style` definitions and nests flat Writer nodes in `text:list` and
+`text:list-item` elements. Root `xml:id` and `text:continue-list` segments
+retain list identity across intervening ordinary paragraphs. Import performs
+the inverse traversal, including LibreOffice output that declares only the
+levels used by a list style; missing internal formats are completed when the
+ten-level `SwNumRule` is built.
+
 Spaces are emitted as `text:s`, including `text:c` for runs, while tabs and
 in-paragraph line breaks use `text:tab` and `text:line-break`. This retains exact
 current `SwTextNode` text through semantic round trips. Internal browser paragraph
@@ -50,11 +62,12 @@ manifests, duplicate styles, unsupported semantic style properties, and
 differing Western/CJK/CTL weight or posture values until script-specific
 browser projections are implemented.
 
-Lossy export is not permitted. Writer list state and paragraph item IDs outside
-the implemented alignment and character subset fail explicitly. Imported tables, lists,
-images, fields, annotations, tracked changes, sections, page styles, objects,
-scripts, signatures, encryption, RDF, and arbitrary style properties likewise
-remain unsupported rather than being silently discarded.
+Lossy export is not permitted. Paragraph item IDs outside the implemented
+alignment, list, and character subset fail explicitly. Imported tables, images,
+fields, annotations, tracked changes, sections, page styles, objects, scripts,
+signatures, encryption, RDF, custom bullet glyphs, non-decimal numbering, list
+headers, and arbitrary style properties likewise remain unsupported rather than
+being silently discarded.
 
 ## Browser File integration
 

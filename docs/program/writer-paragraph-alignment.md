@@ -16,12 +16,10 @@ The browser editable paragraph receives the corresponding CSS `text-align` value
 result remains visible without pretending that browser editing implements
 LibreOffice line layout or justification algorithms.
 
-New and appended paragraphs resolve the pool's start/left default. Version-two
-browser-local snapshots retain only direct item deltas plus style definitions.
-Version-one and earlier local snapshots with an absent or unsupported alignment
-are migrated to the pool default without changing lifecycle metadata; this is a
-narrow Vite Office compatibility bridge, not a general document migration
-framework.
+New and appended paragraphs resolve the pool's start/left default. Version-three
+browser-local snapshots retain only direct item deltas plus style definitions;
+older non-canonical schemas are rejected. The same `RES_PARATR_ADJUST` value is
+mapped to and from `fo:text-align` by the bounded ODT filter.
 
 ## Pinned LibreOffice provenance
 
@@ -36,7 +34,7 @@ as a paragraph command and describes its container-margin behavior. The pinned
 its export assertion is outside this browser-only feature.
 
 Local domain, storage, React integration, and production-browser tests cover
-the model transition, no-op and invalid cases, legacy snapshot normalization,
+the model transition, no-op and invalid cases, current snapshot restoration,
 focused targeting, undo/redo, serialization, toolbar semantics, sidebar
 feedback, and visible CSS alignment. They do not map the upstream export
 assertion or establish parity for its fixture.
@@ -45,6 +43,6 @@ assertion or establish parity for its fixture.
 
 This feature has no selection ranges, keyboard paragraph-alignment shortcuts,
 writing-direction-aware start/end behavior, distributed alignment,
-last-line rules, line-breaking, pagination, rich-text runs, ODT/OOXML import or
-export, print/PDF output, localization, or full LibreOffice Writer parity.
+last-line rules, line-breaking, pagination, OOXML import or export, print/PDF
+output, localization, or full LibreOffice Writer parity.
 Each remains a separately mapped capability.

@@ -101,15 +101,15 @@ The same table now also includes the active ODT file-command boundary.
 | `package/source/manifest/ManifestExport.ts` | `package/source/manifest/ManifestExport.cxx` | ODF 1.3 manifest stream |
 | `vcl/browser/browser-file.ts` | Browser-only | Sandboxed user file selection and byte reading without document ownership |
 | `vcl/browser/browser-download.ts` | Browser-only | Sandboxed byte and plain-text download dispatch |
-| `xmloff/source/text/txtparae.ts` | `xmloff/source/text/txtparae.cxx` | Neutral ODF paragraph and inline export |
-| `xmloff/source/text/txtparai.ts` | `xmloff/source/text/txtparai.cxx` | Neutral ODF paragraph and inline import |
+| `xmloff/source/text/txtparae.ts` | `xmloff/source/text/txtparae.cxx` | Neutral ODF paragraph, inline, list-style, and nested-list export |
+| `xmloff/source/text/txtparai.ts` | `xmloff/source/text/txtparai.cxx` | Neutral ODF paragraph, inline, and recursive list import |
 | `sw/inc/hintids.ts` | `sw/inc/hintids.hxx` | Numeric WhichIds and bounded Writer ranges |
 | `sw/source/core/attr/swatrset.ts` | `sw/source/core/attr/swatrset.cxx` | Document-owned `SwAttrPool` and Writer-specialized `SwAttrSet` |
 | `sw/source/core/attr/format.ts` | `sw/source/core/attr/format.cxx` | `SwFormat` attributes and derived-from links |
 | `sw/source/core/doc/fmtcol.ts` | `sw/source/core/doc/fmtcol.cxx` | Named `SwFormatColl` and paragraph `SwTextFormatColl` |
 | `sw/source/core/para/paratr.ts` | `sw/source/core/para/paratr.cxx` | Paragraph `SwNumRuleItem` rule-name value |
 | `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Serializable list metadata and legacy normalization |
-| `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Deterministic visible bullet and numbering marker calculation |
+| `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Document-owned per-level numbering rules and deterministic visible markers |
 | `sw/source/core/doc/doc.ts` | `sw/source/core/doc/doc.cxx` | `SwDoc` owner of `SwNodes` plus explicit browser snapshot conversion |
 | `sw/source/core/docnode/nodes.ts` | `sw/source/core/docnode/nodes.cxx` | Ordered nodes and LibreOffice-matching fixed section sentinels |
 | `sw/source/core/crsr/pam.ts` | `sw/source/core/crsr/pam.cxx` | Model positions and directional point/mark ranges |

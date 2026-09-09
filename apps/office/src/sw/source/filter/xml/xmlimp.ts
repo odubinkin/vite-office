@@ -16,6 +16,7 @@ import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
 import {
   ODF_NAMESPACES,
   type OdfCharacterProperties,
+  type OdfListRule,
   type OdfParagraphAlignment,
 } from "../../../../xmloff/source/text/txtparae";
 import {
@@ -23,6 +24,7 @@ import {
   type OdfStyleDefinition,
 } from "../../../../xmloff/source/text/txtparai";
 import { SwDoc } from "../../core/doc/doc";
+import { SwNumFormat, SwNumRule } from "../../core/doc/number";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_WEIGHT,
@@ -46,15 +48,42 @@ export function importWriterXml(
   const namedStyles = collectStyles(stylesDocument);
   applyNamedParagraphStyles(document, namedStyles);
   const allStyles = new Map([...namedStyles, ...collectStyles(contentDocument)]);
+  const listRules = new Map([
+    ...collectListStyles(stylesDocument),
+    ...collectListStyles(contentDocument),
+  ]);
   const officeText = contentDocument.getElementsByTagNameNS(ODF_NAMESPACES.office, "text");
   if (officeText.length !== 1) throw new Error("ODF content must contain exactly one office:text.");
-  const paragraphs = importTextParagraphs(officeText[0] as Element, allStyles);
+  const paragraphs = importTextParagraphs(officeText[0] as Element, allStyles, listRules);
+  const importedRules = new Map<string, OdfListRule>();
+  paragraphs.forEach(
+    /** Collects every referenced list rule before paragraph items resolve it. @param paragraph - Imported neutral paragraph. @returns Nothing. */
+    (paragraph) => {
+      if (paragraph.list !== undefined)
+        importedRules.set(paragraph.list.rule.name, paragraph.list.rule);
+    },
+  );
+  importedRules.forEach(
+    /** Creates one document-owned SwNumRule with per-level SwNumFormat values. @param rule - Neutral ODF rule. @returns Nothing. */
+    (rule) => {
+      const formats = rule.formats.map(
+        /** Creates one Writer numbering format. @param kind - Imported marker family. @returns Level format. */
+        (kind) => new SwNumFormat(kind),
+      );
+      document.AddNumRule(new SwNumRule(rule.name, formats, rule.name));
+    },
+  );
   paragraphs.forEach(
     /** Restores one neutral paragraph as a canonical text node. @param paragraph - Imported paragraph. @param index - Body order. @returns Nothing. */
     (paragraph, index) => {
       const node = document.nodes.MakeTextNode(`paragraph-${index + 1}`);
       node.ChgFormatColl(document.GetTextFormatColl(paragraph.style));
       if (paragraph.alignment !== undefined) node.SetParagraphAlignment(paragraph.alignment);
+      if (paragraph.list !== undefined) {
+        node.SetNumRule(paragraph.list.rule.name);
+        node.SetListId(paragraph.list.listId);
+        node.SetAttrListLevel(paragraph.list.level);
+      }
       if (paragraph.properties !== undefined)
         putCharacterProperties(
           paragraph.properties,
@@ -73,6 +102,77 @@ export function importWriterXml(
     },
   );
   return document;
+}
+
+/** Collects ODF list styles into per-level Writer numbering rules. @param document - Parsed ODF stream. @returns Style-name keyed rules. */
+function collectListStyles(document: XMLDocument): ReadonlyMap<string, OdfListRule> {
+  const rules = new Map<string, OdfListRule>();
+  for (const element of document.getElementsByTagNameNS(ODF_NAMESPACES.text, "list-style")) {
+    assertPropertyAttributes(element, [
+      [ODF_NAMESPACES.style, "name"],
+      [ODF_NAMESPACES.style, "display-name"],
+    ]);
+    const styleName = requiredAttribute(element, ODF_NAMESPACES.style, "name");
+    if (rules.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
+    const ruleName = element.getAttributeNS(ODF_NAMESPACES.style, "display-name") ?? styleName;
+    const formats: ("bullet" | "numbered" | undefined)[] = Array.from({ length: 10 });
+    for (const levelElement of element.children) {
+      if (levelElement.namespaceURI !== ODF_NAMESPACES.text)
+        throw new Error(`Unsupported ODF list style child: ${levelElement.localName}`);
+      const kind =
+        levelElement.localName === "list-level-style-bullet"
+          ? "bullet"
+          : levelElement.localName === "list-level-style-number"
+            ? "numbered"
+            : undefined;
+      if (kind === undefined)
+        throw new Error(`Unsupported ODF list level style: ${levelElement.localName}`);
+      assertPropertyAttributes(
+        levelElement,
+        kind === "bullet"
+          ? [
+              [ODF_NAMESPACES.text, "level"],
+              [ODF_NAMESPACES.text, "bullet-char"],
+            ]
+          : [
+              [ODF_NAMESPACES.text, "level"],
+              [ODF_NAMESPACES.style, "num-format"],
+              [ODF_NAMESPACES.style, "num-suffix"],
+            ],
+      );
+      const rawLevel = requiredAttribute(levelElement, ODF_NAMESPACES.text, "level");
+      const level = Number(rawLevel);
+      if (!Number.isInteger(level) || level < 1 || level > formats.length)
+        throw new Error(`Unsupported ODF list level: ${rawLevel}`);
+      if (formats[level - 1] !== undefined)
+        throw new Error(`Duplicate ODF list level: ${rawLevel}`);
+      if (kind === "bullet") {
+        const bullet = requiredAttribute(levelElement, ODF_NAMESPACES.text, "bullet-char");
+        if (bullet !== "•") throw new Error(`Unsupported ODF bullet character: ${bullet}`);
+      } else {
+        const numberFormat = requiredAttribute(levelElement, ODF_NAMESPACES.style, "num-format");
+        if (numberFormat !== "1")
+          throw new Error(`Unsupported ODF numbering format: ${numberFormat}`);
+        const suffix = levelElement.getAttributeNS(ODF_NAMESPACES.style, "num-suffix");
+        if (suffix !== null && suffix !== ".")
+          throw new Error(`Unsupported ODF numbering suffix: ${suffix}`);
+      }
+      formats[level - 1] = kind;
+    }
+    const fallback = formats.find(
+      /** Finds the first declared level format. @param format - Candidate format. @returns Whether declared. */
+      (format) => format !== undefined,
+    );
+    if (fallback === undefined) throw new Error(`ODF list style has no levels: ${styleName}`);
+    rules.set(styleName, {
+      formats: formats.map(
+        /** Completes an undeclared internal level using the first declared format. @param format - Imported level. @returns Complete level kind. */
+        (format) => format ?? fallback,
+      ),
+      name: ruleName,
+    });
+  }
+  return rules;
 }
 
 /** Parses one ODF XML stream with a fixed root. @param xml - Source XML. @param expectedRoot - office root local name. @returns XML document. */

@@ -1,4 +1,4 @@
-/** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and v1 migration. */
+/** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
 
 import { describe, expect, it } from "vitest";
 
@@ -22,7 +22,6 @@ import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_NUMRULE,
-  RES_TXTATR_AUTOFMT,
   WRITER_TEXT_NODE_WHICH_RANGES,
 } from "../../../inc/hintids";
 import { SwFormat } from "../attr/format";
@@ -32,7 +31,7 @@ import type { SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatColl } from "./fmtcol";
-import { SwNumRule } from "./number";
+import { SwNumFormat, SwNumRule } from "./number";
 import {
   createWriterDocument,
   normalizeWriterParagraphFormatting,
@@ -246,7 +245,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
   });
 });
 
-describe("Writer numbering rules and snapshots" /** Groups document tables and schema migration tests. @returns Nothing; Vitest registers tests. */, function defineWriterPersistenceTests(): void {
+describe("Writer numbering rules and snapshots" /** Groups document tables and current-schema tests. @returns Nothing; Vitest registers tests. */, function defineWriterPersistenceTests(): void {
   it("owns numbering rules and stores list properties as paragraph items" /** Verifies rule-table and RES_PARATR_* relationships. @returns Nothing; assertions inspect table and item state. */, function storesNumberingRules(): void {
     const writer = createFixture();
     const node = writer.paragraphs[0];
@@ -263,9 +262,12 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and s
     expect(writer.FindNumRulePtr("missing")).toBeUndefined();
     expect(writer.GetNumRuleTable()).toEqual([stored]);
     expect(writer.EnsureNumRule("List 1", "numbered")).toBe(stored);
-    const replacement = writer.EnsureNumRule("List 1", "bullet");
-    expect(replacement.GetKind()).toBe("bullet");
-    expect(replacement.GetDefaultListId()).toBe("list-id-1");
+    expect(
+      throwing(
+        /** Resolves an incompatible existing rule. @returns Invalid rule. */ () =>
+          writer.EnsureNumRule("List 1", "bullet"),
+      ),
+    ).toThrow("different format");
     expect(
       throwing(
         /** Adds a duplicate rule. @returns Duplicate rule. */ () =>
@@ -284,6 +286,17 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and s
     expect((node.GetAttr(RES_PARATR_NUMRULE) as SwNumRuleItem).GetValue()).toBe("");
     node.SetAttr(new SwNumRuleItem("Missing rule"));
     expect(node.list).toEqual({ kind: "none", level: 0 });
+    node.SetParagraphList({ kind: "numbered", level: 0, styleId: "Custom" });
+    node.SetParagraphList({ kind: "bullet", level: 0, styleId: "Custom" });
+    expect(node.GetNumRuleName()).toBe("__WriterDefaultBullet");
+    node.SetListId("");
+    expect(node.GetListId()).toBe("__WriterDefaultBullet");
+    node.SetNumRule("");
+    expect(node.GetListId()).toBe("");
+    for (const level of [-1, 0.5, 10])
+      expect(
+        /** Assigns an invalid list level. @returns Nothing. */ () => node.SetAttrListLevel(level),
+      ).toThrow("outside 0-9");
     expect(
       throwing(
         /** Creates a blank rule name. @returns Invalid rule. */ () => new SwNumRule(" ", "bullet"),
@@ -303,13 +316,36 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and s
     ).toThrow("bullet or numbered");
     expect(
       throwing(
-        /** Restores an invalid rule kind. @returns Invalid rule. */ () =>
-          SwNumRule.fromSnapshot({ kind: "none" as "bullet", listId: "id", name: "Rule" }),
+        /** Restores an invalid rule format. @returns Invalid rule. */ () =>
+          SwNumRule.fromSnapshot({
+            formats: Array.from(
+              { length: 10 },
+              /** Creates an invalid format snapshot. @returns Invalid format. */ () => ({
+                kind: "none" as "bullet",
+              }),
+            ),
+            listId: "id",
+            name: "Rule",
+          }),
       ),
-    ).toThrow("invalid");
+    ).toThrow("bullet or numbered");
+    const mixedFormats = Array.from(
+      { length: 10 },
+      /** Creates a per-level numbering format. @param _unused - Unused array slot. @param level - Zero-based level. @returns Numbering format. */
+      (_unused, level) => new SwNumFormat(level === 1 ? "bullet" : "numbered"),
+    );
+    const mixedRule = new SwNumRule("Mixed", mixedFormats, "mixed-id");
+    expect(mixedRule.GetNumFormat(0).GetKind()).toBe("numbered");
+    expect(mixedRule.GetNumFormat(1).GetKind()).toBe("bullet");
+    expect(
+      throwing(
+        /** Reads a format beyond Writer's level table. @returns Invalid format. */ () =>
+          mixedRule.GetNumFormat(10),
+      ),
+    ).toThrow("outside 0-9");
   });
 
-  it("round-trips item-backed styles, direct attributes, and document rules" /** Verifies v2 snapshots preserve the canonical ownership graph. @returns Nothing; assertions inspect an independent clone. */, function roundTripsVersionTwo(): void {
+  it("round-trips item-backed styles, direct attributes, and document rules" /** Verifies current snapshots preserve the canonical ownership graph. @returns Nothing; assertions inspect an independent clone. */, function roundTripsCurrentVersion(): void {
     const writer = createFixture();
     const node = writer.paragraphs[0];
     if (node === undefined) throw new Error("Writer fixture has no text node.");
@@ -319,7 +355,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and s
     node.SetParagraphAlignment("right");
     node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 2 });
+    expect(snapshot).toMatchObject({ swModelVersion: 3 });
     expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", text: "" });
     expect(snapshot.textNodes[0]).not.toHaveProperty("alignment");
     const restored = normalizeWriterParagraphFormatting(snapshot);
@@ -336,94 +372,17 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and s
     expect(copied.paragraphs[0]?.toSnapshot()).toEqual(restored.paragraphs[0]?.toSnapshot());
   });
 
-  it("migrates version-one text-node fields and rejects malformed v1 records" /** Verifies compatibility with snapshots emitted before item sets. @returns Nothing; assertions inspect conversion and guards. */, function migratesVersionOne(): void {
-    const officeDocument = createDocument({
-      id: "writer-v1",
-      suiteId: "writer",
-      title: "Writer v1",
-    });
-    const migrated = normalizeWriterParagraphFormatting({
-      document: officeDocument,
-      swModelVersion: 1,
-      textNodes: [
-        {
-          alignment: "center",
-          hints: [
-            {
-              end: 2,
-              format: {
-                items: { bold: true, italic: false, underline: false },
-                which: RES_TXTATR_AUTOFMT,
-              },
-              start: 0,
-            },
-          ],
-          id: "p-v1",
-          list: { kind: "numbered", level: 1, styleId: "List v1" },
-          style: "heading-1",
-          text: "v1",
-        },
-      ],
-    });
-    expect(migrated.paragraphs[0]).toMatchObject({
-      alignment: "center",
-      id: "p-v1",
-      list: { kind: "numbered", level: 1, styleId: "List v1" },
-      style: "heading-1",
-      text: "v1",
-    });
-    expect(migrated.paragraphs[0]?.runs[0]?.attributes.bold).toBe(true);
-    const fallback = normalizeWriterParagraphFormatting({
-      document: officeDocument,
-      swModelVersion: 1,
-      textNodes: [{ alignment: "bad", hints: "bad", id: "p", list: null, style: "bad", text: "" }],
-    });
-    expect(fallback.paragraphs[0]).toMatchObject({ alignment: "left", style: "default" });
-    expect(
-      throwing(
-        /** Migrates v1 without a document record. @returns Invalid graph. */ () =>
-          normalizeWriterParagraphFormatting({ swModelVersion: 1, textNodes: [{}] }),
-      ),
-    ).toThrow("invalid");
-    expect(
-      throwing(
-        /** Migrates an empty v1 body. @returns Invalid graph. */ () =>
-          normalizeWriterParagraphFormatting({
-            document: officeDocument,
-            swModelVersion: 1,
-            textNodes: [],
-          }),
-      ),
-    ).toThrow("no paragraphs");
-    expect(
-      throwing(
-        /** Migrates a non-record v1 node. @returns Invalid graph. */ () =>
-          normalizeWriterParagraphFormatting({
-            document: officeDocument,
-            swModelVersion: 1,
-            textNodes: [null],
-          }),
-      ),
-    ).toThrow("text node is invalid");
-    expect(
-      throwing(
-        /** Migrates a blank v1 node id. @returns Invalid graph. */ () =>
-          normalizeWriterParagraphFormatting({
-            document: officeDocument,
-            swModelVersion: 1,
-            textNodes: [{ id: " ", text: "" }],
-          }),
-      ),
-    ).toThrow("text node is invalid");
-    expect(
-      throwing(
-        /** Migrates a non-string v1 text. @returns Invalid graph. */ () =>
-          normalizeWriterParagraphFormatting({
-            document: officeDocument,
-            swModelVersion: 1,
-            textNodes: [{ id: "p", text: 1 }],
-          }),
-      ),
-    ).toThrow("text node is invalid");
+  it("rejects obsolete snapshot schemas instead of preserving pre-canonical models" /** Keeps the core contract limited to the current LO-shaped schema. @returns Nothing. */, function rejectsObsoleteSchemas(): void {
+    for (const obsolete of [
+      { document: {}, paragraphs: [] },
+      { document: {}, swModelVersion: 1, textNodes: [] },
+      { document: {}, numRules: [], swModelVersion: 2, textFormatCollections: [], textNodes: [] },
+    ])
+      expect(
+        throwing(
+          /** Restores an obsolete saved-document schema. @returns Invalid document. */ () =>
+            normalizeWriterParagraphFormatting(obsolete),
+        ),
+      ).toThrow("schema is unsupported");
   });
 });

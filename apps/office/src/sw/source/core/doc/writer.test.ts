@@ -377,16 +377,14 @@ describe("Writer paragraph body" /**
     ).toThrowError();
   });
 
-  it("changes one paragraph alignment immutably and normalizes legacy stored values" /**
-   * Verifies alignment uses the shared dirty transition, preserves no-op references, and restores old snapshots safely.
+  it("changes one paragraph alignment immutably" /**
+   * Verifies alignment uses the shared dirty transition and preserves no-op references.
    *
-   * @returns Nothing; assertions validate valid, invalid, and legacy alignment behavior.
+   * @returns Nothing; assertions validate valid and invalid alignment behavior.
    */, function alignsParagraphs(): void {
     const writer = appendWriterParagraph(createFixture(), "p-2");
     const aligned = setWriterParagraphAlignment(writer, "p-2", "center");
     const unchanged = setWriterParagraphAlignment(aligned, "p-2", "center");
-    const legacyWriter = { document: writer.document, paragraphs: [{ id: "p-1", text: "Legacy" }] };
-    const normalized = normalizeWriterParagraphFormatting(legacyWriter);
 
     expect(projectParagraphs(writer)[1]).toEqual({
       alignment: "left",
@@ -406,21 +404,6 @@ describe("Writer paragraph body" /**
       text: "",
     });
     expect(unchanged).toBe(aligned);
-    expect(projectParagraphs(normalized)).toEqual([
-      {
-        alignment: "left",
-        id: "p-1",
-        list: { kind: "none", level: 0 },
-        runs: [
-          {
-            attributes: { bold: false, italic: false, underline: false },
-            text: "Legacy",
-          },
-        ],
-        style: "default",
-        text: "Legacy",
-      },
-    ]);
     expect(normalizeWriterParagraphFormatting(aligned)).toBe(aligned);
     expect(
       /** Executes the unsupported-alignment failure case for Vitest. @returns Invalid alignment transition; delegated call always throws. */

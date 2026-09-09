@@ -24,7 +24,7 @@ export interface SwDocSnapshot {
   /** Document-owned paragraph style collections. */
   readonly textFormatCollections: readonly SwTextFormatCollSnapshot[];
   /** Writer model schema discriminator. */
-  readonly swModelVersion: 2;
+  readonly swModelVersion: 3;
 }
 
 /** Owns Writer's document node array and browser lifecycle metadata. */
@@ -107,15 +107,12 @@ export class SwDoc {
     return [...this.numRules.values()];
   }
 
-  /** Finds or creates a rule with stable kind semantics. @param name - Rule name. @param kind - Bullet or numbering family. @returns Document-owned rule. */
-  public EnsureNumRule(name: string, kind: "bullet" | "numbered"): SwNumRule {
+  /** Finds or creates a rule with stable level-format semantics. @param name - Rule name. @param kind - Bullet or numbering family. @param level - Level whose format must agree. @returns Document-owned rule. */
+  public EnsureNumRule(name: string, kind: "bullet" | "numbered", level = 0): SwNumRule {
     const existing = this.FindNumRulePtr(name);
     if (existing !== undefined) {
-      if (existing.GetKind() !== kind) {
-        const replacement = new SwNumRule(name, kind, existing.GetDefaultListId());
-        this.numRules.set(name, replacement);
-        return replacement;
-      }
+      if (existing.GetNumFormat(level).GetKind() !== kind)
+        throw new Error(`SwNumRule ${name} has a different format at level ${level}.`);
       return existing;
     }
     return this.AddNumRule(new SwNumRule(name, kind));
@@ -146,7 +143,7 @@ export class SwDoc {
           return rule.toSnapshot();
         },
       ),
-      swModelVersion: 2,
+      swModelVersion: 3,
       textNodes: this.paragraphs.map(
         /** Serializes one regular body text node. @param node - Canonical SwTextNode. @returns Persisted node record. */
         function serializeTextNode(node): SwTextNodeSnapshot {

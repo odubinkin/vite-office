@@ -32,10 +32,32 @@ export type OdfParagraphStyle = "default" | "heading-1";
 /** Paragraph alignment values shared with the Writer model. */
 export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
 
+/** Marker family stored by one ODF list level style. */
+export type OdfListLevelKind = "bullet" | "numbered";
+
+/** Neutral projection of one document-owned Writer numbering rule. */
+export interface OdfListRule {
+  /** Per-level marker families in zero-based Writer order. */
+  readonly formats: readonly OdfListLevelKind[];
+  /** Canonical SwNumRule name. */
+  readonly name: string;
+}
+
+/** Neutral list attributes applied to one paragraph. */
+export interface OdfParagraphList {
+  /** Effective Writer list identity. */
+  readonly listId: string;
+  /** Zero-based Writer list level. */
+  readonly level: number;
+  /** Document numbering rule. */
+  readonly rule: OdfListRule;
+}
+
 /** Neutral paragraph record passed between Writer and xmloff. */
 export interface OdfParagraph {
   readonly alignment?: OdfParagraphAlignment;
   readonly inheritedProperties?: OdfCharacterProperties;
+  readonly list?: OdfParagraphList;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly runs: readonly OdfTextRun[];
   readonly style: OdfParagraphStyle;
@@ -51,9 +73,24 @@ export interface OdfTextExport {
 export function exportTextParagraphs(paragraphs: readonly OdfParagraph[]): OdfTextExport {
   const paragraphStyleNames = new Map<string, string>();
   const characterStyleNames = new Map<string, string>();
+  const listRules = new Map<string, OdfListRule>();
   paragraphs.forEach(
     /** Collects automatic styles used by one paragraph. @param paragraph - Neutral paragraph. @returns Nothing. */
     (paragraph) => {
+      if (paragraph.list !== undefined) {
+        const list = paragraph.list;
+        assertList(list);
+        const existing = listRules.get(list.rule.name);
+        if (
+          existing !== undefined &&
+          existing.formats.some(
+            /** Finds a conflicting same-name level format. @param kind - Existing family. @param index - List level. @returns Whether definitions conflict. */
+            (kind, index) => kind !== list.rule.formats[index],
+          )
+        )
+          throw new Error(`Conflicting ODF list rule: ${list.rule.name}`);
+        listRules.set(list.rule.name, list.rule);
+      }
       if (paragraph.alignment !== undefined || paragraph.properties !== undefined) {
         const key = paragraphStyleKey(paragraph.style, paragraph.alignment, paragraph.properties);
         if (!paragraphStyleNames.has(key))
@@ -102,38 +139,176 @@ export function exportTextParagraphs(paragraphs: readonly OdfParagraph[]): OdfTe
       return `<style:style style:name="${name}" style:family="text"><style:text-properties${exportCharacterAttributes(properties)}/></style:style>`;
     },
   );
-  const body = paragraphs
+  const listStyleNames = new Map<string, string>();
+  const listStyles = [...listRules.values()].map(
+    /** Emits one automatic ODF list style. @param rule - Writer numbering rule. @param index - Stable style index. @returns Style XML. */
+    (rule, index) => {
+      const name = `L${index + 1}`;
+      listStyleNames.set(rule.name, name);
+      const levels = rule.formats
+        .map(
+          /** Emits one list-level style. @param kind - Marker family. @param level - Zero-based Writer level. @returns Level XML. */
+          (kind, level) =>
+            kind === "bullet"
+              ? `<text:list-level-style-bullet text:level="${level + 1}" text:bullet-char="•"/>`
+              : `<text:list-level-style-number text:level="${level + 1}" style:num-format="1"/>`,
+        )
+        .join("");
+      return `<text:list-style style:name="${name}" style:display-name="${escapeXml(rule.name)}">${levels}</text:list-style>`;
+    },
+  );
+  const body = exportParagraphBody(
+    paragraphs,
+    paragraphStyleNames,
+    characterStyleNames,
+    listStyleNames,
+  );
+  return {
+    automaticStyles: [...paragraphStyles, ...characterStyles, ...listStyles].join(""),
+    body,
+  };
+}
+
+/** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @returns ODF body fragment. */
+function exportParagraphBody(
+  paragraphs: readonly OdfParagraph[],
+  paragraphStyleNames: ReadonlyMap<string, string>,
+  characterStyleNames: ReadonlyMap<string, string>,
+  listStyleNames: ReadonlyMap<string, string>,
+): string {
+  let body = "";
+  let activeListId: string | undefined;
+  const openRules: string[] = [];
+  const listIdentities = new Map<string, { readonly rootId: string; segments: number }>();
+  const usedXmlIds = new Set<string>();
+
+  /** Closes every currently open list item and list. @returns Nothing. */
+  function closeAllLists(): void {
+    while (openRules.length > 0) {
+      body += "</text:list-item></text:list>";
+      openRules.pop();
+    }
+    activeListId = undefined;
+  }
+
+  /** Opens one list level and its first item. @param paragraphList - Source list metadata. @param root - Whether this is a root list block. @returns Nothing. */
+  function openListLevel(paragraphList: OdfParagraphList, root: boolean): void {
+    const styleName = listStyleNames.get(paragraphList.rule.name) as string;
+    let identityAttributes = "";
+    if (root) {
+      const prior = listIdentities.get(paragraphList.listId);
+      if (prior === undefined) {
+        const rootId = createXmlId(paragraphList.listId, usedXmlIds);
+        listIdentities.set(paragraphList.listId, { rootId, segments: 1 });
+        identityAttributes = ` xml:id="${rootId}"`;
+      } else {
+        prior.segments += 1;
+        const segmentId = createXmlId(`${prior.rootId}-${prior.segments}`, usedXmlIds);
+        identityAttributes = ` xml:id="${segmentId}" text:continue-list="${prior.rootId}"`;
+      }
+    }
+    body += `<text:list text:style-name="${styleName}"${identityAttributes}><text:list-item>`;
+    openRules.push(paragraphList.rule.name);
+  }
+
+  paragraphs.forEach(
+    /** Emits one flat paragraph into the current list stack or document body. @param paragraph - Neutral paragraph. @returns Nothing. */
+    (paragraph) => {
+      const paragraphXml = exportParagraphElement(
+        paragraph,
+        paragraphStyleNames,
+        characterStyleNames,
+      );
+      if (paragraph.list === undefined) {
+        closeAllLists();
+        body += paragraphXml;
+        return;
+      }
+      const list = paragraph.list;
+      const currentRuleAtLevel = openRules[list.level];
+      if (
+        activeListId !== undefined &&
+        (activeListId !== list.listId ||
+          (currentRuleAtLevel !== undefined && currentRuleAtLevel !== list.rule.name))
+      )
+        closeAllLists();
+      if (openRules.length === 0) {
+        activeListId = list.listId;
+        for (let level = 0; level <= list.level; level += 1) openListLevel(list, level === 0);
+      } else if (list.level >= openRules.length) {
+        while (openRules.length <= list.level) openListLevel(list, false);
+      } else {
+        while (openRules.length - 1 > list.level) {
+          body += "</text:list-item></text:list>";
+          openRules.pop();
+        }
+        body += "</text:list-item><text:list-item>";
+      }
+      body += paragraphXml;
+    },
+  );
+  closeAllLists();
+  return body;
+}
+
+/** Emits one paragraph or heading element without list containers. @param paragraph - Neutral paragraph. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @returns Element XML. */
+function exportParagraphElement(
+  paragraph: OdfParagraph,
+  paragraphStyleNames: ReadonlyMap<string, string>,
+  characterStyleNames: ReadonlyMap<string, string>,
+): string {
+  const baseStyleName = paragraph.style === "heading-1" ? "Heading_20_1" : "Standard";
+  const styleName =
+    paragraph.alignment === undefined && paragraph.properties === undefined
+      ? baseStyleName
+      : (paragraphStyleNames.get(
+          paragraphStyleKey(paragraph.style, paragraph.alignment, paragraph.properties),
+        ) as string);
+  const content = paragraph.runs
     .map(
-      /** Emits one ODF paragraph or heading. @param paragraph - Neutral paragraph. @returns Text XML. */
-      (paragraph) => {
-        const baseStyleName = paragraph.style === "heading-1" ? "Heading_20_1" : "Standard";
-        const styleName =
-          paragraph.alignment === undefined && paragraph.properties === undefined
-            ? baseStyleName
-            : (paragraphStyleNames.get(
-                paragraphStyleKey(paragraph.style, paragraph.alignment, paragraph.properties),
-              ) as string);
-        const content = paragraph.runs
-          .map(
-            /** Emits one plain or styled text fragment. @param run - Neutral run. @returns Inline XML. */
-            (run) => {
-              const encoded = exportText(run.text);
-              if (equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph)))
-                return encoded;
-              const name = characterStyleNames.get(
-                characterPropertiesKey(run.properties),
-              ) as string;
-              return `<text:span text:style-name="${name}">${encoded}</text:span>`;
-            },
-          )
-          .join("");
-        return paragraph.style === "heading-1"
-          ? `<text:h text:outline-level="1" text:style-name="${styleName}">${content}</text:h>`
-          : `<text:p text:style-name="${styleName}">${content}</text:p>`;
+      /** Emits one plain or styled text fragment. @param run - Neutral run. @returns Inline XML. */
+      (run) => {
+        const encoded = exportText(run.text);
+        if (equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph)))
+          return encoded;
+        const name = characterStyleNames.get(characterPropertiesKey(run.properties)) as string;
+        return `<text:span text:style-name="${name}">${encoded}</text:span>`;
       },
     )
     .join("");
-  return { automaticStyles: [...paragraphStyles, ...characterStyles].join(""), body };
+  return paragraph.style === "heading-1"
+    ? `<text:h text:outline-level="1" text:style-name="${styleName}">${content}</text:h>`
+    : `<text:p text:style-name="${styleName}">${content}</text:p>`;
+}
+
+/** Validates list metadata before XML generation. @param list - Neutral list state. @returns Nothing. */
+function assertList(list: OdfParagraphList): void {
+  if (!Number.isInteger(list.level) || list.level < 0 || list.level >= list.rule.formats.length)
+    throw new Error("ODF list level is outside its numbering rule.");
+  if (list.listId.length === 0 || list.rule.name.length === 0)
+    throw new Error("ODF list identity and rule name must not be blank.");
+  if (list.rule.formats.length !== 10)
+    throw new Error("ODF list rule must define ten Writer levels.");
+}
+
+/** Creates a unique XML ID while preserving already-valid Writer list ids. @param value - Canonical list identity. @param used - IDs already emitted. @returns Unique XML ID. */
+function createXmlId(value: string, used: Set<string>): string {
+  const base = /^[A-Za-z_][A-Za-z0-9._-]*$/.test(value)
+    ? value
+    : `list-${[...value]
+        .map(
+          /** Encodes one invalid-ID character. @param character - Source character. @returns Hexadecimal code point. */
+          (character) => (character.codePointAt(0) as number).toString(16),
+        )
+        .join("-")}`;
+  let candidate = base;
+  let suffix = 2;
+  while (used.has(candidate)) {
+    candidate = `${base}-${suffix}`;
+    suffix += 1;
+  }
+  used.add(candidate);
+  return candidate;
 }
 
 /** Creates an automatic paragraph style deduplication key. @param style - Parent style. @param alignment - Direct alignment. @param properties - Direct character properties. @returns Key. */

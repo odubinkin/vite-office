@@ -1,4 +1,4 @@
-/** @fileoverview Verifies Writer list serialization and legacy normalization at the `list.cxx`-derived document boundary. */
+/** @fileoverview Verifies Writer list projection normalization at the `list.cxx`-derived document boundary. */
 
 import { describe, expect, it } from "vitest";
 
@@ -18,7 +18,7 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
     expect(isWriterParagraphListKind(undefined)).toBe(false);
   });
 
-  it("normalizes legacy and malformed list metadata without losing valid future fields" /** Verifies browser-local snapshots retain serializable valid fields and default invalid candidates. @returns Nothing; assertions cover normalization branches. */, function normalizesListMetadata(): void {
+  it("normalizes malformed command metadata without losing valid fields" /** Verifies browser command inputs retain valid fields and default invalid candidates. @returns Nothing; assertions cover normalization branches. */, function normalizesListMetadata(): void {
     expect(normalizeWriterParagraphList(undefined)).toEqual({ kind: "none", level: 0 });
     expect(normalizeWriterParagraphList(null)).toEqual({ kind: "none", level: 0 });
     expect(normalizeWriterParagraphList({ kind: "outline", level: -1, styleId: "  " })).toEqual({

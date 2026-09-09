@@ -10,7 +10,8 @@ and [`number.ts`](../../apps/office/src/sw/source/core/doc/number.ts), matching
 the `sw/source/core/doc/list.cxx` and `number.cxx` ownership boundaries.
 Canonical paragraph state follows Writer's split ownership: a `SwNumRuleItem`
 stores the rule name with `RES_PARATR_NUMRULE`, list identity and level are
-separate items, and `SwDoc` owns the referenced bounded `SwNumRule`. The
+separate items, and `SwDoc` owns the referenced bounded `SwNumRule` with one
+`SwNumFormat` for every level. The
 `{ kind, level, styleId }` object consumed by browser controls and marker
 rendering is derived from those items and the rule table.
 
@@ -32,13 +33,20 @@ the commands where they would be no-ops. A list level adds a visible document
 indent outside `textContent`, so native editing and Copy continue to contain
 only paragraph text.
 
+The ODF filter projects those same canonical values into automatic
+`text:list-style` definitions and nested `text:list`/`text:list-item` blocks.
+Import restores rule name, list identity, level, and the bullet-or-decimal
+format for every supported level. Disjoint portions of one list use ODF
+`text:continue-list`, matching LibreOffice's list-block export rather than
+flattening markers into paragraph text.
+
 ## Deliberate current boundary
 
-This is not full Writer list parity. Range and table-cell selection, nested
-document rendering and numbering semantics, full multi-level named list-style definitions, restart/continue
-numbering, automatic list detection, outline numbering, RTF clipboard transfer,
-Paste, and ODT/DOCX import/export remain separately mapped follow-up
-capabilities. The bounded semantic nested-HTML and level-indented plain-text
-Copy path is documented in
+This is not full Writer list parity. Range and table-cell selection, complete
+numbering semantics, prefixes and suffixes, custom glyphs and numeric formats,
+explicit restart values, automatic list detection, outline numbering, RTF
+clipboard transfer, Paste, and DOCX import/export remain separately mapped
+follow-up capabilities. The bounded semantic nested-HTML and level-indented
+plain-text Copy path is documented in
 [Browser Writer clipboard](writer-clipboard.md); it is deliberately not a
 claim of full list export/import parity.

@@ -120,9 +120,10 @@ The product cannot depend on backend persistence. The platform layer may use:
 - IndexedDB or Origin Private File System for autosave and recovery;
 - Service Worker caching for offline static assets after initial installation.
 
-Stored content needs versioned schemas, migrations, quota handling, corruption
-recovery, and tests. Browser storage is not a substitute for explicit file-save
-behavior.
+Stored content needs versioned schema validation, quota handling, corruption
+recovery, and tests. Migration belongs in an explicitly approved compatibility
+task; it must not constrain a replacement canonical model by default. Browser
+storage is not a substitute for explicit file-save behavior.
 
 ## Rendering and accessibility
 

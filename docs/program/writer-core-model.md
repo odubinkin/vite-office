@@ -62,7 +62,8 @@ is allocated on first mutation and released when its last delta is cleared.
 The current style table contains Default Paragraph Style and Heading 1, with
 Heading 1 derived from the default collection. Alignment is an
 `SvxAdjustItem`. List application stores a `SwNumRuleItem` name, list identity,
-and level while the corresponding bounded `SwNumRule` is owned by `SwDoc`.
+and level while the corresponding `SwNumRule` and its ten per-level
+`SwNumFormat` records are owned by `SwDoc`.
 The browser-facing `alignment`, `style`, and `list` properties are derived
 projections, like `runs`; they are not canonical storage.
 
@@ -84,13 +85,13 @@ current browser workbench still needs immutable React roots, so each command
 clones the `SwDoc` graph and then applies the source-shaped mutation to the
 clone. This is a UI/history adapter, not the canonical document representation.
 
-Persistence uses the explicit `swModelVersion: 2` snapshot produced by
+Persistence uses the explicit `swModelVersion: 3` snapshot produced by
 `SwDoc.toSnapshot()`. It records the shared document header, document-owned
 style and numbering definitions, text-node collection identities, direct item
 deltas, and text hints. `SwDoc.fromSnapshot()` reconstructs those ownership and
-inheritance links. Loading also accepts both the version-one `SwDoc` snapshot
-with direct paragraph fields and the earlier `paragraphs`/`runs` DTO, converting
-either immediately into the item-backed graph.
+inheritance links. Earlier DTO and snapshot schemas are deliberately rejected;
+the current reimplementation does not preserve contracts from the preceding
+non-canonical model.
 
 ## Deliberate remaining gaps
 
@@ -99,9 +100,10 @@ commands plus Western/CJK/CTL weight and posture and common underline. It does
 not yet reproduce pool ranges for the complete Writer item
 universe, invalid/disabled item payloads, item sharing/reference counts,
 `SfxBroadcaster` notifications, conditional styles, automatic-style caches, or
-the complete built-in style and numbering tables. Registered index correction,
+the complete built-in style and numbering tables and format properties. Registered index correction,
 nested non-body sections, tables, frames, fields, marks, redlines, content
-controls, anchored objects, layout frames, native undo objects, and Writer's
-file filters also remain. ODT and DOCX support must be reimplemented from the
-corresponding pinned filter and storage sources against this graph; serializing
-the browser snapshot is not a format implementation.
+controls, anchored objects, layout frames, native undo objects, and most Writer
+file filters also remain. The bounded ODT filter maps this graph; DOCX and the
+remaining formats must be reimplemented from their corresponding pinned filter
+and storage sources. Serializing the browser snapshot is not a file-format
+implementation.

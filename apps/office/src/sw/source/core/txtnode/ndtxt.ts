@@ -17,6 +17,7 @@ import {
 import {
   createDefaultWriterParagraphList,
   normalizeWriterParagraphList,
+  WRITER_MAX_LIST_LEVEL,
   type WriterParagraphList,
 } from "../doc/list";
 import {
@@ -24,7 +25,11 @@ import {
   type SwTextFormatColl,
   type WriterParagraphStyle,
 } from "../doc/fmtcol";
-import { DEFAULT_BULLET_RULE_NAME, DEFAULT_NUMBERING_RULE_NAME } from "../doc/number";
+import {
+  DEFAULT_BULLET_RULE_NAME,
+  DEFAULT_NUMBERING_RULE_NAME,
+  type SwNumRule,
+} from "../doc/number";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwNumRuleItem } from "../para/paratr";
@@ -379,22 +384,64 @@ export class SwTextNode extends SwContentNode {
 
   /** Returns a copy of the bounded numbering/list items. @returns Paragraph list items. */
   public get list(): WriterParagraphList {
-    const ruleName = (this.GetAttr(RES_PARATR_NUMRULE) as SwNumRuleItem).GetValue();
+    const ruleName = this.GetNumRuleName();
     if (ruleName.length === 0) {
       const listId = (this.GetAttr(RES_PARATR_LIST_ID) as SfxStringItem).GetValue();
-      const level = (this.GetAttr(RES_PARATR_LIST_LEVEL) as SfxInt16Item).GetValue();
+      const level = this.GetAttrListLevel();
       return listId.length === 0
         ? { kind: "none", level }
         : { kind: "none", level, styleId: listId };
     }
-    const rule = this.GetDoc().FindNumRulePtr(ruleName);
+    const rule = this.GetNumRule();
     if (rule === undefined) return createDefaultWriterParagraphList();
-    const level = (this.GetAttr(RES_PARATR_LIST_LEVEL) as SfxInt16Item).GetValue();
+    const level = this.GetAttrListLevel();
     const builtIn =
       ruleName === DEFAULT_BULLET_RULE_NAME || ruleName === DEFAULT_NUMBERING_RULE_NAME;
     return builtIn
-      ? { kind: rule.GetKind(), level }
-      : { kind: rule.GetKind(), level, styleId: ruleName };
+      ? { kind: rule.GetNumFormat(level).GetKind(), level }
+      : { kind: rule.GetNumFormat(level).GetKind(), level, styleId: ruleName };
+  }
+
+  /** Returns the SwNumRuleItem value applied to this text node. @returns Rule name, or an empty string. */
+  public GetNumRuleName(): string {
+    return (this.GetAttr(RES_PARATR_NUMRULE) as SwNumRuleItem).GetValue();
+  }
+
+  /** Resolves the paragraph's SwNumRuleItem through the owning document table. @returns Document-owned rule, when valid. */
+  public GetNumRule(): SwNumRule | undefined {
+    const ruleName = this.GetNumRuleName();
+    return ruleName.length === 0 ? undefined : this.GetDoc().FindNumRulePtr(ruleName);
+  }
+
+  /** Returns the zero-based RES_PARATR_LIST_LEVEL value. @returns List level. */
+  public GetAttrListLevel(): number {
+    return (this.GetAttr(RES_PARATR_LIST_LEVEL) as SfxInt16Item).GetValue();
+  }
+
+  /** Sets the bounded RES_PARATR_LIST_LEVEL value. @param level - Zero-based list level. @returns Nothing. */
+  public SetAttrListLevel(level: number): void {
+    if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
+      throw new Error(`Writer list level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
+    if (level === 0) this.ResetAttr(RES_PARATR_LIST_LEVEL);
+    else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, level));
+  }
+
+  /** Returns RES_PARATR_LIST_ID, falling back to the rule's default list id like Writer. @returns Effective list identity. */
+  public GetListId(): string {
+    const direct = (this.GetAttr(RES_PARATR_LIST_ID) as SfxStringItem).GetValue();
+    return direct.length > 0 ? direct : (this.GetNumRule()?.GetDefaultListId() ?? "");
+  }
+
+  /** Sets or resets RES_PARATR_LIST_ID. @param listId - Direct list identity. @returns Nothing. */
+  public SetListId(listId: string): void {
+    if (listId.length === 0) this.ResetAttr(RES_PARATR_LIST_ID);
+    else this.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, listId));
+  }
+
+  /** Sets or resets RES_PARATR_NUMRULE without changing list id or level. @param ruleName - Document rule name. @returns Nothing. */
+  public SetNumRule(ruleName: string): void {
+    if (ruleName.length === 0) this.ResetAttr(RES_PARATR_NUMRULE);
+    else this.SetAttr(new SwNumRuleItem(ruleName));
   }
 
   /** Returns the paragraph's text format collection identity. @returns Paragraph style identity. */
@@ -418,20 +465,27 @@ export class SwTextNode extends SwContentNode {
   public SetParagraphList(list: WriterParagraphList): void {
     const normalized = normalizeWriterParagraphList(list);
     if (normalized.kind === "none") {
-      this.ResetAttr(RES_PARATR_NUMRULE);
+      this.SetNumRule("");
       if (normalized.styleId === undefined) this.ResetAttr(RES_PARATR_LIST_ID);
-      else this.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, normalized.styleId));
-      if (normalized.level === 0) this.ResetAttr(RES_PARATR_LIST_LEVEL);
-      else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, normalized.level));
+      else this.SetListId(normalized.styleId);
+      this.SetAttrListLevel(normalized.level);
       return;
     }
-    const ruleName =
+    let ruleName =
       normalized.styleId ??
       (normalized.kind === "bullet" ? DEFAULT_BULLET_RULE_NAME : DEFAULT_NUMBERING_RULE_NAME);
-    const rule = this.GetDoc().EnsureNumRule(ruleName, normalized.kind);
-    this.SetAttr(new SwNumRuleItem(rule.GetName()));
-    this.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, rule.GetDefaultListId()));
-    this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, normalized.level));
+    const namedRule = this.GetDoc().FindNumRulePtr(ruleName);
+    if (
+      normalized.styleId !== undefined &&
+      namedRule !== undefined &&
+      namedRule.GetNumFormat(normalized.level).GetKind() !== normalized.kind
+    )
+      ruleName =
+        normalized.kind === "bullet" ? DEFAULT_BULLET_RULE_NAME : DEFAULT_NUMBERING_RULE_NAME;
+    const rule = this.GetDoc().EnsureNumRule(ruleName, normalized.kind, normalized.level);
+    this.SetNumRule(rule.GetName());
+    this.SetListId(rule.GetDefaultListId());
+    this.SetAttrListLevel(normalized.level);
   }
 
   /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @returns Inserted text. */

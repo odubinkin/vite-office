@@ -5,6 +5,7 @@
 import {
   ODF_NAMESPACES,
   type OdfCharacterProperties,
+  type OdfListRule,
   type OdfParagraph,
   type OdfParagraphAlignment,
   type OdfParagraphStyle,
@@ -26,32 +27,136 @@ const DEFAULT_CHARACTER_PROPERTIES: OdfCharacterProperties = {
   underline: false,
 };
 
-/** Imports ODF paragraph and heading children from office:text. @param textElement - office:text element. @param styles - Resolved style table. @returns Neutral paragraphs. */
+/** Imports ODF paragraph and heading children from office:text. @param textElement - office:text element. @param styles - Resolved style table. @param listRules - ODF style-name keyed numbering rules. @returns Neutral paragraphs. */
 export function importTextParagraphs(
   textElement: Element,
   styles: ReadonlyMap<string, OdfStyleDefinition>,
+  listRules: ReadonlyMap<string, OdfListRule> = new Map(),
 ): readonly OdfParagraph[] {
   const paragraphs: OdfParagraph[] = [];
+  const context: OdfListImportContext = {
+    generatedListId: 0,
+    listIds: new Map<string, string>(),
+  };
   for (const child of textElement.children) {
-    if (
-      child.namespaceURI !== ODF_NAMESPACES.text ||
-      (child.localName !== "p" && child.localName !== "h")
-    )
+    if (child.namespaceURI !== ODF_NAMESPACES.text)
       throw new Error(`Unsupported ODF text element: ${child.localName}`);
-    const styleName = child.getAttributeNS(ODF_NAMESPACES.text, "style-name") ?? "";
-    const resolved = resolveParagraphStyle(styleName, child.localName === "h", styles);
-    const runs: OdfTextRun[] = [];
-    const inherited = { ...DEFAULT_CHARACTER_PROPERTIES, ...resolved.effectiveProperties };
-    appendInlineContent(child, inherited, styles, runs);
-    paragraphs.push({
-      ...(resolved.alignment === undefined ? {} : { alignment: resolved.alignment }),
-      ...(resolved.properties === undefined ? {} : { properties: resolved.properties }),
-      runs: normalizeRuns(runs),
-      style: resolved.style,
-    });
+    if (child.localName === "p" || child.localName === "h")
+      paragraphs.push(importParagraphElement(child, styles));
+    else if (child.localName === "list")
+      importListElement(child, 0, undefined, undefined, styles, listRules, context, paragraphs);
+    else throw new Error(`Unsupported ODF text element: ${child.localName}`);
   }
   if (paragraphs.length === 0) paragraphs.push({ runs: [], style: "default" });
   return paragraphs;
+}
+
+/** Mutable state shared by recursive ODF list contexts. */
+interface OdfListImportContext {
+  generatedListId: number;
+  readonly listIds: Map<string, string>;
+}
+
+/** Imports one paragraph or heading element. @param element - ODF paragraph or heading. @param styles - Resolved style table. @param list - Optional list metadata. @returns Neutral paragraph. */
+function importParagraphElement(
+  element: Element,
+  styles: ReadonlyMap<string, OdfStyleDefinition>,
+  list?: OdfParagraph["list"],
+): OdfParagraph {
+  const styleName = element.getAttributeNS(ODF_NAMESPACES.text, "style-name") ?? "";
+  const resolved = resolveParagraphStyle(styleName, element.localName === "h", styles);
+  const runs: OdfTextRun[] = [];
+  const inherited = { ...DEFAULT_CHARACTER_PROPERTIES, ...resolved.effectiveProperties };
+  appendInlineContent(element, inherited, styles, runs);
+  return {
+    ...(resolved.alignment === undefined ? {} : { alignment: resolved.alignment }),
+    ...(list === undefined ? {} : { list }),
+    ...(resolved.properties === undefined ? {} : { properties: resolved.properties }),
+    runs: normalizeRuns(runs),
+    style: resolved.style,
+  };
+}
+
+/** Recursively imports text:list blocks using LibreOffice's list style, id, and level relationships. @param listElement - Current text:list. @param level - Zero-based nesting depth. @param inheritedStyleName - Parent list style name. @param inheritedListId - Parent list identity. @param styles - Paragraph and text styles. @param listRules - Numbering rules. @param context - Shared identity state. @param paragraphs - Output accumulator. @returns Nothing. */
+function importListElement(
+  listElement: Element,
+  level: number,
+  inheritedStyleName: string | undefined,
+  inheritedListId: string | undefined,
+  styles: ReadonlyMap<string, OdfStyleDefinition>,
+  listRules: ReadonlyMap<string, OdfListRule>,
+  context: OdfListImportContext,
+  paragraphs: OdfParagraph[],
+): void {
+  assertElementAttributes(listElement, [
+    [ODF_NAMESPACES.text, "style-name"],
+    [ODF_NAMESPACES.text, "continue-list"],
+    ["http://www.w3.org/XML/1998/namespace", "id"],
+  ]);
+  const styleName =
+    listElement.getAttributeNS(ODF_NAMESPACES.text, "style-name") ?? inheritedStyleName;
+  if (styleName === undefined) throw new Error("Unsupported ODF list without a list style.");
+  const rule = listRules.get(styleName);
+  if (rule === undefined) throw new Error(`Unsupported ODF list style: ${styleName}`);
+  if (level >= rule.formats.length) throw new Error("Unsupported ODF list level.");
+  const xmlId = listElement.getAttributeNS("http://www.w3.org/XML/1998/namespace", "id");
+  const continuedId = listElement.getAttributeNS(ODF_NAMESPACES.text, "continue-list");
+  let listId = inheritedListId;
+  if (continuedId !== null) listId = context.listIds.get(continuedId) ?? continuedId;
+  else if (xmlId !== null) listId = xmlId;
+  else if (listId === undefined) {
+    context.generatedListId += 1;
+    listId = `${rule.name}-${context.generatedListId}`;
+  }
+  if (xmlId !== null) context.listIds.set(xmlId, listId);
+  for (const item of listElement.children) {
+    if (item.namespaceURI !== ODF_NAMESPACES.text || item.localName !== "list-item")
+      throw new Error(`Unsupported ODF list child: ${item.localName}`);
+    assertElementAttributes(item, []);
+    let paragraphCount = 0;
+    for (const child of item.children) {
+      if (child.namespaceURI !== ODF_NAMESPACES.text)
+        throw new Error(`Unsupported ODF list item child: ${child.localName}`);
+      if (child.localName === "p" || child.localName === "h") {
+        paragraphCount += 1;
+        if (paragraphCount > 1)
+          throw new Error("Unsupported ODF list item with multiple paragraphs.");
+        paragraphs.push(
+          importParagraphElement(child, styles, {
+            listId,
+            level,
+            rule,
+          }),
+        );
+      } else if (child.localName === "list") {
+        importListElement(
+          child,
+          level + 1,
+          styleName,
+          listId,
+          styles,
+          listRules,
+          context,
+          paragraphs,
+        );
+      } else throw new Error(`Unsupported ODF list item child: ${child.localName}`);
+    }
+  }
+}
+
+/** Rejects list attributes that would otherwise be dropped by the bounded model. @param element - List or list-item element. @param allowed - Supported namespace/name pairs. @returns Nothing. */
+function assertElementAttributes(
+  element: Element,
+  allowed: readonly (readonly [namespace: string, name: string])[],
+): void {
+  for (const attribute of element.attributes)
+    if (
+      !allowed.some(
+        /** Matches one supported list attribute. @param entry - Namespace and local name. @returns Whether supported. */
+        ([namespace, name]) => attribute.namespaceURI === namespace && attribute.localName === name,
+      )
+    )
+      throw new Error(`Unsupported ODF list attribute: ${attribute.name}`);
 }
 
 /** Resolves named/automatic paragraph styles to the bounded model. @param name - ODF style name. @param heading - Whether element is text:h. @param styles - Style table. @param seen - Current recursion chain. @returns Model style and optional direct alignment. */

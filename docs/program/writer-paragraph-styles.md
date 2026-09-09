@@ -16,11 +16,10 @@ bounded browser editing surface, and its accessible description and properties
 sidebar state identify the style. This is paragraph-level styling, not an HTML
 heading tree or a replacement for Writer's document semantics.
 
-Version-two snapshots persist collection definitions, their direct item deltas,
-parent IDs, and each node's collection ID. Version-one and older local snapshots
-are migrated to the safe default when their style is absent or unsupported.
-This compatibility rule only bridges prior Vite Office snapshots and does not
-parse or migrate ODT, OOXML, or arbitrary third-party documents.
+Version-three snapshots persist collection definitions, their direct item
+deltas, parent IDs, and each node's collection ID; older non-canonical schemas
+are rejected. The bounded ODT filter maps Default Paragraph Style and Heading 1
+names, inheritance, and supported properties through named ODF styles.
 
 ## Pinned LibreOffice provenance
 
@@ -38,6 +37,6 @@ layout assertions.
 The bounded two-style hierarchy is not the complete Writer style system. There
 is no custom style creation/editing UI, conditional style logic, automatic-style
 cache, complete follow-style behavior, outline assignment, character/page/list
-styles, locale-aware built-in style pool, ODT/OOXML style import/export,
+styles, locale-aware built-in style pool, OOXML style import/export,
 pagination, navigation outline, or print/PDF parity. Each requires an
 independently mapped feature task.

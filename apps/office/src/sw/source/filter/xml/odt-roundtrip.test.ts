@@ -118,6 +118,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     second.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE));
     const third = writer.nodes.MakeTextNode("source-3", "not underlined");
     third.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE));
+    first?.SetParagraphList({ kind: "numbered", level: 0 });
+    second.SetParagraphList({ kind: "numbered", level: 1 });
+    third.SetParagraphList({ kind: "bullet", level: 0 });
 
     const bytes = writeOdtDocument(writer);
     expect(new SwXMLWriter().Write(writer)).toEqual(bytes);
@@ -138,6 +141,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(content).toContain('<text:s text:c="2"/>');
     expect(content).toContain("<text:tab/>");
     expect(content).toContain("<text:line-break/>");
+    expect(content).toContain("<text:list-style");
+    expect(content).toContain("<text:list-item>");
 
     const restored = await readOdtDocument(bytes, metadata());
     expect((await new SwXMLReader().Read(bytes, metadata())).toSnapshot()).toEqual(
@@ -174,11 +179,164 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     );
   });
 
+  it("imports LibreOffice-shaped nested and continued list blocks" /** Verifies one-level automatic styles become ten-level SwNumRule records and list identity survives continuation segments. @returns Nothing. */, async () => {
+    const empty = createWriterDocument(metadata("LibreOffice lists"), "p1");
+    const styles = exportStylesXml(empty);
+    const listStyles = [
+      '<text:list-style style:name="L1" style:display-name="Numbering 1"><text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="1"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"/></text:list-level-style-number></text:list-style>',
+      '<text:list-style style:name="L2"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"/></text:list-level-style-bullet></text:list-style>',
+    ].join("");
+    const body = [
+      '<text:list xml:id="list1" text:style-name="L1">',
+      "<text:list-item><text:p>alpha</text:p></text:list-item>",
+      '<text:list-item><text:p>beta</text:p><text:list text:style-name="L2"><text:list-item><text:p>nested</text:p></text:list-item></text:list></text:list-item>',
+      "</text:list>",
+      "<text:p>gap</text:p>",
+      '<text:list text:continue-list="list1" text:style-name="L1"><text:list-item><text:p>gamma</text:p></text:list-item></text:list>',
+    ].join("");
+    const content = exportContentXml(empty)
+      .replace("</office:automatic-styles>", `${listStyles}</office:automatic-styles>`)
+      .replace(/<office:text>[\s\S]*<\/office:text>/, `<office:text>${body}</office:text>`);
+    const imported = importWriterXml(styles, content, metadata());
+    expect(
+      imported.paragraphs.map(
+        /** Projects a text node into list assertions. @param node - Imported Writer node. @returns Comparable list state. */
+        (node) => ({
+          listId: node.GetListId(),
+          ruleName: node.GetNumRuleName(),
+          ...node.list,
+          text: node.text,
+        }),
+      ),
+    ).toEqual([
+      {
+        kind: "numbered",
+        level: 0,
+        listId: "list1",
+        ruleName: "Numbering 1",
+        styleId: "Numbering 1",
+        text: "alpha",
+      },
+      {
+        kind: "numbered",
+        level: 0,
+        listId: "list1",
+        ruleName: "Numbering 1",
+        styleId: "Numbering 1",
+        text: "beta",
+      },
+      { kind: "bullet", level: 1, listId: "list1", ruleName: "L2", styleId: "L2", text: "nested" },
+      { kind: "none", level: 0, listId: "", ruleName: "", text: "gap" },
+      {
+        kind: "numbered",
+        level: 0,
+        listId: "list1",
+        ruleName: "Numbering 1",
+        styleId: "Numbering 1",
+        text: "gamma",
+      },
+    ]);
+    const roundTripped = await readOdtDocument(writeOdtDocument(imported), metadata());
+    expect(
+      roundTripped.paragraphs.map(
+        /** Projects a text node into list assertions. @param node - Round-tripped Writer node. @returns Comparable list state. */
+        (node) => ({
+          listId: node.GetListId(),
+          ruleName: node.GetNumRuleName(),
+          ...node.list,
+          text: node.text,
+        }),
+      ),
+    ).toEqual(
+      imported.paragraphs.map(
+        /** Projects a text node into list assertions. @param node - Imported Writer node. @returns Comparable list state. */
+        (node) => ({
+          listId: node.GetListId(),
+          ruleName: node.GetNumRuleName(),
+          ...node.list,
+          text: node.text,
+        }),
+      ),
+    );
+    expect(
+      /** Imports an unsupported list-item attribute. @returns Invalid document. */ () =>
+        importWriterXml(
+          styles,
+          content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
+          metadata(),
+        ),
+    ).toThrow("Unsupported ODF list attribute");
+    expect(
+      /** Imports an unsupported numbering suffix. @returns Invalid document. */ () =>
+        importWriterXml(
+          styles,
+          content.replace('style:num-suffix="."', 'style:num-suffix=")"'),
+          metadata(),
+        ),
+    ).toThrow("Unsupported ODF numbering suffix");
+    const importWithListStyle =
+      /** Imports an additional list-style fragment. @param fragment - ODF style XML. @returns Imported Writer document. */ (
+        fragment: string,
+      ): ReturnType<typeof importWriterXml> =>
+        importWriterXml(
+          styles,
+          content.replace("</office:automatic-styles>", `${fragment}</office:automatic-styles>`),
+          metadata(),
+        );
+    const numberedLevel =
+      /** Builds a numbered level fragment. @param attributes - Extra level attributes. @returns ODF list-level XML. */ (
+        attributes = "",
+      ) => `<text:list-level-style-number text:level="1" style:num-format="1"${attributes}/>`;
+    for (const [fragment, message] of [
+      [
+        '<text:list-style style:name="L1"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>',
+        "Duplicate ODF list style",
+      ],
+      [
+        '<text:list-style style:name="Foreign"><style:list-level-properties/></text:list-style>',
+        "Unsupported ODF list style child",
+      ],
+      [
+        '<text:list-style style:name="Image"><text:list-level-style-image text:level="1"/></text:list-style>',
+        "Unsupported ODF list level style",
+      ],
+      [
+        '<text:list-style style:name="Duplicate"><text:list-level-style-number text:level="1" style:num-format="1"/><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style>',
+        "Duplicate ODF list level",
+      ],
+      [
+        '<text:list-style style:name="Bullet"><text:list-level-style-bullet text:level="1" text:bullet-char="-"/></text:list-style>',
+        "Unsupported ODF bullet character",
+      ],
+      [
+        '<text:list-style style:name="Roman"><text:list-level-style-number text:level="1" style:num-format="i"/></text:list-style>',
+        "Unsupported ODF numbering format",
+      ],
+      ['<text:list-style style:name="Empty"/>', "has no levels"],
+      [
+        `<text:list-style style:name="Extra" style:family="list">${numberedLevel()}</text:list-style>`,
+        "Unsupported ODF style property",
+      ],
+      [
+        `<text:list-style style:name="ExtraLevel">${numberedLevel(' style:num-prefix="("')}</text:list-style>`,
+        "Unsupported ODF style property",
+      ],
+    ] as const)
+      expect(
+        /** Imports an invalid list-style definition. @returns Invalid document. */ () =>
+          importWithListStyle(fragment),
+      ).toThrow(message);
+    for (const level of ["0", "1.5", "11"])
+      expect(
+        /** Imports an invalid ODF list level. @returns Invalid document. */ () =>
+          importWithListStyle(
+            `<text:list-style style:name="BadLevel${level}"><text:list-level-style-number text:level="${level}" style:num-format="1"/></text:list-style>`,
+          ),
+      ).toThrow("Unsupported ODF list level");
+  });
+
   it("rejects unsupported canonical Writer state instead of silently dropping it" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
     for (const configure of [
-      /** Executes the enclosing deterministic test or transformation callback. @param writer - Callback input. @returns Callback result. */
-      (writer: ReturnType<typeof createWriterDocument>) =>
-        writer.paragraphs[0]?.SetParagraphList({ kind: "bullet", level: 0 }),
       /** Executes the enclosing deterministic test or transformation callback. @param writer - Callback input. @returns Callback result. */
       (writer: ReturnType<typeof createWriterDocument>) =>
         writer.paragraphs[0]?.SetParagraphList({ kind: "none", level: 1 }),
@@ -191,14 +349,14 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       expect(
         /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
         () => writeOdtDocument(writer),
-      ).toThrow("does not yet support Writer lists");
+      ).toThrow("without SwNumRule");
     }
     const unknownRule = createWriterDocument(metadata(), "p1");
     unknownRule.paragraphs[0]?.SetAttr(new SwNumRuleItem("Missing"));
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportContentXml(unknownRule),
-    ).toThrow(`WhichId ${RES_PARATR_NUMRULE}`);
+    ).toThrow("cannot resolve SwNumRule Missing");
     const invalidCharacter = createWriterDocument(metadata(), "p1");
     const invalidCharacterSet = invalidCharacter
       .GetDfltTextFormatColl()

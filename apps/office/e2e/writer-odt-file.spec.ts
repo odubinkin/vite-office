@@ -38,6 +38,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
     "BrowserODTContent".length,
     "bold",
   );
+  source.paragraphs[0]?.SetParagraphList({ kind: "numbered", level: 1 });
   const sourceBytes = writeOdtDocument(source);
 
   await page.goto("/");
@@ -55,6 +56,9 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   await expect(editor).toHaveCSS("font-size", "24px");
   await expect(editor).toHaveCSS("text-align", "center");
   await expect(editor.locator("strong")).toHaveText("BrowserODTContent");
+  await expect(editor).toHaveAttribute("data-list-kind", "numbered");
+  await expect(editor).toHaveAttribute("data-list-level", "1");
+  await expect(page.getByTestId("writer-list-marker-paragraph-1")).toHaveText("1.");
   await expect(page.getByText("Browser ODT Fixture")).toBeVisible();
   await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
     "Opened browser-fixture.odt.",
@@ -69,7 +73,10 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   const downloadedBytes = new Uint8Array(await readFile(downloadPath));
   const archive = new ZipFile(downloadedBytes);
   expect(await archive.readTextEntry("mimetype")).toBe("application/vnd.oasis.opendocument.text");
-  expect(await archive.readTextEntry("content.xml")).toContain("BrowserODTContent");
+  const contentXml = await archive.readTextEntry("content.xml");
+  expect(contentXml).toContain("BrowserODTContent");
+  expect(contentXml).toContain("<text:list-style");
+  expect(contentXml).toContain("<text:list-item>");
 
   await page.getByRole("button", { name: "File" }).click();
   await expect(page.getByRole("menuitem", { name: "Open local copy…" })).toBeVisible();

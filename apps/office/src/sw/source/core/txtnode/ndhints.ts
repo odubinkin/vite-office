@@ -171,30 +171,19 @@ export interface WriterTextRunLike {
   readonly text: string;
 }
 
-/** Restores current nested snapshots and legacy boolean snapshots. @param pool - Destination pool. @param candidate - Persisted value. @returns Normalized hints. */
-export function createSwpHintsFromSnapshot(pool: SwAttrPool, candidate: unknown): SwpHints {
-  if (!Array.isArray(candidate)) return new SwpHints(pool);
-  const hints = candidate.flatMap(
-    /** Parses one persisted auto-format hint. @param value - Unknown record. @returns Zero or one hint. */
-    (value): readonly SwTextAttr[] => {
-      if (typeof value !== "object" || value === null) return [];
-      const record = value as Record<string, unknown>;
-      if (
-        !Number.isInteger(record.start) ||
-        !Number.isInteger(record.end) ||
-        (record.start as number) < 0 ||
-        (record.end as number) <= (record.start as number) ||
-        typeof record.format !== "object" ||
-        record.format === null
-      )
-        return [];
-      const formatRecord = record.format as Record<string, unknown>;
-      const format =
-        "items" in formatRecord
-          ? createSwFormatAutoFormat(pool, normalizeLegacyAttributes(formatRecord.items))
-          : restoreSwFormatAutoFormat(pool, record.format as SwTextAttrSnapshot["format"]);
-      return [new SwTextAttr(format, record.start as number, record.end as number)];
-    },
+/** Restores the current canonical nested pooled-item snapshots. @param pool - Destination pool. @param snapshots - Persisted hints. @returns Restored hints. */
+export function createSwpHintsFromSnapshot(
+  pool: SwAttrPool,
+  snapshots: readonly SwTextAttrSnapshot[],
+): SwpHints {
+  const hints = snapshots.map(
+    /** Restores one current auto-format hint. @param snapshot - Persisted hint. @returns Restored hint. */
+    (snapshot) =>
+      new SwTextAttr(
+        restoreSwFormatAutoFormat(pool, snapshot.format),
+        snapshot.start,
+        snapshot.end,
+      ),
   );
   return new SwpHints(pool, hints);
 }
@@ -228,15 +217,4 @@ function equalAttributes(
   return (
     left.bold === right.bold && left.italic === right.italic && left.underline === right.underline
   );
-}
-
-/** Normalizes a legacy boolean auto-format payload. @param value - Legacy items field. @returns Browser properties. */
-function normalizeLegacyAttributes(value: unknown): WriterCharacterAttributes {
-  const record =
-    typeof value === "object" && value !== null ? (value as Record<string, unknown>) : {};
-  return {
-    bold: record.bold === true,
-    italic: record.italic === true,
-    underline: record.underline === true,
-  };
 }
