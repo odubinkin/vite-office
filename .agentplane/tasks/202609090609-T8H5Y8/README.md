@@ -1,10 +1,11 @@
 ---
 id: "202609090609-T8H5Y8"
 title: "Serve suite routes through nginx SPA fallback"
-status: "DOING"
+result_summary: "Configured nginx SPA fallback and verified direct suite routes in Docker"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -22,9 +23,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-09T06:18:55.985Z"
+  updated_at: "2026-09-09T06:20:00.591Z"
   updated_by: "CODER"
-  note: "Command: docker build --tag vite-office:spa-fallback-verify .; Result: pass after Docker daemon restart; production image built successfully. Command: docker run --rm --detach --name vite-office-spa-fallback-verify --publish 127.0.0.1:4180:80 vite-office:spa-fallback-verify; Result: pass. Command: curl probes for /, /writer, and /calc; Result: pass with 200 text/html and identical index.html SHA-256. Asset probes: emitted JavaScript returned 200 application/javascript; /assets/missing.js returned 404. Command: docker exec nginx -t; Result: configuration syntax successful. Command: docker stop; Result: temporary container stopped and removed. Command: git diff --check and git status; Result: pass with only Dockerfile, nginx/default.conf, and task artifacts changed. Unit and E2E tests were intentionally not run per approved verification scope."
+  note: "Configured nginx SPA fallback and verified direct suite routes in Docker"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,7 +42,9 @@ quality_review:
     - ".agentplane/tasks/202609090609-T8H5Y8/blueprint/resolved-snapshot.json"
   findings:
     - "A locally built Docker image returned 200 for /, /writer, and /calc with identical index HTML; the emitted JavaScript returned 200, a missing asset returned 404, and nginx -t passed."
-commit: null
+commit:
+  hash: "e88b84e319205634062848fe8101d9cdadc3e09a"
+  message: "🐳 T8H5Y8 ops: add nginx SPA route fallback"
 comments:
   -
     author: "CODER"
@@ -52,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: Configured nginx SPA fallback and verified direct suite routes in Docker. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -80,8 +86,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: docker build --tag vite-office:spa-fallback-verify .; Result: pass after Docker daemon restart; production image built successfully. Command: docker run --rm --detach --name vite-office-spa-fallback-verify --publish 127.0.0.1:4180:80 vite-office:spa-fallback-verify; Result: pass. Command: curl probes for /, /writer, and /calc; Result: pass with 200 text/html and identical index.html SHA-256. Asset probes: emitted JavaScript returned 200 application/javascript; /assets/missing.js returned 404. Command: docker exec nginx -t; Result: configuration syntax successful. Command: docker stop; Result: temporary container stopped and removed. Command: git diff --check and git status; Result: pass with only Dockerfile, nginx/default.conf, and task artifacts changed. Unit and E2E tests were intentionally not run per approved verification scope."
+  -
+    type: "verify"
+    at: "2026-09-09T06:20:00.591Z"
+    author: "CODER"
+    state: "ok"
+    note: "Configured nginx SPA fallback and verified direct suite routes in Docker"
+  -
+    type: "status"
+    at: "2026-09-09T06:20:00.731Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Configured nginx SPA fallback and verified direct suite routes in Docker. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-09T06:18:56.074Z"
+doc_updated_at: "2026-09-09T06:20:00.732Z"
 doc_updated_by: "CODER"
 description: "Configure the production nginx image so direct requests to /writer, /calc, and other client-side suite routes serve index.html instead of returning 404, while missing static assets still return 404."
 sections:
@@ -126,6 +145,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task verify-show 202609090609-T8H5Y8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-09T06:20:00.591Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Configured nginx SPA fallback and verified direct suite routes in Docker
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T06:18:56.074Z, excerpt_hash=sha256:4a13c878f444b182a9ea8fb332949b1b37769781c2bf779132aeddb928e50181
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090609-T8H5Y8/blueprint/resolved-snapshot.json
+    - old_digest: c8dbfbf3ea833c32938391c974049404ca392bb93988b0f5b91f76d5806f88b0
+    - current_digest: c8dbfbf3ea833c32938391c974049404ca392bb93988b0f5b91f76d5806f88b0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609090609-T8H5Y8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609090609-T8H5Y8 --result verified-202609090609-T8H5Y8 --commit fc64667188b01cda03b6d0aed029a3a7c3e179aa
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -192,6 +241,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609090609-T8H5Y8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-09T06:20:00.591Z — VERIFY — ok
+
+By: CODER
+
+Note: Configured nginx SPA fallback and verified direct suite routes in Docker
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T06:18:56.074Z, excerpt_hash=sha256:4a13c878f444b182a9ea8fb332949b1b37769781c2bf779132aeddb928e50181
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090609-T8H5Y8/blueprint/resolved-snapshot.json
+- old_digest: c8dbfbf3ea833c32938391c974049404ca392bb93988b0f5b91f76d5806f88b0
+- current_digest: c8dbfbf3ea833c32938391c974049404ca392bb93988b0f5b91f76d5806f88b0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609090609-T8H5Y8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609090609-T8H5Y8 --result verified-202609090609-T8H5Y8 --commit fc64667188b01cda03b6d0aed029a3a7c3e179aa
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
