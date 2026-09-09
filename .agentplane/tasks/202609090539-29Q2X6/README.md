@@ -1,10 +1,11 @@
 ---
 id: "202609090539-29Q2X6"
 title: "Route office suites to dedicated pages"
-status: "DOING"
+result_summary: "verified-202609090539-29Q2X6"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -24,7 +25,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-09T06:00:21.420Z"
+  updated_at: "2026-09-09T06:00:56.621Z"
   updated_by: "CODER"
   note: "verified-202609090539-29Q2X6"
   attempts: 0
@@ -43,11 +44,16 @@ quality_review:
     - ".agentplane/tasks/202609090539-29Q2X6/blueprint/resolved-snapshot.json"
   findings:
     - "Root renders only the global header and suite links; /writer renders only Writer in main#workspace; other known suite paths render their full-page foundation interfaces; unit and E2E regressions are covered."
-commit: null
+commit:
+  hash: "12919d6de738b69c9610e67e1c7b92dfa731cfe2"
+  message: "🧪 29Q2X6 task: record quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved pathname routing and route-focused UI tests while preserving all unrelated active Writer task changes."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609090539-29Q2X6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -68,8 +74,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609090539-29Q2X6"
+  -
+    type: "verify"
+    at: "2026-09-09T06:00:56.621Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609090539-29Q2X6"
+  -
+    type: "status"
+    at: "2026-09-09T06:00:56.823Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609090539-29Q2X6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-09T06:00:21.501Z"
+doc_updated_at: "2026-09-09T06:00:56.824Z"
 doc_updated_by: "CODER"
 description: "Show only the application menu and disabled global header on the home page, and render each office suite on its own pathname with the selected application interface filling main#workspace."
 sections:
@@ -151,9 +170,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-09T06:00:56.621Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609090539-29Q2X6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T06:00:21.501Z, excerpt_hash=sha256:0254acccff0e87d462e12305e3e285e5af85278fe7e961efd089170d23283a65
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090539-29Q2X6/blueprint/resolved-snapshot.json
+    - old_digest: cada93cc42b4f7ae173fa144f87a7e9ffdafbea08f98ef520ed1f632f8347efb
+    - current_digest: cada93cc42b4f7ae173fa144f87a7e9ffdafbea08f98ef520ed1f632f8347efb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609090539-29Q2X6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609090539-29Q2X6 --result verified-202609090539-29Q2X6 --commit 12919d6de738b69c9610e67e1c7b92dfa731cfe2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task commit that changes the desktop routing, launcher card navigation, and their tests; then rerun the declared office checks. Preserve all pre-existing Writer edits from task 202609090458-TRG4A7."
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "4aa6c2092c145f1149068acba4224f1f545fe034"
+    message: "🧩 29Q2X6 code: route suites to dedicated pages"
 id_source: "generated"
 ---
 ## Summary
@@ -237,6 +290,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609090539-29Q2X6 --result verified-202609090539-29Q2X6 --commit 4aa6c2092c145f1149068acba4224f1f545fe034
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-09T06:00:56.621Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609090539-29Q2X6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-09T06:00:21.501Z, excerpt_hash=sha256:0254acccff0e87d462e12305e3e285e5af85278fe7e961efd089170d23283a65
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609090539-29Q2X6/blueprint/resolved-snapshot.json
+- old_digest: cada93cc42b4f7ae173fa144f87a7e9ffdafbea08f98ef520ed1f632f8347efb
+- current_digest: cada93cc42b4f7ae173fa144f87a7e9ffdafbea08f98ef520ed1f632f8347efb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609090539-29Q2X6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609090539-29Q2X6 --result verified-202609090539-29Q2X6 --commit 12919d6de738b69c9610e67e1c7b92dfa731cfe2
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
