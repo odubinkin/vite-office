@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609090458-TRG4A7",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-09T05:35:43.744Z",
+  "verdict": "pass",
+  "summary": "Writer input no longer lets React reconcile browser-mutated editable descendants, and typing undo history now follows pinned LibreOffice grouping and capacity semantics.",
+  "evaluated_sha": "bef72902639e06f9d9d56636e68dc495db45b7dc",
+  "blueprint_digest": "3a9a0cbb523873e9d736cfe8b912e7ec15ad114ce9c92ad6896ef6455decd6a1",
+  "findings": [
+    "Focused and full deterministic checks pass; parallel verify exposed only an existing pointer-drag E2E race race that passed 5/5 sequentially and is outside the crash path."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609090458-TRG4A7/README.md",
+    "bef72902639e"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
