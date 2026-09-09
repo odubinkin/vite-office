@@ -338,7 +338,7 @@
       "status": "implemented",
       "gaps": [
         "The browser supports one native non-empty same-paragraph range and collapsed-caret pending attributes only; cross-paragraph, table, multi-range, character-style, and full IME behavior remain unmapped.",
-        "Font family, size, colour, double underline, strikeout, overline, Paste, RTF, and ODT/DOCX interchange remain separate capabilities rather than browser-runtime exceptions."
+        "Font family, size, colour, double underline, strikeout, overline, Paste, RTF, and DOCX interchange remain separate capabilities; bounded ODT character-format interchange is recorded by LO-WRITER-0113."
       ],
       "upstream": {
         "implementation": [
@@ -438,7 +438,7 @@
       "status": "implemented",
       "gaps": [
         "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Browser commands clone the graph for React history and persistence uses an explicit snapshot. Native Writer undo objects and ODT/DOCX filters are not yet implemented."
+        "Browser commands clone the graph for React history and local persistence uses an explicit snapshot. Native Writer undo objects, full ODT semantics, and DOCX filters are not yet implemented."
       ],
       "upstream": {
         "implementation": [
@@ -484,7 +484,7 @@
       "status": "implemented",
       "gaps": [
         "The current alignment/list WhichIds plus Western/CJK/CTL weight and posture and common underline are implemented. Font family, size, language, color, the complete item universe, built-in style pool, conditional styles, automatic-style cache, multi-level numbering formats, broadcasts, and item sharing remain separate work.",
-        "Versioned browser snapshots preserve the implemented ownership graph, but they are not ODT/DOCX style or numbering filters and do not replace native Writer undo, layout, or file-format behavior."
+        "Versioned browser snapshots preserve the implemented ownership graph, but they do not replace the bounded ODT filter, and ODT numbering plus DOCX style/numbering filters remain unimplemented."
       ],
       "upstream": {
         "implementation": [
@@ -535,7 +535,7 @@
       "status": "implemented",
       "gaps": [
         "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting; lists, tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, and arbitrary style properties remain explicit unsupported cases.",
-        "Browser File Open and Save command wiring is not part of this filter task, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability fixtures beyond the mapped pinned feature tests remain future work."
+        "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability fixtures beyond the mapped pinned feature tests remain future work."
       ],
       "upstream": {
         "implementation": [
@@ -547,7 +547,9 @@
           { "path": "xmloff/source/text/txtparai.cxx", "marker": "XMLTextImportHelper" },
           { "path": "sw/source/filter/xml/wrtxml.cxx", "marker": "SwXMLWriter::WriteThroughComponent" },
           { "path": "sw/source/filter/xml/swxml.cxx", "marker": "styles.xml" },
-          { "path": "sw/source/filter/xml/swxml.cxx", "marker": "content.xml" }
+          { "path": "sw/source/filter/xml/swxml.cxx", "marker": "content.xml" },
+          { "path": "sw/source/uibase/app/docsh.cxx", "marker": "SwDocShell::SaveAs" },
+          { "path": "sw/source/uibase/app/docshini.cxx", "marker": "SwDocShell::Load" }
         ],
         "tests": [
           { "path": "sw/qa/extras/odfimport/odffeatures.cxx", "marker": "testFeatureText" },
@@ -571,14 +573,24 @@
           { "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts", "marker": "exportContentXml" },
           { "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts", "marker": "importWriterXml" },
           { "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts", "marker": "export class SwXMLWriter" },
-          { "path": "apps/office/src/sw/source/filter/xml/swxml.ts", "marker": "export class SwXMLReader" }
+          { "path": "apps/office/src/sw/source/filter/xml/swxml.ts", "marker": "export class SwXMLReader" },
+          { "path": "apps/office/src/sw/source/uibase/app/docsh.ts", "marker": "export class SwDocShell" },
+          { "path": "apps/office/src/vcl/browser/browser-file.ts", "marker": "selectBrowserFile" },
+          { "path": "apps/office/src/vcl/browser/browser-download.ts", "marker": "downloadBytes" },
+          { "path": "apps/office/src/sw/source/uibase/uiview/view.tsx", "marker": "handleWriterOpenOdt" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "marker": "Open ODT…" },
+          { "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx", "marker": "Save as ODT" }
         ],
         "tests": [
           { "path": "apps/office/src/package/source/zipapi/CRC32.test.ts", "marker": "standard ZIP checksum" },
           { "path": "apps/office/src/package/source/zipapi/ZipFile.test.ts", "marker": "defensive ZIP32 input validation" },
           { "path": "apps/office/src/package/source/manifest/ManifestExport.test.ts", "marker": "bounded ODF 1.3 manifest" },
           { "path": "apps/office/src/xmloff/source/text/txtpara.test.ts", "marker": "bounded ODF text paragraph" },
-          { "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts", "marker": "restores canonical formatting" }
+          { "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts", "marker": "restores canonical formatting" },
+          { "path": "apps/office/src/sw/source/uibase/app/docsh.test.ts", "marker": "describe(\"SwDocShell\"" },
+          { "path": "apps/office/src/vcl/browser/browser-file.test.ts", "marker": "browser file selection" },
+          { "path": "apps/office/src/framework/source/services/desktop.test.tsx", "marker": "opens a supported ODT atomically" },
+          { "path": "apps/office/e2e/writer-odt-file.spec.ts", "marker": "Writer opens and saves a bounded ODT file" }
         ],
         "docs": [
           { "path": "docs/program/writer-odt-format.md", "marker": "Writer ODF 1.3 package slice" },

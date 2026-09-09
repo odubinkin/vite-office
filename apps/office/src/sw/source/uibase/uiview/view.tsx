@@ -3,6 +3,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import {
   applyTransaction,
   createTransactionHistory,
@@ -39,12 +40,15 @@ import {
   type WriterSnapshotState,
 } from "../../core/doc/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "../../../../vcl/browser/indexeddb-storage";
+import { createDownloadFilename, downloadBytes } from "../../../../vcl/browser/browser-download";
+import { readBrowserFile, selectBrowserFile } from "../../../../vcl/browser/browser-file";
 import { WriterMenuBar } from "../../../uiconfig/swriter/menubar/menubar";
 import { WriterCommandToolbar } from "../../../uiconfig/swriter/toolbar/standardbar";
 import { WriterParagraphFormattingToolbar } from "../ribbar/inputwin";
 import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
 import { WriterPlainTextEditor } from "../docvw/edtwin";
 import { WriterWorkspaceChrome } from "../app/mainwn";
+import { SwDocShell } from "../app/docsh";
 import type { WriterListLevelCommand } from "../shells/listsh";
 import { toggleWriterCharacterFormat } from "../shells/txtattr";
 import { useWriterBrowserCommands, useWriterHistoryShortcuts } from "../shells/textsh";
@@ -120,6 +124,23 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     globalThis.indexedDB === undefined
       ? undefined
       : new IndexedDbDocumentStorageAdapter<WriterSnapshotState>("vite-office-writer-workbench");
+
+  /** Replaces the complete workbench session after New, Open, or local Load. @param nextDocument - New active SwDoc. @param status - User-facing operation result. @returns Nothing. */
+  function replaceWriterSession(nextDocument: WriterDocument, status: string): void {
+    const firstParagraph = nextDocument.paragraphs[0] as WriterParagraph;
+    setActiveParagraphId(firstParagraph.id);
+    setFocusParagraphId(undefined);
+    setFocusParagraphOffset(undefined);
+    setPendingCharacterAttributes(
+      getWriterTextAttributesAtOffset(firstParagraph.runs, firstParagraph.text.length),
+    );
+    setWriterHistory(
+      createTransactionHistory(nextDocument, {
+        position: getWorkbenchSelectionPosition(nextDocument),
+      }),
+    );
+    setStorageStatus(status);
+  }
 
   /**
    * Replaces the selected Writer paragraph text through the immutable domain transition.
@@ -471,6 +492,62 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     );
   }
 
+  /** Creates a new empty Writer document through the document shell. @returns Nothing. */
+  function handleWriterNew(): void {
+    const shell = new SwDocShell(writerDocument);
+    const nextDocument = shell.InitNew(
+      createDocument({
+        id: "writer-workbench",
+        suiteId: "writer",
+        title: "Untitled Writer Document",
+      }),
+      "writer-paragraph-1",
+    );
+    replaceWriterSession(nextDocument, "Created a new Writer document.");
+  }
+
+  /** Selects and loads one ODT without replacing the active document on cancel or failure. @returns A promise resolved after feedback and optional session replacement. */
+  async function handleWriterOpenOdt(): Promise<void> {
+    setStoragePending(true);
+    try {
+      const file = await selectBrowserFile(`${SwDocShell.ODT_MEDIA_TYPE},.odt`);
+      if (file === undefined) {
+        setStorageStatus("ODT open cancelled.");
+        return;
+      }
+      const fallbackTitle = file.name.replace(/\.odt$/i, "") || "Imported Writer Document";
+      const shell = new SwDocShell(writerDocument);
+      const opened = await shell.Load(
+        await readBrowserFile(file),
+        createDocument({
+          id: `writer-odt:${file.name}`,
+          suiteId: "writer",
+          title: fallbackTitle,
+        }),
+      );
+      replaceWriterSession(opened, `Opened ${file.name}.`);
+    } catch (error) {
+      setStorageStatus(`Could not open ODT: ${getErrorMessage(error)}`);
+    } finally {
+      setStoragePending(false);
+    }
+  }
+
+  /** Serializes the current Writer document and starts an ODT browser download. @returns Nothing. */
+  function handleWriterSaveOdt(): void {
+    setStoragePending(true);
+    try {
+      const bytes = new SwDocShell(writerDocument).SaveAs();
+      const filename = createDownloadFilename(writerDocument.document.title, ".odt");
+      downloadBytes(bytes, SwDocShell.ODT_MEDIA_TYPE, filename);
+      setStorageStatus(`ODT download started: ${filename}`);
+    } catch (error) {
+      setStorageStatus(`Could not save ODT: ${getErrorMessage(error)}`);
+    } finally {
+      setStoragePending(false);
+    }
+  }
+
   /** Restores the preceding Writer snapshot. @returns Nothing; React schedules an undo. */
   function handleWriterUndo(): void {
     setWriterHistory(
@@ -539,13 +616,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       const result = await loadWriterDocument(writerStorage, writerDocument.document.id);
       if (result.status === "missing") setStorageStatus("No local saved copy exists.");
       else {
-        setActiveParagraphId((result.writerDocument.paragraphs[0] as WriterParagraph).id);
-        setWriterHistory(
-          createTransactionHistory(result.writerDocument, {
-            position: getWorkbenchSelectionPosition(result.writerDocument),
-          }),
-        );
-        setStorageStatus("Loaded local saved copy.");
+        replaceWriterSession(result.writerDocument, "Loaded local saved copy.");
       }
     } catch {
       setStorageStatus("Could not load local copy.");
@@ -582,11 +653,14 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             onDownload={handleWriterDownload}
             onHorizontalRulerVisibilityChange={setIsHorizontalRulerVisible}
             onLoad={handleWriterLoad}
+            onNew={handleWriterNew}
+            onOpenOdt={handleWriterOpenOdt}
             onPaste={handleWriterPaste}
             onListKindChange={handleWriterParagraphListKind}
             onListLevelChange={handleWriterParagraphListLevel}
             onRedo={handleWriterRedo}
             onSave={handleWriterSave}
+            onSaveOdt={handleWriterSaveOdt}
             onSelectAll={requestSelectAll}
             onSidebarVisibilityChange={setIsPropertiesSidebarVisible}
             onStatusBarVisibilityChange={setIsStatusBarVisible}
@@ -630,10 +704,10 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
             isStoragePending={storagePending}
             onCopy={handleWriterCopy}
             onCut={handleWriterCut}
-            onLoad={handleWriterLoad}
+            onOpenOdt={handleWriterOpenOdt}
             onPaste={handleWriterPaste}
             onRedo={handleWriterRedo}
-            onSave={handleWriterSave}
+            onSaveOdt={handleWriterSaveOdt}
             onUndo={handleWriterUndo}
           />
         }
@@ -698,4 +772,9 @@ function getWriterShortcutFormat(key: string): WriterCharacterFormat | undefined
       : normalizedKey === "u"
         ? "underline"
         : undefined;
+}
+
+/** Normalizes unknown operation failures for deterministic status feedback. @param error - Caught value. @returns Stable message. */
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }

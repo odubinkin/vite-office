@@ -7,9 +7,16 @@ import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
 import { Desktop as App } from "./desktop";
+import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../sfx2/source/doc/docfac";
 import { createWriterTextRuns } from "../../../sw/source/core/txtnode/ndtxt";
-import { normalizeWriterParagraphFormatting } from "../../../sw/source/core/doc/writer";
+import {
+  createWriterDocument,
+  insertWriterText,
+  normalizeWriterParagraphFormatting,
+} from "../../../sw/source/core/doc/writer";
+import { readOdtDocument } from "../../../sw/source/filter/xml/swxml";
+import { writeOdtDocument } from "../../../sw/source/filter/xml/wrtxml";
 import {
   saveWriterDocument,
   type WriterSnapshotState,
@@ -41,6 +48,16 @@ function selectWriterParagraphText(paragraph: HTMLElement): void {
   if (selection === null) throw new Error("Browser selection must be available in Writer tests.");
   selection.removeAllRanges();
   selection.addRange(range);
+}
+
+/** Invokes one Writer File menu command by its accessible label. @param name - Visible command label. @returns A promise fulfilled after asynchronous command state settles. */
+async function invokeWriterFileCommand(name: string): Promise<void> {
+  fireEvent.click(screen.getByRole("button", { name: "File" }));
+  fireEvent.click(screen.getByRole("menuitem", { name }));
+  await act(
+    /** Flushes state scheduled by asynchronous File commands. @returns A fulfilled React act promise. */
+    async () => undefined,
+  );
 }
 
 describe("App" /**
@@ -277,6 +294,127 @@ describe("App" /**
     );
   });
 
+  it("opens a supported ODT atomically and starts a parseable ODT download" /** Verifies the product File boundary uses the existing Writer package filters. @returns A fulfilled assertion promise. */, async () => {
+    const imported = insertWriterText(
+      createWriterDocument(
+        createDocument({ id: "fixture", suiteId: "writer", title: "Opened ODT" }),
+        "fixture-p-1",
+      ),
+      "fixture-p-1",
+      0,
+      "Imported package body",
+    );
+    const inputClick = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(
+      /** Supplies the generated ODT to the transient browser chooser. @param this - Transient file input. @returns Nothing. */
+      function chooseOdt(this: HTMLInputElement): void {
+        const file = new File([writeOdtDocument(imported) as BlobPart], "fixture.odt", {
+          type: "application/vnd.oasis.opendocument.text",
+        });
+        Object.defineProperty(this, "files", { configurable: true, value: [file] });
+        this.dispatchEvent(new Event("change"));
+      },
+    );
+    let downloadedBlob: Blob | undefined;
+    const originalCreateObjectUrl = URL.createObjectURL;
+    const originalRevokeObjectUrl = URL.revokeObjectURL;
+    Object.defineProperty(URL, "createObjectURL", {
+      configurable: true,
+      value: vi.fn(
+        /** Captures an ODT Blob. @param blob - Downloaded package. @returns Test URL. */
+        (blob: Blob): string => {
+          downloadedBlob = blob;
+          return "blob:writer-odt";
+        },
+      ),
+    });
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      value: vi.fn(),
+    });
+    const anchorClick = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(
+      /** Records download dispatch without navigation. @returns Nothing. */
+      () => undefined,
+    );
+    try {
+      render(<App />);
+      enterWriterParagraphText(
+        screen.getByRole("textbox", { name: "Writer document text" }),
+        "Discarded current body",
+      );
+      await invokeWriterFileCommand("Open ODT…");
+      await waitFor(
+        /** Waits for the imported session. @returns Nothing. */
+        () => expect(screen.getByText("Imported package body")).toBeInTheDocument(),
+      );
+      expect(screen.getByText("Opened ODT")).toBeInTheDocument();
+      expect(screen.getByText("Opened fixture.odt.")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+
+      fireEvent.click(screen.getByRole("button", { name: "Save as ODT" }));
+      expect(anchorClick).toHaveBeenCalledOnce();
+      expect(downloadedBlob?.type).toBe("application/vnd.oasis.opendocument.text");
+      expect(downloadedBlob).toBeInstanceOf(Blob);
+      const downloadedBytes = new Uint8Array(await (downloadedBlob as Blob).arrayBuffer());
+      const archive = new ZipFile(downloadedBytes);
+      expect(await archive.readTextEntry("content.xml")).toContain("Imported");
+      expect((await readOdtDocument(downloadedBytes, imported.document)).paragraphs[0]?.text).toBe(
+        "Imported package body",
+      );
+      expect(screen.getByText("ODT download started: Opened ODT.odt")).toBeInTheDocument();
+    } finally {
+      inputClick.mockRestore();
+      anchorClick.mockRestore();
+      Object.defineProperty(URL, "createObjectURL", {
+        configurable: true,
+        value: originalCreateObjectUrl,
+      });
+      Object.defineProperty(URL, "revokeObjectURL", {
+        configurable: true,
+        value: originalRevokeObjectUrl,
+      });
+    }
+  });
+
+  it("keeps the active document on cancelled or invalid ODT open and exposes New" /** Verifies failure atomicity and the core new-document command. @returns A fulfilled assertion promise. */, async () => {
+    const inputClick = vi.spyOn(HTMLInputElement.prototype, "click");
+    try {
+      render(<App />);
+      const editor = screen.getByRole("textbox", { name: "Writer document text" });
+      enterWriterParagraphText(editor, "Current body");
+      inputClick.mockImplementationOnce(
+        /** Cancels the first chooser. @param this - Transient file input. @returns Nothing. */
+        function cancelOpen(this: HTMLInputElement): void {
+          this.dispatchEvent(new Event("cancel"));
+        },
+      );
+      await invokeWriterFileCommand("Open ODT…");
+      expect(editor).toHaveTextContent("Current body");
+      expect(screen.getByText("ODT open cancelled.")).toBeInTheDocument();
+
+      inputClick.mockImplementationOnce(
+        /** Supplies an invalid package. @param this - Transient file input. @returns Nothing. */
+        function chooseInvalid(this: HTMLInputElement): void {
+          Object.defineProperty(this, "files", {
+            configurable: true,
+            value: [new File(["not an odt"], ".odt")],
+          });
+          this.dispatchEvent(new Event("change"));
+        },
+      );
+      await invokeWriterFileCommand("Open ODT…");
+      expect(editor).toHaveTextContent("Current body");
+      expect(screen.getByText(/Could not open ODT:/)).toBeInTheDocument();
+
+      await invokeWriterFileCommand("New");
+      expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent("");
+      expect(screen.getByText("Untitled Writer Document")).toBeInTheDocument();
+      expect(screen.getByText("Created a new Writer document.")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+    } finally {
+      inputClick.mockRestore();
+    }
+  });
+
   it("saves and restores a Writer paragraph through browser-local IndexedDB" /**
    * Verifies Save persists the current body and Load restores it after a later in-memory edit.
    * @returns A promise resolved after the asynchronous storage feedback is asserted.
@@ -293,12 +431,7 @@ describe("App" /**
       fireEvent.change(screen.getByLabelText("Paragraph style"), {
         target: { value: "heading-1" },
       });
-      await act(
-        /** Starts the asynchronous save interaction. @returns A fulfilled React act promise. */
-        async function savesDocument(): Promise<void> {
-          fireEvent.click(screen.getByRole("button", { name: "Save locally" }));
-        },
-      );
+      await invokeWriterFileCommand("Save local copy");
       await waitFor(
         /** Waits for successful save feedback. @returns A fulfilled polling promise. */
         async function verifiesSavedStatus(): Promise<void> {
@@ -306,12 +439,7 @@ describe("App" /**
         },
       );
       enterWriterParagraphText(editor, "Changed body");
-      await act(
-        /** Starts the asynchronous load interaction. @returns A fulfilled React act promise. */
-        async function loadsDocument(): Promise<void> {
-          fireEvent.click(screen.getByRole("button", { name: "Load locally" }));
-        },
-      );
+      await invokeWriterFileCommand("Open local copy…");
       await waitFor(
         /** Waits for restored text and load feedback. @returns A fulfilled polling promise. */
         async function verifiesLoadedDocument(): Promise<void> {
@@ -371,12 +499,7 @@ describe("App" /**
         }),
       );
       render(<App />);
-      await act(
-        /** Starts the asynchronous load of the irregular saved body. @returns A fulfilled React act promise. */
-        async function loadsIrregularBody(): Promise<void> {
-          fireEvent.click(screen.getByRole("button", { name: "Load locally" }));
-        },
-      );
+      await invokeWriterFileCommand("Open local copy…");
       await waitFor(
         /** Waits for the loaded body to become visible. @returns A fulfilled polling promise. */
         async function verifiesIrregularBody(): Promise<void> {
@@ -406,12 +529,7 @@ describe("App" /**
     Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: new IDBFactory() });
     try {
       render(<App />);
-      await act(
-        /** Starts a missing-snapshot lookup. @returns A fulfilled React act promise. */
-        async function loadsMissing(): Promise<void> {
-          fireEvent.click(screen.getByRole("button", { name: "Load locally" }));
-        },
-      );
+      await invokeWriterFileCommand("Open local copy…");
       await waitFor(
         /** Waits for missing-snapshot feedback. @returns A fulfilled polling promise. */
         async function verifiesMissing(): Promise<void> {
@@ -423,19 +541,9 @@ describe("App" /**
     }
     cleanup();
     render(<App />);
-    await act(
-      /** Starts save where IndexedDB is unavailable. @returns A fulfilled React act promise. */
-      async function reportsUnavailable(): Promise<void> {
-        fireEvent.click(screen.getByRole("button", { name: "Save locally" }));
-      },
-    );
+    await invokeWriterFileCommand("Save local copy");
     expect(screen.getByText("Browser storage is unavailable.")).toBeInTheDocument();
-    await act(
-      /** Starts load where IndexedDB is unavailable. @returns A fulfilled React act promise. */
-      async function reportsUnavailableLoad(): Promise<void> {
-        fireEvent.click(screen.getByRole("button", { name: "Load locally" }));
-      },
-    );
+    await invokeWriterFileCommand("Open local copy…");
     cleanup();
     Object.defineProperty(globalThis, "indexedDB", {
       configurable: true,
@@ -448,24 +556,14 @@ describe("App" /**
       },
     });
     render(<App />);
-    await act(
-      /** Starts a failing save operation. @returns A fulfilled React act promise. */
-      async function reportsSaveFailure(): Promise<void> {
-        fireEvent.click(screen.getByRole("button", { name: "Save locally" }));
-      },
-    );
+    await invokeWriterFileCommand("Save local copy");
     await waitFor(
       /** Waits for save-failure feedback. @returns A fulfilled polling promise. */
       async function verifiesSaveFailure(): Promise<void> {
         expect(screen.getByText("Could not save locally.")).toBeInTheDocument();
       },
     );
-    await act(
-      /** Starts a failing load operation. @returns A fulfilled React act promise. */
-      async function reportsFailure(): Promise<void> {
-        fireEvent.click(screen.getByRole("button", { name: "Load locally" }));
-      },
-    );
+    await invokeWriterFileCommand("Open local copy…");
     await waitFor(
       /** Waits for load-failure feedback. @returns A fulfilled polling promise. */
       async function verifiesFailure(): Promise<void> {
@@ -478,8 +576,8 @@ describe("App" /**
     });
   });
 
-  it("starts a multi-paragraph plain-text download and reports adapter failures" /**
-   * Verifies the user-visible result for successful and rejected browser download capabilities.
+  it("starts browser downloads and reports adapter failures" /**
+   * Verifies the user-visible result for successful plain-text and rejected ODT download capabilities.
    * @returns A promise resolved after Blob text serialization is asserted.
    */, async function downloadsWriterText(): Promise<void> {
     let downloadedBlob: Blob | undefined;
@@ -523,6 +621,15 @@ describe("App" /**
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Save as text…" }));
     expect(screen.getByText("Could not start plain-text download.")).toBeInTheDocument();
+    createObjectUrl.mockImplementationOnce(
+      /** Simulates a non-Error browser capability rejection. @returns No URL because this call throws. */
+      function rejectsOdtObjectUrl(): string {
+        const rejection: unknown = "download denied";
+        throw rejection;
+      },
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Save as ODT" }));
+    expect(screen.getByText("Could not save ODT: download denied")).toBeInTheDocument();
     click.mockRestore();
   });
 });

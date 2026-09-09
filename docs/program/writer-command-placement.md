@@ -7,9 +7,10 @@ copy native menu pixels.
 
 Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 
-- `sw/uiconfig/swriter/menubar/menubar.xml` places Open, Save, and Save As in
-  **File**. Browser-local load, save, and plain-text download are the bounded
-  counterparts.
+- `sw/uiconfig/swriter/menubar/menubar.xml` places New, Open, Save, and Save As
+  in **File**. The browser exposes **New**, **Open ODT…**, and **Save as ODT…**
+  through `SwDocShell`; browser-local IndexedDB persistence and plain-text
+  download remain explicitly labelled secondary commands in the same menu.
 - The same file places Undo and Redo in **Edit**.
 - It places `.uno:Cut`, `.uno:Copy`, and `.uno:Paste` in **Edit** and the
   standard toolbar. The browser **Copy** command writes sanitized visible plain
@@ -50,8 +51,9 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 
 `sw/uiconfig/swriter/toolbar/standardbar.xml` supplies Open, Save, Cut, Copy,
 Paste, Undo, and Redo, but no generic plain-text download command. Accordingly,
-the standard toolbar retains the bounded Save, Open, Cut, Copy, Paste, Undo,
-and Redo controls; the browser text export remains **File → Save as text…**. The former **Add
+the standard toolbar uses **Open ODT** and **Save as ODT** for its bounded file
+commands and retains Cut, Copy, Paste, Undo, and Redo; local IndexedDB actions
+and text export remain in **File**. The former **Add
 paragraph** toolbar control was removed: normal Writer paragraph
 creation is caret/Enter behavior, not a standalone toolbar command. The
 implemented browser equivalent now intercepts unmodified **Enter** at a

@@ -45,7 +45,11 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
 
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     expect(screen.getByRole("menu", { name: "File menu" })).toBeVisible();
-    expect(screen.getByRole("menuitem", { name: "Save" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "New" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "Open ODT…" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "Save as ODT…" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "Open local copy…" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "Save local copy" })).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     expect(screen.queryByRole("menu", { name: "File menu" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "View" }));

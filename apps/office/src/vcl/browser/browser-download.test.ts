@@ -3,6 +3,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  createDownloadFilename,
+  downloadBytes,
   downloadPlainText,
   type DownloadAnchor,
   type DownloadDocument,
@@ -65,5 +67,27 @@ describe("browser plain-text download" /** Groups Blob download lifecycle cases.
     expect(environment.values.revoked).toBe("blob:writer-export");
     await expect(environment.values.blob?.text()).resolves.toBe("Hello Writer");
     expect(environment.values.blob?.type).toBe("text/plain;charset=utf-8");
+  });
+
+  it("downloads exact binary bytes with the requested media type" /** Verifies the shared Blob boundary for document packages. @returns A fulfilled assertion promise. */, async () => {
+    const environment = createDownloadEnvironment();
+    downloadBytes(
+      new Uint8Array([0, 255, 17]),
+      "application/test",
+      "document.odt",
+      environment.document,
+      environment.url,
+    );
+    expect(environment.anchor.download).toBe("document.odt");
+    expect(environment.values.blob?.type).toBe("application/test");
+    await expect(environment.values.blob?.arrayBuffer()).resolves.toEqual(
+      new Uint8Array([0, 255, 17]).buffer,
+    );
+  });
+
+  it("normalizes portable download filenames and retains existing extensions" /** Verifies browser filename policy. @returns Nothing. */, () => {
+    expect(createDownloadFilename(" Report: Q1 ", ".odt")).toBe("Report- Q1.odt");
+    expect(createDownloadFilename("report.ODT", ".odt")).toBe("report.ODT");
+    expect(createDownloadFilename("   ", "txt")).toBe("Untitled.txt");
   });
 });

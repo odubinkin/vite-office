@@ -56,10 +56,16 @@ export interface WriterMenuBarProps {
   readonly onSelectAll: () => void;
   /** Loads the existing document identity from browser-local storage. */
   readonly onLoad: () => void;
+  /** Creates a new empty Writer document. */
+  readonly onNew: () => void;
+  /** Opens an OpenDocument Text file selected by the browser user. */
+  readonly onOpenOdt: () => void;
   /** Restores the following immutable Writer history snapshot. */
   readonly onRedo: () => void;
   /** Saves the current Writer document in browser-local storage. */
   readonly onSave: () => void;
+  /** Downloads the current Writer document as OpenDocument Text. */
+  readonly onSaveOdt: () => void;
   /** Requests the next visibility state for the Writer properties sidebar. */
   readonly onSidebarVisibilityChange: (isVisible: boolean) => void;
   /** Requests the next visibility state for the Writer status bar. */
@@ -97,9 +103,12 @@ export interface WriterMenuBarProps {
  * @param props.onCopy - Callback used by Edit Copy entry.
  * @param props.onHorizontalRulerVisibilityChange - Callback used by the View Rulers horizontal item.
  * @param props.onLoad - Callback used by File Open Local Copy entry.
+ * @param props.onNew - Callback used by File New.
+ * @param props.onOpenOdt - Callback used by File Open ODT.
  * @param props.onPaste - Callback used by Edit Paste entry.
  * @param props.onRedo - Callback used by Edit Redo entry.
  * @param props.onSave - Callback used by File Save entry.
+ * @param props.onSaveOdt - Callback used by File Save as ODT.
  * @param props.onSelectAll - Callback used by Edit Select All entry.
  * @param props.onSidebarVisibilityChange - Callback used by the View Sidebar check item.
  * @param props.onStatusBarVisibilityChange - Callback used by the View Status Bar check item.
@@ -128,9 +137,12 @@ export function WriterMenuBar({
   onCopy,
   onHorizontalRulerVisibilityChange,
   onLoad,
+  onNew,
+  onOpenOdt,
   onPaste,
   onRedo,
   onSave,
+  onSaveOdt,
   onSelectAll,
   onSidebarVisibilityChange,
   onStatusBarVisibilityChange,
@@ -319,12 +331,28 @@ export function WriterMenuBar({
           id={menuId}
           role="menu"
         >
+          {renderMenuItem("New", invokeMenuAction.bind(undefined, onNew), isStoragePending)}
+          {renderMenuItem(
+            "Open ODT…",
+            invokeMenuAction.bind(undefined, onOpenOdt),
+            isStoragePending,
+          )}
+          {renderMenuItem(
+            "Save as ODT…",
+            invokeMenuAction.bind(undefined, onSaveOdt),
+            isStoragePending,
+          )}
+          <div aria-hidden="true" className="my-1 border-t border-slate-200" />
           {renderMenuItem(
             "Open local copy…",
             invokeMenuAction.bind(undefined, onLoad),
             isStoragePending,
           )}
-          {renderMenuItem("Save", invokeMenuAction.bind(undefined, onSave), isStoragePending)}
+          {renderMenuItem(
+            "Save local copy",
+            invokeMenuAction.bind(undefined, onSave),
+            isStoragePending,
+          )}
           <div aria-hidden="true" className="my-1 border-t border-slate-200" />
           {renderMenuItem("Save as text…", invokeMenuAction.bind(undefined, onDownload))}
         </div>

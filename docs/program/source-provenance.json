@@ -56,6 +56,7 @@
     { "localPath": "apps/office/src/sw/source/filter/xml/wrtxml.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/wrtxml.cxx" },
     { "localPath": "apps/office/src/sw/source/filter/xml/xmlexp.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/xmlexp.cxx" },
     { "localPath": "apps/office/src/sw/source/filter/xml/xmlimp.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/xmlimp.cxx" },
+    { "localPath": "apps/office/src/sw/source/uibase/app/docsh.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/app/docsh.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/app/mainwn.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/app/mainwn.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx" },
     { "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx" },
@@ -78,6 +79,7 @@
     { "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml" },
     { "localPath": "apps/office/src/vcl/browser/browser-clipboard.ts", "status": "mapped", "upstreamPath": "vcl/source/app/ClipboardBase.cxx" },
     { "localPath": "apps/office/src/vcl/browser/browser-download.ts", "status": "browser-only", "rationale": "Browser download initiation delegates to the user agent's sandboxed download permission model. LibreOffice native file dialogs and filesystem writes cannot be represented by one static browser source-file implementation." },
+    { "localPath": "apps/office/src/vcl/browser/browser-file.ts", "status": "browser-only", "rationale": "A transient HTML file input and Blob byte reader are browser sandbox capabilities. They deliberately stop at selected bytes so Writer document ownership and ODT parsing remain in SwDocShell and the mapped XML filters." },
     { "localPath": "apps/office/src/vcl/browser/indexeddb-storage.ts", "status": "browser-only", "rationale": "IndexedDB is a browser-native asynchronous persistence API with no LibreOffice file-equivalent implementation. The module is documented as a platform adapter rather than a false reimplementation of native storage." },
     { "localPath": "apps/office/src/xmloff/source/text/txtparae.ts", "status": "mapped", "upstreamPath": "xmloff/source/text/txtparae.cxx" },
     { "localPath": "apps/office/src/xmloff/source/text/txtparai.ts", "status": "mapped", "upstreamPath": "xmloff/source/text/txtparai.cxx" }

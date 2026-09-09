@@ -26,6 +26,26 @@ export interface DownloadUrl {
   revokeObjectURL(url: string): void;
 }
 
+/** Creates a portable browser download filename from a document title. @param title - Human-readable title. @param extension - Required extension including its dot. @returns Sanitized filename. */
+export function createDownloadFilename(title: string, extension: string): string {
+  const normalizedExtension = extension.startsWith(".") ? extension : `.${extension}`;
+  const sanitized = title.trim().replace(/[\\/:*?"<>|]/g, "-") || "Untitled";
+  return sanitized.toLowerCase().endsWith(normalizedExtension.toLowerCase())
+    ? sanitized
+    : `${sanitized}${normalizedExtension}`;
+}
+
+/** Creates and triggers a browser download for caller-owned bytes. @param bytes - Exact file bytes. @param mediaType - Blob media type. @param filename - Browser-visible filename. @param document - DOM anchor factory. @param url - Object-URL capability. @returns Nothing. */
+export function downloadBytes(
+  bytes: Uint8Array,
+  mediaType: string,
+  filename: string,
+  document: DownloadDocument = globalThis.document,
+  url: DownloadUrl = globalThis.URL,
+): void {
+  downloadBlob(new Blob([bytes as BlobPart], { type: mediaType }), filename, document, url);
+}
+
 /**
  * Creates and immediately triggers a UTF-8 plain-text browser download.
  *
@@ -41,7 +61,16 @@ export function downloadPlainText(
   document: DownloadDocument = globalThis.document,
   url: DownloadUrl = globalThis.URL,
 ): void {
-  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  downloadBlob(new Blob([text], { type: "text/plain;charset=utf-8" }), filename, document, url);
+}
+
+/** Dispatches one Blob through a temporary anchor and always releases its URL. @param blob - File payload. @param filename - Browser filename. @param document - DOM anchor factory. @param url - Object-URL capability. @returns Nothing. */
+function downloadBlob(
+  blob: Blob,
+  filename: string,
+  document: DownloadDocument,
+  url: DownloadUrl,
+): void {
   const objectUrl = url.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.download = filename;

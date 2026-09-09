@@ -16,12 +16,12 @@ export interface WriterCommandToolbarProps {
   readonly onCut: () => void;
   /** Requests copying the current native Writer selection to the browser clipboard. */
   readonly onCopy: () => void;
-  /** Requests loading the Writer document from browser-local storage. */
-  readonly onLoad: () => void;
+  /** Requests opening an OpenDocument Text file. */
+  readonly onOpenOdt: () => void;
   /** Requests restoration of the following Writer history snapshot. */
   readonly onRedo: () => void;
-  /** Requests saving the Writer document to browser-local storage. */
-  readonly onSave: () => void;
+  /** Requests downloading the Writer document as OpenDocument Text. */
+  readonly onSaveOdt: () => void;
   /** Requests pasting browser clipboard text at the current Writer selection or caret. */
   readonly onPaste: () => void;
   /** Requests restoration of the preceding Writer history snapshot. */
@@ -37,9 +37,9 @@ export interface WriterCommandToolbarProps {
  * @param props.isStoragePending - Whether Save and Load should be disabled temporarily.
  * @param props.onCut - Callback copying then deleting the current Writer selection.
  * @param props.onCopy - Callback starting browser-local Writer selection copy.
- * @param props.onLoad - Callback starting browser-local load.
+ * @param props.onOpenOdt - Callback starting ODT file selection.
  * @param props.onRedo - Callback restoring the following history entry.
- * @param props.onSave - Callback starting browser-local save.
+ * @param props.onSaveOdt - Callback starting ODT package download.
  * @param props.onPaste - Callback reading the browser clipboard at the current Writer selection or caret.
  * @param props.onUndo - Callback restoring the preceding history entry.
  * @returns Compact icon command buttons with stable accessible names.
@@ -50,30 +50,30 @@ export function WriterCommandToolbar({
   isStoragePending,
   onCut,
   onCopy,
-  onLoad,
+  onOpenOdt,
   onRedo,
-  onSave,
+  onSaveOdt,
   onPaste,
   onUndo,
 }: WriterCommandToolbarProps): React.JSX.Element {
   return (
     <>
       <button
-        aria-label="Save locally"
+        aria-label="Save as ODT"
         className="grid size-9 place-items-center rounded-lg text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50"
         disabled={isStoragePending}
-        onClick={onSave}
-        title="Save locally"
+        onClick={onSaveOdt}
+        title="Save as ODT"
         type="button"
       >
         <Save aria-hidden="true" size={18} />
       </button>
       <button
-        aria-label="Load locally"
+        aria-label="Open ODT"
         className="grid size-9 place-items-center rounded-lg text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50"
         disabled={isStoragePending}
-        onClick={onLoad}
-        title="Load locally"
+        onClick={onOpenOdt}
+        title="Open ODT"
         type="button"
       >
         <FolderOpen aria-hidden="true" size={18} />

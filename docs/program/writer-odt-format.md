@@ -56,9 +56,19 @@ images, fields, annotations, tracked changes, sections, page styles, objects,
 scripts, signatures, encryption, RDF, and arbitrary style properties likewise
 remain unsupported rather than being silently discarded.
 
-## Current product limit
+## Browser File integration
 
-The filter API is implemented and tested, but the workbench does not yet expose
-ODT in browser File Open or Save controls. That browser/platform wiring and the
-next ODF semantic slices are separate Writer tasks. This record is therefore a
-bounded compatibility claim, not complete ODT or LibreOffice format parity.
+The Writer workbench exposes **File → Open ODT…**, **File → Save as ODT…**, and
+matching standard-toolbar actions. A browser-only VCL adapter obtains user-selected
+bytes or starts a sandboxed byte download; it does not parse or own the document.
+The LibreOffice-shaped `SwDocShell` remains the active `SwDoc` owner and delegates
+load/save to `SwXMLReader` and `SwXMLWriter`. Import builds and validates a candidate
+graph before replacing the current session, so cancellation, malformed packages,
+and unsupported semantics leave the active document and history intact. Successful
+New or Open resets browser selection state and starts a fresh undo history.
+
+Browsers do not grant this static application an in-place filesystem handle, so
+Save As starts a download with a sanitized `.odt` filename. IndexedDB local copies
+and plain-text download remain available as separately labelled File commands.
+This record is a bounded compatibility claim, not complete ODT or LibreOffice
+format parity; the unsupported model and package cases above still fail explicitly.
