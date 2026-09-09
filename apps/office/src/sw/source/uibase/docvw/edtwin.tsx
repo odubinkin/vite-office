@@ -54,8 +54,13 @@ export interface WriterPlainTextEditorProps {
   readonly onSelectAll: () => void;
   /** Ordered immutable Writer paragraphs bound to document-integrated editable controls. */
   readonly paragraphs: readonly WriterParagraph[];
-  /** Receives a stable paragraph identity and its complete next text after a browser input event. */
-  readonly onTextChange: (paragraphId: string, text: string) => void;
+  /** Receives a stable paragraph identity, complete next text, caret, and native edit kind after browser input. */
+  readonly onTextChange: (
+    paragraphId: string,
+    text: string,
+    caretOffset: number | undefined,
+    inputType: string,
+  ) => void;
   /** Removes a copied native same-paragraph selection after its clipboard payload is safely prepared. */
   readonly onTextCut: (range: WriterParagraphTextRange) => void;
   /** Replaces a native same-paragraph selection or caret with safe clipboard data. */
@@ -189,7 +194,14 @@ export function WriterPlainTextEditor({
   ): void {
     const offset = getWriterCollapsedCaretOffset(event.currentTarget);
     if (offset !== undefined) pendingInputCaret.current = { paragraphId, offset };
-    onTextChange(paragraphId, event.currentTarget.textContent);
+    const nativeInput = event.nativeEvent as InputEvent;
+    onTextChange(
+      paragraphId,
+      event.currentTarget.textContent,
+      offset,
+      /* c8 ignore next -- React's contenteditable onInput always wraps a native InputEvent. */
+      typeof nativeInput.inputType === "string" ? nativeInput.inputType : "",
+    );
   }
 
   /**

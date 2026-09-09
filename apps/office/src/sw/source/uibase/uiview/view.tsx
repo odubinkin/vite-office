@@ -5,6 +5,7 @@
 import { useEffect, useState } from "react";
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import {
+  applyGroupedTransaction,
   applyTransaction,
   createTransactionHistory,
   getCurrentTransactionState,
@@ -147,9 +148,16 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
    *
    * @param paragraphId - Stable identity of the Writer paragraph being edited.
    * @param text - Complete next plain-text value emitted by the Writer editable paragraph.
+   * @param caretOffset - Collapsed caret after the native edit, when available.
+   * @param inputType - Native input operation used to preserve Writer undo boundaries.
    * @returns Nothing; React schedules the next Writer document state.
    */
-  function handleWriterTextChange(paragraphId: string, text: string): void {
+  function handleWriterTextChange(
+    paragraphId: string,
+    text: string,
+    caretOffset: number | undefined,
+    inputType: string,
+  ): void {
     setActiveParagraphId(paragraphId);
     setWriterHistory(
       /**
@@ -163,18 +171,40 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       ): TransactionHistory<WriterDocument> {
         const currentDocument = getCurrentTransactionState(currentHistory);
         const paragraph = getActiveWriterParagraph(currentDocument, paragraphId);
-        const insertion = getWriterInsertedText(paragraph.text, text);
+        const change = getWriterTextChange(paragraph.text, text);
         const nextDocument =
-          insertion === undefined
-            ? replaceWriterParagraph(currentDocument, paragraphId, text)
-            : insertWriterTextWithAttributes(
+          change?.kind === "insert"
+            ? insertWriterTextWithAttributes(
                 currentDocument,
                 paragraphId,
-                insertion.offset,
-                insertion.text,
+                change.offset,
+                change.text,
                 pendingCharacterAttributes,
-              );
-        return applyTransaction(currentHistory, nextDocument, { position: text.length });
+              )
+            : change?.kind === "delete"
+              ? replaceWriterParagraphTextRange(
+                  currentDocument,
+                  { end: change.end, paragraphId, start: change.start },
+                  [],
+                )
+              : replaceWriterParagraph(currentDocument, paragraphId, text);
+        const selection = { position: caretOffset ?? text.length };
+        const grouping = getWriterTypingGroup(
+          paragraphId,
+          change,
+          inputType,
+          currentHistory.selection.position,
+          caretOffset,
+        );
+        return grouping === undefined
+          ? applyTransaction(currentHistory, nextDocument, selection)
+          : applyGroupedTransaction(
+              currentHistory,
+              nextDocument,
+              selection,
+              grouping.id,
+              grouping.extendCurrent,
+            );
       },
     );
   }
@@ -737,13 +767,16 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
  *
  * @param previousText - Canonical immutable paragraph text before native browser input.
  * @param nextText - Complete visible paragraph text after native browser input.
- * @returns Insertion offset and text when the change adds one contiguous segment, otherwise undefined for deletion or replacement.
+ * @returns Exact insertion or deletion bounds, otherwise undefined for replacement.
  */
-function getWriterInsertedText(
+function getWriterTextChange(
   previousText: string,
   nextText: string,
-): Readonly<{ offset: number; text: string }> | undefined {
-  if (nextText.length <= previousText.length) return undefined;
+):
+  | Readonly<{ kind: "delete"; end: number; start: number; text: string }>
+  | Readonly<{ kind: "insert"; offset: number; text: string }>
+  | undefined {
+  if (nextText === previousText) return undefined;
   let prefixLength = 0;
   while (
     prefixLength < previousText.length &&
@@ -757,9 +790,86 @@ function getWriterInsertedText(
       nextText.charAt(nextText.length - suffixLength - 1)
   )
     suffixLength += 1;
+  const previousEnd = previousText.length - suffixLength;
+  const removedText = previousText.slice(prefixLength, previousEnd);
   const insertedText = nextText.slice(prefixLength, nextText.length - suffixLength);
-  /* v8 ignore next -- A strictly longer next value always leaves at least one inserted code unit after maximal common prefix/suffix removal. */
-  return insertedText.length === 0 ? undefined : { offset: prefixLength, text: insertedText };
+  if (removedText.length === 0 && insertedText.length > 0)
+    return { kind: "insert", offset: prefixLength, text: insertedText };
+  if (insertedText.length === 0 && removedText.length > 0)
+    return { kind: "delete", end: previousEnd, start: prefixLength, text: removedText };
+  return undefined;
+}
+
+/**
+ * Derives the compatible undo action that LibreOffice keeps open for adjacent typing.
+ *
+ * `SwUndoInsert::CanGrouping` requires the same node, adjacent position, and matching
+ * letter/number versus delimiter class. `SwUndoDelete::CanGrouping` additionally keeps
+ * Backspace and Delete groups separate and accepts only single-character deletion.
+ *
+ * @param paragraphId - Writer text node receiving the edit.
+ * @param change - Exact contiguous insertion or deletion detected from browser text.
+ * @param inputType - Native InputEvent operation name.
+ * @param previousCaretOffset - Selection stored by the preceding history action.
+ * @param nextCaretOffset - Collapsed caret emitted after this native edit.
+ * @returns Group identity and whether the current group passes source position checks.
+ */
+function getWriterTypingGroup(
+  paragraphId: string,
+  change:
+    | Readonly<{ kind: "delete"; end: number; start: number; text: string }>
+    | Readonly<{ kind: "insert"; offset: number; text: string }>
+    | undefined,
+  inputType: string,
+  previousCaretOffset: number,
+  nextCaretOffset: number | undefined,
+): Readonly<{ extendCurrent: boolean; id: string }> | undefined {
+  if (change === undefined || nextCaretOffset === undefined) return undefined;
+  const characterClass = getWriterTypingCharacterClass(change.text);
+  if (characterClass === undefined) return undefined;
+  if (change.kind === "insert") {
+    if (inputType !== "insertText") return undefined;
+    return {
+      extendCurrent: change.offset === previousCaretOffset,
+      id: `writer-typing:${paragraphId}:insert:${characterClass}`,
+    };
+  }
+  if (change.text.length !== 1) return undefined;
+  if (inputType === "deleteContentBackward")
+    return {
+      extendCurrent: change.end === previousCaretOffset,
+      id: `writer-typing:${paragraphId}:backspace:${characterClass}`,
+    };
+  if (inputType === "deleteContentForward")
+    return {
+      extendCurrent: change.start === previousCaretOffset,
+      id: `writer-typing:${paragraphId}:delete:${characterClass}`,
+    };
+  return undefined;
+}
+
+/**
+ * Classifies input using the letter/numeric versus delimiter split used by Writer grouping.
+ *
+ * @param text - Inserted or deleted text from one browser input operation.
+ * @returns Shared class when every Unicode character matches, otherwise undefined.
+ */
+function getWriterTypingCharacterClass(text: string): "delimiter" | "word" | undefined {
+  const characters = [...text];
+  const firstCharacter = characters[0];
+  /* c8 ignore next -- detected insertions and deletions always contain at least one character. */
+  if (firstCharacter === undefined) return undefined;
+  const firstIsWord = /[\p{L}\p{N}]/u.test(firstCharacter);
+  return characters.every(
+    /** Checks one character against the group's Writer delimiter class. @param character - Unicode input character. @returns Whether its class matches the first character. */
+    function hasMatchingClass(character): boolean {
+      return /[\p{L}\p{N}]/u.test(character) === firstIsWord;
+    },
+  )
+    ? firstIsWord
+      ? "word"
+      : "delimiter"
+    : undefined;
 }
 
 /** Maps one browser shortcut key to its supported direct Writer character command. @param key - Browser key value normalized by the platform. @returns Direct character format, or undefined when no Writer formatting shortcut applies. */

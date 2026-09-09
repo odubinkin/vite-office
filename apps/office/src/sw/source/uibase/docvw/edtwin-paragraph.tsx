@@ -2,7 +2,9 @@
  * @fileoverview Renders one document-integrated editable Writer paragraph while leaving document mutation and selection policy to the parent editor.
  */
 
-import type { WriterParagraph } from "../../core/doc/writer";
+import { useLayoutEffect, useRef } from "react";
+
+import type { WriterParagraph, WriterTextRun } from "../../core/doc/writer";
 
 /** Defines the immutable state and browser callbacks needed by one Writer editable paragraph. */
 export interface WriterEditableParagraphProps {
@@ -59,14 +61,24 @@ export function WriterEditableParagraph({
   paragraph,
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
+  const paragraphElement = useRef<HTMLParagraphElement | null>(null);
   const styleDescriptionId = `writer-paragraph-style-${index + 1}`;
   const label = index === 0 ? "Writer document text" : `Writer paragraph ${index + 1}`;
   const listIndent = listMarker === undefined ? undefined : `${paragraph.list.level * 2}rem`;
-  const hasOnlyDefaultRun =
-    paragraph.runs.length === 1 &&
-    paragraph.runs[0]?.attributes.bold === false &&
-    paragraph.runs[0]?.attributes.italic === false &&
-    paragraph.runs[0]?.attributes.underline === false;
+  useLayoutEffect(
+    /**
+     * Synchronizes the browser-owned editable subtree without asking React to reconcile nodes
+     * that native input may already have removed, split, or wrapped.
+     *
+     * @returns Nothing; the DOM is replaced only when it differs from the canonical Writer runs.
+     */
+    function synchronizeEditableContent(): void {
+      const element = paragraphElement.current;
+      /* c8 ignore next -- React runs layout effects only after assigning the mounted paragraph ref. */
+      if (element !== null) synchronizeWriterParagraphContent(element, paragraph.runs);
+    },
+    [paragraph.runs],
+  );
   return (
     <div className={isLast ? "" : "mb-4"} data-active={isActive}>
       <span className="sr-only" id={styleDescriptionId}>
@@ -127,32 +139,58 @@ export function WriterEditableParagraph({
           ref={
             /** Retains the mounted element for later caret restoration. @param element - Current mounted paragraph or null after unmount. @returns Nothing; the parent updates its ref map. */
             function retainParagraphElement(element: HTMLParagraphElement | null): void {
+              paragraphElement.current = element;
               retainElement(paragraph.id, element);
             }
           }
           role="textbox"
           style={{ textAlign: paragraph.alignment }}
           suppressContentEditableWarning
-        >
-          {hasOnlyDefaultRun
-            ? paragraph.text
-            : paragraph.runs.map(
-                /** Renders one semantic direct-format run without exposing editor metadata in visible text. @param run - Immutable normalized Writer text run. @param runIndex - Stable in-paragraph render position. @returns Text node or semantic formatting element. */
-                function renderWriterTextRun(run, runIndex): React.ReactNode {
-                  const key = `${runIndex}-${run.text}`;
-                  let content: React.ReactNode = run.text;
-                  if (run.attributes.underline)
-                    content = <span style={{ textDecoration: "underline" }}>{content}</span>;
-                  if (run.attributes.italic) content = <em>{content}</em>;
-                  return run.attributes.bold ? (
-                    <strong key={key}>{content}</strong>
-                  ) : (
-                    <span key={key}>{content}</span>
-                  );
-                },
-              )}
-        </p>
+        />
       </div>
     </div>
   );
+}
+
+/**
+ * Projects canonical Writer runs into one DOM-only editing boundary.
+ *
+ * React intentionally owns the paragraph element and its attributes but has no virtual children
+ * below it. Native `contenteditable` input can therefore mutate descendants without invalidating
+ * React's fiber child list, while this layout-phase adapter restores canonical semantic markup.
+ *
+ * @param paragraph - Browser editing host whose descendants are browser-owned between commits.
+ * @param runs - Canonical Writer text runs to project.
+ * @returns Nothing; matching markup is retained so native caret placement remains untouched.
+ */
+function synchronizeWriterParagraphContent(
+  paragraph: HTMLParagraphElement,
+  runs: readonly WriterTextRun[],
+): void {
+  const expected = paragraph.ownerDocument.createElement("p");
+  runs.forEach(
+    /** Appends one semantically nested direct-format run. @param run - Canonical Writer run. @returns Nothing; expected receives the run subtree. */
+    function renderWriterTextRun(run): void {
+      let content: Node = paragraph.ownerDocument.createTextNode(run.text);
+      if (run.attributes.underline) {
+        const underline = paragraph.ownerDocument.createElement("span");
+        underline.style.textDecoration = "underline";
+        underline.append(content);
+        content = underline;
+      }
+      if (run.attributes.italic) {
+        const italic = paragraph.ownerDocument.createElement("em");
+        italic.append(content);
+        content = italic;
+      }
+      if (run.attributes.bold) {
+        const bold = paragraph.ownerDocument.createElement("strong");
+        bold.append(content);
+        content = bold;
+      }
+      expected.append(content);
+    },
+  );
+  if (paragraph.innerHTML === expected.innerHTML) return;
+  paragraph.replaceChildren(...expected.childNodes);
 }

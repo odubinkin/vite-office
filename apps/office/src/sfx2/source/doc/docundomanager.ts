@@ -10,6 +10,8 @@ export interface CursorSelection {
 
 /** Describes immutable serializable history for one caller-selected state type. */
 export interface TransactionHistory<State> {
+  /** Identifier of the last open grouped action, omitted after commands and history navigation. */
+  readonly activeGroup?: string;
   /** State snapshots in chronological order, always containing the current snapshot. */
   readonly entries: readonly State[];
   /** Zero-based index of the current snapshot in entries. */
@@ -17,6 +19,9 @@ export interface TransactionHistory<State> {
   /** Current logical selection stored independently of future rendering. */
   readonly selection: CursorSelection;
 }
+
+/** Matches the default top-level action capacity of LibreOffice's SfxUndoManager. */
+export const DEFAULT_MAX_UNDO_ACTION_COUNT = 20;
 
 /**
  * Creates history with one initial state and a validated initial selection.
@@ -50,9 +55,72 @@ export function applyTransaction<State>(
 ): TransactionHistory<State> {
   assertHistory(history);
   assertSelection(selection);
+  return appendTransaction(history, nextState, selection);
+}
+
+/**
+ * Applies or extends one source-compatible grouped action such as Writer typing.
+ *
+ * LibreOffice's `SwUndoInsert::CanGrouping` and `SwUndoDelete::CanGrouping` update the latest
+ * undo action when adjacent input has the same grouping class. This snapshot adapter mirrors
+ * that ownership by replacing the current snapshot while a caller-selected group remains open.
+ *
+ * @param history - Immutable prior history that remains unmodified.
+ * @param nextState - Caller-owned state snapshot becoming current.
+ * @param selection - Selection associated with nextState.
+ * @param group - Non-empty identity for one compatible source-level undo action.
+ * @param extendCurrent - Whether source-level position checks allow merging into the open group.
+ * @returns History with either a new action or an updated current grouped action.
+ */
+export function applyGroupedTransaction<State>(
+  history: TransactionHistory<State>,
+  nextState: State,
+  selection: CursorSelection,
+  group: string,
+  extendCurrent = true,
+): TransactionHistory<State> {
+  assertHistory(history);
+  assertSelection(selection);
+  if (group.length === 0) throw new Error("Transaction group must not be empty.");
+  if (
+    extendCurrent &&
+    history.activeGroup === group &&
+    history.index === history.entries.length - 1 &&
+    history.entries.length > 1
+  ) {
+    return {
+      activeGroup: group,
+      entries: [...history.entries.slice(0, history.index), nextState],
+      index: history.index,
+      selection: { ...selection },
+    };
+  }
+  return appendTransaction(history, nextState, selection, group);
+}
+
+/**
+ * Appends one bounded undo action and clears any redo branch.
+ *
+ * @param history - Immutable prior history.
+ * @param nextState - State stored by the new action.
+ * @param selection - Selection associated with nextState.
+ * @param activeGroup - Optional grouped-action identity retained for compatible input.
+ * @returns History with the new bounded action as its current state.
+ */
+function appendTransaction<State>(
+  history: TransactionHistory<State>,
+  nextState: State,
+  selection: CursorSelection,
+  activeGroup?: string,
+): TransactionHistory<State> {
+  let entries = [...history.entries.slice(0, history.index + 1), nextState];
+  const maximumEntryCount = DEFAULT_MAX_UNDO_ACTION_COUNT + 1;
+  if (entries.length > maximumEntryCount)
+    entries = entries.slice(entries.length - maximumEntryCount);
   return {
-    entries: [...history.entries.slice(0, history.index + 1), nextState],
-    index: history.index + 1,
+    ...(activeGroup === undefined ? {} : { activeGroup }),
+    entries,
+    index: entries.length - 1,
     selection: { ...selection },
   };
 }
@@ -73,7 +141,7 @@ export function undoTransaction<State>(
   assertSelection(selection);
   return history.index === 0
     ? history
-    : { ...history, index: history.index - 1, selection: { ...selection } };
+    : { entries: history.entries, index: history.index - 1, selection: { ...selection } };
 }
 
 /**
@@ -92,7 +160,7 @@ export function redoTransaction<State>(
   assertSelection(selection);
   return history.index === history.entries.length - 1
     ? history
-    : { ...history, index: history.index + 1, selection: { ...selection } };
+    : { entries: history.entries, index: history.index + 1, selection: { ...selection } };
 }
 
 /**

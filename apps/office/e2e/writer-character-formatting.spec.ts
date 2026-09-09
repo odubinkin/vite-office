@@ -9,6 +9,15 @@ test("Writer direct character formatting" /**
  * @param root0.page - Chromium page hosting the built static Writer workbench.
  * @returns A promise resolved after browser-visible formatting and ClipboardEvent payloads are asserted.
  */, async function formatsWriterCharacters({ page }): Promise<void> {
+  const pageErrors: string[] = [];
+  page.on(
+    "pageerror",
+    /** Retains one uncaught browser error for the final crash assertion. @param error - Uncaught page error. @returns Nothing; pageErrors receives its message. */ function retainPageError(
+      error,
+    ): void {
+      pageErrors.push(error.message);
+    },
+  );
   await page.goto("/");
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await writerEditor.fill("Formatted Writer body");
@@ -85,4 +94,22 @@ test("Writer direct character formatting" /**
   expect(clipboardPayload.plainText).toBe("Formatted Writer body");
   expect(clipboardPayload.html).toContain('<strong><em><span style="text-decoration: underline">');
   expect(clipboardPayload.html).not.toContain("Paragraph style:");
+  await writerEditor.evaluate(
+    /** Focuses and selects the formatted editable subtree immediately before native deletion. @param element - Writer editing host whose browser-owned descendant will be removed. @returns Nothing; the live selection covers the complete formatted text. */ function selectFormattedWriterText(
+      element: HTMLElement,
+    ): void {
+      element.focus();
+      const selection = window.getSelection();
+      if (selection === null) return;
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    },
+  );
+  await page.keyboard.press("Backspace");
+  await expect(writerEditor).toHaveText("");
+  await writerEditor.pressSequentially("Recovered");
+  await expect(writerEditor).toHaveText("Recovered");
+  expect(pageErrors).toEqual([]);
 });

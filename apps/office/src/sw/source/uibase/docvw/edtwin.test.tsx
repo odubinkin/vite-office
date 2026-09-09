@@ -36,6 +36,26 @@ function placeWriterCaret(paragraph: HTMLElement, offset: number): void {
   selection.addRange(range);
 }
 
+/**
+ * Applies one browser-native text edit with its post-edit caret and InputEvent kind.
+ *
+ * @param paragraph - Editable Writer paragraph receiving the native mutation.
+ * @param text - Complete post-edit paragraph text.
+ * @param inputType - Native InputEvent edit kind.
+ * @param caretOffset - Collapsed caret after the browser mutation.
+ * @returns Nothing; the DOM mutation is committed through the Writer input boundary.
+ */
+function inputWriterParagraphText(
+  paragraph: HTMLElement,
+  text: string,
+  inputType: string,
+  caretOffset = text.length,
+): void {
+  paragraph.textContent = text;
+  placeWriterCaret(paragraph, caretOffset);
+  fireEvent.input(paragraph, { inputType });
+}
+
 describe("Writer paragraph breaks" /** Groups native Enter interaction and guarded browser-selection behavior. @returns Nothing; Vitest registers the enclosed case. */, function defineWriterParagraphBreakTests(): void {
   it("routes a native same-paragraph Paste event through the immutable Writer document body" /** Verifies React's document-body clipboard listener replaces selected text with safe direct-format runs instead of allowing editable-host HTML mutation. @returns Nothing; browser-visible pasted markup is asserted. */, function routesNativePasteThroughDocumentBody(): void {
     render(<App />);
@@ -100,6 +120,67 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     fireEvent.keyDown(secondParagraph, { ctrlKey: true, key: "a" });
     expect(window.getSelection()?.toString()).toContain("Before Xafter");
     expect(window.getSelection()?.toString()).toContain("Second paragraph");
+  });
+
+  it("keeps native contenteditable deletion outside React child reconciliation" /**
+   * Reproduces Chromium removing a formatted descendant before React commits the corresponding Writer model update.
+   * @returns Nothing; the browser-owned DOM deletion and a longer selection replacement commit without NotFoundError or stale text.
+   */, function handlesBrowserOwnedFormattedDeletion(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    inputWriterParagraphText(paragraph, "Bold", "insertText");
+    const selection = window.getSelection() as Selection;
+    const range = document.createRange();
+    range.selectNodeContents(paragraph);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    fireEvent.click(screen.getByRole("button", { name: "Bold" }));
+    const formattedParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    expect(formattedParagraph.querySelector("strong")).toHaveTextContent("Bold");
+    formattedParagraph.querySelector("strong")?.remove();
+    expect(
+      /** Commits browser-owned descendant removal through React. @returns Nothing; Writer receives the empty text. */ function commitNativeDeletion(): void {
+        fireEvent.input(formattedParagraph, { inputType: "deleteContentBackward" });
+      },
+    ).not.toThrow();
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent("");
+
+    const emptyParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    inputWriterParagraphText(emptyParagraph, "a", "insertText");
+    inputWriterParagraphText(emptyParagraph, "longer", "insertText");
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
+      "longer",
+    );
+  });
+
+  it("groups adjacent typing and deletion at LibreOffice undo boundaries" /**
+   * Verifies SwUndoInsert/SwUndoDelete-compatible word, delimiter, and Backspace grouping in the snapshot adapter.
+   * @returns Nothing; each Undo restores the preceding semantic input group.
+   */, function groupsWriterTypingHistory(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    for (const text of ["a", "ab", "abc", "abc ", "abc d", "abc de", "abc def"])
+      inputWriterParagraphText(paragraph, text, "insertText");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(paragraph.textContent).toBe("abc ");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(paragraph).toHaveTextContent("abc");
+    inputWriterParagraphText(paragraph, "ab", "deleteContentBackward");
+    inputWriterParagraphText(paragraph, "a", "deleteContentBackward");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(paragraph).toHaveTextContent("abc");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(paragraph).toHaveTextContent("");
+
+    for (const text of ["a", "ab", "abc"]) inputWriterParagraphText(paragraph, text, "insertText");
+    inputWriterParagraphText(paragraph, "bc", "deleteContentForward", 0);
+    inputWriterParagraphText(paragraph, "c", "deleteContentForward", 0);
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(paragraph).toHaveTextContent("abc");
+    inputWriterParagraphText(paragraph, "ac", "deleteByDrag", 1);
+    inputWriterParagraphText(paragraph, "ax c", "insertText", 3);
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(paragraph).toHaveTextContent("ac");
   });
 
   it("creates and focuses an adjacent Writer paragraph through Enter" /** Verifies Enter splits text at a caret, inherits formatting, ignores unsafe modifiers/selections, and retains undo/redo. @returns Nothing; assertions cover the browser-visible paragraph-break flow. */, function createsParagraphThroughEnter(): void {
