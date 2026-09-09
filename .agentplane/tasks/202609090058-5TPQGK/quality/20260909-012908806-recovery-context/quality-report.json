@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609090058-5TPQGK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-09T01:29:08.806Z",
+  "verdict": "pass",
+  "summary": "Writer ODT File commands preserve the LibreOffice-shaped SwDocShell/filter boundary and satisfy the approved browser integration scope.",
+  "evaluated_sha": "f343a9d3a2c1dcf8f240933477b54c16c710e4a1",
+  "blueprint_digest": "2e2ecf4ff7efa2afde0ce2a4d1c097e48780c01592e9c8c7f1f19980d167839f",
+  "findings": [
+    "New, atomic Open ODT, and Save as ODT are implemented in the pinned menu/toolbar placements; local and text actions remain explicit, all planned success and failure paths are tested, both coverage suites are 100 percent, Chromium round-trips text and formatting, and parity reports zero evidence exceptions."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609090058-5TPQGK/README.md",
+    "f343a9d3a2c1dcf8f240933477b54c16c710e4a1",
+    "npm run verify",
+    "npm run inventory:parity"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser Save As cannot retain an in-place filesystem handle, and unsupported ODF model entities remain explicit failures as documented."
+  ]
+}
