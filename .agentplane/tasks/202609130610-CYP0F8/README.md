@@ -4,7 +4,7 @@ title: "Implement Stage 0 upstream parity foundation"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,29 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-13T07:04:22.682Z"
+  updated_at: "2026-09-13T07:05:00.661Z"
   updated_by: "CODER"
-  note: "Stage 0 lifecycle, inventory, docs, and regression checks pass."
+  note: "verified-202609130610-CYP0F8"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-13T07:05:24.566Z"
+  updated_by: "EVALUATOR"
+  note: "Stage 0 matches the approved scope and pinned LibreOffice lifecycle semantics; all declared checks pass."
+  evaluated_sha: "4e58b158b20bf7fd94ecad431545cbce2c188f35"
+  blueprint_digest: "9e32a5a1b013688e1028d9f367fdbfab5e6c00e21e0382428f9ab41675dee088"
+  evidence_refs:
+    - ".agentplane/tasks/202609130610-CYP0F8/README.md"
+    - ".agentplane/tasks/202609130610-CYP0F8/quality/20260913-070524566-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609130610-CYP0F8/quality/20260913-070524566-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609130610-CYP0F8/quality/20260913-070524566-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609130610-CYP0F8/blueprint/resolved-snapshot.json"
+    - "npm run verify: pass with 100% app and inventory coverage, 8/8 Chromium E2E, build and static smoke"
+    - "npm run inventory:parity: 14 implemented records plus exhaustive runtime and 31-command inventory"
+    - "node .agentplane/policy/check-routing.mjs and ap doctor: pass"
+  findings:
+    - "Lifecycle generations are independent, primary and recovery acknowledgements occur only after successful writes, and each later primary save moves the single Undo/Redo save mark."
+    - "Parity validators reject malformed evidence, unresolved verified gaps, unapproved exceptions, missing closure evidence, uncovered runtime modules, unknown capability references, and duplicate visible command IDs."
 commit: null
 comments:
   -
@@ -41,8 +60,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Stage 0 lifecycle, inventory, docs, and regression checks pass."
+  -
+    type: "verify"
+    at: "2026-09-13T07:05:00.661Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609130610-CYP0F8"
 doc_version: 3
-doc_updated_at: "2026-09-13T07:04:22.758Z"
+doc_updated_at: "2026-09-13T07:05:00.743Z"
 doc_updated_by: "CODER"
 description: "Implement Stage 0 of docs/program/vite-office-upstream-parity-plan.md: lifecycle generations, parity record model and inventory, stronger validators, synchronized documentation, and required tests."
 sections:
@@ -90,6 +115,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task verify-show 202609130610-CYP0F8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-13T07:05:00.661Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609130610-CYP0F8
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T07:04:22.758Z, excerpt_hash=sha256:2331c405946581c51c7038ab03df7734c2d0fd161d1aecbeaaf93c4bc0f0d37b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130610-CYP0F8/blueprint/resolved-snapshot.json
+    - old_digest: 9e32a5a1b013688e1028d9f367fdbfab5e6c00e21e0382428f9ab41675dee088
+    - current_digest: 9e32a5a1b013688e1028d9f367fdbfab5e6c00e21e0382428f9ab41675dee088
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609130610-CYP0F8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609130610-CYP0F8 --result verified-202609130610-CYP0F8 --commit 4e58b158b20bf7fd94ecad431545cbce2c188f35
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -156,6 +211,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609130610-CYP0F8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-13T07:05:00.661Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609130610-CYP0F8
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T07:04:22.758Z, excerpt_hash=sha256:2331c405946581c51c7038ab03df7734c2d0fd161d1aecbeaaf93c4bc0f0d37b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130610-CYP0F8/blueprint/resolved-snapshot.json
+- old_digest: 9e32a5a1b013688e1028d9f367fdbfab5e6c00e21e0382428f9ab41675dee088
+- current_digest: 9e32a5a1b013688e1028d9f367fdbfab5e6c00e21e0382428f9ab41675dee088
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609130610-CYP0F8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609130610-CYP0F8 --result verified-202609130610-CYP0F8 --commit 4e58b158b20bf7fd94ecad431545cbce2c188f35
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
