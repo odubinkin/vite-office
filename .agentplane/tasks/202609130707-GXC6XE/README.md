@@ -4,7 +4,7 @@ title: "Restore stage 1 module boundaries"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,33 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-13T07:29:25.509Z"
+  updated_by: "CODER"
+  note: "verified-202609130707-GXC6XE"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-13T07:29:13.859Z"
+  updated_by: "EVALUATOR"
+  note: "Stage 1 restores the specified module boundaries without changing the implemented Writer feature slice."
+  evaluated_sha: "7cac83f35dcb96b922aaa29ca7f9811ad00780d5"
+  blueprint_digest: "e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0"
+  evidence_refs:
+    - ".agentplane/tasks/202609130707-GXC6XE/README.md"
+    - ".agentplane/tasks/202609130707-GXC6XE/quality/20260913-072913859-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609130707-GXC6XE/quality/20260913-072913859-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609130707-GXC6XE/quality/20260913-072913859-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609130707-GXC6XE/blueprint/resolved-snapshot.json"
+    - "npm run check:dependencies"
+    - "npm run test:coverage"
+    - "npm run test:inventory:coverage"
+    - "npm run test:e2e"
+    - "npm run test:static"
+    - "apps/office/src/sw/source/uibase/app/swmodule.tsx"
+    - "scripts/check-module-boundaries.mjs"
+  findings:
+    - "The diff removes every targeted reverse import, applies caller-owned WhichIds exactly like the pinned editeng constructors, isolates package manifest XML, injects neutral storage contracts, and activates Writer only through a composition-root factory; full regression and architecture checks pass."
 commit: null
 comments:
   -
@@ -35,8 +57,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved stage 1 module boundaries against pinned LibreOffice ownership, preserving current behavior and existing user changes."
+  -
+    type: "verify"
+    at: "2026-09-13T07:29:03.035Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pass: check:dependencies (74 runtime sources, 211 relative imports, 12 allowed edges); format:check, lint, typecheck, check:docs and check:file-size; test:coverage (42 files, 176 tests, 100%); test:inventory:coverage (31 files, 79 tests, 100%); test:e2e (8/8); test:static; source provenance (74 modules); inventory:parity; policy routing; ap doctor; and git diff --check."
+  -
+    type: "verify"
+    at: "2026-09-13T07:29:25.509Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609130707-GXC6XE"
 doc_version: 3
-doc_updated_at: "2026-09-13T07:08:51.368Z"
+doc_updated_at: "2026-09-13T07:29:25.587Z"
 doc_updated_by: "CODER"
 description: "Implement stage 1 from docs/program/vite-office-upstream-parity-plan.md: remove sfx2-to-framework, editeng-to-sw, package-to-xmloff, vcl/svl-to-sfx2 reverse dependencies; register Writer through a factory descriptor; add enforced import-graph validation while preserving current behavior and staying close to LibreOffice ownership boundaries."
 sections:
@@ -71,6 +105,66 @@ sections:
     7. Run git diff --check and git status --short --untracked-files=all. Expected: no whitespace errors, no unintended tracked changes, user-preexisting changes remain preserved, and all new artifacts are reviewed.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-13T07:29:03.035Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pass: check:dependencies (74 runtime sources, 211 relative imports, 12 allowed edges); format:check, lint, typecheck, check:docs and check:file-size; test:coverage (42 files, 176 tests, 100%); test:inventory:coverage (31 files, 79 tests, 100%); test:e2e (8/8); test:static; source provenance (74 modules); inventory:parity; policy routing; ap doctor; and git diff --check.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T07:08:51.368Z, excerpt_hash=sha256:7bded797894496f9a7cf781f135b44301833a245e241f63ffed2a20c4685c84a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130707-GXC6XE/blueprint/resolved-snapshot.json
+    - old_digest: e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0
+    - current_digest: e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609130707-GXC6XE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609130707-GXC6XE
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-13T07:29:25.509Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609130707-GXC6XE
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T07:29:03.116Z, excerpt_hash=sha256:7bded797894496f9a7cf781f135b44301833a245e241f63ffed2a20c4685c84a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130707-GXC6XE/blueprint/resolved-snapshot.json
+    - old_digest: e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0
+    - current_digest: e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609130707-GXC6XE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609130707-GXC6XE --result verified-202609130707-GXC6XE --commit 7cac83f35dcb96b922aaa29ca7f9811ad00780d5
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the implementation and task-artifact commits for 202609130707-GXC6XE, restore the prior import locations and direct Writer composition, then rerun the focused dependency and regression checks. Do not discard the pre-existing modified task README or the user-authored untracked parity plan."
   Findings: "Approval evidence: the user explicitly approved the stage 1 plan and repository mutations on 2026-09-13. Network access is not approved or required because the pinned LibreOffice checkout already exists at vendor/libreoffice-reference (commit 9bc445578). Pre-existing changes to .agentplane/tasks/202609130610-CYP0F8/README.md and docs/program/vite-office-upstream-parity-plan.md must be preserved."
@@ -116,6 +210,66 @@ Expected implementation paths are limited to package scripts/config plus apps/of
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-13T07:29:03.035Z — VERIFY — ok
+
+By: CODER
+
+Note: Pass: check:dependencies (74 runtime sources, 211 relative imports, 12 allowed edges); format:check, lint, typecheck, check:docs and check:file-size; test:coverage (42 files, 176 tests, 100%); test:inventory:coverage (31 files, 79 tests, 100%); test:e2e (8/8); test:static; source provenance (74 modules); inventory:parity; policy routing; ap doctor; and git diff --check.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T07:08:51.368Z, excerpt_hash=sha256:7bded797894496f9a7cf781f135b44301833a245e241f63ffed2a20c4685c84a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130707-GXC6XE/blueprint/resolved-snapshot.json
+- old_digest: e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0
+- current_digest: e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609130707-GXC6XE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609130707-GXC6XE
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-13T07:29:25.509Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609130707-GXC6XE
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T07:29:03.116Z, excerpt_hash=sha256:7bded797894496f9a7cf781f135b44301833a245e241f63ffed2a20c4685c84a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130707-GXC6XE/blueprint/resolved-snapshot.json
+- old_digest: e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0
+- current_digest: e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609130707-GXC6XE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609130707-GXC6XE --result verified-202609130707-GXC6XE --commit 7cac83f35dcb96b922aaa29ca7f9811ad00780d5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

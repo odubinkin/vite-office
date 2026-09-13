@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202609130707-GXC6XE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-13T07:29:13.859Z",
+  "verdict": "pass",
+  "summary": "Stage 1 restores the specified module boundaries without changing the implemented Writer feature slice.",
+  "evaluated_sha": "7cac83f35dcb96b922aaa29ca7f9811ad00780d5",
+  "blueprint_digest": "e85b1a8fa226ac90cae842537ed77e874a6c2b29c1727da4c1d1d11b25dc8df0",
+  "findings": [
+    "The diff removes every targeted reverse import, applies caller-owned WhichIds exactly like the pinned editeng constructors, isolates package manifest XML, injects neutral storage contracts, and activates Writer only through a composition-root factory; full regression and architecture checks pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609130707-GXC6XE/README.md",
+    "npm run check:dependencies",
+    "npm run test:coverage",
+    "npm run test:inventory:coverage",
+    "npm run test:e2e",
+    "npm run test:static",
+    "apps/office/src/sw/source/uibase/app/swmodule.tsx",
+    "scripts/check-module-boundaries.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
