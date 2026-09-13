@@ -546,14 +546,13 @@
     },
     {
       "path": "apps/office/src/sw/source/uibase/shells/textsh.ts",
-      "classification": "mapping-too-broad",
+      "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
-      "subsystem": "command-shell",
+      "subsystem": "accelerators",
       "capabilityIds": [
         "CAP-0102",
-        "CAP-0106",
-        "CAP-0110"
+        "CAP-0109"
       ]
     },
     {
@@ -577,6 +576,27 @@
       ]
     },
     {
+      "path": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "command-shell",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0102",
+        "CAP-0103",
+        "CAP-0104",
+        "CAP-0105",
+        "CAP-0106",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0110",
+        "CAP-0112",
+        "CAP-0113",
+        "CAP-0114"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -591,8 +611,29 @@
       ]
     },
     {
+      "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "workbench-session",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0102",
+        "CAP-0103",
+        "CAP-0104",
+        "CAP-0105",
+        "CAP-0106",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0110",
+        "CAP-0112",
+        "CAP-0113",
+        "CAP-0114"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/source/uibase/uiview/view.tsx",
-      "classification": "mapping-too-broad",
+      "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
       "subsystem": "workbench-session",
@@ -624,16 +665,6 @@
       ]
     },
     {
-      "path": "apps/office/src/sw/source/uibase/uiview/viewstat.ts",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "workspace-view",
-      "capabilityIds": [
-        "CAP-0104"
-      ]
-    },
-    {
       "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -641,6 +672,21 @@
       "subsystem": "selection",
       "capabilityIds": [
         "CAP-0103"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-shell",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0110",
+        "CAP-0112"
       ]
     },
     {

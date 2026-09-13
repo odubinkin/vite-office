@@ -101,12 +101,18 @@ export class SwPaM {
    */
   public constructor(point: SwPosition, mark?: SwPosition) {
     this.point = point.clone();
-    this.mark = mark?.clone();
-    if (
-      this.mark !== undefined &&
-      this.mark.GetNode().GetNodes() !== this.point.GetNode().GetNodes()
-    )
+    this.mark = undefined;
+    this.Assign(point, mark);
+  }
+
+  /** Repositions this persistent PaM after cursor movement or atomic document replacement. @param point - New moving endpoint. @param mark - Optional fixed endpoint. @returns Nothing. */
+  public Assign(point: SwPosition, mark?: SwPosition): void {
+    const nextPoint = point.clone();
+    const nextMark = mark?.clone();
+    if (nextMark !== undefined && nextMark.GetNode().GetNodes() !== nextPoint.GetNode().GetNodes())
       throw new Error("SwPaM endpoints belong to different documents.");
+    this.point = nextPoint;
+    this.mark = nextMark;
   }
 
   /** Returns the moving point endpoint. @returns Point position. */

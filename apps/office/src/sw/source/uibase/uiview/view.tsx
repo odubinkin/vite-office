@@ -1,893 +1,284 @@
 /**
- * @fileoverview Owns the bounded Writer document workbench state and browser-only editing controls.
+ * @fileoverview Renders the Writer view as a React projection of a persistent SwView session.
  */
 
-import { useEffect, useState } from "react";
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
-import {
-  applyGroupedTransaction,
-  applyTransaction,
-  createTransactionHistory,
-  getCurrentTransactionState,
-  type TransactionHistory,
-} from "../../../../sfx2/source/doc/docundomanager";
-import {
-  replaceWriterParagraph,
-  insertWriterTextWithAttributes,
-  mergeWriterParagraphWithPrevious,
-  splitWriterParagraph,
-  type WriterDocument,
-  type WriterParagraph,
-  type WriterParagraphAlignment,
-  type WriterParagraphStyle,
-  type WriterCharacterAttributes,
-  type WriterCharacterFormat,
-  type WriterTextRun,
+import { useCallback, useSyncExternalStore } from "react";
+
+import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
+import type {
+  WriterCharacterFormat,
+  WriterParagraphAlignment,
+  WriterParagraphListKind,
+  WriterParagraphStyle,
 } from "../../core/doc/writer";
-import {
-  replaceWriterParagraphTextRange,
-  type WriterParagraphTextRange,
-} from "../../core/doc/DocumentContentOperationsManager";
-import {
-  DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
-  getWriterTextAttributesAtOffset,
-} from "../../core/txtnode/ndtxt";
-import type { WriterParagraphListKind } from "../../core/doc/list";
-import {
-  loadWriterDocument,
-  saveWriterDocument,
-  type WriterSnapshotState,
-} from "../../core/doc/writer-storage";
-import { IndexedDbDocumentStorageAdapter } from "../../../../vcl/browser/indexeddb-storage";
-import { createDownloadFilename, downloadBytes } from "../../../../vcl/browser/browser-download";
-import { readBrowserFile, selectBrowserFile } from "../../../../vcl/browser/browser-file";
-import { WriterMenuBar } from "../../../uiconfig/swriter/menubar/menubar";
-import { WriterCommandToolbar } from "../../../uiconfig/swriter/toolbar/standardbar";
-import { WriterParagraphFormattingToolbar } from "../ribbar/inputwin";
-import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
+import { readWriterClipboardPaste, createWriterClipboardSelection } from "../dochdl/swdtflvr";
 import { WriterPlainTextEditor } from "../docvw/edtwin";
 import { WriterWorkspaceChrome } from "../app/mainwn";
-import { SwDocShell } from "../app/docsh";
-import type { WriterListLevelCommand } from "../shells/listsh";
-import { toggleWriterCharacterFormat } from "../shells/txtattr";
-import { useWriterBrowserCommands, useWriterHistoryShortcuts } from "../shells/textsh";
-import { readWriterClipboardPaste } from "../dochdl/swdtflvr";
-import { getWriterSameParagraphSelection } from "../wrtsh/select";
-import { useWriterDocumentSelection, useWriterWorkspaceChrome } from "./viewstat";
-import {
-  getActiveWriterParagraph,
-  applyWriterAlignmentTransaction,
-  acknowledgeWriterSave,
-  applyWriterListKindTransaction,
-  applyWriterListLevelTransaction,
-  applyWriterStyleTransaction,
-  createWriterWorkbenchDocument,
-  getNextWriterParagraphId,
-  getWorkbenchSelectionPosition,
-  redoWriterTransaction,
-  undoWriterTransaction,
-} from "./viewfunc";
+import { WriterParagraphFormattingToolbar } from "../ribbar/inputwin";
+import { useWriterCommandShortcuts } from "../shells/textsh";
+import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
+import { getWriterCollapsedParagraphCaret, getWriterSameParagraphSelection } from "../wrtsh/select";
+import { WriterMenuBar } from "../../../uiconfig/swriter/menubar/menubar";
+import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
+import { WriterCommandToolbar } from "../../../uiconfig/swriter/toolbar/standardbar";
+import type {
+  SwView,
+  WriterCutCommandArguments,
+  WriterPasteCommandArguments,
+} from "./view-session";
 
-/** Describes the suite-selection visibility controlled by the application shell. */
+/** Describes the persistent view selected by the application frame. */
 export interface WriterWorkbenchProps {
-  /** Whether Writer is the current suite and its workbench should be interactable. */
+  /** Whether Writer is the current suite and may receive browser shortcuts. */
   readonly isActive: boolean;
+  /** Persistent Writer view created by the module composition root. */
+  readonly view: SwView;
 }
 
 /**
- * Renders the browser-only Writer workbench and owns its bounded document session.
+ * Projects immutable SwView snapshots and forwards UI intent to stable command IDs.
  *
- * @param props - Suite-selection visibility owned by the application shell.
- * @param props.isActive - Whether the workbench is visible and may execute Writer shortcuts.
- * @returns The editor, history controls, and browser-local storage actions for Writer.
+ * @param props - Active state and persistent Writer view.
+ * @param props.isActive - Whether browser shortcuts may dispatch.
+ * @param props.view - External-store view that outlives React remounts.
+ * @returns Writer workspace presentation.
  */
-export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.Element {
-  const [activeParagraphId, setActiveParagraphId] = useState("writer-paragraph-1");
-  const [focusParagraphId, setFocusParagraphId] = useState<string>();
-  const [focusParagraphOffset, setFocusParagraphOffset] = useState<number>();
-  const [pendingCharacterAttributes, setPendingCharacterAttributes] =
-    useState<WriterCharacterAttributes>(DEFAULT_WRITER_CHARACTER_ATTRIBUTES);
-  const {
-    isHorizontalRulerVisible,
-    isPropertiesSidebarVisible,
-    isStatusBarVisible,
-    setIsHorizontalRulerVisible,
-    setIsPropertiesSidebarVisible,
-    setIsStatusBarVisible,
-  } = useWriterWorkspaceChrome();
-  const { requestSelectAll, selectAllRequestId } = useWriterDocumentSelection();
-  const [storagePending, setStoragePending] = useState(false);
-  const [storageStatus, setStorageStatus] = useState("Not saved in this browser.");
-  const [writerHistory, setWriterHistory] = useState<TransactionHistory<WriterDocument>>(
-    /**
-     * Creates the Writer history once for the browser workbench session.
-     *
-     * @returns Initial history containing the new Writer document.
-     */
-    function createWriterHistory(): TransactionHistory<WriterDocument> {
-      const initialDocument = createWriterWorkbenchDocument();
-      return createTransactionHistory(initialDocument, {
-        position: getWorkbenchSelectionPosition(initialDocument),
-      });
+export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React.JSX.Element {
+  const snapshot = useSyncExternalStore(view.Subscribe, view.GetSnapshot, view.GetSnapshot);
+  const wrtShell = view.GetWrtShell();
+
+  /** Resolves DOM-only selection data before dispatching a shell command. @param commandId - Stable Writer command. @returns Typed command arguments or undefined. */
+  const resolveCommandArguments = useCallback(
+    /** Resolves browser-only arguments for one command. @param commandId - Stable Writer command. @returns Adapted arguments or undefined. */
+    function resolveWriterCommandArguments(commandId: string): unknown {
+      const selection = globalThis.getSelection();
+      if (
+        commandId === WRITER_COMMAND_IDS.bold ||
+        commandId === WRITER_COMMAND_IDS.italic ||
+        commandId === WRITER_COMMAND_IDS.underline
+      )
+        return { range: getWriterSameParagraphSelection(selection) };
+      if (commandId === WRITER_COMMAND_IDS.copy)
+        return { selection: createWriterClipboardSelection(selection) };
+      if (commandId === WRITER_COMMAND_IDS.cut) return createWriterCutCommandArguments(selection);
+      if (commandId === WRITER_COMMAND_IDS.paste)
+        return { range: getWriterPasteRange(selection, wrtShell.GetActiveParagraph()) };
+      return undefined;
     },
-  );
-  const writerDocument = getCurrentTransactionState(writerHistory);
-  const activeParagraph = getActiveWriterParagraph(writerDocument, activeParagraphId);
-  const activeParagraphIndex = writerDocument.paragraphs.indexOf(activeParagraph);
-  const { handleWriterCopy, handleWriterCut, handleWriterDownload, handleWriterPaste } =
-    useWriterBrowserCommands({
-      activeParagraph,
-      onCut: handleWriterTextCut,
-      onPaste: handleWriterPasteRuns,
-      setStorageStatus,
-      writerDocument,
-    });
-  const writerStorage =
-    globalThis.indexedDB === undefined
-      ? undefined
-      : new IndexedDbDocumentStorageAdapter<WriterSnapshotState>("vite-office-writer-workbench");
-
-  /** Replaces the complete workbench session after New, Open, or local Load. @param nextDocument - New active SwDoc. @param status - User-facing operation result. @returns Nothing. */
-  function replaceWriterSession(nextDocument: WriterDocument, status: string): void {
-    const firstParagraph = nextDocument.paragraphs[0] as WriterParagraph;
-    setActiveParagraphId(firstParagraph.id);
-    setFocusParagraphId(undefined);
-    setFocusParagraphOffset(undefined);
-    setPendingCharacterAttributes(
-      getWriterTextAttributesAtOffset(firstParagraph.runs, firstParagraph.text.length),
-    );
-    setWriterHistory(
-      createTransactionHistory(nextDocument, {
-        position: getWorkbenchSelectionPosition(nextDocument),
-      }),
-    );
-    setStorageStatus(status);
-  }
-
-  /**
-   * Replaces the selected Writer paragraph text through the immutable domain transition.
-   *
-   * @param paragraphId - Stable identity of the Writer paragraph being edited.
-   * @param text - Complete next plain-text value emitted by the Writer editable paragraph.
-   * @param caretOffset - Collapsed caret after the native edit, when available.
-   * @param inputType - Native input operation used to preserve Writer undo boundaries.
-   * @returns Nothing; React schedules the next Writer document state.
-   */
-  function handleWriterTextChange(
-    paragraphId: string,
-    text: string,
-    caretOffset: number | undefined,
-    inputType: string,
-  ): void {
-    setActiveParagraphId(paragraphId);
-    setWriterHistory(
-      /**
-       * Applies the complete-text replacement to the selected workbench paragraph.
-       *
-       * @param currentHistory - Current immutable Writer workbench history state.
-       * @returns History with the paragraph replacement applied as a new snapshot.
-       */
-      function replaceWorkbenchParagraph(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        const currentDocument = getCurrentTransactionState(currentHistory);
-        const paragraph = getActiveWriterParagraph(currentDocument, paragraphId);
-        const change = getWriterTextChange(paragraph.text, text);
-        const nextDocument =
-          change?.kind === "insert"
-            ? insertWriterTextWithAttributes(
-                currentDocument,
-                paragraphId,
-                change.offset,
-                change.text,
-                pendingCharacterAttributes,
-              )
-            : change?.kind === "delete"
-              ? replaceWriterParagraphTextRange(
-                  currentDocument,
-                  { end: change.end, paragraphId, start: change.start },
-                  [],
-                )
-              : replaceWriterParagraph(currentDocument, paragraphId, text);
-        const selection = { position: caretOffset ?? text.length };
-        const grouping = getWriterTypingGroup(
-          paragraphId,
-          change,
-          inputType,
-          currentHistory.selection.position,
-          caretOffset,
-        );
-        return grouping === undefined
-          ? applyTransaction(currentHistory, nextDocument, selection)
-          : applyGroupedTransaction(
-              currentHistory,
-              nextDocument,
-              selection,
-              grouping.id,
-              grouping.extendCurrent,
-            );
-      },
-    );
-  }
-
-  /**
-   * Deletes a same-paragraph native Writer selection after its Cut payload reaches the browser clipboard.
-   *
-   * @param range - Existing Writer text range copied by the Cut command.
-   * @returns Nothing; React schedules deletion and restores the caret at the former selection start.
-   */
-  function handleWriterTextCut(range: WriterParagraphTextRange): void {
-    handleWriterPasteRuns(range, []);
-  }
-
-  /**
-   * Parses native browser clipboard MIME data before applying its bounded Writer text runs.
-   *
-   * @param range - Same-paragraph target selection or collapsed caret resolved by the editable Writer body.
-   * @param clipboardData - Browser clipboard data read synchronously from the native Paste event.
-   * @returns Nothing; React records safe text insertion or deterministic empty-clipboard feedback.
-   */
-  function handleWriterTextPaste(
-    range: WriterParagraphTextRange,
-    clipboardData: DataTransfer,
-  ): void {
-    const paste = readWriterClipboardPaste(clipboardData);
-    if (paste === undefined) {
-      setStorageStatus("Clipboard has no text to paste.");
-      return;
-    }
-    handleWriterPasteRuns(range, paste.runs);
-    setStorageStatus("Pasted clipboard text.");
-  }
-
-  /**
-   * Replaces one immutable Writer range with safe direct-format runs from either native or toolbar Paste.
-   *
-   * @param range - Same-paragraph target selection or collapsed caret.
-   * @param runs - Normalized bounded Writer text runs that replace range.
-   * @returns Nothing; React schedules one history transition and post-render caret restoration.
-   */
-  function handleWriterPasteRuns(
-    range: WriterParagraphTextRange,
-    runs: readonly WriterTextRun[],
-  ): void {
-    const insertionLength = runs.reduce(
-      /** Counts visible UTF-16 code units inserted at the range start. @param total - Count so far. @param run - Inserted formatted run. @returns Updated visible text length. */
-      function addRunLength(total, run): number {
-        return total + run.text.length;
-      },
-      0,
-    );
-    setActiveParagraphId(range.paragraphId);
-    setFocusParagraphId(range.paragraphId);
-    setFocusParagraphOffset(range.start + insertionLength);
-    setWriterHistory(
-      /** Applies bounded Cut or Paste runs to the latest Writer snapshot. @param currentHistory - Current immutable Writer history. @returns Existing or replacement history with a deterministic caret position. */
-      function replaceWriterClipboardRange(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        const currentDocument = getCurrentTransactionState(currentHistory);
-        const nextDocument = replaceWriterParagraphTextRange(currentDocument, range, runs);
-        return nextDocument === currentDocument
-          ? currentHistory
-          : applyTransaction(currentHistory, nextDocument, {
-              position: range.start + insertionLength,
-            });
-      },
-    );
-  }
-
-  /**
-   * Records the paragraph whose editable block is currently focused for subsequent formatting commands.
-   *
-   * @param paragraphId - Existing Writer paragraph identity emitted by the focused editable block.
-   * @returns Nothing; React schedules focused-paragraph state.
-   */
-  function handleWriterParagraphFocus(paragraphId: string): void {
-    setActiveParagraphId(paragraphId);
-    const paragraph = getActiveWriterParagraph(writerDocument, paragraphId);
-    setPendingCharacterAttributes(
-      getWriterTextAttributesAtOffset(paragraph.runs, paragraph.text.length),
-    );
-  }
-
-  /**
-   * Toggles a direct Writer character attribute over a native same-paragraph selection, or changes pending attributes for a collapsed caret.
-   *
-   * @param format - Direct Writer format selected from the toolbar, Format Text menu, or browser shortcut.
-   * @returns Nothing; React records one immutable history transition or pending-caret state.
-   */
-  function handleWriterCharacterFormat(format: WriterCharacterFormat): void {
-    const selection = getWriterSameParagraphSelection(globalThis.getSelection());
-    if (selection === undefined) {
-      setPendingCharacterAttributes(
-        /** Toggles only the requested pending direct attribute. @param attributes - Current pending caret attributes. @returns Updated immutable attribute record. */
-        function togglePendingCharacterAttribute(attributes): WriterCharacterAttributes {
-          return { ...attributes, [format]: !attributes[format] };
-        },
-      );
-      return;
-    }
-    setActiveParagraphId(selection.paragraphId);
-    setWriterHistory(
-      /** Applies this shell command to the latest immutable Writer history state. @param currentHistory - Current Writer transaction history. @returns Existing or formatted next history. */
-      function formatSelectedWriterText(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        const nextDocument = toggleWriterCharacterFormat(
-          getCurrentTransactionState(currentHistory),
-          selection,
-          format,
-        );
-        /* v8 ignore next -- A non-empty DOM selection is validated before scheduling this updater, so the text-attribute shell always creates a new document snapshot. */
-        return nextDocument === getCurrentTransactionState(currentHistory)
-          ? currentHistory
-          : applyTransaction(currentHistory, nextDocument, { position: selection.end });
-      },
-    );
-    setPendingCharacterAttributes(
-      /** Toggles only the requested attribute for immediately following collapsed typing. @param attributes - Current pending caret attributes. @returns Updated immutable attribute record. */
-      function togglePendingAttribute(attributes): WriterCharacterAttributes {
-        return { ...attributes, [format]: !attributes[format] };
-      },
-    );
-  }
-
-  useEffect(
-    /** Installs Ctrl/Meta direct-character Writer shortcuts while the Writer suite is active. @returns Cleanup removing the browser listener. */
-    function installWriterCharacterShortcuts(): () => void {
-      /** Dispatches one supported direct-format shortcut. @param event - Browser key event inspected and optionally cancelled. @returns Nothing; the workbench applies the selected command. */
-      function handleCharacterShortcut(event: KeyboardEvent): void {
-        if (!isActive || event.altKey || (!event.ctrlKey && !event.metaKey)) return;
-        const format = getWriterShortcutFormat(event.key);
-        if (format === undefined) return;
-        event.preventDefault();
-        handleWriterCharacterFormat(format);
-      }
-      window.addEventListener("keydown", handleCharacterShortcut);
-      /** Removes this workbench instance's direct-format shortcut listener. @returns Nothing. */
-      function removeWriterCharacterShortcuts(): void {
-        window.removeEventListener("keydown", handleCharacterShortcut);
-      }
-      return removeWriterCharacterShortcuts;
-    },
-    [isActive, pendingCharacterAttributes, writerHistory],
+    [wrtShell],
   );
 
-  /**
-   * Splits the editable Writer paragraph at an unmodified Enter caret and targets the trailing paragraph.
-   *
-   * @param paragraphId - Existing Writer paragraph identity that received the native Enter key.
-   * @param offset - Collapsed UTF-16 caret offset within that paragraph's current plain text.
-   * @returns Nothing; React schedules the immutable split history transition and post-render browser focus.
-   */
-  function handleWriterParagraphBreak(paragraphId: string, offset: number): void {
-    const nextParagraphId = getNextWriterParagraphId(writerDocument);
-    setActiveParagraphId(nextParagraphId);
-    setFocusParagraphId(nextParagraphId);
-    setFocusParagraphOffset(0);
-    setWriterHistory(
-      /**
-       * Applies the paragraph break to the current immutable history snapshot.
-       *
-       * @param currentHistory - Current Writer workbench history state.
-       * @returns History containing the split document with the caret position reset for the trailing paragraph.
-       */
-      function splitWorkbenchParagraph(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        const nextDocument = splitWriterParagraph(
-          getCurrentTransactionState(currentHistory),
-          paragraphId,
-          offset,
-          nextParagraphId,
-        );
-        return applyTransaction(currentHistory, nextDocument, { position: 0 });
-      },
-    );
-  }
+  /** Executes one stable command through the frame shell stack. @param commandId - Writer command identity. @param arguments_ - Optional DOM-adapted arguments. @returns Nothing. */
+  const executeCommand = useCallback(
+    /** Dispatches one Writer command. @param commandId - Stable command ID. @param arguments_ - Optional adapted arguments. @returns Nothing. */
+    function executeWriterCommand(commandId: string, arguments_?: unknown): void {
+      view.Execute(commandId, arguments_ ?? resolveCommandArguments(commandId));
+    },
+    [resolveCommandArguments, view],
+  );
 
-  /**
-   * Removes the preceding paragraph break and focuses the surviving paragraph at the original join boundary.
-   *
-   * @param paragraphId - Existing non-first Writer paragraph that received Backspace at offset zero.
-   * @returns Nothing; React schedules the immutable join history transition and post-render browser focus.
-   */
-  function handleWriterParagraphMerge(paragraphId: string): void {
-    const paragraphIndex = writerDocument.paragraphs.findIndex(
-      /** Finds the requested current paragraph index. @param paragraph - Writer paragraph being inspected. @returns True only for paragraphId. */
-      function hasParagraphId(paragraph): boolean {
-        return paragraph.id === paragraphId;
-      },
-    );
-    if (paragraphIndex <= 0) return;
-    const precedingParagraph = writerDocument.paragraphs[paragraphIndex - 1] as WriterParagraph;
-    const joinOffset = precedingParagraph.text.length;
-    setActiveParagraphId(precedingParagraph.id);
-    setFocusParagraphId(precedingParagraph.id);
-    setFocusParagraphOffset(joinOffset);
-    setWriterHistory(
-      /** Applies the paragraph merge to the current immutable history snapshot. @param currentHistory - Current Writer history. @returns History containing the merged Writer body. */
-      function mergeWorkbenchParagraph(currentHistory): TransactionHistory<WriterDocument> {
-        const nextDocument = mergeWriterParagraphWithPrevious(
-          getCurrentTransactionState(currentHistory),
-          paragraphId,
-        );
-        return applyTransaction(currentHistory, nextDocument, { position: joinOffset });
-      },
-    );
-  }
-
-  /** Merges the following paragraph into this one after Delete at its end caret. @param paragraphId - Existing non-last Writer paragraph identity. @returns Nothing; React schedules a merge and restores focus at the join. */
-  function handleWriterParagraphMergeNext(paragraphId: string): void {
-    const paragraphIndex = writerDocument.paragraphs.findIndex(
-      /** Finds the paragraph selected for forward merge. @param paragraph - Writer paragraph being inspected. @returns True only for paragraphId. */
-      function hasParagraphId(paragraph): boolean {
-        return paragraph.id === paragraphId;
-      },
-    );
-    if (paragraphIndex < 0 || paragraphIndex === writerDocument.paragraphs.length - 1) return;
-    const currentParagraph = writerDocument.paragraphs[paragraphIndex] as WriterParagraph;
-    const nextParagraph = writerDocument.paragraphs[paragraphIndex + 1] as WriterParagraph;
-    const joinOffset = currentParagraph.text.length;
-    setActiveParagraphId(currentParagraph.id);
-    setFocusParagraphId(currentParagraph.id);
-    setFocusParagraphOffset(joinOffset);
-    setWriterHistory(
-      /** Applies the existing preceding-sibling merge with the following paragraph as its selected node. @param currentHistory - Current Writer history. @returns History containing the forward merged body. */
-      function mergeNextWorkbenchParagraph(currentHistory): TransactionHistory<WriterDocument> {
-        const nextDocument = mergeWriterParagraphWithPrevious(
-          getCurrentTransactionState(currentHistory),
-          nextParagraph.id,
-        );
-        return applyTransaction(currentHistory, nextDocument, { position: joinOffset });
-      },
-    );
-  }
-
-  /**
-   * Changes the active Writer paragraph alignment through an immutable history transaction.
-   *
-   * @param alignment - Supported next horizontal alignment selected from the formatting toolbar.
-   * @returns Nothing; React schedules the next Writer document history state.
-   */
-  function handleWriterParagraphAlignment(alignment: WriterParagraphAlignment): void {
-    setWriterHistory(
-      /**
-       * Applies alignment to the still-existing active paragraph or the deterministic first-paragraph fallback.
-       *
-       * @param currentHistory - Current immutable Writer workbench history state.
-       * @returns History with the requested alignment represented by a new snapshot when it changed.
-       */
-      function alignActiveWorkbenchParagraph(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        return applyWriterAlignmentTransaction(currentHistory, activeParagraphId, alignment);
-      },
-    );
-  }
-
-  /**
-   * Changes the active Writer paragraph style through an immutable history transaction.
-   *
-   * @param style - Supported next paragraph style selected from the formatting toolbar.
-   * @returns Nothing; React schedules the next Writer document history state.
-   */
-  function handleWriterParagraphStyle(style: WriterParagraphStyle): void {
-    setWriterHistory(
-      /**
-       * Applies a bounded style to the still-existing active paragraph or its deterministic fallback.
-       *
-       * @param currentHistory - Current immutable Writer workbench history state.
-       * @returns History with a new style snapshot only when the requested style changed.
-       */
-      function styleActiveWorkbenchParagraph(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        return applyWriterStyleTransaction(currentHistory, activeParagraphId, style);
-      },
-    );
-  }
-
-  /**
-   * Executes the active paragraph's default-list command through the Writer numbering shell.
-   *
-   * @param listKind - Next supported bullet, numbered, or no-list state.
-   * @returns Nothing; React schedules an immutable history transition only when the command changes state.
-   */
-  function handleWriterParagraphListKind(listKind: WriterParagraphListKind): void {
-    setWriterHistory(
-      /** Delegates list-kind history changes to the `viewfunc.hxx`-derived pure workbench helper. @param currentHistory - Current Writer history. @returns Existing or command-adjusted history. */
-      function listActiveWorkbenchParagraph(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        return applyWriterListKindTransaction(currentHistory, activeParagraphId, listKind);
-      },
-    );
-  }
-
-  /**
-   * Executes the active paragraph's Writer Promote or Demote command through the list shell.
-   *
-   * @param command - Bounded list-level action selected from a Writer-positioned menu or numbering toolbar.
-   * @returns Nothing; React schedules immutable history only when the requested level changes.
-   */
-  function handleWriterParagraphListLevel(command: WriterListLevelCommand): void {
-    setWriterHistory(
-      /** Delegates list-level history changes to the `viewfunc.hxx`-derived pure workbench helper. @param currentHistory - Current Writer history. @returns Existing or command-adjusted history. */
-      function changeActiveWorkbenchListLevel(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        return applyWriterListLevelTransaction(currentHistory, activeParagraphId, command);
-      },
-    );
-  }
-
-  /** Creates a new empty Writer document through the document shell. @returns Nothing. */
-  function handleWriterNew(): void {
-    const shell = new SwDocShell(writerDocument);
-    const nextDocument = shell.InitNew(
-      createDocument({
-        id: "writer-workbench",
-        suiteId: "writer",
-        title: "Untitled Writer Document",
-      }),
-      "writer-paragraph-1",
-    );
-    replaceWriterSession(nextDocument, "Created a new Writer document.");
-  }
-
-  /** Selects and loads one ODT without replacing the active document on cancel or failure. @returns A promise resolved after feedback and optional session replacement. */
-  async function handleWriterOpenOdt(): Promise<void> {
-    setStoragePending(true);
-    try {
-      const file = await selectBrowserFile(`${SwDocShell.ODT_MEDIA_TYPE},.odt`);
-      if (file === undefined) {
-        setStorageStatus("ODT open cancelled.");
-        return;
-      }
-      const fallbackTitle = file.name.replace(/\.odt$/i, "") || "Imported Writer Document";
-      const shell = new SwDocShell(writerDocument);
-      const opened = await shell.Load(
-        await readBrowserFile(file),
-        createDocument({
-          id: `writer-odt:${file.name}`,
-          suiteId: "writer",
-          title: fallbackTitle,
-        }),
-      );
-      replaceWriterSession(opened, `Opened ${file.name}.`);
-    } catch (error) {
-      setStorageStatus(`Could not open ODT: ${getErrorMessage(error)}`);
-    } finally {
-      setStoragePending(false);
-    }
-  }
-
-  /** Serializes the current Writer document and starts an ODT browser download. @returns Nothing. */
-  function handleWriterSaveOdt(): void {
-    setStoragePending(true);
-    try {
-      const bytes = new SwDocShell(writerDocument).SaveAs();
-      const filename = createDownloadFilename(writerDocument.document.title, ".odt");
-      downloadBytes(bytes, SwDocShell.ODT_MEDIA_TYPE, filename);
-      setStorageStatus(`ODT download started: ${filename}`);
-    } catch (error) {
-      setStorageStatus(`Could not save ODT: ${getErrorMessage(error)}`);
-    } finally {
-      setStoragePending(false);
-    }
-  }
-
-  /** Restores the preceding Writer snapshot. @returns Nothing; React schedules an undo. */
-  function handleWriterUndo(): void {
-    setWriterHistory(
-      /**
-       * Moves history backward and derives its deterministic selection from the restored text.
-       *
-       * @param currentHistory - Immutable history before undo.
-       * @returns History positioned at the preceding snapshot when one exists.
-       */
-      function undoWriterHistory(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        return undoWriterTransaction(currentHistory);
-      },
-    );
-  }
-
-  /** Restores the following Writer snapshot. @returns Nothing; React schedules a redo. */
-  function handleWriterRedo(): void {
-    setWriterHistory(
-      /**
-       * Moves history forward and derives its deterministic selection from the restored text.
-       *
-       * @param currentHistory - Immutable history before redo.
-       * @returns History positioned at the following snapshot when one exists.
-       */
-      function redoWriterHistory(
-        currentHistory: TransactionHistory<WriterDocument>,
-      ): TransactionHistory<WriterDocument> {
-        return redoWriterTransaction(currentHistory);
-      },
-    );
-  }
-
-  /** Saves the current Writer snapshot to native browser storage. @returns A promise resolved after feedback is updated. */
-  async function handleWriterSave(): Promise<void> {
-    if (writerStorage === undefined) {
-      setStorageStatus("Browser storage is unavailable.");
-      return;
-    }
-    setStoragePending(true);
-    try {
-      const saved = await saveWriterDocument(writerStorage, writerDocument);
-      setWriterHistory(
-        /** Applies the successful medium acknowledgement to the latest history state. @param currentHistory - Current Writer history, possibly newer than the persisted generation. @returns History with updated save generation and no new undo action. */
-        function acknowledgeCompletedSave(
-          currentHistory: TransactionHistory<WriterDocument>,
-        ): TransactionHistory<WriterDocument> {
-          return acknowledgeWriterSave(currentHistory, saved.snapshot.version);
-        },
-      );
-      setStorageStatus("Saved locally in this browser.");
-    } catch {
-      setStorageStatus("Could not save locally.");
-    } finally {
-      setStoragePending(false);
-    }
-  }
-
-  /** Loads the current Writer identity from native browser storage. @returns A promise resolved after feedback is updated. */
-  async function handleWriterLoad(): Promise<void> {
-    if (writerStorage === undefined) {
-      setStorageStatus("Browser storage is unavailable.");
-      return;
-    }
-    setStoragePending(true);
-    try {
-      const result = await loadWriterDocument(writerStorage, writerDocument.document.id);
-      if (result.status === "missing") setStorageStatus("No local saved copy exists.");
-      else {
-        replaceWriterSession(result.writerDocument, "Loaded local saved copy.");
-      }
-    } catch {
-      setStorageStatus("Could not load local copy.");
-    } finally {
-      setStoragePending(false);
-    }
-  }
-
-  useWriterHistoryShortcuts({
-    history: writerHistory,
+  useWriterCommandShortcuts({
+    dispatcher: view.GetViewFrame().GetDispatcher(),
     isActive,
-    onRedo: handleWriterRedo,
-    onUndo: handleWriterUndo,
+    resolveArguments: resolveCommandArguments,
   });
+
+  /** Maps a direct character format to its stable command identity. @param format - Requested Writer format. @returns Nothing. */
+  function executeCharacterFormat(format: WriterCharacterFormat): void {
+    executeCommand(
+      {
+        bold: WRITER_COMMAND_IDS.bold,
+        italic: WRITER_COMMAND_IDS.italic,
+        underline: WRITER_COMMAND_IDS.underline,
+      }[format],
+    );
+  }
+
+  /** Maps paragraph alignment to its stable command identity. @param alignment - Requested alignment. @returns Nothing. */
+  function executeAlignment(alignment: WriterParagraphAlignment): void {
+    executeCommand(
+      {
+        center: WRITER_COMMAND_IDS.alignCenter,
+        justify: WRITER_COMMAND_IDS.alignJustify,
+        left: WRITER_COMMAND_IDS.alignLeft,
+        right: WRITER_COMMAND_IDS.alignRight,
+      }[alignment],
+    );
+  }
+
+  /** Maps paragraph style to its stable command identity. @param style - Requested style. @returns Nothing. */
+  function executeStyle(style: WriterParagraphStyle): void {
+    executeCommand(
+      style === "default"
+        ? WRITER_COMMAND_IDS.defaultParagraphStyle
+        : WRITER_COMMAND_IDS.headingOne,
+    );
+  }
+
+  /** Maps default-list state to its stable command identity. @param kind - Requested list kind. @returns Nothing. */
+  function executeListKind(kind: WriterParagraphListKind): void {
+    executeCommand(
+      {
+        bullet: WRITER_COMMAND_IDS.unorderedList,
+        none: WRITER_COMMAND_IDS.removeBullets,
+        numbered: WRITER_COMMAND_IDS.orderedList,
+      }[kind],
+    );
+  }
+
+  /** Maps a list-level request to its stable command identity. @param command - Promote or Demote request. @returns Nothing. */
+  function executeListLevel(command: "demote" | "promote"): void {
+    executeCommand(command === "demote" ? WRITER_COMMAND_IDS.demote : WRITER_COMMAND_IDS.promote);
+  }
+
+  /** Creates a UI callback that ignores presentation events and dispatches only a stable command ID. @param commandId - Stable Writer command. @returns Event-independent command callback. */
+  function createCommandHandler(commandId: string): () => void {
+    return /** Executes the captured command through the active view. @returns Nothing. */ function executeUiCommand(): void {
+      executeCommand(commandId);
+    };
+  }
+
+  /** Dispatches a native Cut after its clipboard payload was prepared. @param range - Same-paragraph selection range. @returns Nothing. */
+  function executeNativeCut(range: WriterParagraphTextRange): void {
+    executeCommand(WRITER_COMMAND_IDS.cut, { clipboardHandled: true, range });
+  }
+
+  /** Dispatches a native Paste after browser clipboard parsing. @param range - Replacement range. @param clipboardData - Native clipboard payload. @returns Nothing. */
+  function executeNativePaste(range: WriterParagraphTextRange, clipboardData: DataTransfer): void {
+    const paste = readWriterClipboardPaste(clipboardData);
+    executeCommand(WRITER_COMMAND_IDS.paste, {
+      clipboardHandled: true,
+      range,
+      ...(paste === undefined ? {} : { runs: paste.runs }),
+    } satisfies WriterPasteCommandArguments);
+  }
 
   return (
     <div hidden={!isActive}>
       <WriterWorkspaceChrome
-        documentTitle={writerDocument.document.title}
-        menuBar={
-          <WriterMenuBar
-            alignment={activeParagraph.alignment}
-            characterAttributes={pendingCharacterAttributes}
-            canRedo={writerHistory.index < writerHistory.entries.length - 1}
-            canUndo={writerHistory.index > 0}
-            isHorizontalRulerVisible={isHorizontalRulerVisible}
-            isStoragePending={storagePending}
-            isSidebarVisible={isPropertiesSidebarVisible}
-            isStatusBarVisible={isStatusBarVisible}
-            onAlignmentChange={handleWriterParagraphAlignment}
-            onCharacterFormatChange={handleWriterCharacterFormat}
-            onCopy={handleWriterCopy}
-            onCut={handleWriterCut}
-            onDownload={handleWriterDownload}
-            onHorizontalRulerVisibilityChange={setIsHorizontalRulerVisible}
-            onLoad={handleWriterLoad}
-            onNew={handleWriterNew}
-            onOpenOdt={handleWriterOpenOdt}
-            onPaste={handleWriterPaste}
-            onListKindChange={handleWriterParagraphListKind}
-            onListLevelChange={handleWriterParagraphListLevel}
-            onRedo={handleWriterRedo}
-            onSave={handleWriterSave}
-            onSaveOdt={handleWriterSaveOdt}
-            onSelectAll={requestSelectAll}
-            onSidebarVisibilityChange={setIsPropertiesSidebarVisible}
-            onStatusBarVisibilityChange={setIsStatusBarVisible}
-            onStyleChange={handleWriterParagraphStyle}
-            onUndo={handleWriterUndo}
-            listKind={activeParagraph.list.kind}
-            listLevel={activeParagraph.list.level}
-            style={activeParagraph.style}
-          />
-        }
+        documentTitle={snapshot.document.document.title}
         formattingToolbar={
           <WriterParagraphFormattingToolbar
-            alignment={activeParagraph.alignment}
-            characterAttributes={pendingCharacterAttributes}
-            onAlignmentChange={handleWriterParagraphAlignment}
-            onCharacterFormatChange={handleWriterCharacterFormat}
-            onListKindChange={handleWriterParagraphListKind}
-            onListLevelChange={handleWriterParagraphListLevel}
-            onStyleChange={handleWriterParagraphStyle}
-            listKind={activeParagraph.list.kind}
-            listLevel={activeParagraph.list.level}
-            style={activeParagraph.style}
+            alignment={snapshot.activeParagraph.alignment}
+            characterAttributes={snapshot.pendingCharacterAttributes}
+            listKind={snapshot.activeParagraph.list.kind}
+            listLevel={snapshot.activeParagraph.list.level}
+            onAlignmentChange={executeAlignment}
+            onCharacterFormatChange={executeCharacterFormat}
+            onListKindChange={executeListKind}
+            onListLevelChange={executeListLevel}
+            onStyleChange={executeStyle}
+            style={snapshot.activeParagraph.style}
           />
         }
-        isHorizontalRulerVisible={isHorizontalRulerVisible}
-        isPropertiesSidebarVisible={isPropertiesSidebarVisible}
-        isStatusBarVisible={isStatusBarVisible}
+        isHorizontalRulerVisible={snapshot.isHorizontalRulerVisible}
+        isPropertiesSidebarVisible={snapshot.isPropertiesSidebarVisible}
+        isStatusBarVisible={snapshot.isStatusBarVisible}
+        menuBar={
+          <WriterMenuBar
+            alignment={snapshot.activeParagraph.alignment}
+            canRedo={view.QueryState(WRITER_COMMAND_IDS.redo).enabled}
+            canUndo={view.QueryState(WRITER_COMMAND_IDS.undo).enabled}
+            characterAttributes={snapshot.pendingCharacterAttributes}
+            isHorizontalRulerVisible={snapshot.isHorizontalRulerVisible}
+            isSidebarVisible={snapshot.isPropertiesSidebarVisible}
+            isStatusBarVisible={snapshot.isStatusBarVisible}
+            isStoragePending={!view.QueryState(WRITER_COMMAND_IDS.saveOdt).enabled}
+            listKind={snapshot.activeParagraph.list.kind}
+            listLevel={snapshot.activeParagraph.list.level}
+            onAlignmentChange={executeAlignment}
+            onCharacterFormatChange={executeCharacterFormat}
+            onCopy={createCommandHandler(WRITER_COMMAND_IDS.copy)}
+            onCut={createCommandHandler(WRITER_COMMAND_IDS.cut)}
+            onDownload={createCommandHandler(WRITER_COMMAND_IDS.exportText)}
+            onHorizontalRulerVisibilityChange={createCommandHandler(
+              WRITER_COMMAND_IDS.toggleHorizontalRuler,
+            )}
+            onListKindChange={executeListKind}
+            onListLevelChange={executeListLevel}
+            onLoad={createCommandHandler(WRITER_COMMAND_IDS.openLocal)}
+            onNew={createCommandHandler(WRITER_COMMAND_IDS.newDocument)}
+            onOpenOdt={createCommandHandler(WRITER_COMMAND_IDS.openOdt)}
+            onPaste={createCommandHandler(WRITER_COMMAND_IDS.paste)}
+            onRedo={createCommandHandler(WRITER_COMMAND_IDS.redo)}
+            onSave={createCommandHandler(WRITER_COMMAND_IDS.saveLocal)}
+            onSaveOdt={createCommandHandler(WRITER_COMMAND_IDS.saveOdt)}
+            onSelectAll={createCommandHandler(WRITER_COMMAND_IDS.selectAll)}
+            onSidebarVisibilityChange={createCommandHandler(WRITER_COMMAND_IDS.toggleSidebar)}
+            onStatusBarVisibilityChange={createCommandHandler(WRITER_COMMAND_IDS.toggleStatusBar)}
+            onStyleChange={executeStyle}
+            onUndo={createCommandHandler(WRITER_COMMAND_IDS.undo)}
+            style={snapshot.activeParagraph.style}
+          />
+        }
         propertiesSidebar={
           <WriterParagraphProperties
-            alignment={activeParagraph.alignment}
-            listKind={activeParagraph.list.kind}
-            paragraphNumber={activeParagraphIndex + 1}
-            style={activeParagraph.style}
+            alignment={snapshot.activeParagraph.alignment}
+            listKind={snapshot.activeParagraph.list.kind}
+            paragraphNumber={snapshot.activeParagraphIndex + 1}
+            style={snapshot.activeParagraph.style}
           />
         }
-        status={storageStatus}
+        status={snapshot.storageStatus}
         toolbar={
           <WriterCommandToolbar
-            canRedo={writerHistory.index < writerHistory.entries.length - 1}
-            canUndo={writerHistory.index > 0}
-            isStoragePending={storagePending}
-            onCopy={handleWriterCopy}
-            onCut={handleWriterCut}
-            onOpenOdt={handleWriterOpenOdt}
-            onPaste={handleWriterPaste}
-            onRedo={handleWriterRedo}
-            onSaveOdt={handleWriterSaveOdt}
-            onUndo={handleWriterUndo}
+            canRedo={view.QueryState(WRITER_COMMAND_IDS.redo).enabled}
+            canUndo={view.QueryState(WRITER_COMMAND_IDS.undo).enabled}
+            isStoragePending={!view.QueryState(WRITER_COMMAND_IDS.saveOdt).enabled}
+            onCopy={createCommandHandler(WRITER_COMMAND_IDS.copy)}
+            onCut={createCommandHandler(WRITER_COMMAND_IDS.cut)}
+            onOpenOdt={createCommandHandler(WRITER_COMMAND_IDS.openOdt)}
+            onPaste={createCommandHandler(WRITER_COMMAND_IDS.paste)}
+            onRedo={createCommandHandler(WRITER_COMMAND_IDS.redo)}
+            onSaveOdt={createCommandHandler(WRITER_COMMAND_IDS.saveOdt)}
+            onUndo={createCommandHandler(WRITER_COMMAND_IDS.undo)}
           />
         }
       >
         <WriterPlainTextEditor
-          activeParagraphId={activeParagraph.id}
-          focusParagraphId={focusParagraphId}
-          focusParagraphOffset={focusParagraphOffset}
-          onParagraphBreak={handleWriterParagraphBreak}
-          onParagraphMerge={handleWriterParagraphMerge}
-          onParagraphMergeNext={handleWriterParagraphMergeNext}
-          onParagraphFocus={handleWriterParagraphFocus}
-          onSelectAll={requestSelectAll}
-          onTextChange={handleWriterTextChange}
-          onTextCut={handleWriterTextCut}
-          onTextPaste={handleWriterTextPaste}
-          paragraphs={writerDocument.paragraphs}
-          selectAllRequestId={selectAllRequestId}
+          activeParagraphId={snapshot.activeParagraph.id}
+          focusParagraphId={snapshot.focusParagraphId}
+          focusParagraphOffset={snapshot.focusParagraphOffset}
+          focusRequestId={snapshot.focusRequestId}
+          onParagraphBreak={wrtShell.SplitParagraph.bind(wrtShell)}
+          onParagraphFocus={wrtShell.SetCursor.bind(wrtShell)}
+          onParagraphMerge={wrtShell.MergeParagraphWithPrevious.bind(wrtShell)}
+          onParagraphMergeNext={wrtShell.MergeParagraphWithNext.bind(wrtShell)}
+          onSelectAll={createCommandHandler(WRITER_COMMAND_IDS.selectAll)}
+          onTextChange={wrtShell.InsertText.bind(wrtShell)}
+          onTextCut={executeNativeCut}
+          onTextPaste={executeNativePaste}
+          paragraphs={snapshot.document.paragraphs}
+          selectAllRequestId={snapshot.selectAllRequestId}
         />
       </WriterWorkspaceChrome>
     </div>
   );
 }
 
-/**
- * Detects the sole inserted segment between a prior and next browser paragraph value.
- *
- * @param previousText - Canonical immutable paragraph text before native browser input.
- * @param nextText - Complete visible paragraph text after native browser input.
- * @returns Exact insertion or deletion bounds, otherwise undefined for replacement.
- */
-function getWriterTextChange(
-  previousText: string,
-  nextText: string,
-):
-  | Readonly<{ kind: "delete"; end: number; start: number; text: string }>
-  | Readonly<{ kind: "insert"; offset: number; text: string }>
-  | undefined {
-  if (nextText === previousText) return undefined;
-  let prefixLength = 0;
-  while (
-    prefixLength < previousText.length &&
-    previousText.charAt(prefixLength) === nextText.charAt(prefixLength)
-  )
-    prefixLength += 1;
-  let suffixLength = 0;
-  while (
-    suffixLength < previousText.length - prefixLength &&
-    previousText.charAt(previousText.length - suffixLength - 1) ===
-      nextText.charAt(nextText.length - suffixLength - 1)
-  )
-    suffixLength += 1;
-  const previousEnd = previousText.length - suffixLength;
-  const removedText = previousText.slice(prefixLength, previousEnd);
-  const insertedText = nextText.slice(prefixLength, nextText.length - suffixLength);
-  if (removedText.length === 0 && insertedText.length > 0)
-    return { kind: "insert", offset: prefixLength, text: insertedText };
-  if (insertedText.length === 0 && removedText.length > 0)
-    return { kind: "delete", end: previousEnd, start: prefixLength, text: removedText };
-  return undefined;
+/** Resolves explicit Paste targeting from DOM selection or the active shell paragraph. @param selection - Current DOM selection. @param activeParagraph - Shell-selected fallback paragraph. @returns Same-paragraph model range. */
+function getWriterPasteRange(
+  selection: Selection | null,
+  activeParagraph: Readonly<{ id: string; text: string }>,
+): WriterParagraphTextRange {
+  const selectedRange = getWriterSameParagraphSelection(selection);
+  if (selectedRange !== undefined) return selectedRange;
+  const caret = getWriterCollapsedParagraphCaret(selection);
+  return caret === undefined
+    ? {
+        end: activeParagraph.text.length,
+        paragraphId: activeParagraph.id,
+        start: activeParagraph.text.length,
+      }
+    : { end: caret.offset, paragraphId: caret.paragraphId, start: caret.offset };
 }
 
-/**
- * Derives the compatible undo action that LibreOffice keeps open for adjacent typing.
- *
- * `SwUndoInsert::CanGrouping` requires the same node, adjacent position, and matching
- * letter/number versus delimiter class. `SwUndoDelete::CanGrouping` additionally keeps
- * Backspace and Delete groups separate and accepts only single-character deletion.
- *
- * @param paragraphId - Writer text node receiving the edit.
- * @param change - Exact contiguous insertion or deletion detected from browser text.
- * @param inputType - Native InputEvent operation name.
- * @param previousCaretOffset - Selection stored by the preceding history action.
- * @param nextCaretOffset - Collapsed caret emitted after this native edit.
- * @returns Group identity and whether the current group passes source position checks.
- */
-function getWriterTypingGroup(
-  paragraphId: string,
-  change:
-    | Readonly<{ kind: "delete"; end: number; start: number; text: string }>
-    | Readonly<{ kind: "insert"; offset: number; text: string }>
-    | undefined,
-  inputType: string,
-  previousCaretOffset: number,
-  nextCaretOffset: number | undefined,
-): Readonly<{ extendCurrent: boolean; id: string }> | undefined {
-  if (change === undefined || nextCaretOffset === undefined) return undefined;
-  const characterClass = getWriterTypingCharacterClass(change.text);
-  if (characterClass === undefined) return undefined;
-  if (change.kind === "insert") {
-    if (inputType !== "insertText") return undefined;
-    return {
-      extendCurrent: change.offset === previousCaretOffset,
-      id: `writer-typing:${paragraphId}:insert:${characterClass}`,
-    };
-  }
-  if (change.text.length !== 1) return undefined;
-  if (inputType === "deleteContentBackward")
-    return {
-      extendCurrent: change.end === previousCaretOffset,
-      id: `writer-typing:${paragraphId}:backspace:${characterClass}`,
-    };
-  if (inputType === "deleteContentForward")
-    return {
-      extendCurrent: change.start === previousCaretOffset,
-      id: `writer-typing:${paragraphId}:delete:${characterClass}`,
-    };
-  return undefined;
-}
-
-/**
- * Classifies input using the letter/numeric versus delimiter split used by Writer grouping.
- *
- * @param text - Inserted or deleted text from one browser input operation.
- * @returns Shared class when every Unicode character matches, otherwise undefined.
- */
-function getWriterTypingCharacterClass(text: string): "delimiter" | "word" | undefined {
-  const characters = [...text];
-  const firstCharacter = characters[0];
-  /* c8 ignore next -- detected insertions and deletions always contain at least one character. */
-  if (firstCharacter === undefined) return undefined;
-  const firstIsWord = /[\p{L}\p{N}]/u.test(firstCharacter);
-  return characters.every(
-    /** Checks one character against the group's Writer delimiter class. @param character - Unicode input character. @returns Whether its class matches the first character. */
-    function hasMatchingClass(character): boolean {
-      return /[\p{L}\p{N}]/u.test(character) === firstIsWord;
-    },
-  )
-    ? firstIsWord
-      ? "word"
-      : "delimiter"
-    : undefined;
-}
-
-/** Maps one browser shortcut key to its supported direct Writer character command. @param key - Browser key value normalized by the platform. @returns Direct character format, or undefined when no Writer formatting shortcut applies. */
-function getWriterShortcutFormat(key: string): WriterCharacterFormat | undefined {
-  const normalizedKey = key.toLowerCase();
-  return normalizedKey === "b"
-    ? "bold"
-    : normalizedKey === "i"
-      ? "italic"
-      : normalizedKey === "u"
-        ? "underline"
-        : undefined;
-}
-
-/** Normalizes unknown operation failures for deterministic status feedback. @param error - Caught value. @returns Stable message. */
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
+/** Creates exact-optional Cut arguments from the browser selection. @param selection - Current DOM selection. @returns Sanitized command arguments. */
+function createWriterCutCommandArguments(selection: Selection | null): WriterCutCommandArguments {
+  const range = getWriterSameParagraphSelection(selection);
+  const clipboardSelection = createWriterClipboardSelection(selection);
+  return {
+    ...(range === undefined ? {} : { range }),
+    ...(clipboardSelection === undefined ? {} : { selection: clipboardSelection }),
+  };
 }

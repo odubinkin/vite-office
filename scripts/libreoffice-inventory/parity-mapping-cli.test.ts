@@ -96,7 +96,7 @@ describe("parity mapping CLI" /**
       implementedCount: 14,
       recordCount: 14,
       runtime: {
-        commandCount: 31,
+        commandCount: 29,
         placeholderSuiteCount: 6,
         schemaVersion: 1,
       },

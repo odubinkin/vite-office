@@ -59,9 +59,14 @@ describe("suiteDefinitions" /**
       function createWorkspace(): null {
         return null;
       };
-    const modules = createOfficeModuleDescriptors([{ createWorkspace, suiteId: "writer" }]);
+    const closeWorkspace =
+      /** Closes a neutral persistent workspace fixture. @returns Nothing. */
+      function closeWorkspace(): void {};
+    const modules = createOfficeModuleDescriptors([
+      { closeWorkspace, createWorkspace, suiteId: "writer" },
+    ]);
     expect(modules).not.toBe(suiteDefinitions);
-    expect(modules[0]).toMatchObject({ createWorkspace, id: "writer" });
+    expect(modules[0]).toMatchObject({ closeWorkspace, createWorkspace, id: "writer" });
     expect(modules[1]).not.toHaveProperty("createWorkspace");
     expect(
       /** Registers the same suite factory twice. @returns No descriptors because registration throws. */
@@ -75,5 +80,8 @@ describe("suiteDefinitions" /**
       /** Registers a runtime-invalid suite identity. @returns No descriptors because registration throws. */
       () => createOfficeModuleDescriptors([{ createWorkspace, suiteId: "unknown" as "writer" }]),
     ).toThrow("Unknown office module factory: unknown");
+    expect(
+      createOfficeModuleDescriptors([{ createWorkspace, suiteId: "writer" }])[0],
+    ).not.toHaveProperty("closeWorkspace");
   });
 });

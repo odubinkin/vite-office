@@ -5,6 +5,9 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  OfficeFrame,
+  SfxDispatcher,
+  createCommandShell,
   createCommandRegistry,
   dispatchCommand,
   findCommandById,
@@ -63,6 +66,7 @@ function createCommands(): readonly CommandDefinition<CommandContext>[] {
       id: "shared.greet",
       label: "Greet",
       shortcut: " shift + ctrl + g ",
+      shortcuts: ["Meta+G"],
     },
     {
       execute: save,
@@ -89,13 +93,88 @@ describe("command registry" /**
     expect(registry.commands).toHaveLength(2);
     expect(registry.commands[0]).not.toBe(commands[0]);
     expect(registry.commands[0]?.shortcut).toBe("Ctrl+Shift+G");
+    expect(registry.commands[0]?.shortcuts).toEqual(["Meta+G"]);
     expect(registry.commands[1]?.shortcut).toBe("Meta+S");
     expect(commands[0]?.shortcut).toBe(" shift + ctrl + g ");
     expect(normalizeCommandShortcut("option + Enter")).toBe("Alt+ENTER");
     expect(findCommandById(registry, "shared.greet")?.label).toBe("Greet");
     expect(findCommandById(registry, "missing")).toBeUndefined();
     expect(findCommandByShortcut(registry, "ctrl+shift+g")?.id).toBe("shared.greet");
+    expect(findCommandByShortcut(registry, "cmd+g")?.id).toBe("shared.greet");
     expect(findCommandByShortcut(registry, "Alt+X")).toBeUndefined();
+  });
+
+  it("resolves command execution and state from the top of an Sfx shell stack" /** Verifies last-pushed priority, state queries, shortcut aliases, invalidation, frame ownership, and stack cleanup. @returns Nothing. */, function resolvesShellStack(): void {
+    const dispatcher = new SfxDispatcher();
+    const lowerContext = { enabled: true, name: "Lower" };
+    const upperContext = { enabled: false, name: "Upper" };
+    const lower = createCommandShell(lowerContext, createCommandRegistry(createCommands()));
+    const upper = createCommandShell(
+      upperContext,
+      createCommandRegistry([
+        {
+          execute: greet,
+          /** Reads the command owner's name. @param context - Active command context. @returns Context name. */
+          getStateValue: (context): string => context.name,
+          id: "shared.greet",
+          /** Reports the deterministic toggle state. @returns True. */
+          isChecked: (): boolean => true,
+          label: "Upper greet",
+          shortcut: "Alt+G",
+        },
+      ]),
+    );
+    const invalidations: number[] = [];
+    const unsubscribe = dispatcher.Subscribe(
+      /** Captures one dispatcher version after invalidation. @returns New capture length. */ () =>
+        invalidations.push(dispatcher.GetVersion()),
+    );
+    dispatcher.Push(lower);
+    dispatcher.Push(upper);
+    expect(dispatcher.GetShell(0)).toBe(upper);
+    expect(dispatcher.GetShell(1)).toBe(lower);
+    expect(dispatcher.GetShell(2)).toBeUndefined();
+    expect(dispatcher.Execute("shared.greet")).toMatchObject({
+      status: "executed",
+      value: "Hello Upper",
+    });
+    expect(dispatcher.QueryState("shared.greet")).toEqual({
+      checked: true,
+      enabled: true,
+      value: "Upper",
+    });
+    expect(dispatcher.QueryState("missing")).toEqual({ enabled: false });
+    expect(dispatcher.FindCommandByShortcut("alt+g")?.command.label).toBe("Upper greet");
+    expect(
+      dispatcher.GetCommands().map(
+        /** Projects one command identity. @param command - Active command descriptor. @returns Stable ID. */
+        (command) => command.id,
+      ),
+    ).toEqual(["shared.greet", "shared.save"]);
+    expect(
+      /** Attempts duplicate shell activation. @returns Nothing before the expected exception. */ () =>
+        dispatcher.Push(upper),
+    ).toThrow("SfxShell is already active.");
+    expect(
+      /** Attempts dependency-free invalidation. @returns Nothing before the expected exception. */ () =>
+        dispatcher.Invalidate(),
+    ).toThrow("Invalidation requires a dependency.");
+    dispatcher.Pop(upper);
+    expect(dispatcher.Execute("shared.greet")).toMatchObject({ value: "Hello Lower" });
+    dispatcher.Pop(upper);
+    unsubscribe();
+    dispatcher.Invalidate("document");
+    expect(invalidations).toEqual([1, 2, 3]);
+
+    const frame = new OfficeFrame<string>();
+    frame.SetActiveView("first", [lower]);
+    expect(frame.GetActiveView()).toBe("first");
+    expect(frame.GetDispatcher().GetShell(0)).toBe(lower);
+    frame.SetActiveView("second", [upper]);
+    expect(frame.GetActiveView()).toBe("second");
+    expect(frame.GetDispatcher().GetShell(0)).toBe(upper);
+    frame.CloseView();
+    expect(frame.GetActiveView()).toBeUndefined();
   });
 
   it("returns explicit dispatch outcomes and rejects invalid registry input" /**

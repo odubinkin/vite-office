@@ -33,6 +33,7 @@
     "inventory:dictionaries": "tsx scripts/libreoffice-inventory/dictionaries-cli.ts",
     "lint": "eslint . --max-warnings 0",
     "preview": "npm run preview --workspace @vite-office/office",
+    "test": "npm run test:coverage && npm run test:inventory:coverage",
     "test:inventory:coverage": "vitest run --config scripts/libreoffice-inventory/vitest.config.ts --coverage",
     "test:source-provenance": "vitest run scripts/check-source-provenance.test.ts",
     "test:coverage": "npm run test:coverage --workspace @vite-office/office",

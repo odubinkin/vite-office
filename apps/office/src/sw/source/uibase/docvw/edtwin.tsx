@@ -40,6 +40,8 @@ export interface WriterPlainTextEditorProps {
   readonly focusParagraphId: string | undefined;
   /** UTF-16 offset where a requested post-transaction paragraph focus must place its caret. */
   readonly focusParagraphOffset: number | undefined;
+  /** Distinguishes repeated focus requests targeting the same model position. */
+  readonly focusRequestId: number | undefined;
   /** Receives a paragraph identity and collapsed caret offset when native Enter requests a paragraph break. */
   readonly onParagraphBreak: (paragraphId: string, offset: number) => void;
   /** Receives a non-first paragraph identity when Backspace requests removal of its preceding paragraph break. */
@@ -74,6 +76,7 @@ export interface WriterPlainTextEditorProps {
  * @param props.activeParagraphId - Stable identity of the paragraph targeted by formatting controls.
  * @param props.focusParagraphId - Newly inserted paragraph that should receive browser focus at offset zero.
  * @param props.focusParagraphOffset - Caret offset restored after a split or paragraph-boundary merge.
+ * @param props.focusRequestId - Monotonic identity for repeated focus requests.
  * @param props.onParagraphBreak - Callback that creates a new paragraph from a collapsed native Enter caret.
  * @param props.onParagraphMerge - Callback that merges a non-first paragraph into its preceding sibling.
  * @param props.onParagraphMergeNext - Callback that merges a following paragraph into the selected paragraph.
@@ -90,6 +93,7 @@ export function WriterPlainTextEditor({
   activeParagraphId,
   focusParagraphId,
   focusParagraphOffset,
+  focusRequestId,
   onParagraphBreak,
   onParagraphMerge,
   onParagraphMergeNext,
@@ -149,7 +153,7 @@ export function WriterPlainTextEditor({
       /* c8 ignore next -- a transaction target remains rendered after Writer split or merge operations. */
       if (paragraph !== undefined) restoreWriterCollapsedCaret(paragraph, focusParagraphOffset);
     },
-    [focusParagraphId, focusParagraphOffset],
+    [focusParagraphId, focusParagraphOffset, focusRequestId],
   );
 
   useEffect(

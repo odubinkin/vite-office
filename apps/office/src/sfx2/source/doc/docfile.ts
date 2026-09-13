@@ -14,6 +14,22 @@ import {
 
 export type { SerializableValue } from "../../../svl/source/misc/storage";
 
+/** Identifies the browser-adapted medium currently associated with a document shell. */
+export type SfxMediumKind = "browser-local" | "file" | "untitled";
+
+/**
+ * Describes the persistent document medium without coupling Sfx2 to File, IndexedDB,
+ * download, or another browser API.
+ */
+export interface SfxMediumDescriptor {
+  /** Browser-adapted medium family used by lifecycle commands. */
+  readonly kind: SfxMediumKind;
+  /** MIME type selected by the owning document filter, when applicable. */
+  readonly mediaType?: string;
+  /** Stable user-facing or storage-facing medium name. */
+  readonly name: string;
+}
+
 /** Describes one immutable versioned snapshot owned by a document-storage caller. */
 export type DocumentSnapshot<State extends SerializableValue> = VersionedStorageRecord<State>;
 

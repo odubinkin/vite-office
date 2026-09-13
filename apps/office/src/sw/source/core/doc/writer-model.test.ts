@@ -229,6 +229,9 @@ describe("Writer SwPosition and SwPaM" /** Groups model cursor and range-directi
     expect(collapsed.HasMark()).toBe(true);
     collapsed.DeleteMark();
     expect(collapsed.HasMark()).toBe(false);
+    collapsed.Assign(end, start);
+    expect(collapsed.GetPoint().GetNode()).toBe(second);
+    expect(collapsed.GetMark().GetNode()).toBe(first);
   });
 
   it("rejects invalid content offsets and cross-document selections" /** Verifies position and PaM ownership guards. @returns Nothing; assertions inspect deterministic errors. */, function rejectsInvalidPositions(): void {
@@ -265,6 +268,13 @@ describe("Writer SwPosition and SwPaM" /** Groups model cursor and range-directi
       throwing(
         /** Combines positions from two documents. @returns Invalid range. */ () =>
           new SwPaM(position, new SwPosition(other.paragraphs[0] as SwTextNode, 0)),
+      ),
+    ).toThrow("different documents");
+    const persistent = new SwPaM(position);
+    expect(
+      throwing(
+        /** Reassigns a persistent PaM across document ownership. @returns Nothing. */ () =>
+          persistent.Assign(position, new SwPosition(other.paragraphs[0] as SwTextNode, 0)),
       ),
     ).toThrow("different documents");
   });

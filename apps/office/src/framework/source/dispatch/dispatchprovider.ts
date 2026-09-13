@@ -2,24 +2,74 @@
  * @fileoverview Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes at the LibreOffice `framework/source/dispatch/dispatchprovider.cxx` ownership boundary.
  */
 
+/** Identifies the shell layer that owns one command handler. */
+export type CommandTarget = "application" | "frame" | "shell" | "view";
+
+/** Declares whether a command participates in document undo recording. */
+export type CommandUndoPolicy = "none" | "record";
+
+/** Represents the UI state returned by the shell that currently resolves a command. */
+export interface CommandState<Value = unknown> {
+  /** Whether dispatch may execute the command in the current shell context. */
+  readonly enabled: boolean;
+  /** Optional boolean toggle state used by menus and toolbars. */
+  readonly checked?: boolean;
+  /** Optional typed state value used by selectors such as paragraph style. */
+  readonly value?: Value;
+}
+
 /** Describes one immutable executable command with a context-specific handler. */
-export interface CommandDefinition<Context, Result = unknown> {
+export interface CommandDefinition<Context, Result = unknown, Arguments = unknown> {
+  /** Parity capability that owns the implemented command behavior. */
+  readonly capabilityId?: `CAP-${string}`;
+  /** Optional debug label separate from the reader-facing command label. */
+  readonly debugLabel?: string;
   /** Stable non-blank command identifier selected by the owning domain. */
   readonly id: string;
+  /** State dependencies invalidated after relevant document or view changes. */
+  readonly invalidates?: readonly string[];
   /** Non-blank human-readable label for future accessible command surfaces. */
   readonly label: string;
   /** Optional platform-neutral shortcut normalized during registry creation. */
   readonly shortcut?: string;
+  /** Optional additional shortcuts that resolve to this same command identity. */
+  readonly shortcuts?: readonly string[];
+  /** Shell layer that owns command execution and state. */
+  readonly target?: CommandTarget;
+  /** Undo recording contract for the command. */
+  readonly undoPolicy?: CommandUndoPolicy;
   /** Optional predicate evaluated at dispatch time without mutating context. */
   readonly isEnabled?: (context: Context) => boolean;
+  /** Optional checked-state predicate evaluated through the resolving shell. */
+  readonly isChecked?: (context: Context) => boolean;
+  /** Optional state selector evaluated through the resolving shell. */
+  readonly getStateValue?: (context: Context) => unknown;
   /** Handler that returns a command-owned result after availability succeeds. */
-  readonly execute: (context: Context) => Result;
+  readonly execute: (context: Context, arguments_: Arguments) => Result;
 }
 
 /** Describes an immutable ordered registry of commands sharing one context type. */
 export interface CommandRegistry<Context> {
   /** Copied ordered command definitions with canonical shortcut strings. */
   readonly commands: readonly CommandDefinition<Context>[];
+}
+
+/** Binds typed registry context behind the non-generic shell-stack contract. */
+export interface SfxShell {
+  /** Stable registered command identities in descriptor order. */
+  readonly commandIds: readonly string[];
+  /** Resolves a command against this shell, or returns undefined so lower shells may answer. */
+  readonly ResolveCommand: (commandId: string) => ResolvedShellCommand | undefined;
+}
+
+/** Represents one command already bound to the shell context that owns it. */
+export interface ResolvedShellCommand {
+  /** Immutable registered descriptor used for diagnostics and shortcut lookup. */
+  readonly command: CommandDefinition<unknown, unknown, unknown>;
+  /** Executes through the owning shell context. */
+  readonly execute: (arguments_?: unknown) => CommandDispatchResult<unknown>;
+  /** Queries enabled, checked, and value state through the owning shell context. */
+  readonly getState: () => CommandState;
 }
 
 /** Describes the successful execution of a registered command. */
@@ -93,12 +143,20 @@ export function createCommandRegistry<Context>(
         assertNonBlank(command.label, "Command label");
         if (ids.has(command.id)) throw new Error(`Duplicate command id: ${command.id}`);
         ids.add(command.id);
-        const shortcut =
-          command.shortcut === undefined ? undefined : normalizeCommandShortcut(command.shortcut);
-        if (shortcut !== undefined && shortcuts.has(shortcut))
-          throw new Error(`Duplicate command shortcut: ${shortcut}`);
-        if (shortcut !== undefined) shortcuts.add(shortcut);
-        return shortcut === undefined ? { ...command } : { ...command, shortcut };
+        const normalizedShortcuts = [
+          ...(command.shortcut === undefined ? [] : [command.shortcut]),
+          ...(command.shortcuts ?? []),
+        ].map(normalizeCommandShortcut);
+        for (const shortcut of normalizedShortcuts) {
+          if (shortcuts.has(shortcut)) throw new Error(`Duplicate command shortcut: ${shortcut}`);
+          shortcuts.add(shortcut);
+        }
+        const [shortcut, ...additionalShortcuts] = normalizedShortcuts;
+        return {
+          ...command,
+          ...(shortcut === undefined ? {} : { shortcut }),
+          ...(additionalShortcuts.length === 0 ? {} : { shortcuts: additionalShortcuts }),
+        };
       },
     ),
   };
@@ -149,7 +207,10 @@ export function findCommandByShortcut<Context>(
      * @returns True only for the command owning normalizedShortcut.
      */
     function hasShortcut(command): boolean {
-      return command.shortcut === normalizedShortcut;
+      return (
+        command.shortcut === normalizedShortcut ||
+        (command.shortcuts?.includes(normalizedShortcut) ?? false)
+      );
     },
   );
 }
@@ -160,18 +221,190 @@ export function findCommandByShortcut<Context>(
  * @param registry - Immutable registry providing a command handler.
  * @param commandId - Exact command identity selected for dispatch.
  * @param context - Caller-owned context forwarded unchanged to predicates and handlers.
+ * @param arguments_ - Optional command arguments forwarded unchanged to the handler.
  * @returns Deterministic command outcome; missing and disabled paths never invoke a handler.
  */
 export function dispatchCommand<Context>(
   registry: CommandRegistry<Context>,
   commandId: string,
   context: Context,
+  arguments_?: unknown,
 ): CommandDispatchResult<unknown> {
   const command = findCommandById(registry, commandId);
   if (command === undefined) return { commandId, status: "missing" };
   if (command.isEnabled !== undefined && !command.isEnabled(context))
     return { commandId: command.id, status: "disabled" };
-  return { commandId: command.id, status: "executed", value: command.execute(context) };
+  return {
+    commandId: command.id,
+    status: "executed",
+    value: command.execute(context, arguments_),
+  };
+}
+
+/** Creates an upstream-shaped shell whose registered commands remain bound to one context. @param context - Long-lived command owner. @param registry - Immutable command registry for that owner. @returns Shell suitable for an SfxDispatcher stack. */
+export function createCommandShell<Context>(
+  context: Context,
+  registry: CommandRegistry<Context>,
+): SfxShell {
+  return {
+    commandIds: registry.commands.map(
+      /** Projects one stable command identity for shell-stack enumeration. @param command - Registered command. @returns Command ID. */
+      function getCommandId(command): string {
+        return command.id;
+      },
+    ),
+    /** Resolves one registry command against the retained context. @param commandId - Stable command ID. @returns Bound command or undefined. */
+    ResolveCommand: function resolveCommand(commandId): ResolvedShellCommand | undefined {
+      const command = findCommandById(registry, commandId);
+      if (command === undefined) return undefined;
+      return {
+        command: command as CommandDefinition<unknown, unknown, unknown>,
+        /** Executes with retained shell context. @param arguments_ - Caller command arguments. @returns Dispatch result. */
+        execute: function executeResolvedCommand(arguments_): CommandDispatchResult<unknown> {
+          return dispatchCommand(registry, commandId, context, arguments_);
+        },
+        /** Queries state with retained shell context. @returns Current command state. */
+        getState: function getResolvedCommandState(): CommandState {
+          return {
+            enabled: command.isEnabled?.(context) ?? true,
+            ...(command.isChecked === undefined ? {} : { checked: command.isChecked(context) }),
+            ...(command.getStateValue === undefined
+              ? {}
+              : { value: command.getStateValue(context) }),
+          };
+        },
+      };
+    },
+  };
+}
+
+/**
+ * Resolves slot-like commands from the top of a last-pushed-first shell stack.
+ *
+ * This follows the pinned SfxDispatcher contract where GetShell(0) is the last
+ * pushed shell and command lookup stops at the first shell providing the slot.
+ */
+export class SfxDispatcher {
+  private readonly listeners = new Set<() => void>();
+  private readonly shells: SfxShell[] = [];
+  private version = 0;
+
+  /** Pushes one shell to the top of the dispatch stack. @param shell - Context shell becoming highest priority. @returns Nothing. */
+  public Push(shell: SfxShell): void {
+    if (this.shells.includes(shell)) throw new Error("SfxShell is already active.");
+    this.shells.push(shell);
+    this.Invalidate("shell-stack");
+  }
+
+  /** Removes one active shell from the stack. @param shell - Exact shell identity to remove. @returns Nothing. */
+  public Pop(shell: SfxShell): void {
+    const index = this.shells.lastIndexOf(shell);
+    if (index < 0) return;
+    this.shells.splice(index, 1);
+    this.Invalidate("shell-stack");
+  }
+
+  /** Returns a shell counted from the top, where zero is the last pushed shell. @param index - Zero-based stack level. @returns Active shell or undefined. */
+  public GetShell(index: number): SfxShell | undefined {
+    return this.shells[this.shells.length - index - 1];
+  }
+
+  /** Finds the highest-priority shell command for one stable ID. @param commandId - Command identity to resolve. @returns Bound command or undefined. */
+  public QueryDispatch(commandId: string): ResolvedShellCommand | undefined {
+    for (let index = 0; index < this.shells.length; index += 1) {
+      const command = this.GetShell(index)?.ResolveCommand(commandId);
+      if (command !== undefined) return command;
+    }
+    return undefined;
+  }
+
+  /** Executes the command resolved from the active shell stack. @param commandId - Stable slot-like identity. @param arguments_ - Typed caller arguments forwarded unchanged. @returns Explicit dispatch outcome. */
+  public Execute(commandId: string, arguments_?: unknown): CommandDispatchResult<unknown> {
+    const command = this.QueryDispatch(commandId);
+    return command === undefined ? { commandId, status: "missing" } : command.execute(arguments_);
+  }
+
+  /** Queries the active shell state for one command. @param commandId - Stable slot-like identity. @returns Disabled state when no shell provides the command. */
+  public QueryState(commandId: string): CommandState {
+    return this.QueryDispatch(commandId)?.getState() ?? { enabled: false };
+  }
+
+  /** Returns every active command once, honoring top-shell shadowing. @returns Commands in shell-priority and registration order. */
+  public GetCommands(): readonly CommandDefinition<unknown, unknown, unknown>[] {
+    const commands: CommandDefinition<unknown, unknown, unknown>[] = [];
+    const ids = new Set<string>();
+    for (let shellIndex = 0; shellIndex < this.shells.length; shellIndex += 1) {
+      const shell = this.GetShell(shellIndex) as SfxShell;
+      for (const commandId of shell.commandIds) {
+        if (ids.has(commandId)) continue;
+        const command = shell.ResolveCommand(commandId)?.command;
+        if (command !== undefined) {
+          ids.add(commandId);
+          commands.push(command);
+        }
+      }
+    }
+    return commands;
+  }
+
+  /** Finds one command by normalized shortcut across active shells. @param shortcut - Browser-adapted shortcut. @returns Highest-priority matching command. */
+  public FindCommandByShortcut(shortcut: string): ResolvedShellCommand | undefined {
+    const normalized = normalizeCommandShortcut(shortcut);
+    for (const command of this.GetCommands()) {
+      if (command.shortcut === normalized || command.shortcuts?.includes(normalized))
+        return this.QueryDispatch(command.id);
+    }
+    return undefined;
+  }
+
+  /** Publishes centralized command-state invalidation. @param dependencies - Changed state dependency labels. @returns Nothing. */
+  public Invalidate(...dependencies: readonly string[]): void {
+    if (dependencies.length === 0) throw new Error("Invalidation requires a dependency.");
+    this.version += 1;
+    for (const listener of this.listeners) listener();
+  }
+
+  /** Returns the monotonic dispatcher invalidation version. @returns Current version. */
+  public GetVersion(): number {
+    return this.version;
+  }
+
+  /** Subscribes to command-state invalidation. @param listener - Callback invoked after invalidation. @returns Cleanup removing the listener. */
+  public Subscribe(listener: () => void): () => void {
+    this.listeners.add(listener);
+    return /** Removes the registered invalidation listener. @returns Whether the listener was present. */ () =>
+      this.listeners.delete(listener);
+  }
+}
+
+/** Owns the active view and its dispatcher, matching the minimal browser frame responsibility. */
+export class OfficeFrame<View> {
+  private activeView: View | undefined;
+  private readonly dispatcher = new SfxDispatcher();
+
+  /** Activates one view and replaces the frame's shell stack. @param view - Active suite view. @param shells - Bottom-to-top shell order. @returns Nothing. */
+  public SetActiveView(view: View, shells: readonly SfxShell[]): void {
+    this.CloseView();
+    this.activeView = view;
+    for (const shell of shells) this.dispatcher.Push(shell);
+  }
+
+  /** Returns the frame-owned dispatcher. @returns Active dispatcher. */
+  public GetDispatcher(): SfxDispatcher {
+    return this.dispatcher;
+  }
+
+  /** Returns the active view, when one is installed. @returns Current view or undefined. */
+  public GetActiveView(): View | undefined {
+    return this.activeView;
+  }
+
+  /** Removes every active shell and clears the view reference. @returns Nothing. */
+  public CloseView(): void {
+    while (this.dispatcher.GetShell(0) !== undefined)
+      this.dispatcher.Pop(this.dispatcher.GetShell(0) as SfxShell);
+    this.activeView = undefined;
+  }
 }
 
 /**

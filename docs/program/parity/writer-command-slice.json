@@ -205,8 +205,8 @@
             "marker": "copyRichText"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/shells/textsh.ts",
-            "marker": "useWriterBrowserCommands"
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async Copy"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -301,7 +301,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/viewstat.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
             "marker": "isPropertiesSidebarVisible"
           },
           {
@@ -649,8 +649,8 @@
             "marker": "changeWriterParagraphListLevel"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.tsx",
-            "marker": "handleWriterParagraphListLevel"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "marker": "ChangeParagraphListLevel"
           },
           {
             "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
@@ -1025,8 +1025,8 @@
             "marker": "parseWriterClipboardPaste"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/shells/textsh.ts",
-            "marker": "handleWriterPaste"
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async Paste"
           },
           {
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
@@ -1489,8 +1489,8 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.tsx",
-            "marker": "handleWriterOpenOdt"
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async OpenOdt"
           },
           {
             "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
