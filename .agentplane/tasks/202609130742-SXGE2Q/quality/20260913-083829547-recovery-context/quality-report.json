@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202609130742-SXGE2Q",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-13T08:38:29.547Z",
+  "verdict": "pass",
+  "summary": "Stage 2 implementation satisfies the approved ownership, dispatch, state, remount, and DOM-free command acceptance criteria.",
+  "evaluated_sha": "3e6450165ead6b109fa93eb36deb665a55a39601",
+  "blueprint_digest": "ae06b912b7d24013de4df99ace610d33e15ea6fcf6b3972b04f3ce2cb1391e69",
+  "findings": [
+    "SfxDispatcher resolves last-pushed shells first and centralizes execution, state, shortcuts, and invalidation.",
+    "Writer lifecycle and editing state persist in SwDocShell, SwView, SwWrtShell, and SwPaM across React remount and New/Open/Save operations.",
+    "No Stage 3 action-based undo or new product behavior was introduced; snapshot history remains explicitly temporary."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609130742-SXGE2Q/README.md",
+    "3e6450165ead",
+    "npm run verify: pass (184 runtime tests, 79 inventory tests, 8 Playwright tests, 100% coverage)",
+    "vendor/libreoffice-reference/include/sfx2/dispatch.hxx",
+    "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx",
+    "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Snapshot-based undo remains intentionally deferred to Stage 3."
+  ]
+}
