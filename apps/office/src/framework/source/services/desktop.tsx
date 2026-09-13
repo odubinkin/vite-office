@@ -4,38 +4,50 @@
 
 import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "lucide-react";
 
-import { WriterWorkbench } from "../../../sw/source/uibase/uiview/view";
 import { createDocument } from "../../../sfx2/source/doc/docfac";
-import { suiteDefinitions } from "./modulemanager";
-import type { SuiteDefinition } from "./modulemanager";
+import type { OfficeModuleDescriptor, SuiteDefinition } from "./modulemanager";
 import { SuiteCard } from "./SuiteCard";
+
+/** Defines the module inventory supplied by the application composition root. */
+interface DesktopProps {
+  /** Ordered framework route descriptors with suite-owned factories where implemented. */
+  readonly modules: readonly OfficeModuleDescriptor[];
+}
 
 /**
  * Renders the browser-only office launcher or the suite selected by the current pathname.
  *
+ * @param props - Registered office modules supplied by the composition root.
+ * @param props.modules - Ordered route descriptors and optional workspace factories.
  * @returns The launcher at `/`, a full-page suite workspace at a known suite path, or the launcher as an unknown-path fallback.
  */
-export function Desktop(): React.JSX.Element {
-  const activeSuite = suiteDefinitions.find(
+export function Desktop({ modules }: DesktopProps): React.JSX.Element {
+  const activeModule = modules.find(
     /** Matches the browser pathname to one stable suite route. @param suite - Suite route candidate. @returns True when the route selects this suite. */
     (suite): boolean => globalThis.location.pathname === `/${suite.id}`,
   );
 
-  if (activeSuite === undefined) return <OfficeLauncher />;
+  if (activeModule === undefined) return <OfficeLauncher modules={modules} />;
 
   return (
     <main className="min-h-screen min-w-0 bg-slate-100" id="workspace">
-      {activeSuite.id === "writer" ? (
-        <WriterWorkbench isActive />
+      {activeModule.createWorkspace === undefined ? (
+        <FoundationWorkspace suite={activeModule} />
       ) : (
-        <FoundationWorkspace suite={activeSuite} />
+        activeModule.createWorkspace()
       )}
     </main>
   );
 }
 
-/** Renders the home page with only global chrome and the office application launcher. @returns The home launcher. */
-function OfficeLauncher(): React.JSX.Element {
+/** Defines the ordered module inventory rendered by the office launcher. */
+interface OfficeLauncherProps {
+  /** Module descriptors rendered as launcher destinations. */
+  readonly modules: readonly OfficeModuleDescriptor[];
+}
+
+/** Renders the home page with only global chrome and the office application launcher. @param props - Launcher module inventory. @param props.modules - Ordered route descriptors. @returns The home launcher. */
+function OfficeLauncher({ modules }: OfficeLauncherProps): React.JSX.Element {
   return (
     <div className="min-h-screen bg-[#f4f5f8] text-slate-950">
       <header className="border-b border-slate-200/80 bg-white/90 backdrop-blur">
@@ -94,7 +106,7 @@ function OfficeLauncher(): React.JSX.Element {
             aria-label="Office applications"
             className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3"
           >
-            {suiteDefinitions.map(
+            {modules.map(
               /** Converts one immutable suite definition into its launcher link. @param suite - Suite definition to render. @returns A keyed suite link. */
               (suite): React.JSX.Element => (
                 <SuiteCard key={suite.id} suite={suite} />

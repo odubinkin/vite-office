@@ -6,7 +6,7 @@ import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/text
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
-import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+import { RES_CHRATR_WEIGHT, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import {
   appendWriterParagraph,
@@ -392,7 +392,9 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
       ),
     ).toThrow("Overlapping Writer");
     const inheritedWriter = createModelFixture("hint-inherited");
-    inheritedWriter.GetDfltTextFormatColl().SetFormatAttr(new SvxWeightItem(FontWeight.BOLD));
+    inheritedWriter
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
     const inheritedPool = inheritedWriter.GetAttrPool();
     const redundant = new SwpHints(inheritedPool, [
       new SwTextAttr(createSwFormatAutoFormat(inheritedPool, bold), 1, 2),

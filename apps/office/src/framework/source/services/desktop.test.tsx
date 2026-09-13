@@ -6,7 +6,8 @@ import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testi
 import { IDBFactory } from "fake-indexeddb";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Desktop as App } from "./desktop";
+import { Desktop } from "./desktop";
+import { createOfficeModuleDescriptors } from "./modulemanager";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../sfx2/source/doc/docfac";
 import { createWriterDocument, insertWriterText } from "../../../sw/source/core/doc/writer";
@@ -17,6 +18,12 @@ import {
   type WriterSnapshotState,
 } from "../../../sw/source/core/doc/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-storage";
+import { createWriterModuleFactory } from "../../../sw/source/uibase/app/swmodule";
+
+/** Renders framework Desktop with the Writer factory registered by a test composition root. @returns Configured desktop element. */
+function App(): React.JSX.Element {
+  return <Desktop modules={createOfficeModuleDescriptors([createWriterModuleFactory()])} />;
+}
 
 /**
  * Replaces the complete text content of one document-integrated editable Writer paragraph.

@@ -22,7 +22,10 @@ import {
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
+  RES_PARATR_ADJUST,
   RES_PARATR_NUMRULE,
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../../core/para/paratr";
@@ -75,24 +78,32 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   it("writes deterministic ODF 1.3 packages and restores canonical formatting" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
     const writer = createWriterDocument(metadata("Round & Trip"), "source-1");
     writer.GetDfltTextFormatColl().SetFormatName("Body < text");
-    writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center));
-    writer.GetDfltTextFormatColl().SetFormatAttr(new SvxWeightItem(FontWeight.BOLD));
+    writer
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+    writer
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
     writer
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_CJK_WEIGHT));
     writer
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_CTL_WEIGHT));
-    writer.GetDfltTextFormatColl().SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL));
+    writer
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
     writer
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_CJK_POSTURE));
     writer
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_CTL_POSTURE));
-    writer.GetDfltTextFormatColl().SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE));
+    writer
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
     writer.GetTextFormatColl("heading-1").SetFormatName("Heading & one");
-    for (const which of [undefined, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       writer
         .GetTextFormatColl("heading-1")
         .SetFormatAttr(new SvxWeightItem(FontWeight.NORMAL, which));
@@ -111,13 +122,13 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     ]);
     const second = writer.nodes.MakeTextNode("source-2", "plain");
     second.SetParagraphAlignment("justify");
-    for (const which of [undefined, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       second.SetAttr(new SvxWeightItem(FontWeight.NORMAL, which));
-    for (const which of [undefined, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
+    for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       second.SetAttr(new SvxPostureItem(FontItalic.NONE, which));
-    second.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE));
+    second.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
     const third = writer.nodes.MakeTextNode("source-3", "not underlined");
-    third.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE));
+    third.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
     first?.SetParagraphList({ kind: "numbered", level: 0 });
     second.SetParagraphList({ kind: "numbered", level: 1 });
     third.SetParagraphList({ kind: "bullet", level: 0 });
@@ -371,7 +382,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const scriptSpecificCharacter = createWriterDocument(metadata(), "p1");
     scriptSpecificCharacter
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD));
+      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportStylesXml(scriptSpecificCharacter),
@@ -395,7 +406,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       [SvxAdjust.BlockLine, "justify"],
     ] as const) {
       const writer = createWriterDocument(metadata(), "p1");
-      writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(adjust));
+      writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));
       expect(exportStylesXml(writer)).toContain(`fo:text-align="${expected}"`);
     }
     const invalidItem = createWriterDocument(metadata(), "p1");
@@ -411,7 +422,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       () => exportStylesXml(invalidItem),
     ).toThrow("adjustment item is invalid");
     const invalidValue = createWriterDocument(metadata(), "p1");
-    const item = new SvxAdjustItem();
+    const item = new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST);
     (item as unknown as { adjust: number }).adjust = SvxAdjust.End;
     const valueSet = invalidValue.GetDfltTextFormatColl().GetAttrSet() as unknown as {
       items: Map<number, unknown>;
@@ -673,7 +684,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       [SvxAdjust.Block, "justify"],
     ] as const) {
       const styledWriter = createWriterDocument(metadata(), "p1");
-      styledWriter.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(adjust));
+      styledWriter
+        .GetDfltTextFormatColl()
+        .SetFormatAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));
       const imported = importWriterXml(
         exportStylesXml(styledWriter),
         exportContentXml(styledWriter),
@@ -690,7 +703,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       );
     }
     const headingWriter = createWriterDocument(metadata(), "p1");
-    headingWriter.GetTextFormatColl("heading-1").SetFormatAttr(new SvxAdjustItem(SvxAdjust.Right));
+    headingWriter
+      .GetTextFormatColl("heading-1")
+      .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST));
     expect(
       importWriterXml(exportStylesXml(headingWriter), exportContentXml(headingWriter), metadata())
         .GetTextFormatColl("heading-1")

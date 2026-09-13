@@ -3,10 +3,10 @@
  */
 
 import type {
-  DocumentSnapshot,
-  DocumentStorageAdapter,
   SerializableValue,
-} from "../../sfx2/source/doc/docfile";
+  VersionedStorageAdapter,
+  VersionedStorageRecord,
+} from "../../svl/source/misc/storage";
 
 /* eslint-disable jsdoc/require-jsdoc -- V8 ignore annotations must sit immediately before native event-handler expressions; detailed JSDoc remains enforced by check-jsdoc.mjs. */
 
@@ -46,7 +46,7 @@ export interface IndexedDbFactory {
  */
 export class IndexedDbDocumentStorageAdapter<
   State extends SerializableValue,
-> implements DocumentStorageAdapter<State> {
+> implements VersionedStorageAdapter<State> {
   /**
    * Creates an adapter bound to one caller-chosen browser-local database.
    *
@@ -66,7 +66,7 @@ export class IndexedDbDocumentStorageAdapter<
    * @returns A structured-cloned snapshot, or undefined when no matching key exists.
    * @throws {Error} When IndexedDB cannot open or read the database; its original rejection propagates.
    */
-  async load(id: string): Promise<DocumentSnapshot<State> | undefined> {
+  async load(id: string): Promise<VersionedStorageRecord<State> | undefined> {
     const database = await openSnapshotDatabase(this.indexedDb, this.databaseName);
     try {
       return await readSnapshot<State>(database, id);
@@ -85,7 +85,7 @@ export class IndexedDbDocumentStorageAdapter<
    * @returns A promise fulfilled after the read-write transaction commits.
    * @throws {Error} When IndexedDB cannot open or commit the write; its original rejection propagates.
    */
-  async save(snapshot: DocumentSnapshot<State>): Promise<void> {
+  async save(snapshot: VersionedStorageRecord<State>): Promise<void> {
     const database = await openSnapshotDatabase(this.indexedDb, this.databaseName);
     try {
       await writeSnapshot(database, snapshot);
@@ -153,7 +153,7 @@ function openSnapshotDatabase(
 function readSnapshot<State extends SerializableValue>(
   database: IDBDatabase,
   id: string,
-): Promise<DocumentSnapshot<State> | undefined> {
+): Promise<VersionedStorageRecord<State> | undefined> {
   return new Promise(
     /**
      * Registers a readonly request and settles after its transaction.
@@ -189,7 +189,7 @@ function readSnapshot<State extends SerializableValue>(
        * @returns Nothing; resolves the outer promise.
        */
       transaction.oncomplete = function resolveRead(): void {
-        resolve(request.result as DocumentSnapshot<State> | undefined);
+        resolve(request.result as VersionedStorageRecord<State> | undefined);
       };
     },
   );
@@ -205,7 +205,7 @@ function readSnapshot<State extends SerializableValue>(
  */
 function writeSnapshot<State extends SerializableValue>(
   database: IDBDatabase,
-  snapshot: DocumentSnapshot<State>,
+  snapshot: VersionedStorageRecord<State>,
 ): Promise<void> {
   return new Promise(
     /**

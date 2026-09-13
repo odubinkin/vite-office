@@ -6,7 +6,6 @@
 export const ODF_NAMESPACES = {
   dc: "http://purl.org/dc/elements/1.1/",
   fo: "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0",
-  manifest: "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0",
   meta: "urn:oasis:names:tc:opendocument:xmlns:meta:1.0",
   office: "urn:oasis:names:tc:opendocument:xmlns:office:1.0",
   style: "urn:oasis:names:tc:opendocument:xmlns:style:1.0",

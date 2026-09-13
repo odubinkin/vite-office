@@ -80,30 +80,30 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
   });
 
   it("implements the numeric SvxAdjust item contract" /** Verifies the EditEngine paragraph item subtype. @returns Nothing; assertions inspect enum behavior. */, function verifiesAdjustItem(): void {
-    const item = new SvxAdjustItem(SvxAdjust.Center);
+    const item = new SvxAdjustItem(SvxAdjust.Center, 65);
     expect(item.GetAdjust()).toBe(SvxAdjust.Center);
     expect(item.Clone()).not.toBe(item);
     expect(item.Clone().equals(item)).toBe(true);
-    expect(item.equals(new SvxAdjustItem(SvxAdjust.Right))).toBe(false);
+    expect(item.equals(new SvxAdjustItem(SvxAdjust.Right, 65))).toBe(false);
     expect(item.equals(new SvxAdjustItem(SvxAdjust.Center, 66))).toBe(false);
     expect(item.equals(new SfxInt16Item(65, SvxAdjust.Center))).toBe(false);
     expect(item.toSnapshot()).toMatchObject({ type: "SvxAdjustItem", value: SvxAdjust.Center });
     expect(
       throwing(
         /** Creates an invalid enum value. @returns Invalid item. */ () =>
-          new SvxAdjustItem(-1 as SvxAdjust),
+          new SvxAdjustItem(-1 as SvxAdjust, 65),
       ),
     ).toThrow("invalid");
     expect(
       throwing(
         /** Creates a terminal enum value. @returns Invalid item. */ () =>
-          new SvxAdjustItem(SvxAdjust.End),
+          new SvxAdjustItem(SvxAdjust.End, 65),
       ),
     ).toThrow("invalid");
     expect(
       throwing(
         /** Creates a fractional enum value. @returns Invalid item. */ () =>
-          new SvxAdjustItem(1.5 as SvxAdjust),
+          new SvxAdjustItem(1.5 as SvxAdjust, 65),
       ),
     ).toThrow("invalid");
   });

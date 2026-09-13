@@ -92,13 +92,17 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(node.GetpSwAttrSet()).toBeUndefined();
     expect(node.HasSwAttrSet()).toBe(false);
     expect(node.alignment).toBe("left");
-    expect(defaultStyle.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center))).toBe(true);
-    expect(defaultStyle.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center))).toBe(false);
+    expect(defaultStyle.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST))).toBe(
+      true,
+    );
+    expect(defaultStyle.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST))).toBe(
+      false,
+    );
     expect(node.alignment).toBe("center");
     node.ChgFormatColl(heading);
     expect(node.alignment).toBe("center");
-    expect(node.SetAttr(new SvxAdjustItem(SvxAdjust.Right))).toBe(true);
-    expect(node.SetAttr(new SvxAdjustItem(SvxAdjust.Right))).toBe(false);
+    expect(node.SetAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST))).toBe(true);
+    expect(node.SetAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST))).toBe(false);
     expect(node.HasSwAttrSet()).toBe(true);
     expect(node.GetpSwAttrSet()?.GetParent()).toBe(heading.GetAttrSet());
     expect(node.GetAttr(RES_PARATR_ADJUST)).toMatchObject({});
@@ -129,7 +133,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(format.IsAuto()).toBe(true);
     format.SetAuto(false);
     expect(format.IsAuto()).toBe(false);
-    expect(format.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Block))).toBe(true);
+    expect(format.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Block, RES_PARATR_ADJUST))).toBe(true);
     const source = new SfxItemSet(pool, WRITER_TEXT_NODE_WHICH_RANGES);
     source.Put(new SfxInt16Item(RES_PARATR_LIST_LEVEL, 3));
     expect(format.SetFormatAttrSet(source)).toBe(true);
@@ -215,9 +219,9 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const style = writer.GetDfltTextFormatColl();
     const node = writer.paragraphs[0];
     if (node === undefined) throw new Error("Writer fixture has no text node.");
-    style.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD));
-    style.SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL));
-    style.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE));
+    style.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
+    style.SetFormatAttr(new SvxPostureItem(FontItalic.NORMAL, RES_CHRATR_POSTURE));
+    style.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.SINGLE, RES_CHRATR_UNDERLINE));
     expect(style.GetAttrSet().GetWeight().GetBoolValue()).toBe(true);
     expect(style.GetAttrSet().GetPosture().GetBoolValue()).toBe(true);
     expect(style.GetAttrSet().GetUnderline().GetBoolValue()).toBe(true);
@@ -349,7 +353,9 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const writer = createFixture();
     const node = writer.paragraphs[0];
     if (node === undefined) throw new Error("Writer fixture has no text node.");
-    writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center));
+    writer
+      .GetDfltTextFormatColl()
+      .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
     writer.GetTextFormatColl("heading-1").SetFormatName("Custom heading");
     node.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     node.SetParagraphAlignment("right");

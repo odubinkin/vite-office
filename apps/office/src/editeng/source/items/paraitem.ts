@@ -3,7 +3,6 @@
  */
 
 import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../svl/source/items/poolitem";
-import { RES_PARATR_ADJUST } from "../../../sw/inc/hintids";
 
 /** Matches the pinned SvxAdjust enumeration order. */
 export enum SvxAdjust {
@@ -21,8 +20,8 @@ export enum SvxAdjust {
 export class SvxAdjustItem extends SfxPoolItem {
   /** Creates a paragraph adjustment item. @param adjust - Paragraph adjustment value. @param which - Item identity. @returns Nothing. */
   public constructor(
-    private readonly adjust: SvxAdjust = SvxAdjust.ParaStart,
-    which: number = RES_PARATR_ADJUST,
+    private readonly adjust: SvxAdjust,
+    which: number,
   ) {
     super(which);
     if (!Number.isInteger(adjust) || adjust < SvxAdjust.Left || adjust >= SvxAdjust.End)

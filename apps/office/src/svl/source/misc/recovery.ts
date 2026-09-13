@@ -1,12 +1,12 @@
 /** @fileoverview Defines deterministic browser autosave recovery orchestration over injected serializable document storage without timers or UI policy. */
 
 import {
-  loadSnapshot,
-  saveSnapshot,
-  type DocumentSnapshot,
-  type DocumentStorageAdapter,
+  loadStorageRecord,
+  saveStorageRecord,
   type SerializableValue,
-} from "../../../sfx2/source/doc/docfile";
+  type VersionedStorageAdapter,
+  type VersionedStorageRecord,
+} from "./storage";
 
 /** Describes the durable recovery state for one caller-chosen document identity. */
 export interface RecoveryState<State extends SerializableValue> {
@@ -15,7 +15,7 @@ export interface RecoveryState<State extends SerializableValue> {
   /** Content generation of the last successful recovery write, or null before recovery exists. */
   readonly recoveryGeneration: number | null;
   /** Last successfully saved snapshot, or undefined before any recovery data exists. */
-  readonly snapshot: DocumentSnapshot<State> | undefined;
+  readonly snapshot: VersionedStorageRecord<State> | undefined;
 }
 
 /** Represents one deterministic autosave operation outcome. */
@@ -32,12 +32,12 @@ export type AutosaveResult<State extends SerializableValue> =
  * @throws {Error} When the storage load rejects without translation.
  */
 export async function recoverDocument<State extends SerializableValue>(
-  adapter: DocumentStorageAdapter<State>,
+  adapter: VersionedStorageAdapter<State>,
   id: string,
 ): Promise<RecoveryState<State>> {
-  const result = await loadSnapshot(adapter, id);
+  const result = await loadStorageRecord(adapter, id);
   return result.status === "found"
-    ? { id, recoveryGeneration: result.snapshot.version, snapshot: result.snapshot }
+    ? { id, recoveryGeneration: result.record.version, snapshot: result.record }
     : { id, recoveryGeneration: null, snapshot: undefined };
 }
 
@@ -53,18 +53,18 @@ export async function recoverDocument<State extends SerializableValue>(
  * @throws {Error} When snapshot validation or storage save rejects without translation.
  */
 export async function autosaveDocument<State extends SerializableValue>(
-  adapter: DocumentStorageAdapter<State>,
+  adapter: VersionedStorageAdapter<State>,
   recovery: RecoveryState<State>,
-  snapshot: DocumentSnapshot<State>,
+  snapshot: VersionedStorageRecord<State>,
 ): Promise<AutosaveResult<State>> {
   if (recovery.id === snapshot.id && recovery.recoveryGeneration === snapshot.version)
     return { recovery, status: "unchanged" };
-  const saved = await saveSnapshot(adapter, snapshot);
+  const saved = await saveStorageRecord(adapter, snapshot);
   return {
     recovery: {
       id: snapshot.id,
-      recoveryGeneration: saved.snapshot.version,
-      snapshot: saved.snapshot,
+      recoveryGeneration: saved.record.version,
+      snapshot: saved.record,
     },
     status: "saved",
   };

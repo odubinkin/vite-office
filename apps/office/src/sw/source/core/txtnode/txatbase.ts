@@ -173,7 +173,10 @@ export function createSwFormatAutoFormat(
       items.Put(new SvxPostureItem(attributes.italic ? FontItalic.NORMAL : FontItalic.NONE, which));
   if (attributes.underline !== inherited.underline)
     items.Put(
-      new SvxUnderlineItem(attributes.underline ? FontLineStyle.SINGLE : FontLineStyle.NONE),
+      new SvxUnderlineItem(
+        attributes.underline ? FontLineStyle.SINGLE : FontLineStyle.NONE,
+        RES_CHRATR_UNDERLINE,
+      ),
     );
   return new SwFormatAutoFormat(items);
 }

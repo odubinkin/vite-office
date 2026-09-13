@@ -2,10 +2,11 @@
  * @fileoverview Defines pure, JSON-serializable document identity and lifecycle transitions at the LibreOffice `sfx2/source/doc/docfac.cxx` ownership boundary.
  */
 
-import type { SuiteId } from "../../../framework/source/services/modulemanager";
-
 /** Identifies the permitted lifecycle states for a locally held browser document. */
 export type DocumentLifecycle = "closed" | "dirty" | "new" | "saved";
+
+/** Identifies the application module that owns a document body without coupling sfx2 to framework discovery. */
+export type DocumentModuleId = string;
 
 /** Describes one immutable, serializable document header and lifecycle state. */
 export interface OfficeDocument {
@@ -22,7 +23,7 @@ export interface OfficeDocument {
   /** Content generation corresponding to the last confirmed primary-medium save, or null before save. */
   readonly savedGeneration: number | null;
   /** Office suite that owns the eventual document body model. */
-  readonly suiteId: SuiteId;
+  readonly suiteId: DocumentModuleId;
   /** Human-readable document title retained as serializable metadata. */
   readonly title: string;
 }
@@ -32,7 +33,7 @@ export interface CreateDocumentInput {
   /** Stable non-empty document identity supplied by a caller or future identity service. */
   readonly id: string;
   /** Suite that owns the document body model. */
-  readonly suiteId: SuiteId;
+  readonly suiteId: DocumentModuleId;
   /** Non-empty human-readable title for the document. */
   readonly title: string;
 }
@@ -46,6 +47,7 @@ export interface CreateDocumentInput {
  */
 export function createDocument(input: CreateDocumentInput): OfficeDocument {
   assertNonBlank(input.id, "Document id");
+  assertNonBlank(input.suiteId, "Document module id");
   assertNonBlank(input.title, "Document title");
   return {
     contentGeneration: 0,

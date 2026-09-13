@@ -1,6 +1,6 @@
 /** @fileoverview Defines serializable browser worker request sequencing, cancellation, and stale-result classification without Worker runtime coupling. */
 
-import type { SerializableValue } from "../../../sfx2/source/doc/docfile";
+import type { SerializableValue } from "../../../svl/source/misc/storage";
 
 /** Describes a versioned request sent to a future browser worker. */
 export interface WorkerRequest<Payload extends SerializableValue> {

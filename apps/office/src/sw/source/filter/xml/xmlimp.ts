@@ -31,7 +31,9 @@ import {
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_POSTURE,
+  RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
+  RES_PARATR_ADJUST,
 } from "../../../inc/hintids";
 
 /** Imports styles.xml followed by content.xml into a canonical SwDoc. @param stylesXml - Named styles stream. @param contentXml - Body stream. @param metadata - Caller document identity. @param metaXml - Optional metadata stream. @returns Imported document. */
@@ -237,11 +239,11 @@ function applyNamedParagraphStyles(
   if (standard.alignment !== undefined)
     document
       .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxAdjustItem(toSvxAdjust(standard.alignment)));
+      .SetFormatAttr(new SvxAdjustItem(toSvxAdjust(standard.alignment), RES_PARATR_ADJUST));
   if (heading.alignment !== undefined)
     document
       .GetTextFormatColl("heading-1")
-      .SetFormatAttr(new SvxAdjustItem(toSvxAdjust(heading.alignment)));
+      .SetFormatAttr(new SvxAdjustItem(toSvxAdjust(heading.alignment), RES_PARATR_ADJUST));
   if (standard.properties !== undefined)
     putCharacterProperties(
       standard.properties,
@@ -342,7 +344,12 @@ function putCharacterProperties(
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       put(new SvxPostureItem(properties.italic ? FontItalic.NORMAL : FontItalic.NONE, which));
   if (properties.underline !== undefined)
-    put(new SvxUnderlineItem(properties.underline ? FontLineStyle.SINGLE : FontLineStyle.NONE));
+    put(
+      new SvxUnderlineItem(
+        properties.underline ? FontLineStyle.SINGLE : FontLineStyle.NONE,
+        RES_CHRATR_UNDERLINE,
+      ),
+    );
 }
 
 /** Rejects script-specific values that the bounded browser projection cannot distinguish. @param property - Property label. @param western - Western value. @param asian - Asian value. @param complex - Complex value. @returns Nothing. */

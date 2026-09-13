@@ -458,7 +458,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Sets the paragraph adjustment item. @param alignment - New paragraph alignment. @returns Nothing. */
   public SetParagraphAlignment(alignment: WriterParagraphAlignment): void {
-    this.SetAttr(new SvxAdjustItem(getSvxAdjust(alignment)));
+    this.SetAttr(new SvxAdjustItem(getSvxAdjust(alignment), RES_PARATR_ADJUST));
   }
 
   /** Sets the bounded numbering/list items. @param list - New list items. @returns Nothing. */

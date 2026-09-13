@@ -5,7 +5,14 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Desktop as App } from "../../../../framework/source/services/desktop";
+import { Desktop } from "../../../../framework/source/services/desktop";
+import { createOfficeModuleDescriptors } from "../../../../framework/source/services/modulemanager";
+import { createWriterModuleFactory } from "../../../source/uibase/app/swmodule";
+
+/** Renders the desktop through the same Writer module registration used by the composition root. @returns Configured desktop element. */
+function App(): React.JSX.Element {
+  return <Desktop modules={createOfficeModuleDescriptors([createWriterModuleFactory()])} />;
+}
 
 /**
  * Replaces the complete text content of one document-integrated editable Writer paragraph.

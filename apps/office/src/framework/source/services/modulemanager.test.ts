@@ -4,7 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { suiteDefinitions } from "./modulemanager";
+import { createOfficeModuleDescriptors, suiteDefinitions } from "./modulemanager";
 
 describe("suiteDefinitions" /**
  * Groups invariants for the initial suite inventory.
@@ -51,5 +51,29 @@ describe("suiteDefinitions" /**
           },
         ),
     ).toBe(true);
+  });
+
+  it("binds suite factories without importing their implementations into framework core" /** Verifies mapped and foundation descriptors plus duplicate and unknown registration guards. @returns Nothing; assertions cover the complete factory-registration contract. */, function bindsFactories(): void {
+    const createWorkspace =
+      /** Creates a neutral test workspace value. @returns Null test view. */
+      function createWorkspace(): null {
+        return null;
+      };
+    const modules = createOfficeModuleDescriptors([{ createWorkspace, suiteId: "writer" }]);
+    expect(modules).not.toBe(suiteDefinitions);
+    expect(modules[0]).toMatchObject({ createWorkspace, id: "writer" });
+    expect(modules[1]).not.toHaveProperty("createWorkspace");
+    expect(
+      /** Registers the same suite factory twice. @returns No descriptors because registration throws. */
+      () =>
+        createOfficeModuleDescriptors([
+          { createWorkspace, suiteId: "writer" },
+          { createWorkspace, suiteId: "writer" },
+        ]),
+    ).toThrow("Duplicate office module factory: writer");
+    expect(
+      /** Registers a runtime-invalid suite identity. @returns No descriptors because registration throws. */
+      () => createOfficeModuleDescriptors([{ createWorkspace, suiteId: "unknown" as "writer" }]),
+    ).toThrow("Unknown office module factory: unknown");
   });
 });

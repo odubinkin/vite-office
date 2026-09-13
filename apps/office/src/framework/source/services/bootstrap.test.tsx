@@ -7,6 +7,7 @@ import type { Root } from "react-dom/client";
 import { describe, expect, it } from "vitest";
 
 import { mountApplication } from "./bootstrap";
+import { createOfficeModuleDescriptors } from "./modulemanager";
 
 describe("mountApplication" /**
  * Groups browser-root lifecycle tests for the static entry adapter.
@@ -29,7 +30,7 @@ describe("mountApplication" /**
      * @returns Nothing; the created root is retained for deterministic cleanup.
      */
     function performMount(): void {
-      root = mountApplication(container);
+      root = mountApplication(container, createOfficeModuleDescriptors([]));
     }
 
     /**
@@ -59,7 +60,7 @@ describe("mountApplication" /**
      * @returns No usable root because the mount adapter throws synchronously.
      */
     function mountWithoutRoot(): Root {
-      return mountApplication(null);
+      return mountApplication(null, createOfficeModuleDescriptors([]));
     }
 
     expect(mountWithoutRoot).toThrowError("Vite Office could not find its #root mount element.");

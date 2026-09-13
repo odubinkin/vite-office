@@ -214,6 +214,16 @@
       ]
     },
     {
+      "path": "apps/office/src/svl/source/misc/storage.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "storage-contract",
+      "capabilityIds": [
+        "CAP-0114"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/inc/hintids.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -461,6 +471,16 @@
       "state": "active",
       "suite": "writer",
       "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/swmodule.tsx",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "application-services",
       "capabilityIds": [
         "CAP-0101"
       ]

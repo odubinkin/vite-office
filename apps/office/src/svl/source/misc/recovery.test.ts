@@ -2,34 +2,34 @@
 
 import { describe, expect, it } from "vitest";
 import { autosaveDocument, recoverDocument, type RecoveryState } from "./recovery";
-import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../sfx2/source/doc/docfile";
+import type { VersionedStorageAdapter, VersionedStorageRecord } from "./storage";
 
 /** Describes JSON-compatible state used by recovery fixtures. */
 type FixtureState = { readonly text: string };
 
 /** Provides a deterministic storage double that records immutable calls. */
-class StorageDouble implements DocumentStorageAdapter<FixtureState> {
+class StorageDouble implements VersionedStorageAdapter<FixtureState> {
   /** Stored snapshot returned by load. */
-  stored: DocumentSnapshot<FixtureState> | undefined;
+  stored: VersionedStorageRecord<FixtureState> | undefined;
   /** Calls received by save. */
-  readonly saves: DocumentSnapshot<FixtureState>[] = [];
+  readonly saves: VersionedStorageRecord<FixtureState>[] = [];
   /** Optional failure propagated from either operation. */
   failure: Error | undefined;
   /** Loads the configured snapshot. @param id - Ignored identity recorded by the caller. @returns Configured snapshot. @throws {Error} Configured storage failure. */
-  async load(id: string): Promise<DocumentSnapshot<FixtureState> | undefined> {
+  async load(id: string): Promise<VersionedStorageRecord<FixtureState> | undefined> {
     void id;
     if (this.failure) throw this.failure;
     return this.stored;
   }
   /** Saves a snapshot without mutation. @param snapshot - Snapshot retained for assertions. @returns Nothing after recording. @throws {Error} Configured storage failure. */
-  async save(snapshot: DocumentSnapshot<FixtureState>): Promise<void> {
+  async save(snapshot: VersionedStorageRecord<FixtureState>): Promise<void> {
     if (this.failure) throw this.failure;
     this.saves.push(snapshot);
   }
 }
 
 /** Creates a valid snapshot fixture. @param version - Revision assigned to the fixture. @returns Serializable snapshot. */
-function snapshot(version: number): DocumentSnapshot<FixtureState> {
+function snapshot(version: number): VersionedStorageRecord<FixtureState> {
   return { id: "document-1", state: { text: `v${version}` }, version };
 }
 

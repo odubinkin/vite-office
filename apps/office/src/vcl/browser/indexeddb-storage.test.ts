@@ -5,7 +5,7 @@
 import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it } from "vitest";
 
-import type { DocumentSnapshot } from "../../sfx2/source/doc/docfile";
+import type { VersionedStorageRecord } from "../../svl/source/misc/storage";
 import { IndexedDbDocumentStorageAdapter, type IndexedDbFactory } from "./indexeddb-storage";
 
 /** Describes the JSON-compatible snapshot body used by the IndexedDB fixtures. */
@@ -26,7 +26,7 @@ function createSnapshot(
   id = "document-1",
   version = 0,
   body = "First body",
-): DocumentSnapshot<IndexedDbFixtureState> {
+): VersionedStorageRecord<IndexedDbFixtureState> {
   return { id, state: { body }, version };
 }
 
@@ -167,7 +167,7 @@ describe("IndexedDbDocumentStorageAdapter" /**
       id: "document-4",
       state: Symbol("not-json"),
       version: 0,
-    } as unknown as DocumentSnapshot<IndexedDbFixtureState>;
+    } as unknown as VersionedStorageRecord<IndexedDbFixtureState>;
 
     await expect(adapter.save(invalidSnapshot)).rejects.toBeInstanceOf(Error);
     await expect(adapter.load("document-4")).resolves.toBeUndefined();

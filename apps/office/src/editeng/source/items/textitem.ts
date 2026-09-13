@@ -3,11 +3,6 @@
  */
 
 import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../svl/source/items/poolitem";
-import {
-  RES_CHRATR_POSTURE,
-  RES_CHRATR_UNDERLINE,
-  RES_CHRATR_WEIGHT,
-} from "../../../sw/inc/hintids";
 
 /** Matches LibreOffice FontWeight ordering from tools/fontenum.hxx. */
 export enum FontWeight {
@@ -59,8 +54,8 @@ export enum FontLineStyle {
 export class SvxWeightItem extends SfxPoolItem {
   /** Creates a weight item. @param weight - Font weight. @param which - Script-specific WhichId. @returns Nothing. */
   public constructor(
-    private readonly weight: FontWeight = FontWeight.NORMAL,
-    which: number = RES_CHRATR_WEIGHT,
+    private readonly weight: FontWeight,
+    which: number,
   ) {
     super(which);
     assertEnumValue(weight, FontWeight.DONTKNOW, FontWeight.BLACK, "SvxWeightItem");
@@ -100,8 +95,8 @@ export class SvxWeightItem extends SfxPoolItem {
 export class SvxPostureItem extends SfxPoolItem {
   /** Creates a posture item. @param posture - Font posture. @param which - Script-specific WhichId. @returns Nothing. */
   public constructor(
-    private readonly posture: FontItalic = FontItalic.NONE,
-    which: number = RES_CHRATR_POSTURE,
+    private readonly posture: FontItalic,
+    which: number,
   ) {
     super(which);
     assertEnumValue(posture, FontItalic.NONE, FontItalic.DONTKNOW, "SvxPostureItem");
@@ -141,8 +136,8 @@ export class SvxPostureItem extends SfxPoolItem {
 export class SvxUnderlineItem extends SfxPoolItem {
   /** Creates an underline item. @param style - Line style. @param which - Underline WhichId. @returns Nothing. */
   public constructor(
-    private readonly style: FontLineStyle = FontLineStyle.NONE,
-    which: number = RES_CHRATR_UNDERLINE,
+    private readonly style: FontLineStyle,
+    which: number,
   ) {
     super(which);
     assertEnumValue(style, FontLineStyle.NONE, FontLineStyle.BOLDWAVE, "SvxUnderlineItem");

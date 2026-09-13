@@ -48,15 +48,15 @@ export class SwAttrPool extends SfxItemPool {
         (value) => new SvxWeightItem(Number(value) as FontWeight, which),
       );
     this.RegisterDefaultItem(
-      new SvxUnderlineItem(FontLineStyle.NONE),
+      new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE),
       /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */
-      (value) => new SvxUnderlineItem(Number(value) as FontLineStyle),
+      (value) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
     );
     this.RegisterDefaultItem(
-      new SvxAdjustItem(),
+      new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST),
       /** Restores an adjustment item. @param value - Persisted enum value. @returns Concrete adjustment item. */
       function restoreAdjust(value): SvxAdjustItem {
-        return new SvxAdjustItem(value as SvxAdjust);
+        return new SvxAdjustItem(value as SvxAdjust, RES_PARATR_ADJUST);
       },
     );
     this.RegisterDefaultItem(
