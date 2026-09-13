@@ -1,10 +1,11 @@
 ---
 id: "202609130742-SXGE2Q"
 title: "Implement Stage 2 persistent Writer session and unified dispatch"
-status: "DOING"
+result_summary: "verified-202609130742-SXGE2Q"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-13T08:38:43.662Z"
+  updated_at: "2026-09-13T08:39:09.059Z"
   updated_by: "CODER"
   note: "verified-202609130742-SXGE2Q"
   attempts: 0
@@ -44,11 +45,16 @@ quality_review:
     - "SfxDispatcher resolves last-pushed shells first and centralizes execution, state, shortcuts, and invalidation."
     - "Writer lifecycle and editing state persist in SwDocShell, SwView, SwWrtShell, and SwPaM across React remount and New/Open/Save operations."
     - "No Stage 3 action-based undo or new product behavior was introduced; snapshot history remains explicitly temporary."
-commit: null
+commit:
+  hash: "10146ae8513c922f23d23f21a86acea5a248cd0c"
+  message: "🧪 SXGE2Q task: record Stage 2 verification"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609130742-SXGE2Q. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609130742-SXGE2Q"
+  -
+    type: "verify"
+    at: "2026-09-13T08:39:09.059Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609130742-SXGE2Q"
+  -
+    type: "status"
+    at: "2026-09-13T08:39:09.186Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609130742-SXGE2Q. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-13T08:38:43.713Z"
+doc_updated_at: "2026-09-13T08:39:09.186Z"
 doc_updated_by: "CODER"
 description: "Implement section 6 of docs/program/vite-office-upstream-parity-plan.md: persistent SwDocShell/SwView/SwWrtShell ownership, React external-store subscription, descriptor-based command dispatch and migration of menu/toolbar/shortcuts, closely following local upstream LibreOffice evidence without entering Stage 3 action-based undo."
 sections:
@@ -160,6 +179,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-13T08:39:09.059Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609130742-SXGE2Q
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T08:38:43.713Z, excerpt_hash=sha256:9cf67b1415b18f21020c474d2bbd7322ea9721b5d6b40520196a2fd61449234b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130742-SXGE2Q/blueprint/resolved-snapshot.json
+    - old_digest: ae06b912b7d24013de4df99ace610d33e15ea6fcf6b3972b04f3ce2cb1391e69
+    - current_digest: ae06b912b7d24013de4df99ace610d33e15ea6fcf6b3972b04f3ce2cb1391e69
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609130742-SXGE2Q
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609130742-SXGE2Q --result verified-202609130742-SXGE2Q --commit 10146ae8513c922f23d23f21a86acea5a248cd0c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert only the implementation and task-lifecycle commits associated with 202609130742-SXGE2Q.
@@ -170,6 +219,10 @@ sections:
     - Observation: Persistent session identity, shell-priority dispatch, shared UI command routing, command state, ODT lifecycle, and React remount behavior are covered.
       Impact: Stage 2 removes canonical Writer document and command ownership from React while preserving existing browser behavior.
       Resolution: Implemented persistent OfficeFrame/SwDocShell/SwView/SwWrtShell ownership and descriptor-based SfxDispatcher routing from pinned local LibreOffice sources.
+extensions:
+  implementation_commit:
+    hash: "3e6450165ead6b109fa93eb36deb665a55a39601"
+    message: "🧩 SXGE2Q code: implement persistent Writer dispatch session"
 id_source: "generated"
 ---
 ## Summary
@@ -260,6 +313,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609130742-SXGE2Q --result verified-202609130742-SXGE2Q --commit 3e6450165ead6b109fa93eb36deb665a55a39601
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-13T08:39:09.059Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609130742-SXGE2Q
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T08:38:43.713Z, excerpt_hash=sha256:9cf67b1415b18f21020c474d2bbd7322ea9721b5d6b40520196a2fd61449234b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130742-SXGE2Q/blueprint/resolved-snapshot.json
+- old_digest: ae06b912b7d24013de4df99ace610d33e15ea6fcf6b3972b04f3ce2cb1391e69
+- current_digest: ae06b912b7d24013de4df99ace610d33e15ea6fcf6b3972b04f3ce2cb1391e69
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609130742-SXGE2Q
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609130742-SXGE2Q --result verified-202609130742-SXGE2Q --commit 10146ae8513c922f23d23f21a86acea5a248cd0c
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
