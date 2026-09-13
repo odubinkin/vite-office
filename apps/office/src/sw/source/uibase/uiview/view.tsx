@@ -9,8 +9,6 @@ import {
   applyTransaction,
   createTransactionHistory,
   getCurrentTransactionState,
-  redoTransaction,
-  undoTransaction,
   type TransactionHistory,
 } from "../../../../sfx2/source/doc/docundomanager";
 import {
@@ -59,12 +57,15 @@ import { useWriterDocumentSelection, useWriterWorkspaceChrome } from "./viewstat
 import {
   getActiveWriterParagraph,
   applyWriterAlignmentTransaction,
+  acknowledgeWriterSave,
   applyWriterListKindTransaction,
   applyWriterListLevelTransaction,
   applyWriterStyleTransaction,
   createWriterWorkbenchDocument,
   getNextWriterParagraphId,
   getWorkbenchSelectionPosition,
+  redoWriterTransaction,
+  undoWriterTransaction,
 } from "./viewfunc";
 
 /** Describes the suite-selection visibility controlled by the application shell. */
@@ -590,10 +591,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       function undoWriterHistory(
         currentHistory: TransactionHistory<WriterDocument>,
       ): TransactionHistory<WriterDocument> {
-        const candidate = undoTransaction(currentHistory, { position: 0 });
-        return undoTransaction(currentHistory, {
-          position: getWorkbenchSelectionPosition(getCurrentTransactionState(candidate)),
-        });
+        return undoWriterTransaction(currentHistory);
       },
     );
   }
@@ -610,10 +608,7 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
       function redoWriterHistory(
         currentHistory: TransactionHistory<WriterDocument>,
       ): TransactionHistory<WriterDocument> {
-        const candidate = redoTransaction(currentHistory, { position: 0 });
-        return redoTransaction(currentHistory, {
-          position: getWorkbenchSelectionPosition(getCurrentTransactionState(candidate)),
-        });
+        return redoWriterTransaction(currentHistory);
       },
     );
   }
@@ -626,7 +621,15 @@ export function WriterWorkbench({ isActive }: WriterWorkbenchProps): React.JSX.E
     }
     setStoragePending(true);
     try {
-      await saveWriterDocument(writerStorage, writerDocument);
+      const saved = await saveWriterDocument(writerStorage, writerDocument);
+      setWriterHistory(
+        /** Applies the successful medium acknowledgement to the latest history state. @param currentHistory - Current Writer history, possibly newer than the persisted generation. @returns History with updated save generation and no new undo action. */
+        function acknowledgeCompletedSave(
+          currentHistory: TransactionHistory<WriterDocument>,
+        ): TransactionHistory<WriterDocument> {
+          return acknowledgeWriterSave(currentHistory, saved.snapshot.version);
+        },
+      );
       setStorageStatus("Saved locally in this browser.");
     } catch {
       setStorageStatus("Could not save locally.");

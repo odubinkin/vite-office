@@ -11,11 +11,14 @@ import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import { createTransactionHistory } from "../../../../sfx2/source/doc/docundomanager";
 import {
   applyWriterAlignmentTransaction,
+  acknowledgeWriterSave,
   applyWriterListKindTransaction,
   applyWriterListLevelTransaction,
   applyWriterStyleTransaction,
   getActiveWriterParagraph,
   getNextWriterParagraphId,
+  redoWriterTransaction,
+  undoWriterTransaction,
 } from "./viewfunc";
 
 /** Creates a two-paragraph Writer fixture whose identities expose a generated-ID collision. @returns Immutable Writer fixture. */
@@ -32,6 +35,89 @@ function createWriterFixture(): WriterDocument {
 describe("Writer workbench helpers" /** Groups pure focus and generated-ID helper tests. @returns Nothing; Vitest registers cases. */, function defineWriterWorkbenchHelperTests(): void {
   it("generates a non-colliding identity after the current body-length suffix" /** Verifies an occupied generated suffix is skipped deterministically. @returns Nothing; assertions validate identity generation. */, function generatesParagraphId(): void {
     expect(getNextWriterParagraphId(createWriterFixture())).toBe("writer-paragraph-4");
+  });
+
+  it("keeps a monotonic generation and the primary save mark across Undo and Redo" /**
+   * Verifies Writer history mirrors upstream modified-state restoration around the last save position.
+   * @returns Nothing; assertions validate generations and modified state.
+   */, function navigatesSavedHistory(): void {
+    const initial = createTransactionHistory(createWriterFixture(), { position: 0 });
+    const edited = applyWriterAlignmentTransaction(initial, "writer-paragraph-1", "center");
+    const saved = acknowledgeWriterSave(
+      edited,
+      edited.entries[edited.index]?.document.contentGeneration ?? -1,
+    );
+    const editedAgain = applyWriterStyleTransaction(saved, "writer-paragraph-1", "heading-1");
+    const undone = undoWriterTransaction(editedAgain);
+    const redone = redoWriterTransaction(undone);
+
+    expect(undone.entries[undone.index]?.document).toMatchObject({
+      contentGeneration: 4,
+      isModified: false,
+      savedGeneration: 2,
+    });
+    expect(redone.entries[redone.index]?.document).toMatchObject({
+      contentGeneration: 5,
+      isModified: true,
+      savedGeneration: 2,
+    });
+  });
+
+  it("preserves history identity when Undo or Redo is unavailable" /**
+   * Verifies history-bound navigation is an immutable no-op.
+   * @returns Nothing; both unavailable directions retain the same history object.
+   */, function preservesBoundedHistory(): void {
+    const initial = createTransactionHistory(createWriterFixture(), { position: 0 });
+    expect(undoWriterTransaction(initial)).toBe(initial);
+    expect(redoWriterTransaction(initial)).toBe(initial);
+  });
+
+  it("moves the single primary save mark when a later history entry is saved" /**
+   * Verifies an earlier save position becomes modified after the primary medium is replaced again.
+   * @returns Nothing; Undo and Redo are asserted around the moved save mark.
+   */, function movesPrimarySaveMark(): void {
+    const initial = createTransactionHistory(createWriterFixture(), { position: 0 });
+    const firstEdit = applyWriterAlignmentTransaction(initial, "writer-paragraph-1", "center");
+    const firstSave = acknowledgeWriterSave(firstEdit, 2);
+    const secondEdit = applyWriterStyleTransaction(firstSave, "writer-paragraph-1", "heading-1");
+    const secondSave = acknowledgeWriterSave(secondEdit, 3);
+    const undone = undoWriterTransaction(secondSave);
+    const redone = redoWriterTransaction(undone);
+
+    expect(undone.entries[undone.index]?.document).toMatchObject({
+      contentGeneration: 4,
+      isModified: true,
+      savedGeneration: 3,
+    });
+    expect(redone.entries[redone.index]?.document).toMatchObject({
+      contentGeneration: 5,
+      isModified: false,
+      savedGeneration: 3,
+    });
+  });
+
+  it("moves the primary save mark when a later history entry is saved" /**
+   * Verifies the former save position becomes modified and Redo returns to the new clean position.
+   * @returns Nothing; moved save-mark lifecycle state is asserted in both directions.
+   */, function movesWriterSaveMark(): void {
+    const initial = createTransactionHistory(createWriterFixture(), { position: 0 });
+    const firstEdit = applyWriterAlignmentTransaction(initial, "writer-paragraph-1", "center");
+    const firstSave = acknowledgeWriterSave(firstEdit, 2);
+    const secondEdit = applyWriterStyleTransaction(firstSave, "writer-paragraph-1", "heading-1");
+    const secondSave = acknowledgeWriterSave(secondEdit, 3);
+    const undone = undoWriterTransaction(secondSave);
+    const redone = redoWriterTransaction(undone);
+
+    expect(undone.entries[undone.index]?.document).toMatchObject({
+      contentGeneration: 4,
+      isModified: true,
+      savedGeneration: 3,
+    });
+    expect(redone.entries[redone.index]?.document).toMatchObject({
+      contentGeneration: 5,
+      isModified: false,
+      savedGeneration: 3,
+    });
   });
 
   it("uses the focused paragraph when it exists and the first paragraph after history makes it stale" /** Verifies formatting has a stable deterministic target across current and stale focus identities. @returns Nothing; assertions validate reference selection. */, function resolvesFocusedParagraph(): void {

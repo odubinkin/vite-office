@@ -21,6 +21,18 @@ const excludedDirectories = new Set([
 ]);
 const excludedFiles = new Set(["package-lock.json"]);
 const generatedPathPrefixes = ["docs/program/inventory/"];
+const sourceFileExtensions = new Set([
+  ".cjs",
+  ".css",
+  ".cts",
+  ".html",
+  ".js",
+  ".jsx",
+  ".mjs",
+  ".mts",
+  ".ts",
+  ".tsx",
+]);
 
 /**
  * Determines whether a directory is generated, vendored, or lifecycle-owned and therefore excluded.
@@ -50,6 +62,18 @@ function isGeneratedInventoryArtifact(relativePath) {
       return relativePath.startsWith(prefix);
     },
   );
+}
+
+/**
+ * Determines whether a repository file is authored executable or presentation source code.
+ *
+ * Machine-readable data and prose are intentionally outside the source-file decomposition gate.
+ *
+ * @param fileName - Repository file basename considered by the scanner.
+ * @returns True when the file extension belongs to an authored source-code format.
+ */
+function isSourceFile(fileName) {
+  return sourceFileExtensions.has(path.extname(fileName));
 }
 
 /**
@@ -83,7 +107,7 @@ async function collectAuthoredFiles(directoryPath) {
     const entryPath = path.join(directoryPath, entry.name);
     if (entry.isDirectory()) {
       files.push(...(await collectAuthoredFiles(entryPath)));
-    } else if (entry.isFile() && !excludedFiles.has(entry.name)) {
+    } else if (entry.isFile() && !excludedFiles.has(entry.name) && isSourceFile(entry.name)) {
       files.push(entryPath);
     }
   }

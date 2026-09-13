@@ -25,43 +25,37 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
   );
   expect(selectAllSelection).toContain("First Writer paragraph");
   expect(selectAllSelection).toContain("Second Writer paragraph");
-  const firstBox = await firstParagraph.boundingBox();
-  const secondBox = await secondParagraph.boundingBox();
-  if (firstBox === null || secondBox === null)
-    throw new Error("Writer paragraphs must have measurable boxes for pointer selection coverage.");
-  await page.evaluate(
+  const firstPoint = await firstParagraph.evaluate(
     /**
-     * Makes pointer geometry deterministic so the browser-facing selection bridge can be checked at partial text offsets.
-     *
-     * @param coordinates - Vertical paragraph bounds used to select the deterministic text endpoint.
-     * @returns Nothing; the page-local caret resolver is replaced for this isolated test page.
+     * Resolves a real rendered character position for the forward pointer anchor.
+     * @param paragraph - First rendered Writer paragraph.
+     * @returns Viewport point at UTF-16 offset five.
      */
-    function installDeterministicCaretRanges(
-      coordinates: Readonly<{ secondParagraphY: number }>,
-    ): void {
-      document.caretRangeFromPoint =
-        /** Resolves a repeatable Writer paragraph endpoint from the drag row. @param _x - Ignored horizontal coordinate. @param y - Viewport vertical coordinate that determines the test paragraph. @returns Collapsed range at the asserted partial offset. */
-        function resolveWriterTestCaret(_x, y): Range {
-          const paragraph = document.querySelectorAll<HTMLParagraphElement>(
-            "[data-writer-paragraph-id]",
-          )[y < coordinates.secondParagraphY ? 0 : 1] as HTMLParagraphElement;
-          const range = document.createRange();
-          range.setStart(paragraph.firstChild as Text, y < coordinates.secondParagraphY ? 5 : 6);
-          range.collapse(true);
-          return range;
-        };
+    function resolveFirstPointerPoint(paragraph): Readonly<{ x: number; y: number }> {
+      const range = document.createRange();
+      range.setStart(paragraph.firstChild as Text, 5);
+      range.setEnd(paragraph.firstChild as Text, 6);
+      const rectangle = range.getBoundingClientRect();
+      return { x: rectangle.x, y: rectangle.y + rectangle.height / 2 };
     },
-    { secondParagraphY: secondBox.y },
   );
-  await page.mouse.move(firstBox.x + 8, firstBox.y + firstBox.height / 2);
+  const secondPoint = await secondParagraph.evaluate(
+    /**
+     * Resolves a real rendered character position for the forward pointer focus.
+     * @param paragraph - Second rendered Writer paragraph.
+     * @returns Viewport point at UTF-16 offset six.
+     */
+    function resolveSecondPointerPoint(paragraph): Readonly<{ x: number; y: number }> {
+      const range = document.createRange();
+      range.setStart(paragraph.firstChild as Text, 6);
+      range.setEnd(paragraph.firstChild as Text, 7);
+      const rectangle = range.getBoundingClientRect();
+      return { x: rectangle.x, y: rectangle.y + rectangle.height / 2 };
+    },
+  );
+  await page.mouse.move(firstPoint.x, firstPoint.y);
   await page.mouse.down();
-  await page.mouse.move(
-    secondBox.x + Math.min(96, secondBox.width - 2),
-    secondBox.y + secondBox.height / 2,
-    {
-      steps: 8,
-    },
-  );
+  await page.mouse.move(secondPoint.x, secondPoint.y, { steps: 8 });
   await page.mouse.up();
   const pointerSelection = await secondParagraph.evaluate(
     /**
@@ -78,15 +72,9 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
     },
   );
   expect(pointerSelection).toEqual({ anchorOffset: 5, focusOffset: 6 });
-  await page.mouse.move(secondBox.x + 8, secondBox.y + secondBox.height / 2);
+  await page.mouse.move(secondPoint.x, secondPoint.y);
   await page.mouse.down();
-  await page.mouse.move(
-    firstBox.x + Math.min(96, firstBox.width - 2),
-    firstBox.y + firstBox.height / 2,
-    {
-      steps: 8,
-    },
-  );
+  await page.mouse.move(firstPoint.x, firstPoint.y, { steps: 8 });
   await page.mouse.up();
   const reversePointerSelection = await secondParagraph.evaluate(
     /**

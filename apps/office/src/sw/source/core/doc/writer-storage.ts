@@ -8,6 +8,7 @@ import {
   type DocumentStorageAdapter,
   type SerializableValue,
 } from "../../../../sfx2/source/doc/docfile";
+import { markDocumentSaved } from "../../../../sfx2/source/doc/docfac";
 import {
   normalizeWriterParagraphFormatting,
   serializeWriterDocument,
@@ -22,7 +23,7 @@ export type WriterSnapshotState = {
 };
 
 /**
- * Saves one Writer workbench document using its document identity and revision as snapshot metadata.
+ * Saves one Writer workbench document using its stable identity and content generation.
  *
  * @param adapter - Generic browser storage boundary invoked without mutation.
  * @param writerDocument - Immutable Writer document persisted as JSON-compatible state.
@@ -32,14 +33,23 @@ export type WriterSnapshotState = {
 export async function saveWriterDocument(
   adapter: DocumentStorageAdapter<WriterSnapshotState>,
   writerDocument: WriterDocument,
-) {
-  return saveSnapshot(adapter, {
+): Promise<
+  Readonly<{
+    snapshot: Awaited<ReturnType<typeof saveSnapshot<WriterSnapshotState>>>["snapshot"];
+    status: "saved";
+    writerDocument: WriterDocument;
+  }>
+> {
+  const saved = await saveSnapshot(adapter, {
     id: writerDocument.document.id,
     state: {
       writerDocument: serializeWriterDocument(writerDocument) as unknown as SerializableValue,
     },
-    version: writerDocument.document.revision,
+    version: writerDocument.document.contentGeneration,
   });
+  const acknowledged = writerDocument.clone();
+  acknowledged.document = markDocumentSaved(acknowledged.document, saved.snapshot.version);
+  return { ...saved, writerDocument: acknowledged };
 }
 
 /**
@@ -58,12 +68,10 @@ export async function loadWriterDocument(
   | { readonly status: "found"; readonly writerDocument: WriterDocument }
 > {
   const result = await loadSnapshot(adapter, id);
-  return result.status === "missing"
-    ? result
-    : {
-        status: "found",
-        writerDocument: normalizeWriterParagraphFormatting(
-          result.snapshot.state.writerDocument as unknown as WriterDocument,
-        ),
-      };
+  if (result.status === "missing") return result;
+  const writerDocument = normalizeWriterParagraphFormatting(
+    result.snapshot.state.writerDocument as unknown as WriterDocument,
+  );
+  writerDocument.document = markDocumentSaved(writerDocument.document, result.snapshot.version);
+  return { status: "found", writerDocument };
 }

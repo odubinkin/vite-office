@@ -11,6 +11,13 @@ outcome. It does not install browser key listeners, mutate application state,
 or supply menus, toolbars, undo/redo, localization, persistence, macros, or
 suite-specific commands. No upstream parity row is advanced by this foundation.
 
+The Writer menu module also exports the complete `writerUserCommands` inventory:
+31 visible command IDs, labels, and domain-agnostic capability IDs. The Stage 0
+runtime validator rejects duplicate IDs, unknown capability references, or a
+visible command omitted from that registry. This is an audit surface rather
+than a second dispatch implementation; command handlers remain in their
+existing Writer shells and view composition.
+
 The Writer workbench uses a separate browser-event adapter before dispatching
 through this registry. Ctrl or Meta Z invokes Undo; Ctrl or Meta Shift Z invokes
 Redo when the matching history command is enabled. A browser default is

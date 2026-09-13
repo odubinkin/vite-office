@@ -1,0 +1,797 @@
+{
+  "schemaVersion": 1,
+  "modules": [
+    {
+      "path": "apps/office/src/editeng/source/items/paraitem.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/editeng/source/items/textitem.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/framework/source/accelerators/keymapping.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "accelerators",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/framework/source/dispatch/dispatchprovider.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": []
+    },
+    {
+      "path": "apps/office/src/framework/source/services/SuiteCard.tsx",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": []
+    },
+    {
+      "path": "apps/office/src/framework/source/services/bootstrap.tsx",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": []
+    },
+    {
+      "path": "apps/office/src/framework/source/services/desktop.tsx",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/framework/source/services/messages.ts",
+      "classification": "local-infrastructure",
+      "state": "foundation",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/framework/source/services/modulemanager.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+      "classification": "local-infrastructure",
+      "state": "foundation",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/main.tsx",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "composition",
+      "capabilityIds": []
+    },
+    {
+      "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/package/source/zipapi/CRC32.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/package/source/zipapi/ZipFile.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0114"
+      ]
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/docfile.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0114"
+      ]
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/docundomanager.ts",
+      "classification": "mapping-too-broad",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
+      ]
+    },
+    {
+      "path": "apps/office/src/svl/source/items/itempool.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/svl/source/items/itemset.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/svl/source/items/poolitem.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/svl/source/misc/recovery.ts",
+      "classification": "upstream-mechanism",
+      "state": "foundation",
+      "suite": "shared",
+      "subsystem": "recovery",
+      "capabilityIds": [
+        "CAP-0114"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/format.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/crsr/pam.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0110",
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/fmtcol.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/list.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/number.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0114"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/writer.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/node.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/para/paratr.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-shell",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0114"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/mainwn.tsx",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "clipboard-transfer",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0106",
+        "CAP-0108",
+        "CAP-0110"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/listsh.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "numbering",
+      "capabilityIds": [
+        "CAP-0107"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/textsh.ts",
+      "classification": "mapping-too-broad",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "command-shell",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0106",
+        "CAP-0110"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/txtattr.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "character-formatting",
+      "capabilityIds": [
+        "CAP-0109"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/txtnum.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "numbering",
+      "capabilityIds": [
+        "CAP-0105"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uiview/view.tsx",
+      "classification": "mapping-too-broad",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "workbench-session",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0102",
+        "CAP-0103",
+        "CAP-0104",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0110",
+        "CAP-0113",
+        "CAP-0114"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
+      "classification": "mapping-too-broad",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "workbench-controller",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0112",
+        "CAP-0114"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uiview/viewstat.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "workspace-view",
+      "capabilityIds": [
+        "CAP-0104"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "selection",
+      "capabilityIds": [
+        "CAP-0103"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "numbering",
+      "capabilityIds": [
+        "CAP-0107"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "numbering",
+      "capabilityIds": [
+        "CAP-0105"
+      ]
+    },
+    {
+      "path": "apps/office/src/vcl/browser/browser-clipboard.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-platform",
+      "capabilityIds": [
+        "CAP-0106",
+        "CAP-0110"
+      ]
+    },
+    {
+      "path": "apps/office/src/vcl/browser/browser-download.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-platform",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/vcl/browser/browser-file.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-platform",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/vcl/browser/indexeddb-storage.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-platform",
+      "capabilityIds": [
+        "CAP-0114"
+      ]
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    }
+  ],
+  "internalOperations": [
+    {
+      "id": "writer.internal.move-paragraph",
+      "description": "Reorders an existing paragraph but has no current user command.",
+      "classification": "out-of-parity-scope",
+      "capabilityId": "CAP-0111"
+    },
+    {
+      "id": "writer.internal.remove-paragraph",
+      "description": "Removes a paragraph while preserving the non-empty body invariant but has no standalone user command.",
+      "classification": "out-of-parity-scope",
+      "capabilityId": "CAP-0111"
+    }
+  ],
+  "uiBehaviors": [
+    {
+      "id": "writer.ui.contenteditable-input",
+      "description": "Native contentEditable input is adapted into bounded Writer mutations without a standalone dispatch ID.",
+      "classification": "mapping-too-broad",
+      "capabilityId": "CAP-0111"
+    },
+    {
+      "id": "writer.ui.focus-restoration",
+      "description": "DOM focus and caret restoration are browser-only projection behavior.",
+      "classification": "browser-adaptation",
+      "capabilityId": "CAP-0103"
+    },
+    {
+      "id": "writer.ui.pending-character-format",
+      "description": "Collapsed-caret pending character formatting is session UI state mapped by the bounded formatting record.",
+      "classification": "mapping-too-broad",
+      "capabilityId": "CAP-0109"
+    },
+    {
+      "id": "writer.ui.pointer-selection",
+      "description": "Pointer selection is read from the DOM adapter before conversion to Writer ranges.",
+      "classification": "browser-adaptation",
+      "capabilityId": "CAP-0103"
+    }
+  ],
+  "placeholderSuites": [
+    "base",
+    "calc",
+    "chart",
+    "draw",
+    "impress",
+    "math"
+  ]
+}

@@ -9,12 +9,18 @@ export type DocumentLifecycle = "closed" | "dirty" | "new" | "saved";
 
 /** Describes one immutable, serializable document header and lifecycle state. */
 export interface OfficeDocument {
+  /** Monotonic generation advanced by every successful domain-content mutation. */
+  readonly contentGeneration: number;
   /** Stable caller-provided document identity; generation and persistence remain separate platform concerns. */
   readonly id: string;
+  /** Whether the current content differs from the last confirmed primary-medium state. */
+  readonly isModified: boolean;
   /** Current lifecycle state, independent of any React component or browser capability. */
   readonly lifecycle: DocumentLifecycle;
-  /** Monotonic local revision incremented only when a state-changing transition succeeds. */
-  readonly revision: number;
+  /** Content generation most recently persisted as a recovery snapshot, or null before recovery. */
+  readonly recoveryGeneration: number | null;
+  /** Content generation corresponding to the last confirmed primary-medium save, or null before save. */
+  readonly savedGeneration: number | null;
   /** Office suite that owns the eventual document body model. */
   readonly suiteId: SuiteId;
   /** Human-readable document title retained as serializable metadata. */
@@ -35,16 +41,19 @@ export interface CreateDocumentInput {
  * Creates a new immutable document header with its initial unsaved lifecycle state.
  *
  * @param input - Complete caller-owned identity, suite, and title metadata.
- * @returns A JSON-serializable new document at revision zero.
+ * @returns A JSON-serializable unsaved document at content generation zero.
  * @throws {Error} When id or title is blank after trimming.
  */
 export function createDocument(input: CreateDocumentInput): OfficeDocument {
   assertNonBlank(input.id, "Document id");
   assertNonBlank(input.title, "Document title");
   return {
+    contentGeneration: 0,
     id: input.id,
+    isModified: false,
     lifecycle: "new",
-    revision: 0,
+    recoveryGeneration: null,
+    savedGeneration: null,
     suiteId: input.suiteId,
     title: input.title,
   };
@@ -54,40 +63,138 @@ export function createDocument(input: CreateDocumentInput): OfficeDocument {
  * Marks an open document dirty after a future body-editing operation has changed its serializable content.
  *
  * @param document - Immutable prior document state that is not mutated.
- * @returns A new dirty document with an incremented revision, or the same dirty document when no state changes.
+ * @returns A new dirty document with an incremented content generation.
  * @throws {Error} When the document is closed.
  */
 export function markDocumentDirty(document: OfficeDocument): OfficeDocument {
   assertOpen(document);
-  return document.lifecycle === "dirty"
-    ? document
-    : { ...document, lifecycle: "dirty", revision: document.revision + 1 };
+  return {
+    ...document,
+    contentGeneration: document.contentGeneration + 1,
+    isModified: true,
+    lifecycle: "dirty",
+  };
 }
 
 /**
  * Marks an open document saved after a future persistence adapter completes successfully.
  *
  * @param document - Immutable prior document state that is not mutated.
- * @returns A new saved document with an incremented revision, or the same saved document when no state changes.
+ * @param generation - Generation whose primary-medium write completed successfully.
+ * @returns State acknowledging exactly the persisted generation without changing content generation.
  * @throws {Error} When the document is closed.
  */
-export function markDocumentSaved(document: OfficeDocument): OfficeDocument {
+export function markDocumentSaved(
+  document: OfficeDocument,
+  generation = document.contentGeneration,
+): OfficeDocument {
   assertOpen(document);
-  return document.lifecycle === "saved"
+  assertAcknowledgedGeneration(document, generation, "Saved generation");
+  const isModified = generation !== document.contentGeneration;
+  if (
+    document.savedGeneration === generation &&
+    document.isModified === isModified &&
+    document.lifecycle === (isModified ? "dirty" : "saved")
+  )
+    return document;
+  return {
+    ...document,
+    isModified,
+    lifecycle: isModified ? "dirty" : "saved",
+    savedGeneration: generation,
+  };
+}
+
+/**
+ * Acknowledges a successfully persisted recovery snapshot independently of the primary medium.
+ *
+ * @param document - Immutable prior document state that is not mutated.
+ * @param generation - Content generation written to recovery storage.
+ * @returns State with updated recovery generation and unchanged modified/save semantics.
+ */
+export function markDocumentRecoverySaved(
+  document: OfficeDocument,
+  generation = document.contentGeneration,
+): OfficeDocument {
+  assertOpen(document);
+  assertAcknowledgedGeneration(document, generation, "Recovery generation");
+  return document.recoveryGeneration === generation
     ? document
-    : { ...document, lifecycle: "saved", revision: document.revision + 1 };
+    : { ...document, recoveryGeneration: generation };
+}
+
+/**
+ * Marks whether a historical entry is the current primary save position without changing content.
+ *
+ * LibreOffice keeps this concern in `SwUndoManager::m_UndoSaveMark`; the browser snapshot history
+ * stores the equivalent bit on each entry so a moved save mark remains deterministic.
+ *
+ * @param document - Open historical document metadata.
+ * @param isSavePosition - Whether this entry is the current primary save position.
+ * @returns Metadata with matching modified and lifecycle state but unchanged generations.
+ */
+export function markDocumentHistorySavePosition(
+  document: OfficeDocument,
+  isSavePosition: boolean,
+): OfficeDocument {
+  assertOpen(document);
+  const isModified = !isSavePosition;
+  const lifecycle = isSavePosition ? "saved" : "dirty";
+  return document.isModified === isModified && document.lifecycle === lifecycle
+    ? document
+    : { ...document, isModified, lifecycle };
+}
+
+/**
+ * Applies a history navigation as a fresh content mutation while retaining current save/recovery checkpoints.
+ *
+ * @param current - Current lifecycle state before Undo or Redo.
+ * @param restored - Historical content state selected by Undo or Redo.
+ * @returns Restored lifecycle metadata with a new monotonic content generation.
+ */
+export function markDocumentHistoryRestored(
+  current: OfficeDocument,
+  restored: OfficeDocument,
+): OfficeDocument {
+  assertOpen(current);
+  assertOpen(restored);
+  if (current.id !== restored.id) throw new Error("History document identity must remain stable.");
+  const contentGeneration = current.contentGeneration + 1;
+  return {
+    ...restored,
+    contentGeneration,
+    isModified: restored.isModified,
+    lifecycle: restored.isModified ? "dirty" : "saved",
+    recoveryGeneration: current.recoveryGeneration,
+    savedGeneration: current.savedGeneration,
+  };
 }
 
 /**
  * Closes an open document without performing persistence; save prompting belongs to a future workbench policy.
  *
  * @param document - Immutable prior document state that is not mutated.
- * @returns A new closed document with an incremented revision, or the same closed document when no state changes.
+ * @returns A new closed document without changing content or persistence generations.
  */
 export function closeDocument(document: OfficeDocument): OfficeDocument {
-  return document.lifecycle === "closed"
-    ? document
-    : { ...document, lifecycle: "closed", revision: document.revision + 1 };
+  return document.lifecycle === "closed" ? document : { ...document, lifecycle: "closed" };
+}
+
+/**
+ * Validates a generation acknowledged by primary or recovery persistence.
+ *
+ * @param document - Current document whose existing generation bounds the acknowledgement.
+ * @param generation - Candidate integral generation to acknowledge.
+ * @param label - Human-readable persistence kind for deterministic errors.
+ * @returns Nothing after successful validation.
+ */
+function assertAcknowledgedGeneration(
+  document: OfficeDocument,
+  generation: number,
+  label: string,
+): void {
+  if (!Number.isInteger(generation) || generation < 0 || generation > document.contentGeneration)
+    throw new Error(`${label} must identify existing document content.`);
 }
 
 /**

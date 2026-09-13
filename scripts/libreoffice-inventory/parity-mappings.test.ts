@@ -20,17 +20,8 @@ function createManifestSource(overrides: Readonly<Record<string, unknown>> = {})
   return JSON.stringify({
     baselineCommit: "pinned-commit",
     baselineTag: "pinned-tag",
-    records: [
-      {
-        capability: "A bounded Writer command",
-        gaps: ["Browser behavior is intentionally narrower."],
-        id: "LO-WRITER-0101",
-        local: createEvidence("local"),
-        status: "implemented",
-        upstream: createEvidence("upstream"),
-      },
-    ],
-    schemaVersion: 1,
+    records: [createRecord("LO-WRITER-0101")],
+    schemaVersion: 2,
     ...overrides,
   });
 }
@@ -78,6 +69,8 @@ describe("parity mappings" /**
       exceptionCount: 0,
       exceptions: [],
       gapCount: 1,
+      implementedCount: 1,
+      recordCount: 1,
       resolvedEvidence: [
         { kind: "implementation", path: "local-implementation.ts", side: "local" },
         { kind: "tests", path: "local-tests.ts", side: "local" },
@@ -86,7 +79,8 @@ describe("parity mappings" /**
         { kind: "tests", path: "upstream-tests.ts", side: "upstream" },
         { kind: "docs", path: "upstream-docs.md", side: "upstream" },
       ],
-      schemaVersion: 1,
+      schemaVersion: 2,
+      verifiedCount: 0,
     });
   });
 
@@ -97,7 +91,7 @@ describe("parity mappings" /**
    */, function rejectsInvalidDocumentContracts(): void {
     expectInvalid("{");
     expectInvalid("[]");
-    expectInvalid(createManifestSource({ schemaVersion: 2 }));
+    expectInvalid(createManifestSource({ schemaVersion: 1 }));
     expectInvalid(createManifestSource({ baselineCommit: "other" }));
     expectInvalid(createManifestSource({ baselineTag: "other" }));
     expectInvalid(createManifestSource({ records: [] }));
@@ -106,14 +100,14 @@ describe("parity mappings" /**
         records: [createRecord("LO-WRITER-0102"), createRecord("LO-WRITER-0101")],
       }),
     );
-    expectInvalid(createManifestSource({ records: [{ id: "LO-CALC-0101" }] }));
+    expectInvalid(createManifestSource({ records: [{ id: "invalid" }] }));
     expectInvalid(createManifestSource({ records: [null] }));
     expectInvalid(
-      createManifestSource({ records: [{ ...createRecord("LO-WRITER-0101"), status: "bad" }] }),
+      createManifestSource({ records: [{ ...createRecord("LO-WRITER-0101"), maturity: "bad" }] }),
     );
     expectInvalid(
       createManifestSource({
-        records: [{ ...createRecord("LO-WRITER-0101"), gaps: ["gap"], status: "mapped" }],
+        records: [{ ...createRecord("LO-WRITER-0101"), gaps: ["gap"], maturity: "verified" }],
       }),
     );
     expectInvalid(
@@ -142,6 +136,153 @@ describe("parity mappings" /**
         ],
       }),
     );
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), capabilityId: "LO-WRITER-0101" }],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          createRecord("LO-WRITER-0101"),
+          { ...createRecord("LO-WRITER-0102"), capabilityId: "CAP-0101" },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), assertions: [] }],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), assertions: [], manualContract: "" }],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), suite: "format" }],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), type: "macro" }],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), stackDivergence: null }],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            stackDivergence: { kind: "native-reuse", rationale: "Not allowlisted." },
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            gaps: [],
+            maturity: "verified",
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            gaps: [],
+            maturity: "verified",
+            verification: null,
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            gaps: [],
+            maturity: "verified",
+            verification: { ...createVerification(), commit: "not-a-hash" },
+          },
+        ],
+      }),
+    );
+  });
+
+  it("accepts every Stage 0 suite, type, maturity, and stack-divergence value" /**
+   * Verifies the full closed schema vocabulary, manual contracts, and verified reporting.
+   *
+   * @returns A promise resolving after the vocabulary report is checked.
+   */, async function acceptsSchemaVocabulary(): Promise<void> {
+    const exception = {
+      approvedBy: "user decision",
+      disposition: "not-implementable",
+      rationale: "Native integration has no browser counterpart.",
+      reason: "browser-runtime-inapplicable",
+    };
+    const coordinates = [
+      ["LO-BASE-0001", "CAP-0001", "base", "command", "planned", "none"],
+      ["LO-CALC-0002", "CAP-0002", "calc", "model", "mapped", "browser-adaptation"],
+      ["LO-CHART-0003", "CAP-0003", "chart", "filter", "implemented", "local-infrastructure"],
+      ["LO-DRAW-0004", "CAP-0004", "draw", "platform", "verified", "none"],
+      ["LO-IMPRESS-0005", "CAP-0005", "impress", "lifecycle", "planned", "none"],
+      ["LO-MATH-0006", "CAP-0006", "math", "infrastructure", "mapped", "none"],
+      ["LO-SHARED-0007", "CAP-0007", "shared", "command", "implemented", "none"],
+      ["LO-WRITER-0008", "CAP-0008", "writer", "model", "exception-approved", "none"],
+    ] as const;
+    const records = coordinates.map(
+      /**
+       * Creates one valid record exercising the selected schema coordinates.
+       * @param coordinate - ID, ownership, maturity, and divergence tuple.
+       * @param index - Tuple index used to select the manual-contract fixture.
+       * @returns Valid authored parity record.
+       */
+      function createVocabularyRecord(coordinate, index) {
+        const [id, capabilityId, suite, type, maturity, kind] = coordinate;
+        const isClosed = maturity === "verified" || maturity === "exception-approved";
+        return {
+          ...createRecord(id),
+          assertions: index === 0 ? [] : ["Mapped assertion."],
+          capabilityId,
+          ...(maturity === "exception-approved" ? { exception } : {}),
+          gaps: maturity === "verified" ? [] : ["Visible gap."],
+          ...(index === 0 ? { manualContract: "Review the bounded behavior manually." } : {}),
+          maturity,
+          stackDivergence: { kind, rationale: "Reviewed Stage 0 classification." },
+          suite,
+          type,
+          ...(isClosed ? { verification: createVerification() } : {}),
+        };
+      },
+    );
+    const manifest = parseParityMappingManifest(createManifestSource({ records }), baseline);
+    const report = await validateParityMappingEvidence(
+      manifest,
+      /**
+       * Returns synthetic evidence containing its marker.
+       * @param path - Rooted synthetic evidence path.
+       * @returns A promise resolving to marker-bearing content.
+       */
+      async function readVocabularyEvidence(path: string): Promise<string> {
+        return path.replace(/^(local-root|upstream-root)\//, "").replace(/\.(md|ts)$/, "");
+      },
+      { local: "local-root", upstream: "upstream-root" },
+    );
+    expect(report).toMatchObject({ implementedCount: 2, recordCount: 8, verifiedCount: 1 });
+    expect(manifest.records[0]?.manualContract).toBe("Review the bounded behavior manually.");
+    expect(manifest.records[3]?.verification).toEqual(createVerification());
   });
 
   it("requires auditable exceptions for whole capabilities and individual evidence references" /**
@@ -164,7 +305,8 @@ describe("parity mappings" /**
               exception,
               gaps: ["Explicitly approved."],
               local: { ...createEvidence("local"), implementation: [], tests: [] },
-              status: "exception-approved",
+              maturity: "exception-approved",
+              verification: createVerification(),
             },
           ],
         }),
@@ -194,7 +336,7 @@ describe("parity mappings" /**
             ...createRecord("LO-WRITER-0101"),
             exception: { ...exception, disposition: "implemented" },
             gaps: ["Explicitly approved."],
-            status: "exception-approved",
+            maturity: "exception-approved",
           },
         ],
       }),
@@ -220,7 +362,7 @@ describe("parity mappings" /**
     );
     expectInvalid(
       createManifestSource({
-        records: [{ ...createRecord("LO-WRITER-0101"), status: "exception-approved" }],
+        records: [{ ...createRecord("LO-WRITER-0101"), maturity: "exception-approved" }],
       }),
     );
     expectInvalid(
@@ -233,7 +375,7 @@ describe("parity mappings" /**
             ...createRecord("LO-WRITER-0101"),
             exception,
             gaps: [],
-            status: "exception-approved",
+            maturity: "exception-approved",
           },
         ],
       }),
@@ -244,7 +386,7 @@ describe("parity mappings" /**
           {
             ...createRecord("LO-WRITER-0101"),
             exception: { ...exception, approvedBy: "" },
-            status: "exception-approved",
+            maturity: "exception-approved",
           },
         ],
       }),
@@ -256,7 +398,7 @@ describe("parity mappings" /**
             ...createRecord("LO-WRITER-0101"),
             exception: { ...exception, reason: "not-a-browser-reason" },
             gaps: ["Explicitly approved."],
-            status: "exception-approved",
+            maturity: "exception-approved",
           },
         ],
       }),
@@ -264,7 +406,7 @@ describe("parity mappings" /**
     expectInvalid(
       createManifestSource({
         records: [
-          { ...createRecord("LO-WRITER-0101"), exception: null, status: "exception-approved" },
+          { ...createRecord("LO-WRITER-0101"), exception: null, maturity: "exception-approved" },
         ],
       }),
     );
@@ -295,7 +437,8 @@ describe("parity mappings" /**
             exception: capabilityException,
             gaps: ["Browser runtime exception."],
             local: { ...createEvidence("local"), implementation: [], tests: [] },
-            status: "exception-approved",
+            maturity: "exception-approved",
+            verification: createVerification(),
             upstream: {
               ...createEvidence("upstream"),
               tests: [
@@ -367,13 +510,27 @@ describe("parity mappings" /**
  */
 function createRecord(id: string): Record<string, unknown> {
   return {
+    assertions: ["The pinned upstream test asserts the bounded Writer command behavior."],
     capability: "A bounded Writer command",
+    capabilityId: id.replace("LO-WRITER", "CAP"),
     gaps: ["Browser behavior is intentionally narrower."],
     id,
     local: createEvidence("local"),
-    status: "implemented",
+    maturity: "implemented",
+    stackDivergence: {
+      kind: "browser-adaptation",
+      rationale: "The browser supplies the platform integration boundary.",
+    },
+    subsystem: "test",
+    suite: "writer",
+    type: "command",
     upstream: createEvidence("upstream"),
   };
+}
+
+/** Creates complete closure evidence for exception and verified-record fixtures. @returns Valid closure evidence. */
+function createVerification(): Record<string, string> {
+  return { commit: "abcdef1", evidence: "npm test passed", taskId: "TASK-1" };
 }
 
 /**

@@ -4,7 +4,7 @@ title: "Implement Stage 0 upstream parity foundation"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-13T07:04:22.682Z"
+  updated_by: "CODER"
+  note: "Stage 0 lifecycle, inventory, docs, and regression checks pass."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved Stage 0 lifecycle generations, parity inventory validation, documentation synchronization, and regression coverage."
+  -
+    type: "verify"
+    at: "2026-09-13T07:04:22.682Z"
+    author: "CODER"
+    state: "ok"
+    note: "Stage 0 lifecycle, inventory, docs, and regression checks pass."
 doc_version: 3
-doc_updated_at: "2026-09-13T06:11:21.567Z"
+doc_updated_at: "2026-09-13T07:04:22.758Z"
 doc_updated_by: "CODER"
 description: "Implement Stage 0 of docs/program/vite-office-upstream-parity-plan.md: lifecycle generations, parity record model and inventory, stronger validators, synchronized documentation, and required tests."
 sections:
@@ -59,9 +65,41 @@ sections:
     5. Inspect git diff and git status --short --untracked-files=all. Expected: only approved Stage 0 changes and Agentplane task artifacts are present; any residual gap is recorded in Findings.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-13T07:04:22.682Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Stage 0 lifecycle, inventory, docs, and regression checks pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T07:04:22.140Z, excerpt_hash=sha256:2331c405946581c51c7038ab03df7734c2d0fd161d1aecbeaaf93c4bc0f0d37b
+
+    Details:
+
+    Command: focused lifecycle and recovery Vitest suite. Result: pass. Evidence: 5 files, 22 tests. Scope: content/save/recovery generations, failed saves, autosave, and moved Undo/Redo save marks. Command: focused parity inventory Vitest suite plus npm run inventory:parity. Result: pass. Evidence: 3 files, 12 tests; 14 implemented records, complete runtime and 31-command inventory. Scope: schema, evidence, gap, exception, closed-record, module, operation, and command validation. Command: npm run verify. Result: pass. Evidence: 42 app test files and 175 tests at 100% coverage; 31 inventory test files and 79 tests at 100% coverage; 8 Chromium E2E tests; build, static, JSDoc, formatting, lint, typecheck, and source-file-size gates passed. Scope: repository-wide Stage 0 regression surface. Command: node .agentplane/policy/check-routing.mjs and ap doctor. Result: pass. Evidence: policy routing OK; doctor OK with one pre-existing unrelated warning. Scope: policy and workflow health.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130610-CYP0F8/blueprint/resolved-snapshot.json
+    - old_digest: 9e32a5a1b013688e1028d9f367fdbfab5e6c00e21e0382428f9ab41675dee088
+    - current_digest: 9e32a5a1b013688e1028d9f367fdbfab5e6c00e21e0382428f9ab41675dee088
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609130610-CYP0F8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609130610-CYP0F8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the Stage 0 implementation and task close commits using normal non-destructive Git history operations, then rerun the focused lifecycle and inventory tests plus policy routing validation. No data migration or external rollback is required."
-  Findings: "No material drift identified during planning."
+  Findings: "Implemented against the pinned LibreOffice baseline: SfxObjectShell modified/save transitions, SfxBaseModel recovery acknowledgement, and SwUndoManager save-mark behavior. Stage 0 inventory reports 14 implemented and 0 verified capabilities; unresolved semantic gaps remain explicit. The initially flaky pointer-selection E2E used fixed pixel coordinates and was repaired to derive endpoints from rendered DOM ranges; it then passed five repeated Chromium runs and the full suite. Agentplane doctor passes with one pre-existing warning about a prior DONE task commit reference and informational fallback-hook notices. No network access or material scope drift occurred. The user-provided parity plan remains an intentionally untracked reviewed artifact."
 id_source: "generated"
 ---
 ## Summary
@@ -93,6 +131,38 @@ Implement Stage 0 of the approved upstream-parity plan: correct Writer lifecycle
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-13T07:04:22.682Z — VERIFY — ok
+
+By: CODER
+
+Note: Stage 0 lifecycle, inventory, docs, and regression checks pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-13T07:04:22.140Z, excerpt_hash=sha256:2331c405946581c51c7038ab03df7734c2d0fd161d1aecbeaaf93c4bc0f0d37b
+
+Details:
+
+Command: focused lifecycle and recovery Vitest suite. Result: pass. Evidence: 5 files, 22 tests. Scope: content/save/recovery generations, failed saves, autosave, and moved Undo/Redo save marks. Command: focused parity inventory Vitest suite plus npm run inventory:parity. Result: pass. Evidence: 3 files, 12 tests; 14 implemented records, complete runtime and 31-command inventory. Scope: schema, evidence, gap, exception, closed-record, module, operation, and command validation. Command: npm run verify. Result: pass. Evidence: 42 app test files and 175 tests at 100% coverage; 31 inventory test files and 79 tests at 100% coverage; 8 Chromium E2E tests; build, static, JSDoc, formatting, lint, typecheck, and source-file-size gates passed. Scope: repository-wide Stage 0 regression surface. Command: node .agentplane/policy/check-routing.mjs and ap doctor. Result: pass. Evidence: policy routing OK; doctor OK with one pre-existing unrelated warning. Scope: policy and workflow health.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609130610-CYP0F8/blueprint/resolved-snapshot.json
+- old_digest: 9e32a5a1b013688e1028d9f367fdbfab5e6c00e21e0382428f9ab41675dee088
+- current_digest: 9e32a5a1b013688e1028d9f367fdbfab5e6c00e21e0382428f9ab41675dee088
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609130610-CYP0F8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609130610-CYP0F8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -101,4 +171,4 @@ Revert the Stage 0 implementation and task close commits using normal non-destru
 
 ## Findings
 
-No material drift identified during planning.
+Implemented against the pinned LibreOffice baseline: SfxObjectShell modified/save transitions, SfxBaseModel recovery acknowledgement, and SwUndoManager save-mark behavior. Stage 0 inventory reports 14 implemented and 0 verified capabilities; unresolved semantic gaps remain explicit. The initially flaky pointer-selection E2E used fixed pixel coordinates and was repaired to derive endpoints from rendered DOM ranges; it then passed five repeated Chromium runs and the full suite. Agentplane doctor passes with one pre-existing warning about a prior DONE task commit reference and informational fallback-hook notices. No network access or material scope drift occurred. The user-provided parity plan remains an intentionally untracked reviewed artifact.

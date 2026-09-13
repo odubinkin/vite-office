@@ -51,6 +51,14 @@ This mapping is architectural provenance, not a parity claim. Capability-level
 source, test, and Help evidence remains in the machine-readable
 [Writer command mappings](parity/writer-command-slice.json).
 
+Stage 0 additionally maintains an exhaustive
+[`runtime-inventory.json`](parity/runtime-inventory.json). It classifies every
+production runtime module and its exported operations as an upstream mechanism,
+browser adaptation, local infrastructure, overly broad mapping, or explicitly
+out of parity scope. The same validation covers visible command IDs, UI-only
+behavior, internal operations, and placeholder suites; this makes active code
+without a capability record a hard inventory failure.
+
 ## Complete current runtime provenance
 
 [`source-provenance.json`](source-provenance.json) is the authoritative,

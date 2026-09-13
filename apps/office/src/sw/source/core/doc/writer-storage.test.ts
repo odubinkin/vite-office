@@ -46,7 +46,7 @@ function createAdapter(
 }
 
 describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @returns Nothing; Vitest registers cases. */, function defineWriterStorageTests(): void {
-  it("saves a Writer snapshot and loads its document or an explicit missing outcome" /** Verifies identity, revision, state round trip, and missing behavior. @returns Nothing; assertions validate outcomes. */, async function savesAndLoads(): Promise<void> {
+  it("saves a Writer snapshot and loads its document or an explicit missing outcome" /** Verifies identity, content generation, state round trip, and missing behavior. @returns Nothing; assertions validate outcomes. */, async function savesAndLoads(): Promise<void> {
     const adapter = createAdapter();
     const writerDocument = createWriterFixture();
     const saved = await saveWriterDocument(adapter, writerDocument);
@@ -55,16 +55,41 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
       version: 1,
       state: { writerDocument: { swModelVersion: 3 } },
     });
+    expect(saved.writerDocument.document).toMatchObject({
+      contentGeneration: 1,
+      isModified: false,
+      savedGeneration: 1,
+    });
     const loaded = await loadWriterDocument(adapter, "writer-store");
     expect(loaded.status).toBe("found");
-    if (loaded.status === "found")
+    if (loaded.status === "found") {
       expect(serializeWriterDocument(loaded.writerDocument)).toEqual(
-        serializeWriterDocument(writerDocument),
+        serializeWriterDocument(saved.writerDocument),
       );
+      expect(loaded.writerDocument.document.isModified).toBe(false);
+    }
     await expect(loadWriterDocument(adapter, "missing")).resolves.toEqual({
       id: "missing",
       status: "missing",
     });
+  });
+
+  it("does not acknowledge a failed primary save" /** Verifies savedGeneration advances only after adapter success. @returns A promise resolved after failure identity and lifecycle are asserted. */, async function preservesFailedSaveState(): Promise<void> {
+    const writerDocument = createWriterFixture();
+    const failure = new Error("write failed");
+    const adapter: DocumentStorageAdapter<WriterSnapshotState> = {
+      /** Returns no existing snapshot. @returns A promise resolving without a snapshot. */
+      load: async function load(): Promise<undefined> {
+        return undefined;
+      },
+      /** Simulates a rejected primary-medium write. @returns A promise that rejects with the fixture failure. */
+      save: async function save(): Promise<void> {
+        throw failure;
+      },
+    };
+
+    await expect(saveWriterDocument(adapter, writerDocument)).rejects.toBe(failure);
+    expect(writerDocument.document).toMatchObject({ isModified: true, savedGeneration: null });
   });
 
   it("round-trips canonical list state" /** Verifies storage retains executable list state in the current schema. @returns A promise resolved after the snapshot is asserted. */, async function storesLists(): Promise<void> {

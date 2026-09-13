@@ -5,8 +5,16 @@
 import {
   applyTransaction,
   getCurrentTransactionState,
+  redoTransaction,
+  replaceCurrentTransactionState,
   type TransactionHistory,
+  undoTransaction,
 } from "../../../../sfx2/source/doc/docundomanager";
+import {
+  markDocumentHistoryRestored,
+  markDocumentHistorySavePosition,
+  markDocumentSaved,
+} from "../../../../sfx2/source/doc/docfac";
 import {
   setWriterParagraphAlignment,
   setWriterParagraphStyle,
@@ -45,6 +53,90 @@ export function createWriterWorkbenchDocument(): WriterDocument {
  */
 export function getWorkbenchSelectionPosition(writerDocument: WriterDocument): number {
   return (writerDocument.paragraphs[0] as WriterParagraph).text.length;
+}
+
+/**
+ * Acknowledges a completed primary-medium save without creating a Writer undo action.
+ *
+ * @param history - Current Writer history whose selected entry was persisted.
+ * @param savedGeneration - Exact content generation acknowledged by storage.
+ * @returns History with persistence metadata replaced on the selected entry.
+ */
+export function acknowledgeWriterSave(
+  history: TransactionHistory<WriterDocument>,
+  savedGeneration: number,
+): TransactionHistory<WriterDocument> {
+  return {
+    ...history,
+    entries: history.entries.map(
+      /**
+       * Moves the single Writer save mark while retaining every content snapshot.
+       * @param entry - Existing Writer history entry.
+       * @param index - Entry position compared with the current cursor.
+       * @returns Cloned entry marked clean only at the newly saved position.
+       */
+      function moveWriterSaveMark(entry, index): WriterDocument {
+        const next = entry.clone();
+        next.document =
+          index === history.index
+            ? markDocumentSaved(next.document, savedGeneration)
+            : markDocumentHistorySavePosition(next.document, false);
+        return next;
+      },
+    ),
+    selection: { ...history.selection },
+  };
+}
+
+/**
+ * Restores the preceding Writer state as a fresh mutation with LibreOffice-like save-mark semantics.
+ *
+ * @param history - Current Writer history.
+ * @returns Prior state with repaired lifecycle metadata, or the same history at its bound.
+ */
+export function undoWriterTransaction(
+  history: TransactionHistory<WriterDocument>,
+): TransactionHistory<WriterDocument> {
+  return navigateWriterHistory(history, "undo");
+}
+
+/**
+ * Restores the following Writer state as a fresh mutation with LibreOffice-like save-mark semantics.
+ *
+ * @param history - Current Writer history.
+ * @returns Following state with repaired lifecycle metadata, or the same history at its bound.
+ */
+export function redoWriterTransaction(
+  history: TransactionHistory<WriterDocument>,
+): TransactionHistory<WriterDocument> {
+  return navigateWriterHistory(history, "redo");
+}
+
+/**
+ * Performs one bounded history navigation and repairs session-owned lifecycle generations.
+ *
+ * @param history - Current Writer history.
+ * @param direction - Undo or Redo navigation direction.
+ * @returns Navigated and repaired history, or the same history when movement is unavailable.
+ */
+function navigateWriterHistory(
+  history: TransactionHistory<WriterDocument>,
+  direction: "redo" | "undo",
+): TransactionHistory<WriterDocument> {
+  const current = getCurrentTransactionState(history);
+  const candidate =
+    direction === "undo"
+      ? undoTransaction(history, { position: 0 })
+      : redoTransaction(history, { position: 0 });
+  if (candidate === history) return history;
+  const historical = getCurrentTransactionState(candidate);
+  const restored = historical.clone();
+  restored.document = markDocumentHistoryRestored(current.document, historical.document);
+  const repaired = replaceCurrentTransactionState(candidate, restored);
+  return {
+    ...repaired,
+    selection: { position: getWorkbenchSelectionPosition(restored) },
+  };
 }
 
 /**

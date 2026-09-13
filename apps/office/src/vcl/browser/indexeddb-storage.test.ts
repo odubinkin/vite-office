@@ -18,7 +18,7 @@ let databaseSequence = 0;
  * Creates a valid complete snapshot fixture.
  *
  * @param id - Exact object-store key retained without normalization.
- * @param version - Non-negative integer revision for replacement assertions.
+ * @param version - Non-negative integer content generation for replacement assertions.
  * @param body - JSON-compatible text body retained in the snapshot state.
  * @returns Caller-owned snapshot fixture suitable for IndexedDB structured cloning.
  */

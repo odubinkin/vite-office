@@ -39,25 +39,48 @@ describe("autosave recovery" /** Groups recovery contract cases. @returns Nothin
     adapter.stored = snapshot(1);
     await expect(recoverDocument(adapter, "document-1")).resolves.toEqual({
       id: "document-1",
+      recoveryGeneration: 1,
       snapshot: snapshot(1),
     });
     adapter.stored = undefined;
     await expect(recoverDocument(adapter, "missing")).resolves.toEqual({
       id: "missing",
+      recoveryGeneration: null,
       snapshot: undefined,
     });
   });
-  it("saves changed revisions and preserves unchanged recovery identity" /** Verifies idempotent and save outcomes. @returns Nothing; assertions validate calls. */, async function autosaves(): Promise<void> {
+  it("saves each changed generation and preserves unchanged recovery identity" /** Verifies idempotent and save outcomes. @returns Nothing; assertions validate calls. */, async function autosaves(): Promise<void> {
     const adapter = new StorageDouble();
-    const prior: RecoveryState<FixtureState> = { id: "document-1", snapshot: snapshot(1) };
+    const prior: RecoveryState<FixtureState> = {
+      id: "document-1",
+      recoveryGeneration: 1,
+      snapshot: snapshot(1),
+    };
     await expect(autosaveDocument(adapter, prior, snapshot(1))).resolves.toEqual({
       recovery: prior,
       status: "unchanged",
     });
     const result = await autosaveDocument(adapter, prior, snapshot(2));
     expect(result).toMatchObject({ status: "saved", recovery: { snapshot: snapshot(2) } });
+    const second = await autosaveDocument(adapter, result.recovery, snapshot(3));
+    expect(second).toMatchObject({
+      status: "saved",
+      recovery: { recoveryGeneration: 3, snapshot: snapshot(3) },
+    });
+    expect(
+      adapter.saves.map(
+        /** Selects the generation written by one recovery save. @param saved - Persisted snapshot. @returns Persisted content generation. */
+        function selectSavedGeneration(saved): number {
+          return saved.version;
+        },
+      ),
+    ).toEqual([2, 3]);
     expect(adapter.saves[0]).not.toBe(snapshot(2));
-    expect(prior).toEqual({ id: "document-1", snapshot: snapshot(1) });
+    expect(prior).toEqual({
+      id: "document-1",
+      recoveryGeneration: 1,
+      snapshot: snapshot(1),
+    });
   });
   it("propagates storage failures unchanged" /** Verifies recovery callers retain native failure identity. @returns Nothing; assertions validate rejection identity. */, async function propagatesFailures(): Promise<void> {
     const adapter = new StorageDouble();
@@ -65,7 +88,11 @@ describe("autosave recovery" /** Groups recovery contract cases. @returns Nothin
     adapter.failure = failure;
     await expect(recoverDocument(adapter, "document-1")).rejects.toBe(failure);
     await expect(
-      autosaveDocument(adapter, { id: "document-1", snapshot: undefined }, snapshot(1)),
+      autosaveDocument(
+        adapter,
+        { id: "document-1", recoveryGeneration: null, snapshot: undefined },
+        snapshot(1),
+      ),
     ).rejects.toBe(failure);
   });
 });

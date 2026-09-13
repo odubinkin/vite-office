@@ -7,6 +7,7 @@ import {
   DEFAULT_MAX_UNDO_ACTION_COUNT,
   getCurrentTransactionState,
   redoTransaction,
+  replaceCurrentTransactionState,
   undoTransaction,
 } from "./docundomanager";
 
@@ -36,6 +37,22 @@ describe("transaction history" /**
     });
     expect(undoTransaction(initial, { position: 0 })).toBe(initial);
     expect(redoTransaction(branched, { position: 4 })).toBe(branched);
+  });
+
+  it("replaces the current state without adding an undo action" /**
+   * Verifies persistence acknowledgements can update metadata at LibreOffice's save mark.
+   * @returns Nothing; assertions validate replacement and group closure.
+   */, function replacesCurrentState(): void {
+    const initial = createTransactionHistory("one", { position: 0 });
+    const grouped = applyGroupedTransaction(initial, "two", { position: 2 }, "typing:word");
+    const replaced = replaceCurrentTransactionState(grouped, "saved-two");
+
+    expect(replaced).toEqual({
+      entries: ["one", "saved-two"],
+      index: 1,
+      selection: { position: 2 },
+    });
+    expect(grouped.entries).toEqual(["one", "two"]);
   });
 
   it("groups compatible actions and bounds retained undo snapshots like SfxUndoManager" /**

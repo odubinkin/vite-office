@@ -225,7 +225,7 @@ describe("Writer paragraph body" /**
  * @returns Nothing; Vitest registers enclosed cases.
  */, function defineWriterTests(): void {
   it("creates serializable bodies and changes paragraph text immutably while advancing lifecycle" /**
-   * Verifies plain-text insertion and replacement preserve the prior body and use shared dirty-state revision behavior.
+   * Verifies plain-text insertion and replacement preserve the prior body and advance content generation per mutation.
    *
    * @returns Nothing; assertions validate successful paragraph operations.
    */, function editsParagraphs(): void {
@@ -248,7 +248,7 @@ describe("Writer paragraph body" /**
     const replaced = replaceWriterParagraph(middle, "p-2", "updated");
     const unchanged = replaceWriterParagraph(replaced, "p-2", "updated");
     expect(writer).toMatchObject({
-      document: { lifecycle: "new", revision: 0 },
+      document: { contentGeneration: 0, lifecycle: "new" },
       paragraphs: [
         {
           alignment: "left",
@@ -260,7 +260,7 @@ describe("Writer paragraph body" /**
         },
       ],
     });
-    expect(inserted.document).toMatchObject({ lifecycle: "dirty", revision: 1 });
+    expect(inserted.document).toMatchObject({ contentGeneration: 3, lifecycle: "dirty" });
     expect(inserted.paragraphs[0]?.text).toBe("hello");
     expect(middle.paragraphs[0]?.text).toBe("he!llo");
     expect(middle.paragraphs[1]?.text).toBe("unchanged");
@@ -294,7 +294,7 @@ describe("Writer paragraph body" /**
         text: "",
       },
     ]);
-    expect(appended.document).toMatchObject({ lifecycle: "dirty", revision: 1 });
+    expect(appended.document).toMatchObject({ contentGeneration: 1, lifecycle: "dirty" });
     expect(projectParagraphs(appended)).toEqual([
       {
         alignment: "left",
@@ -344,7 +344,7 @@ describe("Writer paragraph body" /**
     const removed = removeWriterParagraph(writer, "p-1");
 
     expect(writer.paragraphs).toHaveLength(2);
-    expect(removed.document).toMatchObject({ lifecycle: "dirty", revision: 1 });
+    expect(removed.document).toMatchObject({ contentGeneration: 2, lifecycle: "dirty" });
     expect(projectParagraphs(removed)).toEqual([
       {
         alignment: "left",

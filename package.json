@@ -20,7 +20,7 @@
     "format:check": "prettier --check .",
     "inventory:validate": "tsx scripts/libreoffice-inventory/cli.ts",
     "inventory:modules": "tsx scripts/libreoffice-inventory/modules-cli.ts",
-    "inventory:parity": "tsx scripts/libreoffice-inventory/parity-mapping-cli.ts",
+    "inventory:parity": "tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
     "inventory:tests": "tsx scripts/libreoffice-inventory/tests-cli.ts",
     "inventory:test-source-targets": "tsx scripts/libreoffice-inventory/test-source-target-cli.ts",
     "inventory:junit-source-targets": "tsx scripts/libreoffice-inventory/junit-source-target-cli.ts",

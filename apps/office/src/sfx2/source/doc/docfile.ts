@@ -21,7 +21,7 @@ export type SerializableValue =
 export interface DocumentSnapshot<State extends SerializableValue> {
   /** Non-blank stable storage identity; whitespace is not a valid identifier. */
   readonly id: string;
-  /** Non-negative integer revision used for deterministic conflict handling in a future adapter. */
+  /** Non-negative content generation used for deterministic persistence and recovery decisions. */
   readonly version: number;
   /** JSON-compatible document state retained by reference without deep mutation. */
   readonly state: State;

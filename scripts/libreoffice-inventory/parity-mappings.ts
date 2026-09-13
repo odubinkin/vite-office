@@ -10,6 +10,32 @@ export type ParityEvidenceKind = "docs" | "implementation" | "source" | "tests";
 /** Identifies the browser-runtime reason that makes an upstream behavior non-implementable locally. */
 export type ParityExceptionReason = "browser-runtime-inapplicable" | "browser-runtime-supersedes";
 
+/** Identifies the architecture-neutral kind of one bounded capability. */
+export type ParityCapabilityType =
+  "command" | "filter" | "infrastructure" | "lifecycle" | "model" | "platform";
+
+/** Identifies the evidence maturity without conflating implemented and verified behavior. */
+export type ParityMaturity =
+  "exception-approved" | "implemented" | "mapped" | "planned" | "verified";
+
+/** Records whether and why the browser stack differs from the pinned upstream stack. */
+export interface ParityStackDivergence {
+  /** Approved divergence classification from the Stage 0 allowlist. */
+  readonly kind: "browser-adaptation" | "local-infrastructure" | "none";
+  /** Concrete architectural reason for this classification. */
+  readonly rationale: string;
+}
+
+/** Records executable task and commit evidence for a closed parity claim. */
+export interface ParityVerificationEvidence {
+  /** Commit containing the verified implementation and evidence. */
+  readonly commit: string;
+  /** Human-readable verification command or report reference. */
+  readonly evidence: string;
+  /** AgentPlane task that owns the closed claim. */
+  readonly taskId: string;
+}
+
 /** Defines the auditable basis for an explicitly approved browser-environment exception. */
 export interface ParityException {
   /** Task, user decision, or governing record that explicitly approved the exception. */
@@ -44,8 +70,12 @@ export interface ParityEvidence {
 
 /** Describes one bounded capability whose equivalent browser behavior remains incomplete. */
 export interface ParityMappingRecord {
+  /** Exact upstream behavior assertions or fixture expectations mapped by this record. */
+  readonly assertions: readonly string[];
   /** User-observable bounded capability description. */
   readonly capability: string;
+  /** Stable domain-agnostic identity retained even if suite ownership changes. */
+  readonly capabilityId: string;
   /** Explicit browser, fidelity, fixture, or platform differences that prevent a verified claim. */
   readonly gaps: readonly string[];
   /** Required only for an explicit whole-capability exception. */
@@ -54,10 +84,22 @@ export interface ParityMappingRecord {
   readonly id: string;
   /** Browser implementation, test, and documentation evidence. */
   readonly local: ParityEvidence;
-  /** Completion state deliberately below verified until every upstream assertion is mapped. */
-  readonly status: "exception-approved" | "implemented" | "mapped";
+  /** Optional formal local contract when no upstream executable assertion applies. */
+  readonly manualContract?: string;
+  /** Evidence maturity; only verified counts as parity. */
+  readonly maturity: ParityMaturity;
+  /** Suite that owns the capability independently of its stable capability ID. */
+  readonly suite: "base" | "calc" | "chart" | "draw" | "impress" | "math" | "shared" | "writer";
+  /** Narrow owning subsystem within the suite. */
+  readonly subsystem: string;
+  /** Reviewed stack relationship to upstream. */
+  readonly stackDivergence: ParityStackDivergence;
+  /** Architecture-neutral capability category. */
+  readonly type: ParityCapabilityType;
   /** Pinned LibreOffice source, test, and documentation evidence. */
   readonly upstream: ParityEvidence;
+  /** Required task/commit evidence for verified and exception-approved records. */
+  readonly verification?: ParityVerificationEvidence;
 }
 
 /** Defines the versioned authored mapping document for one bounded Writer slice. */
@@ -69,7 +111,7 @@ export interface ParityMappingManifest {
   /** Deterministically ordered atomic Writer mappings. */
   readonly records: readonly ParityMappingRecord[];
   /** Static schema version for strict compatibility validation. */
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
 }
 
 /** Represents one fully resolved evidence marker for a validation report. */
@@ -104,10 +146,16 @@ export interface ParityMappingReport {
   readonly exceptionCount: number;
   /** Number of visible unsupported differences across all records. */
   readonly gapCount: number;
+  /** Number of records whose code exists but semantic parity remains unverified. */
+  readonly implementedCount: number;
+  /** Total bounded capability records. */
+  readonly recordCount: number;
   /** Successfully resolved evidence paths in stable record and evidence order. */
   readonly resolvedEvidence: readonly ResolvedParityEvidence[];
   /** Static report schema version. */
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
+  /** Number of records whose semantic evidence is complete. */
+  readonly verifiedCount: number;
 }
 
 /** Defines the asynchronous text boundary used to validate paths and required evidence markers. */
@@ -126,7 +174,7 @@ export function parseParityMappingManifest(
   baseline: BaselineManifest,
 ): ParityMappingManifest {
   const root = parseObject(sourceText, "root");
-  if (root.schemaVersion !== 1) throw new Error("Parity mapping schemaVersion must equal 1.");
+  if (root.schemaVersion !== 2) throw new Error("Parity mapping schemaVersion must equal 2.");
   const baselineCommit = requireString(root, "baselineCommit");
   const baselineTag = requireString(root, "baselineTag");
   if (baselineCommit !== baseline.commit)
@@ -136,7 +184,8 @@ export function parseParityMappingManifest(
     throw new Error("Parity mapping records must be a non-empty array.");
   const records = root.records.map(parseRecord);
   assertOrderedUniqueIds(records);
-  return { baselineCommit, baselineTag, records, schemaVersion: 1 };
+  assertOrderedUniqueCapabilityIds(records);
+  return { baselineCommit, baselineTag, records, schemaVersion: 2 };
 }
 
 /**
@@ -165,8 +214,11 @@ export async function validateParityMappingEvidence(
     exceptionCount: exceptions.length,
     exceptions,
     gapCount: manifest.records.flatMap(selectGaps).length,
+    implementedCount: manifest.records.filter(isImplemented).length,
+    recordCount: manifest.records.length,
     resolvedEvidence,
-    schemaVersion: 1,
+    schemaVersion: 2,
+    verifiedCount: manifest.records.filter(isVerified).length,
   };
 }
 
@@ -181,31 +233,141 @@ export async function validateParityMappingEvidence(
 function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
   if (!isRecord(candidate)) throw new Error(`Parity mapping records[${index}] must be an object.`);
   const id = requireString(candidate, "id");
-  if (!/^LO-WRITER-\d{4}$/.test(id)) throw new Error(`Invalid Writer parity ID: ${id}`);
-  const status = candidate.status;
-  if (status !== "implemented" && status !== "mapped" && status !== "exception-approved")
-    throw new Error(`Invalid parity mapping status for ${id}.`);
+  if (!/^LO-(?:BASE|CALC|CHART|DRAW|IMPRESS|MATH|SHARED|WRITER)-\d{4}$/.test(id))
+    throw new Error(`Invalid parity ID: ${id}`);
+  const capabilityId = requireString(candidate, "capabilityId");
+  if (!/^CAP-\d{4}$/.test(capabilityId))
+    throw new Error(`Invalid domain-agnostic capability ID: ${capabilityId}`);
+  const maturity = parseMaturity(candidate.maturity, id);
   const gaps = requireStringArray(candidate, "gaps");
-  if (status === "mapped" && gaps.length > 0)
-    throw new Error(`Mapped parity record ${id} must not retain unresolved gaps.`);
+  const assertions = requireStringArray(candidate, "assertions");
+  const manualContract = optionalString(candidate, "manualContract");
+  if (assertions.length === 0 && manualContract === undefined)
+    throw new Error(`Parity record ${id} requires an upstream assertion or manual contract.`);
+  if (maturity === "verified" && gaps.length > 0)
+    throw new Error(`Verified parity record ${id} must not retain unresolved gaps.`);
   const exception =
     candidate.exception === undefined
       ? undefined
       : parseException(candidate.exception, `${id}.exception`);
-  if (status === "exception-approved" && exception === undefined)
+  if (maturity === "exception-approved" && exception === undefined)
     throw new Error(`Exception-approved parity record ${id} requires exception evidence.`);
-  if (status === "exception-approved" && gaps.length === 0)
+  if (maturity === "exception-approved" && gaps.length === 0)
     throw new Error(`Exception-approved parity record ${id} requires a visible gap.`);
-  if (status !== "exception-approved" && exception !== undefined)
+  if (maturity !== "exception-approved" && exception !== undefined)
     throw new Error(`Only exception-approved parity record ${id} may declare exception evidence.`);
+  const verification =
+    candidate.verification === undefined
+      ? undefined
+      : parseVerification(candidate.verification, `${id}.verification`);
+  if ((maturity === "verified" || maturity === "exception-approved") && verification === undefined)
+    throw new Error(`Closed parity record ${id} requires task and commit verification evidence.`);
+  const suite = parseSuite(candidate.suite, id);
   return {
+    assertions,
     capability: requireString(candidate, "capability"),
+    capabilityId,
     ...(exception === undefined ? {} : { exception }),
     gaps,
     id,
-    local: parseEvidence(candidate.local, `${id}.local`, status === "exception-approved"),
-    status,
+    local: parseEvidence(candidate.local, `${id}.local`, maturity === "exception-approved"),
+    ...(manualContract === undefined ? {} : { manualContract }),
+    maturity,
+    stackDivergence: parseStackDivergence(candidate.stackDivergence, id),
+    subsystem: requireString(candidate, "subsystem"),
+    suite,
+    type: parseCapabilityType(candidate.type, id),
     upstream: parseEvidence(candidate.upstream, `${id}.upstream`, false, true),
+    ...(verification === undefined ? {} : { verification }),
+  };
+}
+
+/**
+ * Parses one allowed parity maturity.
+ * @param candidate - Unknown authored maturity.
+ * @param id - Owning parity record ID.
+ * @returns Validated maturity.
+ */
+function parseMaturity(candidate: unknown, id: string): ParityMaturity {
+  if (
+    candidate !== "planned" &&
+    candidate !== "mapped" &&
+    candidate !== "implemented" &&
+    candidate !== "verified" &&
+    candidate !== "exception-approved"
+  )
+    throw new Error(`Invalid parity maturity for ${id}.`);
+  return candidate;
+}
+
+/**
+ * Parses one architecture-neutral capability type.
+ * @param candidate - Unknown authored type.
+ * @param id - Owning parity record ID.
+ * @returns Validated capability type.
+ */
+function parseCapabilityType(candidate: unknown, id: string): ParityCapabilityType {
+  if (
+    candidate !== "command" &&
+    candidate !== "model" &&
+    candidate !== "filter" &&
+    candidate !== "platform" &&
+    candidate !== "lifecycle" &&
+    candidate !== "infrastructure"
+  )
+    throw new Error(`Invalid parity capability type for ${id}.`);
+  return candidate;
+}
+
+/**
+ * Parses one supported suite or shared ownership value.
+ * @param candidate - Unknown authored suite.
+ * @param id - Owning parity record ID.
+ * @returns Validated suite ownership.
+ */
+function parseSuite(candidate: unknown, id: string): ParityMappingRecord["suite"] {
+  if (
+    candidate !== "shared" &&
+    candidate !== "writer" &&
+    candidate !== "calc" &&
+    candidate !== "impress" &&
+    candidate !== "draw" &&
+    candidate !== "base" &&
+    candidate !== "math" &&
+    candidate !== "chart"
+  )
+    throw new Error(`Invalid parity suite for ${id}.`);
+  return candidate;
+}
+
+/**
+ * Parses the approved Stage 0 stack-divergence classification.
+ * @param candidate - Unknown authored divergence object.
+ * @param id - Owning parity record ID.
+ * @returns Validated divergence classification and rationale.
+ */
+function parseStackDivergence(candidate: unknown, id: string): ParityStackDivergence {
+  if (!isRecord(candidate)) throw new Error(`Stack divergence for ${id} must be an object.`);
+  const kind = candidate.kind;
+  if (kind !== "none" && kind !== "browser-adaptation" && kind !== "local-infrastructure")
+    throw new Error(`Unapproved stack divergence for ${id}.`);
+  return { kind, rationale: requireString(candidate, "rationale") };
+}
+
+/**
+ * Parses task, commit, and verification evidence for a closed parity record.
+ * @param candidate - Unknown authored verification object.
+ * @param location - Human-readable field location for deterministic errors.
+ * @returns Validated task, commit, and executable evidence.
+ */
+function parseVerification(candidate: unknown, location: string): ParityVerificationEvidence {
+  if (!isRecord(candidate)) throw new Error(`${location} must be an object.`);
+  const commit = requireString(candidate, "commit");
+  if (!/^[0-9a-f]{7,40}$/.test(commit)) throw new Error(`${location}.commit must be a Git hash.`);
+  return {
+    commit,
+    evidence: requireString(candidate, "evidence"),
+    taskId: requireString(candidate, "taskId"),
   };
 }
 
@@ -383,6 +545,23 @@ function assertOrderedUniqueIds(records: readonly ParityMappingRecord[]): void {
 }
 
 /**
+ * Rejects duplicate or non-ordered domain-agnostic capability identifiers.
+ * @param records - Parsed records in authored order.
+ * @returns Nothing after order and uniqueness are proven.
+ */
+function assertOrderedUniqueCapabilityIds(records: readonly ParityMappingRecord[]): void {
+  for (let index = 1; index < records.length; index += 1) {
+    const previous = records[index - 1];
+    const current = records[index];
+    /* v8 ignore next 3 -- loop bounds prove both indexed records exist; this guard satisfies noUncheckedIndexedAccess. */
+    if (previous === undefined || current === undefined)
+      throw new Error("Capability record ordering could not be determined.");
+    if (previous.capabilityId >= current.capabilityId)
+      throw new Error("Parity records must have unique ordered capability IDs.");
+  }
+}
+
+/**
  * Extracts unresolved-gap strings for aggregate counting.
  *
  * @param record - One parsed parity record.
@@ -390,6 +569,24 @@ function assertOrderedUniqueIds(records: readonly ParityMappingRecord[]): void {
  */
 function selectGaps(record: ParityMappingRecord): readonly string[] {
   return record.gaps;
+}
+
+/**
+ * Selects implemented-but-unverified records for report counts.
+ * @param record - Parsed parity record.
+ * @returns Whether implementation exists without verified maturity.
+ */
+function isImplemented(record: ParityMappingRecord): boolean {
+  return record.maturity === "implemented";
+}
+
+/**
+ * Selects semantically verified records for report counts.
+ * @param record - Parsed parity record.
+ * @returns Whether semantic evidence is verified.
+ */
+function isVerified(record: ParityMappingRecord): boolean {
+  return record.maturity === "verified";
 }
 
 /**
@@ -423,6 +620,20 @@ function requireString(record: Record<string, unknown>, field: string): string {
   const value = record[field];
   if (typeof value !== "string" || value.trim().length === 0)
     throw new Error(`Parity mapping ${field} must be a non-empty string.`);
+  return value;
+}
+
+/**
+ * Reads an optional non-blank string while rejecting explicit blank values.
+ * @param record - Parsed object carrying the optional field.
+ * @param field - Optional field name.
+ * @returns The authored string or undefined when absent.
+ */
+function optionalString(record: Record<string, unknown>, field: string): string | undefined {
+  const value = record[field];
+  if (value === undefined) return undefined;
+  if (typeof value !== "string" || value.trim().length === 0)
+    throw new Error(`Parity mapping ${field} must be a non-empty string when supplied.`);
   return value;
 }
 

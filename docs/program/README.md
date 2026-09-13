@@ -107,8 +107,11 @@ The following documents form the program control plane:
 
 - [Parity matrix](parity-matrix.md): status and traceability source of truth.
 - [Writer command parity mappings](parity/writer-command-slice.json):
-  machine-validated upstream-to-local evidence for the first bounded Writer
-  command slices, with explicit unresolved gaps and approved exceptions.
+  machine-validated upstream-to-local evidence for 14 bounded Writer
+  capabilities, with explicit unresolved gaps and approved exceptions.
+- [Runtime parity inventory](parity/runtime-inventory.json): exhaustive
+  classification of production modules, exported operations, visible command
+  IDs, UI-only behavior, internal operations, and placeholder suites.
 - [LibreOffice baseline](libreoffice-baseline.md): immutable upstream identity,
   acquisition, provenance, and licensing boundary.
 - [Inventory contract](inventory-contract.md): deterministic validation of the
@@ -202,11 +205,13 @@ while an approved feature task controls the scope of its own change.
 
 ## Known program gaps
 
-- The upstream source, test, and documentation corpora have not been inventoried.
+- The broad upstream source, test, and documentation corpora are inventoried at
+  provenance level; most entries still require atomic assertion mapping.
 - No upstream fixture, asset, sample, or documentation file is approved for
   copying; each candidate still requires the baseline's per-file provenance and
   licensing review.
 - Native integrations and backend-dependent features need browser feasibility
   studies; they remain parity requirements until explicitly resolved.
-- The current application is only a verified foundation preview; no LibreOffice
-  feature has been mapped or implemented yet.
+- Fourteen bounded Writer capabilities are mapped and implemented but none is
+  yet `verified`; unresolved fidelity, platform, fixture, and documentation gaps
+  remain explicit in the parity records.

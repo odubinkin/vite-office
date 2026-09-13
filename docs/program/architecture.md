@@ -102,6 +102,11 @@ not called from document-domain code.
 - The canonical document model may be an identity-bearing, cyclic object graph,
   as in Writer. Persistence and browser history use explicit, versioned snapshot
   conversion rather than forcing the runtime model into a view DTO.
+- Each successful content mutation advances a monotonic content generation.
+  Primary save and recovery completion acknowledge separate generations only
+  after their respective writes succeed. `isModified` follows the Writer undo
+  save mark, so Undo can return to clean state without rewinding the monotonic
+  operation counter.
 - Document snapshots must be serializable independently of React or another
   view library. UI framework objects do not belong in the document model.
 - Expensive parsing, calculation, layout, and export work should run in Web

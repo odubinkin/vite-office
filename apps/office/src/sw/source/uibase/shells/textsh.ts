@@ -11,6 +11,7 @@ import {
   dispatchCommand,
   findCommandByShortcut,
 } from "../../../../framework/source/dispatch/dispatchprovider";
+import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { TransactionHistory } from "../../../../sfx2/source/doc/docundomanager";
 import type { WriterDocument } from "../../core/doc/writer";
 import type { WriterParagraph, WriterTextRun } from "../../core/doc/writer";
@@ -214,7 +215,7 @@ export function useWriterHistoryShortcuts({
       const registry = createCommandRegistry([
         {
           execute: onUndo,
-          id: "writer.undo",
+          id: WRITER_COMMAND_IDS.undo,
           /** Checks whether Ctrl Undo has a prior Writer snapshot. @returns True when undo is available. */
           isEnabled: function canUndo(): boolean {
             return isActive && history.index > 0;
@@ -224,7 +225,7 @@ export function useWriterHistoryShortcuts({
         },
         {
           execute: onRedo,
-          id: "writer.redo",
+          id: WRITER_COMMAND_IDS.redo,
           /** Checks whether Ctrl Redo has a following Writer snapshot. @returns True when redo is available. */
           isEnabled: function canRedo(): boolean {
             return isActive && history.index < history.entries.length - 1;
@@ -234,7 +235,7 @@ export function useWriterHistoryShortcuts({
         },
         {
           execute: onUndo,
-          id: "writer.metaUndo",
+          id: WRITER_COMMAND_IDS.metaUndo,
           /** Checks whether Meta Undo has a prior Writer snapshot. @returns True when undo is available. */
           isEnabled: function canUndo(): boolean {
             return isActive && history.index > 0;
@@ -244,7 +245,7 @@ export function useWriterHistoryShortcuts({
         },
         {
           execute: onRedo,
-          id: "writer.metaRedo",
+          id: WRITER_COMMAND_IDS.metaRedo,
           /** Checks whether Meta Redo has a following Writer snapshot. @returns True when redo is available. */
           isEnabled: function canRedo(): boolean {
             return isActive && history.index < history.entries.length - 1;

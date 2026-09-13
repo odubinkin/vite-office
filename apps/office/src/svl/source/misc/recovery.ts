@@ -12,6 +12,8 @@ import {
 export interface RecoveryState<State extends SerializableValue> {
   /** Exact storage identity retained without normalization. */
   readonly id: string;
+  /** Content generation of the last successful recovery write, or null before recovery exists. */
+  readonly recoveryGeneration: number | null;
   /** Last successfully saved snapshot, or undefined before any recovery data exists. */
   readonly snapshot: DocumentSnapshot<State> | undefined;
 }
@@ -35,8 +37,8 @@ export async function recoverDocument<State extends SerializableValue>(
 ): Promise<RecoveryState<State>> {
   const result = await loadSnapshot(adapter, id);
   return result.status === "found"
-    ? { id, snapshot: result.snapshot }
-    : { id, snapshot: undefined };
+    ? { id, recoveryGeneration: result.snapshot.version, snapshot: result.snapshot }
+    : { id, recoveryGeneration: null, snapshot: undefined };
 }
 
 /**
@@ -55,8 +57,15 @@ export async function autosaveDocument<State extends SerializableValue>(
   recovery: RecoveryState<State>,
   snapshot: DocumentSnapshot<State>,
 ): Promise<AutosaveResult<State>> {
-  if (recovery.id === snapshot.id && recovery.snapshot?.version === snapshot.version)
+  if (recovery.id === snapshot.id && recovery.recoveryGeneration === snapshot.version)
     return { recovery, status: "unchanged" };
   const saved = await saveSnapshot(adapter, snapshot);
-  return { recovery: { id: snapshot.id, snapshot: saved.snapshot }, status: "saved" };
+  return {
+    recovery: {
+      id: snapshot.id,
+      recoveryGeneration: saved.snapshot.version,
+      snapshot: saved.snapshot,
+    },
+    status: "saved",
+  };
 }

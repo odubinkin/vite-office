@@ -113,7 +113,10 @@ describe("Writer paragraph breaks" /** Groups normal and rejected immutable para
       },
     ]);
     expect(split).toMatchObject({
-      document: { lifecycle: "dirty", revision: writer.document.revision },
+      document: {
+        contentGeneration: writer.document.contentGeneration + 1,
+        lifecycle: "dirty",
+      },
       paragraphs: [
         {
           alignment: "center",

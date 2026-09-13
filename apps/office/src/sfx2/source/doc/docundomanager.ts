@@ -176,6 +176,30 @@ export function getCurrentTransactionState<State>(history: TransactionHistory<St
 }
 
 /**
+ * Replaces the current entry without creating an undo action, for persistence acknowledgements or generation repair.
+ *
+ * @param history - Immutable prior history that remains unmodified.
+ * @param nextState - Replacement for the current logical content entry.
+ * @returns History with the same cursor and entries except for the replaced current state.
+ */
+export function replaceCurrentTransactionState<State>(
+  history: TransactionHistory<State>,
+  nextState: State,
+): TransactionHistory<State> {
+  assertHistory(history);
+  return {
+    entries: history.entries.map(
+      /** Replaces only the current history slot. @param state - Existing state. @param index - State index. @returns Existing or replacement state. */
+      function replaceCurrentState(state, index): State {
+        return index === history.index ? nextState : state;
+      },
+    ),
+    index: history.index,
+    selection: { ...history.selection },
+  };
+}
+
+/**
  * Validates cursor selection values before they enter history transitions.
  *
  * @param selection - Candidate selection inspected without mutation.

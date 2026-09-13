@@ -183,8 +183,8 @@ function FoundationWorkspace({ suite }: FoundationWorkspaceProps): React.JSX.Ele
               <h3 className="mt-3 font-bold text-slate-900">Document lifecycle contract</h3>
               <p className="mt-1 text-sm leading-6 text-slate-600">
                 {previewDocument.title} is a serializable {previewDocument.lifecycle} document
-                preview at revision {previewDocument.revision}; editing and storage are not yet
-                enabled.
+                preview at content generation {previewDocument.contentGeneration}; editing and
+                storage are not yet enabled.
               </p>
             </article>
           </div>

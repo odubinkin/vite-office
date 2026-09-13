@@ -3,27 +3,24 @@
 ## Purpose
 
 This matrix is the authoritative index connecting the pinned LibreOffice
-baseline to Vite Office implementation, tests, and documentation. It begins as
-a coarse suite inventory and must be expanded to atomic, testable capabilities
-after the upstream reference checkout is approved and pinned.
-
-No row below claims a LibreOffice capability implementation. All seeded rows use
-`inventory-pending` because authoritative upstream source, test, and help
-references are not yet available in this repository. The browser workbench
-foundation is infrastructure evidence only and does not change that status.
+baseline to Vite Office implementation, tests, and documentation. The coarse
+suite table remains a planning inventory; machine-readable JSON records are the
+source of truth for atomic capability maturity.
 
 The first authored atomic records live in
-[`parity/writer-command-slice.json`](parity/writer-command-slice.json). They
-cover four bounded Writer command slices and are machine-validated by
-`npm run inventory:parity`. Each remains `implemented`, not `verified`: every
-known browser difference stays visible and no gap counts as parity.
+[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Its 14
+bounded Writer records are machine-validated together with the exhaustive
+[`parity/runtime-inventory.json`](parity/runtime-inventory.json) by
+`npm run inventory:parity`. The current records are all `implemented` and none
+is `verified`: every known browser difference stays visible and no gap counts
+as parity.
 
 ## Stable identifier format
 
-Identifiers use `LO-<DOMAIN>-<NNNN>` and never change after publication. Domain
-codes are `SHARED`, `WRITER`, `CALC`, `IMPRESS`, `DRAW`, `BASE`, `MATH`, `CHART`,
-`FORMAT`, `AUTO`, `A11Y`, and `L10N`. A split row receives new identifiers and
-keeps a `superseded-by` note on the original row.
+Every atomic record has a domain-agnostic `CAP-<NNNN>` identity that remains
+stable if suite ownership changes. Existing published `LO-<DOMAIN>-<NNNN>` IDs
+are retained as immutable compatibility aliases. A split capability receives
+new IDs instead of reusing an existing identity.
 
 ## Required traceability fields
 
@@ -31,33 +28,40 @@ Each atomic capability record must contain:
 
 | Field | Required evidence |
 | --- | --- |
-| Parity ID | Immutable identifier in the format above. |
+| Capability ID | Immutable domain-agnostic `CAP-<NNNN>` identifier. |
+| Legacy parity ID | Immutable published `LO-<DOMAIN>-<NNNN>` alias. |
 | Capability | One user-observable or compatibility behavior. |
+| Suite, subsystem, type | Current ownership and one of command, model, filter, platform, lifecycle, or infrastructure. |
+| Assertions/manual contract | Exact upstream assertions or a formal manual verification contract. |
 | Upstream source | Paths and symbols at the pinned LibreOffice SHA. |
 | Upstream tests | Test paths, cases, fixtures, and relevant assertions. |
 | Upstream docs | Help IDs, guide/API pages, or an evidenced `none`. |
 | Local implementation | TypeScript modules, components, workers, or adapters. |
 | Local tests | Executable tests and fixtures covering mapped assertions. |
 | Local docs | User, developer, API, accessibility, and format topics. |
-| Status | One lifecycle value from the table below. |
-| Evidence | Task ID, commit, verification result, and review notes. |
+| Maturity | One lifecycle value from the table below. |
+| Stack divergence | Allowlisted classification and concrete rationale. |
+| Verification | Task ID, commit, and executable evidence for a closed record. |
 | Gaps | Known behavioral, platform, test, or documentation differences. |
 
 ## Status lifecycle
 
-| Status | Meaning |
+| Maturity | Meaning |
 | --- | --- |
-| `inventory-pending` | The pinned upstream corpus has not yet defined the row. |
-| `mapped` | Upstream source, tests, and documentation are fully referenced. |
 | `planned` | An approved AgentPlane feature task owns the mapped behavior. |
+| `mapped` | Upstream source, tests, documentation, and assertions are referenced. |
 | `implemented` | Code exists, but complete parity evidence is not yet recorded. |
 | `verified` | Functional, test, and documentation evidence all pass. |
-| `blocked` | A concrete external or platform constraint prevents progress. |
 | `exception-approved` | A user-approved divergence is documented with rationale. |
-| `superseded` | Atomic successor rows replace this record without losing history. |
 
 Only `verified` counts toward parity. `exception-approved` is visible debt and
 does not silently count as equivalent functionality.
+
+A `verified` record must have no gaps, must reference an executable local test,
+and must include task, commit, and verification evidence. An
+`exception-approved` record requires the same closure evidence plus its explicit
+approval. Implemented code without complete semantic evidence stays
+`implemented` even when its local test suite is green.
 
 An exception may apply to a whole capability or to one upstream test reference.
 It is an explicit `not-implementable` disposition, not an implementation claim,
@@ -70,7 +74,11 @@ all upstream evidence and local documentation of the decision. A test exception
 is allowed only on an `upstream.tests` reference. The parity report lists both
 forms separately, so neither can count as mapped or verified coverage.
 
-## Seed inventory
+## Coarse seed inventory
+
+The rows below are intentionally non-atomic planning groups. Their legacy
+`inventory-pending` label does not participate in the atomic maturity schema and
+cannot be counted as parity.
 
 | Parity ID | Capability group | Upstream source | Upstream tests | Upstream docs | Local implementation | Local tests | Local docs | Status | Evidence | Gaps |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -107,13 +115,18 @@ capability remains an inventory gap.
 
 ## Completion queries
 
-Future tooling must be able to fail CI when:
+The Stage 0 tooling fails when:
 
 - an upstream test or documentation record has no parity ID;
+- a capability ID or visible Writer command ID is duplicated or unknown;
+- a production runtime module, exported domain operation, UI-only behavior, or
+  internal operation is absent from the runtime inventory;
 - a `verified` row lacks any required evidence field;
+- a `verified` row retains a gap or lacks an exact assertion/manual contract and
+  executable local test;
 - a local implementation or test references an unknown parity ID;
 - evidence targets a different upstream baseline;
-- a task changes mapped behavior without updating tests and documentation;
+- a closed record lacks its AgentPlane task, commit, or verification result;
 - an approved exception lacks the approving task and user decision.
 
 See the [test strategy](test-strategy.md),
