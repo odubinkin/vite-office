@@ -1,10 +1,11 @@
 ---
 id: "202609141057-NC36X2"
 title: "Document upstream parity refactoring plan"
-status: "DOING"
+result_summary: "Added a detailed LibreOffice upstream parity refactoring plan with phased workstreams, dependencies, safeguards, and acceptance criteria."
+status: "DONE"
 priority: "high"
 owner: "DOCS"
-revision: 20
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-14T11:04:41.519Z"
+  updated_at: "2026-09-14T11:06:46.585Z"
   updated_by: "CODER"
   note: "verified-202609141057-NC36X2"
   attempts: 0
@@ -38,7 +39,9 @@ quality_review:
     - "docs/program/vite-office-upstream-parity-plan.md"
   findings:
     - "The plan distinguishes confirmed current behavior from target work, covers all audited architecture and inventory defects, defines browser-specific exceptions, acceptance criteria, migration safeguards, verification requirements, and immediate delivery slices; all recorded docs checks passed."
-commit: null
+commit:
+  hash: "f18e6de221d256d7e03b9ec9fdd467a0e3a9f203"
+  message: "✅ NC36X2 task: record parity plan quality gate"
 comments:
   -
     author: "DOCS"
@@ -55,6 +58,12 @@ comments:
   -
     author: "DOCS"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609141057-NC36X2. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "DOCS"
+    body: "Verified: detailed upstream parity refactoring plan added under docs/program with validated local links, formatting, policy routing, and Agentplane quality review."
 events:
   -
     type: "status"
@@ -103,8 +112,28 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-09-14T11:06:46.585Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609141057-NC36X2"
+  -
+    type: "status"
+    at: "2026-09-14T11:06:46.779Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609141057-NC36X2. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-09-14T11:08:36.692Z"
+    author: "DOCS"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: detailed upstream parity refactoring plan added under docs/program with validated local links, formatting, policy routing, and Agentplane quality review."
 doc_version: 3
-doc_updated_at: "2026-09-14T11:06:25.561Z"
+doc_updated_at: "2026-09-14T11:08:36.693Z"
 doc_updated_by: "DOCS"
 description: "Create a detailed, evidence-based refactoring plan for the implemented Vite Office scope, covering inventory corrections, unjustified LibreOffice architecture divergences, UI/browser adapter cleanup, sequencing, acceptance criteria, risks, and verification."
 sections:
@@ -176,22 +205,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-14T11:06:46.585Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609141057-NC36X2
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T11:06:25.561Z, excerpt_hash=sha256:623f263005996fa84909f6a687397fe60e40b8f0fee5766a6cbb92a5fc30ac8f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141057-NC36X2/blueprint/resolved-snapshot.json
+    - old_digest: 678ff9a063164d13c2271d044ac741b6e8d0ccfacedad3650e7273fe41d6066b
+    - current_digest: 678ff9a063164d13c2271d044ac741b6e8d0ccfacedad3650e7273fe41d6066b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609141057-NC36X2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609141057-NC36X2 --result verified-202609141057-NC36X2 --commit f18e6de221d256d7e03b9ec9fdd467a0e3a9f203
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only docs/program/vite-office-upstream-parity-plan.md and the task-local state generated for this task if the document is rejected; no implementation or policy files are in scope."
-  Findings: |-
-    The audit found false-positive provenance mappings, stale parity records, duplicated immutable command adapters, missing registered position correction and model notifications, browser lifecycle leakage into SwDoc, an eager Writer session, an oversized UI controller, and a DOM-like xmloff intermediate tree.
-
-    - Observation: Direct task completion was attempted after successful verification but Agentplane rejected closeout because the required EVALUATOR quality review was not yet recorded.
-      Impact: The plan document and implementation commit are complete, but the task cannot be finished until the mandatory quality gate is satisfied.
-      Resolution: Record an EVALUATOR review against the document and verification evidence, then recompute the route and complete the task.
-      Promotion: incident-candidate
-      Fixability: repo-fixable
-
-    - Observation: The task-artifact persistence commit was rejected by the commit-msg hook because the subject used the unsupported scope word review.
-      Impact: Evaluator evidence is valid but remains staged and the task cannot close until those canonical artifacts are committed.
-      Resolution: Retry the same task-scoped artifact commit with an allowed task intent token such as task; do not change the reviewed document.
-      Promotion: incident-candidate
-      Fixability: repo-fixable
+  Findings: "The audit found false-positive provenance mappings, stale parity records, duplicated immutable command adapters, missing registered position correction and model notifications, browser lifecycle leakage into SwDoc, an eager Writer session, an oversized UI controller, and a DOM-like xmloff intermediate tree. Process note: closeout required an additional EVALUATOR gate; one task-artifact commit message used a disallowed scope token; and the route-generated generic result was rejected by commit policy. These workflow issues did not alter the reviewed document or its verification evidence."
+extensions:
+  implementation_commit:
+    hash: "686ba3e3bc20b610e38f289ed0b29833cc8fa7bc"
+    message: "📝 NC36X2 docs: add upstream parity refactoring plan"
 id_source: "generated"
 ---
 ## Summary
@@ -275,6 +325,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-09-14T11:06:46.585Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609141057-NC36X2
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T11:06:25.561Z, excerpt_hash=sha256:623f263005996fa84909f6a687397fe60e40b8f0fee5766a6cbb92a5fc30ac8f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141057-NC36X2/blueprint/resolved-snapshot.json
+- old_digest: 678ff9a063164d13c2271d044ac741b6e8d0ccfacedad3650e7273fe41d6066b
+- current_digest: 678ff9a063164d13c2271d044ac741b6e8d0ccfacedad3650e7273fe41d6066b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609141057-NC36X2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609141057-NC36X2 --result verified-202609141057-NC36X2 --commit f18e6de221d256d7e03b9ec9fdd467a0e3a9f203
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -283,16 +363,4 @@ Revert only docs/program/vite-office-upstream-parity-plan.md and the task-local 
 
 ## Findings
 
-The audit found false-positive provenance mappings, stale parity records, duplicated immutable command adapters, missing registered position correction and model notifications, browser lifecycle leakage into SwDoc, an eager Writer session, an oversized UI controller, and a DOM-like xmloff intermediate tree.
-
-- Observation: Direct task completion was attempted after successful verification but Agentplane rejected closeout because the required EVALUATOR quality review was not yet recorded.
-  Impact: The plan document and implementation commit are complete, but the task cannot be finished until the mandatory quality gate is satisfied.
-  Resolution: Record an EVALUATOR review against the document and verification evidence, then recompute the route and complete the task.
-  Promotion: incident-candidate
-  Fixability: repo-fixable
-
-- Observation: The task-artifact persistence commit was rejected by the commit-msg hook because the subject used the unsupported scope word review.
-  Impact: Evaluator evidence is valid but remains staged and the task cannot close until those canonical artifacts are committed.
-  Resolution: Retry the same task-scoped artifact commit with an allowed task intent token such as task; do not change the reviewed document.
-  Promotion: incident-candidate
-  Fixability: repo-fixable
+The audit found false-positive provenance mappings, stale parity records, duplicated immutable command adapters, missing registered position correction and model notifications, browser lifecycle leakage into SwDoc, an eager Writer session, an oversized UI controller, and a DOM-like xmloff intermediate tree. Process note: closeout required an additional EVALUATOR gate; one task-artifact commit message used a disallowed scope token; and the route-generated generic result was rejected by commit policy. These workflow issues did not alter the reviewed document or its verification evidence.
