@@ -4,7 +4,7 @@ title: "Fix Writer spaces and structured list paste"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-14T08:14:21.925Z"
+  updated_by: "CODER"
+  note: "verified-202609140738-50NKAH"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-14T08:14:40.747Z"
+  updated_by: "EVALUATOR"
+  note: "Writer spaces and structured list Paste match the bounded upstream ownership model and pass all repository gates."
+  evaluated_sha: "ef9b3f04e51e3b4d0516608309023d81219e8d39"
+  blueprint_digest: "d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7"
+  evidence_refs:
+    - ".agentplane/tasks/202609140738-50NKAH/README.md"
+    - ".agentplane/tasks/202609140738-50NKAH/quality/20260914-081440747-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609140738-50NKAH/quality/20260914-081440747-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609140738-50NKAH/quality/20260914-081440747-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609140738-50NKAH/blueprint/resolved-snapshot.json"
+    - "npm run verify: 210 runtime tests and 79 inventory tests at 100% coverage; 9 Chromium E2E tests passed"
+  findings:
+    - "Clipboard HTML is sanitized into canonical paragraphs and list metadata, inserted through one compound Writer undo action; Space is normalized at the accelerator boundary and repeated whitespace is preserved only in presentation."
 commit: null
 comments:
   -
@@ -35,8 +51,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: reproduce and fix Stage 4 whitespace projection and structured list Paste regressions using canonical Writer actions."
+  -
+    type: "verify"
+    at: "2026-09-14T08:14:02.366Z"
+    author: "CODER"
+    state: "ok"
+    note: "Focused Vitest 34/34, focused Chromium 2/2, full npm run verify passed with 100% runtime and inventory coverage; policy routing, doctor, and source provenance passed."
+  -
+    type: "verify"
+    at: "2026-09-14T08:14:21.925Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609140738-50NKAH"
 doc_version: 3
-doc_updated_at: "2026-09-14T07:42:38.986Z"
+doc_updated_at: "2026-09-14T08:14:21.979Z"
 doc_updated_by: "CODER"
 description: "Follow up Stage 4 by restoring immediate whitespace-preserving projection and multi-paragraph/list-aware native paste without changing canonical SwWrtShell ownership."
 sections:
@@ -56,12 +84,75 @@ sections:
     5. `git status --short --untracked-files=all` — expected: only intentional follow-up artifacts/source changes and the pre-existing user plan file are present.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-14T08:14:02.366Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Focused Vitest 34/34, focused Chromium 2/2, full npm run verify passed with 100% runtime and inventory coverage; policy routing, doctor, and source provenance passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T07:42:38.986Z, excerpt_hash=sha256:91a2f107b9cc55e505749be65220c0879a2fd0fa2b4121c6c9d2cf47117a406f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609140738-50NKAH/blueprint/resolved-snapshot.json
+    - old_digest: d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7
+    - current_digest: d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609140738-50NKAH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609140738-50NKAH
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-14T08:14:21.925Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609140738-50NKAH
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T08:14:02.436Z, excerpt_hash=sha256:91a2f107b9cc55e505749be65220c0879a2fd0fa2b4121c6c9d2cf47117a406f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609140738-50NKAH/blueprint/resolved-snapshot.json
+    - old_digest: d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7
+    - current_digest: d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609140738-50NKAH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609140738-50NKAH --result verified-202609140738-50NKAH --commit ef9b3f04e51e3b4d0516608309023d81219e8d39
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert the follow-up implementation and deterministic close commits.
     - Re-run focused Writer input/clipboard tests and npm run verify to confirm Stage 4 baseline restoration.
     - Preserve the user-owned untracked parity plan file.
-  Findings: ""
+  Findings: |-
+    - Observation: Writer collapsed repeated spaces visually and flattened semantic list HTML during Paste.
+      Impact: Ordinary spacing was delayed/collapsed and list items were inserted into one paragraph.
+      Resolution: Preserve whitespace in the editable projection, normalize Space accelerators, parse clipboard blocks/lists, and paste them through one compound SwWrtShell undo transaction.
 id_source: "generated"
 ---
 ## Summary
@@ -90,6 +181,66 @@ Fix the two reported Stage 4 regressions through the existing Writer boundaries:
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-14T08:14:02.366Z — VERIFY — ok
+
+By: CODER
+
+Note: Focused Vitest 34/34, focused Chromium 2/2, full npm run verify passed with 100% runtime and inventory coverage; policy routing, doctor, and source provenance passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T07:42:38.986Z, excerpt_hash=sha256:91a2f107b9cc55e505749be65220c0879a2fd0fa2b4121c6c9d2cf47117a406f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609140738-50NKAH/blueprint/resolved-snapshot.json
+- old_digest: d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7
+- current_digest: d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609140738-50NKAH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609140738-50NKAH
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-14T08:14:21.925Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609140738-50NKAH
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T08:14:02.436Z, excerpt_hash=sha256:91a2f107b9cc55e505749be65220c0879a2fd0fa2b4121c6c9d2cf47117a406f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609140738-50NKAH/blueprint/resolved-snapshot.json
+- old_digest: d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7
+- current_digest: d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609140738-50NKAH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609140738-50NKAH --result verified-202609140738-50NKAH --commit ef9b3f04e51e3b4d0516608309023d81219e8d39
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -99,3 +250,7 @@ Fix the two reported Stage 4 regressions through the existing Writer boundaries:
 - Preserve the user-owned untracked parity plan file.
 
 ## Findings
+
+- Observation: Writer collapsed repeated spaces visually and flattened semantic list HTML during Paste.
+  Impact: Ordinary spacing was delayed/collapsed and list items were inserted into one paragraph.
+  Resolution: Preserve whitespace in the editable projection, normalize Space accelerators, parse clipboard blocks/lists, and paste them through one compound SwWrtShell undo transaction.

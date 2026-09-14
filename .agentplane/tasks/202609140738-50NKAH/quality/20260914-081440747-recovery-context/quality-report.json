@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202609140738-50NKAH",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-14T08:14:40.747Z",
+  "verdict": "pass",
+  "summary": "Writer spaces and structured list Paste match the bounded upstream ownership model and pass all repository gates.",
+  "evaluated_sha": "ef9b3f04e51e3b4d0516608309023d81219e8d39",
+  "blueprint_digest": "d37e1ee296b2448c8d188edc5f6c4c3d8e7b6fb2c36eeb544abbe4cf5056a7d7",
+  "findings": [
+    "Clipboard HTML is sanitized into canonical paragraphs and list metadata, inserted through one compound Writer undo action; Space is normalized at the accelerator boundary and repeated whitespace is preserved only in presentation."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609140738-50NKAH/README.md",
+    "npm run verify: 210 runtime tests and 79 inventory tests at 100% coverage; 9 Chromium E2E tests passed"
+  ],
+  "missing_tests": [
+    "none"
+  ],
+  "hidden_assumptions": [
+    "Clipboard structure support is intentionally bounded to semantic p, div, ol, ul, and li elements plus existing direct-format tags."
+  ],
+  "residual_risks": [
+    "Arbitrary office-suite-specific clipboard CSS and proprietary HTML are outside the approved Stage 4 slice."
+  ]
+}
