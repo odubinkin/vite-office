@@ -1,10 +1,11 @@
 ---
 id: "202609141429-H8TF7J"
 title: "Implement Workstream 4 command and UI architecture"
-status: "DOING"
+result_summary: "verified-202609141429-H8TF7J"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-14T15:10:04.357Z"
+  updated_at: "2026-09-14T15:10:24.912Z"
   updated_by: "CODER"
   note: "verified-202609141429-H8TF7J"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "Shared command descriptors and dispatcher state now drive declarative Writer resources and generic browser presenters; interaction, provenance, and regression coverage pass."
-commit: null
+commit:
+  hash: "cb4b75c96cca0c0f9bf71f81ce781ee419a17c20"
+  message: "♻️ H8TF7J code: align Writer command UI architecture"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Workstream 4 command descriptors, declarative UI resources, corrected browser presenter identities, and accessible menu semantics against the pinned LibreOffice baseline."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609141429-H8TF7J. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609141429-H8TF7J"
+  -
+    type: "verify"
+    at: "2026-09-14T15:10:24.912Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609141429-H8TF7J"
+  -
+    type: "status"
+    at: "2026-09-14T15:10:25.046Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609141429-H8TF7J. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-14T15:10:04.430Z"
+doc_updated_at: "2026-09-14T15:10:25.047Z"
 doc_updated_by: "CODER"
 description: "Implement P4.1-P4.4 from docs/program/vite-office-upstream-parity-plan.md using pinned LibreOffice 26.8.0.2 sources, preserving upstream structure and semantics where browser constraints allow; do not retain old persisted document compatibility if storage model changes."
 sections:
@@ -163,6 +182,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202609141429-H8TF7J --result verified-202609141429-H8TF7J --commit cb4b75c96cca0c0f9bf71f81ce781ee419a17c20
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-14T15:10:24.912Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609141429-H8TF7J
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T15:10:04.430Z, excerpt_hash=sha256:88af327fe2969ed3f582bdfe6a3caed059ae94ddd8551cde8da494e198523e20
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141429-H8TF7J/blueprint/resolved-snapshot.json
+    - old_digest: 110896dd3bc3ff1ffa8eb77e46283fde984a45bc28a238fec144b56dc4943be9
+    - current_digest: 110896dd3bc3ff1ffa8eb77e46283fde984a45bc28a238fec144b56dc4943be9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609141429-H8TF7J
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609141429-H8TF7J --result verified-202609141429-H8TF7J --commit 58d0567e35b1e2d9e0404c07d7720a45a32ef848
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -280,6 +329,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609141429-H8TF7J --result verified-202609141429-H8TF7J --commit cb4b75c96cca0c0f9bf71f81ce781ee419a17c20
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-14T15:10:24.912Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609141429-H8TF7J
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T15:10:04.430Z, excerpt_hash=sha256:88af327fe2969ed3f582bdfe6a3caed059ae94ddd8551cde8da494e198523e20
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141429-H8TF7J/blueprint/resolved-snapshot.json
+- old_digest: 110896dd3bc3ff1ffa8eb77e46283fde984a45bc28a238fec144b56dc4943be9
+- current_digest: 110896dd3bc3ff1ffa8eb77e46283fde984a45bc28a238fec144b56dc4943be9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609141429-H8TF7J
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609141429-H8TF7J --result verified-202609141429-H8TF7J --commit 58d0567e35b1e2d9e0404c07d7720a45a32ef848
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
