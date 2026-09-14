@@ -1,10 +1,11 @@
 ---
 id: "202609141728-A97V69"
 title: "Implement Workstream 8 differential parity verification"
-status: "DOING"
+result_summary: "verified-202609141728-A97V69"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-14T17:39:48.141Z"
+  updated_at: "2026-09-14T17:40:06.824Z"
   updated_by: "CODER"
   note: "verified-202609141728-A97V69"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "Schema v4 distinguishes blocking gaps from reviewed out-of-scope limitations; CAP-0130 alone has exact upstream/local assertion evidence and immutable implementation evidence, while 33 records retain visible blockers."
-commit: null
+commit:
+  hash: "d4aececaf79268ea29f0546c566c8da314d68e11"
+  message: "🧩 A97V69 task: persist verification and quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: audit all Writer parity assertions, add differential evidence and tests, promote only fully qualified capabilities, then run complete verification and push."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609141728-A97V69. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609141728-A97V69"
+  -
+    type: "verify"
+    at: "2026-09-14T17:40:06.824Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609141728-A97V69"
+  -
+    type: "status"
+    at: "2026-09-14T17:40:06.952Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609141728-A97V69. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-14T17:39:48.194Z"
+doc_updated_at: "2026-09-14T17:40:06.953Z"
 doc_updated_by: "CODER"
 description: "Establish assertion-level upstream/local evidence for supported Writer capabilities, promote only fully evidenced records to verified, and preserve explicit gaps for the rest."
 sections:
@@ -196,9 +215,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-14T17:40:06.824Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609141728-A97V69
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T17:39:48.194Z, excerpt_hash=sha256:8a7d7dd1e0db78898b9f43cfacd6fd24158012196df31196bbefe9aae6b7d70b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141728-A97V69/blueprint/resolved-snapshot.json
+    - old_digest: 655a7adc5e9b6aebec43c748d702af03ef4f8f9a1c62fbab9e19811fa97e6f5f
+    - current_digest: 655a7adc5e9b6aebec43c748d702af03ef4f8f9a1c62fbab9e19811fa97e6f5f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609141728-A97V69
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609141728-A97V69 --result verified-202609141728-A97V69 --commit d4aececaf79268ea29f0546c566c8da314d68e11
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation commit and deterministic close commit. No compatibility migration or external persistent data mutation is planned."
   Findings: "CAP-0130 is the only capability promoted in this slice because its three pinned LibreOffice feature_text fixtures run through local import/export/import and compare normalized Writer semantics. The other 33 records retain 66 explicit gaps; their currently broad or mismatched upstream/local test markers are insufficient for honest verified status. Two CAP-0130 statements describe adjacent unsupported format/platform scope, so schema v4 retains them as scopeLimitations rather than concealing them or treating the bounded round-trip assertion as incomplete. The parity manifest schema intentionally accepts only v4; no compatibility parser was added. No persistent Writer document model changed."
+extensions:
+  implementation_commit:
+    hash: "4a804ec30be1197400b0915e51f938eb4e05c7e5"
+    message: "✅ A97V69 code: promote verified ODT round-trip capability"
 id_source: "generated"
 ---
 ## Summary
@@ -328,6 +381,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609141728-A97V69 --result verified-202609141728-A97V69 --commit 4a804ec30be1197400b0915e51f938eb4e05c7e5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-14T17:40:06.824Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609141728-A97V69
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T17:39:48.194Z, excerpt_hash=sha256:8a7d7dd1e0db78898b9f43cfacd6fd24158012196df31196bbefe9aae6b7d70b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141728-A97V69/blueprint/resolved-snapshot.json
+- old_digest: 655a7adc5e9b6aebec43c748d702af03ef4f8f9a1c62fbab9e19811fa97e6f5f
+- current_digest: 655a7adc5e9b6aebec43c748d702af03ef4f8f9a1c62fbab9e19811fa97e6f5f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609141728-A97V69
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609141728-A97V69 --result verified-202609141728-A97V69 --commit d4aececaf79268ea29f0546c566c8da314d68e11
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
