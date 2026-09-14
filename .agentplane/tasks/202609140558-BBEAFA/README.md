@@ -1,10 +1,11 @@
 ---
 id: "202609140558-BBEAFA"
 title: "Implement stage 4 canonical cursor and input pipeline"
-status: "DOING"
+result_summary: "Implemented canonical Writer cursor and input pipeline"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-14T06:50:12.791Z"
+  updated_at: "2026-09-14T06:50:59.124Z"
   updated_by: "CODER"
   note: "verified-202609140558-BBEAFA"
   attempts: 0
@@ -38,11 +39,19 @@ quality_review:
     - "npm run verify: 206 unit tests and 79 inventory tests at 100% coverage; 8/8 E2E; build, docs, boundaries, and file-size passed"
   findings:
     - "Persistent SwPaM, pre-DOM beforeinput dispatch, extended-text-input transaction, direction-preserving DOM adapter, mixed character-format state, and selection-preserving undo are covered without duplicated document mutation paths."
-commit: null
+commit:
+  hash: "fc113c45842939b1607d9bc184efc61ec071e8ea"
+  message: "🧩 BBEAFA task: persist verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Stage 4 canonical cursor, beforeinput, IME composition, DOM selection adapter, and parity verification scope."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609140558-BBEAFA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: Stage 4 canonical Writer cursor and input pipeline passes full repository verification."
 events:
   -
     type: "status"
@@ -63,8 +72,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609140558-BBEAFA"
+  -
+    type: "verify"
+    at: "2026-09-14T06:50:59.124Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609140558-BBEAFA"
+  -
+    type: "status"
+    at: "2026-09-14T06:50:59.313Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609140558-BBEAFA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-09-14T06:51:56.857Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: Stage 4 canonical Writer cursor and input pipeline passes full repository verification."
 doc_version: 3
-doc_updated_at: "2026-09-14T06:50:12.865Z"
+doc_updated_at: "2026-09-14T06:51:56.859Z"
 doc_updated_by: "CODER"
 description: "Implement section 8 (Stage 4) of docs/program/vite-office-upstream-parity-plan.md, preserving upstream LibreOffice semantics and avoiding invented domain behavior."
 sections:
@@ -144,6 +173,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-14T06:50:59.124Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609140558-BBEAFA
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T06:50:12.865Z, excerpt_hash=sha256:9cf1c2b906f584d427b910cb6cb75a91ee206af0a8a9dbf2742012a0ac52b15f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609140558-BBEAFA/blueprint/resolved-snapshot.json
+    - old_digest: 565cedd7bfccad088233fc05b9490b47f4ed504b1458f5b4c0e30496b78ba897
+    - current_digest: 565cedd7bfccad088233fc05b9490b47f4ed504b1458f5b4c0e30496b78ba897
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609140558-BBEAFA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609140558-BBEAFA --result verified-202609140558-BBEAFA --commit fc113c45842939b1607d9bc184efc61ec071e8ea
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert the implementation commit and the deterministic task-close commit if created.
@@ -153,6 +212,10 @@ sections:
     - Observation: Full verification passed: 206 unit tests and 79 inventory tests at 100% coverage, 8/8 Chromium E2E, static production build, JSDoc, file-size, policy routing, doctor, and source provenance.
       Impact: SwWrtShell now owns persistent point/mark and modeled edit transactions before DOM mutation; native selection is a reversible view projection.
       Resolution: Implementation commit 4d6adb8b313c contains only Stage 4 source/tests and task artifacts; pre-existing user plan remains untracked.
+extensions:
+  implementation_commit:
+    hash: "4d6adb8b313c2c02fce5967016c2c2e4cab1faa5"
+    message: "🧩 BBEAFA code: implement canonical Writer cursor and input"
 id_source: "generated"
 ---
 ## Summary
@@ -234,6 +297,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609140558-BBEAFA --result verified-202609140558-BBEAFA --commit 4d6adb8b313c2c02fce5967016c2c2e4cab1faa5
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-14T06:50:59.124Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609140558-BBEAFA
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T06:50:12.865Z, excerpt_hash=sha256:9cf1c2b906f584d427b910cb6cb75a91ee206af0a8a9dbf2742012a0ac52b15f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609140558-BBEAFA/blueprint/resolved-snapshot.json
+- old_digest: 565cedd7bfccad088233fc05b9490b47f4ed504b1458f5b4c0e30496b78ba897
+- current_digest: 565cedd7bfccad088233fc05b9490b47f4ed504b1458f5b4c0e30496b78ba897
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609140558-BBEAFA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609140558-BBEAFA --result verified-202609140558-BBEAFA --commit fc113c45842939b1607d9bc184efc61ec071e8ea
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
