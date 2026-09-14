@@ -15,6 +15,7 @@ export type RuntimeModuleState = "active" | "foundation" | "internal";
 export interface RuntimeModuleRecord {
   readonly capabilityIds: readonly string[];
   readonly classification: RuntimeClassification;
+  readonly infrastructureExemption?: string;
   readonly path: string;
   readonly state: RuntimeModuleState;
   readonly subsystem: string;
@@ -23,18 +24,24 @@ export interface RuntimeModuleRecord {
 
 /** One non-module item that must remain visible in the reinventory. */
 export interface RuntimeInventoryItem {
-  readonly capabilityId?: string;
+  readonly capabilityId: string;
   readonly classification: RuntimeClassification;
   readonly description: string;
   readonly id: string;
 }
 
+/** One exported non-command mutation helper that must remain explicitly inventoried. */
+export interface RuntimeInternalOperation extends RuntimeInventoryItem {
+  readonly modulePath: string;
+  readonly symbol: string;
+}
+
 /** Complete authored runtime inventory input. */
 export interface RuntimeInventoryManifest {
-  readonly internalOperations: readonly RuntimeInventoryItem[];
+  readonly internalOperations: readonly RuntimeInternalOperation[];
   readonly modules: readonly RuntimeModuleRecord[];
   readonly placeholderSuites: readonly string[];
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
   readonly uiBehaviors: readonly RuntimeInventoryItem[];
 }
 
@@ -57,7 +64,7 @@ export interface RuntimeInventoryReport {
   readonly internalOperationCount: number;
   readonly modules: readonly RuntimeModuleReportEntry[];
   readonly placeholderSuiteCount: number;
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
   readonly uiBehaviorCount: number;
 }
 
@@ -68,10 +75,10 @@ export interface RuntimeInventoryReport {
  */
 export function parseRuntimeInventoryManifest(sourceText: string): RuntimeInventoryManifest {
   const root = parseObject(sourceText);
-  if (root.schemaVersion !== 1) throw new Error("Runtime inventory schemaVersion must equal 1.");
+  if (root.schemaVersion !== 2) throw new Error("Runtime inventory schemaVersion must equal 2.");
   const modules = requireArray(root.modules, "modules").map(parseModule);
   assertOrderedUnique(modules.map(selectPath), "Runtime module paths");
-  const internalOperations = parseItems(root.internalOperations, "internalOperations");
+  const internalOperations = parseInternalOperations(root.internalOperations);
   const uiBehaviors = parseItems(root.uiBehaviors, "uiBehaviors");
   const placeholderSuites = requireStringArray(root, "placeholderSuites");
   assertOrderedUnique(placeholderSuites, "Placeholder suites");
@@ -79,7 +86,7 @@ export function parseRuntimeInventoryManifest(sourceText: string): RuntimeInvent
     internalOperations,
     modules,
     placeholderSuites,
-    schemaVersion: 1,
+    schemaVersion: 2,
     uiBehaviors,
   };
 }
@@ -114,24 +121,65 @@ export async function validateRuntimeInventory(
       throw new Error(`Invalid runtime command record: ${command.id}`);
     assertKnownCapability(command.capabilityId, knownCapabilityIds, command.id);
   }
-  for (const item of [...manifest.internalOperations, ...manifest.uiBehaviors]) {
-    if (item.capabilityId !== undefined)
-      assertKnownCapability(item.capabilityId, knownCapabilityIds, item.id);
-  }
+  for (const item of [...manifest.internalOperations, ...manifest.uiBehaviors])
+    assertKnownCapability(item.capabilityId, knownCapabilityIds, item.id);
   const modules: RuntimeModuleReportEntry[] = [];
+  const operationsByModule = new Map<string, readonly string[]>();
   for (const module of manifest.modules) {
+    if (module.capabilityIds.length === 0 && module.infrastructureExemption === undefined)
+      throw new Error(
+        `Runtime module ${module.path} requires a capability or infrastructure exemption.`,
+      );
+    if (
+      module.infrastructureExemption !== undefined &&
+      (module.classification !== "local-infrastructure" || module.capabilityIds.length > 0)
+    )
+      throw new Error(`Runtime module ${module.path} has an invalid infrastructure exemption.`);
     for (const capabilityId of module.capabilityIds)
       assertKnownCapability(capabilityId, knownCapabilityIds, module.path);
     const source = await readModule(module.path);
-    modules.push({ ...module, exportedOperations: extractExportedOperations(source) });
+    const exportedOperations = extractExportedOperations(source);
+    operationsByModule.set(module.path, exportedOperations);
+    modules.push({ ...module, exportedOperations });
   }
+  const expectedMutationHelpers = modules.flatMap(
+    /** Selects qualified mutation helpers from one module. @param module - Validated runtime module. @returns Qualified helper references. */
+    function selectMutationHelpers(module) {
+      return module.exportedOperations.filter(isMutationHelper).map(
+        /** Qualifies one exported symbol by module path. @param symbol - Exported symbol. @returns Qualified reference. */
+        function qualify(symbol): string {
+          return `${module.path}#${symbol}`;
+        },
+      );
+    },
+  );
+  const inventoriedMutationHelpers = manifest.internalOperations.map(
+    /** Resolves and qualifies one authored operation. @param operation - Authored operation. @returns Qualified reference. */
+    function qualify(operation) {
+      const exported = operationsByModule.get(operation.modulePath);
+      if (exported === undefined)
+        throw new Error(`Internal operation ${operation.id} names an unknown runtime module.`);
+      if (!exported.includes(operation.symbol))
+        throw new Error(`Internal operation ${operation.id} names a non-exported symbol.`);
+      return `${operation.modulePath}#${operation.symbol}`;
+    },
+  );
+  assertOrderedUnique(
+    [...inventoriedMutationHelpers].sort(),
+    "Internal mutation helper references",
+  );
+  assertSameValues(
+    [...expectedMutationHelpers].sort(),
+    [...inventoriedMutationHelpers].sort(),
+    "Runtime mutation helper inventory",
+  );
   return {
     commandCount: commands.length,
     exportedOperationCount: modules.flatMap(selectExportedOperations).length,
     internalOperationCount: manifest.internalOperations.length,
     modules,
     placeholderSuiteCount: manifest.placeholderSuites.length,
-    schemaVersion: 1,
+    schemaVersion: 2,
     uiBehaviorCount: manifest.uiBehaviors.length,
   };
 }
@@ -203,9 +251,11 @@ export function extractExportedOperations(source: string): readonly string[] {
  */
 function parseModule(candidate: unknown, index: number): RuntimeModuleRecord {
   if (!isRecord(candidate)) throw new Error(`Runtime modules[${index}] must be an object.`);
+  const infrastructureExemption = optionalString(candidate, "infrastructureExemption");
   return {
     capabilityIds: requireStringArray(candidate, "capabilityIds"),
     classification: parseClassification(candidate.classification),
+    ...(infrastructureExemption === undefined ? {} : { infrastructureExemption }),
     path: requireString(candidate, "path"),
     state: parseState(candidate.state),
     subsystem: requireString(candidate, "subsystem"),
@@ -229,9 +279,8 @@ function parseItems(candidate: unknown, location: string): readonly RuntimeInven
      */
     function parseItem(value, index): RuntimeInventoryItem {
       if (!isRecord(value)) throw new Error(`${location}[${index}] must be an object.`);
-      const capabilityId = optionalString(value, "capabilityId");
       return {
-        ...(capabilityId === undefined ? {} : { capabilityId }),
+        capabilityId: requireString(value, "capabilityId"),
         classification: parseClassification(value.classification),
         description: requireString(value, "description"),
         id: requireString(value, "id"),
@@ -240,6 +289,59 @@ function parseItems(candidate: unknown, location: string): readonly RuntimeInven
   );
   assertOrderedUnique(items.map(selectId), `${location} IDs`);
   return items;
+}
+
+/**
+ * Parses exact exported mutation-helper records.
+ * @param candidate - Unknown operation array.
+ * @returns Parsed internal operation records.
+ */
+function parseInternalOperations(candidate: unknown): readonly RuntimeInternalOperation[] {
+  const items = requireArray(candidate, "internalOperations").map(
+    /** Parses one exported mutation helper. @param value - Unknown operation. @param index - Operation index. @returns Validated operation. */
+    function parseOperation(value, index): RuntimeInternalOperation {
+      if (!isRecord(value)) throw new Error(`internalOperations[${index}] must be an object.`);
+      return {
+        capabilityId: requireString(value, "capabilityId"),
+        classification: parseClassification(value.classification),
+        description: requireString(value, "description"),
+        id: requireString(value, "id"),
+        modulePath: requireString(value, "modulePath"),
+        symbol: requireString(value, "symbol"),
+      };
+    },
+  );
+  assertOrderedUnique(items.map(selectId), "internalOperations IDs");
+  return items;
+}
+
+/**
+ * Identifies exported non-command helpers that mutate Writer or lifecycle state.
+ * @param symbol - Exported function name.
+ * @returns Whether it follows the mutation-helper naming contract.
+ */
+function isMutationHelper(symbol: string): boolean {
+  return /^(?:append|change|close|insert|mark|merge|move|remove|replace|setWriter|split|toggleWriter)/u.test(
+    symbol,
+  );
+}
+
+/**
+ * Requires two sorted value sets to match exactly.
+ * @param expected - Discovered values.
+ * @param actual - Authored values.
+ * @param label - Diagnostic label.
+ * @returns Nothing; mismatches throw.
+ */
+function assertSameValues(
+  expected: readonly string[],
+  actual: readonly string[],
+  label: string,
+): void {
+  if (JSON.stringify(expected) !== JSON.stringify(actual))
+    throw new Error(
+      `${label} must be exhaustive; expected ${expected.join(", ") || "none"}; received ${actual.join(", ") || "none"}.`,
+    );
 }
 
 /**

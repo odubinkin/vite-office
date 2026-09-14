@@ -1,108 +1,2885 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "filenameDivergences": [
-    { "localPath": "apps/office/src/svl/source/misc/recovery.ts", "rationale": "The browser recovery coordinator has a distinct semantic name from LibreOffice's shared lockfile helper, while the mapped source records the nearest ownership boundary rather than claiming a lockfile port." },
-    { "localPath": "apps/office/src/sw/source/core/doc/writer.ts", "rationale": "The browser document model is named for the Writer aggregate it owns; the pinned docnew.cxx counterpart owns document creation, so preserving its basename would falsely narrow the local model's responsibility." },
-    { "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "rationale": "This React paragraph leaf deliberately decomposes the browser editor beneath the single edtwin.cxx ownership boundary; it is documented as one component of that mapped editor rather than a nonexistent upstream module." },
-    { "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts", "rationale": "The typed descriptor table materializes the current bounded subset of Writer slots from swriter.sdi so every browser surface resolves the same command without reproducing generated C++ slot tables." },
-    { "localPath": "apps/office/src/sw/source/uibase/uiview/view-session.ts", "rationale": "The persistent non-React SwView is separated from the JSX projection in view.tsx; both remain mapped to the single upstream view.cxx ownership boundary." },
-    { "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts", "rationale": "The bounded TypeScript SwWrtShell uses the conventional class basename while the pinned constructor and cursor ownership reside in upstream wrtsh1.cxx." },
-    { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts", "rationale": "The typed declarative command subset is extracted from the pinned menubar.xml configuration so browser controls can share ordering and labels without pretending that a TypeScript file is the XML resource itself." },
-    { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx", "rationale": "The React Format popup is an intentional decomposition of the same pinned menubar.xml hierarchy, separating a growing browser render branch while retaining the upstream configuration file as its ownership source." },
-    { "localPath": "apps/office/src/vcl/browser/browser-clipboard.ts", "rationale": "The browser platform adapter is named for its Web Clipboard responsibility and maps to ClipboardBase.cxx by capability ownership; using the native base-class filename would obscure the required static-browser boundary." },
-    { "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts", "rationale": "The worker-safe TypeScript tree adapter is named for its bounded XML-parser role, while the mapped pinned fastparser.cxx supplies the SAX namespace and event-order mechanism rather than a DOM tree API." }
+    {
+      "localPath": "apps/office/src/sfx2/source/doc/docundomanager.ts",
+      "rationale": "The local docundomanager.ts module preserves the reviewed SfxUndoAction responsibility while TypeScript decomposition or public naming requires a different filename from undo.cxx."
+    },
+    {
+      "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
+      "rationale": "The local edtwin-paragraph.tsx module preserves the reviewed SwTextBoxHelper::getOtherTextBoxFormat responsibility while TypeScript decomposition or public naming requires a different filename from edtwin.cxx."
+    },
+    {
+      "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
+      "rationale": "The local writercommands.ts module preserves the reviewed CreateSWDrawView responsibility while TypeScript decomposition or public naming requires a different filename from swriter.sdi."
+    },
+    {
+      "localPath": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+      "rationale": "The local view-session.ts module preserves the reviewed SwView responsibility while TypeScript decomposition or public naming requires a different filename from view.cxx."
+    },
+    {
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+      "rationale": "The local wrtsh.ts module preserves the reviewed SwWrtShell responsibility while TypeScript decomposition or public naming requires a different filename from wrtsh1.cxx."
+    },
+    {
+      "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx",
+      "rationale": "The local format-menu.tsx module preserves the reviewed .uno:PickList responsibility while TypeScript decomposition or public naming requires a different filename from menubar.xml."
+    },
+    {
+      "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+      "rationale": "The local menubar-commands.ts module preserves the reviewed .uno:PickList responsibility while TypeScript decomposition or public naming requires a different filename from menubar.xml."
+    }
   ],
   "entries": [
-    { "localPath": "apps/office/src/editeng/source/items/paraitem.ts", "status": "mapped", "upstreamPath": "editeng/source/items/paraitem.cxx" },
-    { "localPath": "apps/office/src/editeng/source/items/textitem.ts", "status": "mapped", "upstreamPath": "editeng/source/items/textitem.cxx" },
-    { "localPath": "apps/office/src/framework/source/accelerators/keymapping.ts", "status": "mapped", "upstreamPath": "framework/source/accelerators/keymapping.cxx" },
-    { "localPath": "apps/office/src/framework/source/dispatch/dispatchprovider.ts", "status": "mapped", "upstreamPath": "framework/source/dispatch/dispatchprovider.cxx" },
-    { "localPath": "apps/office/src/framework/source/services/autorecovery.ts", "status": "mapped", "upstreamPath": "framework/source/services/autorecovery.cxx" },
-    { "localPath": "apps/office/src/framework/source/services/desktop.tsx", "status": "mapped", "upstreamPath": "framework/source/services/desktop.cxx" },
-    { "localPath": "apps/office/src/framework/source/services/SuiteCard.tsx", "status": "browser-only", "rationale": "This is a small React composition leaf for the static suite chooser. LibreOffice has no corresponding reusable native widget source file, and browser DOM semantics replace that desktop control boundary." },
-    { "localPath": "apps/office/src/framework/source/services/bootstrap.tsx", "status": "browser-only", "rationale": "This static React mounting adapter delegates to the browser DOM root and React lifecycle. LibreOffice desktop startup cannot be represented by an equivalent Vite entrypoint, so ownership remains explicit rather than duplicating the desktop.cxx mapping." },
-    { "localPath": "apps/office/src/framework/source/services/messages.ts", "status": "browser-only", "rationale": "This TypeScript message catalog is a browser bundle contract rather than a native LibreOffice resource source. It deliberately avoids copying translation catalogs into the static application runtime." },
-    { "localPath": "apps/office/src/framework/source/services/modulemanager.ts", "status": "mapped", "upstreamPath": "framework/source/services/modulemanager.cxx" },
-    { "localPath": "apps/office/src/framework/source/services/worker-protocol.ts", "status": "browser-only", "rationale": "Web Worker message typing is specific to browser isolation and structured clone transport. LibreOffice native threads and UNO do not provide a file-equivalent static-browser protocol to reimplement." },
-    { "localPath": "apps/office/src/main.tsx", "status": "browser-only", "rationale": "The Vite React entrypoint performs browser DOM mounting and has no LibreOffice C++ source equivalent. Its only responsibility is static-host bootstrapping supplied by the browser and bundler." },
-    { "localPath": "apps/office/src/package/source/manifest/ManifestExport.ts", "status": "mapped", "upstreamPath": "package/source/manifest/ManifestExport.cxx" },
-    { "localPath": "apps/office/src/package/source/zipapi/CRC32.ts", "status": "mapped", "upstreamPath": "package/source/zipapi/CRC32.cxx" },
-    { "localPath": "apps/office/src/package/source/zipapi/ZipFile.ts", "status": "mapped", "upstreamPath": "package/source/zipapi/ZipFile.cxx" },
-    { "localPath": "apps/office/src/package/source/zipapi/ZipOutputStream.ts", "status": "mapped", "upstreamPath": "package/source/zipapi/ZipOutputStream.cxx" },
-    { "localPath": "apps/office/src/sfx2/source/doc/docfac.ts", "status": "mapped", "upstreamPath": "sfx2/source/doc/docfac.cxx" },
-    { "localPath": "apps/office/src/sfx2/source/doc/docundomanager.ts", "status": "mapped", "upstreamPath": "sfx2/source/doc/docundomanager.cxx" },
-    { "localPath": "apps/office/src/sfx2/source/doc/docfile.ts", "status": "mapped", "upstreamPath": "sfx2/source/doc/docfile.cxx" },
-    { "localPath": "apps/office/src/svl/source/items/itempool.ts", "status": "mapped", "upstreamPath": "svl/source/items/itempool.cxx" },
-    { "localPath": "apps/office/src/svl/source/items/itemset.ts", "status": "mapped", "upstreamPath": "svl/source/items/itemset.cxx" },
-    { "localPath": "apps/office/src/svl/source/items/poolitem.ts", "status": "mapped", "upstreamPath": "svl/source/items/poolitem.cxx" },
-    { "localPath": "apps/office/src/svl/source/misc/recovery.ts", "status": "mapped", "upstreamPath": "svl/source/misc/lockfilecommon.cxx" },
-    { "localPath": "apps/office/src/svl/source/misc/storage.ts", "status": "browser-only", "rationale": "This structural versioned-record contract is shared by browser IndexedDB and worker-facing code so low-level adapters do not import Sfx document application types. LibreOffice expresses equivalent boundaries through native storage and UNO interfaces rather than one source-file counterpart." },
-    { "localPath": "apps/office/src/sw/inc/hintids.ts", "status": "mapped", "upstreamPath": "sw/inc/hintids.hxx" },
-    { "localPath": "apps/office/src/sw/source/core/attr/format.ts", "status": "mapped", "upstreamPath": "sw/source/core/attr/format.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/attr/swatrset.ts", "status": "mapped", "upstreamPath": "sw/source/core/attr/swatrset.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/doc/list.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/list.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/doc/number.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/number.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/doc/doc.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/doc.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/doc/fmtcol.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/fmtcol.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/docnode/node.ts", "status": "mapped", "upstreamPath": "sw/source/core/docnode/node.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/docnode/nodes.ts", "status": "mapped", "upstreamPath": "sw/source/core/docnode/nodes.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/para/paratr.ts", "status": "mapped", "upstreamPath": "sw/source/core/para/paratr.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/doc/writer-storage.ts", "status": "browser-only", "rationale": "This module serializes bounded Writer snapshots for browser-local persistence. LibreOffice document-filter and storage layers cannot be copied as a direct static IndexedDB implementation and remain separately mapped compatibility work." },
-    { "localPath": "apps/office/src/sw/source/core/doc/writer.ts", "status": "mapped", "upstreamPath": "sw/source/core/doc/docnew.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/undo/undel.ts", "status": "mapped", "upstreamPath": "sw/source/core/undo/undel.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/undo/undobj.ts", "status": "mapped", "upstreamPath": "sw/source/core/undo/undobj.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/undo/unfmco.ts", "status": "mapped", "upstreamPath": "sw/source/core/undo/unfmco.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/undo/unins.ts", "status": "mapped", "upstreamPath": "sw/source/core/undo/unins.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/undo/unnum.ts", "status": "mapped", "upstreamPath": "sw/source/core/undo/unnum.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/undo/unspnd.ts", "status": "mapped", "upstreamPath": "sw/source/core/undo/unspnd.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/undo/unattr.ts", "status": "mapped", "upstreamPath": "sw/source/core/undo/unattr.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/crsr/pam.ts", "status": "mapped", "upstreamPath": "sw/source/core/crsr/pam.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/txtnode/ndhints.ts", "status": "mapped", "upstreamPath": "sw/source/core/txtnode/ndhints.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts", "status": "mapped", "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx" },
-    { "localPath": "apps/office/src/sw/source/core/txtnode/txatbase.ts", "status": "mapped", "upstreamPath": "sw/source/core/txtnode/txatbase.cxx" },
-    { "localPath": "apps/office/src/sw/source/filter/ascii/ascatr.ts", "status": "mapped", "upstreamPath": "sw/source/filter/ascii/ascatr.cxx" },
-    { "localPath": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts", "status": "mapped", "upstreamPath": "sw/source/filter/html/htmlnumwriter.cxx" },
-    { "localPath": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts", "status": "browser-only", "rationale": "This asynchronous structured-clone service isolates the Writer filter from the main thread. LibreOffice uses native component and stream interfaces rather than a browser Worker service contract." },
-    { "localPath": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts", "status": "browser-only", "rationale": "The restartable Worker client implements browser transferables, AbortSignal cancellation, timeout, stale-result rejection, and termination, which have no single LibreOffice source-file equivalent." },
-    { "localPath": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts", "status": "browser-only", "rationale": "This Dedicated Worker request coordinator is a browser execution adapter around the mapped package and Writer filters; native LibreOffice scheduling and UNO transport do not provide an equivalent module." },
-    { "localPath": "apps/office/src/sw/source/filter/xml/odt-worker.ts", "status": "browser-only", "rationale": "This Vite module-worker entry installs a browser message listener and owns no document semantics. LibreOffice process startup does not have a corresponding static-browser entry module." },
-    { "localPath": "apps/office/src/sw/source/filter/xml/swxml.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/swxml.cxx" },
-    { "localPath": "apps/office/src/sw/source/filter/xml/wrtxml.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/wrtxml.cxx" },
-    { "localPath": "apps/office/src/sw/source/filter/xml/xmlexp.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/xmlexp.cxx" },
-    { "localPath": "apps/office/src/sw/source/filter/xml/xmlimp.ts", "status": "mapped", "upstreamPath": "sw/source/filter/xml/xmlimp.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/app/docsh.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/app/docsh.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/app/mainwn.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/app/mainwn.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/app/swmodule.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/app/swmodule.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/wrtsh/select.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/wrtsh/select.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/ribbar/inputwin.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/shells/listsh.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/shells/listsh.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/shells/textsh.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts", "status": "mapped", "upstreamPath": "sw/sdi/swriter.sdi" },
-    { "localPath": "apps/office/src/sw/source/uibase/shells/txtattr.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/shells/txtattr.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/shells/txtnum.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/shells/txtnum.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/uiview/view.tsx", "status": "mapped", "upstreamPath": "sw/source/uibase/uiview/view.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/uiview/view-session.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/uiview/view.cxx" },
-    { "localPath": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts", "status": "mapped", "upstreamPath": "sw/source/uibase/uiview/viewfunc.hxx" },
-    { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml" },
-    { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml" },
-    { "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml" },
-    { "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/toolbar/numobjectbar.xml" },
-    { "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/toolbar/standardbar.xml" },
-    { "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts", "status": "mapped", "upstreamPath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml" },
-    { "localPath": "apps/office/src/vcl/browser/browser-clipboard.ts", "status": "mapped", "upstreamPath": "vcl/source/app/ClipboardBase.cxx" },
-    { "localPath": "apps/office/src/vcl/browser/browser-download.ts", "status": "browser-only", "rationale": "Browser download initiation delegates to the user agent's sandboxed download permission model. LibreOffice native file dialogs and filesystem writes cannot be represented by one static browser source-file implementation." },
-    { "localPath": "apps/office/src/vcl/browser/browser-file.ts", "status": "browser-only", "rationale": "A transient HTML file input and Blob byte reader are browser sandbox capabilities. They deliberately stop at selected bytes so Writer document ownership and ODT parsing remain in SwDocShell and the mapped XML filters." },
-    { "localPath": "apps/office/src/vcl/browser/indexeddb-storage.ts", "status": "browser-only", "rationale": "IndexedDB is a browser-native asynchronous persistence API with no LibreOffice file-equivalent implementation. The module is documented as a platform adapter rather than a false reimplementation of native storage." },
-    { "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts", "status": "mapped", "upstreamPath": "sax/source/fastparser/fastparser.cxx" },
-    { "localPath": "apps/office/src/xmloff/source/text/txtparae.ts", "status": "mapped", "upstreamPath": "xmloff/source/text/txtparae.cxx" },
-    { "localPath": "apps/office/src/xmloff/source/text/txtparai.ts", "status": "mapped", "upstreamPath": "xmloff/source/text/txtparai.cxx" }
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SvxAdjust",
+            "path": "apps/office/src/editeng/source/items/paraitem.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SvxAdjust",
+            "path": "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/editeng/source/items/paraitem.ts",
+      "localSymbols": [
+        "SvxAdjust",
+        "SvxAdjustItem"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SvxAdjust, SvxAdjustItem, SvxLineSpacingItem::CreateDefault, SvxAdjustItem::CreateDefault and the bounded SvxAdjust, SvxAdjustItem contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded SvxAdjustItem paragraph-alignment value from pinned `editeng/source/items/paraitem.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "editeng/source/items/paraitem.cxx",
+      "upstreamSymbols": [
+        "SvxAdjust",
+        "SvxAdjustItem",
+        "SvxLineSpacingItem::CreateDefault",
+        "SvxAdjustItem::CreateDefault"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "FontWeight",
+            "path": "apps/office/src/editeng/source/items/textitem.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "FontWeight",
+            "path": "vendor/libreoffice-reference/editeng/source/items/textitem.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/editeng/source/items/textitem.ts",
+      "localSymbols": [
+        "FontWeight",
+        "FontItalic",
+        "FontLineStyle",
+        "SvxWeightItem",
+        "SvxPostureItem",
+        "SvxUnderlineItem"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside FontWeight, FontItalic, FontLineStyle, SvxWeightItem and the bounded FontWeight, FontItalic, FontLineStyle contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements bounded EditEngine character items from pinned `editeng/source/items/textitem.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "editeng/source/items/textitem.cxx",
+      "upstreamSymbols": [
+        "FontWeight",
+        "FontItalic",
+        "FontLineStyle",
+        "SvxWeightItem"
+      ]
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserShortcutEvent",
+            "path": "apps/office/src/framework/source/accelerators/keymapping.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/accelerators/keymapping.ts",
+      "rationale": "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "CommandTarget",
+            "path": "apps/office/src/framework/source/dispatch/dispatchprovider.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/dispatch/dispatchprovider.ts",
+      "rationale": "Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes at the LibreOffice `framework/source/dispatch/dispatchprovider.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes at the LibreOffice `framework/source/dispatch/dispatchprovider.cxx` ownership boundary."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SuiteCardProps",
+            "path": "apps/office/src/framework/source/services/SuiteCard.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/services/SuiteCard.tsx",
+      "rationale": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Renders one accessible suite link for the office application launcher."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "AutoRecoverySaveReason",
+            "path": "apps/office/src/framework/source/services/autorecovery.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "cppu::supportsService",
+            "path": "vendor/libreoffice-reference/framework/source/services/autorecovery.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/services/autorecovery.ts",
+      "localSymbols": [
+        "AutoRecoverySaveReason",
+        "AutoRecoverySaveResult",
+        "AutoRecoveryRestoreResult",
+        "AutoRecoveryCandidate",
+        "AutoRecoveryEnvironment",
+        "AutoRecoveryOptions"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside cppu::supportsService, OWeakObject::acquire, OWeakObject::release, svtools::ConfigItems and the bounded AutoRecoverySaveReason, AutoRecoverySaveResult, AutoRecoveryRestoreResult contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the browser application AutoRecovery owner corresponding to LibreOffice `framework/source/services/autorecovery.cxx` over injected document and storage contracts."
+      ],
+      "status": "mapped",
+      "upstreamPath": "framework/source/services/autorecovery.cxx",
+      "upstreamSymbols": [
+        "cppu::supportsService",
+        "OWeakObject::acquire",
+        "OWeakObject::release",
+        "svtools::ConfigItems"
+      ]
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "mountApplication",
+            "path": "apps/office/src/framework/source/services/bootstrap.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/services/bootstrap.tsx",
+      "rationale": "Mounts the React application into a caller-provided browser root with an explicit missing-root failure. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Mounts the React application into a caller-provided browser root with an explicit missing-root failure."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "Desktop",
+            "path": "apps/office/src/framework/source/services/desktop.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/services/desktop.tsx",
+      "rationale": "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "MessageCatalog",
+            "path": "apps/office/src/framework/source/services/messages.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/services/messages.ts",
+      "rationale": "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SuiteId",
+            "path": "apps/office/src/framework/source/services/modulemanager.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/services/modulemanager.ts",
+      "rationale": "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WORKER_PROTOCOL_VERSION",
+            "path": "apps/office/src/framework/source/services/worker-protocol.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/services/worker-protocol.ts",
+      "rationale": "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter.",
+            "path": "apps/office/src/main.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/main.tsx",
+      "rationale": "Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "ODT_MIMETYPE",
+            "path": "apps/office/src/package/source/manifest/ManifestExport.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "ManifestExport::ManifestExport",
+            "path": "vendor/libreoffice-reference/package/source/manifest/ManifestExport.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/package/source/manifest/ManifestExport.ts",
+      "localSymbols": [
+        "ODT_MIMETYPE",
+        "createOdtManifestXml",
+        "validateOdtManifestXml"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside ManifestExport::ManifestExport, Base64::encode, OUString::number, uno::RuntimeException and the bounded ODT_MIMETYPE, createOdtManifestXml, validateOdtManifestXml contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded ODF package manifest exporter from pinned LibreOffice `package/source/manifest/ManifestExport.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "package/source/manifest/ManifestExport.cxx",
+      "upstreamSymbols": [
+        "ManifestExport::ManifestExport",
+        "Base64::encode",
+        "OUString::number",
+        "uno::RuntimeException"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "CRC32",
+            "path": "apps/office/src/package/source/zipapi/CRC32.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "CRC32::CRC32",
+            "path": "vendor/libreoffice-reference/package/source/zipapi/CRC32.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/package/source/zipapi/CRC32.ts",
+      "localSymbols": [
+        "CRC32"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside CRC32::CRC32, CRC32::reset, CRC32::getValue, CRC32::updateSegment and the bounded CRC32 contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the ZIP CRC-32 accumulator from pinned LibreOffice `package/source/zipapi/CRC32.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "package/source/zipapi/CRC32.cxx",
+      "upstreamSymbols": [
+        "CRC32::CRC32",
+        "CRC32::reset",
+        "CRC32::getValue",
+        "CRC32::updateSegment"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "ZipFileLimits",
+            "path": "apps/office/src/package/source/zipapi/ZipFile.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "ZipFile::ZipFile",
+            "path": "vendor/libreoffice-reference/package/source/zipapi/ZipFile.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/package/source/zipapi/ZipFile.ts",
+      "localSymbols": [
+        "ZipFileLimits",
+        "DEFAULT_ZIP_FILE_LIMITS",
+        "ZipFile",
+        "assertSafeZipEntryName"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside ZipFile::ZipFile, std::move, ZipFile::~ZipFile, ZipFile::setInputStream and the bounded ZipFileLimits, DEFAULT_ZIP_FILE_LIMITS, ZipFile contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements bounded ZIP32 central-directory and local-record validation from pinned LibreOffice `package/source/zipapi/ZipFile.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "package/source/zipapi/ZipFile.cxx",
+      "upstreamSymbols": [
+        "ZipFile::ZipFile",
+        "std::move",
+        "ZipFile::~ZipFile",
+        "ZipFile::setInputStream"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "ZipOutputStream",
+            "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "ZipOutputStream::ZipOutputStream",
+            "path": "vendor/libreoffice-reference/package/source/zipapi/ZipOutputStream.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+      "localSymbols": [
+        "ZipOutputStream"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside ZipOutputStream::ZipOutputStream, ThreadPool::createThreadTaskTag, ZipOutputStream::~ZipOutputStream, ZipOutputStream::setEntry and the bounded ZipOutputStream contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the deterministic ZIP record writer boundary from pinned LibreOffice `package/source/zipapi/ZipOutputStream.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "package/source/zipapi/ZipOutputStream.cxx",
+      "upstreamSymbols": [
+        "ZipOutputStream::ZipOutputStream",
+        "ThreadPool::createThreadTaskTag",
+        "ZipOutputStream::~ZipOutputStream",
+        "ZipOutputStream::setEntry"
+      ]
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DocumentLifecycle",
+            "path": "apps/office/src/sfx2/source/doc/docfac.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/doc/docfac.ts",
+      "rationale": "Defines immutable browser document identity and lifecycle value transitions used by the object-shell layer. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Defines immutable browser document identity and lifecycle value transitions used by the object-shell layer."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SerializableValue",
+            "path": "apps/office/src/sfx2/source/doc/docfile.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "std::move",
+            "path": "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/doc/docfile.ts",
+      "localSymbols": [
+        "SerializableValue",
+        "SfxMediumKind",
+        "SfxMediumOrigin",
+        "SfxMediumEndpointKind",
+        "SfxMediumOperation",
+        "SfxMediumOperationState"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside std::move, UseDocumentSystemFileLocking::get, UseDocumentOOoLockFile::get, UseLocking::get and the bounded SerializableValue, SfxMediumKind, SfxMediumOrigin contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Defines the bounded browser document-medium persistence contract at the LibreOffice `sfx2/source/doc/docfile.cxx` ownership boundary without selecting a browser persistence API."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sfx2/source/doc/docfile.cxx",
+      "upstreamSymbols": [
+        "std::move",
+        "UseDocumentSystemFileLocking::get",
+        "UseDocumentOOoLockFile::get",
+        "UseLocking::get"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DEFAULT_MAX_UNDO_ACTION_COUNT",
+            "path": "apps/office/src/sfx2/source/doc/docundomanager.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxUndoAction",
+            "path": "vendor/libreoffice-reference/svl/source/undo/undo.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/doc/docundomanager.ts",
+      "localSymbols": [
+        "DEFAULT_MAX_UNDO_ACTION_COUNT",
+        "SfxUndoAction",
+        "SfxListUndoAction",
+        "SfxUndoManager"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SfxUndoAction, SfxListUndoAction, SfxUndoManager, SfxRepeatTarget::~SfxRepeatTarget and the bounded DEFAULT_MAX_UNDO_ACTION_COUNT, SfxUndoAction, SfxListUndoAction contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the document-facing Sfx undo manager with action stacks, list actions, save-position tracking, merging, redo truncation, and bounded retention."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/undo/undo.cxx",
+      "upstreamSymbols": [
+        "SfxUndoAction",
+        "SfxListUndoAction",
+        "SfxUndoManager",
+        "SfxRepeatTarget::~SfxRepeatTarget"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxPoolItemFactory",
+            "path": "apps/office/src/svl/source/items/itempool.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxItemPool",
+            "path": "vendor/libreoffice-reference/svl/source/items/itempool.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/items/itempool.ts",
+      "localSymbols": [
+        "SfxPoolItemFactory",
+        "SfxItemPool"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SfxItemPool, ScDocument::UpdateFontCharSet, ScDocument::GetDocColors, SwDoc::GetDocColors and the bounded SfxPoolItemFactory, SfxItemPool contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded default-item registry and item restoration responsibilities from pinned `svl/source/items/itempool.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/items/itempool.cxx",
+      "upstreamSymbols": [
+        "SfxItemPool",
+        "ScDocument::UpdateFontCharSet",
+        "ScDocument::GetDocColors",
+        "SwDoc::GetDocColors"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxItemState",
+            "path": "apps/office/src/svl/source/items/itemset.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxItemState",
+            "path": "vendor/libreoffice-reference/svl/source/items/itemset.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/items/itemset.ts",
+      "localSymbols": [
+        "SfxItemState",
+        "WhichRange",
+        "WhichRangesContainer",
+        "SfxItemSet"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SfxItemState, WhichRange, WhichRangesContainer, SfxItemSet and the bounded SfxItemState, WhichRange, WhichRangesContainer contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements bounded SfxItemSet delta storage, parent lookup, and item state from pinned `svl/source/items/itemset.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/items/itemset.cxx",
+      "upstreamSymbols": [
+        "SfxItemState",
+        "WhichRange",
+        "WhichRangesContainer",
+        "SfxItemSet"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxPoolItemValue",
+            "path": "apps/office/src/svl/source/items/poolitem.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxPoolItem",
+            "path": "vendor/libreoffice-reference/svl/source/items/poolitem.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/items/poolitem.ts",
+      "localSymbols": [
+        "SfxPoolItemValue",
+        "SfxPoolItemSnapshot",
+        "SfxPoolItem",
+        "SfxStringItem",
+        "SfxInt16Item"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SfxPoolItem, DefaultItemInstanceManager::find, SfxPoolItem::getItemInstanceManager, SfxPoolItem::SfxPoolItem and the bounded SfxPoolItemValue, SfxPoolItemSnapshot, SfxPoolItem contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded SfxPoolItem value hierarchy from pinned `svl/source/items/poolitem.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/items/poolitem.cxx",
+      "upstreamSymbols": [
+        "SfxPoolItem",
+        "DefaultItemInstanceManager::find",
+        "SfxPoolItem::getItemInstanceManager",
+        "SfxPoolItem::SfxPoolItem"
+      ]
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "RecoveryStorageAdapter",
+            "path": "apps/office/src/svl/source/misc/recovery.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/misc/recovery.ts",
+      "rationale": "Coordinates deterministic browser recovery storage over an injected versioned-storage contract. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Coordinates deterministic browser recovery storage over an injected versioned-storage contract."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SerializableValue",
+            "path": "apps/office/src/svl/source/misc/storage.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/misc/storage.ts",
+      "rationale": "Defines neutral serializable versioned-record storage used by application services and browser adapters without depending on a document shell. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Defines neutral serializable versioned-record storage used by application services and browser adapters without depending on a document shell."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "RES_CHRATR_BEGIN",
+            "path": "apps/office/src/sw/inc/hintids.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "RES_CHRATR_BEGIN",
+            "path": "vendor/libreoffice-reference/sw/inc/hintids.hxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/inc/hintids.ts",
+      "localSymbols": [
+        "RES_CHRATR_BEGIN",
+        "RES_CHRATR_POSTURE",
+        "RES_CHRATR_UNDERLINE",
+        "RES_CHRATR_WEIGHT",
+        "RES_CHRATR_CJK_POSTURE",
+        "RES_CHRATR_CJK_WEIGHT"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT and the bounded RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Declares the bounded Writer WhichIds used by the TypeScript core, matching pinned `sw/inc/hintids.hxx` numeric identities."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/inc/hintids.hxx",
+      "upstreamSymbols": [
+        "RES_CHRATR_BEGIN",
+        "RES_CHRATR_POSTURE",
+        "RES_CHRATR_UNDERLINE",
+        "RES_CHRATR_WEIGHT"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwFormat",
+            "path": "apps/office/src/sw/source/core/attr/format.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwFormat",
+            "path": "vendor/libreoffice-reference/sw/source/core/attr/format.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/attr/format.ts",
+      "localSymbols": [
+        "SwFormat"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwFormat, SwFmt::getIDocumentSettingAccess, SwFormat::SwFormat, sw::BorderCacheOwner and the bounded SwFormat contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/attr/format.cxx",
+      "upstreamSymbols": [
+        "SwFormat",
+        "SwFmt::getIDocumentSettingAccess",
+        "SwFormat::SwFormat",
+        "sw::BorderCacheOwner"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwAttrPool",
+            "path": "apps/office/src/sw/source/core/attr/swatrset.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwAttrPool",
+            "path": "vendor/libreoffice-reference/sw/source/core/attr/swatrset.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "localSymbols": [
+        "SwAttrPool",
+        "SwAttrSet"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwAttrPool, SwAttrSet, SwAttrPool::SwAttrPool, o3tl::convert and the bounded SwAttrPool, SwAttrSet contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/attr/swatrset.cxx",
+      "upstreamSymbols": [
+        "SwAttrPool",
+        "SwAttrSet",
+        "SwAttrPool::SwAttrPool",
+        "o3tl::convert"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwNodeIndex",
+            "path": "apps/office/src/sw/source/core/crsr/pam.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwNodeIndex",
+            "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/crsr/pam.ts",
+      "localSymbols": [
+        "SwNodeIndex",
+        "SwPosition",
+        "SwPaM"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwNodeIndex, SwPosition, SwPaM, SwPosition::SwPosition and the bounded SwNodeIndex, SwPosition, SwPaM contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/crsr/pam.cxx",
+      "upstreamSymbols": [
+        "SwNodeIndex",
+        "SwPosition",
+        "SwPaM",
+        "SwPosition::SwPosition"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterParagraphTextRange",
+            "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "IDocumentMarkAccess::GetType",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+      "localSymbols": [
+        "WriterParagraphTextRange",
+        "DocumentContentOperationsManager",
+        "replaceWriterParagraphTextRange"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside IDocumentMarkAccess::GetType, std::lower_bound, sw::CalcBreaks, o3tl::make_unsigned and the bounded WriterParagraphTextRange, DocumentContentOperationsManager, replaceWriterParagraphTextRange contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements bounded SwPaM content operations at the pinned LibreOffice `sw/source/core/doc/DocumentContentOperationsManager.cxx` boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+      "upstreamSymbols": [
+        "IDocumentMarkAccess::GetType",
+        "std::lower_bound",
+        "sw::CalcBreaks",
+        "o3tl::make_unsigned"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwDocSnapshot",
+            "path": "apps/office/src/sw/source/core/doc/doc.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwDoc",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/doc.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/doc.ts",
+      "localSymbols": [
+        "SwDocSnapshot",
+        "SwDoc"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwDoc, SwDoc::acquire, SwDoc::release, SwDoc::getReferenceCount and the bounded SwDocSnapshot, SwDoc contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the Writer SwDoc aggregate from the pinned LibreOffice `sw/source/core/doc/docnew.cxx` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/doc.cxx",
+      "upstreamSymbols": [
+        "SwDoc",
+        "SwDoc::acquire",
+        "SwDoc::release",
+        "SwDoc::getReferenceCount"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WRITER_PARAGRAPH_STYLES",
+            "path": "apps/office/src/sw/source/core/doc/fmtcol.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwFormatColl",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/fmtcol.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/fmtcol.ts",
+      "localSymbols": [
+        "WRITER_PARAGRAPH_STYLES",
+        "WriterParagraphStyle",
+        "SwTextFormatCollSnapshot",
+        "SwFormatColl",
+        "SwTextFormatColl",
+        "isWriterParagraphStyle"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwFormatColl, SwTextFormatColl, SwTextFormatColl::SwTextFormatColl, SwTextFormatColl::~SwTextFormatColl and the bounded WRITER_PARAGRAPH_STYLES, WriterParagraphStyle, SwTextFormatCollSnapshot contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements bounded SwFormatColl and SwTextFormatColl hierarchy from pinned `sw/source/core/doc/fmtcol.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/fmtcol.cxx",
+      "upstreamSymbols": [
+        "SwFormatColl",
+        "SwTextFormatColl",
+        "SwTextFormatColl::SwTextFormatColl",
+        "SwTextFormatColl::~SwTextFormatColl"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WRITER_PARAGRAPH_LIST_KINDS",
+            "path": "apps/office/src/sw/source/core/doc/list.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwList::SwList",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/list.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/list.ts",
+      "localSymbols": [
+        "WRITER_PARAGRAPH_LIST_KINDS",
+        "WRITER_MAX_LIST_LEVEL",
+        "WriterParagraphListKind",
+        "WriterParagraphList",
+        "createDefaultWriterParagraphList",
+        "isWriterParagraphListKind"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwList::SwList, std::move, uno::RuntimeException, SwList::~SwList and the bounded WRITER_PARAGRAPH_LIST_KINDS, WRITER_MAX_LIST_LEVEL, WriterParagraphListKind contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Defines the browser projection and command-boundary normalization for Writer list state at LibreOffice's `sw/source/core/doc/list.cxx` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/list.cxx",
+      "upstreamSymbols": [
+        "SwList::SwList",
+        "std::move",
+        "uno::RuntimeException",
+        "SwList::~SwList"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DEFAULT_BULLET_RULE_NAME",
+            "path": "apps/office/src/sw/source/core/doc/number.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwNumFormat",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/number.ts",
+      "localSymbols": [
+        "DEFAULT_BULLET_RULE_NAME",
+        "DEFAULT_NUMBERING_RULE_NAME",
+        "SwNumFormatSnapshot",
+        "SwNumFormat",
+        "SwNumRuleSnapshot",
+        "SwNumRule"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwNumFormat, SwNumRule, o3tl::toTwips, SwNumRule::GetOutlineRuleName and the bounded DEFAULT_BULLET_RULE_NAME, DEFAULT_NUMBERING_RULE_NAME, SwNumFormatSnapshot contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Calculates browser-visible Writer list markers at the `sw/source/core/doc/number.cxx` ownership boundary without changing editable paragraph text."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/number.cxx",
+      "upstreamSymbols": [
+        "SwNumFormat",
+        "SwNumRule",
+        "o3tl::toTwips",
+        "SwNumRule::GetOutlineRuleName"
+      ]
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterSnapshotState",
+            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+      "rationale": "Defines Writer-specific snapshot orchestration over the generic browser storage contract without selecting an IndexedDB implementation or React UI. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Defines Writer-specific snapshot orchestration over the generic browser storage contract without selecting an IndexedDB implementation or React UI."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwDoc",
+            "path": "apps/office/src/sw/source/core/doc/writer.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/writer.ts",
+      "rationale": "Exposes legacy and test-facing Writer graph helpers without owning the production command path. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Exposes legacy and test-facing Writer graph helpers without owning the production command path."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwNodeType",
+            "path": "apps/office/src/sw/source/core/docnode/node.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwNodeType",
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/docnode/node.ts",
+      "localSymbols": [
+        "SwNodeType",
+        "SwNode",
+        "SwStartNode",
+        "SwEndNode",
+        "SwContentNode",
+        "moveWriterParagraph"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwNodeType, SwNode, SwStartNode, SwEndNode and the bounded SwNodeType, SwNode, SwStartNode contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements Writer document model nodes and structural transitions from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/docnode/node.cxx",
+      "upstreamSymbols": [
+        "SwNodeType",
+        "SwNode",
+        "SwStartNode",
+        "SwEndNode"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwNodes",
+            "path": "apps/office/src/sw/source/core/docnode/nodes.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwNodes",
+            "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "localSymbols": [
+        "SwNodes"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwNodes, SwNodes::SwNodes, SwNodes::~SwNodes, SwNodes::ChgNode and the bounded SwNodes contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/docnode/nodes.cxx",
+      "upstreamSymbols": [
+        "SwNodes",
+        "SwNodes::SwNodes",
+        "SwNodes::~SwNodes",
+        "SwNodes::ChgNode"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwNumRuleItem",
+            "path": "apps/office/src/sw/source/core/para/paratr.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwNumRuleItem",
+            "path": "vendor/libreoffice-reference/sw/source/core/para/paratr.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/para/paratr.ts",
+      "localSymbols": [
+        "SwNumRuleItem"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwNumRuleItem, SwFormatDrop::CreateDefault, SwRegisterItem::CreateDefault, SwNumRuleItem::CreateDefault and the bounded SwNumRuleItem contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded Writer paragraph pool items from pinned `sw/source/core/para/paratr.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/para/paratr.cxx",
+      "upstreamSymbols": [
+        "SwNumRuleItem",
+        "SwFormatDrop::CreateDefault",
+        "SwRegisterItem::CreateDefault",
+        "SwNumRuleItem::CreateDefault"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwpHints",
+            "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwpHints",
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+      "localSymbols": [
+        "SwpHints",
+        "WriterTextRunLike",
+        "createSwpHintsFromSnapshot"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwpHints, CompareSwpHtWhichStart::operator, CompareSwpHtEnd::operator, SwpHints::Insert and the bounded SwpHints, WriterTextRunLike, createSwpHintsFromSnapshot contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/txtnode/ndhints.cxx",
+      "upstreamSymbols": [
+        "SwpHints",
+        "CompareSwpHtWhichStart::operator",
+        "CompareSwpHtEnd::operator",
+        "SwpHints::Insert"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterCharacterAttributes",
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwTextNode",
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "localSymbols": [
+        "WriterCharacterAttributes",
+        "WRITER_CHARACTER_FORMATS",
+        "WriterCharacterFormat",
+        "WriterTextRun",
+        "DEFAULT_WRITER_CHARACTER_ATTRIBUTES",
+        "WRITER_PARAGRAPH_ALIGNMENTS"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwTextNode, SwNodes::MakeTextNode, SwTextNode::SwTextNode, sw::TextNodeNotificationSuppressor and the bounded WriterCharacterAttributes, WRITER_CHARACTER_FORMATS, WriterCharacterFormat contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements Writer text nodes plus derived browser text runs at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+      "upstreamSymbols": [
+        "SwTextNode",
+        "SwNodes::MakeTextNode",
+        "SwTextNode::SwTextNode",
+        "sw::TextNodeNotificationSuppressor"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "RES_TXTATR_AUTOFMT",
+            "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "RES_TXTATR_AUTOFMT",
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+      "localSymbols": [
+        "RES_TXTATR_AUTOFMT",
+        "WriterCharacterAttributes",
+        "SwFormatAutoFormat",
+        "SwTextAttrSnapshot",
+        "SwTextAttr",
+        "createSwFormatAutoFormat"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside RES_TXTATR_AUTOFMT, SwTextAttr, SwTextAttr::SwTextAttr, SwTextAttr::~SwTextAttr and the bounded RES_TXTATR_AUTOFMT, WriterCharacterAttributes, SwFormatAutoFormat contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/txtnode/txatbase.cxx",
+      "upstreamSymbols": [
+        "RES_TXTATR_AUTOFMT",
+        "SwTextAttr",
+        "SwTextAttr::SwTextAttr",
+        "SwTextAttr::~SwTextAttr"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwUndoAttr",
+            "path": "apps/office/src/sw/source/core/undo/unattr.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwUndoAttr",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/unattr.ts",
+      "localSymbols": [
+        "SwUndoAttr",
+        "SwUndoParagraphFormat"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwUndoAttr, SwUndoFormatAttrHelper::SwUndoFormatAttrHelper, SwUndoFormatAttrHelper::SwClientNotify, SwDocModifyAndUndoGuard::SwDocModifyAndUndoGuard and the bounded SwUndoAttr, SwUndoParagraphFormat contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements direct character and paragraph attribute undo from pinned LibreOffice unattr.cxx."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/unattr.cxx",
+      "upstreamSymbols": [
+        "SwUndoAttr",
+        "SwUndoFormatAttrHelper::SwUndoFormatAttrHelper",
+        "SwUndoFormatAttrHelper::SwClientNotify",
+        "SwDocModifyAndUndoGuard::SwDocModifyAndUndoGuard"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwUndoDeleteDirection",
+            "path": "apps/office/src/sw/source/core/undo/undel.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwUndoDelete",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/undel.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/undel.ts",
+      "localSymbols": [
+        "SwUndoDeleteDirection",
+        "SwUndoDeleteGroup",
+        "SwUndoDelete",
+        "SwUndoReplace",
+        "SwUndoJoinParagraphs"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwUndoDelete, SwUndoDelete::SwUndoDelete, SwUndoDelete::SaveContent, SwUndoDelete::CanGrouping and the bounded SwUndoDeleteDirection, SwUndoDeleteGroup, SwUndoDelete contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements bounded Writer delete, replace, and join undo payloads from pinned undel.cxx."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/undel.cxx",
+      "upstreamSymbols": [
+        "SwUndoDelete",
+        "SwUndoDelete::SwUndoDelete",
+        "SwUndoDelete::SaveContent",
+        "SwUndoDelete::CanGrouping"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwUndoCursorPosition",
+            "path": "apps/office/src/sw/source/core/undo/undobj.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwUndo",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/undobj.ts",
+      "localSymbols": [
+        "SwUndoCursorPosition",
+        "SwUndoCursorState",
+        "SwUndoRedoContext",
+        "SwUndo",
+        "GetUndoTextNode",
+        "CopyTextRangeRuns"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwUndo, SwUndRng::SwUndRng, SwUndRng::SetValues, SwUndRng::SetPaM and the bounded SwUndoCursorPosition, SwUndoCursorState, SwUndoRedoContext contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Defines Writer undo context, cursor snapshots, and range helpers corresponding to the shared SwUndo/SwUndRng infrastructure in pinned LibreOffice undobj.cxx."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/undobj.cxx",
+      "upstreamSymbols": [
+        "SwUndo",
+        "SwUndRng::SwUndRng",
+        "SwUndRng::SetValues",
+        "SwUndRng::SetPaM"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwUndoFormatColl",
+            "path": "apps/office/src/sw/source/core/undo/unfmco.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwUndoFormatColl",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unfmco.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/unfmco.ts",
+      "localSymbols": [
+        "SwUndoFormatColl"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwUndoFormatColl, SwUndoFormatColl::SwUndoFormatColl, SwUndoFormatColl::~SwUndoFormatColl, SwUndoFormatColl::UndoImpl and the bounded SwUndoFormatColl contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements paragraph style collection undo from pinned LibreOffice unfmco.cxx."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/unfmco.cxx",
+      "upstreamSymbols": [
+        "SwUndoFormatColl",
+        "SwUndoFormatColl::SwUndoFormatColl",
+        "SwUndoFormatColl::~SwUndoFormatColl",
+        "SwUndoFormatColl::UndoImpl"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwUndoInsertGroup",
+            "path": "apps/office/src/sw/source/core/undo/unins.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwUndoInsert",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/unins.ts",
+      "localSymbols": [
+        "SwUndoInsertGroup",
+        "SwUndoInsert"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwUndoInsert, SwUndoInsert::GetTextFromDoc, SwUndoInsert::Init, SwUndoInsert::SwUndoInsert and the bounded SwUndoInsertGroup, SwUndoInsert contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the bounded SwUndoInsert action from pinned LibreOffice unins.cxx."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/unins.cxx",
+      "upstreamSymbols": [
+        "SwUndoInsert",
+        "SwUndoInsert::GetTextFromDoc",
+        "SwUndoInsert::Init",
+        "SwUndoInsert::SwUndoInsert"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwUndoInsNum",
+            "path": "apps/office/src/sw/source/core/undo/unnum.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwUndoInsNum",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/unnum.ts",
+      "localSymbols": [
+        "SwUndoInsNum",
+        "SwUndoNumLevel"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwUndoInsNum, SwUndoInsNum::SwUndoInsNum, std::move, SwUndoInsNum::~SwUndoInsNum and the bounded SwUndoInsNum, SwUndoNumLevel contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements bounded numbering and list-level undo from pinned LibreOffice unnum.cxx."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/unnum.cxx",
+      "upstreamSymbols": [
+        "SwUndoInsNum",
+        "SwUndoInsNum::SwUndoInsNum",
+        "std::move",
+        "SwUndoInsNum::~SwUndoInsNum"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwUndoSplitNode",
+            "path": "apps/office/src/sw/source/core/undo/unspnd.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwUndoSplitNode",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/unspnd.ts",
+      "localSymbols": [
+        "SwUndoSplitNode"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwUndoSplitNode, SwUndoSplitNode::SwUndoSplitNode, SwUndoSplitNode::~SwUndoSplitNode, SwUndoSplitNode::UndoImpl and the bounded SwUndoSplitNode contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the bounded SwUndoSplitNode action from pinned LibreOffice unspnd.cxx."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/unspnd.cxx",
+      "upstreamSymbols": [
+        "SwUndoSplitNode",
+        "SwUndoSplitNode::SwUndoSplitNode",
+        "SwUndoSplitNode::~SwUndoSplitNode",
+        "SwUndoSplitNode::UndoImpl"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "serializeWriterClipboardPlainText",
+            "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwASC_AttrIter::SwASC_AttrIter",
+            "path": "vendor/libreoffice-reference/sw/source/filter/ascii/ascatr.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
+      "localSymbols": [
+        "serializeWriterClipboardPlainText"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwASC_AttrIter::SwASC_AttrIter, SwASC_AttrIter::SearchNext, SwASC_AttrIter::OutAttr, std::make_pair and the bounded serializeWriterClipboardPlainText contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Serializes prepared Writer selections to readable plain text, following LibreOffice Writer's `sw/source/filter/ascii/ascatr.cxx` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/ascii/ascatr.cxx",
+      "upstreamSymbols": [
+        "SwASC_AttrIter::SwASC_AttrIter",
+        "SwASC_AttrIter::SearchNext",
+        "SwASC_AttrIter::OutAttr",
+        "std::make_pair"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "serializeWriterClipboardHtml",
+            "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwHTMLWriter::FillNextNumInfo",
+            "path": "vendor/libreoffice-reference/sw/source/filter/html/htmlnumwriter.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
+      "localSymbols": [
+        "serializeWriterClipboardHtml"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwHTMLWriter::FillNextNumInfo, SwHTMLWriter::ClearNextNumInfo, SwHTMLWriter::SetNextNumInfo, std::move and the bounded serializeWriterClipboardHtml contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Serializes prepared Writer list paragraphs as portable HTML, following LibreOffice Writer's `sw/source/filter/html/htmlnumwriter.cxx` format-writer ownership."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/html/htmlnumwriter.cxx",
+      "upstreamSymbols": [
+        "SwHTMLWriter::FillNextNumInfo",
+        "SwHTMLWriter::ClearNextNumInfo",
+        "SwHTMLWriter::SetNextNumInfo",
+        "std::move"
+      ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "OdtFilterProgressStage",
+            "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
+      "rationale": "Defines the neutral asynchronous ODT filter service used by SwDocShell and by the Dedicated Worker adapter while retaining package/xmloff/sw ownership inside the filter. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Defines the neutral asynchronous ODT filter service used by SwDocShell and by the Dedicated Worker adapter while retaining package/xmloff/sw ownership inside the filter."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "ODT_WORKER_TIMEOUT_MS",
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+      "rationale": "Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with transferables, stale-result rejection, cancellation, timeout, and deterministic termination. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with transferables, stale-result rejection, cancellation, timeout, and deterministic termination."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "OdtWorkerImportRequest",
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+      "rationale": "Executes bounded Writer ODT filter requests inside a Dedicated Worker and returns only neutral snapshots or transferable byte buffers to the document-shell client. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Executes bounded Writer ODT filter requests inside a Dedicated Worker and returns only neutral snapshots or transferable byte buffers to the document-shell client."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker.",
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+      "rationale": "Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "ODT_XML_STREAM_BYTE_LIMIT",
+            "path": "apps/office/src/sw/source/filter/xml/swxml.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "XMLReader::XMLReader",
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/swxml.ts",
+      "localSymbols": [
+        "ODT_XML_STREAM_BYTE_LIMIT",
+        "OdtImportProgressStage",
+        "OdtImportControl",
+        "SwXMLReader",
+        "readOdtDocument"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside XMLReader::XMLReader, XMLReader::GetReaderType, OUString::createFromAscii, Parser::create and the bounded ODT_XML_STREAM_BYTE_LIMIT, OdtImportProgressStage, OdtImportControl contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded SwXMLReader package orchestration from pinned LibreOffice `sw/source/filter/xml/swxml.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/xml/swxml.cxx",
+      "upstreamSymbols": [
+        "XMLReader::XMLReader",
+        "XMLReader::GetReaderType",
+        "OUString::createFromAscii",
+        "Parser::create"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "ODT_EXPORT_BYTE_LIMIT",
+            "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwXMLWriter",
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/wrtxml.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/wrtxml.ts",
+      "localSymbols": [
+        "ODT_EXPORT_BYTE_LIMIT",
+        "OdtExportProgressStage",
+        "OdtExportControl",
+        "SwXMLWriter",
+        "writeOdtDocument"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwXMLWriter, SwXMLWriter::SwXMLWriter, SwXMLWriter::~SwXMLWriter, SwXMLWriter::Write_ and the bounded ODT_EXPORT_BYTE_LIMIT, OdtExportProgressStage, OdtExportControl contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded SwXMLWriter package orchestration from pinned LibreOffice `sw/source/filter/xml/wrtxml.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/xml/wrtxml.cxx",
+      "upstreamSymbols": [
+        "SwXMLWriter",
+        "SwXMLWriter::SwXMLWriter",
+        "SwXMLWriter::~SwXMLWriter",
+        "SwXMLWriter::Write_"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "exportStylesXml",
+            "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwXMLExport::SwXMLExport",
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "localSymbols": [
+        "exportStylesXml",
+        "exportContentXml",
+        "exportMetaXml"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwXMLExport::SwXMLExport, SwXMLExport::exportDoc, SvXMLUnitConverter::GetMeasureUnit, SwModule::get and the bounded exportStylesXml, exportContentXml, exportMetaXml contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",
+      "upstreamSymbols": [
+        "SwXMLExport::SwXMLExport",
+        "SwXMLExport::exportDoc",
+        "SvXMLUnitConverter::GetMeasureUnit",
+        "SwModule::get"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "importWriterXml",
+            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwXMLBodyContext_Impl::SwXMLBodyContext_Impl",
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+      "localSymbols": [
+        "importWriterXml",
+        "parseOdfXml"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwXMLBodyContext_Impl::SwXMLBodyContext_Impl, SwXMLBodyContext_Impl::createFastChildContext, SwXMLDocContext_Impl::SwXMLDocContext_Impl, SwXMLDocContext_Impl::createFastChildContext and the bounded importWriterXml, parseOdfXml contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded Writer ODF XML import bridge from pinned LibreOffice `sw/source/filter/xml/xmlimp.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",
+      "upstreamSymbols": [
+        "SwXMLBodyContext_Impl::SwXMLBodyContext_Impl",
+        "SwXMLBodyContext_Impl::createFastChildContext",
+        "SwXMLDocContext_Impl::SwXMLDocContext_Impl",
+        "SwXMLDocContext_Impl::createFastChildContext"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwDocShell",
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwDocShell",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/app/docsh.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/app/docsh.ts",
+      "localSymbols": [
+        "SwDocShell"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwDocShell, SwDocShell::InitInterface_Impl, SwDocShell::InsertGeneratedStream, sw::XTextRangeToSwPaM and the bounded SwDocShell contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded Writer document-shell load/save boundary from pinned `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/app/docsh.cxx",
+      "upstreamSymbols": [
+        "SwDocShell",
+        "SwDocShell::InitInterface_Impl",
+        "SwDocShell::InsertGeneratedStream",
+        "sw::XTextRangeToSwPaM"
+      ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterWorkspaceChromeProps",
+            "path": "apps/office/src/sw/source/uibase/app/mainwn.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/app/mainwn.tsx",
+      "rationale": "Renders the browser Writer workspace chrome and presentation regions. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the browser Writer workspace chrome and presentation regions."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterDocumentSession",
+            "path": "apps/office/src/sw/source/uibase/app/swmodule.tsx"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwModule::SwModule",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/app/swmodule.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/app/swmodule.tsx",
+      "localSymbols": [
+        "WriterDocumentSession",
+        "createWriterBrowserSessionServices",
+        "createWriterDocumentSession",
+        "createWriterModuleFactory"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwModule::SwModule, SvtCTLOptions::GetCTLTextNumerals, SvxErrorHandler::ensure, comphelper::IsFuzzing and the bounded WriterDocumentSession, createWriterBrowserSessionServices, createWriterDocumentSession contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Registers one persistent Writer document session at the suite composition boundary without exposing Writer implementation to framework core."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/app/swmodule.cxx",
+      "upstreamSymbols": [
+        "SwModule::SwModule",
+        "SvtCTLOptions::GetCTLTextNumerals",
+        "SvxErrorHandler::ensure",
+        "comphelper::IsFuzzing"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterClipboardSelection",
+            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "o3tl::convert",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+      "localSymbols": [
+        "WriterClipboardSelection",
+        "WriterClipboardPaste",
+        "WriterClipboardPasteParagraph",
+        "WriterClipboardParagraph",
+        "readWriterClipboardPaste",
+        "parseWriterClipboardPaste"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside o3tl::convert, UITestLogger::getInstance, SwTransferable::SwTransferable, URIHelper::removePassword and the bounded WriterClipboardSelection, WriterClipboardPaste, WriterClipboardPasteParagraph contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Prepares an isolated browser Writer transfer document from a native selection, mirroring LibreOffice Writer's `sw/source/uibase/dochdl/swdtflvr.cxx` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx",
+      "upstreamSymbols": [
+        "o3tl::convert",
+        "UITestLogger::getInstance",
+        "SwTransferable::SwTransferable",
+        "URIHelper::removePassword"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterEditableParagraphProps",
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwTextBoxHelper::getOtherTextBoxFormat",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
+      "localSymbols": [
+        "WriterEditableParagraphProps",
+        "WriterEditableParagraph"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwTextBoxHelper::getOtherTextBoxFormat, std::abs, SwEditWin::UpdatePointer, SwCursorShell::SetVisibleCursor and the bounded WriterEditableParagraphProps, WriterEditableParagraph contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Renders one document-integrated editable Writer paragraph while leaving document mutation and selection policy to the parent editor."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
+      "upstreamSymbols": [
+        "SwTextBoxHelper::getOtherTextBoxFormat",
+        "std::abs",
+        "SwEditWin::UpdatePointer",
+        "SwCursorShell::SetVisibleCursor"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterPlainTextEditorProps",
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwTextBoxHelper::getOtherTextBoxFormat",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
+      "localSymbols": [
+        "WriterPlainTextEditorProps",
+        "WriterPlainTextEditor"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwTextBoxHelper::getOtherTextBoxFormat, std::abs, SwEditWin::UpdatePointer, SwCursorShell::SetVisibleCursor and the bounded WriterPlainTextEditorProps, WriterPlainTextEditor contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Renders ordered Writer paragraphs as accessible editable blocks integrated directly into the document page."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
+      "upstreamSymbols": [
+        "SwTextBoxHelper::getOtherTextBoxFormat",
+        "std::abs",
+        "SwEditWin::UpdatePointer",
+        "SwCursorShell::SetVisibleCursor"
+      ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterParagraphFormattingToolbarProps",
+            "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx",
+      "rationale": "Renders the browser Writer paragraph-formatting toolbar. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the browser Writer paragraph-formatting toolbar."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterListLevelCommand",
+            "path": "apps/office/src/sw/source/uibase/shells/listsh.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwListShell::InitInterface_Impl",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/shells/listsh.ts",
+      "localSymbols": [
+        "WriterListLevelCommand",
+        "changeWriterParagraphListLevel"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwListShell::InitInterface_Impl, SwListShell::Execute, SwListShell::GetState, SwListShell::SwListShell and the bounded WriterListLevelCommand, changeWriterParagraphListLevel contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements bounded Writer list-level commands at the LibreOffice `sw/source/uibase/shells/listsh.cxx` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/shells/listsh.cxx",
+      "upstreamSymbols": [
+        "SwListShell::InitInterface_Impl",
+        "SwListShell::Execute",
+        "SwListShell::GetState",
+        "SwListShell::SwListShell"
+      ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterShortcutOptions",
+            "path": "apps/office/src/sw/source/uibase/shells/textsh.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts",
+      "rationale": "Adapts browser keyboard events to registered Writer command dispatch. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Adapts browser keyboard events to registered Writer command dispatch."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterCharacterSelection",
+            "path": "apps/office/src/sw/source/uibase/shells/txtattr.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwTextShell::ExecCharAttr",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/txtattr.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/shells/txtattr.ts",
+      "localSymbols": [
+        "WriterCharacterSelection",
+        "toggleWriterCharacterFormat"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwTextShell::ExecCharAttr, SwTextShell::ExecCharAttrArgs, SwStyleNameMapper::GetPoolIdFromUIName, std::move and the bounded WriterCharacterSelection, toggleWriterCharacterFormat contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Applies bounded Writer direct character attributes at the LibreOffice `sw/source/uibase/shells/txtattr.cxx` command-shell ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/shells/txtattr.cxx",
+      "upstreamSymbols": [
+        "SwTextShell::ExecCharAttr",
+        "SwTextShell::ExecCharAttrArgs",
+        "SwStyleNameMapper::GetPoolIdFromUIName",
+        "std::move"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "setWriterParagraphListKind",
+            "path": "apps/office/src/sw/source/uibase/shells/txtnum.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwTextShell::ExecEnterNum",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/txtnum.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/shells/txtnum.ts",
+      "localSymbols": [
+        "setWriterParagraphListKind"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwTextShell::ExecEnterNum, numfunc::GetDefaultPositionAndSpaceMode, std::move, SwAbstractDialogFactory::Create and the bounded setWriterParagraphListKind contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the browser Writer equivalents of `FN_NUM_BULLET_ON`, `FN_NUM_NUMBERING_ON`, and `FN_NUM_BULLET_OFF` from LibreOffice `sw/source/uibase/shells/txtnum.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/shells/txtnum.cxx",
+      "upstreamSymbols": [
+        "SwTextShell::ExecEnterNum",
+        "numfunc::GetDefaultPositionAndSpaceMode",
+        "std::move",
+        "SwAbstractDialogFactory::Create"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterCharacterCommandArguments",
+            "path": "apps/office/src/sw/source/uibase/shells/writercommands.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "CreateSWDrawView",
+            "path": "vendor/libreoffice-reference/sw/sdi/swriter.sdi"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
+      "localSymbols": [
+        "WriterCharacterCommandArguments",
+        "WriterTextCommandTarget",
+        "WriterViewCommandTarget",
+        "createWriterTextCommandRegistry",
+        "createWriterViewCommandRegistry"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside CreateSWDrawView, AcceptTrackedChanges, TrackChanges, TrackChangesBar and the bounded WriterCharacterCommandArguments, WriterTextCommandTarget, WriterViewCommandTarget contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Declares Writer slot-like command descriptors and state handlers following the pinned SfxShell/SfxDispatcher execution boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/sdi/swriter.sdi",
+      "upstreamSymbols": [
+        "CreateSWDrawView",
+        "AcceptTrackedChanges",
+        "TrackChanges",
+        "TrackChangesBar"
+      ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterParagraphPropertiesProps",
+            "path": "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx",
+      "rationale": "Renders the bounded browser Writer paragraph-properties summary. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the bounded browser Writer paragraph-properties summary."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterSessionServices",
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwView",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+      "localSymbols": [
+        "WriterSessionServices",
+        "WriterCutCommandArguments",
+        "WriterPasteCommandArguments",
+        "WriterViewSnapshot",
+        "SwView"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwView, SwView::GetDispatcher, SwView::ImpSetVerb, SwView::GotFocus and the bounded WriterSessionServices, WriterCutCommandArguments, WriterPasteCommandArguments contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the persistent SwView session, external-store snapshot, and browser-adapted lifecycle commands from pinned Writer view and document-shell boundaries."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/uiview/view.cxx",
+      "upstreamSymbols": [
+        "SwView",
+        "SwView::GetDispatcher",
+        "SwView::ImpSetVerb",
+        "SwView::GotFocus"
+      ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterWorkbenchProps",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/uiview/view.tsx",
+      "rationale": "Renders the Writer view as a React projection of a persistent SwView session. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the Writer view as a React projection of a persistent SwView session."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "createWriterWorkbenchDocument",
+            "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "Point",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewfunc.hxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
+      "localSymbols": [
+        "createWriterWorkbenchDocument",
+        "getNextWriterParagraphId",
+        "getActiveWriterParagraph"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside Point, SfxPrinter, Size, SvxRuler and the bounded createWriterWorkbenchDocument, getNextWriterParagraphId, getActiveWriterParagraph contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Provides pure Writer workbench document and paragraph identity helpers."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/uiview/viewfunc.hxx",
+      "upstreamSymbols": [
+        "Point",
+        "SfxPrinter",
+        "Size",
+        "SvxRuler"
+      ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterParagraphElementResolver",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/select.ts",
+      "rationale": "Converts browser DOM selections and collapsed carets to and from Writer model positions. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Converts browser DOM selections and collapsed carets to and from Writer model positions."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterCursorPosition",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwWrtShell",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+      "localSymbols": [
+        "WriterCursorPosition",
+        "WriterCursorSelection",
+        "SwWrtShell",
+        "SwWrtShellHistory"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SwWrtShell, UITestLogger::getInstance, SvxAutoCorrCfg::Get, SwWrtShell::NoEdit and the bounded WriterCursorPosition, WriterCursorSelection, SwWrtShell contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "upstreamSymbols": [
+        "SwWrtShell",
+        "UITestLogger::getInstance",
+        "SvxAutoCorrCfg::Get",
+        "SwWrtShell::NoEdit"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterFormatMenuProps",
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": ".uno:PickList",
+            "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx",
+      "localSymbols": [
+        "WriterFormatMenuProps",
+        "WriterFormatMenu"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside .uno:PickList, .uno:AddDirect, .uno:OpenFromWriter, .uno:OpenRemote and the bounded WriterFormatMenuProps, WriterFormatMenu contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Renders the bounded Writer Format popup and pinned Bullets and Numbering submenu at the LibreOffice `sw/uiconfig/swriter/menubar/menubar.xml` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml",
+      "upstreamSymbols": [
+        ".uno:PickList",
+        ".uno:AddDirect",
+        ".uno:OpenFromWriter",
+        ".uno:OpenRemote"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterTopLevelMenu",
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": ".uno:PickList",
+            "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+      "localSymbols": [
+        "WriterTopLevelMenu",
+        "WriterMenuPlacement",
+        "WriterBulletsAndNumberingMenuCommand",
+        "WriterListLevelMenuCommand",
+        "WriterUserCommandInventoryRecord",
+        "WRITER_COMMAND_IDS"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside .uno:PickList, .uno:AddDirect, .uno:OpenFromWriter, .uno:OpenRemote and the bounded WriterTopLevelMenu, WriterMenuPlacement, WriterBulletsAndNumberingMenuCommand contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Declares the browser Writer top-level menu order from the LibreOffice Writer `sw/uiconfig/swriter/menubar` ownership boundary without reproducing native XML resources."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml",
+      "upstreamSymbols": [
+        ".uno:PickList",
+        ".uno:AddDirect",
+        ".uno:OpenFromWriter",
+        ".uno:OpenRemote"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterMenuBarProps",
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": ".uno:PickList",
+            "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+      "localSymbols": [
+        "WriterMenuBarProps",
+        "WriterMenuBar"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside .uno:PickList, .uno:AddDirect, .uno:OpenFromWriter, .uno:OpenRemote and the bounded WriterMenuBarProps, WriterMenuBar contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Renders the implemented Writer commands in their pinned LibreOffice menu locations without copying native menu visuals."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml",
+      "upstreamSymbols": [
+        ".uno:PickList",
+        ".uno:AddDirect",
+        ".uno:OpenFromWriter",
+        ".uno:OpenRemote"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterNumObjectBarListLevelCommand",
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": ".uno:DecrementLevel",
+            "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/numobjectbar.xml"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
+      "localSymbols": [
+        "WriterNumObjectBarListLevelCommand",
+        "writerNumObjectBarListLevelCommands"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside .uno:DecrementLevel, .uno:IncrementLevel, .uno:DecrementSubLevels, .uno:IncrementSubLevels and the bounded WriterNumObjectBarListLevelCommand, writerNumObjectBarListLevelCommands contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Declares browser Writer list-level controls at the pinned LibreOffice `sw/uiconfig/swriter/toolbar/numobjectbar.xml` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
+      "upstreamSymbols": [
+        ".uno:DecrementLevel",
+        ".uno:IncrementLevel",
+        ".uno:DecrementSubLevels",
+        ".uno:IncrementSubLevels"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterCommandToolbarProps",
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": ".uno:OpenUrl",
+            "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/standardbar.xml"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+      "localSymbols": [
+        "WriterCommandToolbarProps",
+        "WriterCommandToolbar"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside .uno:OpenUrl, .uno:AddDirect, .uno:NewDoc, .uno:OpenFromWriter and the bounded WriterCommandToolbarProps, WriterCommandToolbar contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Renders the implemented Writer commands in a compact standard-toolbar presentation."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+      "upstreamSymbols": [
+        ".uno:OpenUrl",
+        ".uno:AddDirect",
+        ".uno:NewDoc",
+        ".uno:OpenFromWriter"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterTextObjectBarListCommand",
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": ".uno:DesignerDialog",
+            "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
+      "localSymbols": [
+        "WriterTextObjectBarListCommand",
+        "writerTextObjectBarListCommands"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside .uno:DesignerDialog, .uno:StyleApply, .uno:StyleUpdateByExample, .uno:StyleNewByExample and the bounded WriterTextObjectBarListCommand, writerTextObjectBarListCommands contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Declares the initial browser Writer list controls at the pinned `sw/uiconfig/swriter/toolbar/textobjectbar` ownership boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+      "upstreamSymbols": [
+        ".uno:DesignerDialog",
+        ".uno:StyleApply",
+        ".uno:StyleUpdateByExample",
+        ".uno:StyleNewByExample"
+      ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserClipboardEnvironment",
+            "path": "apps/office/src/vcl/browser/browser-clipboard.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/vcl/browser/browser-clipboard.ts",
+      "rationale": "Copies plain and bounded rich text through browser Clipboard APIs with a local plain-text fallback for static browser deployments. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Copies plain and bounded rich text through browser Clipboard APIs with a local plain-text fallback for static browser deployments."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DownloadAnchor",
+            "path": "apps/office/src/vcl/browser/browser-download.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/vcl/browser/browser-download.ts",
+      "rationale": "Implements a browser-only text Blob download adapter with injectable DOM and object-URL capabilities for deterministic tests. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Implements a browser-only text Blob download adapter with injectable DOM and object-URL capabilities for deterministic tests."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "selectBrowserFile",
+            "path": "apps/office/src/vcl/browser/browser-file.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/vcl/browser/browser-file.ts",
+      "rationale": "Implements browser-only file selection and byte reading behind injectable DOM capabilities. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Implements browser-only file selection and byte reading behind injectable DOM capabilities."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DEFAULT_RECOVERY_GENERATION_LIMIT",
+            "path": "apps/office/src/vcl/browser/indexeddb-storage.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/vcl/browser/indexeddb-storage.ts",
+      "rationale": "Implements a browser-native IndexedDB adapter for versioned JSON document snapshots without backend, autosave, or file-picker policy. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Implements a browser-native IndexedDB adapter for versioned JSON document snapshots without backend, autosave, or file-picker policy."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DEFAULT_ODF_XML_DEPTH_LIMIT",
+            "path": "apps/office/src/xmloff/source/core/xml-parser.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
+      "rationale": "Builds the current bounded immutable XML tree used by ODF import contexts. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Builds the current bounded immutable XML tree used by ODF import contexts."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "ODF_NAMESPACES",
+            "path": "apps/office/src/xmloff/source/text/txtparae.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "HyperlinkData::HyperlinkData",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/text/txtparae.ts",
+      "localSymbols": [
+        "ODF_NAMESPACES",
+        "OdfCharacterProperties",
+        "OdfTextRun",
+        "OdfParagraphStyle",
+        "OdfParagraphAlignment",
+        "OdfListLevelKind"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside HyperlinkData::HyperlinkData, HyperlinkData::addHyperlinkAttributes, HyperlinkData::exportEvents, BoundFrames::Fill and the bounded ODF_NAMESPACES, OdfCharacterProperties, OdfTextRun contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/text/txtparae.cxx",
+      "upstreamSymbols": [
+        "HyperlinkData::HyperlinkData",
+        "HyperlinkData::addHyperlinkAttributes",
+        "HyperlinkData::exportEvents",
+        "BoundFrames::Fill"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "OdfStyleDefinition",
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "XMLHints_Impl::push_back",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/text/txtparai.ts",
+      "localSymbols": [
+        "OdfStyleDefinition",
+        "importTextParagraphs"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside XMLHints_Impl::push_back, std::move, XMLCharContext::XMLCharContext, sax_fastparser::castToFastAttributeList and the bounded OdfStyleDefinition, importTextParagraphs contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Reimplements the bounded ODF text paragraph import boundary from pinned LibreOffice `xmloff/source/text/txtparai.cxx`."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/text/txtparai.cxx",
+      "upstreamSymbols": [
+        "XMLHints_Impl::push_back",
+        "std::move",
+        "XMLCharContext::XMLCharContext",
+        "sax_fastparser::castToFastAttributeList"
+      ]
+    }
   ]
 }

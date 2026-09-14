@@ -28,8 +28,11 @@ document model.
 while retaining its complete model state.
 
 The underlying Writer graph and content manager use identity-bearing mutable
-objects, matching the applicable LibreOffice ownership model. Browser commands
-clone the graph before mutation so React history receives a new root object.
+objects, matching the applicable LibreOffice ownership model. Interactive
+browser commands mutate that graph through the persistent `SwWrtShell` and
+record action-local undo payloads; React receives a derived presentation
+snapshot rather than a cloned document. The cloning helpers in `writer.ts`
+remain only as legacy/test-facing infrastructure pending Workstream 1.
 Persistence passes through an explicit versioned snapshot; the cyclic runtime
 graph itself is intentionally not serialized with `JSON.stringify`. A changed
 body uses the shared lifecycle transition to become dirty; an identical

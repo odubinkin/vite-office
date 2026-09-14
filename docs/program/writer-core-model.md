@@ -80,10 +80,13 @@ bounds for content operations.
 
 ## Browser transaction and persistence adapters
 
-LibreOffice mutates its identity-bearing model and records undo objects. The
-current browser workbench still needs immutable React roots, so each command
-clones the `SwDoc` graph and then applies the source-shaped mutation to the
-clone. This is a UI/history adapter, not the canonical document representation.
+Like LibreOffice, the interactive browser path mutates the identity-bearing
+`SwDoc` graph through `SwWrtShell` and records action-local undo objects in the
+document shell's `SfxUndoManager`. React observes immutable presentation
+snapshots published by the persistent session; it does not require a cloned
+document root. The pure cloning helpers still exported by `writer.ts` are
+legacy/test-facing infrastructure scheduled for removal in Workstream 1 and
+are not the production command path.
 
 Persistence uses the explicit `swModelVersion: 3` snapshot produced by
 `SwDoc.toSnapshot()`. It records the shared document header, document-owned
@@ -102,7 +105,7 @@ universe, invalid/disabled item payloads, item sharing/reference counts,
 `SfxBroadcaster` notifications, conditional styles, automatic-style caches, or
 the complete built-in style and numbering tables and format properties. Registered index correction,
 nested non-body sections, tables, frames, fields, marks, redlines, content
-controls, anchored objects, layout frames, native undo objects, and most Writer
+controls, anchored objects, layout frames, the complete native undo surface, and most Writer
 file filters also remain. The bounded ODT filter maps this graph; DOCX and the
 remaining formats must be reimplemented from their corresponding pinned filter
 and storage sources. Serializing the browser snapshot is not a file-format

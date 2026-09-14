@@ -18,6 +18,16 @@ export type ParityCapabilityType =
 export type ParityMaturity =
   "exception-approved" | "implemented" | "mapped" | "planned" | "verified";
 
+/** Identifies the independently verifiable layer owned by one atomic capability. */
+export type ParityCapabilityAspect =
+  | "browser-input"
+  | "command-placement"
+  | "command-state"
+  | "compatibility"
+  | "model-operation"
+  | "persistence-filter"
+  | "undo-redo";
+
 /** Records whether and why the browser stack differs from the pinned upstream stack. */
 export interface ParityStackDivergence {
   /** Approved divergence classification from the Stage 0 allowlist. */
@@ -34,6 +44,13 @@ export interface ParityVerificationEvidence {
   readonly evidence: string;
   /** AgentPlane task that owns the closed claim. */
   readonly taskId: string;
+}
+
+/** Binds one claimed assertion to exact executable evidence on both implementation sides. */
+export interface ParityAssertionEvidence {
+  readonly assertion: string;
+  readonly local: ParityEvidenceReference;
+  readonly upstream: ParityEvidenceReference;
 }
 
 /** Defines the auditable basis for an explicitly approved browser-environment exception. */
@@ -70,8 +87,14 @@ export interface ParityEvidence {
 
 /** Describes one bounded capability whose equivalent browser behavior remains incomplete. */
 export interface ParityMappingRecord {
+  /** One independently testable operation rather than an umbrella feature label. */
+  readonly atomicOperation: string;
   /** Exact upstream behavior assertions or fixture expectations mapped by this record. */
   readonly assertions: readonly string[];
+  /** Required assertion-by-assertion executable evidence before maturity may become verified. */
+  readonly assertionEvidence?: readonly ParityAssertionEvidence[];
+  /** Architectural layer isolated by this atomic capability. */
+  readonly aspect: ParityCapabilityAspect;
   /** User-observable bounded capability description. */
   readonly capability: string;
   /** Stable domain-agnostic identity retained even if suite ownership changes. */
@@ -111,7 +134,7 @@ export interface ParityMappingManifest {
   /** Deterministically ordered atomic Writer mappings. */
   readonly records: readonly ParityMappingRecord[];
   /** Static schema version for strict compatibility validation. */
-  readonly schemaVersion: 2;
+  readonly schemaVersion: 3;
 }
 
 /** Represents one fully resolved evidence marker for a validation report. */
@@ -153,7 +176,7 @@ export interface ParityMappingReport {
   /** Successfully resolved evidence paths in stable record and evidence order. */
   readonly resolvedEvidence: readonly ResolvedParityEvidence[];
   /** Static report schema version. */
-  readonly schemaVersion: 2;
+  readonly schemaVersion: 3;
   /** Number of records whose semantic evidence is complete. */
   readonly verifiedCount: number;
 }
@@ -174,7 +197,7 @@ export function parseParityMappingManifest(
   baseline: BaselineManifest,
 ): ParityMappingManifest {
   const root = parseObject(sourceText, "root");
-  if (root.schemaVersion !== 2) throw new Error("Parity mapping schemaVersion must equal 2.");
+  if (root.schemaVersion !== 3) throw new Error("Parity mapping schemaVersion must equal 3.");
   const baselineCommit = requireString(root, "baselineCommit");
   const baselineTag = requireString(root, "baselineTag");
   if (baselineCommit !== baseline.commit)
@@ -185,7 +208,7 @@ export function parseParityMappingManifest(
   const records = root.records.map(parseRecord);
   assertOrderedUniqueIds(records);
   assertOrderedUniqueCapabilityIds(records);
-  return { baselineCommit, baselineTag, records, schemaVersion: 2 };
+  return { baselineCommit, baselineTag, records, schemaVersion: 3 };
 }
 
 /**
@@ -207,6 +230,13 @@ export async function validateParityMappingEvidence(
   for (const record of manifest.records) {
     await validateSide(record.local, "local", roots.local, readEvidence, resolvedEvidence);
     await validateSide(record.upstream, "upstream", roots.upstream, readEvidence, resolvedEvidence);
+    if (record.assertionEvidence !== undefined)
+      await validateAssertionEvidence(
+        record.assertionEvidence,
+        roots,
+        readEvidence,
+        resolvedEvidence,
+      );
     collectExceptions(record, exceptions);
   }
   return {
@@ -217,9 +247,41 @@ export async function validateParityMappingEvidence(
     implementedCount: manifest.records.filter(isImplemented).length,
     recordCount: manifest.records.length,
     resolvedEvidence,
-    schemaVersion: 2,
+    schemaVersion: 3,
     verifiedCount: manifest.records.filter(isVerified).length,
   };
+}
+
+/**
+ * Resolves the exact local and upstream test marker attached to every verified assertion.
+ * @param evidence - Assertion-level evidence pairs.
+ * @param roots - Local and upstream roots.
+ * @param readEvidence - Evidence text reader.
+ * @param resolvedEvidence - Mutable resolved-evidence report.
+ * @returns Completion after all assertion markers resolve.
+ */
+async function validateAssertionEvidence(
+  evidence: readonly ParityAssertionEvidence[],
+  roots: Readonly<{ local: string; upstream: string }>,
+  readEvidence: ParityEvidenceReader,
+  resolvedEvidence: ResolvedParityEvidence[],
+): Promise<void> {
+  for (const item of evidence) {
+    await validateSide(
+      { docs: [], implementation: [], tests: [item.local] },
+      "local",
+      roots.local,
+      readEvidence,
+      resolvedEvidence,
+    );
+    await validateSide(
+      { docs: [], implementation: [], tests: [item.upstream] },
+      "upstream",
+      roots.upstream,
+      readEvidence,
+      resolvedEvidence,
+    );
+  }
 }
 
 /**
@@ -241,11 +303,16 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
   const maturity = parseMaturity(candidate.maturity, id);
   const gaps = requireStringArray(candidate, "gaps");
   const assertions = requireStringArray(candidate, "assertions");
+  const assertionEvidence = parseAssertionEvidence(candidate.assertionEvidence, id, assertions);
   const manualContract = optionalString(candidate, "manualContract");
   if (assertions.length === 0 && manualContract === undefined)
     throw new Error(`Parity record ${id} requires an upstream assertion or manual contract.`);
   if (maturity === "verified" && gaps.length > 0)
     throw new Error(`Verified parity record ${id} must not retain unresolved gaps.`);
+  if (maturity === "verified" && assertionEvidence === undefined)
+    throw new Error(`Verified parity record ${id} requires assertion-level evidence.`);
+  if (maturity !== "verified" && assertionEvidence !== undefined)
+    throw new Error(`Only verified parity record ${id} may declare assertion-level evidence.`);
   const exception =
     candidate.exception === undefined
       ? undefined
@@ -264,7 +331,10 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
     throw new Error(`Closed parity record ${id} requires task and commit verification evidence.`);
   const suite = parseSuite(candidate.suite, id);
   return {
+    atomicOperation: requireString(candidate, "atomicOperation"),
     assertions,
+    ...(assertionEvidence === undefined ? {} : { assertionEvidence }),
+    aspect: parseAspect(candidate.aspect, id),
     capability: requireString(candidate, "capability"),
     capabilityId,
     ...(exception === undefined ? {} : { exception }),
@@ -280,6 +350,74 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
     upstream: parseEvidence(candidate.upstream, `${id}.upstream`, false, true),
     ...(verification === undefined ? {} : { verification }),
   };
+}
+
+/**
+ * Parses the architectural layer of one atomic capability.
+ * @param candidate - Unknown aspect value.
+ * @param id - Owning parity record ID.
+ * @returns Validated capability aspect.
+ */
+function parseAspect(candidate: unknown, id: string): ParityCapabilityAspect {
+  if (
+    candidate !== "model-operation" &&
+    candidate !== "undo-redo" &&
+    candidate !== "command-state" &&
+    candidate !== "command-placement" &&
+    candidate !== "browser-input" &&
+    candidate !== "persistence-filter" &&
+    candidate !== "compatibility"
+  )
+    throw new Error(`Invalid parity capability aspect for ${id}.`);
+  return candidate;
+}
+
+/**
+ * Parses exact local/upstream assertion evidence for verified parity only.
+ * @param candidate - Unknown assertion-evidence array.
+ * @param id - Owning parity record ID.
+ * @param assertions - Exact claimed assertions.
+ * @returns Parsed evidence or undefined when absent.
+ */
+function parseAssertionEvidence(
+  candidate: unknown,
+  id: string,
+  assertions: readonly string[],
+): readonly ParityAssertionEvidence[] | undefined {
+  if (candidate === undefined) return undefined;
+  if (!Array.isArray(candidate) || candidate.length !== assertions.length)
+    throw new Error(`Parity assertion evidence for ${id} must cover every assertion exactly once.`);
+  const parsed = candidate.map(
+    /** Parses one assertion evidence pair. @param value - Unknown pair. @param index - Assertion index. @returns Validated pair. */
+    function parseAssertionReference(value, index): ParityAssertionEvidence {
+      if (!isRecord(value)) throw new Error(`${id}.assertionEvidence[${index}] must be an object.`);
+      const assertion = requireString(value, "assertion");
+      if (assertion !== assertions[index])
+        throw new Error(`${id}.assertionEvidence[${index}] must repeat its exact assertion.`);
+      return {
+        assertion,
+        local: parseSingleReference(value.local, `${id}.assertionEvidence[${index}].local`),
+        upstream: parseSingleReference(
+          value.upstream,
+          `${id}.assertionEvidence[${index}].upstream`,
+        ),
+      };
+    },
+  );
+  return parsed;
+}
+
+/**
+ * Parses one path-and-marker reference without exception metadata.
+ * @param candidate - Unknown evidence reference.
+ * @param location - Diagnostic field location.
+ * @returns Validated evidence reference.
+ */
+function parseSingleReference(candidate: unknown, location: string): ParityEvidenceReference {
+  if (!isRecord(candidate)) throw new Error(`${location} must be an object.`);
+  if (candidate.exception !== undefined)
+    throw new Error(`${location} may not replace executable assertion evidence with an exception.`);
+  return { marker: requireString(candidate, "marker"), path: requireString(candidate, "path") };
 }
 
 /**

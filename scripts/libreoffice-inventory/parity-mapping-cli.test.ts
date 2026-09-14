@@ -92,15 +92,15 @@ describe("parity mapping CLI" /**
     expect(JSON.parse(output)).toMatchObject({
       baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
       exceptionCount: 0,
-      gapCount: 28,
-      implementedCount: 14,
-      recordCount: 14,
+      gapCount: 68,
+      implementedCount: 34,
+      recordCount: 34,
       runtime: {
         commandCount: 29,
         placeholderSuiteCount: 6,
-        schemaVersion: 1,
+        schemaVersion: 2,
       },
-      schemaVersion: 2,
+      schemaVersion: 3,
       verifiedCount: 0,
     });
   }, 30_000);

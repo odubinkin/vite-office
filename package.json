@@ -11,6 +11,7 @@
   },
   "scripts": {
     "build": "npm run build --workspace @vite-office/office",
+    "check": "npm run verify",
     "check:dependencies": "node scripts/check-module-boundaries.mjs",
     "check:docs": "node scripts/check-jsdoc.mjs",
     "check:file-size": "node scripts/check-file-size.mjs",
@@ -41,7 +42,7 @@
     "test:static": "npm run build && node scripts/check-static-build.mjs",
     "typecheck": "npm run typecheck:tools && npm run typecheck --workspace @vite-office/office",
     "typecheck:tools": "tsc --project tsconfig.tools.json",
-    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size"
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:parity"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

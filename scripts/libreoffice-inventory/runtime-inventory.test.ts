@@ -21,13 +21,16 @@ function source(overrides: Readonly<Record<string, unknown>> = {}): string {
         capabilityId: "CAP-0001",
         classification: "out-of-parity-scope",
         description: "Internal operation.",
-        id: "internal.operation",
+        id: "internal.replace-writer-paragraph",
+        modulePath: "src/b.tsx",
+        symbol: "replaceWriterParagraph",
       },
     ],
     modules: [
       {
         capabilityIds: [],
         classification: "local-infrastructure",
+        infrastructureExemption: "Synthetic local bootstrap with no domain capability.",
         path: "src/a.ts",
         state: "foundation",
         subsystem: "bootstrap",
@@ -43,10 +46,11 @@ function source(overrides: Readonly<Record<string, unknown>> = {}): string {
       },
     ],
     placeholderSuites: ["base", "calc"],
-    schemaVersion: 1,
+    schemaVersion: 2,
     uiBehaviors: [
       {
         classification: "browser-adaptation",
+        capabilityId: "CAP-0001",
         description: "Browser focus projection.",
         id: "ui.focus",
       },
@@ -65,20 +69,25 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
       async function readModule(path: string): Promise<string> {
         return path.endsWith("a.ts")
           ? "export function alpha() {}"
-          : "export async function beta() {}\nexport function gamma() {}";
+          : "export async function beta() {}\nexport function gamma() {}\nexport function replaceWriterParagraph() {}";
       },
       [{ capabilityId: "CAP-0001", id: "writer.test", label: "Test" }],
       new Set(["CAP-0001"]),
     );
     expect(report).toMatchObject({
       commandCount: 1,
-      exportedOperationCount: 3,
+      exportedOperationCount: 4,
       internalOperationCount: 1,
       placeholderSuiteCount: 2,
-      schemaVersion: 1,
+      schemaVersion: 2,
       uiBehaviorCount: 1,
     });
-    expect(reportedOperations(report.modules)).toEqual(["alpha", "beta", "gamma"]);
+    expect(reportedOperations(report.modules)).toEqual([
+      "alpha",
+      "beta",
+      "gamma",
+      "replaceWriterParagraph",
+    ]);
   });
 
   it("selects production TypeScript entries and extracts sorted exported functions" /** Verifies discovery excludes tests and setup files. @returns Nothing. */, function selectsRuntimePaths(): void {
@@ -102,7 +111,7 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
   it("rejects malformed authored inventory fields" /** Exercises every strict schema discriminator. @returns Nothing. */, function rejectsMalformedInventory(): void {
     expectInvalid("{");
     expectInvalid("[]");
-    expectInvalid(source({ schemaVersion: 2 }));
+    expectInvalid(source({ schemaVersion: 1 }));
     expectInvalid(source({ modules: "bad" }));
     expectInvalid(source({ modules: [null] }));
     expectInvalid(source({ modules: duplicateModules() }));
@@ -111,7 +120,9 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
     expectInvalid(source({ modules: [moduleRecord({ suite: "calc" })] }));
     expectInvalid(source({ modules: [moduleRecord({ subsystem: "" })] }));
     expectInvalid(source({ modules: [moduleRecord({ capabilityIds: [""] })] }));
+    expectInvalid(source({ modules: [moduleRecord({ infrastructureExemption: "" })] }));
     expectInvalid(source({ internalOperations: [null] }));
+    expectInvalid(source({ uiBehaviors: [null] }));
     expectInvalid(source({ internalOperations: [itemRecord({ classification: "bad" })] }));
     expectInvalid(source({ internalOperations: [itemRecord({ capabilityId: "" })] }));
     expectInvalid(source({ uiBehaviors: duplicateItems() }));
@@ -164,6 +175,88 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
       new Set(["CAP-0001"]),
     );
   });
+
+  it("rejects invalid infrastructure exemptions and incomplete mutation-helper inventories" /**
+   * Proves every capability-free module and exported mutation helper has an explicit audited disposition.
+   * @returns A promise resolving after all new exhaustive-coverage failures are observed.
+   */, async function rejectsUninventoriedOperations(): Promise<void> {
+    const runtimePaths = ["src/a.ts", "src/b.tsx"];
+    const knownCapabilities = new Set(["CAP-0001"]);
+    const missingExemption = parseRuntimeInventoryManifest(
+      source({
+        modules: [
+          moduleRecord({ capabilityIds: [], infrastructureExemption: undefined }),
+          moduleRecord({ capabilityIds: ["CAP-0001"], path: "src/b.tsx" }),
+        ],
+      }),
+    );
+    await expectValidationFailure(missingExemption, runtimePaths, [], knownCapabilities);
+    const invalidExemption = parseRuntimeInventoryManifest(
+      source({
+        modules: [
+          moduleRecord({
+            capabilityIds: ["CAP-0001"],
+            infrastructureExemption: "Invalid because this module already names a capability.",
+          }),
+          moduleRecord({ capabilityIds: ["CAP-0001"], path: "src/b.tsx" }),
+        ],
+      }),
+    );
+    await expectValidationFailure(invalidExemption, runtimePaths, [], knownCapabilities);
+    const unknownModuleOperation = parseRuntimeInventoryManifest(
+      source({
+        internalOperations: [itemRecord({ modulePath: "src/missing.ts" })],
+      }),
+    );
+    await expectValidationFailure(unknownModuleOperation, runtimePaths, [], knownCapabilities);
+    const nonExportedOperation = parseRuntimeInventoryManifest(
+      source({ internalOperations: [itemRecord({ symbol: "replaceMissingParagraph" })] }),
+    );
+    await expectValidationFailure(nonExportedOperation, runtimePaths, [], knownCapabilities);
+    const manifest = parseRuntimeInventoryManifest(source());
+    await expect(
+      validateRuntimeInventory(
+        manifest,
+        runtimePaths,
+        /** Returns one source with an extra mutation helper. @param path - Fixture module path. @returns Synthetic source. */
+        async function readModule(path): Promise<string> {
+          return path === "src/a.ts"
+            ? "export function moveWriterParagraph() {}"
+            : "export function replaceWriterParagraph() {}";
+        },
+        [],
+        knownCapabilities,
+      ),
+    ).rejects.toThrowError(/mutation helper inventory/u);
+    const omittedMutation = parseRuntimeInventoryManifest(source({ internalOperations: [] }));
+    await expect(
+      validateRuntimeInventory(
+        omittedMutation,
+        runtimePaths,
+        /** Returns one unlisted mutation helper. @param path - Fixture module path. @returns Synthetic source. */
+        async function readMutationModule(path): Promise<string> {
+          return path === "src/a.ts" ? "" : "export function replaceWriterParagraph() {}";
+        },
+        [],
+        knownCapabilities,
+      ),
+    ).rejects.toThrowError(/received none/u);
+    const spuriousMutation = parseRuntimeInventoryManifest(
+      source({ internalOperations: [itemRecord()] }),
+    );
+    await expect(
+      validateRuntimeInventory(
+        spuriousMutation,
+        runtimePaths,
+        /** Returns one inventoried but non-mutating export. @param path - Fixture module path. @returns Synthetic source. */
+        async function readNonMutationModule(path): Promise<string> {
+          return path === "src/a.ts" ? "export function alpha() {}" : "";
+        },
+        [],
+        knownCapabilities,
+      ),
+    ).rejects.toThrowError(/expected none/u);
+  });
 });
 
 /**
@@ -195,9 +288,12 @@ function duplicateModules(): readonly Record<string, unknown>[] {
  */
 function itemRecord(overrides: Readonly<Record<string, unknown>> = {}): Record<string, unknown> {
   return {
+    capabilityId: "CAP-0001",
     classification: "local-infrastructure",
     description: "Item.",
     id: "item.one",
+    modulePath: "src/a.ts",
+    symbol: "alpha",
     ...overrides,
   };
 }

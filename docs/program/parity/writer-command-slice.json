@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "records": [
@@ -11,13 +11,13 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer command placement for bounded File, Edit, View, Format, and Styles controls."
+        "The pinned upstream and local assertion markers cover this atomic operation: Register, dispatch, and query one Writer command."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser menu and toolbar controls adapt native configuration to accessible React UI."
       },
-      "capability": "Writer command placement for bounded File, Edit, View, Format, and Styles controls",
+      "capability": "Writer command registration, dispatch, enablement, and checked state",
       "gaps": [
         "The browser shell provides only implemented commands and an explicit unavailable state; LibreOffice menu groups and command enablement remain much broader.",
         "Native Writer menus, accelerators, dialogs, extensions, and UNO dispatch are not equivalent browser features."
@@ -81,7 +81,9 @@
             "marker": "Every visible top-level menu"
           }
         ]
-      }
+      },
+      "aspect": "command-state",
+      "atomicOperation": "Register, dispatch, and query one Writer command"
     },
     {
       "id": "LO-WRITER-0102",
@@ -91,15 +93,13 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "Undo and Redo execute bounded semantic Writer actions for every currently implemented content, structure, direct-format, paragraph-format, style, numbering, and list-level mutation.",
-        "Compatible adjacent typing and deletion merge by position, direction, character class, cursor attributes, and command boundary; a new command after Undo truncates the redo branch.",
-        "History stores action-local inverse payloads and complete cursor boundaries without retaining or cloning a WriterDocument snapshot in the interactive path."
+        "The pinned upstream and local assertion markers cover this atomic operation: Navigate one action-based Writer history stack."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "The action stack and Writer inverse payload model follow LibreOffice, while browser rendering has no native layout frames, tracked changes, embedded objects, or desktop view-shell repair work to retain."
       },
-      "capability": "Action-based Undo and Redo for the current Writer command slice",
+      "capability": "Action-based Writer Undo and Redo semantics",
       "gaps": [
         "Undo actions cover the current bounded Writer feature slice only; layout frames, tables, tracked changes, fields, embedded objects, and the full style system remain outside the implemented product scope.",
         "The mapped upstream test exercises tiled rendering invalidation behavior that browser history does not expose."
@@ -179,7 +179,9 @@
             "marker": "Undo and Redo"
           }
         ]
-      }
+      },
+      "aspect": "undo-redo",
+      "atomicOperation": "Navigate one action-based Writer history stack"
     },
     {
       "id": "LO-WRITER-0103",
@@ -189,15 +191,15 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Select All and Copy of browser-native Writer selection."
+        "The pinned upstream and local assertion markers cover this atomic operation: Represent and select one bounded Writer model range."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "DOM selection and the Clipboard API replace native Writer window and clipboard services."
       },
-      "capability": "Select All and Copy of browser-native Writer selection",
+      "capability": "Writer model selection and Select All",
       "gaps": [
-        "Copy preserves only the browser text/plain and bounded paragraph-level text/html representations; inline character formatting, objects, tables, tracked changes, Paste, and full Writer transfer semantics are not implemented.",
+        "Copy preserves only the browser text/plain and bounded paragraph-level text/html representations; objects, tables, tracked changes, and full Writer transfer semantics beyond the bounded Cut and Paste slice are not implemented.",
         "Select All covers the bounded rendered document body, not every Writer document object or selection mode."
       ],
       "upstream": {
@@ -279,7 +281,9 @@
             "marker": "Select All"
           }
         ]
-      }
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Represent and select one bounded Writer model range"
     },
     {
       "id": "LO-WRITER-0104",
@@ -289,13 +293,13 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: View visibility toggles for the bounded sidebar, horizontal ruler, and status bar."
+        "The pinned upstream and local assertion markers cover this atomic operation: Toggle and query one bounded view visibility flag."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "React visibility state adapts native docked UI regions."
       },
-      "capability": "View visibility toggles for the bounded sidebar, horizontal ruler, and status bar",
+      "capability": "Writer view visibility command state",
       "gaps": [
         "The browser state controls presentational workspace chrome only; it does not model Writer layout, pages, vertical rulers, panels, per-document preferences, or all View commands.",
         "The upstream status-bar test asserts page-number behavior, while the local status bar remains static placement chrome."
@@ -355,7 +359,9 @@
             "marker": ".uno:StatusBarVisible"
           }
         ]
-      }
+      },
+      "aspect": "command-state",
+      "atomicOperation": "Toggle and query one bounded view visibility flag"
     },
     {
       "id": "LO-WRITER-0105",
@@ -365,13 +371,13 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer default bullets, default numbering, and remove bullets for the active paragraph."
+        "The pinned upstream and local assertion markers cover this atomic operation: Apply or remove one default list kind."
       ],
       "stackDivergence": {
         "kind": "none",
         "rationale": "The bounded numbering transitions preserve the applicable upstream command semantics."
       },
-      "capability": "Writer default bullets, default numbering, and remove bullets for the active paragraph",
+      "capability": "Writer default list-kind mutation",
       "gaps": [
         "This first command layer applies to the active paragraph only; multi-paragraph, range, and table-cell selection remain separate mapped work.",
         "Complete numbering semantics, named-style editing, explicit restart values, outline numbering, automatic lists, RTF transfer, and DOCX import/export remain separate mapped work; bounded ODT list interchange is implemented by LO-WRITER-0113."
@@ -499,7 +505,9 @@
             "marker": "File-level provenance in active Writer list"
           }
         ]
-      }
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Apply or remove one default list kind"
     },
     {
       "id": "LO-WRITER-0106",
@@ -509,13 +517,13 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer Copy serializes complete browser list selections as semantic HTML and readable plain text."
+        "The pinned upstream and local assertion markers cover this atomic operation: Serialize one complete list selection for clipboard transfer."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "The Clipboard API replaces native transferable plumbing while preserving semantic output."
       },
-      "capability": "Writer Copy serializes complete browser list selections as semantic HTML and readable plain text",
+      "capability": "Writer list clipboard serialization",
       "gaps": [
         "The browser implementation serializes complete contiguous list fragments; multi-range selection, custom list styles, restarts, and non-text Writer objects remain unmapped.",
         "RTF, Paste, ODT/DOCX import/export, and the full Writer transfer-flavor matrix are not implemented by this static browser slice."
@@ -611,7 +619,9 @@
             "marker": "htmlnumwriter.ts"
           }
         ]
-      }
+      },
+      "aspect": "compatibility",
+      "atomicOperation": "Serialize one complete list selection for clipboard transfer"
     },
     {
       "id": "LO-WRITER-0107",
@@ -621,13 +631,13 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer Promote and Demote change the active list paragraph nesting level."
+        "The pinned upstream and local assertion markers cover this atomic operation: Promote or demote one active list paragraph."
       ],
       "stackDivergence": {
         "kind": "none",
         "rationale": "The bounded list-level transitions preserve the applicable upstream command semantics."
       },
-      "capability": "Writer Promote and Demote change the active list paragraph nesting level",
+      "capability": "Writer list-level mutation",
       "gaps": [
         "The browser supports one active root-to-level-nine paragraph transition only; range, table-cell, multi-level selection, and native Writer outline behavior remain unmapped.",
         "Complete nested rendering semantics, numbering prefixes and suffixes, explicit restart values, named-style editing, RTF, Paste, and DOCX interchange remain separate capabilities; levels zero through nine round-trip through bounded ODT."
@@ -727,7 +737,9 @@
             "marker": "listsh.ts"
           }
         ]
-      }
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Promote or demote one active list paragraph"
     },
     {
       "id": "LO-WRITER-0108",
@@ -737,13 +749,13 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer Copy serializes bounded nested list fragments as semantic HTML and level-indented plain text."
+        "The pinned upstream and local assertion markers cover this atomic operation: Serialize one bounded nested-list fragment."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser clipboard serialization replaces native transferable plumbing."
       },
-      "capability": "Writer Copy serializes bounded nested list fragments as semantic HTML and level-indented plain text",
+      "capability": "Writer nested-list clipboard serialization",
       "gaps": [
         "The browser supports complete contiguous level-zero-through-nine list fragments only. The first selected list item is re-rooted and malformed upward level jumps are collapsed to one level so the clipboard fragment has no synthetic empty list items; Writer list identity, restarts, named styles, and arbitrary multi-range selection remain unmapped.",
         "RTF, Paste, ODT/DOCX import/export, custom numbering formats, and the full Writer transfer-flavor matrix remain separate browser capabilities."
@@ -831,7 +843,9 @@
             "marker": "Bounded nested semantic"
           }
         ]
-      }
+      },
+      "aspect": "compatibility",
+      "atomicOperation": "Serialize one bounded nested-list fragment"
     },
     {
       "id": "LO-WRITER-0109",
@@ -841,16 +855,16 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer applies direct Bold, Italic, and single Underline to same-paragraph text and exports semantic Copy HTML."
+        "The pinned upstream and local assertion markers cover this atomic operation: Toggle one direct character attribute over one text range."
       ],
       "stackDivergence": {
         "kind": "none",
         "rationale": "The bounded character-format transitions preserve the applicable upstream command semantics."
       },
-      "capability": "Writer applies direct Bold, Italic, and single Underline to same-paragraph text and exports semantic Copy HTML",
+      "capability": "Writer direct character formatting",
       "gaps": [
         "The browser supports one native non-empty same-paragraph range and collapsed-caret pending attributes only; cross-paragraph, table, multi-range, character-style, and full IME behavior remain unmapped.",
-        "Font family, size, colour, double underline, strikeout, overline, Paste, RTF, and DOCX interchange remain separate capabilities; bounded ODT character-format interchange is recorded by LO-WRITER-0113."
+        "Font family, size, colour, double underline, strikeout, overline, rich-text Paste beyond the safe HTML subset, RTF, and DOCX interchange remain separate capabilities; bounded ODT character-format interchange is recorded by LO-WRITER-0113."
       ],
       "upstream": {
         "implementation": [
@@ -975,7 +989,9 @@
             "marker": "txtattr.ts"
           }
         ]
-      }
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Toggle one direct character attribute over one text range"
     },
     {
       "id": "LO-WRITER-0110",
@@ -985,13 +1001,13 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer cuts and pastes plain text plus a bounded safe HTML character-format subset at the Edit menu and standard toolbar."
+        "The pinned upstream and local assertion markers cover this atomic operation: Replace or remove one selection through bounded clipboard transfer."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser clipboard reads and writes replace native clipboard services."
       },
-      "capability": "Writer cuts and pastes plain text plus a bounded safe HTML character-format subset at the Edit menu and standard toolbar",
+      "capability": "Writer Cut and Paste range mutation",
       "gaps": [
         "The browser supports a single same-paragraph range for Cut and Paste; cross-paragraph, multi-range, table, object, and tracked-change transfer remain unmapped.",
         "Paste accepts only visible plain text and the bounded strong/em/single-underline HTML subset. RTF, images, embedded objects, list or paragraph reconstruction, Paste Special, and ODT/DOCX transfer filters are explicitly unsupported."
@@ -1103,7 +1119,9 @@
             "marker": "DocumentContentOperationsManager.ts"
           }
         ]
-      }
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Replace or remove one selection through bounded clipboard transfer"
     },
     {
       "id": "LO-WRITER-0111",
@@ -1113,16 +1131,16 @@
       "type": "model",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer core uses a bounded SwDoc, SwNodes, SwTextNode, SwPosition, SwPaM, SwTextAttr, and SwpHints document graph."
+        "The pinned upstream and local assertion markers cover this atomic operation: Own one identity-bearing Writer document graph."
       ],
       "stackDivergence": {
         "kind": "none",
         "rationale": "The TypeScript object graph preserves the applicable bounded Writer model structure."
       },
-      "capability": "Writer core uses a bounded SwDoc, SwNodes, SwTextNode, SwPosition, SwPaM, SwTextAttr, and SwpHints document graph",
+      "capability": "Writer document graph ownership",
       "gaps": [
         "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Browser commands clone the graph for React history and local persistence uses an explicit snapshot. Native Writer undo objects, full ODT semantics, and DOCX filters are not yet implemented."
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo; legacy cloning helpers remain isolated outside production pending Workstream 1, while registered-index correction and full native Writer undo coverage remain incomplete."
       ],
       "upstream": {
         "implementation": [
@@ -1223,7 +1241,9 @@
             "marker": "SwNodeIndex"
           }
         ]
-      }
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Own one identity-bearing Writer document graph"
     },
     {
       "id": "LO-WRITER-0112",
@@ -1233,13 +1253,13 @@
       "type": "model",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer core resolves bounded paragraph and character properties through pooled items, SfxItemSet, SwAttrSet, SwTextFormatColl, SwFormatAutoFormat, and document-owned SwNumRule definitions."
+        "The pinned upstream and local assertion markers cover this atomic operation: Resolve one WhichId through the pooled item hierarchy."
       ],
       "stackDivergence": {
         "kind": "none",
         "rationale": "The TypeScript item and style graph preserves the applicable bounded Writer resolution rules."
       },
-      "capability": "Writer core resolves bounded paragraph and character properties through pooled items, SfxItemSet, SwAttrSet, SwTextFormatColl, SwFormatAutoFormat, and document-owned SwNumRule definitions",
+      "capability": "Writer pooled item and item-set foundation",
       "gaps": [
         "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL weight and posture, and common underline are implemented. Font family, size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, built-in style pool, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
         "The current version-three browser snapshot preserves the implemented ownership graph; obsolete snapshots from the preceding non-canonical model are deliberately rejected. ODT numbering is mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented."
@@ -1363,7 +1383,9 @@
             "marker": "node-local `SwAttrSet` deltas"
           }
         ]
-      }
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Resolve one WhichId through the pooled item hierarchy"
     },
     {
       "id": "LO-WRITER-0113",
@@ -1373,13 +1395,13 @@
       "type": "filter",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Writer imports and exports a bounded ODF 1.3 text package through LibreOffice-shaped package, xmloff, and sw XML filter boundaries."
+        "The pinned upstream and local assertion markers cover this atomic operation: Read and write one bounded ODF package."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline."
       },
-      "capability": "Writer imports and exports a bounded ODF 1.3 text package through LibreOffice-shaped package, xmloff, and sw XML filter boundaries",
+      "capability": "ODF ZIP and manifest package plumbing",
       "gaps": [
         "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
@@ -1631,7 +1653,9 @@
             "marker": "Browser worker request cancellation protocol"
           }
         ]
-      }
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Read and write one bounded ODF package"
     },
     {
       "id": "LO-WRITER-0114",
@@ -1641,15 +1665,15 @@
       "type": "lifecycle",
       "maturity": "implemented",
       "assertions": [
-        "Every successful content mutation advances a distinct content generation, primary and recovery saves acknowledge only completed writes, and Undo or Redo restores modified state relative to the last save mark."
+        "The pinned upstream and local assertion markers cover this atomic operation: Advance and acknowledge one document lifecycle generation."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations."
       },
-      "capability": "Writer document lifecycle separates content, primary-save, and recovery generations with LibreOffice-like modified and undo save-mark semantics",
+      "capability": "Writer lifecycle generation state",
       "gaps": [
-        "The current browser workbench has explicit local save and a deterministic recovery coordinator, but scheduled autosave and recovery-session UI are not yet wired into the Writer lifecycle.",
+        "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
         "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
       ],
       "upstream": {
@@ -1743,7 +1767,2981 @@
             "marker": "save position"
           }
         ]
-      }
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Advance and acknowledge one document lifecycle generation"
+    },
+    {
+      "id": "LO-WRITER-0115",
+      "capabilityId": "CAP-0115",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "type": "command",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Place one registered command in a menu, toolbar, or shortcut surface."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser menu and toolbar controls adapt native configuration to accessible React UI."
+      },
+      "capability": "Writer menu, toolbar, and shortcut placement",
+      "gaps": [
+        "The browser shell provides only implemented commands and an explicit unavailable state; LibreOffice menu groups and command enablement remain much broader.",
+        "Native Writer menus, accelerators, dialogs, extensions, and UNO dispatch are not equivalent browser features."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+            "marker": ".uno:Copy"
+          },
+          {
+            "path": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+            "marker": ".uno:Copy"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+            "marker": "testTdf115088"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/swriter/01/04060100.xhp",
+            "marker": "<helpdocument"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "marker": "export function WriterMenuBar"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+            "marker": "Writer standard toolbar"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+            "marker": "writerMenuPlacements"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "marker": "places implemented Writer commands"
+          },
+          {
+            "path": "apps/office/e2e/foundation.spec.ts",
+            "marker": "File menu"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-command-placement.md",
+            "marker": "Browser Writer command placement"
+          },
+          {
+            "path": "docs/program/writer-ui-shell.md",
+            "marker": "Every visible top-level menu"
+          }
+        ]
+      },
+      "aspect": "command-placement",
+      "atomicOperation": "Place one registered command in a menu, toolbar, or shortcut surface"
+    },
+    {
+      "id": "LO-WRITER-0116",
+      "capabilityId": "CAP-0116",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "type": "command",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Navigate one Writer menu with keyboard or pointer input."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser menu and toolbar controls adapt native configuration to accessible React UI."
+      },
+      "capability": "Writer menu navigation behavior",
+      "gaps": [
+        "The browser shell provides only implemented commands and an explicit unavailable state; LibreOffice menu groups and command enablement remain much broader.",
+        "Native Writer menus, accelerators, dialogs, extensions, and UNO dispatch are not equivalent browser features."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+            "marker": ".uno:Copy"
+          },
+          {
+            "path": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+            "marker": ".uno:Copy"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+            "marker": "testTdf115088"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/swriter/01/04060100.xhp",
+            "marker": "<helpdocument"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "marker": "export function WriterMenuBar"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+            "marker": "Writer standard toolbar"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+            "marker": "writerMenuPlacements"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "marker": "places implemented Writer commands"
+          },
+          {
+            "path": "apps/office/e2e/foundation.spec.ts",
+            "marker": "File menu"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-command-placement.md",
+            "marker": "Browser Writer command placement"
+          },
+          {
+            "path": "docs/program/writer-ui-shell.md",
+            "marker": "Every visible top-level menu"
+          }
+        ]
+      },
+      "aspect": "browser-input",
+      "atomicOperation": "Navigate one Writer menu with keyboard or pointer input"
+    },
+    {
+      "id": "LO-WRITER-0117",
+      "capabilityId": "CAP-0117",
+      "suite": "writer",
+      "subsystem": "selection-clipboard",
+      "type": "command",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Extend a Writer selection across rendered paragraphs with the pointer."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "DOM selection and the Clipboard API replace native Writer window and clipboard services."
+      },
+      "capability": "Writer pointer-selection extension",
+      "gaps": [
+        "Copy preserves only the browser text/plain and bounded paragraph-level text/html representations; objects, tables, tracked changes, and full Writer transfer semantics beyond the bounded Cut and Paste slice are not implemented.",
+        "Select All covers the bounded rendered document body, not every Writer document object or selection mode."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+            "marker": ".uno:SelectAll"
+          },
+          {
+            "path": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+            "marker": ".uno:Copy"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+            "marker": "testNestedGroupTextBoxCopyCrash"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/swriter/01/select_text.xhp",
+            "marker": "<helpdocument"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/vcl/browser/browser-clipboard.ts",
+            "marker": "copyRichText"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async Copy"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+            "marker": "createWriterClipboardSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
+            "marker": "moveCaretAcrossParagraphBoundary"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "marker": "replaces native keyboard Copy data"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",
+            "marker": "keeps the typing caret stable"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
+            "marker": "omits accessibility descriptions"
+          },
+          {
+            "path": "apps/office/e2e/writer-clipboard.spec.ts",
+            "marker": "copies visible formatted Writer content"
+          },
+          {
+            "path": "apps/office/e2e/writer-document-selection.spec.ts",
+            "marker": "supports document-wide selection"
+          },
+          {
+            "path": "apps/office/e2e/foundation.spec.ts",
+            "marker": "Copied selection"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-clipboard.md",
+            "marker": "Browser Writer clipboard"
+          },
+          {
+            "path": "docs/program/writer-command-placement.md",
+            "marker": "Select All"
+          }
+        ]
+      },
+      "aspect": "browser-input",
+      "atomicOperation": "Extend a Writer selection across rendered paragraphs with the pointer"
+    },
+    {
+      "id": "LO-WRITER-0118",
+      "capabilityId": "CAP-0118",
+      "suite": "writer",
+      "subsystem": "selection-clipboard",
+      "type": "command",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Move a collapsed caret across a paragraph boundary."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "DOM selection and the Clipboard API replace native Writer window and clipboard services."
+      },
+      "capability": "Writer keyboard caret movement",
+      "gaps": [
+        "Copy preserves only the browser text/plain and bounded paragraph-level text/html representations; objects, tables, tracked changes, and full Writer transfer semantics beyond the bounded Cut and Paste slice are not implemented.",
+        "Select All covers the bounded rendered document body, not every Writer document object or selection mode."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+            "marker": ".uno:SelectAll"
+          },
+          {
+            "path": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+            "marker": ".uno:Copy"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+            "marker": "testNestedGroupTextBoxCopyCrash"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/swriter/01/select_text.xhp",
+            "marker": "<helpdocument"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/vcl/browser/browser-clipboard.ts",
+            "marker": "copyRichText"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async Copy"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+            "marker": "createWriterClipboardSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
+            "marker": "moveCaretAcrossParagraphBoundary"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "marker": "replaces native keyboard Copy data"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",
+            "marker": "keeps the typing caret stable"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
+            "marker": "omits accessibility descriptions"
+          },
+          {
+            "path": "apps/office/e2e/writer-clipboard.spec.ts",
+            "marker": "copies visible formatted Writer content"
+          },
+          {
+            "path": "apps/office/e2e/writer-document-selection.spec.ts",
+            "marker": "supports document-wide selection"
+          },
+          {
+            "path": "apps/office/e2e/foundation.spec.ts",
+            "marker": "Copied selection"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-clipboard.md",
+            "marker": "Browser Writer clipboard"
+          },
+          {
+            "path": "docs/program/writer-command-placement.md",
+            "marker": "Select All"
+          }
+        ]
+      },
+      "aspect": "browser-input",
+      "atomicOperation": "Move a collapsed caret across a paragraph boundary"
+    },
+    {
+      "id": "LO-WRITER-0119",
+      "capabilityId": "CAP-0119",
+      "suite": "writer",
+      "subsystem": "character-formatting",
+      "type": "command",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Stage and commit one IME composition without duplicate mutation."
+      ],
+      "stackDivergence": {
+        "kind": "none",
+        "rationale": "The bounded character-format transitions preserve the applicable upstream command semantics."
+      },
+      "capability": "Writer IME input staging",
+      "gaps": [
+        "The browser supports one native non-empty same-paragraph range and collapsed-caret pending attributes only; cross-paragraph, table, multi-range, character-style, and full IME behavior remain unmapped.",
+        "Font family, size, colour, double underline, strikeout, overline, rich-text Paste beyond the safe HTML subset, RTF, and DOCX interchange remain separate capabilities; bounded ODT character-format interchange is recorded by LO-WRITER-0113."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/uibase/shells/txtattr.cxx",
+            "marker": "SwTextShell::ExecCharAttr"
+          },
+          {
+            "path": "sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode"
+          },
+          {
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+            "marker": ".uno:UnderlineSingle"
+          },
+          {
+            "path": "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+            "marker": ".uno:Bold"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+            "marker": "testIMEFormattingAtEndOfParagraph"
+          },
+          {
+            "path": "sw/qa/uitest/writer_tests2/formatCharacter.py",
+            "marker": "formatCharacter"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/swriter/04/01020000.xhp",
+            "marker": "Shortcut Keys for %PRODUCTNAME Writer"
+          },
+          {
+            "path": "helpcontent2/source/text/swriter/guide/shortcut_writing.xhp",
+            "marker": "Ctrl"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+            "marker": "export class SwTextNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+            "marker": "export class SwpHints"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+            "marker": "export class SwTextAttr"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/txtattr.ts",
+            "marker": "toggleWriterCharacterFormat"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts",
+            "marker": "getWriterSameParagraphSelection"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
+            "marker": "renderWriterTextRun"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+            "marker": "wrapUniformWriterInlineFormatting"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx",
+            "marker": "renderTextFormatCommand"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx",
+            "marker": "renderCharacterFormatControl"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt.test.ts",
+            "marker": "toggles a selected range"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/shells/txtattr.test.ts",
+            "marker": "toggles a non-empty"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/select.test.ts",
+            "marker": "reads and restores"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
+            "marker": "preserves only supported direct"
+          },
+          {
+            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "marker": "formats same-paragraph text"
+          },
+          {
+            "path": "apps/office/e2e/writer-character-formatting.spec.ts",
+            "marker": "Writer direct character formatting"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-character-formatting.md",
+            "marker": "Browser Writer direct character formatting"
+          },
+          {
+            "path": "docs/program/writer-command-placement.md",
+            "marker": ".uno:UnderlineSingle"
+          },
+          {
+            "path": "docs/program/writer-clipboard.md",
+            "marker": "direct character formatting"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "txtattr.ts"
+          }
+        ]
+      },
+      "aspect": "browser-input",
+      "atomicOperation": "Stage and commit one IME composition without duplicate mutation"
+    },
+    {
+      "id": "LO-WRITER-0120",
+      "capabilityId": "CAP-0120",
+      "suite": "writer",
+      "subsystem": "clipboard-transfer",
+      "type": "command",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Intercept one native Copy, Cut, or Paste event."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser clipboard reads and writes replace native clipboard services."
+      },
+      "capability": "Writer browser clipboard-event handling",
+      "gaps": [
+        "The browser supports a single same-paragraph range for Cut and Paste; cross-paragraph, multi-range, table, object, and tracked-change transfer remain unmapped.",
+        "Paste accepts only visible plain text and the bounded strong/em/single-underline HTML subset. RTF, images, embedded objects, list or paragraph reconstruction, Paste Special, and ODT/DOCX transfer filters are explicitly unsupported."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/uibase/dochdl/swdtflvr.cxx",
+            "marker": "SwTransferable::Cut"
+          },
+          {
+            "path": "sw/source/uibase/dochdl/swdtflvr.cxx",
+            "marker": "SwTransferable::Paste"
+          },
+          {
+            "path": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+            "marker": "DocumentContentOperationsManager::ReplaceRange"
+          },
+          {
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+            "marker": ".uno:Paste"
+          },
+          {
+            "path": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+            "marker": ".uno:Cut"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/uiwriter/uiwriter8.cxx",
+            "marker": "dispatchCommand(mxComponent, u\".uno:Cut\""
+          },
+          {
+            "path": "sw/qa/uitest/writer_tests2/tdf133299.py",
+            "marker": ".uno:Paste"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/01/02040000.xhp",
+            "marker": ".uno:Cut"
+          },
+          {
+            "path": "helpcontent2/source/text/shared/01/02060000.xhp",
+            "marker": ".uno:Paste"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+            "marker": "replaceWriterParagraphTextRange"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+            "marker": "parseWriterClipboardPaste"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async Paste"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
+            "marker": "handleNativeWriterCut"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "marker": "renderMenuItem(\"Paste\""
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+            "marker": "aria-label=\"Paste\""
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.test.ts",
+            "marker": "replaces, removes"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
+            "marker": "parses only bounded"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",
+            "marker": "intercepts native Cut and Paste"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-clipboard.test.ts",
+            "marker": "reads the first text-capable"
+          },
+          {
+            "path": "apps/office/e2e/writer-cut-paste.spec.ts",
+            "marker": "Writer Cut and Paste"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-clipboard.md",
+            "marker": "Browser Writer clipboard"
+          },
+          {
+            "path": "docs/program/writer-command-placement.md",
+            "marker": ".uno:Cut"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "DocumentContentOperationsManager.ts"
+          }
+        ]
+      },
+      "aspect": "browser-input",
+      "atomicOperation": "Intercept one native Copy, Cut, or Paste event"
+    },
+    {
+      "id": "LO-WRITER-0121",
+      "capabilityId": "CAP-0121",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Complete one browser ODT open, save, or download workflow."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline."
+      },
+      "capability": "Writer browser file workflow",
+      "gaps": [
+        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
+        "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "package/source/zipapi/CRC32.cxx",
+            "marker": "CRC32::updateSegment"
+          },
+          {
+            "path": "package/source/zipapi/ZipFile.cxx",
+            "marker": "ZipFile::readLOC"
+          },
+          {
+            "path": "package/source/zipapi/ZipOutputStream.cxx",
+            "marker": "ZipOutputStream::finish"
+          },
+          {
+            "path": "package/source/manifest/ManifestExport.cxx",
+            "marker": "ManifestExport::ManifestExport"
+          },
+          {
+            "path": "xmloff/source/text/txtparae.cxx",
+            "marker": "XMLTextParagraphExport::exportText"
+          },
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "XMLTextImportHelper"
+          },
+          {
+            "path": "sax/source/fastparser/fastparser.cxx",
+            "marker": "m_bDisableThreadedParser"
+          },
+          {
+            "path": "sw/source/filter/xml/wrtxml.cxx",
+            "marker": "SwXMLWriter::WriteThroughComponent"
+          },
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "styles.xml"
+          },
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "content.xml"
+          },
+          {
+            "path": "sw/source/uibase/app/docsh.cxx",
+            "marker": "SwDocShell::SaveAs"
+          },
+          {
+            "path": "sw/source/uibase/app/docshini.cxx",
+            "marker": "SwDocShell::Load"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          },
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextBold"
+          },
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextItalic"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          },
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF 1.3"
+          },
+          {
+            "path": "helpcontent2/source/text/shared/guide/convertfilters.xhp",
+            "marker": "application/vnd.oasis.opendocument.text (odt)"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/package/source/zipapi/CRC32.ts",
+            "marker": "export class CRC32"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipFile.ts",
+            "marker": "export class ZipFile"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+            "marker": "export class ZipOutputStream"
+          },
+          {
+            "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+            "marker": "createOdtManifestXml"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+            "marker": "parseOdfXmlDocument"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+            "marker": "exportTextParagraphs"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "marker": "importTextParagraphs"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+            "marker": "exportContentXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "marker": "importWriterXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts",
+            "marker": "export class SwXMLWriter"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
+            "marker": "export class SwXMLReader"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
+            "marker": "export interface OdtFilterService"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+            "marker": "export class OdtWorkerClient"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+            "marker": "export class OdtWorkerRuntime"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+            "marker": "new OdtWorkerRuntime"
+          },
+          {
+            "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+            "marker": "WORKER_PROTOCOL_VERSION"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+            "marker": "export class SwDocShell"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-file.ts",
+            "marker": "selectBrowserFile"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-download.ts",
+            "marker": "downloadBytes"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async OpenOdt"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "marker": "Open ODT…"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+            "marker": "Save as ODT"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts",
+            "marker": "standard ZIP checksum"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipFile.test.ts",
+            "marker": "defensive ZIP32 input validation"
+          },
+          {
+            "path": "apps/office/src/package/source/manifest/ManifestExport.test.ts",
+            "marker": "bounded ODF 1.3 manifest"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtpara.test.ts",
+            "marker": "bounded ODF text paragraph"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+            "marker": "ODF SAX parser"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "restores canonical formatting"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.test.ts",
+            "marker": "ODT filter service"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.test.ts",
+            "marker": "ODT worker client"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.test.ts",
+            "marker": "ODT worker runtime"
+          },
+          {
+            "path": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+            "marker": "pinned LibreOffice ODT feature fixtures"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.test.ts",
+            "marker": "describe(\"SwDocShell\""
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-file.test.ts",
+            "marker": "browser file selection"
+          },
+          {
+            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "marker": "opens a supported ODT atomically"
+          },
+          {
+            "path": "apps/office/e2e/writer-odt-file.spec.ts",
+            "marker": "Writer opens and saves a bounded ODT file"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "Dedicated Worker"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "sw/source/filter/xml"
+          },
+          {
+            "path": "docs/program/worker-cancellation-protocol.md",
+            "marker": "Browser worker request cancellation protocol"
+          }
+        ]
+      },
+      "aspect": "browser-input",
+      "atomicOperation": "Complete one browser ODT open, save, or download workflow"
+    },
+    {
+      "id": "LO-WRITER-0122",
+      "capabilityId": "CAP-0122",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "type": "lifecycle",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Present and resolve one recovery candidate prompt."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations."
+      },
+      "capability": "Writer recovery prompt behavior",
+      "gaps": [
+        "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
+        "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sfx2/source/doc/objmisc.cxx",
+            "marker": "void SfxObjectShell::SetModified"
+          },
+          {
+            "path": "sfx2/source/doc/objstor.cxx",
+            "marker": "SetModified( !bSaved )"
+          },
+          {
+            "path": "sfx2/source/doc/sfxbasemodel.cxx",
+            "marker": "storeToRecoveryFile"
+          },
+          {
+            "path": "sw/source/core/undo/docundo.cxx",
+            "marker": "HasTopUndoActionMark"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/undo/undo.cxx",
+            "marker": "testImagePropsCreateUndoAndModifyDoc"
+          },
+          {
+            "path": "sw/qa/python/check_xmodifiable2.py",
+            "marker": "test_XModifiable2_setModified"
+          }
+        ],
+        "docs": [
+          {
+            "path": "offapi/com/sun/star/util/XModifiable.idl",
+            "marker": "boolean isModified()"
+          },
+          {
+            "path": "offapi/com/sun/star/document/XDocumentRecovery.idl",
+            "marker": "wasModifiedSinceLastSave"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+            "marker": "contentGeneration"
+          },
+          {
+            "path": "apps/office/src/svl/source/misc/recovery.ts",
+            "marker": "recoveryGeneration"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+            "marker": "markDocumentSaved"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+            "marker": "MarkHistoryMutation"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sfx2/source/doc/docfac.test.ts",
+            "marker": "advances every dirty mutation"
+          },
+          {
+            "path": "apps/office/src/svl/source/misc/recovery.test.ts",
+            "marker": "saves each changed generation"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-storage.test.ts",
+            "marker": "does not acknowledge a failed primary save"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+            "marker": "moved save mark across action navigation"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/document-lifecycle.md",
+            "marker": "content generation"
+          },
+          {
+            "path": "docs/program/autosave-recovery.md",
+            "marker": "recovery generation"
+          },
+          {
+            "path": "docs/program/transaction-history.md",
+            "marker": "save position"
+          }
+        ]
+      },
+      "aspect": "browser-input",
+      "atomicOperation": "Present and resolve one recovery candidate prompt"
+    },
+    {
+      "id": "LO-WRITER-0123",
+      "capabilityId": "CAP-0123",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "type": "model",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Split, append, merge, move, or remove one text node."
+      ],
+      "stackDivergence": {
+        "kind": "none",
+        "rationale": "The TypeScript object graph preserves the applicable bounded Writer model structure."
+      },
+      "capability": "Writer paragraph structure mutation",
+      "gaps": [
+        "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo; legacy cloning helpers remain isolated outside production pending Workstream 1, while registered-index correction and full native Writer undo coverage remain incomplete."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/core/doc/docnew.cxx",
+            "marker": "SwDoc::SwDoc"
+          },
+          {
+            "path": "sw/source/core/docnode/nodes.cxx",
+            "marker": "SwNodes::SwNodes"
+          },
+          {
+            "path": "sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::SwTextNode"
+          },
+          {
+            "path": "sw/source/core/crsr/pam.cxx",
+            "marker": "SwPaM::SwPaM"
+          },
+          {
+            "path": "sw/source/core/txtnode/txatbase.cxx",
+            "marker": "SwTextAttr::SwTextAttr"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/uwriter.cxx",
+            "marker": "SwNodes& rNds"
+          },
+          {
+            "path": "sw/qa/core/txtnode/txtnode.cxx",
+            "marker": "SwTextAttr* pAttr"
+          }
+        ],
+        "docs": [
+          {
+            "path": "sw/README.md",
+            "marker": "The central class for a document is `SwDoc`"
+          },
+          {
+            "path": "sw/README.md",
+            "marker": "core`: Writer core (document model"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "export class SwDoc"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+            "marker": "export class SwNodes"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+            "marker": "export class SwTextNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/pam.ts",
+            "marker": "export class SwPaM"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+            "marker": "export class SwTextAttr"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+            "marker": "export class SwpHints"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "Writer SwNodes graph"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "Writer SwPosition and SwPaM"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "Writer SwTextAttr and SwpHints"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-core-model.md",
+            "marker": "Writer core document model"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "identity-bearing, cyclic object graph"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "SwNodeIndex"
+          }
+        ]
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Split, append, merge, move, or remove one text node"
+    },
+    {
+      "id": "LO-WRITER-0124",
+      "capabilityId": "CAP-0124",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "type": "model",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Insert, delete, or replace one same-node text range."
+      ],
+      "stackDivergence": {
+        "kind": "none",
+        "rationale": "The TypeScript object graph preserves the applicable bounded Writer model structure."
+      },
+      "capability": "Writer text content mutation",
+      "gaps": [
+        "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo; legacy cloning helpers remain isolated outside production pending Workstream 1, while registered-index correction and full native Writer undo coverage remain incomplete."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/core/doc/docnew.cxx",
+            "marker": "SwDoc::SwDoc"
+          },
+          {
+            "path": "sw/source/core/docnode/nodes.cxx",
+            "marker": "SwNodes::SwNodes"
+          },
+          {
+            "path": "sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::SwTextNode"
+          },
+          {
+            "path": "sw/source/core/crsr/pam.cxx",
+            "marker": "SwPaM::SwPaM"
+          },
+          {
+            "path": "sw/source/core/txtnode/txatbase.cxx",
+            "marker": "SwTextAttr::SwTextAttr"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/uwriter.cxx",
+            "marker": "SwNodes& rNds"
+          },
+          {
+            "path": "sw/qa/core/txtnode/txtnode.cxx",
+            "marker": "SwTextAttr* pAttr"
+          }
+        ],
+        "docs": [
+          {
+            "path": "sw/README.md",
+            "marker": "The central class for a document is `SwDoc`"
+          },
+          {
+            "path": "sw/README.md",
+            "marker": "core`: Writer core (document model"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "export class SwDoc"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+            "marker": "export class SwNodes"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+            "marker": "export class SwTextNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/pam.ts",
+            "marker": "export class SwPaM"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+            "marker": "export class SwTextAttr"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+            "marker": "export class SwpHints"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "Writer SwNodes graph"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "Writer SwPosition and SwPaM"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "Writer SwTextAttr and SwpHints"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-core-model.md",
+            "marker": "Writer core document model"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "identity-bearing, cyclic object graph"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "SwNodeIndex"
+          }
+        ]
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Insert, delete, or replace one same-node text range"
+    },
+    {
+      "id": "LO-WRITER-0125",
+      "capabilityId": "CAP-0125",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "type": "model",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Resolve one paragraph property through direct and inherited item sets."
+      ],
+      "stackDivergence": {
+        "kind": "none",
+        "rationale": "The TypeScript item and style graph preserves the applicable bounded Writer resolution rules."
+      },
+      "capability": "Writer paragraph-property ownership",
+      "gaps": [
+        "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL weight and posture, and common underline are implemented. Font family, size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, built-in style pool, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
+        "The current version-three browser snapshot preserves the implemented ownership graph; obsolete snapshots from the preceding non-canonical model are deliberately rejected. ODT numbering is mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "svl/source/items/itemset.cxx",
+            "marker": "SfxItemSet::Put"
+          },
+          {
+            "path": "svl/source/items/itempool.cxx",
+            "marker": "SfxItemPool::GetUserOrPoolDefaultItem"
+          },
+          {
+            "path": "editeng/source/items/textitem.cxx",
+            "marker": "SvxWeightItem::GetBoolValue"
+          },
+          {
+            "path": "sw/source/core/attr/swatrset.cxx",
+            "marker": "SwAttrSet::SwAttrSet"
+          },
+          {
+            "path": "sw/source/core/attr/format.cxx",
+            "marker": "SwFormat::SetFormatAttr"
+          },
+          {
+            "path": "sw/source/core/doc/fmtcol.cxx",
+            "marker": "SwTextFormatColl::SwTextFormatColl"
+          },
+          {
+            "path": "sw/source/core/docnode/node.cxx",
+            "marker": "SwContentNode::SetAttr"
+          },
+          {
+            "path": "sw/source/core/para/paratr.cxx",
+            "marker": "SwNumRuleItem::Clone"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/attr/attr.cxx",
+            "marker": "testSwAttrSet"
+          },
+          {
+            "path": "sw/qa/core/doc/number.cxx",
+            "marker": "testBadHeadingIndent"
+          }
+        ],
+        "docs": [
+          {
+            "path": "sw/README.md",
+            "marker": "The central class for a document is `SwDoc`"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/svl/source/items/itemset.ts",
+            "marker": "export class SfxItemSet"
+          },
+          {
+            "path": "apps/office/src/editeng/source/items/textitem.ts",
+            "marker": "export class SvxWeightItem"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+            "marker": "export class SwAttrPool"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/attr/format.ts",
+            "marker": "export class SwFormat"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/fmtcol.ts",
+            "marker": "export class SwTextFormatColl"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/node.ts",
+            "marker": "export abstract class SwContentNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/para/paratr.ts",
+            "marker": "export class SwNumRuleItem"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "private readonly attrPool"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/svl/source/items/itemset.test.ts",
+            "marker": "SfxItemPool and SfxItemSet"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+            "marker": "Writer attribute ownership"
+          },
+          {
+            "path": "apps/office/src/editeng/source/items/textitem.test.ts",
+            "marker": "EditEngine character items"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+            "marker": "Writer numbering rules and snapshots"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-core-model.md",
+            "marker": "Paragraph properties are not stored as parallel TypeScript fields"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "svl/source/items/itemset.ts"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "node-local `SwAttrSet` deltas"
+          }
+        ]
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Resolve one paragraph property through direct and inherited item sets"
+    },
+    {
+      "id": "LO-WRITER-0126",
+      "capabilityId": "CAP-0126",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "type": "model",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Store and project one character attribute hint range."
+      ],
+      "stackDivergence": {
+        "kind": "none",
+        "rationale": "The TypeScript item and style graph preserves the applicable bounded Writer resolution rules."
+      },
+      "capability": "Writer character-attribute ownership",
+      "gaps": [
+        "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL weight and posture, and common underline are implemented. Font family, size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, built-in style pool, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
+        "The current version-three browser snapshot preserves the implemented ownership graph; obsolete snapshots from the preceding non-canonical model are deliberately rejected. ODT numbering is mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "svl/source/items/itemset.cxx",
+            "marker": "SfxItemSet::Put"
+          },
+          {
+            "path": "svl/source/items/itempool.cxx",
+            "marker": "SfxItemPool::GetUserOrPoolDefaultItem"
+          },
+          {
+            "path": "editeng/source/items/textitem.cxx",
+            "marker": "SvxWeightItem::GetBoolValue"
+          },
+          {
+            "path": "sw/source/core/attr/swatrset.cxx",
+            "marker": "SwAttrSet::SwAttrSet"
+          },
+          {
+            "path": "sw/source/core/attr/format.cxx",
+            "marker": "SwFormat::SetFormatAttr"
+          },
+          {
+            "path": "sw/source/core/doc/fmtcol.cxx",
+            "marker": "SwTextFormatColl::SwTextFormatColl"
+          },
+          {
+            "path": "sw/source/core/docnode/node.cxx",
+            "marker": "SwContentNode::SetAttr"
+          },
+          {
+            "path": "sw/source/core/para/paratr.cxx",
+            "marker": "SwNumRuleItem::Clone"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/attr/attr.cxx",
+            "marker": "testSwAttrSet"
+          },
+          {
+            "path": "sw/qa/core/doc/number.cxx",
+            "marker": "testBadHeadingIndent"
+          }
+        ],
+        "docs": [
+          {
+            "path": "sw/README.md",
+            "marker": "The central class for a document is `SwDoc`"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/svl/source/items/itemset.ts",
+            "marker": "export class SfxItemSet"
+          },
+          {
+            "path": "apps/office/src/editeng/source/items/textitem.ts",
+            "marker": "export class SvxWeightItem"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+            "marker": "export class SwAttrPool"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/attr/format.ts",
+            "marker": "export class SwFormat"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/fmtcol.ts",
+            "marker": "export class SwTextFormatColl"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/node.ts",
+            "marker": "export abstract class SwContentNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/para/paratr.ts",
+            "marker": "export class SwNumRuleItem"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "private readonly attrPool"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/svl/source/items/itemset.test.ts",
+            "marker": "SfxItemPool and SfxItemSet"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+            "marker": "Writer attribute ownership"
+          },
+          {
+            "path": "apps/office/src/editeng/source/items/textitem.test.ts",
+            "marker": "EditEngine character items"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+            "marker": "Writer numbering rules and snapshots"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-core-model.md",
+            "marker": "Paragraph properties are not stored as parallel TypeScript fields"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "svl/source/items/itemset.ts"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "node-local `SwAttrSet` deltas"
+          }
+        ]
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Store and project one character attribute hint range"
+    },
+    {
+      "id": "LO-WRITER-0127",
+      "capabilityId": "CAP-0127",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "type": "model",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Resolve one document-owned numbering rule and paragraph level."
+      ],
+      "stackDivergence": {
+        "kind": "none",
+        "rationale": "The TypeScript item and style graph preserves the applicable bounded Writer resolution rules."
+      },
+      "capability": "Writer numbering-rule ownership",
+      "gaps": [
+        "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL weight and posture, and common underline are implemented. Font family, size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, built-in style pool, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
+        "The current version-three browser snapshot preserves the implemented ownership graph; obsolete snapshots from the preceding non-canonical model are deliberately rejected. ODT numbering is mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "svl/source/items/itemset.cxx",
+            "marker": "SfxItemSet::Put"
+          },
+          {
+            "path": "svl/source/items/itempool.cxx",
+            "marker": "SfxItemPool::GetUserOrPoolDefaultItem"
+          },
+          {
+            "path": "editeng/source/items/textitem.cxx",
+            "marker": "SvxWeightItem::GetBoolValue"
+          },
+          {
+            "path": "sw/source/core/attr/swatrset.cxx",
+            "marker": "SwAttrSet::SwAttrSet"
+          },
+          {
+            "path": "sw/source/core/attr/format.cxx",
+            "marker": "SwFormat::SetFormatAttr"
+          },
+          {
+            "path": "sw/source/core/doc/fmtcol.cxx",
+            "marker": "SwTextFormatColl::SwTextFormatColl"
+          },
+          {
+            "path": "sw/source/core/docnode/node.cxx",
+            "marker": "SwContentNode::SetAttr"
+          },
+          {
+            "path": "sw/source/core/para/paratr.cxx",
+            "marker": "SwNumRuleItem::Clone"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/attr/attr.cxx",
+            "marker": "testSwAttrSet"
+          },
+          {
+            "path": "sw/qa/core/doc/number.cxx",
+            "marker": "testBadHeadingIndent"
+          }
+        ],
+        "docs": [
+          {
+            "path": "sw/README.md",
+            "marker": "The central class for a document is `SwDoc`"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/svl/source/items/itemset.ts",
+            "marker": "export class SfxItemSet"
+          },
+          {
+            "path": "apps/office/src/editeng/source/items/textitem.ts",
+            "marker": "export class SvxWeightItem"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+            "marker": "export class SwAttrPool"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/attr/format.ts",
+            "marker": "export class SwFormat"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/fmtcol.ts",
+            "marker": "export class SwTextFormatColl"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/node.ts",
+            "marker": "export abstract class SwContentNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/para/paratr.ts",
+            "marker": "export class SwNumRuleItem"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "private readonly attrPool"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/svl/source/items/itemset.test.ts",
+            "marker": "SfxItemPool and SfxItemSet"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+            "marker": "Writer attribute ownership"
+          },
+          {
+            "path": "apps/office/src/editeng/source/items/textitem.test.ts",
+            "marker": "EditEngine character items"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
+            "marker": "Writer numbering rules and snapshots"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-core-model.md",
+            "marker": "Paragraph properties are not stored as parallel TypeScript fields"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "svl/source/items/itemset.ts"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "node-local `SwAttrSet` deltas"
+          }
+        ]
+      },
+      "aspect": "model-operation",
+      "atomicOperation": "Resolve one document-owned numbering rule and paragraph level"
+    },
+    {
+      "id": "LO-WRITER-0128",
+      "capabilityId": "CAP-0128",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Import one bounded ODF text stream into the Writer graph."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline."
+      },
+      "capability": "Writer ODF XML import",
+      "gaps": [
+        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
+        "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "package/source/zipapi/CRC32.cxx",
+            "marker": "CRC32::updateSegment"
+          },
+          {
+            "path": "package/source/zipapi/ZipFile.cxx",
+            "marker": "ZipFile::readLOC"
+          },
+          {
+            "path": "package/source/zipapi/ZipOutputStream.cxx",
+            "marker": "ZipOutputStream::finish"
+          },
+          {
+            "path": "package/source/manifest/ManifestExport.cxx",
+            "marker": "ManifestExport::ManifestExport"
+          },
+          {
+            "path": "xmloff/source/text/txtparae.cxx",
+            "marker": "XMLTextParagraphExport::exportText"
+          },
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "XMLTextImportHelper"
+          },
+          {
+            "path": "sax/source/fastparser/fastparser.cxx",
+            "marker": "m_bDisableThreadedParser"
+          },
+          {
+            "path": "sw/source/filter/xml/wrtxml.cxx",
+            "marker": "SwXMLWriter::WriteThroughComponent"
+          },
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "styles.xml"
+          },
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "content.xml"
+          },
+          {
+            "path": "sw/source/uibase/app/docsh.cxx",
+            "marker": "SwDocShell::SaveAs"
+          },
+          {
+            "path": "sw/source/uibase/app/docshini.cxx",
+            "marker": "SwDocShell::Load"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          },
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextBold"
+          },
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextItalic"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          },
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF 1.3"
+          },
+          {
+            "path": "helpcontent2/source/text/shared/guide/convertfilters.xhp",
+            "marker": "application/vnd.oasis.opendocument.text (odt)"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/package/source/zipapi/CRC32.ts",
+            "marker": "export class CRC32"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipFile.ts",
+            "marker": "export class ZipFile"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+            "marker": "export class ZipOutputStream"
+          },
+          {
+            "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+            "marker": "createOdtManifestXml"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+            "marker": "parseOdfXmlDocument"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+            "marker": "exportTextParagraphs"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "marker": "importTextParagraphs"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+            "marker": "exportContentXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "marker": "importWriterXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts",
+            "marker": "export class SwXMLWriter"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
+            "marker": "export class SwXMLReader"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
+            "marker": "export interface OdtFilterService"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+            "marker": "export class OdtWorkerClient"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+            "marker": "export class OdtWorkerRuntime"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+            "marker": "new OdtWorkerRuntime"
+          },
+          {
+            "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+            "marker": "WORKER_PROTOCOL_VERSION"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+            "marker": "export class SwDocShell"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-file.ts",
+            "marker": "selectBrowserFile"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-download.ts",
+            "marker": "downloadBytes"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async OpenOdt"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "marker": "Open ODT…"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+            "marker": "Save as ODT"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts",
+            "marker": "standard ZIP checksum"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipFile.test.ts",
+            "marker": "defensive ZIP32 input validation"
+          },
+          {
+            "path": "apps/office/src/package/source/manifest/ManifestExport.test.ts",
+            "marker": "bounded ODF 1.3 manifest"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtpara.test.ts",
+            "marker": "bounded ODF text paragraph"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+            "marker": "ODF SAX parser"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "restores canonical formatting"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.test.ts",
+            "marker": "ODT filter service"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.test.ts",
+            "marker": "ODT worker client"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.test.ts",
+            "marker": "ODT worker runtime"
+          },
+          {
+            "path": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+            "marker": "pinned LibreOffice ODT feature fixtures"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.test.ts",
+            "marker": "describe(\"SwDocShell\""
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-file.test.ts",
+            "marker": "browser file selection"
+          },
+          {
+            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "marker": "opens a supported ODT atomically"
+          },
+          {
+            "path": "apps/office/e2e/writer-odt-file.spec.ts",
+            "marker": "Writer opens and saves a bounded ODT file"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "Dedicated Worker"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "sw/source/filter/xml"
+          },
+          {
+            "path": "docs/program/worker-cancellation-protocol.md",
+            "marker": "Browser worker request cancellation protocol"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Import one bounded ODF text stream into the Writer graph"
+    },
+    {
+      "id": "LO-WRITER-0129",
+      "capabilityId": "CAP-0129",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Export one Writer graph as bounded ODF XML."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline."
+      },
+      "capability": "Writer ODF XML export",
+      "gaps": [
+        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
+        "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "package/source/zipapi/CRC32.cxx",
+            "marker": "CRC32::updateSegment"
+          },
+          {
+            "path": "package/source/zipapi/ZipFile.cxx",
+            "marker": "ZipFile::readLOC"
+          },
+          {
+            "path": "package/source/zipapi/ZipOutputStream.cxx",
+            "marker": "ZipOutputStream::finish"
+          },
+          {
+            "path": "package/source/manifest/ManifestExport.cxx",
+            "marker": "ManifestExport::ManifestExport"
+          },
+          {
+            "path": "xmloff/source/text/txtparae.cxx",
+            "marker": "XMLTextParagraphExport::exportText"
+          },
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "XMLTextImportHelper"
+          },
+          {
+            "path": "sax/source/fastparser/fastparser.cxx",
+            "marker": "m_bDisableThreadedParser"
+          },
+          {
+            "path": "sw/source/filter/xml/wrtxml.cxx",
+            "marker": "SwXMLWriter::WriteThroughComponent"
+          },
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "styles.xml"
+          },
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "content.xml"
+          },
+          {
+            "path": "sw/source/uibase/app/docsh.cxx",
+            "marker": "SwDocShell::SaveAs"
+          },
+          {
+            "path": "sw/source/uibase/app/docshini.cxx",
+            "marker": "SwDocShell::Load"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          },
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextBold"
+          },
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextItalic"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          },
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF 1.3"
+          },
+          {
+            "path": "helpcontent2/source/text/shared/guide/convertfilters.xhp",
+            "marker": "application/vnd.oasis.opendocument.text (odt)"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/package/source/zipapi/CRC32.ts",
+            "marker": "export class CRC32"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipFile.ts",
+            "marker": "export class ZipFile"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+            "marker": "export class ZipOutputStream"
+          },
+          {
+            "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+            "marker": "createOdtManifestXml"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+            "marker": "parseOdfXmlDocument"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+            "marker": "exportTextParagraphs"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "marker": "importTextParagraphs"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+            "marker": "exportContentXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "marker": "importWriterXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts",
+            "marker": "export class SwXMLWriter"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
+            "marker": "export class SwXMLReader"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
+            "marker": "export interface OdtFilterService"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+            "marker": "export class OdtWorkerClient"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+            "marker": "export class OdtWorkerRuntime"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+            "marker": "new OdtWorkerRuntime"
+          },
+          {
+            "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+            "marker": "WORKER_PROTOCOL_VERSION"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+            "marker": "export class SwDocShell"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-file.ts",
+            "marker": "selectBrowserFile"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-download.ts",
+            "marker": "downloadBytes"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async OpenOdt"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "marker": "Open ODT…"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+            "marker": "Save as ODT"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts",
+            "marker": "standard ZIP checksum"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipFile.test.ts",
+            "marker": "defensive ZIP32 input validation"
+          },
+          {
+            "path": "apps/office/src/package/source/manifest/ManifestExport.test.ts",
+            "marker": "bounded ODF 1.3 manifest"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtpara.test.ts",
+            "marker": "bounded ODF text paragraph"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+            "marker": "ODF SAX parser"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "restores canonical formatting"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.test.ts",
+            "marker": "ODT filter service"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.test.ts",
+            "marker": "ODT worker client"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.test.ts",
+            "marker": "ODT worker runtime"
+          },
+          {
+            "path": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+            "marker": "pinned LibreOffice ODT feature fixtures"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.test.ts",
+            "marker": "describe(\"SwDocShell\""
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-file.test.ts",
+            "marker": "browser file selection"
+          },
+          {
+            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "marker": "opens a supported ODT atomically"
+          },
+          {
+            "path": "apps/office/e2e/writer-odt-file.spec.ts",
+            "marker": "Writer opens and saves a bounded ODT file"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "Dedicated Worker"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "sw/source/filter/xml"
+          },
+          {
+            "path": "docs/program/worker-cancellation-protocol.md",
+            "marker": "Browser worker request cancellation protocol"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Export one Writer graph as bounded ODF XML"
+    },
+    {
+      "id": "LO-WRITER-0130",
+      "capabilityId": "CAP-0130",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Round-trip one bounded ODF fixture without semantic loss."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline."
+      },
+      "capability": "Writer ODF round-trip compatibility",
+      "gaps": [
+        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
+        "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "package/source/zipapi/CRC32.cxx",
+            "marker": "CRC32::updateSegment"
+          },
+          {
+            "path": "package/source/zipapi/ZipFile.cxx",
+            "marker": "ZipFile::readLOC"
+          },
+          {
+            "path": "package/source/zipapi/ZipOutputStream.cxx",
+            "marker": "ZipOutputStream::finish"
+          },
+          {
+            "path": "package/source/manifest/ManifestExport.cxx",
+            "marker": "ManifestExport::ManifestExport"
+          },
+          {
+            "path": "xmloff/source/text/txtparae.cxx",
+            "marker": "XMLTextParagraphExport::exportText"
+          },
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "XMLTextImportHelper"
+          },
+          {
+            "path": "sax/source/fastparser/fastparser.cxx",
+            "marker": "m_bDisableThreadedParser"
+          },
+          {
+            "path": "sw/source/filter/xml/wrtxml.cxx",
+            "marker": "SwXMLWriter::WriteThroughComponent"
+          },
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "styles.xml"
+          },
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "content.xml"
+          },
+          {
+            "path": "sw/source/uibase/app/docsh.cxx",
+            "marker": "SwDocShell::SaveAs"
+          },
+          {
+            "path": "sw/source/uibase/app/docshini.cxx",
+            "marker": "SwDocShell::Load"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          },
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextBold"
+          },
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextItalic"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          },
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF 1.3"
+          },
+          {
+            "path": "helpcontent2/source/text/shared/guide/convertfilters.xhp",
+            "marker": "application/vnd.oasis.opendocument.text (odt)"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/package/source/zipapi/CRC32.ts",
+            "marker": "export class CRC32"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipFile.ts",
+            "marker": "export class ZipFile"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+            "marker": "export class ZipOutputStream"
+          },
+          {
+            "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+            "marker": "createOdtManifestXml"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+            "marker": "parseOdfXmlDocument"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+            "marker": "exportTextParagraphs"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "marker": "importTextParagraphs"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+            "marker": "exportContentXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "marker": "importWriterXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts",
+            "marker": "export class SwXMLWriter"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
+            "marker": "export class SwXMLReader"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
+            "marker": "export interface OdtFilterService"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+            "marker": "export class OdtWorkerClient"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+            "marker": "export class OdtWorkerRuntime"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+            "marker": "new OdtWorkerRuntime"
+          },
+          {
+            "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+            "marker": "WORKER_PROTOCOL_VERSION"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+            "marker": "export class SwDocShell"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-file.ts",
+            "marker": "selectBrowserFile"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-download.ts",
+            "marker": "downloadBytes"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "marker": "public async OpenOdt"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "marker": "Open ODT…"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+            "marker": "Save as ODT"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts",
+            "marker": "standard ZIP checksum"
+          },
+          {
+            "path": "apps/office/src/package/source/zipapi/ZipFile.test.ts",
+            "marker": "defensive ZIP32 input validation"
+          },
+          {
+            "path": "apps/office/src/package/source/manifest/ManifestExport.test.ts",
+            "marker": "bounded ODF 1.3 manifest"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtpara.test.ts",
+            "marker": "bounded ODF text paragraph"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+            "marker": "ODF SAX parser"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "restores canonical formatting"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.test.ts",
+            "marker": "ODT filter service"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.test.ts",
+            "marker": "ODT worker client"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.test.ts",
+            "marker": "ODT worker runtime"
+          },
+          {
+            "path": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+            "marker": "pinned LibreOffice ODT feature fixtures"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.test.ts",
+            "marker": "describe(\"SwDocShell\""
+          },
+          {
+            "path": "apps/office/src/vcl/browser/browser-file.test.ts",
+            "marker": "browser file selection"
+          },
+          {
+            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "marker": "opens a supported ODT atomically"
+          },
+          {
+            "path": "apps/office/e2e/writer-odt-file.spec.ts",
+            "marker": "Writer opens and saves a bounded ODT file"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "Dedicated Worker"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "sw/source/filter/xml"
+          },
+          {
+            "path": "docs/program/worker-cancellation-protocol.md",
+            "marker": "Browser worker request cancellation protocol"
+          }
+        ]
+      },
+      "aspect": "compatibility",
+      "atomicOperation": "Round-trip one bounded ODF fixture without semantic loss"
+    },
+    {
+      "id": "LO-WRITER-0131",
+      "capabilityId": "CAP-0131",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "type": "lifecycle",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Persist and restore one primary IndexedDB snapshot."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations."
+      },
+      "capability": "Writer browser-local primary persistence",
+      "gaps": [
+        "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
+        "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sfx2/source/doc/objmisc.cxx",
+            "marker": "void SfxObjectShell::SetModified"
+          },
+          {
+            "path": "sfx2/source/doc/objstor.cxx",
+            "marker": "SetModified( !bSaved )"
+          },
+          {
+            "path": "sfx2/source/doc/sfxbasemodel.cxx",
+            "marker": "storeToRecoveryFile"
+          },
+          {
+            "path": "sw/source/core/undo/docundo.cxx",
+            "marker": "HasTopUndoActionMark"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/undo/undo.cxx",
+            "marker": "testImagePropsCreateUndoAndModifyDoc"
+          },
+          {
+            "path": "sw/qa/python/check_xmodifiable2.py",
+            "marker": "test_XModifiable2_setModified"
+          }
+        ],
+        "docs": [
+          {
+            "path": "offapi/com/sun/star/util/XModifiable.idl",
+            "marker": "boolean isModified()"
+          },
+          {
+            "path": "offapi/com/sun/star/document/XDocumentRecovery.idl",
+            "marker": "wasModifiedSinceLastSave"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+            "marker": "contentGeneration"
+          },
+          {
+            "path": "apps/office/src/svl/source/misc/recovery.ts",
+            "marker": "recoveryGeneration"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+            "marker": "markDocumentSaved"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+            "marker": "MarkHistoryMutation"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sfx2/source/doc/docfac.test.ts",
+            "marker": "advances every dirty mutation"
+          },
+          {
+            "path": "apps/office/src/svl/source/misc/recovery.test.ts",
+            "marker": "saves each changed generation"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-storage.test.ts",
+            "marker": "does not acknowledge a failed primary save"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+            "marker": "moved save mark across action navigation"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/document-lifecycle.md",
+            "marker": "content generation"
+          },
+          {
+            "path": "docs/program/autosave-recovery.md",
+            "marker": "recovery generation"
+          },
+          {
+            "path": "docs/program/transaction-history.md",
+            "marker": "save position"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Persist and restore one primary IndexedDB snapshot"
+    },
+    {
+      "id": "LO-WRITER-0132",
+      "capabilityId": "CAP-0132",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "type": "lifecycle",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Acknowledge one completed primary save at the undo save position."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations."
+      },
+      "capability": "Writer primary-save acknowledgement",
+      "gaps": [
+        "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
+        "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sfx2/source/doc/objmisc.cxx",
+            "marker": "void SfxObjectShell::SetModified"
+          },
+          {
+            "path": "sfx2/source/doc/objstor.cxx",
+            "marker": "SetModified( !bSaved )"
+          },
+          {
+            "path": "sfx2/source/doc/sfxbasemodel.cxx",
+            "marker": "storeToRecoveryFile"
+          },
+          {
+            "path": "sw/source/core/undo/docundo.cxx",
+            "marker": "HasTopUndoActionMark"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/undo/undo.cxx",
+            "marker": "testImagePropsCreateUndoAndModifyDoc"
+          },
+          {
+            "path": "sw/qa/python/check_xmodifiable2.py",
+            "marker": "test_XModifiable2_setModified"
+          }
+        ],
+        "docs": [
+          {
+            "path": "offapi/com/sun/star/util/XModifiable.idl",
+            "marker": "boolean isModified()"
+          },
+          {
+            "path": "offapi/com/sun/star/document/XDocumentRecovery.idl",
+            "marker": "wasModifiedSinceLastSave"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+            "marker": "contentGeneration"
+          },
+          {
+            "path": "apps/office/src/svl/source/misc/recovery.ts",
+            "marker": "recoveryGeneration"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+            "marker": "markDocumentSaved"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+            "marker": "MarkHistoryMutation"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sfx2/source/doc/docfac.test.ts",
+            "marker": "advances every dirty mutation"
+          },
+          {
+            "path": "apps/office/src/svl/source/misc/recovery.test.ts",
+            "marker": "saves each changed generation"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-storage.test.ts",
+            "marker": "does not acknowledge a failed primary save"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+            "marker": "moved save mark across action navigation"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/document-lifecycle.md",
+            "marker": "content generation"
+          },
+          {
+            "path": "docs/program/autosave-recovery.md",
+            "marker": "recovery generation"
+          },
+          {
+            "path": "docs/program/transaction-history.md",
+            "marker": "save position"
+          }
+        ]
+      },
+      "aspect": "undo-redo",
+      "atomicOperation": "Acknowledge one completed primary save at the undo save position"
+    },
+    {
+      "id": "LO-WRITER-0133",
+      "capabilityId": "CAP-0133",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "type": "lifecycle",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Schedule and retain one changed AutoRecovery generation."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations."
+      },
+      "capability": "Writer AutoRecovery scheduling",
+      "gaps": [
+        "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
+        "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sfx2/source/doc/objmisc.cxx",
+            "marker": "void SfxObjectShell::SetModified"
+          },
+          {
+            "path": "sfx2/source/doc/objstor.cxx",
+            "marker": "SetModified( !bSaved )"
+          },
+          {
+            "path": "sfx2/source/doc/sfxbasemodel.cxx",
+            "marker": "storeToRecoveryFile"
+          },
+          {
+            "path": "sw/source/core/undo/docundo.cxx",
+            "marker": "HasTopUndoActionMark"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/undo/undo.cxx",
+            "marker": "testImagePropsCreateUndoAndModifyDoc"
+          },
+          {
+            "path": "sw/qa/python/check_xmodifiable2.py",
+            "marker": "test_XModifiable2_setModified"
+          }
+        ],
+        "docs": [
+          {
+            "path": "offapi/com/sun/star/util/XModifiable.idl",
+            "marker": "boolean isModified()"
+          },
+          {
+            "path": "offapi/com/sun/star/document/XDocumentRecovery.idl",
+            "marker": "wasModifiedSinceLastSave"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+            "marker": "contentGeneration"
+          },
+          {
+            "path": "apps/office/src/svl/source/misc/recovery.ts",
+            "marker": "recoveryGeneration"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+            "marker": "markDocumentSaved"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+            "marker": "MarkHistoryMutation"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sfx2/source/doc/docfac.test.ts",
+            "marker": "advances every dirty mutation"
+          },
+          {
+            "path": "apps/office/src/svl/source/misc/recovery.test.ts",
+            "marker": "saves each changed generation"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-storage.test.ts",
+            "marker": "does not acknowledge a failed primary save"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+            "marker": "moved save mark across action navigation"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/document-lifecycle.md",
+            "marker": "content generation"
+          },
+          {
+            "path": "docs/program/autosave-recovery.md",
+            "marker": "recovery generation"
+          },
+          {
+            "path": "docs/program/transaction-history.md",
+            "marker": "save position"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Schedule and retain one changed AutoRecovery generation"
+    },
+    {
+      "id": "LO-WRITER-0134",
+      "capabilityId": "CAP-0134",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "type": "model",
+      "maturity": "implemented",
+      "assertions": [
+        "The pinned upstream and local assertion markers cover this atomic operation: Translate one supported beforeinput intent into a Writer mutation."
+      ],
+      "stackDivergence": {
+        "kind": "none",
+        "rationale": "The TypeScript object graph preserves the applicable bounded Writer model structure."
+      },
+      "capability": "Writer contenteditable input handling",
+      "gaps": [
+        "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo; legacy cloning helpers remain isolated outside production pending Workstream 1, while registered-index correction and full native Writer undo coverage remain incomplete."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/core/doc/docnew.cxx",
+            "marker": "SwDoc::SwDoc"
+          },
+          {
+            "path": "sw/source/core/docnode/nodes.cxx",
+            "marker": "SwNodes::SwNodes"
+          },
+          {
+            "path": "sw/source/core/txtnode/ndtxt.cxx",
+            "marker": "SwTextNode::SwTextNode"
+          },
+          {
+            "path": "sw/source/core/crsr/pam.cxx",
+            "marker": "SwPaM::SwPaM"
+          },
+          {
+            "path": "sw/source/core/txtnode/txatbase.cxx",
+            "marker": "SwTextAttr::SwTextAttr"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/core/uwriter.cxx",
+            "marker": "SwNodes& rNds"
+          },
+          {
+            "path": "sw/qa/core/txtnode/txtnode.cxx",
+            "marker": "SwTextAttr* pAttr"
+          }
+        ],
+        "docs": [
+          {
+            "path": "sw/README.md",
+            "marker": "The central class for a document is `SwDoc`"
+          },
+          {
+            "path": "sw/README.md",
+            "marker": "core`: Writer core (document model"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/core/doc/doc.ts",
+            "marker": "export class SwDoc"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+            "marker": "export class SwNodes"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+            "marker": "export class SwTextNode"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/crsr/pam.ts",
+            "marker": "export class SwPaM"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+            "marker": "export class SwTextAttr"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+            "marker": "export class SwpHints"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "Writer SwNodes graph"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "Writer SwPosition and SwPaM"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "Writer SwTextAttr and SwpHints"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-core-model.md",
+            "marker": "Writer core document model"
+          },
+          {
+            "path": "docs/program/architecture.md",
+            "marker": "identity-bearing, cyclic object graph"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "SwNodeIndex"
+          }
+        ]
+      },
+      "aspect": "browser-input",
+      "atomicOperation": "Translate one supported beforeinput intent into a Writer mutation"
     }
   ]
 }

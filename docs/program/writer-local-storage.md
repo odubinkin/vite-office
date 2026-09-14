@@ -16,7 +16,8 @@ unchanged and report deterministic feedback. Snapshots created before paragraph
 alignment or paragraph style was introduced receive the safe defaults when loaded.
 
 Browser-local storage is the current primary medium. It is distinct from
-recovery snapshots and from explicit text/ODT export or browser download. This
-feature does not implement scheduled autosave, recovery prompts, file pickers,
-cross-tab coordination, encryption, or OOXML import/export. Those remain
-separate mapped tasks.
+recovery snapshots and from explicit text/ODT export or browser download.
+AutoRecovery scheduling, generation retention, startup recovery prompts, and
+the ODT file picker are wired through separate browser adapters and
+`SwDocShell`; they do not change the primary-medium acknowledgement contract.
+Cross-tab coordination, encryption, and OOXML import/export remain unsupported.

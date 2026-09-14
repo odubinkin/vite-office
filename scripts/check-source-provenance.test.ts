@@ -1,6 +1,4 @@
-/**
- * @fileoverview Verifies strict parsing and exhaustive runtime-tree validation for the LibreOffice-derived source-provenance manifest.
- */
+/** @fileoverview Verifies strict responsibility-, symbol-, evidence-, and runtime-classification provenance. */
 
 import { describe, expect, it } from "vitest";
 
@@ -9,187 +7,223 @@ import {
   validateSourceProvenanceManifest,
 } from "./check-source-provenance";
 
-/** Defines a compact pinned LibreOffice identity used by synthetic provenance manifests. */
 const baseline = { commit: "pinned-commit", tag: "pinned-tag" };
+const writerPath = "apps/office/src/sw/source/core/doc/writer.ts";
+const mainPath = "apps/office/src/main.tsx";
 
-/**
- * Creates valid strict source-provenance JSON with optional top-level overrides.
- *
- * @param overrides - Partial source document replacing default valid fields.
- * @returns Serialized strict provenance manifest source.
- */
+/** Creates one valid strict schema-v2 fixture. @param overrides - Top-level overrides. @returns Serialized manifest. */
 function createManifestSource(overrides: Readonly<Record<string, unknown>> = {}): string {
   return JSON.stringify({
     baselineCommit: baseline.commit,
     baselineTag: baseline.tag,
+    entries: [mappedEntry(), localEntry()],
     filenameDivergences: [
       {
-        localPath: "apps/office/src/sw/source/core/doc/writer.ts",
+        localPath: writerPath,
         rationale:
-          "The browser Writer document aggregate owns broader immutable state than upstream document creation, so its honest local filename differs while the concrete ownership mapping remains auditable.",
+          "The local Writer aggregate exposes a bounded construction helper while the upstream constructor remains owned by docnew.cxx, so the distinct filename is intentional and reviewable.",
       },
     ],
-    entries: [
-      {
-        localPath: "apps/office/src/sw/source/core/doc/writer.ts",
-        status: "mapped",
-        upstreamPath: "sw/source/core/doc/docnew.cxx",
-      },
-      {
-        localPath: "apps/office/src/main.tsx",
-        rationale:
-          "Browser mounting is specific to Vite and React, so no native LibreOffice file can honestly be treated as an implementation equivalent for this entrypoint.",
-        status: "browser-only",
-      },
-    ],
-    schemaVersion: 1,
+    schemaVersion: 2,
     ...overrides,
   });
 }
 
-/**
- * Parses an intentionally invalid source manifest and expects a deterministic error.
- *
- * @param sourceText - Invalid JSON or structurally invalid manifest source.
- * @returns Nothing; parsing must throw.
- */
-function expectInvalidManifest(sourceText: string): void {
+/** Creates one valid exact-symbol upstream mapping. @param overrides - Entry overrides. @returns Mapped entry. */
+function mappedEntry(overrides: Readonly<Record<string, unknown>> = {}): Record<string, unknown> {
+  return {
+    classification: "upstream-mechanism",
+    evidence: {
+      local: [{ marker: "createWriterDocument", path: writerPath }],
+      upstream: [
+        {
+          marker: "SwDoc::SwDoc",
+          path: "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx",
+        },
+      ],
+    },
+    localPath: writerPath,
+    localSymbols: ["createWriterDocument"],
+    omittedResponsibilities: ["Native document-shell attachment is outside this bounded helper."],
+    preservedResponsibilities: ["Construct the canonical Writer document graph."],
+    status: "mapped",
+    upstreamPath: "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx",
+    upstreamSymbols: ["SwDoc::SwDoc"],
+    ...overrides,
+  };
+}
+
+/** Creates one valid explicit local-only browser adapter. @param overrides - Entry overrides. @returns Local-only entry. */
+function localEntry(overrides: Readonly<Record<string, unknown>> = {}): Record<string, unknown> {
+  return {
+    classification: "browser-adaptation",
+    evidence: { local: [{ marker: "mountApplication", path: mainPath }] },
+    localPath: mainPath,
+    rationale:
+      "Vite and React mount into a browser DOM root; the native LibreOffice process bootstrap cannot be claimed as a source-file implementation for this adapter.",
+    responsibilities: ["Mount the application into the supplied browser DOM root."],
+    stackDivergence: {
+      kind: "browser-adaptation",
+      rationale: "The browser DOM and React replace the native application window bootstrap.",
+    },
+    status: "local-only",
+    ...overrides,
+  };
+}
+
+/** Returns exact synthetic source text. @param path - Fixture path. @returns Matching source text. */
+async function readFixture(path: string): Promise<string> {
+  const sources: Readonly<Record<string, string>> = {
+    [mainPath]: "export function mountApplication() {}",
+    [writerPath]: "export function createWriterDocument() {}",
+    "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx": "SwDoc::SwDoc() {}",
+  };
+  const source = sources[path];
+  if (source === undefined) throw new Error(`Missing fixture path: ${path}`);
+  return source;
+}
+
+/** Parses malformed source under a rejection assertion. @param sourceText - Invalid JSON source. @returns Nothing. */
+function expectInvalid(sourceText: string): void {
   expect(
-    /** Executes the invalid parser input. @returns Invalid parsed manifest that always throws. */
-    function parsesInvalidManifest() {
+    /** Parses an invalid manifest. @returns A result that should never be produced. */
+    function parseInvalid(): unknown {
       return parseSourceProvenanceManifest(sourceText, baseline);
     },
   ).toThrowError();
 }
 
-describe("source provenance" /** Groups complete current runtime source-provenance contract tests. @returns Nothing; Vitest registers enclosed tests. */, function defineSourceProvenanceTests(): void {
-  it("parses a pinned manifest and reports complete mapped and browser-only runtime entries" /** Verifies explicit browser-only exceptions remain visible rather than counting as direct mappings. @returns A promise resolved after async upstream validation. */, async function parsesAndValidatesManifest(): Promise<void> {
+describe("source provenance" /** Defines strict provenance test cases. @returns Nothing. */, function defineSourceProvenanceTests(): void {
+  it("validates exhaustive exact-symbol provenance against runtime classifications" /** Validates the complete successful fixture. @returns Completion after validation. */, async function validatesManifest(): Promise<void> {
     const manifest = parseSourceProvenanceManifest(createManifestSource(), baseline);
-    await expect(
-      validateSourceProvenanceManifest(
-        manifest,
-        ["apps/office/src/main.tsx", "apps/office/src/sw/source/core/doc/writer.ts"],
-        /** Resolves only the declared synthetic mapped upstream path. @param upstreamPath - Candidate synthetic upstream source path. @returns Promise resolving true only for docnew.cxx. */
-        async function syntheticUpstreamExists(upstreamPath: string): Promise<boolean> {
-          return upstreamPath === "sw/source/core/doc/docnew.cxx";
-        },
-      ),
-    ).resolves.toEqual({ browserOnlyCount: 1, mappedCount: 1, moduleCount: 2 });
-  });
-
-  it("rejects malformed baseline, entry, duplicate, missing, stale, and upstream-source evidence" /** Verifies the gate cannot silently accept incomplete or false source ownership claims. @returns A promise resolved after all rejection paths are asserted. */, async function rejectsInvalidProvenance(): Promise<void> {
-    expectInvalidManifest("{");
-    expectInvalidManifest(createManifestSource({ baselineCommit: "other" }));
-    expectInvalidManifest(createManifestSource({ schemaVersion: 2 }));
-    expectInvalidManifest(createManifestSource({ entries: [] }));
-    expectInvalidManifest(createManifestSource({ filenameDivergences: undefined }));
-    expectInvalidManifest(
-      createManifestSource({
-        filenameDivergences: [
-          {
-            localPath: "apps/office/src/sw/source/core/doc/writer.ts",
-            rationale: "Too short.",
-          },
-        ],
-      }),
-    );
-    expectInvalidManifest(
-      createManifestSource({
-        entries: [
-          {
-            localPath: "not-a-runtime-module.ts",
-            status: "mapped",
-            upstreamPath: "sw/source/core/doc/docnew.cxx",
-          },
-        ],
-      }),
-    );
-    expectInvalidManifest(
-      createManifestSource({
-        entries: [
-          {
-            localPath: "apps/office/src/main.tsx",
-            rationale: "Too short.",
-            status: "browser-only",
-          },
-        ],
-      }),
-    );
-    const manifest = parseSourceProvenanceManifest(createManifestSource(), baseline);
-    await expect(
-      validateSourceProvenanceManifest(
-        manifest,
-        ["apps/office/src/main.tsx"],
-        /** Reports all synthetic upstream paths as present so missing local coverage is isolated. @returns Promise resolving true. */
-        async function acceptsSyntheticPath(): Promise<boolean> {
-          return true;
-        },
-      ),
-    ).rejects.toThrowError(/stale modules/u);
     await expect(
       validateSourceProvenanceManifest(
         manifest,
         [
-          "apps/office/src/main.tsx",
-          "apps/office/src/sw/source/core/doc/writer.ts",
-          "apps/office/src/sw/source/core/doc/list.ts",
+          { classification: "upstream-mechanism", path: writerPath },
+          { classification: "browser-adaptation", path: mainPath },
         ],
-        /** Reports all synthetic upstream paths as present so missing manifest coverage is isolated. @returns Promise resolving true. */
-        async function acceptsSyntheticPath(): Promise<boolean> {
-          return true;
-        },
+        readFixture,
       ),
-    ).rejects.toThrowError(/omits runtime modules/u);
+    ).resolves.toEqual({
+      browserAdaptationCount: 1,
+      localInfrastructureCount: 0,
+      mappedCount: 1,
+      moduleCount: 2,
+    });
+  });
+
+  it("rejects malformed contracts before filesystem validation" /** Rejects malformed schema shapes. @returns Nothing. */, function rejectsMalformed(): void {
+    expectInvalid("{");
+    expectInvalid(createManifestSource({ baselineCommit: "other" }));
+    expectInvalid(createManifestSource({ schemaVersion: 1 }));
+    expectInvalid(createManifestSource({ entries: [] }));
+    expectInvalid(createManifestSource({ filenameDivergences: undefined }));
+    expectInvalid(createManifestSource({ entries: [mappedEntry({ localSymbols: [] })] }));
+    expectInvalid(createManifestSource({ entries: [mappedEntry({ upstreamSymbols: [] })] }));
+    expectInvalid(
+      createManifestSource({ entries: [mappedEntry({ preservedResponsibilities: [] })] }),
+    );
+    expectInvalid(
+      createManifestSource({ entries: [mappedEntry({ omittedResponsibilities: [] })] }),
+    );
+    expectInvalid(
+      createManifestSource({
+        entries: [mappedEntry({ classification: "browser-adaptation" })],
+      }),
+    );
+    expectInvalid(createManifestSource({ entries: [localEntry({ rationale: "too short" })] }));
+    expectInvalid(
+      createManifestSource({
+        entries: [
+          localEntry({ stackDivergence: { kind: "local-infrastructure", rationale: "Mismatch." } }),
+        ],
+      }),
+    );
+  });
+
+  it("rejects coverage, classification, symbol, marker, and basename-only claims" /** Rejects insufficient runtime and source evidence. @returns Completion after all rejection assertions. */, async function rejectsWeakEvidence(): Promise<void> {
+    const manifest = parseSourceProvenanceManifest(createManifestSource(), baseline);
     await expect(
       validateSourceProvenanceManifest(
         manifest,
-        ["apps/office/src/main.tsx", "apps/office/src/sw/source/core/doc/writer.ts"],
-        /** Reports every synthetic path absent to prove concrete upstream files are mandatory. @returns Promise resolving false. */
-        async function rejectsSyntheticPath(): Promise<boolean> {
-          return false;
-        },
+        [{ classification: "upstream-mechanism", path: writerPath }],
+        readFixture,
       ),
-    ).rejects.toThrowError(/upstream path does not exist/u);
-    const missingDivergenceManifest = parseSourceProvenanceManifest(
-      createManifestSource({ filenameDivergences: [] }),
+    ).rejects.toThrowError(/coverage mismatch/u);
+    await expect(
+      validateSourceProvenanceManifest(
+        manifest,
+        [
+          { classification: "local-infrastructure", path: writerPath },
+          { classification: "browser-adaptation", path: mainPath },
+        ],
+        readFixture,
+      ),
+    ).rejects.toThrowError(/classification mismatch/u);
+    const absentSymbol = parseSourceProvenanceManifest(
+      createManifestSource({
+        entries: [mappedEntry({ upstreamSymbols: ["MissingSymbol"] }), localEntry()],
+      }),
       baseline,
     );
     await expect(
       validateSourceProvenanceManifest(
-        missingDivergenceManifest,
-        ["apps/office/src/main.tsx", "apps/office/src/sw/source/core/doc/writer.ts"],
-        /** Accepts the mapped fixture source so only missing divergence evidence is observed. @returns Promise resolving true. */
-        async function acceptsMappedFixture(): Promise<boolean> {
-          return true;
-        },
+        absentSymbol,
+        [
+          { classification: "upstream-mechanism", path: writerPath },
+          { classification: "browser-adaptation", path: mainPath },
+        ],
+        readFixture,
       ),
-    ).rejects.toThrowError(/filename divergences/u);
-    const staleDivergenceManifest = parseSourceProvenanceManifest(
+    ).rejects.toThrowError(/upstream symbols are absent/u);
+    const absentMarker = parseSourceProvenanceManifest(
       createManifestSource({
-        filenameDivergences: [
-          {
-            localPath: "apps/office/src/main.tsx",
-            rationale:
-              "This deliberately stale browser entry demonstrates that filename-divergence records may only document a concrete mapped local-to-upstream basename mismatch.",
-          },
-          {
-            localPath: "apps/office/src/sw/source/core/doc/writer.ts",
-            rationale:
-              "The browser Writer document aggregate owns broader immutable state than upstream document creation, so its honest local filename differs while the concrete ownership mapping remains auditable.",
-          },
+        entries: [
+          mappedEntry({
+            evidence: {
+              local: [{ marker: "MissingMarker", path: writerPath }],
+              upstream: [
+                {
+                  marker: "SwDoc::SwDoc",
+                  path: "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx",
+                },
+              ],
+            },
+          }),
+          localEntry(),
         ],
       }),
       baseline,
     );
     await expect(
       validateSourceProvenanceManifest(
-        staleDivergenceManifest,
-        ["apps/office/src/main.tsx", "apps/office/src/sw/source/core/doc/writer.ts"],
-        /** Accepts the mapped fixture source so only stale divergence evidence is observed. @returns Promise resolving true. */
-        async function acceptsMappedFixture(): Promise<boolean> {
-          return true;
+        absentMarker,
+        [
+          { classification: "upstream-mechanism", path: writerPath },
+          { classification: "browser-adaptation", path: mainPath },
+        ],
+        readFixture,
+      ),
+    ).rejects.toThrowError(/evidence marker is absent/u);
+    const basenameOnly = parseSourceProvenanceManifest(
+      createManifestSource({
+        entries: [mappedEntry({ upstreamSymbols: ["docnew"] }), localEntry()],
+      }),
+      baseline,
+    );
+    await expect(
+      validateSourceProvenanceManifest(
+        basenameOnly,
+        [
+          { classification: "upstream-mechanism", path: writerPath },
+          { classification: "browser-adaptation", path: mainPath },
+        ],
+        /** Returns basename-only evidence for the upstream fixture. @param path - Fixture path. @returns Synthetic evidence. */
+        async function readBasenameFixture(path): Promise<string> {
+          return path.endsWith("docnew.cxx") ? "docnew" : readFixture(path);
         },
       ),
-    ).rejects.toThrowError(/filename divergences/u);
+    ).rejects.toThrowError(/basename similarity/u);
   });
 });

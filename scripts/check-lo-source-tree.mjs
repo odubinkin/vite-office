@@ -65,7 +65,6 @@ const requiredFiles = [
   "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx",
   "apps/office/src/sw/source/uibase/uiview/view.tsx",
   "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
-  "apps/office/src/sw/source/uibase/uiview/viewstat.ts",
   "apps/office/src/sw/source/uibase/app/docsh.ts",
   "apps/office/src/sw/source/uibase/app/mainwn.tsx",
   "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",

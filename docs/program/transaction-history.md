@@ -39,8 +39,9 @@ character attributes before and after the command. Restoring history mutates the
 existing `SwPaM` and `SwDoc`; it does not replace either object.
 
 The interactive editing path never calls `SwDoc.clone()` or stores a complete
-`WriterDocument` in history. Cloning remains available to pure model fixtures,
-explicit persistence/import preparation, and other non-interactive callers.
+`WriterDocument` in history. The remaining pure cloning helpers are legacy or
+test-facing infrastructure rather than a second production command path;
+persistence and import cross explicit snapshot boundaries.
 Focused performance coverage uses representative small and large documents to
 assert that one-character history payload is constant and that neither
 `SwDoc.clone()` nor `SwDoc.toSnapshot()` runs during interactive insertion.

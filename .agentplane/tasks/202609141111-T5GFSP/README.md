@@ -4,7 +4,7 @@ title: "Implement Workstream 0 authoritative parity inventory"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-14T11:52:59.439Z"
+  updated_by: "CODER"
+  note: "Workstream 0 authoritative inventories, upstream provenance, parity gaps, and default CI gates pass all declared local checks."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement Workstream 0 provenance, atomic inventory, documentation, and verification gates against the pinned local LibreOffice baseline."
+  -
+    type: "verify"
+    at: "2026-09-14T11:52:59.439Z"
+    author: "CODER"
+    state: "ok"
+    note: "Workstream 0 authoritative inventories, upstream provenance, parity gaps, and default CI gates pass all declared local checks."
 doc_version: 3
-doc_updated_at: "2026-09-14T11:11:51.280Z"
+doc_updated_at: "2026-09-14T11:52:59.520Z"
 doc_updated_by: "CODER"
 description: "Implement P0.1-P0.3 from docs/program/vite-office-upstream-parity-plan.md using the pinned local LibreOffice checkout as primary evidence."
 sections:
@@ -53,9 +59,48 @@ sections:
     7. ap doctor
     8. node .agentplane/policy/check-routing.mjs
     9. git status --short --untracked-files=all
-  Verification: "Pending execution after implementation. Record exact commands, results, evidence summaries, and covered scope."
+  Verification: |-
+    Pending execution after implementation. Record exact commands, results, evidence summaries, and covered scope.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-14T11:52:59.439Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Workstream 0 authoritative inventories, upstream provenance, parity gaps, and default CI gates pass all declared local checks.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T11:11:51.280Z, excerpt_hash=sha256:b4c141ee42e3bfcdaaefb6b5d3c9bc4babe6a97ff8876f27b6b40953e715f780
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141111-T5GFSP/blueprint/resolved-snapshot.json
+    - old_digest: d2997672f6bb03bcb197463ba32cd1dd6e0762cf20e3b2c63cc69f8142f51491
+    - current_digest: d2997672f6bb03bcb197463ba32cd1dd6e0762cf20e3b2c63cc69f8142f51491
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609141111-T5GFSP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609141111-T5GFSP
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the implementation commit for this task. The changes are metadata, validation, tests, scripts, and documentation; no data migration or external state is involved."
-  Findings: "No findings yet."
+  Findings: |-
+    No findings yet.
+
+    - Observation: npm run check passed the full 240-unit, 84-inventory, 9-e2e suite with 100% unit and inventory coverage; source-tree, provenance, parity, doctor, routing, and diff checks also passed.
+      Impact: Parity claims are now exhaustive and evidence-backed against the pinned LibreOffice baseline; missing or misclassified runtime modules fail validation.
+      Resolution: Implemented strict schema validators and inventories, corrected stale documentation and source-tree expectations, and wired all parity checks into the default verification command.
 id_source: "generated"
 ---
 ## Summary
@@ -86,6 +131,39 @@ In scope: scripts/check-source-provenance.ts and tests; scripts/check-lo-source-
 
 Pending execution after implementation. Record exact commands, results, evidence summaries, and covered scope.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-14T11:52:59.439Z — VERIFY — ok
+
+By: CODER
+
+Note: Workstream 0 authoritative inventories, upstream provenance, parity gaps, and default CI gates pass all declared local checks.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T11:11:51.280Z, excerpt_hash=sha256:b4c141ee42e3bfcdaaefb6b5d3c9bc4babe6a97ff8876f27b6b40953e715f780
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141111-T5GFSP/blueprint/resolved-snapshot.json
+- old_digest: d2997672f6bb03bcb197463ba32cd1dd6e0762cf20e3b2c63cc69f8142f51491
+- current_digest: d2997672f6bb03bcb197463ba32cd1dd6e0762cf20e3b2c63cc69f8142f51491
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609141111-T5GFSP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609141111-T5GFSP
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only the implementation commit for this task. The changes are metadata, validation, tests, scripts, and documentation; no data migration or external state is involved.
@@ -93,3 +171,7 @@ Revert only the implementation commit for this task. The changes are metadata, v
 ## Findings
 
 No findings yet.
+
+- Observation: npm run check passed the full 240-unit, 84-inventory, 9-e2e suite with 100% unit and inventory coverage; source-tree, provenance, parity, doctor, routing, and diff checks also passed.
+  Impact: Parity claims are now exhaustive and evidence-backed against the pinned LibreOffice baseline; missing or misclassified runtime modules fail validation.
+  Resolution: Implemented strict schema validators and inventories, corrected stale documentation and source-tree expectations, and wired all parity checks into the default verification command.

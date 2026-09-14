@@ -21,7 +21,7 @@ function createManifestSource(overrides: Readonly<Record<string, unknown>> = {})
     baselineCommit: "pinned-commit",
     baselineTag: "pinned-tag",
     records: [createRecord("LO-WRITER-0101")],
-    schemaVersion: 2,
+    schemaVersion: 3,
     ...overrides,
   });
 }
@@ -79,7 +79,7 @@ describe("parity mappings" /**
         { kind: "tests", path: "upstream-tests.ts", side: "upstream" },
         { kind: "docs", path: "upstream-docs.md", side: "upstream" },
       ],
-      schemaVersion: 2,
+      schemaVersion: 3,
       verifiedCount: 0,
     });
   });
@@ -104,6 +104,16 @@ describe("parity mappings" /**
     expectInvalid(createManifestSource({ records: [null] }));
     expectInvalid(
       createManifestSource({ records: [{ ...createRecord("LO-WRITER-0101"), maturity: "bad" }] }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), aspect: "umbrella" }],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), atomicOperation: "" }],
+      }),
     );
     expectInvalid(
       createManifestSource({
@@ -200,6 +210,9 @@ describe("parity mappings" /**
         records: [
           {
             ...createRecord("LO-WRITER-0101"),
+            assertionEvidence: createAssertionEvidence(
+              "The pinned upstream test asserts the bounded Writer command behavior.",
+            ),
             gaps: [],
             maturity: "verified",
             verification: null,
@@ -212,9 +225,38 @@ describe("parity mappings" /**
         records: [
           {
             ...createRecord("LO-WRITER-0101"),
+            assertionEvidence: createAssertionEvidence(
+              "The pinned upstream test asserts the bounded Writer command behavior.",
+            ),
             gaps: [],
             maturity: "verified",
             verification: { ...createVerification(), commit: "not-a-hash" },
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            assertionEvidence: createAssertionEvidence(
+              "The pinned upstream test asserts the bounded Writer command behavior.",
+            ),
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            assertionEvidence: createAssertionEvidence(
+              "The pinned upstream test asserts the bounded Writer command behavior.",
+            ),
+            gaps: [],
+            maturity: "verified",
           },
         ],
       }),
@@ -255,6 +297,9 @@ describe("parity mappings" /**
         return {
           ...createRecord(id),
           assertions: index === 0 ? [] : ["Mapped assertion."],
+          ...(maturity === "verified"
+            ? { assertionEvidence: createAssertionEvidence("Mapped assertion.") }
+            : {}),
           capabilityId,
           ...(maturity === "exception-approved" ? { exception } : {}),
           gaps: maturity === "verified" ? [] : ["Visible gap."],
@@ -283,6 +328,85 @@ describe("parity mappings" /**
     expect(report).toMatchObject({ implementedCount: 2, recordCount: 8, verifiedCount: 1 });
     expect(manifest.records[0]?.manualContract).toBe("Review the bounded behavior manually.");
     expect(manifest.records[3]?.verification).toEqual(createVerification());
+  });
+
+  it("requires and resolves assertion-level local and upstream evidence before verification" /**
+   * Proves a verified claim cannot be inferred from implementation and test-file existence alone.
+   * @returns A promise resolving after valid and malformed assertion evidence is exercised.
+   */, async function validatesAssertionEvidence(): Promise<void> {
+    const assertion = "The pinned upstream test asserts the bounded Writer command behavior.";
+    const verified = {
+      ...createRecord("LO-WRITER-0101"),
+      assertionEvidence: createAssertionEvidence(assertion),
+      gaps: [],
+      maturity: "verified",
+      verification: createVerification(),
+    };
+    const manifest = parseParityMappingManifest(
+      createManifestSource({ records: [verified] }),
+      baseline,
+    );
+    const report = await validateParityMappingEvidence(
+      manifest,
+      /** Returns marker-bearing assertion evidence. @param path - Rooted fixture path. @returns Synthetic evidence text. */
+      async function readAssertionEvidence(path): Promise<string> {
+        return path.replace(/^(local-root|upstream-root)\//, "").replace(/\.(md|ts)$/, "");
+      },
+      { local: "local-root", upstream: "upstream-root" },
+    );
+    expect(report.verifiedCount).toBe(1);
+    expect(report.resolvedEvidence.slice(-2)).toEqual([
+      { kind: "tests", path: "local-tests.ts", side: "local" },
+      { kind: "tests", path: "upstream-tests.ts", side: "upstream" },
+    ]);
+    expectInvalid(createManifestSource({ records: [{ ...verified, assertionEvidence: [] }] }));
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...verified,
+            assertionEvidence: createAssertionEvidence("A different assertion."),
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...verified,
+            assertionEvidence: [
+              {
+                assertion,
+                local: {
+                  exception: { approvedBy: "n/a" },
+                  marker: "local-tests",
+                  path: "local-tests.ts",
+                },
+                upstream: { marker: "upstream-tests", path: "upstream-tests.ts" },
+              },
+            ],
+          },
+        ],
+      }),
+    );
+    expectInvalid(createManifestSource({ records: [{ ...verified, assertionEvidence: [null] }] }));
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...verified,
+            assertionEvidence: [
+              {
+                assertion,
+                local: null,
+                upstream: { marker: "upstream-tests", path: "upstream-tests.ts" },
+              },
+            ],
+          },
+        ],
+      }),
+    );
   });
 
   it("requires auditable exceptions for whole capabilities and individual evidence references" /**
@@ -510,6 +634,8 @@ describe("parity mappings" /**
  */
 function createRecord(id: string): Record<string, unknown> {
   return {
+    aspect: "command-state",
+    atomicOperation: "Dispatch one bounded Writer command and query its state",
     assertions: ["The pinned upstream test asserts the bounded Writer command behavior."],
     capability: "A bounded Writer command",
     capabilityId: id.replace("LO-WRITER", "CAP"),
@@ -526,6 +652,17 @@ function createRecord(id: string): Record<string, unknown> {
     type: "command",
     upstream: createEvidence("upstream"),
   };
+}
+
+/** Creates exact local and upstream test references. @param assertion - Exact assertion text. @returns Evidence pairs. */
+function createAssertionEvidence(assertion: string): readonly Record<string, unknown>[] {
+  return [
+    {
+      assertion,
+      local: { marker: "local-tests", path: "local-tests.ts" },
+      upstream: { marker: "upstream-tests", path: "upstream-tests.ts" },
+    },
+  ];
 }
 
 /** Creates complete closure evidence for exception and verified-record fixtures. @returns Valid closure evidence. */
