@@ -8,12 +8,12 @@ suite table remains a planning inventory; machine-readable JSON records are the
 source of truth for atomic capability maturity.
 
 The first authored atomic records live in
-[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Its 14
+[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Its 34
 bounded Writer records are machine-validated together with the exhaustive
 [`parity/runtime-inventory.json`](parity/runtime-inventory.json) by
-`npm run inventory:parity`. The current records are all `implemented` and none
-is `verified`: every known browser difference stays visible and no gap counts
-as parity.
+`npm run inventory:parity`. Verification is promoted per atomic operation only
+after its assertion-level upstream/local evidence and task result are recorded;
+every unresolved parity gap remains visible and does not count as parity.
 
 ## Stable identifier format
 
@@ -43,6 +43,7 @@ Each atomic capability record must contain:
 | Stack divergence | Allowlisted classification and concrete rationale. |
 | Verification | Task ID, commit, and executable evidence for a closed record. |
 | Gaps | Known behavioral, platform, test, or documentation differences. |
+| Scope limitations | Unsupported behavior outside the atomic operation; visible but not a claim that the operation itself is incomplete. |
 
 ## Status lifecycle
 
@@ -62,6 +63,11 @@ and must include task, commit, and verification evidence. An
 `exception-approved` record requires the same closure evidence plus its explicit
 approval. Implemented code without complete semantic evidence stays
 `implemented` even when its local test suite is green.
+
+`scopeLimitations` is distinct from `gaps`: it records adjacent LibreOffice
+behavior that the deliberately bounded atomic operation does not claim. Moving
+text from `gaps` to `scopeLimitations` requires an assertion-level review; it
+must never be used to hide incomplete behavior inside the asserted operation.
 
 An exception may apply to a whole capability or to one upstream test reference.
 It is an explicit `not-implementable` disposition, not an implementation claim,

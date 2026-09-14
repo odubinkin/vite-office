@@ -21,7 +21,7 @@ function createManifestSource(overrides: Readonly<Record<string, unknown>> = {})
     baselineCommit: "pinned-commit",
     baselineTag: "pinned-tag",
     records: [createRecord("LO-WRITER-0101")],
-    schemaVersion: 3,
+    schemaVersion: 4,
     ...overrides,
   });
 }
@@ -79,7 +79,8 @@ describe("parity mappings" /**
         { kind: "tests", path: "upstream-tests.ts", side: "upstream" },
         { kind: "docs", path: "upstream-docs.md", side: "upstream" },
       ],
-      schemaVersion: 3,
+      schemaVersion: 4,
+      scopeLimitationCount: 0,
       verifiedCount: 0,
     });
   });
@@ -340,6 +341,7 @@ describe("parity mappings" /**
       assertionEvidence: createAssertionEvidence(assertion),
       gaps: [],
       maturity: "verified",
+      scopeLimitations: ["Tables are outside this bounded command operation."],
       verification: createVerification(),
     };
     const manifest = parseParityMappingManifest(
@@ -355,6 +357,7 @@ describe("parity mappings" /**
       { local: "local-root", upstream: "upstream-root" },
     );
     expect(report.verifiedCount).toBe(1);
+    expect(report.scopeLimitationCount).toBe(1);
     expect(report.resolvedEvidence.slice(-2)).toEqual([
       { kind: "tests", path: "local-tests.ts", side: "local" },
       { kind: "tests", path: "upstream-tests.ts", side: "upstream" },
@@ -643,6 +646,7 @@ function createRecord(id: string): Record<string, unknown> {
     id,
     local: createEvidence("local"),
     maturity: "implemented",
+    scopeLimitations: [],
     stackDivergence: {
       kind: "browser-adaptation",
       rationale: "The browser supplies the platform integration boundary.",

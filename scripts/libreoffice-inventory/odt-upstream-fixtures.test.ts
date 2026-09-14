@@ -9,6 +9,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../apps/office/src/sfx2/source/doc/objsh";
+import type { SwDoc } from "../../apps/office/src/sw/source/core/doc/doc";
 import { readOdtDocument } from "../../apps/office/src/sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrtxml";
 
@@ -20,6 +21,22 @@ const fixtures = [
   { bold: true, file: "feature_text_bold.odt", italic: false },
   { bold: false, file: "feature_text_italic.odt", italic: true },
 ] as const;
+
+/** Projects stable Writer semantics while excluding browser-generated node identities. @param document - Imported Writer graph. @returns Comparable bounded ODF semantics. */
+function normalizeWriterSemantics(document: SwDoc): readonly object[] {
+  return document.paragraphs.map(
+    /** Projects one canonical text node to the ODF subset covered by the pinned fixtures. @param paragraph - Writer text node. @returns Stable semantic record. */
+    function normalizeParagraph(paragraph): object {
+      return {
+        alignment: paragraph.alignment,
+        list: paragraph.list,
+        runs: paragraph.runs,
+        style: paragraph.style,
+        text: paragraph.text,
+      };
+    },
+  );
+}
 
 describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createSwDoc assertions in upstream odffeatures.cxx with local semantic assertions. @returns Nothing. */, () => {
   for (const fixture of fixtures)
@@ -49,8 +66,8 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         writeOdtDocument(imported.document, imported.documentState),
         metadata,
       );
-      expect(roundTripped.document.paragraphs[0]?.runs).toEqual(
-        imported.document.paragraphs[0]?.runs,
+      expect(normalizeWriterSemantics(roundTripped.document)).toEqual(
+        normalizeWriterSemantics(imported.document),
       );
     });
 });

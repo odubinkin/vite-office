@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "records": [
@@ -83,7 +83,8 @@
         ]
       },
       "aspect": "command-state",
-      "atomicOperation": "Register, dispatch, and query one Writer command"
+      "atomicOperation": "Register, dispatch, and query one Writer command",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0102",
@@ -181,7 +182,8 @@
         ]
       },
       "aspect": "undo-redo",
-      "atomicOperation": "Navigate one action-based Writer history stack"
+      "atomicOperation": "Navigate one action-based Writer history stack",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0103",
@@ -283,7 +285,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Represent and select one bounded Writer model range"
+      "atomicOperation": "Represent and select one bounded Writer model range",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0104",
@@ -361,7 +364,8 @@
         ]
       },
       "aspect": "command-state",
-      "atomicOperation": "Toggle and query one bounded view visibility flag"
+      "atomicOperation": "Toggle and query one bounded view visibility flag",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0105",
@@ -507,7 +511,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Apply or remove one default list kind"
+      "atomicOperation": "Apply or remove one default list kind",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0106",
@@ -621,7 +626,8 @@
         ]
       },
       "aspect": "compatibility",
-      "atomicOperation": "Serialize one complete list selection for clipboard transfer"
+      "atomicOperation": "Serialize one complete list selection for clipboard transfer",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0107",
@@ -739,7 +745,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Promote or demote one active list paragraph"
+      "atomicOperation": "Promote or demote one active list paragraph",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0108",
@@ -845,7 +852,8 @@
         ]
       },
       "aspect": "compatibility",
-      "atomicOperation": "Serialize one bounded nested-list fragment"
+      "atomicOperation": "Serialize one bounded nested-list fragment",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0109",
@@ -991,7 +999,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Toggle one direct character attribute over one text range"
+      "atomicOperation": "Toggle one direct character attribute over one text range",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0110",
@@ -1121,7 +1130,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Replace or remove one selection through bounded clipboard transfer"
+      "atomicOperation": "Replace or remove one selection through bounded clipboard transfer",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0111",
@@ -1243,7 +1253,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Own one identity-bearing Writer document graph"
+      "atomicOperation": "Own one identity-bearing Writer document graph",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0112",
@@ -1385,7 +1396,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Resolve one WhichId through the pooled item hierarchy"
+      "atomicOperation": "Resolve one WhichId through the pooled item hierarchy",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0113",
@@ -1663,7 +1675,8 @@
         ]
       },
       "aspect": "persistence-filter",
-      "atomicOperation": "Read and write one bounded ODF package"
+      "atomicOperation": "Read and write one bounded ODF package",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0114",
@@ -1777,7 +1790,8 @@
         ]
       },
       "aspect": "persistence-filter",
-      "atomicOperation": "Advance and acknowledge one document lifecycle generation"
+      "atomicOperation": "Advance and acknowledge one document lifecycle generation",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0115",
@@ -1859,7 +1873,8 @@
         ]
       },
       "aspect": "command-placement",
-      "atomicOperation": "Place one registered command in a menu, toolbar, or shortcut surface"
+      "atomicOperation": "Place one registered command in a menu, toolbar, or shortcut surface",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0116",
@@ -1941,7 +1956,8 @@
         ]
       },
       "aspect": "browser-input",
-      "atomicOperation": "Navigate one Writer menu with keyboard or pointer input"
+      "atomicOperation": "Navigate one Writer menu with keyboard or pointer input",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0117",
@@ -2043,7 +2059,8 @@
         ]
       },
       "aspect": "browser-input",
-      "atomicOperation": "Extend a Writer selection across rendered paragraphs with the pointer"
+      "atomicOperation": "Extend a Writer selection across rendered paragraphs with the pointer",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0118",
@@ -2145,7 +2162,8 @@
         ]
       },
       "aspect": "browser-input",
-      "atomicOperation": "Move a collapsed caret across a paragraph boundary"
+      "atomicOperation": "Move a collapsed caret across a paragraph boundary",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0119",
@@ -2291,7 +2309,8 @@
         ]
       },
       "aspect": "browser-input",
-      "atomicOperation": "Stage and commit one IME composition without duplicate mutation"
+      "atomicOperation": "Stage and commit one IME composition without duplicate mutation",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0120",
@@ -2421,7 +2440,8 @@
         ]
       },
       "aspect": "browser-input",
-      "atomicOperation": "Intercept one native Copy, Cut, or Paste event"
+      "atomicOperation": "Intercept one native Copy, Cut, or Paste event",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0121",
@@ -2699,7 +2719,8 @@
         ]
       },
       "aspect": "browser-input",
-      "atomicOperation": "Complete one browser ODT open, save, or download workflow"
+      "atomicOperation": "Complete one browser ODT open, save, or download workflow",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0122",
@@ -2813,7 +2834,8 @@
         ]
       },
       "aspect": "browser-input",
-      "atomicOperation": "Present and resolve one recovery candidate prompt"
+      "atomicOperation": "Present and resolve one recovery candidate prompt",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0123",
@@ -2935,7 +2957,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Split, append, merge, move, or remove one text node"
+      "atomicOperation": "Split, append, merge, move, or remove one text node",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0124",
@@ -3057,7 +3080,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Insert, delete, or replace one same-node text range"
+      "atomicOperation": "Insert, delete, or replace one same-node text range",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0125",
@@ -3199,7 +3223,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Resolve one paragraph property through direct and inherited item sets"
+      "atomicOperation": "Resolve one paragraph property through direct and inherited item sets",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0126",
@@ -3341,7 +3366,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Store and project one character attribute hint range"
+      "atomicOperation": "Store and project one character attribute hint range",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0127",
@@ -3483,7 +3509,8 @@
         ]
       },
       "aspect": "model-operation",
-      "atomicOperation": "Resolve one document-owned numbering rule and paragraph level"
+      "atomicOperation": "Resolve one document-owned numbering rule and paragraph level",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0128",
@@ -3761,7 +3788,8 @@
         ]
       },
       "aspect": "persistence-filter",
-      "atomicOperation": "Import one bounded ODF text stream into the Writer graph"
+      "atomicOperation": "Import one bounded ODF text stream into the Writer graph",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0129",
@@ -4039,7 +4067,8 @@
         ]
       },
       "aspect": "persistence-filter",
-      "atomicOperation": "Export one Writer graph as bounded ODF XML"
+      "atomicOperation": "Export one Writer graph as bounded ODF XML",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0130",
@@ -4056,10 +4085,7 @@
         "rationale": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline."
       },
       "capability": "Writer ODF round-trip compatibility",
-      "gaps": [
-        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
-        "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
-      ],
+      "gaps": [],
       "upstream": {
         "implementation": [
           {
@@ -4317,7 +4343,11 @@
         ]
       },
       "aspect": "compatibility",
-      "atomicOperation": "Round-trip one bounded ODF fixture without semantic loss"
+      "atomicOperation": "Round-trip one bounded ODF fixture without semantic loss",
+      "scopeLimitations": [
+        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
+        "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
+      ]
     },
     {
       "id": "LO-WRITER-0131",
@@ -4431,7 +4461,8 @@
         ]
       },
       "aspect": "persistence-filter",
-      "atomicOperation": "Persist and restore one primary IndexedDB snapshot"
+      "atomicOperation": "Persist and restore one primary IndexedDB snapshot",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0132",
@@ -4545,7 +4576,8 @@
         ]
       },
       "aspect": "undo-redo",
-      "atomicOperation": "Acknowledge one completed primary save at the undo save position"
+      "atomicOperation": "Acknowledge one completed primary save at the undo save position",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0133",
@@ -4659,7 +4691,8 @@
         ]
       },
       "aspect": "persistence-filter",
-      "atomicOperation": "Schedule and retain one changed AutoRecovery generation"
+      "atomicOperation": "Schedule and retain one changed AutoRecovery generation",
+      "scopeLimitations": []
     },
     {
       "id": "LO-WRITER-0134",
@@ -4781,7 +4814,8 @@
         ]
       },
       "aspect": "browser-input",
-      "atomicOperation": "Translate one supported beforeinput intent into a Writer mutation"
+      "atomicOperation": "Translate one supported beforeinput intent into a Writer mutation",
+      "scopeLimitations": []
     }
   ]
 }

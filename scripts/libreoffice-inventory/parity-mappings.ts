@@ -101,6 +101,8 @@ export interface ParityMappingRecord {
   readonly capabilityId: string;
   /** Explicit browser, fidelity, fixture, or platform differences that prevent a verified claim. */
   readonly gaps: readonly string[];
+  /** Explicit boundaries outside this atomic operation that remain unsupported without blocking its verification. */
+  readonly scopeLimitations: readonly string[];
   /** Required only for an explicit whole-capability exception. */
   readonly exception?: ParityException;
   /** Immutable Writer parity identifier. */
@@ -134,7 +136,7 @@ export interface ParityMappingManifest {
   /** Deterministically ordered atomic Writer mappings. */
   readonly records: readonly ParityMappingRecord[];
   /** Static schema version for strict compatibility validation. */
-  readonly schemaVersion: 3;
+  readonly schemaVersion: 4;
 }
 
 /** Represents one fully resolved evidence marker for a validation report. */
@@ -171,12 +173,14 @@ export interface ParityMappingReport {
   readonly gapCount: number;
   /** Number of records whose code exists but semantic parity remains unverified. */
   readonly implementedCount: number;
+  /** Number of explicit out-of-scope limitations retained by bounded capability records. */
+  readonly scopeLimitationCount: number;
   /** Total bounded capability records. */
   readonly recordCount: number;
   /** Successfully resolved evidence paths in stable record and evidence order. */
   readonly resolvedEvidence: readonly ResolvedParityEvidence[];
   /** Static report schema version. */
-  readonly schemaVersion: 3;
+  readonly schemaVersion: 4;
   /** Number of records whose semantic evidence is complete. */
   readonly verifiedCount: number;
 }
@@ -197,7 +201,7 @@ export function parseParityMappingManifest(
   baseline: BaselineManifest,
 ): ParityMappingManifest {
   const root = parseObject(sourceText, "root");
-  if (root.schemaVersion !== 3) throw new Error("Parity mapping schemaVersion must equal 3.");
+  if (root.schemaVersion !== 4) throw new Error("Parity mapping schemaVersion must equal 4.");
   const baselineCommit = requireString(root, "baselineCommit");
   const baselineTag = requireString(root, "baselineTag");
   if (baselineCommit !== baseline.commit)
@@ -208,7 +212,7 @@ export function parseParityMappingManifest(
   const records = root.records.map(parseRecord);
   assertOrderedUniqueIds(records);
   assertOrderedUniqueCapabilityIds(records);
-  return { baselineCommit, baselineTag, records, schemaVersion: 3 };
+  return { baselineCommit, baselineTag, records, schemaVersion: 4 };
 }
 
 /**
@@ -247,7 +251,8 @@ export async function validateParityMappingEvidence(
     implementedCount: manifest.records.filter(isImplemented).length,
     recordCount: manifest.records.length,
     resolvedEvidence,
-    schemaVersion: 3,
+    schemaVersion: 4,
+    scopeLimitationCount: manifest.records.flatMap(selectScopeLimitations).length,
     verifiedCount: manifest.records.filter(isVerified).length,
   };
 }
@@ -302,6 +307,7 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
     throw new Error(`Invalid domain-agnostic capability ID: ${capabilityId}`);
   const maturity = parseMaturity(candidate.maturity, id);
   const gaps = requireStringArray(candidate, "gaps");
+  const scopeLimitations = requireStringArray(candidate, "scopeLimitations");
   const assertions = requireStringArray(candidate, "assertions");
   const assertionEvidence = parseAssertionEvidence(candidate.assertionEvidence, id, assertions);
   const manualContract = optionalString(candidate, "manualContract");
@@ -343,6 +349,7 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
     local: parseEvidence(candidate.local, `${id}.local`, maturity === "exception-approved"),
     ...(manualContract === undefined ? {} : { manualContract }),
     maturity,
+    scopeLimitations,
     stackDivergence: parseStackDivergence(candidate.stackDivergence, id),
     subsystem: requireString(candidate, "subsystem"),
     suite,
@@ -350,6 +357,11 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
     upstream: parseEvidence(candidate.upstream, `${id}.upstream`, false, true),
     ...(verification === undefined ? {} : { verification }),
   };
+}
+
+/** Selects explicit out-of-scope limitations for deterministic report counting. @param record - Parsed capability. @returns Capability limitations. */
+function selectScopeLimitations(record: ParityMappingRecord): readonly string[] {
+  return record.scopeLimitations;
 }
 
 /**
