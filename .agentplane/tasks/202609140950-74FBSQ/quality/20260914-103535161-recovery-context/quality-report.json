@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609140950-74FBSQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-14T10:35:35.161Z",
+  "verdict": "pass",
+  "summary": "Stage 6 implements the bounded LibreOffice-shaped ODT package/xmloff/sw filter pipeline in a Dedicated Worker with atomic main-thread installation.",
+  "evaluated_sha": "28af106234e503c26b8aca0ad0c53799b04c7ec6",
+  "blueprint_digest": "fb0147a27b59986a3da883751b7645a4d71493b72dbecfc042034ef05c543cc0",
+  "findings": [
+    "Implementation commit 28af106 passes 100% office and inventory coverage, pinned LibreOffice feature fixtures, Chromium ODT E2E, build, type, lint, dependency, documentation, file-size, provenance, parity, and routing checks."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609140950-74FBSQ/README.md",
+    "28af106234e5"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
