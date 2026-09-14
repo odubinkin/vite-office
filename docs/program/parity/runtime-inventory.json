@@ -98,11 +98,12 @@
     {
       "path": "apps/office/src/framework/source/services/worker-protocol.ts",
       "classification": "local-infrastructure",
-      "state": "foundation",
+      "state": "active",
       "suite": "shared",
       "subsystem": "application-services",
       "capabilityIds": [
-        "CAP-0101"
+        "CAP-0101",
+        "CAP-0113"
       ]
     },
     {
@@ -495,6 +496,46 @@
       ]
     },
     {
+      "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -865,6 +906,16 @@
       "subsystem": "browser-platform",
       "capabilityIds": [
         "CAP-0114"
+      ]
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
       ]
     },
     {

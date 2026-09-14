@@ -219,6 +219,10 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     fireEvent.click(screen.getByRole("menuitem", { name: "Redo" }));
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Save as ODT…" }));
+    await waitFor(
+      /** Waits for asynchronous ODT serialization and download dispatch. @returns Nothing. */
+      () => expect(services.downloadBytes).toHaveBeenCalled(),
+    );
     fireEvent.click(screen.getByRole("button", { name: "Open ODT" }));
     await waitFor(
       /** Asserts that toolbar Open reached the injected file service. @returns Nothing. */
@@ -247,7 +251,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
   it("opens and saves ODT through the existing document session" /** Verifies file lifecycle replaces the document graph without replacing frame, view, document shell, or Writer shell. @returns Completion after ODT import. */, async function preservesSessionAcrossOdtLifecycle(): Promise<void> {
     const services = createServices();
     const session = createWriterDocumentSession(services);
-    const sourceBytes = session.docShell.SerializeOdt();
+    const sourceBytes = await session.docShell.SerializeOdt();
     vi.mocked(services.selectFile).mockResolvedValue(
       new File([sourceBytes as BlobPart], "persistent.odt", {
         type: SwDocShell.ODT_MEDIA_TYPE,
@@ -257,7 +261,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const { docShell, frame, view } = session;
     const wrtShell = view.GetWrtShell();
     await view.OpenOdt();
-    view.SaveOdt();
+    await view.SaveOdt();
     expect(session).toMatchObject({ docShell, frame, view });
     expect(view.GetWrtShell()).toBe(wrtShell);
     expect(services.downloadBytes).toHaveBeenCalledWith(
@@ -284,7 +288,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     session.view.GetWrtShell().InsertText(paragraphId, "dirty", 0, "insertText");
     const dirtyGeneration = session.docShell.GetDoc().document.contentGeneration;
 
-    session.view.SaveOdt();
+    await session.view.SaveOdt();
     expect(session.docShell.GetDoc().document).toMatchObject({
       isModified: true,
       savedGeneration: null,

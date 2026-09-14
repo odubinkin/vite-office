@@ -109,6 +109,7 @@ The same table now also includes the active ODT file-command boundary.
 | `package/source/manifest/ManifestExport.ts` | `package/source/manifest/ManifestExport.cxx` | ODF 1.3 manifest stream |
 | `vcl/browser/browser-file.ts` | Browser-only | Sandboxed user file selection and byte reading without document ownership |
 | `vcl/browser/browser-download.ts` | Browser-only | Sandboxed byte and plain-text download dispatch |
+| `xmloff/source/core/xml-parser.ts` | `sax/source/fastparser/fastparser.cxx` | Worker-safe namespace-aware SAX tree with DTD and depth rejection |
 | `xmloff/source/text/txtparae.ts` | `xmloff/source/text/txtparae.cxx` | Neutral ODF paragraph, inline, list-style, and nested-list export |
 | `xmloff/source/text/txtparai.ts` | `xmloff/source/text/txtparai.cxx` | Neutral ODF paragraph, inline, and recursive list import |
 | `sw/inc/hintids.ts` | `sw/inc/hintids.hxx` | Numeric WhichIds and bounded Writer ranges |
@@ -133,6 +134,10 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
 | `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Bounded nested semantic `ul`/`ol`/`li` clipboard HTML serialization |
 | `sw/source/filter/ascii/ascatr.ts` | `sw/source/filter/ascii/ascatr.cxx` | Level-indented plain-text list-marker clipboard serialization |
+| `sw/source/filter/xml/odt-filter-service.ts` | Browser-only | Asynchronous neutral snapshot/byte filter boundary |
+| `sw/source/filter/xml/odt-worker-client.ts` | Browser-only | Transferable requests, cancellation, timeout, stale-result rejection, and worker lifecycle |
+| `sw/source/filter/xml/odt-worker-runtime.ts` | Browser-only | Dedicated Worker request dispatch, progress, and structured failures |
+| `sw/source/filter/xml/odt-worker.ts` | Browser-only | Vite module-worker entrypoint |
 | `sw/source/filter/xml/xmlexp.ts` | `sw/source/filter/xml/xmlexp.cxx` | `SwDoc` to ODF styles/content/meta stream bridge |
 | `sw/source/filter/xml/xmlimp.ts` | `sw/source/filter/xml/xmlimp.cxx` | ODF styles/content/meta stream to `SwDoc` bridge |
 | `sw/source/filter/xml/wrtxml.ts` | `sw/source/filter/xml/wrtxml.cxx` | Styles-before-content ODT package writer orchestration |

@@ -2,6 +2,8 @@
  * @fileoverview Reimplements the bounded ODF package manifest exporter from pinned LibreOffice `package/source/manifest/ManifestExport.cxx`.
  */
 
+import { SaxesParser, type SaxesAttributeNS, type SaxesTagNS } from "saxes";
+
 /** MIME type of an OpenDocument Text package. */
 export const ODT_MIMETYPE = "application/vnd.oasis.opendocument.text";
 
@@ -29,27 +31,61 @@ export function createOdtManifestXml(): string {
 
 /** Validates mandatory ODT manifest entries before Writer XML import. @param xml - Manifest XML. @returns Nothing. */
 export function validateOdtManifestXml(xml: string): void {
-  if (/<!DOCTYPE/i.test(xml)) throw new Error("ODF manifest declarations are unsupported.");
-  const document = new DOMParser().parseFromString(xml, "application/xml");
-  const root = document.documentElement;
-  if (
-    document.getElementsByTagName("parsererror").length > 0 ||
-    root.namespaceURI !== manifestNamespace ||
-    root.localName !== "manifest"
-  )
-    throw new Error("ODF manifest XML is invalid.");
   const entries = new Map<string, string>();
-  for (const element of root.getElementsByTagNameNS(manifestNamespace, "file-entry")) {
-    const path = element.getAttributeNS(manifestNamespace, "full-path");
-    const mediaType = element.getAttributeNS(manifestNamespace, "media-type");
-    if (path === null || mediaType === null || entries.has(path))
-      throw new Error("ODF manifest entry is invalid.");
-    entries.set(path, mediaType);
+  let depth = 0;
+  let rootIsValid = false;
+  const parser = new SaxesParser({ xmlns: true });
+  parser.on(
+    "doctype",
+    /** Rejects entity-bearing document types. @returns Never. */ () => {
+      throw new Error("ODF manifest declarations are unsupported.");
+    },
+  );
+  parser.on(
+    "opentag",
+    /** Validates and records one manifest element. @param tag - Namespace-aware SAX tag. @returns Nothing. */ (
+      tag: SaxesTagNS,
+    ) => {
+      if (depth >= 256) throw new Error("ODF manifest exceeds depth limit.");
+      if (depth === 0) rootIsValid = tag.uri === manifestNamespace && tag.local === "manifest";
+      depth += 1;
+      if (tag.uri !== manifestNamespace || tag.local !== "file-entry") return;
+      const attributes = Object.values(tag.attributes);
+      const path = readManifestAttribute(attributes, "full-path");
+      const mediaType = readManifestAttribute(attributes, "media-type");
+      if (path === undefined || mediaType === undefined || entries.has(path))
+        throw new Error("ODF manifest entry is invalid.");
+      entries.set(path, mediaType);
+    },
+  );
+  parser.on(
+    "closetag",
+    /** Closes one bounded manifest nesting level. @returns Nothing. */ () => {
+      depth -= 1;
+    },
+  );
+  try {
+    parser.write(xml).close();
+  } catch (error) {
+    if (error instanceof Error && error.message.startsWith("ODF manifest")) throw error;
+    throw new Error("ODF manifest XML is invalid.", { cause: error });
   }
+  if (!rootIsValid) throw new Error("ODF manifest XML is invalid.");
   if (entries.get("/") !== ODT_MIMETYPE)
     throw new Error("ODF manifest root media type is invalid.");
   for (const path of ["content.xml", "styles.xml", "meta.xml"])
     if (entries.get(path) !== "text/xml") throw new Error(`ODF manifest entry is missing: ${path}`);
+}
+
+/** Reads one namespaced manifest attribute. @param attributes - SAX attributes. @param localName - Namespace-local name. @returns Decoded value or undefined. */
+function readManifestAttribute(
+  attributes: readonly SaxesAttributeNS[],
+  localName: string,
+): string | undefined {
+  return attributes.find(
+    /** Matches one manifest expanded name. @param attribute - Candidate attribute. @returns Whether it matches. */
+    (attribute) => attribute.uri === manifestNamespace && attribute.local === localName,
+  )?.value;
 }
 
 /** Escapes XML attribute metacharacters for package-owned manifest serialization. @param value - Raw attribute value. @returns XML-safe value. */

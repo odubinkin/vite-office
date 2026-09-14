@@ -11,6 +11,7 @@ import {
   type OdfParagraphStyle,
   type OdfTextRun,
 } from "./txtparae";
+import type { OdfXmlElement } from "../core/xml-parser";
 
 /** Parsed named or automatic style properties used by the text importer. */
 export interface OdfStyleDefinition {
@@ -29,7 +30,7 @@ const DEFAULT_CHARACTER_PROPERTIES: OdfCharacterProperties = {
 
 /** Imports ODF paragraph and heading children from office:text. @param textElement - office:text element. @param styles - Resolved style table. @param listRules - ODF style-name keyed numbering rules. @returns Neutral paragraphs. */
 export function importTextParagraphs(
-  textElement: Element,
+  textElement: OdfXmlElement,
   styles: ReadonlyMap<string, OdfStyleDefinition>,
   listRules: ReadonlyMap<string, OdfListRule> = new Map(),
 ): readonly OdfParagraph[] {
@@ -45,6 +46,7 @@ export function importTextParagraphs(
       paragraphs.push(importParagraphElement(child, styles));
     else if (child.localName === "list")
       importListElement(child, 0, undefined, undefined, styles, listRules, context, paragraphs);
+    else if (child.localName === "sequence-decls") continue;
     else throw new Error(`Unsupported ODF text element: ${child.localName}`);
   }
   if (paragraphs.length === 0) paragraphs.push({ runs: [], style: "default" });
@@ -59,7 +61,7 @@ interface OdfListImportContext {
 
 /** Imports one paragraph or heading element. @param element - ODF paragraph or heading. @param styles - Resolved style table. @param list - Optional list metadata. @returns Neutral paragraph. */
 function importParagraphElement(
-  element: Element,
+  element: OdfXmlElement,
   styles: ReadonlyMap<string, OdfStyleDefinition>,
   list?: OdfParagraph["list"],
 ): OdfParagraph {
@@ -79,7 +81,7 @@ function importParagraphElement(
 
 /** Recursively imports text:list blocks using LibreOffice's list style, id, and level relationships. @param listElement - Current text:list. @param level - Zero-based nesting depth. @param inheritedStyleName - Parent list style name. @param inheritedListId - Parent list identity. @param styles - Paragraph and text styles. @param listRules - Numbering rules. @param context - Shared identity state. @param paragraphs - Output accumulator. @returns Nothing. */
 function importListElement(
-  listElement: Element,
+  listElement: OdfXmlElement,
   level: number,
   inheritedStyleName: string | undefined,
   inheritedListId: string | undefined,
@@ -146,7 +148,7 @@ function importListElement(
 
 /** Rejects list attributes that would otherwise be dropped by the bounded model. @param element - List or list-item element. @param allowed - Supported namespace/name pairs. @returns Nothing. */
 function assertElementAttributes(
-  element: Element,
+  element: OdfXmlElement,
   allowed: readonly (readonly [namespace: string, name: string])[],
 ): void {
   for (const attribute of element.attributes)
@@ -228,20 +230,20 @@ function resolveParagraphStyle(
 
 /** Recursively imports supported inline nodes. @param parent - Container. @param inherited - Inherited direct properties. @param styles - Style table. @param runs - Output accumulator. @returns Nothing. */
 function appendInlineContent(
-  parent: Element,
+  parent: OdfXmlElement,
   inherited: OdfCharacterProperties,
   styles: ReadonlyMap<string, OdfStyleDefinition>,
   runs: OdfTextRun[],
 ): void {
   for (const node of parent.childNodes) {
-    if (node.nodeType === Node.TEXT_NODE) {
-      appendRun(runs, node.nodeValue as string, inherited);
+    if (node.kind === "text") {
+      appendRun(runs, node.value, inherited);
       continue;
     }
-    if (node.nodeType !== Node.ELEMENT_NODE) throw new Error("Unsupported ODF inline node.");
-    const element = node as Element;
+    if (node.kind !== "element") throw new Error("Unsupported ODF inline node.");
+    const element = node;
     if (element.namespaceURI !== ODF_NAMESPACES.text)
-      throw new Error(`Unsupported ODF inline namespace: ${element.namespaceURI ?? ""}`);
+      throw new Error(`Unsupported ODF inline namespace: ${element.namespaceURI}`);
     if (element.localName === "s") {
       const rawCount = element.getAttributeNS(ODF_NAMESPACES.text, "c") ?? "1";
       const count = Number(rawCount);

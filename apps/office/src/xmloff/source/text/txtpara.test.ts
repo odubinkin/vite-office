@@ -2,6 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 
+import { parseOdfXmlDocument, type OdfXmlElement } from "../core/xml-parser";
 import {
   escapeXml,
   exportCharacterAttributes,
@@ -16,9 +17,9 @@ import { importTextParagraphs, type OdfStyleDefinition } from "./txtparai";
 const plain: OdfCharacterProperties = { bold: false, italic: false, underline: false };
 
 /** Parses one office:text test element. @param body - Child XML. @returns Element. */
-function parseText(body: string): Element {
+function parseText(body: string): OdfXmlElement {
   const xml = `<office:text xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}">${body}</office:text>`;
-  return new DOMParser().parseFromString(xml, "application/xml").documentElement;
+  return parseOdfXmlDocument(xml).documentElement;
 }
 
 describe("ODF text paragraph export" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
@@ -240,7 +241,7 @@ describe("ODF text paragraph import" /** Executes the enclosing deterministic te
       ["T3", { family: "text", parentStyleName: "T1", properties: { italic: true } }],
     ]);
     const element = parseText(
-      '<text:p>plain</text:p><text:p text:style-name="Standard"/><text:h/><text:h text:style-name="Heading_20_1">head</text:h><text:h text:style-name="P1"><text:span text:style-name="T1">b<text:span text:style-name="T2">i</text:span></text:span><text:span text:style-name="T3">p</text:span><text:s/><text:s text:c="2"/><text:tab/><text:line-break/></text:h><text:p text:style-name="P2">tail</text:p>',
+      '<text:sequence-decls/><text:p>plain</text:p><text:p text:style-name="Standard"/><text:h/><text:h text:style-name="Heading_20_1">head</text:h><text:h text:style-name="P1"><text:span text:style-name="T1">b<text:span text:style-name="T2">i</text:span></text:span><text:span text:style-name="T3">p</text:span><text:s/><text:s text:c="2"/><text:tab/><text:line-break/></text:h><text:p text:style-name="P2">tail</text:p>',
     );
     expect(importTextParagraphs(element, styles)).toEqual([
       { runs: [{ properties: plain, text: "plain" }], style: "default" },

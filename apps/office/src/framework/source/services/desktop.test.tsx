@@ -361,7 +361,10 @@ describe("App" /**
       expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
 
       fireEvent.click(screen.getByRole("button", { name: "Save as ODT" }));
-      expect(anchorClick).toHaveBeenCalledOnce();
+      await waitFor(
+        /** Waits for worker-shaped asynchronous ODT serialization. @returns Nothing. */
+        () => expect(anchorClick).toHaveBeenCalledOnce(),
+      );
       expect(downloadedBlob?.type).toBe("application/vnd.oasis.opendocument.text");
       expect(downloadedBlob).toBeInstanceOf(Blob);
       const downloadedBytes = new Uint8Array(await (downloadedBlob as Blob).arrayBuffer());
@@ -622,7 +625,10 @@ describe("App" /**
       },
     );
     fireEvent.click(screen.getByRole("button", { name: "Save as ODT" }));
-    expect(screen.getByText("Could not save ODT: download denied")).toBeInTheDocument();
+    await waitFor(
+      /** Waits for asynchronous ODT export failure feedback. @returns Nothing. */
+      () => expect(screen.getByText("Could not save ODT: download denied")).toBeInTheDocument(),
+    );
     click.mockRestore();
   });
 });

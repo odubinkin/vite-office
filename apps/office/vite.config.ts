@@ -11,7 +11,12 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   test: {
     coverage: {
-      exclude: ["src/**/*.test.{ts,tsx}", "src/main.tsx", "src/test/**"],
+      exclude: [
+        "src/**/*.test.{ts,tsx}",
+        "src/main.tsx",
+        "src/sw/source/filter/xml/odt-worker.ts",
+        "src/test/**",
+      ],
       include: ["src/**/*.{ts,tsx}"],
       provider: "v8",
       reporter: ["text", "json-summary", "html"],

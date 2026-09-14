@@ -19,7 +19,10 @@ the package streams.
 5. `meta.xml`.
 
 The reader accepts STORE and raw-DEFLATE ZIP32 entries. It imports named styles
-before content, matching the ordering in the pinned Writer XML filter.
+before content, matching the ordering in the pinned Writer XML filter. Export is
+deliberately STORE-only: the result remains a valid ODF ZIP package, avoids adding
+a second compression implementation to the browser bundle, and is bounded by a
+64 MiB complete-output ceiling.
 
 ## Model mapping
 
@@ -57,27 +60,36 @@ agreement, UTF-8 or ASCII-safe names, duplicate paths, sizes, CRC-32, methods,
 and archive structure. It rejects encryption, ZIP64, multi-disk archives,
 path traversal, invalid DEFLATE, and packages exceeding configurable archive,
 entry-count, entry-size, total-size, or expansion-ratio ceilings. XML parsing
-rejects document type declarations, malformed or incorrect roots, invalid
-manifests, duplicate styles, unsupported semantic style properties, and
-differing Western/CJK/CTL weight or posture values until script-specific
-browser projections are implemented.
+uses a namespace-aware SAX event stream, following LibreOffice's fast-parser
+boundary without requiring `Window.DOMParser` in the worker. It rejects document
+type declarations, malformed or incorrect roots, nesting beyond 256 elements,
+mandatory XML streams larger than 16 MiB, invalid manifests, duplicate supported
+styles, unsupported semantic values, and differing Western/CJK/CTL weight or
+posture values until script-specific browser projections are implemented.
 
 Lossy export is not permitted. Paragraph item IDs outside the implemented
 alignment, list, and character subset fail explicitly. Imported tables, images,
-fields, annotations, tracked changes, sections, page styles, objects, scripts,
-signatures, encryption, RDF, custom bullet glyphs, non-decimal numbering, list
-headers, and arbitrary style properties likewise remain unsupported rather than
-being silently discarded.
+fields, annotations, tracked changes, sections, objects, scripts, signatures,
+encryption, RDF, custom bullet glyphs, non-decimal numbering, and list headers
+remain unsupported. Unrelated style families, page-style data, and properties
+outside the bounded Writer model are ignored during import, matching the scoped
+upstream import-context behavior instead of inventing browser document fields.
 
 ## Browser File integration
 
 The Writer workbench exposes **File → Open ODT…**, **File → Save as ODT…**, and
 matching standard-toolbar actions. A browser-only VCL adapter obtains user-selected
 bytes or starts a sandboxed byte download; it does not parse or own the document.
-The LibreOffice-shaped `SwDocShell` remains the active `SwDoc` owner and delegates
-load/save to `SwXMLReader` and `SwXMLWriter`. Import builds and validates a candidate
-graph before replacing the current session, so cancellation, malformed packages,
-and unsupported semantics leave the active document and history intact. Successful
+Production import and export cross a version-one Dedicated Worker protocol using
+monotonic request IDs and transferable `ArrayBuffer` payloads. The worker performs
+ZIP, manifest, SAX/xmloff, Writer XML mapping, and package serialization, returning
+only a neutral Writer snapshot or complete ODT bytes.
+
+The LibreOffice-shaped `SwDocShell` remains the active `SwDoc` owner. It validates
+the returned snapshot on the main thread and replaces the current graph only after
+the request is still current. A newer operation, explicit cancellation, timeout,
+worker error, malformed package, or unsupported semantic value terminates or
+rejects the candidate and leaves the active document and history intact. Successful
 New or Open resets browser selection state and starts a fresh undo history.
 
 Browsers do not grant this static application an in-place filesystem handle, so
@@ -85,3 +97,8 @@ Save As starts a download with a sanitized `.odt` filename. IndexedDB local copi
 and plain-text download remain available as separately labelled File commands.
 This record is a bounded compatibility claim, not complete ODT or LibreOffice
 format parity; the unsupported model and package cases above still fail explicitly.
+
+The compatibility suite also imports the exact pinned LibreOffice
+`feature_text.odt`, `feature_text_bold.odt`, and `feature_text_italic.odt` fixtures
+used by `sw/qa/extras/odfimport/odffeatures.cxx`, then verifies the supported text
+and character semantics through a local export/reimport round trip.

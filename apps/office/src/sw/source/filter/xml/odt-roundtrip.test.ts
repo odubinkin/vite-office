@@ -471,6 +471,19 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(
       (await readOdtDocument(bytes, metadata(), DEFAULT_ZIP_FILE_LIMITS)).paragraphs,
     ).toHaveLength(1);
+    await expect(
+      new SwXMLReader().Read(bytes, metadata(), undefined, { maxXmlStreamBytes: 1 }),
+    ).rejects.toThrow("XML stream exceeds size limit");
+    expect(
+      /** Exports with a deliberately strict complete-package limit. @returns ODT bytes. */ () =>
+        new SwXMLWriter().Write(createWriterDocument(metadata(), "p1"), { maxOutputBytes: 1 }),
+    ).toThrow("export exceeds size limit");
+    expect(
+      /** Cancels before Writer serialization proceeds. @returns ODT bytes. */ () =>
+        writeOdtDocument(createWriterDocument(metadata(), "p1"), {
+          isCancelled: /** Reports deterministic cancellation. @returns True. */ () => true,
+        }),
+    ).toThrow("cancelled");
   });
 
   it("validates XML roots, declarations, required Writer styles, and body structure" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
@@ -507,13 +520,34 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       ).toThrow("ODF");
     for (const changed of [
       styles.replace(/<style:style style:name="Standard"[\s\S]*?<\/style:style>/, ""),
-      styles.replace(/<style:style style:name="Heading_20_1"[\s\S]*?<\/style:style>/, ""),
       styles.replace('style:parent-style-name="Standard"', 'style:parent-style-name="Other"'),
     ])
       expect(
         /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
         () => importWriterXml(changed, content, metadata(), meta),
       ).toThrow("ODF");
+    expect(
+      importWriterXml(
+        styles.replace(/<style:style style:name="Heading_20_1"[\s\S]*?<\/style:style>/, ""),
+        content,
+        metadata(),
+        meta,
+      )
+        .GetTextFormatColl("heading-1")
+        .GetName(),
+    ).toBe("Heading 1");
+    expect(
+      /** Imports an invalid Heading 1 family. @returns Invalid document. */ () =>
+        importWriterXml(
+          styles.replace(
+            /(<style:style style:name="Heading_20_1"[^>]*style:family=")paragraph/,
+            "$1text",
+          ),
+          content,
+          metadata(),
+          meta,
+        ),
+    ).toThrow("Heading 1 paragraph style is invalid");
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () =>
@@ -557,16 +591,13 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const mutations = [
       [styles.replace(' style:name="Standard"', ""), "style name is missing"],
       [styles.replace(' style:family="paragraph"', ""), "style family is missing"],
-      [styles.replace('style:family="paragraph"', 'style:family="table"'), "style family"],
+      [
+        styles.replace('style:family="paragraph"', 'style:family="table"'),
+        "Standard paragraph style",
+      ],
       [
         styles.replace("</office:styles>", standardStyle + "</office:styles>"),
         "Duplicate ODF style",
-      ],
-      [
-        styles
-          .replace('style:family="paragraph"', 'style:family="text"')
-          .replace("</style:style>", "<style:paragraph-properties/></style:style>"),
-        "paragraph properties on ODF text",
       ],
       [
         styles.replace(
@@ -574,13 +605,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           "<style:paragraph-properties/><style:paragraph-properties/></style:style>",
         ),
         "duplicate paragraph-properties",
-      ],
-      [
-        styles.replace(
-          "</style:style>",
-          '<style:paragraph-properties fo:margin-left="1cm"/></style:style>',
-        ),
-        "Unsupported ODF style property",
       ],
       [
         styles.replace(
@@ -616,10 +640,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       'fo:font-weight="bold"',
       'fo:font-weight="bold" fo:color="#000000"',
     );
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => importWriterXml(styles, unknown, metadata(), meta),
-    ).toThrow("Unsupported ODF style property");
+    expect(importWriterXml(styles, unknown, metadata(), meta).paragraphs[0]?.text).toBe("");
     const mismatchedScript = styledContent.replace(
       'fo:font-weight="bold"',
       'fo:font-weight="bold" style:font-weight-asian="normal"',

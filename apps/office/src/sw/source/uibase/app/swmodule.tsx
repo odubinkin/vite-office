@@ -23,6 +23,11 @@ import {
   IndexedDbRecoveryStorageAdapter,
 } from "../../../../vcl/browser/indexeddb-storage";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
+import {
+  createInlineOdtFilterService,
+  type OdtFilterService,
+} from "../../filter/xml/odt-filter-service";
+import { createBrowserOdtFilterService } from "../../filter/xml/odt-worker-client";
 import { WriterWorkbench } from "../uiview/view";
 import { SwView, type WriterSessionServices } from "../uiview/view-session";
 import { createWriterWorkbenchDocument } from "../uiview/viewfunc";
@@ -72,11 +77,16 @@ export function createWriterBrowserSessionServices(): WriterSessionServices {
   };
 }
 
-/** Creates one complete persistent Writer ownership chain. @param services - Browser adapters injected by the composition root. @returns Active document session. */
+/** Creates one complete persistent Writer ownership chain. @param services - Browser adapters injected by the composition root. @param odtFilter - Asynchronous ODT filter service. @returns Active document session. */
 export function createWriterDocumentSession(
   services: WriterSessionServices = createWriterBrowserSessionServices(),
+  odtFilter: OdtFilterService = createInlineOdtFilterService(),
 ): WriterDocumentSession {
-  const docShell = new SwDocShell(createWriterWorkbenchDocument());
+  const docShell = new SwDocShell(
+    createWriterWorkbenchDocument(),
+    { kind: "untitled", name: "Untitled Writer Document" },
+    odtFilter,
+  );
   const view = new SwView(docShell, services);
   const frame = new OfficeFrame<SwView>();
   const autoRecovery =
@@ -160,7 +170,12 @@ function createRecoveryOwnerId(): string {
 
 /** Creates the Writer module factory consumed by the application composition root. @returns Writer-owned persistent workspace factory. */
 export function createWriterModuleFactory(): OfficeModuleFactory {
-  const session = createWriterDocumentSession();
+  const session = createWriterDocumentSession(
+    createWriterBrowserSessionServices(),
+    typeof Worker === "undefined"
+      ? createInlineOdtFilterService()
+      : createBrowserOdtFilterService(),
+  );
   return {
     closeWorkspace: session.Close,
     createWorkspace:

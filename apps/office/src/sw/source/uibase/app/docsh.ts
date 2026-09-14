@@ -27,8 +27,12 @@ import {
   type WriterSnapshotState,
 } from "../../core/doc/writer-storage";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
-import { readOdtDocument } from "../../filter/xml/swxml";
-import { writeOdtDocument } from "../../filter/xml/wrtxml";
+import {
+  createInlineOdtFilterService,
+  OdtFilterError,
+  type OdtFilterOperationOptions,
+  type OdtFilterService,
+} from "../../filter/xml/odt-filter-service";
 
 /** Writer document shell that owns the active SwDoc across new, load, and save operations. */
 export class SwDocShell {
@@ -37,12 +41,14 @@ export class SwDocShell {
 
   private readonly listeners = new Set<() => void>();
   private medium: SfxMediumDescriptor;
+  private odtRequestGeneration = 0;
   private undoManager: SfxUndoManager<SwUndoRedoContext>;
 
-  /** Creates a shell around an existing Writer document. @param document - Active canonical document. @param medium - Persistent browser-adapted medium descriptor. @returns Nothing. */
+  /** Creates a shell around an existing Writer document. @param document - Active canonical document. @param medium - Persistent browser-adapted medium descriptor. @param odtFilter - Asynchronous ODT filter boundary. @returns Nothing. */
   public constructor(
     private document: SwDoc,
     medium: SfxMediumInput = { kind: "untitled", name: document.document.title },
+    private readonly odtFilter: OdtFilterService = createInlineOdtFilterService(),
   ) {
     this.undoManager = new SfxUndoManager<SwUndoRedoContext>();
     if (document.document.isModified) this.undoManager.ClearSavePosition();
@@ -129,6 +135,8 @@ export class SwDocShell {
 
   /** Atomically replaces the document and resets its undo manager for New, Open, or Load. @param document - Replacement canonical graph. @param medium - Replacement medium descriptor. @returns Installed document. */
   public ReplaceDocument(document: SwDoc, medium: SfxMediumInput): SwDoc {
+    this.odtRequestGeneration += 1;
+    this.odtFilter.Cancel();
     this.document = document;
     this.medium = createSfxMediumDescriptor(medium, document.document);
     this.undoManager = new SfxUndoManager<SwUndoRedoContext>();
@@ -145,7 +153,7 @@ export class SwDocShell {
     });
   }
 
-  /** Loads an ODT into a candidate graph before atomically replacing the active document. @param bytes - Complete ODT bytes. @param metadata - Fallback identity and title. @param medium - Replacement medium descriptor. @returns Loaded saved-state SwDoc. */
+  /** Loads an ODT into a candidate graph before atomically replacing the active document. @param bytes - Complete ODT bytes. @param metadata - Fallback identity and title. @param medium - Replacement medium descriptor. @param options - Filter cancellation/progress controls. @returns Loaded saved-state SwDoc. */
   public async Open(
     bytes: Uint8Array,
     metadata: OfficeDocument,
@@ -155,9 +163,14 @@ export class SwDocShell {
       mediaType: SwDocShell.ODT_MEDIA_TYPE,
       name: metadata.title,
     },
+    options?: OdtFilterOperationOptions,
   ): Promise<SwDoc> {
-    const loaded = await readOdtDocument(bytes, metadata);
-    loaded.document = markDocumentSaved(loaded.document);
+    this.odtFilter.Cancel();
+    const requestGeneration = ++this.odtRequestGeneration;
+    const snapshot = await this.odtFilter.Import(bytes, metadata, options);
+    if (requestGeneration !== this.odtRequestGeneration)
+      throw new OdtFilterError("stale", "ODT open result is stale.");
+    const loaded = restoreWriterSnapshot(snapshot, "primary");
     return this.ReplaceDocument(
       loaded,
       updateSfxMediumOperation(
@@ -179,9 +192,9 @@ export class SwDocShell {
     return medium === undefined ? this.Open(bytes, metadata) : this.Open(bytes, metadata, medium);
   }
 
-  /** Serializes the active document through Writer's ODT package filter without changing medium state. @returns Complete ODT bytes. */
-  public SerializeOdt(): Uint8Array {
-    return writeOdtDocument(this.document);
+  /** Serializes a captured active-document snapshot through Writer's asynchronous ODT filter without changing medium state. @param options - Cancellation/progress controls. @returns Complete ODT bytes. */
+  public SerializeOdt(options?: OdtFilterOperationOptions): Promise<Uint8Array> {
+    return this.odtFilter.Export(createWriterSnapshot(this.document), options);
   }
 
   /** Saves to the current confirmed writable primary medium. @param persist - Adapter operation that must resolve only after a committed write. @returns Completion after save acknowledgement. */
@@ -293,6 +306,8 @@ export class SwDocShell {
 
   /** Closes document-shell subscriptions at explicit session termination. @returns Nothing. */
   public Close(): void {
+    this.odtRequestGeneration += 1;
+    this.odtFilter.Close();
     this.listeners.clear();
   }
 

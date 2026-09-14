@@ -14,6 +14,11 @@ import {
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
 import {
+  parseOdfXmlDocument,
+  type OdfXmlDocument,
+  type OdfXmlElement,
+} from "../../../../xmloff/source/core/xml-parser";
+import {
   ODF_NAMESPACES,
   type OdfCharacterProperties,
   type OdfListRule,
@@ -56,7 +61,7 @@ export function importWriterXml(
   ]);
   const officeText = contentDocument.getElementsByTagNameNS(ODF_NAMESPACES.office, "text");
   if (officeText.length !== 1) throw new Error("ODF content must contain exactly one office:text.");
-  const paragraphs = importTextParagraphs(officeText[0] as Element, allStyles, listRules);
+  const paragraphs = importTextParagraphs(officeText[0] as OdfXmlElement, allStyles, listRules);
   const importedRules = new Map<string, OdfListRule>();
   paragraphs.forEach(
     /** Collects every referenced list rule before paragraph items resolve it. @param paragraph - Imported neutral paragraph. @returns Nothing. */
@@ -107,7 +112,7 @@ export function importWriterXml(
 }
 
 /** Collects ODF list styles into per-level Writer numbering rules. @param document - Parsed ODF stream. @returns Style-name keyed rules. */
-function collectListStyles(document: XMLDocument): ReadonlyMap<string, OdfListRule> {
+function collectListStyles(document: OdfXmlDocument): ReadonlyMap<string, OdfListRule> {
   const rules = new Map<string, OdfListRule>();
   for (const element of document.getElementsByTagNameNS(ODF_NAMESPACES.text, "list-style")) {
     assertPropertyAttributes(element, [
@@ -177,12 +182,10 @@ function collectListStyles(document: XMLDocument): ReadonlyMap<string, OdfListRu
   return rules;
 }
 
-/** Parses one ODF XML stream with a fixed root. @param xml - Source XML. @param expectedRoot - office root local name. @returns XML document. */
-export function parseOdfXml(xml: string, expectedRoot: string): XMLDocument {
-  if (/<!DOCTYPE/i.test(xml)) throw new Error("ODF document type declarations are unsupported.");
-  const document = new DOMParser().parseFromString(xml, "application/xml");
+/** Parses one ODF XML stream with a fixed root. @param xml - Source XML. @param expectedRoot - office root local name. @param maxDepth - Maximum element nesting. @returns Worker-safe XML document. */
+export function parseOdfXml(xml: string, expectedRoot: string, maxDepth?: number): OdfXmlDocument {
+  const document = parseOdfXmlDocument(xml, maxDepth);
   if (
-    document.getElementsByTagName("parsererror").length > 0 ||
     document.documentElement.namespaceURI !== ODF_NAMESPACES.office ||
     document.documentElement.localName !== expectedRoot
   )
@@ -191,23 +194,22 @@ export function parseOdfXml(xml: string, expectedRoot: string): XMLDocument {
 }
 
 /** Collects supported named or automatic style records. @param document - Parsed ODF stream. @returns Style table. */
-function collectStyles(document: XMLDocument): ReadonlyMap<string, OdfStyleDefinition> {
+function collectStyles(document: OdfXmlDocument): ReadonlyMap<string, OdfStyleDefinition> {
   const styles = new Map<string, OdfStyleDefinition>();
   for (const element of document.getElementsByTagNameNS(ODF_NAMESPACES.style, "style")) {
     const name = requiredAttribute(element, ODF_NAMESPACES.style, "name");
     const family = requiredAttribute(element, ODF_NAMESPACES.style, "family");
-    if (family !== "paragraph" && family !== "text")
-      throw new Error(`Unsupported ODF style family: ${family}`);
+    if (family !== "paragraph" && family !== "text") continue;
     if (styles.has(name)) throw new Error(`Duplicate ODF style: ${name}`);
     const parentStyleName =
       element.getAttributeNS(ODF_NAMESPACES.style, "parent-style-name") ?? undefined;
     const displayName = element.getAttributeNS(ODF_NAMESPACES.style, "display-name") ?? undefined;
     const paragraphProperties = directChild(element, ODF_NAMESPACES.style, "paragraph-properties");
     const textProperties = directChild(element, ODF_NAMESPACES.style, "text-properties");
-    if (family === "text" && paragraphProperties !== undefined)
-      throw new Error(`Unsupported paragraph properties on ODF text style: ${name}`);
     const alignment =
-      paragraphProperties === undefined ? undefined : importAlignment(paragraphProperties);
+      paragraphProperties === undefined || family === "text"
+        ? undefined
+        : importAlignment(paragraphProperties);
     const properties =
       textProperties === undefined ? undefined : importCharacterProperties(textProperties);
     styles.set(name, {
@@ -228,19 +230,21 @@ function applyNamedParagraphStyles(
 ): void {
   const standard = styles.get("Standard");
   const heading = styles.get("Heading_20_1");
-  if (standard?.family !== "paragraph" || heading?.family !== "paragraph")
-    throw new Error("ODF Writer named paragraph styles are missing.");
-  if (heading.parentStyleName !== "Standard")
+  if (standard?.family !== "paragraph")
+    throw new Error("ODF Writer Standard paragraph style is missing.");
+  if (heading !== undefined && heading.family !== "paragraph")
+    throw new Error("ODF Writer Heading 1 paragraph style is invalid.");
+  if (heading !== undefined && heading.parentStyleName !== "Standard")
     throw new Error("ODF Heading 1 must derive from Standard.");
   if (standard.displayName !== undefined)
     document.GetDfltTextFormatColl().SetFormatName(standard.displayName);
-  if (heading.displayName !== undefined)
+  if (heading?.displayName !== undefined)
     document.GetTextFormatColl("heading-1").SetFormatName(heading.displayName);
   if (standard.alignment !== undefined)
     document
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxAdjustItem(toSvxAdjust(standard.alignment), RES_PARATR_ADJUST));
-  if (heading.alignment !== undefined)
+  if (heading?.alignment !== undefined)
     document
       .GetTextFormatColl("heading-1")
       .SetFormatAttr(new SvxAdjustItem(toSvxAdjust(heading.alignment), RES_PARATR_ADJUST));
@@ -250,7 +254,7 @@ function applyNamedParagraphStyles(
       /** Stores one imported default-style character item. @param item - Pooled item. @returns Nothing. */
       (item) => document.GetDfltTextFormatColl().SetFormatAttr(item),
     );
-  if (heading.properties !== undefined)
+  if (heading?.properties !== undefined)
     putCharacterProperties(
       heading.properties,
       /** Stores one imported heading-style character item. @param item - Pooled item. @returns Nothing. */
@@ -268,14 +272,18 @@ function importMetaTitle(xml: string): string | undefined {
 }
 
 /** Reads a required namespaced attribute. @param element - Source. @param namespace - Namespace. @param name - Local name. @returns Value. */
-function requiredAttribute(element: Element, namespace: string, name: string): string {
+function requiredAttribute(element: OdfXmlElement, namespace: string, name: string): string {
   const value = element.getAttributeNS(namespace, name);
   if (value === null || value.length === 0) throw new Error(`ODF style ${name} is missing.`);
   return value;
 }
 
 /** Finds at most one direct child. @param element - Parent. @param namespace - Namespace. @param name - Local name. @returns Child. */
-function directChild(element: Element, namespace: string, name: string): Element | undefined {
+function directChild(
+  element: OdfXmlElement,
+  namespace: string,
+  name: string,
+): OdfXmlElement | undefined {
   const children = [...element.children].filter(
     /** Matches one direct property child. @param child - Candidate element. @returns Whether names match. */
     (child) => child.namespaceURI === namespace && child.localName === name,
@@ -285,8 +293,7 @@ function directChild(element: Element, namespace: string, name: string): Element
 }
 
 /** Imports one supported fo:text-align. @param element - Paragraph properties. @returns Model alignment when present. */
-function importAlignment(element: Element): OdfParagraphAlignment | undefined {
-  assertPropertyAttributes(element, [[ODF_NAMESPACES.fo, "text-align"]]);
+function importAlignment(element: OdfXmlElement): OdfParagraphAlignment | undefined {
   const value = element.getAttributeNS(ODF_NAMESPACES.fo, "text-align");
   if (value === null) return undefined;
   if (value === "start" || value === "left") return "left";
@@ -296,17 +303,7 @@ function importAlignment(element: Element): OdfParagraphAlignment | undefined {
 }
 
 /** Imports the three supported character properties. @param element - Text properties. @returns Direct properties. */
-function importCharacterProperties(element: Element): Partial<OdfCharacterProperties> {
-  assertPropertyAttributes(element, [
-    [ODF_NAMESPACES.fo, "font-weight"],
-    [ODF_NAMESPACES.fo, "font-style"],
-    [ODF_NAMESPACES.style, "font-weight-asian"],
-    [ODF_NAMESPACES.style, "font-weight-complex"],
-    [ODF_NAMESPACES.style, "font-style-asian"],
-    [ODF_NAMESPACES.style, "font-style-complex"],
-    [ODF_NAMESPACES.style, "text-underline-style"],
-    [ODF_NAMESPACES.style, "text-underline-width"],
-  ]);
+function importCharacterProperties(element: OdfXmlElement): Partial<OdfCharacterProperties> {
   const weight = element.getAttributeNS(ODF_NAMESPACES.fo, "font-weight");
   const posture = element.getAttributeNS(ODF_NAMESPACES.fo, "font-style");
   const underline = element.getAttributeNS(ODF_NAMESPACES.style, "text-underline-style");
@@ -366,7 +363,7 @@ function assertScriptPropertyAgreement(
 
 /** Rejects silently lossy style-property attributes. @param element - Property element. @param allowed - Supported namespace/name pairs. @returns Nothing. */
 function assertPropertyAttributes(
-  element: Element,
+  element: OdfXmlElement,
   allowed: readonly (readonly [namespace: string, name: string])[],
 ): void {
   for (const attribute of element.attributes)

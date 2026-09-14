@@ -19,7 +19,9 @@ describe("ODF manifest" /** Executes the enclosing deterministic test or transfo
     for (const xml of [
       `<!DOCTYPE manifest>${valid}`,
       "<broken",
+      "<root/>",
       valid.replace("manifest:manifest", "manifest:wrong"),
+      valid.replace(' manifest:full-path="/"', ""),
       valid.replace(' manifest:media-type="text/xml"', ""),
       valid.replace("content.xml", "styles.xml"),
       valid.replace(ODT_MIMETYPE, "application/invalid"),
@@ -32,5 +34,10 @@ describe("ODF manifest" /** Executes the enclosing deterministic test or transfo
         /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
         () => validateOdtManifestXml(xml),
       ).toThrow("ODF manifest");
+    const nested = `<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0">${"<x>".repeat(256)}${"</x>".repeat(256)}</manifest:manifest>`;
+    expect(
+      /** Validates excessive XML nesting. @returns Nothing. */ () =>
+        validateOdtManifestXml(nested),
+    ).toThrow("depth limit");
   });
 });

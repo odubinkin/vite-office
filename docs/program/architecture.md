@@ -25,9 +25,9 @@ nesting deliberately follow the corresponding pinned LibreOffice modules:
 | `svl/source/items` and `svl/source/misc` | WhichId item pool/set primitives and generic recovery orchestration | `svl` item and shared utility layers |
 | `package/source/zipapi` and `package/source/manifest` | Bounded ZIP32 package transport, CRC, resource ceilings, and ODF manifests | LibreOffice package storage boundaries |
 | `vcl/browser` | Tested adapters around IndexedDB, downloads, clipboard, and browser styling | `vcl` platform/widget layer, specialized for static-browser runtime |
-| `xmloff/source/text` | UI-neutral ODF paragraph, automatic-style, inline-format, and whitespace conversion | Shared LibreOffice XML filter ownership |
+| `xmloff/source/core` and `xmloff/source/text` | Worker-safe SAX trees plus UI-neutral ODF paragraph, automatic-style, inline-format, and whitespace conversion | LibreOffice SAX and shared XML filter ownership |
 | `sw/source/core/attr`, `doc`, `docnode`, `para`, `txtnode`, and `crsr` | Writer document graph, attribute pool, style collections, ordered nodes, text attributes, numbering items, and model ranges | `SwDoc`, `SwAttrSet`, `SwTextFormatColl`, `SwNodes`, `SwTextNode`, `SwpHints`, `SwTextAttr`, `SwPosition`, and `SwPaM` ownership |
-| `sw/source/filter/xml` | ODF styles/content/meta bridges and styles-before-content ODT orchestration | Writer XML filter ownership |
+| `sw/source/filter/xml` | ODF styles/content/meta bridges, styles-before-content package orchestration, and the browser Dedicated Worker adapter | Writer XML filter ownership plus explicit browser scheduling adaptation |
 | `sw/source/uibase/docvw`, `ribbar`, `sidebar`, `shells`, `uiview`, and `utlui` | Writer document view, formatting bar, sidebar, command shells, workbench view, and common Writer UI helpers | Matching `sw/source/uibase` regions |
 | `sw/uiconfig/swriter` | Browser declarations for Writer menu/toolbar placement | Writer UI configuration ownership |
 
@@ -109,8 +109,9 @@ not called from document-domain code.
   operation counter.
 - Document snapshots must be serializable independently of React or another
   view library. UI framework objects do not belong in the document model.
-- Expensive parsing, calculation, layout, and export work should run in Web
-  Workers behind versioned message contracts.
+- ODT ZIP/XML import and export run in a Dedicated Worker behind a versioned
+  message contract; later expensive calculation and layout work should follow
+  the same isolation rule.
 - Worker messages and persistence schemas are documented and compatibility
   tested like public APIs.
 - Concurrency rules must specify cancellation, stale result rejection, and

@@ -60,7 +60,7 @@ export interface WriterViewCommandTarget {
   readonly Paste: (arguments_?: unknown) => Promise<void>;
   readonly RequestSelectAll: () => void;
   readonly SaveLocal: () => Promise<void>;
-  readonly SaveOdt: () => void;
+  readonly SaveOdt: () => Promise<void>;
   readonly ToggleHorizontalRuler: () => void;
   readonly ToggleSidebar: () => void;
   readonly ToggleStatusBar: () => void;
@@ -253,8 +253,8 @@ export function createWriterViewCommandRegistry(
     },
     {
       capabilityId: "CAP-0113",
-      /** Starts an ODT Save As operation. @returns Nothing. */
-      execute: (): void => target.SaveOdt(),
+      /** Starts an ODT Save As operation. @returns Completion after worker export. */
+      execute: (): Promise<void> => target.SaveOdt(),
       id: WRITER_COMMAND_IDS.saveOdt,
       invalidates: ["lifecycle"],
       isEnabled: lifecycleEnabled,

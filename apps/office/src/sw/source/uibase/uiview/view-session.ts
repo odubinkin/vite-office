@@ -254,12 +254,13 @@ export class SwView {
     }
   }
 
-  /** Downloads the active document through Writer's ODT filter. @returns Nothing. */
-  public SaveOdt(): void {
+  /** Downloads the active document through Writer's ODT filter. @returns Completion after worker export and download start. */
+  public async SaveOdt(): Promise<void> {
     this.SetStoragePending(true);
     try {
       const document = this.docShell.GetDoc();
       const filename = this.services.createDownloadFilename(document.document.title, ".odt");
+      const bytes = await this.docShell.SerializeOdt();
       this.docShell.Download(
         {
           destinationKind: "download",
@@ -271,13 +272,8 @@ export class SwView {
           readOnly: true,
           sourceKind: "none",
         },
-        /** Serializes and starts the browser download without acknowledging a primary save. @returns Nothing. */
-        () =>
-          this.services.downloadBytes(
-            this.docShell.SerializeOdt(),
-            SwDocShell.ODT_MEDIA_TYPE,
-            filename,
-          ),
+        /** Starts the browser download without acknowledging a primary save. @returns Nothing. */
+        () => this.services.downloadBytes(bytes, SwDocShell.ODT_MEDIA_TYPE, filename),
       );
       this.SetStorageStatus(`ODT download started: ${filename}`);
     } catch (error) {

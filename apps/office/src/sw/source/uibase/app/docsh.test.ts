@@ -3,8 +3,11 @@
 import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import type { DocumentSnapshot } from "../../../../sfx2/source/doc/docfile";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { createWriterSnapshot, type WriterSnapshotState } from "../../core/doc/writer-storage";
 import { createWriterDocument, insertWriterText } from "../../core/doc/writer";
+import type { OdtFilterService } from "../../filter/xml/odt-filter-service";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 import { SwDocShell } from "./docsh";
 
@@ -27,7 +30,7 @@ describe("SwDocShell" /** Groups the bounded document-shell lifecycle. @returns 
       readOnly: false,
       sourceKind: "none",
     });
-    const bytes = shell.SerializeOdt();
+    const bytes = await shell.SerializeOdt();
     expect(new ZipFile(bytes).getEntryNames()).toContain("content.xml");
 
     const empty = shell.InitNew(metadata("New document", "new-document"), "new-p-1");
@@ -59,6 +62,36 @@ describe("SwDocShell" /** Groups the bounded document-shell lifecycle. @returns 
     const shell = new SwDocShell(active);
     await expect(shell.Load(new Uint8Array([1, 2, 3]), metadata("Broken"))).rejects.toThrow();
     expect(shell.GetDoc()).toBe(active);
+  });
+
+  it("rejects an import result superseded by document replacement" /** Verifies the main-thread request generation guard. @returns Completion after stale rejection. */, async () => {
+    let resolveImport: ((snapshot: DocumentSnapshot<WriterSnapshotState>) => void) | undefined;
+    const filter: OdtFilterService = {
+      /** Marks the fake request cancelled without resolving it. @returns Nothing. */
+      Cancel: () => undefined,
+      /** Closes the fake service. @returns Nothing. */
+      Close: () => undefined,
+      /** Provides unused deterministic export bytes. @returns Empty bytes. */
+      Export: async () => new Uint8Array(),
+      /** Defers the candidate snapshot. @returns Pending snapshot. */
+      Import: () =>
+        new Promise(
+          /** Captures the import resolver. @param resolve - Promise resolver. @returns Nothing. */ (
+            resolve,
+          ) => {
+            resolveImport = resolve;
+          },
+        ),
+    };
+    const active = createWriterDocument(metadata(), "p-1");
+    const shell = new SwDocShell(active, undefined, filter);
+    const opening = shell.Open(new Uint8Array([1]), metadata("Incoming"));
+    const replacement = shell.InitNew(metadata("Replacement"), "replacement-p-1");
+    resolveImport?.(
+      createWriterSnapshot(createWriterDocument(metadata("Candidate"), "candidate-p-1")),
+    );
+    await expect(opening).rejects.toMatchObject({ category: "stale" });
+    expect(shell.GetDoc()).toBe(replacement);
   });
 
   it("separates Save, Save As, Export, Download, and recovery acknowledgement" /** Verifies LibreOffice-like primary-medium adoption and non-primary store semantics. @returns Completion after asynchronous medium operations. */, async function separatesMediumOperations(): Promise<void> {
