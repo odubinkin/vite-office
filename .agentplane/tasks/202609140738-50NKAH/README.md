@@ -1,10 +1,12 @@
 ---
 id: "202609140738-50NKAH"
 title: "Fix Writer spaces and structured list paste"
-status: "DOING"
+result_summary: "Fixed immediate repeated-space rendering and structured list Paste with upstream-aligned Writer clipboard and undo ownership."
+risk_level: "low"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +40,16 @@ quality_review:
     - "npm run verify: 210 runtime tests and 79 inventory tests at 100% coverage; 9 Chromium E2E tests passed"
   findings:
     - "Clipboard HTML is sanitized into canonical paragraphs and list metadata, inserted through one compound Writer undo action; Space is normalized at the accelerator boundary and repeated whitespace is preserved only in presentation."
-commit: null
+commit:
+  hash: "9b0d92bc3e9ed6b54c9d2e827370cd697f29d21a"
+  message: "🧪 50NKAH task: record regression verification"
 comments:
   -
     author: "CODER"
     body: "Start: reproduce and fix Stage 4 whitespace projection and structured list Paste regressions using canonical Writer actions."
+  -
+    author: "CODER"
+    body: "Verified: repeated spaces render immediately without accelerator errors, and semantic HTML lists paste as canonical Writer paragraphs with list levels and one-step undo."
 events:
   -
     type: "status"
@@ -63,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609140738-50NKAH"
+  -
+    type: "status"
+    at: "2026-09-14T08:15:50.578Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: repeated spaces render immediately without accelerator errors, and semantic HTML lists paste as canonical Writer paragraphs with list levels and one-step undo."
 doc_version: 3
-doc_updated_at: "2026-09-14T08:14:21.979Z"
+doc_updated_at: "2026-09-14T08:15:50.582Z"
 doc_updated_by: "CODER"
 description: "Follow up Stage 4 by restoring immediate whitespace-preserving projection and multi-paragraph/list-aware native paste without changing canonical SwWrtShell ownership."
 sections:
@@ -153,6 +167,10 @@ sections:
     - Observation: Writer collapsed repeated spaces visually and flattened semantic list HTML during Paste.
       Impact: Ordinary spacing was delayed/collapsed and list items were inserted into one paragraph.
       Resolution: Preserve whitespace in the editable projection, normalize Space accelerators, parse clipboard blocks/lists, and paste them through one compound SwWrtShell undo transaction.
+extensions:
+  implementation_commit:
+    hash: "ef9b3f04e51e3b4d0516608309023d81219e8d39"
+    message: "🚧 50NKAH task: fix Writer spaces and structured list paste"
 id_source: "generated"
 ---
 ## Summary
