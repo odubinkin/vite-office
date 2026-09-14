@@ -1,12 +1,12 @@
 /**
- * @fileoverview Adapts browser key events to the active Writer SfxDispatcher while command
- * ownership remains in persistent view and editing shells.
+ * @fileoverview Adapts browser key events to the active Writer SfxDispatcher without claiming
+ * LibreOffice `textsh.cxx` command-shell ownership.
  */
 
 import { useEffect } from "react";
 
-import { getBrowserShortcut } from "../../../../framework/source/accelerators/keymapping";
-import type { SfxDispatcher } from "../../../../framework/source/dispatch/dispatchprovider";
+import { getBrowserShortcut } from "../../../framework/source/accelerators/keymapping";
+import type { SfxDispatcher } from "../../../framework/source/dispatch/dispatchprovider";
 
 /** Options used by the browser accelerator adapter. */
 export interface WriterShortcutOptions {

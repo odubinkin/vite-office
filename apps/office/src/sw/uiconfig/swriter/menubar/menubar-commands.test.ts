@@ -1,0 +1,63 @@
+/** @fileoverview Verifies Writer placement resources independently from React rendering. */
+import { describe, expect, it } from "vitest";
+
+import { WRITER_COMMAND_IDS, writerMenuCommandIds, writerMenuPlacements } from "./menubar-commands";
+import { writerNumObjectBarItems } from "../toolbar/numobjectbar";
+import { writerStandardBarItems } from "../toolbar/standardbar";
+import { writerTextObjectBarItems } from "../toolbar/textobjectbar";
+
+describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @returns Nothing. */, function defineWriterUiResourceTests(): void {
+  it("preserves supported pinned menu and toolbar ordering without React" /** Verifies menu and toolbar resource ordering. @returns Nothing. */, function validatesPlacementOrder(): void {
+    expect(
+      writerMenuPlacements.map(
+        /** Projects a menu resource identity. @param menu - Top-level menu. @returns Resource identity. */ (
+          menu,
+        ) => menu.id,
+      ),
+    ).toEqual([
+      "file",
+      "edit",
+      "view",
+      "insert",
+      "format",
+      "styles",
+      "table",
+      "tools",
+      "window",
+      "help",
+    ]);
+    expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.bold);
+    expect(
+      writerStandardBarItems
+        .filter(
+          /** Retains command placements. @param item - Toolbar resource item. @returns Whether the item is a command. */ (
+            item,
+          ) => item.kind === "command",
+        )
+        .map(
+          /** Projects a toolbar command identity. @param item - Command placement. @returns Command identity. */ (
+            item,
+          ) => item.commandId,
+        ),
+    ).toEqual([
+      WRITER_COMMAND_IDS.openOdt,
+      WRITER_COMMAND_IDS.saveOdt,
+      WRITER_COMMAND_IDS.cut,
+      WRITER_COMMAND_IDS.copy,
+      WRITER_COMMAND_IDS.paste,
+      WRITER_COMMAND_IDS.undo,
+      WRITER_COMMAND_IDS.redo,
+    ]);
+    expect(
+      writerTextObjectBarItems.some(
+        /** Finds the command-backed paragraph style selector. @param item - Toolbar resource item. @returns Whether it is a command select. */ (
+          item,
+        ) => item.kind === "command-select",
+      ),
+    ).toBe(true);
+    expect(writerNumObjectBarItems).toEqual([
+      { commandId: WRITER_COMMAND_IDS.demote, kind: "command" },
+      { commandId: WRITER_COMMAND_IDS.promote, kind: "command" },
+    ]);
+  });
+});

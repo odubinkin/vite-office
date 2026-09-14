@@ -1,8 +1,9 @@
 /**
- * @fileoverview Provides browser-DOM selection and collapsed-caret primitives at the LibreOffice `sw/source/uibase/wrtsh/select.cxx` ownership boundary without coupling them to React state.
+ * @fileoverview Adapts native browser selections to Writer model positions without claiming
+ * ownership of LibreOffice `sw/source/uibase/wrtsh/select.cxx` model selection behavior.
  */
 
-import type { WriterCursorSelection } from "./wrtsh";
+import type { WriterCursorSelection } from "../../source/uibase/wrtsh/wrtsh";
 
 /** Resolves a rendered editable paragraph from its stable Writer text-node identity. */
 export type WriterParagraphElementResolver = (

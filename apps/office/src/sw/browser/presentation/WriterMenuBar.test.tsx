@@ -5,9 +5,9 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Desktop } from "../../../../framework/source/services/desktop";
-import { createOfficeModuleDescriptors } from "../../../../framework/source/services/modulemanager";
-import { createWriterModuleFactory } from "../../../source/uibase/app/swmodule";
+import { Desktop } from "../../../framework/source/services/desktop";
+import { createOfficeModuleDescriptors } from "../../../framework/source/services/modulemanager";
+import { createWriterModuleFactory } from "../../source/uibase/app/swmodule";
 
 /** Renders the desktop through the same Writer module registration used by the composition root. @returns Configured desktop element. */
 function App(): React.JSX.Element {
@@ -388,5 +388,102 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       "text/plain",
       expect.stringContaining("Paragraph style:"),
     );
+  });
+
+  it("implements roving, popup, submenu, typeahead, escape, and outside-click menu semantics" /** Verifies the primary menu keyboard and dismissal interactions. @returns Nothing. */, function navigatesWriterMenus(): void {
+    render(<App />);
+    const file = screen.getByRole("button", { name: "File" });
+    const edit = screen.getByRole("button", { name: "Edit" });
+    file.focus();
+    fireEvent.keyDown(file, { key: "ArrowRight" });
+    expect(edit).toHaveFocus();
+    expect(edit).toHaveAttribute("tabindex", "0");
+    fireEvent.keyDown(edit, { key: "ArrowDown" });
+    expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: "End" });
+    expect(screen.getByRole("menuitem", { name: "Select All" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menuitem", { name: "Select All" }), { key: "p" });
+    expect(screen.getByRole("menuitem", { name: "Paste" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menuitem", { name: "Paste" }), { key: "Escape" });
+    expect(edit).toHaveFocus();
+    expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    const text = screen.getByRole("menuitem", { name: "Text" });
+    text.focus();
+    fireEvent.keyDown(text, { key: "ArrowRight" });
+    expect(screen.getByRole("menuitemcheckbox", { name: "Bold" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menuitemcheckbox", { name: "Bold" }), { key: "ArrowLeft" });
+    expect(text).toHaveFocus();
+    fireEvent.pointerDown(screen.getByRole("region", { name: "Writer document canvas" }));
+    expect(screen.queryByRole("menu", { name: "Format menu" })).not.toBeInTheDocument();
+  });
+
+  it("covers every keyboard entry and transition in the reusable menu state machine" /** Traverses every supported top-level and popup keyboard transition. @returns Nothing. */, function traversesMenuStateMachine(): void {
+    vi.useFakeTimers();
+    try {
+      render(<App />);
+      const file = screen.getByRole("button", { name: "File" });
+      file.focus();
+      fireEvent.keyDown(file, { key: "ArrowLeft" });
+      expect(screen.getByRole("button", { name: "Help" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("button", { name: "Help" }), { key: "Home" });
+      expect(file).toHaveFocus();
+      fireEvent.keyDown(file, { key: "End" });
+      expect(screen.getByRole("button", { name: "Help" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("button", { name: "Help" }), { key: "Escape" });
+      fireEvent.keyDown(screen.getByRole("button", { name: "Help" }), { key: "Tab" });
+
+      fireEvent.click(file);
+      const firstFileItem = screen.getByRole("menuitem", { name: "New" });
+      firstFileItem.focus();
+      fireEvent.keyDown(firstFileItem, { key: "ArrowDown" });
+      expect(screen.getByRole("menuitem", { name: "Open ODT…" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Open ODT…" }), {
+        key: "ArrowUp",
+      });
+      expect(firstFileItem).toHaveFocus();
+      fireEvent.keyDown(firstFileItem, { key: "End" });
+      expect(screen.getByRole("menuitem", { name: "Save as text…" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Save as text…" }), {
+        key: "Home",
+      });
+      expect(firstFileItem).toHaveFocus();
+      fireEvent.keyDown(file, { key: "ArrowRight" });
+      expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
+      expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
+      fireEvent.pointerDown(screen.getByRole("menuitem", { name: "Cut" }));
+      expect(screen.getByRole("menu", { name: "Edit menu" })).toBeVisible();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: "Tab" });
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: "ArrowRight" });
+      expect(screen.getByRole("menu", { name: "View menu" })).toBeVisible();
+      expect(screen.getByRole("menuitemcheckbox", { name: "Status Bar" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menuitemcheckbox", { name: "Status Bar" }), {
+        key: "ArrowLeft",
+      });
+      expect(screen.getByRole("menuitem", { name: "Cut" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: "c" });
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: "u" });
+      vi.advanceTimersByTime(500);
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Cut" }), { key: " " });
+      expect(screen.queryByRole("menu", { name: "Edit menu" })).not.toBeInTheDocument();
+
+      const view = screen.getByRole("button", { name: "View" });
+      fireEvent.keyDown(view, { key: "ArrowUp" });
+      expect(screen.getByRole("menuitemcheckbox", { name: "Sidebar" })).toHaveFocus();
+      fireEvent.click(screen.getByRole("menuitem", { name: "Rulers" }));
+      const horizontal = screen.getByRole("menuitemcheckbox", { name: "Horizontal ruler" });
+      expect(horizontal).toHaveFocus();
+      fireEvent.keyDown(horizontal, { key: "Escape" });
+      expect(screen.getByRole("menuitem", { name: "Rulers" })).toHaveFocus();
+      fireEvent.click(screen.getByRole("menuitem", { name: "Rulers" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Rulers" }));
+
+      const insert = screen.getByRole("button", { name: "Insert" });
+      fireEvent.keyDown(insert, { key: "ArrowDown" });
+      expect(screen.getByRole("menu", { name: "Insert menu" })).toBeVisible();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

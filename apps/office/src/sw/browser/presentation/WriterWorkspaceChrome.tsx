@@ -1,5 +1,6 @@
 /**
- * @fileoverview Defines the durable LibreOffice-style structural regions around the browser Writer document canvas.
+ * @fileoverview Defines browser workspace chrome around the Writer document projection without
+ * claiming LibreOffice `mainwn.cxx` progress-window ownership.
  */
 
 import type { ReactNode } from "react";

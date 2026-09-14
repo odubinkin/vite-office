@@ -13,7 +13,7 @@ import {
   getWriterSameParagraphSelection,
   restoreWriterCollapsedCaret,
   restoreWriterDomSelection,
-} from "../wrtsh/select";
+} from "../../../browser/editor/writer-selection";
 import type { WriterCursorSelection, WriterParagraphTextRange } from "../wrtsh/wrtsh";
 
 /** Stores one browser caret endpoint used to extend a pointer selection across Writer paragraph editing hosts. */

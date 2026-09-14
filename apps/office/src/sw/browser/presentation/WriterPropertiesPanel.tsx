@@ -1,9 +1,10 @@
 /**
- * @fileoverview Displays the focused Writer paragraph's implemented formatting in the durable properties sidebar without claiming unimplemented layout controls.
+ * @fileoverview Displays focused paragraph formatting in the browser Properties panel without
+ * claiming LibreOffice Writer Inspector ownership.
  */
 
-import type { WriterParagraphAlignment, WriterParagraphStyle } from "../../core/doc/writer";
-import type { WriterParagraphListKind } from "../../core/doc/list";
+import type { WriterParagraphAlignment, WriterParagraphStyle } from "../../source/core/doc/writer";
+import type { WriterParagraphListKind } from "../../source/core/doc/list";
 
 /** Maps serializable alignment literals to concise reader-facing property values. */
 const alignmentLabels: Readonly<Record<WriterParagraphAlignment, string>> = {

@@ -9,7 +9,7 @@ import {
   getWriterSameParagraphSelection,
   restoreWriterCollapsedCaret,
   restoreWriterDomSelection,
-} from "./select";
+} from "./writer-selection";
 
 afterEach(
   /** Resets test-owned browser selection and DOM fixtures. @returns Nothing; the JSDOM body becomes empty. */ function resetWriterSelectionFixture(): void {

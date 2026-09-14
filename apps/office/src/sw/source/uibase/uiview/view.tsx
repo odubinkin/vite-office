@@ -1,75 +1,44 @@
-/**
- * @fileoverview Renders the Writer view as a React projection of a persistent SwView session.
- */
-
+/** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
 import { useCallback, useSyncExternalStore } from "react";
 
-import type {
-  WriterCharacterAttributes,
-  WriterCharacterFormat,
-  WriterParagraphAlignment,
-  WriterParagraphListKind,
-  WriterParagraphStyle,
-} from "../../core/doc/writer";
-import { readWriterClipboardPaste, createWriterClipboardSelection } from "../dochdl/swdtflvr";
-import { WriterPlainTextEditor } from "../docvw/edtwin";
-import { WriterWorkspaceChrome } from "../app/mainwn";
-import { WriterParagraphFormattingToolbar } from "../ribbar/inputwin";
-import { useWriterCommandShortcuts } from "../shells/textsh";
-import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
+import { WriterCommandToolbar } from "../../../browser/presentation/WriterCommandToolbar";
+import { WriterFormattingToolbar } from "../../../browser/presentation/WriterFormattingToolbar";
+import { WriterMenuBar } from "../../../browser/presentation/WriterMenuBar";
+import { WriterParagraphProperties } from "../../../browser/presentation/WriterPropertiesPanel";
+import { WriterWorkspaceChrome } from "../../../browser/presentation/WriterWorkspaceChrome";
+import { useWriterCommandShortcuts } from "../../../browser/accelerators/writer-shortcuts";
 import {
   getWriterCollapsedParagraphCaret,
   getWriterDomSelection,
   getWriterSameParagraphSelection,
-} from "../wrtsh/select";
-import { WriterMenuBar } from "../../../uiconfig/swriter/menubar/menubar";
+} from "../../../browser/editor/writer-selection";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
-import { WriterCommandToolbar } from "../../../uiconfig/swriter/toolbar/standardbar";
+import { readWriterClipboardPaste, createWriterClipboardSelection } from "../dochdl/swdtflvr";
+import { WriterPlainTextEditor } from "../docvw/edtwin";
+import type { WriterParagraphTextRange } from "../wrtsh/wrtsh";
 import type {
   SwView,
   WriterCutCommandArguments,
   WriterPasteCommandArguments,
 } from "./view-session";
-import type { WriterParagraphTextRange } from "../wrtsh/wrtsh";
 
-/** Describes the persistent view selected by the application frame. */
+/** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
-  /** Whether Writer is the current suite and may receive browser shortcuts. */
   readonly isActive: boolean;
-  /** Persistent Writer view created by the module composition root. */
   readonly view: SwView;
 }
 
-/**
- * Projects immutable SwView snapshots and forwards UI intent to stable command IDs.
- *
- * @param props - Active state and persistent Writer view.
- * @param props.isActive - Whether browser shortcuts may dispatch.
- * @param props.view - External-store view that outlives React remounts.
- * @returns Writer workspace presentation.
- */
+/** Projects one Writer view through browser presenters. @param props - Active view selection. @returns Writer workspace. */
 export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React.JSX.Element {
   const snapshot = useSyncExternalStore(view.Subscribe, view.GetSnapshot, view.GetSnapshot);
   const wrtShell = view.GetWrtShell();
-  const characterAttributes: WriterCharacterAttributes = {
-    bold: view.QueryState(WRITER_COMMAND_IDS.bold).checked === true,
-    italic: view.QueryState(WRITER_COMMAND_IDS.italic).checked === true,
-    underline: view.QueryState(WRITER_COMMAND_IDS.underline).checked === true,
-  };
 
-  /** Resolves DOM-only selection data before dispatching a shell command. @param commandId - Stable Writer command. @returns Typed command arguments or undefined. */
   const resolveCommandArguments = useCallback(
-    /** Resolves browser-only arguments for one command. @param commandId - Stable Writer command. @returns Adapted arguments or undefined. */
+    /** Resolves browser selection-dependent command arguments. @param commandId - Stable command identity. @returns Browser-derived command arguments. */
     function resolveWriterCommandArguments(commandId: string): unknown {
       const selection = globalThis.getSelection();
       const cursor = getWriterDomSelection(selection);
       if (cursor !== undefined) wrtShell.SetSelection(cursor);
-      if (
-        commandId === WRITER_COMMAND_IDS.bold ||
-        commandId === WRITER_COMMAND_IDS.italic ||
-        commandId === WRITER_COMMAND_IDS.underline
-      )
-        return undefined;
       if (commandId === WRITER_COMMAND_IDS.copy)
         return { selection: createWriterClipboardSelection(selection) };
       if (commandId === WRITER_COMMAND_IDS.cut) return createWriterCutCommandArguments(selection);
@@ -80,85 +49,21 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
     [wrtShell],
   );
 
-  /** Executes one stable command through the frame shell stack. @param commandId - Writer command identity. @param arguments_ - Optional DOM-adapted arguments. @returns Nothing. */
-  const executeCommand = useCallback(
-    /** Dispatches one Writer command. @param commandId - Stable command ID. @param arguments_ - Optional adapted arguments. @returns Nothing. */
-    function executeWriterCommand(commandId: string, arguments_?: unknown): void {
-      view.Execute(commandId, arguments_ ?? resolveCommandArguments(commandId));
-    },
-    [resolveCommandArguments, view],
-  );
-
   useWriterCommandShortcuts({
     dispatcher: view.GetViewFrame().GetDispatcher(),
     isActive,
     resolveArguments: resolveCommandArguments,
   });
 
-  /** Maps a direct character format to its stable command identity. @param format - Requested Writer format. @returns Nothing. */
-  function executeCharacterFormat(format: WriterCharacterFormat): void {
-    executeCommand(
-      {
-        bold: WRITER_COMMAND_IDS.bold,
-        italic: WRITER_COMMAND_IDS.italic,
-        underline: WRITER_COMMAND_IDS.underline,
-      }[format],
-    );
-  }
-
-  /** Maps paragraph alignment to its stable command identity. @param alignment - Requested alignment. @returns Nothing. */
-  function executeAlignment(alignment: WriterParagraphAlignment): void {
-    executeCommand(
-      {
-        center: WRITER_COMMAND_IDS.alignCenter,
-        justify: WRITER_COMMAND_IDS.alignJustify,
-        left: WRITER_COMMAND_IDS.alignLeft,
-        right: WRITER_COMMAND_IDS.alignRight,
-      }[alignment],
-    );
-  }
-
-  /** Maps paragraph style to its stable command identity. @param style - Requested style. @returns Nothing. */
-  function executeStyle(style: WriterParagraphStyle): void {
-    executeCommand(
-      style === "default"
-        ? WRITER_COMMAND_IDS.defaultParagraphStyle
-        : WRITER_COMMAND_IDS.headingOne,
-    );
-  }
-
-  /** Maps default-list state to its stable command identity. @param kind - Requested list kind. @returns Nothing. */
-  function executeListKind(kind: WriterParagraphListKind): void {
-    executeCommand(
-      {
-        bullet: WRITER_COMMAND_IDS.unorderedList,
-        none: WRITER_COMMAND_IDS.removeBullets,
-        numbered: WRITER_COMMAND_IDS.orderedList,
-      }[kind],
-    );
-  }
-
-  /** Maps a list-level request to its stable command identity. @param command - Promote or Demote request. @returns Nothing. */
-  function executeListLevel(command: "demote" | "promote"): void {
-    executeCommand(command === "demote" ? WRITER_COMMAND_IDS.demote : WRITER_COMMAND_IDS.promote);
-  }
-
-  /** Creates a UI callback that ignores presentation events and dispatches only a stable command ID. @param commandId - Stable Writer command. @returns Event-independent command callback. */
-  function createCommandHandler(commandId: string): () => void {
-    return /** Executes the captured command through the active view. @returns Nothing. */ function executeUiCommand(): void {
-      executeCommand(commandId);
-    };
-  }
-
-  /** Dispatches a native Cut after its clipboard payload was prepared. @param range - Same-paragraph selection range. @returns Nothing. */
+  /** Dispatches an already browser-handled native Cut. @param range - Selected model range. @returns Nothing. */
   function executeNativeCut(range: WriterParagraphTextRange): void {
-    executeCommand(WRITER_COMMAND_IDS.cut, { clipboardHandled: true, range });
+    view.Execute(WRITER_COMMAND_IDS.cut, { clipboardHandled: true, range });
   }
 
-  /** Dispatches a native Paste after browser clipboard parsing. @param range - Replacement range. @param clipboardData - Native clipboard payload. @returns Nothing. */
+  /** Dispatches an already browser-handled native Paste. @param range - Replacement range. @param clipboardData - Native clipboard data. @returns Nothing. */
   function executeNativePaste(range: WriterParagraphTextRange, clipboardData: DataTransfer): void {
     const paste = readWriterClipboardPaste(clipboardData);
-    executeCommand(WRITER_COMMAND_IDS.paste, {
+    view.Execute(WRITER_COMMAND_IDS.paste, {
       clipboardHandled: true,
       range,
       ...(paste === undefined ? {} : { paste }),
@@ -170,59 +75,15 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
       <WriterWorkspaceChrome
         documentTitle={snapshot.documentState.title}
         formattingToolbar={
-          <WriterParagraphFormattingToolbar
-            alignment={snapshot.activeParagraph.alignment}
-            characterAttributes={characterAttributes}
-            listKind={snapshot.activeParagraph.list.kind}
-            listLevel={snapshot.activeParagraph.list.level}
-            onAlignmentChange={executeAlignment}
-            onCharacterFormatChange={executeCharacterFormat}
-            onListKindChange={executeListKind}
-            onListLevelChange={executeListLevel}
-            onStyleChange={executeStyle}
-            style={snapshot.activeParagraph.style}
+          <WriterFormattingToolbar
+            commandSource={view}
+            resolveArguments={resolveCommandArguments}
           />
         }
         isHorizontalRulerVisible={snapshot.isHorizontalRulerVisible}
         isPropertiesSidebarVisible={snapshot.isPropertiesSidebarVisible}
         isStatusBarVisible={snapshot.isStatusBarVisible}
-        menuBar={
-          <WriterMenuBar
-            alignment={snapshot.activeParagraph.alignment}
-            canRedo={view.QueryState(WRITER_COMMAND_IDS.redo).enabled}
-            canUndo={view.QueryState(WRITER_COMMAND_IDS.undo).enabled}
-            characterAttributes={characterAttributes}
-            isHorizontalRulerVisible={snapshot.isHorizontalRulerVisible}
-            isSidebarVisible={snapshot.isPropertiesSidebarVisible}
-            isStatusBarVisible={snapshot.isStatusBarVisible}
-            isStoragePending={!view.QueryState(WRITER_COMMAND_IDS.saveOdt).enabled}
-            listKind={snapshot.activeParagraph.list.kind}
-            listLevel={snapshot.activeParagraph.list.level}
-            onAlignmentChange={executeAlignment}
-            onCharacterFormatChange={executeCharacterFormat}
-            onCopy={createCommandHandler(WRITER_COMMAND_IDS.copy)}
-            onCut={createCommandHandler(WRITER_COMMAND_IDS.cut)}
-            onDownload={createCommandHandler(WRITER_COMMAND_IDS.exportText)}
-            onHorizontalRulerVisibilityChange={createCommandHandler(
-              WRITER_COMMAND_IDS.toggleHorizontalRuler,
-            )}
-            onListKindChange={executeListKind}
-            onListLevelChange={executeListLevel}
-            onLoad={createCommandHandler(WRITER_COMMAND_IDS.openLocal)}
-            onNew={createCommandHandler(WRITER_COMMAND_IDS.newDocument)}
-            onOpenOdt={createCommandHandler(WRITER_COMMAND_IDS.openOdt)}
-            onPaste={createCommandHandler(WRITER_COMMAND_IDS.paste)}
-            onRedo={createCommandHandler(WRITER_COMMAND_IDS.redo)}
-            onSave={createCommandHandler(WRITER_COMMAND_IDS.saveLocal)}
-            onSaveOdt={createCommandHandler(WRITER_COMMAND_IDS.saveOdt)}
-            onSelectAll={createCommandHandler(WRITER_COMMAND_IDS.selectAll)}
-            onSidebarVisibilityChange={createCommandHandler(WRITER_COMMAND_IDS.toggleSidebar)}
-            onStatusBarVisibilityChange={createCommandHandler(WRITER_COMMAND_IDS.toggleStatusBar)}
-            onStyleChange={executeStyle}
-            onUndo={createCommandHandler(WRITER_COMMAND_IDS.undo)}
-            style={snapshot.activeParagraph.style}
-          />
-        }
+        menuBar={<WriterMenuBar commandSource={view} resolveArguments={resolveCommandArguments} />}
         propertiesSidebar={
           <WriterParagraphProperties
             alignment={snapshot.activeParagraph.alignment}
@@ -233,18 +94,7 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
         }
         status={snapshot.storageStatus}
         toolbar={
-          <WriterCommandToolbar
-            canRedo={view.QueryState(WRITER_COMMAND_IDS.redo).enabled}
-            canUndo={view.QueryState(WRITER_COMMAND_IDS.undo).enabled}
-            isStoragePending={!view.QueryState(WRITER_COMMAND_IDS.saveOdt).enabled}
-            onCopy={createCommandHandler(WRITER_COMMAND_IDS.copy)}
-            onCut={createCommandHandler(WRITER_COMMAND_IDS.cut)}
-            onOpenOdt={createCommandHandler(WRITER_COMMAND_IDS.openOdt)}
-            onPaste={createCommandHandler(WRITER_COMMAND_IDS.paste)}
-            onRedo={createCommandHandler(WRITER_COMMAND_IDS.redo)}
-            onSaveOdt={createCommandHandler(WRITER_COMMAND_IDS.saveOdt)}
-            onUndo={createCommandHandler(WRITER_COMMAND_IDS.undo)}
-          />
+          <WriterCommandToolbar commandSource={view} resolveArguments={resolveCommandArguments} />
         }
       >
         <WriterPlainTextEditor
@@ -255,7 +105,10 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
           onCompositionStart={wrtShell.StartComposition.bind(wrtShell)}
           onCompositionUpdate={wrtShell.UpdateComposition.bind(wrtShell)}
           onParagraphFocus={wrtShell.FocusParagraph.bind(wrtShell)}
-          onSelectAll={createCommandHandler(WRITER_COMMAND_IDS.selectAll)}
+          onSelectAll={
+            /** Dispatches document-wide selection from the editor adapter. @returns Dispatch result discarded by React. */ () =>
+              view.Execute(WRITER_COMMAND_IDS.selectAll)
+          }
           onSelectionChange={wrtShell.SetSelection.bind(wrtShell)}
           onTextChange={wrtShell.InsertText.bind(wrtShell)}
           onTextCut={executeNativeCut}
@@ -268,7 +121,7 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
   );
 }
 
-/** Resolves explicit Paste targeting from DOM selection or the active shell paragraph. @param selection - Current DOM selection. @param activeParagraph - Shell-selected fallback paragraph. @returns Same-paragraph model range. */
+/** Resolves a paste target from DOM selection or the active paragraph. @param selection - Current browser selection. @param activeParagraph - Shell fallback paragraph. @returns Model text range. */
 function getWriterPasteRange(
   selection: Selection | null,
   activeParagraph: Readonly<{ id: string; text: string }>,
@@ -285,7 +138,7 @@ function getWriterPasteRange(
     : { end: caret.offset, paragraphId: caret.paragraphId, start: caret.offset };
 }
 
-/** Creates exact-optional Cut arguments from the browser selection. @param selection - Current DOM selection. @returns Sanitized command arguments. */
+/** Creates exact-optional Cut arguments. @param selection - Current browser selection. @returns Sanitized arguments. */
 function createWriterCutCommandArguments(selection: Selection | null): WriterCutCommandArguments {
   const range = getWriterSameParagraphSelection(selection);
   const clipboardSelection = createWriterClipboardSelection(selection);

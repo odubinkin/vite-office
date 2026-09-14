@@ -213,6 +213,42 @@ describe("command registry" /**
       },
     ).toThrowError();
     expect(
+      /** Attempts check-command registration without boolean state. @returns Invalid registry result; creation throws. */ () =>
+        createCommandRegistry([
+          {
+            execute:
+              /** Returns nothing for invalid registration fixtures. @returns Nothing. */ (): void =>
+                undefined,
+            id: "invalid.check",
+            label: "Invalid check",
+            presentation: {
+              labelKey: "commands.invalid.check",
+              placements: [],
+              semantics: "check",
+              stateType: "none",
+            },
+          },
+        ]),
+    ).toThrow("Check commands require boolean state.");
+    expect(
+      /** Attempts radio-command registration without radio state. @returns Invalid registry result; creation throws. */ () =>
+        createCommandRegistry([
+          {
+            execute:
+              /** Returns nothing for invalid registration fixtures. @returns Nothing. */ (): void =>
+                undefined,
+            id: "invalid.radio",
+            label: "Invalid radio",
+            presentation: {
+              labelKey: "commands.invalid.radio",
+              placements: [],
+              semantics: "radio",
+              stateType: "none",
+            },
+          },
+        ]),
+    ).toThrow("Radio commands require boolean or value state.");
+    expect(
       /**
        * Attempts duplicate command identity registration.
        *
@@ -285,5 +321,49 @@ describe("command registry" /**
         return normalizeCommandShortcut("Ctrl++K");
       },
     ).toThrowError();
+  });
+
+  it("publishes pending and error state for asynchronous commands" /** Verifies pending and normalized error state for asynchronous execution. @returns Promise resolved after both rejection shapes are observed. */, async function tracksAsyncState(): Promise<void> {
+    const dispatcher = new SfxDispatcher();
+    const shell = createCommandShell(
+      {},
+      createCommandRegistry([
+        {
+          execute:
+            /** Rejects after one microtask to expose pending state. @returns Rejected command promise. */ async (): Promise<void> => {
+              await Promise.resolve();
+              throw new Error("Denied");
+            },
+          id: "shared.async",
+          label: "Async",
+          presentation: {
+            labelKey: "commands.shared.async",
+            placements: ["toolbar/standard"],
+            semantics: "action",
+            stateType: "none",
+          },
+        },
+        {
+          execute:
+            /** Rejects with a non-Error value to verify normalization. @returns Rejected command promise. */ async (): Promise<void> =>
+              Promise.reject("String denied"),
+          id: "shared.async-string",
+          label: "Async string",
+        },
+      ]),
+    );
+    dispatcher.Push(shell);
+    const result = dispatcher.Execute("shared.async");
+    expect(dispatcher.QueryState("shared.async")).toMatchObject({ enabled: true, pending: true });
+    if (result.status !== "executed") throw new Error("Async command must execute.");
+    await result.value;
+    expect(dispatcher.QueryState("shared.async")).toEqual({ enabled: true, error: "Denied" });
+    const stringResult = dispatcher.Execute("shared.async-string");
+    if (stringResult.status !== "executed") throw new Error("Async string command must execute.");
+    await stringResult.value;
+    expect(dispatcher.QueryState("shared.async-string")).toEqual({
+      enabled: true,
+      error: "String denied",
+    });
   });
 });

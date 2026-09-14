@@ -24,7 +24,7 @@ The command adapter is `SwWrtShell.ToggleCharacterFormat`, backed by
 `SwUndoAttr` and the command descriptors in `writercommands.ts`; the model is mapped to
 `sw/source/core/txtnode/ndtxt.cxx`, `ndhints.cxx`, and `txatbase.cxx`. It
 deliberately separates model range formatting from browser DOM selection conversion in
-[`select.ts`](../../apps/office/src/sw/source/uibase/wrtsh/select.ts).
+[`writer-selection.ts`](../../apps/office/src/sw/browser/editor/writer-selection.ts).
 
 ## Clipboard and accessibility
 

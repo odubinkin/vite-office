@@ -84,7 +84,7 @@ describe("App" /**
     render(<App />);
 
     expect(screen.getByRole("region", { name: "Writer workspace" })).toBeVisible();
-    expect(screen.getByRole("navigation", { name: "Writer menu bar" })).toBeVisible();
+    expect(screen.getByRole("menubar", { name: "Writer menu bar" })).toBeVisible();
     expect(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).toBeVisible();
     expect(
       within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).queryByRole(
@@ -195,7 +195,7 @@ describe("App" /**
     selectWriterParagraphText(editor);
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Text" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Italic" }));
+    fireEvent.click(screen.getByRole("menuitemcheckbox", { name: "Italic" }));
     expect(editor.querySelector("strong em")).toHaveTextContent("Body");
     selectWriterParagraphText(editor);
     fireEvent.keyDown(window, { ctrlKey: true, key: "u" });

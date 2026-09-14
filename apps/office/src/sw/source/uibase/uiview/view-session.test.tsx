@@ -192,7 +192,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Text" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Bold" }));
+    fireEvent.click(screen.getByRole("menuitemcheckbox", { name: "Bold" }));
     fireEvent.keyDown(window, { ctrlKey: true, key: "b" });
     expect(
       execute.mock.calls

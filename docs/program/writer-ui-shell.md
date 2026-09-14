@@ -5,8 +5,8 @@ LibreOffice Writer while retaining Vite Office's existing indigo, slate, rounded
 and accessible design language. It is not a pixel-perfect copy of the native
 application and does not claim visual or command parity.
 
-[`mainwn`](../../apps/office/src/sw/source/uibase/app/mainwn.tsx)
-defines the durable UI placement contract:
+[`WriterWorkspaceChrome`](../../apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx)
+defines the browser-only workspace regions:
 
 - a Writer menu bar with the expected top-level menu locations;
 - standard and formatting toolbars;
@@ -15,11 +15,11 @@ defines the durable UI placement contract:
 - a right properties sidebar that the **View → Sidebar** command can hide; and
 - a Writer status bar that **View → Status Bar** can hide.
 
-Implemented commands are placed in the standard toolbar through
-[`standardbar`](../../apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx):
-browser-local save/load and undo/redo. The functional
-[`menubar`](../../apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx) also puts
-each enabled command in its matching Writer menu. See
+Implemented command placement comes from the declarative
+[`standardbar`](../../apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.ts)
+and [`menubar`](../../apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts)
+resources. Generic React presenters live under `sw/browser/presentation` and
+query the shared dispatcher descriptor/state contract. See
 [Writer command placement](writer-command-placement.md) for pinned provenance.
 **Edit → Select All** is a direct browser selection action: it selects the
 complete current page-integrated document body without changing its serialized
@@ -51,7 +51,9 @@ Format menu, which follows Writer menubar placement without claiming
 LibreOffice drag, range, or tracked-change movement. Whole-paragraph removal
 has no browser UI until keyboard/range editing is explicitly implemented.
 
-Every visible top-level menu is an interactive trigger. File, Edit, View,
+Every visible top-level menu is an interactive trigger with roving focus,
+arrow/Home/End navigation, Escape restoration, submenu focus, typeahead, and
+outside-click dismissal. File, Edit, View,
 Format, and Styles expose their bounded commands; Insert, Table, Tools, Window,
 and Help instead open an explicit unavailable-command state until a separately
 mapped feature task implements a command in that location. This prevents a

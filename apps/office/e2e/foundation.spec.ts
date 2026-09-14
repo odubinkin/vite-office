@@ -5,7 +5,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-test("launcher routes to full-page suite workspaces with accessible application chrome" /**
+test("Writer menu keyboard navigation and accessible application chrome" /**
  * Verifies the launcher, dedicated Writer and Calc pages, accessible editing, keyboard navigation, and configured axe rules.
  *
  * @param root0 - Playwright fixture object provided for the isolated test.
@@ -27,9 +27,19 @@ test("launcher routes to full-page suite workspaces with accessible application 
   await expect(page.getByRole("region", { name: "Writer workspace" })).toBeVisible();
   await expect(page.locator("main#workspace")).toBeVisible();
   await expect(page.getByText("Vite Office")).toHaveCount(0);
-  const writerMenuBar = page.getByRole("navigation", { name: "Writer menu bar" });
+  const writerMenuBar = page.getByRole("menubar", { name: "Writer menu bar" });
   await expect(writerMenuBar).toBeVisible();
   await expect(writerMenuBar).toHaveCSS("overflow-x", "visible");
+  const fileMenuButton = page.getByRole("button", { name: "File" });
+  await fileMenuButton.focus();
+  await fileMenuButton.press("ArrowRight");
+  await expect(page.getByRole("button", { name: "Edit" })).toBeFocused();
+  await page.getByRole("button", { name: "Edit" }).press("ArrowDown");
+  await expect(page.getByRole("menuitem", { name: "Cut" })).toBeFocused();
+  await page.getByRole("menuitem", { name: "Cut" }).press("End");
+  await expect(page.getByRole("menuitem", { name: "Select All" })).toBeFocused();
+  await page.getByRole("menuitem", { name: "Select All" }).press("Escape");
+  await expect(page.getByRole("button", { name: "Edit" })).toBeFocused();
   await page.getByRole("button", { name: "File" }).click();
   await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
   await page.getByRole("button", { name: "Insert" }).click();

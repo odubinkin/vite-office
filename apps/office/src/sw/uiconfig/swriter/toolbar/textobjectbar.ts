@@ -1,19 +1,23 @@
-/**
- * @fileoverview Declares the initial browser Writer list controls at the pinned `sw/uiconfig/swriter/toolbar/textobjectbar` ownership boundary.
- */
+/** @fileoverview Declares the supported subset of pinned Writer `textobjectbar.xml` placement data. */
+import { WRITER_COMMAND_IDS } from "../menubar/menubar-commands";
+import type { WriterToolbarItemPlacement } from "../ui-resource";
 
-/** Describes one default-list control placed after paragraph alignment in the Writer text-object toolbar. */
-export interface WriterTextObjectBarListCommand {
-  /** Supported list presentation selected by the toolbar control. */
-  readonly listKind: "bullet" | "numbered";
-  /** Stable accessible name shown in the browser toolbar. */
-  readonly label: string;
-  /** LibreOffice UNO command retained for parity evidence and later typed dispatch. */
-  readonly unoCommand: ".uno:DefaultBullet" | ".uno:DefaultNumbering";
-}
-
-/** Lists default bullet and numbering controls in their pinned Writer toolbar order. */
-export const writerTextObjectBarListCommands: readonly WriterTextObjectBarListCommand[] = [
-  { label: "Unordered List", listKind: "bullet", unoCommand: ".uno:DefaultBullet" },
-  { label: "Ordered List", listKind: "numbered", unoCommand: ".uno:DefaultNumbering" },
+export const writerTextObjectBarItems: readonly WriterToolbarItemPlacement[] = [
+  {
+    kind: "command-select",
+    label: "Paragraph style",
+    options: [WRITER_COMMAND_IDS.defaultParagraphStyle, WRITER_COMMAND_IDS.headingOne],
+  },
+  { kind: "unavailable-control", label: "Font name", value: "System font" },
+  { commandId: WRITER_COMMAND_IDS.bold, kind: "command" },
+  { commandId: WRITER_COMMAND_IDS.italic, kind: "command" },
+  { commandId: WRITER_COMMAND_IDS.underline, kind: "command" },
+  { kind: "separator" },
+  { commandId: WRITER_COMMAND_IDS.alignLeft, kind: "command" },
+  { commandId: WRITER_COMMAND_IDS.alignCenter, kind: "command" },
+  { commandId: WRITER_COMMAND_IDS.alignRight, kind: "command" },
+  { commandId: WRITER_COMMAND_IDS.alignJustify, kind: "command" },
+  { kind: "separator" },
+  { commandId: WRITER_COMMAND_IDS.unorderedList, kind: "command" },
+  { commandId: WRITER_COMMAND_IDS.orderedList, kind: "command" },
 ];

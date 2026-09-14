@@ -5,6 +5,7 @@
 
 import {
   createCommandShell,
+  type CommandDefinition,
   type CommandDispatchResult,
   type CommandState,
   type OfficeFrame,
@@ -204,6 +205,11 @@ export class SwView {
   /** Queries enabled/checked/value state from the same resolving shell used for execution. @param commandId - Stable command identity. @returns Current command state. */
   public QueryState(commandId: string): CommandState {
     return this.GetDispatcher().QueryState(commandId);
+  }
+
+  /** Returns the same resolved descriptor used by every presentation surface. @param commandId - Stable command identity. @returns Resolved descriptor or undefined. */
+  public QueryCommand(commandId: string): CommandDefinition<unknown, unknown, unknown> | undefined {
+    return this.GetDispatcher().QueryDispatch(commandId)?.command;
   }
 
   /** Creates a new document through the existing document shell. @returns Nothing. */

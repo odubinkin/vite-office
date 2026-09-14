@@ -1,50 +1,6 @@
-/**
- * @fileoverview Declares the browser Writer top-level menu order from the LibreOffice Writer `sw/uiconfig/swriter/menubar` ownership boundary without reproducing native XML resources.
- */
+/** @fileoverview Declares the supported Writer menu hierarchy in pinned LibreOffice resource order. */
+import type { WriterMenuPlacement } from "../ui-resource";
 
-/** Identifies one visible top-level Writer menu in the pinned Writer menu-bar order. */
-export type WriterTopLevelMenu =
-  "edit" | "file" | "format" | "help" | "insert" | "styles" | "table" | "tools" | "view" | "window";
-
-/** Describes one browser-visible Writer menu placement derived from its pinned LibreOffice configuration region. */
-export interface WriterMenuPlacement {
-  /** Stable literal used to identify the Writer menu and its popup. */
-  readonly id: WriterTopLevelMenu;
-  /** Reader-facing top-level Writer menu title. */
-  readonly label: string;
-}
-
-/** Describes one current default-list command positioned in Writer's Format → Bullets and Numbering menu. */
-export interface WriterBulletsAndNumberingMenuCommand {
-  /** Supported list presentation requested by the command. */
-  readonly listKind: "bullet" | "none" | "numbered";
-  /** Stable accessible label derived from the matching Writer command. */
-  readonly label: string;
-  /** LibreOffice UNO command retained for parity evidence and later dispatch expansion. */
-  readonly unoCommand: ".uno:DefaultBullet" | ".uno:DefaultNumbering" | ".uno:RemoveBullets";
-}
-
-/** Describes one Writer list-level command placed after default list commands in the Bullets and Numbering submenu. */
-export interface WriterListLevelMenuCommand {
-  /** Semantic level transition applied to the focused Writer list paragraph. */
-  readonly command: "demote" | "promote";
-  /** Stable accessible command label matching the pinned Writer command. */
-  readonly label: string;
-  /** LibreOffice UNO command retained for parity evidence and later dispatch expansion. */
-  readonly unoCommand: ".uno:DecrementLevel" | ".uno:IncrementLevel";
-}
-
-/** Describes one current user-executable command and its owning capability record. */
-export interface WriterUserCommandInventoryRecord {
-  /** Stable runtime command identity independent of its menu or toolbar placement. */
-  readonly id: string;
-  /** Current accessible command label. */
-  readonly label: string;
-  /** Domain-agnostic capability record that classifies this command. */
-  readonly capabilityId: `CAP-${string}`;
-}
-
-/** Stable command IDs for every current Writer menu, toolbar, and shortcut action. */
 export const WRITER_COMMAND_IDS = {
   alignCenter: "writer.format.align-center",
   alignJustify: "writer.format.justify",
@@ -77,71 +33,166 @@ export const WRITER_COMMAND_IDS = {
   unorderedList: "writer.list.default-bullet",
 } as const;
 
-/** Complete Stage 0 inventory of current Writer runtime command IDs. */
-export const writerUserCommands: readonly WriterUserCommandInventoryRecord[] = [
-  { capabilityId: "CAP-0112", id: WRITER_COMMAND_IDS.alignCenter, label: "Align center" },
-  { capabilityId: "CAP-0112", id: WRITER_COMMAND_IDS.alignJustify, label: "Justify paragraph" },
-  { capabilityId: "CAP-0112", id: WRITER_COMMAND_IDS.alignLeft, label: "Align left" },
-  { capabilityId: "CAP-0112", id: WRITER_COMMAND_IDS.alignRight, label: "Align right" },
-  { capabilityId: "CAP-0109", id: WRITER_COMMAND_IDS.bold, label: "Bold" },
-  { capabilityId: "CAP-0106", id: WRITER_COMMAND_IDS.copy, label: "Copy" },
-  { capabilityId: "CAP-0110", id: WRITER_COMMAND_IDS.cut, label: "Cut" },
-  {
-    capabilityId: "CAP-0112",
-    id: WRITER_COMMAND_IDS.defaultParagraphStyle,
-    label: "Default Paragraph Style",
-  },
-  { capabilityId: "CAP-0107", id: WRITER_COMMAND_IDS.demote, label: "Demote" },
-  { capabilityId: "CAP-0101", id: WRITER_COMMAND_IDS.exportText, label: "Save as text" },
-  { capabilityId: "CAP-0112", id: WRITER_COMMAND_IDS.headingOne, label: "Heading 1" },
-  { capabilityId: "CAP-0109", id: WRITER_COMMAND_IDS.italic, label: "Italic" },
-  { capabilityId: "CAP-0114", id: WRITER_COMMAND_IDS.newDocument, label: "New" },
-  { capabilityId: "CAP-0114", id: WRITER_COMMAND_IDS.openLocal, label: "Open local copy" },
-  { capabilityId: "CAP-0113", id: WRITER_COMMAND_IDS.openOdt, label: "Open ODT" },
-  { capabilityId: "CAP-0105", id: WRITER_COMMAND_IDS.orderedList, label: "Ordered List" },
-  { capabilityId: "CAP-0110", id: WRITER_COMMAND_IDS.paste, label: "Paste" },
-  { capabilityId: "CAP-0107", id: WRITER_COMMAND_IDS.promote, label: "Promote" },
-  { capabilityId: "CAP-0102", id: WRITER_COMMAND_IDS.redo, label: "Redo" },
-  { capabilityId: "CAP-0105", id: WRITER_COMMAND_IDS.removeBullets, label: "Remove Bullets" },
-  { capabilityId: "CAP-0114", id: WRITER_COMMAND_IDS.saveLocal, label: "Save local copy" },
-  { capabilityId: "CAP-0113", id: WRITER_COMMAND_IDS.saveOdt, label: "Save as ODT" },
-  { capabilityId: "CAP-0103", id: WRITER_COMMAND_IDS.selectAll, label: "Select All" },
-  {
-    capabilityId: "CAP-0104",
-    id: WRITER_COMMAND_IDS.toggleHorizontalRuler,
-    label: "Horizontal ruler",
-  },
-  { capabilityId: "CAP-0104", id: WRITER_COMMAND_IDS.toggleSidebar, label: "Sidebar" },
-  { capabilityId: "CAP-0104", id: WRITER_COMMAND_IDS.toggleStatusBar, label: "Status Bar" },
-  { capabilityId: "CAP-0109", id: WRITER_COMMAND_IDS.underline, label: "Underline" },
-  { capabilityId: "CAP-0102", id: WRITER_COMMAND_IDS.undo, label: "Undo" },
-  { capabilityId: "CAP-0105", id: WRITER_COMMAND_IDS.unorderedList, label: "Unordered List" },
-];
+/** Inventory projection retained for parity validation; executable descriptors own UI metadata. */
+export const writerUserCommands: readonly Readonly<{
+  capabilityId: `CAP-${string}`;
+  id: string;
+  label: string;
+}>[] = [
+  ["CAP-0112", WRITER_COMMAND_IDS.alignCenter, "Align center"],
+  ["CAP-0112", WRITER_COMMAND_IDS.alignJustify, "Justify paragraph"],
+  ["CAP-0112", WRITER_COMMAND_IDS.alignLeft, "Align left"],
+  ["CAP-0112", WRITER_COMMAND_IDS.alignRight, "Align right"],
+  ["CAP-0109", WRITER_COMMAND_IDS.bold, "Bold"],
+  ["CAP-0106", WRITER_COMMAND_IDS.copy, "Copy"],
+  ["CAP-0110", WRITER_COMMAND_IDS.cut, "Cut"],
+  ["CAP-0112", WRITER_COMMAND_IDS.defaultParagraphStyle, "Default Paragraph Style"],
+  ["CAP-0107", WRITER_COMMAND_IDS.demote, "Demote"],
+  ["CAP-0101", WRITER_COMMAND_IDS.exportText, "Save as text"],
+  ["CAP-0112", WRITER_COMMAND_IDS.headingOne, "Heading 1"],
+  ["CAP-0109", WRITER_COMMAND_IDS.italic, "Italic"],
+  ["CAP-0114", WRITER_COMMAND_IDS.newDocument, "New"],
+  ["CAP-0114", WRITER_COMMAND_IDS.openLocal, "Open local copy"],
+  ["CAP-0113", WRITER_COMMAND_IDS.openOdt, "Open ODT"],
+  ["CAP-0105", WRITER_COMMAND_IDS.orderedList, "Ordered List"],
+  ["CAP-0110", WRITER_COMMAND_IDS.paste, "Paste"],
+  ["CAP-0107", WRITER_COMMAND_IDS.promote, "Promote"],
+  ["CAP-0102", WRITER_COMMAND_IDS.redo, "Redo"],
+  ["CAP-0105", WRITER_COMMAND_IDS.removeBullets, "Remove Bullets"],
+  ["CAP-0114", WRITER_COMMAND_IDS.saveLocal, "Save local copy"],
+  ["CAP-0113", WRITER_COMMAND_IDS.saveOdt, "Save as ODT"],
+  ["CAP-0103", WRITER_COMMAND_IDS.selectAll, "Select All"],
+  ["CAP-0104", WRITER_COMMAND_IDS.toggleHorizontalRuler, "Horizontal ruler"],
+  ["CAP-0104", WRITER_COMMAND_IDS.toggleSidebar, "Sidebar"],
+  ["CAP-0104", WRITER_COMMAND_IDS.toggleStatusBar, "Status Bar"],
+  ["CAP-0109", WRITER_COMMAND_IDS.underline, "Underline"],
+  ["CAP-0102", WRITER_COMMAND_IDS.undo, "Undo"],
+  ["CAP-0105", WRITER_COMMAND_IDS.unorderedList, "Unordered List"],
+].map(
+  /** Converts the compact audit tuple to its named inventory record. @param tuple - Capability, command identity, and label. @returns Inventory record. */ ([
+    capabilityId,
+    id,
+    label,
+  ]) => ({
+    capabilityId: capabilityId as `CAP-${string}`,
+    id: id as string,
+    label: label as string,
+  }),
+);
 
-/** Lists the pinned Writer top-level menu order shared by browser menu rendering and parity documentation. */
+const unavailable = [
+  { kind: "unavailable", label: "No browser command is implemented here yet." },
+] as const;
+
 export const writerMenuPlacements: readonly WriterMenuPlacement[] = [
-  { id: "file", label: "File" },
-  { id: "edit", label: "Edit" },
-  { id: "view", label: "View" },
-  { id: "insert", label: "Insert" },
-  { id: "format", label: "Format" },
-  { id: "styles", label: "Styles" },
-  { id: "table", label: "Table" },
-  { id: "tools", label: "Tools" },
-  { id: "window", label: "Window" },
-  { id: "help", label: "Help" },
+  {
+    id: "file",
+    label: "File",
+    items: [
+      { commandId: WRITER_COMMAND_IDS.newDocument, kind: "command" },
+      { kind: "separator" },
+      { commandId: WRITER_COMMAND_IDS.openOdt, kind: "command", showsDialog: true },
+      { commandId: WRITER_COMMAND_IDS.openLocal, kind: "command", showsDialog: true },
+      { kind: "separator" },
+      { commandId: WRITER_COMMAND_IDS.saveOdt, kind: "command", showsDialog: true },
+      { commandId: WRITER_COMMAND_IDS.saveLocal, kind: "command" },
+      { commandId: WRITER_COMMAND_IDS.exportText, kind: "command", showsDialog: true },
+    ],
+  },
+  {
+    id: "edit",
+    label: "Edit",
+    items: [
+      { commandId: WRITER_COMMAND_IDS.undo, kind: "command" },
+      { commandId: WRITER_COMMAND_IDS.redo, kind: "command" },
+      { kind: "separator" },
+      { commandId: WRITER_COMMAND_IDS.cut, kind: "command" },
+      { commandId: WRITER_COMMAND_IDS.copy, kind: "command" },
+      { commandId: WRITER_COMMAND_IDS.paste, kind: "command" },
+      { kind: "separator" },
+      { commandId: WRITER_COMMAND_IDS.selectAll, kind: "command" },
+    ],
+  },
+  {
+    id: "view",
+    label: "View",
+    items: [
+      { commandId: WRITER_COMMAND_IDS.toggleStatusBar, kind: "command" },
+      {
+        id: "rulers",
+        items: [{ commandId: WRITER_COMMAND_IDS.toggleHorizontalRuler, kind: "command" }],
+        kind: "submenu",
+        label: "Rulers",
+      },
+      { commandId: WRITER_COMMAND_IDS.toggleSidebar, kind: "command" },
+    ],
+  },
+  { id: "insert", items: unavailable, label: "Insert" },
+  {
+    id: "format",
+    label: "Format",
+    items: [
+      {
+        id: "text",
+        items: [
+          { commandId: WRITER_COMMAND_IDS.bold, kind: "command" },
+          { commandId: WRITER_COMMAND_IDS.italic, kind: "command" },
+          { commandId: WRITER_COMMAND_IDS.underline, kind: "command" },
+        ],
+        kind: "submenu",
+        label: "Text",
+      },
+      { kind: "separator" },
+      { commandId: WRITER_COMMAND_IDS.alignLeft, kind: "command" },
+      { commandId: WRITER_COMMAND_IDS.alignCenter, kind: "command" },
+      { commandId: WRITER_COMMAND_IDS.alignRight, kind: "command" },
+      { commandId: WRITER_COMMAND_IDS.alignJustify, kind: "command" },
+      { kind: "separator" },
+      {
+        id: "bullets-and-numbering",
+        items: [
+          { commandId: WRITER_COMMAND_IDS.unorderedList, kind: "command" },
+          { commandId: WRITER_COMMAND_IDS.orderedList, kind: "command" },
+          { commandId: WRITER_COMMAND_IDS.removeBullets, kind: "command" },
+          { kind: "separator" },
+          { commandId: WRITER_COMMAND_IDS.demote, kind: "command" },
+          { commandId: WRITER_COMMAND_IDS.promote, kind: "command" },
+        ],
+        kind: "submenu",
+        label: "Bullets and Numbering",
+      },
+    ],
+  },
+  {
+    id: "styles",
+    label: "Styles",
+    items: [
+      { commandId: WRITER_COMMAND_IDS.defaultParagraphStyle, kind: "command" },
+      { commandId: WRITER_COMMAND_IDS.headingOne, kind: "command" },
+    ],
+  },
+  { id: "table", items: unavailable, label: "Table" },
+  { id: "tools", items: unavailable, label: "Tools" },
+  { id: "window", items: unavailable, label: "Window" },
+  { id: "help", items: unavailable, label: "Help" },
 ];
 
-/** Lists the first browser-executable commands from the pinned Writer Bullets and Numbering menu. */
-export const writerBulletsAndNumberingMenuCommands: readonly WriterBulletsAndNumberingMenuCommand[] =
-  [
-    { label: "Unordered List", listKind: "bullet", unoCommand: ".uno:DefaultBullet" },
-    { label: "Ordered List", listKind: "numbered", unoCommand: ".uno:DefaultNumbering" },
-    { label: "Remove Bullets", listKind: "none", unoCommand: ".uno:RemoveBullets" },
-  ];
+/** Collects nested command IDs in resource order. @param items - Menu items to traverse. @returns Ordered command IDs. */
+function collectCommandIds(items: WriterMenuPlacement["items"]): string[] {
+  return items.flatMap(
+    /** Collects one nested resource item. @param item - Resource item. @returns Referenced command IDs. */ (
+      item,
+    ): string[] =>
+      item.kind === "command"
+        ? [item.commandId]
+        : item.kind === "submenu"
+          ? collectCommandIds(item.items)
+          : [],
+  );
+}
 
-/** Lists pinned Writer Promote and Demote commands in the Bullets and Numbering submenu. */
-export const writerListLevelMenuCommands: readonly WriterListLevelMenuCommand[] = [
-  { command: "demote", label: "Demote", unoCommand: ".uno:DecrementLevel" },
-  { command: "promote", label: "Promote", unoCommand: ".uno:IncrementLevel" },
-];
+export const writerMenuCommandIds = writerMenuPlacements.flatMap(
+  /** Collects command identities from one top-level menu. @param menu - Menu resource. @returns Ordered command IDs. */ (
+    menu,
+  ) => collectCommandIds(menu.items),
+);

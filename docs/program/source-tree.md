@@ -29,18 +29,16 @@ static application runtime.
 | `apps/office/src/sw/source/core/txtnode` | `sw/source/core/txtnode` | `SwTextNode` text storage and `SwpHints`/`SwTextAttr` character attributes |
 | `apps/office/src/sw/source/core/crsr` | `sw/source/core/crsr` | `SwNodeIndex`, `SwPosition`, and directional `SwPaM` model ranges |
 | `apps/office/src/sw/source/uibase/docvw` | `sw/source/uibase/docvw` | Document-page editor and editable paragraphs |
-| `apps/office/src/sw/source/uibase/wrtsh` | `sw/source/uibase/wrtsh` | Writer selection shell and browser DOM caret bridge |
+| `apps/office/src/sw/source/uibase/wrtsh` | `sw/source/uibase/wrtsh` | Writer shell selection and editing operations |
 | `apps/office/src/sw/source/uibase/dochdl` | `sw/source/uibase/dochdl` | Selection transfer-document preparation and clipboard ownership |
 | `apps/office/src/sw/source/filter/html` | `sw/source/filter/html` | Writer HTML transfer serialization |
 | `apps/office/src/sw/source/filter/ascii` | `sw/source/filter/ascii` | Writer plain-text transfer serialization |
 | `apps/office/src/sw/source/filter/xml` | `sw/source/filter/xml` | ODF package orchestration and `SwDoc` XML import/export bridges |
-| `apps/office/src/sw/source/uibase/ribbar` | `sw/source/uibase/ribbar` | Writer formatting toolbar |
-| `apps/office/src/sw/source/uibase/sidebar` | `sw/source/uibase/sidebar` | Writer properties sidebar |
-| `apps/office/src/sw/source/uibase/shells` | `sw/source/uibase/shells` | Writer command-shell shortcut adapters |
-| `apps/office/src/sw/source/uibase/uiview` | `sw/source/uibase/uiview` | Writer workbench state and workspace view chrome |
-| `apps/office/src/sw/source/uibase/app` | `sw/source/uibase/app` | `SwDocShell` new/load/save ownership plus main Writer window composition |
-| `apps/office/src/sw/uiconfig/swriter/menubar` | `sw/uiconfig/swriter/menubar` | Writer menu declaration and browser menu control |
-| `apps/office/src/sw/uiconfig/swriter/toolbar` | `sw/uiconfig/swriter/toolbar` | Writer toolbar declaration and browser toolbar controls |
+| `apps/office/src/sw/source/uibase/shells` | `sw/source/uibase/shells` | Writer command execution and state ownership |
+| `apps/office/src/sw/source/uibase/uiview` | `sw/source/uibase/uiview` | Persistent Writer view/session composition |
+| `apps/office/src/sw/source/uibase/app` | `sw/source/uibase/app` | `SwDocShell` new/load/save ownership and module composition |
+| `apps/office/src/sw/uiconfig/swriter` | `sw/uiconfig/swriter` | Presentation-free menu and toolbar placement data derived from pinned XML resources |
+| `apps/office/src/sw/browser` | Browser-only | React presenters, accelerator binding, and DOM selection adaptation |
 
 Tests remain colocated with the module they protect, matching the local source
 ownership rather than imitating LibreOffice's CppUnit/Python harnesses. Browser
@@ -80,7 +78,7 @@ documentation have dedicated parity evidence.
 
 Mapped modules ordinarily use the exact LibreOffice filename. The exhaustive
 `filenameDivergences` manifest field and provenance gate allow the following
-six cases only; adding, removing, or renaming one must update both the table and
+five cases only; adding, removing, or renaming one must update both the table and
 machine-checked record.
 
 | Local browser module | Pinned upstream module | Reason |
@@ -89,7 +87,6 @@ machine-checked record.
 | `sw/source/core/doc/writer.ts` | `sw/source/core/doc/docnew.cxx` | Browser command façade around the `SwDoc` graph rather than only document construction |
 | `sw/source/uibase/docvw/edtwin-paragraph.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | React paragraph decomposition beneath the one editor boundary |
 | `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Typed command declaration extracted from XML configuration |
-| `sw/uiconfig/swriter/menubar/format-menu.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | React Format-popup decomposition of the same menu hierarchy |
 | `vcl/browser/browser-clipboard.ts` | `vcl/source/app/ClipboardBase.cxx` | Explicit static-browser clipboard platform adapter |
 
 ## File-level provenance in active Writer list, character-formatting, clipboard, and model slices
@@ -126,7 +123,7 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/core/txtnode/txatbase.ts` | `sw/source/core/txtnode/txatbase.cxx` | `SwTextAttr` ranges and `SfxItemSet`-backed `SwFormatAutoFormat` items |
 | `sw/source/core/doc/DocumentContentOperationsManager.ts` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Bounded same-text-node Insert, Delete, and Replace operations through `SwPaM` |
 | `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Bounded Promote and Demote command identity |
-| `sw/source/uibase/shells/textsh.ts` | `sw/source/uibase/shells/textsh.cxx` | Browser-owned Cut, Copy, Paste, download, and Undo/Redo command shell |
+| `sw/browser/accelerators/writer-shortcuts.ts` | Browser-only | Global keyboard-event adaptation to the shared dispatcher |
 | `sw/source/uibase/wrtsh/wrtsh.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Persistent cursor plus action-based text, formatting, list, split, and join mutation path |
 | `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Canonical text-node storage, hint-aware editing, split/append, and derived rendering runs |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
@@ -142,9 +139,9 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/filter/xml/wrtxml.ts` | `sw/source/filter/xml/wrtxml.cxx` | Styles-before-content ODT package writer orchestration |
 | `sw/source/filter/xml/swxml.ts` | `sw/source/filter/xml/swxml.cxx` | Validated ODT package reader orchestration |
 | `sw/source/uibase/app/docsh.ts` | `sw/source/uibase/app/docsh.cxx` | Active `SwDoc` ownership and atomic New, ODT Load, and ODT Save As bridge |
-| `sw/uiconfig/swriter/menubar/menubar.tsx` | `sw/uiconfig/swriter/menubar/menubar.xml` | Writer menu control and Format → Bullets and Numbering declaration |
+| `sw/browser/presentation/WriterMenuBar.tsx` | Browser-only | Generic React menu renderer and interaction state machine |
 | `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Declarative Writer menu order and list command definitions |
-| `sw/uiconfig/swriter/toolbar/standardbar.tsx` | `sw/uiconfig/swriter/toolbar/standardbar.xml` | Browser Writer standard-toolbar control |
+| `sw/uiconfig/swriter/toolbar/standardbar.ts` | `sw/uiconfig/swriter/toolbar/standardbar.xml` | Declarative standard-toolbar placement data |
 | `sw/uiconfig/swriter/toolbar/textobjectbar.ts` | `sw/uiconfig/swriter/toolbar/textobjectbar.xml` | Text-object toolbar list command declaration |
 | `sw/uiconfig/swriter/toolbar/numobjectbar.ts` | `sw/uiconfig/swriter/toolbar/numobjectbar.xml` | Numbering-toolbar Promote and Demote command declaration |
 
@@ -155,9 +152,9 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/uibase/uiview/view.tsx` | `sw/source/uibase/uiview/view.cxx` | Browser Writer view/workbench ownership |
 | `sw/source/uibase/uiview/viewfunc.ts` | `sw/source/uibase/uiview/viewfunc.hxx` | Pure focused-document, identity, formatting-command, and command-history helpers |
 | `sw/source/uibase/uiview/viewstat.ts` | `sw/source/uibase/uiview/viewstat.cxx` | Browser view-status and visibility state |
-| `sw/source/uibase/app/mainwn.tsx` | `sw/source/uibase/app/mainwn.cxx` | Main Writer window/chrome regions |
+| `sw/browser/presentation/WriterWorkspaceChrome.tsx` | Browser-only | Writer workspace chrome regions |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Editable browser document-view orchestration |
 | `sw/source/uibase/docvw/edtwin-paragraph.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser-only editable paragraph leaf beneath the matching editor module |
-| `sw/source/uibase/wrtsh/select.ts` | `sw/source/uibase/wrtsh/select.cxx` | Browser selection shell and collapsed-caret bridge |
-| `sw/source/uibase/ribbar/inputwin.tsx` | `sw/source/uibase/ribbar/inputwin.cxx` | Formatting-toolbar controls |
-| `sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx` | `sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx` | Focused Writer paragraph inspector |
+| `sw/browser/editor/writer-selection.ts` | Browser-only | DOM selection and collapsed-caret mapping |
+| `sw/browser/presentation/WriterFormattingToolbar.tsx` | Browser-only | Generic formatting-toolbar presenter |
+| `sw/browser/presentation/WriterPropertiesPanel.tsx` | Browser-only | Focused paragraph Properties panel |

@@ -12,12 +12,32 @@ export type CommandUndoPolicy = "none" | "record";
 export interface CommandState<Value = unknown> {
   /** Whether dispatch may execute the command in the current shell context. */
   readonly enabled: boolean;
+  /** Error retained from the most recent asynchronous execution, when one failed. */
+  readonly error?: string;
+  /** Whether an asynchronous execution of this command is still active. */
+  readonly pending?: boolean;
   /** Optional boolean toggle state used by menus and toolbars. */
   readonly checked?: boolean;
   /** Whether a toggle covers a selection with both applied and unapplied values. */
   readonly mixed?: boolean;
   /** Optional typed state value used by selectors such as paragraph style. */
   readonly value?: Value;
+}
+
+/** Presentation-neutral metadata shared by menus, toolbars, and accelerators. */
+export interface CommandPresentation {
+  /** Optional runtime argument contract used at presentation adapter boundaries. */
+  readonly argumentSchema?: Readonly<{ readonly description: string }>;
+  /** Stable message-catalog identity; the current browser shell may resolve it to label. */
+  readonly labelKey: string;
+  /** UI resources that place this command without owning its behavior. */
+  readonly placements: readonly string[];
+  /** Stable value represented by a radio command in selector presentations. */
+  readonly selectionValue?: string;
+  /** Check/radio behavior expected from every presentation surface. */
+  readonly semantics: "action" | "check" | "radio";
+  /** Shape exposed by command state queries. */
+  readonly stateType: "boolean" | "none" | "value";
 }
 
 /** Describes one immutable executable command with a context-specific handler. */
@@ -32,6 +52,8 @@ export interface CommandDefinition<Context, Result = unknown, Arguments = unknow
   readonly invalidates?: readonly string[];
   /** Non-blank human-readable label for future accessible command surfaces. */
   readonly label: string;
+  /** Shared presentation contract; legacy non-UI registries may omit it. */
+  readonly presentation?: CommandPresentation;
   /** Optional platform-neutral shortcut normalized during registry creation. */
   readonly shortcut?: string;
   /** Optional additional shortcuts that resolve to this same command identity. */
@@ -145,6 +167,26 @@ export function createCommandRegistry<Context>(
       function copyCommand(command): CommandDefinition<Context> {
         assertNonBlank(command.id, "Command id");
         assertNonBlank(command.label, "Command label");
+        if (command.presentation !== undefined) {
+          assertNonBlank(command.presentation.labelKey, "Command label key");
+          if (
+            command.presentation.semantics === "check" &&
+            command.presentation.stateType !== "boolean"
+          )
+            throw new Error("Check commands require boolean state.");
+          if (
+            command.presentation.semantics === "radio" &&
+            command.presentation.stateType === "none"
+          )
+            throw new Error("Radio commands require boolean or value state.");
+          for (const placement of command.presentation.placements)
+            assertNonBlank(placement, "Command placement");
+          if (command.presentation.argumentSchema !== undefined)
+            assertNonBlank(
+              command.presentation.argumentSchema.description,
+              "Command argument schema description",
+            );
+        }
         if (ids.has(command.id)) throw new Error(`Duplicate command id: ${command.id}`);
         ids.add(command.id);
         const normalizedShortcuts = [
@@ -290,6 +332,7 @@ export function createCommandShell<Context>(
  * pushed shell and command lookup stops at the first shell providing the slot.
  */
 export class SfxDispatcher {
+  private readonly asyncStates = new Map<string, Readonly<{ error?: string; pending: boolean }>>();
   private readonly listeners = new Set<() => void>();
   private readonly shells: SfxShell[] = [];
   private version = 0;
@@ -326,12 +369,39 @@ export class SfxDispatcher {
   /** Executes the command resolved from the active shell stack. @param commandId - Stable slot-like identity. @param arguments_ - Typed caller arguments forwarded unchanged. @returns Explicit dispatch outcome. */
   public Execute(commandId: string, arguments_?: unknown): CommandDispatchResult<unknown> {
     const command = this.QueryDispatch(commandId);
-    return command === undefined ? { commandId, status: "missing" } : command.execute(arguments_);
+    if (command === undefined) return { commandId, status: "missing" };
+    const result = command.execute(arguments_);
+    if (result.status !== "executed" || !isPromiseLike(result.value)) return result;
+    this.asyncStates.set(commandId, { pending: true });
+    this.Invalidate("command-async");
+    const tracked = Promise.resolve(result.value).then(
+      /** Clears pending state after fulfillment. @param value - Fulfilled command value. @returns Original command value. */
+      (value) => {
+        this.asyncStates.delete(commandId);
+        this.Invalidate("command-async");
+        return value;
+      },
+      /** Publishes a normalized asynchronous failure. @param error - Rejected command value. @returns Undefined after recording the failure. */
+      (error: unknown) => {
+        this.asyncStates.set(commandId, { error: getErrorMessage(error), pending: false });
+        this.Invalidate("command-async");
+        return undefined;
+      },
+    );
+    return { ...result, value: tracked };
   }
 
   /** Queries the active shell state for one command. @param commandId - Stable slot-like identity. @returns Disabled state when no shell provides the command. */
   public QueryState(commandId: string): CommandState {
-    return this.QueryDispatch(commandId)?.getState() ?? { enabled: false };
+    const state = this.QueryDispatch(commandId)?.getState();
+    if (state === undefined) return { enabled: false };
+    const asyncState = this.asyncStates.get(commandId);
+    return {
+      ...state,
+      enabled: state.enabled,
+      ...(asyncState?.error === undefined ? {} : { error: asyncState.error }),
+      ...(asyncState?.pending === true ? { pending: true } : {}),
+    };
   }
 
   /** Returns every active command once, honoring top-shell shadowing. @returns Commands in shell-priority and registration order. */
@@ -380,6 +450,21 @@ export class SfxDispatcher {
     return /** Removes the registered invalidation listener. @returns Whether the listener was present. */ () =>
       this.listeners.delete(listener);
   }
+}
+
+/** Detects asynchronous command results without requiring a native Promise instance. @param value - Candidate command result. @returns Whether the value implements PromiseLike. */
+function isPromiseLike(value: unknown): value is PromiseLike<unknown> {
+  return (
+    (typeof value === "object" || typeof value === "function") &&
+    value !== null &&
+    "then" in value &&
+    typeof (value as { readonly then?: unknown }).then === "function"
+  );
+}
+
+/** Normalizes an asynchronous command failure for presentation state. @param error - Rejected value. @returns Displayable failure message. */
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
 
 /** Owns the active view and its dispatcher, matching the minimal browser frame responsibility. */

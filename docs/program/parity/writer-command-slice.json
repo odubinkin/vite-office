@@ -49,12 +49,12 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
             "marker": "export function WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "Writer standard toolbar"
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           },
           {
             "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
@@ -63,7 +63,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
             "marker": "places implemented Writer commands"
           },
           {
@@ -247,7 +247,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
             "marker": "replaces native keyboard Copy data"
           },
           {
@@ -335,13 +335,13 @@
             "marker": "isPropertiesSidebarVisible"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "Status Bar"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           }
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
             "marker": "Horizontal ruler"
           },
           {
@@ -453,20 +453,20 @@
             "marker": "data-writer-list-marker"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "Bullets and Numbering"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx",
-            "marker": "Paragraph lists"
+            "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+            "marker": "WriterFormattingToolbar"
           },
           {
             "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-            "marker": "writerBulletsAndNumberingMenuCommands"
+            "marker": "writerMenuPlacements"
           },
           {
             "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
-            "marker": "writerTextObjectBarListCommands"
+            "marker": "writerTextObjectBarItems"
           }
         ],
         "tests": [
@@ -693,12 +693,12 @@
             "marker": "class SwUndoNumLevel"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx",
-            "marker": "renderListLevelMenuCommand"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
             "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
-            "marker": "writerNumObjectBarListLevelCommands"
+            "marker": "writerNumObjectBarItems"
           },
           {
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
@@ -925,7 +925,7 @@
             "marker": "ToggleCharacterFormat"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts",
+            "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
             "marker": "getWriterSameParagraphSelection"
           },
           {
@@ -937,12 +937,12 @@
             "marker": "wrapUniformWriterInlineFormatting"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx",
-            "marker": "renderTextFormatCommand"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx",
-            "marker": "renderCharacterFormatControl"
+            "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+            "marker": "WriterFormattingToolbar"
           }
         ],
         "tests": [
@@ -955,7 +955,7 @@
             "marker": "routes formatting and list commands"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/select.test.ts",
+            "path": "apps/office/src/sw/browser/editor/writer-selection.test.ts",
             "marker": "reads and restores"
           },
           {
@@ -1075,12 +1075,12 @@
             "marker": "handleNativeWriterCut"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "renderMenuItem(\"Paste\""
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "aria-label=\"Paste\""
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           }
         ],
         "tests": [
@@ -1569,12 +1569,12 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "Open ODT…"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "Save as ODT"
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           }
         ],
         "tests": [
@@ -1817,12 +1817,12 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
             "marker": "export function WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "Writer standard toolbar"
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           },
           {
             "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
@@ -1831,7 +1831,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
             "marker": "places implemented Writer commands"
           },
           {
@@ -1899,12 +1899,12 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
             "marker": "export function WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "Writer standard toolbar"
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           },
           {
             "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
@@ -1913,7 +1913,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
             "marker": "places implemented Writer commands"
           },
           {
@@ -1999,7 +1999,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
             "marker": "replaces native keyboard Copy data"
           },
           {
@@ -2101,7 +2101,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.test.tsx",
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
             "marker": "replaces native keyboard Copy data"
           },
           {
@@ -2217,7 +2217,7 @@
             "marker": "ToggleCharacterFormat"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts",
+            "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
             "marker": "getWriterSameParagraphSelection"
           },
           {
@@ -2229,12 +2229,12 @@
             "marker": "wrapUniformWriterInlineFormatting"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx",
-            "marker": "renderTextFormatCommand"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx",
-            "marker": "renderCharacterFormatControl"
+            "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+            "marker": "WriterFormattingToolbar"
           }
         ],
         "tests": [
@@ -2247,7 +2247,7 @@
             "marker": "routes formatting and list commands"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/select.test.ts",
+            "path": "apps/office/src/sw/browser/editor/writer-selection.test.ts",
             "marker": "reads and restores"
           },
           {
@@ -2367,12 +2367,12 @@
             "marker": "handleNativeWriterCut"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "renderMenuItem(\"Paste\""
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "aria-label=\"Paste\""
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           }
         ],
         "tests": [
@@ -2597,12 +2597,12 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "Open ODT…"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "Save as ODT"
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           }
         ],
         "tests": [
@@ -3651,12 +3651,12 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "Open ODT…"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "Save as ODT"
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           }
         ],
         "tests": [
@@ -3921,12 +3921,12 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "Open ODT…"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "Save as ODT"
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           }
         ],
         "tests": [
@@ -4191,12 +4191,12 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "Open ODT…"
+            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+            "marker": "WriterMenuBar"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
-            "marker": "Save as ODT"
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+            "marker": "WriterCommandToolbar"
           }
         ],
         "tests": [

@@ -49,7 +49,7 @@ test("Writer direct character formatting" /**
   );
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Text" }).click();
-  await page.getByRole("menuitem", { name: "Italic" }).click();
+  await page.getByRole("menuitemcheckbox", { name: "Italic" }).click();
   await expect(writerEditor.locator("strong em")).toHaveText("Formatted Writer body");
   await writerEditor.evaluate(
     /** Restores native selection before the Ctrl/Cmd shortcut. @param element - Writer editing host that owns the semantic runs. @returns Nothing; browser selection is replaced. */

@@ -267,6 +267,104 @@
       ]
     },
     {
+      "path": "apps/office/src/sw/browser/accelerators/writer-shortcuts.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "accelerators",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0109",
+        "CAP-0115"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-editor",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0117",
+        "CAP-0118"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0112",
+        "CAP-0115"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115",
+        "CAP-0116"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0112",
+        "CAP-0115"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/command-source.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0115"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/inc/calbck.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -677,17 +775,6 @@
       ]
     },
     {
-      "path": "apps/office/src/sw/source/uibase/app/mainwn.tsx",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "writer-ui",
-      "capabilityIds": [
-        "CAP-0101",
-        "CAP-0115"
-      ]
-    },
-    {
       "path": "apps/office/src/sw/source/uibase/app/swmodule.tsx",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -745,21 +832,6 @@
       ]
     },
     {
-      "path": "apps/office/src/sw/source/uibase/ribbar/inputwin.tsx",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "writer-ui",
-      "capabilityIds": [
-        "CAP-0101",
-        "CAP-0105",
-        "CAP-0107",
-        "CAP-0109",
-        "CAP-0112",
-        "CAP-0115"
-      ]
-    },
-    {
       "path": "apps/office/src/sw/source/uibase/shells/listsh.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -768,18 +840,6 @@
       "capabilityIds": [
         "CAP-0107",
         "CAP-0127"
-      ]
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/shells/textsh.ts",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "accelerators",
-      "capabilityIds": [
-        "CAP-0102",
-        "CAP-0109",
-        "CAP-0115"
       ]
     },
     {
@@ -801,21 +861,6 @@
         "CAP-0112",
         "CAP-0113",
         "CAP-0114",
-        "CAP-0115"
-      ]
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "writer-ui",
-      "capabilityIds": [
-        "CAP-0101",
-        "CAP-0105",
-        "CAP-0107",
-        "CAP-0109",
-        "CAP-0112",
         "CAP-0115"
       ]
     },
@@ -879,18 +924,6 @@
       ]
     },
     {
-      "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "selection",
-      "capabilityIds": [
-        "CAP-0103",
-        "CAP-0117",
-        "CAP-0118"
-      ]
-    },
-    {
       "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -911,18 +944,6 @@
       ]
     },
     {
-      "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "writer-ui",
-      "capabilityIds": [
-        "CAP-0101",
-        "CAP-0115",
-        "CAP-0116"
-      ]
-    },
-    {
       "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -931,18 +952,6 @@
       "capabilityIds": [
         "CAP-0101",
         "CAP-0115"
-      ]
-    },
-    {
-      "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "writer-ui",
-      "capabilityIds": [
-        "CAP-0101",
-        "CAP-0115",
-        "CAP-0116"
       ]
     },
     {
@@ -956,7 +965,7 @@
       ]
     },
     {
-      "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.tsx",
+      "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "writer",
@@ -974,6 +983,16 @@
       "subsystem": "numbering",
       "capabilityIds": [
         "CAP-0105"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/ui-resource.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0115"
       ]
     },
     {
