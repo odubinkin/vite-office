@@ -15,8 +15,8 @@ import {
   exportTextParagraphs,
   ODF_NAMESPACES,
   type OdfCharacterProperties,
-  type OdfParagraph,
   type OdfParagraphAlignment,
+  type XMLTextParagraphSource,
 } from "../../../../xmloff/source/text/txtparae";
 import {
   RES_CHRATR_CJK_POSTURE,
@@ -63,10 +63,20 @@ export function exportStylesXml(document: SwDoc): string {
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3"><office:styles>${styles.join("")}</office:styles></office:document-styles>`;
 }
 
-/** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @returns Complete XML. */
-export function exportContentXml(document: SwDoc): string {
-  const paragraphs = document.paragraphs.map(projectParagraph);
-  const exported = exportTextParagraphs(paragraphs);
+/** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @returns Complete XML. */
+export function exportContentXml(
+  document: SwDoc,
+  isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
+): string {
+  const exported = exportTextParagraphs(
+    {
+      /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
+      *paragraphs(): Iterable<XMLTextParagraphSource> {
+        for (const node of document.paragraphs) yield projectParagraph(node);
+      },
+    },
+    isCancelled,
+  );
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3"><office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
 }
 
@@ -76,7 +86,7 @@ export function exportMetaXml(title: string): string {
 }
 
 /** Projects one canonical text node without leaking Writer ownership into xmloff. @param node - Source text node. @returns Neutral paragraph. */
-function projectParagraph(node: SwTextNode): OdfParagraph {
+function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
   const directItems = node.GetpSwAttrSet()?.entries() ?? [];
   assertSupportedItems(directItems, `paragraph ${node.id}`, true);
   const ruleName = node.GetNumRuleName();

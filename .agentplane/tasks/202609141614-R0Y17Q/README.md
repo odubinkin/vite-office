@@ -47,9 +47,14 @@ sections:
   Verify Steps: "1. Run npm run test:coverage --workspace @vite-office/office -- --runInBand if supported, otherwise npm run test:coverage --workspace @vite-office/office. Expected: XML parser/context, ODT round-trip, Worker runtime/client, filter service, Writer model, and existing UI unit tests pass with coverage thresholds. 2. Run npm run typecheck. Expected: all workspace and tooling TypeScript checks pass. 3. Run npm run lint && npm run format:check && npm run check:dependencies && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:parity. Expected: architectural, documentation, size, provenance, and parity checks pass. 4. Run npm run test:e2e && npm run test:static. Expected: browser ODT workflows and production static build checks pass. 5. Run npm run test:inventory:coverage. Expected: inventory tooling remains green. 6. Run node .agentplane/policy/check-routing.mjs && ap doctor. Expected: repository workflow policy and Agentplane state pass. 7. Inspect git status --short --untracked-files=all. Expected: only intentional Workstream 6 artifacts plus the pre-existing Workstream 5 task README modification remain."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    - PASS: office Vitest coverage — 52 files, 261 tests, 100% statements/branches/functions/lines.
+    - PASS: inventory Vitest coverage — 32 files, 84 tests, 100% statements/branches/functions/lines; all three pinned LibreOffice feature_text ODT fixtures pass semantic import/round-trip.
+    - PASS: typecheck, ESLint, Prettier, dependency boundaries, JSDoc, file size, source tree, source provenance, and parity inventory.
+    - PASS: Playwright — 9 browser workflows; static production build smoke.
+    - PASS: Agentplane routing policy and doctor (no errors; one pre-existing workflow warning).
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the Workstream 6 implementation and task artifacts through a new approved change. The pre-existing Workstream 5 README modification must remain untouched. No migration or compatibility layer is required because the old intermediate/stored representation is intentionally unsupported."
-  Findings: "Planning baseline: the pinned LibreOffice checkout is present locally, so implementation research requires no network access. Pre-existing unrelated change: .agentplane/tasks/202609141518-C5V3TD/README.md."
+  Findings: "Implementation follows the pinned LibreOffice fast-parser/context split and keeps only bounded active-context, style-table, and numbering-rule state. The retained XML tree and complete OdfParagraph document DTO are removed; import mutates a temporary SwDoc and publishes only after success, while export performs definition and body passes over live model views. Known non-model ODF style/page/metadata subtrees use explicit ignore contexts; unknown content remains rejected. No stored document schema migration or backward-compatibility path was added. The pre-existing Workstream 5 README change was not included in this task's implementation diff."
 id_source: "generated"
 ---
 ## Summary
@@ -71,6 +76,11 @@ Implement P6.1-P6.4 in apps/office/src/xmloff/source/core, apps/office/src/xmlof
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+- PASS: office Vitest coverage — 52 files, 261 tests, 100% statements/branches/functions/lines.
+- PASS: inventory Vitest coverage — 32 files, 84 tests, 100% statements/branches/functions/lines; all three pinned LibreOffice feature_text ODT fixtures pass semantic import/round-trip.
+- PASS: typecheck, ESLint, Prettier, dependency boundaries, JSDoc, file size, source tree, source provenance, and parity inventory.
+- PASS: Playwright — 9 browser workflows; static production build smoke.
+- PASS: Agentplane routing policy and doctor (no errors; one pre-existing workflow warning).
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -79,4 +89,4 @@ Revert only the Workstream 6 implementation and task artifacts through a new app
 
 ## Findings
 
-Planning baseline: the pinned LibreOffice checkout is present locally, so implementation research requires no network access. Pre-existing unrelated change: .agentplane/tasks/202609141518-C5V3TD/README.md.
+Implementation follows the pinned LibreOffice fast-parser/context split and keeps only bounded active-context, style-table, and numbering-rule state. The retained XML tree and complete OdfParagraph document DTO are removed; import mutates a temporary SwDoc and publishes only after success, while export performs definition and body passes over live model views. Known non-model ODF style/page/metadata subtrees use explicit ignore contexts; unknown content remains rejected. No stored document schema migration or backward-compatibility path was added. The pre-existing Workstream 5 README change was not included in this task's implementation diff.

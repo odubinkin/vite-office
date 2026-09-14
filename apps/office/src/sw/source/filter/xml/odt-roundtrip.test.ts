@@ -365,6 +365,12 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
             `<text:list-style style:name="BadLevel${level}"><text:list-level-style-number text:level="${level}" style:num-format="1"/></text:list-style>`,
           ),
       ).toThrow("Unsupported ODF list level");
+    expect(
+      /** Imports matching aliases followed by a conflicting canonical rule name. @returns Invalid document. */ () =>
+        importWithListStyle(
+          '<text:list-style style:name="Alias1" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias2" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias3" style:display-name="Shared"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>',
+        ),
+    ).toThrow("Conflicting ODF list rule");
   });
 
   it("rejects unsupported canonical Writer state instead of silently dropping it" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
@@ -539,6 +545,38 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
         () => parseOdfXml(xml, root),
       ).toThrow("ODF");
+    expect(
+      /** Parses with the legacy validation boundary's explicit depth ceiling. @returns Nothing. */ () =>
+        parseOdfXml(content, "document-content", 1),
+    ).toThrow("depth limit");
+    expect(
+      /** Rejects an unknown requested root name. @returns Nothing. */ () =>
+        parseOdfXml(content, "unknown-root"),
+    ).toThrow("invalid");
+    expect(
+      /** Rejects an unknown package root through SwXMLImport. @returns Nothing. */ () =>
+        importWriterXml(
+          styles.replaceAll("document-styles", "unknown-styles"),
+          content,
+          metadata(),
+        ),
+    ).toThrow("Unsupported ODF XML element");
+    expect(
+      /** Rejects a known root that does not match the active package stream. @returns Nothing. */ () =>
+        importWriterXml(
+          styles.replaceAll("document-styles", "document-content"),
+          content,
+          metadata(),
+        ),
+    ).toThrow("Unsupported ODF XML element");
+    expect(
+      /** Rejects a known non-text body child. @returns Nothing. */ () =>
+        importWriterXml(
+          styles,
+          content.replace("<office:text>", "<office:styles/>").replace("</office:text>", ""),
+          metadata(),
+        ),
+    ).toThrow("Unsupported ODF XML element");
     for (const changed of [
       styles.replace(/<style:style style:name="Standard"[\s\S]*?<\/style:style>/, ""),
       styles.replace('style:parent-style-name="Standard"', 'style:parent-style-name="Other"'),
@@ -630,6 +668,25 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       [
         styles.replace(
           "</style:style>",
+          "<style:text-properties/><style:text-properties/></style:style>",
+        ),
+        "duplicate text-properties",
+      ],
+      [
+        styles.replace("<office:styles>", "<office:styles><style:paragraph-properties/>"),
+        "Unsupported ODF XML element",
+      ],
+      [
+        styles.replace("</style:style>", "<style:list-level-properties/></style:style>"),
+        "Unsupported ODF XML element",
+      ],
+      [
+        styles.replace("</office:document-styles>", "<office:body/></office:document-styles>"),
+        "Unsupported ODF XML element",
+      ],
+      [
+        styles.replace(
+          "</style:style>",
           '<style:paragraph-properties fo:text-align="match-parent"/></style:style>',
         ),
         "paragraph alignment",
@@ -640,6 +697,16 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
         () => importWriterXml(changed, content, metadata(), meta),
       ).toThrow(message);
+
+    expect(
+      /** Rejects a known but invalid metadata child. @returns Invalid document. */ () =>
+        importWriterXml(
+          styles,
+          content,
+          metadata(),
+          meta.replace("</office:meta>", "<office:body/></office:meta>"),
+        ),
+    ).toThrow("Unsupported ODF XML element");
 
     const styledContent = content.replace(
       "</office:automatic-styles>",

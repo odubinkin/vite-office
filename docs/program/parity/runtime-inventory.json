@@ -1115,7 +1115,29 @@
     },
     {
       "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
-      "classification": "local-infrastructure",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ]
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ]
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+      "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",
       "subsystem": "odf-filter",

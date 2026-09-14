@@ -34,6 +34,14 @@
     {
       "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
       "rationale": "The local menubar-commands.ts module preserves the reviewed .uno:PickList responsibility while TypeScript decomposition or public naming requires a different filename from menubar.xml."
+    },
+    {
+      "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
+      "rationale": "The browser-facing xml-parser.ts name describes the saxes adapter while preserving the reviewed context-stack responsibility implemented by upstream fastparser.cxx."
+    },
+    {
+      "localPath": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+      "rationale": "The xmlstylei.ts suffix distinguishes streaming import contexts from future export support while preserving the reviewed SvXMLStylesContext responsibility in upstream xmlstyle.cxx."
     }
   ],
   "entries": [
@@ -3050,25 +3058,109 @@
       "status": "local-only"
     },
     {
-      "classification": "local-infrastructure",
+      "classification": "upstream-mechanism",
       "evidence": {
         "local": [
           {
-            "marker": "DEFAULT_ODF_XML_DEPTH_LIMIT",
+            "marker": "parseOdfXmlStream",
             "path": "apps/office/src/xmloff/source/core/xml-parser.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "FastSaxParserImpl::parseStream",
+            "path": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx"
           }
         ]
       },
       "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
-      "rationale": "Builds the current bounded immutable XML tree used by ODF import contexts. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Builds the current bounded immutable XML tree used by ODF import contexts."
+      "localSymbols": [
+        "DEFAULT_ODF_XML_LIMITS",
+        "FastAttributeList",
+        "SvXMLImportContext",
+        "parseOdfXmlStream"
       ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      "omittedResponsibilities": [
+        "Upstream expat integration, UNO services, thread-local parser state, and vocabularies outside the bounded Writer ODF subset remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Preserves fast context creation, tokenized attributes, ordered start/character/end callbacks, stack ownership, unknown-element policy, and bounded parsing from the pinned SAX fast parser."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sax/source/fastparser/fastparser.cxx",
+      "upstreamSymbols": [
+        "FastSaxParserImpl",
+        "FastSaxParserImpl::parseStream"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "getXMLToken",
+            "path": "apps/office/src/xmloff/source/core/xmltoken.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "GetXMLToken",
+            "path": "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx"
+          }
+        ]
       },
-      "status": "local-only"
+      "localPath": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "localSymbols": [
+        "ODF_NAMESPACES",
+        "XMLToken",
+        "getXMLToken"
+      ],
+      "omittedResponsibilities": [
+        "The complete LibreOffice XML vocabulary and native string storage remain omitted in favor of the supported Writer subset."
+      ],
+      "preservedResponsibilities": [
+        "Maintains stable namespace/local-name token lookup for fast XML contexts."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/core/xmltoken.cxx",
+      "upstreamSymbols": [
+        "XMLTokenEntry",
+        "GetXMLToken"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "XMLStylesContext",
+            "path": "apps/office/src/xmloff/source/style/xmlstylei.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SvXMLStylesContext::createFastChildContext",
+            "path": "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+      "localSymbols": [
+        "XMLStyleImportTarget",
+        "XMLStylesContext"
+      ],
+      "omittedResponsibilities": [
+        "Style families and property mappers outside the bounded paragraph, character, and numbering subset remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Creates style child contexts and publishes completed style definitions before document references."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/style/xmlstyle.cxx",
+      "upstreamSymbols": [
+        "SvXMLStylesContext",
+        "SvXMLStylesContext::createFastChildContext"
+      ]
     },
     {
       "classification": "upstream-mechanism",
@@ -3090,13 +3182,13 @@
       "localSymbols": [
         "ODF_NAMESPACES",
         "OdfCharacterProperties",
-        "OdfTextRun",
-        "OdfParagraphStyle",
         "OdfParagraphAlignment",
-        "OdfListLevelKind"
+        "OdfListLevelKind",
+        "XMLTextExportSource",
+        "exportTextParagraphs"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside HyperlinkData::HyperlinkData, HyperlinkData::addHyperlinkAttributes, HyperlinkData::exportEvents, BoundFrames::Fill and the bounded ODF_NAMESPACES, OdfCharacterProperties, OdfTextRun contract remain intentionally omitted."
+        "Upstream obligations outside HyperlinkData::HyperlinkData, HyperlinkData::addHyperlinkAttributes, HyperlinkData::exportEvents, BoundFrames::Fill and the bounded live XMLTextExportSource contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
         "Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`."
@@ -3129,10 +3221,12 @@
       "localPath": "apps/office/src/xmloff/source/text/txtparai.ts",
       "localSymbols": [
         "OdfStyleDefinition",
-        "importTextParagraphs"
+        "XMLTextBodyContext",
+        "XMLParaContext",
+        "resolveParagraphStyle"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside XMLHints_Impl::push_back, std::move, XMLCharContext::XMLCharContext, sax_fastparser::castToFastAttributeList and the bounded OdfStyleDefinition, importTextParagraphs contract remain intentionally omitted."
+        "Upstream obligations outside XMLHints_Impl::push_back, std::move, XMLCharContext::XMLCharContext, sax_fastparser::castToFastAttributeList and the bounded XMLTextBodyContext/Writer target contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
         "Reimplements the bounded ODF text paragraph import boundary from pinned LibreOffice `xmloff/source/text/txtparai.cxx`."

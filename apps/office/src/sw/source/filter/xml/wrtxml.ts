@@ -42,7 +42,10 @@ export class SwXMLWriter {
     checkpoint(control, "styles");
     output.putNextEntry("styles.xml", encoder.encode(exportStylesXml(document)));
     checkpoint(control, "content");
-    output.putNextEntry("content.xml", encoder.encode(exportContentXml(document)));
+    output.putNextEntry(
+      "content.xml",
+      encoder.encode(exportContentXml(document, control.isCancelled)),
+    );
     checkpoint(control, "metadata");
     output.putNextEntry("meta.xml", encoder.encode(exportMetaXml(documentState.title)));
     checkpoint(control, "package");

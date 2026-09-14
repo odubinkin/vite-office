@@ -51,7 +51,9 @@ export class SwXMLReader {
     const contentXml = await readXmlEntry(packageFile, "content.xml", control, "content");
     const metaXml = await readXmlEntry(packageFile, "meta.xml", control, "metadata");
     checkpoint(control, "mapping");
-    return importWriterXml(stylesXml, contentXml, metadata, metaXml);
+    return importWriterXml(stylesXml, contentXml, metadata, metaXml, {
+      ...(control.isCancelled === undefined ? {} : { isCancelled: control.isCancelled }),
+    });
   }
 }
 

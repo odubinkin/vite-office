@@ -2,15 +2,7 @@
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
 
-/** ODF namespace URIs used by the Writer XML filters. */
-export const ODF_NAMESPACES = {
-  dc: "http://purl.org/dc/elements/1.1/",
-  fo: "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0",
-  meta: "urn:oasis:names:tc:opendocument:xmlns:meta:1.0",
-  office: "urn:oasis:names:tc:opendocument:xmlns:office:1.0",
-  style: "urn:oasis:names:tc:opendocument:xmlns:style:1.0",
-  text: "urn:oasis:names:tc:opendocument:xmlns:text:1.0",
-} as const;
+export { ODF_NAMESPACES } from "../core/xmltoken";
 
 /** Direct character properties supported by the bounded text exporter. */
 export interface OdfCharacterProperties {
@@ -19,14 +11,14 @@ export interface OdfCharacterProperties {
   readonly underline: boolean;
 }
 
-/** One non-empty text fragment and its direct properties. */
-export interface OdfTextRun {
+/** One model-owned text fragment exposed to the streaming exporter. */
+export interface XMLTextRunSource {
   readonly properties: OdfCharacterProperties;
   readonly text: string;
 }
 
 /** Writer paragraph styles supported by the bounded filter. */
-export type OdfParagraphStyle = "default" | "heading-1";
+export type XMLParagraphStyle = "default" | "heading-1";
 
 /** Paragraph alignment values shared with the Writer model. */
 export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
@@ -35,7 +27,7 @@ export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
 export type OdfListLevelKind = "bullet" | "numbered";
 
 /** Neutral projection of one document-owned Writer numbering rule. */
-export interface OdfListRule {
+export interface XMLTextListRuleSource {
   /** Per-level marker families in zero-based Writer order. */
   readonly formats: readonly OdfListLevelKind[];
   /** Canonical SwNumRule name. */
@@ -43,23 +35,28 @@ export interface OdfListRule {
 }
 
 /** Neutral list attributes applied to one paragraph. */
-export interface OdfParagraphList {
+export interface XMLTextListSource {
   /** Effective Writer list identity. */
   readonly listId: string;
   /** Zero-based Writer list level. */
   readonly level: number;
   /** Document numbering rule. */
-  readonly rule: OdfListRule;
+  readonly rule: XMLTextListRuleSource;
 }
 
-/** Neutral paragraph record passed between Writer and xmloff. */
-export interface OdfParagraph {
+/** Narrow live view of one canonical Writer paragraph. */
+export interface XMLTextParagraphSource {
   readonly alignment?: OdfParagraphAlignment;
   readonly inheritedProperties?: OdfCharacterProperties;
-  readonly list?: OdfParagraphList;
+  readonly list?: XMLTextListSource;
   readonly properties?: Partial<OdfCharacterProperties>;
-  readonly runs: readonly OdfTextRun[];
-  readonly style: OdfParagraphStyle;
+  readonly runs: readonly XMLTextRunSource[];
+  readonly style: XMLParagraphStyle;
+}
+
+/** Reiterable model-facing source; definitions are collected before body references. */
+export interface XMLTextExportSource {
+  paragraphs(): Iterable<XMLTextParagraphSource>;
 }
 
 /** Serialized automatic styles and paragraph body fragment. */
@@ -68,52 +65,53 @@ export interface OdfTextExport {
   readonly body: string;
 }
 
-/** Exports Writer-neutral paragraphs into ODF automatic styles and text elements. @param paragraphs - Ordered paragraphs. @returns XML fragments. */
-export function exportTextParagraphs(paragraphs: readonly OdfParagraph[]): OdfTextExport {
+/** Exports live Writer paragraphs into ODF automatic styles and text elements. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @returns XML fragments. */
+export function exportTextParagraphs(
+  source: XMLTextExportSource,
+  isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
+): OdfTextExport {
   const paragraphStyleNames = new Map<string, string>();
   const characterStyleNames = new Map<string, string>();
-  const listRules = new Map<string, OdfListRule>();
-  paragraphs.forEach(
-    /** Collects automatic styles used by one paragraph. @param paragraph - Neutral paragraph. @returns Nothing. */
-    (paragraph) => {
-      if (paragraph.list !== undefined) {
-        const list = paragraph.list;
-        assertList(list);
-        const existing = listRules.get(list.rule.name);
-        if (
-          existing !== undefined &&
-          existing.formats.some(
-            /** Finds a conflicting same-name level format. @param kind - Existing family. @param index - List level. @returns Whether definitions conflict. */
-            (kind, index) => kind !== list.rule.formats[index],
-          )
+  const listRules = new Map<string, XMLTextListRuleSource>();
+  for (const paragraph of source.paragraphs()) {
+    if (isCancelled()) throw new Error("ODT operation was cancelled.");
+    if (paragraph.list !== undefined) {
+      const list = paragraph.list;
+      assertList(list);
+      const existing = listRules.get(list.rule.name);
+      if (
+        existing !== undefined &&
+        existing.formats.some(
+          /** Detects a conflicting list level. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
+          (kind, index) => kind !== list.rule.formats[index],
         )
-          throw new Error(`Conflicting ODF list rule: ${list.rule.name}`);
-        listRules.set(list.rule.name, list.rule);
-      }
-      if (paragraph.alignment !== undefined || paragraph.properties !== undefined) {
-        const key = paragraphStyleKey(paragraph.style, paragraph.alignment, paragraph.properties);
-        if (!paragraphStyleNames.has(key))
-          paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
-      }
-      paragraph.runs.forEach(
-        /** Collects one non-default character style. @param run - Neutral text run. @returns Nothing. */
-        (run) => {
-          if (run.text.length === 0) throw new Error("ODF text runs must not be empty.");
-          if (!equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph))) {
-            const key = characterPropertiesKey(run.properties);
-            if (!characterStyleNames.has(key))
-              characterStyleNames.set(key, `T${characterStyleNames.size + 1}`);
-          }
-        },
-      );
-    },
-  );
+      )
+        throw new Error(`Conflicting ODF list rule: ${list.rule.name}`);
+      listRules.set(list.rule.name, list.rule);
+    }
+    if (paragraph.alignment !== undefined || paragraph.properties !== undefined) {
+      const key = paragraphStyleKey(paragraph.style, paragraph.alignment, paragraph.properties);
+      if (!paragraphStyleNames.has(key))
+        paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
+    }
+    paragraph.runs.forEach(
+      /** Collects one used character style. @param run - Live text run. @returns Nothing. */
+      (run) => {
+        if (run.text.length === 0) throw new Error("ODF text runs must not be empty.");
+        if (!equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph))) {
+          const key = characterPropertiesKey(run.properties);
+          if (!characterStyleNames.has(key))
+            characterStyleNames.set(key, `T${characterStyleNames.size + 1}`);
+        }
+      },
+    );
+  }
   const paragraphStyles = [...paragraphStyleNames].map(
     /** Emits one automatic paragraph style. @param entry - Internal key and ODF name. @returns Style XML. */
     (entry) => {
       const [key, name] = entry;
       const [style, alignment, propertiesKey] = key.split(":") as [
-        OdfParagraphStyle,
+        XMLParagraphStyle,
         OdfParagraphAlignment | "",
         string,
       ];
@@ -157,10 +155,11 @@ export function exportTextParagraphs(paragraphs: readonly OdfParagraph[]): OdfTe
     },
   );
   const body = exportParagraphBody(
-    paragraphs,
+    source.paragraphs(),
     paragraphStyleNames,
     characterStyleNames,
     listStyleNames,
+    isCancelled,
   );
   return {
     automaticStyles: [...paragraphStyles, ...characterStyles, ...listStyles].join(""),
@@ -168,12 +167,13 @@ export function exportTextParagraphs(paragraphs: readonly OdfParagraph[]): OdfTe
   };
 }
 
-/** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @returns ODF body fragment. */
+/** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @param isCancelled - Cancellation probe. @returns ODF body fragment. */
 function exportParagraphBody(
-  paragraphs: readonly OdfParagraph[],
+  paragraphs: Iterable<XMLTextParagraphSource>,
   paragraphStyleNames: ReadonlyMap<string, string>,
   characterStyleNames: ReadonlyMap<string, string>,
   listStyleNames: ReadonlyMap<string, string>,
+  isCancelled: () => boolean,
 ): string {
   let body = "";
   let activeListId: string | undefined;
@@ -191,7 +191,7 @@ function exportParagraphBody(
   }
 
   /** Opens one list level and its first item. @param paragraphList - Source list metadata. @param root - Whether this is a root list block. @returns Nothing. */
-  function openListLevel(paragraphList: OdfParagraphList, root: boolean): void {
+  function openListLevel(paragraphList: XMLTextListSource, root: boolean): void {
     const styleName = listStyleNames.get(paragraphList.rule.name) as string;
     let identityAttributes = "";
     if (root) {
@@ -210,49 +210,47 @@ function exportParagraphBody(
     openRules.push(paragraphList.rule.name);
   }
 
-  paragraphs.forEach(
-    /** Emits one flat paragraph into the current list stack or document body. @param paragraph - Neutral paragraph. @returns Nothing. */
-    (paragraph) => {
-      const paragraphXml = exportParagraphElement(
-        paragraph,
-        paragraphStyleNames,
-        characterStyleNames,
-      );
-      if (paragraph.list === undefined) {
-        closeAllLists();
-        body += paragraphXml;
-        return;
-      }
-      const list = paragraph.list;
-      const currentRuleAtLevel = openRules[list.level];
-      if (
-        activeListId !== undefined &&
-        (activeListId !== list.listId ||
-          (currentRuleAtLevel !== undefined && currentRuleAtLevel !== list.rule.name))
-      )
-        closeAllLists();
-      if (openRules.length === 0) {
-        activeListId = list.listId;
-        for (let level = 0; level <= list.level; level += 1) openListLevel(list, level === 0);
-      } else if (list.level >= openRules.length) {
-        while (openRules.length <= list.level) openListLevel(list, false);
-      } else {
-        while (openRules.length - 1 > list.level) {
-          body += "</text:list-item></text:list>";
-          openRules.pop();
-        }
-        body += "</text:list-item><text:list-item>";
-      }
+  for (const paragraph of paragraphs) {
+    if (isCancelled()) throw new Error("ODT operation was cancelled.");
+    const paragraphXml = exportParagraphElement(
+      paragraph,
+      paragraphStyleNames,
+      characterStyleNames,
+    );
+    if (paragraph.list === undefined) {
+      closeAllLists();
       body += paragraphXml;
-    },
-  );
+      continue;
+    }
+    const list = paragraph.list;
+    const currentRuleAtLevel = openRules[list.level];
+    if (
+      activeListId !== undefined &&
+      (activeListId !== list.listId ||
+        (currentRuleAtLevel !== undefined && currentRuleAtLevel !== list.rule.name))
+    )
+      closeAllLists();
+    if (openRules.length === 0) {
+      activeListId = list.listId;
+      for (let level = 0; level <= list.level; level += 1) openListLevel(list, level === 0);
+    } else if (list.level >= openRules.length) {
+      while (openRules.length <= list.level) openListLevel(list, false);
+    } else {
+      while (openRules.length - 1 > list.level) {
+        body += "</text:list-item></text:list>";
+        openRules.pop();
+      }
+      body += "</text:list-item><text:list-item>";
+    }
+    body += paragraphXml;
+  }
   closeAllLists();
   return body;
 }
 
 /** Emits one paragraph or heading element without list containers. @param paragraph - Neutral paragraph. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @returns Element XML. */
 function exportParagraphElement(
-  paragraph: OdfParagraph,
+  paragraph: XMLTextParagraphSource,
   paragraphStyleNames: ReadonlyMap<string, string>,
   characterStyleNames: ReadonlyMap<string, string>,
 ): string {
@@ -281,7 +279,7 @@ function exportParagraphElement(
 }
 
 /** Validates list metadata before XML generation. @param list - Neutral list state. @returns Nothing. */
-function assertList(list: OdfParagraphList): void {
+function assertList(list: XMLTextListSource): void {
   if (!Number.isInteger(list.level) || list.level < 0 || list.level >= list.rule.formats.length)
     throw new Error("ODF list level is outside its numbering rule.");
   if (list.listId.length === 0 || list.rule.name.length === 0)
@@ -312,7 +310,7 @@ function createXmlId(value: string, used: Set<string>): string {
 
 /** Creates an automatic paragraph style deduplication key. @param style - Parent style. @param alignment - Direct alignment. @param properties - Direct character properties. @returns Key. */
 function paragraphStyleKey(
-  style: OdfParagraphStyle,
+  style: XMLParagraphStyle,
   alignment?: OdfParagraphAlignment,
   properties?: Partial<OdfCharacterProperties>,
 ): string {
@@ -372,7 +370,7 @@ function exportAlignment(alignment: OdfParagraphAlignment): string {
 }
 
 /** Returns the effective paragraph character baseline. @param paragraph - Neutral paragraph. @returns Complete inherited properties. */
-function paragraphInheritedProperties(paragraph: OdfParagraph): OdfCharacterProperties {
+function paragraphInheritedProperties(paragraph: XMLTextParagraphSource): OdfCharacterProperties {
   return paragraph.inheritedProperties ?? { bold: false, italic: false, underline: false };
 }
 

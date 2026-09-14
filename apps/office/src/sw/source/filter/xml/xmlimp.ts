@@ -1,6 +1,4 @@
-/**
- * @fileoverview Reimplements the bounded Writer ODF XML import bridge from pinned LibreOffice `sw/source/filter/xml/xmlimp.cxx`.
- */
+/** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
@@ -14,22 +12,31 @@ import {
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import {
-  parseOdfXmlDocument,
-  type OdfXmlDocument,
-  type OdfXmlElement,
+  FastAttributeList,
+  parseOdfXmlStream,
+  SvXMLIgnoreContext,
+  SvXMLImportContext,
+  type OdfXmlParseOptions,
+  type SvXMLImport as SvXMLImportContract,
 } from "../../../../xmloff/source/core/xml-parser";
-import {
-  ODF_NAMESPACES,
-  type OdfCharacterProperties,
-  type OdfListRule,
-  type OdfParagraphAlignment,
+import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import { XMLStylesContext } from "../../../../xmloff/source/style/xmlstylei";
+import type {
+  OdfCharacterProperties,
+  OdfParagraphAlignment,
+  XMLParagraphStyle,
 } from "../../../../xmloff/source/text/txtparae";
 import {
-  importTextParagraphs,
+  XMLTextBodyContext,
   type OdfStyleDefinition,
+  type XMLParagraphImportTarget,
+  type XMLParagraphListState,
+  type XMLTextImportTarget,
+  type XMLTextListRule,
 } from "../../../../xmloff/source/text/txtparai";
 import { SwDoc } from "../../core/doc/doc";
 import { SwNumFormat, SwNumRule } from "../../core/doc/number";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_WEIGHT,
@@ -41,196 +48,319 @@ import {
   RES_PARATR_ADJUST,
 } from "../../../inc/hintids";
 
+const ignoredDocumentChildren = new Set([
+  XMLToken.OFFICE_FONT_FACE_DECLS,
+  XMLToken.OFFICE_MASTER_STYLES,
+  XMLToken.OFFICE_SETTINGS,
+  XMLToken.OFFICE_SCRIPTS,
+]);
+
+const ignoredMetadataChildren = new Set([
+  XMLToken.META_GENERATOR,
+  XMLToken.META_INITIAL_CREATOR,
+  XMLToken.META_CREATION_DATE,
+  XMLToken.META_EDITING_CYCLES,
+  XMLToken.META_EDITING_DURATION,
+  XMLToken.META_DOCUMENT_STATISTIC,
+  XMLToken.DC_CREATOR,
+  XMLToken.DC_DATE,
+]);
+
 /** Imported model plus shell-owned lifecycle candidate. */
 export interface ImportedWriterDocument {
   readonly document: SwDoc;
   readonly documentState: OfficeDocument;
 }
 
-/** Imports styles.xml followed by content.xml into a canonical SwDoc. @param stylesXml - Named styles stream. @param contentXml - Body stream. @param metadata - Caller document identity. @param metaXml - Optional metadata stream. @returns Imported document. */
+/** Validates one expected ODF document root through the streaming parser. @param xml - XML stream. @param expectedRoot - Root local name. @param maxDepth - Optional depth ceiling. @returns Nothing. */
+export function parseOdfXml(xml: string, expectedRoot: string, maxDepth?: number): void {
+  const roots: Readonly<Record<string, XMLToken>> = {
+    "document-content": XMLToken.OFFICE_DOCUMENT_CONTENT,
+    "document-meta": XMLToken.OFFICE_DOCUMENT_META,
+    "document-styles": XMLToken.OFFICE_DOCUMENT_STYLES,
+  };
+  const expected = roots[expectedRoot];
+  if (expected === undefined) throw new Error(`ODF ${expectedRoot} XML is invalid.`);
+  parseOdfXmlStream(
+    xml,
+    {
+      /** Accepts only the requested root. @param element - Root token. @returns Ignore context or null. */
+      createFastContext(element): SvXMLImportContext | null {
+        return element === expected ? new SvXMLIgnoreContext() : null;
+      },
+      /** Rejects unknown roots. @returns Null. */
+      createUnknownContext(): null {
+        return null;
+      },
+    },
+    maxDepth === undefined ? {} : { limits: { maxDepth } },
+  );
+}
+
+/** Imports all package XML into one temporary canonical document. @param stylesXml - Named styles stream. @param contentXml - Content stream. @param metadata - Shell metadata. @param metaXml - Optional metadata stream. @param options - Parser controls. @returns Imported document candidate. */
 export function importWriterXml(
   stylesXml: string,
   contentXml: string,
   metadata: OfficeDocument,
   metaXml?: string,
+  options: OdfXmlParseOptions = {},
 ): ImportedWriterDocument {
-  const stylesDocument = parseOdfXml(stylesXml, "document-styles");
-  const contentDocument = parseOdfXml(contentXml, "document-content");
-  const title = metaXml === undefined ? undefined : importMetaTitle(metaXml);
-  const documentState = title === undefined ? metadata : { ...metadata, title };
-  const document = new SwDoc();
-  const namedStyles = collectStyles(stylesDocument);
-  applyNamedParagraphStyles(document, namedStyles);
-  const allStyles = new Map([...namedStyles, ...collectStyles(contentDocument)]);
-  const listRules = new Map([
-    ...collectListStyles(stylesDocument),
-    ...collectListStyles(contentDocument),
-  ]);
-  const officeText = contentDocument.getElementsByTagNameNS(ODF_NAMESPACES.office, "text");
-  if (officeText.length !== 1) throw new Error("ODF content must contain exactly one office:text.");
-  const paragraphs = importTextParagraphs(officeText[0] as OdfXmlElement, allStyles, listRules);
-  const importedRules = new Map<string, OdfListRule>();
-  paragraphs.forEach(
-    /** Collects every referenced list rule before paragraph items resolve it. @param paragraph - Imported neutral paragraph. @returns Nothing. */
-    (paragraph) => {
-      if (paragraph.list !== undefined)
-        importedRules.set(paragraph.list.rule.name, paragraph.list.rule);
-    },
-  );
-  importedRules.forEach(
-    /** Creates one document-owned SwNumRule with per-level SwNumFormat values. @param rule - Neutral ODF rule. @returns Nothing. */
-    (rule) => {
-      const formats = rule.formats.map(
-        /** Creates one Writer numbering format. @param kind - Imported marker family. @returns Level format. */
-        (kind) => new SwNumFormat(kind),
-      );
-      document.AddNumRule(new SwNumRule(rule.name, formats, rule.name));
-    },
-  );
-  paragraphs.forEach(
-    /** Restores one neutral paragraph as a canonical text node. @param paragraph - Imported paragraph. @param index - Body order. @returns Nothing. */
-    (paragraph, index) => {
-      const node = document.nodes.MakeTextNode(`paragraph-${index + 1}`);
-      node.ChgFormatColl(document.GetTextFormatColl(paragraph.style));
-      if (paragraph.alignment !== undefined) node.SetParagraphAlignment(paragraph.alignment);
-      if (paragraph.list !== undefined) {
-        node.SetNumRule(paragraph.list.rule.name);
-        node.SetListId(paragraph.list.listId);
-        node.SetAttrListLevel(paragraph.list.level);
-      }
-      if (paragraph.properties !== undefined)
-        putCharacterProperties(
-          paragraph.properties,
-          /** Stores one imported direct character item. @param item - Pooled item. @returns Nothing. */
-          (item) => node.SetAttr(item),
-        );
-      if (paragraph.runs.length > 0)
-        node.ReplaceRange(
-          0,
-          0,
-          paragraph.runs.map(
-            /** Executes the enclosing deterministic test or transformation callback. @param run - Callback input. @returns Callback result. */
-            (run) => ({ attributes: run.properties, text: run.text }),
-          ),
-        );
-    },
-  );
-  return { document, documentState };
+  const xmlImport = new SwXMLImport(new SwDoc());
+  xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
+  xmlImport.finishNamedStyles();
+  xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
+  xmlImport.finishContent();
+  if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
+  return {
+    document: xmlImport.document,
+    documentState:
+      xmlImport.title === undefined ? metadata : { ...metadata, title: xmlImport.title },
+  };
 }
 
-/** Collects ODF list styles into per-level Writer numbering rules. @param document - Parsed ODF stream. @returns Style-name keyed rules. */
-function collectListStyles(document: OdfXmlDocument): ReadonlyMap<string, OdfListRule> {
-  const rules = new Map<string, OdfListRule>();
-  for (const element of document.getElementsByTagNameNS(ODF_NAMESPACES.text, "list-style")) {
-    assertPropertyAttributes(element, [
-      [ODF_NAMESPACES.style, "name"],
-      [ODF_NAMESPACES.style, "display-name"],
-    ]);
-    const styleName = requiredAttribute(element, ODF_NAMESPACES.style, "name");
-    if (rules.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
-    const ruleName = element.getAttributeNS(ODF_NAMESPACES.style, "display-name") ?? styleName;
-    const formats: ("bullet" | "numbered" | undefined)[] = Array.from({ length: 10 });
-    for (const levelElement of element.children) {
-      if (levelElement.namespaceURI !== ODF_NAMESPACES.text)
-        throw new Error(`Unsupported ODF list style child: ${levelElement.localName}`);
-      const kind =
-        levelElement.localName === "list-level-style-bullet"
-          ? "bullet"
-          : levelElement.localName === "list-level-style-number"
-            ? "numbered"
-            : undefined;
-      if (kind === undefined)
-        throw new Error(`Unsupported ODF list level style: ${levelElement.localName}`);
-      assertPropertyAttributes(
-        levelElement,
-        kind === "bullet"
-          ? [
-              [ODF_NAMESPACES.text, "level"],
-              [ODF_NAMESPACES.text, "bullet-char"],
-            ]
-          : [
-              [ODF_NAMESPACES.text, "level"],
-              [ODF_NAMESPACES.style, "num-format"],
-              [ODF_NAMESPACES.style, "num-suffix"],
-            ],
-      );
-      const rawLevel = requiredAttribute(levelElement, ODF_NAMESPACES.text, "level");
-      const level = Number(rawLevel);
-      if (!Number.isInteger(level) || level < 1 || level > formats.length)
-        throw new Error(`Unsupported ODF list level: ${rawLevel}`);
-      if (formats[level - 1] !== undefined)
-        throw new Error(`Duplicate ODF list level: ${rawLevel}`);
-      if (kind === "bullet") {
-        const bullet = requiredAttribute(levelElement, ODF_NAMESPACES.text, "bullet-char");
-        if (bullet !== "•") throw new Error(`Unsupported ODF bullet character: ${bullet}`);
-      } else {
-        const numberFormat = requiredAttribute(levelElement, ODF_NAMESPACES.style, "num-format");
-        if (numberFormat !== "1")
-          throw new Error(`Unsupported ODF numbering format: ${numberFormat}`);
-        const suffix = levelElement.getAttributeNS(ODF_NAMESPACES.style, "num-suffix");
-        if (suffix !== null && suffix !== ".")
-          throw new Error(`Unsupported ODF numbering suffix: ${suffix}`);
-      }
-      formats[level - 1] = kind;
+/** Writer import coordinator matching upstream SwXMLImport context ownership. */
+class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget {
+  private expectedRoot = XMLToken.UNKNOWN;
+  private officeTextCount = 0;
+  private paragraphCount = 0;
+  private titleSeen = false;
+  private readonly styles = new Map<string, OdfStyleDefinition>();
+  private readonly listRules = new Map<string, XMLTextListRule>();
+  public title: string | undefined;
+
+  /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @returns Coordinator. */
+  public constructor(public readonly document: SwDoc) {}
+
+  /** Parses one expected package stream. @param xml - XML text. @param expectedRoot - Required root token. @param options - Parser controls. @returns Nothing. */
+  public parse(xml: string, expectedRoot: XMLToken, options: OdfXmlParseOptions): void {
+    this.expectedRoot = expectedRoot;
+    parseOdfXmlStream(xml, this, options);
+  }
+
+  /** Creates the root document context. @param element - Root token. @param attributes - Root attributes. @returns Root context or null. */
+  public createFastContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element !== this.expectedRoot) return null;
+    attributes.assertOnly([XMLToken.OFFICE_VERSION], "document root");
+    return new SwXMLDocContext(this, element);
+  }
+
+  /** Rejects unknown document roots. @returns Null. */
+  public createUnknownContext(): null {
+    return null;
+  }
+
+  /** Resolves one imported style. @param styleName - ODF style name. @returns Style definition. */
+  public getStyle(styleName: string): OdfStyleDefinition | undefined {
+    return this.styles.get(styleName);
+  }
+
+  /** Resolves one document-owned list rule. @param styleName - ODF list style name. @returns Rule view. */
+  public getListRule(styleName: string): XMLTextListRule | undefined {
+    return this.listRules.get(styleName);
+  }
+
+  /** Registers one parsed style. @param name - ODF style name. @param definition - Parsed definition. @returns Nothing. */
+  public registerStyle(name: string, definition: OdfStyleDefinition): void {
+    if (this.styles.has(name)) throw new Error(`Duplicate ODF style: ${name}`);
+    this.styles.set(name, definition);
+  }
+
+  /** Registers one numbering definition in Writer. @param styleName - ODF style name. @param rule - Parsed rule. @returns Nothing. */
+  public registerListStyle(styleName: string, rule: XMLTextListRule): void {
+    if (this.listRules.has(styleName)) throw new Error(`Duplicate ODF list style: ${styleName}`);
+    this.listRules.set(styleName, rule);
+    const existing = this.document.FindNumRulePtr(rule.name);
+    if (existing !== undefined) {
+      if (
+        rule.formats.some(
+          /** Detects a conflicting canonical level. @param kind - Imported kind. @param level - Level. @returns Whether conflicting. */
+          (kind, level) => existing.GetNumFormat(level).GetKind() !== kind,
+        )
+      )
+        throw new Error(`Conflicting ODF list rule: ${rule.name}`);
+      return;
     }
-    const fallback = formats.find(
-      /** Finds the first declared level format. @param format - Candidate format. @returns Whether declared. */
-      (format) => format !== undefined,
-    );
-    if (fallback === undefined) throw new Error(`ODF list style has no levels: ${styleName}`);
-    rules.set(styleName, {
-      formats: formats.map(
-        /** Completes an undeclared internal level using the first declared format. @param format - Imported level. @returns Complete level kind. */
-        (format) => format ?? fallback,
+    this.document.AddNumRule(
+      new SwNumRule(
+        rule.name,
+        rule.formats.map(
+          /** Creates one canonical level format. @param kind - Marker family. @returns Writer format. */
+          (kind) => new SwNumFormat(kind),
+        ),
+        rule.name,
       ),
-      name: ruleName,
-    });
+    );
   }
-  return rules;
-}
 
-/** Parses one ODF XML stream with a fixed root. @param xml - Source XML. @param expectedRoot - office root local name. @param maxDepth - Maximum element nesting. @returns Worker-safe XML document. */
-export function parseOdfXml(xml: string, expectedRoot: string, maxDepth?: number): OdfXmlDocument {
-  const document = parseOdfXmlDocument(xml, maxDepth);
-  if (
-    document.documentElement.namespaceURI !== ODF_NAMESPACES.office ||
-    document.documentElement.localName !== expectedRoot
-  )
-    throw new Error(`ODF ${expectedRoot} XML is invalid.`);
-  return document;
-}
-
-/** Collects supported named or automatic style records. @param document - Parsed ODF stream. @returns Style table. */
-function collectStyles(document: OdfXmlDocument): ReadonlyMap<string, OdfStyleDefinition> {
-  const styles = new Map<string, OdfStyleDefinition>();
-  for (const element of document.getElementsByTagNameNS(ODF_NAMESPACES.style, "style")) {
-    const name = requiredAttribute(element, ODF_NAMESPACES.style, "name");
-    const family = requiredAttribute(element, ODF_NAMESPACES.style, "family");
-    if (family !== "paragraph" && family !== "text") continue;
-    if (styles.has(name)) throw new Error(`Duplicate ODF style: ${name}`);
-    const parentStyleName =
-      element.getAttributeNS(ODF_NAMESPACES.style, "parent-style-name") ?? undefined;
-    const displayName = element.getAttributeNS(ODF_NAMESPACES.style, "display-name") ?? undefined;
-    const paragraphProperties = directChild(element, ODF_NAMESPACES.style, "paragraph-properties");
-    const textProperties = directChild(element, ODF_NAMESPACES.style, "text-properties");
-    const alignment =
-      paragraphProperties === undefined || family === "text"
-        ? undefined
-        : importAlignment(paragraphProperties);
-    const properties =
-      textProperties === undefined ? undefined : importCharacterProperties(textProperties);
-    styles.set(name, {
-      ...(alignment === undefined ? {} : { alignment }),
-      ...(displayName === undefined ? {} : { displayName }),
-      family,
-      ...(parentStyleName === undefined ? {} : { parentStyleName }),
-      ...(properties === undefined ? {} : { properties }),
-    });
+  /** Opens the sole office:text context. @returns Text body context. */
+  public registerOfficeText(): XMLTextBodyContext {
+    this.officeTextCount += 1;
+    if (this.officeTextCount > 1)
+      throw new Error("ODF content must contain exactly one office:text.");
+    return new XMLTextBodyContext(this);
   }
-  return styles;
+
+  /** Marks the single metadata title as encountered. @returns Nothing. */
+  public startTitle(): void {
+    if (this.titleSeen) throw new Error("ODF metadata contains duplicate titles.");
+    this.titleSeen = true;
+  }
+
+  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param properties - Direct character properties. @param list - Optional list state. @returns Paragraph target. */
+  public createParagraph(
+    style: XMLParagraphStyle,
+    alignment: OdfParagraphAlignment | undefined,
+    properties: Partial<OdfCharacterProperties> | undefined,
+    list: XMLParagraphListState | undefined,
+  ): XMLParagraphImportTarget {
+    const node = this.document.nodes.MakeTextNode(`paragraph-${++this.paragraphCount}`);
+    node.ChgFormatColl(this.document.GetTextFormatColl(style));
+    if (alignment !== undefined) node.SetParagraphAlignment(alignment);
+    if (list !== undefined) {
+      /* v8 ignore next -- list contexts only expose rules registered in this same temporary document. */
+      if (this.document.FindNumRulePtr(list.ruleName) === undefined)
+        throw new Error(`Unsupported ODF list rule: ${list.ruleName}`);
+      node.SetNumRule(list.ruleName);
+      node.SetListId(list.listId);
+      node.SetAttrListLevel(list.level);
+    }
+    if (properties !== undefined)
+      putCharacterProperties(
+        properties,
+        /** Applies a direct paragraph item. @param item - Pooled item. @returns Set result. */
+        (item) => node.SetAttr(item),
+      );
+    return new SwXMLParagraphTarget(node);
+  }
+
+  /** Applies imported named style state. @returns Nothing. */
+  public finishNamedStyles(): void {
+    applyNamedParagraphStyles(this.document, this.styles);
+  }
+
+  /** Validates body cardinality and supplies Writer's empty paragraph. @returns Nothing. */
+  public finishContent(): void {
+    if (this.officeTextCount !== 1)
+      throw new Error("ODF content must contain exactly one office:text.");
+    if (this.paragraphCount === 0) this.createParagraph("default", undefined, undefined, undefined);
+  }
 }
 
-/** Applies direct properties of Standard and Heading 1 to SwTextFormatColl objects. @param document - Destination. @param styles - Named styles. @returns Nothing. */
+/** Applies SAX character callbacks directly to one canonical text node. */
+class SwXMLParagraphTarget implements XMLParagraphImportTarget {
+  /** Wraps one live text node. @param node - Canonical node. @returns Paragraph target. */
+  public constructor(private readonly node: SwTextNode) {}
+
+  /** Appends SAX text with effective attributes. @param text - Character data. @param properties - Effective formatting. @returns Nothing. */
+  public appendText(text: string, properties: OdfCharacterProperties): void {
+    this.node.InsertText(text, this.node.Len(), properties);
+  }
+}
+
+/** Dispatches document-level elements like upstream SwXMLDocContext_Impl. */
+class SwXMLDocContext extends SvXMLImportContext {
+  /** Creates a document dispatcher. @param xmlImport - Import owner. @param root - Current root. @returns Context. */
+  public constructor(
+    private readonly xmlImport: SwXMLImport,
+    private readonly root: XMLToken,
+  ) {
+    super();
+  }
+
+  /** Dispatches one document child. @param element - Child token. @param attributes - Child attributes. @returns Child context or null. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (
+      (element === XMLToken.OFFICE_STYLES || element === XMLToken.OFFICE_AUTOMATIC_STYLES) &&
+      (this.root === XMLToken.OFFICE_DOCUMENT_STYLES ||
+        this.root === XMLToken.OFFICE_DOCUMENT_CONTENT)
+    ) {
+      attributes.assertOnly([], "styles container");
+      return new XMLStylesContext(this.xmlImport);
+    }
+    if (element === XMLToken.OFFICE_BODY && this.root === XMLToken.OFFICE_DOCUMENT_CONTENT) {
+      attributes.assertOnly([], "body");
+      return new SwXMLBodyContext(this.xmlImport);
+    }
+    if (element === XMLToken.OFFICE_META && this.root === XMLToken.OFFICE_DOCUMENT_META) {
+      attributes.assertOnly([], "metadata");
+      return new XMLMetaContext(this.xmlImport);
+    }
+    if (ignoredDocumentChildren.has(element)) return new SvXMLIgnoreContext();
+    return null;
+  }
+}
+
+/** Owns the single office:text body child. */
+class SwXMLBodyContext extends SvXMLImportContext {
+  /** Creates a body context. @param xmlImport - Import owner. @returns Context. */
+  public constructor(private readonly xmlImport: SwXMLImport) {
+    super();
+  }
+
+  /** Creates the Writer text body context. @param element - Child token. @param attributes - Child attributes. @returns Child context or null. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element === XMLToken.OFFICE_SPREADSHEET) return new SvXMLIgnoreContext();
+    if (element !== XMLToken.OFFICE_TEXT) return null;
+    attributes.assertOnly([], "text body");
+    return this.xmlImport.registerOfficeText();
+  }
+}
+
+/** Imports metadata while explicitly ignoring the known generator element. */
+class XMLMetaContext extends SvXMLImportContext {
+  /** Creates a metadata context. @param xmlImport - Import owner. @returns Context. */
+  public constructor(private readonly xmlImport: SwXMLImport) {
+    super();
+  }
+
+  /** Creates a supported metadata child. @param element - Child token. @param attributes - Child attributes. @returns Child context or null. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element === XMLToken.DC_TITLE) {
+      attributes.assertOnly([], "metadata title");
+      this.xmlImport.startTitle();
+      return new XMLTitleContext(
+        /** Commits the parsed title. @param title - Normalized title. @returns Nothing. */
+        (title) => {
+          this.xmlImport.title = title;
+        },
+      );
+    }
+    if (ignoredMetadataChildren.has(element)) return new SvXMLIgnoreContext();
+    return null;
+  }
+}
+
+/** Accumulates the bounded title element. */
+class XMLTitleContext extends SvXMLImportContext {
+  private value = "";
+  /** Creates a title accumulator. @param commit - Completion callback. @returns Context. */
+  public constructor(private readonly commit: (title: string) => void) {
+    super();
+  }
+  /** Appends title characters. @param characters - Decoded text. @returns Nothing. */
+  public override characters(characters: string): void {
+    this.value += characters;
+  }
+  /** Commits a non-empty normalized title. @returns Nothing. */
+  public override endFastElement(): void {
+    const title = this.value.trim();
+    if (title.length > 0) this.commit(title);
+  }
+}
+
+/** Applies Standard and Heading 1 style state. @param document - Destination. @param styles - Imported styles. @returns Nothing. */
 function applyNamedParagraphStyles(
   document: SwDoc,
   styles: ReadonlyMap<string, OdfStyleDefinition>,
@@ -258,85 +388,18 @@ function applyNamedParagraphStyles(
   if (standard.properties !== undefined)
     putCharacterProperties(
       standard.properties,
-      /** Stores one imported default-style character item. @param item - Pooled item. @returns Nothing. */
+      /** Applies a default-style item. @param item - Pooled item. @returns Set result. */
       (item) => document.GetDfltTextFormatColl().SetFormatAttr(item),
     );
   if (heading?.properties !== undefined)
     putCharacterProperties(
       heading.properties,
-      /** Stores one imported heading-style character item. @param item - Pooled item. @returns Nothing. */
+      /** Applies a heading-style item. @param item - Pooled item. @returns Set result. */
       (item) => document.GetTextFormatColl("heading-1").SetFormatAttr(item),
     );
 }
 
-/** Reads dc:title from meta.xml. @param xml - Metadata stream. @returns Title when present. */
-function importMetaTitle(xml: string): string | undefined {
-  const document = parseOdfXml(xml, "document-meta");
-  const titles = document.getElementsByTagNameNS(ODF_NAMESPACES.dc, "title");
-  if (titles.length > 1) throw new Error("ODF metadata contains duplicate titles.");
-  const title = titles[0]?.textContent ?? "";
-  return title.trim().length === 0 ? undefined : title;
-}
-
-/** Reads a required namespaced attribute. @param element - Source. @param namespace - Namespace. @param name - Local name. @returns Value. */
-function requiredAttribute(element: OdfXmlElement, namespace: string, name: string): string {
-  const value = element.getAttributeNS(namespace, name);
-  if (value === null || value.length === 0) throw new Error(`ODF style ${name} is missing.`);
-  return value;
-}
-
-/** Finds at most one direct child. @param element - Parent. @param namespace - Namespace. @param name - Local name. @returns Child. */
-function directChild(
-  element: OdfXmlElement,
-  namespace: string,
-  name: string,
-): OdfXmlElement | undefined {
-  const children = [...element.children].filter(
-    /** Matches one direct property child. @param child - Candidate element. @returns Whether names match. */
-    (child) => child.namespaceURI === namespace && child.localName === name,
-  );
-  if (children.length > 1) throw new Error(`ODF style has duplicate ${name}.`);
-  return children[0];
-}
-
-/** Imports one supported fo:text-align. @param element - Paragraph properties. @returns Model alignment when present. */
-function importAlignment(element: OdfXmlElement): OdfParagraphAlignment | undefined {
-  const value = element.getAttributeNS(ODF_NAMESPACES.fo, "text-align");
-  if (value === null) return undefined;
-  if (value === "start" || value === "left") return "left";
-  if (value === "end" || value === "right") return "right";
-  if (value === "center" || value === "justify") return value;
-  throw new Error(`Unsupported ODF paragraph alignment: ${value}`);
-}
-
-/** Imports the three supported character properties. @param element - Text properties. @returns Direct properties. */
-function importCharacterProperties(element: OdfXmlElement): Partial<OdfCharacterProperties> {
-  const weight = element.getAttributeNS(ODF_NAMESPACES.fo, "font-weight");
-  const posture = element.getAttributeNS(ODF_NAMESPACES.fo, "font-style");
-  const underline = element.getAttributeNS(ODF_NAMESPACES.style, "text-underline-style");
-  const underlineWidth = element.getAttributeNS(ODF_NAMESPACES.style, "text-underline-width");
-  const asianWeight = element.getAttributeNS(ODF_NAMESPACES.style, "font-weight-asian");
-  const complexWeight = element.getAttributeNS(ODF_NAMESPACES.style, "font-weight-complex");
-  const asianPosture = element.getAttributeNS(ODF_NAMESPACES.style, "font-style-asian");
-  const complexPosture = element.getAttributeNS(ODF_NAMESPACES.style, "font-style-complex");
-  if (weight !== null && weight !== "normal" && weight !== "bold")
-    throw new Error(`Unsupported ODF font weight: ${weight}`);
-  if (posture !== null && posture !== "normal" && posture !== "italic")
-    throw new Error(`Unsupported ODF font style: ${posture}`);
-  if (underline !== null && underline !== "none" && underline !== "solid")
-    throw new Error(`Unsupported ODF underline style: ${underline}`);
-  if (underlineWidth !== null && underlineWidth !== "auto")
-    throw new Error(`Unsupported ODF underline width: ${underlineWidth}`);
-  assertScriptPropertyAgreement("font weight", weight, asianWeight, complexWeight);
-  assertScriptPropertyAgreement("font style", posture, asianPosture, complexPosture);
-  return {
-    ...(weight === null ? {} : { bold: weight === "bold" }),
-    ...(posture === null ? {} : { italic: posture === "italic" }),
-    ...(underline === null ? {} : { underline: underline === "solid" }),
-  };
-}
-
-/** Applies synchronized Western/CJK/CTL character deltas as pooled items. @param properties - ODF deltas. @param put - Destination item-set operation. @returns Nothing. */
+/** Converts ODF character deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @returns Nothing. */
 function putCharacterProperties(
   properties: Partial<OdfCharacterProperties>,
   put: (item: SfxPoolItem) => unknown,
@@ -356,37 +419,7 @@ function putCharacterProperties(
     );
 }
 
-/** Rejects script-specific values that the bounded browser projection cannot distinguish. @param property - Property label. @param western - Western value. @param asian - Asian value. @param complex - Complex value. @returns Nothing. */
-function assertScriptPropertyAgreement(
-  property: string,
-  western: string | null,
-  asian: string | null,
-  complex: string | null,
-): void {
-  for (const value of [asian, complex])
-    if (value !== null && western !== value)
-      throw new Error(`Unsupported script-specific ODF ${property}.`);
-}
-
-/** Rejects silently lossy style-property attributes. @param element - Property element. @param allowed - Supported namespace/name pairs. @returns Nothing. */
-function assertPropertyAttributes(
-  element: OdfXmlElement,
-  allowed: readonly (readonly [namespace: string, name: string])[],
-): void {
-  for (const attribute of element.attributes)
-    if (
-      !allowed.some(
-        /** Matches one supported property attribute. @param entry - Namespace and local name. @returns Whether allowed. */
-        (entry) => {
-          const [namespace, name] = entry;
-          return attribute.namespaceURI === namespace && attribute.localName === name;
-        },
-      )
-    )
-      throw new Error(`Unsupported ODF style property: ${attribute.name}`);
-}
-
-/** Maps model alignment into SvxAdjust. @param alignment - Model value. @returns Pool enum. */
+/** Converts ODF alignment to Writer adjustment. @param alignment - ODF alignment. @returns Writer adjustment. */
 function toSvxAdjust(alignment: OdfParagraphAlignment): SvxAdjust {
   if (alignment === "left") return SvxAdjust.ParaStart;
   if (alignment === "right") return SvxAdjust.ParaEnd;
