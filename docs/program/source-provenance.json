@@ -16,10 +16,6 @@
       "rationale": "The local contentindex.ts module follows the SwContentIndex public type name while preserving the reviewed registry/update responsibility implemented by upstream index.cxx."
     },
     {
-      "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
-      "rationale": "The local edtwin-paragraph.tsx module preserves the reviewed SwTextBoxHelper::getOtherTextBoxFormat responsibility while TypeScript decomposition or public naming requires a different filename from edtwin.cxx."
-    },
-    {
       "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
       "rationale": "The local writercommands.ts module preserves the reviewed CreateSWDrawView responsibility while TypeScript decomposition or public naming requires a different filename from swriter.sdi."
     },
@@ -30,6 +26,10 @@
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
       "rationale": "The local wrtsh.ts module preserves the reviewed SwWrtShell responsibility while TypeScript decomposition or public naming requires a different filename from wrtsh1.cxx."
+    },
+    {
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
+      "rationale": "The local wrtsh-selection.ts module preserves the reviewed SwWrtShell selection responsibility while the retired select.ts source-tree path remains reserved by the repository migration guard."
     },
     {
       "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
@@ -848,6 +848,90 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserWriterClipboardEvents",
+            "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+      "rationale": "Isolates native ClipboardEvent and DataTransfer mechanics behind canonical Writer selection and command ports; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Adapts native copy, cut, and paste events to bounded Writer transfer payloads and canonical selections."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser ClipboardEvent and DataTransfer replace native VCL clipboard event delivery."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserWriterCompositionAdapter",
+            "path": "apps/office/src/sw/browser/editor/writer-composition.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/writer-composition.ts",
+      "rationale": "Owns browser IME staging and trailing event suppression while delegating extended-text-input semantics to SwWrtShell; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Adapts browser composition events to one shell-owned extended-text-input transaction."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "DOM composition events replace native VCL input-method events."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserWriterEditController",
+            "path": "apps/office/src/sw/browser/editor/writer-edit-controller.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/writer-edit-controller.ts",
+      "rationale": "Normalizes browser Input Events intent before invoking the Writer shell and exposes guarded fallback diagnostics; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Translates normalized browser edit intents into canonical Writer shell operations."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Input Events replace native VCL key and command event delivery."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "getBrowserWriterCaretFromPoint",
+            "path": "apps/office/src/sw/browser/editor/writer-geometry.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/writer-geometry.ts",
+      "rationale": "Contains the optional browser caretRangeFromPoint geometry fallback behind an injected surface; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Maps viewport pointer coordinates to Writer paragraph DOM caret endpoints when required."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser Range geometry replaces native layout hit testing at the outer adapter boundary."
       },
       "status": "local-only"
     },
@@ -2399,76 +2483,46 @@
       ]
     },
     {
-      "classification": "upstream-mechanism",
+      "classification": "browser-adaptation",
       "evidence": {
         "local": [
           {
-            "marker": "WriterEditableParagraphProps",
+            "marker": "WriterEditableParagraph",
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwTextBoxHelper::getOtherTextBoxFormat",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx"
           }
         ]
       },
       "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
-      "localSymbols": [
-        "WriterEditableParagraphProps",
-        "WriterEditableParagraph"
+      "rationale": "Projects canonical Writer text nodes into browser DOM descendants that inherit editability from one root host; it no longer claims native SwEditWin ownership.",
+      "responsibilities": [
+        "Projects paragraph attributes and formatted runs without owning input or document mutation."
       ],
-      "omittedResponsibilities": [
-        "Upstream obligations outside SwTextBoxHelper::getOtherTextBoxFormat, std::abs, SwEditWin::UpdatePointer, SwCursorShell::SetVisibleCursor and the bounded WriterEditableParagraphProps, WriterEditableParagraph contract remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Renders one document-integrated editable Writer paragraph while leaving document mutation and selection policy to the parent editor."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
-      "upstreamSymbols": [
-        "SwTextBoxHelper::getOtherTextBoxFormat",
-        "std::abs",
-        "SwEditWin::UpdatePointer",
-        "SwCursorShell::SetVisibleCursor"
-      ]
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM projection replace native VCL painting at the outer presentation boundary."
+      },
+      "status": "local-only"
     },
     {
-      "classification": "upstream-mechanism",
+      "classification": "browser-adaptation",
       "evidence": {
         "local": [
           {
-            "marker": "WriterPlainTextEditorProps",
+            "marker": "WriterPlainTextEditor",
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwTextBoxHelper::getOtherTextBoxFormat",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx"
           }
         ]
       },
       "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-      "localSymbols": [
-        "WriterPlainTextEditorProps",
-        "WriterPlainTextEditor"
+      "rationale": "Binds isolated browser editor adapters to one React document projection and one logical contenteditable host; it no longer claims native SwEditWin ownership.",
+      "responsibilities": [
+        "Renders Writer paragraphs inside one browser editing host and binds model-neutral adapter entry points."
       ],
-      "omittedResponsibilities": [
-        "Upstream obligations outside SwTextBoxHelper::getOtherTextBoxFormat, std::abs, SwEditWin::UpdatePointer, SwCursorShell::SetVisibleCursor and the bounded WriterPlainTextEditorProps, WriterPlainTextEditor contract remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Renders ordered Writer paragraphs as accessible editable blocks integrated directly into the document page."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
-      "upstreamSymbols": [
-        "SwTextBoxHelper::getOtherTextBoxFormat",
-        "std::abs",
-        "SwEditWin::UpdatePointer",
-        "SwCursorShell::SetVisibleCursor"
-      ]
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM event binding replace the native VCL window boundary."
+      },
+      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",
@@ -2639,6 +2693,77 @@
         "SfxPrinter",
         "Size",
         "SvxRuler"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "getWriterDeleteGrouping",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/delete.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwWrtShell::DelLeft",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/delete.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/delete.ts",
+      "localSymbols": [
+        "getWriterDeleteGrouping",
+        "getWriterInsertGroup",
+        "getWriterTypingCharacterClass"
+      ],
+      "omittedResponsibilities": [
+        "Upstream deletion modes outside the bounded browser text-edit and SwUndo grouping contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Preserves Writer deletion direction and consecutive-edit grouping rules used by SwWrtShell."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/wrtsh/delete.cxx",
+      "upstreamSymbols": [
+        "SwWrtShell::DelLeft",
+        "SwWrtShell::DelRight"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterCursorSelection",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwWrtShell::SelAll",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
+      "localSymbols": [
+        "WriterCursorPosition",
+        "WriterCursorSelection",
+        "WriterParagraphTextRange",
+        "areWriterCursorSelectionsEqual",
+        "isWriterCursorOffset"
+      ],
+      "omittedResponsibilities": [
+        "Upstream visual, table and object selection modes outside the bounded text SwPaM projection contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Defines direction-preserving Writer point-and-mark projections and validates their text-node coordinates."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/wrtsh/select.cxx",
+      "upstreamSymbols": [
+        "SwWrtShell::SelAll"
       ]
     },
     {

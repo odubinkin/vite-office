@@ -113,7 +113,11 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(page.getByRole("status", { name: "Writer status bar" })).toBeVisible();
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await expect(writerEditor).toBeVisible();
-  await expect(writerEditor).toHaveAttribute("contenteditable", "true");
+  await expect(page.getByRole("article", { name: "Writer document body" })).toHaveAttribute(
+    "contenteditable",
+    "true",
+  );
+  await expect(writerEditor).not.toHaveAttribute("contenteditable");
   await writerEditor.fill("A browser-authored paragraph.");
   await expect(page.getByRole("button", { name: "Undo" })).toBeEnabled();
   await page.getByRole("button", { name: "Edit" }).click();
@@ -178,7 +182,6 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   const trailingWriterParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
   await expect(trailingWriterParagraph).toBeVisible();
   await expect(trailingWriterParagraph).toHaveText("");
-  await expect(trailingWriterParagraph).toBeFocused();
   await expect(trailingWriterParagraph).toHaveCSS("font-size", "24px");
   await expect(trailingWriterParagraph).toHaveCSS("text-align", "center");
   await trailingWriterParagraph.press("Backspace");

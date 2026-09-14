@@ -1,82 +1,26 @@
-/**
- * @fileoverview Renders one document-integrated editable Writer paragraph while leaving document mutation and selection policy to the parent editor.
- */
+/** @fileoverview Projects one canonical Writer paragraph inside the shared editing host. */
 
 import { useLayoutEffect, useRef } from "react";
 
 import type { WriterParagraph, WriterTextRun } from "../../core/doc/writer";
 
-/** Defines the immutable state and browser callbacks needed by one Writer editable paragraph. */
+/** Immutable projection properties for one Writer text node. */
 export interface WriterEditableParagraphProps {
-  /** Whether this paragraph is the current target of Writer formatting commands. */
   readonly isActive: boolean;
-  /** Whether this paragraph is the final visible Writer body entry. */
   readonly isLast: boolean;
-  /** Zero-based body position used only for stable accessibility labels. */
   readonly index: number;
-  /** Visible list marker kept outside the editable paragraph text and omitted for non-list paragraphs. */
   readonly listMarker: string | undefined;
-  /** Delegates cancelable browser edit intent before contenteditable mutates descendants. */
-  readonly onBeforeInput: (paragraphId: string, event: InputEvent) => void;
-  /** Delegates the final extended-text-input payload. */
-  readonly onCompositionEnd: (event: React.CompositionEvent<HTMLParagraphElement>) => void;
-  /** Delegates the start of one extended-text-input transaction. */
-  readonly onCompositionStart: (event: React.CompositionEvent<HTMLParagraphElement>) => void;
-  /** Delegates temporary extended-text-input replacement data. */
-  readonly onCompositionUpdate: (event: React.CompositionEvent<HTMLParagraphElement>) => void;
-  /** Applies the browser focus fallback until selectionchange supplies an exact caret. */
-  readonly onFocus: (paragraphId: string) => void;
-  /** Delegates native key handling for the stable paragraph identity. */
-  readonly onKeyDown: (
-    paragraphId: string,
-    event: React.KeyboardEvent<HTMLParagraphElement>,
-  ) => void;
-  /** Delegates pointer-anchor capture to the document editor. */
-  readonly onMouseDown: (event: React.MouseEvent<HTMLParagraphElement>) => void;
-  /** Delegates browser input to the immutable Writer document owner. */
-  readonly onTextInput: (paragraphId: string, event: React.FormEvent<HTMLParagraphElement>) => void;
-  /** Immutable serializable paragraph rendered by this editing host. */
   readonly paragraph: WriterParagraph;
-  /** Monotonic view invalidation used to reconcile transient browser composition markup. */
   readonly projectionVersion: number;
-  /** Retains or clears the DOM paragraph element for caret restoration. */
   readonly retainElement: (paragraphId: string, element: HTMLParagraphElement | null) => void;
 }
 
-/**
- * Renders a semantic contenteditable paragraph without adding controls that do not exist in LibreOffice Writer's document body.
- *
- * @param props - Serialized paragraph state and browser-event callbacks owned by the document editor.
- * @param props.isActive - Whether formatting currently targets the paragraph.
- * @param props.isLast - Whether document spacing follows the paragraph.
- * @param props.index - Zero-based visible body position used for accessible naming.
- * @param props.listMarker - Current visible marker excluded from the editable text and clipboard paragraph payload.
- * @param props.onBeforeInput - Parent callback invoked before a native editable mutation.
- * @param props.onCompositionEnd - Parent callback invoked when native composition commits or cancels.
- * @param props.onCompositionStart - Parent callback invoked when native composition begins.
- * @param props.onCompositionUpdate - Parent callback invoked for transient native composition data.
- * @param props.onFocus - Parent callback invoked when focus crosses Writer paragraphs.
- * @param props.onKeyDown - Parent callback invoked for native paragraph keys.
- * @param props.onMouseDown - Parent callback invoked to start pointer selection tracking.
- * @param props.onTextInput - Parent callback invoked when editable text changes.
- * @param props.paragraph - Immutable Writer paragraph content and bounded formatting.
- * @param props.projectionVersion - View invalidation that forces canonical DOM reconciliation.
- * @param props.retainElement - Parent callback that stores the mounted editable element.
- * @returns One page-integrated editable paragraph with stable Writer DOM attributes.
- */
+/** Renders a paragraph projection that inherits editability from the one document root. @param props - Immutable paragraph projection state. @returns Rendered paragraph projection. */
 export function WriterEditableParagraph({
   index,
   isActive,
   isLast,
   listMarker,
-  onBeforeInput,
-  onCompositionEnd,
-  onCompositionStart,
-  onCompositionUpdate,
-  onFocus,
-  onKeyDown,
-  onMouseDown,
-  onTextInput,
   paragraph,
   projectionVersion,
   retainElement,
@@ -86,36 +30,17 @@ export function WriterEditableParagraph({
   const label = index === 0 ? "Writer document text" : `Writer paragraph ${index + 1}`;
   const listIndent = listMarker === undefined ? undefined : `${paragraph.list.level * 2}rem`;
   useLayoutEffect(
-    /**
-     * Synchronizes the browser-owned editable subtree without asking React to reconcile nodes
-     * that native input may already have removed, split, or wrapped.
-     *
-     * @returns Nothing; the DOM is replaced only when it differs from the canonical Writer runs.
-     */
+    /** Reprojects canonical runs after accepted commands or guarded fallback. @returns Nothing. */
     function synchronizeEditableContent(): void {
-      const element = paragraphElement.current;
-      /* c8 ignore next -- React runs layout effects only after assigning the mounted paragraph ref. */
-      if (element !== null) synchronizeWriterParagraphContent(element, paragraph.runs);
+      /* c8 ignore next -- React assigns the paragraph ref before running its layout effect. */
+      if (paragraphElement.current !== null)
+        synchronizeWriterParagraphContent(paragraphElement.current, paragraph.runs);
     },
     [paragraph.runs, projectionVersion],
   );
-  useLayoutEffect(
-    /** Installs native beforeinput because React's synthetic fallback does not preserve InputEvent intent consistently across engines. @returns Listener cleanup. */
-    function subscribeBeforeInput(): () => void {
-      const element = paragraphElement.current as HTMLParagraphElement;
-      /** Delegates the native cancelable edit intent. @param event - Browser beforeinput event. @returns Nothing. */
-      function handleBeforeInput(event: Event): void {
-        onBeforeInput(paragraph.id, event as InputEvent);
-      }
-      element.addEventListener("beforeinput", handleBeforeInput);
-      return /** Removes the native input-intent bridge. @returns Nothing. */ () =>
-        element.removeEventListener("beforeinput", handleBeforeInput);
-    },
-    [onBeforeInput, paragraph.id],
-  );
   return (
     <div className={isLast ? "" : "mb-4"} data-active={isActive}>
-      <span className="sr-only" id={styleDescriptionId}>
+      <span className="sr-only" id={styleDescriptionId} contentEditable={false}>
         Paragraph style: {paragraph.style === "heading-1" ? "Heading 1" : "Default Paragraph Style"}
         {listMarker === undefined
           ? ""
@@ -129,6 +54,7 @@ export function WriterEditableParagraph({
           <span
             aria-hidden="true"
             className="w-5 shrink-0 pt-0.5 text-right text-slate-700"
+            contentEditable={false}
             data-testid={`writer-list-marker-${paragraph.id}`}
             data-writer-list-marker={paragraph.id}
           >
@@ -139,94 +65,55 @@ export function WriterEditableParagraph({
           aria-describedby={styleDescriptionId}
           aria-label={label}
           aria-multiline="true"
-          className={`min-h-7 whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"} ${
-            paragraph.style === "heading-1" ? "text-2xl font-bold leading-9" : "text-base leading-7"
-          }`}
-          contentEditable
+          className={`min-h-7 whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"} ${paragraph.style === "heading-1" ? "text-2xl font-bold leading-9" : "text-base leading-7"}`}
           data-alignment={paragraph.alignment}
           data-list-kind={paragraph.list.kind}
           data-list-level={paragraph.list.level}
           data-list-marker={listMarker}
           data-style={paragraph.style}
           data-writer-paragraph-id={paragraph.id}
-          onCompositionEnd={onCompositionEnd}
-          onCompositionStart={onCompositionStart}
-          onCompositionUpdate={onCompositionUpdate}
-          onFocus={
-            /** Applies the paragraph-focus fallback before a browser selectionchange supplies the exact caret. @returns Nothing. */ function focusParagraph(): void {
-              onFocus(paragraph.id);
-            }
-          }
-          onInput={
-            /** Delegates browser input without losing the stable paragraph identity. @param event - Native editable input event. @returns Nothing; the parent schedules document state. */
-            function updateParagraph(event: React.FormEvent<HTMLParagraphElement>): void {
-              onTextInput(paragraph.id, event);
-            }
-          }
-          onKeyDown={
-            /** Delegates native Writer keyboard handling without adding UI-owned behavior. @param event - Native editable keyboard event. @returns Nothing; the parent may prevent the event. */
-            function handleWriterParagraphKeyDown(
-              event: React.KeyboardEvent<HTMLParagraphElement>,
-            ): void {
-              onKeyDown(paragraph.id, event);
-            }
-          }
-          onMouseDown={onMouseDown}
           ref={
-            /** Retains the mounted element for later caret restoration. @param element - Current mounted paragraph or null after unmount. @returns Nothing; the parent updates its ref map. */
-            function retainParagraphElement(element: HTMLParagraphElement | null): void {
+            /** Retains the mounted paragraph projection. @param element - Mounted paragraph or null. @returns Nothing. */ (
+              element,
+            ) => {
               paragraphElement.current = element;
               retainElement(paragraph.id, element);
             }
           }
           role="textbox"
           style={{ textAlign: paragraph.alignment }}
-          suppressContentEditableWarning
+          tabIndex={-1}
         />
       </div>
     </div>
   );
 }
 
-/**
- * Projects canonical Writer runs into one DOM-only editing boundary.
- *
- * React intentionally owns the paragraph element and its attributes but has no virtual children
- * below it. Native `contenteditable` input can therefore mutate descendants without invalidating
- * React's fiber child list, while this layout-phase adapter restores canonical semantic markup.
- *
- * @param paragraph - Browser editing host whose descendants are browser-owned between commits.
- * @param runs - Canonical Writer text runs to project.
- * @returns Nothing; matching markup is retained so native caret placement remains untouched.
- */
+/** Projects canonical direct-format runs without making React the editor mutation owner. @param paragraph - Paragraph projection. @param runs - Canonical Writer runs. @returns Nothing. */
 function synchronizeWriterParagraphContent(
   paragraph: HTMLParagraphElement,
   runs: readonly WriterTextRun[],
 ): void {
   const expected = paragraph.ownerDocument.createElement("p");
-  runs.forEach(
-    /** Appends one semantically nested direct-format run. @param run - Canonical Writer run. @returns Nothing; expected receives the run subtree. */
-    function renderWriterTextRun(run): void {
-      let content: Node = paragraph.ownerDocument.createTextNode(run.text);
-      if (run.attributes.underline) {
-        const underline = paragraph.ownerDocument.createElement("span");
-        underline.style.textDecoration = "underline";
-        underline.append(content);
-        content = underline;
-      }
-      if (run.attributes.italic) {
-        const italic = paragraph.ownerDocument.createElement("em");
-        italic.append(content);
-        content = italic;
-      }
-      if (run.attributes.bold) {
-        const bold = paragraph.ownerDocument.createElement("strong");
-        bold.append(content);
-        content = bold;
-      }
-      expected.append(content);
-    },
-  );
-  if (paragraph.innerHTML === expected.innerHTML) return;
-  paragraph.replaceChildren(...expected.childNodes);
+  for (const run of runs) {
+    let content: Node = paragraph.ownerDocument.createTextNode(run.text);
+    if (run.attributes.underline) {
+      const underline = paragraph.ownerDocument.createElement("span");
+      underline.style.textDecoration = "underline";
+      underline.append(content);
+      content = underline;
+    }
+    if (run.attributes.italic) {
+      const italic = paragraph.ownerDocument.createElement("em");
+      italic.append(content);
+      content = italic;
+    }
+    if (run.attributes.bold) {
+      const bold = paragraph.ownerDocument.createElement("strong");
+      bold.append(content);
+      content = bold;
+    }
+    expected.append(content);
+  }
+  if (paragraph.innerHTML !== expected.innerHTML) paragraph.replaceChildren(...expected.childNodes);
 }

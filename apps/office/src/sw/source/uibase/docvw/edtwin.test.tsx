@@ -169,18 +169,7 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     );
     const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
     enterWriterParagraphText(secondParagraph, "Second paragraph");
-    placeWriterCaret(firstParagraph, "Before Xafter".length);
-    fireEvent.keyDown(firstParagraph, { key: "ArrowRight" });
     expect(secondParagraph).toHaveFocus();
-    expect(window.getSelection()?.getRangeAt(0).startOffset).toBe(0);
-    fireEvent.keyDown(secondParagraph, { key: "ArrowLeft" });
-    expect(firstParagraph).toHaveFocus();
-    expect(window.getSelection()?.getRangeAt(0).startOffset).toBe("Before Xafter".length);
-    fireEvent.keyDown(firstParagraph, { key: "ArrowDown" });
-    expect(secondParagraph).toHaveFocus();
-    placeWriterCaret(secondParagraph, 0);
-    fireEvent.keyDown(secondParagraph, { key: "ArrowUp" });
-    expect(firstParagraph).toHaveFocus();
     fireEvent.keyDown(secondParagraph, { ctrlKey: true, key: "a" });
     expect(window.getSelection()?.toString()).toContain("Before Xafter");
     expect(window.getSelection()?.toString()).toContain("Second paragraph");
@@ -430,5 +419,37 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
       },
     });
     expect(screen.getByText("Clipboard has no text to paste.")).toBeInTheDocument();
+  });
+
+  it("uses one editing host and deletes a cross-paragraph SwPaM through beforeinput" /** Verifies paragraph projections inherit one contenteditable root and canonical deletion joins selected nodes in one undo unit. @returns Nothing. */, function deletesCrossParagraphSelection(): void {
+    render(<App />);
+    const editingHost = screen.getByRole("article", { name: "Writer document body" });
+    const first = screen.getByRole("textbox", { name: "Writer document text" });
+    expect(editingHost).toHaveAttribute("contenteditable", "true");
+    expect(first).not.toHaveAttribute("contenteditable");
+    fireEvent.focus(editingHost);
+    enterWriterParagraphText(first, "First");
+    expect(editingHost).toHaveAttribute("data-writer-fallback-count", "1");
+    placeWriterCaret(first, first.textContent.length);
+    beforeInputWriterParagraph(first, "insertParagraph");
+    const second = screen.getByRole("textbox", { name: "Writer paragraph 2" });
+    enterWriterParagraphText(second, "Second");
+    const range = document.createRange();
+    range.setStart(first.firstChild as Text, 2);
+    range.setEnd(second.firstChild as Text, 3);
+    const selection = window.getSelection() as Selection;
+    selection.removeAllRanges();
+    selection.addRange(range);
+    expect(beforeInputWriterParagraph(second, "deleteContentBackward").defaultPrevented).toBe(true);
+    expect(screen.getAllByRole("textbox")).toHaveLength(1);
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
+      "Fiond",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(screen.getAllByRole("textbox")).toHaveLength(2);
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
+      "First",
+    );
+    expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveTextContent("Second");
   });
 });

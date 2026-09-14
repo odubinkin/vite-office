@@ -59,6 +59,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     const shell = createShell("ab");
     const cursor = shell.GetCursor();
     expect(shell.SetSelection(shell.GetCursorSelection())).toBe(false);
+    expect(shell.DeleteSelection()).toBe(false);
     expect(shell.SetSelection({ point: { offset: 0, paragraphId: "missing" } })).toBe(false);
     expect(shell.SetSelection({ point: { offset: -1, paragraphId: "p-1" } })).toBe(false);
     expect(
@@ -114,7 +115,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     ).toEqual(["A", "b"]);
   });
 
-  it("applies selection deletion and paragraph splitting only within one text node" /** Verifies same-node selection actions, zero-width guards, and cross-node rejection inherited from SwWrtShell. @returns Nothing. */, function appliesBoundedSelectionInput(): void {
+  it("applies selection replacement, deletion, and splitting across text nodes" /** Verifies the registered SwPaM remains authoritative for same-node and cross-node editing. @returns Nothing. */, function appliesBoundedSelectionInput(): void {
     const shell = createShell("abcd");
     shell.SetSelection({
       mark: { offset: 1, paragraphId: "p-1" },
@@ -143,32 +144,71 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
           ) => paragraph.text,
         ),
     ).toEqual(["", "d"]);
-    shell.SetSelection({
-      mark: { offset: 0, paragraphId: "p-1" },
-      point: { offset: 1, paragraphId: secondId },
+    expect(secondId).toBe(shell.GetActiveParagraph().id);
+
+    const crossShell = createShell("ab");
+    crossShell.SetCursor("p-1", 2);
+    crossShell.HandleInput("insertParagraph", null);
+    crossShell.HandleInput("insertText", "cd");
+    crossShell.HandleInput("insertParagraph", null);
+    const crossThirdId = crossShell.GetActiveParagraph().id;
+    crossShell.HandleInput("insertText", "ef");
+    crossShell.SetSelection({
+      mark: { offset: 1, paragraphId: "p-1" },
+      point: { offset: 1, paragraphId: crossThirdId },
     });
-    const before = shell
-      .GetDoc()
-      .paragraphs.map(
-        /** Reads one paragraph's visible text. @param paragraph - Writer paragraph. @returns Visible text. */ (
-          paragraph,
-        ) => paragraph.text,
-      );
-    shell.HandleInput("insertText", "x");
-    shell.HandleInput("deleteContentBackward", null);
-    shell.HandleInput("insertParagraph", null);
+    expect(crossShell.HandleInput("insertText", "X")).toBe(true);
     expect(
-      shell
+      crossShell
+        .GetDoc()
+        .paragraphs.map(
+          /** Reads visible paragraph text. @param paragraph - Writer paragraph. @returns Visible text. */ (
+            paragraph,
+          ) => paragraph.text,
+        ),
+    ).toEqual(["aXf"]);
+    expect(crossShell.Undo()).toBe(true);
+    expect(
+      crossShell
+        .GetDoc()
+        .paragraphs.map(
+          /** Reads visible paragraph text. @param paragraph - Writer paragraph. @returns Visible text. */ (
+            paragraph,
+          ) => paragraph.text,
+        ),
+    ).toEqual(["ab", "cd", "ef"]);
+    crossShell.SetSelection({
+      mark: { offset: 1, paragraphId: crossThirdId },
+      point: { offset: 1, paragraphId: "p-1" },
+    });
+    expect(crossShell.HandleInput("deleteContentBackward", null)).toBe(true);
+    expect(
+      crossShell
+        .GetDoc()
+        .paragraphs.map(
+          /** Reads visible paragraph text. @param paragraph - Writer paragraph. @returns Visible text. */ (
+            paragraph,
+          ) => paragraph.text,
+        ),
+    ).toEqual(["af"]);
+    expect(crossShell.Undo()).toBe(true);
+    crossShell.SetSelection({
+      mark: { offset: 1, paragraphId: "p-1" },
+      point: { offset: 1, paragraphId: crossThirdId },
+    });
+    expect(crossShell.HandleInput("insertParagraph", null)).toBe(true);
+    expect(
+      crossShell
         .GetDoc()
         .paragraphs.map(
           /** Reads one paragraph's visible text. @param paragraph - Writer paragraph. @returns Visible text. */ (
             paragraph,
           ) => paragraph.text,
         ),
-    ).toEqual(before);
+    ).toEqual(["a", "f"]);
   });
 
-  it("retains extended text outside SwDoc until one composition commit" /** Verifies implicit start, duplicate start, cancellation, no-session end, and rejected cross-node commit paths. @returns Nothing. */, function commitsExtendedTextInput(): void {
+  it("retains extended text outside SwDoc until one composition commit" /** Verifies implicit start, duplicate start, cancellation, no-session end, and cross-node replacement. @returns Nothing. */, function commitsExtendedTextInput(): void {
     const shell = createShell("ab");
     expect(shell.EndComposition()).toBe(false);
     shell.SetSelection({
@@ -190,8 +230,17 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       point: { offset: 0, paragraphId: secondId },
     });
     shell.StartComposition();
-    shell.UpdateComposition("ignored");
-    expect(shell.EndComposition()).toBe(false);
+    shell.UpdateComposition("joined");
+    expect(shell.EndComposition()).toBe(true);
+    expect(
+      shell
+        .GetDoc()
+        .paragraphs.map(
+          /** Reads visible paragraph text. @param paragraph - Writer paragraph. @returns Visible text. */ (
+            paragraph,
+          ) => paragraph.text,
+        ),
+    ).toEqual(["joinedb"]);
   });
 
   it("uses code-point boundaries when Intl.Segmenter is unavailable" /** Verifies the older-engine fallback still deletes whole surrogate pairs in both directions. @returns Nothing. */, function usesCodePointFallback(): void {
@@ -337,6 +386,25 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     ).toBe(true);
     expect(emptyBlockShell.GetDoc().paragraphs).toHaveLength(2);
     expect(emptyBlockShell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(1);
+
+    const replacementShell = createShell("old");
+    expect(
+      replacementShell.Paste(
+        { end: 2, paragraphId: "p-1", start: 1 },
+        {
+          isBlock: false,
+          paragraphs: [
+            {
+              listKind: "none",
+              listLevel: 0,
+              runs: [{ attributes: { bold: true, italic: false, underline: false }, text: "X" }],
+            },
+          ],
+          source: "html",
+        },
+      ),
+    ).toBe(true);
+    expect(replacementShell.GetActiveParagraph().text).toBe("oXd");
   });
 
   it("routes formatting and list commands through one mutable undo history" /** Verifies the retired clone facades have one identity-preserving shell replacement with reversible action objects. @returns Nothing. */, function routesFormattingCommands(): void {

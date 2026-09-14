@@ -29,11 +29,7 @@ import {
 } from "../dochdl/swdtflvr";
 import { SwDocShell } from "../app/docsh";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
-import {
-  SwWrtShell,
-  type WriterCursorSelection,
-  type WriterParagraphTextRange,
-} from "../wrtsh/wrtsh";
+import { SwWrtShell, type WriterCursorSelection } from "../wrtsh/wrtsh";
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
@@ -61,8 +57,8 @@ export interface WriterSessionServices {
 export interface WriterCutCommandArguments {
   /** True when a native Cut event already populated event.clipboardData. */
   readonly clipboardHandled?: boolean;
-  /** Same-paragraph model range deleted only after clipboard preparation. */
-  readonly range?: WriterParagraphTextRange;
+  /** Direction-preserving canonical selection deleted after clipboard preparation. */
+  readonly cursorSelection?: WriterCursorSelection;
   /** Sanitized selection used by toolbar or menu Cut. */
   readonly selection?: WriterClipboardSelection;
 }
@@ -71,8 +67,8 @@ export interface WriterCutCommandArguments {
 export interface WriterPasteCommandArguments {
   /** True when a native Paste event supplied the complete clipboard payload, including empty. */
   readonly clipboardHandled?: boolean;
-  /** Same-paragraph replacement range, defaulting to the active paragraph end. */
-  readonly range?: WriterParagraphTextRange;
+  /** Canonical caret or cross-paragraph selection replaced by the paste operation. */
+  readonly cursorSelection?: WriterCursorSelection;
   /** Already parsed native clipboard document, omitted for asynchronous toolbar Paste. */
   readonly paste?: WriterClipboardPaste;
 }
@@ -417,11 +413,11 @@ export class SwView {
     }
   }
 
-  /** Copies then deletes a same-paragraph Writer selection through one Cut command. @param arguments_ - DOM-adapted Cut request. @returns Completion after feedback. */
+  /** Copies then deletes a canonical Writer selection through one Cut command. @param arguments_ - DOM-adapted Cut request. @returns Completion after feedback. */
   public async Cut(arguments_?: unknown): Promise<void> {
     const request = arguments_ as WriterCutCommandArguments | undefined;
     if (
-      request?.range === undefined ||
+      request?.cursorSelection === undefined ||
       (!request.clipboardHandled && request.selection === undefined)
     ) {
       this.SetStorageStatus("Select text in one paragraph to cut.");
@@ -430,7 +426,7 @@ export class SwView {
     try {
       if (!request.clipboardHandled)
         await this.services.copyRichText(request.selection as WriterClipboardSelection);
-      this.wrtShell.ReplaceRange(request.range, []);
+      this.wrtShell.DeleteSelection(request.cursorSelection);
       this.SetStorageStatus("Cut selection.");
     } catch {
       this.SetStorageStatus("Could not cut selection.");
@@ -441,7 +437,7 @@ export class SwView {
   public async Paste(arguments_?: unknown): Promise<void> {
     const request = arguments_ as WriterPasteCommandArguments | undefined;
     const active = this.wrtShell.GetActiveParagraph();
-    const range = request?.range ?? {
+    const target = request?.cursorSelection ?? {
       end: active.text.length,
       paragraphId: active.id,
       start: active.text.length,
@@ -461,7 +457,7 @@ export class SwView {
         }
         paste = parsedPaste;
       }
-      this.wrtShell.Paste(range, paste);
+      this.wrtShell.Paste(target, paste);
       this.SetStorageStatus("Pasted clipboard text.");
     } catch {
       this.SetStorageStatus("Could not read browser clipboard.");

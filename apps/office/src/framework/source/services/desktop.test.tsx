@@ -106,7 +106,11 @@ describe("App" /**
     expect(within(documentCanvas).getByRole("textbox", { name: "Writer document text" })).toBe(
       editor,
     );
-    expect(editor).toHaveAttribute("contenteditable", "true");
+    expect(screen.getByRole("article", { name: "Writer document body" })).toHaveAttribute(
+      "contenteditable",
+      "true",
+    );
+    expect(editor).not.toHaveAttribute("contenteditable");
     const undoButton = screen.getByRole("button", { name: "Undo" });
     const redoButton = screen.getByRole("button", { name: "Redo" });
     expect(editor).toHaveTextContent("");

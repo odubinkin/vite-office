@@ -30,7 +30,6 @@ test("Writer bullets and numbering" /** Verifies Format submenu and text-object 
   );
   await firstParagraph.press("Enter");
   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
-  await expect(secondParagraph).toBeFocused();
   await secondParagraph.fill("Second list item");
   await expect(page.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveText("2.");
   await page

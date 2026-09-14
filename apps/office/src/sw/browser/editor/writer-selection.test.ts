@@ -3,6 +3,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 
 import {
+  BrowserWriterSelectionMapper,
   getWriterCollapsedCaretOffset,
   getWriterCollapsedParagraphCaret,
   getWriterDomSelection,
@@ -40,18 +41,34 @@ function selectRange(range: Range): Selection {
 describe("Writer selection shell" /** Groups nested Writer DOM selection bridge behavior. @returns Nothing; Vitest registers the enclosed cases. */, function defineWriterSelectionShellTests(): void {
   it("reads and restores collapsed offsets through nested text runs" /** Verifies caret conversion crosses rendered direct-format elements. @returns Nothing; clamped offsets are asserted. */, function restoresNestedCaret(): void {
     const { first } = createSelectionFixture();
+    const mapper = new BrowserWriterSelectionMapper(
+      {
+        document,
+        getSelection: /** Reads the fixture selection. @returns Current selection. */ () =>
+          globalThis.getSelection(),
+      },
+      /** Resolves a fixture paragraph. @param paragraphId - Stable Writer ID. @returns Matching paragraph. */ (
+        paragraphId,
+      ) =>
+        document.querySelector<HTMLParagraphElement>(
+          `[data-writer-paragraph-id="${paragraphId}"]`,
+        ) ?? undefined,
+    );
     const boldText = first.querySelector("strong")?.firstChild as Text;
     const range = document.createRange();
     range.setStart(boldText, 1);
     range.collapse(true);
     selectRange(range);
     expect(getWriterCollapsedCaretOffset(first)).toBe(2);
+    expect(getWriterCollapsedCaretOffset(document.createElement("p"))).toBeUndefined();
     restoreWriterCollapsedCaret(first, 3);
     expect(globalThis.getSelection()?.isCollapsed).toBe(true);
     expect(globalThis.getSelection()?.getRangeAt(0).toString()).toBe("");
     expect(getWriterCollapsedCaretOffset(first)).toBe(3);
     restoreWriterCollapsedCaret(first, 999);
     expect(getWriterCollapsedCaretOffset(first)).toBe(4);
+    expect(mapper.Read()).toEqual({ point: { offset: 4, paragraphId: "p-1" } });
+    expect(mapper.Restore({ point: { offset: 4, paragraphId: "p-1" } })).toBe(true);
   });
 
   it("accepts either direction within one paragraph and rejects cross-paragraph selections" /** Verifies only a single editable Writer paragraph produces a format-command range. @returns Nothing; supported and rejected selections are asserted. */, function resolvesFormatRange(): void {

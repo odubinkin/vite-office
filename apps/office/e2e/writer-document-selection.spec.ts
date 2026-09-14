@@ -10,8 +10,34 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
   await firstParagraph.fill("First Writer paragraph");
   await firstParagraph.press("Enter");
   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
-  await expect(secondParagraph).toBeFocused();
   await secondParagraph.fill("Second Writer paragraph");
+  await secondParagraph.click();
+  await page.keyboard.press("Home");
+  await page.keyboard.down("Shift");
+  await page.keyboard.press("ArrowLeft");
+  await page.keyboard.up("Shift");
+  const shiftSelection = await secondParagraph.evaluate(
+    /** Reads paragraph ownership for a native Shift+Arrow range crossing the paragraph break. @returns Stable Writer paragraph IDs at the browser endpoints. */
+    function readShiftSelection(): Readonly<{
+      anchor: string | undefined;
+      focus: string | undefined;
+    }> {
+      const selection = window.getSelection();
+      const paragraphId =
+        /** Resolves the Writer paragraph owning a native endpoint. @param node - Selection endpoint node. @returns Stable paragraph ID, if projected. */ (
+          node: Node | null,
+        ): string | undefined =>
+          (node instanceof Element ? node : node?.parentElement)?.closest<HTMLElement>(
+            "[data-writer-paragraph-id]",
+          )?.dataset.writerParagraphId;
+      return {
+        anchor: paragraphId(selection?.anchorNode ?? null),
+        focus: paragraphId(selection?.focusNode ?? null),
+      };
+    },
+  );
+  expect(shiftSelection.anchor).toBe("writer-paragraph-2");
+  expect(shiftSelection.focus).toBe("writer-paragraph-1");
   await secondParagraph.press("Control+A");
   const selectAllSelection = await secondParagraph.evaluate(
     /**

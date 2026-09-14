@@ -241,8 +241,8 @@
             "marker": "createWriterClipboardSelection"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-            "marker": "moveCaretAcrossParagraphBoundary"
+            "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
+            "marker": "BrowserWriterSelectionMapper"
           }
         ],
         "tests": [
@@ -583,8 +583,8 @@
             "marker": "serializeWriterClipboardPlainText"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-            "marker": "handleNativeWriterCopy"
+            "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+            "marker": "BrowserWriterClipboardEvents"
           }
         ],
         "tests": [
@@ -930,7 +930,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
-            "marker": "renderWriterTextRun"
+            "marker": "synchronizeWriterParagraphContent"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -1071,8 +1071,8 @@
             "marker": "public async Paste"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-            "marker": "handleNativeWriterCut"
+            "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+            "marker": "BrowserWriterClipboardEvents"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
@@ -1993,8 +1993,8 @@
             "marker": "createWriterClipboardSelection"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-            "marker": "moveCaretAcrossParagraphBoundary"
+            "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
+            "marker": "BrowserWriterSelectionMapper"
           }
         ],
         "tests": [
@@ -2095,8 +2095,8 @@
             "marker": "createWriterClipboardSelection"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-            "marker": "moveCaretAcrossParagraphBoundary"
+            "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
+            "marker": "BrowserWriterSelectionMapper"
           }
         ],
         "tests": [
@@ -2222,7 +2222,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
-            "marker": "renderWriterTextRun"
+            "marker": "synchronizeWriterParagraphContent"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -2363,8 +2363,8 @@
             "marker": "public async Paste"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-            "marker": "handleNativeWriterCut"
+            "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+            "marker": "BrowserWriterClipboardEvents"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",

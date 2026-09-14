@@ -279,6 +279,51 @@
       ]
     },
     {
+      "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-editor",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0106",
+        "CAP-0120"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/writer-composition.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-editor",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0118"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/writer-edit-controller.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-editor",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0117",
+        "CAP-0118"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/writer-geometry.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-editor",
+      "capabilityIds": [
+        "CAP-0117"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -802,7 +847,7 @@
     },
     {
       "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
-      "classification": "upstream-mechanism",
+      "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
       "subsystem": "editing-view",
@@ -817,7 +862,7 @@
     },
     {
       "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-      "classification": "upstream-mechanism",
+      "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
       "subsystem": "editing-view",
@@ -921,6 +966,31 @@
       "subsystem": "workbench-session",
       "capabilityIds": [
         "CAP-0101"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/delete.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-shell",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0132"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-shell",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0105",
+        "CAP-0134"
       ]
     },
     {

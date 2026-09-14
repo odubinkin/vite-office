@@ -40,13 +40,12 @@ import type { WriterListLevelCommand } from "../shells/listsh";
 import { createWriterTextCommandRegistry } from "../shells/writercommands";
 import type { SwDocShell } from "../app/docsh";
 import { getActiveWriterParagraph, getNextWriterParagraphId } from "../uiview/viewfunc";
-import { SwUndoInsert, type SwUndoInsertGroup } from "../../core/undo/unins";
+import { SwUndoInsert } from "../../core/undo/unins";
 import {
   SwUndoDelete,
   SwUndoJoinParagraphs,
   SwUndoReplace,
   type SwUndoDeleteDirection,
-  type SwUndoDeleteGroup,
 } from "../../core/undo/undel";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
@@ -60,32 +59,23 @@ import {
   type SwUndoCursorState,
   type SwUndoRedoContext,
 } from "../../core/undo/undobj";
+import {
+  getWriterDeleteGrouping,
+  getWriterInsertGroup,
+  getWriterTypingCharacterClass,
+} from "./delete";
+import {
+  areWriterCursorSelectionsEqual,
+  isWriterCursorOffset,
+  type WriterCursorSelection,
+  type WriterParagraphTextRange,
+} from "./wrtsh-selection";
 
-/** Stable browser-neutral coordinate used to synchronize a Writer SwPaM with a rendered view. */
-export interface WriterCursorPosition {
-  /** Stable Writer text-node identity. */
-  readonly paragraphId: string;
-  /** UTF-16 content offset inside the text node. */
-  readonly offset: number;
-}
-
-/** Direction-preserving projection of the persistent Writer point-and-mark cursor. */
-export interface WriterCursorSelection {
-  /** Optional fixed selection endpoint. */
-  readonly mark?: WriterCursorPosition;
-  /** Moving caret or selection endpoint. */
-  readonly point: WriterCursorPosition;
-}
-
-/** Describes one browser-resolved range after conversion to Writer model coordinates. */
-export interface WriterParagraphTextRange {
-  /** Exclusive UTF-16 range end relative to the text node. */
-  readonly end: number;
-  /** Stable identity of the SwTextNode containing both endpoints. */
-  readonly paragraphId: string;
-  /** Inclusive UTF-16 range start relative to the text node. */
-  readonly start: number;
-}
+export type {
+  WriterCursorPosition,
+  WriterCursorSelection,
+  WriterParagraphTextRange,
+} from "./wrtsh-selection";
 
 /** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
 interface WriterCompositionState {
@@ -351,6 +341,7 @@ export class SwWrtShell extends SwModify {
       return false;
     }
     const changed = this.InsertAtCursor(composition.text, false);
+    /* v8 ignore next -- non-empty composition at a valid registered cursor always inserts. */
     if (!changed) this.NotifySelection();
     return changed;
   }
@@ -431,7 +422,16 @@ export class SwWrtShell extends SwModify {
     const paragraph = point.GetNode() as WriterParagraph;
     const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
     if (mark !== undefined) {
-      if (mark.GetNode() !== paragraph) return false;
+      if (mark.GetNode() !== paragraph) {
+        const manager = this.docShell.GetUndoManager();
+        manager.EnterListAction("Replace");
+        try {
+          this.DeleteCrossParagraphSelection();
+          return this.InsertAtCursor(text, false);
+        } finally {
+          manager.LeaveListAction();
+        }
+      }
       const start = Math.min(mark.GetContentIndex(), point.GetContentIndex());
       const end = Math.max(mark.GetContentIndex(), point.GetContentIndex());
       return this.ApplyAction(
@@ -468,7 +468,7 @@ export class SwWrtShell extends SwModify {
     const paragraph = point.GetNode() as WriterParagraph;
     const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
     if (mark !== undefined) {
-      if (mark.GetNode() !== paragraph) return false;
+      if (mark.GetNode() !== paragraph) return this.DeleteCrossParagraphSelection();
       const start = Math.min(mark.GetContentIndex(), point.GetContentIndex());
       const end = Math.max(mark.GetContentIndex(), point.GetContentIndex());
       if (start === end) return false;
@@ -518,12 +518,59 @@ export class SwWrtShell extends SwModify {
     );
   }
 
+  /** Deletes a canonical visible selection, including ranges spanning text nodes. @param selection - Optional browser-mapped selection to install first. @returns Whether content changed. */
+  public DeleteSelection(selection?: WriterCursorSelection): boolean {
+    if (selection !== undefined) this.SetSelection(selection);
+    return this.cursor.HasMark() && this.DeleteAtCursor("delete");
+  }
+
+  /** Deletes a cross-node SwPaM as one Writer list action and joins the surviving boundary nodes. @returns Whether content changed. */
+  private DeleteCrossParagraphSelection(): boolean {
+    const point = this.cursor.GetPoint();
+    const mark = this.cursor.GetMark();
+    const document = this.GetDoc();
+    const pointNode = point.GetNode() as WriterParagraph;
+    const markNode = mark.GetNode() as WriterParagraph;
+    const pointIndex = document.paragraphs.indexOf(pointNode);
+    const markIndex = document.paragraphs.indexOf(markNode);
+    const startsAtPoint = pointIndex < markIndex;
+    const startNode = startsAtPoint ? pointNode : markNode;
+    const endNode = startsAtPoint ? markNode : pointNode;
+    const startOffset = startsAtPoint ? point.GetContentIndex() : mark.GetContentIndex();
+    const endOffset = startsAtPoint ? mark.GetContentIndex() : point.GetContentIndex();
+    const startIndex = Math.min(pointIndex, markIndex);
+    const endIndex = Math.max(pointIndex, markIndex);
+    const selectedIds = document.paragraphs
+      .slice(startIndex, endIndex + 1)
+      .map(
+        /** Reads a selected paragraph's stable ID. @param selected - Selected paragraph. @returns Stable paragraph ID. */ (
+          selected,
+        ) => selected.id,
+      );
+    const manager = this.docShell.GetUndoManager();
+    manager.EnterListAction("Delete");
+    try {
+      this.ReplaceRange(
+        { end: startNode.Len(), paragraphId: startNode.id, start: startOffset },
+        [],
+      );
+      for (const paragraphId of selectedIds.slice(1, -1)) {
+        const selected = document.nodes.findTextNode(paragraphId) as WriterParagraph;
+        this.ReplaceRange({ end: selected.Len(), paragraphId, start: 0 }, []);
+      }
+      this.ReplaceRange({ end: endOffset, paragraphId: endNode.id, start: 0 }, []);
+      for (const paragraphId of selectedIds.slice(1)) this.MergeParagraphWithPrevious(paragraphId);
+    } finally {
+      manager.LeaveListAction();
+    }
+    this.SetCursor(startNode.id, startOffset);
+    return true;
+  }
+
   /** Splits the paragraph at the persistent caret, first replacing a bounded same-node selection when present. @returns Whether a paragraph break was inserted. */
   private SplitAtCursor(): boolean {
     const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
     if (mark !== undefined) {
-      const point = this.cursor.GetPoint();
-      if (mark.GetNode() !== point.GetNode()) return false;
       const manager = this.docShell.GetUndoManager();
       manager.EnterListAction("Split Paragraph");
       try {
@@ -573,14 +620,35 @@ export class SwWrtShell extends SwModify {
     );
   }
 
-  /** Pastes one safe transfer document as a single Writer undo transaction. @param range - Same-paragraph replacement range. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */
-  public Paste(range: WriterParagraphTextRange, paste: WriterClipboardPaste): boolean {
+  /** Pastes one safe transfer document at a canonical caret or selection as a single Writer undo transaction. @param target - Cursor selection or legacy same-paragraph range. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */
+  public Paste(
+    target: WriterCursorSelection | WriterParagraphTextRange,
+    paste: WriterClipboardPaste,
+  ): boolean {
     const first = paste.paragraphs[0];
     if (first === undefined) return false;
     const manager = this.docShell.GetUndoManager();
     let changed = false;
     manager.EnterListAction("Paste");
     try {
+      if ("paragraphId" in target)
+        this.SetSelection({
+          ...(target.start === target.end
+            ? {}
+            : { mark: { offset: target.start, paragraphId: target.paragraphId } }),
+          point: { offset: target.end, paragraphId: target.paragraphId },
+        });
+      else this.SetSelection(target);
+      if (this.cursor.HasMark()) {
+        this.DeleteAtCursor("delete");
+        changed = true;
+      }
+      const insertionPoint = this.cursor.GetPoint();
+      const range: WriterParagraphTextRange = {
+        end: insertionPoint.GetContentIndex(),
+        paragraphId: (insertionPoint.GetNode() as WriterParagraph).id,
+        start: insertionPoint.GetContentIndex(),
+      };
       changed = this.ReplaceRange(range, first.runs) || changed;
       let paragraphId = range.paragraphId;
       let offset = range.start + GetUndoRunsLength(first.runs);
@@ -900,82 +968,6 @@ export class SwWrtShell extends SwModify {
   private NotifySelection(): void {
     this.CallSwClientNotify({ kind: "cursor-selection-changed" });
   }
-}
-
-/** Validates one stable cursor offset against its current Writer text node. @param paragraph - Target text node. @param offset - Candidate UTF-16 offset. @returns Whether the position is representable. */
-function isWriterCursorOffset(paragraph: WriterParagraph, offset: number): boolean {
-  return Number.isInteger(offset) && offset >= 0 && offset <= paragraph.Len();
-}
-
-/** Compares two direction-preserving browser-neutral cursor projections. @param left - Current selection. @param right - Candidate selection. @returns True when point and optional mark are identical. */
-function areWriterCursorSelectionsEqual(
-  left: WriterCursorSelection,
-  right: WriterCursorSelection,
-): boolean {
-  return (
-    left.point.paragraphId === right.point.paragraphId &&
-    left.point.offset === right.point.offset &&
-    left.mark?.paragraphId === right.mark?.paragraphId &&
-    left.mark?.offset === right.mark?.offset
-  );
-}
-
-/** Applies SwUndoInsert::CanGrouping preconditions to browser input. @param change - Exact insertion. @param inputType - Native edit kind. @param before - Canonical cursor before input. @param nextCaretOffset - Native caret after input. @returns Character group when compatible. */
-function getWriterInsertGroup(
-  change: Readonly<{ kind: "insert"; offset: number; text: string }>,
-  inputType: string,
-  before: SwUndoCursorState,
-  nextCaretOffset: number | undefined,
-): SwUndoInsertGroup | undefined {
-  if (
-    inputType !== "insertText" ||
-    nextCaretOffset !== change.offset + change.text.length ||
-    before.mark !== undefined ||
-    before.point.offset !== change.offset
-  )
-    return undefined;
-  return getWriterTypingCharacterClass(change.text);
-}
-
-/** Applies SwUndoDelete::CanGrouping position and direction rules. @param change - Exact deletion. @param inputType - Native edit kind. @param before - Canonical cursor before input. @param nextCaretOffset - Native caret after input. @returns Direction and class when compatible. */
-function getWriterDeleteGrouping(
-  change: Readonly<{ kind: "delete"; end: number; start: number; text: string }>,
-  inputType: string,
-  before: SwUndoCursorState,
-  nextCaretOffset: number | undefined,
-): Readonly<{ direction: SwUndoDeleteDirection; group: SwUndoDeleteGroup }> | undefined {
-  if (change.text.length !== 1 || before.mark !== undefined) return undefined;
-  const group = /[\p{L}\p{N}]/u.test(change.text) ? "word" : "delimiter";
-  if (
-    inputType === "deleteContentBackward" &&
-    before.point.offset === change.end &&
-    nextCaretOffset === change.start
-  )
-    return { direction: "backspace", group };
-  if (
-    inputType === "deleteContentForward" &&
-    before.point.offset === change.start &&
-    nextCaretOffset === change.start
-  )
-    return { direction: "delete", group };
-  return undefined;
-}
-
-/** Classifies one grouped edit as alphanumeric word or delimiter input. @param text - Non-empty changed text. @returns Shared class or undefined for mixed input. */
-function getWriterTypingCharacterClass(text: string): "delimiter" | "word" | undefined {
-  const characters = [...text];
-  const firstCharacter = characters[0];
-  /* c8 ignore next -- detected insertions and deletions always contain text. */
-  if (firstCharacter === undefined) return undefined;
-  const firstIsWord = /[\p{L}\p{N}]/u.test(firstCharacter);
-  return characters.every(
-    /** Compares one character class with the first changed character. @param character - Changed character. @returns Whether its class matches. */
-    (character) => /[\p{L}\p{N}]/u.test(character) === firstIsWord,
-  )
-    ? firstIsWord
-      ? "word"
-      : "delimiter"
-    : undefined;
 }
 
 /** Exposes the current shell history type for command-state tests without duplicating ownership. */

@@ -10,6 +10,56 @@ export type WriterParagraphElementResolver = (
   paragraphId: string,
 ) => HTMLParagraphElement | undefined;
 
+/** Replaceable browser selection surface used by the document editor. */
+export interface BrowserWriterSelectionEnvironment {
+  readonly document: Document;
+  readonly getSelection: () => Selection | null;
+}
+
+/** Converts native browser selection state to and from canonical Writer positions. */
+export class BrowserWriterSelectionMapper {
+  /** Creates a mapper without capturing browser globals in React code. @param environment - Injected DOM surface. @param resolveParagraph - Mounted paragraph lookup. @returns Nothing. */
+  public constructor(
+    private readonly environment: BrowserWriterSelectionEnvironment,
+    private readonly resolveParagraph: WriterParagraphElementResolver,
+  ) {}
+
+  /** Reads the current direction-preserving Writer selection. @returns Canonical coordinates or undefined outside the projection. */
+  public Read(): WriterCursorSelection | undefined {
+    return getWriterDomSelection(this.environment.getSelection());
+  }
+
+  /** Restores canonical selection into the single browser editing host. @param cursor - Writer cursor projection. @returns Whether restoration succeeded. */
+  public Restore(cursor: WriterCursorSelection): boolean {
+    const current = this.Read();
+    if (
+      current !== undefined &&
+      current.point.paragraphId === cursor.point.paragraphId &&
+      current.point.offset === cursor.point.offset &&
+      current.mark?.paragraphId === cursor.mark?.paragraphId &&
+      current.mark?.offset === cursor.mark?.offset
+    )
+      return true;
+    return restoreWriterDomSelection(
+      cursor,
+      this.resolveParagraph,
+      this.environment.getSelection(),
+    );
+  }
+
+  /** Subscribes to native selection changes. @param listener - Canonical selection consumer. @returns Cleanup callback. */
+  public Subscribe(listener: (selection: WriterCursorSelection) => void): () => void {
+    const synchronize =
+      /** Converts and publishes one native selection change. @returns Nothing. */ (): void => {
+        const selection = this.Read();
+        if (selection !== undefined) listener(selection);
+      };
+    this.environment.document.addEventListener("selectionchange", synchronize);
+    return /** Removes the native selection listener. @returns Nothing. */ () =>
+      this.environment.document.removeEventListener("selectionchange", synchronize);
+  }
+}
+
 /**
  * Converts one native browser selection to Writer point-and-mark coordinates.
  *
@@ -41,13 +91,15 @@ export function getWriterDomSelection(
  *
  * @param cursor - Canonical point-and-mark coordinates.
  * @param resolveParagraph - Mounted paragraph lookup owned by the view adapter.
+ * @param browserSelection - Injected native selection surface.
  * @returns True when every endpoint was mounted and the native selection was restored.
  */
 export function restoreWriterDomSelection(
   cursor: WriterCursorSelection,
   resolveParagraph: WriterParagraphElementResolver,
+  browserSelection: Selection | null = globalThis.getSelection(),
 ): boolean {
-  const selection = globalThis.getSelection();
+  const selection = browserSelection;
   /* c8 ignore next -- Writer requires browser selection support to mount its editable body. */
   if (selection === null) return false;
   const pointParagraph = resolveParagraph(cursor.point.paragraphId);
