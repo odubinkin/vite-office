@@ -28,6 +28,7 @@ export interface WriterTextCommandTarget {
     list: Readonly<{ kind: "bullet" | "none" | "numbered"; level: number }>;
     style: "default" | "heading-1";
   }>;
+  readonly GetCharacterFormatState: (format: WriterCharacterFormat) => "mixed" | "off" | "on";
   readonly GetPendingCharacterAttributes: () => Readonly<{
     bold: boolean;
     italic: boolean;
@@ -85,8 +86,10 @@ export function createWriterTextCommandRegistry(
         ),
       id,
       invalidates: ["document", "history", "selection"],
-      /** Reads the pending toggle value. @returns Current checked state. */
-      isChecked: (): boolean => target.GetPendingCharacterAttributes()[format],
+      /** Reads the selection-aware toggle value. @returns Current checked state. */
+      isChecked: (): boolean => target.GetCharacterFormatState(format) === "on",
+      /** Reports a mixed direct-format selection. @returns True when selected text has both values. */
+      isMixed: (): boolean => target.GetCharacterFormatState(format) === "mixed",
       label,
       shortcuts,
       target: "shell" as const,

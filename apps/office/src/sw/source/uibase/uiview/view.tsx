@@ -6,6 +6,7 @@ import { useCallback, useSyncExternalStore } from "react";
 
 import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
 import type {
+  WriterCharacterAttributes,
   WriterCharacterFormat,
   WriterParagraphAlignment,
   WriterParagraphListKind,
@@ -17,7 +18,11 @@ import { WriterWorkspaceChrome } from "../app/mainwn";
 import { WriterParagraphFormattingToolbar } from "../ribbar/inputwin";
 import { useWriterCommandShortcuts } from "../shells/textsh";
 import { WriterParagraphProperties } from "../sidebar/WriterInspectorTextPanel";
-import { getWriterCollapsedParagraphCaret, getWriterSameParagraphSelection } from "../wrtsh/select";
+import {
+  getWriterCollapsedParagraphCaret,
+  getWriterDomSelection,
+  getWriterSameParagraphSelection,
+} from "../wrtsh/select";
 import { WriterMenuBar } from "../../../uiconfig/swriter/menubar/menubar";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { WriterCommandToolbar } from "../../../uiconfig/swriter/toolbar/standardbar";
@@ -46,18 +51,25 @@ export interface WriterWorkbenchProps {
 export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React.JSX.Element {
   const snapshot = useSyncExternalStore(view.Subscribe, view.GetSnapshot, view.GetSnapshot);
   const wrtShell = view.GetWrtShell();
+  const characterAttributes: WriterCharacterAttributes = {
+    bold: view.QueryState(WRITER_COMMAND_IDS.bold).checked === true,
+    italic: view.QueryState(WRITER_COMMAND_IDS.italic).checked === true,
+    underline: view.QueryState(WRITER_COMMAND_IDS.underline).checked === true,
+  };
 
   /** Resolves DOM-only selection data before dispatching a shell command. @param commandId - Stable Writer command. @returns Typed command arguments or undefined. */
   const resolveCommandArguments = useCallback(
     /** Resolves browser-only arguments for one command. @param commandId - Stable Writer command. @returns Adapted arguments or undefined. */
     function resolveWriterCommandArguments(commandId: string): unknown {
       const selection = globalThis.getSelection();
+      const cursor = getWriterDomSelection(selection);
+      if (cursor !== undefined) wrtShell.SetSelection(cursor);
       if (
         commandId === WRITER_COMMAND_IDS.bold ||
         commandId === WRITER_COMMAND_IDS.italic ||
         commandId === WRITER_COMMAND_IDS.underline
       )
-        return { range: getWriterSameParagraphSelection(selection) };
+        return undefined;
       if (commandId === WRITER_COMMAND_IDS.copy)
         return { selection: createWriterClipboardSelection(selection) };
       if (commandId === WRITER_COMMAND_IDS.cut) return createWriterCutCommandArguments(selection);
@@ -160,7 +172,7 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
         formattingToolbar={
           <WriterParagraphFormattingToolbar
             alignment={snapshot.activeParagraph.alignment}
-            characterAttributes={snapshot.pendingCharacterAttributes}
+            characterAttributes={characterAttributes}
             listKind={snapshot.activeParagraph.list.kind}
             listLevel={snapshot.activeParagraph.list.level}
             onAlignmentChange={executeAlignment}
@@ -179,7 +191,7 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
             alignment={snapshot.activeParagraph.alignment}
             canRedo={view.QueryState(WRITER_COMMAND_IDS.redo).enabled}
             canUndo={view.QueryState(WRITER_COMMAND_IDS.undo).enabled}
-            characterAttributes={snapshot.pendingCharacterAttributes}
+            characterAttributes={characterAttributes}
             isHorizontalRulerVisible={snapshot.isHorizontalRulerVisible}
             isSidebarVisible={snapshot.isPropertiesSidebarVisible}
             isStatusBarVisible={snapshot.isStatusBarVisible}
@@ -237,19 +249,19 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
       >
         <WriterPlainTextEditor
           activeParagraphId={snapshot.activeParagraph.id}
-          focusParagraphId={snapshot.focusParagraphId}
-          focusParagraphOffset={snapshot.focusParagraphOffset}
-          focusRequestId={snapshot.focusRequestId}
-          onParagraphBreak={wrtShell.SplitParagraph.bind(wrtShell)}
-          onParagraphFocus={wrtShell.SetCursor.bind(wrtShell)}
-          onParagraphMerge={wrtShell.MergeParagraphWithPrevious.bind(wrtShell)}
-          onParagraphMergeNext={wrtShell.MergeParagraphWithNext.bind(wrtShell)}
+          cursorSelection={snapshot.cursorSelection}
+          onBeforeInput={wrtShell.HandleInput.bind(wrtShell)}
+          onCompositionEnd={wrtShell.EndComposition.bind(wrtShell)}
+          onCompositionStart={wrtShell.StartComposition.bind(wrtShell)}
+          onCompositionUpdate={wrtShell.UpdateComposition.bind(wrtShell)}
+          onParagraphFocus={wrtShell.FocusParagraph.bind(wrtShell)}
           onSelectAll={createCommandHandler(WRITER_COMMAND_IDS.selectAll)}
+          onSelectionChange={wrtShell.SetSelection.bind(wrtShell)}
           onTextChange={wrtShell.InsertText.bind(wrtShell)}
           onTextCut={executeNativeCut}
           onTextPaste={executeNativePaste}
           paragraphs={snapshot.document.paragraphs}
-          selectAllRequestId={snapshot.selectAllRequestId}
+          projectionVersion={snapshot.viewVersion}
         />
       </WriterWorkspaceChrome>
     </div>

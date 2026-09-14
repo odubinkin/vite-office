@@ -2,6 +2,88 @@
  * @fileoverview Provides browser-DOM selection and collapsed-caret primitives at the LibreOffice `sw/source/uibase/wrtsh/select.cxx` ownership boundary without coupling them to React state.
  */
 
+import type { WriterCursorSelection } from "./wrtsh";
+
+/** Resolves a rendered editable paragraph from its stable Writer text-node identity. */
+export type WriterParagraphElementResolver = (
+  paragraphId: string,
+) => HTMLParagraphElement | undefined;
+
+/**
+ * Converts one native browser selection to Writer point-and-mark coordinates.
+ *
+ * Selection.focus is Writer's moving point and Selection.anchor is its fixed mark, matching
+ * SwPaM direction rather than flattening every range to ordered start/end offsets.
+ *
+ * @param selection - Current browser selection or null when unavailable.
+ * @returns Direction-preserving Writer selection, or undefined outside mounted Writer paragraphs.
+ */
+export function getWriterDomSelection(
+  selection: Selection | null,
+): WriterCursorSelection | undefined {
+  if (
+    selection === null ||
+    selection.rangeCount !== 1 ||
+    !(selection.focusNode instanceof Node) ||
+    !(selection.anchorNode instanceof Node)
+  )
+    return undefined;
+  const point = getWriterDomPosition(selection.focusNode, selection.focusOffset);
+  if (point === undefined) return undefined;
+  if (selection.isCollapsed) return { point };
+  const mark = getWriterDomPosition(selection.anchorNode, selection.anchorOffset);
+  return mark === undefined ? undefined : { mark, point };
+}
+
+/**
+ * Restores one shell-owned SwPaM projection into the native browser Selection.
+ *
+ * @param cursor - Canonical point-and-mark coordinates.
+ * @param resolveParagraph - Mounted paragraph lookup owned by the view adapter.
+ * @returns True when every endpoint was mounted and the native selection was restored.
+ */
+export function restoreWriterDomSelection(
+  cursor: WriterCursorSelection,
+  resolveParagraph: WriterParagraphElementResolver,
+): boolean {
+  const selection = globalThis.getSelection();
+  /* c8 ignore next -- Writer requires browser selection support to mount its editable body. */
+  if (selection === null) return false;
+  const pointParagraph = resolveParagraph(cursor.point.paragraphId);
+  const markParagraph =
+    cursor.mark === undefined ? undefined : resolveParagraph(cursor.mark.paragraphId);
+  if (pointParagraph === undefined || (cursor.mark !== undefined && markParagraph === undefined))
+    return false;
+  if (
+    cursor.mark !== undefined &&
+    markParagraph !== undefined &&
+    markParagraph !== pointParagraph &&
+    cursor.mark.offset === 0 &&
+    cursor.point.offset === (pointParagraph.textContent?.length ?? 0) &&
+    (markParagraph.compareDocumentPosition(pointParagraph) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0
+  ) {
+    const range = pointParagraph.ownerDocument.createRange();
+    range.setStartBefore(markParagraph);
+    range.setEndAfter(pointParagraph);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    return true;
+  }
+  const point = getWriterTextCaretPoint(pointParagraph, cursor.point.offset);
+  if (cursor.mark === undefined || markParagraph === undefined) {
+    pointParagraph.focus();
+    const range = pointParagraph.ownerDocument.createRange();
+    range.setStart(point.node, point.offset);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    return true;
+  }
+  const mark = getWriterTextCaretPoint(markParagraph, cursor.mark.offset);
+  selection.setBaseAndExtent(mark.node, mark.offset, point.node, point.offset);
+  return true;
+}
+
 /**
  * Reads a collapsed browser selection as a UTF-16 offset relative to one editable Writer paragraph.
  *
@@ -29,16 +111,13 @@ export function getWriterCollapsedCaretOffset(
  * @returns Nothing; selection is left unchanged when the browser cannot safely restore a text caret.
  */
 export function restoreWriterCollapsedCaret(paragraph: HTMLParagraphElement, offset: number): void {
-  const selection = globalThis.getSelection();
-  /* c8 ignore next -- Writer requires browser selection support to mount its editable document body. */
-  if (selection === null) return;
-  paragraph.focus();
-  const range = document.createRange();
-  const caret = getWriterTextCaretPoint(paragraph, offset);
-  range.setStart(caret.node, caret.offset);
-  range.collapse(true);
-  selection.removeAllRanges();
-  selection.addRange(range);
+  restoreWriterDomSelection(
+    {
+      point: { offset, paragraphId: paragraph.dataset.writerParagraphId as string },
+    },
+    /** Resolves the one supplied paragraph whose identity constructed the cursor above. @returns Supplied paragraph. */ () =>
+      paragraph,
+  );
 }
 
 /**
@@ -75,22 +154,17 @@ function getWriterTextCaretPoint(
 export function getWriterSameParagraphSelection(
   selection: Selection | null,
 ): Readonly<{ end: number; paragraphId: string; start: number }> | undefined {
-  if (selection === null || selection.isCollapsed || selection.rangeCount !== 1) return undefined;
-  const range = selection.getRangeAt(0);
-  const startParagraph = getWriterSelectionParagraph(range.startContainer);
-  const endParagraph = getWriterSelectionParagraph(range.endContainer);
-  if (startParagraph === undefined || endParagraph === undefined || startParagraph !== endParagraph)
+  const cursor = getWriterDomSelection(selection);
+  if (
+    cursor?.mark === undefined ||
+    cursor.point.paragraphId !== cursor.mark.paragraphId ||
+    cursor.point.offset === cursor.mark.offset
+  )
     return undefined;
-  const paragraphRange = startParagraph.ownerDocument.createRange();
-  paragraphRange.selectNodeContents(startParagraph);
-  const start = getWriterRangeOffset(paragraphRange, range.startContainer, range.startOffset);
-  const end = getWriterRangeOffset(paragraphRange, range.endContainer, range.endOffset);
-  /* v8 ignore next -- A live non-collapsed Range contained by one paragraph always has two representable, distinct text offsets. */
-  if (start === undefined || end === undefined || start === end) return undefined;
   return {
-    end: Math.max(start, end),
-    paragraphId: startParagraph.dataset.writerParagraphId as string,
-    start: Math.min(start, end),
+    end: Math.max(cursor.mark.offset, cursor.point.offset),
+    paragraphId: cursor.point.paragraphId,
+    start: Math.min(cursor.mark.offset, cursor.point.offset),
   };
 }
 
@@ -103,16 +177,24 @@ export function getWriterSameParagraphSelection(
 export function getWriterCollapsedParagraphCaret(
   selection: Selection | null,
 ): Readonly<{ offset: number; paragraphId: string }> | undefined {
-  if (selection === null || !selection.isCollapsed || selection.rangeCount !== 1) return undefined;
-  const range = selection.getRangeAt(0);
-  const paragraph = getWriterSelectionParagraph(range.startContainer);
+  const cursor = getWriterDomSelection(selection);
+  return cursor?.mark === undefined ? cursor?.point : undefined;
+}
+
+/** Converts one native endpoint to a paragraph-relative Writer model position. @param node - Native endpoint node. @param offset - Native endpoint offset. @returns Writer position or undefined outside the editable body. */
+function getWriterDomPosition(
+  node: Node,
+  offset: number,
+): WriterCursorSelection["point"] | undefined {
+  const paragraph = getWriterSelectionParagraph(node);
   if (paragraph === undefined) return undefined;
   const paragraphRange = paragraph.ownerDocument.createRange();
   paragraphRange.selectNodeContents(paragraph);
-  const offset = getWriterRangeOffset(paragraphRange, range.startContainer, range.startOffset);
-  return offset === undefined
+  const writerOffset = getWriterRangeOffset(paragraphRange, node, offset);
+  /* v8 ignore next -- A live native Selection endpoint is a valid Range endpoint by construction. */
+  return writerOffset === undefined
     ? undefined
-    : { offset, paragraphId: paragraph.dataset.writerParagraphId as string };
+    : { offset: writerOffset, paragraphId: paragraph.dataset.writerParagraphId as string };
 }
 
 /** Finds the Writer editable paragraph enclosing one selection container. @param node - Browser text or element node from a selection endpoint. @returns Enclosing Writer paragraph, or undefined outside the editor. */

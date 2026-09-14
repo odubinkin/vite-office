@@ -56,24 +56,37 @@ import {
   type SwUndoRedoContext,
 } from "../../core/undo/undobj";
 
-/** Post-render caret request derived from one Writer shell operation. */
-export interface WriterFocusTarget {
-  /** Paragraph receiving browser focus after React projects the new model. */
+/** Stable browser-neutral coordinate used to synchronize a Writer SwPaM with a rendered view. */
+export interface WriterCursorPosition {
+  /** Stable Writer text-node identity. */
   readonly paragraphId: string;
-  /** UTF-16 caret offset inside the target paragraph. */
+  /** UTF-16 content offset inside the text node. */
   readonly offset: number;
-  /** Monotonic request identity allowing repeated focus at the same model position. */
-  readonly requestId: number;
+}
+
+/** Direction-preserving projection of the persistent Writer point-and-mark cursor. */
+export interface WriterCursorSelection {
+  /** Optional fixed selection endpoint. */
+  readonly mark?: WriterCursorPosition;
+  /** Moving caret or selection endpoint. */
+  readonly point: WriterCursorPosition;
+}
+
+/** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
+interface WriterCompositionState {
+  /** Cursor or selection replaced when the composition is committed. */
+  readonly cursor: SwUndoCursorState;
+  /** Latest browser composition text, not yet written into SwDoc. */
+  text: string;
 }
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell {
   private activeParagraphId: string;
   private readonly commandShell: SfxShell;
+  private composition: WriterCompositionState | undefined;
   private readonly cursor: SwPaM;
-  private focusTarget: WriterFocusTarget | undefined;
   private readonly listeners = new Set<() => void>();
-  private nextFocusRequestId = 0;
   private pendingCharacterAttributes: WriterCharacterAttributes = {
     ...DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
   };
@@ -114,6 +127,20 @@ export class SwWrtShell {
     return this.cursor;
   }
 
+  /** Projects the persistent SwPaM to stable Writer node coordinates. @returns Copied direction-preserving cursor state. */
+  public GetCursorSelection(): WriterCursorSelection {
+    const point = this.cursor.GetPoint();
+    const pointNode = point.GetNode() as WriterParagraph;
+    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
+    const markNode = mark?.GetNode() as WriterParagraph | undefined;
+    return {
+      ...(mark === undefined || markNode === undefined
+        ? {}
+        : { mark: { offset: mark.GetContentIndex(), paragraphId: markNode.id } }),
+      point: { offset: point.GetContentIndex(), paragraphId: pointNode.id },
+    };
+  }
+
   /** Returns the Writer editing command shell for top-priority frame registration. @returns SfxShell adapter. */
   public GetCommandShell(): SfxShell {
     return this.commandShell;
@@ -127,11 +154,6 @@ export class SwWrtShell {
   /** Returns pending direct attributes for a collapsed caret. @returns Copied attribute state. */
   public GetPendingCharacterAttributes(): WriterCharacterAttributes {
     return { ...this.pendingCharacterAttributes };
-  }
-
-  /** Returns the current post-render focus target. @returns Focus target or undefined. */
-  public GetFocusTarget(): WriterFocusTarget | undefined {
-    return this.focusTarget === undefined ? undefined : { ...this.focusTarget };
   }
 
   /** Returns whether the shell-owned history can move backward. @returns True when Undo is enabled. */
@@ -155,7 +177,7 @@ export class SwWrtShell {
   public DocumentReplaced(): void {
     const paragraph = this.GetDoc().paragraphs[0] as WriterParagraph;
     this.activeParagraphId = paragraph.id;
-    this.focusTarget = undefined;
+    this.composition = undefined;
     this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(
       paragraph.runs,
       paragraph.text.length,
@@ -167,20 +189,122 @@ export class SwWrtShell {
   /** Selects one paragraph as the command target. @param paragraphId - Existing paragraph identity. @param offset - Optional logical caret offset, defaulting to paragraph end. @returns Nothing. */
   public SetCursor(paragraphId: string, offset?: number): void {
     const paragraph = getActiveWriterParagraph(this.GetDoc(), paragraphId);
-    const nextOffset = offset ?? paragraph.text.length;
-    const point = this.cursor.GetPoint();
-    const changed =
-      this.cursor.HasMark() ||
-      point.GetNode() !== paragraph ||
-      point.GetContentIndex() !== nextOffset;
-    this.activeParagraphId = paragraph.id;
-    this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(paragraph.runs, nextOffset);
-    if (changed) this.docShell.GetUndoManager().BreakUndoGrouping();
-    this.AssignCursor(paragraph, nextOffset);
-    this.Notify();
+    this.SetSelection({
+      point: { offset: offset ?? paragraph.text.length, paragraphId: paragraph.id },
+    });
   }
 
-  /** Applies one browser text replacement using Writer-compatible grouping rules. @param paragraphId - Edited paragraph. @param text - Complete next visible text. @param caretOffset - Collapsed caret after input. @param inputType - Native input operation. @returns Whether document content changed. */
+  /** Uses paragraph-end fallback only when focus crosses nodes before the browser publishes selectionchange. @param paragraphId - Focused paragraph identity. @returns Nothing. */
+  public FocusParagraph(paragraphId: string): void {
+    const paragraph = getActiveWriterParagraph(this.GetDoc(), paragraphId);
+    if (this.cursor.GetPoint().GetNode() === paragraph) {
+      this.activeParagraphId = paragraph.id;
+      return;
+    }
+    this.SetCursor(paragraph.id);
+  }
+
+  /** Synchronizes an externally changed view selection into the persistent SwPaM. @param selection - Stable point-and-mark coordinates from a view adapter. @returns Whether canonical cursor state changed. */
+  public SetSelection(selection: WriterCursorSelection): boolean {
+    const document = this.GetDoc();
+    const pointNode = document.nodes.findTextNode(selection.point.paragraphId);
+    if (pointNode === undefined) return false;
+    const markNode =
+      selection.mark === undefined
+        ? undefined
+        : document.nodes.findTextNode(selection.mark.paragraphId);
+    if (
+      !isWriterCursorOffset(pointNode, selection.point.offset) ||
+      (selection.mark !== undefined &&
+        (markNode === undefined || !isWriterCursorOffset(markNode, selection.mark.offset)))
+    )
+      return false;
+    const current = this.GetCursorSelection();
+    if (areWriterCursorSelectionsEqual(current, selection)) return false;
+    this.activeParagraphId = pointNode.id;
+    this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(
+      pointNode.runs,
+      selection.point.offset,
+    );
+    this.docShell.GetUndoManager().BreakUndoGrouping();
+    this.cursor.Assign(
+      new SwPosition(pointNode, selection.point.offset),
+      selection.mark === undefined || markNode === undefined
+        ? undefined
+        : new SwPosition(markNode, selection.mark.offset),
+    );
+    this.Notify();
+    return true;
+  }
+
+  /** Selects the complete current Writer body through the persistent shell cursor. @returns Nothing. */
+  public SelectAll(): void {
+    const document = this.GetDoc();
+    const first = document.paragraphs[0] as WriterParagraph;
+    const last = document.paragraphs[document.paragraphs.length - 1] as WriterParagraph;
+    this.SetSelection({
+      mark: { offset: 0, paragraphId: first.id },
+      point: { offset: last.Len(), paragraphId: last.id },
+    });
+  }
+
+  /** Executes a supported browser edit intent against the persistent SwPaM before native DOM mutation. @param inputType - Native beforeinput operation. @param data - Inserted text supplied by InputEvent. @returns True when the intent belongs to the modeled Writer input subset. */
+  public HandleInput(inputType: string, data: string | null): boolean {
+    switch (inputType) {
+      case "insertText":
+      case "insertReplacementText":
+        if (data !== null && data.length > 0) this.InsertAtCursor(data, inputType === "insertText");
+        return true;
+      case "insertLineBreak":
+      case "insertParagraph":
+        this.SplitAtCursor();
+        return true;
+      case "deleteContentBackward":
+        this.DeleteAtCursor("backspace");
+        return true;
+      case "deleteContentForward":
+        this.DeleteAtCursor("delete");
+        return true;
+      case "historyUndo":
+        this.Undo();
+        return true;
+      case "historyRedo":
+        this.Redo();
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /** Begins browser extended text input while retaining the exact Writer selection it may replace. @returns Nothing. */
+  public StartComposition(): void {
+    if (this.composition !== undefined) return;
+    this.docShell.GetUndoManager().BreakUndoGrouping();
+    this.composition = { cursor: this.CaptureCursorState(), text: "" };
+  }
+
+  /** Updates temporary extended text without mutating the canonical Writer document. @param text - Latest complete browser composition string. @returns Nothing. */
+  public UpdateComposition(text: string): void {
+    if (this.composition === undefined) this.StartComposition();
+    (this.composition as WriterCompositionState).text = text;
+  }
+
+  /** Commits one extended-text-input unit through the same selection-replacing shell insertion used upstream. @returns Whether document content changed. */
+  public EndComposition(): boolean {
+    const composition = this.composition;
+    if (composition === undefined) return false;
+    this.composition = undefined;
+    this.RestoreCursorState(composition.cursor);
+    if (composition.text.length === 0) {
+      this.Notify();
+      return false;
+    }
+    const changed = this.InsertAtCursor(composition.text, false);
+    if (!changed) this.Notify();
+    return changed;
+  }
+
+  /** Applies one explicitly isolated post-DOM fallback replacement for unsupported browser input kinds. @param paragraphId - Edited paragraph. @param text - Complete next visible text. @param caretOffset - Collapsed caret after input. @param inputType - Native input operation. @returns Whether document content changed. */
   public InsertText(
     paragraphId: string,
     text: string,
@@ -247,6 +371,125 @@ export class SwWrtShell {
         after,
       ),
     );
+  }
+
+  /** Inserts text at the persistent point, replacing a same-node selection like SwWrtShell::Insert. @param text - Non-empty inserted text. @param allowGrouping - Whether ordinary typing may merge with the preceding insert action. @returns Whether the document changed. */
+  private InsertAtCursor(text: string, allowGrouping: boolean): boolean {
+    const before = this.CaptureCursorState();
+    const point = this.cursor.GetPoint();
+    const paragraph = point.GetNode() as WriterParagraph;
+    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
+    if (mark !== undefined) {
+      if (mark.GetNode() !== paragraph) return false;
+      const start = Math.min(mark.GetContentIndex(), point.GetContentIndex());
+      const end = Math.max(mark.GetContentIndex(), point.GetContentIndex());
+      return this.ApplyAction(
+        new SwUndoReplace(
+          paragraph.id,
+          start,
+          CopyTextRangeRuns(paragraph, start, end),
+          [{ attributes: { ...this.pendingCharacterAttributes }, text }],
+          "Replace",
+          before,
+          this.CreateCollapsedCursorState(paragraph.id, start + text.length),
+        ),
+      );
+    }
+    const offset = point.GetContentIndex();
+    const group = allowGrouping ? getWriterTypingCharacterClass(text) : undefined;
+    return this.ApplyAction(
+      new SwUndoInsert(
+        paragraph.id,
+        offset,
+        [{ attributes: { ...this.pendingCharacterAttributes }, text }],
+        group,
+        before,
+        this.CreateCollapsedCursorState(paragraph.id, offset + text.length),
+      ),
+      group !== undefined,
+    );
+  }
+
+  /** Deletes the active same-node selection or one adjacent grapheme through DelLeft/DelRight semantics. @param direction - Logical deletion direction. @returns Whether the document changed. */
+  private DeleteAtCursor(direction: SwUndoDeleteDirection): boolean {
+    const before = this.CaptureCursorState();
+    const point = this.cursor.GetPoint();
+    const paragraph = point.GetNode() as WriterParagraph;
+    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
+    if (mark !== undefined) {
+      if (mark.GetNode() !== paragraph) return false;
+      const start = Math.min(mark.GetContentIndex(), point.GetContentIndex());
+      const end = Math.max(mark.GetContentIndex(), point.GetContentIndex());
+      if (start === end) return false;
+      return this.ApplyAction(
+        new SwUndoDelete(
+          paragraph.id,
+          start,
+          CopyTextRangeRuns(paragraph, start, end),
+          direction,
+          undefined,
+          before,
+          this.CreateCollapsedCursorState(paragraph.id, start),
+        ),
+      );
+    }
+    const offset = point.GetContentIndex();
+    if (direction === "backspace" && offset === 0)
+      return this.MergeParagraphWithPrevious(paragraph.id);
+    if (direction === "delete" && offset === paragraph.Len())
+      return this.MergeParagraphWithNext(paragraph.id);
+    const start =
+      direction === "backspace"
+        ? getWriterPreviousGraphemeBoundary(paragraph.text, offset)
+        : offset;
+    const end =
+      direction === "backspace" ? offset : getWriterNextGraphemeBoundary(paragraph.text, offset);
+    /* v8 ignore next -- Valid non-boundary cursor offsets still lie strictly inside one grapheme. */
+    if (start === end) return false;
+    const deletedText = paragraph.text.slice(start, end);
+    const group =
+      deletedText.length === 1
+        ? /[\p{L}\p{N}]/u.test(deletedText)
+          ? "word"
+          : "delimiter"
+        : undefined;
+    return this.ApplyAction(
+      new SwUndoDelete(
+        paragraph.id,
+        start,
+        CopyTextRangeRuns(paragraph, start, end),
+        direction,
+        group,
+        before,
+        this.CreateCollapsedCursorState(paragraph.id, start),
+      ),
+      group !== undefined,
+    );
+  }
+
+  /** Splits the paragraph at the persistent caret, first replacing a bounded same-node selection when present. @returns Whether a paragraph break was inserted. */
+  private SplitAtCursor(): boolean {
+    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
+    if (mark !== undefined) {
+      const point = this.cursor.GetPoint();
+      if (mark.GetNode() !== point.GetNode()) return false;
+      const manager = this.docShell.GetUndoManager();
+      manager.EnterListAction("Split Paragraph");
+      try {
+        this.DeleteAtCursor("delete");
+        const nextPoint = this.cursor.GetPoint();
+        this.SplitParagraph(
+          (nextPoint.GetNode() as WriterParagraph).id,
+          nextPoint.GetContentIndex(),
+        );
+      } finally {
+        manager.LeaveListAction();
+      }
+      return true;
+    }
+    const point = this.cursor.GetPoint();
+    this.SplitParagraph((point.GetNode() as WriterParagraph).id, point.GetContentIndex());
+    return true;
   }
 
   /** Replaces one same-paragraph range with Writer text runs. @param range - Target range. @param runs - Inserted safe runs. @returns Whether document content changed. */
@@ -332,24 +575,73 @@ export class SwWrtShell {
     return this.MergeParagraphWithPrevious((document.paragraphs[index + 1] as WriterParagraph).id);
   }
 
+  /** Returns on/off/mixed state for one direct character format at the persistent cursor. @param format - Writer direct character format. @returns Selection-aware slot state. */
+  public GetCharacterFormatState(format: WriterCharacterFormat): "mixed" | "off" | "on" {
+    const range = this.GetSelectedTextRange();
+    if (range === undefined)
+      return this.cursor.HasMark()
+        ? "mixed"
+        : this.pendingCharacterAttributes[format]
+          ? "on"
+          : "off";
+    const paragraph = this.GetDoc().nodes.findTextNode(range.paragraphId) as WriterParagraph;
+    const values = new Set(
+      CopyTextRangeRuns(paragraph, range.start, range.end).map(
+        /** Reads the selected fragment's format value. @param run - Selected Writer text run. @returns Applied flag. */ (
+          run,
+        ) => run.attributes[format],
+      ),
+    );
+    return values.size > 1 ? "mixed" : values.has(true) ? "on" : "off";
+  }
+
   /** Toggles direct character formatting over a range or pending caret state. @param format - Writer character format. @param range - Optional same-paragraph selection. @returns Whether document content changed. */
   public ToggleCharacterFormat(
     format: WriterCharacterFormat,
     range?: WriterParagraphTextRange,
   ): boolean {
+    if (range !== undefined) {
+      const paragraph = this.GetDoc().nodes.findTextNode(range.paragraphId);
+      if (paragraph === undefined) throw new Error(`Unknown paragraph: ${range.paragraphId}`);
+      if (
+        !Number.isInteger(range.start) ||
+        !Number.isInteger(range.end) ||
+        range.start < 0 ||
+        range.end < range.start ||
+        range.end > paragraph.Len()
+      )
+        throw new Error("Writer text range is outside the paragraph.");
+      const currentRange = this.GetSelectedTextRange();
+      if (
+        currentRange?.paragraphId !== range.paragraphId ||
+        currentRange.start !== range.start ||
+        currentRange.end !== range.end
+      )
+        this.SetSelection({
+          mark: { offset: range.start, paragraphId: range.paragraphId },
+          point: { offset: range.end, paragraphId: range.paragraphId },
+        });
+    }
     const before = this.CaptureCursorState();
+    const selectedRange = this.GetSelectedTextRange();
     this.pendingCharacterAttributes = {
       ...this.pendingCharacterAttributes,
-      [format]: !this.pendingCharacterAttributes[format],
+      [format]: this.GetCharacterFormatState(format) !== "on",
     };
-    if (range === undefined) {
+    if (selectedRange === undefined) {
+      if (this.cursor.HasMark()) {
+        this.Notify();
+        return false;
+      }
       this.docShell.GetUndoManager().BreakUndoGrouping();
       this.Notify();
       return false;
     }
-    const paragraph = this.GetDoc().nodes.findTextNode(range.paragraphId);
-    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${range.paragraphId}`);
-    const beforeRuns = CopyTextRangeRuns(paragraph, range.start, range.end);
+    const paragraph = this.GetDoc().nodes.findTextNode(selectedRange.paragraphId);
+    /* v8 ignore next -- A canonical same-node selection retains its indexed SwTextNode. */
+    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${selectedRange.paragraphId}`);
+    const beforeRuns = CopyTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
+    /* v8 ignore next 3 -- A validated non-empty text range always copies at least one run. */
     if (beforeRuns.length === 0) {
       this.Notify();
       return false;
@@ -361,14 +653,7 @@ export class SwWrtShell {
       format,
     );
     return this.ApplyAction(
-      new SwUndoAttr(
-        paragraph.id,
-        range.start,
-        beforeRuns,
-        afterRuns,
-        before,
-        this.CreateCollapsedCursorState(paragraph.id, range.end),
-      ),
+      new SwUndoAttr(paragraph.id, selectedRange.start, beforeRuns, afterRuns, before, before),
     );
   }
 
@@ -450,6 +735,19 @@ export class SwWrtShell {
     return true;
   }
 
+  /** Returns an ordered non-empty same-node selection from the persistent SwPaM. @returns Bounded range or undefined for a caret/cross-node selection. */
+  private GetSelectedTextRange(): WriterParagraphTextRange | undefined {
+    if (!this.cursor.HasMark()) return undefined;
+    const point = this.cursor.GetPoint();
+    const mark = this.cursor.GetMark();
+    if (point.GetNode() !== mark.GetNode()) return undefined;
+    const start = Math.min(point.GetContentIndex(), mark.GetContentIndex());
+    const end = Math.max(point.GetContentIndex(), mark.GetContentIndex());
+    return start === end
+      ? undefined
+      : { end, paragraphId: (point.GetNode() as WriterParagraph).id, start };
+  }
+
   /** Captures point, mark direction, active paragraph, and pending attributes for one action boundary. @returns Complete cursor state. */
   private CaptureCursorState(): SwUndoCursorState {
     const point = this.cursor.GetPoint();
@@ -492,7 +790,6 @@ export class SwWrtShell {
       document.nodes.findTextNode(state.activeParagraphId)?.id ?? pointNode.id;
     this.pendingCharacterAttributes = { ...state.pendingCharacterAttributes };
     this.cursor.Assign(point, mark);
-    this.SetFocusTarget(pointNode.id, point.GetContentIndex());
   }
 
   /** Mutates the existing PaM identity to a collapsed model position. @param paragraph - Target node. @param offset - UTF-16 content offset. @returns Nothing. */
@@ -500,16 +797,63 @@ export class SwWrtShell {
     this.cursor.Assign(new SwPosition(paragraph, offset));
   }
 
-  /** Records a distinct browser focus request even when its model position repeats. @param paragraphId - Target paragraph identity. @param offset - Target content offset. @returns Nothing. */
-  private SetFocusTarget(paragraphId: string, offset: number): void {
-    this.focusTarget = { offset, paragraphId, requestId: this.nextFocusRequestId };
-    this.nextFocusRequestId += 1;
-  }
-
   /** Publishes shell-local selection state invalidation. @returns Nothing. */
   private Notify(): void {
     for (const listener of this.listeners) listener();
   }
+}
+
+/** Validates one stable cursor offset against its current Writer text node. @param paragraph - Target text node. @param offset - Candidate UTF-16 offset. @returns Whether the position is representable. */
+function isWriterCursorOffset(paragraph: WriterParagraph, offset: number): boolean {
+  return Number.isInteger(offset) && offset >= 0 && offset <= paragraph.Len();
+}
+
+/** Compares two direction-preserving browser-neutral cursor projections. @param left - Current selection. @param right - Candidate selection. @returns True when point and optional mark are identical. */
+function areWriterCursorSelectionsEqual(
+  left: WriterCursorSelection,
+  right: WriterCursorSelection,
+): boolean {
+  return (
+    left.point.paragraphId === right.point.paragraphId &&
+    left.point.offset === right.point.offset &&
+    left.mark?.paragraphId === right.mark?.paragraphId &&
+    left.mark?.offset === right.mark?.offset
+  );
+}
+
+/** Finds the grapheme start immediately before a caret, matching Writer character deletion rather than raw UTF-16 units. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
+function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
+  const boundaries = getWriterGraphemeBoundaries(text);
+  let previous = 0;
+  for (const boundary of boundaries) {
+    if (boundary >= offset) return previous;
+    previous = boundary;
+  }
+  /* v8 ignore next -- Boundary enumeration always includes text.length for a valid cursor offset. */
+  return previous;
+}
+
+/** Finds the grapheme end immediately after a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Next grapheme boundary. */
+function getWriterNextGraphemeBoundary(text: string, offset: number): number {
+  for (const boundary of getWriterGraphemeBoundaries(text)) if (boundary > offset) return boundary;
+  /* v8 ignore next -- Callers handle the text-end cursor before asking for a following boundary. */
+  return text.length;
+}
+
+/** Enumerates browser-standard grapheme boundaries with a code-point fallback for older engines. @param text - Paragraph text. @returns Ordered UTF-16 boundaries including zero and text length. */
+function getWriterGraphemeBoundaries(text: string): readonly number[] {
+  const boundaries = [0];
+  if (typeof Intl.Segmenter === "function") {
+    const segments = new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(text);
+    for (const segment of segments) boundaries.push(segment.index + segment.segment.length);
+    return boundaries;
+  }
+  let offset = 0;
+  for (const character of text) {
+    offset += character.length;
+    boundaries.push(offset);
+  }
+  return boundaries;
 }
 
 /** Detects one contiguous insertion, deletion, or fallback replacement. @param previousText - Canonical text. @param nextText - Browser text. @returns Exact change when representable. */

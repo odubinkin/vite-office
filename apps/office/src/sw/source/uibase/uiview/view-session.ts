@@ -17,16 +17,11 @@ import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipb
 import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
 import { loadWriterDocument, saveWriterDocument } from "../../core/doc/writer-storage";
-import type {
-  WriterCharacterAttributes,
-  WriterDocument,
-  WriterParagraph,
-  WriterTextRun,
-} from "../../core/doc/writer";
+import type { WriterDocument, WriterParagraph, WriterTextRun } from "../../core/doc/writer";
 import { parseWriterClipboardPaste, type WriterClipboardSelection } from "../dochdl/swdtflvr";
 import { SwDocShell } from "../app/docsh";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
-import { SwWrtShell } from "../wrtsh/wrtsh";
+import { SwWrtShell, type WriterCursorSelection } from "../wrtsh/wrtsh";
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
@@ -76,12 +71,8 @@ export interface WriterViewSnapshot {
   readonly activeParagraphIndex: number;
   /** Canonical shell-owned document reference. */
   readonly document: WriterDocument;
-  /** Post-transaction browser caret target. */
-  readonly focusParagraphId: string | undefined;
-  /** Post-transaction browser caret offset. */
-  readonly focusParagraphOffset: number | undefined;
-  /** Monotonic browser focus request identity. */
-  readonly focusRequestId: number | undefined;
+  /** Direction-preserving persistent SwPaM projection for the DOM selection adapter. */
+  readonly cursorSelection: WriterCursorSelection;
   /** Horizontal-ruler visibility in this view. */
   readonly isHorizontalRulerVisible: boolean;
   /** Properties-sidebar visibility in this view. */
@@ -90,10 +81,6 @@ export interface WriterViewSnapshot {
   readonly isStoragePending: boolean;
   /** Status-bar visibility in this view. */
   readonly isStatusBarVisible: boolean;
-  /** Pending direct character attributes at the shell cursor. */
-  readonly pendingCharacterAttributes: WriterCharacterAttributes;
-  /** Monotonic Select All request identity for the DOM adapter. */
-  readonly selectAllRequestId: number | undefined;
   /** Current lifecycle or browser-operation feedback. */
   readonly storageStatus: string;
   /** Monotonic dispatcher invalidation version. */
@@ -111,7 +98,6 @@ export class SwView {
   private isStatusBarVisible = true;
   private isStoragePending = false;
   private readonly listeners = new Set<() => void>();
-  private selectAllRequestId: number | undefined;
   private storageStatus = "Not saved in this browser.";
   private readonly viewCommandShell: SfxShell;
   private readonly wrtShell: SwWrtShell;
@@ -174,20 +160,15 @@ export class SwView {
       if (this.cachedSnapshot !== undefined) return this.cachedSnapshot;
       const document = this.docShell.GetDoc();
       const activeParagraph = this.wrtShell.GetActiveParagraph();
-      const focus = this.wrtShell.GetFocusTarget();
       this.cachedSnapshot = Object.freeze({
         activeParagraph,
         activeParagraphIndex: document.paragraphs.indexOf(activeParagraph),
+        cursorSelection: Object.freeze(this.wrtShell.GetCursorSelection()),
         document,
-        focusParagraphId: focus?.paragraphId,
-        focusParagraphOffset: focus?.offset,
-        focusRequestId: focus?.requestId,
         isHorizontalRulerVisible: this.isHorizontalRulerVisible,
         isPropertiesSidebarVisible: this.isPropertiesSidebarVisible,
         isStatusBarVisible: this.isStatusBarVisible,
         isStoragePending: this.isStoragePending,
-        pendingCharacterAttributes: Object.freeze(this.wrtShell.GetPendingCharacterAttributes()),
-        selectAllRequestId: this.selectAllRequestId,
         storageStatus: this.storageStatus,
         viewVersion: this.GetDispatcher().GetVersion(),
       });
@@ -402,11 +383,9 @@ export class SwView {
     }
   }
 
-  /** Requests a fresh DOM Select All projection. @returns Nothing. */
+  /** Selects the complete Writer body through the persistent SwPaM. @returns Nothing. */
   public RequestSelectAll(): void {
-    this.selectAllRequestId =
-      this.selectAllRequestId === undefined ? 0 : this.selectAllRequestId + 1;
-    this.Invalidate("selection");
+    this.wrtShell.SelectAll();
   }
 
   /** Returns horizontal-ruler command state. @returns Visibility. */

@@ -16,7 +16,15 @@ export interface WriterEditableParagraphProps {
   readonly index: number;
   /** Visible list marker kept outside the editable paragraph text and omitted for non-list paragraphs. */
   readonly listMarker: string | undefined;
-  /** Records that the browser focused this paragraph for later command targeting. */
+  /** Delegates cancelable browser edit intent before contenteditable mutates descendants. */
+  readonly onBeforeInput: (paragraphId: string, event: InputEvent) => void;
+  /** Delegates the final extended-text-input payload. */
+  readonly onCompositionEnd: (event: React.CompositionEvent<HTMLParagraphElement>) => void;
+  /** Delegates the start of one extended-text-input transaction. */
+  readonly onCompositionStart: (event: React.CompositionEvent<HTMLParagraphElement>) => void;
+  /** Delegates temporary extended-text-input replacement data. */
+  readonly onCompositionUpdate: (event: React.CompositionEvent<HTMLParagraphElement>) => void;
+  /** Applies the browser focus fallback until selectionchange supplies an exact caret. */
   readonly onFocus: (paragraphId: string) => void;
   /** Delegates native key handling for the stable paragraph identity. */
   readonly onKeyDown: (
@@ -29,6 +37,8 @@ export interface WriterEditableParagraphProps {
   readonly onTextInput: (paragraphId: string, event: React.FormEvent<HTMLParagraphElement>) => void;
   /** Immutable serializable paragraph rendered by this editing host. */
   readonly paragraph: WriterParagraph;
+  /** Monotonic view invalidation used to reconcile transient browser composition markup. */
+  readonly projectionVersion: number;
   /** Retains or clears the DOM paragraph element for caret restoration. */
   readonly retainElement: (paragraphId: string, element: HTMLParagraphElement | null) => void;
 }
@@ -41,11 +51,16 @@ export interface WriterEditableParagraphProps {
  * @param props.isLast - Whether document spacing follows the paragraph.
  * @param props.index - Zero-based visible body position used for accessible naming.
  * @param props.listMarker - Current visible marker excluded from the editable text and clipboard paragraph payload.
- * @param props.onFocus - Parent callback invoked when the paragraph gains focus.
+ * @param props.onBeforeInput - Parent callback invoked before a native editable mutation.
+ * @param props.onCompositionEnd - Parent callback invoked when native composition commits or cancels.
+ * @param props.onCompositionStart - Parent callback invoked when native composition begins.
+ * @param props.onCompositionUpdate - Parent callback invoked for transient native composition data.
+ * @param props.onFocus - Parent callback invoked when focus crosses Writer paragraphs.
  * @param props.onKeyDown - Parent callback invoked for native paragraph keys.
  * @param props.onMouseDown - Parent callback invoked to start pointer selection tracking.
  * @param props.onTextInput - Parent callback invoked when editable text changes.
  * @param props.paragraph - Immutable Writer paragraph content and bounded formatting.
+ * @param props.projectionVersion - View invalidation that forces canonical DOM reconciliation.
  * @param props.retainElement - Parent callback that stores the mounted editable element.
  * @returns One page-integrated editable paragraph with stable Writer DOM attributes.
  */
@@ -54,11 +69,16 @@ export function WriterEditableParagraph({
   isActive,
   isLast,
   listMarker,
+  onBeforeInput,
+  onCompositionEnd,
+  onCompositionStart,
+  onCompositionUpdate,
   onFocus,
   onKeyDown,
   onMouseDown,
   onTextInput,
   paragraph,
+  projectionVersion,
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
@@ -77,7 +97,21 @@ export function WriterEditableParagraph({
       /* c8 ignore next -- React runs layout effects only after assigning the mounted paragraph ref. */
       if (element !== null) synchronizeWriterParagraphContent(element, paragraph.runs);
     },
-    [paragraph.runs],
+    [paragraph.runs, projectionVersion],
+  );
+  useLayoutEffect(
+    /** Installs native beforeinput because React's synthetic fallback does not preserve InputEvent intent consistently across engines. @returns Listener cleanup. */
+    function subscribeBeforeInput(): () => void {
+      const element = paragraphElement.current as HTMLParagraphElement;
+      /** Delegates the native cancelable edit intent. @param event - Browser beforeinput event. @returns Nothing. */
+      function handleBeforeInput(event: Event): void {
+        onBeforeInput(paragraph.id, event as InputEvent);
+      }
+      element.addEventListener("beforeinput", handleBeforeInput);
+      return /** Removes the native input-intent bridge. @returns Nothing. */ () =>
+        element.removeEventListener("beforeinput", handleBeforeInput);
+    },
+    [onBeforeInput, paragraph.id],
   );
   return (
     <div className={isLast ? "" : "mb-4"} data-active={isActive}>
@@ -115,9 +149,11 @@ export function WriterEditableParagraph({
           data-list-marker={listMarker}
           data-style={paragraph.style}
           data-writer-paragraph-id={paragraph.id}
+          onCompositionEnd={onCompositionEnd}
+          onCompositionStart={onCompositionStart}
+          onCompositionUpdate={onCompositionUpdate}
           onFocus={
-            /** Selects this paragraph for subsequent Writer formatting. @returns Nothing; the parent records paragraph.id. */
-            function selectParagraph(): void {
+            /** Applies the paragraph-focus fallback before a browser selectionchange supplies the exact caret. @returns Nothing. */ function focusParagraph(): void {
               onFocus(paragraph.id);
             }
           }

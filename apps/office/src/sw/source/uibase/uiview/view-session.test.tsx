@@ -111,6 +111,42 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     ).toThrow("not attached");
   });
 
+  it("publishes mixed formatting from the persistent directional SwPaM" /** Verifies selection state is owned by SwWrtShell, command query exposes mixed state, formatting retains direction, and Undo restores it. @returns Nothing; shell and dispatch state are asserted without DOM input. */, function publishesCanonicalSelectionState(): void {
+    const session = createWriterDocumentSession(createServices());
+    const shell = session.view.GetWrtShell();
+    const paragraphId = shell.GetActiveParagraph().id;
+    expect(shell.HandleInput("insertText", "ab")).toBe(true);
+    shell.SetSelection({
+      mark: { offset: 0, paragraphId },
+      point: { offset: 1, paragraphId },
+    });
+    session.view.Execute(WRITER_COMMAND_IDS.bold);
+    shell.SetSelection({
+      mark: { offset: 2, paragraphId },
+      point: { offset: 0, paragraphId },
+    });
+    expect(session.view.QueryState(WRITER_COMMAND_IDS.bold)).toMatchObject({
+      checked: false,
+      mixed: true,
+    });
+    session.view.Execute(WRITER_COMMAND_IDS.bold);
+    expect(session.view.QueryState(WRITER_COMMAND_IDS.bold)).toMatchObject({
+      checked: true,
+      mixed: false,
+    });
+    expect(shell.GetCursorSelection()).toEqual({
+      mark: { offset: 2, paragraphId },
+      point: { offset: 0, paragraphId },
+    });
+    session.view.Execute(WRITER_COMMAND_IDS.undo);
+    expect(session.view.QueryState(WRITER_COMMAND_IDS.bold).mixed).toBe(true);
+    expect(shell.GetCursorSelection()).toEqual({
+      mark: { offset: 2, paragraphId },
+      point: { offset: 0, paragraphId },
+    });
+    session.Close();
+  });
+
   it("routes toolbar, menu, and shortcut through one command ID and survives React remount" /** Verifies shared dispatch handler/state and view lifetime independent from React. @returns Completion after async browser adapters settle. */, async function convergesCommandSurfaces(): Promise<void> {
     const services = createServices();
     const session = createWriterDocumentSession(services);

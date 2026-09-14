@@ -14,6 +14,8 @@ export interface CommandState<Value = unknown> {
   readonly enabled: boolean;
   /** Optional boolean toggle state used by menus and toolbars. */
   readonly checked?: boolean;
+  /** Whether a toggle covers a selection with both applied and unapplied values. */
+  readonly mixed?: boolean;
   /** Optional typed state value used by selectors such as paragraph style. */
   readonly value?: Value;
 }
@@ -42,6 +44,8 @@ export interface CommandDefinition<Context, Result = unknown, Arguments = unknow
   readonly isEnabled?: (context: Context) => boolean;
   /** Optional checked-state predicate evaluated through the resolving shell. */
   readonly isChecked?: (context: Context) => boolean;
+  /** Optional mixed-state predicate evaluated through the resolving shell. */
+  readonly isMixed?: (context: Context) => boolean;
   /** Optional state selector evaluated through the resolving shell. */
   readonly getStateValue?: (context: Context) => unknown;
   /** Handler that returns a command-owned result after availability succeeds. */
@@ -268,6 +272,7 @@ export function createCommandShell<Context>(
           return {
             enabled: command.isEnabled?.(context) ?? true,
             ...(command.isChecked === undefined ? {} : { checked: command.isChecked(context) }),
+            ...(command.isMixed === undefined ? {} : { mixed: command.isMixed(context) }),
             ...(command.getStateValue === undefined
               ? {}
               : { value: command.getStateValue(context) }),

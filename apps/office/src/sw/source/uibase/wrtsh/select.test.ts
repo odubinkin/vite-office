@@ -5,8 +5,10 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   getWriterCollapsedCaretOffset,
   getWriterCollapsedParagraphCaret,
+  getWriterDomSelection,
   getWriterSameParagraphSelection,
   restoreWriterCollapsedCaret,
+  restoreWriterDomSelection,
 } from "./select";
 
 afterEach(
@@ -65,11 +67,83 @@ describe("Writer selection shell" /** Groups nested Writer DOM selection bridge 
       paragraphId: "p-1",
       start: 0,
     });
+    expect(getWriterCollapsedParagraphCaret(selection)).toBeUndefined();
     const crossParagraph = document.createRange();
     crossParagraph.setStart(firstText, 0);
     crossParagraph.setEnd(second.firstChild as Text, 1);
     expect(getWriterSameParagraphSelection(selectRange(crossParagraph))).toBeUndefined();
     expect(getWriterSameParagraphSelection(null)).toBeUndefined();
+  });
+
+  it("roundtrips a backward cross-paragraph SwPaM after rendered descendants change" /** Verifies DOM reconciliation does not flatten point/mark direction or retain stale text nodes. @returns Nothing; native anchor/focus and model coordinates are asserted. */, function restoresCrossParagraphDirection(): void {
+    const { first, second } = createSelectionFixture();
+    const cursor = {
+      mark: { offset: 1, paragraphId: "p-2" },
+      point: { offset: 1, paragraphId: "p-1" },
+    } as const;
+    const resolveParagraph =
+      /** Resolves one mounted fixture paragraph. @param paragraphId - Stable Writer identity. @returns Matching paragraph. */ (
+        paragraphId: string,
+      ): HTMLParagraphElement | undefined =>
+        ({ "p-1": first, "p-2": second })[paragraphId as "p-1" | "p-2"];
+    expect(restoreWriterDomSelection(cursor, resolveParagraph)).toBe(true);
+    expect(getWriterDomSelection(globalThis.getSelection())).toEqual(cursor);
+    expect(globalThis.getSelection()?.anchorNode).toBe(second.firstChild);
+    expect(globalThis.getSelection()?.focusNode).toBe(first.firstChild);
+    first.innerHTML = "<strong>AB</strong>CD";
+    expect(restoreWriterDomSelection(cursor, resolveParagraph)).toBe(true);
+    expect(getWriterDomSelection(globalThis.getSelection())).toEqual(cursor);
+    expect(
+      restoreWriterDomSelection(
+        cursor,
+        /** Resolves no mounted paragraphs. @returns Undefined. */ (): undefined => undefined,
+      ),
+    ).toBe(false);
+    expect(
+      restoreWriterDomSelection(
+        cursor,
+        /** Resolves only the point paragraph. @param paragraphId - Requested Writer identity. @returns First paragraph or undefined. */ (
+          paragraphId,
+        ) => (paragraphId === "p-1" ? first : undefined),
+      ),
+    ).toBe(false);
+  });
+
+  it("projects forward whole-paragraph selection around separate editing hosts" /** Verifies browser Select All includes every contenteditable paragraph instead of being clipped to the first host. @returns Nothing. */, function restoresWholeParagraphSelection(): void {
+    const { first, second } = createSelectionFixture();
+    expect(
+      restoreWriterDomSelection(
+        {
+          mark: { offset: 0, paragraphId: "p-1" },
+          point: { offset: 1, paragraphId: "p-2" },
+        },
+        /** Resolves the complete two-paragraph fixture. @param paragraphId - Requested Writer identity. @returns Matching fixture paragraph. */ (
+          paragraphId,
+        ) => (paragraphId === "p-1" ? first : second),
+      ),
+    ).toBe(true);
+    expect(globalThis.getSelection()?.toString()).toContain("ABCD");
+    expect(globalThis.getSelection()?.toString()).toContain("E");
+  });
+
+  it("rejects an unresolvable native mark while retaining a valid Writer point" /** Verifies malformed cross-host native selections do not become a partial SwPaM. @returns Nothing. */, function rejectsMissingNativeMark(): void {
+    const { first } = createSelectionFixture();
+    const outside = document.createElement("p");
+    outside.textContent = "Outside";
+    document.body.append(outside);
+    expect(
+      getWriterDomSelection({
+        anchorNode: outside.firstChild,
+        anchorOffset: 0,
+        focusNode: first.firstChild,
+        focusOffset: 1,
+        isCollapsed: false,
+        rangeCount: 1,
+      } as Selection),
+    ).toBeUndefined();
+    expect(getWriterCollapsedParagraphCaret(selectRange(document.createRange()))).toBeUndefined();
+    const paragraphWithoutIdentity = document.createElement("p");
+    restoreWriterCollapsedCaret(paragraphWithoutIdentity, 0);
   });
 
   it("reads a collapsed Writer paragraph caret and rejects an outside caret" /** Verifies toolbar Paste can retain the browser caret instead of appending to the active paragraph. @returns Nothing; caret ownership and offset are asserted. */, function resolvesCollapsedPasteCaret(): void {

@@ -182,9 +182,10 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(shell.GetCursor().GetMark().GetContentIndex()).toBe(3);
     expect(shell.GetPendingCharacterAttributes().bold).toBe(false);
     shell.Redo();
-    expect(shell.GetCursor().HasMark()).toBe(false);
-    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(3);
-    expect(shell.GetPendingCharacterAttributes().bold).toBe(true);
+    expect(shell.GetCursor().HasMark()).toBe(true);
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(1);
+    expect(shell.GetCursor().GetMark().GetContentIndex()).toBe(3);
+    expect(shell.GetPendingCharacterAttributes().bold).toBe(false);
 
     shell.SetParagraphAlignment("center");
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoParagraphFormat);
@@ -415,6 +416,10 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       /** Formats an absent paragraph. @returns Invalid lookup that never returns. */
       () => shell.ToggleCharacterFormat("bold", { paragraphId: "missing", start: 0, end: 0 }),
     ).toThrow("Unknown paragraph");
+    expect(
+      /** Formats an invalid paragraph range. @returns Invalid range operation that never returns. */
+      () => shell.ToggleCharacterFormat("bold", { paragraphId: "p-1", start: -1, end: 1 }),
+    ).toThrow("outside the paragraph");
     expect(shell.ToggleCharacterFormat("bold", { paragraphId: "p-1", start: 1, end: 1 })).toBe(
       false,
     );

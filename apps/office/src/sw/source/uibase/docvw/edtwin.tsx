@@ -2,17 +2,20 @@
  * @fileoverview Renders ordered Writer paragraphs as accessible editable blocks integrated directly into the document page.
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 
 import { getWriterParagraphListMarker, type WriterParagraph } from "../../core/doc/writer";
 import { WriterEditableParagraph } from "./edtwin-paragraph";
 import { createWriterClipboardSelection } from "../dochdl/swdtflvr";
 import {
   getWriterCollapsedCaretOffset,
+  getWriterDomSelection,
   getWriterSameParagraphSelection,
   restoreWriterCollapsedCaret,
+  restoreWriterDomSelection,
 } from "../wrtsh/select";
 import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
+import type { WriterCursorSelection } from "../wrtsh/wrtsh";
 
 /** Stores one browser caret endpoint used to extend a pointer selection across Writer paragraph editing hosts. */
 interface WriterPointerCaret {
@@ -24,38 +27,30 @@ interface WriterPointerCaret {
   readonly offset: number;
 }
 
-/** Stores the text offset that must survive React's immutable paragraph re-render after browser input. */
-interface WriterPendingCaret {
-  /** Stable identity of the paragraph that owns the browser caret. */
-  readonly paragraphId: string;
-  /** UTF-16 caret offset to restore after the paragraph text is committed. */
-  readonly offset: number;
-}
-
 /** Defines the immutable state and callback required by the integrated Writer document editor. */
 export interface WriterPlainTextEditorProps {
   /** Stable identity of the paragraph whose formatting controls are currently active. */
   readonly activeParagraphId: string;
-  /** Stable identity of a newly inserted paragraph that should receive browser focus at its beginning. */
-  readonly focusParagraphId: string | undefined;
-  /** UTF-16 offset where a requested post-transaction paragraph focus must place its caret. */
-  readonly focusParagraphOffset: number | undefined;
-  /** Distinguishes repeated focus requests targeting the same model position. */
-  readonly focusRequestId: number | undefined;
-  /** Receives a paragraph identity and collapsed caret offset when native Enter requests a paragraph break. */
-  readonly onParagraphBreak: (paragraphId: string, offset: number) => void;
-  /** Receives a non-first paragraph identity when Backspace requests removal of its preceding paragraph break. */
-  readonly onParagraphMerge: (paragraphId: string) => void;
-  /** Receives a non-last paragraph identity when Delete requests removal of its following paragraph break. */
-  readonly onParagraphMergeNext: (paragraphId: string) => void;
-  /** Receives a stable paragraph identity when an editable paragraph gains focus. */
+  /** Persistent shell cursor projected back into browser selection after rendering. */
+  readonly cursorSelection: WriterCursorSelection;
+  /** Executes one supported edit intent before browser DOM mutation. */
+  readonly onBeforeInput: (inputType: string, data: string | null) => boolean;
+  /** Commits or cancels one shell-owned extended-text-input unit. */
+  readonly onCompositionEnd: () => boolean;
+  /** Starts one shell-owned extended-text-input unit. */
+  readonly onCompositionStart: () => void;
+  /** Updates temporary extended-text-input data without changing SwDoc. */
+  readonly onCompositionUpdate: (text: string) => void;
+  /** Applies a paragraph focus fallback before selectionchange supplies an exact caret. */
   readonly onParagraphFocus: (paragraphId: string) => void;
-  /** Explicit request identity that asks the mounted editor to select its complete body. */
-  readonly selectAllRequestId: number | undefined;
   /** Requests the same complete-document selection used by Edit Select All. */
   readonly onSelectAll: () => void;
+  /** Synchronizes an externally changed native selection into the persistent SwPaM. */
+  readonly onSelectionChange: (selection: WriterCursorSelection) => boolean;
   /** Ordered immutable Writer paragraphs bound to document-integrated editable controls. */
   readonly paragraphs: readonly WriterParagraph[];
+  /** Monotonic view invalidation used to remove transient native composition markup. */
+  readonly projectionVersion: number;
   /** Receives a stable paragraph identity, complete next text, caret, and native edit kind after browser input. */
   readonly onTextChange: (
     paragraphId: string,
@@ -74,16 +69,16 @@ export interface WriterPlainTextEditorProps {
  *
  * @param props - Immutable Writer state and callbacks for complete-text replacement and focused formatting.
  * @param props.activeParagraphId - Stable identity of the paragraph targeted by formatting controls.
- * @param props.focusParagraphId - Newly inserted paragraph that should receive browser focus at offset zero.
- * @param props.focusParagraphOffset - Caret offset restored after a split or paragraph-boundary merge.
- * @param props.focusRequestId - Monotonic identity for repeated focus requests.
- * @param props.onParagraphBreak - Callback that creates a new paragraph from a collapsed native Enter caret.
- * @param props.onParagraphMerge - Callback that merges a non-first paragraph into its preceding sibling.
- * @param props.onParagraphMergeNext - Callback that merges a following paragraph into the selected paragraph.
- * @param props.onParagraphFocus - Callback that selects a paragraph for formatting after it gains focus.
- * @param props.selectAllRequestId - Explicit request identity for browser selection of all rendered paragraphs.
+ * @param props.cursorSelection - Persistent SwPaM projection restored after rendering.
+ * @param props.onBeforeInput - Callback executing supported edit intent before DOM mutation.
+ * @param props.onCompositionEnd - Callback committing or canceling extended text input.
+ * @param props.onCompositionStart - Callback starting extended text input.
+ * @param props.onCompositionUpdate - Callback updating temporary extended text input.
+ * @param props.onParagraphFocus - Callback handling cross-paragraph focus fallback.
  * @param props.onSelectAll - Callback that requests the document-wide browser selection.
+ * @param props.onSelectionChange - Callback synchronizing native selection into the persistent SwPaM.
  * @param props.paragraphs - Ordered Writer paragraphs displayed in the bounded document body.
+ * @param props.projectionVersion - View invalidation used for canonical DOM reconciliation.
  * @param props.onTextChange - Callback receiving a paragraph identity and complete user-entered text.
  * @param props.onTextCut - Callback removing a native copied same-paragraph selection.
  * @param props.onTextPaste - Callback inserting parsed native clipboard data at a Writer range.
@@ -91,23 +86,24 @@ export interface WriterPlainTextEditorProps {
  */
 export function WriterPlainTextEditor({
   activeParagraphId,
-  focusParagraphId,
-  focusParagraphOffset,
-  focusRequestId,
-  onParagraphBreak,
-  onParagraphMerge,
-  onParagraphMergeNext,
+  cursorSelection,
+  onBeforeInput,
+  onCompositionEnd,
+  onCompositionStart,
+  onCompositionUpdate,
   onParagraphFocus,
   onSelectAll,
+  onSelectionChange,
   onTextChange,
   onTextCut,
   onTextPaste,
   paragraphs,
-  selectAllRequestId,
+  projectionVersion,
 }: WriterPlainTextEditorProps): React.JSX.Element {
   const paragraphElements = useRef(new Map<string, HTMLParagraphElement>());
   const paragraphsRef = useRef(paragraphs);
-  const pendingInputCaret = useRef<WriterPendingCaret | undefined>(undefined);
+  const ignoreCompositionInput = useRef(false);
+  const isComposing = useRef(false);
   const pointerSelectionAnchor = useRef<WriterPointerCaret | undefined>(undefined);
   const pointerSelectionFocus = useRef<WriterPointerCaret | undefined>(undefined);
 
@@ -123,66 +119,32 @@ export function WriterPlainTextEditor({
     [paragraphs],
   );
 
-  useEffect(
-    /**
-     * Restores a typing caret after React commits immutable paragraph text, preventing it from jumping to the line start.
-     *
-     * @returns Nothing; the pending caret is consumed whether or not the browser can restore it safely.
-     */
-    function restorePendingInputCaret(): void {
-      const pendingCaret = pendingInputCaret.current;
-      pendingInputCaret.current = undefined;
-      if (pendingCaret === undefined) return;
-      const paragraph = paragraphElements.current.get(pendingCaret.paragraphId);
-      /* c8 ignore next -- the pending identity belongs to the rendered paragraph that emitted the input event. */
-      if (paragraph !== undefined) restoreWriterCollapsedCaret(paragraph, pendingCaret.offset);
+  useLayoutEffect(
+    /** Restores native selection only after every paragraph has projected canonical text runs. @returns Nothing. */
+    function restoreCanonicalSelection(): void {
+      restoreWriterDomSelection(
+        cursorSelection,
+        /** Resolves one currently mounted Writer paragraph. @param paragraphId - Stable text-node identity. @returns Mounted editable host. */ (
+          paragraphId,
+        ) => paragraphElements.current.get(paragraphId),
+      );
     },
-    [paragraphs],
-  );
-
-  /* c8 ignore next -- Post-transaction focus is exercised in production Chromium because JSDOM does not model empty contenteditable caret focus. */
-  useEffect(
-    /**
-     * Focuses a transaction-target paragraph after React has mounted its document-integrated editable block.
-     *
-     * @returns Nothing; browser focus and its requested caret offset are restored only when the paragraph is present.
-     */
-    function focusInsertedParagraph(): void {
-      if (focusParagraphId === undefined || focusParagraphOffset === undefined) return;
-      const paragraph = paragraphElements.current.get(focusParagraphId);
-      /* c8 ignore next -- a transaction target remains rendered after Writer split or merge operations. */
-      if (paragraph !== undefined) restoreWriterCollapsedCaret(paragraph, focusParagraphOffset);
-    },
-    [focusParagraphId, focusParagraphOffset, focusRequestId],
+    [cursorSelection, paragraphs],
   );
 
   useEffect(
-    /**
-     * Selects the rendered Writer body after an explicit Edit Select All request without mutating paragraph state.
-     *
-     * @returns Nothing; the browser selection covers the first through last editable paragraph when available.
-     */
-    function selectCompleteWriterDocument(): void {
-      if (selectAllRequestId === undefined) return;
-      const selection = globalThis.getSelection();
-      if (selection === null) return;
-      const firstWriterParagraph = paragraphsRef.current[0] as WriterParagraph;
-      const lastWriterParagraph = paragraphsRef.current[
-        paragraphsRef.current.length - 1
-      ] as WriterParagraph;
-      const firstParagraph = paragraphElements.current.get(
-        firstWriterParagraph.id,
-      ) as HTMLParagraphElement;
-      const lastParagraph = paragraphElements.current.get(
-        lastWriterParagraph.id,
-      ) as HTMLParagraphElement;
-      const range = document.createRange();
-      range.setStartBefore(firstParagraph);
-      range.setEndAfter(lastParagraph);
-      selection.removeAllRanges();
-      selection.addRange(range);
+    /** Subscribes the shell to pointer, keyboard, and accessibility selection changes made outside model commands. @returns Listener cleanup. */
+    function subscribeNativeSelection(): () => void {
+      /** Converts one live browser Selection to the persistent Writer SwPaM. @returns Nothing. */
+      function synchronizeNativeSelection(): void {
+        const selection = getWriterDomSelection(globalThis.getSelection());
+        if (selection !== undefined) onSelectionChange(selection);
+      }
+      document.addEventListener("selectionchange", synchronizeNativeSelection);
+      return /** Removes the document-level selection bridge. @returns Nothing. */ () =>
+        document.removeEventListener("selectionchange", synchronizeNativeSelection);
     },
-    [selectAllRequestId],
+    [onSelectionChange],
   );
 
   /**
@@ -196,9 +158,18 @@ export function WriterPlainTextEditor({
     paragraphId: string,
     event: React.FormEvent<HTMLParagraphElement>,
   ): void {
-    const offset = getWriterCollapsedCaretOffset(event.currentTarget);
-    if (offset !== undefined) pendingInputCaret.current = { paragraphId, offset };
     const nativeInput = event.nativeEvent as InputEvent;
+    if (
+      isComposing.current ||
+      nativeInput.inputType === "insertCompositionText" ||
+      nativeInput.inputType === "deleteCompositionText" ||
+      nativeInput.inputType === "insertFromComposition" ||
+      ignoreCompositionInput.current
+    ) {
+      ignoreCompositionInput.current = false;
+      return;
+    }
+    const offset = getWriterCollapsedCaretOffset(event.currentTarget);
     onTextChange(
       paragraphId,
       event.currentTarget.textContent,
@@ -206,6 +177,44 @@ export function WriterPlainTextEditor({
       /* c8 ignore next -- React's contenteditable onInput always wraps a native InputEvent. */
       typeof nativeInput.inputType === "string" ? nativeInput.inputType : "",
     );
+  }
+
+  /** Routes supported beforeinput intent through SwWrtShell while the DOM still matches SwDoc. @param paragraphId - Event paragraph identity. @param event - React beforeinput wrapper. @returns Nothing. */
+  function handleBeforeInput(paragraphId: string, event: InputEvent): void {
+    void paragraphId;
+    const selection = getWriterDomSelection(globalThis.getSelection());
+    if (selection === undefined) return;
+    onSelectionChange(selection);
+    if (event.inputType === "insertCompositionText" || event.inputType === "deleteCompositionText")
+      return;
+    if (event.inputType === "insertFromComposition" && ignoreCompositionInput.current) {
+      ignoreCompositionInput.current = false;
+      event.preventDefault();
+      return;
+    }
+    ignoreCompositionInput.current = false;
+    if (onBeforeInput(event.inputType, event.data)) event.preventDefault();
+  }
+
+  /** Captures the canonical SwPaM before native IME starts its temporary DOM projection. @returns Nothing. */
+  function handleCompositionStart(): void {
+    const selection = getWriterDomSelection(globalThis.getSelection());
+    if (selection !== undefined) onSelectionChange(selection);
+    isComposing.current = true;
+    onCompositionStart();
+  }
+
+  /** Retains the latest complete native IME text outside the canonical document. @param event - Composition update. @returns Nothing. */
+  function handleCompositionUpdate(event: React.CompositionEvent<HTMLParagraphElement>): void {
+    onCompositionUpdate(event.data);
+  }
+
+  /** Commits or cancels native IME as one shell transaction and suppresses its trailing input echo. @param event - Composition end. @returns Nothing. */
+  function handleCompositionEnd(event: React.CompositionEvent<HTMLParagraphElement>): void {
+    isComposing.current = false;
+    ignoreCompositionInput.current = true;
+    onCompositionUpdate(event.data);
+    onCompositionEnd();
   }
 
   /**
@@ -308,17 +317,13 @@ export function WriterPlainTextEditor({
     const targetElement = paragraphElements.current.get(targetParagraph.id);
     /* c8 ignore next -- paragraph refs exist for every paragraph rendered into the active Writer document. */
     if (targetElement === undefined) return false;
-    restoreWriterCollapsedCaret(targetElement, movesBackward ? targetParagraph.text.length : 0);
+    const targetOffset = movesBackward ? targetParagraph.text.length : 0;
+    onSelectionChange({ point: { offset: targetOffset, paragraphId: targetParagraph.id } });
+    restoreWriterCollapsedCaret(targetElement, targetOffset);
     return true;
   }
 
-  /**
-   * Intercepts an unmodified Enter key only when the browser exposes a safe collapsed caret for paragraph splitting.
-   *
-   * @param paragraphId - Stable identity of the paragraph that received the keyboard event.
-   * @param event - Browser keyboard event emitted by that editable paragraph.
-   * @returns Nothing; native Enter is prevented only for the modeled paragraph-break transition.
-   */
+  /** Handles only selection/navigation keys; document mutations are owned by beforeinput. @param paragraphId - Event paragraph. @param event - Browser keyboard event. @returns Nothing. */
   function handleParagraphKeyDown(
     paragraphId: string,
     event: React.KeyboardEvent<HTMLParagraphElement>,
@@ -333,17 +338,6 @@ export function WriterPlainTextEditor({
     if (offset === undefined) return;
     if (moveCaretAcrossParagraphBoundary(paragraphId, offset, event.key)) {
       event.preventDefault();
-      return;
-    }
-    if (event.key === "Enter") {
-      event.preventDefault();
-      onParagraphBreak(paragraphId, offset);
-    } else if (event.key === "Backspace" && offset === 0) {
-      event.preventDefault();
-      onParagraphMerge(paragraphId);
-    } else if (event.key === "Delete" && offset === event.currentTarget.textContent.length) {
-      event.preventDefault();
-      onParagraphMergeNext(paragraphId);
     }
   }
 
@@ -444,11 +438,16 @@ export function WriterPlainTextEditor({
               isLast={index === paragraphs.length - 1}
               key={paragraph.id}
               listMarker={getWriterParagraphListMarker(paragraphs, paragraph.id)}
+              onBeforeInput={handleBeforeInput}
+              onCompositionEnd={handleCompositionEnd}
+              onCompositionStart={handleCompositionStart}
+              onCompositionUpdate={handleCompositionUpdate}
               onFocus={onParagraphFocus}
               onKeyDown={handleParagraphKeyDown}
               onMouseDown={handleParagraphMouseDown}
               onTextInput={handleTextChange}
               paragraph={paragraph}
+              projectionVersion={projectionVersion}
               retainElement={
                 /** Stores mounted editor elements for later caret restoration. @param paragraphId - Stable paragraph identity. @param element - Mounted element or null after unmount. @returns Nothing; the ref map is updated. */
                 function retainParagraphElement(paragraphId, element): void {

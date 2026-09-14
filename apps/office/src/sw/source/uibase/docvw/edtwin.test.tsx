@@ -33,9 +33,9 @@ function enterWriterParagraphText(paragraph: HTMLElement, text: string): void {
  */
 function placeWriterCaret(paragraph: HTMLElement, offset: number): void {
   const textNode = paragraph.firstChild;
-  if (textNode === null) throw new Error("Writer test paragraph must contain a text node.");
   const range = document.createRange();
-  range.setStart(textNode, offset);
+  if (textNode === null) range.setStart(paragraph, 0);
+  else range.setStart(textNode, offset);
   range.collapse(true);
   const selection = window.getSelection();
   if (selection === null) throw new Error("Browser selection must be available in Writer tests.");
@@ -61,6 +61,22 @@ function inputWriterParagraphText(
   paragraph.textContent = text;
   placeWriterCaret(paragraph, caretOffset);
   fireEvent.input(paragraph, { inputType });
+}
+
+/** Dispatches one cancelable edit intent before any browser-owned DOM mutation. @param paragraph - Editable Writer paragraph. @param inputType - Native beforeinput operation. @param data - Optional inserted text. @returns Dispatched native event for cancellation assertions. */
+function beforeInputWriterParagraph(
+  paragraph: HTMLElement,
+  inputType: string,
+  data: string | null = null,
+): InputEvent {
+  const event = new InputEvent("beforeinput", {
+    bubbles: true,
+    cancelable: true,
+    data,
+    inputType,
+  });
+  fireEvent(paragraph, event);
+  return event;
 }
 
 describe("Writer paragraph breaks" /** Groups native Enter interaction and guarded browser-selection behavior. @returns Nothing; Vitest registers the enclosed case. */, function defineWriterParagraphBreakTests(): void {
@@ -116,7 +132,9 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     fireEvent.keyDown(firstParagraph, { metaKey: true, key: "a" });
     expect(window.getSelection()?.toString()).toContain("Before Xafter");
     placeWriterCaret(firstParagraph, "Before Xafter".length);
-    fireEvent.keyDown(firstParagraph, { key: "Enter" });
+    expect(beforeInputWriterParagraph(firstParagraph, "insertParagraph").defaultPrevented).toBe(
+      true,
+    );
     const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
     enterWriterParagraphText(secondParagraph, "Second paragraph");
     placeWriterCaret(firstParagraph, "Before Xafter".length);
@@ -167,6 +185,66 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     );
   });
 
+  it("executes beforeinput against SwPaM and deletes complete Unicode graphemes" /** Verifies supported typing and deletion are canceled before DOM mutation while emoji and combining sequences follow Writer character boundaries. @returns Nothing; canonical text and undo cursor behavior are asserted. */, function handlesCanonicalBeforeInput(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    window.getSelection()?.removeAllRanges();
+    expect(beforeInputWriterParagraph(paragraph, "insertText", "ignored").defaultPrevented).toBe(
+      false,
+    );
+    placeWriterCaret(paragraph, 0);
+    expect(beforeInputWriterParagraph(paragraph, "formatBold").defaultPrevented).toBe(false);
+    const inserted = beforeInputWriterParagraph(paragraph, "insertText", "👩‍💻e\u0301");
+    expect(inserted.defaultPrevented).toBe(true);
+    expect(paragraph).toHaveTextContent("👩‍💻é");
+    placeWriterCaret(paragraph, "👩‍💻é".length);
+    expect(beforeInputWriterParagraph(paragraph, "deleteContentBackward").defaultPrevented).toBe(
+      true,
+    );
+    expect(paragraph).toHaveTextContent("👩‍💻");
+    placeWriterCaret(paragraph, "👩‍💻".length);
+    beforeInputWriterParagraph(paragraph, "deleteContentBackward");
+    expect(paragraph).toHaveTextContent("");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(paragraph).toHaveTextContent("👩‍💻");
+  });
+
+  it("keeps IME updates temporary and commits composition as one undo unit" /** Mirrors LibreOffice extended text input: transient composition stays outside SwDoc and only EndExtTextInput creates history. @returns Nothing; pre-commit state and single-step undo are asserted. */, function commitsOneCompositionAction(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    placeWriterCaret(paragraph, 0);
+    fireEvent.compositionStart(paragraph);
+    paragraph.textContent = "にほ";
+    fireEvent.compositionUpdate(paragraph, { data: "にほ" });
+    expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+    fireEvent.compositionEnd(paragraph, { data: "日本" });
+    expect(
+      beforeInputWriterParagraph(paragraph, "insertFromComposition", "日本").defaultPrevented,
+    ).toBe(true);
+    fireEvent.input(paragraph, { inputType: "insertFromComposition" });
+    expect(paragraph).toHaveTextContent("日本");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(paragraph).toHaveTextContent("");
+    expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
+    placeWriterCaret(paragraph, 0);
+    expect(beforeInputWriterParagraph(paragraph, "deleteCompositionText").defaultPrevented).toBe(
+      false,
+    );
+    window.getSelection()?.removeAllRanges();
+    fireEvent.compositionStart(paragraph);
+    paragraph.textContent = "cancelled";
+    fireEvent.compositionUpdate(paragraph, { data: "cancelled" });
+    expect(
+      beforeInputWriterParagraph(paragraph, "insertCompositionText", "cancelled").defaultPrevented,
+    ).toBe(false);
+    fireEvent.compositionEnd(paragraph, { data: "" });
+    expect(paragraph).toHaveTextContent("");
+    fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+    expect(paragraph).toHaveTextContent("日本");
+    window.getSelection()?.removeAllRanges();
+    document.dispatchEvent(new Event("selectionchange"));
+  });
+
   it("groups adjacent typing and deletion at LibreOffice undo boundaries" /**
    * Verifies SwUndoInsert/SwUndoDelete-compatible word, delimiter, and Backspace grouping in the snapshot adapter.
    * @returns Nothing; each Undo restores the preceding semantic input group.
@@ -206,7 +284,7 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     fireEvent.click(screen.getByRole("button", { name: "Align center" }));
     firstParagraph.focus();
     placeWriterCaret(firstParagraph, 0);
-    fireEvent.keyDown(firstParagraph, { key: "Backspace" });
+    beforeInputWriterParagraph(firstParagraph, "deleteContentBackward");
     expect(screen.getAllByRole("textbox")).toHaveLength(1);
     window.getSelection()?.removeAllRanges();
     fireEvent.keyDown(firstParagraph, { key: "Enter" });
@@ -221,7 +299,9 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     outsideParagraph.remove();
     firstParagraph.focus();
     placeWriterCaret(firstParagraph, 7);
-    fireEvent.keyDown(firstParagraph, { key: "Enter" });
+    expect(beforeInputWriterParagraph(firstParagraph, "insertParagraph").defaultPrevented).toBe(
+      true,
+    );
 
     const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
     expect(firstParagraph).toHaveTextContent("Before");
@@ -251,7 +331,7 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(restoredSecondParagraph).toHaveTextContent("after");
     restoredSecondParagraph.focus();
     placeWriterCaret(restoredSecondParagraph, 0);
-    fireEvent.keyDown(restoredSecondParagraph, { key: "Backspace" });
+    beforeInputWriterParagraph(restoredSecondParagraph, "deleteContentBackward");
     expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
     expect(firstParagraph).toHaveTextContent("Before after");
     expect(firstParagraph).toHaveFocus();
@@ -260,12 +340,12 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveTextContent("after");
     firstParagraph.focus();
     placeWriterCaret(firstParagraph, 7);
-    fireEvent.keyDown(firstParagraph, { key: "Delete" });
+    beforeInputWriterParagraph(firstParagraph, "deleteContentForward");
     expect(screen.queryByRole("textbox", { name: "Writer paragraph 2" })).not.toBeInTheDocument();
     expect(firstParagraph).toHaveTextContent("Before after");
     expect(firstParagraph).toHaveFocus();
     placeWriterCaret(firstParagraph, "Before after".length);
-    fireEvent.keyDown(firstParagraph, { key: "Delete" });
+    beforeInputWriterParagraph(firstParagraph, "deleteContentForward");
     expect(screen.getAllByRole("textbox")).toHaveLength(1);
     expect(firstParagraph).toHaveTextContent("Before after");
   });

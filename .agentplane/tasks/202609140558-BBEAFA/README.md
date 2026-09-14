@@ -4,7 +4,7 @@ title: "Implement stage 4 canonical cursor and input pipeline"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement approved Stage 4 canonical cursor, beforeinput, IME composition, DOM selection adapter, and parity verification scope."
 doc_version: 3
-doc_updated_at: "2026-09-14T06:00:16.426Z"
+doc_updated_at: "2026-09-14T06:34:32.723Z"
 doc_updated_by: "CODER"
 description: "Implement section 8 (Stage 4) of docs/program/vite-office-upstream-parity-plan.md, preserving upstream LibreOffice semantics and avoiding invented domain behavior."
 sections:
@@ -49,7 +49,7 @@ sections:
     - Out of scope: Stage 5 medium/recovery, new Writer features, unsupported cross-paragraph rich-text editing beyond Stage 4 requirements, and unrelated refactors.
   Plan: "Implement Stage 4 as a single CODER-owned leaf: preserve one persistent direction-aware SwPaM, route supported edits through beforeinput into shell operations before DOM reconciliation, model IME composition explicitly as one committed undo unit, isolate DOM selection mapping/restoration, retain shell cursor attributes, and verify the six Stage 4 assertions plus repository gates."
   Verify Steps: |-
-    1. `npm exec vitest run --workspace @vite-office/office -- apps/office/src/sw/source/uibase/wrtsh/select.test.ts apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx apps/office/src/sw/source/uibase/uiview/view-session.test.tsx apps/office/src/sw/source/core/doc/writer-model.test.ts` — expected: Stage 4 cursor/input/IME regressions pass.
+    1. `npm exec vitest run --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/select.test.ts src/sw/source/uibase/wrtsh/wrtsh.test.ts src/sw/source/uibase/docvw/edtwin.test.tsx src/sw/source/uibase/uiview/view-session.test.tsx src/sw/source/core/doc/writer-model.test.ts` — expected: Stage 4 cursor/input/IME regressions pass.
     2. `npm run typecheck` — expected: TypeScript contracts for shell, DOM adapter, and UI compile.
     3. `npm run verify` — expected: formatting, lint, typecheck, boundaries, unit/inventory coverage, E2E, static build, JSDoc, and file-size checks pass.
     4. `node .agentplane/policy/check-routing.mjs` and `ap doctor` — expected: repository workflow policy remains valid.
@@ -81,7 +81,7 @@ Implement Stage 4 as a single CODER-owned leaf: preserve one persistent directio
 
 ## Verify Steps
 
-1. `npm exec vitest run --workspace @vite-office/office -- apps/office/src/sw/source/uibase/wrtsh/select.test.ts apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx apps/office/src/sw/source/uibase/uiview/view-session.test.tsx apps/office/src/sw/source/core/doc/writer-model.test.ts` — expected: Stage 4 cursor/input/IME regressions pass.
+1. `npm exec vitest run --workspace @vite-office/office -- src/sw/source/uibase/wrtsh/select.test.ts src/sw/source/uibase/wrtsh/wrtsh.test.ts src/sw/source/uibase/docvw/edtwin.test.tsx src/sw/source/uibase/uiview/view-session.test.tsx src/sw/source/core/doc/writer-model.test.ts` — expected: Stage 4 cursor/input/IME regressions pass.
 2. `npm run typecheck` — expected: TypeScript contracts for shell, DOM adapter, and UI compile.
 3. `npm run verify` — expected: formatting, lint, typecheck, boundaries, unit/inventory coverage, E2E, static build, JSDoc, and file-size checks pass.
 4. `node .agentplane/policy/check-routing.mjs` and `ap doctor` — expected: repository workflow policy remains valid.
