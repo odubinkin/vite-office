@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609141429-H8TF7J",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-14T15:09:58.482Z",
+  "verdict": "pass",
+  "summary": "Workstream 4 implementation satisfies the approved command/UI architecture scope and all repository gates.",
+  "evaluated_sha": "cb4b75c96cca0c0f9bf71f81ce781ee419a17c20",
+  "blueprint_digest": "110896dd3bc3ff1ffa8eb77e46283fde984a45bc28a238fec144b56dc4943be9",
+  "findings": [
+    "Shared command descriptors and dispatcher state now drive declarative Writer resources and generic browser presenters; interaction, provenance, and regression coverage pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609141429-H8TF7J/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
