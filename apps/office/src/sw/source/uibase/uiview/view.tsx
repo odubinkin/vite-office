@@ -6,6 +6,7 @@ import { WriterFormattingToolbar } from "../../../browser/presentation/WriterFor
 import { WriterMenuBar } from "../../../browser/presentation/WriterMenuBar";
 import { WriterParagraphProperties } from "../../../browser/presentation/WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "../../../browser/presentation/WriterWorkspaceChrome";
+import { presentWriterOperationStatus } from "../../../browser/workflows/writer-workflows";
 import { useWriterCommandShortcuts } from "../../../browser/accelerators/writer-shortcuts";
 import { getWriterDomSelection } from "../../../browser/editor/writer-selection";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
@@ -144,7 +145,7 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
             style={snapshot.activeParagraph.style}
           />
         }
-        status={snapshot.storageStatus}
+        status={presentWriterOperationStatus(snapshot.operationStatus)}
         toolbar={
           <WriterCommandToolbar commandSource={view} resolveArguments={resolveCommandArguments} />
         }

@@ -19,20 +19,20 @@ export interface SuiteDefinition {
 
 /** Defines a suite-owned workspace factory registered by the application composition root. */
 export interface OfficeModuleFactory {
-  /** Explicitly closes persistent suite resources when the application session terminates. */
-  readonly closeWorkspace?: () => void;
   /** Creates the suite workspace without exposing its concrete component to framework core. */
   readonly createWorkspace: () => React.ReactNode;
   /** Stable suite identity whose route activates the factory. */
   readonly suiteId: SuiteId;
+  /** Declares how suite-owned resources are handled when its workspace unmounts. */
+  readonly workspaceRetention: "dispose-on-unmount";
 }
 
 /** Combines framework-owned route metadata with an optional suite-owned workspace factory. */
 export interface OfficeModuleDescriptor extends SuiteDefinition {
-  /** Explicitly closes persistent suite resources at application-session termination. */
-  readonly closeWorkspace?: () => void;
   /** Creates an implemented workspace, or remains absent for a foundation-only suite. */
   readonly createWorkspace?: () => React.ReactNode;
+  /** Explicit resource-retention policy for an implemented workspace. */
+  readonly workspaceRetention?: "dispose-on-unmount";
 }
 
 /** Ordered suite inventory resolved by the static browser module manager. */
@@ -111,10 +111,8 @@ export function createOfficeModuleDescriptors(
         ? { ...suite }
         : {
             ...suite,
-            ...(factory.closeWorkspace === undefined
-              ? {}
-              : { closeWorkspace: factory.closeWorkspace }),
             createWorkspace: factory.createWorkspace,
+            workspaceRetention: factory.workspaceRetention,
           };
     },
   );

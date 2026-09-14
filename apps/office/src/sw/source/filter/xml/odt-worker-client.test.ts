@@ -304,8 +304,7 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
       expect(urls[0]).toContain("odt-worker.ts");
       service.Cancel();
       await expect(pending).rejects.toMatchObject({ category: "cancelled" });
-      const factory = createWriterModuleFactory();
-      (factory.closeWorkspace as () => void)();
+      createWriterModuleFactory();
       expect(workers).toHaveLength(1);
     } finally {
       vi.unstubAllGlobals();

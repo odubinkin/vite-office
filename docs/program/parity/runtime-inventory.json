@@ -389,6 +389,18 @@
       ]
     },
     {
+      "path": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "recovery-presentation",
+      "capabilityIds": [
+        "CAP-0114",
+        "CAP-0122",
+        "CAP-0133"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -407,6 +419,21 @@
       "subsystem": "browser-presentation",
       "capabilityIds": [
         "CAP-0115"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-workflows",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0106",
+        "CAP-0113",
+        "CAP-0114",
+        "CAP-0120",
+        "CAP-0131"
       ]
     },
     {

@@ -1,6 +1,6 @@
 /**
- * @fileoverview Implements the persistent SwView session, external-store snapshot, and
- * browser-adapted lifecycle commands from pinned Writer view and document-shell boundaries.
+ * @fileoverview Implements the persistent SwView shell/frame relationship, command routing,
+ * and external-store snapshot while receiving browser workflows through an injected factory.
  */
 
 import {
@@ -19,17 +19,39 @@ import type { RecoverySavePort } from "../../../../svl/source/misc/recovery";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipboard";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
-import { loadWriterDocument, saveWriterDocument } from "../../core/doc/writer-storage";
 import type { WriterDocument, WriterParagraph } from "../../core/doc/writer";
 import type { SwModelHint } from "../../../inc/hints";
-import {
-  parseWriterClipboardPaste,
-  type WriterClipboardPaste,
-  type WriterClipboardSelection,
-} from "../dochdl/swdtflvr";
+import { type WriterClipboardPaste, type WriterClipboardSelection } from "../dochdl/swdtflvr";
 import { SwDocShell } from "../app/docsh";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
 import { SwWrtShell, type WriterCursorSelection } from "../wrtsh/wrtsh";
+
+/** Stable, presentation-neutral outcome of a Writer browser workflow. */
+export type WriterOperationStatus =
+  | { readonly kind: "idle" }
+  | { readonly kind: "new-document" }
+  | { readonly kind: "odt-open-cancelled" }
+  | { readonly kind: "odt-opened"; readonly name: string }
+  | { readonly detail: string; readonly kind: "odt-open-failed" }
+  | { readonly kind: "odt-download-started"; readonly name: string }
+  | { readonly detail: string; readonly kind: "odt-download-failed" }
+  | { readonly kind: "local-storage-unavailable" }
+  | { readonly kind: "local-saved" }
+  | { readonly kind: "local-save-failed" }
+  | { readonly kind: "local-missing" }
+  | { readonly kind: "local-loaded" }
+  | { readonly kind: "local-load-failed" }
+  | { readonly kind: "text-download-started" }
+  | { readonly kind: "text-download-failed" }
+  | { readonly kind: "copy-selection-required" }
+  | { readonly kind: "copied" }
+  | { readonly kind: "copy-failed" }
+  | { readonly kind: "cut-selection-required" }
+  | { readonly kind: "cut" }
+  | { readonly kind: "cut-failed" }
+  | { readonly kind: "paste-empty" }
+  | { readonly kind: "pasted" }
+  | { readonly kind: "paste-read-failed" };
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
@@ -73,6 +95,47 @@ export interface WriterPasteCommandArguments {
   readonly paste?: WriterClipboardPaste;
 }
 
+/** Browser workflow controllers injected into SwView as neutral command/state surfaces. */
+export interface WriterViewControllers {
+  readonly chromePreferences: {
+    readonly IsHorizontalRulerVisible: () => boolean;
+    readonly IsSidebarVisible: () => boolean;
+    readonly IsStatusBarVisible: () => boolean;
+    readonly ToggleHorizontalRuler: () => void;
+    readonly ToggleSidebar: () => void;
+    readonly ToggleStatusBar: () => void;
+  };
+  readonly clipboardWorkflow: {
+    readonly Copy: (arguments_?: unknown) => Promise<void>;
+    readonly Cut: (arguments_?: unknown) => Promise<void>;
+    readonly Paste: (arguments_?: unknown) => Promise<void>;
+  };
+  readonly fileWorkflow: {
+    readonly ExportText: () => void;
+    readonly OpenOdt: () => Promise<void>;
+    readonly SaveOdt: () => Promise<void>;
+  };
+  readonly localStorageWorkflow: {
+    readonly Load: () => Promise<void>;
+    readonly Save: () => Promise<void>;
+  };
+  readonly operationState: {
+    readonly GetStatus: () => WriterOperationStatus;
+    readonly IsPending: () => boolean;
+    readonly SetStatus: (status: WriterOperationStatus) => void;
+  };
+}
+
+/** Composition-root factory that binds browser ports after SwView creates its editing shell. */
+export interface WriterViewControllerFactory {
+  readonly Create: (
+    docShell: SwDocShell,
+    wrtShell: SwWrtShell,
+    invalidateLifecycle: () => void,
+    invalidateView: () => void,
+  ) => WriterViewControllers;
+}
+
 /** Immutable React read model projected without cloning the canonical SwDoc. */
 export interface WriterViewSnapshot {
   /** Active paragraph targeted by Writer commands. */
@@ -93,8 +156,8 @@ export interface WriterViewSnapshot {
   readonly isStoragePending: boolean;
   /** Status-bar visibility in this view. */
   readonly isStatusBarVisible: boolean;
-  /** Current lifecycle or browser-operation feedback. */
-  readonly storageStatus: string;
+  /** Typed lifecycle or browser-operation outcome formatted by presentation code. */
+  readonly operationStatus: WriterOperationStatus;
   /** Monotonic dispatcher invalidation version. */
   readonly viewVersion: number;
 }
@@ -102,24 +165,37 @@ export interface WriterViewSnapshot {
 /** Persistent Writer view joining SwDocShell, SwWrtShell, frame dispatch, and React snapshots. */
 export class SwView {
   private cachedSnapshot: WriterViewSnapshot | undefined;
+  private readonly chromePreferences: WriterViewControllers["chromePreferences"];
+  private readonly clipboardWorkflow: WriterViewControllers["clipboardWorkflow"];
   private dispatcherSubscription: (() => void) | undefined;
+  private readonly fileWorkflow: WriterViewControllers["fileWorkflow"];
   private frame: OfficeFrame<SwView> | undefined;
-  private isHorizontalRulerVisible = true;
-  private isPropertiesSidebarVisible = true;
-  private isStatusBarVisible = true;
-  private isStoragePending = false;
   private readonly listeners = new Set<() => void>();
-  private storageStatus = "Not saved in this browser.";
+  private readonly localStorageWorkflow: WriterViewControllers["localStorageWorkflow"];
+  private readonly operationState: WriterViewControllers["operationState"];
   private readonly viewCommandShell: SfxShell;
   private readonly wrtShell: SwWrtShell;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param services - Injected browser platform services. @returns Nothing. */
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param controllerFactory - Injected neutral workflow-controller factory. @returns Nothing. */
   public constructor(
     private readonly docShell: SwDocShell,
-    private readonly services: WriterSessionServices,
+    controllerFactory: WriterViewControllerFactory,
   ) {
     this.wrtShell = new SwWrtShell(docShell);
+    const controllers = controllerFactory.Create(
+      docShell,
+      this.wrtShell,
+      /** Invalidates lifecycle command and snapshot state. @returns Nothing. */ () =>
+        this.Invalidate("lifecycle"),
+      /** Invalidates view-only presentation state. @returns Nothing. */ () =>
+        this.Invalidate("view"),
+    );
+    this.operationState = controllers.operationState;
+    this.chromePreferences = controllers.chromePreferences;
+    this.fileWorkflow = controllers.fileWorkflow;
+    this.localStorageWorkflow = controllers.localStorageWorkflow;
+    this.clipboardWorkflow = controllers.clipboardWorkflow;
     this.viewCommandShell = createCommandShell(this, createWriterViewCommandRegistry(this));
     this.wrtShellSubscription = this.wrtShell.Subscribe(
       /** Converts typed Writer hints into dispatcher dependency invalidation. @param hint - Typed Writer hint. @returns Nothing. */ (
@@ -174,11 +250,11 @@ export class SwView {
         cursorSelection: Object.freeze(this.wrtShell.GetCursorSelection()),
         document,
         documentState: this.docShell.GetDocumentState(),
-        isHorizontalRulerVisible: this.isHorizontalRulerVisible,
-        isPropertiesSidebarVisible: this.isPropertiesSidebarVisible,
-        isStatusBarVisible: this.isStatusBarVisible,
-        isStoragePending: this.isStoragePending,
-        storageStatus: this.storageStatus,
+        isHorizontalRulerVisible: this.chromePreferences.IsHorizontalRulerVisible(),
+        isPropertiesSidebarVisible: this.chromePreferences.IsSidebarVisible(),
+        isStatusBarVisible: this.chromePreferences.IsStatusBarVisible(),
+        isStoragePending: this.operationState.IsPending(),
+        operationStatus: this.operationState.GetStatus(),
         viewVersion: this.GetDispatcher().GetVersion(),
       });
       return this.cachedSnapshot;
@@ -218,250 +294,47 @@ export class SwView {
       }),
       "writer-paragraph-1",
     );
-    this.SetStorageStatus("Created a new Writer document.");
+    this.operationState.SetStatus({ kind: "new-document" });
   }
 
   /** Selects and atomically opens one ODT through the persistent document shell. @returns Completion after browser feedback. */
   public async OpenOdt(): Promise<void> {
-    this.SetStoragePending(true);
-    try {
-      const opened = await this.services.documentOpen.open(`${SwDocShell.ODT_MEDIA_TYPE},.odt`);
-      if (opened === undefined) {
-        this.SetStorageStatus("ODT open cancelled.");
-        return;
-      }
-      const fallbackTitle = opened.name.replace(/\.odt$/i, "") || "Imported Writer Document";
-      await this.docShell.Load(
-        opened.bytes,
-        createDocument({
-          id: `writer-odt:${opened.name}`,
-          suiteId: "writer",
-          title: fallbackTitle,
-        }),
-        {
-          filterId: "writer8",
-          kind: "odt-source",
-          mediaType: SwDocShell.ODT_MEDIA_TYPE,
-          name: opened.name,
-          source: { kind: "file", reference: opened.reference },
-        },
-      );
-      this.SetStorageStatus(`Opened ${opened.name}.`);
-    } catch (error) {
-      this.SetStorageStatus(`Could not open ODT: ${getErrorMessage(error)}`);
-    } finally {
-      this.SetStoragePending(false);
-    }
+    await this.fileWorkflow.OpenOdt();
   }
 
   /** Downloads the active document through Writer's ODT filter. @returns Completion after worker export and download start. */
   public async SaveOdt(): Promise<void> {
-    this.SetStoragePending(true);
-    try {
-      const filename = this.services.createDownloadFilename(
-        this.docShell.GetDocumentState().title,
-        ".odt",
-      );
-      const bytes = await this.docShell.SerializeOdt();
-      this.docShell.Download(
-        {
-          downloadTarget: filename,
-          filterId: "writer8",
-          kind: "download",
-          mediaType: SwDocShell.ODT_MEDIA_TYPE,
-          name: filename,
-        },
-        /** Starts the browser download without acknowledging a primary save. @returns Nothing. */
-        () =>
-          this.services.documentExport.export({
-            data: bytes,
-            mediaType: SwDocShell.ODT_MEDIA_TYPE,
-            name: filename,
-          }),
-      );
-      this.SetStorageStatus(`ODT download started: ${filename}`);
-    } catch (error) {
-      this.SetStorageStatus(`Could not save ODT: ${getErrorMessage(error)}`);
-    } finally {
-      this.SetStoragePending(false);
-    }
+    await this.fileWorkflow.SaveOdt();
   }
 
   /** Saves the active identity to its browser-local medium. @returns Completion after acknowledgement. */
   public async SaveLocal(): Promise<void> {
-    if (this.services.primarySave === undefined) {
-      this.SetStorageStatus("Browser storage is unavailable.");
-      return;
-    }
-    this.SetStoragePending(true);
-    try {
-      const primarySave = this.services.primarySave;
-      const medium = this.docShell.GetMedium();
-      const persist =
-        /** Commits one complete Writer snapshot to browser-local primary storage. @param document - Shell-owned Writer graph. @returns Completion after IndexedDB commit. */
-        async (document: WriterDocument) => {
-          const saved = await saveWriterDocument(
-            primarySave,
-            document,
-            this.docShell.GetDocumentState(),
-          );
-          return { generation: saved.snapshot.version };
-        };
-      if (
-        medium.kind === "browser-local" &&
-        medium.destination.kind === "indexeddb" &&
-        medium.destination.key === this.docShell.GetDocumentState().id
-      )
-        await this.docShell.Save(persist);
-      else
-        await this.docShell.SaveAs(
-          {
-            indexedDbKey: this.docShell.GetDocumentState().id,
-            kind: "browser-local",
-            name: this.docShell.GetDocumentState().title,
-            source: medium.source,
-          },
-          persist,
-        );
-      this.SetStorageStatus("Saved locally in this browser.");
-    } catch {
-      this.SetStorageStatus("Could not save locally.");
-    } finally {
-      this.SetStoragePending(false);
-    }
+    await this.localStorageWorkflow.Save();
   }
 
   /** Loads the current document identity from browser-local storage. @returns Completion after optional replacement. */
   public async LoadLocal(): Promise<void> {
-    if (this.services.storedDocumentOpen === undefined) {
-      this.SetStorageStatus("Browser storage is unavailable.");
-      return;
-    }
-    this.SetStoragePending(true);
-    try {
-      const result = await loadWriterDocument(
-        this.services.storedDocumentOpen,
-        this.docShell.GetDocumentState().id,
-      );
-      if (result.status === "missing") this.SetStorageStatus("No local saved copy exists.");
-      else {
-        this.docShell.ReplaceDocument(result.document, result.documentState, {
-          filterId: "writer-browser-snapshot",
-          indexedDbKey: result.documentState.id,
-          kind: "browser-local",
-          lastOperation: {
-            generation: result.documentState.contentGeneration,
-            operation: "open",
-            state: "succeeded",
-          },
-          name: result.documentState.title,
-        });
-        this.SetStorageStatus("Loaded local saved copy.");
-      }
-    } catch {
-      this.SetStorageStatus("Could not load local copy.");
-    } finally {
-      this.SetStoragePending(false);
-    }
+    await this.localStorageWorkflow.Load();
   }
 
   /** Starts the existing plain-text export through the injected browser adapter. @returns Nothing. */
   public ExportText(): void {
-    try {
-      const document = this.docShell.GetDoc();
-      const filename = `${this.docShell.GetDocumentState().title}.txt`;
-      this.docShell.Download(
-        {
-          downloadTarget: filename,
-          filterId: "Text",
-          kind: "download",
-          mediaType: "text/plain;charset=utf-8",
-          name: filename,
-        },
-        /** Starts a plain-text browser export without changing primary-medium state. @returns Nothing. */
-        () =>
-          this.services.documentExport.export({
-            data: document.paragraphs
-              .map(
-                /** Projects one paragraph's visible text. @param paragraph - Writer paragraph. @returns Plain text. */
-                (paragraph) => paragraph.text,
-              )
-              .join("\n"),
-            mediaType: "text/plain;charset=utf-8",
-            name: filename,
-          }),
-      );
-      this.SetStorageStatus("Plain-text download started.");
-    } catch {
-      this.SetStorageStatus("Could not start plain-text download.");
-    }
+    this.fileWorkflow.ExportText();
   }
 
   /** Copies one DOM-adapted Writer selection. @param arguments_ - Optional sanitized selection. @returns Completion after feedback. */
   public async Copy(arguments_?: unknown): Promise<void> {
-    const selection = (arguments_ as { readonly selection?: WriterClipboardSelection } | undefined)
-      ?.selection;
-    if (selection === undefined) {
-      this.SetStorageStatus("Select text to copy.");
-      return;
-    }
-    try {
-      await this.services.copyRichText(selection);
-      this.SetStorageStatus("Copied selection.");
-    } catch {
-      this.SetStorageStatus("Could not copy selection.");
-    }
+    await this.clipboardWorkflow.Copy(arguments_);
   }
 
   /** Copies then deletes a canonical Writer selection through one Cut command. @param arguments_ - DOM-adapted Cut request. @returns Completion after feedback. */
   public async Cut(arguments_?: unknown): Promise<void> {
-    const request = arguments_ as WriterCutCommandArguments | undefined;
-    if (
-      request?.cursorSelection === undefined ||
-      (!request.clipboardHandled && request.selection === undefined)
-    ) {
-      this.SetStorageStatus("Select text in one paragraph to cut.");
-      return;
-    }
-    try {
-      if (!request.clipboardHandled)
-        await this.services.copyRichText(request.selection as WriterClipboardSelection);
-      this.wrtShell.DeleteSelection(request.cursorSelection);
-      this.SetStorageStatus("Cut selection.");
-    } catch {
-      this.SetStorageStatus("Could not cut selection.");
-    }
+    await this.clipboardWorkflow.Cut(arguments_);
   }
 
   /** Inserts native or asynchronously read clipboard content through one Paste command. @param arguments_ - DOM-adapted range and optional native transfer document. @returns Completion after feedback. */
   public async Paste(arguments_?: unknown): Promise<void> {
-    const request = arguments_ as WriterPasteCommandArguments | undefined;
-    const active = this.wrtShell.GetActiveParagraph();
-    const target = request?.cursorSelection ?? {
-      end: active.text.length,
-      paragraphId: active.id,
-      start: active.text.length,
-    };
-    try {
-      let paste: WriterClipboardPaste;
-      if (request?.paste !== undefined) paste = request.paste;
-      else if (request?.clipboardHandled === true) {
-        this.SetStorageStatus("Clipboard has no text to paste.");
-        return;
-      } else {
-        const clipboard = await this.services.readRichClipboard();
-        const parsedPaste = parseWriterClipboardPaste(clipboard.html, clipboard.plainText);
-        if (parsedPaste === undefined) {
-          this.SetStorageStatus("Clipboard has no text to paste.");
-          return;
-        }
-        paste = parsedPaste;
-      }
-      this.wrtShell.Paste(target, paste);
-      this.SetStorageStatus("Pasted clipboard text.");
-    } catch {
-      this.SetStorageStatus("Could not read browser clipboard.");
-    }
+    await this.clipboardWorkflow.Paste(arguments_);
   }
 
   /** Selects the complete Writer body through the persistent SwPaM. @returns Nothing. */
@@ -471,40 +344,37 @@ export class SwView {
 
   /** Returns horizontal-ruler command state. @returns Visibility. */
   public IsHorizontalRulerVisible(): boolean {
-    return this.isHorizontalRulerVisible;
+    return this.chromePreferences.IsHorizontalRulerVisible();
   }
 
   /** Returns sidebar command state. @returns Visibility. */
   public IsSidebarVisible(): boolean {
-    return this.isPropertiesSidebarVisible;
+    return this.chromePreferences.IsSidebarVisible();
   }
 
   /** Returns status-bar command state. @returns Visibility. */
   public IsStatusBarVisible(): boolean {
-    return this.isStatusBarVisible;
+    return this.chromePreferences.IsStatusBarVisible();
   }
 
   /** Returns whether a medium operation gates lifecycle commands. @returns Pending state. */
   public IsStoragePending(): boolean {
-    return this.isStoragePending;
+    return this.operationState.IsPending();
   }
 
   /** Toggles horizontal-ruler visibility. @returns Nothing. */
   public ToggleHorizontalRuler(): void {
-    this.isHorizontalRulerVisible = !this.isHorizontalRulerVisible;
-    this.Invalidate("view");
+    this.chromePreferences.ToggleHorizontalRuler();
   }
 
   /** Toggles sidebar visibility. @returns Nothing. */
   public ToggleSidebar(): void {
-    this.isPropertiesSidebarVisible = !this.isPropertiesSidebarVisible;
-    this.Invalidate("view");
+    this.chromePreferences.ToggleSidebar();
   }
 
   /** Toggles status-bar visibility. @returns Nothing. */
   public ToggleStatusBar(): void {
-    this.isStatusBarVisible = !this.isStatusBarVisible;
-    this.Invalidate("view");
+    this.chromePreferences.ToggleStatusBar();
   }
 
   /** Releases view, dispatcher, and document-shell subscriptions at explicit session close. @returns Nothing. */
@@ -538,23 +408,6 @@ export class SwView {
     this.cachedSnapshot = undefined;
     for (const listener of this.listeners) listener();
   }
-
-  /** Changes storage pending state and invalidates lifecycle commands. @param pending - Next pending state. @returns Nothing. */
-  private SetStoragePending(pending: boolean): void {
-    this.isStoragePending = pending;
-    this.Invalidate("lifecycle");
-  }
-
-  /** Changes status feedback and invalidates the view read model. @param status - Reader-facing status. @returns Nothing. */
-  private SetStorageStatus(status: string): void {
-    this.storageStatus = status;
-    this.Invalidate("lifecycle");
-  }
-}
-
-/** Normalizes unknown operation failures for deterministic status feedback. @param error - Caught value. @returns Stable message. */
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
 }
 
 /** Maps typed Writer notifications to the command-state dependency vocabulary. @param hint - Typed Writer hint. @returns Changed dependency labels. */

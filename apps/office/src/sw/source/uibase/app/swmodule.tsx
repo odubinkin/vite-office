@@ -1,7 +1,11 @@
 /**
- * @fileoverview Registers one persistent Writer document session at the suite composition
- * boundary without exposing Writer implementation to framework core.
+ * @fileoverview Registers a lazy Writer module and owns one disposable document session per
+ * mounted workspace without exposing Writer implementation to framework core.
  */
+
+/* eslint-disable react-refresh/only-export-components -- the private lifecycle host belongs to the exported Writer module factory. */
+
+import { useEffect, useState } from "react";
 
 import { OfficeFrame } from "../../../../framework/source/dispatch/dispatchprovider";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
@@ -29,6 +33,8 @@ import {
 } from "../../filter/xml/odt-filter-service";
 import { createBrowserOdtFilterService } from "../../filter/xml/odt-worker-client";
 import { WriterWorkbench } from "../uiview/view";
+import { WriterRecoveryPrompt } from "../../../browser/presentation/WriterRecoveryPrompt";
+import { createWriterViewControllerFactory } from "../../../browser/workflows/writer-workflows";
 import { SwView, type WriterSessionServices } from "../uiview/view-session";
 import { createWriterWorkbenchDocument } from "../uiview/viewfunc";
 import { SwDocShell } from "./docsh";
@@ -37,6 +43,8 @@ import { SwDocShell } from "./docsh";
 export interface WriterDocumentSession {
   /** Application-owned recovery service, when durable recovery is available. */
   readonly autoRecovery: AutoRecovery<WriterSnapshotState> | undefined;
+  /** Starts recovery timers/listeners only after the recovery presentation gate resolves. */
+  readonly BeginRecoveryScheduling: () => void;
   /** Explicitly releases the active frame, view, and document-shell subscriptions. */
   readonly Close: () => void;
   /** Deletes recovery history after the caller rejects a recovery candidate. */
@@ -94,7 +102,7 @@ export function createWriterDocumentSession(
     { kind: "untitled", name: "Untitled Writer Document" },
     odtFilter,
   );
-  const view = new SwView(docShell, services);
+  const view = new SwView(docShell, createWriterViewControllerFactory(services));
   const frame = new OfficeFrame<SwView>();
   const autoRecovery =
     services.recoverySave === undefined
@@ -106,13 +114,20 @@ export function createWriterDocumentSession(
           ownerId: createRecoveryOwnerId(),
         });
   const unregisterRecovery = autoRecovery?.RegisterDocument(docShell);
-  autoRecovery?.Start();
   view.AttachFrame(frame);
   frame.SetActiveView(view, [view.GetCommandShell(), view.GetWrtShell().GetCommandShell()]);
+  let closed = false;
   return {
     autoRecovery,
+    BeginRecoveryScheduling:
+      /** Starts scheduling idempotently after the recovery decision. @returns Nothing. */
+      function beginRecoveryScheduling(): void {
+        if (!closed) autoRecovery?.Start();
+      },
     /** Closes the persistent Writer session. @returns Nothing. */
     Close: function closeWriterSession(): void {
+      if (closed) return;
+      closed = true;
       autoRecovery?.Stop();
       unregisterRecovery?.();
       view.Close();
@@ -174,21 +189,51 @@ function createRecoveryOwnerId(): string {
   return globalThis.crypto?.randomUUID?.() ?? `writer-tab-${Date.now()}-${Math.random()}`;
 }
 
-/** Creates the Writer module factory consumed by the application composition root. @returns Writer-owned persistent workspace factory. */
-export function createWriterModuleFactory(): OfficeModuleFactory {
-  const session = createWriterDocumentSession(
-    createWriterBrowserSessionServices(),
-    typeof Worker === "undefined"
-      ? createInlineOdtFilterService()
-      : createBrowserOdtFilterService(),
+/** Optional testable construction boundary for the lazy Writer module. */
+export interface WriterModuleFactoryOptions {
+  /** Creates one session only when a Writer workspace mounts. */
+  readonly createSession?: () => WriterDocumentSession;
+}
+
+/** Owns exactly one Writer session for the lifetime of one mounted workspace. @param props - Lazy session constructor. @returns Recovery-gated Writer workspace. */
+function WriterWorkspaceSession({
+  createSession,
+}: Required<WriterModuleFactoryOptions>): React.JSX.Element {
+  const [session] = useState(createSession);
+  useEffect(
+    /** Disposes all session-owned resources when the workspace closes. @returns Cleanup. */ () =>
+      session.Close,
+    [session],
   );
+  return (
+    <WriterRecoveryPrompt recovery={session}>
+      <WriterWorkbench isActive view={session.view} />
+    </WriterRecoveryPrompt>
+  );
+}
+
+/** Creates a module factory that remains resource-free until Writer mounts. @param options - Optional injected session factory. @returns Lazy Writer workspace factory. */
+export function createWriterModuleFactory(
+  options: WriterModuleFactoryOptions = {},
+): OfficeModuleFactory {
+  const createSession =
+    options.createSession ??
+    /** Creates production adapters at workspace-open time. @returns Active Writer session. */
+    function createProductionWriterSession(): WriterDocumentSession {
+      return createWriterDocumentSession(
+        createWriterBrowserSessionServices(),
+        typeof Worker === "undefined"
+          ? createInlineOdtFilterService()
+          : createBrowserOdtFilterService(),
+      );
+    };
   return {
-    closeWorkspace: session.Close,
     createWorkspace:
-      /** Creates a React presentation over the existing Writer session. @returns Writer workbench element. */
+      /** Creates a lifecycle host without constructing its session before React mounts it. @returns Writer host element. */
       function createWriterWorkspace(): React.JSX.Element {
-        return <WriterWorkbench isActive view={session.view} />;
+        return <WriterWorkspaceSession createSession={createSession} />;
       },
     suiteId: "writer",
+    workspaceRetention: "dispose-on-unmount",
   };
 }

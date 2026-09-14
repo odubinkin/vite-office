@@ -12,6 +12,7 @@ import type {
 } from "../../../../sfx2/source/doc/docfile";
 import type { RecoverySavePort } from "../../../../svl/source/misc/recovery";
 import { createDownloadFilename } from "../../../../vcl/browser/browser-download";
+import { createWriterViewControllerFactory } from "../../../browser/workflows/writer-workflows";
 import { SwDoc } from "../../core/doc/doc";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
@@ -405,7 +406,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
   it("retains explicit construction order before frame attachment" /** Verifies pre-frame invalidation remains local and dispatch requires an attached frame. @returns Nothing. */, function enforcesFrameConstructionOrder(): void {
     const state = createDocument({ id: "isolated", suiteId: "writer", title: "Isolated Writer" });
     const docShell = new SwDocShell(new SwDoc("isolated-paragraph-1"), state);
-    const view = new SwView(docShell, createServices());
+    const view = new SwView(docShell, createWriterViewControllerFactory(createServices()));
     expect(
       /** Dispatches before frame attachment. @returns Nothing before the expected exception. */
       () => view.Execute(WRITER_COMMAND_IDS.undo),

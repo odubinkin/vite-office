@@ -1083,6 +1083,28 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterRecoveryPresentationController",
+            "path": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx",
+      "rationale": "Presents browser recovery candidates and requires an explicit restore, discard, or clean-continue choice; no native dialog implementation is claimed.",
+      "responsibilities": [
+        "Coordinates recovery candidate presentation without owning recovery storage or Writer document mutation.",
+        "Delays AutoRecovery scheduling until candidate inspection and any required user choice complete."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and browser interaction replace the native recovery dialog presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterWorkspaceChrome",
             "path": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx"
           }
@@ -1096,6 +1118,28 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterFileWorkflowController",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
+      "rationale": "Owns browser file, download, clipboard, IndexedDB, chrome-preference, and operation-presentation workflows behind narrow injected ports; no native platform source file is claimed.",
+      "responsibilities": [
+        "Adapts browser file, export, clipboard, and local-storage operations without assigning their policy to SwView.",
+        "Stores transient chrome preferences and typed operation outcomes outside Writer model classes."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser APIs and React presentation replace native VCL, system clipboard, file dialog, and desktop storage boundaries."
       },
       "status": "local-only"
     },
@@ -2431,6 +2475,7 @@
       "localPath": "apps/office/src/sw/source/uibase/app/swmodule.tsx",
       "localSymbols": [
         "WriterDocumentSession",
+        "WriterModuleFactoryOptions",
         "createWriterBrowserSessionServices",
         "createWriterDocumentSession",
         "createWriterModuleFactory"
@@ -2439,7 +2484,7 @@
         "Upstream obligations outside SwModule::SwModule, SvtCTLOptions::GetCTLTextNumerals, SvxErrorHandler::ensure, comphelper::IsFuzzing and the bounded WriterDocumentSession, createWriterBrowserSessionServices, createWriterDocumentSession contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Registers one persistent Writer document session at the suite composition boundary without exposing Writer implementation to framework core."
+        "Registers a resource-free Writer module factory and creates one explicitly disposable Writer document session only when its workspace mounts."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/app/swmodule.cxx",
@@ -2624,9 +2669,12 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
       "localSymbols": [
+        "WriterOperationStatus",
         "WriterSessionServices",
         "WriterCutCommandArguments",
         "WriterPasteCommandArguments",
+        "WriterViewControllers",
+        "WriterViewControllerFactory",
         "WriterViewSnapshot",
         "SwView"
       ],
@@ -2634,7 +2682,7 @@
         "Upstream obligations outside SwView, SwView::GetDispatcher, SwView::ImpSetVerb, SwView::GotFocus and the bounded WriterSessionServices, WriterCutCommandArguments, WriterPasteCommandArguments contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements the persistent SwView session, external-store snapshot, and browser-adapted lifecycle commands from pinned Writer view and document-shell boundaries."
+        "Implements the active SwView shell/frame relationship, view command routing, and external-store snapshot while delegating browser workflows and presentation state to injected controllers."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/uiview/view.cxx",

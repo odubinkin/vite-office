@@ -59,29 +59,39 @@ describe("suiteDefinitions" /**
       function createWorkspace(): null {
         return null;
       };
-    const closeWorkspace =
-      /** Closes a neutral persistent workspace fixture. @returns Nothing. */
-      function closeWorkspace(): void {};
     const modules = createOfficeModuleDescriptors([
-      { closeWorkspace, createWorkspace, suiteId: "writer" },
+      { createWorkspace, suiteId: "writer", workspaceRetention: "dispose-on-unmount" },
     ]);
     expect(modules).not.toBe(suiteDefinitions);
-    expect(modules[0]).toMatchObject({ closeWorkspace, createWorkspace, id: "writer" });
+    expect(modules[0]).toMatchObject({
+      createWorkspace,
+      id: "writer",
+      workspaceRetention: "dispose-on-unmount",
+    });
     expect(modules[1]).not.toHaveProperty("createWorkspace");
     expect(
       /** Registers the same suite factory twice. @returns No descriptors because registration throws. */
       () =>
         createOfficeModuleDescriptors([
-          { createWorkspace, suiteId: "writer" },
-          { createWorkspace, suiteId: "writer" },
+          { createWorkspace, suiteId: "writer", workspaceRetention: "dispose-on-unmount" },
+          { createWorkspace, suiteId: "writer", workspaceRetention: "dispose-on-unmount" },
         ]),
     ).toThrow("Duplicate office module factory: writer");
     expect(
       /** Registers a runtime-invalid suite identity. @returns No descriptors because registration throws. */
-      () => createOfficeModuleDescriptors([{ createWorkspace, suiteId: "unknown" as "writer" }]),
+      () =>
+        createOfficeModuleDescriptors([
+          {
+            createWorkspace,
+            suiteId: "unknown" as "writer",
+            workspaceRetention: "dispose-on-unmount",
+          },
+        ]),
     ).toThrow("Unknown office module factory: unknown");
     expect(
-      createOfficeModuleDescriptors([{ createWorkspace, suiteId: "writer" }])[0],
-    ).not.toHaveProperty("closeWorkspace");
+      createOfficeModuleDescriptors([
+        { createWorkspace, suiteId: "writer", workspaceRetention: "dispose-on-unmount" },
+      ])[0],
+    ).toHaveProperty("workspaceRetention", "dispose-on-unmount");
   });
 });
