@@ -50,3 +50,59 @@ test("Writer Cut and Paste" /** Verifies native clipboard shortcuts retain Write
   await page.getByRole("button", { name: "Redo" }).click();
   await expect(writerEditor.locator("strong")).toHaveText("Pasted");
 });
+
+test("Writer immediate spaces and structured list Paste" /** Verifies consecutive typed spaces remain visible immediately and Writer-compatible rich lists retain paragraph structure through one undoable Paste. @param root0 - Playwright fixture object. @param root0.page - Chromium page hosting Writer. @returns Completion after browser rendering and list structure are asserted. */, async function preservesSpacesAndPastesLists({
+  page,
+}): Promise<void> {
+  const pageErrors: string[] = [];
+  page.on(
+    "pageerror",
+    /** Retains unexpected browser exceptions raised during text input. @param error - Unhandled page exception. @returns Nothing. */ function retainPageError(
+      error,
+    ): void {
+      pageErrors.push(error.message);
+    },
+  );
+  await page.goto("/writer");
+  const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
+  await writerEditor.pressSequentially("a   ");
+  await expect(writerEditor).toHaveText("a   ");
+  await expect(writerEditor).toHaveCSS("white-space", "pre-wrap");
+  expect(pageErrors).toEqual([]);
+
+  await writerEditor.evaluate(
+    /** Replaces the typed fixture through one native-shaped structured Paste. @param element - Active editable Writer paragraph. @returns Nothing; Writer owns the resulting document mutation. */
+    function pasteWriterList(element: HTMLElement): void {
+      const selection = window.getSelection();
+      if (selection === null) throw new Error("Writer Paste requires browser selection support.");
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      const clipboardData = new DataTransfer();
+      clipboardData.setData(
+        "text/html",
+        "<ol><li><strong>First</strong><ul><li>Nested</li></ul></li><li>Second</li></ol>",
+      );
+      clipboardData.setData("text/plain", "1. First\n• Nested\n2. Second");
+      element.dispatchEvent(
+        new ClipboardEvent("paste", { bubbles: true, cancelable: true, clipboardData }),
+      );
+    },
+  );
+
+  const paragraphs = page.getByRole("textbox");
+  await expect(paragraphs).toHaveCount(3);
+  await expect(paragraphs.nth(0)).toHaveText("First");
+  await expect(paragraphs.nth(0)).toHaveAttribute("data-list-kind", "numbered");
+  await expect(paragraphs.nth(0)).toHaveAttribute("data-list-level", "0");
+  await expect(paragraphs.nth(0).locator("strong")).toHaveText("First");
+  await expect(paragraphs.nth(1)).toHaveText("Nested");
+  await expect(paragraphs.nth(1)).toHaveAttribute("data-list-kind", "bullet");
+  await expect(paragraphs.nth(1)).toHaveAttribute("data-list-level", "1");
+  await expect(paragraphs.nth(2)).toHaveText("Second");
+  await expect(paragraphs.nth(2)).toHaveAttribute("data-list-kind", "numbered");
+  await page.getByRole("button", { name: "Undo" }).click();
+  await expect(page.getByRole("textbox")).toHaveCount(1);
+  await expect(page.getByRole("textbox", { name: "Writer document text" })).toHaveText("a   ");
+});

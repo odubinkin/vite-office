@@ -48,6 +48,7 @@ import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
 import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import { SwUndoInsNum, SwUndoNumLevel } from "../../core/undo/unnum";
+import type { WriterClipboardPaste, WriterClipboardPasteParagraph } from "../dochdl/swdtflvr";
 import {
   CopyTextRangeRuns,
   CopyUndoRuns,
@@ -522,6 +523,33 @@ export class SwWrtShell {
     );
   }
 
+  /** Pastes one safe transfer document as a single Writer undo transaction. @param range - Same-paragraph replacement range. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */
+  public Paste(range: WriterParagraphTextRange, paste: WriterClipboardPaste): boolean {
+    const first = paste.paragraphs[0];
+    if (first === undefined) return false;
+    const manager = this.docShell.GetUndoManager();
+    let changed = false;
+    manager.EnterListAction("Paste");
+    try {
+      changed = this.ReplaceRange(range, first.runs) || changed;
+      let paragraphId = range.paragraphId;
+      let offset = range.start + GetUndoRunsLength(first.runs);
+      this.SetCursor(paragraphId, offset);
+      if (paste.isBlock) changed = this.ApplyPastedParagraphList(first) || changed;
+      for (const paragraph of paste.paragraphs.slice(1)) {
+        paragraphId = this.SplitParagraph(paragraphId, offset);
+        changed = true;
+        changed = this.ReplaceRange({ end: 0, paragraphId, start: 0 }, paragraph.runs) || changed;
+        offset = GetUndoRunsLength(paragraph.runs);
+        this.SetCursor(paragraphId, offset);
+        changed = this.ApplyPastedParagraphList(paragraph) || changed;
+      }
+    } finally {
+      manager.LeaveListAction();
+    }
+    return changed;
+  }
+
   /** Splits one paragraph at the logical caret. @param paragraphId - Source paragraph. @param offset - Split offset. @returns New paragraph identity. */
   public SplitParagraph(paragraphId: string, offset: number): string {
     const document = this.GetDoc();
@@ -707,6 +735,15 @@ export class SwWrtShell {
         cursor,
       ),
     );
+  }
+
+  /** Applies one clipboard paragraph's complete bounded list tuple through Writer numbering undo. @param paragraph - Parsed clipboard paragraph. @returns Whether list metadata changed. */
+  private ApplyPastedParagraphList(paragraph: WriterClipboardPasteParagraph): boolean {
+    const target = this.GetActiveParagraph();
+    const nextList = { kind: paragraph.listKind, level: paragraph.listLevel } as const;
+    if (target.list.kind === nextList.kind && target.list.level === nextList.level) return false;
+    const cursor = this.CaptureCursorState();
+    return this.ApplyAction(new SwUndoInsNum(target.id, target.list, nextList, cursor, cursor));
   }
 
   /** Restores the preceding Writer history state. @returns Whether navigation occurred. */

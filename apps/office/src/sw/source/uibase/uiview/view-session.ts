@@ -17,8 +17,12 @@ import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipb
 import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
 import { loadWriterDocument, saveWriterDocument } from "../../core/doc/writer-storage";
-import type { WriterDocument, WriterParagraph, WriterTextRun } from "../../core/doc/writer";
-import { parseWriterClipboardPaste, type WriterClipboardSelection } from "../dochdl/swdtflvr";
+import type { WriterDocument, WriterParagraph } from "../../core/doc/writer";
+import {
+  parseWriterClipboardPaste,
+  type WriterClipboardPaste,
+  type WriterClipboardSelection,
+} from "../dochdl/swdtflvr";
 import { SwDocShell } from "../app/docsh";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
 import { SwWrtShell, type WriterCursorSelection } from "../wrtsh/wrtsh";
@@ -59,8 +63,8 @@ export interface WriterPasteCommandArguments {
   readonly clipboardHandled?: boolean;
   /** Same-paragraph replacement range, defaulting to the active paragraph end. */
   readonly range?: WriterParagraphTextRange;
-  /** Already parsed native clipboard runs, omitted for asynchronous toolbar Paste. */
-  readonly runs?: readonly WriterTextRun[];
+  /** Already parsed native clipboard document, omitted for asynchronous toolbar Paste. */
+  readonly paste?: WriterClipboardPaste;
 }
 
 /** Immutable React read model projected without cloning the canonical SwDoc. */
@@ -352,7 +356,7 @@ export class SwView {
     }
   }
 
-  /** Inserts native or asynchronously read clipboard text through one Paste command. @param arguments_ - DOM-adapted range and optional native runs. @returns Completion after feedback. */
+  /** Inserts native or asynchronously read clipboard content through one Paste command. @param arguments_ - DOM-adapted range and optional native transfer document. @returns Completion after feedback. */
   public async Paste(arguments_?: unknown): Promise<void> {
     const request = arguments_ as WriterPasteCommandArguments | undefined;
     const active = this.wrtShell.GetActiveParagraph();
@@ -362,21 +366,21 @@ export class SwView {
       start: active.text.length,
     };
     try {
-      let pasteRuns: readonly WriterTextRun[];
-      if (request?.runs !== undefined) pasteRuns = request.runs;
+      let paste: WriterClipboardPaste;
+      if (request?.paste !== undefined) paste = request.paste;
       else if (request?.clipboardHandled === true) {
         this.SetStorageStatus("Clipboard has no text to paste.");
         return;
       } else {
         const clipboard = await this.services.readRichClipboard();
-        const paste = parseWriterClipboardPaste(clipboard.html, clipboard.plainText);
-        if (paste === undefined) {
+        const parsedPaste = parseWriterClipboardPaste(clipboard.html, clipboard.plainText);
+        if (parsedPaste === undefined) {
           this.SetStorageStatus("Clipboard has no text to paste.");
           return;
         }
-        pasteRuns = paste.runs;
+        paste = parsedPaste;
       }
-      this.wrtShell.ReplaceRange(range, pasteRuns);
+      this.wrtShell.Paste(range, paste);
       this.SetStorageStatus("Pasted clipboard text.");
     } catch {
       this.SetStorageStatus("Could not read browser clipboard.");

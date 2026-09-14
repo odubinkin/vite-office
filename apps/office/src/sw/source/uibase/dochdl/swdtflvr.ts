@@ -22,10 +22,22 @@ export interface WriterClipboardSelection {
 
 /** Describes bounded Writer text extracted from one browser clipboard transfer for a Paste operation. */
 export interface WriterClipboardPaste {
-  /** Normalized Writer direct-format runs safe to insert into a paragraph. */
-  readonly runs: readonly WriterTextRun[];
+  /** Whether the source explicitly carries paragraph boundaries or list structure. */
+  readonly isBlock: boolean;
+  /** Ordered safe Writer paragraphs retained from the transfer document. */
+  readonly paragraphs: readonly WriterClipboardPasteParagraph[];
   /** MIME representation selected by the transfer parser. */
   readonly source: "html" | "plain-text";
+}
+
+/** One safe paragraph extracted from a clipboard transfer document. */
+export interface WriterClipboardPasteParagraph {
+  /** Complete semantic list kind, or none for ordinary paragraph content. */
+  readonly listKind: "bullet" | "none" | "numbered";
+  /** Zero-based list nesting level bounded by the Writer model. */
+  readonly listLevel: number;
+  /** Normalized direct-format runs belonging only to this paragraph. */
+  readonly runs: readonly WriterTextRun[];
 }
 
 /** Describes one selected Writer paragraph in the transfer document before a format writer serializes it. */
@@ -88,12 +100,117 @@ export function parseWriterClipboardPaste(
   if (html.trim().length > 0) {
     const container = document.createElement("div");
     container.innerHTML = html;
-    const runs = parseWriterClipboardHtml(container, defaultPasteCharacterAttributes);
-    if (runs.length > 0 || container.textContent === "") return { runs, source: "html" };
+    const parsed = parseWriterClipboardHtmlDocument(container);
+    if (
+      parsed.paragraphs.some(
+        /** Checks one parsed paragraph for visible safe content. @param paragraph - Parsed clipboard paragraph. @returns Whether the paragraph owns runs. */ (
+          paragraph,
+        ) => paragraph.runs.length > 0,
+      ) ||
+      container.textContent === ""
+    )
+      return { ...parsed, source: "html" };
   }
-  return plainText.length === 0
-    ? undefined
-    : { runs: createWriterTextRuns(plainText), source: "plain-text" };
+  if (plainText.length === 0) return undefined;
+  const lines = plainText.split(/\r\n?|\n/u);
+  return {
+    isBlock: lines.length > 1,
+    paragraphs: lines.map(
+      /** Converts one plain-text line to an ordinary Writer paragraph. @param text - Clipboard line. @returns Safe paragraph record. */ (
+        text,
+      ) => ({ listKind: "none", listLevel: 0, runs: createWriterTextRuns(text) }),
+    ),
+    source: "plain-text",
+  };
+}
+
+/** Parses safe block and list structure from one detached clipboard HTML document. @param container - Detached transfer root. @returns Ordered paragraph records plus a block-structure flag. */
+function parseWriterClipboardHtmlDocument(
+  container: HTMLElement,
+): Readonly<{ isBlock: boolean; paragraphs: readonly WriterClipboardPasteParagraph[] }> {
+  const hasBlockContent = Array.from(container.children).some(
+    /** Finds a supported top-level paragraph or list container. @param element - Clipboard root child. @returns Whether it defines block structure. */ (
+      element,
+    ) => isWriterClipboardBlockElement(element),
+  );
+  if (!hasBlockContent)
+    return {
+      isBlock: false,
+      paragraphs: [
+        {
+          listKind: "none",
+          listLevel: 0,
+          runs: parseWriterClipboardHtml(container, defaultPasteCharacterAttributes),
+        },
+      ],
+    };
+  const paragraphs: WriterClipboardPasteParagraph[] = [];
+  container.childNodes.forEach(
+    /** Extracts one supported top-level clipboard block. @param node - Clipboard root child. @returns Nothing. */ function parseClipboardBlock(
+      node,
+    ): void {
+      if (node instanceof Text) {
+        if (node.data.trim().length > 0)
+          paragraphs.push({
+            listKind: "none",
+            listLevel: 0,
+            runs: [{ attributes: defaultPasteCharacterAttributes, text: node.data }],
+          });
+        return;
+      }
+      if (!(node instanceof HTMLElement)) return;
+      if (node.tagName === "OL" || node.tagName === "UL") {
+        parseWriterClipboardList(node, 0, paragraphs);
+        return;
+      }
+      if (node.tagName === "P" || node.tagName === "DIV")
+        paragraphs.push({
+          listKind: "none",
+          listLevel: 0,
+          runs: parseWriterClipboardHtml(node, defaultPasteCharacterAttributes),
+        });
+    },
+  );
+  return { isBlock: true, paragraphs };
+}
+
+/** Recursively extracts semantic list items in visual document order. @param list - Detached OL or UL element. @param level - Current zero-based nesting. @param paragraphs - Mutable ordered destination. @returns Nothing. */
+function parseWriterClipboardList(
+  list: HTMLElement,
+  level: number,
+  paragraphs: WriterClipboardPasteParagraph[],
+): void {
+  const listKind = list.tagName === "OL" ? "numbered" : "bullet";
+  Array.from(list.children).forEach(
+    /** Parses one direct list item and any nested lists it owns. @param child - Candidate direct LI. @returns Nothing. */ function parseClipboardListItem(
+      child,
+    ): void {
+      if (!(child instanceof HTMLElement) || child.tagName !== "LI") return;
+      paragraphs.push({
+        listKind,
+        listLevel: Math.min(level, WRITER_MAX_LIST_LEVEL),
+        runs: parseWriterClipboardHtml(child, defaultPasteCharacterAttributes, true),
+      });
+      Array.from(child.children).forEach(
+        /** Recurses into one nested list while ignoring inline descendants. @param nested - Candidate nested list. @returns Nothing. */ function parseNestedClipboardList(
+          nested,
+        ): void {
+          if (nested instanceof HTMLElement && (nested.tagName === "OL" || nested.tagName === "UL"))
+            parseWriterClipboardList(nested, level + 1, paragraphs);
+        },
+      );
+    },
+  );
+}
+
+/** Returns whether one detached root child establishes safe Writer block structure. @param element - Clipboard root child. @returns True for paragraphs, divs, and semantic lists. */
+function isWriterClipboardBlockElement(element: Element): boolean {
+  return (
+    element.tagName === "P" ||
+    element.tagName === "DIV" ||
+    element.tagName === "OL" ||
+    element.tagName === "UL"
+  );
 }
 
 /**
@@ -101,11 +218,13 @@ export function parseWriterClipboardPaste(
  *
  * @param parent - Detached HTML element whose child nodes are parsed.
  * @param inheritedAttributes - Bounded direct character attributes inherited from permitted semantic ancestors.
+ * @param excludeLists - Whether nested OL and UL descendants belong to separate clipboard paragraphs.
  * @returns Normalized visible text runs with untrusted markup flattened rather than retained.
  */
 function parseWriterClipboardHtml(
   parent: HTMLElement,
   inheritedAttributes: WriterCharacterAttributes,
+  excludeLists = false,
 ): readonly WriterTextRun[] {
   const runs: WriterTextRun[] = [];
   parent.childNodes.forEach(
@@ -117,12 +236,13 @@ function parseWriterClipboardHtml(
       }
       if (!(node instanceof HTMLElement)) return;
       if (node.tagName === "SCRIPT" || node.tagName === "STYLE") return;
+      if (excludeLists && (node.tagName === "OL" || node.tagName === "UL")) return;
       if (node.tagName === "BR") {
         runs.push({ attributes: inheritedAttributes, text: "\n" });
         return;
       }
       const attributes = getWriterClipboardNodeAttributes(node, inheritedAttributes);
-      runs.push(...parseWriterClipboardHtml(node, attributes));
+      runs.push(...parseWriterClipboardHtml(node, attributes, excludeLists));
     },
   );
   return normalizeWriterTextRuns(runs);

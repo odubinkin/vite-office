@@ -44,11 +44,18 @@ describe("createWriterClipboardSelection" /** Groups selected Writer paragraph c
       },
     } as Pick<DataTransfer, "getData">;
     expect(readWriterClipboardPaste(htmlClipboard)).toEqual({
-      runs: [
-        { attributes: { bold: true, italic: false, underline: false }, text: "Bold " },
-        { attributes: { bold: true, italic: true, underline: false }, text: "italic" },
-        { attributes: { bold: false, italic: false, underline: true }, text: "under" },
-        { attributes: { bold: false, italic: false, underline: false }, text: "\nlink" },
+      isBlock: false,
+      paragraphs: [
+        {
+          listKind: "none",
+          listLevel: 0,
+          runs: [
+            { attributes: { bold: true, italic: false, underline: false }, text: "Bold " },
+            { attributes: { bold: true, italic: true, underline: false }, text: "italic" },
+            { attributes: { bold: false, italic: false, underline: true }, text: "under" },
+            { attributes: { bold: false, italic: false, underline: false }, text: "\nlink" },
+          ],
+        },
       ],
       source: "html",
     });
@@ -59,7 +66,19 @@ describe("createWriterClipboardSelection" /** Groups selected Writer paragraph c
       },
     } as Pick<DataTransfer, "getData">;
     expect(readWriterClipboardPaste(plainClipboard)).toEqual({
-      runs: [{ attributes: { bold: false, italic: false, underline: false }, text: "plain\ntext" }],
+      isBlock: true,
+      paragraphs: [
+        {
+          listKind: "none",
+          listLevel: 0,
+          runs: [{ attributes: { bold: false, italic: false, underline: false }, text: "plain" }],
+        },
+        {
+          listKind: "none",
+          listLevel: 0,
+          runs: [{ attributes: { bold: false, italic: false, underline: false }, text: "text" }],
+        },
+      ],
       source: "plain-text",
     });
     expect(
@@ -75,7 +94,11 @@ describe("createWriterClipboardSelection" /** Groups selected Writer paragraph c
           return type === "text/html" ? "<script></script>" : "";
         },
       }),
-    ).toEqual({ runs: [], source: "html" });
+    ).toEqual({
+      isBlock: false,
+      paragraphs: [{ listKind: "none", listLevel: 0, runs: [] }],
+      source: "html",
+    });
     expect(
       readWriterClipboardPaste({
         /** Returns ignored script HTML and a visible plain fallback. @param type - Requested clipboard MIME type. @returns Script HTML or fallback text. */
@@ -84,9 +107,95 @@ describe("createWriterClipboardSelection" /** Groups selected Writer paragraph c
         },
       }),
     ).toEqual({
-      runs: [{ attributes: { bold: false, italic: false, underline: false }, text: "fallback" }],
+      isBlock: false,
+      paragraphs: [
+        {
+          listKind: "none",
+          listLevel: 0,
+          runs: [
+            { attributes: { bold: false, italic: false, underline: false }, text: "fallback" },
+          ],
+        },
+      ],
       source: "plain-text",
     });
+  });
+
+  it("retains rich paragraph and nested-list boundaries in visual order" /** Verifies Paste parses Writer's own semantic block HTML without importing arbitrary attributes. @returns Nothing; safe paragraph runs and list tuples are asserted. */, function parsesStructuredWriterClipboardHtml(): void {
+    const clipboard = {
+      /** Returns a mixed Writer block document for rich Paste. @param type - Requested clipboard MIME type. @returns Semantic HTML or its plain fallback. */
+      getData(type: string): string {
+        return type === "text/html"
+          ? "<p>Intro</p><ol><li><strong>Parent</strong><ul><li><em>Child</em></li></ul></li><li>Sibling</li></ol><div>Outro</div>"
+          : "Intro\nParent\nChild\nSibling\nOutro";
+      },
+    } as Pick<DataTransfer, "getData">;
+
+    expect(readWriterClipboardPaste(clipboard)).toEqual({
+      isBlock: true,
+      paragraphs: [
+        {
+          listKind: "none",
+          listLevel: 0,
+          runs: [{ attributes: { bold: false, italic: false, underline: false }, text: "Intro" }],
+        },
+        {
+          listKind: "numbered",
+          listLevel: 0,
+          runs: [{ attributes: { bold: true, italic: false, underline: false }, text: "Parent" }],
+        },
+        {
+          listKind: "bullet",
+          listLevel: 1,
+          runs: [{ attributes: { bold: false, italic: true, underline: false }, text: "Child" }],
+        },
+        {
+          listKind: "numbered",
+          listLevel: 0,
+          runs: [{ attributes: { bold: false, italic: false, underline: false }, text: "Sibling" }],
+        },
+        {
+          listKind: "none",
+          listLevel: 0,
+          runs: [{ attributes: { bold: false, italic: false, underline: false }, text: "Outro" }],
+        },
+      ],
+      source: "html",
+    });
+  });
+
+  it("retains visible root text around supported clipboard blocks" /** Verifies block parsing keeps non-whitespace root text while ignoring comments and malformed direct list children. @returns Nothing; visual-order paragraph text is asserted. */, function parsesMixedRootClipboardContent(): void {
+    const clipboard = {
+      /** Returns mixed root text, blocks, and ignored nodes. @param type - Requested MIME type. @returns Rich test HTML or plain fallback. */
+      getData(type: string): string {
+        return type === "text/html"
+          ? "lead<!--ignored--><p>Body</p> tail<div>Outro</div> \n <span>ignored root</span><ol><div>ignored child</div><li>Item</li></ol>"
+          : "fallback";
+      },
+    } as Pick<DataTransfer, "getData">;
+
+    expect(
+      readWriterClipboardPaste(clipboard)?.paragraphs.map(
+        /** Projects normalized paragraph text and list kind. @param paragraph - Parsed clipboard paragraph. @returns Observable transfer state. */ (
+          paragraph,
+        ) => ({
+          kind: paragraph.listKind,
+          text: paragraph.runs
+            .map(
+              /** Projects one parsed run's visible text. @param run - Safe clipboard text run. @returns Visible run text. */ (
+                run,
+              ) => run.text,
+            )
+            .join(""),
+        }),
+      ),
+    ).toEqual([
+      { kind: "none", text: "lead" },
+      { kind: "none", text: "Body" },
+      { kind: "none", text: " tail" },
+      { kind: "none", text: "Outro" },
+      { kind: "numbered", text: "Item" },
+    ]);
   });
 
   it("omits accessibility descriptions and preserves every bounded paragraph style in rich HTML" /** Verifies only rendered editable paragraph bodies become clipboard data. @returns Nothing; visible plain text and portable HTML are asserted. */, function serializesVisibleParagraphs(): void {

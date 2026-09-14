@@ -161,7 +161,7 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
     executeCommand(WRITER_COMMAND_IDS.paste, {
       clipboardHandled: true,
       range,
-      ...(paste === undefined ? {} : { runs: paste.runs }),
+      ...(paste === undefined ? {} : { paste }),
     } satisfies WriterPasteCommandArguments);
   }
 

@@ -139,7 +139,7 @@ export function WriterEditableParagraph({
           aria-describedby={styleDescriptionId}
           aria-label={label}
           aria-multiline="true"
-          className={`min-h-7 text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"} ${
+          className={`min-h-7 whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"} ${
             paragraph.style === "heading-1" ? "text-2xl font-bold leading-9" : "text-base leading-7"
           }`}
           contentEditable

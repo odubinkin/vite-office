@@ -15,6 +15,7 @@ describe("browser shortcuts" /** Groups browser keyboard shortcut adaptation cas
     expect(getBrowserShortcut(createEvent({ key: "z", metaKey: true }))).toBe("Meta+z");
     expect(getBrowserShortcut(createEvent({ altKey: true }))).toBe("Alt+z");
     expect(getBrowserShortcut(createEvent({}))).toBe("z");
+    expect(getBrowserShortcut(createEvent({ key: " " }))).toBe("Space");
     expect(getBrowserShortcut(createEvent({ key: "Control" }))).toBeUndefined();
   });
 });

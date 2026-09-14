@@ -172,4 +172,133 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       if (descriptor !== undefined) Object.defineProperty(Intl, "Segmenter", descriptor);
     }
   });
+
+  it("pastes structured list paragraphs as one reversible Writer action" /** Verifies semantic clipboard blocks split canonical text nodes, retain list levels, preserve the trailing range text, and undo atomically. @returns Nothing. */, function pastesStructuredParagraphs(): void {
+    const shell = createShell("prefix  suffix");
+    expect(
+      shell.Paste(
+        { end: 7, paragraphId: "p-1", start: 7 },
+        {
+          isBlock: true,
+          paragraphs: [
+            {
+              listKind: "numbered",
+              listLevel: 0,
+              runs: [
+                {
+                  attributes: { bold: true, italic: false, underline: false },
+                  text: "Parent",
+                },
+              ],
+            },
+            {
+              listKind: "bullet",
+              listLevel: 1,
+              runs: [
+                {
+                  attributes: { bold: false, italic: true, underline: false },
+                  text: "Child",
+                },
+              ],
+            },
+            {
+              listKind: "numbered",
+              listLevel: 0,
+              runs: [
+                {
+                  attributes: { bold: false, italic: false, underline: false },
+                  text: "Sibling",
+                },
+              ],
+            },
+          ],
+          source: "html",
+        },
+      ),
+    ).toBe(true);
+    expect(
+      shell
+        .GetDoc()
+        .paragraphs.map(
+          /** Projects pasted text and list metadata. @param paragraph - Canonical Writer paragraph. @returns Observable paragraph state. */ (
+            paragraph,
+          ) => ({ list: paragraph.list, text: paragraph.text, runs: paragraph.runs }),
+        ),
+    ).toEqual([
+      {
+        list: { kind: "numbered", level: 0 },
+        runs: [
+          { attributes: { bold: false, italic: false, underline: false }, text: "prefix " },
+          { attributes: { bold: true, italic: false, underline: false }, text: "Parent" },
+        ],
+        text: "prefix Parent",
+      },
+      {
+        list: { kind: "bullet", level: 1 },
+        runs: [{ attributes: { bold: false, italic: true, underline: false }, text: "Child" }],
+        text: "Child",
+      },
+      {
+        list: { kind: "numbered", level: 0 },
+        runs: [
+          { attributes: { bold: false, italic: false, underline: false }, text: "Sibling suffix" },
+        ],
+        text: "Sibling suffix",
+      },
+    ]);
+    expect(shell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(1);
+    expect(shell.Undo()).toBe(true);
+    expect(
+      shell
+        .GetDoc()
+        .paragraphs.map(
+          /** Projects canonical text after Undo. @param paragraph - Restored Writer paragraph. @returns Visible paragraph text. */ (
+            paragraph,
+          ) => paragraph.text,
+        ),
+    ).toEqual(["prefix  suffix"]);
+    expect(shell.Redo()).toBe(true);
+    expect(
+      shell
+        .GetDoc()
+        .paragraphs.map(
+          /** Projects canonical text after Redo. @param paragraph - Reapplied Writer paragraph. @returns Visible paragraph text. */ (
+            paragraph,
+          ) => paragraph.text,
+        ),
+    ).toEqual(["prefix Parent", "Child", "Sibling suffix"]);
+    expect(
+      shell.Paste(
+        { end: 0, paragraphId: "p-1", start: 0 },
+        { isBlock: true, paragraphs: [], source: "html" },
+      ),
+    ).toBe(false);
+
+    const emptyBlockShell = createShell();
+    expect(
+      emptyBlockShell.Paste(
+        { end: 0, paragraphId: "p-1", start: 0 },
+        {
+          isBlock: false,
+          paragraphs: [{ listKind: "none", listLevel: 0, runs: [] }],
+          source: "html",
+        },
+      ),
+    ).toBe(false);
+    expect(
+      emptyBlockShell.Paste(
+        { end: 0, paragraphId: "p-1", start: 0 },
+        {
+          isBlock: true,
+          paragraphs: [
+            { listKind: "none", listLevel: 0, runs: [] },
+            { listKind: "none", listLevel: 0, runs: [] },
+          ],
+          source: "html",
+        },
+      ),
+    ).toBe(true);
+    expect(emptyBlockShell.GetDoc().paragraphs).toHaveLength(2);
+    expect(emptyBlockShell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(1);
+  });
 });

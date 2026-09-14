@@ -116,6 +116,38 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     const pastedParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     expect(pastedParagraph).toHaveTextContent("Inserted");
     expect(pastedParagraph.querySelector("strong")).toHaveTextContent("Inserted");
+    expect(pastedParagraph).toHaveClass("whitespace-pre-wrap");
+  });
+
+  it("pastes semantic nested lists as separate Writer paragraphs" /** Verifies native rich Paste retains item boundaries, kinds, levels, direct formatting, and one-step undo. @returns Nothing; canonical list projections are asserted. */, function pastesStructuredLists(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    placeWriterCaret(paragraph, 0);
+    fireEvent.paste(paragraph, {
+      clipboardData: {
+        /** Supplies Writer-compatible nested list HTML and its plain fallback. @param type - Requested clipboard MIME type. @returns Structured rich clipboard data or plain lines. */
+        getData(type: string): string {
+          return type === "text/html"
+            ? "<ol><li><strong>First</strong><ul><li>Nested</li></ul></li><li>Second</li></ol>"
+            : "1. First\n• Nested\n2. Second";
+        },
+      },
+    });
+    const paragraphs = screen.getAllByRole("textbox");
+    expect(paragraphs).toHaveLength(3);
+    expect(paragraphs[0]).toHaveTextContent("First");
+    expect(paragraphs[0]).toHaveAttribute("data-list-kind", "numbered");
+    expect(paragraphs[0]).toHaveAttribute("data-list-level", "0");
+    expect(paragraphs[0]?.querySelector("strong")).toHaveTextContent("First");
+    expect(paragraphs[1]).toHaveTextContent("Nested");
+    expect(paragraphs[1]).toHaveAttribute("data-list-kind", "bullet");
+    expect(paragraphs[1]).toHaveAttribute("data-list-level", "1");
+    expect(paragraphs[2]).toHaveTextContent("Second");
+    expect(paragraphs[2]).toHaveAttribute("data-list-kind", "numbered");
+    expect(paragraphs[2]).toHaveAttribute("data-list-level", "0");
+    fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+    expect(screen.getAllByRole("textbox")).toHaveLength(1);
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent("");
   });
 
   it("keeps the typing caret stable and routes Ctrl/Cmd+A to Writer Select All" /** Verifies immutable input commits preserve a mid-paragraph caret while both platform Select All shortcuts select every Writer paragraph. @returns Nothing; the browser selection and visible paragraph contents are asserted. */, function handlesDocumentSelectionShortcuts(): void {

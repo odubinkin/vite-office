@@ -24,12 +24,13 @@ export interface BrowserShortcutEvent {
  */
 export function getBrowserShortcut(event: BrowserShortcutEvent): string | undefined {
   if (["Alt", "Control", "Meta", "Shift"].includes(event.key)) return undefined;
+  const key = event.key === " " ? "Space" : event.key;
   return [
     event.ctrlKey ? "Ctrl" : undefined,
     event.altKey ? "Alt" : undefined,
     event.shiftKey ? "Shift" : undefined,
     event.metaKey ? "Meta" : undefined,
-    event.key,
+    key,
   ]
     .filter(
       /** Retains only defined shortcut segments. @param part - Candidate segment. @returns True for text segments. */
