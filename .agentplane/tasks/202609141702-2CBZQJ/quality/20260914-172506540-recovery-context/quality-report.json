@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609141702-2CBZQJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-14T17:25:06.540Z",
+  "verdict": "pass",
+  "summary": "Workstream 7 scope and acceptance criteria are implemented with clean browser/view boundaries and deterministic lazy disposal.",
+  "evaluated_sha": "484fadc5dc3835375a422f4d06b168dd645607d5",
+  "blueprint_digest": "c66045acd07e916cccac9becaaffc38c9432810b5863e6a8ae72ce8036fcc07f",
+  "findings": [
+    "Full repository verification passes, recovery remains explicitly user-selected, and inactive routes create no Writer session resources."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609141702-2CBZQJ/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
