@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609140510-T05E0J",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-14T05:48:03.857Z",
+  "verdict": "pass",
+  "summary": "Stage 3 action-based Writer undo/redo matches the pinned Sfx/SwUndo architecture within the current browser slice and passes every declared check.",
+  "evaluated_sha": "b5724f104089b1b227f40679fdf906d23db8e16c",
+  "blueprint_digest": "6368a1bb162135baee462b9f9652e0c42e799ea0c99ec9e35978729a02676a47",
+  "findings": [
+    "Specialized minimal-payload actions replace full-document snapshot history; grouping, redo truncation, save position, cursor restoration, structural and formatting fidelity, bounded retention, and representative performance are covered."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609140510-T05E0J/README.md",
+    "apps/office/src/sw/source/core/undo/undobj.test.ts",
+    "apps/office/src/sfx2/source/doc/docundomanager.test.ts",
+    "docs/program/transaction-history.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
