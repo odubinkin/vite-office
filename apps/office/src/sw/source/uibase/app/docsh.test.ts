@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { createWriterDocument, insertWriterText } from "../../core/doc/writer";
-import { undoWriterTransaction } from "../uiview/viewfunc";
+import { SwWrtShell } from "../wrtsh/wrtsh";
 import { SwDocShell } from "./docsh";
 
 /** Creates deterministic Writer metadata. @param title - Visible title. @param id - Stable identity. @returns New document header. */
@@ -50,25 +50,41 @@ describe("SwDocShell" /** Groups the bounded document-shell lifecycle. @returns 
   it("coordinates history and document invalidation for one persistent shell" /** Verifies mutation ownership, no-op transitions, history replacement, subscription cleanup, and medium replacement. @returns Nothing. */, function coordinatesPersistentHistory(): void {
     const initial = createWriterDocument(metadata(), "p-1");
     const shell = new SwDocShell(initial, { kind: "browser-local", name: "shell-document" });
+    const writerShell = new SwWrtShell(shell);
     let invalidations = 0;
     const unsubscribe = shell.Subscribe(
       /** Counts one document-shell invalidation. @returns Nothing. */ () => {
         invalidations += 1;
       },
     );
-    expect(shell.ApplyDocument(initial, { position: 0 })).toBe(false);
-    const changed = insertWriterText(initial, "p-1", 0, "A");
-    expect(shell.ApplyDocument(changed, { position: 1 })).toBe(true);
-    expect(shell.GetDoc()).toBe(changed);
-    expect(shell.GetUndoManager()).toMatchObject({ index: 1, selection: { position: 1 } });
-    const undone = undoWriterTransaction(shell.GetUndoManager());
-    expect(shell.SetUndoManager(undone)).toBe(true);
+    expect(writerShell.InsertText("p-1", "A", 1, "insertText")).toBe(true);
+    expect(shell.GetDoc()).toBe(initial);
+    expect(shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+    expect(writerShell.Undo()).toBe(true);
     expect(shell.GetDoc().paragraphs[0]?.text).toBe("");
-    expect(shell.SetUndoManager(undone)).toBe(false);
+    expect(writerShell.Undo()).toBe(false);
     expect(invalidations).toBe(2);
+    const generation = shell.GetDoc().document.contentGeneration;
+    expect(writerShell.AcknowledgeSave(generation)).toBe(true);
+    expect(writerShell.AcknowledgeSave(generation)).toBe(false);
+    expect(invalidations).toBe(3);
     unsubscribe();
     shell.InitNew(metadata("Replacement", "replacement"), "replacement-p-1");
-    expect(invalidations).toBe(2);
+    expect(invalidations).toBe(3);
     shell.Close();
+  });
+
+  it("clears the save position for dirty replacement documents" /** Verifies constructor and replacement history start away from a primary-medium save boundary. @returns Nothing. */, function replacesWithDirtyDocuments(): void {
+    const dirty = insertWriterText(createWriterDocument(metadata(), "p-1"), "p-1", 0, "dirty");
+    const shell = new SwDocShell(dirty);
+    expect(shell.GetUndoManager().IsAtSavePosition()).toBe(false);
+    const replacement = insertWriterText(
+      createWriterDocument(metadata("Replacement", "replacement"), "replacement-p-1"),
+      "replacement-p-1",
+      0,
+      "changed",
+    );
+    shell.ReplaceDocument(replacement, { kind: "browser-local", name: "replacement" });
+    expect(shell.GetUndoManager().IsAtSavePosition()).toBe(false);
   });
 });

@@ -1,117 +1,251 @@
-/** @fileoverview Verifies immutable transaction history, cursor selection, undo, redo, branching, and invalid state rejection. */
+/** @fileoverview Verifies Sfx action stacks, merging, compounds, save marks, redo branches, and limits. */
+
 import { describe, expect, it } from "vitest";
 import {
-  applyGroupedTransaction,
-  applyTransaction,
-  createTransactionHistory,
   DEFAULT_MAX_UNDO_ACTION_COUNT,
-  getCurrentTransactionState,
-  redoTransaction,
-  replaceCurrentTransactionState,
-  undoTransaction,
+  SfxListUndoAction,
+  SfxUndoAction,
+  SfxUndoManager,
 } from "./docundomanager";
 
-describe("transaction history" /**
- * Groups pure history transition tests.
- * @returns Nothing; Vitest registers cases.
- */, function defineHistoryTests(): void {
-  it("applies, undoes, redoes, and truncates redo branches immutably" /**
-   * Verifies chronological state and selection transitions.
-   * @returns Nothing; assertions validate transitions.
-   */, function transitionsHistory(): void {
-    const initial = createTransactionHistory("one", { position: 0 });
-    const two = applyTransaction(initial, "two", { position: 2 });
-    const three = applyTransaction(two, "three", { position: 3 });
-    const undone = undoTransaction(three, { position: 2 });
-    const branched = applyTransaction(undone, "four", { position: 4 });
-    expect(initial).toEqual({ entries: ["one"], index: 0, selection: { position: 0 } });
-    expect(getCurrentTransactionState(undone)).toBe("two");
-    expect(redoTransaction(undone, { position: 3 })).toMatchObject({
-      index: 2,
-      selection: { position: 3 },
-    });
-    expect(branched).toEqual({
-      entries: ["one", "two", "four"],
-      index: 2,
-      selection: { position: 4 },
-    });
-    expect(undoTransaction(initial, { position: 0 })).toBe(initial);
-    expect(redoTransaction(branched, { position: 4 })).toBe(branched);
+/** Mutable context used to observe generic actions. */
+interface TextContext {
+  /** Current test value. */
+  value: string;
+}
+
+/** Reversible generic text replacement with optional grouping. */
+class TextAction extends SfxUndoAction<TextContext> {
+  /** Creates one action. @param before - Prior value. @param after - Next value. @param group - Optional merge identity. @param fails - Whether undo/redo throws. @returns Nothing. */
+  public constructor(
+    private readonly before: string,
+    private after: string,
+    private readonly group?: string,
+    private readonly fails = false,
+  ) {
+    super();
+  }
+
+  /** Restores the prior value. @param context - Mutable context. @returns Nothing. */
+  public override UndoWithContext(context: TextContext): void {
+    if (this.fails) throw new Error("undo failed");
+    context.value = this.before;
+  }
+
+  /** Applies the next value. @param context - Mutable context. @returns Nothing. */
+  public override RedoWithContext(context: TextContext): void {
+    if (this.fails) throw new Error("redo failed");
+    context.value = this.after;
+  }
+
+  /** Returns a deterministic test label. @returns Label. */
+  public override GetComment(): string {
+    return `Set ${this.after}`;
+  }
+
+  /** Merges matching groups. @param next - Newer action. @returns Whether absorbed. */
+  public override Merge(next: SfxUndoAction<TextContext>): boolean {
+    if (!(next instanceof TextAction) || this.group === undefined || next.group !== this.group)
+      return false;
+    this.after = next.after;
+    return true;
+  }
+
+  /** Counts retained test text. @returns Character count. */
+  public override GetPayloadSize(): number {
+    return this.before.length + this.after.length;
+  }
+}
+
+/** Executes then records one action like a document shell. @param manager - Target manager. @param context - Mutable context. @param action - New action. @param merge - Whether grouping is allowed. @returns Nothing. */
+function apply(
+  manager: SfxUndoManager<TextContext>,
+  context: TextContext,
+  action: TextAction,
+  merge = false,
+): void {
+  action.RedoWithContext(context);
+  manager.AddUndoAction(action, merge);
+}
+
+describe("SfxUndoManager" /** Groups generic action-manager behavior. @returns Nothing. */, function defineUndoManagerTests(): void {
+  it("undoes, redoes, truncates a redo branch, and exposes stack actions" /** Verifies the upstream current-action cursor model. @returns Nothing. */, function navigatesActions(): void {
+    const context = { value: "one" };
+    const manager = new SfxUndoManager<TextContext>();
+    apply(manager, context, new TextAction("one", "two"));
+    apply(manager, context, new TextAction("two", "three"));
+    expect(manager.GetUndoActionCount()).toBe(2);
+    expect(manager.GetRedoActionCount()).toBe(0);
+    expect(manager.GetUndoAction()?.GetComment()).toBe("Set three");
+    expect(manager.GetUndoAction(1)?.GetComment()).toBe("Set two");
+    expect(manager.GetUndoAction(2)).toBeUndefined();
+    expect(manager.Undo(context)).toBe(true);
+    expect(context.value).toBe("two");
+    expect(manager.GetRedoAction()?.GetComment()).toBe("Set three");
+    expect(manager.Redo(context)).toBe(true);
+    expect(context.value).toBe("three");
+    expect(manager.Redo(context)).toBe(false);
+    expect(manager.Undo(context)).toBe(true);
+    apply(manager, context, new TextAction("two", "four"));
+    expect(manager.GetRedoActionCount()).toBe(0);
+    expect(manager.GetRedoAction()).toBeUndefined();
+    expect(manager.GetUndoAction()?.GetComment()).toBe("Set four");
   });
 
-  it("replaces the current state without adding an undo action" /**
-   * Verifies persistence acknowledgements can update metadata at LibreOffice's save mark.
-   * @returns Nothing; assertions validate replacement and group closure.
-   */, function replacesCurrentState(): void {
-    const initial = createTransactionHistory("one", { position: 0 });
-    const grouped = applyGroupedTransaction(initial, "two", { position: 2 }, "typing:word");
-    const replaced = replaceCurrentTransactionState(grouped, "saved-two");
-
-    expect(replaced).toEqual({
-      entries: ["one", "saved-two"],
-      index: 1,
-      selection: { position: 2 },
-    });
-    expect(grouped.entries).toEqual(["one", "two"]);
+  it("groups only an open compatible action and invalidates a save position changed in place" /** Verifies Merge and explicit grouping barriers. @returns Nothing. */, function groupsActions(): void {
+    const context = { value: "" };
+    const manager = new SfxUndoManager<TextContext>();
+    apply(manager, context, new TextAction("", "a", "typing"), true);
+    manager.SetSavePosition();
+    apply(manager, context, new TextAction("a", "ab", "typing"), true);
+    expect(manager.GetUndoActionCount()).toBe(2);
+    expect(manager.IsAtSavePosition()).toBe(false);
+    apply(manager, context, new TextAction("ab", "abc", "typing"), true);
+    expect(manager.GetUndoActionCount()).toBe(2);
+    expect(manager.GetUndoAction()?.GetComment()).toBe("Set abc");
+    manager.BreakUndoGrouping();
+    apply(manager, context, new TextAction("abc", "abcd", "typing"), true);
+    expect(manager.GetUndoActionCount()).toBe(3);
+    expect(manager.ClearSavePosition()).toBe(true);
+    expect(manager.ClearSavePosition()).toBe(false);
+    expect(manager.SetSavePosition()).toBe(true);
+    expect(manager.ClearSavePosition()).toBe(true);
+    expect(manager.SetSavePosition()).toBe(true);
+    expect(manager.SetSavePosition()).toBe(false);
+    expect(manager.IsAtSavePosition()).toBe(true);
   });
 
-  it("groups compatible actions and bounds retained undo snapshots like SfxUndoManager" /**
-   * Verifies source-compatible action merging, command boundaries, and the default twenty-action capacity.
-   * @returns Nothing; assertions validate grouped and bounded histories.
-   */, function groupsAndBoundsHistory(): void {
-    const initial = createTransactionHistory("", { position: 0 });
-    const first = applyGroupedTransaction(initial, "a", { position: 1 }, "typing:word");
-    const grouped = applyGroupedTransaction(first, "ab", { position: 2 }, "typing:word");
-    const restarted = applyGroupedTransaction(
-      grouped,
-      "Xab",
-      { position: 1 },
-      "typing:word",
-      false,
-    );
-    const command = applyTransaction(restarted, "Xab!", { position: 4 });
-    const resumed = applyGroupedTransaction(command, "Xab!c", { position: 5 }, "typing:word");
-    expect(grouped).toMatchObject({ entries: ["", "ab"], index: 1 });
-    expect(restarted.entries).toEqual(["", "ab", "Xab"]);
-    expect(command.activeGroup).toBeUndefined();
-    expect(resumed.entries).toEqual(["", "ab", "Xab", "Xab!", "Xab!c"]);
-
-    let bounded = initial;
-    for (let index = 1; index <= DEFAULT_MAX_UNDO_ACTION_COUNT + 5; index += 1)
-      bounded = applyTransaction(bounded, `${index}`, { position: index });
-    expect(bounded.entries).toHaveLength(DEFAULT_MAX_UNDO_ACTION_COUNT + 1);
-    expect(bounded.entries[0]).toBe("5");
-    expect(getCurrentTransactionState(bounded)).toBe("25");
+  it("records nested and empty list actions as one top-level operation" /** Verifies EnterListAction/LeaveListAction ordering and payload. @returns Nothing. */, function recordsCompoundActions(): void {
+    const context = { value: "a" };
+    const manager = new SfxUndoManager<TextContext>();
+    manager.EnterListAction("Replace");
+    expect(manager.IsInListAction()).toBe(true);
+    expect(manager.GetListActionDepth()).toBe(1);
+    expect(manager.Undo(context)).toBe(false);
+    expect(manager.Redo(context)).toBe(false);
+    apply(manager, context, new TextAction("a", "b", "child"), true);
+    apply(manager, context, new TextAction("b", "c", "child"), true);
+    manager.EnterListAction("Nested");
+    apply(manager, context, new TextAction("c", "d"));
+    expect(manager.LeaveListAction()).toBe(1);
+    expect(manager.LeaveListAction()).toBe(2);
+    expect(manager.GetUndoActionCount()).toBe(1);
+    expect(manager.GetUndoAction()).toBeInstanceOf(SfxListUndoAction);
+    expect(manager.GetUndoAction()?.GetComment()).toBe("Replace");
+    expect(manager.GetHistoryPayloadSize()).toBeGreaterThan(0);
+    expect(manager.Undo(context)).toBe(true);
+    expect(context.value).toBe("a");
+    expect(manager.Redo(context)).toBe(true);
+    expect(context.value).toBe("d");
+    manager.EnterListAction("Empty");
+    expect(manager.LeaveListAction()).toBe(0);
+    expect(
+      /** Attempts to close a list action when none is open. @returns Invalid transition that never returns. */
+      () => manager.LeaveListAction(),
+    ).toThrow("No Sfx list action");
   });
 
-  it("rejects invalid selection and malformed history bounds" /**
-   * Verifies invalid inputs never produce partial transitions.
-   * @returns Nothing; assertions validate errors.
-   */, function rejectsInvalidHistory(): void {
+  it("bounds retained actions and repairs save marks when old actions fall out" /** Verifies the default and configurable history limit. @returns Nothing. */, function boundsActions(): void {
+    const context = { value: "0" };
+    const manager = new SfxUndoManager<TextContext>();
+    expect(manager.GetMaxUndoActionCount()).toBe(DEFAULT_MAX_UNDO_ACTION_COUNT);
+    manager.SetSavePosition();
+    for (let index = 1; index <= DEFAULT_MAX_UNDO_ACTION_COUNT + 5; index += 1) {
+      const next = `${index}`;
+      apply(manager, context, new TextAction(context.value, next));
+    }
+    expect(manager.GetUndoActionCount()).toBe(DEFAULT_MAX_UNDO_ACTION_COUNT);
+    expect(manager.IsAtSavePosition()).toBe(false);
+    manager.SetMaxUndoActionCount(2);
+    expect(manager.GetMaxUndoActionCount()).toBe(2);
+    expect(manager.GetUndoActionCount()).toBe(2);
+    manager.SetMaxUndoActionCount(0);
+    expect(manager.GetUndoActionCount()).toBe(0);
+    apply(manager, context, new TextAction(context.value, "discarded"));
+    expect(manager.GetUndoActionCount()).toBe(0);
+    expect(manager.Undo(context)).toBe(false);
+    const disabled = new SfxUndoManager<TextContext>(0);
+    disabled.AddUndoAction(new TextAction(context.value, "discarded"));
+    expect(disabled.IsAtSavePosition()).toBe(false);
+  });
+
+  it("rejects invalid capacities, blank compounds, unsafe clears, and restores the cursor after failed Undo" /** Verifies defensive manager invariants. @returns Nothing. */, function rejectsInvalidState(): void {
     expect(
-      /** Attempts negative selection creation. @returns Invalid history creation result. */ function negative(): unknown {
-        return createTransactionHistory("one", { position: -1 });
-      },
-    ).toThrowError();
+      /** Constructs a manager with a negative capacity. @returns Invalid construction that never returns. */
+      () => new SfxUndoManager(-1),
+    ).toThrow("non-negative integer");
     expect(
-      /** Attempts fractional selection creation. @returns Invalid history creation result. */ function fractional(): unknown {
-        return createTransactionHistory("one", { position: 0.5 });
-      },
-    ).toThrowError();
+      /** Constructs a manager with a fractional capacity. @returns Invalid construction that never returns. */
+      () => new SfxUndoManager(0.5),
+    ).toThrow("non-negative integer");
     expect(
-      /** Attempts malformed current-state access. @returns Invalid current-state result. */ function malformed(): unknown {
-        return getCurrentTransactionState({ entries: [], index: 0, selection: { position: 0 } });
-      },
-    ).toThrowError();
+      /** Constructs a compound action without a label. @returns Invalid construction that never returns. */
+      () => new SfxListUndoAction(""),
+    ).toThrow("must not be blank");
+    const context = { value: "a" };
+    const manager = new SfxUndoManager<TextContext>();
     expect(
-      /** Attempts an empty grouped action identity. @returns Invalid grouped history result. */ function emptyGroup(): unknown {
-        return applyGroupedTransaction(
-          createTransactionHistory("one", { position: 0 }),
-          "two",
-          { position: 1 },
-          "",
-        );
-      },
-    ).toThrowError();
+      /** Applies an invalid runtime capacity. @returns Invalid transition that never returns. */
+      () => manager.SetMaxUndoActionCount(-1),
+    ).toThrow("non-negative integer");
+    manager.EnterListAction("Open");
+    expect(
+      /** Clears history while a compound action is open. @returns Invalid transition that never returns. */
+      () => manager.Clear(),
+    ).toThrow("inside a list action");
+    expect(manager.LeaveListAction()).toBe(0);
+    context.value = "b";
+    manager.AddUndoAction(new TextAction("a", "b", undefined, true));
+    expect(
+      /** Executes a deliberately failing action. @returns Failure propagated from the action. */
+      () => manager.Undo(context),
+    ).toThrow("undo failed");
+    expect(manager.GetUndoActionCount()).toBe(1);
+    manager.Clear();
+    expect(manager.GetUndoActionCount()).toBe(0);
+    expect(manager.IsAtSavePosition()).toBe(true);
+  });
+
+  it("invalidates a save position retained on a discarded redo branch" /** Verifies a new command cannot keep an unreachable primary-medium boundary. @returns Nothing. */, function invalidatesRedoSavePosition(): void {
+    const context = { value: "a" };
+    const manager = new SfxUndoManager<TextContext>();
+    apply(manager, context, new TextAction("a", "b"));
+    apply(manager, context, new TextAction("b", "c"));
+    manager.SetSavePosition();
+    manager.Undo(context);
+    apply(manager, context, new TextAction("b", "d"));
+    expect(manager.IsAtSavePosition()).toBe(false);
+  });
+
+  it("retains a reachable save position while trimming older actions" /** Verifies capacity trimming translates an in-range save boundary. @returns Nothing. */, function retainsTrimmedSavePosition(): void {
+    const context = { value: "a" };
+    const manager = new SfxUndoManager<TextContext>();
+    apply(manager, context, new TextAction("a", "b"));
+    apply(manager, context, new TextAction("b", "c"));
+    apply(manager, context, new TextAction("c", "d"));
+    manager.SetSavePosition();
+    manager.SetMaxUndoActionCount(2);
+    expect(manager.IsAtSavePosition()).toBe(true);
+  });
+
+  it("provides base non-merge and zero-payload behavior" /** Covers default SfxUndoAction hooks. @returns Nothing. */, function usesBaseHooks(): void {
+    /** Minimal action used to exercise the base optional hooks. */
+    class MinimalAction extends SfxUndoAction<TextContext> {
+      /** No-op undo. @param context - Test context. @returns Nothing. */
+      public override UndoWithContext(context: TextContext): void {
+        void context;
+      }
+      /** No-op redo. @param context - Test context. @returns Nothing. */
+      public override RedoWithContext(context: TextContext): void {
+        void context;
+      }
+      /** Returns label. @returns Label. */
+      public override GetComment(): string {
+        return "Minimal";
+      }
+    }
+    const action = new MinimalAction();
+    expect(action.Merge(new MinimalAction())).toBe(false);
+    expect(action.GetPayloadSize()).toBe(0);
   });
 });

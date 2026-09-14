@@ -1,30 +1,46 @@
-# Browser Transaction History
+# Writer Action-Based Undo and Redo
 
 [`apps/office/src/sfx2/source/doc/docundomanager.ts`](../../apps/office/src/sfx2/source/doc/docundomanager.ts)
-provides a serializable, immutable sequence of caller-owned state snapshots with
-a zero-based cursor selection. `applyTransaction` appends a snapshot after the
-current entry and discards any redo branch. `undoTransaction` and
-`redoTransaction` move at most one entry and preserve the original history at
-their respective bounds.
+implements the document-facing `SfxUndoAction`, `SfxListUndoAction`, and
+`SfxUndoManager` contracts. The manager retains reversible actions in one
+bounded array with a current-action cursor, matching the essential behavior of
+LibreOffice's `include/svl/undo.hxx` and `svl/source/undo/undo.cxx`:
 
-`replaceCurrentTransactionState` can acknowledge persistence metadata on the
-current entry without creating a user-visible undo action. A successful Writer
-save moves the single save mark to the current entry and marks every other
-retained Undo/Redo entry as modified relative to that new position. Writer's
-`undoWriterTransaction` and `redoWriterTransaction` restore content as new
-monotonic content generations while preserving the current primary and recovery
-checkpoints. Modified state comes from the restored entry: reaching the primary
-save mark becomes clean, while Redo away from it becomes modified again. This
-mirrors `SwUndoManager::Undo` and `SwUndoManager::Redo`, which compare the undo
-stack to `m_UndoSaveMark` and call `ResetModified` or `SetModified` accordingly.
+- Undo and Redo execute action methods instead of selecting document snapshots.
+- a new action after Undo truncates the redo branch;
+- compatible adjacent actions may merge through `Merge`;
+- nested list actions execute as one top-level command;
+- the default top-level history limit is 20 actions;
+- a save position is tracked independently from action payloads.
 
-The generic module validates selection positions and history indexes. It is
-browser independent and does not itself implement document operations,
-rich-text ranges, persistence, collaboration, or conflict resolution. Snapshot
-history remains a deliberate browser-stack divergence from LibreOffice's
-action-based undo objects; only the lifecycle semantics above are mapped by
-`CAP-0114` / `LO-WRITER-0114`.
+Writer-specific actions live under
+[`apps/office/src/sw/source/core/undo`](../../apps/office/src/sw/source/core/undo).
+They follow the corresponding pinned LibreOffice `sw/source/core/undo` files:
 
-The Writer workbench uses the contract for one in-memory plain-text paragraph.
-Undo and Redo restore preceding and following snapshots, disable at their
-respective bounds, and a new edit after undo discards the redo branch.
+- `SwUndoInsert` stores inserted formatted runs and implements adjacent typing
+  grouping;
+- `SwUndoDelete` stores deleted formatted runs and groups Backspace separately
+  from forward Delete;
+- replace/paste stores only removed and inserted range runs;
+- split stores two paragraph identities and one offset;
+- join stores only the removed trailing paragraph snapshot;
+- character formatting stores the changed range runs so text hints are restored;
+- paragraph alignment, paragraph style, numbering, and list-level actions store
+  only their old and new item values.
+
+`SwDocShell` owns the manager and advances `contentGeneration` after each normal
+edit, Undo, or Redo. A successful primary-medium save moves the manager's save
+position. Undo to that position clears `isModified`; Redo away from it marks the
+document modified while preserving current save and recovery generations.
+
+`SwWrtShell` supplies the undo context. Each Writer action stores point, optional
+mark, selection direction, active paragraph, content offsets, and pending direct
+character attributes before and after the command. Restoring history mutates the
+existing `SwPaM` and `SwDoc`; it does not replace either object.
+
+The interactive editing path never calls `SwDoc.clone()` or stores a complete
+`WriterDocument` in history. Cloning remains available to pure model fixtures,
+explicit persistence/import preparation, and other non-interactive callers.
+Focused performance coverage uses representative small and large documents to
+assert that one-character history payload is constant and that neither
+`SwDoc.clone()` nor `SwDoc.toSnapshot()` runs during interactive insertion.

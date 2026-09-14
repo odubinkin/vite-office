@@ -165,7 +165,7 @@
     },
     {
       "path": "apps/office/src/sfx2/source/doc/docundomanager.ts",
-      "classification": "mapping-too-broad",
+      "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",
       "subsystem": "undo-redo",
@@ -392,6 +392,76 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/undel.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/undobj.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unins.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unnum.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unspnd.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
       ]
     },
     {
@@ -652,16 +722,12 @@
     },
     {
       "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
-      "classification": "mapping-too-broad",
+      "classification": "upstream-mechanism",
       "state": "active",
       "suite": "writer",
-      "subsystem": "workbench-controller",
+      "subsystem": "workbench-session",
       "capabilityIds": [
-        "CAP-0102",
-        "CAP-0105",
-        "CAP-0107",
-        "CAP-0112",
-        "CAP-0114"
+        "CAP-0101"
       ]
     },
     {

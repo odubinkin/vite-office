@@ -1,228 +1,269 @@
 /**
- * @fileoverview Defines pure serializable browser transaction history and cursor selection transitions at the LibreOffice `sfx2/source/doc/docundomanager.cxx` ownership boundary.
+ * @fileoverview Implements the document-facing Sfx undo manager with action stacks, list actions,
+ * save-position tracking, merging, redo truncation, and bounded retention.
  */
 
-/** Describes one immutable cursor selection using a zero-based position. */
-export interface CursorSelection {
-  /** Zero-based logical selection position owned by a future document model. */
-  readonly position: number;
-}
-
-/** Describes immutable serializable history for one caller-selected state type. */
-export interface TransactionHistory<State> {
-  /** Identifier of the last open grouped action, omitted after commands and history navigation. */
-  readonly activeGroup?: string;
-  /** State snapshots in chronological order, always containing the current snapshot. */
-  readonly entries: readonly State[];
-  /** Zero-based index of the current snapshot in entries. */
-  readonly index: number;
-  /** Current logical selection stored independently of future rendering. */
-  readonly selection: CursorSelection;
-}
-
-/** Matches the default top-level action capacity of LibreOffice's SfxUndoManager. */
+/** Matches LibreOffice's default top-level SfxUndoManager action capacity. */
 export const DEFAULT_MAX_UNDO_ACTION_COUNT = 20;
 
-/**
- * Creates history with one initial state and a validated initial selection.
- *
- * @param initialState - Caller-owned initial snapshot retained by reference without mutation.
- * @param selection - Initial cursor selection with a non-negative integer position.
- * @returns Immutable history at its first snapshot.
- * @throws {Error} When selection.position is not a non-negative integer.
- */
-export function createTransactionHistory<State>(
-  initialState: State,
-  selection: CursorSelection,
-): TransactionHistory<State> {
-  assertSelection(selection);
-  return { entries: [initialState], index: 0, selection: { ...selection } };
-}
+/** Base class for one reversible operation retained by SfxUndoManager. */
+export abstract class SfxUndoAction<Context> {
+  /** Reverts this action against the supplied document context. @param context - Active undo context. @returns Nothing. */
+  public abstract UndoWithContext(context: Context): void;
 
-/**
- * Applies a new snapshot, truncating any redo branch and updating validated selection.
- *
- * @param history - Immutable prior history that remains unmodified.
- * @param nextState - Caller-owned state snapshot becoming current.
- * @param selection - Selection associated with nextState.
- * @returns New history with nextState after the prior current entry.
- * @throws {Error} When selection.position is invalid or history is malformed.
- */
-export function applyTransaction<State>(
-  history: TransactionHistory<State>,
-  nextState: State,
-  selection: CursorSelection,
-): TransactionHistory<State> {
-  assertHistory(history);
-  assertSelection(selection);
-  return appendTransaction(history, nextState, selection);
-}
+  /** Reapplies this action against the supplied document context. @param context - Active redo context. @returns Nothing. */
+  public abstract RedoWithContext(context: Context): void;
 
-/**
- * Applies or extends one source-compatible grouped action such as Writer typing.
- *
- * LibreOffice's `SwUndoInsert::CanGrouping` and `SwUndoDelete::CanGrouping` update the latest
- * undo action when adjacent input has the same grouping class. This snapshot adapter mirrors
- * that ownership by replacing the current snapshot while a caller-selected group remains open.
- *
- * @param history - Immutable prior history that remains unmodified.
- * @param nextState - Caller-owned state snapshot becoming current.
- * @param selection - Selection associated with nextState.
- * @param group - Non-empty identity for one compatible source-level undo action.
- * @param extendCurrent - Whether source-level position checks allow merging into the open group.
- * @returns History with either a new action or an updated current grouped action.
- */
-export function applyGroupedTransaction<State>(
-  history: TransactionHistory<State>,
-  nextState: State,
-  selection: CursorSelection,
-  group: string,
-  extendCurrent = true,
-): TransactionHistory<State> {
-  assertHistory(history);
-  assertSelection(selection);
-  if (group.length === 0) throw new Error("Transaction group must not be empty.");
-  if (
-    extendCurrent &&
-    history.activeGroup === group &&
-    history.index === history.entries.length - 1 &&
-    history.entries.length > 1
-  ) {
-    return {
-      activeGroup: group,
-      entries: [...history.entries.slice(0, history.index), nextState],
-      index: history.index,
-      selection: { ...selection },
-    };
+  /** Returns the human-readable action label. @returns Command label. */
+  public abstract GetComment(): string;
+
+  /** Tries to absorb an immediately following compatible action. @param nextAction - Newer action candidate. @returns True when this action absorbed the candidate. */
+  public Merge(nextAction: SfxUndoAction<Context>): boolean {
+    void nextAction;
+    return false;
   }
-  return appendTransaction(history, nextState, selection, group);
+
+  /** Returns an approximate retained domain-payload size, excluding object overhead. @returns Payload units. */
+  public GetPayloadSize(): number {
+    return 0;
+  }
 }
 
-/**
- * Appends one bounded undo action and clears any redo branch.
- *
- * @param history - Immutable prior history.
- * @param nextState - State stored by the new action.
- * @param selection - Selection associated with nextState.
- * @param activeGroup - Optional grouped-action identity retained for compatible input.
- * @returns History with the new bounded action as its current state.
- */
-function appendTransaction<State>(
-  history: TransactionHistory<State>,
-  nextState: State,
-  selection: CursorSelection,
-  activeGroup?: string,
-): TransactionHistory<State> {
-  let entries = [...history.entries.slice(0, history.index + 1), nextState];
-  const maximumEntryCount = DEFAULT_MAX_UNDO_ACTION_COUNT + 1;
-  if (entries.length > maximumEntryCount)
-    entries = entries.slice(entries.length - maximumEntryCount);
-  return {
-    ...(activeGroup === undefined ? {} : { activeGroup }),
-    entries,
-    index: entries.length - 1,
-    selection: { ...selection },
-  };
+/** Composite action whose children undo in reverse order and redo in forward order. */
+export class SfxListUndoAction<Context> extends SfxUndoAction<Context> {
+  private readonly actions: SfxUndoAction<Context>[] = [];
+
+  /** Creates one compound action. @param comment - User-visible command label. @returns Nothing. */
+  public constructor(private readonly comment: string) {
+    super();
+    if (comment.trim().length === 0) throw new Error("Undo action comment must not be blank.");
+  }
+
+  /** Adds or merges one child action. @param action - Child operation. @param tryMerge - Whether the current child may absorb it. @returns Nothing. */
+  public AddAction(action: SfxUndoAction<Context>, tryMerge = false): void {
+    const current = this.actions[this.actions.length - 1];
+    if (tryMerge && current?.Merge(action) === true) return;
+    this.actions.push(action);
+  }
+
+  /** Returns the number of child operations. @returns Child count. */
+  public GetActionCount(): number {
+    return this.actions.length;
+  }
+
+  /** Reverts children in reverse execution order. @param context - Active undo context. @returns Nothing. */
+  public override UndoWithContext(context: Context): void {
+    for (let index = this.actions.length - 1; index >= 0; index -= 1)
+      (this.actions[index] as SfxUndoAction<Context>).UndoWithContext(context);
+  }
+
+  /** Reapplies children in original execution order. @param context - Active redo context. @returns Nothing. */
+  public override RedoWithContext(context: Context): void {
+    for (const action of this.actions) action.RedoWithContext(context);
+  }
+
+  /** Returns the compound command label. @returns Command label. */
+  public override GetComment(): string {
+    return this.comment;
+  }
+
+  /** Sums retained child payloads. @returns Approximate payload units. */
+  public override GetPayloadSize(): number {
+    return this.actions.reduce(
+      /** Adds one child payload. @param total - Accumulated units. @param action - Child action. @returns Updated total. */
+      (total, action) => total + action.GetPayloadSize(),
+      0,
+    );
+  }
 }
 
-/**
- * Moves one snapshot backward when possible while updating the validated selection.
- *
- * @param history - Immutable prior history that remains unmodified.
- * @param selection - Selection associated with the resulting current snapshot.
- * @returns Original history at the first entry, otherwise a new history one step earlier.
- * @throws {Error} When selection.position is invalid or history is malformed.
- */
-export function undoTransaction<State>(
-  history: TransactionHistory<State>,
-  selection: CursorSelection,
-): TransactionHistory<State> {
-  assertHistory(history);
-  assertSelection(selection);
-  return history.index === 0
-    ? history
-    : { entries: history.entries, index: history.index - 1, selection: { ...selection } };
+/** Action-based undo manager following LibreOffice's single array plus current-action cursor model. */
+export class SfxUndoManager<Context> {
+  private readonly actions: SfxUndoAction<Context>[] = [];
+  private currentAction = 0;
+  private readonly listActions: SfxListUndoAction<Context>[] = [];
+  private mergeAllowed = false;
+  private savePosition: number | undefined = 0;
+
+  /** Creates a bounded manager. @param maximumActionCount - Retained top-level action capacity. @returns Nothing. */
+  public constructor(private maximumActionCount = DEFAULT_MAX_UNDO_ACTION_COUNT) {
+    assertActionCount(maximumActionCount);
+  }
+
+  /** Records one already-executed action, optionally merging it with the current top action. @param action - Reversible operation. @param tryMerge - Whether compatible immediate grouping is allowed. @returns Nothing. */
+  public AddUndoAction(action: SfxUndoAction<Context>, tryMerge = false): void {
+    const listAction = this.listActions[this.listActions.length - 1];
+    if (listAction !== undefined) {
+      listAction.AddAction(action, tryMerge);
+      return;
+    }
+    this.TruncateRedoBranch();
+    const current = this.actions[this.currentAction - 1];
+    if (tryMerge && this.mergeAllowed && current?.Merge(action) === true) {
+      return;
+    }
+    if (this.maximumActionCount === 0) {
+      if (this.savePosition === this.currentAction) this.savePosition = undefined;
+      this.mergeAllowed = false;
+      return;
+    }
+    this.actions.push(action);
+    this.currentAction += 1;
+    this.mergeAllowed = tryMerge;
+    this.TrimToMaximum();
+  }
+
+  /** Reverts the current top action. @param context - Active document context. @returns True when an action ran. */
+  public Undo(context: Context): boolean {
+    if (this.IsInListAction() || this.currentAction === 0) return false;
+    const action = this.actions[this.currentAction - 1] as SfxUndoAction<Context>;
+    this.currentAction -= 1;
+    this.mergeAllowed = false;
+    try {
+      action.UndoWithContext(context);
+      return true;
+    } catch (error) {
+      this.currentAction += 1;
+      throw error;
+    }
+  }
+
+  /** Reapplies the next redo action. @param context - Active document context. @returns True when an action ran. */
+  public Redo(context: Context): boolean {
+    if (this.IsInListAction() || this.currentAction >= this.actions.length) return false;
+    const action = this.actions[this.currentAction] as SfxUndoAction<Context>;
+    action.RedoWithContext(context);
+    this.currentAction += 1;
+    this.mergeAllowed = false;
+    return true;
+  }
+
+  /** Begins a nested compound action. @param comment - User-visible label. @returns Nothing. */
+  public EnterListAction(comment: string): void {
+    this.listActions.push(new SfxListUndoAction(comment));
+  }
+
+  /** Closes the current compound action and records it in its parent or the top-level stack. @returns Number of child actions. */
+  public LeaveListAction(): number {
+    const action = this.listActions.pop();
+    if (action === undefined) throw new Error("No Sfx list action is open.");
+    const count = action.GetActionCount();
+    if (count === 0) return 0;
+    const parent = this.listActions[this.listActions.length - 1];
+    if (parent === undefined) this.AddUndoAction(action);
+    else parent.AddAction(action);
+    return count;
+  }
+
+  /** Reports whether a compound action is open. @returns True inside Enter/LeaveListAction. */
+  public IsInListAction(): boolean {
+    return this.listActions.length > 0;
+  }
+
+  /** Returns nested compound-action depth. @returns Open list depth. */
+  public GetListActionDepth(): number {
+    return this.listActions.length;
+  }
+
+  /** Returns available top-level undo count. @returns Undo action count. */
+  public GetUndoActionCount(): number {
+    return this.currentAction;
+  }
+
+  /** Returns available top-level redo count. @returns Redo action count. */
+  public GetRedoActionCount(): number {
+    return this.actions.length - this.currentAction;
+  }
+
+  /** Returns an undo action counted from the stack top. @param offset - Zero-based distance from top. @returns Matching action, when present. */
+  public GetUndoAction(offset = 0): SfxUndoAction<Context> | undefined {
+    return this.actions[this.currentAction - 1 - offset];
+  }
+
+  /** Returns a redo action counted from the next action. @param offset - Zero-based distance from next. @returns Matching action, when present. */
+  public GetRedoAction(offset = 0): SfxUndoAction<Context> | undefined {
+    return this.actions[this.currentAction + offset];
+  }
+
+  /** Returns the configured top-level capacity. @returns Maximum retained actions. */
+  public GetMaxUndoActionCount(): number {
+    return this.maximumActionCount;
+  }
+
+  /** Changes top-level capacity and trims the oldest retained actions immediately. @param maximumActionCount - New non-negative capacity. @returns Nothing. */
+  public SetMaxUndoActionCount(maximumActionCount: number): void {
+    assertActionCount(maximumActionCount);
+    this.maximumActionCount = maximumActionCount;
+    this.TrimToMaximum();
+  }
+
+  /** Marks the current stack position as the primary-medium save position and closes grouping. @returns Whether the mark moved. */
+  public SetSavePosition(): boolean {
+    const changed = this.savePosition !== this.currentAction;
+    this.savePosition = this.currentAction;
+    this.mergeAllowed = false;
+    return changed;
+  }
+
+  /** Invalidates an unreachable or unknown primary save boundary. @returns Whether a mark existed. */
+  public ClearSavePosition(): boolean {
+    const changed = this.savePosition !== undefined;
+    this.savePosition = undefined;
+    this.mergeAllowed = false;
+    return changed;
+  }
+
+  /** Closes the current action-merging window without changing history. @returns Nothing. */
+  public BreakUndoGrouping(): void {
+    this.mergeAllowed = false;
+  }
+
+  /** Reports whether current content corresponds to the primary save mark. @returns True at the marked action boundary. */
+  public IsAtSavePosition(): boolean {
+    return this.savePosition === this.currentAction;
+  }
+
+  /** Returns approximate retained domain payload across undo and redo. @returns Payload units. */
+  public GetHistoryPayloadSize(): number {
+    return this.actions.reduce(
+      /** Adds one action payload. @param total - Accumulated units. @param action - Retained action. @returns Updated total. */
+      (total, action) => total + action.GetPayloadSize(),
+      0,
+    );
+  }
+
+  /** Clears all retained actions and treats the current state as the new clean boundary. @returns Nothing. */
+  public Clear(): void {
+    if (this.IsInListAction()) throw new Error("Cannot clear SfxUndoManager inside a list action.");
+    this.actions.length = 0;
+    this.currentAction = 0;
+    this.mergeAllowed = false;
+    this.savePosition = 0;
+  }
+
+  /** Removes the redo branch before a newly executed command is recorded. @returns Nothing. */
+  private TruncateRedoBranch(): void {
+    if (this.currentAction === this.actions.length) return;
+    this.actions.splice(this.currentAction);
+    if (this.savePosition !== undefined && this.savePosition > this.currentAction)
+      this.savePosition = undefined;
+  }
+
+  /** Drops oldest actions above the configured capacity while repairing cursor and save mark. @returns Nothing. */
+  private TrimToMaximum(): void {
+    const removeCount = this.actions.length - this.maximumActionCount;
+    if (removeCount <= 0) return;
+    this.actions.splice(0, removeCount);
+    this.currentAction = Math.max(0, this.currentAction - removeCount);
+    if (this.savePosition !== undefined) {
+      this.savePosition -= removeCount;
+      if (this.savePosition < 0) this.savePosition = undefined;
+    }
+  }
 }
 
-/**
- * Moves one snapshot forward when possible while updating the validated selection.
- *
- * @param history - Immutable prior history that remains unmodified.
- * @param selection - Selection associated with the resulting current snapshot.
- * @returns Original history at the final entry, otherwise a new history one step later.
- * @throws {Error} When selection.position is invalid or history is malformed.
- */
-export function redoTransaction<State>(
-  history: TransactionHistory<State>,
-  selection: CursorSelection,
-): TransactionHistory<State> {
-  assertHistory(history);
-  assertSelection(selection);
-  return history.index === history.entries.length - 1
-    ? history
-    : { entries: history.entries, index: history.index + 1, selection: { ...selection } };
-}
-
-/**
- * Reads the current immutable state snapshot from validated history.
- *
- * @param history - Immutable history to inspect without mutation.
- * @returns Current snapshot at history.index.
- * @throws {Error} When history is malformed.
- */
-export function getCurrentTransactionState<State>(history: TransactionHistory<State>): State {
-  assertHistory(history);
-  return history.entries[history.index] as State;
-}
-
-/**
- * Replaces the current entry without creating an undo action, for persistence acknowledgements or generation repair.
- *
- * @param history - Immutable prior history that remains unmodified.
- * @param nextState - Replacement for the current logical content entry.
- * @returns History with the same cursor and entries except for the replaced current state.
- */
-export function replaceCurrentTransactionState<State>(
-  history: TransactionHistory<State>,
-  nextState: State,
-): TransactionHistory<State> {
-  assertHistory(history);
-  return {
-    entries: history.entries.map(
-      /** Replaces only the current history slot. @param state - Existing state. @param index - State index. @returns Existing or replacement state. */
-      function replaceCurrentState(state, index): State {
-        return index === history.index ? nextState : state;
-      },
-    ),
-    index: history.index,
-    selection: { ...history.selection },
-  };
-}
-
-/**
- * Validates cursor selection values before they enter history transitions.
- *
- * @param selection - Candidate selection inspected without mutation.
- * @returns Nothing; invalid selection throws.
- * @throws {Error} When position is negative or non-integral.
- */
-function assertSelection(selection: CursorSelection): void {
-  if (!Number.isInteger(selection.position) || selection.position < 0)
-    throw new Error("Selection position must be a non-negative integer.");
-}
-
-/**
- * Validates history entry and cursor bounds before an operation reads it.
- *
- * @param history - Candidate history inspected without mutation.
- * @returns Nothing; malformed history throws.
- * @throws {Error} When entries are empty or index is outside their range.
- */
-function assertHistory<State>(history: TransactionHistory<State>): void {
-  if (
-    !Number.isInteger(history.index) ||
-    history.index < 0 ||
-    history.index >= history.entries.length
-  )
-    throw new Error("Transaction history index is outside its entries.");
+/** Validates a configured action capacity. @param count - Candidate count. @returns Nothing. */
+function assertActionCount(count: number): void {
+  if (!Number.isInteger(count) || count < 0)
+    throw new Error("Maximum undo action count must be a non-negative integer.");
 }

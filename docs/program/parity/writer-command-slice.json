@@ -91,19 +91,33 @@
       "type": "command",
       "maturity": "implemented",
       "assertions": [
-        "The mapped upstream and local evidence asserts the bounded behavior: Undo and Redo of bounded Writer paragraph history."
+        "Undo and Redo execute bounded semantic Writer actions for every currently implemented content, structure, direct-format, paragraph-format, style, numbering, and list-level mutation.",
+        "Compatible adjacent typing and deletion merge by position, direction, character class, cursor attributes, and command boundary; a new command after Undo truncates the redo branch.",
+        "History stores action-local inverse payloads and complete cursor boundaries without retaining or cloning a WriterDocument snapshot in the interactive path."
       ],
       "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The browser currently uses immutable snapshots while retaining mapped Undo and Redo behavior."
+        "kind": "browser-adaptation",
+        "rationale": "The action stack and Writer inverse payload model follow LibreOffice, while browser rendering has no native layout frames, tracked changes, embedded objects, or desktop view-shell repair work to retain."
       },
-      "capability": "Undo and Redo of bounded Writer paragraph history",
+      "capability": "Action-based Undo and Redo for the current Writer command slice",
       "gaps": [
-        "The local snapshot history clones the bounded SwDoc graph, but it does not yet implement Writer's native undo objects, repair semantics, layout, tables, tracked changes, or full style system.",
+        "Undo actions cover the current bounded Writer feature slice only; layout frames, tables, tracked changes, fields, embedded objects, and the full style system remain outside the implemented product scope.",
         "The mapped upstream test exercises tiled rendering invalidation behavior that browser history does not expose."
       ],
       "upstream": {
         "implementation": [
+          {
+            "path": "svl/source/undo/undo.cxx",
+            "marker": "SfxUndoManager::AddUndoAction"
+          },
+          {
+            "path": "sw/source/core/undo/unins.cxx",
+            "marker": "SwUndoInsert::CanGrouping"
+          },
+          {
+            "path": "sw/source/core/undo/undel.cxx",
+            "marker": "SwUndoDelete::CanGrouping"
+          },
           {
             "path": "sw/uiconfig/swriter/menubar/menubar.xml",
             "marker": ".uno:Undo"
@@ -126,21 +140,33 @@
         "implementation": [
           {
             "path": "apps/office/src/sfx2/source/doc/docundomanager.ts",
-            "marker": "undoTransaction"
+            "marker": "class SfxUndoManager"
           },
           {
-            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar.tsx",
-            "marker": "onUndo"
+            "path": "apps/office/src/sw/source/core/undo/unins.ts",
+            "marker": "class SwUndoInsert"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/undel.ts",
+            "marker": "class SwUndoDelete"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+            "marker": "class SwUndoAttr"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "marker": "ApplyAction"
           }
         ],
         "tests": [
           {
             "path": "apps/office/src/sfx2/source/doc/docundomanager.test.ts",
-            "marker": "undo"
+            "marker": "records nested and empty list actions"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
-            "marker": "Undo"
+            "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+            "marker": "stores constant insert payload"
           }
         ],
         "docs": [
@@ -653,8 +679,8 @@
             "marker": "ChangeParagraphListLevel"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
-            "marker": "applyWriterListLevelTransaction"
+            "path": "apps/office/src/sw/source/core/undo/unnum.ts",
+            "marker": "class SwUndoNumLevel"
           },
           {
             "path": "apps/office/src/sw/uiconfig/swriter/menubar/format-menu.tsx",
@@ -1629,8 +1655,8 @@
             "marker": "markDocumentSaved"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
-            "marker": "undoWriterTransaction"
+            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+            "marker": "MarkHistoryMutation"
           }
         ],
         "tests": [
@@ -1647,8 +1673,8 @@
             "marker": "does not acknowledge a failed primary save"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.test.ts",
-            "marker": "primary save mark across Undo and Redo"
+            "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
+            "marker": "moved save mark across action navigation"
           }
         ],
         "docs": [
@@ -1662,7 +1688,7 @@
           },
           {
             "path": "docs/program/transaction-history.md",
-            "marker": "save mark"
+            "marker": "save position"
           }
         ]
       }

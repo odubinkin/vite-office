@@ -244,6 +244,21 @@ describe("Writer paragraph body" /**
         underline: false,
       }),
     ).toBe(inserted);
+    const attributed = insertWriterTextWithAttributes(inserted, "p-1", 5, "!", {
+      bold: true,
+      italic: false,
+      underline: false,
+    });
+    expect(attributed.paragraphs[0]?.runs).toEqual([
+      {
+        attributes: { bold: false, italic: false, underline: false },
+        text: "hello",
+      },
+      {
+        attributes: { bold: true, italic: false, underline: false },
+        text: "!",
+      },
+    ]);
     const middle = insertWriterText(inserted, "p-1", 2, "!");
     const replaced = replaceWriterParagraph(middle, "p-2", "updated");
     const unchanged = replaceWriterParagraph(replaced, "p-2", "updated");

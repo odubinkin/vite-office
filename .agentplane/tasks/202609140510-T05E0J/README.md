@@ -4,7 +4,7 @@ title: "Implement Stage 3 action-based Writer undo and redo"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implement the approved Stage 3 action-based Writer undo/redo slice from pinned LibreOffice evidence, preserving current behavior and verification coverage."
 doc_version: 3
-doc_updated_at: "2026-09-14T05:10:58.375Z"
+doc_updated_at: "2026-09-14T05:47:04.081Z"
 doc_updated_by: "CODER"
 description: "Implement section 7 of docs/program/vite-office-upstream-parity-plan.md using repository-local pinned LibreOffice SfxUndoManager and Writer undo-action evidence; remove full-document snapshots from the interactive path while preserving current behavior."
 sections:
@@ -65,7 +65,14 @@ sections:
     - Restore the pre-Stage-3 snapshot adapter and shell history wiring if rollback is required.
     - Re-run the declared Verify Steps after rollback.
     - Preserve docs/program/vite-office-upstream-parity-plan.md because it predates and remains outside task-owned edits.
-  Findings: "- Pending implementation audit and verification."
+  Findings: |-
+    - Pending implementation audit and verification.
+
+    - Observation: The prior Writer history stored whole cloned SwDoc graphs, so simple edits retained document-sized payloads and did not model LibreOffice undo actions.
+      Impact: Interactive edit, formatting, list, and structural command cost scaled with the complete document and parity evidence described snapshots rather than Sfx/Writer action semantics.
+      Resolution: Replaced snapshot history with a bounded SfxUndoManager cursor plus specialized Writer actions mapped to pinned svl/source/undo/undo.cxx and sw/source/core/undo/*.cxx; added exact cursor/payload/grouping, performance, lifecycle, and full-coverage tests.
+      Promotion: incident-candidate
+      Fixability: repo-fixable
 id_source: "generated"
 ---
 ## Summary
@@ -110,3 +117,9 @@ Implement Stage 3 as one atomic CODER-owned vertical slice: establish upstream-a
 ## Findings
 
 - Pending implementation audit and verification.
+
+- Observation: The prior Writer history stored whole cloned SwDoc graphs, so simple edits retained document-sized payloads and did not model LibreOffice undo actions.
+  Impact: Interactive edit, formatting, list, and structural command cost scaled with the complete document and parity evidence described snapshots rather than Sfx/Writer action semantics.
+  Resolution: Replaced snapshot history with a bounded SfxUndoManager cursor plus specialized Writer actions mapped to pinned svl/source/undo/undo.cxx and sw/source/core/undo/*.cxx; added exact cursor/payload/grouping, performance, lifecycle, and full-coverage tests.
+  Promotion: incident-candidate
+  Fixability: repo-fixable

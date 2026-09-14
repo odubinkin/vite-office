@@ -71,7 +71,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const listener = vi.fn();
     const unsubscribe = view.Subscribe(listener);
     expect(view.Execute(WRITER_COMMAND_IDS.alignCenter).status).toBe("executed");
-    expect(docShell.GetDoc()).not.toBe(initialDocument);
+    expect(docShell.GetDoc()).toBe(initialDocument);
     expect(docShell.GetDoc().paragraphs[0]?.alignment).toBe("center");
     expect(view.QueryState(WRITER_COMMAND_IDS.alignCenter)).toMatchObject({
       checked: true,
@@ -97,7 +97,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(view.GetDocShell()).toBe(sameDocShell);
     expect(view.GetWrtShell()).toBe(wrtShell);
     expect(wrtShell.GetCursor()).toBe(cursor);
-    expect(docShell.GetUndoManager().index).toBe(0);
+    expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(0);
     expect(wrtShell.Undo()).toBe(false);
     expect(wrtShell.Redo()).toBe(false);
     await view.Paste();

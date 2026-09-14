@@ -2,19 +2,17 @@
  * @fileoverview Reimplements the bounded Writer document-shell load/save boundary from pinned `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
  */
 
-import { markDocumentSaved, type OfficeDocument } from "../../../../sfx2/source/doc/docfac";
-import type { SfxMediumDescriptor } from "../../../../sfx2/source/doc/docfile";
 import {
-  applyGroupedTransaction,
-  applyTransaction,
-  createTransactionHistory,
-  getCurrentTransactionState,
-  type CursorSelection,
-  type TransactionHistory,
-} from "../../../../sfx2/source/doc/docundomanager";
+  markDocumentDirty,
+  markDocumentHistorySavePosition,
+  markDocumentSaved,
+  type OfficeDocument,
+} from "../../../../sfx2/source/doc/docfac";
+import type { SfxMediumDescriptor } from "../../../../sfx2/source/doc/docfile";
+import { SfxUndoManager, type SfxUndoAction } from "../../../../sfx2/source/doc/docundomanager";
 import { ODT_MIMETYPE } from "../../../../package/source/manifest/ManifestExport";
 import { SwDoc } from "../../core/doc/doc";
-import type { WriterParagraph } from "../../core/doc/writer";
+import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 
@@ -23,19 +21,17 @@ export class SwDocShell {
   /** MIME type used by Writer's OpenDocument Text filter. */
   public static readonly ODT_MEDIA_TYPE = ODT_MIMETYPE;
 
-  private history: TransactionHistory<SwDoc>;
   private readonly listeners = new Set<() => void>();
   private medium: SfxMediumDescriptor;
+  private undoManager: SfxUndoManager<SwUndoRedoContext>;
 
   /** Creates a shell around an existing Writer document. @param document - Active canonical document. @param medium - Persistent browser-adapted medium descriptor. @returns Nothing. */
   public constructor(
     private document: SwDoc,
     medium: SfxMediumDescriptor = { kind: "untitled", name: document.document.title },
   ) {
-    const paragraph = document.paragraphs[0] as WriterParagraph;
-    this.history = createTransactionHistory(document, {
-      position: paragraph.text.length,
-    });
+    this.undoManager = new SfxUndoManager<SwUndoRedoContext>();
+    if (document.document.isModified) this.undoManager.ClearSavePosition();
     this.medium = { ...medium };
   }
 
@@ -44,9 +40,9 @@ export class SwDocShell {
     return this.document;
   }
 
-  /** Returns the shell-coordinated transaction manager used until Stage 3 replaces snapshots with actions. @returns Current immutable history. */
-  public GetUndoManager(): TransactionHistory<SwDoc> {
-    return this.history;
+  /** Returns the document-owned action manager. @returns Current Sfx undo manager. */
+  public GetUndoManager(): SfxUndoManager<SwUndoRedoContext> {
+    return this.undoManager;
   }
 
   /** Returns the active browser-adapted medium descriptor. @returns Immutable copied descriptor. */
@@ -61,46 +57,51 @@ export class SwDocShell {
       this.listeners.delete(listener);
   }
 
-  /** Applies one domain document transition through the shell-owned undo manager. @param nextDocument - Changed immutable SwDoc. @param selection - Logical cursor position stored with the action. @param grouping - Optional upstream-compatible open-action grouping. @returns True when a new current document was installed. */
-  public ApplyDocument(
-    nextDocument: SwDoc,
-    selection: CursorSelection,
-    grouping?: Readonly<{ extendCurrent: boolean; id: string }>,
+  /** Executes and records one semantic Writer action. @param action - Reversible domain operation. @param context - Active Writer shell context. @param tryMerge - Whether the top action may absorb it. @returns True after successful execution. */
+  public ApplyUndoAction(
+    action: SfxUndoAction<SwUndoRedoContext>,
+    context: SwUndoRedoContext,
+    tryMerge = false,
   ): boolean {
-    if (nextDocument === this.document) return false;
-    this.history =
-      grouping === undefined
-        ? applyTransaction(this.history, nextDocument, selection)
-        : applyGroupedTransaction(
-            this.history,
-            nextDocument,
-            selection,
-            grouping.id,
-            grouping.extendCurrent,
-          );
-    this.document = nextDocument;
+    action.RedoWithContext(context);
+    this.document.SetModified();
+    this.undoManager.AddUndoAction(action, tryMerge);
     this.Notify();
     return true;
   }
 
-  /** Replaces the coordinated undo-manager state after Undo, Redo, or save acknowledgement. @param history - Complete validated next history. @returns True when the current history changed. */
-  public SetUndoManager(history: TransactionHistory<SwDoc>): boolean {
-    if (history === this.history) return false;
-    const document = getCurrentTransactionState(history);
-    this.history = history;
-    this.document = document;
+  /** Reverts the current top Writer action and updates lifecycle state against the save mark. @param context - Active Writer shell context. @returns Whether an action ran. */
+  public Undo(context: SwUndoRedoContext): boolean {
+    if (!this.undoManager.Undo(context)) return false;
+    this.MarkHistoryMutation();
+    this.Notify();
+    return true;
+  }
+
+  /** Reapplies the next Writer action and updates lifecycle state against the save mark. @param context - Active Writer shell context. @returns Whether an action ran. */
+  public Redo(context: SwUndoRedoContext): boolean {
+    if (!this.undoManager.Redo(context)) return false;
+    this.MarkHistoryMutation();
+    this.Notify();
+    return true;
+  }
+
+  /** Moves the primary-medium save mark without adding an undo action. @param savedGeneration - Persisted content generation. @returns Whether lifecycle or save-position state changed. */
+  public AcknowledgeSave(savedGeneration: number): boolean {
+    const previous = this.document.document;
+    this.document.document = markDocumentSaved(previous, savedGeneration);
+    const markChanged = this.undoManager.SetSavePosition();
+    if (this.document.document === previous && !markChanged) return false;
     this.Notify();
     return true;
   }
 
   /** Atomically replaces the document and resets its undo manager for New, Open, or Load. @param document - Replacement canonical graph. @param medium - Replacement medium descriptor. @returns Installed document. */
   public ReplaceDocument(document: SwDoc, medium: SfxMediumDescriptor): SwDoc {
-    const paragraph = document.paragraphs[0] as WriterParagraph;
     this.document = document;
     this.medium = { ...medium };
-    this.history = createTransactionHistory(document, {
-      position: paragraph.text.length,
-    });
+    this.undoManager = new SfxUndoManager<SwUndoRedoContext>();
+    if (document.document.isModified) this.undoManager.ClearSavePosition();
     this.Notify();
     return document;
   }
@@ -141,5 +142,13 @@ export class SwDocShell {
   /** Publishes one shell-owned state invalidation. @returns Nothing. */
   private Notify(): void {
     for (const listener of this.listeners) listener();
+  }
+
+  /** Advances generation after Undo or Redo and restores modified state from the current save position. @returns Nothing. */
+  private MarkHistoryMutation(): void {
+    this.document.document = markDocumentHistorySavePosition(
+      markDocumentDirty(this.document.document),
+      this.undoManager.IsAtSavePosition(),
+    );
   }
 }
