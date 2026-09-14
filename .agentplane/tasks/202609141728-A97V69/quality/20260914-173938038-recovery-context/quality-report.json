@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609141728-A97V69",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-14T17:39:38.038Z",
+  "verdict": "pass",
+  "summary": "Workstream 8 differential verification slice is internally consistent and fully validated.",
+  "evaluated_sha": "4a804ec30be1197400b0915e51f938eb4e05c7e5",
+  "blueprint_digest": "655a7adc5e9b6aebec43c748d702af03ef4f8f9a1c62fbab9e19811fa97e6f5f",
+  "findings": [
+    "Schema v4 distinguishes blocking gaps from reviewed out-of-scope limitations; CAP-0130 alone has exact upstream/local assertion evidence and immutable implementation evidence, while 33 records retain visible blockers."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609141728-A97V69/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
