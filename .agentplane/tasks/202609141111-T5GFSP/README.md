@@ -1,10 +1,11 @@
 ---
 id: "202609141111-T5GFSP"
 title: "Implement Workstream 0 authoritative parity inventory"
-status: "DOING"
+result_summary: "Implemented Workstream 0 with exhaustive upstream-backed inventories and enforced parity validation."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "commit aececf675042; npm run check; npm run test:source-provenance; ap doctor; node .agentplane/policy/check-routing.mjs"
   findings:
     - "All 89 runtime modules are classified with exact local/upstream symbols or explicit browser/local divergence; 34 atomic capabilities expose 68 gaps without unsupported verified claims."
-commit: null
+commit:
+  hash: "aececf67504256ec18aca927b8b39c9c77abd71b"
+  message: "✅ T5GFSP code: implement authoritative parity inventory"
 comments:
   -
     author: "CODER"
     body: "Start: Implement Workstream 0 provenance, atomic inventory, documentation, and verification gates against the pinned local LibreOffice baseline."
+  -
+    author: "CODER"
+    body: "Verified: Workstream 0 authoritative provenance, runtime inventory, atomic parity gaps, and default verification gates are implemented and passing."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609141111-T5GFSP"
+  -
+    type: "status"
+    at: "2026-09-14T11:54:52.384Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Workstream 0 authoritative provenance, runtime inventory, atomic parity gaps, and default verification gates are implemented and passing."
 doc_version: 3
-doc_updated_at: "2026-09-14T11:54:02.065Z"
+doc_updated_at: "2026-09-14T11:54:52.386Z"
 doc_updated_by: "CODER"
 description: "Implement P0.1-P0.3 from docs/program/vite-office-upstream-parity-plan.md using the pinned local LibreOffice checkout as primary evidence."
 sections:
@@ -153,6 +166,10 @@ sections:
     - Observation: npm run check passed the full 240-unit, 84-inventory, 9-e2e suite with 100% unit and inventory coverage; source-tree, provenance, parity, doctor, routing, and diff checks also passed.
       Impact: Parity claims are now exhaustive and evidence-backed against the pinned LibreOffice baseline; missing or misclassified runtime modules fail validation.
       Resolution: Implemented strict schema validators and inventories, corrected stale documentation and source-tree expectations, and wired all parity checks into the default verification command.
+extensions:
+  implementation_commit:
+    hash: "aececf67504256ec18aca927b8b39c9c77abd71b"
+    message: "✅ T5GFSP code: implement authoritative parity inventory"
 id_source: "generated"
 ---
 ## Summary
