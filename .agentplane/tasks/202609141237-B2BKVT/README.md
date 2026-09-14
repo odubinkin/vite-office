@@ -1,10 +1,11 @@
 ---
 id: "202609141237-B2BKVT"
 title: "Implement Writer Workstream 2 core invariants"
-status: "DOING"
+result_summary: "Implemented and verified Writer Workstream 2 core invariants without legacy document-model compatibility."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 20
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-14T13:55:01.153Z"
-  updated_by: "TESTER"
-  note: "Workstream 2 verified in the target-only document model: registered content indices, typed svl/sw notifications, SfxObjectShell/SwDocShell lifecycle ownership, svl undo relocation, schema-v4 SwDoc snapshots and schema-v1 Writer persistence. npm run verify passed (246 unit tests and 84 inventory tests at 100% coverage, 9/9 E2E); target-schema rg assertions, ap doctor, routing policy, and git diff checks passed."
+  updated_at: "2026-09-14T13:56:14.943Z"
+  updated_by: "CODER"
+  note: "verified-202609141237-B2BKVT"
   attempts: 0
 quality_review:
   state: "pass"
@@ -45,11 +46,19 @@ quality_review:
     - "Typed broadcaster/listener and SwModify/SwClient propagation replace generic shell listener sets while preserving one UI transaction boundary."
     - "SwDoc is model-only; SfxObjectShell and SwDocShell exclusively own lifecycle, save, recovery, medium, and undo responsibilities."
     - "Retired persistence shapes and old sfx2 docfac/docundomanager runtime paths are rejected or removed; only the target schemas remain."
-commit: null
+commit:
+  hash: "6e1c876ea5f2c20cdcecea85ccf5212569a7f87e"
+  message: "🧪 B2BKVT task: record Workstream 2 verification"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609141237-B2BKVT. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: Workstream 2 implemented and fully verified in the target-only Writer document model."
 events:
   -
     type: "status"
@@ -64,8 +73,28 @@ events:
     author: "TESTER"
     state: "ok"
     note: "Workstream 2 verified in the target-only document model: registered content indices, typed svl/sw notifications, SfxObjectShell/SwDocShell lifecycle ownership, svl undo relocation, schema-v4 SwDoc snapshots and schema-v1 Writer persistence. npm run verify passed (246 unit tests and 84 inventory tests at 100% coverage, 9/9 E2E); target-schema rg assertions, ap doctor, routing policy, and git diff checks passed."
+  -
+    type: "verify"
+    at: "2026-09-14T13:56:14.943Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609141237-B2BKVT"
+  -
+    type: "status"
+    at: "2026-09-14T13:56:15.066Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609141237-B2BKVT. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-09-14T13:57:27.039Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: Workstream 2 implemented and fully verified in the target-only Writer document model."
 doc_version: 3
-doc_updated_at: "2026-09-14T13:55:01.207Z"
+doc_updated_at: "2026-09-14T13:57:27.041Z"
 doc_updated_by: "CODER"
 description: "Implement Workstream 2 from docs/program/vite-office-upstream-parity-plan.md using the pinned LibreOffice baseline: registered content indices, typed model broadcasters/clients, shell-owned lifecycle, and correct svl/sfx2 undo/factory ownership."
 sections:
@@ -107,6 +136,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-14T13:56:14.943Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609141237-B2BKVT
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T13:55:01.207Z, excerpt_hash=sha256:72880aa42318d3f0c5f784468b89092b4027b92c2913b9005174373df4a06901
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141237-B2BKVT/blueprint/resolved-snapshot.json
+    - old_digest: 5fbf1f94bd8cd05218ae9c641354efd39f141d5b98909f4cdb39dfacb4e7484a
+    - current_digest: 5fbf1f94bd8cd05218ae9c641354efd39f141d5b98909f4cdb39dfacb4e7484a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609141237-B2BKVT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609141237-B2BKVT --result verified-202609141237-B2BKVT --commit 6e1c876ea5f2c20cdcecea85ccf5212569a7f87e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the Workstream 2 implementation and task metadata commits together. The approved target intentionally removes compatibility with pre-Workstream-2 IndexedDB Writer snapshots; rollback restores the old schema code but does not migrate data written by the new schema."
   Findings: |-
@@ -119,6 +178,10 @@ sections:
     - Observation: All required Workstream 2 mechanisms and ownership boundaries are implemented with upstream-aligned structures; retired document schema readers and old sfx2 facades are absent from production code.
       Impact: Writer positions remain valid across node/content edits, notification propagation is typed and mutation-safe, lifecycle/save/recovery ownership is centralized in shells, and persistence accepts only the target schema.
       Resolution: Full repository verification and explicit ownership/compatibility assertions completed successfully.
+extensions:
+  implementation_commit:
+    hash: "ae373a238b39ed7714a07519078c71553b1167ac"
+    message: "🧩 B2BKVT code: implement Writer Workstream 2 core invariants"
 id_source: "generated"
 ---
 ## Summary
@@ -165,6 +228,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609141237-B2BKVT
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-14T13:56:14.943Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609141237-B2BKVT
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T13:55:01.207Z, excerpt_hash=sha256:72880aa42318d3f0c5f784468b89092b4027b92c2913b9005174373df4a06901
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141237-B2BKVT/blueprint/resolved-snapshot.json
+- old_digest: 5fbf1f94bd8cd05218ae9c641354efd39f141d5b98909f4cdb39dfacb4e7484a
+- current_digest: 5fbf1f94bd8cd05218ae9c641354efd39f141d5b98909f4cdb39dfacb4e7484a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609141237-B2BKVT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609141237-B2BKVT --result verified-202609141237-B2BKVT --commit 6e1c876ea5f2c20cdcecea85ccf5212569a7f87e
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
