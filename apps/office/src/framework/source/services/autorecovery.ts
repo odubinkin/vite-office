@@ -6,7 +6,7 @@
 import {
   recoverDocument,
   type RecoverableDocument,
-  type RecoveryStorageAdapter,
+  type RecoverySavePort,
 } from "../../../svl/source/misc/recovery";
 import { saveStorageRecord, type SerializableValue } from "../../../svl/source/misc/storage";
 
@@ -88,7 +88,7 @@ export class AutoRecovery<State extends SerializableValue> {
 
   /** Creates an inactive recovery service over an injected durable adapter. @param storage - Recovery-specific versioned storage. @param options - Scheduling and ownership configuration. @returns Nothing. */
   public constructor(
-    private readonly storage: RecoveryStorageAdapter<State>,
+    private readonly storage: RecoverySavePort<State>,
     private readonly options: AutoRecoveryOptions,
   ) {
     if (options.ownerId.trim().length === 0)

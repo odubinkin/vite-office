@@ -2,6 +2,8 @@
  * @fileoverview Implements a browser-only text Blob download adapter with injectable DOM and object-URL capabilities for deterministic tests.
  */
 
+import type { DocumentExportPort } from "../../svl/source/misc/storage";
+
 /** Defines the minimum anchor surface needed to trigger a browser download. */
 export interface DownloadAnchor {
   /** Triggers the browser download navigation. @returns Nothing; browser handles the navigation. */
@@ -62,6 +64,18 @@ export function downloadPlainText(
   url: DownloadUrl = globalThis.URL,
 ): void {
   downloadBlob(new Blob([text], { type: "text/plain;charset=utf-8" }), filename, document, url);
+}
+
+/** Creates the browser implementation of the shell-neutral export port. @param exportBytes - Binary browser download capability. @param exportText - Text browser download capability. @returns Replaceable export port. */
+export function createBrowserDocumentExportPort(
+  exportBytes: typeof downloadBytes = downloadBytes,
+  exportText: typeof downloadPlainText = downloadPlainText,
+): DocumentExportPort {
+  return {
+    /** Routes textual and binary payloads to their browser Blob adapters. @param request - Complete neutral export request. @returns Nothing. */
+    export: ({ data, mediaType, name }) =>
+      typeof data === "string" ? exportText(data, name) : exportBytes(data, mediaType, name),
+  };
 }
 
 /** Dispatches one Blob through a temporary anchor and always releases its URL. @param blob - File payload. @param filename - Browser filename. @param document - DOM anchor factory. @param url - Object-URL capability. @returns Nothing. */

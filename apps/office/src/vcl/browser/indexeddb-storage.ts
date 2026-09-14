@@ -7,7 +7,7 @@ import type {
   VersionedStorageAdapter,
   VersionedStorageRecord,
 } from "../../svl/source/misc/storage";
-import type { RecoveryStorageAdapter } from "../../svl/source/misc/recovery";
+import type { RecoverySavePort } from "../../svl/source/misc/recovery";
 
 /* eslint-disable jsdoc/require-jsdoc -- V8 ignore annotations must sit immediately before native event-handler expressions; detailed JSDoc remains enforced by check-jsdoc.mjs. */
 
@@ -136,7 +136,7 @@ interface RecoveryLeaseRow {
 /** Durable recovery-history adapter with bounded generations and cross-tab leases. */
 export class IndexedDbRecoveryStorageAdapter<
   State extends SerializableValue,
-> implements RecoveryStorageAdapter<State> {
+> implements RecoverySavePort<State> {
   /** Creates a recovery-only database adapter. @param databaseName - Recovery database name. @param indexedDb - Native or test IndexedDB factory. @param generationLimit - Positive retained history bound. @returns Nothing. */
   public constructor(
     private readonly databaseName: string,

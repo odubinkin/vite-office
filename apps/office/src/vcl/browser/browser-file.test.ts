@@ -2,7 +2,7 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import { readBrowserFile, selectBrowserFile } from "./browser-file";
+import { createBrowserDocumentOpenPort, readBrowserFile, selectBrowserFile } from "./browser-file";
 
 describe("browser file selection" /** Groups the platform file adapter. @returns Nothing. */, () => {
   it("configures a single-file chooser and reads selected bytes" /** Verifies accept, selection, cleanup, and byte ownership. @returns A fulfilled assertion promise. */, async () => {
@@ -44,5 +44,24 @@ describe("browser file selection" /** Groups the platform file adapter. @returns
         createElement: () => input,
       } as Pick<Document, "createElement">),
     ).resolves.toBeUndefined();
+  });
+
+  it("composes chooser and byte reading behind the shell-neutral open port" /** Verifies Writer consumers receive no DOM File API operations. @returns A fulfilled assertion promise. */, async () => {
+    const file = new File(["ODT"], "port.odt");
+    const select = vi.fn(
+      /** Returns the selected fixture file. @returns Fixture file. */ async () => file,
+    );
+    const read = vi.fn(
+      /** Returns deterministic fixture bytes. @returns Fixture bytes. */ async () =>
+        new Uint8Array([7, 8, 9]),
+    );
+    const port = createBrowserDocumentOpenPort(select, read);
+    await expect(port.open(".odt")).resolves.toEqual({
+      bytes: new Uint8Array([7, 8, 9]),
+      name: "port.odt",
+      reference: file,
+    });
+    expect(select).toHaveBeenCalledWith(".odt");
+    expect(read).toHaveBeenCalledWith(file);
   });
 });

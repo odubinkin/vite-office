@@ -2,10 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import type {
-  RecoverableDocument,
-  RecoveryStorageAdapter,
-} from "../../../svl/source/misc/recovery";
+import type { RecoverableDocument, RecoverySavePort } from "../../../svl/source/misc/recovery";
 import type { VersionedStorageRecord } from "../../../svl/source/misc/storage";
 import { AutoRecovery, type AutoRecoveryEnvironment } from "./autorecovery";
 
@@ -95,7 +92,7 @@ class MismatchedGenerationDocumentDouble extends RecoveryDocumentDouble {
 }
 
 /** In-memory recovery history and lease adapter. */
-class RecoveryStorageDouble implements RecoveryStorageAdapter<FixtureState> {
+class RecoveryStorageDouble implements RecoverySavePort<FixtureState> {
   /** Newest-first durable histories. */
   readonly histories = new Map<string, VersionedStorageRecord<FixtureState>[]>();
   /** Current context leases. */
@@ -293,7 +290,7 @@ describe("AutoRecovery" /** Groups application recovery service behavior. @retur
 
   it("supports a single-record recovery adapter without lease extensions" /** Verifies optional history and lease operations have deterministic fallbacks. @returns Completion after save and candidate reads. */, async function supportsMinimalAdapter(): Promise<void> {
     let stored: VersionedStorageRecord<FixtureState> | undefined;
-    const storage: RecoveryStorageAdapter<FixtureState> = {
+    const storage: RecoverySavePort<FixtureState> = {
       /** Loads the mutable fixture record. @returns Stored snapshot or undefined. */
       load: async () => stored,
       /** Retains one record. @param record - Saved recovery snapshot. @returns Fulfilled completion. */

@@ -13,8 +13,9 @@ import {
 } from "../../../../framework/source/dispatch/dispatchprovider";
 import type { AutoRecoveryEnvironment } from "../../../../framework/source/services/autorecovery";
 import { createDocument, type OfficeDocument } from "../../../../sfx2/source/doc/objsh";
-import type { DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
-import type { RecoveryStorageAdapter } from "../../../../svl/source/misc/recovery";
+import type { PrimarySavePort, StoredDocumentOpenPort } from "../../../../sfx2/source/doc/docfile";
+import type { RecoverySavePort } from "../../../../svl/source/misc/recovery";
+import type { DocumentExportPort, DocumentOpenPort } from "../../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipboard";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
 import { loadWriterDocument, saveWriterDocument } from "../../core/doc/writer-storage";
@@ -37,22 +38,20 @@ import {
 export interface WriterSessionServices {
   /** Writes a sanitized rich/plain pair to the browser clipboard. */
   readonly copyRichText: (selection: WriterClipboardSelection) => Promise<void>;
-  /** Starts a browser download for exact bytes and media type. */
-  readonly downloadBytes: (bytes: Uint8Array, mediaType: string, filename: string) => void;
+  /** Opens one external document through an injected platform adapter. */
+  readonly documentOpen: DocumentOpenPort;
+  /** Exports one representation through an injected platform adapter. */
+  readonly documentExport: DocumentExportPort;
   /** Creates the browser-safe filename used by download adapters. */
   readonly createDownloadFilename: (title: string, extension: string) => string;
-  /** Starts a UTF-8 plain-text download. */
-  readonly downloadPlainText: (text: string, filename: string) => void;
-  /** Reads a selected browser File into bytes. */
-  readonly readFile: (file: Blob) => Promise<Uint8Array>;
   /** Reads rich clipboard MIME values after a user gesture. */
   readonly readRichClipboard: () => Promise<RichClipboardPayload>;
-  /** Opens a single-file browser picker. */
-  readonly selectFile: (accept: string) => Promise<File | undefined>;
-  /** Optional local primary-medium adapter. */
-  readonly storage?: DocumentStorageAdapter<WriterSnapshotState>;
+  /** Optional primary-save port, independently replaceable from stored-document open. */
+  readonly primarySave?: PrimarySavePort<WriterSnapshotState>;
+  /** Optional stored-document open port, independently replaceable from primary save. */
+  readonly storedDocumentOpen?: StoredDocumentOpenPort<WriterSnapshotState>;
   /** Optional recovery-only durable history adapter. */
-  readonly recoveryStorage?: RecoveryStorageAdapter<WriterSnapshotState>;
+  readonly recoverySave?: RecoverySavePort<WriterSnapshotState>;
   /** Optional injected browser lifecycle boundary for application AutoRecovery. */
   readonly recoveryEnvironment?: AutoRecoveryEnvironment;
 }
@@ -224,30 +223,28 @@ export class SwView {
   public async OpenOdt(): Promise<void> {
     this.SetStoragePending(true);
     try {
-      const file = await this.services.selectFile(`${SwDocShell.ODT_MEDIA_TYPE},.odt`);
-      if (file === undefined) {
+      const opened = await this.services.documentOpen.open(`${SwDocShell.ODT_MEDIA_TYPE},.odt`);
+      if (opened === undefined) {
         this.SetStorageStatus("ODT open cancelled.");
         return;
       }
-      const fallbackTitle = file.name.replace(/\.odt$/i, "") || "Imported Writer Document";
+      const fallbackTitle = opened.name.replace(/\.odt$/i, "") || "Imported Writer Document";
       await this.docShell.Load(
-        await this.services.readFile(file),
+        opened.bytes,
         createDocument({
-          id: `writer-odt:${file.name}`,
+          id: `writer-odt:${opened.name}`,
           suiteId: "writer",
           title: fallbackTitle,
         }),
         {
-          destinationKind: "none",
           filterId: "writer8",
-          kind: "file",
+          kind: "odt-source",
           mediaType: SwDocShell.ODT_MEDIA_TYPE,
-          name: file.name,
-          readOnly: true,
-          sourceKind: "blob",
+          name: opened.name,
+          source: { kind: "file", reference: opened.reference },
         },
       );
-      this.SetStorageStatus(`Opened ${file.name}.`);
+      this.SetStorageStatus(`Opened ${opened.name}.`);
     } catch (error) {
       this.SetStorageStatus(`Could not open ODT: ${getErrorMessage(error)}`);
     } finally {
@@ -266,17 +263,19 @@ export class SwView {
       const bytes = await this.docShell.SerializeOdt();
       this.docShell.Download(
         {
-          destinationKind: "download",
           downloadTarget: filename,
           filterId: "writer8",
-          kind: "file",
+          kind: "download",
           mediaType: SwDocShell.ODT_MEDIA_TYPE,
           name: filename,
-          readOnly: true,
-          sourceKind: "none",
         },
         /** Starts the browser download without acknowledging a primary save. @returns Nothing. */
-        () => this.services.downloadBytes(bytes, SwDocShell.ODT_MEDIA_TYPE, filename),
+        () =>
+          this.services.documentExport.export({
+            data: bytes,
+            mediaType: SwDocShell.ODT_MEDIA_TYPE,
+            name: filename,
+          }),
       );
       this.SetStorageStatus(`ODT download started: ${filename}`);
     } catch (error) {
@@ -288,42 +287,37 @@ export class SwView {
 
   /** Saves the active identity to its browser-local medium. @returns Completion after acknowledgement. */
   public async SaveLocal(): Promise<void> {
-    if (this.services.storage === undefined) {
+    if (this.services.primarySave === undefined) {
       this.SetStorageStatus("Browser storage is unavailable.");
       return;
     }
     this.SetStoragePending(true);
     try {
-      const storage = this.services.storage;
+      const primarySave = this.services.primarySave;
       const medium = this.docShell.GetMedium();
       const persist =
         /** Commits one complete Writer snapshot to browser-local primary storage. @param document - Shell-owned Writer graph. @returns Completion after IndexedDB commit. */
         async (document: WriterDocument) => {
           const saved = await saveWriterDocument(
-            storage,
+            primarySave,
             document,
             this.docShell.GetDocumentState(),
           );
           return { generation: saved.snapshot.version };
         };
-      if (medium.kind === "browser-local" && medium.indexedDbKey === medium.documentId)
+      if (
+        medium.kind === "browser-local" &&
+        medium.destination.kind === "indexeddb" &&
+        medium.destination.key === this.docShell.GetDocumentState().id
+      )
         await this.docShell.Save(persist);
       else
         await this.docShell.SaveAs(
           {
-            capabilities: {
-              canConfirmWrite: true,
-              canLock: true,
-              canRead: true,
-              canWrite: true,
-            },
-            destinationKind: "indexeddb",
             indexedDbKey: this.docShell.GetDocumentState().id,
             kind: "browser-local",
             name: this.docShell.GetDocumentState().title,
-            origin: medium.origin,
-            readOnly: false,
-            sourceKind: medium.sourceKind,
+            source: medium.source,
           },
           persist,
         );
@@ -337,14 +331,14 @@ export class SwView {
 
   /** Loads the current document identity from browser-local storage. @returns Completion after optional replacement. */
   public async LoadLocal(): Promise<void> {
-    if (this.services.storage === undefined) {
+    if (this.services.storedDocumentOpen === undefined) {
       this.SetStorageStatus("Browser storage is unavailable.");
       return;
     }
     this.SetStoragePending(true);
     try {
       const result = await loadWriterDocument(
-        this.services.storage,
+        this.services.storedDocumentOpen,
         this.docShell.GetDocumentState().id,
       );
       if (result.status === "missing") this.SetStorageStatus("No local saved copy exists.");
@@ -376,26 +370,24 @@ export class SwView {
       const filename = `${this.docShell.GetDocumentState().title}.txt`;
       this.docShell.Download(
         {
-          destinationKind: "download",
           downloadTarget: filename,
           filterId: "Text",
-          kind: "file",
+          kind: "download",
           mediaType: "text/plain;charset=utf-8",
           name: filename,
-          readOnly: true,
-          sourceKind: "none",
         },
         /** Starts a plain-text browser export without changing primary-medium state. @returns Nothing. */
         () =>
-          this.services.downloadPlainText(
-            document.paragraphs
+          this.services.documentExport.export({
+            data: document.paragraphs
               .map(
                 /** Projects one paragraph's visible text. @param paragraph - Writer paragraph. @returns Plain text. */
                 (paragraph) => paragraph.text,
               )
               .join("\n"),
-            filename,
-          ),
+            mediaType: "text/plain;charset=utf-8",
+            name: filename,
+          }),
       );
       this.SetStorageStatus("Plain-text download started.");
     } catch {

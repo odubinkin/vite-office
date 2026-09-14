@@ -8,20 +8,28 @@ import {
   type LoadStorageRecordResult,
   type SavedStorageRecord,
   type SerializableValue,
-  type VersionedStorageAdapter,
+  type VersionedStorageOpenPort,
   type VersionedStorageRecord,
+  type VersionedStorageSavePort,
 } from "../../../svl/source/misc/storage";
 
 export type { SerializableValue } from "../../../svl/source/misc/storage";
 
 /** Identifies the browser-adapted primary medium associated with a document shell. */
-export type SfxMediumKind = "browser-local" | "file" | "recovery" | "untitled";
+export type SfxMediumKind = "browser-local" | "download" | "odt-source" | "recovery" | "untitled";
 
 /** Identifies where document content originated independently of its current destination. */
 export type SfxMediumOrigin = "browser-local" | "external" | "new" | "recovered";
 
-/** Identifies one browser-side source or destination without exposing a platform API to Sfx2. */
-export type SfxMediumEndpointKind = "blob" | "download" | "file" | "indexeddb" | "none";
+/** Identifies the immutable source from which a document session was created. */
+export type SfxMediumSource =
+  | Readonly<{ kind: "blob" | "file"; reference: object }>
+  | Readonly<{ key: string; kind: "indexeddb"; store: "primary" | "recovery" }>
+  | Readonly<{ kind: "none" }>;
+
+/** Identifies the current primary destination independently from the open source. */
+export type SfxMediumDestination =
+  Readonly<{ key: string; kind: "indexeddb" }> | Readonly<{ kind: "none" }>;
 
 /** Identifies the document operation whose state is retained on the medium. */
 export type SfxMediumOperation =
@@ -54,48 +62,18 @@ export interface SfxMediumCapabilities {
   readonly canWrite: boolean;
 }
 
-/** Lifecycle generations copied onto the medium after every shell transition. */
-export interface SfxMediumGenerations {
-  /** Latest canonical content generation. */
-  readonly content: number;
-  /** Latest confirmed recovery generation. */
-  readonly recovery: number | null;
-  /** Latest confirmed primary-save generation. */
-  readonly saved: number | null;
-}
-
-/** Minimal document state needed to construct or synchronize a medium descriptor. */
-export interface SfxMediumDocumentState {
-  /** Latest canonical content generation. */
-  readonly contentGeneration: number;
-  /** Stable document identity. */
-  readonly id: string;
-  /** Latest confirmed recovery generation. */
-  readonly recoveryGeneration: number | null;
-  /** Latest confirmed primary-save generation. */
-  readonly savedGeneration: number | null;
-  /** User-facing title. */
-  readonly title: string;
-}
-
 /** Complete SfxMedium-like descriptor retained by a document shell. */
 export interface SfxMediumDescriptor {
   /** Optional adapter capabilities; always populated by createSfxMediumDescriptor. */
   readonly capabilities: SfxMediumCapabilities;
-  /** Primary destination kind, which can differ from the open source kind. */
-  readonly destinationKind: SfxMediumEndpointKind;
-  /** Latest canonical content generation retained as a direct descriptor field. */
-  readonly contentGeneration: number;
+  /** Current primary destination, distinct from the source used to open the session. */
+  readonly destination: SfxMediumDestination;
   /** Stable user-facing title. */
   readonly displayName: string;
-  /** Stable document identity, independent from the destination key or filename. */
-  readonly documentId: string;
   /** Browser-adapted primary medium family. */
   readonly kind: SfxMediumKind;
   /** Latest operation status retained independently of document modified state. */
   readonly lastOperation: SfxMediumOperationStatus;
-  /** Terminal shorthand for consumers that only need operation status. */
-  readonly lastOperationStatus: SfxMediumOperationState;
   /** MIME type selected by the owning document filter, when applicable. */
   readonly mediaType?: string;
   /** Stable user-facing or storage-facing medium name. */
@@ -104,152 +82,195 @@ export interface SfxMediumDescriptor {
   readonly origin: SfxMediumOrigin;
   /** Whether normal Save is prohibited. */
   readonly readOnly: boolean;
-  /** Latest confirmed recovery generation retained independently of primary save. */
-  readonly recoveryGeneration: number | null;
-  /** Latest confirmed primary-save generation. */
-  readonly savedGeneration: number | null;
-  /** Source kind used by Open or recovery. */
-  readonly sourceKind: SfxMediumEndpointKind;
+  /** Source used by Open or recovery; never rewritten by a destination change. */
+  readonly source: SfxMediumSource;
   /** Filter identity selected independently of its MIME type. */
   readonly filterId?: string;
-  /** Browser-local primary or recovery storage key. */
-  readonly indexedDbKey?: string;
   /** Browser download target, which does not imply a confirmed write. */
   readonly downloadTarget?: string;
-  /** Opaque browser FileSystemHandle-like reference retained only at the adapter boundary. */
-  readonly fileHandle?: object;
-  /** Opaque Blob-like source reference retained only at the adapter boundary. */
-  readonly blobReference?: object;
-  /** Lifecycle generations observed by this descriptor. */
-  readonly generations: SfxMediumGenerations;
 }
 
-/** Construction input accepted at shell boundaries. */
-export type SfxMediumInput = Readonly<
-  Pick<SfxMediumDescriptor, "kind" | "name"> & Partial<Omit<SfxMediumDescriptor, "kind" | "name">>
->;
+/** Fields shared by every explicit medium construction route. */
+interface SfxMediumInputCommon {
+  readonly displayName?: string;
+  readonly filterId?: string;
+  readonly lastOperation?: SfxMediumOperationStatus;
+  readonly mediaType?: string;
+  readonly name: string;
+}
 
-/** Creates a complete immutable descriptor from a bounded medium input and document state. @param input - Caller-owned partial medium data. @param document - Current document lifecycle state. @returns Complete frozen descriptor. */
-export function createSfxMediumDescriptor(
-  input: SfxMediumInput,
-  document: SfxMediumDocumentState,
-): SfxMediumDescriptor {
+/** Constructs a new document without an external source or destination. */
+export interface SfxUntitledMediumInput extends SfxMediumInputCommon {
+  readonly kind: "untitled";
+}
+
+/** Constructs a document backed by the browser-local primary store. */
+export interface SfxBrowserLocalMediumInput extends SfxMediumInputCommon {
+  readonly indexedDbKey: string;
+  readonly kind: "browser-local";
+  readonly source?: SfxMediumSource;
+}
+
+/** Constructs a read-only document opened from an opaque browser Blob or File handle. */
+export interface SfxOdtSourceMediumInput extends SfxMediumInputCommon {
+  readonly kind: "odt-source";
+  readonly source: Readonly<{ kind: "blob" | "file"; reference: object }>;
+}
+
+/** Constructs a transient browser download destination which is never adopted as primary. */
+export interface SfxDownloadMediumInput extends SfxMediumInputCommon {
+  readonly downloadTarget: string;
+  readonly kind: "download";
+}
+
+/** Constructs a read-only document restored from recovery history. */
+export interface SfxRecoveryMediumInput extends SfxMediumInputCommon {
+  readonly indexedDbKey: string;
+  readonly kind: "recovery";
+}
+
+/** Exhaustive construction input accepted at shell boundaries. */
+export type SfxMediumInput =
+  | SfxBrowserLocalMediumInput
+  | SfxDownloadMediumInput
+  | SfxOdtSourceMediumInput
+  | SfxRecoveryMediumInput
+  | SfxUntitledMediumInput;
+
+/** Accepts either one construction route or an already normalized descriptor. */
+export type SfxMediumDescriptorInput = SfxMediumDescriptor | SfxMediumInput;
+
+/** Creates a complete immutable descriptor from one explicit construction route. @param input - Caller-owned discriminated medium data. @returns Complete frozen descriptor. */
+export function createSfxMediumDescriptor(input: SfxMediumDescriptorInput): SfxMediumDescriptor {
+  if (isSfxMediumDescriptor(input)) return input;
   assertNonBlank(input.name, "Medium name");
-  assertNonBlank(document.id, "Document id");
-  if (input.documentId !== undefined && input.documentId !== document.id)
-    throw new Error("Medium document identity must match the active document.");
+  assertMediumInput(input);
   const defaults = getMediumDefaults(input.kind);
-  const readOnly = input.readOnly ?? defaults.readOnly;
+  const source = getMediumSource(input);
+  const destination = getMediumDestination(input);
   return Object.freeze({
-    capabilities: Object.freeze({
-      ...defaults.capabilities,
-      ...input.capabilities,
-      canWrite: !readOnly && (input.capabilities?.canWrite ?? defaults.capabilities.canWrite),
-    }),
-    contentGeneration: document.contentGeneration,
-    destinationKind: input.destinationKind ?? defaults.destinationKind,
+    capabilities: Object.freeze(defaults.capabilities),
+    destination: Object.freeze(destination),
     displayName: input.displayName ?? input.name,
-    documentId: input.documentId ?? document.id,
-    generations: Object.freeze({
-      content: document.contentGeneration,
-      recovery: document.recoveryGeneration,
-      saved: document.savedGeneration,
-    }),
     kind: input.kind,
     lastOperation: Object.freeze(
       input.lastOperation ?? { operation: "none" as const, state: "idle" as const },
     ),
-    lastOperationStatus: input.lastOperation?.state ?? input.lastOperationStatus ?? "idle",
     name: input.name,
-    origin: input.origin ?? defaults.origin,
-    readOnly,
-    recoveryGeneration: document.recoveryGeneration,
-    savedGeneration: document.savedGeneration,
-    sourceKind: input.sourceKind ?? defaults.sourceKind,
-    ...(input.downloadTarget === undefined ? {} : { downloadTarget: input.downloadTarget }),
-    ...(input.blobReference === undefined ? {} : { blobReference: input.blobReference }),
-    ...(input.fileHandle === undefined ? {} : { fileHandle: input.fileHandle }),
+    origin: input.kind === "browser-local" ? getBrowserLocalOrigin(source) : defaults.origin,
+    readOnly: defaults.readOnly,
+    source: Object.freeze(source),
+    ...(input.kind === "download" ? { downloadTarget: input.downloadTarget } : {}),
     ...(input.filterId === undefined ? {} : { filterId: input.filterId }),
-    ...(input.indexedDbKey === undefined && input.kind !== "browser-local"
-      ? {}
-      : { indexedDbKey: input.indexedDbKey ?? input.name }),
     ...(input.mediaType === undefined ? {} : { mediaType: input.mediaType }),
   });
 }
 
-/** Returns a defensive immutable medium copy synchronized to current document generations. @param medium - Existing descriptor. @param document - Current document lifecycle state. @returns Synchronized descriptor. */
-export function synchronizeSfxMedium(
-  medium: SfxMediumDescriptor,
-  document: SfxMediumDocumentState,
-): SfxMediumDescriptor {
-  return createSfxMediumDescriptor({ ...medium, documentId: document.id }, document);
+/** Recognizes a complete normalized descriptor without accepting partial compatibility shapes. @param input - Medium construction value. @returns Whether input is already normalized. */
+function isSfxMediumDescriptor(input: SfxMediumDescriptorInput): input is SfxMediumDescriptor {
+  return "capabilities" in input && "destination" in input && "source" in input;
 }
 
-/** Returns a medium with one new operation state and current lifecycle generations. @param medium - Existing descriptor. @param document - Current document lifecycle state. @param operation - Operation being recorded. @param state - New operation state. @param generation - Optional captured generation. @param message - Optional failure diagnostic. @returns Updated descriptor. */
+/** Returns a medium with one new operation state. @param medium - Existing descriptor. @param operation - Operation being recorded. @param state - New operation state. @param generation - Optional captured generation. @param message - Optional failure diagnostic. @returns Updated descriptor. */
 export function updateSfxMediumOperation(
   medium: SfxMediumDescriptor,
-  document: SfxMediumDocumentState,
   operation: SfxMediumOperation,
   state: SfxMediumOperationState,
   generation?: number,
   message?: string,
 ): SfxMediumDescriptor {
-  return createSfxMediumDescriptor(
-    {
-      ...medium,
-      lastOperation: {
-        ...(generation === undefined ? {} : { generation }),
-        ...(message === undefined ? {} : { message }),
-        operation,
-        state,
-      },
-    },
-    document,
-  );
+  return Object.freeze({
+    ...medium,
+    lastOperation: Object.freeze({
+      ...(generation === undefined ? {} : { generation }),
+      ...(message === undefined ? {} : { message }),
+      operation,
+      state,
+    }),
+  });
 }
 
 /** Returns default routing properties for one browser-adapted medium family. @param kind - Medium family. @returns Immutable defaults. */
 function getMediumDefaults(kind: SfxMediumKind): Readonly<{
   capabilities: SfxMediumCapabilities;
-  destinationKind: SfxMediumEndpointKind;
   origin: SfxMediumOrigin;
   readOnly: boolean;
-  sourceKind: SfxMediumEndpointKind;
 }> {
-  if (kind === "browser-local" || kind === "recovery")
+  if (kind === "browser-local")
     return {
       capabilities: { canConfirmWrite: true, canLock: true, canRead: true, canWrite: true },
-      destinationKind: "indexeddb",
-      origin: kind === "recovery" ? "recovered" : "browser-local",
+      origin: "browser-local",
       readOnly: false,
-      sourceKind: "indexeddb",
     };
-  if (kind === "file")
+  if (kind === "odt-source" || kind === "recovery")
     return {
       capabilities: { canConfirmWrite: false, canLock: false, canRead: true, canWrite: false },
-      destinationKind: "none",
-      origin: "external",
+      origin: kind === "recovery" ? "recovered" : "external",
       readOnly: true,
-      sourceKind: "file",
     };
   return {
     capabilities: { canConfirmWrite: false, canLock: false, canRead: false, canWrite: false },
-    destinationKind: "none",
     origin: "new",
-    readOnly: false,
-    sourceKind: "none",
+    readOnly: kind === "download",
   };
+}
+
+/** Resolves the source encoded by one construction variant. @param input - Validated medium input. @returns Explicit source. */
+function getMediumSource(input: SfxMediumInput): SfxMediumSource {
+  if (input.kind === "browser-local")
+    return input.source ?? { key: input.indexedDbKey, kind: "indexeddb", store: "primary" };
+  if (input.kind === "odt-source") return input.source;
+  if (input.kind === "recovery")
+    return { key: input.indexedDbKey, kind: "indexeddb", store: "recovery" };
+  return { kind: "none" };
+}
+
+/** Resolves the primary destination encoded by one construction variant. @param input - Validated medium input. @returns Explicit destination. */
+function getMediumDestination(input: SfxMediumInput): SfxMediumDestination {
+  return input.kind === "browser-local"
+    ? { key: input.indexedDbKey, kind: "indexeddb" }
+    : { kind: "none" };
+}
+
+/** Preserves the original session source when a new browser-local destination is adopted. @param source - Explicit session source. @returns Corresponding origin. */
+function getBrowserLocalOrigin(source: SfxMediumSource): SfxMediumOrigin {
+  if (source.kind === "indexeddb")
+    return source.store === "recovery" ? "recovered" : "browser-local";
+  if (source.kind === "blob" || source.kind === "file") return "external";
+  return "new";
+}
+
+/** Rejects runtime objects that bypass the discriminated TypeScript construction contract. @param input - Candidate medium input. @returns Nothing for a valid variant. */
+function assertMediumInput(input: SfxMediumInput): void {
+  const indexedDbKey = "indexedDbKey" in input ? input.indexedDbKey : undefined;
+  const downloadTarget = "downloadTarget" in input ? input.downloadTarget : undefined;
+  if (input.kind === "browser-local" || input.kind === "recovery") {
+    if (typeof indexedDbKey !== "string") throw new Error("IndexedDB key is required.");
+    assertNonBlank(indexedDbKey, "IndexedDB key");
+  }
+  if (input.kind === "download") {
+    if (typeof downloadTarget !== "string") throw new Error("Download target is required.");
+    assertNonBlank(downloadTarget, "Download target");
+  }
+  if (
+    input.kind === "odt-source" &&
+    (input.source === undefined ||
+      (input.source.kind !== "blob" && input.source.kind !== "file") ||
+      typeof input.source.reference !== "object" ||
+      input.source.reference === null)
+  )
+    throw new Error("ODT source requires an opaque Blob or File reference.");
 }
 
 /** Describes one immutable versioned snapshot owned by a document-storage caller. */
 export type DocumentSnapshot<State extends SerializableValue> = VersionedStorageRecord<State>;
 
-/**
- * Defines injected asynchronous persistence operations without coupling domain
- * logic to IndexedDB, OPFS, download APIs, or a backend.
- */
-export type DocumentStorageAdapter<State extends SerializableValue> =
-  VersionedStorageAdapter<State>;
+/** Primary persistence write port consumed by document sessions without browser APIs. */
+export type PrimarySavePort<State extends SerializableValue> = VersionedStorageSavePort<State>;
+
+/** Stored-document open port independently injectable from primary save. */
+export type StoredDocumentOpenPort<State extends SerializableValue> =
+  VersionedStorageOpenPort<State>;
 
 /** Describes a successful snapshot lookup. */
 export interface FoundSnapshotResult<State extends SerializableValue> {
@@ -288,7 +309,7 @@ export interface SavedSnapshotResult<State extends SerializableValue> {
  * @throws {Error} When adapter.load rejects; the original rejection propagates unchanged.
  */
 export async function loadSnapshot<State extends SerializableValue>(
-  adapter: DocumentStorageAdapter<State>,
+  adapter: StoredDocumentOpenPort<State>,
   id: string,
 ): Promise<LoadSnapshotResult<State>> {
   const result: LoadStorageRecordResult<State> = await loadStorageRecord(adapter, id);
@@ -304,7 +325,7 @@ export async function loadSnapshot<State extends SerializableValue>(
  * @throws {Error} When id is blank, version is not an integer, version is negative, or adapter.save rejects.
  */
 export async function saveSnapshot<State extends SerializableValue>(
-  adapter: DocumentStorageAdapter<State>,
+  adapter: PrimarySavePort<State>,
   snapshot: DocumentSnapshot<State>,
 ): Promise<SavedSnapshotResult<State>> {
   const saved: SavedStorageRecord<State> = await saveStorageRecord(adapter, snapshot);

@@ -6,9 +6,10 @@ import {
   loadSnapshot,
   saveSnapshot,
   type DocumentSnapshot,
-  type DocumentStorageAdapter,
+  type PrimarySavePort,
   type SavedSnapshotResult,
   type SerializableValue,
+  type StoredDocumentOpenPort,
 } from "../../../../sfx2/source/doc/docfile";
 import {
   markDocumentRecoverySaved,
@@ -87,7 +88,7 @@ export function restoreWriterSnapshot(
  * @throws {Error} When the storage adapter rejects the save operation.
  */
 export async function saveWriterDocument(
-  adapter: DocumentStorageAdapter<WriterSnapshotState>,
+  adapter: PrimarySavePort<WriterSnapshotState>,
   writerDocument: WriterDocument,
   documentState: OfficeDocument,
 ): Promise<SavedSnapshotResult<WriterSnapshotState>> {
@@ -103,7 +104,7 @@ export async function saveWriterDocument(
  * @throws {Error} When the storage adapter rejects the load operation.
  */
 export async function loadWriterDocument(
-  adapter: DocumentStorageAdapter<WriterSnapshotState>,
+  adapter: StoredDocumentOpenPort<WriterSnapshotState>,
   id: string,
 ): Promise<
   | { readonly id: string; readonly status: "missing" }

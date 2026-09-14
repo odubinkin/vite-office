@@ -21,13 +21,52 @@ export interface VersionedStorageRecord<State extends SerializableValue> {
   readonly version: number;
 }
 
-/** Defines injected asynchronous key-value persistence for versioned records. */
-export interface VersionedStorageAdapter<State extends SerializableValue> {
+/** Defines the read side of versioned storage independently from save capability. */
+export interface VersionedStorageOpenPort<State extends SerializableValue> {
   /** Loads the latest record for an exact identity. @param id - Stable identity passed through unchanged. @returns Stored record or undefined. */
   load(id: string): Promise<VersionedStorageRecord<State> | undefined>;
+}
 
+/** Defines the write side of versioned storage independently from open capability. */
+export interface VersionedStorageSavePort<State extends SerializableValue> {
   /** Persists one complete record. @param record - Validated record retained without mutation. @returns A promise fulfilled after persistence completes. */
   save(record: VersionedStorageRecord<State>): Promise<void>;
+}
+
+/** Defines a store that supports both independently injectable open and save ports. */
+export interface VersionedStorageAdapter<State extends SerializableValue>
+  extends VersionedStorageOpenPort<State>, VersionedStorageSavePort<State> {}
+
+/** One selected external document returned by a platform-neutral open port. */
+export interface OpenedDocument {
+  /** Exact source bytes. */
+  readonly bytes: Uint8Array;
+  /** User-visible source name. */
+  readonly name: string;
+  /** Opaque platform reference retained only as medium source identity. */
+  readonly reference: object;
+}
+
+/** Shell-neutral port for selecting and reading one external document. */
+export interface DocumentOpenPort {
+  /** Opens one caller-filtered document or returns undefined after cancellation. @param accept - Supported media selector. @returns Selected source. */
+  open(accept: string): Promise<OpenedDocument | undefined>;
+}
+
+/** One external representation offered to a platform export adapter. */
+export interface DocumentExportRequest {
+  /** Exact binary or textual payload. */
+  readonly data: Uint8Array | string;
+  /** Platform-visible media type. */
+  readonly mediaType: string;
+  /** Suggested destination name. */
+  readonly name: string;
+}
+
+/** Shell-neutral port for exporting one representation without adopting it as primary. */
+export interface DocumentExportPort {
+  /** Starts one platform export. @param request - Complete export payload. @returns Nothing; completion confirmation is intentionally unavailable. */
+  export(request: DocumentExportRequest): void;
 }
 
 /** Describes a successful record lookup. */
@@ -67,7 +106,7 @@ export interface SavedStorageRecord<State extends SerializableValue> {
  * @throws {Error} When adapter.load rejects; the original rejection propagates unchanged.
  */
 export async function loadStorageRecord<State extends SerializableValue>(
-  adapter: VersionedStorageAdapter<State>,
+  adapter: VersionedStorageOpenPort<State>,
   id: string,
 ): Promise<LoadStorageRecordResult<State>> {
   const record = await adapter.load(id);
@@ -83,7 +122,7 @@ export async function loadStorageRecord<State extends SerializableValue>(
  * @throws {Error} When id is blank, version is not a non-negative integer, or adapter.save rejects.
  */
 export async function saveStorageRecord<State extends SerializableValue>(
-  adapter: VersionedStorageAdapter<State>,
+  adapter: VersionedStorageSavePort<State>,
   record: VersionedStorageRecord<State>,
 ): Promise<SavedStorageRecord<State>> {
   assertStorageRecord(record);

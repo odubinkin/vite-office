@@ -8,10 +8,10 @@ import {
   createSfxMediumDescriptor,
   loadSnapshot,
   saveSnapshot,
-  synchronizeSfxMedium,
   updateSfxMediumOperation,
   type DocumentSnapshot,
-  type DocumentStorageAdapter,
+  type PrimarySavePort,
+  type StoredDocumentOpenPort,
 } from "./docfile";
 
 /** Describes the JSON-compatible document body used by storage contract fixtures. */
@@ -24,7 +24,9 @@ type StorageFixtureState = { readonly text: string };
  * prove the domain boundary supplies a fresh frozen container instead of the
  * caller-owned snapshot object.
  */
-class RecordingStorageAdapter implements DocumentStorageAdapter<StorageFixtureState> {
+class RecordingStorageAdapter
+  implements PrimarySavePort<StorageFixtureState>, StoredDocumentOpenPort<StorageFixtureState>
+{
   /** Stored snapshots keyed by their exact identifier. */
   readonly snapshots = new Map<string, DocumentSnapshot<StorageFixtureState>>();
 
@@ -78,78 +80,91 @@ describe("document storage contract" /**
  *
  * @returns Nothing; Vitest registers enclosed cases.
  */, function defineStorageTests(): void {
-  it("constructs and transitions a complete SfxMedium-like descriptor" /**
-   * Verifies origin, endpoint, capabilities, identity, generations, and operation state remain explicit.
+  it("constructs explicit stable SfxMedium variants without lifecycle duplication" /**
+   * Verifies source, destination, capabilities, stable identity, and operation state remain explicit.
    *
    * @returns Nothing; assertions validate immutable medium state.
    */, function createsMediumDescriptor(): void {
-    const document = {
-      contentGeneration: 2,
-      id: "document-medium",
-      recoveryGeneration: 1,
-      savedGeneration: 0,
-      title: "Medium document",
-    };
-    const untitled = createSfxMediumDescriptor(
-      { kind: "untitled", name: "Medium document" },
-      document,
-    );
+    const untitled = createSfxMediumDescriptor({ kind: "untitled", name: "Medium document" });
     expect(untitled).toMatchObject({
       capabilities: { canConfirmWrite: false, canRead: false, canWrite: false },
-      destinationKind: "none",
+      destination: { kind: "none" },
       displayName: "Medium document",
-      documentId: "document-medium",
-      generations: { content: 2, recovery: 1, saved: 0 },
       lastOperation: { operation: "none", state: "idle" },
       origin: "new",
       readOnly: false,
-      sourceKind: "none",
+      source: { kind: "none" },
     });
     expect(Object.isFrozen(untitled)).toBe(true);
     expect(Object.isFrozen(untitled.capabilities)).toBe(true);
 
-    const local = createSfxMediumDescriptor(
-      {
-        blobReference: { id: "blob" },
-        fileHandle: { id: "handle" },
-        kind: "browser-local",
-        name: "local-key",
-      },
-      document,
-    );
-    const saving = updateSfxMediumOperation(local, document, "save", "pending", 2);
+    const sourceReference = { id: "blob" };
+    const local = createSfxMediumDescriptor({
+      indexedDbKey: "local-key",
+      kind: "browser-local",
+      name: "Local document",
+      source: { kind: "blob", reference: sourceReference },
+    });
+    const saving = updateSfxMediumOperation(local, "save", "pending", 2);
     expect(saving).toMatchObject({
       capabilities: { canConfirmWrite: true, canLock: true, canRead: true, canWrite: true },
-      destinationKind: "indexeddb",
-      indexedDbKey: "local-key",
+      destination: { key: "local-key", kind: "indexeddb" },
       lastOperation: { generation: 2, operation: "save", state: "pending" },
-      origin: "browser-local",
-      sourceKind: "indexeddb",
+      origin: "external",
+      source: { kind: "blob", reference: sourceReference },
     });
-    expect(local).toMatchObject({
-      blobReference: { id: "blob" },
-      fileHandle: { id: "handle" },
-    });
-    expect(updateSfxMediumOperation(local, document, "none", "idle").lastOperation).toEqual({
+    expect(updateSfxMediumOperation(local, "none", "idle").lastOperation).toEqual({
       operation: "none",
       state: "idle",
     });
+    expect(createSfxMediumDescriptor(local)).toBe(local);
+    expect(local).not.toHaveProperty("contentGeneration");
+    expect(local).not.toHaveProperty("savedGeneration");
+    expect(local).not.toHaveProperty("recoveryGeneration");
+    expect(local).not.toHaveProperty("lastOperationStatus");
     expect(
-      synchronizeSfxMedium(saving, {
-        ...document,
-        contentGeneration: 3,
-        recoveryGeneration: 2,
-        savedGeneration: 2,
-      }).generations,
-    ).toEqual({ content: 3, recovery: 2, saved: 2 });
+      createSfxMediumDescriptor({
+        indexedDbKey: "recovery-key",
+        kind: "recovery",
+        name: "Recovered document",
+      }),
+    ).toMatchObject({
+      destination: { kind: "none" },
+      origin: "recovered",
+      readOnly: true,
+      source: { key: "recovery-key", kind: "indexeddb", store: "recovery" },
+    });
     expect(
-      /** Constructs a medium for a different document identity. @returns Invalid descriptor that never returns. */
-      () => createSfxMediumDescriptor({ ...local, documentId: "other" }, document),
-    ).toThrow("identity");
+      createSfxMediumDescriptor({
+        indexedDbKey: "primary-after-recovery",
+        kind: "browser-local",
+        name: "Recovered then saved",
+        source: { key: "recovery-key", kind: "indexeddb", store: "recovery" },
+      }).origin,
+    ).toBe("recovered");
+    expect(
+      createSfxMediumDescriptor({
+        indexedDbKey: "existing-primary",
+        kind: "browser-local",
+        name: "Existing primary",
+      }).origin,
+    ).toBe("browser-local");
     expect(
       /** Constructs a blank-named medium. @returns Invalid descriptor that never returns. */ () =>
-        createSfxMediumDescriptor({ kind: "untitled", name: " " }, document),
+        createSfxMediumDescriptor({ kind: "untitled", name: " " }),
     ).toThrow("blank");
+    expect(
+      /** Constructs a runtime-invalid browser-local input. @returns Invalid descriptor that never returns. */ () =>
+        createSfxMediumDescriptor({ kind: "browser-local", name: "Local" } as never),
+    ).toThrow("required");
+    expect(
+      /** Constructs a runtime-invalid ODT input. @returns Invalid descriptor that never returns. */ () =>
+        createSfxMediumDescriptor({ kind: "odt-source", name: "File" } as never),
+    ).toThrow("opaque");
+    expect(
+      /** Constructs a runtime-invalid download input. @returns Invalid descriptor that never returns. */ () =>
+        createSfxMediumDescriptor({ kind: "download", name: "File" } as never),
+    ).toThrow("required");
   });
 
   it("returns explicit found and missing states without changing lookup identities" /**

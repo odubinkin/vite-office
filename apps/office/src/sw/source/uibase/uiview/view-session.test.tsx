@@ -5,8 +5,12 @@ import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
-import type { RecoveryStorageAdapter } from "../../../../svl/source/misc/recovery";
+import type {
+  DocumentSnapshot,
+  PrimarySavePort,
+  StoredDocumentOpenPort,
+} from "../../../../sfx2/source/doc/docfile";
+import type { RecoverySavePort } from "../../../../svl/source/misc/recovery";
 import { createDownloadFilename } from "../../../../vcl/browser/browser-download";
 import { SwDoc } from "../../core/doc/doc";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
@@ -23,27 +27,24 @@ function createServices(): WriterSessionServices {
       /** Resolves deterministic clipboard writes. @returns Completion. */ async () => undefined,
     ),
     createDownloadFilename,
-    downloadBytes: vi.fn(),
-    downloadPlainText: vi.fn(),
-    readFile: vi.fn(
-      /** Returns deterministic empty file bytes. @returns Empty bytes. */ async () =>
-        new Uint8Array(),
-    ),
+    documentExport: { export: vi.fn() },
+    documentOpen: {
+      open: vi.fn(
+        /** Resolves a cancelled deterministic file selection. @returns Undefined. */ async () =>
+          undefined,
+      ),
+    },
     readRichClipboard: vi.fn(
       /** Returns a deterministic empty clipboard payload. @returns Empty rich/plain values. */ async () => ({
         html: "",
         plainText: "",
       }),
     ),
-    selectFile: vi.fn(
-      /** Resolves a cancelled deterministic file selection. @returns Undefined. */ async () =>
-        undefined,
-    ),
   };
 }
 
 /** In-memory retained recovery history shared by simulated reload sessions. */
-class SessionRecoveryStorage implements RecoveryStorageAdapter<WriterSnapshotState> {
+class SessionRecoveryStorage implements RecoverySavePort<WriterSnapshotState> {
   /** Newest-first recovery histories. */
   readonly histories = new Map<string, DocumentSnapshot<WriterSnapshotState>[]>();
 
@@ -221,12 +222,12 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     fireEvent.click(screen.getByRole("menuitem", { name: "Save as ODT…" }));
     await waitFor(
       /** Waits for asynchronous ODT serialization and download dispatch. @returns Nothing. */
-      () => expect(services.downloadBytes).toHaveBeenCalled(),
+      () => expect(services.documentExport.export).toHaveBeenCalled(),
     );
     fireEvent.click(screen.getByRole("button", { name: "Open ODT" }));
     await waitFor(
       /** Asserts that toolbar Open reached the injected file service. @returns Nothing. */
-      () => expect(services.selectFile).toHaveBeenCalled(),
+      () => expect(services.documentOpen.open).toHaveBeenCalled(),
     );
     const document = session.docShell.GetDoc();
     firstMount.unmount();
@@ -252,37 +253,42 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const services = createServices();
     const session = createWriterDocumentSession(services);
     const sourceBytes = await session.docShell.SerializeOdt();
-    vi.mocked(services.selectFile).mockResolvedValue(
-      new File([sourceBytes as BlobPart], "persistent.odt", {
-        type: SwDocShell.ODT_MEDIA_TYPE,
-      }),
-    );
-    vi.mocked(services.readFile).mockResolvedValue(sourceBytes);
+    vi.mocked(services.documentOpen.open).mockResolvedValue({
+      bytes: sourceBytes,
+      name: "persistent.odt",
+      reference: { id: "persistent-file" },
+    });
     const { docShell, frame, view } = session;
     const wrtShell = view.GetWrtShell();
     await view.OpenOdt();
     await view.SaveOdt();
     expect(session).toMatchObject({ docShell, frame, view });
     expect(view.GetWrtShell()).toBe(wrtShell);
-    expect(services.downloadBytes).toHaveBeenCalledWith(
-      expect.any(Uint8Array),
-      SwDocShell.ODT_MEDIA_TYPE,
-      "Untitled Writer Document.odt",
-    );
+    expect(services.documentExport.export).toHaveBeenCalledWith({
+      data: expect.any(Uint8Array),
+      mediaType: SwDocShell.ODT_MEDIA_TYPE,
+      name: "Untitled Writer Document.odt",
+    });
     session.Close();
   });
 
   it("keeps downloads independent from the browser-local primary medium" /** Verifies UI commands use Save As for the first confirmed local write, Save thereafter, and never acknowledge downloads. @returns Completion after local persistence. */, async function separatesUiMediumOperations(): Promise<void> {
     let stored: DocumentSnapshot<WriterSnapshotState> | undefined;
-    const storage: DocumentStorageAdapter<WriterSnapshotState> = {
+    const storedDocumentOpen: StoredDocumentOpenPort<WriterSnapshotState> = {
       /** Loads the current matching fixture snapshot. @param id - Requested identity. @returns Matching snapshot or undefined. */
       load: async (id) => (stored?.id === id ? stored : undefined),
+    };
+    const primarySave: PrimarySavePort<WriterSnapshotState> = {
       /** Retains one complete primary snapshot. @param snapshot - Persisted snapshot. @returns Fulfilled completion. */
       save: async (snapshot) => {
         stored = snapshot;
       },
     };
-    const services: WriterSessionServices = { ...createServices(), storage };
+    const services: WriterSessionServices = {
+      ...createServices(),
+      primarySave,
+      storedDocumentOpen,
+    };
     const session = createWriterDocumentSession(services);
     const paragraphId = session.view.GetWrtShell().GetActiveParagraph().id;
     session.view.GetWrtShell().InsertText(paragraphId, "dirty", 0, "insertText");
@@ -305,7 +311,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       savedGeneration: dirtyGeneration,
     });
     expect(session.docShell.GetMedium()).toMatchObject({
-      indexedDbKey: "writer-workbench",
+      destination: { key: "writer-workbench", kind: "indexeddb" },
       kind: "browser-local",
       lastOperation: { operation: "save-as", state: "succeeded" },
     });
@@ -330,7 +336,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const recoveryStorage = new SessionRecoveryStorage();
     const first = createWriterDocumentSession({
       ...createServices(),
-      recoveryStorage,
+      recoverySave: recoveryStorage,
     });
     const paragraphId = first.view.GetWrtShell().GetActiveParagraph().id;
     first.view.GetWrtShell().InsertText(paragraphId, "Recovered text", 0, "insertText");
@@ -341,7 +347,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
 
     const reloaded = createWriterDocumentSession({
       ...createServices(),
-      recoveryStorage,
+      recoverySave: recoveryStorage,
     });
     await expect(reloaded.GetRecoveryCandidate()).resolves.toMatchObject({
       id: "writer-workbench",

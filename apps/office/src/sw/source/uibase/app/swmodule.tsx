@@ -14,11 +14,10 @@ import {
 import type { OfficeModuleFactory } from "../../../../framework/source/services/modulemanager";
 import { copyRichText, readRichClipboard } from "../../../../vcl/browser/browser-clipboard";
 import {
+  createBrowserDocumentExportPort,
   createDownloadFilename,
-  downloadBytes,
-  downloadPlainText,
 } from "../../../../vcl/browser/browser-download";
-import { readBrowserFile, selectBrowserFile } from "../../../../vcl/browser/browser-file";
+import { createBrowserDocumentOpenPort } from "../../../../vcl/browser/browser-file";
 import {
   IndexedDbDocumentStorageAdapter,
   IndexedDbRecoveryStorageAdapter,
@@ -56,24 +55,25 @@ export interface WriterDocumentSession {
 
 /** Creates the production browser adapters without leaking them into document or Writer shell code. @returns Injected session services. */
 export function createWriterBrowserSessionServices(): WriterSessionServices {
+  const primaryStorage =
+    globalThis.indexedDB === undefined
+      ? undefined
+      : new IndexedDbDocumentStorageAdapter<WriterSnapshotState>("vite-office-writer-workbench");
   return {
     copyRichText,
     createDownloadFilename,
-    downloadBytes,
-    downloadPlainText,
-    readFile: readBrowserFile,
+    documentExport: createBrowserDocumentExportPort(),
+    documentOpen: createBrowserDocumentOpenPort(),
     readRichClipboard,
-    selectFile: selectBrowserFile,
-    ...(globalThis.indexedDB === undefined
+    ...(primaryStorage === undefined
       ? {}
       : {
-          storage: new IndexedDbDocumentStorageAdapter<WriterSnapshotState>(
-            "vite-office-writer-workbench",
-          ),
+          primarySave: primaryStorage,
           recoveryEnvironment: createBrowserAutoRecoveryEnvironment(),
-          recoveryStorage: new IndexedDbRecoveryStorageAdapter<WriterSnapshotState>(
+          recoverySave: new IndexedDbRecoveryStorageAdapter<WriterSnapshotState>(
             "vite-office-writer-recovery",
           ),
+          storedDocumentOpen: primaryStorage,
         }),
   };
 }
@@ -97,9 +97,9 @@ export function createWriterDocumentSession(
   const view = new SwView(docShell, services);
   const frame = new OfficeFrame<SwView>();
   const autoRecovery =
-    services.recoveryStorage === undefined
+    services.recoverySave === undefined
       ? undefined
-      : new AutoRecovery(services.recoveryStorage, {
+      : new AutoRecovery(services.recoverySave, {
           ...(services.recoveryEnvironment === undefined
             ? {}
             : { environment: services.recoveryEnvironment }),

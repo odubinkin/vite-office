@@ -6,6 +6,7 @@
 import {
   createSfxMediumDescriptor,
   type SfxMediumDescriptor,
+  type SfxMediumDescriptorInput,
   type SfxMediumInput,
 } from "./docfile";
 
@@ -53,7 +54,7 @@ export class SfxObjectShell {
   /** Creates an object shell from explicit lifecycle and medium inputs. @param document - Lifecycle state. @param medium - Current medium. @returns Nothing. */
   public constructor(document: OfficeDocument, medium: SfxMediumInput) {
     this.documentState = { ...document };
-    this.medium = createSfxMediumDescriptor(medium, this.documentState);
+    this.medium = createSfxMediumDescriptor(medium);
   }
 
   /** Returns immutable lifecycle state owned by this shell. @returns Current state. */
@@ -61,9 +62,9 @@ export class SfxObjectShell {
     return this.documentState;
   }
 
-  /** Returns the current medium synchronized to shell lifecycle. @returns Medium descriptor. */
+  /** Returns the stable current medium; lifecycle state remains owned separately by this shell. @returns Medium descriptor. */
   public GetMedium(): SfxMediumDescriptor {
-    return createSfxMediumDescriptor(this.medium, this.documentState);
+    return this.medium;
   }
 
   /** Rejects commands and persistence after shell closure. @returns Nothing for an open shell. */
@@ -73,9 +74,9 @@ export class SfxObjectShell {
   }
 
   /** Replaces shell-owned lifecycle and medium atomically. @param document - New lifecycle. @param medium - New medium. @returns Nothing. */
-  protected ReplaceObjectState(document: OfficeDocument, medium: SfxMediumInput): void {
+  protected ReplaceObjectState(document: OfficeDocument, medium: SfxMediumDescriptorInput): void {
     this.documentState = { ...document };
-    this.medium = createSfxMediumDescriptor(medium, this.documentState);
+    this.medium = createSfxMediumDescriptor(medium);
   }
 
   /** Stores a lifecycle transition owned by this framework shell. @param document - New state. @returns Whether state identity changed. */

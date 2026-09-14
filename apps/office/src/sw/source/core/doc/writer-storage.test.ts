@@ -3,7 +3,11 @@
 import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
+import type {
+  DocumentSnapshot,
+  PrimarySavePort,
+  StoredDocumentOpenPort,
+} from "../../../../sfx2/source/doc/docfile";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { createWriterDocument, type WriterDocument } from "./writer";
@@ -33,7 +37,7 @@ function createWriterFixture(): WriterFixture {
 /** Creates an in-memory generic storage adapter. @param initialSnapshot - Optional initial state. @returns Test adapter. */
 function createAdapter(
   initialSnapshot?: DocumentSnapshot<WriterSnapshotState>,
-): DocumentStorageAdapter<WriterSnapshotState> {
+): PrimarySavePort<WriterSnapshotState> & StoredDocumentOpenPort<WriterSnapshotState> {
   let snapshot = initialSnapshot;
   return {
     load: /** Loads one matching snapshot. @param id - Requested identity. @returns Stored snapshot. */ async (
@@ -78,8 +82,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
   it("does not acknowledge a failed primary save", /** Verifies failed-write behavior. @returns Completion after assertions. */ async () => {
     const fixture = createWriterFixture();
     const failure = new Error("write failed");
-    const adapter: DocumentStorageAdapter<WriterSnapshotState> = {
-      load: /** Returns no snapshot. @returns Missing result. */ async () => undefined,
+    const adapter: PrimarySavePort<WriterSnapshotState> = {
       save: /** Rejects the write. @returns Rejected completion. */ async () => {
         throw failure;
       },

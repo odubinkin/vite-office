@@ -1,5 +1,7 @@
 /** @fileoverview Implements browser-only file selection and byte reading behind injectable DOM capabilities. */
 
+import type { DocumentOpenPort } from "../../svl/source/misc/storage";
+
 /** Opens a browser file chooser and resolves its single selected file or an explicit cancellation. @param accept - File input accept filter. @param document - DOM element factory. @returns Selected file or undefined. */
 export function selectBrowserFile(
   accept: string,
@@ -40,4 +42,20 @@ export function selectBrowserFile(
 /** Reads a browser File without interpreting its contents. @param file - Selected browser file. @returns Independent byte array. */
 export async function readBrowserFile(file: Blob): Promise<Uint8Array> {
   return new Uint8Array(await file.arrayBuffer());
+}
+
+/** Creates the browser implementation of the shell-neutral external document open port. @param selectFile - Browser chooser capability. @param readFile - Browser byte-reading capability. @returns Replaceable open port. */
+export function createBrowserDocumentOpenPort(
+  selectFile: typeof selectBrowserFile = selectBrowserFile,
+  readFile: typeof readBrowserFile = readBrowserFile,
+): DocumentOpenPort {
+  return {
+    /** Selects and reads one browser file as an opaque neutral source. @param accept - Browser accept filter. @returns Opened source or cancellation. */
+    open: async (accept) => {
+      const file = await selectFile(accept);
+      return file === undefined
+        ? undefined
+        : { bytes: await readFile(file), name: file.name, reference: file };
+    },
+  };
 }

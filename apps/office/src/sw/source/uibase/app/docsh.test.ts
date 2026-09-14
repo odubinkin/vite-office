@@ -96,19 +96,21 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       isModified: false,
       savedGeneration: generation,
     });
+    const stableMedium = active.shell.GetMedium();
 
     active.writerShell.InsertText("p-1", "dirty!", 6, "insertText");
+    expect(active.shell.GetMedium()).toBe(stableMedium);
     const changedGeneration = active.shell.GetDocumentState().contentGeneration;
     await active.shell.Export(
-      { kind: "file", name: "copy.odt" },
+      { downloadTarget: "copy.odt", kind: "download", name: "copy.odt" },
       /** Completes export. @returns Nothing. */ () => undefined,
     );
     active.shell.Download(
-      { kind: "file", name: "copy.odt" },
+      { downloadTarget: "copy.odt", kind: "download", name: "copy.odt" },
       /** Starts download. @returns Nothing. */ () => undefined,
     );
     expect(active.shell.GetMedium()).toMatchObject({
-      indexedDbKey: "primary-key",
+      destination: { key: "primary-key", kind: "indexeddb" },
       kind: "browser-local",
       lastOperation: { operation: "download", state: "unconfirmed" },
     });
@@ -131,7 +133,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       ) => (completeWrite = resolve),
     );
     const saving = active.shell.SaveAs(
-      { kind: "browser-local", name: "primary" },
+      { indexedDbKey: "primary", kind: "browser-local", name: "primary" },
       /** Waits for durable completion. @returns Captured evidence. */ async () => {
         await completed;
         return { generation: savedGeneration };
@@ -159,17 +161,13 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
 
     const active = fixture("dirty");
     const invalidMedia: SfxMediumInput[] = [
-      { kind: "file" as const, name: "read-only", readOnly: true },
       {
-        capabilities: { canConfirmWrite: true, canLock: false, canRead: true, canWrite: false },
-        kind: "file" as const,
-        name: "not-writable",
+        kind: "odt-source",
+        name: "read-only",
+        source: { kind: "file", reference: {} },
       },
-      {
-        capabilities: { canConfirmWrite: false, canLock: false, canRead: true, canWrite: true },
-        kind: "file" as const,
-        name: "unconfirmed",
-      },
+      { downloadTarget: "unconfirmed.odt", kind: "download", name: "unconfirmed.odt" },
+      { kind: "untitled", name: "not-writable" },
     ];
     for (const medium of invalidMedia)
       await expect(
@@ -181,7 +179,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
 
     await expect(
       active.shell.Export(
-        { kind: "file", name: "failed.odt" },
+        { downloadTarget: "failed.odt", kind: "download", name: "failed.odt" },
         /** Rejects export with a non-Error platform value. @returns Rejected completion. */ async () =>
           Promise.reject("export failed"),
       ),
@@ -191,22 +189,38 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       operation: "export",
       state: "failed",
     });
+    const mediumBeforeRecoveryFailure = active.shell.GetMedium();
     active.shell.RecoverySaveStarted(1);
     active.shell.RecoverySaveFailed(1, "quota");
-    expect(active.shell.GetMedium().lastOperation).toMatchObject({
-      message: "quota",
-      operation: "recovery-save",
-      state: "failed",
-    });
+    expect(active.shell.GetMedium()).toBe(mediumBeforeRecoveryFailure);
+    expect(
+      /** Reports a recovery callback for content that does not exist. @returns Invalid callback. */ () =>
+        active.shell.RecoverySaveStarted(2),
+    ).toThrow("existing document content");
+
+    const stateBeforePrimaryFailure = active.shell.GetDocumentState();
+    const mediumBeforePrimaryFailure = active.shell.GetMedium();
+    const storageFailure = new Error("primary storage failed");
+    await expect(
+      active.shell.SaveAs(
+        { indexedDbKey: "primary", kind: "browser-local", name: "primary" },
+        /** Propagates a durable storage rejection. @returns Rejected completion. */ async () =>
+          Promise.reject(storageFailure),
+      ),
+    ).rejects.toBe(storageFailure);
+    expect(active.shell.GetDocumentState()).toBe(stateBeforePrimaryFailure);
+    expect(active.shell.GetMedium()).toBe(mediumBeforePrimaryFailure);
 
     await expect(
       active.shell.SaveAs(
-        { kind: "browser-local", name: "primary" },
+        { indexedDbKey: "primary", kind: "browser-local", name: "primary" },
         /** Returns mismatched evidence. @returns Invalid evidence. */ async () => ({
           generation: 2,
         }),
       ),
     ).rejects.toThrow("does not match");
+    expect(active.shell.GetDocumentState()).toBe(stateBeforePrimaryFailure);
+    expect(active.shell.GetMedium()).toBe(mediumBeforePrimaryFailure);
 
     const racing = fixture("racing", "Racing", "racing");
     let completeWrite: (() => void) | undefined;
@@ -216,15 +230,17 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       ) => (completeWrite = resolve),
     );
     const saving = racing.shell.SaveAs(
-      { kind: "browser-local", name: "primary" },
+      { indexedDbKey: "primary", kind: "browser-local", name: "primary" },
       /** Waits while the active model is replaced. @returns Evidence for the retired model. */ async () => {
         await completed;
         return { generation: 1 };
       },
     );
     racing.shell.InitNew(metadata("Replacement", "replacement"), "replacement-p-1");
+    const replacementMedium = racing.shell.GetMedium();
     completeWrite?.();
     await expect(saving).rejects.toThrow("no longer active");
+    expect(racing.shell.GetMedium()).toBe(replacementMedium);
     racing.shell.Close();
     racing.shell.Close();
   });

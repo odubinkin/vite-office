@@ -8,8 +8,8 @@ import {
   type VersionedStorageRecord,
 } from "./storage";
 
-/** Storage operations required by framework AutoRecovery beyond one replaceable record. */
-export interface RecoveryStorageAdapter<
+/** Recovery-save port required by framework AutoRecovery beyond one replaceable record. */
+export interface RecoverySavePort<
   State extends SerializableValue,
 > extends VersionedStorageAdapter<State> {
   /** Attempts to acquire a short-lived cross-context lease. @param id - Document identity. @param ownerId - Current context identity. @param expiresAt - Absolute lease expiry in milliseconds. @param now - Current absolute time used to recognize an expired owner. @returns Whether the lease was acquired. */
@@ -68,7 +68,7 @@ export type AutosaveResult<State extends SerializableValue> =
  * @throws {Error} When the storage load rejects without translation.
  */
 export async function recoverDocument<State extends SerializableValue>(
-  adapter: RecoveryStorageAdapter<State>,
+  adapter: RecoverySavePort<State>,
   id: string,
 ): Promise<RecoveryState<State>> {
   const generations = await adapter.loadGenerations?.(id);
@@ -99,7 +99,7 @@ export async function recoverDocument<State extends SerializableValue>(
  * @throws {Error} When snapshot validation or storage save rejects without translation.
  */
 export async function autosaveDocument<State extends SerializableValue>(
-  adapter: RecoveryStorageAdapter<State>,
+  adapter: RecoverySavePort<State>,
   recovery: RecoveryState<State>,
   snapshot: VersionedStorageRecord<State>,
 ): Promise<AutosaveResult<State>> {

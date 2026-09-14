@@ -1,8 +1,9 @@
 /** @fileoverview Verifies deterministic browser plain-text download construction, click dispatch, and URL cleanup. */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
+  createBrowserDocumentExportPort,
   createDownloadFilename,
   downloadBytes,
   downloadPlainText,
@@ -89,5 +90,16 @@ describe("browser plain-text download" /** Groups Blob download lifecycle cases.
     expect(createDownloadFilename(" Report: Q1 ", ".odt")).toBe("Report- Q1.odt");
     expect(createDownloadFilename("report.ODT", ".odt")).toBe("report.ODT");
     expect(createDownloadFilename("   ", "txt")).toBe("Untitled.txt");
+  });
+
+  it("routes binary and text payloads through one shell-neutral export port" /** Verifies browser download mechanics stay replaceable outside Writer. @returns Nothing. */, () => {
+    const exportBytes = vi.fn();
+    const exportText = vi.fn();
+    const port = createBrowserDocumentExportPort(exportBytes, exportText);
+    const bytes = new Uint8Array([1, 2]);
+    port.export({ data: bytes, mediaType: "application/test", name: "binary.odt" });
+    port.export({ data: "text", mediaType: "text/plain", name: "text.txt" });
+    expect(exportBytes).toHaveBeenCalledWith(bytes, "application/test", "binary.odt");
+    expect(exportText).toHaveBeenCalledWith("text", "text.txt");
   });
 });

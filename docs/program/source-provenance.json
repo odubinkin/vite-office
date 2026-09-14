@@ -675,39 +675,42 @@
       "evidence": {
         "local": [
           {
-            "marker": "SerializableValue",
+            "marker": "createSfxMediumDescriptor",
             "path": "apps/office/src/sfx2/source/doc/docfile.ts"
           }
         ],
         "upstream": [
           {
-            "marker": "std::move",
+            "marker": "SfxMedium::SfxMedium()",
             "path": "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx"
           }
         ]
       },
       "localPath": "apps/office/src/sfx2/source/doc/docfile.ts",
       "localSymbols": [
-        "SerializableValue",
+        "SfxMediumDescriptor",
         "SfxMediumKind",
         "SfxMediumOrigin",
-        "SfxMediumEndpointKind",
+        "SfxMediumSource",
+        "SfxMediumDestination",
         "SfxMediumOperation",
-        "SfxMediumOperationState"
+        "createSfxMediumDescriptor"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside std::move, UseDocumentSystemFileLocking::get, UseDocumentOOoLockFile::get, UseLocking::get and the bounded SerializableValue, SfxMediumKind, SfxMediumOrigin contract remain intentionally omitted."
+        "Native streams, UCB content, lock files, item sets, interaction handlers, temporary files, and protocol-specific transfer mechanics remain outside the bounded browser medium."
       ],
       "preservedResponsibilities": [
-        "Defines the bounded browser document-medium persistence contract at the LibreOffice `sfx2/source/doc/docfile.cxx` ownership boundary without selecting a browser persistence API."
+        "Preserves stable SfxMedium identity, distinct original source and current destination, filter metadata, read-only routing, and explicit transfer status without duplicating document lifecycle state."
       ],
       "status": "mapped",
       "upstreamPath": "sfx2/source/doc/docfile.cxx",
       "upstreamSymbols": [
-        "std::move",
-        "UseDocumentSystemFileLocking::get",
-        "UseDocumentOOoLockFile::get",
-        "UseLocking::get"
+        "SfxMedium::SfxMedium",
+        "SfxMedium::GetName",
+        "SfxMedium::GetOrigURL",
+        "SfxMedium::SetName",
+        "SfxMedium::IsReadOnly",
+        "SfxMedium::Transfer_Impl"
       ]
     },
     {
@@ -866,7 +869,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "RecoveryStorageAdapter",
+            "marker": "RecoverySavePort",
             "path": "apps/office/src/svl/source/misc/recovery.ts"
           }
         ]

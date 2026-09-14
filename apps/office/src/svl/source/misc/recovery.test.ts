@@ -5,7 +5,7 @@ import {
   autosaveDocument,
   recoverDocument,
   type RecoveryState,
-  type RecoveryStorageAdapter,
+  type RecoverySavePort,
 } from "./recovery";
 import type { VersionedStorageAdapter, VersionedStorageRecord } from "./storage";
 
@@ -55,7 +55,7 @@ describe("autosave recovery" /** Groups recovery contract cases. @returns Nothin
     });
   });
   it("selects the newest valid retained recovery generation" /** Verifies history-aware adapters ignore invalid rows and avoid the single-record fallback. @returns Completion after recovery lookup. */, async function loadsRecoveryHistory(): Promise<void> {
-    const adapter: RecoveryStorageAdapter<FixtureState> = {
+    const adapter: RecoverySavePort<FixtureState> = {
       /** Supplies an unused fallback record. @returns Old recovery record. */
       load: async () => snapshot(1),
       /** Supplies invalid and valid retained generations. @returns Newest-first fixture history. */

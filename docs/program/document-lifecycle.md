@@ -35,3 +35,8 @@ save mark. The bounded implementation is recorded as `CAP-0114` /
 `LO-WRITER-0114`; its remaining autosave-session gaps keep it `implemented`,
 not `verified`. Model mutations reach the shell through typed `SwModify`
 transactions; document replacement and disposal detach clients explicitly.
+`SfxMedium` retains only source, primary destination, filter metadata,
+capabilities, and the last medium operation. It does not duplicate document
+identity or save/recovery generations. `GetMedium()` returns the stable current
+descriptor, matching upstream `SfxMedium` identity semantics instead of
+reconstructing a defensive snapshot on every read.
