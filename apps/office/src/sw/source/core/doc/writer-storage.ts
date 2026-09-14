@@ -5,10 +5,11 @@
 import {
   loadSnapshot,
   saveSnapshot,
+  type DocumentSnapshot,
   type DocumentStorageAdapter,
   type SerializableValue,
 } from "../../../../sfx2/source/doc/docfile";
-import { markDocumentSaved } from "../../../../sfx2/source/doc/docfac";
+import { markDocumentRecoverySaved, markDocumentSaved } from "../../../../sfx2/source/doc/docfac";
 import {
   normalizeWriterParagraphFormatting,
   serializeWriterDocument,
@@ -21,6 +22,38 @@ export type WriterSnapshotState = {
   /** Writer document copied into the browser-local snapshot. */
   readonly writerDocument: SerializableValue;
 };
+
+/** Creates the complete generation-addressed payload used by primary and recovery persistence. @param writerDocument - Canonical Writer document inspected without mutation. @returns Immutable snapshot container. */
+export function createWriterSnapshot(
+  writerDocument: WriterDocument,
+): DocumentSnapshot<WriterSnapshotState> {
+  return Object.freeze({
+    id: writerDocument.document.id,
+    state: {
+      writerDocument: serializeWriterDocument(writerDocument) as unknown as SerializableValue,
+    },
+    version: writerDocument.document.contentGeneration,
+  });
+}
+
+/** Restores and validates a complete Writer snapshot for primary open or recovery. @param snapshot - Persisted snapshot inspected without mutation. @param purpose - Whether the snapshot is a confirmed primary copy or a recovery copy. @returns Candidate Writer graph ready for atomic shell replacement. */
+export function restoreWriterSnapshot(
+  snapshot: DocumentSnapshot<WriterSnapshotState>,
+  purpose: "primary" | "recovery",
+): WriterDocument {
+  const writerDocument = normalizeWriterParagraphFormatting(
+    snapshot.state.writerDocument as unknown as WriterDocument,
+  );
+  if (writerDocument.document.id !== snapshot.id)
+    throw new Error("Writer snapshot identity does not match its stored record.");
+  if (writerDocument.document.contentGeneration !== snapshot.version)
+    throw new Error("Writer snapshot generation does not match its stored record.");
+  writerDocument.document =
+    purpose === "primary"
+      ? markDocumentSaved(writerDocument.document, snapshot.version)
+      : markDocumentRecoverySaved(writerDocument.document, snapshot.version);
+  return writerDocument;
+}
 
 /**
  * Saves one Writer workbench document using its stable identity and content generation.
@@ -40,13 +73,7 @@ export async function saveWriterDocument(
     writerDocument: WriterDocument;
   }>
 > {
-  const saved = await saveSnapshot(adapter, {
-    id: writerDocument.document.id,
-    state: {
-      writerDocument: serializeWriterDocument(writerDocument) as unknown as SerializableValue,
-    },
-    version: writerDocument.document.contentGeneration,
-  });
+  const saved = await saveSnapshot(adapter, createWriterSnapshot(writerDocument));
   const acknowledged = writerDocument.clone();
   acknowledged.document = markDocumentSaved(acknowledged.document, saved.snapshot.version);
   return { ...saved, writerDocument: acknowledged };
@@ -69,9 +96,6 @@ export async function loadWriterDocument(
 > {
   const result = await loadSnapshot(adapter, id);
   if (result.status === "missing") return result;
-  const writerDocument = normalizeWriterParagraphFormatting(
-    result.snapshot.state.writerDocument as unknown as WriterDocument,
-  );
-  writerDocument.document = markDocumentSaved(writerDocument.document, result.snapshot.version);
+  const writerDocument = restoreWriterSnapshot(result.snapshot, "primary");
   return { status: "found", writerDocument };
 }

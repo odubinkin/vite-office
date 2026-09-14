@@ -6,7 +6,11 @@ import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it } from "vitest";
 
 import type { VersionedStorageRecord } from "../../svl/source/misc/storage";
-import { IndexedDbDocumentStorageAdapter, type IndexedDbFactory } from "./indexeddb-storage";
+import {
+  IndexedDbDocumentStorageAdapter,
+  IndexedDbRecoveryStorageAdapter,
+  type IndexedDbFactory,
+} from "./indexeddb-storage";
 
 /** Describes the JSON-compatible snapshot body used by the IndexedDB fixtures. */
 type IndexedDbFixtureState = { readonly body: string };
@@ -171,5 +175,77 @@ describe("IndexedDbDocumentStorageAdapter" /**
 
     await expect(adapter.save(invalidSnapshot)).rejects.toBeInstanceOf(Error);
     await expect(adapter.load("document-4")).resolves.toBeUndefined();
+  });
+});
+
+describe("IndexedDbRecoveryStorageAdapter" /**
+ * Groups transactional recovery history and lease behavior.
+ *
+ * @returns Nothing; Vitest registers enclosed cases.
+ */, function defineIndexedDbRecoveryTests(): void {
+  it("rejects invalid recovery history bounds" /** Verifies constructor validation blocks fractional and non-positive limits. @returns Nothing; assertions validate deterministic errors. */, function rejectsInvalidBounds(): void {
+    expect(
+      /** Creates a zero-generation adapter. @returns Invalid adapter that never returns. */ () =>
+        new IndexedDbRecoveryStorageAdapter("invalid", new IDBFactory(), 0),
+    ).toThrow("positive integer");
+    expect(
+      /** Creates a fractional-generation adapter. @returns Invalid adapter that never returns. */ () =>
+        new IndexedDbRecoveryStorageAdapter("invalid", new IDBFactory(), 1.5),
+    ).toThrow("positive integer");
+  });
+
+  it("retains bounded ordered generations and deletes one document history" /**
+   * Verifies sequential generations survive reload while cleanup removes only stale rows.
+   *
+   * @returns Completion after IndexedDB transactions commit.
+   */, async function retainsRecoveryHistory(): Promise<void> {
+    databaseSequence += 1;
+    const adapter = new IndexedDbRecoveryStorageAdapter<IndexedDbFixtureState>(
+      `vite-office-recovery-${databaseSequence}`,
+      new IDBFactory(),
+      2,
+    );
+    await adapter.save(createSnapshot("document-recovery", 1, "one"));
+    await adapter.save(createSnapshot("document-recovery", 2, "two"));
+    await adapter.save(createSnapshot("document-recovery", 3, "three"));
+    await adapter.save(createSnapshot("other-document", 7, "other"));
+
+    await expect(adapter.load("document-recovery")).resolves.toEqual(
+      createSnapshot("document-recovery", 3, "three"),
+    );
+    await expect(adapter.loadGenerations("document-recovery")).resolves.toEqual([
+      createSnapshot("document-recovery", 3, "three"),
+      createSnapshot("document-recovery", 2, "two"),
+    ]);
+    await adapter.deleteGenerations("document-recovery");
+    await expect(adapter.loadGenerations("document-recovery")).resolves.toEqual([]);
+    await expect(adapter.load("other-document")).resolves.toEqual(
+      createSnapshot("other-document", 7, "other"),
+    );
+  });
+
+  it("coordinates leases across adapters sharing one recovery database" /**
+   * Verifies active owners exclude other tabs and expired leases can be reclaimed.
+   *
+   * @returns Completion after lease transactions commit.
+   */, async function coordinatesRecoveryLeases(): Promise<void> {
+    databaseSequence += 1;
+    const indexedDb = new IDBFactory();
+    const databaseName = `vite-office-recovery-${databaseSequence}`;
+    const first = new IndexedDbRecoveryStorageAdapter<IndexedDbFixtureState>(
+      databaseName,
+      indexedDb,
+    );
+    const second = new IndexedDbRecoveryStorageAdapter<IndexedDbFixtureState>(
+      databaseName,
+      indexedDb,
+    );
+
+    await expect(first.acquireLease("shared", "tab-1", 200, 100)).resolves.toBe(true);
+    await expect(second.acquireLease("shared", "tab-2", 250, 150)).resolves.toBe(false);
+    await second.releaseLease("shared", "tab-2");
+    await expect(second.acquireLease("shared", "tab-2", 400, 201)).resolves.toBe(true);
+    await second.releaseLease("shared", "tab-2");
+    await expect(first.acquireLease("shared", "tab-1", 500, 202)).resolves.toBe(true);
   });
 });

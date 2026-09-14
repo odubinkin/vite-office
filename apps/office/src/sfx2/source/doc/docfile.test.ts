@@ -5,8 +5,11 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  createSfxMediumDescriptor,
   loadSnapshot,
   saveSnapshot,
+  synchronizeSfxMedium,
+  updateSfxMediumOperation,
   type DocumentSnapshot,
   type DocumentStorageAdapter,
 } from "./docfile";
@@ -75,6 +78,80 @@ describe("document storage contract" /**
  *
  * @returns Nothing; Vitest registers enclosed cases.
  */, function defineStorageTests(): void {
+  it("constructs and transitions a complete SfxMedium-like descriptor" /**
+   * Verifies origin, endpoint, capabilities, identity, generations, and operation state remain explicit.
+   *
+   * @returns Nothing; assertions validate immutable medium state.
+   */, function createsMediumDescriptor(): void {
+    const document = {
+      contentGeneration: 2,
+      id: "document-medium",
+      recoveryGeneration: 1,
+      savedGeneration: 0,
+      title: "Medium document",
+    };
+    const untitled = createSfxMediumDescriptor(
+      { kind: "untitled", name: "Medium document" },
+      document,
+    );
+    expect(untitled).toMatchObject({
+      capabilities: { canConfirmWrite: false, canRead: false, canWrite: false },
+      destinationKind: "none",
+      displayName: "Medium document",
+      documentId: "document-medium",
+      generations: { content: 2, recovery: 1, saved: 0 },
+      lastOperation: { operation: "none", state: "idle" },
+      origin: "new",
+      readOnly: false,
+      sourceKind: "none",
+    });
+    expect(Object.isFrozen(untitled)).toBe(true);
+    expect(Object.isFrozen(untitled.capabilities)).toBe(true);
+
+    const local = createSfxMediumDescriptor(
+      {
+        blobReference: { id: "blob" },
+        fileHandle: { id: "handle" },
+        kind: "browser-local",
+        name: "local-key",
+      },
+      document,
+    );
+    const saving = updateSfxMediumOperation(local, document, "save", "pending", 2);
+    expect(saving).toMatchObject({
+      capabilities: { canConfirmWrite: true, canLock: true, canRead: true, canWrite: true },
+      destinationKind: "indexeddb",
+      indexedDbKey: "local-key",
+      lastOperation: { generation: 2, operation: "save", state: "pending" },
+      origin: "browser-local",
+      sourceKind: "indexeddb",
+    });
+    expect(local).toMatchObject({
+      blobReference: { id: "blob" },
+      fileHandle: { id: "handle" },
+    });
+    expect(updateSfxMediumOperation(local, document, "none", "idle").lastOperation).toEqual({
+      operation: "none",
+      state: "idle",
+    });
+    expect(
+      synchronizeSfxMedium(saving, {
+        ...document,
+        contentGeneration: 3,
+        recoveryGeneration: 2,
+        savedGeneration: 2,
+      }).generations,
+    ).toEqual({ content: 3, recovery: 2, saved: 2 });
+    expect(
+      /** Constructs a medium for a different document identity. @returns Invalid descriptor that never returns. */
+      () => createSfxMediumDescriptor({ ...local, documentId: "other" }, document),
+    ).toThrow("identity");
+    expect(
+      /** Constructs a blank-named medium. @returns Invalid descriptor that never returns. */ () =>
+        createSfxMediumDescriptor({ kind: "untitled", name: " " }, document),
+    ).toThrow("blank");
+  });
+
   it("returns explicit found and missing states without changing lookup identities" /**
    * Verifies lookup success and absence remain distinguishable deterministic states.
    *

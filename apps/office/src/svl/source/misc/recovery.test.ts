@@ -1,7 +1,12 @@
 /** @fileoverview Verifies deterministic recovery loading, autosave outcomes, immutable adapter calls, and unaltered storage failures. */
 
 import { describe, expect, it } from "vitest";
-import { autosaveDocument, recoverDocument, type RecoveryState } from "./recovery";
+import {
+  autosaveDocument,
+  recoverDocument,
+  type RecoveryState,
+  type RecoveryStorageAdapter,
+} from "./recovery";
 import type { VersionedStorageAdapter, VersionedStorageRecord } from "./storage";
 
 /** Describes JSON-compatible state used by recovery fixtures. */
@@ -47,6 +52,26 @@ describe("autosave recovery" /** Groups recovery contract cases. @returns Nothin
       id: "missing",
       recoveryGeneration: null,
       snapshot: undefined,
+    });
+  });
+  it("selects the newest valid retained recovery generation" /** Verifies history-aware adapters ignore invalid rows and avoid the single-record fallback. @returns Completion after recovery lookup. */, async function loadsRecoveryHistory(): Promise<void> {
+    const adapter: RecoveryStorageAdapter<FixtureState> = {
+      /** Supplies an unused fallback record. @returns Old recovery record. */
+      load: async () => snapshot(1),
+      /** Supplies invalid and valid retained generations. @returns Newest-first fixture history. */
+      loadGenerations: async () => [
+        { id: "other", state: { text: "invalid identity" }, version: 3 },
+        { id: "document-1", state: { text: "fractional" }, version: 1.5 },
+        { id: "document-1", state: { text: "negative" }, version: -1 },
+        snapshot(2),
+      ],
+      /** Accepts an unused fixture save. @returns Fulfilled completion. */
+      save: async () => undefined,
+    };
+    await expect(recoverDocument(adapter, "document-1")).resolves.toEqual({
+      id: "document-1",
+      recoveryGeneration: 2,
+      snapshot: snapshot(2),
     });
   });
   it("saves each changed generation and preserves unchanged recovery identity" /** Verifies idempotent and save outcomes. @returns Nothing; assertions validate calls. */, async function autosaves(): Promise<void> {

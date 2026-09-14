@@ -11,7 +11,13 @@ import {
   type WriterDocument,
 } from "./writer";
 import { setWriterParagraphListKind } from "../../uibase/shells/txtnum";
-import { loadWriterDocument, saveWriterDocument, type WriterSnapshotState } from "./writer-storage";
+import {
+  createWriterSnapshot,
+  loadWriterDocument,
+  restoreWriterSnapshot,
+  saveWriterDocument,
+  type WriterSnapshotState,
+} from "./writer-storage";
 
 /** Creates a serializable Writer fixture with a dirty text body. @returns Immutable Writer document fixture. */
 function createWriterFixture(): WriterDocument {
@@ -90,6 +96,27 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
 
     await expect(saveWriterDocument(adapter, writerDocument)).rejects.toBe(failure);
     expect(writerDocument.document).toMatchObject({ isModified: true, savedGeneration: null });
+  });
+
+  it("restores recovery payloads without acknowledging the primary medium" /** Verifies recovery and primary lifecycle checkpoints remain independent. @returns Nothing; assertions inspect restored metadata. */, function restoresRecoverySnapshot(): void {
+    const writerDocument = createWriterFixture();
+    const snapshot = createWriterSnapshot(writerDocument);
+    const recovered = restoreWriterSnapshot(snapshot, "recovery");
+
+    expect(recovered.document).toMatchObject({
+      contentGeneration: 1,
+      isModified: true,
+      recoveryGeneration: 1,
+      savedGeneration: null,
+    });
+    expect(
+      /** Restores a mismatched storage identity. @returns Invalid graph that never returns. */ () =>
+        restoreWriterSnapshot({ ...snapshot, id: "other" }, "recovery"),
+    ).toThrow("identity");
+    expect(
+      /** Restores a mismatched storage generation. @returns Invalid graph that never returns. */ () =>
+        restoreWriterSnapshot({ ...snapshot, version: 2 }, "recovery"),
+    ).toThrow("generation");
   });
 
   it("round-trips canonical list state" /** Verifies storage retains executable list state in the current schema. @returns A promise resolved after the snapshot is asserted. */, async function storesLists(): Promise<void> {

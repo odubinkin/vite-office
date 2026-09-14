@@ -48,6 +48,16 @@
       "capabilityIds": []
     },
     {
+      "path": "apps/office/src/framework/source/services/autorecovery.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "recovery",
+      "capabilityIds": [
+        "CAP-0114"
+      ]
+    },
+    {
       "path": "apps/office/src/framework/source/services/bootstrap.tsx",
       "classification": "local-infrastructure",
       "state": "active",

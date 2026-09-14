@@ -11,8 +11,10 @@ import {
   type SfxDispatcher,
   type SfxShell,
 } from "../../../../framework/source/dispatch/dispatchprovider";
+import type { AutoRecoveryEnvironment } from "../../../../framework/source/services/autorecovery";
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import type { DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
+import type { RecoveryStorageAdapter } from "../../../../svl/source/misc/recovery";
 import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipboard";
 import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
@@ -45,6 +47,10 @@ export interface WriterSessionServices {
   readonly selectFile: (accept: string) => Promise<File | undefined>;
   /** Optional local primary-medium adapter. */
   readonly storage?: DocumentStorageAdapter<WriterSnapshotState>;
+  /** Optional recovery-only durable history adapter. */
+  readonly recoveryStorage?: RecoveryStorageAdapter<WriterSnapshotState>;
+  /** Optional injected browser lifecycle boundary for application AutoRecovery. */
+  readonly recoveryEnvironment?: AutoRecoveryEnvironment;
 }
 
 /** DOM-adapted Cut arguments accepted by the unified command. */
@@ -229,7 +235,15 @@ export class SwView {
           suiteId: "writer",
           title: fallbackTitle,
         }),
-        { kind: "file", mediaType: SwDocShell.ODT_MEDIA_TYPE, name: file.name },
+        {
+          destinationKind: "none",
+          filterId: "writer8",
+          kind: "file",
+          mediaType: SwDocShell.ODT_MEDIA_TYPE,
+          name: file.name,
+          readOnly: true,
+          sourceKind: "blob",
+        },
       );
       this.wrtShell.DocumentReplaced();
       this.SetStorageStatus(`Opened ${file.name}.`);
@@ -246,7 +260,25 @@ export class SwView {
     try {
       const document = this.docShell.GetDoc();
       const filename = this.services.createDownloadFilename(document.document.title, ".odt");
-      this.services.downloadBytes(this.docShell.SaveAs(), SwDocShell.ODT_MEDIA_TYPE, filename);
+      this.docShell.Download(
+        {
+          destinationKind: "download",
+          downloadTarget: filename,
+          filterId: "writer8",
+          kind: "file",
+          mediaType: SwDocShell.ODT_MEDIA_TYPE,
+          name: filename,
+          readOnly: true,
+          sourceKind: "none",
+        },
+        /** Serializes and starts the browser download without acknowledging a primary save. @returns Nothing. */
+        () =>
+          this.services.downloadBytes(
+            this.docShell.SerializeOdt(),
+            SwDocShell.ODT_MEDIA_TYPE,
+            filename,
+          ),
+      );
       this.SetStorageStatus(`ODT download started: ${filename}`);
     } catch (error) {
       this.SetStorageStatus(`Could not save ODT: ${getErrorMessage(error)}`);
@@ -263,8 +295,34 @@ export class SwView {
     }
     this.SetStoragePending(true);
     try {
-      const saved = await saveWriterDocument(this.services.storage, this.docShell.GetDoc());
-      this.wrtShell.AcknowledgeSave(saved.snapshot.version);
+      const storage = this.services.storage;
+      const medium = this.docShell.GetMedium();
+      const persist =
+        /** Commits one complete Writer snapshot to browser-local primary storage. @param document - Shell-owned Writer graph. @returns Completion after IndexedDB commit. */
+        async (document: WriterDocument): Promise<void> => {
+          await saveWriterDocument(storage, document);
+        };
+      if (medium.kind === "browser-local" && medium.indexedDbKey === medium.documentId)
+        await this.docShell.Save(persist);
+      else
+        await this.docShell.SaveAs(
+          {
+            capabilities: {
+              canConfirmWrite: true,
+              canLock: true,
+              canRead: true,
+              canWrite: true,
+            },
+            destinationKind: "indexeddb",
+            indexedDbKey: this.docShell.GetDoc().document.id,
+            kind: "browser-local",
+            name: this.docShell.GetDoc().document.title,
+            origin: medium.origin,
+            readOnly: false,
+            sourceKind: medium.sourceKind,
+          },
+          persist,
+        );
       this.SetStorageStatus("Saved locally in this browser.");
     } catch {
       this.SetStorageStatus("Could not save locally.");
@@ -288,8 +346,15 @@ export class SwView {
       if (result.status === "missing") this.SetStorageStatus("No local saved copy exists.");
       else {
         this.docShell.ReplaceDocument(result.writerDocument, {
+          filterId: "writer-browser-snapshot",
+          indexedDbKey: result.writerDocument.document.id,
           kind: "browser-local",
-          name: result.writerDocument.document.id,
+          lastOperation: {
+            generation: result.writerDocument.document.contentGeneration,
+            operation: "open",
+            state: "succeeded",
+          },
+          name: result.writerDocument.document.title,
         });
         this.wrtShell.DocumentReplaced();
         this.SetStorageStatus("Loaded local saved copy.");
@@ -305,14 +370,29 @@ export class SwView {
   public ExportText(): void {
     try {
       const document = this.docShell.GetDoc();
-      this.services.downloadPlainText(
-        document.paragraphs
-          .map(
-            /** Projects one paragraph's visible text. @param paragraph - Writer paragraph. @returns Plain text. */
-            (paragraph) => paragraph.text,
-          )
-          .join("\n"),
-        `${document.document.title}.txt`,
+      const filename = `${document.document.title}.txt`;
+      this.docShell.Download(
+        {
+          destinationKind: "download",
+          downloadTarget: filename,
+          filterId: "Text",
+          kind: "file",
+          mediaType: "text/plain;charset=utf-8",
+          name: filename,
+          readOnly: true,
+          sourceKind: "none",
+        },
+        /** Starts a plain-text browser export without changing primary-medium state. @returns Nothing. */
+        () =>
+          this.services.downloadPlainText(
+            document.paragraphs
+              .map(
+                /** Projects one paragraph's visible text. @param paragraph - Writer paragraph. @returns Plain text. */
+                (paragraph) => paragraph.text,
+              )
+              .join("\n"),
+            filename,
+          ),
       );
       this.SetStorageStatus("Plain-text download started.");
     } catch {

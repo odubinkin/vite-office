@@ -1,14 +1,18 @@
 /** @fileoverview Verifies persistent Writer session ownership, shell dispatch, React subscription, and remount behavior. */
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
+import type { RecoveryStorageAdapter } from "../../../../svl/source/misc/recovery";
 import { createDownloadFilename } from "../../../../vcl/browser/browser-download";
 import { SwDoc } from "../../core/doc/doc";
+import type { WriterSnapshotState } from "../../core/doc/writer-storage";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../app/docsh";
-import { createWriterDocumentSession } from "../app/swmodule";
+import { createWriterBrowserSessionServices, createWriterDocumentSession } from "../app/swmodule";
 import { WriterWorkbench } from "./view";
 import { SwView, type WriterSessionServices } from "./view-session";
 
@@ -36,6 +40,33 @@ function createServices(): WriterSessionServices {
         undefined,
     ),
   };
+}
+
+/** In-memory retained recovery history shared by simulated reload sessions. */
+class SessionRecoveryStorage implements RecoveryStorageAdapter<WriterSnapshotState> {
+  /** Newest-first recovery histories. */
+  readonly histories = new Map<string, DocumentSnapshot<WriterSnapshotState>[]>();
+
+  /** Loads newest recovery record. @param id - Document identity. @returns Latest record. */
+  async load(id: string): Promise<DocumentSnapshot<WriterSnapshotState> | undefined> {
+    return this.histories.get(id)?.[0];
+  }
+
+  /** Saves one complete generation. @param snapshot - Recovery record. @returns Fulfilled completion. */
+  async save(snapshot: DocumentSnapshot<WriterSnapshotState>): Promise<void> {
+    const current = this.histories.get(snapshot.id) ?? [];
+    this.histories.set(snapshot.id, [snapshot, ...current]);
+  }
+
+  /** Loads newest-first recovery history. @param id - Document identity. @returns Retained records. */
+  async loadGenerations(id: string): Promise<readonly DocumentSnapshot<WriterSnapshotState>[]> {
+    return this.histories.get(id) ?? [];
+  }
+
+  /** Deletes recovery history. @param id - Document identity. @returns Fulfilled completion. */
+  async deleteGenerations(id: string): Promise<void> {
+    this.histories.delete(id);
+  }
 }
 
 /** Replaces the visible browser-owned editable paragraph text. @param text - Next paragraph text. @returns Nothing. */
@@ -216,7 +247,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
   it("opens and saves ODT through the existing document session" /** Verifies file lifecycle replaces the document graph without replacing frame, view, document shell, or Writer shell. @returns Completion after ODT import. */, async function preservesSessionAcrossOdtLifecycle(): Promise<void> {
     const services = createServices();
     const session = createWriterDocumentSession(services);
-    const sourceBytes = session.docShell.SaveAs();
+    const sourceBytes = session.docShell.SerializeOdt();
     vi.mocked(services.selectFile).mockResolvedValue(
       new File([sourceBytes as BlobPart], "persistent.odt", {
         type: SwDocShell.ODT_MEDIA_TYPE,
@@ -235,6 +266,130 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       "Untitled Writer Document.odt",
     );
     session.Close();
+  });
+
+  it("keeps downloads independent from the browser-local primary medium" /** Verifies UI commands use Save As for the first confirmed local write, Save thereafter, and never acknowledge downloads. @returns Completion after local persistence. */, async function separatesUiMediumOperations(): Promise<void> {
+    let stored: DocumentSnapshot<WriterSnapshotState> | undefined;
+    const storage: DocumentStorageAdapter<WriterSnapshotState> = {
+      /** Loads the current matching fixture snapshot. @param id - Requested identity. @returns Matching snapshot or undefined. */
+      load: async (id) => (stored?.id === id ? stored : undefined),
+      /** Retains one complete primary snapshot. @param snapshot - Persisted snapshot. @returns Fulfilled completion. */
+      save: async (snapshot) => {
+        stored = snapshot;
+      },
+    };
+    const services: WriterSessionServices = { ...createServices(), storage };
+    const session = createWriterDocumentSession(services);
+    const paragraphId = session.view.GetWrtShell().GetActiveParagraph().id;
+    session.view.GetWrtShell().InsertText(paragraphId, "dirty", 0, "insertText");
+    const dirtyGeneration = session.docShell.GetDoc().document.contentGeneration;
+
+    session.view.SaveOdt();
+    expect(session.docShell.GetDoc().document).toMatchObject({
+      isModified: true,
+      savedGeneration: null,
+    });
+    expect(session.docShell.GetMedium()).toMatchObject({
+      kind: "untitled",
+      lastOperation: { operation: "download", state: "unconfirmed" },
+    });
+
+    await session.view.SaveLocal();
+    expect(stored?.version).toBe(dirtyGeneration);
+    expect(session.docShell.GetDoc().document).toMatchObject({
+      isModified: false,
+      savedGeneration: dirtyGeneration,
+    });
+    expect(session.docShell.GetMedium()).toMatchObject({
+      indexedDbKey: "writer-workbench",
+      kind: "browser-local",
+      lastOperation: { operation: "save-as", state: "succeeded" },
+    });
+
+    session.view.GetWrtShell().InsertText(paragraphId, "!", 5, "insertText");
+    const nextGeneration = session.docShell.GetDoc().document.contentGeneration;
+    session.view.ExportText();
+    expect(session.docShell.GetDoc().document).toMatchObject({
+      isModified: true,
+      savedGeneration: dirtyGeneration,
+    });
+    await session.view.SaveLocal();
+    expect(stored?.version).toBe(nextGeneration);
+    expect(session.docShell.GetMedium().lastOperation).toMatchObject({
+      operation: "save",
+      state: "succeeded",
+    });
+    session.Close();
+  });
+
+  it("offers and restores the latest intact recovery snapshot after session reload" /** Verifies application-owned recovery survives shell/view recreation and remains caller-selected. @returns Completion after simulated crash reload. */, async function restoresRecoveryAfterReload(): Promise<void> {
+    const recoveryStorage = new SessionRecoveryStorage();
+    const first = createWriterDocumentSession({
+      ...createServices(),
+      recoveryStorage,
+    });
+    const paragraphId = first.view.GetWrtShell().GetActiveParagraph().id;
+    first.view.GetWrtShell().InsertText(paragraphId, "Recovered text", 0, "insertText");
+    await expect(first.autoRecovery?.SaveDocument("writer-workbench")).resolves.toMatchObject({
+      status: "saved",
+    });
+    first.Close();
+
+    const reloaded = createWriterDocumentSession({
+      ...createServices(),
+      recoveryStorage,
+    });
+    await expect(reloaded.GetRecoveryCandidate()).resolves.toMatchObject({
+      id: "writer-workbench",
+      latestGeneration: 1,
+    });
+    await expect(reloaded.RestoreRecovery()).resolves.toMatchObject({
+      generation: 1,
+      status: "restored",
+    });
+    expect(reloaded.docShell.GetDoc().paragraphs[0]?.text).toBe("Recovered text");
+    expect(reloaded.docShell.GetDoc().document).toMatchObject({
+      isModified: true,
+      recoveryGeneration: 1,
+      savedGeneration: null,
+    });
+    await reloaded.DiscardRecovery();
+    await expect(reloaded.GetRecoveryCandidate()).resolves.toBeUndefined();
+    await expect(reloaded.RestoreRecovery()).resolves.toEqual({
+      id: "writer-workbench",
+      status: "missing",
+    });
+    reloaded.Close();
+  });
+
+  it("injects browser lifecycle scheduling and a fallback tab identity" /** Verifies the production composition root owns browser-only timers/listeners and can close them deterministically. @returns Nothing after adapter cleanup. */, function createsBrowserRecoveryEnvironment(): void {
+    vi.stubGlobal("indexedDB", new IDBFactory());
+    vi.stubGlobal("crypto", {});
+    try {
+      const services = createWriterBrowserSessionServices();
+      expect(services.recoveryEnvironment?.isHidden()).toBe(false);
+      const session = createWriterDocumentSession(services);
+      expect(session.autoRecovery).toBeDefined();
+      session.Close();
+
+      const environment = services.recoveryEnvironment;
+      if (environment === undefined) throw new Error("Recovery environment was not created.");
+      const removePageHide = environment.onPageHide(
+        /** Handles a fixture pagehide event. @returns Nothing. */ () => undefined,
+      );
+      const removeVisibility = environment.onVisibilityChange(
+        /** Handles a fixture visibility event. @returns Nothing. */ () => undefined,
+      );
+      const timer = environment.setInterval(
+        /** Handles a fixture interval. @returns Nothing. */ () => undefined,
+        10_000,
+      );
+      environment.clearInterval(timer);
+      removePageHide();
+      removeVisibility();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it("retains explicit construction order before frame attachment" /** Verifies pre-frame invalidation remains local and dispatch requires an attached frame. @returns Nothing. */, function enforcesFrameConstructionOrder(): void {

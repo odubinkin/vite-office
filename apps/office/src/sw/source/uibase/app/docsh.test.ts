@@ -18,8 +18,16 @@ describe("SwDocShell" /** Groups the bounded document-shell lifecycle. @returns 
     const source = insertWriterText(createWriterDocument(metadata(), "p-1"), "p-1", 0, "ODT body");
     const shell = new SwDocShell(source);
     expect(shell.GetDoc()).toBe(source);
-    expect(shell.GetMedium()).toEqual({ kind: "untitled", name: "Shell document" });
-    const bytes = shell.SaveAs();
+    expect(shell.GetMedium()).toMatchObject({
+      destinationKind: "none",
+      documentId: "shell-document",
+      kind: "untitled",
+      name: "Shell document",
+      origin: "new",
+      readOnly: false,
+      sourceKind: "none",
+    });
+    const bytes = shell.SerializeOdt();
     expect(new ZipFile(bytes).getEntryNames()).toContain("content.xml");
 
     const empty = shell.InitNew(metadata("New document", "new-document"), "new-p-1");
@@ -33,10 +41,16 @@ describe("SwDocShell" /** Groups the bounded document-shell lifecycle. @returns 
       title: "Shell document",
     });
     expect(loaded.paragraphs[0]?.text).toBe("ODT body");
-    expect(shell.GetMedium()).toEqual({
+    expect(shell.GetMedium()).toMatchObject({
+      destinationKind: "none",
+      documentId: "opened-document",
+      filterId: "writer8",
       kind: "file",
       mediaType: SwDocShell.ODT_MEDIA_TYPE,
       name: "Fallback",
+      origin: "external",
+      readOnly: true,
+      sourceKind: "file",
     });
   });
 
@@ -45,6 +59,128 @@ describe("SwDocShell" /** Groups the bounded document-shell lifecycle. @returns 
     const shell = new SwDocShell(active);
     await expect(shell.Load(new Uint8Array([1, 2, 3]), metadata("Broken"))).rejects.toThrow();
     expect(shell.GetDoc()).toBe(active);
+  });
+
+  it("separates Save, Save As, Export, Download, and recovery acknowledgement" /** Verifies LibreOffice-like primary-medium adoption and non-primary store semantics. @returns Completion after asynchronous medium operations. */, async function separatesMediumOperations(): Promise<void> {
+    const dirty = insertWriterText(createWriterDocument(metadata(), "p-1"), "p-1", 0, "dirty");
+    const shell = new SwDocShell(dirty);
+    const initialGeneration = dirty.document.contentGeneration;
+    await expect(
+      shell.Save(
+        /** Represents an unreachable untitled-medium write. @returns Fulfilled completion. */ async () =>
+          undefined,
+      ),
+    ).rejects.toThrow("Save As");
+    await expect(
+      shell.SaveAs(
+        { kind: "file", name: "download-only.odt" },
+        /** Represents an unreachable download-only Save As. @returns Fulfilled completion. */ async () =>
+          undefined,
+      ),
+    ).rejects.toThrow("confirmed writable");
+
+    const primaryWrites: number[] = [];
+    await shell.SaveAs(
+      { indexedDbKey: "primary-key", kind: "browser-local", name: "Primary" },
+      /** Records a confirmed browser-local write. @param document - Persisted Writer graph. @param medium - Candidate primary medium. @returns Fulfilled completion. */
+      async (document, medium) => {
+        primaryWrites.push(document.document.contentGeneration);
+        expect(medium.indexedDbKey).toBe("primary-key");
+      },
+    );
+    expect(primaryWrites).toEqual([initialGeneration]);
+    expect(shell.GetDoc().document).toMatchObject({
+      isModified: false,
+      recoveryGeneration: null,
+      savedGeneration: initialGeneration,
+    });
+    expect(shell.GetMedium()).toMatchObject({
+      indexedDbKey: "primary-key",
+      kind: "browser-local",
+      lastOperation: { operation: "save-as", state: "succeeded" },
+    });
+
+    const writerShell = new SwWrtShell(shell);
+    writerShell.InsertText("p-1", "!", 5, "insertText");
+    const changedGeneration = shell.GetDoc().document.contentGeneration;
+    const failure = new Error("quota exceeded");
+    await expect(
+      shell.Save(
+        /** Rejects a primary write. @returns A promise rejected with the fixture failure. */ async () => {
+          throw failure;
+        },
+      ),
+    ).rejects.toBe(failure);
+    expect(shell.GetDoc().document).toMatchObject({
+      contentGeneration: changedGeneration,
+      isModified: true,
+      savedGeneration: initialGeneration,
+    });
+    expect(shell.GetMedium().lastOperation).toMatchObject({
+      generation: changedGeneration,
+      operation: "save",
+      state: "failed",
+    });
+
+    await shell.Export(
+      {
+        destinationKind: "download",
+        kind: "file",
+        name: "copy.odt",
+        readOnly: true,
+        sourceKind: "none",
+      },
+      /** Represents a completed export copy. @returns Nothing. */ () => undefined,
+    );
+    expect(shell.GetMedium()).toMatchObject({
+      indexedDbKey: "primary-key",
+      kind: "browser-local",
+      lastOperation: { operation: "export", state: "succeeded" },
+    });
+    expect(shell.GetDoc().document.isModified).toBe(true);
+    await expect(
+      shell.Export(
+        { destinationKind: "download", kind: "file", name: "failed.odt" },
+        /** Rejects an export copy. @returns A promise rejected with the fixture failure. */ async () => {
+          throw failure;
+        },
+      ),
+    ).rejects.toBe(failure);
+    expect(shell.GetMedium()).toMatchObject({
+      indexedDbKey: "primary-key",
+      kind: "browser-local",
+      lastOperation: { operation: "export", state: "failed" },
+    });
+
+    shell.Download(
+      {
+        destinationKind: "download",
+        downloadTarget: "copy.odt",
+        kind: "file",
+        name: "copy.odt",
+        readOnly: true,
+        sourceKind: "none",
+      },
+      /** Represents a successful click dispatch with unknown transfer completion. @returns Nothing. */ () =>
+        undefined,
+    );
+    expect(shell.GetMedium()).toMatchObject({
+      indexedDbKey: "primary-key",
+      kind: "browser-local",
+      lastOperation: { operation: "download", state: "unconfirmed" },
+    });
+    expect(shell.GetDoc().document.savedGeneration).toBe(initialGeneration);
+
+    shell.RecoverySaveStarted(changedGeneration);
+    shell.RecoverySaveFailed(changedGeneration, failure);
+    expect(shell.GetDoc().document.recoveryGeneration).toBeNull();
+    shell.AcknowledgeRecoverySave(changedGeneration);
+    expect(shell.GetDoc().document).toMatchObject({
+      isModified: true,
+      recoveryGeneration: changedGeneration,
+      savedGeneration: initialGeneration,
+    });
+    expect(shell.AcknowledgeRecoverySave(changedGeneration)).toBe(false);
   });
 
   it("coordinates history and document invalidation for one persistent shell" /** Verifies mutation ownership, no-op transitions, history replacement, subscription cleanup, and medium replacement. @returns Nothing. */, function coordinatesPersistentHistory(): void {
