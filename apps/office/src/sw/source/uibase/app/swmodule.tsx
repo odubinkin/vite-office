@@ -4,6 +4,7 @@
  */
 
 import { OfficeFrame } from "../../../../framework/source/dispatch/dispatchprovider";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import {
   AutoRecovery,
   type AutoRecoveryCandidate,
@@ -82,8 +83,14 @@ export function createWriterDocumentSession(
   services: WriterSessionServices = createWriterBrowserSessionServices(),
   odtFilter: OdtFilterService = createInlineOdtFilterService(),
 ): WriterDocumentSession {
+  const documentState = createDocument({
+    id: "writer-workbench",
+    suiteId: "writer",
+    title: "Untitled Writer Document",
+  });
   const docShell = new SwDocShell(
     createWriterWorkbenchDocument(),
+    documentState,
     { kind: "untitled", name: "Untitled Writer Document" },
     odtFilter,
   );
@@ -124,7 +131,6 @@ export function createWriterDocumentSession(
       /** Restores a caller-selected recovery candidate and reconciles the persistent Writer shell. @returns Explicit recovery result or undefined when unavailable. */
       async function restoreRecovery(): Promise<AutoRecoveryRestoreResult | undefined> {
         const result = await autoRecovery?.RestoreDocument(docShell.GetRecoveryIdentity());
-        if (result?.status === "restored") view.GetWrtShell().DocumentReplaced();
         return result;
       },
     docShell,

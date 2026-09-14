@@ -1,6 +1,6 @@
 /** @fileoverview Implements bounded Writer delete, replace, and join undo payloads from pinned undel.cxx. */
 
-import type { SfxUndoAction } from "../../../../sfx2/source/doc/docundomanager";
+import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SwTextNode, type SwTextNodeSnapshot, type WriterTextRun } from "../txtnode/ndtxt";
 import {
   CopyUndoRuns,
@@ -153,13 +153,12 @@ export class SwUndoJoinParagraphs extends SwUndo {
     const preceding = GetUndoTextNode(document, this.precedingParagraphId);
     const provisional = preceding.SplitContent(this.joinOffset, this.removedParagraph.id);
     document.nodes.insertTextNodeAfter(preceding, provisional);
-    document.nodes.removeTextNode(provisional);
     const restored = SwTextNode.fromSnapshot(
       document.nodes,
       preceding.StartOfSectionNode(),
       this.removedParagraph,
     );
-    document.nodes.insertTextNodeAfter(preceding, restored);
+    document.nodes.replaceTextNode(provisional, restored);
   }
 
   /** Joins the trailing node into its predecessor again. @param context - Active Writer context. @returns Nothing. */

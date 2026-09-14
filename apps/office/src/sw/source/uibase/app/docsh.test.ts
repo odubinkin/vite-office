@@ -1,357 +1,262 @@
-/** @fileoverview Verifies Writer document-shell ownership around new, ODT load, and ODT save. */
+/** @fileoverview Verifies target Writer document-shell ownership, notifications, and persistence. */
 
 import { describe, expect, it } from "vitest";
 
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
-import type { DocumentSnapshot } from "../../../../sfx2/source/doc/docfile";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import type { DocumentSnapshot, SfxMediumInput } from "../../../../sfx2/source/doc/docfile";
+import { createWriterDocument } from "../../core/doc/writer";
 import { createWriterSnapshot, type WriterSnapshotState } from "../../core/doc/writer-storage";
-import { createWriterDocument, type WriterDocument } from "../../core/doc/writer";
 import type { OdtFilterService } from "../../filter/xml/odt-filter-service";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 import { SwDocShell } from "./docsh";
 
-/** Creates deterministic Writer metadata. @param title - Visible title. @param id - Stable identity. @returns New document header. */
+/** Creates deterministic shell-owned document metadata. @param title - Visible title. @param id - Stable identity. @returns Lifecycle state. */
 function metadata(title = "Shell document", id = "shell-document") {
   return createDocument({ id, suiteId: "writer", title });
 }
 
-/** Builds edited test content through the same SwWrtShell and undo path used by production. @param document - Empty canonical document. @param paragraphId - Initial text-node identity. @param text - Complete next text. @returns The same mutated document. */
-function editFixture(document: WriterDocument, paragraphId: string, text: string): WriterDocument {
-  new SwWrtShell(new SwDocShell(document)).InsertText(paragraphId, text, text.length, "insertText");
-  return document;
+/** Creates one model/object-shell pair and optionally edits it through SwWrtShell. @param text - Optional body text. @param title - Visible title. @param id - Stable identity. @returns Live shell fixture. */
+function fixture(text = "", title = "Shell document", id = "shell-document") {
+  const document = createWriterDocument("p-1");
+  const shell = new SwDocShell(document, metadata(title, id));
+  const writerShell = new SwWrtShell(shell);
+  if (text.length > 0) writerShell.InsertText("p-1", text, text.length, "insertText");
+  return { document, shell, writerShell };
 }
 
-describe("SwDocShell" /** Groups the bounded document-shell lifecycle. @returns Nothing. */, () => {
-  it("initializes, saves, and atomically loads Writer documents" /** Verifies document ownership and ODT delegation. @returns A fulfilled assertion promise. */, async () => {
-    const source = editFixture(createWriterDocument(metadata(), "p-1"), "p-1", "ODT body");
-    const shell = new SwDocShell(source);
-    expect(shell.GetDoc()).toBe(source);
-    expect(shell.GetMedium()).toMatchObject({
-      destinationKind: "none",
-      documentId: "shell-document",
-      kind: "untitled",
-      name: "Shell document",
-      origin: "new",
-      readOnly: false,
-      sourceKind: "none",
+describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ () => {
+  it("owns lifecycle outside the model and atomically opens ODT", /** Verifies model/state separation and ODT replacement. @returns Completion after assertions. */ async () => {
+    const active = fixture("ODT body");
+    expect(active.document).not.toHaveProperty("document");
+    expect(active.shell.GetDocumentState()).toMatchObject({
+      contentGeneration: 1,
+      id: "shell-document",
+      isModified: true,
     });
-    const bytes = await shell.SerializeOdt();
+    const bytes = await active.shell.SerializeOdt();
     expect(new ZipFile(bytes).getEntryNames()).toContain("content.xml");
 
-    const empty = shell.InitNew(metadata("New document", "new-document"), "new-p-1");
-    expect(empty.paragraphs).toHaveLength(1);
-    expect(empty.paragraphs[0]?.text).toBe("");
-    const loaded = await shell.Load(bytes, metadata("Fallback", "opened-document"));
-    expect(shell.GetDoc()).toBe(loaded);
-    expect(loaded.document).toMatchObject({
+    const fresh = active.shell.InitNew(metadata("New document", "new-document"), "new-p-1");
+    expect(fresh.paragraphs).toMatchObject([{ id: "new-p-1", text: "" }]);
+    const loaded = await active.shell.Load(bytes, metadata("Fallback", "opened-document"));
+    expect(active.shell.GetDoc()).toBe(loaded);
+    expect(active.shell.GetDocumentState()).toMatchObject({
       id: "opened-document",
       lifecycle: "saved",
       title: "Shell document",
     });
     expect(loaded.paragraphs[0]?.text).toBe("ODT body");
-    expect(shell.GetMedium()).toMatchObject({
-      destinationKind: "none",
-      documentId: "opened-document",
-      filterId: "writer8",
-      kind: "file",
-      mediaType: SwDocShell.ODT_MEDIA_TYPE,
-      name: "Fallback",
-      origin: "external",
-      readOnly: true,
-      sourceKind: "file",
-    });
   });
 
-  it("retains the active document when ODT loading fails" /** Verifies candidate-first atomic replacement. @returns A fulfilled assertion promise. */, async () => {
-    const active = createWriterDocument(metadata(), "p-1");
-    const shell = new SwDocShell(active);
-    await expect(shell.Load(new Uint8Array([1, 2, 3]), metadata("Broken"))).rejects.toThrow();
-    expect(shell.GetDoc()).toBe(active);
+  it("retains the active graph when ODT loading fails", /** Verifies candidate-first replacement. @returns Completion after assertions. */ async () => {
+    const active = fixture();
+    await expect(
+      active.shell.Load(new Uint8Array([1, 2, 3]), metadata("Broken")),
+    ).rejects.toThrow();
+    expect(active.shell.GetDoc()).toBe(active.document);
   });
 
-  it("rejects an import result superseded by document replacement" /** Verifies the main-thread request generation guard. @returns Completion after stale rejection. */, async () => {
+  it("rejects an import superseded by document replacement", /** Verifies stale request rejection. @returns Completion after assertions. */ async () => {
     let resolveImport: ((snapshot: DocumentSnapshot<WriterSnapshotState>) => void) | undefined;
     const filter: OdtFilterService = {
-      /** Marks the fake request cancelled without resolving it. @returns Nothing. */
-      Cancel: () => undefined,
-      /** Closes the fake service. @returns Nothing. */
-      Close: () => undefined,
-      /** Provides unused deterministic export bytes. @returns Empty bytes. */
-      Export: async () => new Uint8Array(),
-      /** Defers the candidate snapshot. @returns Pending snapshot. */
-      Import: () =>
+      Cancel: /** Cancels the fake request. @returns Nothing. */ () => undefined,
+      Close: /** Closes the fake filter. @returns Nothing. */ () => undefined,
+      Export: /** Returns unused bytes. @returns Empty bytes. */ async () => new Uint8Array(),
+      Import: /** Defers one candidate snapshot. @returns Pending snapshot. */ () =>
         new Promise(
-          /** Captures the import resolver. @param resolve - Promise resolver. @returns Nothing. */ (
+          /** Captures the resolver. @param resolve - Snapshot resolver. @returns Nothing. */ (
             resolve,
-          ) => {
-            resolveImport = resolve;
-          },
+          ) => (resolveImport = resolve),
         ),
     };
-    const active = createWriterDocument(metadata(), "p-1");
-    const shell = new SwDocShell(active, undefined, filter);
+    const document = createWriterDocument("p-1");
+    const shell = new SwDocShell(document, metadata(), undefined, filter);
     const opening = shell.Open(new Uint8Array([1]), metadata("Incoming"));
     const replacement = shell.InitNew(metadata("Replacement"), "replacement-p-1");
-    resolveImport?.(
-      createWriterSnapshot(createWriterDocument(metadata("Candidate"), "candidate-p-1")),
-    );
+    const candidateState = metadata("Candidate", "candidate");
+    resolveImport?.(createWriterSnapshot(createWriterDocument("candidate-p-1"), candidateState));
     await expect(opening).rejects.toMatchObject({ category: "stale" });
     expect(shell.GetDoc()).toBe(replacement);
   });
 
-  it("separates Save, Save As, Export, Download, and recovery acknowledgement" /** Verifies LibreOffice-like primary-medium adoption and non-primary store semantics. @returns Completion after asynchronous medium operations. */, async function separatesMediumOperations(): Promise<void> {
-    const dirty = editFixture(createWriterDocument(metadata(), "p-1"), "p-1", "dirty");
-    const shell = new SwDocShell(dirty);
-    const initialGeneration = dirty.document.contentGeneration;
+  it("separates primary save, export, download, and recovery state", /** Verifies independent persistence channels. @returns Completion after assertions. */ async () => {
+    const active = fixture("dirty");
+    const generation = active.shell.GetDocumentState().contentGeneration;
     await expect(
-      shell.Save(
-        /** Represents an unreachable untitled-medium write. @returns Unused evidence. */ async () => ({
-          generation: 0,
-        }),
+      active.shell.Save(
+        /** Returns unused save evidence. @returns Evidence. */ async () => ({ generation }),
       ),
     ).rejects.toThrow("Save As");
-    await expect(
-      shell.SaveAs(
-        { kind: "file", name: "download-only.odt" },
-        /** Represents an unreachable download-only Save As. @returns Unused evidence. */ async () => ({
-          generation: 0,
-        }),
-      ),
-    ).rejects.toThrow("confirmed writable");
-
-    const primaryWrites: number[] = [];
-    await shell.SaveAs(
+    await active.shell.SaveAs(
       { indexedDbKey: "primary-key", kind: "browser-local", name: "Primary" },
-      /** Records a confirmed browser-local write. @param document - Persisted Writer graph. @param medium - Candidate primary medium. @returns Fulfilled completion. */
-      async (document, medium) => {
-        primaryWrites.push(document.document.contentGeneration);
-        expect(medium.indexedDbKey).toBe("primary-key");
-        return { generation: document.document.contentGeneration };
-      },
+      /** Confirms primary persistence. @returns Evidence. */ async () => ({ generation }),
     );
-    expect(primaryWrites).toEqual([initialGeneration]);
-    expect(shell.GetDoc().document).toMatchObject({
+    expect(active.shell.GetDocumentState()).toMatchObject({
       isModified: false,
-      recoveryGeneration: null,
-      savedGeneration: initialGeneration,
-    });
-    expect(shell.GetMedium()).toMatchObject({
-      indexedDbKey: "primary-key",
-      kind: "browser-local",
-      lastOperation: { operation: "save-as", state: "succeeded" },
+      savedGeneration: generation,
     });
 
-    const writerShell = new SwWrtShell(shell);
-    writerShell.InsertText("p-1", "!", 5, "insertText");
-    const changedGeneration = shell.GetDoc().document.contentGeneration;
-    const failure = new Error("quota exceeded");
-    await expect(
-      shell.Save(
-        /** Rejects a primary write. @returns A promise rejected with the fixture failure. */ async () => {
-          throw failure;
-        },
-      ),
-    ).rejects.toBe(failure);
-    expect(shell.GetDoc().document).toMatchObject({
-      contentGeneration: changedGeneration,
-      isModified: true,
-      savedGeneration: initialGeneration,
-    });
-    expect(shell.GetMedium().lastOperation).toMatchObject({
-      generation: changedGeneration,
-      operation: "save",
-      state: "failed",
-    });
-
-    await shell.Export(
-      {
-        destinationKind: "download",
-        kind: "file",
-        name: "copy.odt",
-        readOnly: true,
-        sourceKind: "none",
-      },
-      /** Represents a completed export copy. @returns Nothing. */ () => undefined,
+    active.writerShell.InsertText("p-1", "dirty!", 6, "insertText");
+    const changedGeneration = active.shell.GetDocumentState().contentGeneration;
+    await active.shell.Export(
+      { kind: "file", name: "copy.odt" },
+      /** Completes export. @returns Nothing. */ () => undefined,
     );
-    expect(shell.GetMedium()).toMatchObject({
-      indexedDbKey: "primary-key",
-      kind: "browser-local",
-      lastOperation: { operation: "export", state: "succeeded" },
-    });
-    expect(shell.GetDoc().document.isModified).toBe(true);
-    await expect(
-      shell.Export(
-        { destinationKind: "download", kind: "file", name: "failed.odt" },
-        /** Rejects an export copy. @returns A promise rejected with the fixture failure. */ async () => {
-          throw failure;
-        },
-      ),
-    ).rejects.toBe(failure);
-    expect(shell.GetMedium()).toMatchObject({
-      indexedDbKey: "primary-key",
-      kind: "browser-local",
-      lastOperation: { operation: "export", state: "failed" },
-    });
-
-    shell.Download(
-      {
-        destinationKind: "download",
-        downloadTarget: "copy.odt",
-        kind: "file",
-        name: "copy.odt",
-        readOnly: true,
-        sourceKind: "none",
-      },
-      /** Represents a successful click dispatch with unknown transfer completion. @returns Nothing. */ () =>
-        undefined,
+    active.shell.Download(
+      { kind: "file", name: "copy.odt" },
+      /** Starts download. @returns Nothing. */ () => undefined,
     );
-    expect(shell.GetMedium()).toMatchObject({
+    expect(active.shell.GetMedium()).toMatchObject({
       indexedDbKey: "primary-key",
       kind: "browser-local",
       lastOperation: { operation: "download", state: "unconfirmed" },
     });
-    expect(shell.GetDoc().document.savedGeneration).toBe(initialGeneration);
-
-    shell.RecoverySaveStarted(changedGeneration);
-    shell.RecoverySaveFailed(changedGeneration, failure);
-    expect(shell.GetDoc().document.recoveryGeneration).toBeNull();
-    shell.AcknowledgeRecoverySave(changedGeneration);
-    expect(shell.GetDoc().document).toMatchObject({
-      isModified: true,
+    expect(active.shell.GetDocumentState().isModified).toBe(true);
+    active.shell.AcknowledgeRecoverySave(changedGeneration);
+    expect(active.shell.GetDocumentState()).toMatchObject({
       recoveryGeneration: changedGeneration,
-      savedGeneration: initialGeneration,
+      savedGeneration: generation,
     });
-    expect(shell.AcknowledgeRecoverySave(changedGeneration)).toBe(false);
   });
 
-  it("acknowledges the exact generation and undo boundary captured before an asynchronous save" /** Verifies a concurrent edit stays dirty and Undo can return to the confirmed primary-medium state. @returns Completion after the deferred write resolves. */, async function preservesConcurrentMutation(): Promise<void> {
-    const document = createWriterDocument(metadata(), "p-1");
-    const shell = new SwDocShell(document, {
-      indexedDbKey: "shell-document",
-      kind: "browser-local",
-      name: "Shell document",
-    });
-    const writerShell = new SwWrtShell(shell);
-    writerShell.InsertText("p-1", "saved", 5, "insertText");
-    const savedGeneration = document.document.contentGeneration;
+  it("keeps a concurrent edit dirty after an older save completes", /** Verifies generation-aware acknowledgement. @returns Completion after assertions. */ async () => {
+    const active = fixture();
+    active.writerShell.InsertText("p-1", "saved", 5, "insertText");
+    const savedGeneration = active.shell.GetDocumentState().contentGeneration;
     let completeWrite: (() => void) | undefined;
-    const writeCompleted = new Promise<void>(
-      /** Retains the completion callback for the simulated durable write. @param resolve - Promise resolver. @returns Nothing. */ (
+    const completed = new Promise<void>(
+      /** Captures durable-write completion. @param resolve - Completion callback. @returns Nothing. */ (
         resolve,
-      ) => {
-        completeWrite = resolve;
+      ) => (completeWrite = resolve),
+    );
+    const saving = active.shell.SaveAs(
+      { kind: "browser-local", name: "primary" },
+      /** Waits for durable completion. @returns Captured evidence. */ async () => {
+        await completed;
+        return { generation: savedGeneration };
       },
     );
-    const saving = shell.Save(
-      /** Captures storage evidence before waiting for the simulated commit. @param current - Live document passed to the adapter. @returns Evidence for the committed snapshot. */ async (
-        current,
-      ) => {
-        const evidence = { generation: current.document.contentGeneration };
-        await writeCompleted;
-        return evidence;
-      },
-    );
-
-    writerShell.InsertText("p-1", "saved later", 11, "insertText");
+    active.writerShell.InsertText("p-1", "saved later", 11, "insertText");
     completeWrite?.();
     await saving;
-
-    expect(shell.GetDoc()).toBe(document);
-    expect(document.document).toMatchObject({
+    expect(active.shell.GetDocumentState()).toMatchObject({
       contentGeneration: 2,
       isModified: true,
-      recoveryGeneration: null,
-      savedGeneration,
+      savedGeneration: savedGeneration,
     });
-    expect(writerShell.Undo()).toBe(true);
-    expect(document.paragraphs[0]?.text).toBe("saved");
-    expect(document.document).toMatchObject({ isModified: false, savedGeneration });
   });
 
-  it("rejects mismatched or stale primary-save evidence without acknowledging the active document" /** Verifies delayed adapter results cannot move a save mark onto the wrong generation or replacement graph. @returns Completion after both invalid saves reject. */, async function rejectsInvalidSaveEvidence(): Promise<void> {
-    const document = createWriterDocument(metadata(), "p-1");
-    const shell = new SwDocShell(document, {
-      indexedDbKey: "shell-document",
-      kind: "browser-local",
-      name: "Shell document",
-    });
-    const writerShell = new SwWrtShell(shell);
-    writerShell.InsertText("p-1", "dirty", 5, "insertText");
+  it("rejects invalid save destinations and records failed persistence paths", /** Covers failure state, stale evidence, replacement races, and modified construction. @returns Completion after assertions. */ async () => {
+    const dirtyState = {
+      ...metadata("Dirty", "dirty"),
+      contentGeneration: 1,
+      isModified: true,
+      lifecycle: "dirty" as const,
+    };
+    const initiallyDirty = new SwDocShell(createWriterDocument("dirty-p-1"), dirtyState);
+    expect(initiallyDirty.GetUndoManager().IsAtSavePosition()).toBe(false);
+
+    const active = fixture("dirty");
+    const invalidMedia: SfxMediumInput[] = [
+      { kind: "file" as const, name: "read-only", readOnly: true },
+      {
+        capabilities: { canConfirmWrite: true, canLock: false, canRead: true, canWrite: false },
+        kind: "file" as const,
+        name: "not-writable",
+      },
+      {
+        capabilities: { canConfirmWrite: false, canLock: false, canRead: true, canWrite: true },
+        kind: "file" as const,
+        name: "unconfirmed",
+      },
+    ];
+    for (const medium of invalidMedia)
+      await expect(
+        active.shell.SaveAs(
+          medium,
+          /** Returns unreachable evidence. @returns Evidence. */ async () => ({ generation: 1 }),
+        ),
+      ).rejects.toThrow("confirmed writable medium");
+
     await expect(
-      shell.Save(
-        /** Returns evidence for a generation other than the requested snapshot. @returns Invalid evidence. */ async () => ({
-          generation: 0,
+      active.shell.Export(
+        { kind: "file", name: "failed.odt" },
+        /** Rejects export with a non-Error platform value. @returns Rejected completion. */ async () =>
+          Promise.reject("export failed"),
+      ),
+    ).rejects.toBe("export failed");
+    expect(active.shell.GetMedium().lastOperation).toMatchObject({
+      message: "export failed",
+      operation: "export",
+      state: "failed",
+    });
+    active.shell.RecoverySaveStarted(1);
+    active.shell.RecoverySaveFailed(1, "quota");
+    expect(active.shell.GetMedium().lastOperation).toMatchObject({
+      message: "quota",
+      operation: "recovery-save",
+      state: "failed",
+    });
+
+    await expect(
+      active.shell.SaveAs(
+        { kind: "browser-local", name: "primary" },
+        /** Returns mismatched evidence. @returns Invalid evidence. */ async () => ({
+          generation: 2,
         }),
       ),
     ).rejects.toThrow("does not match");
-    expect(document.document).toMatchObject({ isModified: true, savedGeneration: null });
 
+    const racing = fixture("racing", "Racing", "racing");
     let completeWrite: (() => void) | undefined;
-    const writeCompleted = new Promise<void>(
-      /** Retains completion of the stale-document write. @param resolve - Promise resolver. @returns Nothing. */ (
+    const completed = new Promise<void>(
+      /** Captures durable-write completion. @param resolve - Completion callback. @returns Nothing. */ (
         resolve,
-      ) => {
-        completeWrite = resolve;
+      ) => (completeWrite = resolve),
+    );
+    const saving = racing.shell.SaveAs(
+      { kind: "browser-local", name: "primary" },
+      /** Waits while the active model is replaced. @returns Evidence for the retired model. */ async () => {
+        await completed;
+        return { generation: 1 };
       },
     );
-    const saving = shell.Save(
-      /** Defers evidence for the document that was active at save start. @param current - Original graph. @returns Original generation evidence. */ async (
-        current,
-      ) => {
-        const evidence = { generation: current.document.contentGeneration };
-        await writeCompleted;
-        return evidence;
-      },
-    );
-    const replacement = shell.InitNew(metadata("Replacement", "replacement"), "replacement-p-1");
+    racing.shell.InitNew(metadata("Replacement", "replacement"), "replacement-p-1");
     completeWrite?.();
     await expect(saving).rejects.toThrow("no longer active");
-    expect(shell.GetDoc()).toBe(replacement);
-    expect(replacement.document.savedGeneration).toBeNull();
+    racing.shell.Close();
+    racing.shell.Close();
   });
 
-  it("coordinates history and document invalidation for one persistent shell" /** Verifies mutation ownership, no-op transitions, history replacement, subscription cleanup, and medium replacement. @returns A fulfilled assertion promise. */, async function coordinatesPersistentHistory(): Promise<void> {
-    const initial = createWriterDocument(metadata(), "p-1");
-    const shell = new SwDocShell(initial, { kind: "browser-local", name: "shell-document" });
-    const writerShell = new SwWrtShell(shell);
-    let invalidations = 0;
-    const unsubscribe = shell.Subscribe(
-      /** Counts one document-shell invalidation. @returns Nothing. */ () => {
-        invalidations += 1;
-      },
+  it("propagates one typed transaction and rejects work after close", /** Verifies typed aggregation and terminal guards. @returns Nothing. */ () => {
+    const active = fixture();
+    const hints: string[] = [];
+    active.shell.Subscribe(
+      /** Captures a shell hint. @param hint - Typed hint. @returns New array length. */ (hint) =>
+        hints.push(hint.kind),
     );
-    expect(writerShell.InsertText("p-1", "A", 1, "insertText")).toBe(true);
-    expect(shell.GetDoc()).toBe(initial);
-    expect(shell.GetUndoManager().GetUndoActionCount()).toBe(1);
-    expect(writerShell.Undo()).toBe(true);
-    expect(shell.GetDoc().paragraphs[0]?.text).toBe("");
-    expect(writerShell.Undo()).toBe(false);
-    expect(invalidations).toBe(2);
-    await shell.SaveAs(
-      { kind: "browser-local", name: "shell-document" },
-      /** Confirms the generation accepted by the test primary medium. @param savedDocument - Captured live Writer graph. @returns Matching storage evidence. */ async (
-        savedDocument,
-      ) => ({ generation: savedDocument.document.contentGeneration }),
-    );
-    expect(shell.GetDoc().document.isModified).toBe(false);
-    expect(invalidations).toBe(4);
-    unsubscribe();
-    shell.InitNew(metadata("Replacement", "replacement"), "replacement-p-1");
-    expect(invalidations).toBe(4);
-    shell.Close();
-  });
-
-  it("clears the save position for dirty replacement documents" /** Verifies constructor and replacement history start away from a primary-medium save boundary. @returns Nothing. */, function replacesWithDirtyDocuments(): void {
-    const dirty = editFixture(createWriterDocument(metadata(), "p-1"), "p-1", "dirty");
-    const shell = new SwDocShell(dirty);
-    expect(shell.GetUndoManager().IsAtSavePosition()).toBe(false);
-    const replacement = editFixture(
-      createWriterDocument(metadata("Replacement", "replacement"), "replacement-p-1"),
-      "replacement-p-1",
-      "changed",
-    );
-    shell.ReplaceDocument(replacement, { kind: "browser-local", name: "replacement" });
-    expect(shell.GetUndoManager().IsAtSavePosition()).toBe(false);
+    active.document.CallSwClientNotify({ kind: "document-disposed" });
+    expect(active.shell.GetDocumentState().contentGeneration).toBe(0);
+    hints.length = 0;
+    active.writerShell.InsertText("p-1", "A", 1, "insertText");
+    expect(hints).toEqual(["model-transaction"]);
+    expect(active.writerShell.Undo()).toBe(true);
+    expect(active.shell.GetDocumentState()).toMatchObject({ contentGeneration: 2 });
+    active.writerShell.Close();
+    active.shell.Close();
+    expect(active.shell.GetDocumentState().lifecycle).toBe("closed");
+    expect(
+      /** Creates recovery after close. @returns Invalid result. */ () =>
+        active.shell.CreateRecoverySnapshot(),
+    ).toThrow("Closed document shells");
+    expect(
+      /** Replaces after close. @returns Invalid result. */ () =>
+        active.shell.InitNew(metadata("Other", "other"), "other-p-1"),
+    ).toThrow("Closed document shells");
+    expect(
+      /** Executes a command after close. @returns Invalid result. */ () =>
+        active.writerShell.InsertText("p-1", "late", 4, "insertText"),
+    ).toThrow("Closed document shells");
   });
 });

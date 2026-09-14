@@ -1,12 +1,12 @@
-/** @fileoverview Verifies Writer snapshot save and load orchestration over an injected browser storage contract. */
+/** @fileoverview Verifies target-only Writer snapshot orchestration over generic storage. */
 
 import { describe, expect, it } from "vitest";
 
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
-import { createWriterDocument, type WriterDocument } from "./writer";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
+import { createWriterDocument, type WriterDocument } from "./writer";
 import {
   createWriterSnapshot,
   loadWriterDocument,
@@ -15,56 +15,59 @@ import {
   type WriterSnapshotState,
 } from "./writer-storage";
 
-/** Creates a serializable Writer fixture through the public mutable shell and undo path. @returns Live dirty Writer document. */
-function createWriterFixture(): WriterDocument {
-  const writer = createWriterDocument(
-    createDocument({ id: "writer-store", suiteId: "writer", title: "Writer" }),
-    "p-1",
-  );
-  const shell = new SwWrtShell(new SwDocShell(writer));
-  shell.InsertText("p-1", "Saved text", 10, "insertText");
-  return writer;
+/** Live target-schema storage fixture. */
+interface WriterFixture {
+  readonly document: WriterDocument;
+  readonly shell: SwDocShell;
 }
 
-/** Creates an in-memory implementation of the generic storage boundary. @param initialSnapshot - Optional initial stored snapshot. @returns Mutable test adapter. */
+/** Creates one dirty model through the public shell/undo path. @returns Live fixture. */
+function createWriterFixture(): WriterFixture {
+  const document = createWriterDocument("p-1");
+  const state = createDocument({ id: "writer-store", suiteId: "writer", title: "Writer" });
+  const shell = new SwDocShell(document, state);
+  new SwWrtShell(shell).InsertText("p-1", "Saved text", 10, "insertText");
+  return { document, shell };
+}
+
+/** Creates an in-memory generic storage adapter. @param initialSnapshot - Optional initial state. @returns Test adapter. */
 function createAdapter(
   initialSnapshot?: DocumentSnapshot<WriterSnapshotState>,
 ): DocumentStorageAdapter<WriterSnapshotState> {
   let snapshot = initialSnapshot;
   return {
-    /** Reads the snapshot only when its identifier matches. @param id - Queried ID. @returns Matching snapshot or undefined. */
-    load: async function load(
-      id: string,
-    ): Promise<DocumentSnapshot<WriterSnapshotState> | undefined> {
-      return snapshot?.id === id ? snapshot : undefined;
-    },
-    /** Retains a snapshot for the next test read. @param nextSnapshot - Snapshot to retain. @returns Fulfilled write promise. */
-    save: async function save(nextSnapshot: DocumentSnapshot<WriterSnapshotState>): Promise<void> {
+    load: /** Loads one matching snapshot. @param id - Requested identity. @returns Stored snapshot. */ async (
+      id,
+    ) => (snapshot?.id === id ? snapshot : undefined),
+    save: /** Retains one snapshot. @param nextSnapshot - New snapshot. @returns Completion. */ async (
+      nextSnapshot,
+    ) => {
       snapshot = nextSnapshot;
     },
   };
 }
 
-describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @returns Nothing; Vitest registers cases. */, function defineWriterStorageTests(): void {
-  it("saves a Writer snapshot and loads its document or an explicit missing outcome" /** Verifies identity, content generation, state round trip, and missing behavior. @returns Nothing; assertions validate outcomes. */, async function savesAndLoads(): Promise<void> {
+describe("Writer storage orchestration", /** Registers storage tests. @returns Nothing. */ () => {
+  it("saves and loads the split shell/model target schema", /** Verifies current-schema persistence. @returns Completion after assertions. */ async () => {
     const adapter = createAdapter();
-    const writerDocument = createWriterFixture();
-    const saved = await saveWriterDocument(adapter, writerDocument);
+    const fixture = createWriterFixture();
+    const state = fixture.shell.GetDocumentState();
+    const saved = await saveWriterDocument(adapter, fixture.document, state);
     expect(saved.snapshot).toMatchObject({
       id: "writer-store",
+      state: {
+        documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
+        schemaVersion: 1,
+        writerModel: { swModelVersion: 4 },
+      },
       version: 1,
-      state: { writerDocument: { swModelVersion: 3 } },
     });
-    expect(writerDocument.document).toMatchObject({
-      contentGeneration: 1,
-      isModified: true,
-      savedGeneration: null,
-    });
+    expect(fixture.document).not.toHaveProperty("document");
     const loaded = await loadWriterDocument(adapter, "writer-store");
     expect(loaded.status).toBe("found");
     if (loaded.status === "found") {
-      expect(loaded.writerDocument.paragraphs).toMatchObject([{ text: "Saved text" }]);
-      expect(loaded.writerDocument.document.isModified).toBe(false);
+      expect(loaded.document.paragraphs).toMatchObject([{ text: "Saved text" }]);
+      expect(loaded.documentState).toMatchObject({ isModified: false, savedGeneration: 1 });
     }
     await expect(loadWriterDocument(adapter, "missing")).resolves.toEqual({
       id: "missing",
@@ -72,54 +75,141 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
     });
   });
 
-  it("does not acknowledge a failed primary save" /** Verifies savedGeneration advances only after adapter success. @returns A promise resolved after failure identity and lifecycle are asserted. */, async function preservesFailedSaveState(): Promise<void> {
-    const writerDocument = createWriterFixture();
+  it("does not acknowledge a failed primary save", /** Verifies failed-write behavior. @returns Completion after assertions. */ async () => {
+    const fixture = createWriterFixture();
     const failure = new Error("write failed");
     const adapter: DocumentStorageAdapter<WriterSnapshotState> = {
-      /** Returns no existing snapshot. @returns A promise resolving without a snapshot. */
-      load: async function load(): Promise<undefined> {
-        return undefined;
-      },
-      /** Simulates a rejected primary-medium write. @returns A promise that rejects with the fixture failure. */
-      save: async function save(): Promise<void> {
+      load: /** Returns no snapshot. @returns Missing result. */ async () => undefined,
+      save: /** Rejects the write. @returns Rejected completion. */ async () => {
         throw failure;
       },
     };
-
-    await expect(saveWriterDocument(adapter, writerDocument)).rejects.toBe(failure);
-    expect(writerDocument.document).toMatchObject({ isModified: true, savedGeneration: null });
+    await expect(
+      saveWriterDocument(adapter, fixture.document, fixture.shell.GetDocumentState()),
+    ).rejects.toBe(failure);
+    expect(fixture.shell.GetDocumentState()).toMatchObject({
+      isModified: true,
+      savedGeneration: null,
+    });
   });
 
-  it("restores recovery payloads without acknowledging the primary medium" /** Verifies recovery and primary lifecycle checkpoints remain independent. @returns Nothing; assertions inspect restored metadata. */, function restoresRecoverySnapshot(): void {
-    const writerDocument = createWriterFixture();
-    const snapshot = createWriterSnapshot(writerDocument);
+  it("restores recovery state without acknowledging the primary medium", /** Verifies recovery ownership. @returns Nothing. */ () => {
+    const fixture = createWriterFixture();
+    const snapshot = createWriterSnapshot(fixture.document, fixture.shell.GetDocumentState());
     const recovered = restoreWriterSnapshot(snapshot, "recovery");
-
-    expect(recovered.document).toMatchObject({
-      contentGeneration: 1,
+    expect(recovered.documentState).toMatchObject({
       isModified: true,
       recoveryGeneration: 1,
       savedGeneration: null,
     });
     expect(
-      /** Restores a mismatched storage identity. @returns Invalid graph that never returns. */ () =>
+      /** Restores a mismatched identity. @returns Invalid result. */ () =>
         restoreWriterSnapshot({ ...snapshot, id: "other" }, "recovery"),
     ).toThrow("identity");
     expect(
-      /** Restores a mismatched storage generation. @returns Invalid graph that never returns. */ () =>
+      /** Restores a mismatched generation. @returns Invalid result. */ () =>
         restoreWriterSnapshot({ ...snapshot, version: 2 }, "recovery"),
     ).toThrow("generation");
   });
 
-  it("round-trips canonical list state" /** Verifies storage retains executable list state in the current schema. @returns A promise resolved after the snapshot is asserted. */, async function storesLists(): Promise<void> {
+  it("rejects every retired snapshot root instead of adapting it", /** Verifies strict schema rejection. @returns Nothing. */ () => {
+    const fixture = createWriterFixture();
+    const current = createWriterSnapshot(fixture.document, fixture.shell.GetDocumentState());
+    const oldState = {
+      document: fixture.shell.GetDocumentState(),
+      swModelVersion: 3,
+      textNodes: [],
+    } as unknown as WriterSnapshotState;
+    expect(
+      /** Restores a retired combined root. @returns Invalid result. */ () =>
+        restoreWriterSnapshot({ ...current, state: oldState }, "primary"),
+    ).toThrow("schema is unsupported");
+    const wrongSchema = {
+      ...current,
+      state: { ...current.state, schemaVersion: 0 as 1 },
+    };
+    expect(
+      /** Restores an unknown schema version. @returns Invalid result. */ () =>
+        restoreWriterSnapshot(wrongSchema, "primary"),
+    ).toThrow("schema is unsupported");
+  });
+
+  it("rejects malformed target lifecycle records" /** Exercises target-schema runtime validation without legacy fallbacks. @returns Nothing. */, function rejectsMalformedLifecycle(): void {
+    const fixture = createWriterFixture();
+    const current = createWriterSnapshot(fixture.document, fixture.shell.GetDocumentState());
+    const state = current.state.documentState as unknown as Record<string, unknown>;
+    const invalidStates: unknown[] = [
+      null,
+      [],
+      "invalid",
+      { ...state, contentGeneration: 0.5 },
+      { ...state, id: 7 },
+      { ...state, isModified: "yes" },
+      { ...state, lifecycle: "retired" },
+      { ...state, recoveryGeneration: "none" },
+      { ...state, savedGeneration: "none" },
+      { ...state, suiteId: 7 },
+      { ...state, title: 7 },
+    ];
+    for (const documentState of invalidStates)
+      expect(
+        /** Restores one malformed target record. @returns Invalid result. */ () =>
+          restoreWriterSnapshot(
+            {
+              ...current,
+              state: {
+                ...current.state,
+                documentState: documentState as WriterSnapshotState["documentState"],
+              },
+            },
+            "primary",
+          ),
+      ).toThrow("lifecycle state is invalid");
+
+    for (const lifecycle of ["new", "saved"] as const) {
+      const restored = restoreWriterSnapshot(
+        {
+          ...current,
+          state: {
+            ...current.state,
+            documentState: {
+              ...state,
+              lifecycle,
+              recoveryGeneration: 0,
+              savedGeneration: 0,
+            } as WriterSnapshotState["documentState"],
+          },
+        },
+        "primary",
+      );
+      expect(restored.documentState.lifecycle).toBe("saved");
+    }
+    expect(
+      /** Reaches lifecycle transition validation after accepting the closed discriminator. @returns Invalid result. */ () =>
+        restoreWriterSnapshot(
+          {
+            ...current,
+            state: {
+              ...current.state,
+              documentState: {
+                ...state,
+                lifecycle: "closed",
+              } as WriterSnapshotState["documentState"],
+            },
+          },
+          "primary",
+        ),
+    ).toThrow("Closed documents");
+  });
+
+  it("round-trips current list state", /** Verifies current list persistence. @returns Completion after assertions. */ async () => {
     const adapter = createAdapter();
-    const listedWriter = createWriterFixture();
-    const shell = new SwWrtShell(new SwDocShell(listedWriter));
-    shell.SetParagraphListKind("numbered");
-    await saveWriterDocument(adapter, listedWriter);
+    const fixture = createWriterFixture();
+    new SwWrtShell(fixture.shell).SetParagraphListKind("numbered");
+    await saveWriterDocument(adapter, fixture.document, fixture.shell.GetDocumentState());
     await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
+      document: { paragraphs: [{ list: { kind: "numbered", level: 0 } }] },
       status: "found",
-      writerDocument: { paragraphs: [{ list: { kind: "numbered", level: 0 } }] },
     });
   });
 });

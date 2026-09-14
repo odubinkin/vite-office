@@ -1,6 +1,6 @@
 /**
- * @fileoverview Implements the document-facing Sfx undo manager with action stacks, list actions,
- * save-position tracking, merging, redo truncation, and bounded retention.
+ * @fileoverview Implements the core Sfx undo manager from pinned `svl/source/undo/undo.cxx`
+ * with action stacks, list actions, save-position tracking, merging, redo truncation, and bounded retention.
  */
 
 /** Matches LibreOffice's default top-level SfxUndoManager action capacity. */

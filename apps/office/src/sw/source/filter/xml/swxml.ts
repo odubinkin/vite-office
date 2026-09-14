@@ -2,14 +2,13 @@
  * @fileoverview Reimplements the bounded SwXMLReader package orchestration from pinned LibreOffice `sw/source/filter/xml/swxml.cxx`.
  */
 
-import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
+import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import {
   validateOdtManifestXml,
   ODT_MIMETYPE,
 } from "../../../../package/source/manifest/ManifestExport";
 import { ZipFile, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
-import type { SwDoc } from "../../core/doc/doc";
-import { importWriterXml } from "./xmlimp";
+import { importWriterXml, type ImportedWriterDocument } from "./xmlimp";
 
 /** Maximum UTF-8 size accepted for each mandatory ODT XML stream. */
 export const ODT_XML_STREAM_BYTE_LIMIT = 16 * 1024 * 1024;
@@ -36,7 +35,7 @@ export class SwXMLReader {
     metadata: OfficeDocument,
     limits?: ZipFileLimits,
     control: OdtImportControl = {},
-  ): Promise<SwDoc> {
+  ): Promise<ImportedWriterDocument> {
     checkpoint(control, "package");
     const packageFile = limits === undefined ? new ZipFile(bytes) : new ZipFile(bytes, limits);
     const names = packageFile.getEntryNames();
@@ -62,7 +61,7 @@ export async function readOdtDocument(
   metadata: OfficeDocument,
   limits?: ZipFileLimits,
   control?: OdtImportControl,
-): Promise<SwDoc> {
+): Promise<ImportedWriterDocument> {
   return new SwXMLReader().Read(bytes, metadata, limits, control);
 }
 

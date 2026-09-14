@@ -5,7 +5,7 @@ import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 
 import { ZipFile } from "../src/package/source/zipapi/ZipFile";
-import { createDocument } from "../src/sfx2/source/doc/docfac";
+import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { createWriterDocument } from "../src/sw/source/core/doc/writer";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
@@ -19,8 +19,9 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
     suiteId: "writer",
     title: "Browser ODT Fixture",
   });
-  const source = createWriterDocument(metadata, "fixture-paragraph");
-  const shell = new SwWrtShell(new SwDocShell(source));
+  const source = createWriterDocument("fixture-paragraph");
+  const docShell = new SwDocShell(source, metadata);
+  const shell = new SwWrtShell(docShell);
   shell.InsertText(
     "fixture-paragraph",
     "BrowserODTContent",
@@ -36,7 +37,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   shell.ToggleCharacterFormat("bold");
   shell.SetParagraphListKind("numbered");
   shell.ChangeParagraphListLevel("demote");
-  const sourceBytes = writeOdtDocument(source);
+  const sourceBytes = writeOdtDocument(source, docShell.GetDocumentState());
 
   await page.goto("/writer");
   const fileChooserPromise = page.waitForEvent("filechooser");

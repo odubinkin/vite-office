@@ -1,6 +1,5 @@
 /** @fileoverview Provides pure Writer workbench document and paragraph identity helpers. */
 
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import {
   createWriterDocument,
   type WriterDocument,
@@ -9,14 +8,7 @@ import {
 
 /** Creates the initial empty Writer document used by the browser session. @returns New canonical SwDoc. */
 export function createWriterWorkbenchDocument(): WriterDocument {
-  return createWriterDocument(
-    createDocument({
-      id: "writer-workbench",
-      suiteId: "writer",
-      title: "Untitled Writer Document",
-    }),
-    "writer-paragraph-1",
-  );
+  return createWriterDocument("writer-paragraph-1");
 }
 
 /** Derives the first available numeric paragraph identity. @param writerDocument - Current Writer graph. @returns Stable non-colliding identity. */

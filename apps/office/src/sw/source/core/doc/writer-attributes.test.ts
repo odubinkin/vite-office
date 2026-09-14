@@ -13,7 +13,6 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import {
   RES_PARATR_ADJUST,
   RES_CHRATR_POSTURE,
@@ -42,10 +41,7 @@ import {
 
 /** Creates one canonical Writer fixture. @param id - Document identity. @returns Writer graph. */
 function createFixture(id = "writer-attrs"): WriterDocument {
-  return createWriterDocument(
-    createDocument({ id, suiteId: "writer", title: "Writer attributes" }),
-    "p-1",
-  );
+  return createWriterDocument(`${id}-p-1`);
 }
 
 /** Returns a deferred operation for rejection assertions. @param operation - Operation under test. @returns Same operation. */
@@ -112,6 +108,9 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(node.HasSwAttrSet()).toBe(false);
     expect(node.alignment).toBe("center");
     expect(node.ResetAttr(RES_PARATR_ADJUST)).toBe(false);
+    expect(node.ResetAllAttr()).toBe(0);
+    expect(node.SetAttr(new SfxItemSet(pool, WRITER_TEXT_NODE_WHICH_RANGES))).toBe(false);
+    expect(node.HasSwAttrSet()).toBe(true);
     expect(node.ResetAllAttr()).toBe(0);
     node.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, 4));
     expect(node.ResetAllAttr()).toBe(1);
@@ -361,7 +360,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 3 });
+    expect(snapshot).toMatchObject({ swModelVersion: 4 });
     expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", text: "" });
     expect(snapshot.textNodes[0]).not.toHaveProperty("alignment");
     const restored = normalizeWriterParagraphFormatting(snapshot);
@@ -371,9 +370,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(restored.GetTextFormatColl("heading-1").GetName()).toBe("Custom heading");
     expect(restored.paragraphs[0]).toMatchObject({ alignment: "right", style: "heading-1" });
     expect(restored.paragraphs[0]?.list).toEqual({ kind: "bullet", level: 1, styleId: "Bullets" });
-    const copied = new SwDoc(
-      createDocument({ id: "writer-copy", suiteId: "writer", title: "Writer copy" }),
-    );
+    const copied = new SwDoc();
     copied.nodes.copyContentFrom(restored.nodes);
     expect(copied.paragraphs[0]?.toSnapshot()).toEqual(restored.paragraphs[0]?.toSnapshot());
   });

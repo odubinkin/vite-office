@@ -9,7 +9,8 @@ LibreOffice `sw` sources as follows:
 | TypeScript model | Pinned LibreOffice source | Preserved responsibility |
 | --- | --- | --- |
 | `SfxPoolItem`, `SfxItemPool`, `SfxItemSet` | `svl/source/items/poolitem.cxx`, `itempool.cxx`, `itemset.cxx` | Represent WhichId-keyed values, pool defaults, direct deltas, parent lookup, and item state |
-| `SwDoc` | `sw/inc/doc.hxx`, `sw/source/core/doc/docnew.cxx` | Owns the node array, `SwAttrPool`, paragraph-style collections, numbering rules, and modified state |
+| `SwDoc` | `sw/inc/doc.hxx`, `sw/source/core/doc/docnew.cxx` | Owns only the node array, `SwAttrPool`, paragraph-style collections, and numbering rules |
+| `SfxBroadcaster`, `SfxListener`, `SwModify`, `SwClient` | `svl/source/notify/SfxBroadcaster.cxx`, `lstner.cxx`, `sw/source/core/attr/calbck.cxx` | Provide typed reciprocal model notification and safe disposal |
 | `SwAttrPool`, `SwAttrSet` | `sw/source/core/attr/swatrset.cxx` | Specialize the item pool/set for document-owned Writer attributes |
 | `SwFormat`, `SwFormatColl`, `SwTextFormatColl` | `sw/source/core/attr/format.cxx`, `sw/source/core/doc/fmtcol.cxx` | Own named paragraph-style deltas and their derived-from relationship |
 | `SwNodes` | `sw/inc/ndarr.hxx`, `sw/source/core/docnode/nodes.cxx` | Owns the ordered node array and fixed document sections |
@@ -19,6 +20,7 @@ LibreOffice `sw` sources as follows:
 | `SvxWeightItem`, `SvxPostureItem`, `SvxUnderlineItem` | `editeng/source/items/textitem.cxx` | Preserve the exact font enum ordering and boolean interpretation used by Writer character commands |
 | `SwTextAttr`, `SwFormatAutoFormat`, `SwpHints` | `sw/source/core/txtnode/txatbase.cxx`, `ndhints.cxx`, `thints.cxx` | Store start-sorted character-attribute ranges whose auto-format item owns a character `SfxItemSet` |
 | `SwNodeIndex`, `SwPosition`, `SwPaM` | `sw/inc/pam.hxx`, `sw/source/core/crsr/pam.cxx` | Address nodes, content offsets, and directional point/mark selections |
+| `SwContentIndex`, `SwContentIndexRegistry` | `sw/inc/contentindex.hxx`, `sw/source/core/bastyp/index.cxx` | Register live content offsets and correct them through text and structural mutations |
 | `DocumentContentOperationsManager` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Applies bounded Insert, Delete, and Replace operations through a `SwPaM` |
 
 This is a bounded reimplementation of those source responsibilities. Similar
@@ -88,13 +90,14 @@ document root. `writer.ts` now exposes construction, model types, and
 persistence serialization only; interactive commands have no functional-clone
 alternative.
 
-Persistence uses the explicit `swModelVersion: 3` snapshot produced by
-`SwDoc.toSnapshot()`. It records the shared document header, document-owned
-style and numbering definitions, text-node collection identities, direct item
-deltas, and text hints. `SwDoc.fromSnapshot()` reconstructs those ownership and
-inheritance links. Earlier DTO and snapshot schemas are deliberately rejected;
-the current reimplementation does not preserve contracts from the preceding
-non-canonical model.
+Persistence accepts only the split target snapshot: transport `schemaVersion: 1`
+contains shell-owned `documentState` and a model-only `writerModel` with
+`swModelVersion: 4`. The model snapshot records document-owned style and
+numbering definitions, text-node identities, direct item deltas, and text
+hints; identity, title, lifecycle, save/recovery generations, and medium state
+never enter `SwDoc`. `SwDoc.fromSnapshot()` reconstructs model ownership and
+inheritance links. Retired combined DTO/snapshot roots are rejected rather than
+adapted.
 
 ## Deliberate remaining gaps
 
@@ -102,9 +105,9 @@ The bounded pool supports the paragraph items required by current browser
 commands plus Western/CJK/CTL weight and posture and common underline. It does
 not yet reproduce pool ranges for the complete Writer item
 universe, invalid/disabled item payloads, item sharing/reference counts,
-`SfxBroadcaster` notifications, conditional styles, automatic-style caches, or
-the complete built-in style and numbering tables and format properties. Registered index correction,
-nested non-body sections, tables, frames, fields, marks, redlines, content
+conditional styles, automatic-style caches, or the complete built-in style and
+numbering tables and format properties. Nested non-body sections, tables,
+frames, fields, persistent mark/redline objects, content
 controls, anchored objects, layout frames, the complete native undo surface, and most Writer
 file filters also remain. The bounded ODT filter maps this graph; DOCX and the
 remaining formats must be reimplemented from their corresponding pinned filter

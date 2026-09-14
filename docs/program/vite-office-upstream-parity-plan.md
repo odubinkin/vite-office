@@ -209,9 +209,7 @@ make that composition responsibility explicit.
 | --- | --- | --- | --- |
 | [`sw/source/uibase/ribbar/inputwin.tsx`](../../apps/office/src/sw/source/uibase/ribbar/inputwin.tsx) | [`sw/source/uibase/ribbar/inputwin.cxx`](../../vendor/libreoffice-reference/sw/source/uibase/ribbar/inputwin.cxx) | Local generic formatting toolbar; upstream `SwInputWindow` is the table formula input window | Move the React toolbar to browser presentation; reserve `inputwin` for formula input if implemented |
 | [`sw/source/uibase/app/mainwn.tsx`](../../apps/office/src/sw/source/uibase/app/mainwn.tsx) | [`sw/source/uibase/app/mainwn.cxx`](../../vendor/libreoffice-reference/sw/source/uibase/app/mainwn.cxx) | Local complete workspace chrome; upstream owns Writer progress helpers | Reclassify and move workspace chrome; map progress behavior separately |
-| [`sfx2/source/doc/docfac.ts`](../../apps/office/src/sfx2/source/doc/docfac.ts) | [`sfx2/source/doc/docfac.cxx`](../../vendor/libreoffice-reference/sfx2/source/doc/docfac.cxx) | Local lifecycle value functions; upstream owns `SfxObjectFactory` | Move lifecycle state to object shell support; implement a bounded factory only when needed |
 | [`svl/source/misc/recovery.ts`](../../apps/office/src/svl/source/misc/recovery.ts) | `svl/source/misc/lockfilecommon.cxx` | Local deterministic autosave storage helper; upstream file parses lock files | Reclassify as recovery storage support and map orchestration to framework AutoRecovery |
-| [`sfx2/source/doc/docundomanager.ts`](../../apps/office/src/sfx2/source/doc/docundomanager.ts) | [`sfx2/source/doc/docundomanager.cxx`](../../vendor/libreoffice-reference/sfx2/source/doc/docundomanager.cxx) | Local core `SfxUndoManager`; upstream file is a document/UNO adapter over the core manager | Move core manager to `svl/source/undo`; create a separate document adapter only if required |
 | [`sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx`](../../apps/office/src/sw/source/uibase/sidebar/WriterInspectorTextPanel.tsx) | [`WriterInspectorTextPanel.cxx`](../../vendor/libreoffice-reference/sw/source/uibase/sidebar/WriterInspectorTextPanel.cxx) | Local three-value properties summary; upstream is a property/source inspector with bookmarks, sections, and metadata | Rename current UI as a properties panel; retain Inspector naming for real inspector functionality |
 | [`sw/source/core/doc/writer.ts`](../../apps/office/src/sw/source/core/doc/writer.ts) | `sw/source/core/doc/docnew.cxx` | Local barrel plus cloning command facade; upstream source owns document construction | Retain construction under `SwDoc`; remove or isolate legacy cloning helpers |
 | [`sw/source/uibase/shells/textsh.ts`](../../apps/office/src/sw/source/uibase/shells/textsh.ts) | `sw/source/uibase/shells/textsh.cxx` | Local React/global-keydown hook; upstream is a text command shell | Move browser shortcuts out; keep text command execution/state in the shell boundary |
@@ -448,8 +446,9 @@ Acceptance criteria:
   boundary matching upstream.
 - Keep a separate `sfx2` document undo adapter only if a document-model API or
   listener bridge needs it.
-- Move the current lifecycle helpers out of `sfx2/source/doc/docfac.ts`.
-- Introduce a bounded `SfxObjectFactory` only when view/filter/module factory
+- Consolidate lifecycle helpers with the bounded `SfxObjectShell` support in
+  `sfx2/source/doc/objsh.ts`; do not retain the former `docfac` placement.
+- Do not introduce `SfxObjectFactory` until view/filter/module factory
   registration is required by the runtime.
 
 Avoid empty source-shaped files created only to satisfy source-tree checks.
@@ -961,10 +960,12 @@ task is complete):
    of the normal verification gate;
 3. [x] characterize and remove the legacy immutable command helpers;
 4. [x] remove the persistence acknowledgement clone;
-5. design and implement registered content indices with exhaustive edit-matrix
+5. [x] design and implement registered content indices with exhaustive edit-matrix
    tests;
-6. introduce model broadcasters and a single React subscription bridge.
+6. [x] introduce model broadcasters and a single React subscription bridge;
+7. [x] move lifecycle and medium ownership out of `SwDoc`;
+8. [x] move the core undo manager to `svl/source/undo` without an unused adapter.
 
-UI restructuring, XML context migration, and lifecycle movement should begin
-after those tasks establish trustworthy evidence and stable core mutation
-semantics.
+With the core mutation and lifecycle invariants established, the next parity
+work should proceed through medium normalization, UI restructuring, and XML
+context migration without reintroducing the retired document model.

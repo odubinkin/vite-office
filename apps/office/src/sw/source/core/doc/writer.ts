@@ -2,7 +2,6 @@
  * @fileoverview Exposes the browser Writer façade over the LibreOffice-shaped SwDoc document model.
  */
 
-import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
 import { SwDoc, type SwDocSnapshot } from "./doc";
 import {
   isWriterParagraphAlignment,
@@ -52,13 +51,10 @@ export type WriterDocument = SwDoc;
 /** Read-only browser projection backed directly by a canonical SwTextNode. */
 export type WriterParagraph = SwTextNode;
 
-/** Creates a Writer SwDoc with LibreOffice's fixed sections and one empty body text node. @param document - Browser lifecycle metadata. @param paragraphId - Initial text-node identity. @returns New Writer document graph. */
-export function createWriterDocument(
-  document: OfficeDocument,
-  paragraphId: string,
-): WriterDocument {
+/** Creates a model-only Writer SwDoc with fixed sections and one empty body text node. @param paragraphId - Initial text-node identity. @returns New Writer document graph. */
+export function createWriterDocument(paragraphId: string): WriterDocument {
   if (paragraphId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
-  return new SwDoc(document, paragraphId);
+  return new SwDoc(paragraphId);
 }
 
 /** Restores the current canonical SwDoc snapshot schema. @param candidate - Runtime or persisted Writer state. @returns Canonical document graph. */
@@ -66,7 +62,7 @@ export function normalizeWriterParagraphFormatting(candidate: unknown): WriterDo
   if (candidate instanceof SwDoc) return candidate;
   if (!isRecord(candidate)) throw new Error("Stored Writer document is invalid.");
   if (
-    candidate.swModelVersion === 3 &&
+    candidate.swModelVersion === 4 &&
     Array.isArray(candidate.numRules) &&
     Array.isArray(candidate.textFormatCollections) &&
     Array.isArray(candidate.textNodes)

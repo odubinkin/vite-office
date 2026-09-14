@@ -8,7 +8,7 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { createDocument } from "../../apps/office/src/sfx2/source/doc/docfac";
+import { createDocument } from "../../apps/office/src/sfx2/source/doc/objsh";
 import { readOdtDocument } from "../../apps/office/src/sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrtxml";
 
@@ -31,8 +31,8 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         title: fixture.file,
       });
       const imported = await readOdtDocument(bytes, metadata);
-      expect(imported.paragraphs).toHaveLength(1);
-      expect(imported.paragraphs[0]).toMatchObject({
+      expect(imported.document.paragraphs).toHaveLength(1);
+      expect(imported.document.paragraphs[0]).toMatchObject({
         runs: [
           {
             attributes: {
@@ -45,7 +45,12 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         ],
         text: "Hello World!",
       });
-      const roundTripped = await readOdtDocument(writeOdtDocument(imported), metadata);
-      expect(roundTripped.paragraphs[0]?.runs).toEqual(imported.paragraphs[0]?.runs);
+      const roundTripped = await readOdtDocument(
+        writeOdtDocument(imported.document, imported.documentState),
+        metadata,
+      );
+      expect(roundTripped.document.paragraphs[0]?.runs).toEqual(
+        imported.document.paragraphs[0]?.runs,
+      );
     });
 });

@@ -7,7 +7,9 @@ import {
   createCommandShell,
   type SfxShell,
 } from "../../../../framework/source/dispatch/dispatchprovider";
-import type { SfxUndoAction, SfxUndoManager } from "../../../../sfx2/source/doc/docundomanager";
+import type { SfxUndoAction, SfxUndoManager } from "../../../../svl/source/undo/undo";
+import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
+import type { SwModelHint } from "../../../inc/hints";
 import {
   SwPaM,
   SwPosition,
@@ -22,7 +24,10 @@ import {
 import {
   createWriterTextRuns,
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
+  getWriterNextGraphemeBoundary,
+  getWriterPreviousGraphemeBoundary,
   getWriterTextAttributesAtOffset,
+  getWriterTextChange,
   normalizeWriterTextRuns,
   toggleWriterTextRangeFormat,
 } from "../../core/txtnode/ndtxt";
@@ -91,19 +96,19 @@ interface WriterCompositionState {
 }
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
-export class SwWrtShell {
+export class SwWrtShell extends SwModify {
   private activeParagraphId: string;
   private readonly commandShell: SfxShell;
   private composition: WriterCompositionState | undefined;
   private readonly cursor: SwPaM;
-  private readonly listeners = new Set<() => void>();
+  private readonly docShellSubscription: () => void;
   private pendingCharacterAttributes: WriterCharacterAttributes = {
     ...DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
   };
   private readonly undoContext: SwUndoRedoContext;
-
   /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @returns Nothing. */
   public constructor(private readonly docShell: SwDocShell) {
+    super();
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
     this.activeParagraphId = paragraph.id;
     this.cursor = new SwPaM(new SwPosition(paragraph, paragraph.text.length));
@@ -120,23 +125,25 @@ export class SwWrtShell {
         ) => this.RestoreCursorState(state),
     };
     this.commandShell = createCommandShell(this, createWriterTextCommandRegistry(this));
+    this.docShellSubscription = docShell.Subscribe(
+      /** Relays one document-shell hint into the editing shell. @param hint - Typed shell hint. @returns Nothing. */ (
+        hint,
+      ) => this.ReceiveDocShellHint(hint),
+    );
   }
-
   /** Returns the persistent owning document shell. @returns SwDocShell. */
   public GetDocShell(): SwDocShell {
     return this.docShell;
   }
-
   /** Returns the current canonical Writer document. @returns Shell-owned SwDoc. */
   public GetDoc(): WriterDocument {
+    this.docShell.EnsureOpen();
     return this.docShell.GetDoc();
   }
-
   /** Returns the persistent point-and-mark cursor identity. @returns Current SwPaM. */
   public GetCursor(): SwPaM {
     return this.cursor;
   }
-
   /** Projects the persistent SwPaM to stable Writer node coordinates. @returns Copied direction-preserving cursor state. */
   public GetCursorSelection(): WriterCursorSelection {
     const point = this.cursor.GetPoint();
@@ -168,19 +175,46 @@ export class SwWrtShell {
 
   /** Returns whether the shell-owned history can move backward. @returns True when Undo is enabled. */
   public CanUndo(): boolean {
+    this.docShell.EnsureOpen();
     return this.docShell.GetUndoManager().GetUndoActionCount() > 0;
   }
 
   /** Returns whether the shell-owned history can move forward. @returns True when Redo is enabled. */
   public CanRedo(): boolean {
+    this.docShell.EnsureOpen();
     return this.docShell.GetUndoManager().GetRedoActionCount() > 0;
   }
 
   /** Subscribes to cursor and pending-attribute changes. @param listener - View invalidation callback. @returns Cleanup removing it. */
-  public Subscribe(listener: () => void): () => void {
-    this.listeners.add(listener);
-    return /** Removes one editing-shell listener. @returns Whether the listener was present. */ () =>
-      this.listeners.delete(listener);
+  public Subscribe(listener: (hint: SwModelHint) => void): () => void {
+    return subscribeToSwModify(
+      this,
+      /** Forwards one editing-shell hint. @param _source - Editing shell. @param hint - Typed hint. @returns Nothing. */ (
+        _source,
+        hint,
+      ) => listener(hint),
+    );
+  }
+
+  /** Rebinds cursor state before propagating one document-shell hint. @param hint - Typed shell hint. @returns Nothing. */
+  private ReceiveDocShellHint(hint: SwModelHint): void {
+    this.RunNotificationTransaction(
+      /** Rebinds and propagates one parent hint atomically. @returns Nothing. */ () => {
+        if (
+          hint.kind === "document-replaced" ||
+          (hint.kind === "model-transaction" &&
+            hint.hints.some(
+              /** Detects a replacement inside a transaction. @param nested - Atomic hint. @returns Whether it replaces the model. */ (
+                nested,
+              ) => nested.kind === "document-replaced",
+            ))
+        )
+          this.DocumentReplaced();
+        if (hint.kind === "model-transaction")
+          for (const nested of hint.hints) this.CallSwClientNotify(nested);
+        else this.CallSwClientNotify(hint);
+      },
+    );
   }
 
   /** Rebinds the persistent PaM after explicit document replacement. @returns Nothing. */
@@ -193,7 +227,14 @@ export class SwWrtShell {
       paragraph.text.length,
     );
     this.AssignCursor(paragraph, paragraph.text.length);
-    this.Notify();
+    this.NotifySelection();
+  }
+
+  /** Releases the persistent PaM and broadcaster registrations. @returns Nothing. */
+  public Close(): void {
+    this.docShellSubscription();
+    this.cursor.Dispose();
+    this.DisposeModify();
   }
 
   /** Selects one paragraph as the command target. @param paragraphId - Existing paragraph identity. @param offset - Optional logical caret offset, defaulting to paragraph end. @returns Nothing. */
@@ -243,7 +284,7 @@ export class SwWrtShell {
         ? undefined
         : new SwPosition(markNode, selection.mark.offset),
     );
-    this.Notify();
+    this.NotifySelection();
     return true;
   }
 
@@ -306,11 +347,11 @@ export class SwWrtShell {
     this.composition = undefined;
     this.RestoreCursorState(composition.cursor);
     if (composition.text.length === 0) {
-      this.Notify();
+      this.NotifySelection();
       return false;
     }
     const changed = this.InsertAtCursor(composition.text, false);
-    if (!changed) this.Notify();
+    if (!changed) this.NotifySelection();
     return changed;
   }
 
@@ -328,7 +369,7 @@ export class SwWrtShell {
     if (change === undefined && paragraph.text === text) {
       this.activeParagraphId = paragraph.id;
       this.AssignCursor(paragraph, nextOffset);
-      this.Notify();
+      this.NotifySelection();
       return false;
     }
     const before =
@@ -667,11 +708,11 @@ export class SwWrtShell {
     };
     if (selectedRange === undefined) {
       if (this.cursor.HasMark()) {
-        this.Notify();
+        this.NotifySelection();
         return false;
       }
       this.docShell.GetUndoManager().BreakUndoGrouping();
-      this.Notify();
+      this.NotifySelection();
       return false;
     }
     const paragraph = this.GetDoc().nodes.findTextNode(selectedRange.paragraphId);
@@ -680,7 +721,7 @@ export class SwWrtShell {
     const beforeRuns = CopyTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
     /* v8 ignore next 3 -- A validated non-empty text range always copies at least one run. */
     if (beforeRuns.length === 0) {
-      this.Notify();
+      this.NotifySelection();
       return false;
     }
     const afterRuns = toggleWriterTextRangeFormat(
@@ -757,23 +798,40 @@ export class SwWrtShell {
 
   /** Restores the preceding Writer history state. @returns Whether navigation occurred. */
   public Undo(): boolean {
-    const changed = this.docShell.Undo(this.undoContext);
-    if (changed) this.Notify();
-    return changed;
+    return this.NavigateHistory(
+      /** Runs shell Undo. @returns Whether navigation occurred. */ () =>
+        this.docShell.Undo(this.undoContext),
+    );
   }
 
   /** Restores the following Writer history state. @returns Whether navigation occurred. */
   public Redo(): boolean {
-    const changed = this.docShell.Redo(this.undoContext);
-    if (changed) this.Notify();
-    return changed;
+    return this.NavigateHistory(
+      /** Runs shell Redo. @returns Whether navigation occurred. */ () =>
+        this.docShell.Redo(this.undoContext),
+    );
   }
 
   /** Executes one semantic action and publishes cursor-state invalidation. @param action - Reversible Writer action. @param tryMerge - Whether adjacent typing/deletion grouping is allowed. @returns True after successful execution. */
   private ApplyAction(action: SfxUndoAction<SwUndoRedoContext>, tryMerge = false): boolean {
-    this.docShell.ApplyUndoAction(action, this.undoContext, tryMerge);
-    this.Notify();
-    return true;
+    return this.RunNotificationTransaction(
+      /** Aggregates model, lifecycle, and cursor changes. @returns True after execution. */ () => {
+        this.docShell.ApplyUndoAction(action, this.undoContext, tryMerge);
+        this.NotifySelection();
+        return true;
+      },
+    );
+  }
+
+  /** Runs one history navigation as one editing-shell notification transaction. @param navigate - Undo or Redo callback. @returns Whether navigation occurred. */
+  private NavigateHistory(navigate: () => boolean): boolean {
+    return this.RunNotificationTransaction(
+      /** Adds cursor invalidation to the parent transaction. @returns Whether navigation occurred. */ () => {
+        const changed = navigate();
+        if (changed) this.NotifySelection();
+        return changed;
+      },
+    );
   }
 
   /** Returns an ordered non-empty same-node selection from the persistent SwPaM. @returns Bounded range or undefined for a caret/cross-node selection. */
@@ -839,8 +897,8 @@ export class SwWrtShell {
   }
 
   /** Publishes shell-local selection state invalidation. @returns Nothing. */
-  private Notify(): void {
-    for (const listener of this.listeners) listener();
+  private NotifySelection(): void {
+    this.CallSwClientNotify({ kind: "cursor-selection-changed" });
   }
 }
 
@@ -860,73 +918,6 @@ function areWriterCursorSelectionsEqual(
     left.mark?.paragraphId === right.mark?.paragraphId &&
     left.mark?.offset === right.mark?.offset
   );
-}
-
-/** Finds the grapheme start immediately before a caret, matching Writer character deletion rather than raw UTF-16 units. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
-function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
-  const boundaries = getWriterGraphemeBoundaries(text);
-  let previous = 0;
-  for (const boundary of boundaries) {
-    if (boundary >= offset) return previous;
-    previous = boundary;
-  }
-  /* v8 ignore next -- Boundary enumeration always includes text.length for a valid cursor offset. */
-  return previous;
-}
-
-/** Finds the grapheme end immediately after a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Next grapheme boundary. */
-function getWriterNextGraphemeBoundary(text: string, offset: number): number {
-  for (const boundary of getWriterGraphemeBoundaries(text)) if (boundary > offset) return boundary;
-  /* v8 ignore next -- Callers handle the text-end cursor before asking for a following boundary. */
-  return text.length;
-}
-
-/** Enumerates browser-standard grapheme boundaries with a code-point fallback for older engines. @param text - Paragraph text. @returns Ordered UTF-16 boundaries including zero and text length. */
-function getWriterGraphemeBoundaries(text: string): readonly number[] {
-  const boundaries = [0];
-  if (typeof Intl.Segmenter === "function") {
-    const segments = new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(text);
-    for (const segment of segments) boundaries.push(segment.index + segment.segment.length);
-    return boundaries;
-  }
-  let offset = 0;
-  for (const character of text) {
-    offset += character.length;
-    boundaries.push(offset);
-  }
-  return boundaries;
-}
-
-/** Detects one contiguous insertion, deletion, or fallback replacement. @param previousText - Canonical text. @param nextText - Browser text. @returns Exact change when representable. */
-function getWriterTextChange(
-  previousText: string,
-  nextText: string,
-):
-  | Readonly<{ kind: "delete"; end: number; start: number; text: string }>
-  | Readonly<{ kind: "insert"; offset: number; text: string }>
-  | undefined {
-  if (nextText === previousText) return undefined;
-  let prefixLength = 0;
-  while (
-    prefixLength < previousText.length &&
-    previousText.charAt(prefixLength) === nextText.charAt(prefixLength)
-  )
-    prefixLength += 1;
-  let suffixLength = 0;
-  while (
-    suffixLength < previousText.length - prefixLength &&
-    previousText.charAt(previousText.length - suffixLength - 1) ===
-      nextText.charAt(nextText.length - suffixLength - 1)
-  )
-    suffixLength += 1;
-  const previousEnd = previousText.length - suffixLength;
-  const removedText = previousText.slice(prefixLength, previousEnd);
-  const insertedText = nextText.slice(prefixLength, nextText.length - suffixLength);
-  if (removedText.length === 0 && insertedText.length > 0)
-    return { kind: "insert", offset: prefixLength, text: insertedText };
-  if (insertedText.length === 0 && removedText.length > 0)
-    return { kind: "delete", end: previousEnd, start: prefixLength, text: removedText };
-  return undefined;
 }
 
 /** Applies SwUndoInsert::CanGrouping preconditions to browser input. @param change - Exact insertion. @param inputType - Native edit kind. @param before - Canonical cursor before input. @param nextCaretOffset - Native caret after input. @returns Character group when compatible. */

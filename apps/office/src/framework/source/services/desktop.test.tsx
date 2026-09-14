@@ -9,7 +9,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Desktop } from "./desktop";
 import { createOfficeModuleDescriptors } from "./modulemanager";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
-import { createDocument } from "../../../sfx2/source/doc/docfac";
+import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../../sw/source/core/doc/writer";
 import { readOdtDocument } from "../../../sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../../sw/source/filter/xml/wrtxml";
@@ -307,11 +307,9 @@ describe("App" /**
   });
 
   it("opens a supported ODT atomically and starts a parseable ODT download" /** Verifies the product File boundary uses the existing Writer package filters. @returns A fulfilled assertion promise. */, async () => {
-    const imported = createWriterDocument(
-      createDocument({ id: "fixture", suiteId: "writer", title: "Opened ODT" }),
-      "fixture-p-1",
-    );
-    new SwWrtShell(new SwDocShell(imported)).InsertText(
+    const importedState = createDocument({ id: "fixture", suiteId: "writer", title: "Opened ODT" });
+    const imported = createWriterDocument("fixture-p-1");
+    new SwWrtShell(new SwDocShell(imported, importedState)).InsertText(
       "fixture-p-1",
       "Imported package body",
       "Imported package body".length,
@@ -320,9 +318,13 @@ describe("App" /**
     const inputClick = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(
       /** Supplies the generated ODT to the transient browser chooser. @param this - Transient file input. @returns Nothing. */
       function chooseOdt(this: HTMLInputElement): void {
-        const file = new File([writeOdtDocument(imported) as BlobPart], "fixture.odt", {
-          type: "application/vnd.oasis.opendocument.text",
-        });
+        const file = new File(
+          [writeOdtDocument(imported, importedState) as BlobPart],
+          "fixture.odt",
+          {
+            type: "application/vnd.oasis.opendocument.text",
+          },
+        );
         Object.defineProperty(this, "files", { configurable: true, value: [file] });
         this.dispatchEvent(new Event("change"));
       },
@@ -373,9 +375,9 @@ describe("App" /**
       const downloadedBytes = new Uint8Array(await (downloadedBlob as Blob).arrayBuffer());
       const archive = new ZipFile(downloadedBytes);
       expect(await archive.readTextEntry("content.xml")).toContain("Imported");
-      expect((await readOdtDocument(downloadedBytes, imported.document)).paragraphs[0]?.text).toBe(
-        "Imported package body",
-      );
+      expect(
+        (await readOdtDocument(downloadedBytes, importedState)).document.paragraphs[0]?.text,
+      ).toBe("Imported package body");
       expect(screen.getByText("ODT download started: Opened ODT.odt")).toBeInTheDocument();
     } finally {
       inputClick.mockRestore();
@@ -486,17 +488,15 @@ describe("App" /**
       const adapter = new IndexedDbDocumentStorageAdapter<WriterSnapshotState>(
         "vite-office-writer-workbench",
       );
-      const irregular = createWriterDocument(
-        createDocument({
-          id: "writer-workbench",
-          suiteId: "writer",
-          title: "Untitled Writer Document",
-        }),
-        "writer-paragraph-1",
-      );
+      const irregularState = createDocument({
+        id: "writer-workbench",
+        suiteId: "writer",
+        title: "Untitled Writer Document",
+      });
+      const irregular = createWriterDocument("writer-paragraph-1");
       irregular.paragraphs[0]?.SetText("First stored paragraph");
       irregular.nodes.MakeTextNode("writer-paragraph-3", "Third stored paragraph");
-      await saveWriterDocument(adapter, irregular);
+      await saveWriterDocument(adapter, irregular, irregularState);
       render(<App />);
       await invokeWriterFileCommand("Open local copy…");
       await waitFor(

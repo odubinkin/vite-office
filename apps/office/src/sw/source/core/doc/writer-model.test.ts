@@ -3,7 +3,6 @@
 import { describe, expect, it } from "vitest";
 
 import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_WEIGHT, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
@@ -40,10 +39,8 @@ const plain: WriterCharacterAttributes = { bold: false, italic: false, underline
 
 /** Creates one canonical Writer graph for low-level model tests. @param id - Browser document identity. @returns Canonical Writer fixture. */
 function createModelFixture(id = "model-a"): WriterDocument {
-  return createWriterDocument(
-    createDocument({ id, suiteId: "writer", title: "Writer model" }),
-    "p-1",
-  );
+  void id;
+  return createWriterDocument("p-1");
 }
 
 /** Appends a text node only while constructing a low-level model fixture. @param writer - Fixture graph. @param id - Test node identity. @returns The same graph. */
@@ -160,6 +157,11 @@ describe("Writer SwNodes graph" /** Groups node ownership and fixed-section test
       "p-2",
       writer.nodes.GetEndOfContent().StartOfSectionNode(),
     );
+    const uninserted = new SwTextNode(
+      writer.nodes,
+      "uninserted",
+      writer.nodes.GetEndOfContent().StartOfSectionNode(),
+    );
     expect(
       throwing(
         /** Inserts a duplicate prepared node. @returns Nothing. */ () =>
@@ -177,6 +179,24 @@ describe("Writer SwNodes graph" /** Groups node ownership and fixed-section test
         /** Removes a foreign node. @returns Nothing. */ () => writer.nodes.removeTextNode(foreign),
       ),
     ).toThrow("another SwNodes");
+    expect(
+      throwing(
+        /** Removes a same-document node not present in body content. @returns Nothing. */ () =>
+          writer.nodes.removeTextNode(uninserted),
+      ),
+    ).toThrow("not body content");
+    expect(
+      throwing(
+        /** Replaces a node with a foreign candidate. @returns Nothing. */ () =>
+          writer.nodes.replaceTextNode(node, foreign),
+      ),
+    ).toThrow("another SwNodes");
+    expect(
+      throwing(
+        /** Replaces a node with an identity already in the body. @returns Nothing. */ () =>
+          writer.nodes.replaceTextNode(node, duplicate),
+      ),
+    ).toThrow("Duplicate paragraph");
     expect(
       throwing(
         /** Moves a foreign node. @returns Nothing. */ () => writer.nodes.moveTextNode(foreign, 1),
@@ -437,6 +457,8 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(node.Len()).toBe(0);
     expect(node.GetpSwpHints()).toBeUndefined();
     expect(node.GetOrCreateSwpHints()).toBe(node.GetpSwpHints());
+    expect(node.InsertText("", 0)).toBe("");
+    node.EraseText(0, 0);
     node.SetParagraphAlignment("justify");
     node.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     node.SetParagraphList({ kind: "numbered", level: 2, styleId: "List 1" });
@@ -467,6 +489,18 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(trailing).toMatchObject({ alignment: "justify", style: "heading-1" });
     node.AppendTextNode(trailing);
     expect(node.text).toBe("aYZd");
+    expect(
+      throwing(
+        /** Appends a node to itself. @returns Invalid mutation. */ () => node.AppendTextNode(node),
+      ),
+    ).toThrow("append itself");
+    const foreign = createModelFixture("foreign").paragraphs[0] as SwTextNode;
+    expect(
+      throwing(
+        /** Appends a foreign node. @returns Invalid mutation. */ () =>
+          node.AppendTextNode(foreign),
+      ),
+    ).toThrow("different documents");
     const snapshot = node.toSnapshot();
     const restored = SwTextNode.fromSnapshot(
       writer.nodes,
@@ -476,6 +510,10 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(restored).toMatchObject({ alignment: "justify", style: "default", text: "aYZd" });
     node.SetText("plain");
     expect(node.runs).toEqual([{ attributes: plain, text: "plain" }]);
+    node.SetText("pl");
+    node.SetText("pl");
+    node.SetText("xy");
+    expect(node.text).toBe("xy");
     expect(
       throwing(/** Erases before text. @returns Nothing. */ () => node.EraseText(-1, 1)),
     ).toThrow("outside the text node");
@@ -493,7 +531,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     const writer = appendFixtureParagraph(createModelFixture(), "p-2");
     const first = writer.paragraphs[0] as SwTextNode;
     const second = writer.paragraphs[1] as SwTextNode;
-    const manager = new DocumentContentOperationsManager(writer);
+    const manager = new DocumentContentOperationsManager();
     manager.InsertString(new SwPosition(first), "abcd");
     manager.InsertString(new SwPosition(first, 4), "");
     manager.ReplaceRange(new SwPaM(new SwPosition(first, 3), new SwPosition(first, 1)), [
@@ -519,7 +557,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
           manager.InsertString(new SwPosition(new TestContentNode(writer)), "x"),
       ),
     ).toThrow("requires a SwTextNode");
-    expect(writer.document.lifecycle).toBe("dirty");
+    expect(first.text).toBe("ad");
   });
 
   it("round-trips the current SwDoc schema and rejects obsolete roots" /** Verifies current snapshot restoration and rejects non-canonical schemas. @returns Nothing; assertions inspect serialization. */, function restoresDocuments(): void {
@@ -547,13 +585,13 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(
       throwing(
         /** Rejects an obsolete empty body. @returns Invalid document. */ () =>
-          normalizeWriterParagraphFormatting({ document: writer.document, paragraphs: [] }),
+          normalizeWriterParagraphFormatting({ document: {}, paragraphs: [] }),
       ),
     ).toThrow("schema is unsupported");
     expect(
       throwing(
         /** Rejects an obsolete malformed paragraph. @returns Invalid document. */ () =>
-          normalizeWriterParagraphFormatting({ document: writer.document, paragraphs: [null] }),
+          normalizeWriterParagraphFormatting({ document: {}, paragraphs: [null] }),
       ),
     ).toThrow("schema is unsupported");
   });

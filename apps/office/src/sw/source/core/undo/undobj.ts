@@ -3,7 +3,7 @@
  * to the shared SwUndo/SwUndRng infrastructure in pinned LibreOffice undobj.cxx.
  */
 
-import { SfxUndoAction } from "../../../../sfx2/source/doc/docundomanager";
+import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { WriterCharacterAttributes, WriterTextRun } from "../txtnode/ndtxt";
 import { normalizeWriterTextRuns, SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";

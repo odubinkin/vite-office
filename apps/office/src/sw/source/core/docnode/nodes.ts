@@ -111,6 +111,7 @@ export class SwNodes {
       text,
     );
     this.nodeArray.splice(this.endOfContent.GetIndex(), 0, node);
+    this.document.CallSwClientNotify({ index: node.GetIndex(), kind: "node-inserted", nodeId: id });
     return node;
   }
 
@@ -121,14 +122,41 @@ export class SwNodes {
     if (this.findTextNode(node.id) !== undefined)
       throw new Error(`Duplicate paragraph: ${node.id}`);
     this.nodeArray.splice(source.GetIndex() + 1, 0, node);
+    this.document.CallSwClientNotify({
+      index: node.GetIndex(),
+      kind: "node-inserted",
+      nodeId: node.id,
+    });
   }
 
   /** Removes one body text node while retaining Writer's non-empty content invariant. @param node - Removed text node. @returns Nothing. */
   public removeTextNode(node: SwTextNode): void {
     if (node.GetNodes() !== this) throw new Error("SwTextNode belongs to another SwNodes array.");
-    if (this.getTextNodes().length === 1)
-      throw new Error("Writer document must retain one paragraph.");
-    this.nodeArray.splice(node.GetIndex(), 1);
+    const textNodes = this.getTextNodes();
+    if (textNodes.length === 1) throw new Error("Writer document must retain one paragraph.");
+    const textIndex = textNodes.indexOf(node);
+    if (textIndex < 0) throw new Error("SwTextNode is not body content.");
+    const next = textNodes[textIndex + 1];
+    const previous = textNodes[textIndex - 1];
+    if (next !== undefined) node.CollapseContentIndicesTo(next, 0);
+    else node.CollapseContentIndicesTo(previous as SwTextNode, (previous as SwTextNode).Len());
+    const nodeIndex = node.GetIndex();
+    this.nodeArray.splice(nodeIndex, 1);
+    this.document.CallSwClientNotify({ index: nodeIndex, kind: "node-removed", nodeId: node.id });
+  }
+
+  /** Replaces one body node in place while preserving every registered content index. @param node - Removed node. @param replacement - Same-document replacement. @returns Nothing. */
+  public replaceTextNode(node: SwTextNode, replacement: SwTextNode): void {
+    if (node.GetNodes() !== this || replacement.GetNodes() !== this)
+      throw new Error("SwTextNode belongs to another SwNodes array.");
+    const index = node.GetIndex();
+    const duplicate = this.findTextNode(replacement.id);
+    if (duplicate !== undefined && duplicate !== node)
+      throw new Error(`Duplicate paragraph: ${replacement.id}`);
+    node.MoveAllContentIndicesTo(replacement);
+    this.nodeArray[index] = replacement;
+    this.document.CallSwClientNotify({ index, kind: "node-removed", nodeId: node.id });
+    this.document.CallSwClientNotify({ index, kind: "node-inserted", nodeId: replacement.id });
   }
 
   /** Moves one body text node by one adjacent text-node position. @param node - Moved text node. @param delta - Minus or plus one position. @returns Nothing. */
@@ -144,6 +172,12 @@ export class SwNodes {
     const otherIndex = other.GetIndex();
     this.nodeArray[currentIndex] = other;
     this.nodeArray[otherIndex] = node;
+    this.document.CallSwClientNotify({
+      index: currentIndex,
+      kind: "node-inserted",
+      nodeId: other.id,
+    });
+    this.document.CallSwClientNotify({ index: otherIndex, kind: "node-inserted", nodeId: node.id });
   }
 
   /** Copies body text nodes from another array into this array's content section. @param source - Source node array. @returns Nothing. */

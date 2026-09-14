@@ -168,7 +168,7 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
   return (
     <div hidden={!isActive}>
       <WriterWorkspaceChrome
-        documentTitle={snapshot.document.document.title}
+        documentTitle={snapshot.documentState.title}
         formattingToolbar={
           <WriterParagraphFormattingToolbar
             alignment={snapshot.activeParagraph.alignment}

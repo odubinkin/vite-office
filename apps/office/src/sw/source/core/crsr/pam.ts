@@ -4,6 +4,11 @@
 
 import type { SwContentNode, SwNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
+import {
+  SwContentIndex,
+  type SwContentIndexAffinity,
+  type SwContentIndexOwnerKind,
+} from "../bastyp/contentindex";
 
 /** Tracks a node through structural array changes by retaining its object identity. */
 export class SwNodeIndex {
@@ -38,20 +43,34 @@ export class SwNodeIndex {
 /** Marks one content offset in the Writer document model. */
 export class SwPosition {
   public readonly nNode: SwNodeIndex;
+  public readonly nContent: SwContentIndex;
 
   /**
    * Creates a position owned by one content node.
    * @param node - Positioned content node.
    * @param nContent - UTF-16 offset inside node.
+   * @param ownerKind - Registered owner category.
+   * @param affinity - Boundary affinity.
    * @returns Nothing; initializes this position.
    */
   public constructor(
     node: SwContentNode,
-    public nContent = 0,
+    nContent = 0,
+    ownerKind: SwContentIndexOwnerKind = "cursor",
+    affinity: SwContentIndexAffinity = "after",
   ) {
     if (!Number.isInteger(nContent) || nContent < 0 || nContent > node.Len())
       throw new Error("SwPosition content offset is outside its node.");
     this.nNode = new SwNodeIndex(node);
+    this.nContent = new SwContentIndex(
+      node,
+      nContent,
+      ownerKind,
+      affinity,
+      /** Keeps the paired SwNodeIndex synchronized when structural operations transfer this content index. @param nextNode - New content node. @returns Nothing. */ (
+        nextNode,
+      ) => this.nNode.Assign(nextNode),
+    );
   }
 
   /** Returns the current node array offset. @returns Current node offset. */
@@ -66,7 +85,7 @@ export class SwPosition {
 
   /** Returns the content offset. @returns UTF-16 content offset. */
   public GetContentIndex(): number {
-    return this.nContent;
+    return this.nContent.GetIndex();
   }
 
   /** Changes the content offset inside the current content node. @param offset - New UTF-16 offset. @returns Nothing. */
@@ -74,17 +93,39 @@ export class SwPosition {
     const node = this.GetNode() as SwContentNode;
     if (!Number.isInteger(offset) || offset < 0 || offset > node.Len())
       throw new Error("SwPosition content offset is outside its node.");
-    this.nContent = offset;
+    this.nContent.Assign(node, offset);
   }
 
   /** Compares model order by node and then content offset. @param other - Position to compare. @returns Signed ordering result. */
   public compare(other: SwPosition): number {
-    return this.GetNodeIndex() - other.GetNodeIndex() || this.nContent - other.nContent;
+    return (
+      this.GetNodeIndex() - other.GetNodeIndex() || this.GetContentIndex() - other.GetContentIndex()
+    );
   }
 
-  /** Creates an independent position on the same node. @returns Cloned position. */
-  public clone(): SwPosition {
-    return new SwPosition(this.GetNode() as SwContentNode, this.nContent);
+  /** Reassigns both node and registered content index. @param node - Destination content node. @param offset - Destination offset. @returns Nothing. */
+  public Assign(node: SwContentNode, offset: number): void {
+    this.nContent.Assign(node, offset);
+  }
+
+  /** Changes the bounded position owner category. @param ownerKind - New owner kind. @returns Nothing. */
+  public SetOwnerKind(ownerKind: SwContentIndexOwnerKind): void {
+    this.nContent.SetOwnerKind(ownerKind);
+  }
+
+  /** Explicitly unregisters the content position. @returns Nothing. */
+  public Dispose(): void {
+    this.nContent.Dispose();
+  }
+
+  /** Creates an independent registered position on the same node. @param ownerKind - Optional owner override. @returns Cloned position. */
+  public clone(ownerKind = this.nContent.GetOwnerKind()): SwPosition {
+    return new SwPosition(
+      this.GetNode() as SwContentNode,
+      this.GetContentIndex(),
+      ownerKind,
+      this.nContent.GetAffinity(),
+    );
   }
 }
 
@@ -108,9 +149,12 @@ export class SwPaM {
   /** Repositions this persistent PaM after cursor movement or atomic document replacement. @param point - New moving endpoint. @param mark - Optional fixed endpoint. @returns Nothing. */
   public Assign(point: SwPosition, mark?: SwPosition): void {
     const nextPoint = point.clone();
-    const nextMark = mark?.clone();
+    nextPoint.SetOwnerKind("cursor");
+    const nextMark = mark?.clone("mark");
     if (nextMark !== undefined && nextMark.GetNode().GetNodes() !== nextPoint.GetNode().GetNodes())
       throw new Error("SwPaM endpoints belong to different documents.");
+    this.point?.Dispose();
+    this.mark?.Dispose();
     this.point = nextPoint;
     this.mark = nextMark;
   }
@@ -132,11 +176,20 @@ export class SwPaM {
 
   /** Sets mark to the current point. @returns Nothing. */
   public SetMark(): void {
-    this.mark = this.point.clone();
+    this.mark?.Dispose();
+    this.mark = this.point.clone("mark");
   }
 
   /** Removes mark while retaining point. @returns Nothing. */
   public DeleteMark(): void {
+    this.mark?.Dispose();
+    this.mark = undefined;
+  }
+
+  /** Unregisters both persistent PaM endpoints. @returns Nothing. */
+  public Dispose(): void {
+    this.point.Dispose();
+    this.mark?.Dispose();
     this.mark = undefined;
   }
 

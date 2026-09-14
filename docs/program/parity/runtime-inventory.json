@@ -161,17 +161,6 @@
       ]
     },
     {
-      "path": "apps/office/src/sfx2/source/doc/docfac.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "shared",
-      "subsystem": "document-lifecycle",
-      "capabilityIds": [
-        "CAP-0114",
-        "CAP-0132"
-      ]
-    },
-    {
       "path": "apps/office/src/sfx2/source/doc/docfile.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -183,13 +172,13 @@
       ]
     },
     {
-      "path": "apps/office/src/sfx2/source/doc/docundomanager.ts",
+      "path": "apps/office/src/sfx2/source/doc/objsh.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",
-      "subsystem": "undo-redo",
+      "subsystem": "document-lifecycle",
       "capabilityIds": [
-        "CAP-0102",
+        "CAP-0114",
         "CAP-0132"
       ]
     },
@@ -247,6 +236,47 @@
       ]
     },
     {
+      "path": "apps/office/src/svl/source/notify/broadcast.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/svl/source/notify/listener.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
+      "path": "apps/office/src/svl/source/undo/undo.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0132"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/inc/calbck.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/inc/hintids.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -254,6 +284,16 @@
       "subsystem": "formatting-model",
       "capabilityIds": [
         "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/inc/hints.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
       ]
     },
     {
@@ -274,6 +314,16 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0112"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/bastyp/contentindex.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
       ]
     },
     {
@@ -1011,11 +1061,11 @@
   "internalOperations": [
     {
       "id": "writer.internal.close-document",
-      "modulePath": "apps/office/src/sfx2/source/doc/docfac.ts",
+      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
       "symbol": "closeDocument",
       "classification": "local-infrastructure",
       "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper closeDocument owned by apps/office/src/sfx2/source/doc/docfac.ts."
+      "description": "Exported non-command mutation helper closeDocument owned by apps/office/src/sfx2/source/doc/objsh.ts."
     },
     {
       "id": "writer.internal.insert-writer-text-run",
@@ -1027,43 +1077,43 @@
     },
     {
       "id": "writer.internal.mark-document-dirty",
-      "modulePath": "apps/office/src/sfx2/source/doc/docfac.ts",
+      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
       "symbol": "markDocumentDirty",
       "classification": "local-infrastructure",
       "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentDirty owned by apps/office/src/sfx2/source/doc/docfac.ts."
+      "description": "Exported non-command mutation helper markDocumentDirty owned by apps/office/src/sfx2/source/doc/objsh.ts."
     },
     {
       "id": "writer.internal.mark-document-history-restored",
-      "modulePath": "apps/office/src/sfx2/source/doc/docfac.ts",
+      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
       "symbol": "markDocumentHistoryRestored",
       "classification": "local-infrastructure",
       "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentHistoryRestored owned by apps/office/src/sfx2/source/doc/docfac.ts."
+      "description": "Exported non-command mutation helper markDocumentHistoryRestored owned by apps/office/src/sfx2/source/doc/objsh.ts."
     },
     {
       "id": "writer.internal.mark-document-history-save-position",
-      "modulePath": "apps/office/src/sfx2/source/doc/docfac.ts",
+      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
       "symbol": "markDocumentHistorySavePosition",
       "classification": "local-infrastructure",
       "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentHistorySavePosition owned by apps/office/src/sfx2/source/doc/docfac.ts."
+      "description": "Exported non-command mutation helper markDocumentHistorySavePosition owned by apps/office/src/sfx2/source/doc/objsh.ts."
     },
     {
       "id": "writer.internal.mark-document-recovery-saved",
-      "modulePath": "apps/office/src/sfx2/source/doc/docfac.ts",
+      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
       "symbol": "markDocumentRecoverySaved",
       "classification": "local-infrastructure",
       "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentRecoverySaved owned by apps/office/src/sfx2/source/doc/docfac.ts."
+      "description": "Exported non-command mutation helper markDocumentRecoverySaved owned by apps/office/src/sfx2/source/doc/objsh.ts."
     },
     {
       "id": "writer.internal.mark-document-saved",
-      "modulePath": "apps/office/src/sfx2/source/doc/docfac.ts",
+      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
       "symbol": "markDocumentSaved",
       "classification": "local-infrastructure",
       "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentSaved owned by apps/office/src/sfx2/source/doc/docfac.ts."
+      "description": "Exported non-command mutation helper markDocumentSaved owned by apps/office/src/sfx2/source/doc/objsh.ts."
     },
     {
       "id": "writer.internal.split-writer-text-runs",

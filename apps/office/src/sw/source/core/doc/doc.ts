@@ -2,7 +2,7 @@
  * @fileoverview Implements the Writer SwDoc aggregate from the pinned LibreOffice `sw/source/core/doc/docnew.cxx` ownership boundary.
  */
 
-import { markDocumentDirty, type OfficeDocument } from "../../../../sfx2/source/doc/docfac";
+import { SwModify } from "../../../inc/calbck";
 import { SwAttrPool } from "../attr/swatrset";
 import { SwNodes } from "../docnode/nodes";
 import {
@@ -15,8 +15,6 @@ import type { SwTextNode, SwTextNodeSnapshot } from "../txtnode/ndtxt";
 
 /** Cycle-free persisted state of the currently implemented SwDoc subset. */
 export interface SwDocSnapshot {
-  /** Shared browser document lifecycle metadata. */
-  readonly document: OfficeDocument;
   /** Document-owned numbering-rule definitions. */
   readonly numRules: readonly SwNumRuleSnapshot[];
   /** Ordered regular-content text nodes; fixed sections are recreated by SwNodes. */
@@ -24,20 +22,19 @@ export interface SwDocSnapshot {
   /** Document-owned paragraph style collections. */
   readonly textFormatCollections: readonly SwTextFormatCollSnapshot[];
   /** Writer model schema discriminator. */
-  readonly swModelVersion: 3;
+  readonly swModelVersion: 4;
 }
 
-/** Owns Writer's document node array and browser lifecycle metadata. */
-export class SwDoc {
-  public document: OfficeDocument;
+/** Owns only the Writer document model graph. */
+export class SwDoc extends SwModify {
   private readonly attrPool: SwAttrPool;
   private readonly textFormatCollections: SwTextFormatColl[];
   private readonly numRules = new Map<string, SwNumRule>();
   public readonly nodes: SwNodes;
 
-  /** Creates a Writer document graph with an optional initial text node. @param document - Browser lifecycle metadata. @param initialTextNodeId - Optional initial node identity. @returns Nothing. */
-  public constructor(document: OfficeDocument, initialTextNodeId?: string) {
-    this.document = { ...document };
+  /** Creates a Writer document graph with an optional initial text node. @param initialTextNodeId - Optional initial node identity. @returns Nothing. */
+  public constructor(initialTextNodeId?: string) {
+    super();
     this.attrPool = new SwAttrPool(this);
     const defaultTextFormatColl = new SwTextFormatColl(this.attrPool, "default", "Paragraph style");
     const headingOne = new SwTextFormatColl(
@@ -94,6 +91,7 @@ export class SwDoc {
       throw new Error(`Duplicate SwNumRule: ${rule.GetName()}`);
     const stored = rule.clone();
     this.numRules.set(stored.GetName(), stored);
+    this.CallSwClientNotify({ kind: "numbering-changed", ruleName: stored.GetName() });
     return stored;
   }
 
@@ -123,9 +121,15 @@ export class SwDoc {
     return this.nodes.getTextNodes();
   }
 
-  /** Marks a changed model dirty through the shared browser lifecycle boundary. @returns Nothing. */
-  public SetModified(): void {
-    this.document = markDocumentDirty(this.document);
+  /** Runs one semantic Writer operation as a single notification transaction. @param mutation - Model mutation. @returns Mutation result. */
+  public RunModelTransaction<Result>(mutation: () => Result): Result {
+    return this.RunNotificationTransaction(mutation);
+  }
+
+  /** Announces model disposal and safely detaches every client. @returns Nothing. */
+  public Dispose(): void {
+    this.CallSwClientNotify({ kind: "document-disposed" });
+    this.DisposeModify();
   }
 
   /** Creates an independent document graph for transaction-history snapshots. @returns Cloned document graph. */
@@ -136,14 +140,13 @@ export class SwDoc {
   /** Serializes the graph without its ownership cycles. @returns Versioned Writer snapshot. */
   public toSnapshot(): SwDocSnapshot {
     return {
-      document: { ...this.document },
       numRules: this.GetNumRuleTable().map(
         /** Serializes one document numbering rule. @param rule - Document-owned rule. @returns Rule snapshot. */
         function serializeNumRule(rule): SwNumRuleSnapshot {
           return rule.toSnapshot();
         },
       ),
-      swModelVersion: 3,
+      swModelVersion: 4,
       textNodes: this.paragraphs.map(
         /** Serializes one regular body text node. @param node - Canonical SwTextNode. @returns Persisted node record. */
         function serializeTextNode(node): SwTextNodeSnapshot {
@@ -161,7 +164,7 @@ export class SwDoc {
 
   /** Restores a canonical Writer graph from a validated current snapshot. @param snapshot - Current model snapshot. @returns Restored document graph. */
   public static fromSnapshot(snapshot: SwDocSnapshot): SwDoc {
-    const document = new SwDoc(snapshot.document);
+    const document = new SwDoc();
     document.restoreTextFormatCollections(snapshot.textFormatCollections);
     snapshot.numRules.forEach(
       /** Restores one document numbering rule. @param ruleSnapshot - Persisted rule. @returns Nothing. */

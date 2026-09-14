@@ -1,7 +1,7 @@
 /** @fileoverview Verifies semantic Writer actions, grouping, cursor restoration, lifecycle, limits, and payload scaling. */
 
 import { describe, expect, it, vi } from "vitest";
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwDoc } from "../doc/doc";
 import { createWriterDocument, SwPosition, type WriterTextRun } from "../doc/writer";
 import { SwDocShell } from "../../uibase/app/docsh";
@@ -21,14 +21,16 @@ import {
 
 /** Creates a clean document/session fixture with optional plain text. @param text - Initial first-paragraph text. @returns Document, document shell, and Writer shell. */
 function createSession(text = "") {
-  const document = createWriterDocument(
-    createDocument({ id: "undo-document", suiteId: "writer", title: "Undo document" }),
-    "p-1",
-  );
+  const document = createWriterDocument("p-1");
+  const documentState = createDocument({
+    id: "undo-document",
+    suiteId: "writer",
+    title: "Undo document",
+  });
   if (text.length > 0) document.paragraphs[0]?.InsertText(text, 0);
-  const docShell = new SwDocShell(document, {
+  const docShell = new SwDocShell(document, documentState, {
     kind: "browser-local",
-    name: document.document.title,
+    name: documentState.title,
   });
   return { docShell, document, shell: new SwWrtShell(docShell) };
 }
@@ -211,27 +213,27 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
   });
 
   it("preserves lifecycle generations and the moved save mark across action navigation" /** Verifies document lifecycle ownership after removing historical snapshots. @returns A fulfilled assertion promise. */, async function preservesSaveMark(): Promise<void> {
-    const { docShell, document, shell } = createSession();
+    const { docShell, shell } = createSession();
     shell.InsertText("p-1", "a", 1, "insertText");
     await docShell.Save(
-      /** Confirms the generation accepted by the test primary medium. @param savedDocument - Captured live Writer graph. @returns Matching storage evidence. */ async (
-        savedDocument,
-      ) => ({ generation: savedDocument.document.contentGeneration }),
+      /** Confirms the generation accepted by the test primary medium. @returns Matching storage evidence. */ async () => ({
+        generation: docShell.GetDocumentState().contentGeneration,
+      }),
     );
     shell.InsertText("p-1", "ab", 2, "insertText");
-    expect(document.document).toMatchObject({
+    expect(docShell.GetDocumentState()).toMatchObject({
       contentGeneration: 2,
       isModified: true,
       savedGeneration: 1,
     });
     shell.Undo();
-    expect(document.document).toMatchObject({
+    expect(docShell.GetDocumentState()).toMatchObject({
       contentGeneration: 3,
       isModified: false,
       savedGeneration: 1,
     });
     shell.Redo();
-    expect(document.document).toMatchObject({
+    expect(docShell.GetDocumentState()).toMatchObject({
       contentGeneration: 4,
       isModified: true,
       savedGeneration: 1,

@@ -5,7 +5,7 @@
 
 import type { WorkerErrorCategory } from "../../../../framework/source/services/worker-protocol";
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
-import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
+import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import type { DocumentSnapshot } from "../../../../sfx2/source/doc/docfile";
 import {
   createWriterSnapshot,
@@ -83,8 +83,8 @@ export class InlineOdtFilterService implements OdtFilterService {
   ): Promise<Uint8Array> {
     this.Begin(options.signal);
     try {
-      const document = restoreWriterSnapshot(snapshot, "primary");
-      return writeOdtDocument(document, {
+      const restored = restoreWriterSnapshot(snapshot, "primary");
+      return writeOdtDocument(restored.document, restored.documentState, {
         isCancelled:
           /** Reads the current cooperative cancellation flag. @returns Whether export must stop. */ () =>
             this.IsCancelled(options.signal),
@@ -106,7 +106,7 @@ export class InlineOdtFilterService implements OdtFilterService {
   ): Promise<DocumentSnapshot<WriterSnapshotState>> {
     this.Begin(options.signal);
     try {
-      const document = await readOdtDocument(bytes, metadata, options.zipLimits, {
+      const imported = await readOdtDocument(bytes, metadata, options.zipLimits, {
         isCancelled:
           /** Reads the current cooperative cancellation flag. @returns Whether import must stop. */ () =>
             this.IsCancelled(options.signal),
@@ -115,7 +115,7 @@ export class InlineOdtFilterService implements OdtFilterService {
             stage,
           ) => options.onProgress?.(`import:${stage}`),
       });
-      return createWriterSnapshot(document);
+      return createWriterSnapshot(imported.document, imported.documentState);
     } catch (error) {
       throw normalizeOdtFilterError(error);
     }

@@ -6,7 +6,7 @@ import {
   issueWorkerRequest,
   createWorkerClientState,
 } from "../../../../framework/source/services/worker-protocol";
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterSnapshot } from "../../core/doc/writer-storage";
 import { createWriterDocument } from "../../core/doc/writer";
 import { SwDocShell } from "../../uibase/app/docsh";
@@ -69,11 +69,12 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
   it("imports into a neutral snapshot with ordered progress" /** Verifies worker-side ZIP/XML work. @returns Completion after result. */, async () => {
     const scope = new CapturingScope();
     const runtime = new OdtWorkerRuntime(scope);
-    const document = createWriterDocument(metadata(), "p-1");
-    new SwWrtShell(new SwDocShell(document)).InsertText("p-1", "runtime body", 12, "insertText");
+    const document = createWriterDocument("p-1");
+    const shell = new SwDocShell(document, metadata());
+    new SwWrtShell(shell).InsertText("p-1", "runtime body", 12, "insertText");
     runtime.HandleMessage(
       request({
-        bytes: writeOdtDocument(document).buffer as ArrayBuffer,
+        bytes: writeOdtDocument(document, shell.GetDocumentState()).buffer as ArrayBuffer,
         metadata: metadata(),
         operation: "import",
       }),
@@ -91,7 +92,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     const limitedScope = new CapturingScope();
     new OdtWorkerRuntime(limitedScope).HandleMessage(
       request({
-        bytes: writeOdtDocument(document).buffer as ArrayBuffer,
+        bytes: writeOdtDocument(document, shell.GetDocumentState()).buffer as ArrayBuffer,
         metadata: metadata(),
         operation: "import",
         zipLimits: {
@@ -115,7 +116,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     runtime.HandleMessage(
       request({
         operation: "export",
-        snapshot: createWriterSnapshot(createWriterDocument(metadata(), "p-1")),
+        snapshot: createWriterSnapshot(createWriterDocument("p-1"), metadata()),
       }),
     );
     const result = await terminal(scope);
@@ -170,10 +171,10 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
         if ((message as { stage?: string }).stage === "import:styles")
           cancelRuntime.HandleMessage({ id: 1, protocol: 1, type: "cancel" });
       };
-    const document = createWriterDocument(metadata(), "p-1");
+    const document = createWriterDocument("p-1");
     cancelRuntime.HandleMessage(
       request({
-        bytes: writeOdtDocument(document).buffer as ArrayBuffer,
+        bytes: writeOdtDocument(document, metadata()).buffer as ArrayBuffer,
         metadata: metadata(),
         operation: "import",
       }),

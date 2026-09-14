@@ -1,6 +1,13 @@
 /**
- * @fileoverview Defines pure, JSON-serializable document identity and lifecycle transitions at the LibreOffice `sfx2/source/doc/docfac.cxx` ownership boundary.
+ * @fileoverview Implements bounded SfxObjectShell lifecycle ownership from pinned
+ * `include/sfx2/objsh.hxx` and `sfx2/source/doc/objmisc.cxx`.
  */
+
+import {
+  createSfxMediumDescriptor,
+  type SfxMediumDescriptor,
+  type SfxMediumInput,
+} from "./docfile";
 
 /** Identifies the permitted lifecycle states for a locally held browser document. */
 export type DocumentLifecycle = "closed" | "dirty" | "new" | "saved";
@@ -36,6 +43,53 @@ export interface CreateDocumentInput {
   readonly suiteId: DocumentModuleId;
   /** Non-empty human-readable title for the document. */
   readonly title: string;
+}
+
+/** Framework document shell owning identity, lifecycle generations, and the current medium. */
+export class SfxObjectShell {
+  protected documentState: OfficeDocument;
+  protected medium: SfxMediumDescriptor;
+
+  /** Creates an object shell from explicit lifecycle and medium inputs. @param document - Lifecycle state. @param medium - Current medium. @returns Nothing. */
+  public constructor(document: OfficeDocument, medium: SfxMediumInput) {
+    this.documentState = { ...document };
+    this.medium = createSfxMediumDescriptor(medium, this.documentState);
+  }
+
+  /** Returns immutable lifecycle state owned by this shell. @returns Current state. */
+  public GetDocumentState(): OfficeDocument {
+    return this.documentState;
+  }
+
+  /** Returns the current medium synchronized to shell lifecycle. @returns Medium descriptor. */
+  public GetMedium(): SfxMediumDescriptor {
+    return createSfxMediumDescriptor(this.medium, this.documentState);
+  }
+
+  /** Rejects commands and persistence after shell closure. @returns Nothing for an open shell. */
+  public EnsureOpen(): void {
+    if (this.documentState.lifecycle === "closed")
+      throw new Error("Closed document shells cannot execute commands or persistence.");
+  }
+
+  /** Replaces shell-owned lifecycle and medium atomically. @param document - New lifecycle. @param medium - New medium. @returns Nothing. */
+  protected ReplaceObjectState(document: OfficeDocument, medium: SfxMediumInput): void {
+    this.documentState = { ...document };
+    this.medium = createSfxMediumDescriptor(medium, this.documentState);
+  }
+
+  /** Stores a lifecycle transition owned by this framework shell. @param document - New state. @returns Whether state identity changed. */
+  protected SetDocumentState(document: OfficeDocument): boolean {
+    if (document === this.documentState) return false;
+    this.documentState = document;
+    return true;
+  }
+
+  /** Marks this shell closed without mutating its underlying document model. @returns Whether closure changed state. */
+  protected CloseObjectShell(): boolean {
+    const next = closeDocument(this.documentState);
+    return this.SetDocumentState(next);
+  }
 }
 
 /**

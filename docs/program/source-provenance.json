@@ -4,8 +4,16 @@
   "baselineTag": "libreoffice-26.8.0.2",
   "filenameDivergences": [
     {
-      "localPath": "apps/office/src/sfx2/source/doc/docundomanager.ts",
-      "rationale": "The local docundomanager.ts module preserves the reviewed SfxUndoAction responsibility while TypeScript decomposition or public naming requires a different filename from undo.cxx."
+      "localPath": "apps/office/src/svl/source/notify/broadcast.ts",
+      "rationale": "The local lowercase broadcast.ts filename follows the repository module convention while preserving the reviewed SfxBroadcaster responsibility implemented by upstream SfxBroadcaster.cxx."
+    },
+    {
+      "localPath": "apps/office/src/svl/source/notify/listener.ts",
+      "rationale": "The local listener.ts filename uses the unabbreviated public type name while preserving the reviewed SfxListener responsibility implemented by upstream lstner.cxx."
+    },
+    {
+      "localPath": "apps/office/src/sw/source/core/bastyp/contentindex.ts",
+      "rationale": "The local contentindex.ts module follows the SwContentIndex public type name while preserving the reviewed registry/update responsibility implemented by upstream index.cxx."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
@@ -67,6 +75,78 @@
         "SvxAdjustItem",
         "SvxLineSpacingItem::CreateDefault",
         "SvxAdjustItem::CreateDefault"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwModify",
+            "path": "apps/office/src/sw/inc/calbck.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwModify::CallSwClientNotify",
+            "path": "vendor/libreoffice-reference/sw/source/core/attr/calbck.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/inc/calbck.ts",
+      "localSymbols": [
+        "SwClient",
+        "SwModify",
+        "subscribeToSwModify"
+      ],
+      "omittedResponsibilities": [
+        "The complete native format-death, type-filtered client, and layout-client families remain outside the bounded implementation."
+      ],
+      "preservedResponsibilities": [
+        "Preserves one-parent SwClient registration, SwModify propagation, safe disposal, and bounded transaction aggregation."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/attr/calbck.cxx",
+      "upstreamSymbols": [
+        "SwModify::CallSwClientNotify",
+        "SwModify::SwClientNotify",
+        "SwModify::RemoveAllWriterListeners"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwAtomicModelHint",
+            "path": "apps/office/src/sw/inc/hints.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "class SwFormatChangeHint",
+            "path": "vendor/libreoffice-reference/sw/inc/hints.hxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/inc/hints.ts",
+      "localSymbols": [
+        "SwAtomicModelHint",
+        "SwModelTransactionHint",
+        "SwModelHint"
+      ],
+      "omittedResponsibilities": [
+        "Hints for fields, tables, frames, accessibility, layout, and the complete text-change payload surface remain unimplemented."
+      ],
+      "preservedResponsibilities": [
+        "Defines typed change discriminators for the bounded Writer model, shell lifecycle, selection, replacement, and disposal graph."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/inc/hints.hxx",
+      "upstreamSymbols": [
+        "SwFormatChangeHint",
+        "InsertText",
+        "DeleteText"
       ]
     },
     {
@@ -484,25 +564,111 @@
       ]
     },
     {
-      "classification": "local-infrastructure",
+      "classification": "upstream-mechanism",
       "evidence": {
         "local": [
           {
-            "marker": "DocumentLifecycle",
-            "path": "apps/office/src/sfx2/source/doc/docfac.ts"
+            "marker": "SfxObjectShell",
+            "path": "apps/office/src/sfx2/source/doc/objsh.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "class SfxObjectShell",
+            "path": "vendor/libreoffice-reference/include/sfx2/objsh.hxx"
           }
         ]
       },
-      "localPath": "apps/office/src/sfx2/source/doc/docfac.ts",
-      "rationale": "Defines immutable browser document identity and lifecycle value transitions used by the object-shell layer. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Defines immutable browser document identity and lifecycle value transitions used by the object-shell layer."
+      "localPath": "apps/office/src/sfx2/source/doc/objsh.ts",
+      "localSymbols": [
+        "SfxObjectShell",
+        "OfficeDocument",
+        "markDocumentDirty",
+        "markDocumentSaved"
       ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      "omittedResponsibilities": [
+        "UNO model integration, native storage, signing, macro, printer, and desktop UI obligations remain outside the bounded browser object-shell layer."
+      ],
+      "preservedResponsibilities": [
+        "Owns document identity, modified state, lifecycle transitions, and the current medium outside the Writer model graph."
+      ],
+      "status": "mapped",
+      "upstreamPath": "include/sfx2/objsh.hxx",
+      "upstreamSymbols": [
+        "SfxObjectShell"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxBroadcaster",
+            "path": "apps/office/src/svl/source/notify/broadcast.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxBroadcaster::Broadcast",
+            "path": "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx"
+          }
+        ]
       },
-      "status": "local-only"
+      "localPath": "apps/office/src/svl/source/notify/broadcast.ts",
+      "localSymbols": [
+        "SfxHint",
+        "SfxListenerTarget",
+        "SfxBroadcaster"
+      ],
+      "omittedResponsibilities": [
+        "Native duplicate listener slots, broadcaster copying, forwarding, and style-sheet type probes remain outside the bounded TypeScript implementation."
+      ],
+      "preservedResponsibilities": [
+        "Preserves synchronous typed broadcast, mutation-safe iteration, reciprocal destruction notification, and idempotent registration."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/notify/SfxBroadcaster.cxx",
+      "upstreamSymbols": [
+        "SfxBroadcaster::AddListener",
+        "SfxBroadcaster::RemoveListener",
+        "SfxBroadcaster::Broadcast",
+        "SfxBroadcaster::~SfxBroadcaster"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxListener",
+            "path": "apps/office/src/svl/source/notify/listener.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxListener::StartListening",
+            "path": "vendor/libreoffice-reference/svl/source/notify/lstner.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/notify/listener.ts",
+      "localSymbols": [
+        "SfxListener"
+      ],
+      "omittedResponsibilities": [
+        "Native copy-construction helpers and untyped hint families remain outside the bounded listener implementation."
+      ],
+      "preservedResponsibilities": [
+        "Preserves M:N reciprocal registration, explicit unregistration, and broadcaster-destruction detachment."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/notify/lstner.cxx",
+      "upstreamSymbols": [
+        "SfxListener::StartListening",
+        "SfxListener::EndListening",
+        "SfxListener::EndListeningAll",
+        "SfxListener::RemoveBroadcaster_Impl"
+      ]
     },
     {
       "classification": "upstream-mechanism",
@@ -550,7 +716,7 @@
         "local": [
           {
             "marker": "DEFAULT_MAX_UNDO_ACTION_COUNT",
-            "path": "apps/office/src/sfx2/source/doc/docundomanager.ts"
+            "path": "apps/office/src/svl/source/undo/undo.ts"
           }
         ],
         "upstream": [
@@ -560,7 +726,7 @@
           }
         ]
       },
-      "localPath": "apps/office/src/sfx2/source/doc/docundomanager.ts",
+      "localPath": "apps/office/src/svl/source/undo/undo.ts",
       "localSymbols": [
         "DEFAULT_MAX_UNDO_ACTION_COUNT",
         "SfxUndoAction",
@@ -846,6 +1012,43 @@
         "SwAttrSet",
         "SwAttrPool::SwAttrPool",
         "o3tl::convert"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwContentIndex",
+            "path": "apps/office/src/sw/source/core/bastyp/contentindex.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwContentIndexReg::Update",
+            "path": "vendor/libreoffice-reference/sw/source/core/bastyp/index.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/bastyp/contentindex.ts",
+      "localSymbols": [
+        "SwContentIndexOwnerKind",
+        "SwContentIndexUpdateMode",
+        "SwContentIndexRegistry",
+        "SwContentIndex"
+      ],
+      "omittedResponsibilities": [
+        "Native intrusive sorted-list storage, debug owner discovery, fieldmark correction, and every owner subtype remain outside the bounded implementation."
+      ],
+      "preservedResponsibilities": [
+        "Preserves registered content-position correction for insertion, deletion, replacement, split, merge, removal, and node transfer."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/bastyp/index.cxx",
+      "upstreamSymbols": [
+        "SwContentIndex",
+        "SwContentIndexReg::Update",
+        "SwContentIndexReg::MoveTo"
       ]
     },
     {

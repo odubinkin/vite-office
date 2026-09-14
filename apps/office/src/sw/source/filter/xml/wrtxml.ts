@@ -7,6 +7,7 @@ import {
   ODT_MIMETYPE,
 } from "../../../../package/source/manifest/ManifestExport";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SwDoc } from "../../core/doc/doc";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
 
@@ -28,8 +29,12 @@ export interface OdtExportControl {
 
 /** Writes the currently supported Writer graph as an ODF 1.3 text package. */
 export class SwXMLWriter {
-  /** Produces a deterministic ODT byte stream. @param document - Canonical Writer document. @param control - Cooperative progress/cancellation controls. @returns ODT bytes. */
-  public Write(document: SwDoc, control: OdtExportControl = {}): Uint8Array {
+  /** Produces a deterministic ODT byte stream. @param document - Canonical Writer document. @param documentState - Shell-owned title and identity. @param control - Cooperative progress/cancellation controls. @returns ODT bytes. */
+  public Write(
+    document: SwDoc,
+    documentState: OfficeDocument,
+    control: OdtExportControl = {},
+  ): Uint8Array {
     const encoder = new TextEncoder();
     const output = new ZipOutputStream();
     output.putNextEntry("mimetype", encoder.encode(ODT_MIMETYPE));
@@ -39,7 +44,7 @@ export class SwXMLWriter {
     checkpoint(control, "content");
     output.putNextEntry("content.xml", encoder.encode(exportContentXml(document)));
     checkpoint(control, "metadata");
-    output.putNextEntry("meta.xml", encoder.encode(exportMetaXml(document)));
+    output.putNextEntry("meta.xml", encoder.encode(exportMetaXml(documentState.title)));
     checkpoint(control, "package");
     const bytes = output.finish();
     if (bytes.length > (control.maxOutputBytes ?? ODT_EXPORT_BYTE_LIMIT))
@@ -48,9 +53,13 @@ export class SwXMLWriter {
   }
 }
 
-/** Convenience ODT export boundary. @param document - Canonical Writer document. @param control - Cooperative progress/cancellation controls. @returns Deterministic ODT bytes. */
-export function writeOdtDocument(document: SwDoc, control?: OdtExportControl): Uint8Array {
-  return new SwXMLWriter().Write(document, control);
+/** Convenience ODT export boundary. @param document - Canonical Writer document. @param documentState - Shell-owned title and identity. @param control - Cooperative progress/cancellation controls. @returns Deterministic ODT bytes. */
+export function writeOdtDocument(
+  document: SwDoc,
+  documentState: OfficeDocument,
+  control?: OdtExportControl,
+): Uint8Array {
+  return new SwXMLWriter().Write(document, documentState, control);
 }
 
 /** Emits progress then rejects cancelled work before another heavy stage. @param control - Cooperative controls. @param stage - Current stage. @returns Nothing. */

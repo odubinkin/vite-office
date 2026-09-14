@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
 import type { RecoveryStorageAdapter } from "../../../../svl/source/misc/recovery";
 import { createDownloadFilename } from "../../../../vcl/browser/browser-download";
@@ -286,10 +286,10 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const session = createWriterDocumentSession(services);
     const paragraphId = session.view.GetWrtShell().GetActiveParagraph().id;
     session.view.GetWrtShell().InsertText(paragraphId, "dirty", 0, "insertText");
-    const dirtyGeneration = session.docShell.GetDoc().document.contentGeneration;
+    const dirtyGeneration = session.docShell.GetDocumentState().contentGeneration;
 
     await session.view.SaveOdt();
-    expect(session.docShell.GetDoc().document).toMatchObject({
+    expect(session.docShell.GetDocumentState()).toMatchObject({
       isModified: true,
       savedGeneration: null,
     });
@@ -300,7 +300,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
 
     await session.view.SaveLocal();
     expect(stored?.version).toBe(dirtyGeneration);
-    expect(session.docShell.GetDoc().document).toMatchObject({
+    expect(session.docShell.GetDocumentState()).toMatchObject({
       isModified: false,
       savedGeneration: dirtyGeneration,
     });
@@ -311,9 +311,9 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     });
 
     session.view.GetWrtShell().InsertText(paragraphId, "!", 5, "insertText");
-    const nextGeneration = session.docShell.GetDoc().document.contentGeneration;
+    const nextGeneration = session.docShell.GetDocumentState().contentGeneration;
     session.view.ExportText();
-    expect(session.docShell.GetDoc().document).toMatchObject({
+    expect(session.docShell.GetDocumentState()).toMatchObject({
       isModified: true,
       savedGeneration: dirtyGeneration,
     });
@@ -352,7 +352,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       status: "restored",
     });
     expect(reloaded.docShell.GetDoc().paragraphs[0]?.text).toBe("Recovered text");
-    expect(reloaded.docShell.GetDoc().document).toMatchObject({
+    expect(reloaded.docShell.GetDocumentState()).toMatchObject({
       isModified: true,
       recoveryGeneration: 1,
       savedGeneration: null,
@@ -397,12 +397,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
   });
 
   it("retains explicit construction order before frame attachment" /** Verifies pre-frame invalidation remains local and dispatch requires an attached frame. @returns Nothing. */, function enforcesFrameConstructionOrder(): void {
-    const docShell = new SwDocShell(
-      new SwDoc(
-        createDocument({ id: "isolated", suiteId: "writer", title: "Isolated Writer" }),
-        "isolated-paragraph-1",
-      ),
-    );
+    const state = createDocument({ id: "isolated", suiteId: "writer", title: "Isolated Writer" });
+    const docShell = new SwDocShell(new SwDoc("isolated-paragraph-1"), state);
     const view = new SwView(docShell, createServices());
     expect(
       /** Dispatches before frame attachment. @returns Nothing before the expected exception. */

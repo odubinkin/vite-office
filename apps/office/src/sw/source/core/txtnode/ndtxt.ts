@@ -32,6 +32,76 @@ import {
 } from "../doc/number";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
+import { SwContentIndexUpdateMode } from "../bastyp/contentindex";
+
+/** Finds the grapheme start immediately before a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
+export function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
+  const boundaries = getWriterGraphemeBoundaries(text);
+  let previous = 0;
+  for (const boundary of boundaries) {
+    if (boundary >= offset) return previous;
+    previous = boundary;
+  }
+  /* v8 ignore next -- Boundary enumeration includes text.length for a valid cursor offset. */
+  return previous;
+}
+
+/** Finds the grapheme end immediately after a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Next grapheme boundary. */
+export function getWriterNextGraphemeBoundary(text: string, offset: number): number {
+  for (const boundary of getWriterGraphemeBoundaries(text)) if (boundary > offset) return boundary;
+  /* v8 ignore next -- Callers handle the text-end cursor before requesting a boundary. */
+  return text.length;
+}
+
+/** Exact contiguous text mutation detected between two Writer text states. */
+export type WriterTextChange =
+  | Readonly<{ kind: "delete"; end: number; start: number; text: string }>
+  | Readonly<{ kind: "insert"; offset: number; text: string }>;
+
+/** Detects one contiguous insertion, deletion, or a replacement requiring fallback handling. @param previousText - Canonical text. @param nextText - New text. @returns Exact insertion/deletion when representable. */
+export function getWriterTextChange(
+  previousText: string,
+  nextText: string,
+): WriterTextChange | undefined {
+  if (nextText === previousText) return undefined;
+  let prefixLength = 0;
+  while (
+    prefixLength < previousText.length &&
+    previousText.charAt(prefixLength) === nextText.charAt(prefixLength)
+  )
+    prefixLength += 1;
+  let suffixLength = 0;
+  while (
+    suffixLength < previousText.length - prefixLength &&
+    previousText.charAt(previousText.length - suffixLength - 1) ===
+      nextText.charAt(nextText.length - suffixLength - 1)
+  )
+    suffixLength += 1;
+  const previousEnd = previousText.length - suffixLength;
+  const removedText = previousText.slice(prefixLength, previousEnd);
+  const insertedText = nextText.slice(prefixLength, nextText.length - suffixLength);
+  if (removedText.length === 0 && insertedText.length > 0)
+    return { kind: "insert", offset: prefixLength, text: insertedText };
+  if (insertedText.length === 0 && removedText.length > 0)
+    return { kind: "delete", end: previousEnd, start: prefixLength, text: removedText };
+  return undefined;
+}
+
+/** Enumerates UTF-16 grapheme boundaries with a code-point fallback. @param text - Paragraph text. @returns Ordered boundaries including zero and text length. */
+function getWriterGraphemeBoundaries(text: string): readonly number[] {
+  const boundaries = [0];
+  if (typeof Intl.Segmenter === "function") {
+    const segments = new Intl.Segmenter(undefined, { granularity: "grapheme" }).segment(text);
+    for (const segment of segments) boundaries.push(segment.index + segment.segment.length);
+    return boundaries;
+  }
+  let offset = 0;
+  for (const character of text) {
+    offset += character.length;
+    boundaries.push(offset);
+  }
+  return boundaries;
+}
 import { SwNumRuleItem } from "../para/paratr";
 import { createSwpHintsFromSnapshot, SwpHints } from "./ndhints";
 import type { SwTextAttrSnapshot, WriterCharacterAttributes } from "./txatbase";
@@ -494,9 +564,12 @@ export class SwTextNode extends SwContentNode {
     offset: number,
     attributes = this.getCharacterAttributesAt(offset),
   ): string {
+    if (text.length === 0) return text;
     const runs = insertWriterTextRun(this.runs, offset, text, attributes);
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
     this.setHintsFromRuns(runs);
+    this.UpdateContentIndices(offset, text.length);
+    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
     return text;
   }
 
@@ -504,10 +577,14 @@ export class SwTextNode extends SwContentNode {
   public EraseText(start: number, count = Number.MAX_SAFE_INTEGER): void {
     const end = Math.min(this.mText.length, start + count);
     this.assertRange(start, end);
+    const removedLength = end - start;
+    if (removedLength === 0) return;
     const prefix = splitWriterTextRuns(this.runs, start).prefix;
     const suffix = splitWriterTextRuns(this.runs, end).suffix;
     this.mText = `${this.mText.slice(0, start)}${this.mText.slice(end)}`;
     this.setHintsFromRuns([...prefix, ...suffix]);
+    this.UpdateContentIndices(start, removedLength, SwContentIndexUpdateMode.Negative);
+    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
   }
 
   /** Replaces one text range with caller-normalized direct-format runs. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacementRuns - Replacement content. @returns Nothing. */
@@ -516,20 +593,53 @@ export class SwTextNode extends SwContentNode {
     const prefix = splitWriterTextRuns(this.runs, start).prefix;
     const suffix = splitWriterTextRuns(this.runs, end).suffix;
     const replacement = normalizeWriterTextRuns(replacementRuns);
-    this.mText = `${this.mText.slice(0, start)}${getWriterTextFromRuns(replacement)}${this.mText.slice(end)}`;
+    const replacementText = getWriterTextFromRuns(replacement);
+    const removedLength = end - start;
+    this.mText = `${this.mText.slice(0, start)}${replacementText}${this.mText.slice(end)}`;
     this.setHintsFromRuns([...prefix, ...replacement, ...suffix]);
+    if (removedLength > replacementText.length) {
+      this.UpdateContentIndices(
+        start + replacementText.length,
+        removedLength - replacementText.length,
+        SwContentIndexUpdateMode.Negative,
+      );
+    } else if (replacementText.length > removedLength) {
+      this.UpdateContentIndices(
+        start + removedLength,
+        replacementText.length - removedLength,
+        SwContentIndexUpdateMode.Replace,
+      );
+    }
+    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
   }
 
   /** Replaces the complete node text and clears direct character hints. @param text - New canonical text. @returns Nothing. */
   public SetText(text: string): void {
+    const previousText = this.mText;
+    const previousLength = previousText.length;
     this.mText = text;
     this.pSwpHints = undefined;
+    if (previousLength > text.length)
+      this.UpdateContentIndices(
+        text.length,
+        previousLength - text.length,
+        SwContentIndexUpdateMode.Negative,
+      );
+    else if (text.length > previousLength)
+      this.UpdateContentIndices(
+        previousLength,
+        text.length - previousLength,
+        SwContentIndexUpdateMode.Replace,
+      );
+    if (previousText !== text)
+      this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
   }
 
   /** Applies or removes one direct format over a non-empty range. @param start - Inclusive format start. @param end - Exclusive format end. @param format - Toggled direct property. @returns Nothing. */
   public ToggleTextRangeFormat(start: number, end: number, format: WriterCharacterFormat): void {
     this.assertRange(start, end);
     this.setTextRuns(toggleWriterTextRangeFormat(this.runs, start, end, format));
+    this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
   }
 
   /** Reads direct attributes inherited by a collapsed caret. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
@@ -560,12 +670,20 @@ export class SwTextNode extends SwContentNode {
     trailing.setHintsFromRuns(split.suffix);
     this.mText = getWriterTextFromRuns(split.prefix);
     this.setHintsFromRuns(split.prefix);
+    this.MoveContentIndicesFrom(trailing, offset);
+    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
     return trailing;
   }
 
   /** Appends another text node's content while preserving its direct attributes. @param source - Appended text node. @returns Nothing. */
   public AppendTextNode(source: SwTextNode): void {
+    if (source === this) throw new Error("SwTextNode cannot append itself.");
+    if (source.GetNodes() !== this.GetNodes())
+      throw new Error("Joined SwTextNodes belong to different documents.");
+    const offset = this.Len();
     this.setTextRuns([...this.runs, ...source.runs]);
+    source.MoveAllContentIndicesTo(this, offset);
+    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
   }
 
   /** Creates a cycle-free persisted record. @returns Text-node snapshot. */

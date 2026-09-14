@@ -32,6 +32,7 @@ export class SwFormat {
   public SetFormatName(name: string): void {
     if (name.trim().length === 0) throw new Error("SwFormat name must not be blank.");
     this.formatName = name;
+    this.NotifyFormatInheritance();
   }
 
   /** Returns the owned attribute set. @returns Format attributes. */
@@ -55,27 +56,36 @@ export class SwFormat {
     if (this.derivedFrom === derivedFrom) return false;
     this.derivedFrom = derivedFrom;
     this.attributeSet.SetParent(derivedFrom?.GetAttrSet());
+    this.NotifyFormatInheritance();
     return true;
   }
 
   /** Stores one direct format item. @param item - Format item. @returns True when changed. */
   public SetFormatAttr(item: SfxPoolItem): boolean {
-    return this.attributeSet.Put(item) !== undefined;
+    const changed = this.attributeSet.Put(item) !== undefined;
+    if (changed) this.NotifyAttributeSet();
+    return changed;
   }
 
   /** Copies direct format items from another set. @param set - Source item set. @returns True when changed. */
   public SetFormatAttrSet(set: SfxItemSet): boolean {
-    return this.attributeSet.PutSet(set);
+    const changed = this.attributeSet.PutSet(set);
+    if (changed) this.NotifyAttributeSet();
+    return changed;
   }
 
   /** Clears one direct format item. @param which - Cleared WhichId. @returns True when removed. */
   public ResetFormatAttr(which: number): boolean {
-    return this.attributeSet.ClearItem(which) !== 0;
+    const changed = this.attributeSet.ClearItem(which) !== 0;
+    if (changed) this.NotifyAttributeSet();
+    return changed;
   }
 
   /** Clears every direct format item. @returns Removed item count. */
   public ResetAllFormatAttr(): number {
-    return this.attributeSet.ClearItem();
+    const count = this.attributeSet.ClearItem();
+    if (count > 0) this.NotifyAttributeSet();
+    return count;
   }
 
   /** Reports whether this is an automatic rather than named format. @returns Auto-format flag. */
@@ -86,5 +96,21 @@ export class SwFormat {
   /** Changes the auto-format flag. @param autoFormat - New flag. @returns Nothing. */
   public SetAuto(autoFormat: boolean): void {
     this.autoFormat = autoFormat;
+  }
+
+  /** Emits one format-owned attribute hint through the document broadcaster. @returns Nothing. */
+  private NotifyAttributeSet(): void {
+    this.attributeSet.GetDoc().CallSwClientNotify({
+      formatId: this.formatName,
+      kind: "attribute-set-changed",
+    });
+  }
+
+  /** Emits one format inheritance/name hint through the document broadcaster. @returns Nothing. */
+  private NotifyFormatInheritance(): void {
+    this.attributeSet.GetDoc().CallSwClientNotify({
+      formatId: this.formatName,
+      kind: "format-inheritance-changed",
+    });
   }
 }

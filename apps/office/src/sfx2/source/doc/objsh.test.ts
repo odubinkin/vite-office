@@ -1,5 +1,5 @@
 /**
- * @fileoverview Verifies deterministic document-factory identity validation, lifecycle transitions, immutability, and serializability.
+ * @fileoverview Verifies SfxObjectShell lifecycle identity validation, transitions, immutability, and serializability.
  */
 
 import { describe, expect, it } from "vitest";
@@ -12,7 +12,7 @@ import {
   markDocumentHistorySavePosition,
   markDocumentRecoverySaved,
   markDocumentSaved,
-} from "./docfac";
+} from "./objsh";
 
 /**
  * Creates a valid Writer document fixture for lifecycle tests.

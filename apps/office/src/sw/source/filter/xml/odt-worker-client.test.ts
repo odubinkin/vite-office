@@ -2,7 +2,7 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterSnapshot } from "../../core/doc/writer-storage";
 import { createWriterDocument } from "../../core/doc/writer";
 import { createWriterModuleFactory } from "../../uibase/app/swmodule";
@@ -53,6 +53,11 @@ function metadata() {
   return createDocument({ id: "worker-client", suiteId: "writer", title: "Client" });
 }
 
+/** Creates one target-schema snapshot for transport tests. @returns Current Writer snapshot. */
+function snapshot() {
+  return createWriterSnapshot(createWriterDocument("p-1"), metadata());
+}
+
 /** Reads the last posted request identity. @param worker - Fake transport. @returns Request ID. */
 function postedId(worker: FakeWorker): number {
   return (worker.posted.at(-1)?.message as { id: number }).id;
@@ -66,7 +71,7 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
     );
     const source = new Uint8Array([1, 2, 3]);
     const progress: string[] = [];
-    const importedSnapshot = createWriterSnapshot(createWriterDocument(metadata(), "p-1"));
+    const importedSnapshot = snapshot();
     const importing = client.Import(source, metadata(), {
       onProgress:
         /** Records one accepted worker stage. @param stage - Qualified stage. @returns New array length. */ (
@@ -130,7 +135,7 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
       const first = client.Import(new Uint8Array([1]), metadata());
       const oldWorker = workers[0] as FakeWorker;
       const oldHandler = oldWorker.onmessage;
-      const second = client.Export(createWriterSnapshot(createWriterDocument(metadata(), "p-1")));
+      const second = client.Export(snapshot());
       await expect(first).rejects.toMatchObject({ category: "stale" });
       expect(oldWorker.terminated).toBe(true);
       oldHandler?.call(
@@ -184,7 +189,7 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
       activeAbort.abort();
       await expect(cancelled).rejects.toMatchObject({ category: "cancelled" });
 
-      const timedOut = client.Export(createWriterSnapshot(createWriterDocument(metadata(), "p-1")));
+      const timedOut = client.Export(snapshot());
       const timedOutAssertion = expect(timedOut).rejects.toMatchObject({ category: "timeout" });
       await vi.advanceTimersByTimeAsync(51);
       await timedOutAssertion;

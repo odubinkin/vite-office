@@ -1,14 +1,16 @@
 /**
- * @fileoverview Reimplements the bounded Writer document-shell load/save boundary from pinned `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
+ * @fileoverview Reimplements the bounded Writer document-shell load/save boundary from pinned
+ * `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
  */
 
 import {
+  SfxObjectShell,
   markDocumentDirty,
   markDocumentHistorySavePosition,
   markDocumentRecoverySaved,
   markDocumentSaved,
   type OfficeDocument,
-} from "../../../../sfx2/source/doc/docfac";
+} from "../../../../sfx2/source/doc/objsh";
 import {
   createSfxMediumDescriptor,
   synchronizeSfxMedium,
@@ -22,8 +24,10 @@ import {
   SfxUndoManager,
   type SfxUndoAction,
   type SfxUndoSavePosition,
-} from "../../../../sfx2/source/doc/docundomanager";
+} from "../../../../svl/source/undo/undo";
 import { ODT_MIMETYPE } from "../../../../package/source/manifest/ManifestExport";
+import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
+import type { SwModelHint } from "../../../inc/hints";
 import { SwDoc } from "../../core/doc/doc";
 import {
   createWriterSnapshot,
@@ -38,115 +42,152 @@ import {
   type OdtFilterService,
 } from "../../filter/xml/odt-filter-service";
 
-/** Writer document shell that owns the active SwDoc across new, load, and save operations. */
-export class SwDocShell {
+/** Writer document shell that owns lifecycle/medium state around a model-only SwDoc. */
+export class SwDocShell extends SfxObjectShell {
   /** MIME type used by Writer's OpenDocument Text filter. */
   public static readonly ODT_MEDIA_TYPE = ODT_MIMETYPE;
 
-  private readonly listeners = new Set<() => void>();
-  private medium: SfxMediumDescriptor;
   private odtRequestGeneration = 0;
+  private readonly modelClient: SwClient;
+  private readonly notifications = new SwModify();
   private undoManager: SfxUndoManager<SwUndoRedoContext>;
 
-  /** Creates a shell around an existing Writer document. @param document - Active canonical document. @param medium - Persistent browser-adapted medium descriptor. @param odtFilter - Asynchronous ODT filter boundary. @returns Nothing. */
+  /** Creates a shell around an existing Writer model and explicit object-shell state. @param document - Active model. @param documentState - Shell lifecycle state. @param medium - Current medium. @param odtFilter - ODT filter service. @returns Nothing. */
   public constructor(
     private document: SwDoc,
-    medium: SfxMediumInput = { kind: "untitled", name: document.document.title },
+    documentState: OfficeDocument,
+    medium: SfxMediumInput = { kind: "untitled", name: documentState.title },
     private readonly odtFilter: OdtFilterService = createInlineOdtFilterService(),
   ) {
+    super(documentState, medium);
     this.undoManager = new SfxUndoManager<SwUndoRedoContext>();
-    if (document.document.isModified) this.undoManager.ClearSavePosition();
-    this.medium = createSfxMediumDescriptor(medium, document.document);
+    if (documentState.isModified) this.undoManager.ClearSavePosition();
+    this.modelClient = new SwClient(
+      /** Relays one model notification into shell policy. @param _source - Model source. @param hint - Typed hint. @returns Nothing. */ (
+        _source,
+        hint,
+      ) => this.ReceiveModelHint(hint),
+    );
+    this.modelClient.RegisterToModify(document);
   }
 
-  /** Returns the shell-owned Writer document. @returns Active SwDoc. */
+  /** Returns the shell-owned Writer model. @returns Active model. */
   public GetDoc(): SwDoc {
     return this.document;
   }
 
-  /** Returns the document-owned action manager. @returns Current Sfx undo manager. */
+  /** Returns the document-owned action manager. @returns Current undo manager. */
   public GetUndoManager(): SfxUndoManager<SwUndoRedoContext> {
     return this.undoManager;
   }
 
-  /** Returns the active browser-adapted medium descriptor. @returns Immutable copied descriptor. */
-  public GetMedium(): SfxMediumDescriptor {
-    return createSfxMediumDescriptor(this.medium, this.document.document);
+  /** Subscribes one typed shell consumer through the Writer notification graph. @param listener - Typed receiver. @returns Cleanup callback. */
+  public Subscribe(listener: (hint: SwModelHint) => void): () => void {
+    return subscribeToSwModify(
+      this.notifications,
+      /** Forwards one shell hint. @param _source - Shell notification source. @param hint - Typed hint. @returns Nothing. */ (
+        _source,
+        hint,
+      ) => listener(hint),
+    );
   }
 
-  /** Subscribes to document replacement, history navigation, and lifecycle invalidation. @param listener - Session listener. @returns Cleanup removing the listener. */
-  public Subscribe(listener: () => void): () => void {
-    this.listeners.add(listener);
-    return /** Removes one document-shell listener. @returns Whether the listener was present. */ () =>
-      this.listeners.delete(listener);
-  }
-
-  /** Executes and records one semantic Writer action. @param action - Reversible domain operation. @param context - Active Writer shell context. @param tryMerge - Whether the top action may absorb it. @returns True after successful execution. */
+  /** Executes and records one semantic Writer action as one notification transaction. @param action - Reversible operation. @param context - Writer undo context. @param tryMerge - Whether adjacent history may merge. @returns True after execution. */
   public ApplyUndoAction(
     action: SfxUndoAction<SwUndoRedoContext>,
     context: SwUndoRedoContext,
     tryMerge = false,
   ): boolean {
-    action.RedoWithContext(context);
-    this.document.SetModified();
-    this.undoManager.AddUndoAction(action, tryMerge);
-    this.Notify();
+    this.EnsureOpen();
+    this.notifications.RunNotificationTransaction(
+      /** Executes one shell transaction. @returns Nothing. */ () => {
+        this.document.RunModelTransaction(
+          /** Executes the action against the model. @returns Nothing. */ () =>
+            action.RedoWithContext(context),
+        );
+        this.undoManager.AddUndoAction(action, tryMerge);
+      },
+    );
     return true;
   }
 
-  /** Reverts the current top Writer action and updates lifecycle state against the save mark. @param context - Active Writer shell context. @returns Whether an action ran. */
+  /** Reverts the current top Writer action and updates lifecycle against the save mark. @param context - Writer undo context. @returns Whether an action ran. */
   public Undo(context: SwUndoRedoContext): boolean {
-    if (!this.undoManager.Undo(context)) return false;
-    this.MarkHistoryMutation();
-    this.Notify();
-    return true;
+    this.EnsureOpen();
+    return this.notifications.RunNotificationTransaction(
+      /** Executes one shell undo transaction. @returns Whether an action ran. */ () => {
+        const changed = this.document.RunModelTransaction(
+          /** Executes the current undo action. @returns Whether an action ran. */ () =>
+            this.undoManager.Undo(context),
+        );
+        if (changed) this.MarkHistoryMutation();
+        return changed;
+      },
+    );
   }
 
-  /** Reapplies the next Writer action and updates lifecycle state against the save mark. @param context - Active Writer shell context. @returns Whether an action ran. */
+  /** Reapplies the next Writer action and updates lifecycle against the save mark. @param context - Writer undo context. @returns Whether an action ran. */
   public Redo(context: SwUndoRedoContext): boolean {
-    if (!this.undoManager.Redo(context)) return false;
-    this.MarkHistoryMutation();
-    this.Notify();
-    return true;
+    this.EnsureOpen();
+    return this.notifications.RunNotificationTransaction(
+      /** Executes one shell redo transaction. @returns Whether an action ran. */ () => {
+        const changed = this.document.RunModelTransaction(
+          /** Executes the current redo action. @returns Whether an action ran. */ () =>
+            this.undoManager.Redo(context),
+        );
+        if (changed) this.MarkHistoryMutation();
+        return changed;
+      },
+    );
   }
 
-  /** Acknowledges a committed recovery snapshot without affecting primary save state. @param generation - Persisted recovery generation. @returns Whether lifecycle state changed. */
+  /** Acknowledges a committed recovery snapshot without affecting primary save state. @param generation - Persisted recovery generation. @returns Whether lifecycle changed. */
   public AcknowledgeRecoverySave(generation: number): boolean {
-    const previous = this.document.document;
-    this.document.document = markDocumentRecoverySaved(previous, generation);
+    this.EnsureOpen();
+    const changed = this.SetDocumentState(
+      markDocumentRecoverySaved(this.documentState, generation),
+    );
     this.medium = updateSfxMediumOperation(
       this.medium,
-      this.document.document,
+      this.documentState,
       "recovery-save",
       "succeeded",
       generation,
     );
-    if (this.document.document === previous) return false;
-    this.Notify();
-    return true;
+    this.notifications.CallSwClientNotify({ kind: "medium-operation-changed" });
+    return changed;
   }
 
-  /** Atomically replaces the document and resets its undo manager for New, Open, or Load. @param document - Replacement canonical graph. @param medium - Replacement medium descriptor. @returns Installed document. */
-  public ReplaceDocument(document: SwDoc, medium: SfxMediumInput): SwDoc {
+  /** Atomically replaces model, lifecycle, medium, and history for New/Open/Load. @param document - Replacement model. @param documentState - Replacement lifecycle. @param medium - Replacement medium. @returns Installed model. */
+  public ReplaceDocument(
+    document: SwDoc,
+    documentState: OfficeDocument,
+    medium: SfxMediumInput,
+  ): SwDoc {
+    this.EnsureOpen();
     this.odtRequestGeneration += 1;
     this.odtFilter.Cancel();
+    const previous = this.document;
+    this.modelClient.Dispose();
+    previous.Dispose();
     this.document = document;
-    this.medium = createSfxMediumDescriptor(medium, document.document);
+    this.ReplaceObjectState(documentState, medium);
     this.undoManager = new SfxUndoManager<SwUndoRedoContext>();
-    if (document.document.isModified) this.undoManager.ClearSavePosition();
-    this.Notify();
+    if (documentState.isModified) this.undoManager.ClearSavePosition();
+    this.modelClient.RegisterToModify(document);
+    this.notifications.CallSwClientNotify({ kind: "document-replaced" });
     return document;
   }
 
-  /** Replaces the shell document with a new empty Writer graph. @param metadata - New document identity. @param initialTextNodeId - Initial body node identity. @returns New SwDoc. */
+  /** Replaces the shell contents with a new empty Writer graph. @param metadata - New lifecycle metadata. @param initialTextNodeId - Initial paragraph identity. @returns New model. */
   public InitNew(metadata: OfficeDocument, initialTextNodeId: string): SwDoc {
-    return this.ReplaceDocument(new SwDoc(metadata, initialTextNodeId), {
+    return this.ReplaceDocument(new SwDoc(initialTextNodeId), metadata, {
       kind: "untitled",
       name: metadata.title,
     });
   }
 
-  /** Loads an ODT into a candidate graph before atomically replacing the active document. @param bytes - Complete ODT bytes. @param metadata - Fallback identity and title. @param medium - Replacement medium descriptor. @param options - Filter cancellation/progress controls. @returns Loaded saved-state SwDoc. */
+  /** Loads an ODT candidate before atomically replacing the active graph. @param bytes - Complete ODT bytes. @param metadata - Fallback lifecycle metadata. @param medium - Open medium. @param options - Filter controls. @returns Loaded model. */
   public async Open(
     bytes: Uint8Array,
     metadata: OfficeDocument,
@@ -158,6 +199,7 @@ export class SwDocShell {
     },
     options?: OdtFilterOperationOptions,
   ): Promise<SwDoc> {
+    this.EnsureOpen();
     this.odtFilter.Cancel();
     const requestGeneration = ++this.odtRequestGeneration;
     const snapshot = await this.odtFilter.Import(bytes, metadata, options);
@@ -165,18 +207,19 @@ export class SwDocShell {
       throw new OdtFilterError("stale", "ODT open result is stale.");
     const loaded = restoreWriterSnapshot(snapshot, "primary");
     return this.ReplaceDocument(
-      loaded,
+      loaded.document,
+      loaded.documentState,
       updateSfxMediumOperation(
-        createSfxMediumDescriptor(medium, loaded.document),
-        loaded.document,
+        createSfxMediumDescriptor(medium, loaded.documentState),
+        loaded.documentState,
         "open",
         "succeeded",
-        loaded.document.contentGeneration,
+        loaded.documentState.contentGeneration,
       ),
     );
   }
 
-  /** Compatibility alias for the atomic ODT open boundary. @param bytes - Complete ODT bytes. @param metadata - Fallback identity and title. @param medium - Open medium. @returns Loaded Writer graph. */
+  /** Alias for the atomic ODT open boundary. @param bytes - Complete ODT bytes. @param metadata - Fallback metadata. @param medium - Optional open medium. @returns Loaded model. */
   public Load(
     bytes: Uint8Array,
     metadata: OfficeDocument,
@@ -185,15 +228,17 @@ export class SwDocShell {
     return medium === undefined ? this.Open(bytes, metadata) : this.Open(bytes, metadata, medium);
   }
 
-  /** Serializes a captured active-document snapshot through Writer's asynchronous ODT filter without changing medium state. @param options - Cancellation/progress controls. @returns Complete ODT bytes. */
+  /** Serializes a captured active model/state snapshot without changing medium state. @param options - Filter controls. @returns ODT bytes. */
   public SerializeOdt(options?: OdtFilterOperationOptions): Promise<Uint8Array> {
-    return this.odtFilter.Export(createWriterSnapshot(this.document), options);
+    this.EnsureOpen();
+    return this.odtFilter.Export(createWriterSnapshot(this.document, this.documentState), options);
   }
 
-  /** Saves to the current confirmed writable primary medium. @param persist - Adapter operation that must resolve only after a committed write. @returns Completion after save acknowledgement. */
+  /** Saves to the current confirmed writable primary medium. @param persist - Confirmed write adapter. @returns Completion after acknowledgement. */
   public Save(
     persist: (document: SwDoc, medium: SfxMediumDescriptor) => Promise<SwPrimarySaveEvidence>,
   ): Promise<void> {
+    this.EnsureOpen();
     if (
       this.medium.readOnly ||
       !this.medium.capabilities.canWrite ||
@@ -203,12 +248,13 @@ export class SwDocShell {
     return this.PerformPrimarySave("save", this.medium, persist, false);
   }
 
-  /** Saves to and adopts a new confirmed writable primary medium. @param medium - Candidate replacement medium. @param persist - Adapter operation that resolves after commit. @returns Completion after atomic medium replacement and save acknowledgement. */
+  /** Saves to and adopts a new confirmed writable primary medium. @param medium - Candidate medium. @param persist - Confirmed write adapter. @returns Completion after acknowledgement. */
   public SaveAs(
     medium: SfxMediumInput,
     persist: (document: SwDoc, medium: SfxMediumDescriptor) => Promise<SwPrimarySaveEvidence>,
   ): Promise<void> {
-    const candidate = createSfxMediumDescriptor(medium, this.document.document);
+    this.EnsureOpen();
+    const candidate = createSfxMediumDescriptor(medium, this.documentState);
     if (
       candidate.readOnly ||
       !candidate.capabilities.canWrite ||
@@ -218,13 +264,14 @@ export class SwDocShell {
     return this.PerformPrimarySave("save-as", candidate, persist, true);
   }
 
-  /** Stores an external representation without replacing or acknowledging the primary medium. @param medium - Export destination. @param persist - Export adapter operation. @returns Completion after export status is recorded. */
+  /** Stores an external representation without replacing the primary medium. @param medium - Export target. @param persist - Export adapter. @returns Completion after export. */
   public async Export(
     medium: SfxMediumInput,
     persist: (document: SwDoc, medium: SfxMediumDescriptor) => Promise<void> | void,
   ): Promise<void> {
-    const generation = this.document.document.contentGeneration;
-    const destination = createSfxMediumDescriptor(medium, this.document.document);
+    this.EnsureOpen();
+    const generation = this.documentState.contentGeneration;
+    const destination = createSfxMediumDescriptor(medium, this.documentState);
     this.SetOperation("export", "pending", generation);
     try {
       await persist(this.document, destination);
@@ -235,13 +282,14 @@ export class SwDocShell {
     }
   }
 
-  /** Starts a browser download whose completion cannot confirm primary-medium persistence. @param medium - Download target. @param start - Synchronous browser adapter call. @returns Nothing after unconfirmed status is recorded. */
+  /** Starts a browser download, whose completion cannot confirm primary persistence. @param medium - Download target. @param start - Browser adapter. @returns Nothing. */
   public Download(
     medium: SfxMediumInput,
     start: (document: SwDoc, medium: SfxMediumDescriptor) => void,
   ): void {
-    const generation = this.document.document.contentGeneration;
-    const destination = createSfxMediumDescriptor(medium, this.document.document);
+    this.EnsureOpen();
+    const generation = this.documentState.contentGeneration;
+    const destination = createSfxMediumDescriptor(medium, this.documentState);
     this.SetOperation("download", "pending", generation);
     try {
       start(this.document, destination);
@@ -254,7 +302,7 @@ export class SwDocShell {
 
   /** Returns the stable identity used by application AutoRecovery. @returns Document identity. */
   public GetRecoveryIdentity(): string {
-    return this.document.document.id;
+    return this.documentState.id;
   }
 
   /** Returns the lifecycle fields used by generation-aware recovery decisions. @returns Current recovery state. */
@@ -263,29 +311,32 @@ export class SwDocShell {
     isModified: boolean;
     recoveryGeneration: number | null;
   }> {
-    const { contentGeneration, isModified, recoveryGeneration } = this.document.document;
+    const { contentGeneration, isModified, recoveryGeneration } = this.documentState;
     return { contentGeneration, isModified, recoveryGeneration };
   }
 
-  /** Creates a complete Writer recovery payload without mutating the document. @returns Current generation snapshot. */
+  /** Creates a complete Writer recovery payload without mutating the document. @returns Current snapshot. */
   public CreateRecoverySnapshot(): DocumentSnapshot<WriterSnapshotState> {
-    return createWriterSnapshot(this.document);
+    this.EnsureOpen();
+    return createWriterSnapshot(this.document, this.documentState);
   }
 
   /** Records recovery operation start without changing lifecycle generations. @param generation - Attempted generation. @returns Nothing. */
   public RecoverySaveStarted(generation: number): void {
+    this.EnsureOpen();
     this.SetOperation("recovery-save", "pending", generation);
   }
 
-  /** Records recovery failure without acknowledging the attempted generation. @param generation - Attempted generation. @param error - Storage failure. @returns Nothing. */
+  /** Records recovery failure without acknowledging the attempted generation. @param generation - Attempted generation. @param error - Storage error. @returns Nothing. */
   public RecoverySaveFailed(generation: number, error: unknown): void {
+    this.EnsureOpen();
     this.SetOperation("recovery-save", "failed", generation, getErrorMessage(error));
   }
 
-  /** Validates and atomically installs one recovered Writer snapshot. @param snapshot - Candidate recovery payload. @returns Nothing after replacement. */
+  /** Validates and atomically installs one recovered Writer snapshot. @param snapshot - Recovery payload. @returns Nothing. */
   public RestoreRecoverySnapshot(snapshot: DocumentSnapshot<WriterSnapshotState>): void {
     const recovered = restoreWriterSnapshot(snapshot, "recovery");
-    this.ReplaceDocument(recovered, {
+    this.ReplaceDocument(recovered.document, recovered.documentState, {
       indexedDbKey: snapshot.id,
       kind: "recovery",
       lastOperation: {
@@ -293,32 +344,63 @@ export class SwDocShell {
         operation: "open",
         state: "succeeded",
       },
-      name: recovered.document.title,
+      name: recovered.documentState.title,
     });
   }
 
-  /** Closes document-shell subscriptions at explicit session termination. @returns Nothing. */
+  /** Closes the shell, model, filter, and broadcaster graph. @returns Nothing. */
   public Close(): void {
+    if (this.documentState.lifecycle === "closed") return;
     this.odtRequestGeneration += 1;
     this.odtFilter.Close();
-    this.listeners.clear();
-  }
-
-  /** Publishes one shell-owned state invalidation. @returns Nothing. */
-  private Notify(): void {
-    for (const listener of this.listeners) listener();
-  }
-
-  /** Advances generation after Undo or Redo and restores modified state from the current save position. @returns Nothing. */
-  private MarkHistoryMutation(): void {
-    this.document.document = markDocumentHistorySavePosition(
-      markDocumentDirty(this.document.document),
-      this.undoManager.IsAtSavePosition(),
+    this.notifications.RunNotificationTransaction(
+      /** Publishes the terminal lifecycle transaction. @returns Nothing. */ () => {
+        this.CloseObjectShell();
+        this.notifications.CallSwClientNotify({ kind: "document-disposed" });
+      },
     );
-    this.medium = synchronizeSfxMedium(this.medium, this.document.document);
+    this.modelClient.Dispose();
+    this.document.Dispose();
+    this.notifications.DisposeModify();
   }
 
-  /** Performs primary Save or Save As while adopting the candidate only after commit. @param operation - Save operation. @param candidate - Current or replacement medium. @param persist - Confirmed write callback. @param replaceMedium - Whether success adopts candidate. @returns Completion after acknowledgement. */
+  /** Synchronizes medium generations whenever object-shell state changes. @param document - Next lifecycle state. @returns Whether state changed. */
+  protected override SetDocumentState(document: OfficeDocument): boolean {
+    const previousModified = this.documentState.isModified;
+    const changed = super.SetDocumentState(document);
+    if (changed) {
+      this.medium = synchronizeSfxMedium(this.medium, this.documentState);
+      if (previousModified !== document.isModified)
+        this.notifications.CallSwClientNotify({
+          kind: "document-modified",
+          modified: document.isModified,
+        });
+      this.notifications.CallSwClientNotify({ kind: "document-state-changed" });
+    }
+    return changed;
+  }
+
+  /** Reconciles one model transaction with shell lifecycle and republishes its typed hints. @param hint - Model hint. @returns Nothing. */
+  private ReceiveModelHint(hint: SwModelHint): void {
+    this.notifications.RunNotificationTransaction(
+      /** Reconciles and republishes one source transaction. @returns Nothing. */ () => {
+        if (isContentMutationHint(hint))
+          this.SetDocumentState(markDocumentDirty(this.documentState));
+        if (hint.kind === "model-transaction")
+          for (const nested of hint.hints) this.notifications.CallSwClientNotify(nested);
+        else this.notifications.CallSwClientNotify(hint);
+      },
+    );
+  }
+
+  /** Restores modified state from the undo save mark after history navigation. @returns Nothing. */
+  private MarkHistoryMutation(): void {
+    this.SetDocumentState(
+      markDocumentHistorySavePosition(this.documentState, this.undoManager.IsAtSavePosition()),
+    );
+  }
+
+  /** Performs primary Save/Save As and adopts the candidate only after commit. @param operation - Save operation. @param candidate - Candidate medium. @param persist - Confirmed adapter. @param replaceMedium - Whether to adopt candidate. @returns Completion after acknowledgement. */
   private async PerformPrimarySave(
     operation: "save" | "save-as",
     candidate: SfxMediumDescriptor,
@@ -326,7 +408,7 @@ export class SwDocShell {
     replaceMedium: boolean,
   ): Promise<void> {
     const document = this.document;
-    const generation = this.document.document.contentGeneration;
+    const generation = this.documentState.contentGeneration;
     const savePosition: SfxUndoSavePosition = this.undoManager.CaptureSavePosition();
     this.SetOperation(operation, "pending", generation);
     try {
@@ -335,24 +417,24 @@ export class SwDocShell {
         throw new Error("Primary save evidence does not match the requested generation.");
       if (this.document !== document)
         throw new Error("Primary save completed for a document that is no longer active.");
-      this.document.document = markDocumentSaved(this.document.document, generation);
+      this.SetDocumentState(markDocumentSaved(this.documentState, generation));
       this.undoManager.SetSavePosition(savePosition);
       if (replaceMedium) this.medium = candidate;
       this.medium = updateSfxMediumOperation(
         this.medium,
-        this.document.document,
+        this.documentState,
         operation,
         "succeeded",
         generation,
       );
-      this.Notify();
+      this.notifications.CallSwClientNotify({ kind: "medium-operation-changed" });
     } catch (error) {
       this.SetOperation(operation, "failed", generation, getErrorMessage(error));
       throw error;
     }
   }
 
-  /** Updates medium operation feedback and publishes shell invalidation. @param operation - Operation identity. @param state - New state. @param generation - Captured generation. @param message - Optional failure message. @returns Nothing. */
+  /** Updates medium operation feedback and publishes typed invalidation. @param operation - Operation kind. @param state - Operation state. @param generation - Captured generation. @param message - Optional failure. @returns Nothing. */
   private SetOperation(
     operation: SfxMediumOperation,
     state: SfxMediumDescriptor["lastOperation"]["state"],
@@ -361,23 +443,35 @@ export class SwDocShell {
   ): void {
     this.medium = updateSfxMediumOperation(
       this.medium,
-      this.document.document,
+      this.documentState,
       operation,
       state,
       generation,
       message,
     );
-    this.Notify();
+    this.notifications.CallSwClientNotify({ kind: "medium-operation-changed" });
   }
 }
 
 /** Confirms the exact content generation committed by a primary-medium adapter. */
 export interface SwPrimarySaveEvidence {
-  /** Persisted Writer content generation. */
   readonly generation: number;
 }
 
-/** Returns deterministic error feedback without retaining platform Error objects. @param error - Unknown thrown value. @returns Human-readable text. */
+/** Checks whether a model hint represents serializable Writer content. @param hint - Typed model hint. @returns Whether content changed. */
+function isContentMutationHint(hint: SwModelHint): boolean {
+  if (hint.kind === "model-transaction") return hint.hints.some(isContentMutationHint);
+  return (
+    hint.kind === "attribute-set-changed" ||
+    hint.kind === "format-inheritance-changed" ||
+    hint.kind === "node-content-changed" ||
+    hint.kind === "node-inserted" ||
+    hint.kind === "node-removed" ||
+    hint.kind === "numbering-changed"
+  );
+}
+
+/** Returns deterministic error feedback without retaining platform Error objects. @param error - Unknown error. @returns Stable message. */
 function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }

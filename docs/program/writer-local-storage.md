@@ -12,8 +12,9 @@ modified. Load restores the saved
 Writer document, including its ordered plain-text paragraph body and paragraph
 alignment and bounded style values, into the current in-memory workbench history. A missing copy,
 unavailable browser storage, and native storage failures leave the current text
-unchanged and report deterministic feedback. Snapshots created before paragraph
-alignment or paragraph style was introduced receive the safe defaults when loaded.
+unchanged and report deterministic feedback. Storage accepts only the target
+split shell/model schema; snapshots from the retired combined document model
+are rejected and are not migrated at runtime.
 
 Browser-local storage is the current primary medium. It is distinct from
 recovery snapshots and from explicit text/ODT export or browser download.

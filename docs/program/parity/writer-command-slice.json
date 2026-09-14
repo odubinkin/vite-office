@@ -139,7 +139,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docundomanager.ts",
+            "path": "apps/office/src/svl/source/undo/undo.ts",
             "marker": "class SfxUndoManager"
           },
           {
@@ -161,7 +161,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docundomanager.test.ts",
+            "path": "apps/office/src/svl/source/undo/undo.test.ts",
             "marker": "records nested and empty list actions"
           },
           {
@@ -1139,8 +1139,8 @@
       },
       "capability": "Writer document graph ownership",
       "gaps": [
-        "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; registered-index correction and full native Writer undo coverage remain incomplete."
+        "The fixed body sections, node ownership, text nodes, registered positions, directional ranges, bounded paragraph item pool, auto-format hints, and typed model clients are implemented; nested sections, tables, frames, fields, persistent marks and redlines, content controls, anchored objects, and layout frames remain separate work.",
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; full native Writer undo coverage remains incomplete."
       ],
       "upstream": {
         "implementation": [
@@ -1719,7 +1719,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.ts",
             "marker": "contentGeneration"
           },
           {
@@ -1737,7 +1737,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.test.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
             "marker": "advances every dirty mutation"
           },
           {
@@ -2747,7 +2747,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.ts",
             "marker": "contentGeneration"
           },
           {
@@ -2765,7 +2765,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.test.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
             "marker": "advances every dirty mutation"
           },
           {
@@ -2815,8 +2815,8 @@
       },
       "capability": "Writer paragraph structure mutation",
       "gaps": [
-        "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; registered-index correction and full native Writer undo coverage remain incomplete."
+        "The fixed body sections, node ownership, text nodes, registered positions, directional ranges, bounded paragraph item pool, auto-format hints, and typed model clients are implemented; nested sections, tables, frames, fields, persistent marks and redlines, content controls, anchored objects, and layout frames remain separate work.",
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; full native Writer undo coverage remains incomplete."
       ],
       "upstream": {
         "implementation": [
@@ -2937,8 +2937,8 @@
       },
       "capability": "Writer text content mutation",
       "gaps": [
-        "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; registered-index correction and full native Writer undo coverage remain incomplete."
+        "The fixed body sections, node ownership, text nodes, registered positions, directional ranges, bounded paragraph item pool, auto-format hints, and typed model clients are implemented; nested sections, tables, frames, fields, persistent marks and redlines, content controls, anchored objects, and layout frames remain separate work.",
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; full native Writer undo coverage remains incomplete."
       ],
       "upstream": {
         "implementation": [
@@ -4341,7 +4341,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.ts",
             "marker": "contentGeneration"
           },
           {
@@ -4359,7 +4359,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.test.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
             "marker": "advances every dirty mutation"
           },
           {
@@ -4455,7 +4455,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.ts",
             "marker": "contentGeneration"
           },
           {
@@ -4473,7 +4473,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.test.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
             "marker": "advances every dirty mutation"
           },
           {
@@ -4569,7 +4569,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.ts",
             "marker": "contentGeneration"
           },
           {
@@ -4587,7 +4587,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sfx2/source/doc/docfac.test.ts",
+            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
             "marker": "advances every dirty mutation"
           },
           {
@@ -4637,8 +4637,8 @@
       },
       "capability": "Writer contenteditable input handling",
       "gaps": [
-        "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; registered-index correction and full native Writer undo coverage remain incomplete."
+        "The fixed body sections, node ownership, text nodes, registered positions, directional ranges, bounded paragraph item pool, auto-format hints, and typed model clients are implemented; nested sections, tables, frames, fields, persistent marks and redlines, content controls, anchored objects, and layout frames remain separate work.",
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; full native Writer undo coverage remains incomplete."
       ],
       "upstream": {
         "implementation": [

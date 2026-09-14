@@ -6,7 +6,7 @@ import {
   SfxListUndoAction,
   SfxUndoAction,
   SfxUndoManager,
-} from "./docundomanager";
+} from "./undo";
 
 /** Mutable context used to observe generic actions. */
 interface TextContext {

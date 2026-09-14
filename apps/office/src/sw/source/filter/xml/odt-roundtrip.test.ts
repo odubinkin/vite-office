@@ -13,7 +13,7 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
 import { DEFAULT_ZIP_FILE_LIMITS, ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
@@ -34,10 +34,21 @@ import { readOdtDocument, SwXMLReader } from "./swxml";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml, parseOdfXml } from "./xmlimp";
 import { SwXMLWriter, writeOdtDocument } from "./wrtxml";
+import type { SwDoc } from "../../core/doc/doc";
+import type { OdtExportControl } from "./wrtxml";
 
 /** Creates complete metadata used at the import boundary. @param title - Title. @returns Metadata. */
 function metadata(title = "Imported") {
   return createDocument({ id: "odt-1", suiteId: "writer", title });
+}
+
+/** Exports a model with explicit target object-shell metadata. @param document - Writer model. @param documentState - Shell metadata. @param control - Export controls. @returns ODT bytes. */
+function writeTargetOdt(
+  document: SwDoc,
+  documentState = metadata(),
+  control?: OdtExportControl,
+): Uint8Array {
+  return writeOdtDocument(document, documentState, control);
 }
 
 /** Rebuilds an ODT after changing or removing named entries. @param bytes - Source ODT. @param replacements - Replacement text or null removals. @param order - Optional output order. @returns Rebuilt package. */
@@ -63,7 +74,7 @@ async function rewritePackage(
 
 /** Creates the smallest valid Writer ODT fixture. @returns ODT bytes. */
 function basicOdt(): Uint8Array {
-  return writeOdtDocument(createWriterDocument(metadata("Basic"), "p1"));
+  return writeTargetOdt(createWriterDocument("p1"));
 }
 
 /** Finds a ZIP signature from the end. @param bytes - Archive. @param signature - Little-endian signature. @returns Offset. */
@@ -76,7 +87,7 @@ function findZipSignature(bytes: Uint8Array, signature: number): number {
 
 describe("Writer ODF XML filters" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
   it("writes deterministic ODF 1.3 packages and restores canonical formatting" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
-    const writer = createWriterDocument(metadata("Round & Trip"), "source-1");
+    const writer = createWriterDocument("source-1");
     writer.GetDfltTextFormatColl().SetFormatName("Body < text");
     writer
       .GetDfltTextFormatColl()
@@ -133,8 +144,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     second.SetParagraphList({ kind: "numbered", level: 1 });
     third.SetParagraphList({ kind: "bullet", level: 0 });
 
-    const bytes = writeOdtDocument(writer);
-    expect(new SwXMLWriter().Write(writer)).toEqual(bytes);
+    const documentState = metadata("Round & Trip");
+    const bytes = writeTargetOdt(writer, documentState);
+    expect(new SwXMLWriter().Write(writer, documentState)).toEqual(bytes);
     const archive = new ZipFile(bytes);
     expect(archive.getEntryNames()).toEqual([
       "mimetype",
@@ -156,17 +168,23 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(content).toContain("<text:list-item>");
 
     const restored = await readOdtDocument(bytes, metadata());
-    expect((await new SwXMLReader().Read(bytes, metadata())).toSnapshot()).toEqual(
-      restored.toSnapshot(),
+    expect((await new SwXMLReader().Read(bytes, metadata())).document.toSnapshot()).toEqual(
+      restored.document.toSnapshot(),
     );
-    expect(restored.document.title).toBe("Round & Trip");
-    expect(restored.GetDfltTextFormatColl().GetName()).toBe("Body < text");
-    expect(restored.GetDfltTextFormatColl().GetAttrSet().GetWeight().GetBoolValue()).toBe(true);
-    expect(restored.GetDfltTextFormatColl().GetAttrSet().GetPosture().GetBoolValue()).toBe(true);
-    expect(restored.GetDfltTextFormatColl().GetAttrSet().GetUnderline().GetBoolValue()).toBe(true);
-    expect(restored.GetTextFormatColl("heading-1").GetName()).toBe("Heading & one");
+    expect(restored.documentState.title).toBe("Round & Trip");
+    expect(restored.document.GetDfltTextFormatColl().GetName()).toBe("Body < text");
+    expect(restored.document.GetDfltTextFormatColl().GetAttrSet().GetWeight().GetBoolValue()).toBe(
+      true,
+    );
+    expect(restored.document.GetDfltTextFormatColl().GetAttrSet().GetPosture().GetBoolValue()).toBe(
+      true,
+    );
     expect(
-      restored.paragraphs.map(
+      restored.document.GetDfltTextFormatColl().GetAttrSet().GetUnderline().GetBoolValue(),
+    ).toBe(true);
+    expect(restored.document.GetTextFormatColl("heading-1").GetName()).toBe("Heading & one");
+    expect(
+      restored.document.paragraphs.map(
         /** Executes the enclosing deterministic test or transformation callback. @param node - Callback input. @returns Callback result. */
         (node) => ({
           alignment: node.alignment,
@@ -191,7 +209,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("imports LibreOffice-shaped nested and continued list blocks" /** Verifies one-level automatic styles become ten-level SwNumRule records and list identity survives continuation segments. @returns Nothing. */, async () => {
-    const empty = createWriterDocument(metadata("LibreOffice lists"), "p1");
+    const empty = createWriterDocument("p1");
     const styles = exportStylesXml(empty);
     const listStyles = [
       '<text:list-style style:name="L1" style:display-name="Numbering 1"><text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="1"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"/></text:list-level-style-number></text:list-style>',
@@ -210,7 +228,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       .replace(/<office:text>[\s\S]*<\/office:text>/, `<office:text>${body}</office:text>`);
     const imported = importWriterXml(styles, content, metadata());
     expect(
-      imported.paragraphs.map(
+      imported.document.paragraphs.map(
         /** Projects a text node into list assertions. @param node - Imported Writer node. @returns Comparable list state. */
         (node) => ({
           listId: node.GetListId(),
@@ -247,9 +265,12 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         text: "gamma",
       },
     ]);
-    const roundTripped = await readOdtDocument(writeOdtDocument(imported), metadata());
+    const roundTripped = await readOdtDocument(
+      writeTargetOdt(imported.document, imported.documentState),
+      metadata(),
+    );
     expect(
-      roundTripped.paragraphs.map(
+      roundTripped.document.paragraphs.map(
         /** Projects a text node into list assertions. @param node - Round-tripped Writer node. @returns Comparable list state. */
         (node) => ({
           listId: node.GetListId(),
@@ -259,7 +280,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         }),
       ),
     ).toEqual(
-      imported.paragraphs.map(
+      imported.document.paragraphs.map(
         /** Projects a text node into list assertions. @param node - Imported Writer node. @returns Comparable list state. */
         (node) => ({
           listId: node.GetListId(),
@@ -355,20 +376,20 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       (writer: ReturnType<typeof createWriterDocument>) =>
         writer.paragraphs[0]?.SetParagraphList({ kind: "none", level: 0, styleId: "List" }),
     ]) {
-      const writer = createWriterDocument(metadata(), "p1");
+      const writer = createWriterDocument("p1");
       configure(writer);
       expect(
         /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-        () => writeOdtDocument(writer),
+        () => writeTargetOdt(writer),
       ).toThrow("without SwNumRule");
     }
-    const unknownRule = createWriterDocument(metadata(), "p1");
+    const unknownRule = createWriterDocument("p1");
     unknownRule.paragraphs[0]?.SetAttr(new SwNumRuleItem("Missing"));
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportContentXml(unknownRule),
     ).toThrow("cannot resolve SwNumRule Missing");
-    const invalidCharacter = createWriterDocument(metadata(), "p1");
+    const invalidCharacter = createWriterDocument("p1");
     const invalidCharacterSet = invalidCharacter
       .GetDfltTextFormatColl()
       .GetAttrSet() as unknown as {
@@ -379,7 +400,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportStylesXml(invalidCharacter),
     ).toThrow("ODT character item is invalid");
-    const scriptSpecificCharacter = createWriterDocument(metadata(), "p1");
+    const scriptSpecificCharacter = createWriterDocument("p1");
     scriptSpecificCharacter
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
@@ -387,7 +408,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportStylesXml(scriptSpecificCharacter),
     ).toThrow("script-specific character formatting");
-    const styleItem = createWriterDocument(metadata(), "p1");
+    const styleItem = createWriterDocument("p1");
     styleItem.GetTextFormatColl("heading-1").SetFormatAttr(new SwNumRuleItem("Rule"));
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
@@ -405,11 +426,11 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       [SvxAdjust.Block, "justify"],
       [SvxAdjust.BlockLine, "justify"],
     ] as const) {
-      const writer = createWriterDocument(metadata(), "p1");
+      const writer = createWriterDocument("p1");
       writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));
       expect(exportStylesXml(writer)).toContain(`fo:text-align="${expected}"`);
     }
-    const invalidItem = createWriterDocument(metadata(), "p1");
+    const invalidItem = createWriterDocument("p1");
     const invalidSet = invalidItem.GetDfltTextFormatColl().GetAttrSet() as unknown as {
       items: Map<number, unknown>;
     };
@@ -421,7 +442,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportStylesXml(invalidItem),
     ).toThrow("adjustment item is invalid");
-    const invalidValue = createWriterDocument(metadata(), "p1");
+    const invalidValue = createWriterDocument("p1");
     const item = new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST);
     (item as unknown as { adjust: number }).adjust = SvxAdjust.End;
     const valueSet = invalidValue.GetDfltTextFormatColl().GetAttrSet() as unknown as {
@@ -469,36 +490,36 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         readOdtDocument(await rewritePackage(bytes, { [name]: null }), metadata()),
       ).rejects.toThrow(name === "mimetype" ? "mimetype must be the first" : "Missing ZIP entry");
     expect(
-      (await readOdtDocument(bytes, metadata(), DEFAULT_ZIP_FILE_LIMITS)).paragraphs,
+      (await readOdtDocument(bytes, metadata(), DEFAULT_ZIP_FILE_LIMITS)).document.paragraphs,
     ).toHaveLength(1);
     await expect(
       new SwXMLReader().Read(bytes, metadata(), undefined, { maxXmlStreamBytes: 1 }),
     ).rejects.toThrow("XML stream exceeds size limit");
     expect(
       /** Exports with a deliberately strict complete-package limit. @returns ODT bytes. */ () =>
-        new SwXMLWriter().Write(createWriterDocument(metadata(), "p1"), { maxOutputBytes: 1 }),
+        new SwXMLWriter().Write(createWriterDocument("p1"), metadata(), { maxOutputBytes: 1 }),
     ).toThrow("export exceeds size limit");
     expect(
       /** Cancels before Writer serialization proceeds. @returns ODT bytes. */ () =>
-        writeOdtDocument(createWriterDocument(metadata(), "p1"), {
+        writeTargetOdt(createWriterDocument("p1"), metadata(), {
           isCancelled: /** Reports deterministic cancellation. @returns True. */ () => true,
         }),
     ).toThrow("cancelled");
   });
 
   it("validates XML roots, declarations, required Writer styles, and body structure" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
-    const writer = createWriterDocument(metadata(), "p1");
+    const writer = createWriterDocument("p1");
     const styles = exportStylesXml(writer);
     const content = exportContentXml(writer);
-    const meta = exportMetaXml(writer);
-    expect(importWriterXml(styles, content, metadata()).document.title).toBe("Imported");
+    const meta = exportMetaXml(metadata().title);
+    expect(importWriterXml(styles, content, metadata()).documentState.title).toBe("Imported");
     expect(
       importWriterXml(
         styles,
         content,
         metadata(),
         meta.replace("<dc:title>Imported</dc:title>", "<dc:title></dc:title>"),
-      ).document.title,
+      ).documentState.title,
     ).toBe("Imported");
     expect(
       importWriterXml(
@@ -506,7 +527,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         content,
         metadata(),
         meta.replace(/<dc:title>[\s\S]*?<\/dc:title>/, ""),
-      ).document.title,
+      ).documentState.title,
     ).toBe("Imported");
     for (const [xml, root] of [
       ["<!DOCTYPE x>" + content, "document-content"],
@@ -533,7 +554,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         metadata(),
         meta,
       )
-        .GetTextFormatColl("heading-1")
+        .document.GetTextFormatColl("heading-1")
         .GetName(),
     ).toBe("Heading 1");
     expect(
@@ -581,10 +602,10 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("rejects malformed style records and unsupported semantic properties" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
-    const writer = createWriterDocument(metadata(), "p1");
+    const writer = createWriterDocument("p1");
     const styles = exportStylesXml(writer);
     const content = exportContentXml(writer);
-    const meta = exportMetaXml(writer);
+    const meta = exportMetaXml(metadata().title);
     const standardStyle = styles.match(
       /<style:style style:name="Standard"[\s\S]*?<\/style:style>/,
     )?.[0] as string;
@@ -640,7 +661,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       'fo:font-weight="bold"',
       'fo:font-weight="bold" fo:color="#000000"',
     );
-    expect(importWriterXml(styles, unknown, metadata(), meta).paragraphs[0]?.text).toBe("");
+    expect(importWriterXml(styles, unknown, metadata(), meta).document.paragraphs[0]?.text).toBe(
+      "",
+    );
     const mismatchedScript = styledContent.replace(
       'fo:font-weight="bold"',
       'fo:font-weight="bold" style:font-weight-asian="normal"',
@@ -668,10 +691,10 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("imports normal character values and every ODF alignment spelling" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
-    const writer = createWriterDocument(metadata(), "p1");
+    const writer = createWriterDocument("p1");
     const styles = exportStylesXml(writer);
     const baseContent = exportContentXml(writer);
-    const meta = exportMetaXml(writer);
+    const meta = exportMetaXml(metadata().title);
     for (const [value, expected] of [
       ["start", "left"],
       ["left", "left"],
@@ -686,9 +709,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           `<style:style style:name="P9" style:family="paragraph"><style:paragraph-properties fo:text-align="${value}"/></style:style></office:automatic-styles>`,
         )
         .replace('text:style-name="Standard"', 'text:style-name="P9"');
-      expect(importWriterXml(styles, content, metadata(), meta).paragraphs[0]?.alignment).toBe(
-        expected,
-      );
+      expect(
+        importWriterXml(styles, content, metadata(), meta).document.paragraphs[0]?.alignment,
+      ).toBe(expected);
     }
     const content = baseContent
       .replace(
@@ -696,7 +719,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         '<style:style style:name="T9" style:family="text"><style:text-properties fo:font-weight="normal" fo:font-style="normal" style:text-underline-style="none" style:text-underline-width="auto"/></style:style></office:automatic-styles>',
       )
       .replace("</text:p>", '<text:span text:style-name="T9">plain</text:span></text:p>');
-    expect(importWriterXml(styles, content, metadata(), meta).paragraphs[0]?.text).toBe("plain");
+    expect(importWriterXml(styles, content, metadata(), meta).document.paragraphs[0]?.text).toBe(
+      "plain",
+    );
 
     for (const [adjust, expected] of [
       [SvxAdjust.Left, "left"],
@@ -704,7 +729,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       [SvxAdjust.Center, "center"],
       [SvxAdjust.Block, "justify"],
     ] as const) {
-      const styledWriter = createWriterDocument(metadata(), "p1");
+      const styledWriter = createWriterDocument("p1");
       styledWriter
         .GetDfltTextFormatColl()
         .SetFormatAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));
@@ -713,7 +738,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         exportContentXml(styledWriter),
         metadata(),
       );
-      expect(imported.GetDfltTextFormatColl().GetAttrSet().GetAdjust().GetAdjust()).toBe(
+      expect(imported.document.GetDfltTextFormatColl().GetAttrSet().GetAdjust().GetAdjust()).toBe(
         expected === "left"
           ? SvxAdjust.ParaStart
           : expected === "right"
@@ -723,13 +748,13 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
               : SvxAdjust.Block,
       );
     }
-    const headingWriter = createWriterDocument(metadata(), "p1");
+    const headingWriter = createWriterDocument("p1");
     headingWriter
       .GetTextFormatColl("heading-1")
       .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST));
     expect(
       importWriterXml(exportStylesXml(headingWriter), exportContentXml(headingWriter), metadata())
-        .GetTextFormatColl("heading-1")
+        .document.GetTextFormatColl("heading-1")
         .GetAttrSet()
         .GetAdjust()
         .GetAdjust(),

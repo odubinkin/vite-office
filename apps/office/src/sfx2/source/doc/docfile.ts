@@ -98,7 +98,7 @@ export interface SfxMediumDescriptor {
   readonly lastOperationStatus: SfxMediumOperationState;
   /** MIME type selected by the owning document filter, when applicable. */
   readonly mediaType?: string;
-  /** Stable user-facing or storage-facing medium name retained for compatibility. */
+  /** Stable user-facing or storage-facing medium name. */
   readonly name: string;
   /** Source from which the current document session was created. */
   readonly origin: SfxMediumOrigin;
@@ -124,7 +124,7 @@ export interface SfxMediumDescriptor {
   readonly generations: SfxMediumGenerations;
 }
 
-/** Backward-compatible construction input accepted at shell boundaries. */
+/** Construction input accepted at shell boundaries. */
 export type SfxMediumInput = Readonly<
   Pick<SfxMediumDescriptor, "kind" | "name"> & Partial<Omit<SfxMediumDescriptor, "kind" | "name">>
 >;

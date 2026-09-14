@@ -12,7 +12,7 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import type { OfficeDocument } from "../../../../sfx2/source/doc/docfac";
+import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import {
   parseOdfXmlDocument,
   type OdfXmlDocument,
@@ -41,17 +41,24 @@ import {
   RES_PARATR_ADJUST,
 } from "../../../inc/hintids";
 
+/** Imported model plus shell-owned lifecycle candidate. */
+export interface ImportedWriterDocument {
+  readonly document: SwDoc;
+  readonly documentState: OfficeDocument;
+}
+
 /** Imports styles.xml followed by content.xml into a canonical SwDoc. @param stylesXml - Named styles stream. @param contentXml - Body stream. @param metadata - Caller document identity. @param metaXml - Optional metadata stream. @returns Imported document. */
 export function importWriterXml(
   stylesXml: string,
   contentXml: string,
   metadata: OfficeDocument,
   metaXml?: string,
-): SwDoc {
+): ImportedWriterDocument {
   const stylesDocument = parseOdfXml(stylesXml, "document-styles");
   const contentDocument = parseOdfXml(contentXml, "document-content");
   const title = metaXml === undefined ? undefined : importMetaTitle(metaXml);
-  const document = new SwDoc(title === undefined ? metadata : { ...metadata, title });
+  const documentState = title === undefined ? metadata : { ...metadata, title };
+  const document = new SwDoc();
   const namedStyles = collectStyles(stylesDocument);
   applyNamedParagraphStyles(document, namedStyles);
   const allStyles = new Map([...namedStyles, ...collectStyles(contentDocument)]);
@@ -108,7 +115,7 @@ export function importWriterXml(
         );
     },
   );
-  return document;
+  return { document, documentState };
 }
 
 /** Collects ODF list styles into per-level Writer numbering rules. @param document - Parsed ODF stream. @returns Style-name keyed rules. */

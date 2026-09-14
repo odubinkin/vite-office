@@ -1,6 +1,6 @@
 /** @fileoverview Implements the bounded SwUndoInsert action from pinned LibreOffice unins.cxx. */
 
-import type { SfxUndoAction } from "../../../../sfx2/source/doc/docundomanager";
+import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { WriterTextRun } from "../txtnode/ndtxt";
 import {
   CopyUndoRuns,

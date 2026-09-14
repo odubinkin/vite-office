@@ -4,7 +4,7 @@
 
 import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "lucide-react";
 
-import { createDocument } from "../../../sfx2/source/doc/docfac";
+import { createDocument } from "../../../sfx2/source/doc/objsh";
 import type { OfficeModuleDescriptor, SuiteDefinition } from "./modulemanager";
 import { SuiteCard } from "./SuiteCard";
 

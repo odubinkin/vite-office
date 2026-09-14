@@ -1,6 +1,6 @@
 # Writer Action-Based Undo and Redo
 
-[`apps/office/src/sfx2/source/doc/docundomanager.ts`](../../apps/office/src/sfx2/source/doc/docundomanager.ts)
+[`apps/office/src/svl/source/undo/undo.ts`](../../apps/office/src/svl/source/undo/undo.ts)
 implements the document-facing `SfxUndoAction`, `SfxListUndoAction`, and
 `SfxUndoManager` contracts. The manager retains reversible actions in one
 bounded array with a current-action cursor, matching the essential behavior of

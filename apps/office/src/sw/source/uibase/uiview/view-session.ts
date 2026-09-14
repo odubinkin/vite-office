@@ -12,13 +12,14 @@ import {
   type SfxShell,
 } from "../../../../framework/source/dispatch/dispatchprovider";
 import type { AutoRecoveryEnvironment } from "../../../../framework/source/services/autorecovery";
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { createDocument, type OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import type { DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
 import type { RecoveryStorageAdapter } from "../../../../svl/source/misc/recovery";
 import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipboard";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
 import { loadWriterDocument, saveWriterDocument } from "../../core/doc/writer-storage";
 import type { WriterDocument, WriterParagraph } from "../../core/doc/writer";
+import type { SwModelHint } from "../../../inc/hints";
 import {
   parseWriterClipboardPaste,
   type WriterClipboardPaste,
@@ -84,6 +85,8 @@ export interface WriterViewSnapshot {
   readonly activeParagraphIndex: number;
   /** Canonical shell-owned document reference. */
   readonly document: WriterDocument;
+  /** Object-shell-owned identity and lifecycle state. */
+  readonly documentState: OfficeDocument;
   /** Direction-preserving persistent SwPaM projection for the DOM selection adapter. */
   readonly cursorSelection: WriterCursorSelection;
   /** Horizontal-ruler visibility in this view. */
@@ -104,7 +107,6 @@ export interface WriterViewSnapshot {
 export class SwView {
   private cachedSnapshot: WriterViewSnapshot | undefined;
   private dispatcherSubscription: (() => void) | undefined;
-  private readonly docShellSubscription: () => void;
   private frame: OfficeFrame<SwView> | undefined;
   private isHorizontalRulerVisible = true;
   private isPropertiesSidebarVisible = true;
@@ -123,13 +125,10 @@ export class SwView {
   ) {
     this.wrtShell = new SwWrtShell(docShell);
     this.viewCommandShell = createCommandShell(this, createWriterViewCommandRegistry(this));
-    this.docShellSubscription = docShell.Subscribe(
-      /** Invalidates document-derived state after a document-shell notification. @returns Nothing. */ () =>
-        this.Invalidate("document", "history"),
-    );
     this.wrtShellSubscription = this.wrtShell.Subscribe(
-      /** Invalidates selection-derived state after an editing-shell notification. @returns Nothing. */ () =>
-        this.Invalidate("selection"),
+      /** Converts typed Writer hints into dispatcher dependency invalidation. @param hint - Typed Writer hint. @returns Nothing. */ (
+        hint,
+      ) => this.Invalidate(...getWriterHintDependencies(hint)),
     );
   }
 
@@ -178,6 +177,7 @@ export class SwView {
         activeParagraphIndex: document.paragraphs.indexOf(activeParagraph),
         cursorSelection: Object.freeze(this.wrtShell.GetCursorSelection()),
         document,
+        documentState: this.docShell.GetDocumentState(),
         isHorizontalRulerVisible: this.isHorizontalRulerVisible,
         isPropertiesSidebarVisible: this.isPropertiesSidebarVisible,
         isStatusBarVisible: this.isStatusBarVisible,
@@ -217,7 +217,6 @@ export class SwView {
       }),
       "writer-paragraph-1",
     );
-    this.wrtShell.DocumentReplaced();
     this.SetStorageStatus("Created a new Writer document.");
   }
 
@@ -248,7 +247,6 @@ export class SwView {
           sourceKind: "blob",
         },
       );
-      this.wrtShell.DocumentReplaced();
       this.SetStorageStatus(`Opened ${file.name}.`);
     } catch (error) {
       this.SetStorageStatus(`Could not open ODT: ${getErrorMessage(error)}`);
@@ -261,8 +259,10 @@ export class SwView {
   public async SaveOdt(): Promise<void> {
     this.SetStoragePending(true);
     try {
-      const document = this.docShell.GetDoc();
-      const filename = this.services.createDownloadFilename(document.document.title, ".odt");
+      const filename = this.services.createDownloadFilename(
+        this.docShell.GetDocumentState().title,
+        ".odt",
+      );
       const bytes = await this.docShell.SerializeOdt();
       this.docShell.Download(
         {
@@ -299,7 +299,11 @@ export class SwView {
       const persist =
         /** Commits one complete Writer snapshot to browser-local primary storage. @param document - Shell-owned Writer graph. @returns Completion after IndexedDB commit. */
         async (document: WriterDocument) => {
-          const saved = await saveWriterDocument(storage, document);
+          const saved = await saveWriterDocument(
+            storage,
+            document,
+            this.docShell.GetDocumentState(),
+          );
           return { generation: saved.snapshot.version };
         };
       if (medium.kind === "browser-local" && medium.indexedDbKey === medium.documentId)
@@ -314,9 +318,9 @@ export class SwView {
               canWrite: true,
             },
             destinationKind: "indexeddb",
-            indexedDbKey: this.docShell.GetDoc().document.id,
+            indexedDbKey: this.docShell.GetDocumentState().id,
             kind: "browser-local",
-            name: this.docShell.GetDoc().document.title,
+            name: this.docShell.GetDocumentState().title,
             origin: medium.origin,
             readOnly: false,
             sourceKind: medium.sourceKind,
@@ -341,22 +345,21 @@ export class SwView {
     try {
       const result = await loadWriterDocument(
         this.services.storage,
-        this.docShell.GetDoc().document.id,
+        this.docShell.GetDocumentState().id,
       );
       if (result.status === "missing") this.SetStorageStatus("No local saved copy exists.");
       else {
-        this.docShell.ReplaceDocument(result.writerDocument, {
+        this.docShell.ReplaceDocument(result.document, result.documentState, {
           filterId: "writer-browser-snapshot",
-          indexedDbKey: result.writerDocument.document.id,
+          indexedDbKey: result.documentState.id,
           kind: "browser-local",
           lastOperation: {
-            generation: result.writerDocument.document.contentGeneration,
+            generation: result.documentState.contentGeneration,
             operation: "open",
             state: "succeeded",
           },
-          name: result.writerDocument.document.title,
+          name: result.documentState.title,
         });
-        this.wrtShell.DocumentReplaced();
         this.SetStorageStatus("Loaded local saved copy.");
       }
     } catch {
@@ -370,7 +373,7 @@ export class SwView {
   public ExportText(): void {
     try {
       const document = this.docShell.GetDoc();
-      const filename = `${document.document.title}.txt`;
+      const filename = `${this.docShell.GetDocumentState().title}.txt`;
       this.docShell.Download(
         {
           destinationKind: "download",
@@ -512,11 +515,11 @@ export class SwView {
 
   /** Releases view, dispatcher, and document-shell subscriptions at explicit session close. @returns Nothing. */
   public Close(): void {
-    this.docShellSubscription();
     this.wrtShellSubscription();
     this.dispatcherSubscription?.();
     this.frame?.CloseView();
     this.frame = undefined;
+    this.wrtShell.Close();
     this.docShell.Close();
     this.listeners.clear();
   }
@@ -558,4 +561,29 @@ export class SwView {
 /** Normalizes unknown operation failures for deterministic status feedback. @param error - Caught value. @returns Stable message. */
 function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+/** Maps typed Writer notifications to the command-state dependency vocabulary. @param hint - Typed Writer hint. @returns Changed dependency labels. */
+function getWriterHintDependencies(hint: SwModelHint): readonly string[] {
+  const hints = hint.kind === "model-transaction" ? hint.hints : [hint];
+  const dependencies = new Set<string>();
+  for (const nested of hints) {
+    if (nested.kind === "cursor-selection-changed") dependencies.add("selection");
+    else if (
+      nested.kind === "document-modified" ||
+      nested.kind === "document-state-changed" ||
+      nested.kind === "medium-operation-changed" ||
+      nested.kind === "document-disposed"
+    )
+      dependencies.add("lifecycle");
+    else if (nested.kind === "document-replaced") {
+      dependencies.add("document");
+      dependencies.add("history");
+      dependencies.add("selection");
+    } else {
+      dependencies.add("document");
+      dependencies.add("history");
+    }
+  }
+  return [...dependencies];
 }

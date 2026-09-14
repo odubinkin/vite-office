@@ -2,22 +2,59 @@
 
 import { describe, expect, it } from "vitest";
 
-import { createDocument } from "../../../../sfx2/source/doc/docfac";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/writer";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh";
 
 /** Creates a Writer shell with one stable paragraph. @param text - Optional initial paragraph text. @returns Shell fixture. */
 function createShell(text = ""): SwWrtShell {
-  const document = createWriterDocument(
-    createDocument({ id: "input-document", suiteId: "writer", title: "Input document" }),
-    "p-1",
-  );
+  const document = createWriterDocument("p-1");
+  const documentState = createDocument({
+    id: "input-document",
+    suiteId: "writer",
+    title: "Input document",
+  });
   if (text.length > 0) document.paragraphs[0]?.InsertText(text, 0);
-  return new SwWrtShell(new SwDocShell(document));
+  return new SwWrtShell(new SwDocShell(document, documentState));
 }
 
 describe("Writer canonical input shell", /** Registers canonical cursor and input tests. @returns Nothing. */ function defineWriterInputShellTests(): void {
+  it("publishes each edit and history navigation as one typed transaction" /** Verifies model, lifecycle, and cursor invalidations remain bounded. @returns Nothing. */, function aggregatesNotifications(): void {
+    const shell = createShell();
+    const notifications: Parameters<Parameters<SwWrtShell["Subscribe"]>[0]>[0][] = [];
+    const unsubscribe = shell.Subscribe(
+      /** Captures one editing-shell notification. @param hint - Typed hint. @returns New array length. */ (
+        hint,
+      ) => notifications.push(hint),
+    );
+
+    shell.InsertText("p-1", "A", 1, "insertText");
+    expect(notifications).toHaveLength(1);
+    expect(notifications[0]).toMatchObject({ kind: "model-transaction" });
+    if (notifications[0]?.kind === "model-transaction")
+      expect(
+        notifications[0].hints.map(
+          /** Projects one hint discriminator. @param hint - Atomic hint. @returns Hint kind. */ (
+            hint,
+          ) => hint.kind,
+        ),
+      ).toEqual(
+        expect.arrayContaining([
+          "cursor-selection-changed",
+          "document-modified",
+          "document-state-changed",
+          "node-content-changed",
+        ]),
+      );
+
+    notifications.length = 0;
+    expect(shell.Undo()).toBe(true);
+    expect(notifications).toHaveLength(1);
+    expect(notifications[0]).toMatchObject({ kind: "model-transaction" });
+    unsubscribe();
+  });
+
   it("validates stable point-and-mark coordinates without replacing the persistent PaM" /** Verifies unknown, invalid, unchanged, focus, and Select All cursor transitions. @returns Nothing. */, function validatesCursorCoordinates(): void {
     const shell = createShell("ab");
     const cursor = shell.GetCursor();

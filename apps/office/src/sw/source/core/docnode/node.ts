@@ -6,6 +6,7 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { WRITER_TEXT_NODE_WHICH_RANGES } from "../../../inc/hintids";
 import { SwAttrSet } from "../attr/swatrset";
+import { SwContentIndexRegistry } from "../bastyp/contentindex";
 import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { SwNodes } from "./nodes";
 
@@ -13,7 +14,7 @@ import type { SwNodes } from "./nodes";
 export type SwNodeType = "end" | "start" | "text";
 
 /** Base class of every Writer document model element. */
-export abstract class SwNode {
+export abstract class SwNode extends SwContentIndexRegistry {
   /**
    * Creates a node owned by one SwNodes array.
    * @param nodes - Owning node array.
@@ -27,7 +28,9 @@ export abstract class SwNode {
     public readonly id: string,
     private readonly nodeType: SwNodeType,
     private readonly startOfSection?: SwStartNode,
-  ) {}
+  ) {
+    super();
+  }
 
   /** Returns the owning node array. @returns Owning SwNodes. */
   public GetNodes(): SwNodes {
@@ -143,7 +146,10 @@ export abstract class SwContentNode extends SwNode {
   /** Stores one item or set as direct node attributes. @param itemOrSet - Direct item or item set. @returns True when at least one delta changed. */
   public SetAttr(itemOrSet: SfxPoolItem | SfxItemSet): boolean {
     const set = this.GetOrCreateSwAttrSet();
-    return "Which" in itemOrSet ? set.Put(itemOrSet) !== undefined : set.PutSet(itemOrSet);
+    const changed = "Which" in itemOrSet ? set.Put(itemOrSet) !== undefined : set.PutSet(itemOrSet);
+    if (changed)
+      this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
+    return changed;
   }
 
   /** Clears one direct item and releases an empty auto-attribute set. @param which - Cleared WhichId. @returns True when removed. */
@@ -151,6 +157,8 @@ export abstract class SwContentNode extends SwNode {
     if (this.attributeSet === undefined) return false;
     const removed = this.attributeSet.ClearItem(which) !== 0;
     if (this.attributeSet.Count() === 0) this.attributeSet = undefined;
+    if (removed)
+      this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
     return removed;
   }
 
@@ -159,6 +167,8 @@ export abstract class SwContentNode extends SwNode {
     if (this.attributeSet === undefined) return 0;
     const removed = this.attributeSet.ClearItem();
     this.attributeSet = undefined;
+    if (removed > 0)
+      this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
     return removed;
   }
 
@@ -170,6 +180,11 @@ export abstract class SwContentNode extends SwNode {
     if (previous !== formatColl) {
       this.formatColl = formatColl;
       this.attributeSet?.SetParent(formatColl.GetAttrSet());
+      this.GetDoc().CallSwClientNotify({
+        formatId: formatColl.GetName(),
+        kind: "format-inheritance-changed",
+        nodeId: this.id,
+      });
     }
     return previous;
   }
