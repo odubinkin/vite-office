@@ -4076,9 +4076,22 @@
       "suite": "writer",
       "subsystem": "odf-filter",
       "type": "filter",
-      "maturity": "implemented",
+      "maturity": "verified",
       "assertions": [
         "The pinned upstream and local assertion markers cover this atomic operation: Round-trip one bounded ODF fixture without semantic loss."
+      ],
+      "assertionEvidence": [
+        {
+          "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Round-trip one bounded ODF fixture without semantic loss.",
+          "local": {
+            "path": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+            "marker": "imports and semantically round-trips"
+          },
+          "upstream": {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          }
+        }
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -4347,7 +4360,12 @@
       "scopeLimitations": [
         "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
-      ]
+      ],
+      "verification": {
+        "commit": "83da0b9553d0",
+        "evidence": "npx vitest run --config scripts/libreoffice-inventory/vitest.config.ts scripts/libreoffice-inventory/parity-mappings.test.ts scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts; npm run inventory:parity",
+        "taskId": "202609141728-A97V69"
+      }
     },
     {
       "id": "LO-WRITER-0131",

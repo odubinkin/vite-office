@@ -14,6 +14,8 @@ bounded Writer records are machine-validated together with the exhaustive
 `npm run inventory:parity`. Verification is promoted per atomic operation only
 after its assertion-level upstream/local evidence and task result are recorded;
 every unresolved parity gap remains visible and does not count as parity.
+The current slice contains 33 `implemented` records and one `verified` record:
+CAP-0130, the bounded ODF fixture round trip.
 
 ## Stable identifier format
 

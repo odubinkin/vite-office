@@ -212,7 +212,8 @@ while an approved feature task controls the scope of its own change.
   licensing review.
 - Native integrations and backend-dependent features need browser feasibility
   studies; they remain parity requirements until explicitly resolved.
-- Thirty-four bounded Writer capabilities are mapped. Workstream 8 promotes
-  them individually only after assertion-level differential evidence is
-  recorded; unresolved fidelity, platform, fixture, and documentation gaps
-  remain explicit in the parity records.
+- Thirty-four bounded Writer capabilities are mapped. Workstream 8 has promoted
+  the bounded ODF fixture round trip (CAP-0130); the other 33 remain
+  `implemented` until their assertion-level differential evidence is complete.
+  Unresolved fidelity, platform, fixture, and documentation gaps remain
+  explicit in the parity records.
