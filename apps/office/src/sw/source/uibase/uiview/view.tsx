@@ -4,7 +4,6 @@
 
 import { useCallback, useSyncExternalStore } from "react";
 
-import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
 import type {
   WriterCharacterAttributes,
   WriterCharacterFormat,
@@ -31,6 +30,7 @@ import type {
   WriterCutCommandArguments,
   WriterPasteCommandArguments,
 } from "./view-session";
+import type { WriterParagraphTextRange } from "../wrtsh/wrtsh";
 
 /** Describes the persistent view selected by the application frame. */
 export interface WriterWorkbenchProps {

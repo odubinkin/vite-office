@@ -9,7 +9,6 @@ import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_WEIGHT, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import {
-  appendWriterParagraph,
   createWriterDocument,
   normalizeWriterParagraphFormatting,
   serializeWriterDocument,
@@ -47,6 +46,12 @@ function createModelFixture(id = "model-a"): WriterDocument {
   );
 }
 
+/** Appends a text node only while constructing a low-level model fixture. @param writer - Fixture graph. @param id - Test node identity. @returns The same graph. */
+function appendFixtureParagraph(writer: WriterDocument, id: string): WriterDocument {
+  writer.nodes.MakeTextNode(id);
+  return writer;
+}
+
 /** Returns a function that evaluates the supplied operation for an error assertion. @param operation - Deferred operation. @returns The same deferred operation. */
 function throwing(operation: () => unknown): () => unknown {
   return operation;
@@ -75,7 +80,7 @@ class DetachedNode extends SwNode {
 
 describe("Writer SwNodes graph" /** Groups node ownership and fixed-section tests. @returns Nothing; Vitest registers cases. */, function defineSwNodesTests(): void {
   it("creates the fixed Writer sections and tracks node indices through structural changes" /** Verifies the pinned SwNodes constructor ordering and object-identity indices. @returns Nothing; assertions inspect the graph. */, function createsFixedSections(): void {
-    const writer = appendWriterParagraph(createModelFixture(), "p-2");
+    const writer = appendFixtureParagraph(createModelFixture(), "p-2");
     const nodes = writer.GetNodes();
     expect(nodes.GetDoc()).toBe(writer);
     expect(nodes.Count()).toBe(12);
@@ -200,7 +205,7 @@ describe("Writer SwNodes graph" /** Groups node ownership and fixed-section test
 
 describe("Writer SwPosition and SwPaM" /** Groups model cursor and range-direction tests. @returns Nothing; Vitest registers cases. */, function definePositionTests(): void {
   it("orders point and mark while preserving selection direction" /** Verifies node indices, content bounds, cloning, and SwPaM endpoint semantics. @returns Nothing; assertions inspect positions. */, function ordersPositions(): void {
-    const writer = appendWriterParagraph(createModelFixture(), "p-2");
+    const writer = appendFixtureParagraph(createModelFixture(), "p-2");
     const first = writer.paragraphs[0] as SwTextNode;
     const second = writer.paragraphs[1] as SwTextNode;
     first.InsertText("first", 0);
@@ -438,6 +443,12 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(node.alignment).toBe("justify");
     expect(node.style).toBe("heading-1");
     expect(node.list).toEqual({ kind: "numbered", level: 2, styleId: "List 1" });
+    writer.EnsureNumRule("Conflicting List", "numbered", 2);
+    node.SetParagraphList({ kind: "bullet", level: 2, styleId: "Conflicting List" });
+    expect(node.list).toEqual({ kind: "bullet", level: 2 });
+    writer.EnsureNumRule("Conflicting Bullet", "bullet", 2);
+    node.SetParagraphList({ kind: "numbered", level: 2, styleId: "Conflicting Bullet" });
+    expect(node.list).toEqual({ kind: "numbered", level: 2 });
     node.InsertText("abcd", 0, bold);
     node.InsertText("X", 2);
     expect(node.GetText()).toBe("abXcd");
@@ -479,7 +490,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
   });
 
   it("applies insert, delete, and replacement operations through SwPosition and SwPaM" /** Verifies DocumentContentOperationsManager owns canonical content changes and guards cross-node ranges. @returns Nothing; assertions inspect document state. */, function appliesContentOperations(): void {
-    const writer = appendWriterParagraph(createModelFixture(), "p-2");
+    const writer = appendFixtureParagraph(createModelFixture(), "p-2");
     const first = writer.paragraphs[0] as SwTextNode;
     const second = writer.paragraphs[1] as SwTextNode;
     const manager = new DocumentContentOperationsManager(writer);

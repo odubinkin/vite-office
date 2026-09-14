@@ -10,7 +10,7 @@ import { Desktop } from "./desktop";
 import { createOfficeModuleDescriptors } from "./modulemanager";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../sfx2/source/doc/docfac";
-import { createWriterDocument, insertWriterText } from "../../../sw/source/core/doc/writer";
+import { createWriterDocument } from "../../../sw/source/core/doc/writer";
 import { readOdtDocument } from "../../../sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../../sw/source/filter/xml/wrtxml";
 import {
@@ -19,6 +19,8 @@ import {
 } from "../../../sw/source/core/doc/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-storage";
 import { createWriterModuleFactory } from "../../../sw/source/uibase/app/swmodule";
+import { SwDocShell } from "../../../sw/source/uibase/app/docsh";
+import { SwWrtShell } from "../../../sw/source/uibase/wrtsh/wrtsh";
 
 /** Renders framework Desktop with the Writer factory registered by a test composition root. @returns Configured desktop element. */
 function App(): React.JSX.Element {
@@ -305,14 +307,15 @@ describe("App" /**
   });
 
   it("opens a supported ODT atomically and starts a parseable ODT download" /** Verifies the product File boundary uses the existing Writer package filters. @returns A fulfilled assertion promise. */, async () => {
-    const imported = insertWriterText(
-      createWriterDocument(
-        createDocument({ id: "fixture", suiteId: "writer", title: "Opened ODT" }),
-        "fixture-p-1",
-      ),
+    const imported = createWriterDocument(
+      createDocument({ id: "fixture", suiteId: "writer", title: "Opened ODT" }),
       "fixture-p-1",
-      0,
+    );
+    new SwWrtShell(new SwDocShell(imported)).InsertText(
+      "fixture-p-1",
       "Imported package body",
+      "Imported package body".length,
+      "insertText",
     );
     const inputClick = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(
       /** Supplies the generated ODT to the transient browser chooser. @param this - Transient file input. @returns Nothing. */

@@ -6,9 +6,9 @@ Heading 1 derives from the default collection through the same parent item-set
 lookup used by Writer formats. Each `SwContentNode` registers in one collection,
 and its optional direct `SwAttrSet` is reparented when the collection changes.
 `WriterParagraph.style` is the collection ID projected for the browser.
-`setWriterParagraphStyle` changes that registration immutably; a no-op retains
-the current document reference and a change participates in lifecycle, history,
-snapshot, undo, and redo contracts.
+`SwWrtShell.SetParagraphStyle` changes that registration on the live graph via
+`SwUndoFormatColl`; a no-op retains state and a change participates in
+lifecycle, history, snapshot, undo, and redo contracts.
 
 The existing **Paragraph style** select in the formatting toolbar applies its
 value to the focused editable paragraph. `Heading 1` is visibly larger and bold in the

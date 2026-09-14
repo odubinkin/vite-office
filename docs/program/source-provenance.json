@@ -890,7 +890,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterParagraphTextRange",
+            "marker": "DocumentContentOperationsManager",
             "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts"
           }
         ],
@@ -903,12 +903,10 @@
       },
       "localPath": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
       "localSymbols": [
-        "WriterParagraphTextRange",
-        "DocumentContentOperationsManager",
-        "replaceWriterParagraphTextRange"
+        "DocumentContentOperationsManager"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside IDocumentMarkAccess::GetType, std::lower_bound, sw::CalcBreaks, o3tl::make_unsigned and the bounded WriterParagraphTextRange, DocumentContentOperationsManager, replaceWriterParagraphTextRange contract remain intentionally omitted."
+        "Upstream obligations outside IDocumentMarkAccess::GetType, std::lower_bound, sw::CalcBreaks, o3tl::make_unsigned and the bounded DocumentContentOperationsManager contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
         "Implements bounded SwPaM content operations at the pinned LibreOffice `sw/source/core/doc/DocumentContentOperationsManager.cxx` boundary."
@@ -1089,9 +1087,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/source/core/doc/writer-storage.ts",
-      "rationale": "Defines Writer-specific snapshot orchestration over the generic browser storage contract without selecting an IndexedDB implementation or React UI. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "rationale": "Defines Writer-specific snapshot creation, restoration, and persistence evidence over the generic browser storage contract without acknowledging or cloning the live document. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
       "responsibilities": [
-        "Defines Writer-specific snapshot orchestration over the generic browser storage contract without selecting an IndexedDB implementation or React UI."
+        "Creates and restores Writer snapshots and returns exact adapter-confirmed storage evidence without mutating the live SwDoc."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -1110,9 +1108,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "rationale": "Exposes legacy and test-facing Writer graph helpers without owning the production command path. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "rationale": "Exposes Writer construction, model types, and persistence serialization without owning a parallel mutation path. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
       "responsibilities": [
-        "Exposes legacy and test-facing Writer graph helpers without owning the production command path."
+        "Exposes Writer construction, model types, and persistence serialization while interactive mutation remains in SwWrtShell."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -1142,14 +1140,13 @@
         "SwNode",
         "SwStartNode",
         "SwEndNode",
-        "SwContentNode",
-        "moveWriterParagraph"
+        "SwContentNode"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwNodeType, SwNode, SwStartNode, SwEndNode and the bounded SwNodeType, SwNode, SwStartNode contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements Writer document model nodes and structural transitions from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary."
+        "Implements Writer document model nodes from the pinned LibreOffice `sw/source/core/docnode/node.cxx` boundary."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/docnode/node.cxx",
@@ -2154,14 +2151,13 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/shells/listsh.ts",
       "localSymbols": [
-        "WriterListLevelCommand",
-        "changeWriterParagraphListLevel"
+        "WriterListLevelCommand"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwListShell::InitInterface_Impl, SwListShell::Execute, SwListShell::GetState, SwListShell::SwListShell and the bounded WriterListLevelCommand, changeWriterParagraphListLevel contract remain intentionally omitted."
+        "Upstream obligations outside SwListShell::InitInterface_Impl, SwListShell::Execute, SwListShell::GetState, SwListShell::SwListShell and the bounded WriterListLevelCommand identity remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements bounded Writer list-level commands at the LibreOffice `sw/source/uibase/shells/listsh.cxx` ownership boundary."
+        "Declares the bounded Writer list-level command identity consumed by the single SwWrtShell mutation path."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/shells/listsh.cxx",
@@ -2192,77 +2188,6 @@
         "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
       },
       "status": "local-only"
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterCharacterSelection",
-            "path": "apps/office/src/sw/source/uibase/shells/txtattr.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwTextShell::ExecCharAttr",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/txtattr.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/shells/txtattr.ts",
-      "localSymbols": [
-        "WriterCharacterSelection",
-        "toggleWriterCharacterFormat"
-      ],
-      "omittedResponsibilities": [
-        "Upstream obligations outside SwTextShell::ExecCharAttr, SwTextShell::ExecCharAttrArgs, SwStyleNameMapper::GetPoolIdFromUIName, std::move and the bounded WriterCharacterSelection, toggleWriterCharacterFormat contract remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Applies bounded Writer direct character attributes at the LibreOffice `sw/source/uibase/shells/txtattr.cxx` command-shell ownership boundary."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/shells/txtattr.cxx",
-      "upstreamSymbols": [
-        "SwTextShell::ExecCharAttr",
-        "SwTextShell::ExecCharAttrArgs",
-        "SwStyleNameMapper::GetPoolIdFromUIName",
-        "std::move"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "setWriterParagraphListKind",
-            "path": "apps/office/src/sw/source/uibase/shells/txtnum.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwTextShell::ExecEnterNum",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/txtnum.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/shells/txtnum.ts",
-      "localSymbols": [
-        "setWriterParagraphListKind"
-      ],
-      "omittedResponsibilities": [
-        "Upstream obligations outside SwTextShell::ExecEnterNum, numfunc::GetDefaultPositionAndSpaceMode, std::move, SwAbstractDialogFactory::Create and the bounded setWriterParagraphListKind contract remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Implements the browser Writer equivalents of `FN_NUM_BULLET_ON`, `FN_NUM_NUMBERING_ON`, and `FN_NUM_BULLET_OFF` from LibreOffice `sw/source/uibase/shells/txtnum.cxx`."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/shells/txtnum.cxx",
-      "upstreamSymbols": [
-        "SwTextShell::ExecEnterNum",
-        "numfunc::GetDefaultPositionAndSpaceMode",
-        "std::move",
-        "SwAbstractDialogFactory::Create"
-      ]
     },
     {
       "classification": "upstream-mechanism",

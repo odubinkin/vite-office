@@ -20,9 +20,8 @@ through **Ctrl/Cmd+B**, **Ctrl/Cmd+I**, and **Ctrl/Cmd+U**. These browser
 placements derive from pinned `sw/uiconfig/swriter/menubar/menubar.xml` and
 `sw/uiconfig/swriter/toolbar/textobjectbar.xml`.
 
-The command adapter is
-[`txtattr.ts`](../../apps/office/src/sw/source/uibase/shells/txtattr.ts), mapped
-to `sw/source/uibase/shells/txtattr.cxx`; the model is mapped to
+The command adapter is `SwWrtShell.ToggleCharacterFormat`, backed by
+`SwUndoAttr` and the command descriptors in `writercommands.ts`; the model is mapped to
 `sw/source/core/txtnode/ndtxt.cxx`, `ndhints.cxx`, and `txatbase.cxx`. It
 deliberately separates model range formatting from browser DOM selection conversion in
 [`select.ts`](../../apps/office/src/sw/source/uibase/wrtsh/select.ts).

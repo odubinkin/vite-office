@@ -445,8 +445,8 @@
             "marker": "getWriterParagraphListMarker"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/shells/txtnum.ts",
-            "marker": "setWriterParagraphListKind"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "marker": "SetParagraphListKind"
           },
           {
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
@@ -479,8 +479,8 @@
             "marker": "renders bullets"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/shells/txtnum.test.ts",
-            "marker": "changes only the selected"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "marker": "routes formatting and list commands"
           },
           {
             "path": "apps/office/src/framework/source/services/desktop.test.tsx",
@@ -682,7 +682,7 @@
         "implementation": [
           {
             "path": "apps/office/src/sw/source/uibase/shells/listsh.ts",
-            "marker": "changeWriterParagraphListLevel"
+            "marker": "WriterListLevelCommand"
           },
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
@@ -707,8 +707,8 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/source/uibase/shells/listsh.test.ts",
-            "marker": "promotes and demotes"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "marker": "routes formatting and list commands"
           },
           {
             "path": "apps/office/src/sw/source/core/doc/list.test.ts",
@@ -921,8 +921,8 @@
             "marker": "export class SwTextAttr"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/shells/txtattr.ts",
-            "marker": "toggleWriterCharacterFormat"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "marker": "ToggleCharacterFormat"
           },
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts",
@@ -951,8 +951,8 @@
             "marker": "toggles a selected range"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/shells/txtattr.test.ts",
-            "marker": "toggles a non-empty"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "marker": "routes formatting and list commands"
           },
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/select.test.ts",
@@ -986,7 +986,7 @@
           },
           {
             "path": "docs/program/source-tree.md",
-            "marker": "txtattr.ts"
+            "marker": "wrtsh.ts"
           }
         ]
       },
@@ -1059,8 +1059,8 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
-            "marker": "replaceWriterParagraphTextRange"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "marker": "public ReplaceRange"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -1085,8 +1085,8 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.test.ts",
-            "marker": "replaces, removes"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "marker": "pastes structured list paragraphs"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
@@ -1140,7 +1140,7 @@
       "capability": "Writer document graph ownership",
       "gaps": [
         "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo; legacy cloning helpers remain isolated outside production pending Workstream 1, while registered-index correction and full native Writer undo coverage remain incomplete."
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; registered-index correction and full native Writer undo coverage remain incomplete."
       ],
       "upstream": {
         "implementation": [
@@ -2213,8 +2213,8 @@
             "marker": "export class SwTextAttr"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/shells/txtattr.ts",
-            "marker": "toggleWriterCharacterFormat"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "marker": "ToggleCharacterFormat"
           },
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/select.ts",
@@ -2243,8 +2243,8 @@
             "marker": "toggles a selected range"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/shells/txtattr.test.ts",
-            "marker": "toggles a non-empty"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "marker": "routes formatting and list commands"
           },
           {
             "path": "apps/office/src/sw/source/uibase/wrtsh/select.test.ts",
@@ -2278,7 +2278,7 @@
           },
           {
             "path": "docs/program/source-tree.md",
-            "marker": "txtattr.ts"
+            "marker": "wrtsh.ts"
           }
         ]
       },
@@ -2351,8 +2351,8 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
-            "marker": "replaceWriterParagraphTextRange"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "marker": "public ReplaceRange"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -2377,8 +2377,8 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.test.ts",
-            "marker": "replaces, removes"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "marker": "pastes structured list paragraphs"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
@@ -2816,7 +2816,7 @@
       "capability": "Writer paragraph structure mutation",
       "gaps": [
         "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo; legacy cloning helpers remain isolated outside production pending Workstream 1, while registered-index correction and full native Writer undo coverage remain incomplete."
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; registered-index correction and full native Writer undo coverage remain incomplete."
       ],
       "upstream": {
         "implementation": [
@@ -2938,7 +2938,7 @@
       "capability": "Writer text content mutation",
       "gaps": [
         "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo; legacy cloning helpers remain isolated outside production pending Workstream 1, while registered-index correction and full native Writer undo coverage remain incomplete."
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; registered-index correction and full native Writer undo coverage remain incomplete."
       ],
       "upstream": {
         "implementation": [
@@ -4638,7 +4638,7 @@
       "capability": "Writer contenteditable input handling",
       "gaps": [
         "The fixed body sections, node ownership, text nodes, positions, directional ranges, bounded paragraph item pool, and auto-format hints are implemented, but registered-index correction, notification clients, nested sections, tables, frames, fields, marks, redlines, content controls, anchored objects, and layout frames remain separate work.",
-        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo; legacy cloning helpers remain isolated outside production pending Workstream 1, while registered-index correction and full native Writer undo coverage remain incomplete."
+        "Interactive commands mutate the persistent Writer graph through SwWrtShell and action undo with no functional-clone mutation facade; registered-index correction and full native Writer undo coverage remain incomplete."
       ],
       "upstream": {
         "implementation": [

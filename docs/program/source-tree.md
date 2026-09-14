@@ -125,11 +125,10 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/core/txtnode/ndhints.ts` | `sw/source/core/txtnode/ndhints.cxx` | Start-sorted item-set-backed text attribute hints and derived browser runs |
 | `sw/source/core/txtnode/txatbase.ts` | `sw/source/core/txtnode/txatbase.cxx` | `SwTextAttr` ranges and `SfxItemSet`-backed `SwFormatAutoFormat` items |
 | `sw/source/core/doc/DocumentContentOperationsManager.ts` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Bounded same-text-node Insert, Delete, and Replace operations through `SwPaM` |
-| `sw/source/uibase/shells/txtnum.ts` | `sw/source/uibase/shells/txtnum.cxx` | Default bullet, default numbering, and remove-bullets command transition |
-| `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Active-list Promote and Demote level transition |
+| `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Bounded Promote and Demote command identity |
 | `sw/source/uibase/shells/textsh.ts` | `sw/source/uibase/shells/textsh.cxx` | Browser-owned Cut, Copy, Paste, download, and Undo/Redo command shell |
+| `sw/source/uibase/wrtsh/wrtsh.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Persistent cursor plus action-based text, formatting, list, split, and join mutation path |
 | `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Canonical text-node storage, hint-aware editing, split/append, and derived rendering runs |
-| `sw/source/uibase/shells/txtattr.ts` | `sw/source/uibase/shells/txtattr.cxx` | Bold, Italic, and single Underline command transition |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
 | `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Bounded nested semantic `ul`/`ol`/`li` clipboard HTML serialization |

@@ -9,13 +9,13 @@ item, toolbar button, or canvas action button for paragraph creation.
 uses the browser selection API to calculate the UTF-16 caret offset relative to
 the editable paragraph. When that selection is collapsed and belongs to the
 paragraph, it prevents the browser's uncontrolled DOM mutation and asks
-[`view`](../../apps/office/src/sw/source/uibase/uiview/view.tsx) to apply a
-browser transaction. That transaction clones the `SwDoc` graph, then performs
-the model mutation through `SwTextNode`/`SwNodes` operations.
+[`view`](../../apps/office/src/sw/source/uibase/uiview/view.tsx) to dispatch the
+edit to the persistent `SwWrtShell`. The shell applies `SwUndoSplitNode` to the
+same `SwDoc` graph and records one action-history boundary.
 
-[`splitWriterParagraph`](../../apps/office/src/sw/source/core/doc/writer.ts) replaces the
-source text with the prefix, inserts an adjacent paragraph containing the
-suffix, marks the document dirty, and preserves the source paragraph's bounded
+`SwWrtShell.SplitParagraph` replaces the source text with the prefix, inserts
+an adjacent paragraph containing the suffix, marks the document dirty, and
+preserves the source paragraph's bounded
 alignment, style, and list state on both results. The workbench allocates a collision-free
 paragraph identity, adds one history entry, makes the new paragraph active, and
 focuses it at offset zero after React mounts it. Browser-local save/load and

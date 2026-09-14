@@ -8,8 +8,8 @@ import {
   type CommandRegistry,
 } from "../../../../framework/source/dispatch/dispatchprovider";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
-import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
 import type { WriterCharacterFormat } from "../../core/doc/writer";
+import type { WriterParagraphTextRange } from "../wrtsh/wrtsh";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 
 /** Arguments supplied by the DOM selection adapter to a character-format command. */

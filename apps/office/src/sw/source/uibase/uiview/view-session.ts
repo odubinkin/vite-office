@@ -16,7 +16,6 @@ import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import type { DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
 import type { RecoveryStorageAdapter } from "../../../../svl/source/misc/recovery";
 import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipboard";
-import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
 import type { WriterSnapshotState } from "../../core/doc/writer-storage";
 import { loadWriterDocument, saveWriterDocument } from "../../core/doc/writer-storage";
 import type { WriterDocument, WriterParagraph } from "../../core/doc/writer";
@@ -27,7 +26,11 @@ import {
 } from "../dochdl/swdtflvr";
 import { SwDocShell } from "../app/docsh";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
-import { SwWrtShell, type WriterCursorSelection } from "../wrtsh/wrtsh";
+import {
+  SwWrtShell,
+  type WriterCursorSelection,
+  type WriterParagraphTextRange,
+} from "../wrtsh/wrtsh";
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
@@ -295,8 +298,9 @@ export class SwView {
       const medium = this.docShell.GetMedium();
       const persist =
         /** Commits one complete Writer snapshot to browser-local primary storage. @param document - Shell-owned Writer graph. @returns Completion after IndexedDB commit. */
-        async (document: WriterDocument): Promise<void> => {
-          await saveWriterDocument(storage, document);
+        async (document: WriterDocument) => {
+          const saved = await saveWriterDocument(storage, document);
+          return { generation: saved.snapshot.version };
         };
       if (medium.kind === "browser-local" && medium.indexedDbKey === medium.documentId)
         await this.docShell.Save(persist);

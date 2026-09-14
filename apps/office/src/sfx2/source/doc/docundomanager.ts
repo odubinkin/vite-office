@@ -6,6 +6,16 @@
 /** Matches LibreOffice's default top-level SfxUndoManager action capacity. */
 export const DEFAULT_MAX_UNDO_ACTION_COUNT = 20;
 
+/** Opaque history boundary captured before an asynchronous primary-medium write begins. */
+export interface SfxUndoSavePosition {
+  /** Action immediately before the captured boundary, absent for the history root. */
+  readonly actionBefore?: SfxUndoAction<unknown>;
+  /** History-root revision used to reject boundaries invalidated by trimming or clearing. */
+  readonly historyRootRevision: number;
+  /** Zero-based action cursor at the captured boundary. */
+  readonly position: number;
+}
+
 /** Base class for one reversible operation retained by SfxUndoManager. */
 export abstract class SfxUndoAction<Context> {
   /** Reverts this action against the supplied document context. @param context - Active undo context. @returns Nothing. */
@@ -84,6 +94,7 @@ export class SfxUndoManager<Context> {
   private readonly listActions: SfxListUndoAction<Context>[] = [];
   private mergeAllowed = false;
   private savePosition: number | undefined = 0;
+  private historyRootRevision = 0;
 
   /** Creates a bounded manager. @param maximumActionCount - Retained top-level action capacity. @returns Nothing. */
   public constructor(private maximumActionCount = DEFAULT_MAX_UNDO_ACTION_COUNT) {
@@ -104,6 +115,7 @@ export class SfxUndoManager<Context> {
     }
     if (this.maximumActionCount === 0) {
       if (this.savePosition === this.currentAction) this.savePosition = undefined;
+      this.historyRootRevision += 1;
       this.mergeAllowed = false;
       return;
     }
@@ -197,10 +209,26 @@ export class SfxUndoManager<Context> {
     this.TrimToMaximum();
   }
 
-  /** Marks the current stack position as the primary-medium save position and closes grouping. @returns Whether the mark moved. */
-  public SetSavePosition(): boolean {
-    const changed = this.savePosition !== this.currentAction;
-    this.savePosition = this.currentAction;
+  /** Captures an exact undo boundary and closes grouping so later edits cannot merge across it. @returns Opaque boundary token suitable for asynchronous save acknowledgement. */
+  public CaptureSavePosition(): SfxUndoSavePosition {
+    if (this.IsInListAction())
+      throw new Error("Cannot capture SfxUndoManager save position inside a list action.");
+    this.mergeAllowed = false;
+    return Object.freeze({
+      ...(this.currentAction === 0
+        ? {}
+        : { actionBefore: this.actions[this.currentAction - 1] as SfxUndoAction<unknown> }),
+      historyRootRevision: this.historyRootRevision,
+      position: this.currentAction,
+    });
+  }
+
+  /** Marks the current or a still-reachable captured stack boundary as the primary-medium save position. @param position - Optional asynchronous-save boundary. @returns Whether the mark moved. */
+  public SetSavePosition(position?: SfxUndoSavePosition): boolean {
+    const nextPosition =
+      position === undefined ? this.currentAction : this.ResolveSavePosition(position);
+    const changed = this.savePosition !== nextPosition;
+    this.savePosition = nextPosition;
     this.mergeAllowed = false;
     return changed;
   }
@@ -237,6 +265,7 @@ export class SfxUndoManager<Context> {
     if (this.IsInListAction()) throw new Error("Cannot clear SfxUndoManager inside a list action.");
     this.actions.length = 0;
     this.currentAction = 0;
+    this.historyRootRevision += 1;
     this.mergeAllowed = false;
     this.savePosition = 0;
   }
@@ -254,11 +283,21 @@ export class SfxUndoManager<Context> {
     const removeCount = this.actions.length - this.maximumActionCount;
     if (removeCount <= 0) return;
     this.actions.splice(0, removeCount);
+    this.historyRootRevision += 1;
     this.currentAction = Math.max(0, this.currentAction - removeCount);
     if (this.savePosition !== undefined) {
       this.savePosition -= removeCount;
       if (this.savePosition < 0) this.savePosition = undefined;
     }
+  }
+
+  /** Resolves an asynchronous save token only while its exact action boundary remains reachable. @param position - Captured boundary. @returns Current index or undefined when history diverged. */
+  private ResolveSavePosition(position: SfxUndoSavePosition): number | undefined {
+    if (position.historyRootRevision !== this.historyRootRevision) return undefined;
+    if (position.position === 0) return 0;
+    return this.actions[position.position - 1] === position.actionBefore
+      ? position.position
+      : undefined;
   }
 }
 

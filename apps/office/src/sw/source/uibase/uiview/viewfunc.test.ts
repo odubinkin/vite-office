@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
-import { appendWriterParagraph, createWriterDocument } from "../../core/doc/writer";
+import { createWriterDocument } from "../../core/doc/writer";
 import {
   createWriterWorkbenchDocument,
   getActiveWriterParagraph,
@@ -26,13 +26,11 @@ describe("Writer workbench helpers" /** Groups pure identity helpers. @returns N
   });
 
   it("generates a non-colliding paragraph identity and resolves stale focus" /** Verifies deterministic identity/focus fallbacks. @returns Nothing. */, function resolvesParagraphs(): void {
-    const document = appendWriterParagraph(
-      createWriterDocument(
-        createDocument({ id: "writer", suiteId: "writer", title: "Writer" }),
-        "writer-paragraph-1",
-      ),
-      "writer-paragraph-3",
+    const document = createWriterDocument(
+      createDocument({ id: "writer", suiteId: "writer", title: "Writer" }),
+      "writer-paragraph-1",
     );
+    document.nodes.MakeTextNode("writer-paragraph-3");
     expect(getNextWriterParagraphId(document)).toBe("writer-paragraph-4");
     expect(getActiveWriterParagraph(document, "writer-paragraph-3")).toBe(document.paragraphs[1]);
     expect(getActiveWriterParagraph(document, "missing")).toBe(document.paragraphs[0]);

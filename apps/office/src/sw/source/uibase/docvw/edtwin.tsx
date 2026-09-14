@@ -14,8 +14,7 @@ import {
   restoreWriterCollapsedCaret,
   restoreWriterDomSelection,
 } from "../wrtsh/select";
-import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
-import type { WriterCursorSelection } from "../wrtsh/wrtsh";
+import type { WriterCursorSelection, WriterParagraphTextRange } from "../wrtsh/wrtsh";
 
 /** Stores one browser caret endpoint used to extend a pointer selection across Writer paragraph editing hosts. */
 interface WriterPointerCaret {

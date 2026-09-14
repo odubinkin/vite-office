@@ -4,7 +4,9 @@ import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import { createWriterSnapshot } from "../../core/doc/writer-storage";
-import { createWriterDocument, insertWriterText } from "../../core/doc/writer";
+import { createWriterDocument } from "../../core/doc/writer";
+import { SwDocShell } from "../../uibase/app/docsh";
+import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import {
   createInlineOdtFilterService,
   normalizeOdtFilterError,
@@ -19,12 +21,8 @@ function metadata() {
 describe("ODT filter service" /** Groups asynchronous inline filter behavior. @returns Nothing. */, () => {
   it("round-trips a neutral snapshot and reports import/export stages" /** Verifies the same service contract used by the worker runtime. @returns Completion after assertions. */, async () => {
     const service = createInlineOdtFilterService();
-    const document = insertWriterText(
-      createWriterDocument(metadata(), "p-1"),
-      "p-1",
-      0,
-      "worker body",
-    );
+    const document = createWriterDocument(metadata(), "p-1");
+    new SwWrtShell(new SwDocShell(document)).InsertText("p-1", "worker body", 11, "insertText");
     const progress: string[] = [];
     const bytes = await service.Export(createWriterSnapshot(document), {
       onProgress:

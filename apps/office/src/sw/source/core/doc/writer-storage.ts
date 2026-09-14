@@ -7,6 +7,7 @@ import {
   saveSnapshot,
   type DocumentSnapshot,
   type DocumentStorageAdapter,
+  type SavedSnapshotResult,
   type SerializableValue,
 } from "../../../../sfx2/source/doc/docfile";
 import { markDocumentRecoverySaved, markDocumentSaved } from "../../../../sfx2/source/doc/docfac";
@@ -59,24 +60,15 @@ export function restoreWriterSnapshot(
  * Saves one Writer workbench document using its stable identity and content generation.
  *
  * @param adapter - Generic browser storage boundary invoked without mutation.
- * @param writerDocument - Immutable Writer document persisted as JSON-compatible state.
- * @returns A saved result whose snapshot contains the Writer document.
+ * @param writerDocument - Writer document snapshotted synchronously before the adapter is awaited.
+ * @returns Storage evidence identifying the exact snapshot accepted by the adapter.
  * @throws {Error} When the storage adapter rejects the save operation.
  */
 export async function saveWriterDocument(
   adapter: DocumentStorageAdapter<WriterSnapshotState>,
   writerDocument: WriterDocument,
-): Promise<
-  Readonly<{
-    snapshot: Awaited<ReturnType<typeof saveSnapshot<WriterSnapshotState>>>["snapshot"];
-    status: "saved";
-    writerDocument: WriterDocument;
-  }>
-> {
-  const saved = await saveSnapshot(adapter, createWriterSnapshot(writerDocument));
-  const acknowledged = writerDocument.clone();
-  acknowledged.document = markDocumentSaved(acknowledged.document, saved.snapshot.version);
-  return { ...saved, writerDocument: acknowledged };
+): Promise<SavedSnapshotResult<WriterSnapshotState>> {
+  return saveSnapshot(adapter, createWriterSnapshot(writerDocument));
 }
 
 /**

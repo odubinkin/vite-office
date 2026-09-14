@@ -102,17 +102,17 @@ must not be omitted merely because the original implementation is native.
 
 ## Current implementation inventory
 
-The runtime inventory currently contains 89 production modules:
+The runtime inventory currently contains 87 production modules:
 
 | Classification | Count | Intended meaning |
 | --- | ---: | --- |
-| `upstream-mechanism` | 69 | A bounded implementation of a LibreOffice mechanism |
-| `browser-adaptation` | 10 | Browser APIs or browser execution constraints |
-| `local-infrastructure` | 10 | Application infrastructure without direct source parity |
+| `upstream-mechanism` | 58 | A bounded implementation of a LibreOffice mechanism |
+| `browser-adaptation` | 14 | Browser APIs or browser execution constraints |
+| `local-infrastructure` | 15 | Application infrastructure without direct source parity |
 
-It also declares 4 UI behaviors, 2 internal operations, and 6 placeholder
-suites. The Writer parity slice contains 14 capabilities marked `implemented`,
-28 recorded gaps, no exceptions, and no `verified` records.
+It also declares 10 UI behaviors, 9 internal operations, and 6 placeholder
+suites. The Writer parity slice contains 34 atomic records marked `implemented`,
+68 recorded gaps, no exceptions, and no `verified` records.
 
 ### Implemented shared and framework functionality
 
@@ -274,7 +274,7 @@ runtime inventory classification says browser-only, and vice versa.
 
 Acceptance criteria:
 
-- all 89 runtime modules have one consistent classification;
+- all 87 runtime modules have one consistent classification;
 - every mapped module names an exact responsibility and symbol;
 - the confirmed mismatches in this document are removed or reclassified;
 - filename divergences explain necessary naming differences without using a
@@ -323,6 +323,13 @@ and add the following to the default verification pipeline:
 - parity mapping validation.
 
 ## Workstream 1: establish one mutation and undo path
+
+Status: implemented on 2026-09-14. Interactive editing now mutates the live
+`SwDoc` exclusively through `SwWrtShell` and action undo. The former cloning
+facades and their duplicate behavioral tests were removed. Primary-save
+completion now carries storage evidence back to `SwDocShell`, which acknowledges
+the captured document generation and undo boundary only after persistence
+succeeds.
 
 ### P1.1 Retire cloning command facades
 
@@ -946,13 +953,14 @@ following hold:
 
 ## Immediate next tasks
 
-The first implementation wave should contain only the following tasks:
+The first implementation wave contains the following tasks (`[x]` means the
+task is complete):
 
 1. extend provenance/inventory schemas and correct the confirmed false mappings;
 2. repair stale documentation and make source-tree/provenance/parity checks part
    of the normal verification gate;
-3. characterize and remove the legacy immutable command helpers;
-4. remove the persistence acknowledgement clone;
+3. [x] characterize and remove the legacy immutable command helpers;
+4. [x] remove the persistence acknowledgement clone;
 5. design and implement registered content indices with exhaustive edit-matrix
    tests;
 6. introduce model broadcasters and a single React subscription bridge.

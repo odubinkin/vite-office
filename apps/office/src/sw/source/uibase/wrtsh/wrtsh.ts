@@ -19,7 +19,6 @@ import {
   type WriterParagraphStyle,
   type WriterTextRun,
 } from "../../core/doc/writer";
-import type { WriterParagraphTextRange } from "../../core/doc/DocumentContentOperationsManager";
 import {
   createWriterTextRuns,
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
@@ -71,6 +70,16 @@ export interface WriterCursorSelection {
   readonly mark?: WriterCursorPosition;
   /** Moving caret or selection endpoint. */
   readonly point: WriterCursorPosition;
+}
+
+/** Describes one browser-resolved range after conversion to Writer model coordinates. */
+export interface WriterParagraphTextRange {
+  /** Exclusive UTF-16 range end relative to the text node. */
+  readonly end: number;
+  /** Stable identity of the SwTextNode containing both endpoints. */
+  readonly paragraphId: string;
+  /** Inclusive UTF-16 range start relative to the text node. */
+  readonly start: number;
 }
 
 /** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
@@ -758,11 +767,6 @@ export class SwWrtShell {
     const changed = this.docShell.Redo(this.undoContext);
     if (changed) this.Notify();
     return changed;
-  }
-
-  /** Moves the save mark without recording an undo action. @param savedGeneration - Persisted content generation. @returns Whether history state changed. */
-  public AcknowledgeSave(savedGeneration: number): boolean {
-    return this.docShell.AcknowledgeSave(savedGeneration);
   }
 
   /** Executes one semantic action and publishes cursor-state invalidation. @param action - Reversible Writer action. @param tryMerge - Whether adjacent typing/deletion grouping is allowed. @returns True after successful execution. */

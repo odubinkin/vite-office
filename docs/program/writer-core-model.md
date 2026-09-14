@@ -84,9 +84,9 @@ Like LibreOffice, the interactive browser path mutates the identity-bearing
 `SwDoc` graph through `SwWrtShell` and records action-local undo objects in the
 document shell's `SfxUndoManager`. React observes immutable presentation
 snapshots published by the persistent session; it does not require a cloned
-document root. The pure cloning helpers still exported by `writer.ts` are
-legacy/test-facing infrastructure scheduled for removal in Workstream 1 and
-are not the production command path.
+document root. `writer.ts` now exposes construction, model types, and
+persistence serialization only; interactive commands have no functional-clone
+alternative.
 
 Persistence uses the explicit `swModelVersion: 3` snapshot produced by
 `SwDoc.toSnapshot()`. It records the shared document header, document-owned

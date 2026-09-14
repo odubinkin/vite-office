@@ -3,10 +3,10 @@
 The Writer workbench exposes ordered editable paragraph blocks for the
 plain-text body of an in-memory `WriterDocument`. The
 [`edtwin`](../../apps/office/src/sw/source/uibase/docvw/edtwin.tsx)
-is a browser-owned `contenteditable` view: each input event passes the complete text to its
-[`view`](../../apps/office/src/sw/source/uibase/uiview/view.tsx) owner,
-which uses `replaceWriterParagraph` and `splitWriterParagraph` from the pure
-Writer domain model.
+is a browser-owned `contenteditable` view: supported `beforeinput` intents are
+converted to `SwPosition`/`SwPaM` coordinates and executed by the persistent
+`SwWrtShell`. Its `SwUndoInsert`, `SwUndoDelete`, `SwUndoReplace`, and
+`SwUndoSplitNode` actions mutate the live Writer graph.
 
 The blocks are integrated directly into the document page rather than displayed
 as labelled textarea cards. Their focus drives the existing formatting toolbar

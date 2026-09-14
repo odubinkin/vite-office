@@ -733,28 +733,6 @@
       ]
     },
     {
-      "path": "apps/office/src/sw/source/uibase/shells/txtattr.ts",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "character-formatting",
-      "capabilityIds": [
-        "CAP-0109",
-        "CAP-0126"
-      ]
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/shells/txtnum.ts",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "numbering",
-      "capabilityIds": [
-        "CAP-0105",
-        "CAP-0127"
-      ]
-    },
-    {
       "path": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -1032,22 +1010,6 @@
   ],
   "internalOperations": [
     {
-      "id": "writer.internal.append-writer-paragraph",
-      "modulePath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "symbol": "appendWriterParagraph",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0124",
-      "description": "Exported non-command mutation helper appendWriterParagraph owned by apps/office/src/sw/source/core/doc/writer.ts."
-    },
-    {
-      "id": "writer.internal.change-writer-paragraph-list-level",
-      "modulePath": "apps/office/src/sw/source/uibase/shells/listsh.ts",
-      "symbol": "changeWriterParagraphListLevel",
-      "classification": "upstream-mechanism",
-      "capabilityId": "CAP-0107",
-      "description": "Exported non-command mutation helper changeWriterParagraphListLevel owned by apps/office/src/sw/source/uibase/shells/listsh.ts."
-    },
-    {
       "id": "writer.internal.close-document",
       "modulePath": "apps/office/src/sfx2/source/doc/docfac.ts",
       "symbol": "closeDocument",
@@ -1056,28 +1018,12 @@
       "description": "Exported non-command mutation helper closeDocument owned by apps/office/src/sfx2/source/doc/docfac.ts."
     },
     {
-      "id": "writer.internal.insert-writer-text",
-      "modulePath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "symbol": "insertWriterText",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0124",
-      "description": "Exported non-command mutation helper insertWriterText owned by apps/office/src/sw/source/core/doc/writer.ts."
-    },
-    {
       "id": "writer.internal.insert-writer-text-run",
       "modulePath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
       "symbol": "insertWriterTextRun",
       "classification": "upstream-mechanism",
       "capabilityId": "CAP-0124",
       "description": "Exported non-command mutation helper insertWriterTextRun owned by apps/office/src/sw/source/core/txtnode/ndtxt.ts."
-    },
-    {
-      "id": "writer.internal.insert-writer-text-with-attributes",
-      "modulePath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "symbol": "insertWriterTextWithAttributes",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0124",
-      "description": "Exported non-command mutation helper insertWriterTextWithAttributes owned by apps/office/src/sw/source/core/doc/writer.ts."
     },
     {
       "id": "writer.internal.mark-document-dirty",
@@ -1120,100 +1066,12 @@
       "description": "Exported non-command mutation helper markDocumentSaved owned by apps/office/src/sfx2/source/doc/docfac.ts."
     },
     {
-      "id": "writer.internal.merge-writer-paragraph-with-previous",
-      "modulePath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "symbol": "mergeWriterParagraphWithPrevious",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0124",
-      "description": "Exported non-command mutation helper mergeWriterParagraphWithPrevious owned by apps/office/src/sw/source/core/doc/writer.ts."
-    },
-    {
-      "id": "writer.internal.move-writer-paragraph",
-      "modulePath": "apps/office/src/sw/source/core/docnode/node.ts",
-      "symbol": "moveWriterParagraph",
-      "classification": "upstream-mechanism",
-      "capabilityId": "CAP-0111",
-      "description": "Exported non-command mutation helper moveWriterParagraph owned by apps/office/src/sw/source/core/docnode/node.ts."
-    },
-    {
-      "id": "writer.internal.remove-writer-paragraph",
-      "modulePath": "apps/office/src/sw/source/core/docnode/node.ts",
-      "symbol": "removeWriterParagraph",
-      "classification": "upstream-mechanism",
-      "capabilityId": "CAP-0111",
-      "description": "Exported non-command mutation helper removeWriterParagraph owned by apps/office/src/sw/source/core/docnode/node.ts."
-    },
-    {
-      "id": "writer.internal.replace-writer-paragraph",
-      "modulePath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "symbol": "replaceWriterParagraph",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0124",
-      "description": "Exported non-command mutation helper replaceWriterParagraph owned by apps/office/src/sw/source/core/doc/writer.ts."
-    },
-    {
-      "id": "writer.internal.replace-writer-paragraph-text-range",
-      "modulePath": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
-      "symbol": "replaceWriterParagraphTextRange",
-      "classification": "upstream-mechanism",
-      "capabilityId": "CAP-0124",
-      "description": "Exported non-command mutation helper replaceWriterParagraphTextRange owned by apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts."
-    },
-    {
-      "id": "writer.internal.set-writer-paragraph-alignment",
-      "modulePath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "symbol": "setWriterParagraphAlignment",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0111",
-      "description": "Exported non-command mutation helper setWriterParagraphAlignment owned by apps/office/src/sw/source/core/doc/writer.ts."
-    },
-    {
-      "id": "writer.internal.set-writer-paragraph-list-kind",
-      "modulePath": "apps/office/src/sw/source/uibase/shells/txtnum.ts",
-      "symbol": "setWriterParagraphListKind",
-      "classification": "upstream-mechanism",
-      "capabilityId": "CAP-0105",
-      "description": "Exported non-command mutation helper setWriterParagraphListKind owned by apps/office/src/sw/source/uibase/shells/txtnum.ts."
-    },
-    {
-      "id": "writer.internal.set-writer-paragraph-style",
-      "modulePath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "symbol": "setWriterParagraphStyle",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0111",
-      "description": "Exported non-command mutation helper setWriterParagraphStyle owned by apps/office/src/sw/source/core/doc/writer.ts."
-    },
-    {
-      "id": "writer.internal.split-writer-paragraph",
-      "modulePath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "symbol": "splitWriterParagraph",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0124",
-      "description": "Exported non-command mutation helper splitWriterParagraph owned by apps/office/src/sw/source/core/doc/writer.ts."
-    },
-    {
       "id": "writer.internal.split-writer-text-runs",
       "modulePath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
       "symbol": "splitWriterTextRuns",
       "classification": "upstream-mechanism",
       "capabilityId": "CAP-0124",
       "description": "Exported non-command mutation helper splitWriterTextRuns owned by apps/office/src/sw/source/core/txtnode/ndtxt.ts."
-    },
-    {
-      "id": "writer.internal.toggle-writer-character-format",
-      "modulePath": "apps/office/src/sw/source/uibase/shells/txtattr.ts",
-      "symbol": "toggleWriterCharacterFormat",
-      "classification": "upstream-mechanism",
-      "capabilityId": "CAP-0109",
-      "description": "Exported non-command mutation helper toggleWriterCharacterFormat owned by apps/office/src/sw/source/uibase/shells/txtattr.ts."
-    },
-    {
-      "id": "writer.internal.toggle-writer-paragraph-character-format",
-      "modulePath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "symbol": "toggleWriterParagraphCharacterFormat",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0111",
-      "description": "Exported non-command mutation helper toggleWriterParagraphCharacterFormat owned by apps/office/src/sw/source/core/doc/writer.ts."
     },
     {
       "id": "writer.internal.toggle-writer-text-range-format",

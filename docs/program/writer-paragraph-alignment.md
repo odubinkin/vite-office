@@ -3,11 +3,10 @@
 The Writer workbench supports one direct paragraph-formatting property: left,
 center, right, or justified alignment. Canonical state is a `SvxAdjustItem`
 stored under the pinned numeric `RES_PARATR_ADJUST` WhichId in the paragraph's
-lazy `SwAttrSet`; `WriterParagraph.alignment` is a derived browser projection. The pure
-[`setWriterParagraphAlignment`](../../apps/office/src/sw/source/core/doc/writer.ts) transition
-changes exactly one named paragraph, marks a changed document dirty, preserves
-an identical state by reference, and participates in the existing immutable
-undo/redo history.
+lazy `SwAttrSet`; `WriterParagraph.alignment` is a derived browser projection.
+`SwWrtShell.SetParagraphAlignment` changes the active paragraph through
+`SwUndoParagraphFormat`, preserves the live `SwDoc` identity, rejects no-op
+state, and participates in action-based undo/redo history.
 
 The active editable paragraph determines the target paragraph. The four controls are in
 the Writer formatting toolbar, and their pressed state uses accessible toggle

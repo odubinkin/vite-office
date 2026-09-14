@@ -8,11 +8,11 @@ lives on the page, paragraph formatting lives in the formatting toolbar, and
 focused properties live in the right sidebar.
 
 [`edtwin`](../../apps/office/src/sw/source/uibase/docvw/edtwin.tsx)
-uses one accessible `contenteditable` paragraph block per immutable
+uses one accessible `contenteditable` paragraph block per projected
 `WriterParagraph`. Each block retains a stable accessible name, exposes its
 bounded paragraph style through an assistive description, identifies focus to
-the workbench, and sends its complete current text through the existing pure
-replacement transition. The component is not a custom text-engine: browser
+the workbench, and sends edit intents through the persistent Writer shell. The
+component is not a custom text-engine: browser
 selection, caret behavior, and line wrapping remain browser-owned.
 
 ## Paragraph command placement
@@ -23,10 +23,9 @@ controls stay in the formatting toolbar. Adjacent movement is exposed through
 semantics and pinned menu provenance are recorded in
 [Writer command placement](writer-command-placement.md).
 
-No browser UI removes a whole paragraph in this slice. Native Writer deletion
-is tied to caret and range behavior, which this bounded workbench has not yet
-implemented. The existing pure `removeWriterParagraph` transition remains a
-domain capability for a later keyboard/range-editing feature.
+Whole-paragraph removal is not exposed as an independent command. Backspace
+and Delete join adjacent paragraphs through `SwUndoJoinParagraphs`; broader
+range deletion remains a later model capability.
 
 ## Deliberate limits
 

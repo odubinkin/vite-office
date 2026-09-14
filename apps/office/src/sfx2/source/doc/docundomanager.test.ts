@@ -228,6 +228,48 @@ describe("SfxUndoManager" /** Groups generic action-manager behavior. @returns N
     expect(manager.IsAtSavePosition()).toBe(true);
   });
 
+  it("captures an exact asynchronous save boundary without allowing later action merging" /** Verifies a save token continues to identify the earlier reachable state after another grouped edit. @returns Nothing. */, function capturesSaveBoundary(): void {
+    const context = { value: "a" };
+    const manager = new SfxUndoManager<TextContext>();
+    apply(manager, context, new TextAction("a", "b", "typing"), true);
+    const position = manager.CaptureSavePosition();
+    apply(manager, context, new TextAction("b", "c", "typing"), true);
+    expect(manager.GetUndoActionCount()).toBe(2);
+    expect(manager.SetSavePosition(position)).toBe(true);
+    expect(manager.IsAtSavePosition()).toBe(false);
+    manager.Undo(context);
+    expect(context.value).toBe("b");
+    expect(manager.IsAtSavePosition()).toBe(true);
+  });
+
+  it("rejects captured boundaries after their history branch or root is replaced" /** Verifies delayed persistence cannot attach a save mark to unrelated history. @returns Nothing. */, function rejectsStaleSaveBoundaries(): void {
+    const context = { value: "a" };
+    const manager = new SfxUndoManager<TextContext>();
+    const root = manager.CaptureSavePosition();
+    apply(manager, context, new TextAction("a", "b"));
+    expect(manager.SetSavePosition(root)).toBe(false);
+    expect(manager.IsAtSavePosition()).toBe(false);
+    const changed = manager.CaptureSavePosition();
+    manager.Clear();
+    expect(manager.SetSavePosition(changed)).toBe(true);
+    expect(manager.IsAtSavePosition()).toBe(false);
+    manager.EnterListAction("Open");
+    expect(
+      /** Attempts to capture a partial compound operation. @returns Invalid token. */ () =>
+        manager.CaptureSavePosition(),
+    ).toThrow("inside a list action");
+    expect(manager.LeaveListAction()).toBe(0);
+
+    const branchManager = new SfxUndoManager<TextContext>();
+    context.value = "a";
+    apply(branchManager, context, new TextAction("a", "b"));
+    const replacedBranch = branchManager.CaptureSavePosition();
+    branchManager.Undo(context);
+    apply(branchManager, context, new TextAction("a", "c"));
+    expect(branchManager.SetSavePosition(replacedBranch)).toBe(true);
+    expect(branchManager.IsAtSavePosition()).toBe(false);
+  });
+
   it("provides base non-merge and zero-payload behavior" /** Covers default SfxUndoAction hooks. @returns Nothing. */, function usesBaseHooks(): void {
     /** Minimal action used to exercise the base optional hooks. */
     class MinimalAction extends SfxUndoAction<TextContext> {

@@ -7,7 +7,6 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { WRITER_TEXT_NODE_WHICH_RANGES } from "../../../inc/hintids";
 import { SwAttrSet } from "../attr/swatrset";
 import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
-import type { WriterDocument, WriterParagraphMoveDirection } from "../doc/writer";
 import type { SwNodes } from "./nodes";
 
 /** Identifies the node categories implemented by the current Writer model slice. */
@@ -196,33 +195,4 @@ export abstract class SwContentNode extends SwNode {
     );
     return this.attributeSet;
   }
-}
-
-/** Moves one named Writer paragraph by one adjacent body position. @param writerDocument - Prior document graph. @param paragraphId - Text-node identity. @param direction - Adjacent move direction. @returns Changed cloned graph. */
-export function moveWriterParagraph(
-  writerDocument: WriterDocument,
-  paragraphId: string,
-  direction: WriterParagraphMoveDirection,
-): WriterDocument {
-  if (direction !== "up" && direction !== "down")
-    throw new Error(`Unsupported Writer paragraph direction: ${direction}`);
-  const next = writerDocument.clone();
-  const node = next.nodes.findTextNode(paragraphId);
-  if (node === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
-  next.nodes.moveTextNode(node, direction === "up" ? -1 : 1);
-  next.SetModified();
-  return next;
-}
-
-/** Removes one named Writer text node while preserving a non-empty body. @param writerDocument - Prior document graph. @param paragraphId - Removed text-node identity. @returns Changed cloned graph. */
-export function removeWriterParagraph(
-  writerDocument: WriterDocument,
-  paragraphId: string,
-): WriterDocument {
-  const next = writerDocument.clone();
-  const node = next.nodes.findTextNode(paragraphId);
-  if (node === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
-  next.nodes.removeTextNode(node);
-  next.SetModified();
-  return next;
 }

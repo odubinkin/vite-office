@@ -301,4 +301,41 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(emptyBlockShell.GetDoc().paragraphs).toHaveLength(2);
     expect(emptyBlockShell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(1);
   });
+
+  it("routes formatting and list commands through one mutable undo history" /** Verifies the retired clone facades have one identity-preserving shell replacement with reversible action objects. @returns Nothing. */, function routesFormattingCommands(): void {
+    const shell = createShell("Body");
+    const document = shell.GetDoc();
+    shell.SetSelection({
+      mark: { offset: 1, paragraphId: "p-1" },
+      point: { offset: 3, paragraphId: "p-1" },
+    });
+
+    expect(shell.ToggleCharacterFormat("bold")).toBe(true);
+    expect(shell.SetParagraphAlignment("center")).toBe(true);
+    expect(shell.SetParagraphStyle("heading-1")).toBe(true);
+    expect(shell.SetParagraphListKind("numbered")).toBe(true);
+    expect(shell.ChangeParagraphListLevel("demote")).toBe(true);
+    expect(shell.GetDoc()).toBe(document);
+    expect(document.paragraphs[0]).toMatchObject({
+      alignment: "center",
+      list: { kind: "numbered", level: 1 },
+      style: "heading-1",
+    });
+    expect(document.paragraphs[0]?.runs[1]).toMatchObject({
+      attributes: { bold: true },
+      text: "od",
+    });
+    expect(shell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(5);
+    expect(shell.Undo()).toBe(true);
+    expect(document.paragraphs[0]?.list).toMatchObject({ kind: "numbered", level: 0 });
+    expect(shell.ChangeParagraphListLevel("promote")).toBe(false);
+    expect(
+      /** Rejects an unsupported list-level command at the shell boundary. @returns Invalid command. */ () =>
+        shell.ChangeParagraphListLevel("restart" as "demote"),
+    ).toThrow("Unsupported Writer list-level command");
+    expect(
+      /** Rejects an unsupported list kind at the shell boundary. @returns Invalid command. */ () =>
+        shell.SetParagraphListKind("outline" as "bullet"),
+    ).toThrow("Unsupported Writer paragraph list kind");
+  });
 });

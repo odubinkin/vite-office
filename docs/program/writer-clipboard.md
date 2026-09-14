@@ -59,11 +59,11 @@ only its selected text, preventing a fragment from being falsely promoted to a
 complete list. Neither path serializes screen-reader descriptions nor the
 marker-only DOM sibling.
 
-Copy does not alter the immutable Writer document, transaction history,
+Copy does not alter the live Writer document, transaction history,
 properties, or browser-local snapshot. A missing selection reports **Select
 text to copy.** rather than serializing the whole document implicitly. Cut first
 writes the same paired clipboard data, then removes one non-empty selection inside
-one Writer paragraph as an undoable immutable text-range transition. Paste replaces
+one Writer paragraph as an undoable `SwUndoDelete` transition. Paste replaces
 one same-paragraph selection or inserts at a collapsed Writer caret. Native Paste
 reads its `ClipboardEvent` synchronously; menu and toolbar Paste use a
 user-initiated `navigator.clipboard.read` request, with `readText` fallback.

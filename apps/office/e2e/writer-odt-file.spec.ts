@@ -6,14 +6,10 @@ import { expect, test } from "@playwright/test";
 
 import { ZipFile } from "../src/package/source/zipapi/ZipFile";
 import { createDocument } from "../src/sfx2/source/doc/docfac";
-import {
-  createWriterDocument,
-  insertWriterText,
-  setWriterParagraphAlignment,
-  setWriterParagraphStyle,
-  toggleWriterParagraphCharacterFormat,
-} from "../src/sw/source/core/doc/writer";
+import { createWriterDocument } from "../src/sw/source/core/doc/writer";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
+import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
+import { SwWrtShell } from "../src/sw/source/uibase/wrtsh/wrtsh";
 
 test("Writer opens and saves a bounded ODT file" /** Verifies the browser platform boundary feeds SwDocShell and receives its serialized package. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns A promise fulfilled after the downloaded ODT is inspected. */, async function opensAndSavesOdt({
   page,
@@ -23,22 +19,23 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
     suiteId: "writer",
     title: "Browser ODT Fixture",
   });
-  let source = insertWriterText(
-    createWriterDocument(metadata, "fixture-paragraph"),
+  const source = createWriterDocument(metadata, "fixture-paragraph");
+  const shell = new SwWrtShell(new SwDocShell(source));
+  shell.InsertText(
     "fixture-paragraph",
-    0,
     "BrowserODTContent",
-  );
-  source = setWriterParagraphStyle(source, "fixture-paragraph", "heading-1");
-  source = setWriterParagraphAlignment(source, "fixture-paragraph", "center");
-  source = toggleWriterParagraphCharacterFormat(
-    source,
-    "fixture-paragraph",
-    0,
     "BrowserODTContent".length,
-    "bold",
+    "insertText",
   );
-  source.paragraphs[0]?.SetParagraphList({ kind: "numbered", level: 1 });
+  shell.SetParagraphStyle("heading-1");
+  shell.SetParagraphAlignment("center");
+  shell.SetSelection({
+    mark: { offset: 0, paragraphId: "fixture-paragraph" },
+    point: { offset: "BrowserODTContent".length, paragraphId: "fixture-paragraph" },
+  });
+  shell.ToggleCharacterFormat("bold");
+  shell.SetParagraphListKind("numbered");
+  shell.ChangeParagraphListLevel("demote");
   const sourceBytes = writeOdtDocument(source);
 
   await page.goto("/writer");

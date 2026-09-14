@@ -8,7 +8,9 @@ import {
 } from "../../../../framework/source/services/worker-protocol";
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import { createWriterSnapshot } from "../../core/doc/writer-storage";
-import { createWriterDocument, insertWriterText } from "../../core/doc/writer";
+import { createWriterDocument } from "../../core/doc/writer";
+import { SwDocShell } from "../../uibase/app/docsh";
+import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { writeOdtDocument } from "./wrtxml";
 import {
   OdtWorkerRuntime,
@@ -67,12 +69,8 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
   it("imports into a neutral snapshot with ordered progress" /** Verifies worker-side ZIP/XML work. @returns Completion after result. */, async () => {
     const scope = new CapturingScope();
     const runtime = new OdtWorkerRuntime(scope);
-    const document = insertWriterText(
-      createWriterDocument(metadata(), "p-1"),
-      "p-1",
-      0,
-      "runtime body",
-    );
+    const document = createWriterDocument(metadata(), "p-1");
+    new SwWrtShell(new SwDocShell(document)).InsertText("p-1", "runtime body", 12, "insertText");
     runtime.HandleMessage(
       request({
         bytes: writeOdtDocument(document).buffer as ArrayBuffer,

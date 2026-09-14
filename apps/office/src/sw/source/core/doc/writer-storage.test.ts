@@ -4,13 +4,9 @@ import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/docfac";
 import type { DocumentSnapshot, DocumentStorageAdapter } from "../../../../sfx2/source/doc/docfile";
-import {
-  createWriterDocument,
-  insertWriterText,
-  serializeWriterDocument,
-  type WriterDocument,
-} from "./writer";
-import { setWriterParagraphListKind } from "../../uibase/shells/txtnum";
+import { createWriterDocument, type WriterDocument } from "./writer";
+import { SwDocShell } from "../../uibase/app/docsh";
+import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import {
   createWriterSnapshot,
   loadWriterDocument,
@@ -19,17 +15,15 @@ import {
   type WriterSnapshotState,
 } from "./writer-storage";
 
-/** Creates a serializable Writer fixture with a dirty text body. @returns Immutable Writer document fixture. */
+/** Creates a serializable Writer fixture through the public mutable shell and undo path. @returns Live dirty Writer document. */
 function createWriterFixture(): WriterDocument {
-  return insertWriterText(
-    createWriterDocument(
-      createDocument({ id: "writer-store", suiteId: "writer", title: "Writer" }),
-      "p-1",
-    ),
+  const writer = createWriterDocument(
+    createDocument({ id: "writer-store", suiteId: "writer", title: "Writer" }),
     "p-1",
-    0,
-    "Saved text",
   );
+  const shell = new SwWrtShell(new SwDocShell(writer));
+  shell.InsertText("p-1", "Saved text", 10, "insertText");
+  return writer;
 }
 
 /** Creates an in-memory implementation of the generic storage boundary. @param initialSnapshot - Optional initial stored snapshot. @returns Mutable test adapter. */
@@ -61,17 +55,15 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
       version: 1,
       state: { writerDocument: { swModelVersion: 3 } },
     });
-    expect(saved.writerDocument.document).toMatchObject({
+    expect(writerDocument.document).toMatchObject({
       contentGeneration: 1,
-      isModified: false,
-      savedGeneration: 1,
+      isModified: true,
+      savedGeneration: null,
     });
     const loaded = await loadWriterDocument(adapter, "writer-store");
     expect(loaded.status).toBe("found");
     if (loaded.status === "found") {
-      expect(serializeWriterDocument(loaded.writerDocument)).toEqual(
-        serializeWriterDocument(saved.writerDocument),
-      );
+      expect(loaded.writerDocument.paragraphs).toMatchObject([{ text: "Saved text" }]);
       expect(loaded.writerDocument.document.isModified).toBe(false);
     }
     await expect(loadWriterDocument(adapter, "missing")).resolves.toEqual({
@@ -121,7 +113,9 @@ describe("Writer storage orchestration" /** Groups Writer snapshot behavior. @re
 
   it("round-trips canonical list state" /** Verifies storage retains executable list state in the current schema. @returns A promise resolved after the snapshot is asserted. */, async function storesLists(): Promise<void> {
     const adapter = createAdapter();
-    const listedWriter = setWriterParagraphListKind(createWriterFixture(), "p-1", "numbered");
+    const listedWriter = createWriterFixture();
+    const shell = new SwWrtShell(new SwDocShell(listedWriter));
+    shell.SetParagraphListKind("numbered");
     await saveWriterDocument(adapter, listedWriter);
     await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
       status: "found",

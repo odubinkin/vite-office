@@ -18,7 +18,11 @@ import {
   type SfxMediumInput,
   type SfxMediumOperation,
 } from "../../../../sfx2/source/doc/docfile";
-import { SfxUndoManager, type SfxUndoAction } from "../../../../sfx2/source/doc/docundomanager";
+import {
+  SfxUndoManager,
+  type SfxUndoAction,
+  type SfxUndoSavePosition,
+} from "../../../../sfx2/source/doc/docundomanager";
 import { ODT_MIMETYPE } from "../../../../package/source/manifest/ManifestExport";
 import { SwDoc } from "../../core/doc/doc";
 import {
@@ -106,17 +110,6 @@ export class SwDocShell {
     return true;
   }
 
-  /** Moves the primary-medium save mark without adding an undo action. @param savedGeneration - Persisted content generation. @returns Whether lifecycle or save-position state changed. */
-  public AcknowledgeSave(savedGeneration: number): boolean {
-    const previous = this.document.document;
-    this.document.document = markDocumentSaved(previous, savedGeneration);
-    const markChanged = this.undoManager.SetSavePosition();
-    if (this.document.document === previous && !markChanged) return false;
-    this.medium = synchronizeSfxMedium(this.medium, this.document.document);
-    this.Notify();
-    return true;
-  }
-
   /** Acknowledges a committed recovery snapshot without affecting primary save state. @param generation - Persisted recovery generation. @returns Whether lifecycle state changed. */
   public AcknowledgeRecoverySave(generation: number): boolean {
     const previous = this.document.document;
@@ -199,7 +192,7 @@ export class SwDocShell {
 
   /** Saves to the current confirmed writable primary medium. @param persist - Adapter operation that must resolve only after a committed write. @returns Completion after save acknowledgement. */
   public Save(
-    persist: (document: SwDoc, medium: SfxMediumDescriptor) => Promise<void>,
+    persist: (document: SwDoc, medium: SfxMediumDescriptor) => Promise<SwPrimarySaveEvidence>,
   ): Promise<void> {
     if (
       this.medium.readOnly ||
@@ -213,7 +206,7 @@ export class SwDocShell {
   /** Saves to and adopts a new confirmed writable primary medium. @param medium - Candidate replacement medium. @param persist - Adapter operation that resolves after commit. @returns Completion after atomic medium replacement and save acknowledgement. */
   public SaveAs(
     medium: SfxMediumInput,
-    persist: (document: SwDoc, medium: SfxMediumDescriptor) => Promise<void>,
+    persist: (document: SwDoc, medium: SfxMediumDescriptor) => Promise<SwPrimarySaveEvidence>,
   ): Promise<void> {
     const candidate = createSfxMediumDescriptor(medium, this.document.document);
     if (
@@ -329,15 +322,21 @@ export class SwDocShell {
   private async PerformPrimarySave(
     operation: "save" | "save-as",
     candidate: SfxMediumDescriptor,
-    persist: (document: SwDoc, medium: SfxMediumDescriptor) => Promise<void>,
+    persist: (document: SwDoc, medium: SfxMediumDescriptor) => Promise<SwPrimarySaveEvidence>,
     replaceMedium: boolean,
   ): Promise<void> {
+    const document = this.document;
     const generation = this.document.document.contentGeneration;
+    const savePosition: SfxUndoSavePosition = this.undoManager.CaptureSavePosition();
     this.SetOperation(operation, "pending", generation);
     try {
-      await persist(this.document, candidate);
+      const evidence = await persist(document, candidate);
+      if (evidence.generation !== generation)
+        throw new Error("Primary save evidence does not match the requested generation.");
+      if (this.document !== document)
+        throw new Error("Primary save completed for a document that is no longer active.");
       this.document.document = markDocumentSaved(this.document.document, generation);
-      this.undoManager.SetSavePosition();
+      this.undoManager.SetSavePosition(savePosition);
       if (replaceMedium) this.medium = candidate;
       this.medium = updateSfxMediumOperation(
         this.medium,
@@ -370,6 +369,12 @@ export class SwDocShell {
     );
     this.Notify();
   }
+}
+
+/** Confirms the exact content generation committed by a primary-medium adapter. */
+export interface SwPrimarySaveEvidence {
+  /** Persisted Writer content generation. */
+  readonly generation: number;
 }
 
 /** Returns deterministic error feedback without retaining platform Error objects. @param error - Unknown thrown value. @returns Human-readable text. */

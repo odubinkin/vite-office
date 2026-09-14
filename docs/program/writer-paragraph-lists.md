@@ -2,8 +2,8 @@
 
 The initial list slice implements the pinned Writer commands
 `.uno:DefaultBullet`, `.uno:DefaultNumbering`, and `.uno:RemoveBullets` for the
-active browser Writer paragraph. The command transition is located in
-[`txtnum.ts`](../../apps/office/src/sw/source/uibase/shells/txtnum.ts), mirroring
+active browser Writer paragraph. `SwWrtShell.SetParagraphListKind` applies the
+transition through `SwUndoInsNum`, following the command behavior of
 `sw/source/uibase/shells/txtnum.cxx`; serializable metadata and marker
 calculation live in [`list.ts`](../../apps/office/src/sw/source/core/doc/list.ts)
 and [`number.ts`](../../apps/office/src/sw/source/core/doc/number.ts), matching
@@ -24,9 +24,10 @@ source paragraph list state. Merging paragraphs keeps the preceding paragraph's
 list state.
 
 The same submenu also implements `.uno:DecrementLevel` (**Demote**) and
-`.uno:IncrementLevel` (**Promote**) for the active list paragraph. Their pure
-transition lives in [`listsh.ts`](../../apps/office/src/sw/source/uibase/shells/listsh.ts),
-matching `sw/source/uibase/shells/listsh.cxx`. Demote raises the bounded nesting
+`.uno:IncrementLevel` (**Promote**) for the active list paragraph.
+`SwWrtShell.ChangeParagraphListLevel` applies `SwUndoNumLevel`, while
+[`listsh.ts`](../../apps/office/src/sw/source/uibase/shells/listsh.ts) retains
+the bounded command identity from `listsh.cxx`. Demote raises the bounded nesting
 level by one; Promote lowers it by one. The browser allows levels 0 through 9,
 preserves text, list kind, paragraph style, and sibling identity, and disables
 the commands where they would be no-ops. A list level adds a visible document

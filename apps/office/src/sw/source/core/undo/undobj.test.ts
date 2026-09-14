@@ -26,7 +26,10 @@ function createSession(text = "") {
     "p-1",
   );
   if (text.length > 0) document.paragraphs[0]?.InsertText(text, 0);
-  const docShell = new SwDocShell(document);
+  const docShell = new SwDocShell(document, {
+    kind: "browser-local",
+    name: document.document.title,
+  });
   return { docShell, document, shell: new SwWrtShell(docShell) };
 }
 
@@ -207,10 +210,14 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(paragraph.alignment).toBe("left");
   });
 
-  it("preserves lifecycle generations and the moved save mark across action navigation" /** Verifies document lifecycle ownership after removing historical snapshots. @returns Nothing. */, function preservesSaveMark(): void {
-    const { document, shell } = createSession();
+  it("preserves lifecycle generations and the moved save mark across action navigation" /** Verifies document lifecycle ownership after removing historical snapshots. @returns A fulfilled assertion promise. */, async function preservesSaveMark(): Promise<void> {
+    const { docShell, document, shell } = createSession();
     shell.InsertText("p-1", "a", 1, "insertText");
-    shell.AcknowledgeSave(document.document.contentGeneration);
+    await docShell.Save(
+      /** Confirms the generation accepted by the test primary medium. @param savedDocument - Captured live Writer graph. @returns Matching storage evidence. */ async (
+        savedDocument,
+      ) => ({ generation: savedDocument.document.contentGeneration }),
+    );
     shell.InsertText("p-1", "ab", 2, "insertText");
     expect(document.document).toMatchObject({
       contentGeneration: 2,
