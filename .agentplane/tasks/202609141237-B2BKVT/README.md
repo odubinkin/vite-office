@@ -4,7 +4,7 @@ title: "Implement Writer Workstream 2 core invariants"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,29 @@ verification:
   updated_by: "TESTER"
   note: "Workstream 2 verified in the target-only document model: registered content indices, typed svl/sw notifications, SfxObjectShell/SwDocShell lifecycle ownership, svl undo relocation, schema-v4 SwDoc snapshots and schema-v1 Writer persistence. npm run verify passed (246 unit tests and 84 inventory tests at 100% coverage, 9/9 E2E); target-schema rg assertions, ap doctor, routing policy, and git diff checks passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-14T13:55:52.408Z"
+  updated_by: "EVALUATOR"
+  note: "Workstream 2 satisfies the approved target-only parity scope and repository quality gates."
+  evaluated_sha: "ae373a238b39ed7714a07519078c71553b1167ac"
+  blueprint_digest: "5fbf1f94bd8cd05218ae9c641354efd39f141d5b98909f4cdb39dfacb4e7484a"
+  evidence_refs:
+    - ".agentplane/tasks/202609141237-B2BKVT/README.md"
+    - ".agentplane/tasks/202609141237-B2BKVT/quality/20260914-135552408-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609141237-B2BKVT/quality/20260914-135552408-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609141237-B2BKVT/quality/20260914-135552408-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609141237-B2BKVT/blueprint/resolved-snapshot.json"
+    - "npm run verify: exit 0; 246 unit and 84 inventory tests at 100% coverage; 9 E2E passed"
+    - "Target-schema and ownership rg assertions passed"
+    - "ap doctor: OK"
+    - "node .agentplane/policy/check-routing.mjs: policy routing OK"
+    - "git diff --check: passed"
+  findings:
+    - "Registered content indices cover cursor, mark, redline, anchor, affinity, structural edits, and ownership cleanup."
+    - "Typed broadcaster/listener and SwModify/SwClient propagation replace generic shell listener sets while preserving one UI transaction boundary."
+    - "SwDoc is model-only; SfxObjectShell and SwDocShell exclusively own lifecycle, save, recovery, medium, and undo responsibilities."
+    - "Retired persistence shapes and old sfx2 docfac/docundomanager runtime paths are rejected or removed; only the target schemas remain."
 commit: null
 comments:
   -
