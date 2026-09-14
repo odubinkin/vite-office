@@ -1,10 +1,11 @@
 ---
 id: "202609140852-76QMB7"
 title: "Implement stage 5 document medium, storage, and recovery"
-status: "DOING"
+result_summary: "Implemented and verified Stage 5 document persistence and AutoRecovery parity."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 19
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-14T09:37:37.405Z"
+  updated_at: "2026-09-14T09:38:10.209Z"
   updated_by: "CODER"
   note: "verified-202609140852-76QMB7"
   attempts: 0
@@ -43,11 +44,19 @@ quality_review:
     - "SfxMedium state and SwDocShell I/O operations keep Open, Save, Save As, Export, Download, and recovery acknowledgement semantically distinct, matching the documented LibreOffice separation."
     - "Framework AutoRecovery owns scheduling across documents while IndexedDB provides bounded generations and transaction-based leases; tests cover failures, damaged latest snapshots, reload, and competing writers."
     - "The change is registered in runtime parity and source provenance, and no user-owned plan file is included in the implementation commit."
-commit: null
+commit:
+  hash: "a94a7a7a1f6ccb9a2c2eee895eae7e83eb6096b1"
+  message: "🧪 76QMB7 task: record verification and quality review"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Stage 5 medium, persistence, and recovery architecture with focused acceptance tests and full local verification."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609140852-76QMB7. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: Stage 5 document medium, durable recovery generations, application AutoRecovery, and distinct Save, Save As, Export, and Download semantics passed all declared checks."
 events:
   -
     type: "status"
@@ -74,8 +83,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609140852-76QMB7"
+  -
+    type: "verify"
+    at: "2026-09-14T09:38:10.209Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609140852-76QMB7"
+  -
+    type: "status"
+    at: "2026-09-14T09:38:10.451Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609140852-76QMB7. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-09-14T09:39:55.303Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: Stage 5 document medium, durable recovery generations, application AutoRecovery, and distinct Save, Save As, Export, and Download semantics passed all declared checks."
 doc_version: 3
-doc_updated_at: "2026-09-14T09:37:37.606Z"
+doc_updated_at: "2026-09-14T09:39:55.305Z"
 doc_updated_by: "CODER"
 description: "Implement section 9 of docs/program/vite-office-upstream-parity-plan.md with LibreOffice-aligned medium semantics, storage separation, application-owned recovery, browser recovery safety, and tests."
 sections:
@@ -189,6 +218,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-14T09:38:10.209Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609140852-76QMB7
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T09:37:37.606Z, excerpt_hash=sha256:f5cbc9ef11ba356c8fc8dbbeecb90c1a9071cca5936012a128b36a8e7159c2bb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609140852-76QMB7/blueprint/resolved-snapshot.json
+    - old_digest: 9de69f833f633f8df1ad88333a85ff846feeb535bd6930a318e5955b0ed1bbdf
+    - current_digest: 9de69f833f633f8df1ad88333a85ff846feeb535bd6930a318e5955b0ed1bbdf
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609140852-76QMB7
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609140852-76QMB7 --result verified-202609140852-76QMB7 --commit a94a7a7a1f6ccb9a2c2eee895eae7e83eb6096b1
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the implementation commit(s) and task close commit for 202609140852-76QMB7. The changes are additive/local to the medium, recovery, IndexedDB, Writer shell/session, and tests; no persistent schema migration may delete existing browser data."
   Findings: |-
@@ -209,6 +268,10 @@ sections:
     - Observation: The optional npm run check:source-tree gate is already red because apps/office/src/sw/source/uibase/uiview/viewstat.ts is absent from the pre-existing source tree contract.
       Impact: This unrelated repository-wide gate remains unavailable as Stage 5 evidence; all Stage 5 declared checks, inventory, provenance, and routing validations pass.
       Resolution: Leave the unrelated missing viewstat.ts contract to a separate follow-up task; do not fabricate the module or widen Stage 5 scope.
+extensions:
+  implementation_commit:
+    hash: "273f084b412202af7785c016d6373d79023f3ca6"
+    message: "🚧 76QMB7 task: implement Stage 5 persistence and recovery"
 id_source: "generated"
 ---
 ## Summary
@@ -326,6 +389,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609140852-76QMB7 --result verified-202609140852-76QMB7 --commit 273f084b412202af7785c016d6373d79023f3ca6
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-14T09:38:10.209Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609140852-76QMB7
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T09:37:37.606Z, excerpt_hash=sha256:f5cbc9ef11ba356c8fc8dbbeecb90c1a9071cca5936012a128b36a8e7159c2bb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609140852-76QMB7/blueprint/resolved-snapshot.json
+- old_digest: 9de69f833f633f8df1ad88333a85ff846feeb535bd6930a318e5955b0ed1bbdf
+- current_digest: 9de69f833f633f8df1ad88333a85ff846feeb535bd6930a318e5955b0ed1bbdf
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609140852-76QMB7
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609140852-76QMB7 --result verified-202609140852-76QMB7 --commit a94a7a7a1f6ccb9a2c2eee895eae7e83eb6096b1
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
