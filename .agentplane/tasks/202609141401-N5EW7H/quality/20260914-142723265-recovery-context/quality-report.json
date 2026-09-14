@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609141401-N5EW7H",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-14T14:27:23.265Z",
+  "verdict": "pass",
+  "summary": "Workstream 3 implementation satisfies the approved medium normalization and shell-neutral persistence-port scope.",
+  "evaluated_sha": "24debbcf9ce4d2de22f4a1a4a782e0b446ccc005",
+  "blueprint_digest": "e5658ba29ea6904dd458e406cbee04a71562af575cd56c2452e6d85be4237c4f",
+  "findings": [
+    "Discriminated medium variants remove lifecycle duplication; stable GetMedium identity and independent primary/recovery/open/export ports are covered by full verification."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609141401-N5EW7H/README.md",
+    "24debbcf9ce4"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
