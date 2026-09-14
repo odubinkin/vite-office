@@ -1,10 +1,11 @@
 ---
 id: "202609141201-7V5AK0"
 title: "Implement Writer Workstream 1 mutation and undo path"
-status: "DOING"
+result_summary: "verified-202609141201-7V5AK0"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-14T12:35:29.202Z"
-  updated_by: "TESTER"
-  note: "Workstream 1 passed targeted mutation/save tests, the complete repository verification pipeline, clone audit, doctor, routing validation, and clean-state inspection."
+  updated_at: "2026-09-14T12:36:08.102Z"
+  updated_by: "CODER"
+  note: "verified-202609141201-7V5AK0"
   attempts: 0
 quality_review:
   state: "pass"
@@ -40,11 +41,16 @@ quality_review:
     - "production SwDoc clone audit: zero call sites"
   findings:
     - "No blocking findings: legacy clone facades are absent, save races preserve modified state, and failed or stale acknowledgements cannot move the save mark."
-commit: null
+commit:
+  hash: "a4ea77c6d0dfde8af232967c947c3e9af112ea51"
+  message: "🧪 7V5AK0 task: record Workstream 1 verification"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609141201-7V5AK0. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -59,8 +65,21 @@ events:
     author: "TESTER"
     state: "ok"
     note: "Workstream 1 passed targeted mutation/save tests, the complete repository verification pipeline, clone audit, doctor, routing validation, and clean-state inspection."
+  -
+    type: "verify"
+    at: "2026-09-14T12:36:08.102Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609141201-7V5AK0"
+  -
+    type: "status"
+    at: "2026-09-14T12:36:08.291Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609141201-7V5AK0. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-14T12:35:29.276Z"
+doc_updated_at: "2026-09-14T12:36:08.292Z"
 doc_updated_by: "CODER"
 description: "Retire clone-based Writer mutation facades and make SwDocShell acknowledge exact persisted generations after confirmed storage."
 sections:
@@ -125,12 +144,46 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-14T12:36:08.102Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609141201-7V5AK0
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T12:35:29.276Z, excerpt_hash=sha256:f96a0b41e349e557833b6ad30d8df739df0251a9736519b619dc9b40252ef9c7
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141201-7V5AK0/blueprint/resolved-snapshot.json
+    - old_digest: 3ba1fa7ca8d18abe96c990298bae5a756dc6c96ebeed5b3e6c4c31e6ee1d3292
+    - current_digest: 3ba1fa7ca8d18abe96c990298bae5a756dc6c96ebeed5b3e6c4c31e6ee1d3292
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609141201-7V5AK0
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609141201-7V5AK0 --result verified-202609141201-7V5AK0 --commit a4ea77c6d0dfde8af232967c947c3e9af112ea51
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the task implementation and task metadata commits. No data migration or persistent schema change is planned."
   Findings: |-
     Workstream 1 is implemented with no residual in-scope gap. Interactive mutations use the live `SwDoc` through `SwWrtShell` and action undo; clone-based command facades and the persistence acknowledgement clone are retired. Save completion acknowledges only adapter-confirmed evidence for the captured document generation and undo boundary, so concurrent mutation remains dirty and failures do not move the mark.
 
     The first full verification run exposed an obsolete source-tree requirement for retired `txtattr.ts` and `txtnum.ts`; the gate now requires `wrtsh.ts` and forbids those duplicate facades. The final full verification passed. `ap doctor` retains one unrelated pre-existing warning about an older DONE task commit reference; it does not affect this task.
+extensions:
+  implementation_commit:
+    hash: "88cfdc53054e081c431ab3070dca7203ccdf2fae"
+    message: "🧩 7V5AK0 code: establish one Writer mutation and save path"
 id_source: "generated"
 ---
 ## Summary
@@ -200,6 +253,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609141201-7V5AK0
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-14T12:36:08.102Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609141201-7V5AK0
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-14T12:35:29.276Z, excerpt_hash=sha256:f96a0b41e349e557833b6ad30d8df739df0251a9736519b619dc9b40252ef9c7
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609141201-7V5AK0/blueprint/resolved-snapshot.json
+- old_digest: 3ba1fa7ca8d18abe96c990298bae5a756dc6c96ebeed5b3e6c4c31e6ee1d3292
+- current_digest: 3ba1fa7ca8d18abe96c990298bae5a756dc6c96ebeed5b3e6c4c31e6ee1d3292
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609141201-7V5AK0
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609141201-7V5AK0 --result verified-202609141201-7V5AK0 --commit a4ea77c6d0dfde8af232967c947c3e9af112ea51
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
