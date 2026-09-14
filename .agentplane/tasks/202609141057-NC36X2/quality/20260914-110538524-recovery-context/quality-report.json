@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609141057-NC36X2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-14T11:05:38.524Z",
+  "verdict": "pass",
+  "summary": "The committed document satisfies the approved docs scope and provides an evidence-based, dependency-ordered refactoring program.",
+  "evaluated_sha": "686ba3e3bc20b610e38f289ed0b29833cc8fa7bc",
+  "blueprint_digest": "678ff9a063164d13c2271d044ac741b6e8d0ccfacedad3650e7273fe41d6066b",
+  "findings": [
+    "The plan distinguishes confirmed current behavior from target work, covers all audited architecture and inventory defects, defines browser-specific exceptions, acceptance criteria, migration safeguards, verification requirements, and immediate delivery slices; all recorded docs checks passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609141057-NC36X2/README.md",
+    "docs/program/vite-office-upstream-parity-plan.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Execution estimates are intentionally omitted; each delivery slice still requires its own approved implementation task and current-code revalidation."
+  ]
+}
