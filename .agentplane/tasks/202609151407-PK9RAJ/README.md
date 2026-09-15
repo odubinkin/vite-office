@@ -4,7 +4,7 @@ title: "Implement Writer upstream parity Phase 4"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,26 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T15:17:59.627Z"
+  updated_at: "2026-09-15T15:19:19.962Z"
   updated_by: "CODER"
-  note: "Phase 4 verified: 76 focused tests passed; full npm run verify passed with 312 unit tests and 88 inventory tests at 100% coverage, 10 browser e2e tests, build/static/docs/source-tree/provenance/invariant/parity checks; Agentplane doctor and policy routing passed."
+  note: "verified-202609151407-PK9RAJ"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-15T15:19:07.129Z"
+  updated_by: "EVALUATOR"
+  note: "Phase 4 implementation matches the approved Writer upstream-parity scope and passes the complete repository verification contract."
+  evaluated_sha: "8909374eaaa5ac675bf6eccf059a612b4ec0167c"
+  blueprint_digest: "a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb"
+  evidence_refs:
+    - ".agentplane/tasks/202609151407-PK9RAJ/README.md"
+    - ".agentplane/tasks/202609151407-PK9RAJ/quality/20260915-151907129-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609151407-PK9RAJ/quality/20260915-151907129-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609151407-PK9RAJ/quality/20260915-151907129-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609151407-PK9RAJ/blueprint/resolved-snapshot.json"
+    - "npm run verify"
+  findings:
+    - "No blocking quality findings: lifecycle ownership, upstream-aligned view/list/transferable structure, schema 6 persistence, and dispatch error boundaries are covered by focused, full unit, inventory, browser e2e, build, static, documentation, provenance, and parity checks."
 commit: null
 comments:
   -
@@ -42,8 +58,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "Phase 4 verified: 76 focused tests passed; full npm run verify passed with 312 unit tests and 88 inventory tests at 100% coverage, 10 browser e2e tests, build/static/docs/source-tree/provenance/invariant/parity checks; Agentplane doctor and policy routing passed."
+  -
+    type: "verify"
+    at: "2026-09-15T15:18:49.853Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609151407-PK9RAJ"
+  -
+    type: "verify"
+    at: "2026-09-15T15:19:19.962Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609151407-PK9RAJ"
 doc_version: 3
-doc_updated_at: "2026-09-15T15:17:59.708Z"
+doc_updated_at: "2026-09-15T15:19:20.038Z"
 doc_updated_by: "CODER"
 description: "Restore shell, medium, lifecycle, browser workflow, and undo ownership for the supported Writer slice using pinned LibreOffice 26.8.0.2 semantics; update tests and parity evidence; verify and push main."
 sections:
@@ -90,6 +118,66 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task verify-show 202609151407-PK9RAJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-15T15:18:49.853Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609151407-PK9RAJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T15:17:59.708Z, excerpt_hash=sha256:f045d4d5a3018a986e8fc6a07b3ced54736317d808992566669b59793d20b22e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151407-PK9RAJ/blueprint/resolved-snapshot.json
+    - old_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+    - current_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151407-PK9RAJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609151407-PK9RAJ --result verified-202609151407-PK9RAJ --commit 8909374eaaa5ac675bf6eccf059a612b4ec0167c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-15T15:19:19.962Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609151407-PK9RAJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T15:18:49.935Z, excerpt_hash=sha256:f045d4d5a3018a986e8fc6a07b3ced54736317d808992566669b59793d20b22e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151407-PK9RAJ/blueprint/resolved-snapshot.json
+    - old_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+    - current_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151407-PK9RAJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609151407-PK9RAJ --result verified-202609151407-PK9RAJ --commit 8909374eaaa5ac675bf6eccf059a612b4ec0167c
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -161,6 +249,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609151407-PK9RAJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T15:18:49.853Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609151407-PK9RAJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T15:17:59.708Z, excerpt_hash=sha256:f045d4d5a3018a986e8fc6a07b3ced54736317d808992566669b59793d20b22e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151407-PK9RAJ/blueprint/resolved-snapshot.json
+- old_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+- current_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151407-PK9RAJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609151407-PK9RAJ --result verified-202609151407-PK9RAJ --commit 8909374eaaa5ac675bf6eccf059a612b4ec0167c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T15:19:19.962Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609151407-PK9RAJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T15:18:49.935Z, excerpt_hash=sha256:f045d4d5a3018a986e8fc6a07b3ced54736317d808992566669b59793d20b22e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151407-PK9RAJ/blueprint/resolved-snapshot.json
+- old_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+- current_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151407-PK9RAJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609151407-PK9RAJ --result verified-202609151407-PK9RAJ --commit 8909374eaaa5ac675bf6eccf059a612b4ec0167c
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
