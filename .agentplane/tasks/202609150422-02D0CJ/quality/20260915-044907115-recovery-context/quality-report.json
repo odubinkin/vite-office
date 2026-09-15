@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202609150422-02D0CJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T04:49:07.115Z",
+  "verdict": "pass",
+  "summary": "Upstream-aligned Writer ODT font and paragraph-style round trip is implemented and fully verified.",
+  "evaluated_sha": "f5e65e1470fce1a9e41edb606235bbd15fd72a05",
+  "blueprint_digest": "373d5ec2e8a802b1c815d1cc3be81357b628bc7247a2cbcca2a69898f9863f31",
+  "findings": [
+    "All 126 built-in styles retain encoded ODF identities, parent/follow links, and selected font families across open-save-reopen."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609150422-02D0CJ/README.md",
+    "npm run verify",
+    "commit f5e65e1470fc"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
