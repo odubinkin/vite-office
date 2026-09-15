@@ -30,6 +30,8 @@
     "inventory:ui-test-source-targets": "tsx scripts/libreoffice-inventory/ui-test-source-cli.ts",
     "inventory:cppunit-registrations": "tsx scripts/libreoffice-inventory/cppunit-registration-cli.ts",
     "inventory:help-topics": "tsx scripts/libreoffice-inventory/help-topics-cli.ts",
+    "inventory:invariants": "tsx scripts/libreoffice-inventory/invariants-cli.ts",
+    "inventory:invariants:write": "tsx scripts/libreoffice-inventory/invariants-cli.ts --write",
     "inventory:translations": "tsx scripts/libreoffice-inventory/translations-cli.ts",
     "inventory:dictionaries": "tsx scripts/libreoffice-inventory/dictionaries-cli.ts",
     "lint": "eslint . --max-warnings 0",
@@ -42,7 +44,7 @@
     "test:static": "npm run build && node scripts/check-static-build.mjs",
     "typecheck": "npm run typecheck:tools && npm run typecheck --workspace @vite-office/office",
     "typecheck:tools": "tsc --project tsconfig.tools.json",
-    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:parity"
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

@@ -1,0 +1,517 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "entries": [
+    {
+      "divergenceClass": "none",
+      "id": "editeng.enum.FontItalic",
+      "kind": "enum",
+      "local": {
+        "marker": "export enum FontItalic {",
+        "path": "apps/office/src/editeng/source/items/textitem.ts",
+        "value": "NONE,OBLIQUE,NORMAL,DONTKNOW"
+      },
+      "upstream": {
+        "marker": "enum FontItalic { ITALIC_NONE, ITALIC_OBLIQUE, ITALIC_NORMAL, ITALIC_DONTKNOW",
+        "path": "include/tools/fontenum.hxx",
+        "value": "NONE,OBLIQUE,NORMAL,DONTKNOW"
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "editeng.enum.FontLineStyle",
+      "kind": "enum",
+      "local": {
+        "marker": "export enum FontLineStyle {",
+        "path": "apps/office/src/editeng/source/items/textitem.ts",
+        "value": "NONE,SINGLE,DOUBLE,DOTTED,DONTKNOW,DASH,LONGDASH,DASHDOT,DASHDOTDOT,SMALLWAVE,WAVE,DOUBLEWAVE,BOLD,BOLDDOTTED,BOLDDASH,BOLDLONGDASH,BOLDDASHDOT,BOLDDASHDOTDOT,BOLDWAVE"
+      },
+      "upstream": {
+        "marker": "enum FontLineStyle { LINESTYLE_NONE, LINESTYLE_SINGLE, LINESTYLE_DOUBLE,",
+        "path": "include/tools/fontenum.hxx",
+        "value": "NONE,SINGLE,DOUBLE,DOTTED,DONTKNOW,DASH,LONGDASH,DASHDOT,DASHDOTDOT,SMALLWAVE,WAVE,DOUBLEWAVE,BOLD,BOLDDOTTED,BOLDDASH,BOLDLONGDASH,BOLDDASHDOT,BOLDDASHDOTDOT,BOLDWAVE"
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "editeng.enum.FontWeight",
+      "kind": "enum",
+      "local": {
+        "marker": "export enum FontWeight {",
+        "path": "apps/office/src/editeng/source/items/textitem.ts",
+        "value": "DONTKNOW,THIN,ULTRALIGHT,LIGHT,SEMILIGHT,NORMAL,MEDIUM,SEMIBOLD,BOLD,ULTRABOLD,BLACK"
+      },
+      "upstream": {
+        "marker": "enum FontWeight { WEIGHT_DONTKNOW, WEIGHT_THIN, WEIGHT_ULTRALIGHT,",
+        "path": "include/tools/fontenum.hxx",
+        "value": "DONTKNOW,THIN,ULTRALIGHT,LIGHT,SEMILIGHT,NORMAL,MEDIUM,SEMIBOLD,BOLD,ULTRABOLD,BLACK"
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "svl.default.max-undo-action-count",
+      "kind": "default",
+      "local": {
+        "marker": "DEFAULT_MAX_UNDO_ACTION_COUNT = 20",
+        "path": "apps/office/src/svl/source/undo/undo.ts",
+        "value": 20
+      },
+      "upstream": {
+        "marker": "SfxUndoManager( size_t nMaxUndoActionCount = 20 )",
+        "path": "include/svl/undo.hxx",
+        "value": 20
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.bold",
+      "kind": "command-url",
+      "local": {
+        "marker": "bold: \"writer.format.bold\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.format.bold"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:Bold\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:Bold"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.copy",
+      "kind": "command-url",
+      "local": {
+        "marker": "copy: \"writer.edit.copy\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.edit.copy"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:Copy\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:Copy"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.cut",
+      "kind": "command-url",
+      "local": {
+        "marker": "cut: \"writer.edit.cut\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.edit.cut"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:Cut\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:Cut"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.italic",
+      "kind": "command-url",
+      "local": {
+        "marker": "italic: \"writer.format.italic\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.format.italic"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:Italic\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:Italic"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.orderedList",
+      "kind": "command-url",
+      "local": {
+        "marker": "orderedList: \"writer.list.default-numbering\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.list.default-numbering"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:DefaultNumbering\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:DefaultNumbering"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.paste",
+      "kind": "command-url",
+      "local": {
+        "marker": "paste: \"writer.edit.paste\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.edit.paste"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:Paste\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:Paste"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.redo",
+      "kind": "command-url",
+      "local": {
+        "marker": "redo: \"writer.redo\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.redo"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:Redo\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:Redo"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.selectAll",
+      "kind": "command-url",
+      "local": {
+        "marker": "selectAll: \"writer.edit.select-all\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.edit.select-all"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:SelectAll\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:SelectAll"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.underline",
+      "kind": "command-url",
+      "local": {
+        "marker": "underline: \"writer.format.underline\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.format.underline"
+      },
+      "upstream": {
+        "marker": "xlink:href=\".uno:Underline\"",
+        "path": "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "value": ".uno:Underline"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.undo",
+      "kind": "command-url",
+      "local": {
+        "marker": "undo: \"writer.undo\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.undo"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:Undo\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:Undo"
+      }
+    },
+    {
+      "divergenceClass": "P",
+      "id": "writer.command-url.unorderedList",
+      "kind": "command-url",
+      "local": {
+        "marker": "unorderedList: \"writer.list.default-bullet\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "value": "writer.list.default-bullet"
+      },
+      "upstream": {
+        "marker": "menu:id=\".uno:DefaultBullet\"",
+        "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "value": ".uno:DefaultBullet"
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.default.max-list-level",
+      "kind": "default",
+      "local": {
+        "marker": "WRITER_MAX_LIST_LEVEL = 9",
+        "path": "apps/office/src/sw/source/core/doc/list.ts",
+        "value": 9
+      },
+      "upstream": {
+        "marker": "constexpr sal_uInt8 MAXLEVEL = 10;",
+        "path": "sw/inc/swtypes.hxx",
+        "value": 9
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_BEGIN",
+      "kind": "pool-range",
+      "local": {
+        "marker": "export const RES_CHRATR_BEGIN = 1 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 1
+      },
+      "upstream": {
+        "marker": "inline constexpr sal_uInt16 RES_CHRATR_BEGIN(HINT_BEGIN);",
+        "path": "sw/inc/hintids.hxx",
+        "value": 1
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_CJK_FONT",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_CJK_FONT = 22 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 22
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_CJK_FONT(RES_CHRATR_BEGIN + 21)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 22
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_CJK_POSTURE",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_CJK_POSTURE = 25 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 25
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_CJK_POSTURE(RES_CHRATR_BEGIN + 24)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 25
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_CJK_WEIGHT",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_CJK_WEIGHT = 26 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 26
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_CJK_WEIGHT(RES_CHRATR_BEGIN + 25)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 26
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_CTL_FONT",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_CTL_FONT = 27 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 27
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_CTL_FONT(RES_CHRATR_BEGIN + 26)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 27
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_CTL_POSTURE",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_CTL_POSTURE = 30 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 30
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_CTL_POSTURE(RES_CHRATR_BEGIN + 29)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 30
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_CTL_WEIGHT",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_CTL_WEIGHT = 31 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 31
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_CTL_WEIGHT(RES_CHRATR_BEGIN + 30)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 31
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_END",
+      "kind": "pool-range",
+      "local": {
+        "marker": "export const RES_CHRATR_END = 49 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 49
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_END(RES_CHRATR_BEGIN + 48)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 49
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_FONT",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_FONT = 7 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 7
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_FONT(RES_CHRATR_BEGIN + 6)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 7
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_POSTURE",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_POSTURE = 11 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 11
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_POSTURE(RES_CHRATR_BEGIN + 10)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 11
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_UNDERLINE",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_UNDERLINE = 14 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 14
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_UNDERLINE(RES_CHRATR_BEGIN + 13)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 14
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_CHRATR_WEIGHT",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_CHRATR_WEIGHT = 15 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 15
+      },
+      "upstream": {
+        "marker": "RES_CHRATR_WEIGHT(RES_CHRATR_BEGIN + 14)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 15
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_PARATR_ADJUST",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_PARATR_ADJUST = 65 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 65
+      },
+      "upstream": {
+        "marker": "RES_PARATR_ADJUST(RES_PARATR_BEGIN + 1)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 65
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_PARATR_LIST_ID",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_PARATR_LIST_ID = 83 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 83
+      },
+      "upstream": {
+        "marker": "RES_PARATR_LIST_ID(RES_PARATR_LIST_BEGIN + 0)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 83
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_PARATR_LIST_LEVEL",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_PARATR_LIST_LEVEL = 84 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 84
+      },
+      "upstream": {
+        "marker": "RES_PARATR_LIST_LEVEL(RES_PARATR_LIST_BEGIN + 1)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 84
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_PARATR_NUMRULE",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_PARATR_NUMRULE = 73 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 73
+      },
+      "upstream": {
+        "marker": "RES_PARATR_NUMRULE(RES_PARATR_BEGIN + 9)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 73
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_TXTATR_AUTOFMT",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_TXTATR_AUTOFMT = 53 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 53
+      },
+      "upstream": {
+        "marker": "RES_TXTATR_AUTOFMT(RES_TXTATR_WITHEND_BEGIN + 4)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 53
+      }
+    },
+    {
+      "divergenceClass": "none",
+      "id": "writer.which-id.RES_TXTATR_INETFMT",
+      "kind": "which-id",
+      "local": {
+        "marker": "export const RES_TXTATR_INETFMT = 54 as const;",
+        "path": "apps/office/src/sw/inc/hintids.ts",
+        "value": 54
+      },
+      "upstream": {
+        "marker": "RES_TXTATR_INETFMT(RES_TXTATR_WITHEND_BEGIN + 5)",
+        "path": "sw/inc/hintids.hxx",
+        "value": 54
+      }
+    }
+  ],
+  "schemaVersion": 1
+}

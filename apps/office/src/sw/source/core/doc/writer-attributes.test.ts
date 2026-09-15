@@ -74,7 +74,11 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(font.Clone()).toEqual(font);
     expect(font.equals(new SvxFontItem("Noto Serif", RES_CHRATR_FONT))).toBe(true);
     expect(font.equals(new SvxFontItem("Noto Sans", RES_CHRATR_FONT))).toBe(false);
-    expect(font.toSnapshot()).toEqual({ type: "SvxFontItem", value: "Noto Serif", which: 1 });
+    expect(font.toSnapshot()).toEqual({
+      type: "SvxFontItem",
+      value: "Noto Serif",
+      which: RES_CHRATR_FONT,
+    });
     expect(pool.CreateItem(font.toSnapshot())).toEqual(font);
     expect(
       /** Rejects a blank font. @returns Invalid item. */ () => new SvxFontItem(" ", 1),
@@ -378,7 +382,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 5 });
+    expect(snapshot).toMatchObject({ swModelVersion: 6 });
     expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", text: "" });
     expect(snapshot.textNodes[0]).not.toHaveProperty("alignment");
     const restored = normalizeWriterParagraphFormatting(snapshot);

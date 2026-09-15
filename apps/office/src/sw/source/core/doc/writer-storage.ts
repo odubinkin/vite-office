@@ -28,7 +28,7 @@ export type WriterSnapshotState = {
   /** Shell-owned identity and lifecycle state. */
   readonly documentState: SerializableValue;
   /** Target transport schema discriminator. */
-  readonly schemaVersion: 1;
+  readonly schemaVersion: 2;
   /** Model-only Writer graph. */
   readonly writerModel: SerializableValue;
 };
@@ -48,7 +48,7 @@ export function createWriterSnapshot(
     id: documentState.id,
     state: {
       documentState: { ...documentState } as unknown as SerializableValue,
-      schemaVersion: 1 as const,
+      schemaVersion: 2 as const,
       writerModel: serializeWriterDocument(writerDocument) as unknown as SerializableValue,
     },
     version: documentState.contentGeneration,
@@ -60,8 +60,10 @@ export function restoreWriterSnapshot(
   snapshot: DocumentSnapshot<WriterSnapshotState>,
   purpose: "primary" | "recovery",
 ): RestoredWriterSnapshot {
-  if (snapshot.state.schemaVersion !== 1)
-    throw new Error("Stored Writer snapshot schema is unsupported.");
+  if (snapshot.state.schemaVersion !== 2)
+    throw new Error(
+      "Stored Writer snapshot is incompatible with corrected Writer attribute identifiers; recover from an ODT file or discard the obsolete browser copy.",
+    );
   const writerDocument = normalizeWriterParagraphFormatting(
     snapshot.state.writerModel as unknown as WriterDocument,
   );

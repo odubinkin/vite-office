@@ -24,7 +24,7 @@ export interface SwDocSnapshot {
   /** Document-owned paragraph style collections. */
   readonly textFormatCollections: readonly SwTextFormatCollSnapshot[];
   /** Writer model schema discriminator. */
-  readonly swModelVersion: 5;
+  readonly swModelVersion: 6;
 }
 
 /** Owns only the Writer document model graph. */
@@ -147,7 +147,7 @@ export class SwDoc extends SwModify {
           return rule.toSnapshot();
         },
       ),
-      swModelVersion: 5,
+      swModelVersion: 6,
       textNodes: this.paragraphs.map(
         /** Serializes one regular body text node. @param node - Canonical SwTextNode. @returns Persisted node record. */
         function serializeTextNode(node): SwTextNodeSnapshot {

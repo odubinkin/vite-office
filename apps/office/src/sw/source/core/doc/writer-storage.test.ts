@@ -61,8 +61,8 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
       id: "writer-store",
       state: {
         documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
-        schemaVersion: 1,
-        writerModel: { swModelVersion: 5 },
+        schemaVersion: 2,
+        writerModel: { swModelVersion: 6 },
       },
       version: 1,
     });
@@ -126,15 +126,15 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     expect(
       /** Restores a retired combined root. @returns Invalid result. */ () =>
         restoreWriterSnapshot({ ...current, state: oldState }, "primary"),
-    ).toThrow("schema is unsupported");
+    ).toThrow("incompatible with corrected Writer attribute identifiers");
     const wrongSchema = {
       ...current,
-      state: { ...current.state, schemaVersion: 0 as 1 },
+      state: { ...current.state, schemaVersion: 1 as 2 },
     };
     expect(
       /** Restores an unknown schema version. @returns Invalid result. */ () =>
         restoreWriterSnapshot(wrongSchema, "primary"),
-    ).toThrow("schema is unsupported");
+    ).toThrow("incompatible with corrected Writer attribute identifiers");
   });
 
   it("rejects malformed target lifecycle records" /** Exercises target-schema runtime validation without legacy fallbacks. @returns Nothing. */, function rejectsMalformedLifecycle(): void {

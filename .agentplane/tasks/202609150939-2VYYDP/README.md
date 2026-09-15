@@ -4,7 +4,7 @@ title: "Phase 0.1 exact upstream invariant manifest"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -23,10 +23,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-15T09:49:28.804Z"
+  updated_by: "CODER"
+  note: "P0.1 invariant generation, corrected WhichIds, model/snapshot schema rejection, inventory coverage, office coverage, and parity validation all pass."
   attempts: 0
 commit: null
 comments:
@@ -41,8 +41,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement exact upstream invariant manifest, corrected WhichIds, and incompatible persistence rejection for Phase 0.1."
+  -
+    type: "verify"
+    at: "2026-09-15T09:49:28.804Z"
+    author: "CODER"
+    state: "ok"
+    note: "P0.1 invariant generation, corrected WhichIds, model/snapshot schema rejection, inventory coverage, office coverage, and parity validation all pass."
 doc_version: 3
-doc_updated_at: "2026-09-15T09:40:53.250Z"
+doc_updated_at: "2026-09-15T09:49:28.852Z"
 doc_updated_by: "CODER"
 description: "Generate and enforce pinned Writer/editeng/svl invariants, correct character WhichIds, and reject incompatible browser persistence records."
 sections:
@@ -61,7 +67,47 @@ sections:
     4. Run npm run test:inventory:coverage.
     5. Run npm run test:coverage --workspace @vite-office/office.
     6. Run npm run inventory:parity.
-  Verification: "Pending execution."
+  Verification: |-
+    Command: npm run inventory:invariants. Result: pass. Evidence: 34 exact pinned invariants valid. Scope: generated manifest and local/upstream markers.
+
+    Command: npm run test:inventory:coverage. Result: pass. Evidence: 33 files, 87 tests, 100% statements/branches/functions/lines. Scope: inventory tooling including invariant drift diagnostics.
+
+    Command: npm run test:coverage --workspace @vite-office/office. Result: pass. Evidence: 60 files, 296 tests, 100% coverage. Scope: Writer model, persistence, mappings, and UI behavior.
+
+    Command: npm run inventory:parity. Result: pass. Evidence: 35 records resolved against baseline 9bc445578031fecf56086729d8e4940c77e14d65. Scope: current parity mappings and runtime inventory.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-15T09:49:28.804Z — VERIFY — ok
+
+    By: CODER
+
+    Note: P0.1 invariant generation, corrected WhichIds, model/snapshot schema rejection, inventory coverage, office coverage, and parity validation all pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T09:49:28.434Z, excerpt_hash=sha256:67e6bb62f8624789bcd8ec60b93590bce275ea2786d64c206845234cdd93d0c8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150939-2VYYDP/blueprint/resolved-snapshot.json
+    - old_digest: 0cf005cd44c7d09a93fa65184380c5e1a2a2736d6c0bdbd224963a4a1a385072
+    - current_digest: 0cf005cd44c7d09a93fa65184380c5e1a2a2736d6c0bdbd224963a4a1a385072
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609150939-2VYYDP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609150939-2VYYDP
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task commit, restoring the prior generated artifacts, constants, mappings, and persistence schema. No compatibility shim will be retained for incorrect IDs."
   Findings: "None yet."
 id_source: "generated"
@@ -93,7 +139,46 @@ In scope: invariant generation/validation tooling and fixtures; used Writer/edit
 
 ## Verification
 
-Pending execution.
+Command: npm run inventory:invariants. Result: pass. Evidence: 34 exact pinned invariants valid. Scope: generated manifest and local/upstream markers.
+
+Command: npm run test:inventory:coverage. Result: pass. Evidence: 33 files, 87 tests, 100% statements/branches/functions/lines. Scope: inventory tooling including invariant drift diagnostics.
+
+Command: npm run test:coverage --workspace @vite-office/office. Result: pass. Evidence: 60 files, 296 tests, 100% coverage. Scope: Writer model, persistence, mappings, and UI behavior.
+
+Command: npm run inventory:parity. Result: pass. Evidence: 35 records resolved against baseline 9bc445578031fecf56086729d8e4940c77e14d65. Scope: current parity mappings and runtime inventory.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-15T09:49:28.804Z — VERIFY — ok
+
+By: CODER
+
+Note: P0.1 invariant generation, corrected WhichIds, model/snapshot schema rejection, inventory coverage, office coverage, and parity validation all pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T09:49:28.434Z, excerpt_hash=sha256:67e6bb62f8624789bcd8ec60b93590bce275ea2786d64c206845234cdd93d0c8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150939-2VYYDP/blueprint/resolved-snapshot.json
+- old_digest: 0cf005cd44c7d09a93fa65184380c5e1a2a2736d6c0bdbd224963a4a1a385072
+- current_digest: 0cf005cd44c7d09a93fa65184380c5e1a2a2736d6c0bdbd224963a4a1a385072
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609150939-2VYYDP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609150939-2VYYDP
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

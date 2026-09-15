@@ -5,8 +5,8 @@
 /** First Writer character-format WhichId. */
 export const RES_CHRATR_BEGIN = 1 as const;
 
-/** Western font family, `RES_CHRATR_BEGIN`. */
-export const RES_CHRATR_FONT = 1 as const;
+/** Western font family, `RES_CHRATR_BEGIN + 6`. */
+export const RES_CHRATR_FONT = 7 as const;
 
 /** Western font posture, `RES_CHRATR_BEGIN + 10`. */
 export const RES_CHRATR_POSTURE = 11 as const;
@@ -20,8 +20,8 @@ export const RES_CHRATR_WEIGHT = 15 as const;
 /** CJK font posture, `RES_CHRATR_BEGIN + 24`. */
 export const RES_CHRATR_CJK_POSTURE = 25 as const;
 
-/** CJK font family, `RES_CHRATR_BEGIN + 19`. */
-export const RES_CHRATR_CJK_FONT = 20 as const;
+/** CJK font family, `RES_CHRATR_BEGIN + 21`. */
+export const RES_CHRATR_CJK_FONT = 22 as const;
 
 /** CJK font weight, `RES_CHRATR_BEGIN + 25`. */
 export const RES_CHRATR_CJK_WEIGHT = 26 as const;
