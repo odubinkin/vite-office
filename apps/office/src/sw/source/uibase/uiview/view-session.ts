@@ -13,14 +13,17 @@ import {
   type SfxShell,
 } from "../../../../framework/source/dispatch/dispatchprovider";
 import type { AutoRecoveryEnvironment } from "../../../../framework/source/services/autorecovery";
-import { createDocument, type OfficeDocument } from "../../../../sfx2/source/doc/objsh";
+import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { PrimarySavePort, StoredDocumentOpenPort } from "../../../../sfx2/source/doc/docfile";
 import type { RecoverySavePort } from "../../../../svl/source/misc/recovery";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipboard";
-import type { WriterSnapshotState } from "../../core/doc/writer-storage";
-import type { WriterDocument, WriterParagraph } from "../../core/doc/writer";
+import type { WriterSnapshotState } from "../../../browser/persistence/writer-storage";
 import type { SwModelHint } from "../../../inc/hints";
+import {
+  WriterViewProjection,
+  type WriterPresentationProjection,
+} from "../../../browser/presentation/writer-view-projection";
 import { type WriterClipboardPaste, type WriterClipboardSelection } from "../dochdl/swdtflvr";
 import { SwDocShell } from "../app/docsh";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
@@ -137,17 +140,7 @@ export interface WriterViewControllerFactory {
 }
 
 /** Immutable React read model projected without cloning the canonical SwDoc. */
-export interface WriterViewSnapshot {
-  /** Active paragraph targeted by Writer commands. */
-  readonly activeParagraph: WriterParagraph;
-  /** Zero-based active paragraph position. */
-  readonly activeParagraphIndex: number;
-  /** Canonical shell-owned document reference. */
-  readonly document: WriterDocument;
-  /** Object-shell-owned identity and lifecycle state. */
-  readonly documentState: OfficeDocument;
-  /** Direction-preserving persistent SwPaM projection for the DOM selection adapter. */
-  readonly cursorSelection: WriterCursorSelection;
+export interface WriterViewSnapshot extends WriterPresentationProjection {
   /** Horizontal-ruler visibility in this view. */
   readonly isHorizontalRulerVisible: boolean;
   /** Properties-sidebar visibility in this view. */
@@ -174,6 +167,7 @@ export class SwView {
   private readonly localStorageWorkflow: WriterViewControllers["localStorageWorkflow"];
   private readonly operationState: WriterViewControllers["operationState"];
   private readonly viewCommandShell: SfxShell;
+  private readonly viewProjection = new WriterViewProjection();
   private readonly wrtShell: SwWrtShell;
   private readonly wrtShellSubscription: () => void;
 
@@ -244,12 +238,14 @@ export class SwView {
       if (this.cachedSnapshot !== undefined) return this.cachedSnapshot;
       const document = this.docShell.GetDoc();
       const activeParagraph = this.wrtShell.GetActiveParagraph();
-      this.cachedSnapshot = Object.freeze({
-        activeParagraph,
-        activeParagraphIndex: document.paragraphs.indexOf(activeParagraph),
-        cursorSelection: Object.freeze(this.wrtShell.GetCursorSelection()),
+      const projection = this.viewProjection.Project(
         document,
-        documentState: this.docShell.GetDocumentState(),
+        activeParagraph,
+        this.wrtShell.GetCursorSelection(),
+        this.docShell.GetDocumentState(),
+      );
+      this.cachedSnapshot = Object.freeze({
+        ...projection,
         isHorizontalRulerVisible: this.chromePreferences.IsHorizontalRulerVisible(),
         isPropertiesSidebarVisible: this.chromePreferences.IsSidebarVisible(),
         isStatusBarVisible: this.chromePreferences.IsStatusBarVisible(),

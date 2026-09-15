@@ -1,7 +1,7 @@
 /** @fileoverview Verifies Writer workbench document and paragraph identity helpers. */
 
 import { describe, expect, it } from "vitest";
-import { createWriterDocument } from "../../core/doc/writer";
+import { createWriterDocument } from "../../core/doc/doc";
 import {
   createWriterWorkbenchDocument,
   getActiveWriterParagraph,

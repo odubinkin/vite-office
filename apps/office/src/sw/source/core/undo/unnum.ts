@@ -1,6 +1,7 @@
 /** @fileoverview Implements bounded numbering and list-level undo from pinned LibreOffice unnum.cxx. */
 
 import type { WriterParagraphList } from "../doc/list";
+import type { SwTextNode } from "../txtnode/ndtxt";
 import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
 
 /** Shared reversible paragraph list-item transition. */
@@ -11,7 +12,7 @@ abstract class SwUndoParagraphList extends SwUndo {
   /** Creates one list transition. @param comment - Command label. @param paragraphId - Target node. @param beforeList - Original list items. @param afterList - New list items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
   protected constructor(
     comment: string,
-    private readonly paragraphId: string,
+    private readonly paragraph: SwTextNode,
     beforeList: WriterParagraphList,
     afterList: WriterParagraphList,
     before: SwUndoCursorState,
@@ -29,12 +30,12 @@ abstract class SwUndoParagraphList extends SwUndo {
 
   /** Restores prior paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraphId).SetParagraphList(this.beforeList);
+    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphList(this.beforeList);
   }
 
   /** Reapplies paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraphId).SetParagraphList(this.afterList);
+    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphList(this.afterList);
   }
 }
 
@@ -42,13 +43,13 @@ abstract class SwUndoParagraphList extends SwUndo {
 export class SwUndoInsNum extends SwUndoParagraphList {
   /** Creates one list-kind action. @param paragraphId - Target node. @param beforeList - Original items. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
   public constructor(
-    paragraphId: string,
+    paragraph: SwTextNode,
     beforeList: WriterParagraphList,
     afterList: WriterParagraphList,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
-    super("Numbering", paragraphId, beforeList, afterList, before, after);
+    super("Numbering", paragraph, beforeList, afterList, before, after);
   }
 }
 
@@ -56,12 +57,12 @@ export class SwUndoInsNum extends SwUndoParagraphList {
 export class SwUndoNumLevel extends SwUndoParagraphList {
   /** Creates one list-level action. @param paragraphId - Target node. @param beforeList - Original items. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
   public constructor(
-    paragraphId: string,
+    paragraph: SwTextNode,
     beforeList: WriterParagraphList,
     afterList: WriterParagraphList,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
-    super("List Level", paragraphId, beforeList, afterList, before, after);
+    super("List Level", paragraph, beforeList, afterList, before, after);
   }
 }

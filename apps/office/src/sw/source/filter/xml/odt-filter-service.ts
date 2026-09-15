@@ -11,7 +11,7 @@ import {
   createWriterSnapshot,
   restoreWriterSnapshot,
   type WriterSnapshotState,
-} from "../../core/doc/writer-storage";
+} from "../../../browser/persistence/writer-storage";
 import { readOdtDocument, type OdtImportProgressStage } from "./swxml";
 import { writeOdtDocument, type OdtExportProgressStage } from "./wrtxml";
 

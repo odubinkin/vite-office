@@ -3,7 +3,10 @@
  * pinned LibreOffice `sw/source/uibase/wrtsh/select.cxx`.
  */
 
-import type { WriterCharacterAttributes, WriterParagraph } from "../../core/doc/writer";
+import type {
+  SwTextNode as WriterParagraph,
+  WriterCharacterAttributes,
+} from "../../core/txtnode/ndtxt";
 import type { SwUndoCursorState } from "../../core/undo/undobj";
 
 /** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
@@ -69,30 +72,35 @@ export function getWriterSelectedTextRange(
   return start === end ? undefined : { end, paragraphId: selection.point.paragraphId, start };
 }
 
-/** Creates an undo cursor snapshot. @param selection - Current cursor projection. @param activeParagraphId - Active paragraph identity. @param pendingCharacterAttributes - Pending caret attributes. @returns Complete undo cursor state. */
+/** Creates an undo cursor state from canonical node references. @param point - Moving endpoint node. @param pointOffset - Moving endpoint offset. @param mark - Optional fixed endpoint node. @param markOffset - Optional fixed endpoint offset. @param activeParagraph - Active node. @param pendingCharacterAttributes - Pending caret attributes. @returns Complete undo cursor state. */
 export function createWriterUndoCursorState(
-  selection: WriterCursorSelection,
-  activeParagraphId: string,
+  point: WriterParagraph,
+  pointOffset: number,
+  mark: WriterParagraph | undefined,
+  markOffset: number | undefined,
+  activeParagraph: WriterParagraph,
   pendingCharacterAttributes: WriterCharacterAttributes,
 ): SwUndoCursorState {
   return {
-    activeParagraphId,
-    ...(selection.mark === undefined ? {} : { mark: { ...selection.mark } }),
+    activeParagraph,
+    ...(mark === undefined || markOffset === undefined
+      ? {}
+      : { mark: { node: mark, offset: markOffset } }),
     pendingCharacterAttributes: { ...pendingCharacterAttributes },
-    point: { ...selection.point },
+    point: { node: point, offset: pointOffset },
   };
 }
 
 /** Creates a collapsed undo cursor endpoint. @param paragraphId - Target node identity. @param offset - UTF-16 content offset. @param pendingCharacterAttributes - Pending caret attributes. @returns Complete undo cursor state. */
 export function createWriterCollapsedCursorState(
-  paragraphId: string,
+  paragraph: WriterParagraph,
   offset: number,
   pendingCharacterAttributes: WriterCharacterAttributes,
 ): SwUndoCursorState {
   return {
-    activeParagraphId: paragraphId,
+    activeParagraph: paragraph,
     pendingCharacterAttributes: { ...pendingCharacterAttributes },
-    point: { offset, paragraphId },
+    point: { node: paragraph, offset },
   };
 }
 

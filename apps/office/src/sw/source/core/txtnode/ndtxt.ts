@@ -3,11 +3,7 @@
  */
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
-import {
-  SfxInt16Item,
-  SfxStringItem,
-  type SfxPoolItemSnapshot,
-} from "../../../../svl/source/items/poolitem";
+import { SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_PARATR_ADJUST,
   RES_PARATR_LIST_ID,
@@ -20,11 +16,7 @@ import {
   WRITER_MAX_LIST_LEVEL,
   type WriterParagraphList,
 } from "../doc/list";
-import {
-  isWriterParagraphStyle,
-  type SwTextFormatColl,
-  type WriterParagraphStyle,
-} from "../doc/fmtcol";
+import { type SwTextFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
 import {
   DEFAULT_BULLET_RULE_NAME,
   DEFAULT_NUMBERING_RULE_NAME,
@@ -104,8 +96,8 @@ function getWriterGraphemeBoundaries(text: string): readonly number[] {
   return boundaries;
 }
 import { SwNumRuleItem } from "../para/paratr";
-import { createSwpHintsFromSnapshot, SwpHints } from "./ndhints";
-import type { SwTextAttrSnapshot, WriterCharacterAttributes } from "./txatbase";
+import { SwpHints } from "./ndhints";
+import type { WriterCharacterAttributes } from "./txatbase";
 export type { WriterCharacterAttributes } from "./txatbase";
 
 /** Names the bounded direct character attributes currently supported by the browser Writer. */
@@ -479,20 +471,6 @@ export function getWriterTextAttributesAtOffset(
   return run?.attributes ?? DEFAULT_WRITER_CHARACTER_ATTRIBUTES;
 }
 
-/** Cycle-free persisted record for one regular-content SwTextNode. */
-export interface SwTextNodeSnapshot {
-  /** Direct paragraph auto-attribute deltas. */
-  readonly autoAttributes: readonly SfxPoolItemSnapshot[];
-  /** Paragraph text format collection identity. */
-  readonly formatCollId: WriterParagraphStyle;
-  /** Ordered direct-format text attributes. */
-  readonly hints: readonly SwTextAttrSnapshot[];
-  /** Stable browser identity associated with this node. */
-  readonly id: string;
-  /** Canonical UTF-16 text owned by the node. */
-  readonly text: string;
-}
-
 /**
  * Owns one Writer paragraph's canonical text, paragraph items, format collection, and range hints.
  *
@@ -664,7 +642,10 @@ export class SwTextNode extends SwContentNode {
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
     this.setHintsFromRuns(runs);
     this.UpdateContentIndices(offset, text.length);
-    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
+    this.GetDoc().NotifyModelChange({
+      kind: "node-content-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
     return text;
   }
 
@@ -679,7 +660,10 @@ export class SwTextNode extends SwContentNode {
     this.mText = `${this.mText.slice(0, start)}${this.mText.slice(end)}`;
     this.setHintsFromRuns([...prefix, ...suffix]);
     this.UpdateContentIndices(start, removedLength, SwContentIndexUpdateMode.Negative);
-    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
+    this.GetDoc().NotifyModelChange({
+      kind: "node-content-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
   }
 
   /** Replaces one text range with caller-normalized direct-format runs. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacementRuns - Replacement content. @returns Nothing. */
@@ -705,7 +689,10 @@ export class SwTextNode extends SwContentNode {
         SwContentIndexUpdateMode.Replace,
       );
     }
-    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
+    this.GetDoc().NotifyModelChange({
+      kind: "node-content-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
   }
 
   /** Replaces the complete node text and clears direct character hints. @param text - New canonical text. @returns Nothing. */
@@ -727,14 +714,20 @@ export class SwTextNode extends SwContentNode {
         SwContentIndexUpdateMode.Replace,
       );
     if (previousText !== text)
-      this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
+      this.GetDoc().NotifyModelChange({
+        kind: "node-content-changed",
+        nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+      });
   }
 
   /** Applies or removes one direct format over a non-empty range. @param start - Inclusive format start. @param end - Exclusive format end. @param format - Toggled direct property. @returns Nothing. */
   public ToggleTextRangeFormat(start: number, end: number, format: WriterCharacterFormat): void {
     this.assertRange(start, end);
     this.setTextRuns(toggleWriterTextRangeFormat(this.runs, start, end, format));
-    this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
+    this.GetDoc().NotifyModelChange({
+      kind: "attribute-set-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
   }
 
   /** Reads direct attributes inherited by a collapsed caret. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
@@ -768,7 +761,10 @@ export class SwTextNode extends SwContentNode {
       }),
     );
     this.setTextRuns([...before.prefix, ...replacement, ...selected.suffix]);
-    this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
+    this.GetDoc().NotifyModelChange({
+      kind: "attribute-set-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
   }
 
   /** Splits this node at one content offset and returns an uninserted trailing sibling. @param offset - UTF-16 split offset. @param nextId - Trailing node identity. @returns Prepared trailing text node. */
@@ -789,7 +785,10 @@ export class SwTextNode extends SwContentNode {
     this.mText = getWriterTextFromRuns(split.prefix);
     this.setHintsFromRuns(split.prefix);
     this.MoveContentIndicesFrom(trailing, offset);
-    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
+    this.GetDoc().NotifyModelChange({
+      kind: "node-content-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
     return trailing;
   }
 
@@ -801,41 +800,24 @@ export class SwTextNode extends SwContentNode {
     const offset = this.Len();
     this.setTextRuns([...this.runs, ...source.runs]);
     source.MoveAllContentIndicesTo(this, offset);
-    this.GetDoc().CallSwClientNotify({ kind: "node-content-changed", nodeId: this.id });
+    this.GetDoc().NotifyModelChange({
+      kind: "node-content-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
   }
 
-  /** Creates a cycle-free persisted record. @returns Text-node snapshot. */
-  public toSnapshot(): SwTextNodeSnapshot {
-    return {
-      autoAttributes: this.GetpSwAttrSet()?.toSnapshot() ?? [],
-      formatCollId: this.GetTextFormatColl().id,
-      hints: this.pSwpHints?.toSnapshot() ?? [],
-      id: this.id,
-      text: this.mText,
-    };
-  }
-
-  /** Restores one text node into an existing SwNodes content section. @param nodes - Owning node array. @param startOfSection - Containing section. @param snapshot - Persisted node state. @returns Restored text node. */
-  public static fromSnapshot(
-    nodes: SwNodes,
-    startOfSection: SwStartNode,
-    snapshot: SwTextNodeSnapshot,
-  ): SwTextNode {
-    const formatColl = nodes
-      .GetDoc()
-      .GetTextFormatColl(
-        isWriterParagraphStyle(snapshot.formatCollId) ? snapshot.formatCollId : "default",
-      );
-    const node = new SwTextNode(nodes, snapshot.id, startOfSection, formatColl, snapshot.text);
-    snapshot.autoAttributes.forEach(
-      /** Restores one direct paragraph item. @param itemSnapshot - Persisted item delta. @returns Nothing. */
-      function restoreAutoAttribute(itemSnapshot): void {
-        node.SetAttr(nodes.GetDoc().GetAttrPool().CreateItem(itemSnapshot));
-      },
+  /** Creates an independent text node in another document graph. @param nodes - Destination node array. @returns Detached clone. */
+  public CloneTo(nodes: SwNodes): SwTextNode {
+    const clone = new SwTextNode(
+      nodes,
+      this.id,
+      nodes.GetEndOfContent().StartOfSectionNode(),
+      nodes.GetDoc().GetTextFormatColl(this.style),
     );
-    const hints = createSwpHintsFromSnapshot(nodes.GetDoc().GetAttrPool(), snapshot.hints);
-    node.pSwpHints = hints.Count() === 0 ? undefined : hints;
-    return node;
+    const direct = this.GetpSwAttrSet();
+    if (direct !== undefined) clone.SetAttr(direct);
+    clone.ReplaceRange(0, 0, this.runs);
+    return clone;
   }
 
   /** Replaces canonical text and derives hints from complete boundary runs. @param runs - Complete text runs. @returns Nothing. */

@@ -1,9 +1,11 @@
 /** @fileoverview Verifies semantic Writer actions, grouping, cursor restoration, lifecycle, limits, and payload scaling. */
 
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
+import { encodeWriterDocument } from "../../../browser/persistence/writer-document-codec";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { SwDoc } from "../doc/doc";
-import { createWriterDocument, SwPosition, type WriterTextRun } from "../doc/writer";
+import { createWriterDocument } from "../doc/doc";
+import { SwPosition } from "../crsr/pam";
+import type { SwTextNode, WriterTextRun } from "../txtnode/ndtxt";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { SwUndoDelete, SwUndoJoinParagraphs, SwUndoReplace } from "./undel";
@@ -42,11 +44,11 @@ function run(text: string, bold = false, italic = false, underline = false): Wri
 }
 
 /** Creates a collapsed action cursor state. @param paragraphId - Stable node identity. @param offset - Content offset. @returns Complete Writer cursor state. */
-function cursorState(paragraphId = "p-1", offset = 0): SwUndoCursorState {
+function cursorState(paragraph: SwTextNode, offset = 0): SwUndoCursorState {
   return {
-    activeParagraphId: paragraphId,
+    activeParagraph: paragraph,
     pendingCharacterAttributes: { bold: false, italic: false, underline: false },
-    point: { offset, paragraphId },
+    point: { node: paragraph, offset },
   };
 }
 
@@ -159,12 +161,12 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     shell.SetParagraphStyle("heading-1");
     shell.SetParagraphListKind("numbered");
     shell.ToggleCharacterFormat("italic", { paragraphId: nextId, start: 0, end: 2 });
-    const trailingSnapshot = document.paragraphs[1]?.toSnapshot();
+    const trailingSnapshot = encodeWriterDocument(document).textNodes[1];
     shell.MergeParagraphWithPrevious(nextId);
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoJoinParagraphs);
     expect(document.paragraphs).toHaveLength(1);
     shell.Undo();
-    expect(document.paragraphs[1]?.toSnapshot()).toEqual(trailingSnapshot);
+    expect(encodeWriterDocument(document).textNodes[1]).toEqual(trailingSnapshot);
     shell.Redo();
     expect(
       document.paragraphs.map(
@@ -261,8 +263,6 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const large = createSession("x".repeat(20_000));
     for (let index = 2; index <= 200; index += 1)
       large.document.nodes.MakeTextNode(`p-${index}`, "y".repeat(200));
-    const clone = vi.spyOn(SwDoc.prototype, "clone");
-    const snapshot = vi.spyOn(SwDoc.prototype, "toSnapshot");
     const smallStart = performance.now();
     small.shell.InsertText("p-1", "xa", 2, "insertText");
     const smallLatency = performance.now() - smallStart;
@@ -282,8 +282,6 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const largeRedoStart = performance.now();
     large.shell.Redo();
     const largeRedoLatency = performance.now() - largeRedoStart;
-    expect(clone).not.toHaveBeenCalled();
-    expect(snapshot).not.toHaveBeenCalled();
     expect(large.docShell.GetUndoManager().GetHistoryPayloadSize()).toBe(
       small.docShell.GetUndoManager().GetHistoryPayloadSize(),
     );
@@ -303,8 +301,6 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       smallUndoLatency: expect.any(Number),
     });
     expect(Math.max(largeLatency, largeRedoLatency, largeUndoLatency)).toBeLessThan(250);
-    clone.mockRestore();
-    snapshot.mockRestore();
   });
 
   it("rejects invalid action targets and preserves disabled command no-ops" /** Covers bounded shell validation and command-state branches. @returns Nothing. */, function rejectsInvalidActions(): void {
@@ -335,50 +331,52 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
   });
 
   it("reports bounded action payloads and rejects empty or incompatible grouped actions" /** Covers retained-payload contracts and SwUndo grouping guards directly. @returns Nothing. */, function validatesActionPayloads(): void {
-    const state = cursorState();
-    const insert = new SwUndoInsert("p-1", 0, [run("a")], "word", state, cursorState("p-1", 1));
+    const document = createWriterDocument("p-1");
+    const target = document.paragraphs[0] as SwTextNode;
+    const trailing = document.nodes.MakeTextNode("p-2", "b");
+    const state = cursorState(target);
+    const insert = new SwUndoInsert(target, 0, [run("a")], "word", state, cursorState(target, 1));
     const deletion = new SwUndoDelete(
-      "p-1",
+      target,
       0,
       [run("a")],
       "delete",
       "word",
-      cursorState("p-1", 1),
+      cursorState(target, 1),
       state,
     );
     const replacement = new SwUndoReplace(
-      "p-1",
+      target,
       0,
       [run("a")],
       [run("B", true)],
       "Replace",
       state,
-      cursorState("p-1", 1),
+      cursorState(target, 1),
     );
-    const attr = new SwUndoAttr("p-1", 0, [run("a")], [run("a", true)], state, state);
-    const paragraph = new SwUndoParagraphFormat("p-1", "left", "center", state, state);
-    const style = new SwUndoFormatColl("p-1", "default", "heading-1", state, state);
+    const attr = new SwUndoAttr(target, 0, [run("a")], [run("a", true)], state, state);
+    const paragraph = new SwUndoParagraphFormat(target, "left", "center", state, state);
+    const style = new SwUndoFormatColl(target, "default", "heading-1", state, state);
     const numbering = new SwUndoInsNum(
-      "p-1",
+      target,
       { kind: "none", level: 0 },
       { kind: "numbered", level: 0 },
       state,
       state,
     );
-    const split = new SwUndoSplitNode("p-1", 1, "p-2", state, state);
-    const joined = new SwUndoJoinParagraphs(
-      "p-1",
-      1,
-      {
-        autoAttributes: [],
-        formatCollId: "default",
-        hints: [],
-        id: "p-2",
-        text: "b",
-      },
-      state,
-      state,
-    );
+    const split = new SwUndoSplitNode(target, 1, state, state);
+    const undoContext: SwUndoRedoContext = {
+      GetDoc: /** Returns the active graph. @returns Test document. */ () => document,
+      RestoreCursor: /** Ignores cursor restoration. @returns Nothing. */ () => undefined,
+    };
+    expect(
+      /** Undoes before the first redo. @returns Invalid transition. */ () =>
+        split.UndoWithContext(undoContext),
+    ).toThrow("has not created");
+    const generatedSplit = new SwUndoSplitNode(target, 0, state, state);
+    generatedSplit.RedoWithContext(undoContext);
+    generatedSplit.UndoWithContext(undoContext);
+    const joined = new SwUndoJoinParagraphs(target, 1, trailing, state, state);
     expect(insert.GetComment()).toBe("Insert");
     expect([
       insert.GetPayloadSize(),
@@ -390,23 +388,23 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       numbering.GetPayloadSize(),
       split.GetPayloadSize(),
       joined.GetPayloadSize(),
-    ]).toEqual([4, 4, 8, 8, 2, 2, 6, 7, expect.any(Number)]);
+    ]).toEqual([4, 4, 8, 8, 2, 2, 6, 1, expect.any(Number)]);
     expect(insert.Merge(deletion)).toBe(false);
     expect(
-      deletion.Merge(new SwUndoDelete("p-1", 2, [run("b")], "delete", "word", state, state)),
+      deletion.Merge(new SwUndoDelete(target, 2, [run("b")], "delete", "word", state, state)),
     ).toBe(false);
     expect(
       deletion.Merge(
-        new SwUndoDelete("p-1", 0, [run(" ")], "backspace", "delimiter", state, state),
+        new SwUndoDelete(target, 0, [run(" ")], "backspace", "delimiter", state, state),
       ),
     ).toBe(false);
     expect(
       /** Constructs an insertion without domain payload. @returns Invalid construction that never returns. */
-      () => new SwUndoInsert("p-1", 0, [], undefined, state, state),
+      () => new SwUndoInsert(target, 0, [], undefined, state, state),
     ).toThrow("non-empty text");
     expect(
       /** Constructs a deletion without domain payload. @returns Invalid construction that never returns. */
-      () => new SwUndoDelete("p-1", 0, [], "delete", undefined, state, state),
+      () => new SwUndoDelete(target, 0, [], "delete", undefined, state, state),
     ).toThrow("non-empty text");
   });
 
@@ -414,8 +412,8 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const { docShell, document, shell } = createSession("abc");
     expect(
       /** Resolves an absent action target. @returns Invalid lookup that never returns. */
-      () => GetUndoTextNode(document, "missing"),
-    ).toThrow("Unknown paragraph");
+      () => GetUndoTextNode(document, createWriterDocument("foreign").paragraphs[0] as never),
+    ).toThrow("another document");
     const paragraph = document.paragraphs[0];
     if (paragraph === undefined) throw new Error("Expected the initial Writer paragraph.");
     expect(
@@ -447,11 +445,26 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(document.paragraphs[0]?.list.level).toBe(9);
 
     const context = (shell as unknown as { undoContext: SwUndoRedoContext }).undoContext;
+    expect(
+      /** Resolves a missing private action endpoint. @returns Invalid state. */ () =>
+        (
+          shell as unknown as {
+            CreateCollapsedCursorState: (paragraphId: string, offset: number) => SwUndoCursorState;
+          }
+        ).CreateCollapsedCursorState("missing", 0),
+    ).toThrow("Unknown paragraph");
+    const foreign = createWriterDocument("foreign").paragraphs[0] as SwTextNode;
     docShell.ApplyUndoAction(
-      new SwUndoParagraphFormat("p-1", "left", "right", cursorState(), cursorState("missing", 99)),
+      new SwUndoParagraphFormat(
+        paragraph,
+        "left",
+        "right",
+        cursorState(paragraph),
+        cursorState(foreign, 0),
+      ),
       context,
     );
     expect(shell.GetCursor().GetPoint().GetNode()).toBe(document.paragraphs[0]);
-    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(3);
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(0);
   });
 });

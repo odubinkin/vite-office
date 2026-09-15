@@ -8,20 +8,16 @@ import type { SwAttrPool } from "../attr/swatrset";
 import {
   createSwFormatAutoFormat,
   projectWriterCharacterAttributes,
-  restoreSwFormatAutoFormat,
   SwFormatAutoFormat,
   SwTextAttr,
-  type SwTextAttrSnapshot,
   type WriterCharacterAttributes,
 } from "./txatbase";
 import {
   equalWriterHyperlinks,
   normalizeWriterHyperlink,
-  restoreSwFormatINetFormat,
   SwFormatINetFormat,
   type WriterHyperlink,
 } from "./fmtinfmt";
-import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
 /** Stores direct-format text portions in deterministic start/end/which order. */
 export class SwpHints {
@@ -207,14 +203,6 @@ export class SwpHints {
     return new SwpHints(this.pool, this.hintsByStart);
   }
 
-  /** Converts the hint vector to cycle-free persisted records. @returns Ordered snapshots. */
-  public toSnapshot(): readonly SwTextAttrSnapshot[] {
-    return this.hintsByStart.map(
-      /** Serializes one hint. @param hint - Writer text attribute. @returns Snapshot. */
-      (hint) => hint.toSnapshot(),
-    );
-  }
-
   /** Projects inherited character defaults through the item model. @param inherited - Node/style set. @returns Browser properties. */
   private projectInherited(inherited: SfxItemSet): WriterCharacterAttributes {
     return projectWriterCharacterAttributes(
@@ -232,25 +220,6 @@ export interface WriterTextRunLike {
   readonly hyperlink?: WriterHyperlink;
   /** Visible text in this portion. */
   readonly text: string;
-}
-
-/** Restores the current canonical nested pooled-item snapshots. @param pool - Destination pool. @param snapshots - Persisted hints. @returns Restored hints. */
-export function createSwpHintsFromSnapshot(
-  pool: SwAttrPool,
-  snapshots: readonly SwTextAttrSnapshot[],
-): SwpHints {
-  const hints = snapshots.map(
-    /** Restores one current auto-format hint. @param snapshot - Persisted hint. @returns Restored hint. */
-    (snapshot) =>
-      new SwTextAttr(
-        snapshot.format.which === RES_TXTATR_INETFMT
-          ? restoreSwFormatINetFormat(snapshot.format)
-          : restoreSwFormatAutoFormat(pool, snapshot.format),
-        snapshot.start,
-        snapshot.end,
-      ),
-  );
-  return new SwpHints(pool, hints);
 }
 
 /** Compares hints using LibreOffice start, end, and item ordering. @param left - First. @param right - Second. @returns Signed ordering. */

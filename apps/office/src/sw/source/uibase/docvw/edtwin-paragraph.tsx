@@ -2,7 +2,8 @@
 
 import { useLayoutEffect, useRef } from "react";
 
-import type { WriterParagraph, WriterTextRun } from "../../core/doc/writer";
+import type { WriterTextRun } from "../../core/txtnode/ndtxt";
+import type { WriterParagraphProjection as WriterParagraph } from "../../../browser/presentation/writer-view-projection";
 
 /** Immutable projection properties for one Writer text node. */
 export interface WriterEditableParagraphProps {
@@ -41,7 +42,7 @@ export function WriterEditableParagraph({
   return (
     <div className={isLast ? "" : "mb-4"} data-active={isActive}>
       <span className="sr-only" id={styleDescriptionId} contentEditable={false}>
-        Paragraph style: {paragraph.GetTextFormatColl().GetName()}
+        Paragraph style: {paragraph.styleDisplayName}
         {listMarker === undefined
           ? ""
           : ` Paragraph list: ${paragraph.list.kind === "bullet" ? "Unordered List" : "Ordered List"}.`}

@@ -8,7 +8,7 @@ import {
 } from "./check-source-provenance";
 
 const baseline = { commit: "pinned-commit", tag: "pinned-tag" };
-const writerPath = "apps/office/src/sw/source/core/doc/writer.ts";
+const writerPath = "apps/office/src/sw/source/core/doc/doc.ts";
 const mainPath = "apps/office/src/main.tsx";
 
 /** Creates one valid strict schema-v2 fixture. @param overrides - Top-level overrides. @returns Serialized manifest. */

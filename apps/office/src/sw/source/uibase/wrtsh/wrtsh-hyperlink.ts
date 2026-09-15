@@ -1,13 +1,13 @@
 /** @fileoverview Implements Writer hyperlink shell operations from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
 
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type {
+  SwTextNode as WriterParagraph,
   WriterCharacterAttributes,
-  WriterDocument,
-  WriterHyperlink,
-  WriterParagraph,
   WriterTextRun,
-} from "../../core/doc/writer";
+} from "../../core/txtnode/ndtxt";
+import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import { equalWriterHyperlinks } from "../../core/txtnode/fmtinfmt";
 import { SwUndoAttr } from "../../core/undo/unattr";
 import { SwUndoInsert } from "../../core/undo/unins";
@@ -71,7 +71,7 @@ export function createWriterHyperlinkAction(
       }),
     );
     if (JSON.stringify(beforeRuns) === JSON.stringify(afterRuns)) return undefined;
-    return new SwUndoAttr(paragraph.id, selectedRange.start, beforeRuns, afterRuns, before, before);
+    return new SwUndoAttr(paragraph, selectedRange.start, beforeRuns, afterRuns, before, before);
   }
   if (hyperlink === undefined) return undefined;
   const value = text === undefined || text.length === 0 ? hyperlink.url : text;
@@ -79,15 +79,15 @@ export function createWriterHyperlinkAction(
   if (paragraph === undefined) throw new Error(`Unknown paragraph: ${selection.point.paragraphId}`);
   const offset = selection.point.offset;
   return new SwUndoInsert(
-    paragraph.id,
+    paragraph,
     offset,
     [{ attributes: { ...pendingAttributes }, hyperlink, text: value }],
     undefined,
     before,
     {
-      activeParagraphId: paragraph.id,
+      activeParagraph: paragraph,
       pendingCharacterAttributes: { ...pendingAttributes },
-      point: { offset: offset + value.length, paragraphId: paragraph.id },
+      point: { node: paragraph, offset: offset + value.length },
     },
   );
 }

@@ -7,8 +7,8 @@ import {
   createWorkerClientState,
 } from "../../../../framework/source/services/worker-protocol";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { createWriterSnapshot } from "../../core/doc/writer-storage";
-import { createWriterDocument } from "../../core/doc/writer";
+import { createWriterSnapshot } from "../../../browser/persistence/writer-storage";
+import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { writeOdtDocument } from "./wrtxml";

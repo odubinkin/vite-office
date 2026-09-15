@@ -6,7 +6,7 @@ The Writer body contract is implemented by the `SwDoc` graph in
 [`ndtxt.ts`](../../apps/office/src/sw/source/core/txtnode/ndtxt.ts).
 `SwDoc` owns `SwNodes`; body paragraphs are `SwTextNode` instances inserted
 before the end-of-content sentinel. The thin
-[`writer.ts`](../../apps/office/src/sw/source/core/doc/writer.ts) boundary
+[`doc.ts`](../../apps/office/src/sw/source/core/doc/doc.ts) boundary
 exposes construction, model types, and persistence serialization only.
 Interactive insertion, replacement, splitting, joining, formatting, and list
 changes mutate the live graph through

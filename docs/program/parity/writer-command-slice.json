@@ -1853,7 +1853,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
             "marker": "markDocumentSaved"
           },
           {
@@ -2937,7 +2937,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
             "marker": "markDocumentSaved"
           },
           {
@@ -4640,7 +4640,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
             "marker": "markDocumentSaved"
           },
           {
@@ -4760,7 +4760,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
             "marker": "markDocumentSaved"
           },
           {
@@ -4880,7 +4880,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
             "marker": "markDocumentSaved"
           },
           {

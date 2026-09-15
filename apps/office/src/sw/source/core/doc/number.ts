@@ -11,14 +11,6 @@ export const DEFAULT_BULLET_RULE_NAME = "__WriterDefaultBullet";
 /** Internal rule name used by the bounded default-numbering command. */
 export const DEFAULT_NUMBERING_RULE_NAME = "__WriterDefaultNumbering";
 
-/** Persisted subset of one LibreOffice SwNumFormat level. */
-export interface SwNumFormatSnapshot {
-  /** Imported Unicode bullet character for character-special levels. */
-  readonly bulletChar?: string;
-  /** Browser-supported numbering family for this level. */
-  readonly kind: Exclude<WriterParagraphListKind, "none">;
-}
-
 /** Numbering format owned by one level of a SwNumRule. */
 export class SwNumFormat {
   /** Creates one supported level format. @param kind - Bullet or decimal numbering family. @param bulletChar - Character-special marker. @returns Nothing. */
@@ -46,24 +38,6 @@ export class SwNumFormat {
   public clone(): SwNumFormat {
     return new SwNumFormat(this.kind, this.bulletChar);
   }
-
-  /** Creates a persisted level-format record. @returns Format snapshot. */
-  public toSnapshot(): SwNumFormatSnapshot {
-    return {
-      ...(this.kind === "bullet" ? { bulletChar: this.bulletChar } : {}),
-      kind: this.kind,
-    };
-  }
-}
-
-/** Persisted definition of one bounded Writer numbering rule. */
-export interface SwNumRuleSnapshot {
-  /** Per-level numbering formats in Writer order. */
-  readonly formats: readonly SwNumFormatSnapshot[];
-  /** Default list identity used when the rule is applied. */
-  readonly listId: string;
-  /** Document-unique rule name referenced by SwNumRuleItem. */
-  readonly name: string;
 }
 
 /** Document-owned numbering rule referenced by paragraph item sets. */
@@ -117,29 +91,6 @@ export class SwNumRule {
   public clone(): SwNumRule {
     return new SwNumRule(this.name, this.formats, this.defaultListId);
   }
-
-  /** Creates a persisted numbering-rule record. @returns Rule snapshot. */
-  public toSnapshot(): SwNumRuleSnapshot {
-    return {
-      formats: this.formats.map(
-        /** Serializes one list level. @param format - Owned level format. @returns Snapshot. */
-        (format) => format.toSnapshot(),
-      ),
-      listId: this.defaultListId,
-      name: this.name,
-    };
-  }
-
-  /** Restores a validated bounded numbering rule. @param snapshot - Persisted rule definition. @returns Restored rule. */
-  public static fromSnapshot(snapshot: SwNumRuleSnapshot): SwNumRule {
-    if (!Array.isArray(snapshot.formats) || snapshot.formats.length === 0)
-      throw new Error("Stored SwNumRule formats are invalid.");
-    const formats = snapshot.formats.map(
-      /** Restores one persisted level format. @param format - Stored format. @returns Restored format. */
-      (format) => new SwNumFormat(format.kind, format.bulletChar),
-    );
-    return new SwNumRule(snapshot.name, formats, snapshot.listId);
-  }
 }
 
 /** Creates the ten uniform level formats used by Writer's default list commands. @param kind - Marker family. @returns Independent level formats. */
@@ -161,10 +112,16 @@ export interface WriterNumberingParagraph {
   readonly list: WriterParagraphList;
   /** Optional canonical SwTextNode list identity used to separate adjacent lists. */
   readonly GetListId?: () => string;
+  /** Primitive list identity supplied by a presentation projection. */
+  readonly listId?: string;
   /** Optional canonical SwTextNode rule name used to distinguish numbering definitions. */
   readonly GetNumRuleName?: () => string;
+  /** Primitive rule identity supplied by a presentation projection. */
+  readonly numRuleName?: string;
   /** Optional canonical numbering rule used to resolve per-level bullet characters. */
   readonly GetNumRule?: () => SwNumRule | undefined;
+  /** Primitive bullet marker supplied by a presentation projection. */
+  readonly bulletChar?: string;
 }
 
 /**
@@ -187,7 +144,11 @@ export function getWriterParagraphListMarker(
   const paragraph = paragraphs[paragraphIndex];
   if (paragraph === undefined || paragraph.list.kind === "none") return undefined;
   if (paragraph.list.kind === "bullet")
-    return paragraph.GetNumRule?.()?.GetNumFormat(paragraph.list.level).GetBulletChar() ?? "•";
+    return (
+      paragraph.bulletChar ??
+      paragraph.GetNumRule?.()?.GetNumFormat(paragraph.list.level).GetBulletChar() ??
+      "•"
+    );
   const identity = getNumberingIdentity(paragraph);
   let itemNumber = 1;
   for (let index = paragraphIndex - 1; index >= 0; index -= 1) {
@@ -206,8 +167,12 @@ export function getWriterParagraphListMarker(
 
 /** Returns the canonical list/rule pair when available, or a stable browser-projection fallback. @param paragraph - List-capable paragraph. @returns Stable numbering identity. */
 function getNumberingIdentity(paragraph: WriterNumberingParagraph): string {
-  const listId = paragraph.GetListId?.() ?? "";
+  const listId = paragraph.listId ?? paragraph.GetListId?.() ?? "";
   if (listId.length > 0) return listId;
-  const ruleName = paragraph.GetNumRuleName?.() ?? paragraph.list.styleId ?? paragraph.list.kind;
+  const ruleName =
+    paragraph.numRuleName ??
+    paragraph.GetNumRuleName?.() ??
+    paragraph.list.styleId ??
+    paragraph.list.kind;
   return `\u0000${ruleName}`;
 }

@@ -1,7 +1,7 @@
 /** @fileoverview Implements the bounded SwUndoInsert action from pinned LibreOffice unins.cxx. */
 
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
-import type { WriterTextRun } from "../txtnode/ndtxt";
+import type { SwTextNode, WriterTextRun } from "../txtnode/ndtxt";
 import {
   CopyUndoRuns,
   GetRunsPayloadSize,
@@ -22,7 +22,7 @@ export class SwUndoInsert extends SwUndo {
 
   /** Creates one insert action before it is first redone. @param paragraphId - Target node. @param offset - Insertion start. @param insertedRuns - Inserted formatted fragments. @param group - Optional grouping class. @param before - Cursor before insertion. @param after - Cursor after insertion. @returns Nothing. */
   public constructor(
-    private readonly paragraphId: string,
+    private readonly paragraph: SwTextNode,
     private readonly offset: number,
     insertedRuns: readonly WriterTextRun[],
     private readonly group: SwUndoInsertGroup | undefined,
@@ -41,7 +41,7 @@ export class SwUndoInsert extends SwUndo {
       !(nextAction instanceof SwUndoInsert) ||
       this.group === undefined ||
       nextAction.group !== this.group ||
-      nextAction.paragraphId !== this.paragraphId ||
+      nextAction.paragraph !== this.paragraph ||
       nextAction.offset !== this.offset + GetUndoRunsLength(this.insertedRuns) ||
       !haveEqualBoundaryAttributes(this.insertedRuns, nextAction.insertedRuns)
     )
@@ -58,7 +58,7 @@ export class SwUndoInsert extends SwUndo {
 
   /** Removes the exact inserted range. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraphId).EraseText(
+    GetUndoTextNode(context.GetDoc(), this.paragraph).EraseText(
       this.offset,
       GetUndoRunsLength(this.insertedRuns),
     );
@@ -66,13 +66,7 @@ export class SwUndoInsert extends SwUndo {
 
   /** Reinserts the retained formatted fragments. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    ReplaceUndoRange(
-      context.GetDoc(),
-      this.paragraphId,
-      this.offset,
-      this.offset,
-      this.insertedRuns,
-    );
+    ReplaceUndoRange(context.GetDoc(), this.paragraph, this.offset, this.offset, this.insertedRuns);
   }
 }
 

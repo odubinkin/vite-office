@@ -20,7 +20,7 @@ import type {
   WriterPasteCommandArguments,
 } from "./view-session";
 import type { WriterCommandSource } from "../../../browser/presentation/command-surface";
-import type { WriterHyperlink } from "../../core/doc/writer";
+import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
@@ -205,7 +205,7 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
           onTextChange={handleTextChange}
           onTextCut={executeNativeCut}
           onTextPaste={executeNativePaste}
-          paragraphs={snapshot.document.paragraphs}
+          paragraphs={snapshot.paragraphs}
           projectionVersion={snapshot.viewVersion}
         />
       </WriterWorkspaceChrome>

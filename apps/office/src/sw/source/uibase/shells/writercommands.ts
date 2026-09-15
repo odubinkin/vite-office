@@ -9,8 +9,8 @@ import {
   type CommandRegistry,
 } from "../../../../framework/source/dispatch/dispatchprovider";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
-import type { WriterCharacterFormat } from "../../core/doc/writer";
-import type { WriterHyperlink } from "../../core/doc/writer";
+import type { WriterCharacterFormat } from "../../core/txtnode/ndtxt";
+import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import type { WriterParagraphTextRange } from "../wrtsh/wrtsh";
 import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import {

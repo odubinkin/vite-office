@@ -136,6 +136,9 @@ describe("Sfx notification graph", /** Registers notification tests. @returns No
     );
     child.Notify(second, { kind: "document-state-changed" });
     client.Notify(second, { kind: "document-state-changed" });
+    const unrelated = new SfxBroadcaster<SwModelHint>();
+    child.BroadcasterDying(unrelated);
+    client.BroadcasterDying(unrelated);
     child.BroadcasterDying(second);
     client.BroadcasterDying(second);
     child.RegisterToModify(second);
@@ -158,6 +161,27 @@ describe("Sfx notification graph", /** Registers notification tests. @returns No
     silentSource.CallSwClientNotify({ kind: "document-state-changed" });
     silentSource.DisposeModify();
     expect(silentClient.GetRegisteredIn()).toBeUndefined();
+  });
+
+  it("reparents Writer clients and child modifies when an intermediate source dies", /** Verifies upstream death reparenting. @returns Nothing. */ () => {
+    const root = new SwModify();
+    const intermediate = new SwModify();
+    const child = new SwModify();
+    const directClient = new SwClient();
+    const childClient = new SwClient();
+    intermediate.RegisterToModify(root);
+    child.RegisterToModify(intermediate);
+    directClient.RegisterToModify(intermediate);
+    childClient.RegisterToModify(child);
+
+    intermediate.DisposeModify();
+
+    expect(directClient.GetRegisteredIn()).toBe(root);
+    expect(child.GetRegisteredIn()).toBe(root);
+    root.CallSwClientNotify({ kind: "document-state-changed" });
+    child.DisposeModify();
+    root.DisposeModify();
+    expect(childClient.GetRegisteredIn()).toBeUndefined();
   });
 
   it("finds atomic kinds in atomic and transactional hints", /** Covers the typed hint predicate. @returns Nothing. */ () => {

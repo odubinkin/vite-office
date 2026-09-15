@@ -20,11 +20,7 @@ import {
   type SfxMediumInput,
   type SfxMediumOperation,
 } from "../../../../sfx2/source/doc/docfile";
-import {
-  SfxUndoManager,
-  type SfxUndoAction,
-  type SfxUndoSavePosition,
-} from "../../../../svl/source/undo/undo";
+import { type SfxUndoAction, type SfxUndoSavePosition } from "../../../../svl/source/undo/undo";
 import { ODT_MIMETYPE } from "../../../../package/source/manifest/ManifestExport";
 import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
@@ -33,7 +29,7 @@ import {
   createWriterSnapshot,
   restoreWriterSnapshot,
   type WriterSnapshotState,
-} from "../../core/doc/writer-storage";
+} from "../../../browser/persistence/writer-storage";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import {
   createInlineOdtFilterService,
@@ -50,7 +46,6 @@ export class SwDocShell extends SfxObjectShell {
   private odtRequestGeneration = 0;
   private readonly modelClient: SwClient;
   private readonly notifications = new SwModify();
-  private undoManager: SfxUndoManager<SwUndoRedoContext>;
 
   /** Creates a shell around an existing Writer model and explicit object-shell state. @param document - Active model. @param documentState - Shell lifecycle state. @param medium - Current medium. @param odtFilter - ODT filter service. @returns Nothing. */
   public constructor(
@@ -60,15 +55,14 @@ export class SwDocShell extends SfxObjectShell {
     private readonly odtFilter: OdtFilterService = createInlineOdtFilterService(),
   ) {
     super(documentState, medium);
-    this.undoManager = new SfxUndoManager<SwUndoRedoContext>();
-    if (documentState.isModified) this.undoManager.ClearSavePosition();
+    if (documentState.isModified) this.document.GetUndoManager().ClearSavePosition();
     this.modelClient = new SwClient(
       /** Relays one model notification into shell policy. @param _source - Model source. @param hint - Typed hint. @returns Nothing. */ (
         _source,
         hint,
       ) => this.ReceiveModelHint(hint),
     );
-    this.modelClient.RegisterToModify(document);
+    this.modelClient.RegisterToModify(document.GetDocumentStateManager());
   }
 
   /** Returns the shell-owned Writer model. @returns Active model. */
@@ -77,8 +71,8 @@ export class SwDocShell extends SfxObjectShell {
   }
 
   /** Returns the document-owned action manager. @returns Current undo manager. */
-  public GetUndoManager(): SfxUndoManager<SwUndoRedoContext> {
-    return this.undoManager;
+  public GetUndoManager() {
+    return this.document.GetUndoManager();
   }
 
   /** Subscribes one typed shell consumer through the Writer notification graph. @param listener - Typed receiver. @returns Cleanup callback. */
@@ -105,7 +99,7 @@ export class SwDocShell extends SfxObjectShell {
           /** Executes the action against the model. @returns Nothing. */ () =>
             action.RedoWithContext(context),
         );
-        this.undoManager.AddUndoAction(action, tryMerge);
+        this.document.GetUndoManager().AddUndoAction(action, tryMerge);
       },
     );
     return true;
@@ -118,7 +112,7 @@ export class SwDocShell extends SfxObjectShell {
       /** Executes one shell undo transaction. @returns Whether an action ran. */ () => {
         const changed = this.document.RunModelTransaction(
           /** Executes the current undo action. @returns Whether an action ran. */ () =>
-            this.undoManager.Undo(context),
+            this.document.GetUndoManager().Undo(context),
         );
         if (changed) this.MarkHistoryMutation();
         return changed;
@@ -133,7 +127,7 @@ export class SwDocShell extends SfxObjectShell {
       /** Executes one shell redo transaction. @returns Whether an action ran. */ () => {
         const changed = this.document.RunModelTransaction(
           /** Executes the current redo action. @returns Whether an action ran. */ () =>
-            this.undoManager.Redo(context),
+            this.document.GetUndoManager().Redo(context),
         );
         if (changed) this.MarkHistoryMutation();
         return changed;
@@ -161,9 +155,8 @@ export class SwDocShell extends SfxObjectShell {
     previous.Dispose();
     this.document = document;
     this.ReplaceObjectState(documentState, medium);
-    this.undoManager = new SfxUndoManager<SwUndoRedoContext>();
-    if (documentState.isModified) this.undoManager.ClearSavePosition();
-    this.modelClient.RegisterToModify(document);
+    if (documentState.isModified) this.document.GetUndoManager().ClearSavePosition();
+    this.modelClient.RegisterToModify(document.GetDocumentStateManager());
     this.notifications.CallSwClientNotify({ kind: "document-replaced" });
     return document;
   }
@@ -388,7 +381,10 @@ export class SwDocShell extends SfxObjectShell {
   /** Restores modified state from the undo save mark after history navigation. @returns Nothing. */
   private MarkHistoryMutation(): void {
     this.SetDocumentState(
-      markDocumentHistorySavePosition(this.documentState, this.undoManager.IsAtSavePosition()),
+      markDocumentHistorySavePosition(
+        this.documentState,
+        this.document.GetUndoManager().IsAtSavePosition(),
+      ),
     );
   }
 
@@ -402,7 +398,7 @@ export class SwDocShell extends SfxObjectShell {
     const document = this.document;
     const previousMedium = this.medium;
     const generation = this.documentState.contentGeneration;
-    const savePosition: SfxUndoSavePosition = this.undoManager.CaptureSavePosition();
+    const savePosition: SfxUndoSavePosition = this.document.GetUndoManager().CaptureSavePosition();
     this.SetOperation(operation, "pending", generation);
     try {
       const evidence = await persist(document, candidate);
@@ -411,7 +407,7 @@ export class SwDocShell extends SfxObjectShell {
       if (this.document !== document)
         throw new Error("Primary save completed for a document that is no longer active.");
       this.SetDocumentState(markDocumentSaved(this.documentState, generation));
-      this.undoManager.SetSavePosition(savePosition);
+      this.document.GetUndoManager().SetSavePosition(savePosition);
       if (replaceMedium) this.medium = candidate;
       this.medium = updateSfxMediumOperation(this.medium, operation, "succeeded", generation);
       this.notifications.CallSwClientNotify({ kind: "medium-operation-changed" });

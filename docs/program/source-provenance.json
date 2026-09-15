@@ -1068,6 +1068,48 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterDocumentRecord",
+            "path": "apps/office/src/sw/browser/persistence/writer-document-codec.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/persistence/writer-document-codec.ts",
+      "rationale": "Encodes and decodes the canonical Writer graph only at the browser persistence boundary. This browser boundary has no single native LibreOffice implementation unit and remains explicit in the parity inventory.",
+      "responsibilities": [
+        "Encodes and decodes the canonical Writer graph only at the browser persistence boundary."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "The browser-specific WriterDocumentRecord boundary has no single native LibreOffice implementation unit and therefore remains explicit."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterSnapshotState",
+            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/persistence/writer-storage.ts",
+      "rationale": "Defines browser-owned Writer snapshot orchestration over canonical SwDoc without placing serialization on model classes. This browser persistence boundary has no single native LibreOffice implementation unit.",
+      "responsibilities": [
+        "Creates and restores Writer snapshots and returns exact adapter-confirmed storage evidence without mutating the live SwDoc."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterCommandSource",
             "path": "apps/office/src/sw/browser/presentation/command-surface.ts"
           }
@@ -1081,6 +1123,27 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterViewProjection",
+            "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "rationale": "Projects live Writer nodes into immutable primitive presentation values. This browser boundary has no single native LibreOffice implementation unit and remains explicit in the parity inventory.",
+      "responsibilities": [
+        "Projects live Writer nodes into immutable primitive presentation values."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "The browser-specific WriterViewProjection boundary has no single native LibreOffice implementation unit and therefore remains explicit."
       },
       "status": "local-only"
     },
@@ -1598,7 +1661,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "SwDocSnapshot",
+            "marker": "SwDoc",
             "path": "apps/office/src/sw/source/core/doc/doc.ts"
           }
         ],
@@ -1611,14 +1674,14 @@
       },
       "localPath": "apps/office/src/sw/source/core/doc/doc.ts",
       "localSymbols": [
-        "SwDocSnapshot",
-        "SwDoc"
+        "SwDoc",
+        "createWriterDocument"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwDoc, SwDoc::acquire, SwDoc::release, SwDoc::getReferenceCount and the bounded SwDocSnapshot, SwDoc contract remain intentionally omitted."
+        "Upstream subsystems outside the bounded SwDoc aggregate remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements the Writer SwDoc aggregate from the pinned LibreOffice `sw/source/core/doc/docnew.cxx` ownership boundary."
+        "Owns the final Writer document aggregate and composes upstream-shaped content, list, setting, state, style, and undo managers."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -1669,6 +1732,134 @@
       "evidence": {
         "local": [
           {
+            "marker": "DocumentListsManager",
+            "path": "apps/office/src/sw/source/core/doc/DocumentListsManager.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "DocumentListsManager::DocumentListsManager",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/DocumentListsManager.ts",
+      "localSymbols": [
+        "DocumentListsManager"
+      ],
+      "omittedResponsibilities": [
+        "Upstream responsibilities beyond the bounded DocumentListsManager implementation remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns document list and numbering-rule registration at the upstream manager boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/DocumentListsManager.cxx",
+      "upstreamSymbols": [
+        "DocumentListsManager::DocumentListsManager"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DocumentSettingManager",
+            "path": "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "DocumentSettingManager::DocumentSettingManager",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentSettingManager.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts",
+      "localSymbols": [
+        "DocumentSettingManager"
+      ],
+      "omittedResponsibilities": [
+        "Upstream responsibilities beyond the bounded DocumentSettingManager implementation remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns bounded document settings at the upstream manager boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/DocumentSettingManager.cxx",
+      "upstreamSymbols": [
+        "DocumentSettingManager::DocumentSettingManager"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DocumentStateManager",
+            "path": "apps/office/src/sw/source/core/doc/DocumentStateManager.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "DocumentStateManager::YrsGenNewCommentId",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStateManager.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/DocumentStateManager.ts",
+      "localSymbols": [
+        "DocumentStateManager"
+      ],
+      "omittedResponsibilities": [
+        "Upstream responsibilities beyond the bounded DocumentStateManager implementation remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns Writer model revision state and batched SwModify notifications."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/DocumentStateManager.cxx",
+      "upstreamSymbols": [
+        "DocumentStateManager::YrsGenNewCommentId"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DocumentStylePoolManager",
+            "path": "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "DocumentStylePoolManager::DocumentStylePoolManager",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts",
+      "localSymbols": [
+        "DocumentStylePoolManager"
+      ],
+      "omittedResponsibilities": [
+        "Upstream responsibilities beyond the bounded DocumentStylePoolManager implementation remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns document paragraph-style pool construction and lookup."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+      "upstreamSymbols": [
+        "DocumentStylePoolManager::DocumentStylePoolManager"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "WRITER_PARAGRAPH_STYLES",
             "path": "apps/office/src/sw/source/core/doc/fmtcol.ts"
           }
@@ -1684,7 +1875,6 @@
       "localSymbols": [
         "WRITER_PARAGRAPH_STYLES",
         "WriterParagraphStyle",
-        "SwTextFormatCollSnapshot",
         "SwFormatColl",
         "SwTextFormatColl",
         "isWriterParagraphStyle"
@@ -1764,9 +1954,7 @@
       "localSymbols": [
         "DEFAULT_BULLET_RULE_NAME",
         "DEFAULT_NUMBERING_RULE_NAME",
-        "SwNumFormatSnapshot",
         "SwNumFormat",
-        "SwNumRuleSnapshot",
         "SwNumRule"
       ],
       "omittedResponsibilities": [
@@ -1783,48 +1971,6 @@
         "o3tl::toTwips",
         "SwNumRule::GetOutlineRuleName"
       ]
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterSnapshotState",
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/doc/writer-storage.ts",
-      "rationale": "Defines Writer-specific snapshot creation, restoration, and persistence evidence over the generic browser storage contract without acknowledging or cloning the live document. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Creates and restores Writer snapshots and returns exact adapter-confirmed storage evidence without mutating the live SwDoc."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SwDoc",
-            "path": "apps/office/src/sw/source/core/doc/writer.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/doc/writer.ts",
-      "rationale": "Exposes Writer construction, model types, and persistence serialization without owning a parallel mutation path. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Exposes Writer construction, model types, and persistence serialization while interactive mutation remains in SwWrtShell."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",
@@ -1956,8 +2102,7 @@
         "WriterHyperlink",
         "normalizeWriterHyperlink",
         "equalWriterHyperlinks",
-        "SwFormatINetFormat",
-        "restoreSwFormatINetFormat"
+        "SwFormatINetFormat"
       ],
       "omittedResponsibilities": [
         "Visited-state mutation, macros, and native URL notifications outside the bounded Writer hyperlink range and ODF metadata contract remain intentionally omitted."
@@ -1991,8 +2136,7 @@
       "localPath": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
       "localSymbols": [
         "SwpHints",
-        "WriterTextRunLike",
-        "createSwpHintsFromSnapshot"
+        "WriterTextRunLike"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwpHints, CompareSwpHtWhichStart::operator, CompareSwpHtEnd::operator, SwpHints::Insert and the bounded SwpHints, WriterTextRunLike, createSwpHintsFromSnapshot contract remain intentionally omitted."
@@ -2070,7 +2214,6 @@
         "RES_TXTATR_AUTOFMT",
         "WriterCharacterAttributes",
         "SwFormatAutoFormat",
-        "SwTextAttrSnapshot",
         "SwTextAttr",
         "createSwFormatAutoFormat"
       ],
@@ -2583,40 +2726,6 @@
       "evidence": {
         "local": [
           {
-            "marker": "createWriterFontAutoStylePool",
-            "path": "apps/office/src/sw/source/filter/xml/xmlfonte.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
-            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfonte.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/filter/xml/xmlfonte.ts",
-      "localSymbols": [
-        "createWriterFontAutoStylePool"
-      ],
-      "omittedResponsibilities": [
-        "Font style-name, family, pitch, charset, and embedding metadata remain outside the bounded browser font item model."
-      ],
-      "preservedResponsibilities": [
-        "Collects Writer pool defaults and document font items into a deterministic document-wide XML font auto-style pool."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/filter/xml/xmlfonte.cxx",
-      "upstreamSymbols": [
-        "SwXMLFontAutoStylePool_Impl",
-        "SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
-        "SwXMLExport::CreateFontAutoStylePool"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
             "marker": "exportStylesXml",
             "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts"
           }
@@ -2647,6 +2756,40 @@
         "SwXMLExport::exportDoc",
         "SvXMLUnitConverter::GetMeasureUnit",
         "SwModule::get"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "createWriterFontAutoStylePool",
+            "path": "apps/office/src/sw/source/filter/xml/xmlfonte.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfonte.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlfonte.ts",
+      "localSymbols": [
+        "createWriterFontAutoStylePool"
+      ],
+      "omittedResponsibilities": [
+        "Font style-name, family, pitch, charset, and embedding metadata remain outside the bounded browser font item model."
+      ],
+      "preservedResponsibilities": [
+        "Collects Writer pool defaults and document font items into a deterministic document-wide XML font auto-style pool."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/xml/xmlfonte.cxx",
+      "upstreamSymbols": [
+        "SwXMLFontAutoStylePool_Impl",
+        "SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
+        "SwXMLExport::CreateFontAutoStylePool"
       ]
     },
     {

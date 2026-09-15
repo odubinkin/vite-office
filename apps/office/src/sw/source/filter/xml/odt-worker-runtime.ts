@@ -15,7 +15,7 @@ import {
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import type { DocumentSnapshot } from "../../../../sfx2/source/doc/docfile";
-import type { WriterSnapshotState } from "../../core/doc/writer-storage";
+import type { WriterSnapshotState } from "../../../browser/persistence/writer-storage";
 import {
   createInlineOdtFilterService,
   normalizeOdtFilterError,

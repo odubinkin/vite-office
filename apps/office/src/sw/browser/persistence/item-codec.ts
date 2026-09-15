@@ -6,6 +6,8 @@
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../svl/source/items/itemset";
 import type { SfxPoolItem, SfxPoolItemSnapshot } from "../../../svl/source/items/poolitem";
+import { normalizeWriterHyperlink, SwFormatINetFormat } from "../../source/core/txtnode/fmtinfmt";
+import { RES_TXTATR_INETFMT } from "../../inc/hintids";
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
@@ -28,4 +30,19 @@ export function decodeSfxPoolItem(pool: SfxItemPool, snapshot: SfxPoolItemSnapsh
 /** Restores direct deltas into an existing set. @param set - Destination set. @param snapshots - Current-schema records. @returns Nothing. */
 export function decodeSfxItemSet(set: SfxItemSet, snapshots: readonly SfxPoolItemSnapshot[]): void {
   for (const snapshot of snapshots) set.Put(decodeSfxPoolItem(set.GetPool(), snapshot));
+}
+
+/** Decodes the Writer hyperlink item at the browser persistence boundary. @param snapshot - Stored item. @returns Hyperlink item. */
+export function decodeSwFormatINetFormat(snapshot: SfxPoolItemSnapshot): SwFormatINetFormat {
+  if (snapshot.which !== RES_TXTATR_INETFMT || typeof snapshot.value !== "string")
+    throw new Error("SwFormatINetFormat snapshot is invalid.");
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(snapshot.value);
+  } catch {
+    throw new Error("SwFormatINetFormat snapshot is invalid.");
+  }
+  const hyperlink = normalizeWriterHyperlink(parsed);
+  if (hyperlink === undefined) throw new Error("SwFormatINetFormat snapshot is invalid.");
+  return new SwFormatINetFormat(hyperlink);
 }

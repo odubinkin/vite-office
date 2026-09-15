@@ -1062,6 +1062,58 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/persistence/writer-document-codec.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/browser/persistence/writer-document-codec.ts#WriterDocumentRecord"
+        ],
+        "justification": "Browser-only projection or persistence adaptation kept outside the canonical Writer model.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0114",
+        "CAP-0131",
+        "CAP-0132"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/browser/persistence/writer-storage.ts#WriterSnapshotState"
+        ],
+        "justification": "Defines Writer-specific snapshot creation, restoration, and persistence evidence over the generic browser storage contract without acknowledging or cloning the live document. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1274,6 +1326,31 @@
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "presentation",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/writer-view-projection.ts#WriterViewProjection"
+        ],
+        "justification": "Browser-only projection or persistence adaptation kept outside the canonical Writer model.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -1654,6 +1731,126 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/doc/DocumentListsManager.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0114"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/DocumentListsManager.ts#DocumentListsManager",
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx#DocumentListsManager::DocumentListsManager"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/DocumentListsManager.cxx; Phase 2 preserves the bounded upstream manager boundary.",
+        "knownViolations": [],
+        "localSymbols": [
+          "DocumentListsManager"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/DocumentListsManager.cxx",
+        "upstreamSymbols": [
+          "DocumentListsManager::DocumentListsManager"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts#DocumentSettingManager",
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentSettingManager.cxx#DocumentSettingManager::DocumentSettingManager"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/DocumentSettingManager.cxx; Phase 2 preserves the bounded upstream manager boundary.",
+        "knownViolations": [],
+        "localSymbols": [
+          "DocumentSettingManager"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/DocumentSettingManager.cxx",
+        "upstreamSymbols": [
+          "DocumentSettingManager::DocumentSettingManager"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentStateManager.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/DocumentStateManager.ts#DocumentStateManager",
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentStateManager.cxx#DocumentStateManager::YrsGenNewCommentId"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/DocumentStateManager.cxx; Phase 2 preserves the bounded upstream manager boundary.",
+        "knownViolations": [],
+        "localSymbols": [
+          "DocumentStateManager"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/DocumentStateManager.cxx",
+        "upstreamSymbols": [
+          "DocumentStateManager::YrsGenNewCommentId"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts#DocumentStylePoolManager",
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx#DocumentStylePoolManager::DocumentStylePoolManager"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/DocumentStylePoolManager.cxx; Phase 2 preserves the bounded upstream manager boundary.",
+        "knownViolations": [],
+        "localSymbols": [
+          "DocumentStylePoolManager"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+        "upstreamSymbols": [
+          "DocumentStylePoolManager::DocumentStylePoolManager"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/doc/doc.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -1664,21 +1861,18 @@
       ],
       "semantic": {
         "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
+        "contractStatus": "unverified",
         "defaultStatus": "unverified",
-        "divergenceClass": "A",
+        "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/core/doc/doc.ts#SwDocSnapshot",
+          "apps/office/src/sw/source/core/doc/doc.ts#SwDoc",
           "vendor/libreoffice-reference/sw/source/core/doc/doc.cxx#SwDoc"
         ],
-        "expectedBaseClass": null,
         "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/doc.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
-        "knownViolations": [
-          "inheritance:SwDoc:SwModify"
-        ],
+        "knownViolations": [],
         "localSymbols": [
           "SwDoc",
-          "SwDocSnapshot"
+          "createWriterDocument"
         ],
         "sourceResponsibility": "divergent",
         "upstreamFile": "sw/source/core/doc/doc.cxx",
@@ -1687,7 +1881,8 @@
           "SwDoc::acquire",
           "SwDoc::release",
           "SwDoc::getReferenceCount"
-        ]
+        ],
+        "expectedBaseClass": null
       }
     },
     {
@@ -1713,7 +1908,6 @@
         "localSymbols": [
           "WRITER_PARAGRAPH_STYLES",
           "WriterParagraphStyle",
-          "SwTextFormatCollSnapshot",
           "SwFormatColl",
           "SwTextFormatColl",
           "isWriterParagraphStyle"
@@ -1791,9 +1985,7 @@
         "localSymbols": [
           "DEFAULT_BULLET_RULE_NAME",
           "DEFAULT_NUMBERING_RULE_NAME",
-          "SwNumFormatSnapshot",
           "SwNumFormat",
-          "SwNumRuleSnapshot",
           "SwNumRule"
         ],
         "sourceResponsibility": "unverified",
@@ -1804,60 +1996,6 @@
           "o3tl::toTwips",
           "SwNumRule::GetOutlineRuleName"
         ]
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "document-lifecycle",
-      "capabilityIds": [
-        "CAP-0114",
-        "CAP-0131",
-        "CAP-0132"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/sw/source/core/doc/writer-storage.ts#WriterSnapshotState"
-        ],
-        "justification": "Defines Writer-specific snapshot creation, restoration, and persistence evidence over the generic browser storage contract without acknowledging or cloning the live document. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/core/doc/writer.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "document-model",
-      "capabilityIds": [
-        "CAP-0111",
-        "CAP-0123",
-        "CAP-0124"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/sw/source/core/doc/writer.ts#SwDoc"
-        ],
-        "justification": "Exposes Writer construction, model types, and persistence serialization without owning a parallel mutation path. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
       }
     },
     {
@@ -1992,8 +2130,7 @@
           "WriterHyperlink",
           "normalizeWriterHyperlink",
           "equalWriterHyperlinks",
-          "SwFormatINetFormat",
-          "restoreSwFormatINetFormat"
+          "SwFormatINetFormat"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/txtnode/fmtatr2.cxx",
@@ -2026,8 +2163,7 @@
         "knownViolations": [],
         "localSymbols": [
           "SwpHints",
-          "WriterTextRunLike",
-          "createSwpHintsFromSnapshot"
+          "WriterTextRunLike"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/txtnode/ndhints.cxx",
@@ -2103,7 +2239,6 @@
         "localSymbols": [
           "WriterCharacterAttributes",
           "SwFormatAutoFormat",
-          "SwTextAttrSnapshot",
           "SwTextAttr",
           "createSwFormatAutoFormat"
         ],

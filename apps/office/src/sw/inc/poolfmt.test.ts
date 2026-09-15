@@ -6,7 +6,7 @@ import {
   getWriterStyleIdFromOdfName,
   WRITER_PARAGRAPH_STYLE_POOL,
 } from "./poolfmt";
-import { createWriterDocument } from "../source/core/doc/writer";
+import { createWriterDocument } from "../source/core/doc/doc";
 
 describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothing. */ () => {
   it("preserves all pool ranges, identities, parents, and follow links", /** Verifies the complete graph. @returns Nothing. */ () => {

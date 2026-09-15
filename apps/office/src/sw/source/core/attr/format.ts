@@ -100,7 +100,7 @@ export class SwFormat {
 
   /** Emits one format-owned attribute hint through the document broadcaster. @returns Nothing. */
   private NotifyAttributeSet(): void {
-    this.attributeSet.GetDoc().CallSwClientNotify({
+    this.attributeSet.GetDoc().NotifyModelChange({
       formatId: this.formatName,
       kind: "attribute-set-changed",
     });
@@ -108,7 +108,7 @@ export class SwFormat {
 
   /** Emits one format inheritance/name hint through the document broadcaster. @returns Nothing. */
   private NotifyFormatInheritance(): void {
-    this.attributeSet.GetDoc().CallSwClientNotify({
+    this.attributeSet.GetDoc().NotifyModelChange({
       formatId: this.formatName,
       kind: "format-inheritance-changed",
     });

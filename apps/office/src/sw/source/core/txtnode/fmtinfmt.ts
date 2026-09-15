@@ -1,6 +1,6 @@
 /** @fileoverview Implements Writer's hyperlink pool item from pinned LibreOffice `sw/source/core/txtnode/fmtatr2.cxx` and `sw/inc/fmtinfmt.hxx`. */
 
-import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
+import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
 /** Supported hyperlink metadata retained by the bounded Writer model and ODF filter. */
@@ -81,19 +81,4 @@ export class SwFormatINetFormat extends SfxPoolItem {
   public QueryValue(): string {
     return JSON.stringify(this.hyperlink);
   }
-}
-
-/** Restores a hyperlink item from a persisted snapshot. @param snapshot - Candidate snapshot. @returns Restored item. */
-export function restoreSwFormatINetFormat(snapshot: SfxPoolItemSnapshot): SwFormatINetFormat {
-  if (snapshot.which !== RES_TXTATR_INETFMT || typeof snapshot.value !== "string")
-    throw new Error("SwFormatINetFormat snapshot is invalid.");
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(snapshot.value);
-  } catch {
-    throw new Error("SwFormatINetFormat snapshot is invalid.");
-  }
-  const hyperlink = normalizeWriterHyperlink(parsed);
-  if (hyperlink === undefined) throw new Error("SwFormatINetFormat snapshot is invalid.");
-  return new SwFormatINetFormat(hyperlink);
 }

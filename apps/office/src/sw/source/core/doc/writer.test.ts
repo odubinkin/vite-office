@@ -1,16 +1,15 @@
-/** @fileoverview Verifies the thin Writer construction and serialization boundary. */
+/** @fileoverview Verifies direct SwDoc construction and the external persistence codec. */
 
 import { describe, expect, it } from "vitest";
 
 import {
-  createWriterDocument,
-  isWriterParagraphAlignment,
-  normalizeWriterParagraphFormatting,
-  serializeWriterDocument,
-  SwDoc,
-} from "./writer";
+  decodeWriterDocument,
+  encodeWriterDocument,
+} from "../../../browser/persistence/writer-document-codec";
+import { isWriterParagraphAlignment } from "../txtnode/ndtxt";
+import { createWriterDocument, SwDoc } from "./doc";
 
-describe("Writer document facade", /** Registers construction and persistence-boundary tests. @returns Nothing. */ function defineWriterFacadeTests(): void {
+describe("Writer document boundaries", /** Registers construction and persistence-boundary tests. @returns Nothing. */ function defineWriterBoundaryTests(): void {
   it("constructs one canonical SwDoc without defining a second mutation API" /** Verifies the facade owns only construction while model mutation retains object identity. @returns Nothing. */, function constructsCanonicalDocument(): void {
     const writer = createWriterDocument("p-1");
 
@@ -27,19 +26,18 @@ describe("Writer document facade", /** Registers construction and persistence-bo
   it("round-trips the current snapshot schema and rejects obsolete roots" /** Verifies persistence restoration remains the only document-copy boundary exposed by the facade. @returns Nothing. */, function restoresSnapshots(): void {
     const writer = createWriterDocument("p-1");
     writer.paragraphs[0]?.InsertText("Body", 0);
-    const snapshot = serializeWriterDocument(writer);
-    const restored = normalizeWriterParagraphFormatting(snapshot);
+    const snapshot = encodeWriterDocument(writer);
+    const restored = decodeWriterDocument(snapshot);
 
     expect(restored).not.toBe(writer);
-    expect(serializeWriterDocument(restored)).toEqual(snapshot);
-    expect(normalizeWriterParagraphFormatting(writer)).toBe(writer);
+    expect(encodeWriterDocument(restored)).toEqual(snapshot);
     expect(
       /** Rejects a null persistence root. @returns Invalid document. */ () =>
-        normalizeWriterParagraphFormatting(null),
-    ).toThrow("invalid");
+        decodeWriterDocument(null),
+    ).toThrow("schema is unsupported");
     expect(
       /** Rejects a retired non-SwDoc schema. @returns Invalid document. */ () =>
-        normalizeWriterParagraphFormatting({ document: {}, paragraphs: [] }),
+        decodeWriterDocument({ document: {}, paragraphs: [] }),
     ).toThrow("schema is unsupported");
   });
 });

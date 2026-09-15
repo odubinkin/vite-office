@@ -119,7 +119,7 @@ export function importWriterXml(
   metaXml?: string,
   options: OdfXmlParseOptions = {},
 ): ImportedWriterDocument {
-  const xmlImport = new SwXMLImport(new SwDoc());
+  const xmlImport = new SwXMLImport(new SwDoc(false));
   xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
   xmlImport.finishNamedStyles();
   xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import type { WriterHyperlink } from "../../source/core/doc/writer";
+import type { WriterHyperlink } from "../../source/core/txtnode/fmtinfmt";
 
 /** Hyperlink dialog properties. */
 export interface WriterHyperlinkDialogProps {

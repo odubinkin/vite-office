@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { createWriterDocument } from "../../core/doc/writer";
+import { createWriterDocument } from "../../core/doc/doc";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 

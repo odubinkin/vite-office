@@ -10,8 +10,8 @@ import type { SwDoc } from "../doc/doc";
 
 /** Identifies one stable text-node content position without retaining a node graph. */
 export interface SwUndoCursorPosition {
-  /** Stable SwTextNode identity. */
-  readonly paragraphId: string;
+  /** Canonical SwTextNode identity retained like an upstream node index. */
+  readonly node: SwTextNode;
   /** UTF-16 content offset in that node. */
   readonly offset: number;
 }
@@ -19,7 +19,7 @@ export interface SwUndoCursorPosition {
 /** Stores all Writer cursor state needed after Undo or Redo. */
 export interface SwUndoCursorState {
   /** Command-target paragraph identity. */
-  readonly activeParagraphId: string;
+  readonly activeParagraph: SwTextNode;
   /** Optional fixed selection endpoint; its presence retains direction. */
   readonly mark?: SwUndoCursorPosition;
   /** Direct attributes active at a collapsed Writer cursor. */
@@ -92,9 +92,8 @@ export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
 }
 
 /** Finds one action-target text node. @param document - Current SwDoc. @param paragraphId - Stable node identity. @returns Matching SwTextNode. */
-export function GetUndoTextNode(document: SwDoc, paragraphId: string): SwTextNode {
-  const node = document.nodes.findTextNode(paragraphId);
-  if (node === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+export function GetUndoTextNode(document: SwDoc, node: SwTextNode): SwTextNode {
+  if (node.GetDoc() !== document) throw new Error("Writer undo node belongs to another document.");
   return node;
 }
 
@@ -162,12 +161,12 @@ export function GetUndoRunsLength(runs: readonly WriterTextRun[]): number {
 /** Replaces one node range without cloning its SwDoc. @param document - Mutated graph. @param paragraphId - Target node. @param start - Inclusive offset. @param end - Exclusive offset. @param runs - Replacement fragments. @returns Nothing. */
 export function ReplaceUndoRange(
   document: SwDoc,
-  paragraphId: string,
+  node: SwTextNode,
   start: number,
   end: number,
   runs: readonly WriterTextRun[],
 ): void {
-  GetUndoTextNode(document, paragraphId).ReplaceRange(start, end, runs);
+  GetUndoTextNode(document, node).ReplaceRange(start, end, runs);
 }
 
 /** Estimates retained formatted-text payload in UTF-16 and attribute booleans. @param runs - Retained fragments. @returns Approximate scalar units. */
@@ -182,9 +181,9 @@ export function GetRunsPayloadSize(runs: readonly WriterTextRun[]): number {
 /** Clones one complete action cursor boundary. @param state - Stored state. @returns Independent state. */
 function cloneCursorState(state: SwUndoCursorState): SwUndoCursorState {
   return {
-    activeParagraphId: state.activeParagraphId,
-    ...(state.mark === undefined ? {} : { mark: { ...state.mark } }),
+    activeParagraph: state.activeParagraph,
+    ...(state.mark === undefined ? {} : { mark: { ...state.mark, node: state.mark.node } }),
     pendingCharacterAttributes: { ...state.pendingCharacterAttributes },
-    point: { ...state.point },
+    point: { ...state.point, node: state.point.node },
   };
 }

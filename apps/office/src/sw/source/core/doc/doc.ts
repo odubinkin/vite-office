@@ -1,210 +1,128 @@
-/**
- * @fileoverview Implements the Writer SwDoc aggregate from the pinned LibreOffice `sw/source/core/doc/docnew.cxx` ownership boundary.
- */
+/** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 
-import { SwModify } from "../../../inc/calbck";
 import { SwAttrPool } from "../attr/swatrset";
 import { SwNodes } from "../docnode/nodes";
-import {
-  createWriterTextFormatColl,
-  SwTextFormatColl,
-  type SwTextFormatCollSnapshot,
-  type WriterParagraphStyle,
-} from "./fmtcol";
-import { getWriterParagraphStyleDefinition } from "../../../inc/poolfmt";
-import { SwNumRule, type SwNumRuleSnapshot } from "./number";
-import type { SwTextNode, SwTextNodeSnapshot } from "../txtnode/ndtxt";
+import type { SwTextNode } from "../txtnode/ndtxt";
+import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
+import { DocumentListsManager } from "./DocumentListsManager";
+import { DocumentSettingManager } from "./DocumentSettingManager";
+import { DocumentStateManager } from "./DocumentStateManager";
+import { DocumentStylePoolManager } from "./DocumentStylePoolManager";
+import type { SwTextFormatColl, WriterParagraphStyle } from "./fmtcol";
+import type { SwNumRule } from "./number";
+import type { SwAtomicModelHint } from "../../../inc/hints";
+import { SfxUndoManager } from "../../../../svl/source/undo/undo";
+import type { SwUndoRedoContext } from "../undo/undobj";
 
-/** Cycle-free persisted state of the currently implemented SwDoc subset. */
-export interface SwDocSnapshot {
-  /** Document-owned numbering-rule definitions. */
-  readonly numRules: readonly SwNumRuleSnapshot[];
-  /** Ordered regular-content text nodes; fixed sections are recreated by SwNodes. */
-  readonly textNodes: readonly SwTextNodeSnapshot[];
-  /** Document-owned paragraph style collections. */
-  readonly textFormatCollections: readonly SwTextFormatCollSnapshot[];
-  /** Writer model schema discriminator. */
-  readonly swModelVersion: 6;
-}
-
-/** Owns only the Writer document model graph. */
-export class SwDoc extends SwModify {
+/** Final Writer document aggregate; notification and domain policies are composed managers. */
+export class SwDoc {
   private readonly attrPool: SwAttrPool;
-  private readonly textFormatCollections: SwTextFormatColl[] = [];
-  private readonly textFormatCollectionsById = new Map<string, SwTextFormatColl>();
-  private readonly numRules = new Map<string, SwNumRule>();
+  private readonly contentOperationsManager: DocumentContentOperationsManager;
+  private readonly listsManager: DocumentListsManager;
+  private readonly settingManager = new DocumentSettingManager();
+  private readonly stateManager = new DocumentStateManager();
+  private readonly stylePoolManager: DocumentStylePoolManager;
+  private readonly undoManager = new SfxUndoManager<SwUndoRedoContext>();
   public readonly nodes: SwNodes;
 
-  /** Creates a Writer document graph with an optional initial text node. @param initialTextNodeId - Optional initial node identity. @returns Nothing. */
-  public constructor(initialTextNodeId?: string) {
-    super();
+  /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
+  public constructor(createInitialTextNode: boolean | string = true) {
     this.attrPool = new SwAttrPool(this);
-    this.GetTextFormatColl("default");
+    this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
+    this.listsManager = new DocumentListsManager(this.stateManager);
     this.nodes = new SwNodes(this);
-    if (initialTextNodeId !== undefined) this.nodes.MakeTextNode(initialTextNodeId);
+    this.contentOperationsManager = new DocumentContentOperationsManager();
+    if (createInitialTextNode !== false)
+      this.nodes.MakeTextNode(
+        typeof createInitialTextNode === "string" ? createInitialTextNode : "writer-paragraph-1",
+      );
   }
 
   /** Returns Writer's complete node array. @returns Owned node array. */
   public GetNodes(): SwNodes {
     return this.nodes;
   }
-
-  /** Returns Writer's document-owned attribute pool. @returns SwAttrPool. */
+  /** Returns the document attribute pool. @returns SwAttrPool. */
   public GetAttrPool(): SwAttrPool {
     return this.attrPool;
   }
-
-  /** Returns the default paragraph style collection. @returns Default SwTextFormatColl. */
+  /** Returns content-operation ownership. @returns Content manager. */
+  public GetDocumentContentOperationsManager(): DocumentContentOperationsManager {
+    return this.contentOperationsManager;
+  }
+  /** Returns list and numbering ownership. @returns List manager. */
+  public GetDocumentListsManager(): DocumentListsManager {
+    return this.listsManager;
+  }
+  /** Returns settings ownership. @returns Settings manager. */
+  public GetDocumentSettingManager(): DocumentSettingManager {
+    return this.settingManager;
+  }
+  /** Returns mutation state and notifications. @returns State manager. */
+  public GetDocumentStateManager(): DocumentStateManager {
+    return this.stateManager;
+  }
+  /** Routes a model mutation to the state manager without making SwDoc a broadcaster. @param hint - Model delta. @returns Nothing. */
+  public NotifyModelChange(hint: SwAtomicModelHint): void {
+    this.stateManager.NotifyModelChange(hint);
+  }
+  /** Returns style-pool ownership. @returns Style manager. */
+  public GetDocumentStylePoolManager(): DocumentStylePoolManager {
+    return this.stylePoolManager;
+  }
+  /** Returns Writer's document-owned undo manager. @returns Undo manager. */
+  public GetUndoManager(): SfxUndoManager<SwUndoRedoContext> {
+    return this.undoManager;
+  }
+  /** Returns the default paragraph collection. @returns Default collection. */
   public GetDfltTextFormatColl(): SwTextFormatColl {
-    return this.textFormatCollections[0] as SwTextFormatColl;
+    return this.stylePoolManager.GetDfltTextFormatColl();
   }
-
-  /** Returns the document-owned paragraph style table. @returns Ordered style collections. */
+  /** Returns document paragraph collections. @returns Ordered collections. */
   public GetTextFormatColls(): readonly SwTextFormatColl[] {
-    return this.textFormatCollections;
+    return this.stylePoolManager.GetTextFormatColls();
   }
-
-  /** Finds one supported paragraph style collection. @param id - Programmatic style identity. @returns Matching collection, when present. */
+  /** Finds a supported paragraph collection. @param id - Programmatic identity. @returns Existing collection. */
   public FindTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl | undefined {
-    return this.textFormatCollectionsById.get(id);
+    return this.stylePoolManager.FindTextFormatColl(id);
   }
-
-  /** Returns one supported paragraph style or throws for a broken style table. @param id - Programmatic style identity. @returns Matching collection. */
+  /** Finds or creates a paragraph collection. @param id - Programmatic identity. @returns Document collection. */
   public GetTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl {
-    const existing = this.FindTextFormatColl(id);
-    if (existing !== undefined) return existing;
-    const definition = getWriterParagraphStyleDefinition(id);
-    if (definition === undefined) throw new Error(`Unknown SwTextFormatColl: ${id}`);
-    const parent =
-      definition.parentId === undefined ? undefined : this.GetTextFormatColl(definition.parentId);
-    const collection = createWriterTextFormatColl(this.attrPool, definition, parent);
-    this.textFormatCollectionsById.set(id, collection);
-    this.textFormatCollections.push(collection);
-    collection.SetNextTextFormatColl(
-      definition.followId === id ? collection : this.GetTextFormatColl(definition.followId),
-    );
-    return collection;
+    return this.stylePoolManager.GetTextFormatColl(id);
   }
-
-  /** Adds a document-owned numbering rule. @param rule - New rule. @returns Stored rule. */
+  /** Adds a numbering rule. @param rule - Source rule. @returns Stored rule. */
   public AddNumRule(rule: SwNumRule): SwNumRule {
-    if (this.numRules.has(rule.GetName()))
-      throw new Error(`Duplicate SwNumRule: ${rule.GetName()}`);
-    const stored = rule.clone();
-    this.numRules.set(stored.GetName(), stored);
-    this.CallSwClientNotify({ kind: "numbering-changed", ruleName: stored.GetName() });
-    return stored;
+    return this.listsManager.AddNumRule(rule);
   }
-
-  /** Finds a numbering rule by the name stored in SwNumRuleItem. @param name - Rule name. @returns Matching rule, when present. */
+  /** Finds a numbering rule. @param name - Rule name. @returns Matching rule. */
   public FindNumRulePtr(name: string): SwNumRule | undefined {
-    return this.numRules.get(name);
+    return this.listsManager.FindNumRulePtr(name);
   }
-
-  /** Returns all document-owned numbering rules. @returns Rules in insertion order. */
+  /** Returns numbering rules. @returns Rule table. */
   public GetNumRuleTable(): readonly SwNumRule[] {
-    return [...this.numRules.values()];
+    return this.listsManager.GetNumRuleTable();
   }
-
-  /** Finds or creates a rule with stable level-format semantics. @param name - Rule name. @param kind - Bullet or numbering family. @param level - Level whose format must agree. @returns Document-owned rule. */
+  /** Finds or creates a compatible numbering rule. @param name - Rule name. @param kind - Rule family. @param level - Checked level. @returns Document rule. */
   public EnsureNumRule(name: string, kind: "bullet" | "numbered", level = 0): SwNumRule {
-    const existing = this.FindNumRulePtr(name);
-    if (existing !== undefined) {
-      if (existing.GetNumFormat(level).GetKind() !== kind)
-        throw new Error(`SwNumRule ${name} has a different format at level ${level}.`);
-      return existing;
-    }
-    return this.AddNumRule(new SwNumRule(name, kind));
+    return this.listsManager.EnsureNumRule(name, kind, level);
   }
-
-  /** Returns body text nodes as a read-only browser projection. @returns Ordered body text nodes. */
+  /** Returns body text nodes. @returns Ordered body content. */
   public get paragraphs(): readonly SwTextNode[] {
     return this.nodes.getTextNodes();
   }
-
-  /** Runs one semantic Writer operation as a single notification transaction. @param mutation - Model mutation. @returns Mutation result. */
+  /** Runs one semantic model transaction. @param mutation - Mutation callback. @returns Callback result. */
   public RunModelTransaction<Result>(mutation: () => Result): Result {
-    return this.RunNotificationTransaction(mutation);
+    return this.stateManager.RunModelTransaction(mutation);
   }
-
-  /** Announces model disposal and safely detaches every client. @returns Nothing. */
+  /** Disposes the document notification graph. @returns Nothing. */
   public Dispose(): void {
-    this.CallSwClientNotify({ kind: "document-disposed" });
-    this.DisposeModify();
+    this.stateManager.Dispose();
   }
+}
 
-  /** Creates an independent document graph for transaction-history snapshots. @returns Cloned document graph. */
-  public clone(): SwDoc {
-    return SwDoc.fromSnapshot(this.toSnapshot());
-  }
-
-  /** Serializes the graph without its ownership cycles. @returns Versioned Writer snapshot. */
-  public toSnapshot(): SwDocSnapshot {
-    return {
-      numRules: this.GetNumRuleTable().map(
-        /** Serializes one document numbering rule. @param rule - Document-owned rule. @returns Rule snapshot. */
-        function serializeNumRule(rule): SwNumRuleSnapshot {
-          return rule.toSnapshot();
-        },
-      ),
-      swModelVersion: 6,
-      textNodes: this.paragraphs.map(
-        /** Serializes one regular body text node. @param node - Canonical SwTextNode. @returns Persisted node record. */
-        function serializeTextNode(node): SwTextNodeSnapshot {
-          return node.toSnapshot();
-        },
-      ),
-      textFormatCollections: this.textFormatCollections.map(
-        /** Serializes one paragraph style collection. @param collection - Document-owned style. @returns Style snapshot. */
-        function serializeTextFormatColl(collection): SwTextFormatCollSnapshot {
-          return collection.toSnapshot();
-        },
-      ),
-    };
-  }
-
-  /** Restores a canonical Writer graph from a validated current snapshot. @param snapshot - Current model snapshot. @returns Restored document graph. */
-  public static fromSnapshot(snapshot: SwDocSnapshot): SwDoc {
-    const document = new SwDoc();
-    document.restoreTextFormatCollections(snapshot.textFormatCollections);
-    snapshot.numRules.forEach(
-      /** Restores one document numbering rule. @param ruleSnapshot - Persisted rule. @returns Nothing. */
-      function restoreNumRule(ruleSnapshot): void {
-        document.AddNumRule(SwNumRule.fromSnapshot(ruleSnapshot));
-      },
-    );
-    document.nodes.restoreContent(snapshot.textNodes);
-    return document;
-  }
-
-  /** Restores attributes, names, and inheritance for the bounded style table. @param snapshots - Persisted style definitions. @returns Nothing. */
-  private restoreTextFormatCollections(snapshots: readonly SwTextFormatCollSnapshot[]): void {
-    snapshots.forEach(
-      /** Restores collection-local state before linking parents. @param snapshot - Persisted style definition. @returns Nothing. */
-      (snapshot): void => {
-        const collection = this.GetTextFormatColl(snapshot.id);
-        collection.SetFormatName(snapshot.name);
-        collection.ResetAllFormatAttr();
-        collection.GetAttrSet().restoreSnapshots(snapshot.items);
-      },
-    );
-    snapshots.forEach(
-      /** Restores follow links after collection state. @param snapshot - Persisted collection. @returns Nothing. */ (
-        snapshot,
-      ) => {
-        this.GetTextFormatColl(snapshot.id).SetNextTextFormatColl(
-          this.GetTextFormatColl(snapshot.followId),
-        );
-      },
-    );
-    snapshots.forEach(
-      /** Restores collection inheritance after every collection exists. @param snapshot - Persisted style definition. @returns Nothing. */
-      (snapshot): void => {
-        const collection = this.GetTextFormatColl(snapshot.id);
-        collection.SetDerivedFrom(
-          snapshot.parentId === undefined ? undefined : this.GetTextFormatColl(snapshot.parentId),
-        );
-      },
-    );
-  }
+/** Creates a Writer document; the optional label is accepted only by browser fixtures and is not stored in the model. @param projectionLabel - Optional non-blank external label. @returns New document. */
+export function createWriterDocument(projectionLabel?: string): SwDoc {
+  if (projectionLabel !== undefined && projectionLabel.trim().length === 0)
+    throw new Error("Paragraph label must not be blank.");
+  return new SwDoc(projectionLabel ?? true);
 }

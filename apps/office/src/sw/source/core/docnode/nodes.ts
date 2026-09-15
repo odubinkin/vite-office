@@ -4,7 +4,7 @@
 
 import type { SwDoc } from "../doc/doc";
 import { SwEndNode, SwStartNode, type SwNode } from "./node";
-import { SwTextNode, type SwTextNodeSnapshot } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
 
 /** Owns every Writer model node and the fixed non-content/content section sentinels. */
 export class SwNodes {
@@ -99,6 +99,17 @@ export class SwNodes {
     );
   }
 
+  /** Allocates a non-colliding external projection label without storing it in document persistence. @returns Available label. */
+  public GetUniqueTextNodeLabel(): string {
+    let ordinal = this.getTextNodes().length + 1;
+    let candidate = `writer-paragraph-${ordinal}`;
+    while (this.findTextNode(candidate) !== undefined) {
+      ordinal += 1;
+      candidate = `writer-paragraph-${ordinal}`;
+    }
+    return candidate;
+  }
+
   /** Inserts a new text node immediately before the content end sentinel. @param id - Stable node identity. @param text - Initial text. @returns Inserted text node. */
   public MakeTextNode(id: string, text = ""): SwTextNode {
     if (id.trim().length === 0) throw new Error("Text node id must not be blank.");
@@ -111,7 +122,7 @@ export class SwNodes {
       text,
     );
     this.nodeArray.splice(this.endOfContent.GetIndex(), 0, node);
-    this.document.CallSwClientNotify({ index: node.GetIndex(), kind: "node-inserted", nodeId: id });
+    this.document.NotifyModelChange({ index: node.GetIndex(), kind: "node-inserted" });
     return node;
   }
 
@@ -122,10 +133,9 @@ export class SwNodes {
     if (this.findTextNode(node.id) !== undefined)
       throw new Error(`Duplicate paragraph: ${node.id}`);
     this.nodeArray.splice(source.GetIndex() + 1, 0, node);
-    this.document.CallSwClientNotify({
+    this.document.NotifyModelChange({
       index: node.GetIndex(),
       kind: "node-inserted",
-      nodeId: node.id,
     });
   }
 
@@ -142,7 +152,7 @@ export class SwNodes {
     else node.CollapseContentIndicesTo(previous as SwTextNode, (previous as SwTextNode).Len());
     const nodeIndex = node.GetIndex();
     this.nodeArray.splice(nodeIndex, 1);
-    this.document.CallSwClientNotify({ index: nodeIndex, kind: "node-removed", nodeId: node.id });
+    this.document.NotifyModelChange({ index: nodeIndex, kind: "node-removed" });
   }
 
   /** Replaces one body node in place while preserving every registered content index. @param node - Removed node. @param replacement - Same-document replacement. @returns Nothing. */
@@ -155,8 +165,8 @@ export class SwNodes {
       throw new Error(`Duplicate paragraph: ${replacement.id}`);
     node.MoveAllContentIndicesTo(replacement);
     this.nodeArray[index] = replacement;
-    this.document.CallSwClientNotify({ index, kind: "node-removed", nodeId: node.id });
-    this.document.CallSwClientNotify({ index, kind: "node-inserted", nodeId: replacement.id });
+    this.document.NotifyModelChange({ index, kind: "node-removed" });
+    this.document.NotifyModelChange({ index, kind: "node-inserted" });
   }
 
   /** Moves one body text node by one adjacent text-node position. @param node - Moved text node. @param delta - Minus or plus one position. @returns Nothing. */
@@ -172,12 +182,11 @@ export class SwNodes {
     const otherIndex = other.GetIndex();
     this.nodeArray[currentIndex] = other;
     this.nodeArray[otherIndex] = node;
-    this.document.CallSwClientNotify({
+    this.document.NotifyModelChange({
       index: currentIndex,
       kind: "node-inserted",
-      nodeId: other.id,
     });
-    this.document.CallSwClientNotify({ index: otherIndex, kind: "node-inserted", nodeId: node.id });
+    this.document.NotifyModelChange({ index: otherIndex, kind: "node-inserted" });
   }
 
   /** Copies body text nodes from another array into this array's content section. @param source - Source node array. @returns Nothing. */
@@ -185,26 +194,10 @@ export class SwNodes {
     source.getTextNodes().forEach(
       /** Clones one source text node before the content end sentinel. @param node - Source body node. @returns Nothing. */
       (node): void => {
-        this.insertSnapshot(node.toSnapshot());
+        const clone = node.CloneTo(this);
+        this.nodeArray.splice(this.endOfContent.GetIndex(), 0, clone);
       },
     );
-  }
-
-  /** Replaces the empty body with persisted text-node snapshots. @param snapshots - Ordered persisted text nodes. @returns Nothing. */
-  public restoreContent(snapshots: readonly SwTextNodeSnapshot[]): void {
-    this.getTextNodes().forEach(
-      /** Removes an existing restored body node. @param node - Existing body text node. @returns Nothing. */
-      (node): void => {
-        this.nodeArray.splice(node.GetIndex(), 1);
-      },
-    );
-    snapshots.forEach(
-      /** Restores one ordered body text node. @param snapshot - Persisted node record. @returns Nothing. */
-      (snapshot): void => {
-        this.insertSnapshot(snapshot);
-      },
-    );
-    if (this.getTextNodes().length === 0) throw new Error("SwNodes content section is empty.");
   }
 
   /** Returns the current position of a node owned by this array. @param node - Owned node. @returns Current array offset. */
@@ -212,6 +205,12 @@ export class SwNodes {
     const index = this.nodeArray.indexOf(node);
     if (index < 0) throw new Error("SwNode is disconnected from its SwNodes array.");
     return index;
+  }
+
+  /** Returns a current offset for connected nodes. @param node - Candidate node. @returns Offset or undefined. */
+  public indexOfOrUndefined(node: SwNode): number | undefined {
+    const index = this.nodeArray.indexOf(node);
+    return index < 0 ? undefined : index;
   }
 
   /** Creates one fixed start/end section pair and returns its end sentinel. @param name - Section identity component. @param parent - Optional parent section. @returns Created end sentinel. */
@@ -232,13 +231,6 @@ export class SwNodes {
     const node = new SwEndNode(this, `__sw_${name}`, start);
     this.nodeArray.push(node);
     start.setEndOfSection(node);
-    return node;
-  }
-
-  /** Restores and inserts one persisted text node. @param snapshot - Persisted text-node state. @returns Restored text node. */
-  private insertSnapshot(snapshot: SwTextNodeSnapshot): SwTextNode {
-    const node = SwTextNode.fromSnapshot(this, this.endOfContent.StartOfSectionNode(), snapshot);
-    this.nodeArray.splice(this.endOfContent.GetIndex(), 0, node);
     return node;
   }
 }

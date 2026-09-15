@@ -1,7 +1,13 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
 
 import { describe, expect, it } from "vitest";
-import { encodeSfxPoolItem } from "../../../browser/persistence/item-codec";
+import { encodeSfxItemSet, encodeSfxPoolItem } from "../../../browser/persistence/item-codec";
+import {
+  decodeWriterDocument,
+  decodeWriterDocument as normalizeWriterParagraphFormatting,
+  encodeWriterDocument,
+  encodeWriterDocument as serializeWriterDocument,
+} from "../../../browser/persistence/writer-document-codec";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
@@ -35,13 +41,7 @@ import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatColl } from "./fmtcol";
 import { SwNumFormat, SwNumRule } from "./number";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
-import {
-  createWriterDocument,
-  normalizeWriterParagraphFormatting,
-  serializeWriterDocument,
-  SwDoc,
-  type WriterDocument,
-} from "./writer";
+import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc";
 
 /** Creates one canonical Writer fixture. @param id - Document identity. @returns Writer graph. */
 function createFixture(id = "writer-attrs"): WriterDocument {
@@ -181,8 +181,8 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(heading.GetNextTextFormatColl()).toBe(textBody);
     heading.SetNextTextFormatColl(parent);
     expect(heading.GetNextTextFormatColl()).toBe(parent);
-    expect(parent.toSnapshot()).not.toHaveProperty("parentId");
-    expect(heading.toSnapshot()).toMatchObject({ id: "heading-1", parentId: "heading" });
+    expect(parent.DerivedFrom()).toBeUndefined();
+    expect((heading.DerivedFrom() as SwFormatColl).GetName()).toBe("Heading");
   });
 
   it("specializes SwAttrSet and guards content-node collection ownership" /** Covers Writer typed accessors, clones, and content-format type checks. @returns Nothing; assertions inspect subtype behavior. */, function specializesWriterSets(): void {
@@ -199,7 +199,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const populated = set.CloneAsValue();
     const empty = set.CloneAsValue(false);
     expect(populated).toBeInstanceOf(SwAttrSet);
-    expect(populated.toSnapshot()).toEqual(set.toSnapshot());
+    expect(encodeSfxItemSet(populated)).toEqual(encodeSfxItemSet(set));
     expect(empty.Count()).toBe(0);
     const genericFormat = new SwFormatColl(pool, "Generic");
     const genericNode = new GenericContentNode(
@@ -262,7 +262,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(handle?.Get(RES_CHRATR_WEIGHT)).toBeInstanceOf(SvxWeightItem);
     expect(handle?.Get(RES_CHRATR_POSTURE)).toBeInstanceOf(SvxPostureItem);
     expect(handle?.Get(RES_CHRATR_UNDERLINE)).toBeInstanceOf(SvxUnderlineItem);
-    const restored = writer.clone();
+    const restored = decodeWriterDocument(encodeWriterDocument(writer));
     expect(restored.paragraphs[0]?.runs).toEqual(node.runs);
     expect(restored.paragraphs[0]?.GetpSwpHints()?.Get(0).format).not.toBe(
       node.GetpSwpHints()?.Get(0).format,
@@ -282,7 +282,8 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(stored.GetKind()).toBe("numbered");
     expect(stored.GetDefaultListId()).toBe("list-id-1");
     expect(stored.clone()).not.toBe(stored);
-    expect(stored.clone().toSnapshot()).toEqual(stored.toSnapshot());
+    expect(stored.clone()).toMatchObject({});
+    expect(stored.clone().GetDefaultListId()).toBe(stored.GetDefaultListId());
     expect(writer.FindNumRulePtr("List 1")).toBe(stored);
     expect(writer.FindNumRulePtr("missing")).toBeUndefined();
     expect(writer.GetNumRuleTable()).toEqual([stored]);
@@ -339,21 +340,6 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
           new SwNumRule("Rule", "none" as "bullet"),
       ),
     ).toThrow("bullet or numbered");
-    expect(
-      throwing(
-        /** Restores an invalid rule format. @returns Invalid rule. */ () =>
-          SwNumRule.fromSnapshot({
-            formats: Array.from(
-              { length: 10 },
-              /** Creates an invalid format snapshot. @returns Invalid format. */ () => ({
-                kind: "none" as "bullet",
-              }),
-            ),
-            listId: "id",
-            name: "Rule",
-          }),
-      ),
-    ).toThrow("bullet or numbered");
     const mixedFormats = Array.from(
       { length: 10 },
       /** Creates a per-level numbering format. @param _unused - Unused array slot. @param level - Zero-based level. @returns Numbering format. */
@@ -382,8 +368,8 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 6 });
-    expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", text: "" });
+    expect(snapshot).toMatchObject({ swModelVersion: 7 });
+    expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", runs: [] });
     expect(snapshot.textNodes[0]).not.toHaveProperty("alignment");
     const restored = normalizeWriterParagraphFormatting(snapshot);
     expect(restored).not.toBe(writer);
@@ -394,7 +380,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(restored.paragraphs[0]?.list).toEqual({ kind: "bullet", level: 1, styleId: "Bullets" });
     const copied = new SwDoc();
     copied.nodes.copyContentFrom(restored.nodes);
-    expect(copied.paragraphs[0]?.toSnapshot()).toEqual(restored.paragraphs[0]?.toSnapshot());
+    expect(copied.paragraphs[1]?.runs).toEqual(restored.paragraphs[0]?.runs);
   });
 
   it("rejects obsolete snapshot schemas instead of preserving pre-canonical models" /** Keeps the core contract limited to the current LO-shaped schema. @returns Nothing. */, function rejectsObsoleteSchemas(): void {

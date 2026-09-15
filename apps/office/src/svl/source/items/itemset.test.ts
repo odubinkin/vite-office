@@ -1,7 +1,11 @@
 /** @fileoverview Verifies the bounded SfxPoolItem, SfxItemPool, and SfxItemSet contracts ported from SVL. */
 
 import { describe, expect, it } from "vitest";
-import { encodeSfxPoolItem } from "../../../sw/browser/persistence/item-codec";
+import {
+  decodeSfxItemSet,
+  encodeSfxItemSet,
+  encodeSfxPoolItem,
+} from "../../../sw/browser/persistence/item-codec";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
 import { SfxItemPool } from "./itempool";
@@ -217,7 +221,7 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
           ): number => item.Which(),
         ),
     ).toEqual([1, 2]);
-    expect(child.toSnapshot()).toEqual([
+    expect(encodeSfxItemSet(child)).toEqual([
       { value: "child", which: 1 },
       { value: 7, which: 2 },
     ]);
@@ -228,7 +232,7 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(emptyClone.Count()).toBe(0);
     expect(emptyClone.GetParent()).toBe(parent);
     const cloned = child.Clone();
-    expect(cloned.toSnapshot()).toEqual(child.toSnapshot());
+    expect(encodeSfxItemSet(cloned)).toEqual(encodeSfxItemSet(child));
     expect(cloned.ClearItem()).toBe(1);
     expect(cloned.ClearItem()).toBe(0);
     const otherPool = createPool();
@@ -236,8 +240,8 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(crossPoolClone.GetPool()).toBe(otherPool);
     expect(crossPoolClone.GetParent()).toBeUndefined();
     const restored = new SfxItemSet(pool, [[1, 2]]);
-    restored.restoreSnapshots(child.toSnapshot());
-    expect(restored.toSnapshot()).toEqual(child.toSnapshot());
+    decodeSfxItemSet(restored, encodeSfxItemSet(child));
+    expect(encodeSfxItemSet(restored)).toEqual(encodeSfxItemSet(child));
     child.SetParent(undefined);
     expect(child.GetParent()).toBeUndefined();
   });

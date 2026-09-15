@@ -84,20 +84,20 @@ bounds for content operations.
 
 Like LibreOffice, the interactive browser path mutates the identity-bearing
 `SwDoc` graph through `SwWrtShell` and records action-local undo objects in the
-document shell's `SfxUndoManager`. React observes immutable presentation
+document-owned `SfxUndoManager`. React observes immutable presentation
 snapshots published by the persistent session; it does not require a cloned
-document root. `writer.ts` now exposes construction, model types, and
-persistence serialization only; interactive commands have no functional-clone
-alternative.
+document root. `doc.ts` exposes construction and the canonical model aggregate;
+browser persistence codecs remain outside Writer core, and interactive commands
+have no functional-clone alternative.
 
-Persistence accepts only the split target snapshot: transport `schemaVersion: 1`
+Persistence accepts only the split target snapshot: transport `schemaVersion: 5`
 contains shell-owned `documentState` and a model-only `writerModel` with
-`swModelVersion: 5`. The model snapshot records the complete built-in paragraph-style
-pool (including pool/group, parent, and follow identities), document-owned style and
-numbering definitions, text-node identities, direct item deltas, and text
-hints; identity, title, lifecycle, save/recovery generations, and medium state
-never enter `SwDoc`. `SwDoc.fromSnapshot()` reconstructs model ownership and
-inheritance links. Retired combined DTO/snapshot roots are rejected rather than
+`swModelVersion: 7`. The browser codec records the complete materialized
+paragraph-style pool, document-owned numbering definitions, ordered text-node
+content, direct item deltas, and text hints. Text-node projection identities,
+title, lifecycle, save/recovery generations, and medium state never enter
+`SwDoc`. The browser decoder reconstructs model ownership and inheritance links.
+Retired combined DTO/snapshot roots are rejected rather than
 adapted.
 
 ## Deliberate remaining gaps

@@ -25,7 +25,7 @@ export class SwUndoAttr extends SwUndo {
 
   /** Creates a direct-format action. @param paragraphId - Target node. @param start - Formatted range start. @param beforeRuns - Original hints projected as runs. @param afterRuns - Resulting hints projected as runs. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
-    private readonly paragraphId: string,
+    private readonly paragraph: SwTextNode,
     private readonly start: number,
     beforeRuns: readonly WriterTextRun[],
     afterRuns: readonly WriterTextRun[],
@@ -46,7 +46,7 @@ export class SwUndoAttr extends SwUndo {
   protected override UndoImpl(context: SwUndoRedoContext): void {
     ReplaceUndoRange(
       context.GetDoc(),
-      this.paragraphId,
+      this.paragraph,
       this.start,
       this.start + GetUndoRunsLength(this.afterRuns),
       this.beforeRuns,
@@ -57,7 +57,7 @@ export class SwUndoAttr extends SwUndo {
   protected override RedoImpl(context: SwUndoRedoContext): void {
     ReplaceUndoRange(
       context.GetDoc(),
-      this.paragraphId,
+      this.paragraph,
       this.start,
       this.start + GetUndoRunsLength(this.beforeRuns),
       this.afterRuns,
@@ -78,14 +78,14 @@ export function CreateWriterFontUndo(
   const afterRuns = applyWriterTextRangeFont(beforeRuns, 0, GetUndoRunsLength(beforeRuns), family);
   return JSON.stringify(beforeRuns) === JSON.stringify(afterRuns)
     ? undefined
-    : new SwUndoAttr(paragraph.id, start, beforeRuns, afterRuns, before, after);
+    : new SwUndoAttr(paragraph, start, beforeRuns, afterRuns, before, after);
 }
 
 /** Reversible RES_PARATR_ADJUST change for one paragraph. */
 export class SwUndoParagraphFormat extends SwUndo {
   /** Creates one alignment action. @param paragraphId - Target node. @param beforeAlignment - Original adjustment. @param afterAlignment - New adjustment. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
-    private readonly paragraphId: string,
+    private readonly paragraph: SwTextNode,
     private readonly beforeAlignment: WriterParagraphAlignment,
     private readonly afterAlignment: WriterParagraphAlignment,
     before: SwUndoCursorState,
@@ -101,11 +101,11 @@ export class SwUndoParagraphFormat extends SwUndo {
 
   /** Restores the previous paragraph adjustment. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraphId).SetParagraphAlignment(this.beforeAlignment);
+    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphAlignment(this.beforeAlignment);
   }
 
   /** Reapplies the paragraph adjustment. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraphId).SetParagraphAlignment(this.afterAlignment);
+    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphAlignment(this.afterAlignment);
   }
 }

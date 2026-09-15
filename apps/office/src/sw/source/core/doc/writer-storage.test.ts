@@ -10,14 +10,14 @@ import type {
 } from "../../../../sfx2/source/doc/docfile";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
-import { createWriterDocument, type WriterDocument } from "./writer";
+import { createWriterDocument, type SwDoc as WriterDocument } from "./doc";
 import {
   createWriterSnapshot,
   loadWriterDocument,
   restoreWriterSnapshot,
   saveWriterDocument,
   type WriterSnapshotState,
-} from "./writer-storage";
+} from "../../../browser/persistence/writer-storage";
 
 /** Live target-schema storage fixture. */
 interface WriterFixture {
@@ -61,8 +61,8 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
       id: "writer-store",
       state: {
         documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
-        schemaVersion: 4,
-        writerModel: { swModelVersion: 6 },
+        schemaVersion: 5,
+        writerModel: { swModelVersion: 7 },
       },
       version: 1,
     });
@@ -126,15 +126,15 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     expect(
       /** Restores a retired combined root. @returns Invalid result. */ () =>
         restoreWriterSnapshot({ ...current, state: oldState }, "primary"),
-    ).toThrow("incompatible with corrected Writer attribute identifiers");
+    ).toThrow("schema is unsupported");
     const wrongSchema = {
       ...current,
-      state: { ...current.state, schemaVersion: 1 as 4 },
+      state: { ...current.state, schemaVersion: 1 as 5 },
     };
     expect(
       /** Restores an unknown schema version. @returns Invalid result. */ () =>
         restoreWriterSnapshot(wrongSchema, "primary"),
-    ).toThrow("incompatible with corrected Writer attribute identifiers");
+    ).toThrow("schema is unsupported");
   });
 
   it("rejects malformed target lifecycle records" /** Exercises target-schema runtime validation without legacy fallbacks. @returns Nothing. */, function rejectsMalformedLifecycle(): void {

@@ -4,17 +4,27 @@ import type { SfxHint } from "../../svl/source/notify/broadcast";
 
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
-  | Readonly<{ formatId?: string; kind: "attribute-set-changed"; nodeId?: string }>
+  | Readonly<{
+      formatId?: string;
+      kind: "attribute-set-changed";
+      nodeId?: string;
+      nodeIndex?: number | undefined;
+    }>
   | Readonly<{ kind: "cursor-selection-changed" }>
   | Readonly<{ kind: "document-disposed" }>
   | Readonly<{ kind: "document-modified"; modified: boolean }>
   | Readonly<{ kind: "document-replaced" }>
   | Readonly<{ kind: "document-state-changed" }>
-  | Readonly<{ kind: "format-inheritance-changed"; formatId: string; nodeId?: string }>
-  | Readonly<{ index: number; kind: "node-inserted"; nodeId: string }>
-  | Readonly<{ index: number; kind: "node-removed"; nodeId: string }>
-  | Readonly<{ kind: "node-content-changed"; nodeId: string }>
-  | Readonly<{ kind: "numbering-changed"; nodeId?: string; ruleName?: string }>
+  | Readonly<{
+      kind: "format-inheritance-changed";
+      formatId: string;
+      nodeId?: string;
+      nodeIndex?: number | undefined;
+    }>
+  | Readonly<{ index: number; kind: "node-inserted"; nodeId?: string }>
+  | Readonly<{ index: number; kind: "node-removed"; nodeId?: string }>
+  | Readonly<{ kind: "node-content-changed"; nodeId?: string; nodeIndex?: number | undefined }>
+  | Readonly<{ kind: "numbering-changed"; nodeIndex?: number; ruleName?: string }>
   | Readonly<{ kind: "medium-operation-changed" }>;
 
 /** One bounded notification transaction, possibly containing several atomic model hints. */

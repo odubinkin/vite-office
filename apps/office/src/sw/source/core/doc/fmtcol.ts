@@ -2,7 +2,6 @@
  * @fileoverview Reimplements bounded SwFormatColl and SwTextFormatColl hierarchy from pinned `sw/source/core/doc/fmtcol.cxx`.
  */
 
-import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { WRITER_TEXT_FORMAT_COLL_WHICH_RANGES } from "../../../inc/hintids";
 import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
@@ -20,24 +19,6 @@ export const WRITER_PARAGRAPH_STYLES: readonly string[] = WRITER_PARAGRAPH_STYLE
 
 /** Identifies one current Writer paragraph-style collection. */
 export type WriterParagraphStyle = string;
-
-/** Persisted paragraph-style collection definition. */
-export interface SwTextFormatCollSnapshot {
-  /** Programmatic collection identity. */
-  readonly id: WriterParagraphStyle;
-  /** Stable built-in LibreOffice pool identity. */
-  readonly poolId: number;
-  /** Built-in style category. */
-  readonly group: WriterParagraphStyleGroup;
-  /** Direct collection attribute deltas. */
-  readonly items: readonly SfxPoolItemSnapshot[];
-  /** User-facing format name. */
-  readonly name: string;
-  /** Optional parent collection identity. */
-  readonly parentId?: WriterParagraphStyle;
-  /** Style selected for the paragraph created by Enter. */
-  readonly followId: WriterParagraphStyle;
-}
 
 /** Named Writer format collection; unlike SwFormat it is not automatic. */
 export class SwFormatColl extends SwFormat {
@@ -73,20 +54,6 @@ export class SwTextFormatColl extends SwFormatColl {
   /** Returns the follow-style collection. @returns Next paragraph style. */
   public GetNextTextFormatColl(): SwTextFormatColl {
     return this.nextTextFormatColl;
-  }
-
-  /** Creates a persisted collection definition. @returns Style snapshot. */
-  public toSnapshot(): SwTextFormatCollSnapshot {
-    const parent = this.DerivedFrom();
-    return {
-      id: this.id,
-      followId: this.nextTextFormatColl.id,
-      group: this.group,
-      items: this.GetAttrSet().toSnapshot(),
-      name: this.GetName(),
-      poolId: this.poolId,
-      ...(parent instanceof SwTextFormatColl ? { parentId: parent.id } : {}),
-    };
   }
 }
 

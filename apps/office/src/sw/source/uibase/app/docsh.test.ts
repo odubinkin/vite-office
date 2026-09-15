@@ -5,8 +5,11 @@ import { describe, expect, it } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { DocumentSnapshot, SfxMediumInput } from "../../../../sfx2/source/doc/docfile";
-import { createWriterDocument } from "../../core/doc/writer";
-import { createWriterSnapshot, type WriterSnapshotState } from "../../core/doc/writer-storage";
+import { createWriterDocument } from "../../core/doc/doc";
+import {
+  createWriterSnapshot,
+  type WriterSnapshotState,
+} from "../../../browser/persistence/writer-storage";
 import type { OdtFilterService } from "../../filter/xml/odt-filter-service";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 import { SwDocShell } from "./docsh";
@@ -252,7 +255,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       /** Captures a shell hint. @param hint - Typed hint. @returns New array length. */ (hint) =>
         hints.push(hint.kind),
     );
-    active.document.CallSwClientNotify({ kind: "document-disposed" });
+    active.document.GetDocumentStateManager().CallSwClientNotify({ kind: "document-disposed" });
     expect(active.shell.GetDocumentState().contentGeneration).toBe(0);
     hints.length = 0;
     active.writerShell.InsertText("p-1", "A", 1, "insertText");

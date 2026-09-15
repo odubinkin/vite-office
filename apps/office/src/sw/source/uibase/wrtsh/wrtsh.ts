@@ -7,18 +7,17 @@ import {
 import type { SfxUndoAction, SfxUndoManager } from "../../../../svl/source/undo/undo";
 import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
-import {
-  SwPaM,
-  SwPosition,
-  type WriterCharacterAttributes,
-  type WriterCharacterFormat,
-  type WriterDocument,
-  type WriterHyperlink,
-  type WriterParagraph,
-  type WriterParagraphAlignment,
-  type WriterParagraphStyle,
-  type WriterTextRun,
-} from "../../core/doc/writer";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import type { SwDoc as WriterDocument } from "../../core/doc/doc";
+import type { WriterParagraphStyle } from "../../core/doc/fmtcol";
+import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
+import type {
+  SwTextNode as WriterParagraph,
+  WriterCharacterAttributes,
+  WriterCharacterFormat,
+  WriterParagraphAlignment,
+  WriterTextRun,
+} from "../../core/txtnode/ndtxt";
 import {
   createWriterTextRuns,
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
@@ -37,7 +36,7 @@ import {
 import type { WriterListLevelCommand } from "../shells/listsh";
 import { createWriterTextCommandRegistry } from "../shells/writercommands";
 import type { SwDocShell } from "../app/docsh";
-import { getActiveWriterParagraph, getNextWriterParagraphId } from "../uiview/viewfunc";
+import { getActiveWriterParagraph } from "../uiview/viewfunc";
 import { SwUndoInsert } from "../../core/undo/unins";
 import {
   SwUndoDelete,
@@ -373,7 +372,7 @@ export class SwWrtShell extends SwModify {
       const group = getWriterInsertGroup(change, inputType, before, caretOffset);
       return this.ApplyAction(
         new SwUndoInsert(
-          paragraph.id,
+          paragraph,
           change.offset,
           [{ attributes: { ...this.pendingCharacterAttributes }, text: change.text }],
           group,
@@ -387,7 +386,7 @@ export class SwWrtShell extends SwModify {
       const grouping = getWriterDeleteGrouping(change, inputType, before, caretOffset);
       return this.ApplyAction(
         new SwUndoDelete(
-          paragraph.id,
+          paragraph,
           change.start,
           CopyTextRangeRuns(paragraph, change.start, change.end),
           grouping?.direction ?? (inputType === "deleteContentBackward" ? "backspace" : "delete"),
@@ -400,7 +399,7 @@ export class SwWrtShell extends SwModify {
     }
     return this.ApplyAction(
       new SwUndoReplace(
-        paragraph.id,
+        paragraph,
         0,
         CopyTextRangeRuns(paragraph, 0, paragraph.Len()),
         createWriterTextRuns(text),
@@ -432,7 +431,7 @@ export class SwWrtShell extends SwModify {
       const end = Math.max(mark.GetContentIndex(), point.GetContentIndex());
       return this.ApplyAction(
         new SwUndoReplace(
-          paragraph.id,
+          paragraph,
           start,
           CopyTextRangeRuns(paragraph, start, end),
           [{ attributes: { ...this.pendingCharacterAttributes }, text }],
@@ -446,7 +445,7 @@ export class SwWrtShell extends SwModify {
     const group = allowGrouping ? getWriterTypingCharacterClass(text) : undefined;
     return this.ApplyAction(
       new SwUndoInsert(
-        paragraph.id,
+        paragraph,
         offset,
         [{ attributes: { ...this.pendingCharacterAttributes }, text }],
         group,
@@ -470,7 +469,7 @@ export class SwWrtShell extends SwModify {
       if (start === end) return false;
       return this.ApplyAction(
         new SwUndoDelete(
-          paragraph.id,
+          paragraph,
           start,
           CopyTextRangeRuns(paragraph, start, end),
           direction,
@@ -502,7 +501,7 @@ export class SwWrtShell extends SwModify {
         : undefined;
     return this.ApplyAction(
       new SwUndoDelete(
-        paragraph.id,
+        paragraph,
         start,
         CopyTextRangeRuns(paragraph, start, end),
         direction,
@@ -605,7 +604,7 @@ export class SwWrtShell extends SwModify {
     const nextOffset = range.start + insertionLength;
     return this.ApplyAction(
       new SwUndoReplace(
-        paragraph.id,
+        paragraph,
         range.start,
         removedRuns,
         insertedRuns,
@@ -671,17 +670,15 @@ export class SwWrtShell extends SwModify {
     if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
     if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.Len())
       throw new Error("Split offset is outside the paragraph.");
-    const nextParagraphId = getNextWriterParagraphId(document);
     this.ApplyAction(
       new SwUndoSplitNode(
-        paragraph.id,
+        paragraph,
         offset,
-        nextParagraphId,
         this.CaptureCursorState(),
-        this.CreateCollapsedCursorState(nextParagraphId, 0),
+        this.CreateCollapsedCursorState(paragraph.id, 0),
       ),
     );
-    return nextParagraphId;
+    return this.GetActiveParagraph().id;
   }
 
   /** Joins a non-first paragraph into its preceding node. @param paragraphId - Paragraph whose preceding break is removed. @returns Whether a merge occurred. */
@@ -697,9 +694,9 @@ export class SwWrtShell extends SwModify {
     const removed = document.paragraphs[index] as WriterParagraph;
     return this.ApplyAction(
       new SwUndoJoinParagraphs(
-        preceding.id,
+        preceding,
         offset,
-        removed.toSnapshot(),
+        removed,
         this.CaptureCursorState(),
         this.CreateCollapsedCursorState(preceding.id, offset),
       ),
@@ -795,7 +792,7 @@ export class SwWrtShell extends SwModify {
       format,
     );
     return this.ApplyAction(
-      new SwUndoAttr(paragraph.id, selectedRange.start, beforeRuns, afterRuns, before, before),
+      new SwUndoAttr(paragraph, selectedRange.start, beforeRuns, afterRuns, before, before),
     );
   }
 
@@ -854,7 +851,7 @@ export class SwWrtShell extends SwModify {
     if (paragraph.alignment === alignment) return false;
     const cursor = this.CaptureCursorState();
     return this.ApplyAction(
-      new SwUndoParagraphFormat(paragraph.id, paragraph.alignment, alignment, cursor, cursor),
+      new SwUndoParagraphFormat(paragraph, paragraph.alignment, alignment, cursor, cursor),
     );
   }
 
@@ -864,7 +861,7 @@ export class SwWrtShell extends SwModify {
     if (paragraph.style === style) return false;
     const cursor = this.CaptureCursorState();
     return this.ApplyAction(
-      new SwUndoFormatColl(paragraph.id, paragraph.style, style, cursor, cursor),
+      new SwUndoFormatColl(paragraph, paragraph.style, style, cursor, cursor),
     );
   }
 
@@ -876,7 +873,7 @@ export class SwWrtShell extends SwModify {
     if (paragraph.list.kind === kind) return false;
     const cursor = this.CaptureCursorState();
     return this.ApplyAction(
-      new SwUndoInsNum(paragraph.id, paragraph.list, { ...paragraph.list, kind }, cursor, cursor),
+      new SwUndoInsNum(paragraph, paragraph.list, { ...paragraph.list, kind }, cursor, cursor),
     );
   }
 
@@ -890,13 +887,7 @@ export class SwWrtShell extends SwModify {
     if (level < 0 || level > WRITER_MAX_LIST_LEVEL) return false;
     const cursor = this.CaptureCursorState();
     return this.ApplyAction(
-      new SwUndoNumLevel(
-        paragraph.id,
-        paragraph.list,
-        { ...paragraph.list, level },
-        cursor,
-        cursor,
-      ),
+      new SwUndoNumLevel(paragraph, paragraph.list, { ...paragraph.list, level }, cursor, cursor),
     );
   }
 
@@ -906,7 +897,7 @@ export class SwWrtShell extends SwModify {
     const nextList = { kind: paragraph.listKind, level: paragraph.listLevel } as const;
     if (target.list.kind === nextList.kind && target.list.level === nextList.level) return false;
     const cursor = this.CaptureCursorState();
-    return this.ApplyAction(new SwUndoInsNum(target.id, target.list, nextList, cursor, cursor));
+    return this.ApplyAction(new SwUndoInsNum(target, target.list, nextList, cursor, cursor));
   }
 
   /** Restores the preceding Writer history state. @returns Whether navigation occurred. */
@@ -949,33 +940,40 @@ export class SwWrtShell extends SwModify {
 
   /** Captures point, mark direction, active paragraph, and pending attributes for one action boundary. @returns Complete cursor state. */
   private CaptureCursorState(): SwUndoCursorState {
+    const point = this.cursor.GetPoint();
+    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
     return createWriterUndoCursorState(
-      this.GetCursorSelection(),
-      this.activeParagraphId,
+      point.GetNode() as WriterParagraph,
+      point.GetContentIndex(),
+      mark?.GetNode() as WriterParagraph | undefined,
+      mark?.GetContentIndex(),
+      this.GetActiveParagraph(),
       this.pendingCharacterAttributes,
     );
   }
 
   /** Creates a collapsed action endpoint while retaining pending direct attributes. @param paragraphId - Target node identity. @param offset - Target content offset. @returns Complete cursor state. */
   private CreateCollapsedCursorState(paragraphId: string, offset: number): SwUndoCursorState {
-    return createWriterCollapsedCursorState(paragraphId, offset, this.pendingCharacterAttributes);
+    const paragraph = this.GetDoc().nodes.findTextNode(paragraphId);
+    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+    return createWriterCollapsedCursorState(paragraph, offset, this.pendingCharacterAttributes);
   }
 
   /** Restores action-owned cursor state against the current mutable SwDoc graph. @param state - Stored cursor boundary. @returns Nothing. */
   private RestoreCursorState(state: SwUndoCursorState): void {
     const document = this.GetDoc();
     const pointNode =
-      document.nodes.findTextNode(state.point.paragraphId) ??
-      (document.paragraphs[0] as WriterParagraph);
+      state.point.node.GetDoc() === document
+        ? state.point.node
+        : (document.paragraphs[0] as WriterParagraph);
     const point = new SwPosition(pointNode, Math.min(state.point.offset, pointNode.Len()));
-    const markNode =
-      state.mark === undefined ? undefined : document.nodes.findTextNode(state.mark.paragraphId);
+    const markNode = state.mark?.node.GetDoc() === document ? state.mark.node : undefined;
     const mark =
       state.mark === undefined || markNode === undefined
         ? undefined
         : new SwPosition(markNode, Math.min(state.mark.offset, markNode.Len()));
     this.activeParagraphId =
-      document.nodes.findTextNode(state.activeParagraphId)?.id ?? pointNode.id;
+      state.activeParagraph.GetDoc() === document ? state.activeParagraph.id : pointNode.id;
     this.pendingCharacterAttributes = { ...state.pendingCharacterAttributes };
     this.cursor.Assign(point, mark);
   }

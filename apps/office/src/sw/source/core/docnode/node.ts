@@ -13,6 +13,13 @@ import type { SwNodes } from "./nodes";
 /** Identifies the node categories implemented by the current Writer model slice. */
 export type SwNodeType = "end" | "start" | "text";
 
+/**
+ * Keeps diagnostic/projection labels outside the canonical node objects.
+ * Writer positions use node references and indexes; browser-facing labels are
+ * retained only in this weak side table for the current transitional UI.
+ */
+const nodeProjectionLabels = new WeakMap<SwNode, string>();
+
 /** Base class of every Writer document model element. */
 export abstract class SwNode extends SwContentIndexRegistry {
   /**
@@ -25,11 +32,20 @@ export abstract class SwNode extends SwContentIndexRegistry {
    */
   protected constructor(
     private readonly nodes: SwNodes,
-    public readonly id: string,
+    id: string,
     private readonly nodeType: SwNodeType,
     private readonly startOfSection?: SwStartNode,
   ) {
     super();
+    nodeProjectionLabels.set(this, id);
+  }
+
+  /** Returns the external diagnostic/projection label without storing it on the node. @returns Current label. */
+  public get id(): string {
+    const id = nodeProjectionLabels.get(this);
+    /* v8 ignore next -- every SwNode constructor installs its weak projection label. */
+    if (id === undefined) throw new Error("SwNode projection label is unavailable.");
+    return id;
   }
 
   /** Returns the owning node array. @returns Owning SwNodes. */
@@ -148,7 +164,10 @@ export abstract class SwContentNode extends SwNode {
     const set = this.GetOrCreateSwAttrSet();
     const changed = "Which" in itemOrSet ? set.Put(itemOrSet) !== undefined : set.PutSet(itemOrSet);
     if (changed)
-      this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
+      this.GetDoc().NotifyModelChange({
+        kind: "attribute-set-changed",
+        nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+      });
     return changed;
   }
 
@@ -158,7 +177,10 @@ export abstract class SwContentNode extends SwNode {
     const removed = this.attributeSet.ClearItem(which) !== 0;
     if (this.attributeSet.Count() === 0) this.attributeSet = undefined;
     if (removed)
-      this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
+      this.GetDoc().NotifyModelChange({
+        kind: "attribute-set-changed",
+        nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+      });
     return removed;
   }
 
@@ -168,7 +190,10 @@ export abstract class SwContentNode extends SwNode {
     const removed = this.attributeSet.ClearItem();
     this.attributeSet = undefined;
     if (removed > 0)
-      this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
+      this.GetDoc().NotifyModelChange({
+        kind: "attribute-set-changed",
+        nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+      });
     return removed;
   }
 
@@ -180,10 +205,10 @@ export abstract class SwContentNode extends SwNode {
     if (previous !== formatColl) {
       this.formatColl = formatColl;
       this.attributeSet?.SetParent(formatColl.GetAttrSet());
-      this.GetDoc().CallSwClientNotify({
+      this.GetDoc().NotifyModelChange({
         formatId: formatColl.GetName(),
         kind: "format-inheritance-changed",
-        nodeId: this.id,
+        nodeIndex: this.GetNodes().indexOfOrUndefined(this),
       });
     }
     return previous;

@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { createWriterDocument } from "../../core/doc/writer";
+import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh";
 import { applyWriterTextRangeFont } from "../../core/txtnode/ndtxt";
@@ -94,10 +94,11 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         point: { offset: 0, paragraphId: "missing" },
       }),
     ).toBeUndefined();
+    const paragraph = document.paragraphs[0] as NonNullable<(typeof document.paragraphs)[number]>;
     const before = {
-      activeParagraphId: "missing",
+      activeParagraph: paragraph,
       pendingCharacterAttributes: { bold: false, italic: false, underline: false },
-      point: { offset: 0, paragraphId: "missing" },
+      point: { node: paragraph, offset: 0 },
     };
     expect(
       /** Creates a range action for a stale paragraph. @returns Invalid action. */ () =>

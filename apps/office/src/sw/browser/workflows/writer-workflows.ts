@@ -7,9 +7,9 @@ import { createDocument } from "../../../sfx2/source/doc/objsh";
 import type { PrimarySavePort, StoredDocumentOpenPort } from "../../../sfx2/source/doc/docfile";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../vcl/browser/browser-clipboard";
-import type { WriterSnapshotState } from "../../source/core/doc/writer-storage";
-import { loadWriterDocument, saveWriterDocument } from "../../source/core/doc/writer-storage";
-import type { WriterDocument } from "../../source/core/doc/writer";
+import type { WriterSnapshotState } from "../persistence/writer-storage";
+import { loadWriterDocument, saveWriterDocument } from "../persistence/writer-storage";
+import type { SwDoc as WriterDocument } from "../../source/core/doc/doc";
 import {
   parseWriterClipboardPaste,
   type WriterClipboardPaste,

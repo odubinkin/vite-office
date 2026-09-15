@@ -35,7 +35,10 @@ export class SwClient extends SfxListener<SwModelHint> {
   /** Detaches a dying source. @param broadcaster - Disposed broadcaster. @returns Nothing. */
   public override BroadcasterDying(broadcaster: SfxBroadcaster<SwModelHint>): void {
     super.BroadcasterDying(broadcaster);
-    if (broadcaster === this.registeredIn) this.registeredIn = undefined;
+    if (broadcaster !== this.registeredIn) return;
+    const parent = this.registeredIn.GetRegisteredIn();
+    this.registeredIn = undefined;
+    if (parent !== undefined) this.RegisterToModify(parent);
   }
 
   /** Ends the single Writer registration. @returns Nothing. */
@@ -73,6 +76,11 @@ export class SwModify
     this.registeredIn = undefined;
   }
 
+  /** Returns the parent modify used for Writer-style reparenting. @returns Parent source. */
+  public GetRegisteredIn(): SwModify | undefined {
+    return this.registeredIn;
+  }
+
   /** Receives and propagates one parent notification. @param broadcaster - Parent source. @param hint - Typed hint. @returns Nothing. */
   public Notify(broadcaster: SfxBroadcaster<SwModelHint>, hint: SwModelHint): void {
     if (broadcaster !== this.registeredIn) return;
@@ -84,7 +92,10 @@ export class SwModify
 
   /** Detaches a parent that has begun destruction. @param broadcaster - Dying source. @returns Nothing. */
   public BroadcasterDying(broadcaster: SfxBroadcaster<SwModelHint>): void {
-    if (broadcaster === this.registeredIn) this.registeredIn = undefined;
+    if (broadcaster !== this.registeredIn) return;
+    const parent = this.registeredIn.GetRegisteredIn();
+    this.registeredIn = undefined;
+    if (parent !== undefined) this.RegisterToModify(parent);
   }
 
   /** Emits or queues one atomic Writer hint. @param hint - Atomic typed change. @returns Nothing. */
@@ -110,8 +121,8 @@ export class SwModify
 
   /** Detaches parent and clients safely. @returns Nothing. */
   public DisposeModify(): void {
-    this.EndListening();
     this.PrepareForDestruction();
+    this.EndListening();
     this.pendingHints = [];
     this.notificationDepth = 0;
   }

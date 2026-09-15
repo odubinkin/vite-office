@@ -14,7 +14,7 @@ import type { RecoverySavePort } from "../../../../svl/source/misc/recovery";
 import { createDownloadFilename } from "../../../../vcl/browser/browser-download";
 import { createWriterViewControllerFactory } from "../../../browser/workflows/writer-workflows";
 import { SwDoc } from "../../core/doc/doc";
-import type { WriterSnapshotState } from "../../core/doc/writer-storage";
+import type { WriterSnapshotState } from "../../../browser/persistence/writer-storage";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../app/docsh";
 import { createWriterBrowserSessionServices, createWriterDocumentSession } from "../app/swmodule";

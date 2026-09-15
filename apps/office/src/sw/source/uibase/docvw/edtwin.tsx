@@ -2,7 +2,8 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { getWriterParagraphListMarker, type WriterParagraph } from "../../core/doc/writer";
+import { getWriterParagraphListMarker } from "../../core/doc/number";
+import type { WriterParagraphProjection as WriterParagraph } from "../../../browser/presentation/writer-view-projection";
 import { WriterEditableParagraph } from "./edtwin-paragraph";
 import {
   BrowserWriterSelectionMapper,

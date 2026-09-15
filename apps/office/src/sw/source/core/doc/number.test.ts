@@ -89,17 +89,13 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
 
   it("validates complete per-level rule snapshots" /** Covers current-schema invariants without compatibility fallbacks. @returns Nothing. */, function validatesRules(): void {
     expect(
+      /** Rejects a runtime-invalid numbering kind. @returns Invalid format. */ () =>
+        new SwNumFormat("none" as never),
+    ).toThrow("must be bullet or numbered");
+    expect(
       /** Constructs an incomplete rule. @returns Invalid rule. */ () =>
         new SwNumRule("short", [new SwNumFormat("bullet")]),
     ).toThrow("define every supported list level");
-    expect(
-      /** Restores a rule without level formats. @returns Invalid rule. */ () =>
-        SwNumRule.fromSnapshot({ formats: undefined as never, listId: "id", name: "missing" }),
-    ).toThrow("formats are invalid");
-    expect(
-      /** Restores a rule with no level formats. @returns Invalid rule. */ () =>
-        SwNumRule.fromSnapshot({ formats: [], listId: "id", name: "empty" }),
-    ).toThrow("formats are invalid");
     const rule = new SwNumRule("levels", "numbered");
     for (const level of [-1, 0.5, 10])
       expect(
@@ -112,19 +108,14 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     ).toThrow("at most one Unicode code point");
     const bullet = new SwNumFormat("bullet", "●");
     expect(bullet.GetBulletChar()).toBe("●");
-    expect(
-      SwNumRule.fromSnapshot(
-        new SwNumRule("dots", [
-          bullet,
-          ...Array.from(
-            { length: 9 },
-            /** Creates one default-bullet level. @returns Bullet format. */ () =>
-              new SwNumFormat("bullet"),
-          ),
-        ]).toSnapshot(),
-      )
-        .GetNumFormat(0)
-        .GetBulletChar(),
-    ).toBe("●");
+    const dots = new SwNumRule("dots", [
+      bullet,
+      ...Array.from(
+        { length: 9 },
+        /** Creates one default bullet level. @returns Bullet format. */ () =>
+          new SwNumFormat("bullet"),
+      ),
+    ]);
+    expect(dots.clone().GetNumFormat(0).GetBulletChar()).toBe("●");
   });
 });

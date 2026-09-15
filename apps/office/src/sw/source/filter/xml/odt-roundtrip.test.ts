@@ -33,7 +33,8 @@ import {
   RES_PARATR_NUMRULE,
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../../core/para/paratr";
-import { createWriterDocument } from "../../core/doc/writer";
+import { createWriterDocument } from "../../core/doc/doc";
+import { encodeWriterDocument } from "../../../browser/persistence/writer-document-codec";
 import { readOdtDocument, SwXMLReader } from "./swxml";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml, parseOdfXml } from "./xmlimp";
@@ -218,11 +219,10 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(content).toContain("<text:line-break/>");
     expect(content).toContain("<text:list-style");
     expect(content).toContain("<text:list-item>");
-
     const restored = await readOdtDocument(bytes, metadata());
-    expect((await new SwXMLReader().Read(bytes, metadata())).document.toSnapshot()).toEqual(
-      restored.document.toSnapshot(),
-    );
+    expect(
+      encodeWriterDocument((await new SwXMLReader().Read(bytes, metadata())).document),
+    ).toEqual(encodeWriterDocument(restored.document));
     expect(restored.documentState.title).toBe("Round & Trip");
     expect(restored.document.GetDfltTextFormatColl().GetName()).toBe("Body < text");
     expect(restored.document.GetDfltTextFormatColl().GetAttrSet().GetWeight().GetBoolValue()).toBe(

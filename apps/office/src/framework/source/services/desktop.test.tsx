@@ -10,13 +10,13 @@ import { Desktop } from "./desktop";
 import { createOfficeModuleDescriptors } from "./modulemanager";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import { createWriterDocument } from "../../../sw/source/core/doc/writer";
+import { createWriterDocument } from "../../../sw/source/core/doc/doc";
 import { readOdtDocument } from "../../../sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../../sw/source/filter/xml/wrtxml";
 import {
   saveWriterDocument,
   type WriterSnapshotState,
-} from "../../../sw/source/core/doc/writer-storage";
+} from "../../../sw/browser/persistence/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-storage";
 import { createWriterModuleFactory } from "../../../sw/source/uibase/app/swmodule";
 import { SwDocShell } from "../../../sw/source/uibase/app/docsh";
@@ -497,8 +497,9 @@ describe("App" /**
       await waitFor(
         /** Waits for restored text and load feedback. @returns A fulfilled polling promise. */
         async function verifiesLoadedDocument(): Promise<void> {
-          expect(editor).toHaveTextContent("Stored body");
-          expect(editor).toHaveClass("text-2xl", "font-bold");
+          const restoredEditor = screen.getByRole("textbox", { name: "Writer document text" });
+          expect(restoredEditor).toHaveTextContent("Stored body");
+          expect(restoredEditor).toHaveClass("text-2xl", "font-bold");
           expect(screen.getByText("Loaded local saved copy.")).toBeInTheDocument();
         },
       );
@@ -547,7 +548,7 @@ describe("App" /**
       fireEvent.click(screen.getByRole("button", { name: "Format" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
       fireEvent.click(screen.getByRole("menuitem", { name: /^Unordered List$/ }));
-      expect(screen.getByTestId("writer-list-marker-writer-paragraph-3")).toHaveTextContent("•");
+      expect(screen.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveTextContent("•");
     } finally {
       Object.defineProperty(globalThis, "indexedDB", {
         configurable: true,

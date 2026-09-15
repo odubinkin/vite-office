@@ -1,7 +1,14 @@
 /** @fileoverview Verifies the LibreOffice-shaped Writer node graph, model positions, selections, hints, and content-operation ownership. */
 
 import { describe, expect, it } from "vitest";
-import { encodeSfxPoolItem } from "../../../browser/persistence/item-codec";
+import {
+  decodeSwFormatINetFormat as restoreSwFormatINetFormat,
+  encodeSfxPoolItem,
+} from "../../../browser/persistence/item-codec";
+import {
+  decodeWriterDocument as normalizeWriterParagraphFormatting,
+  encodeWriterDocument as serializeWriterDocument,
+} from "../../../browser/persistence/writer-document-codec";
 
 import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -12,27 +19,15 @@ import {
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
-import {
-  createWriterDocument,
-  normalizeWriterParagraphFormatting,
-  serializeWriterDocument,
-  SwContentNode,
-  SwDoc,
-  SwEndNode,
-  SwNode,
-  SwNodeIndex,
-  SwPaM,
-  SwPosition,
-  SwStartNode,
-  type WriterDocument,
-} from "./writer";
+import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc";
+import { SwContentNode, SwEndNode, SwNode, SwStartNode } from "../docnode/node";
+import { SwNodeIndex, SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
-import { createSwpHintsFromSnapshot, SwpHints } from "../txtnode/ndhints";
+import { SwpHints } from "../txtnode/ndhints";
 import {
   createSwFormatAutoFormat,
   projectWriterCharacterAttributes,
   RES_TXTATR_AUTOFMT,
-  restoreSwFormatAutoFormat,
   SwFormatAutoFormat,
   SwTextAttr,
   type WriterCharacterAttributes,
@@ -40,7 +35,6 @@ import {
 import {
   equalWriterHyperlinks,
   normalizeWriterHyperlink,
-  restoreSwFormatINetFormat,
   SwFormatINetFormat,
 } from "../txtnode/fmtinfmt";
 
@@ -226,11 +220,6 @@ describe("Writer SwNodes graph" /** Groups node ownership and fixed-section test
           writer.nodes.moveTextNode(node, -1),
       ),
     ).toThrow("document boundary");
-    expect(
-      throwing(
-        /** Restores an empty body. @returns Nothing. */ () => writer.nodes.restoreContent([]),
-      ),
-    ).toThrow("content section is empty");
   });
 });
 
@@ -399,9 +388,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     ]);
     expect(hints.getHyperlink("ab", 0)).toEqual(hyperlink);
     expect(hints.getHyperlink("ab", 2)).toEqual(hyperlink);
-    expect(createSwpHintsFromSnapshot(pool, hints.toSnapshot()).toSnapshot()).toEqual(
-      hints.toSnapshot(),
-    );
+    expect(hints.clone().toTextRuns("ab", inherited)).toEqual(hints.toTextRuns("ab", inherited));
     expect(new SwpHints(pool).getHyperlink("", 0)).toBeUndefined();
     expect(
       throwing(
@@ -428,6 +415,11 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     expect(first.format.GetStyleHandle()).toBeInstanceOf(SfxItemSet);
     expect(first.format.Clone()).not.toBe(first.format);
     expect(first.format.Clone().equals(first.format)).toBe(true);
+    expect(first.format.QueryValue()).toEqual([
+      { value: 8, which: RES_CHRATR_WEIGHT },
+      { value: 8, which: 26 },
+      { value: 8, which: 31 },
+    ]);
     expect(first.format.equals(createSwFormatAutoFormat(pool, italic))).toBe(false);
     expect(first.format.equals(new SfxInt16Item(RES_TXTATR_AUTOFMT, 1))).toBe(false);
     expect(
@@ -439,16 +431,6 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     expect(
       projectWriterCharacterAttributes(new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES)),
     ).toEqual(plain);
-    for (const snapshot of [
-      { value: [], which: 52 },
-      { value: 1, which: RES_TXTATR_AUTOFMT },
-    ])
-      expect(
-        throwing(
-          /** Restores an invalid auto-format snapshot. @returns Invalid item. */ () =>
-            restoreSwFormatAutoFormat(pool, snapshot),
-        ),
-      ).toThrow("snapshot is invalid");
     first.dontExpand = true;
     first.dontExpandStart = true;
     first.dontMoveAttr = true;
@@ -469,9 +451,9 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     expect(hints.getCharacterAttributes("abcdef", 6, inherited)).toEqual(plain);
     const clone = hints.clone();
     expect(clone).not.toBe(hints);
-    expect(clone.toSnapshot()).toEqual(hints.toSnapshot());
+    expect(clone.toTextRuns("abcdef", inherited)).toEqual(hints.toTextRuns("abcdef", inherited));
     const clonedHint = first.clone(2);
-    expect(clonedHint.toSnapshot()).toMatchObject({ start: 3, end: 5 });
+    expect(clonedHint).toMatchObject({ start: 3, end: 5 });
     expect(clonedHint.dontExpand).toBe(true);
     first.SetEnd(4);
     expect(first.GetEnd()).toBe(4);
@@ -521,8 +503,8 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
           hints.getCharacterAttributes("abcd", 5, inherited),
       ),
     ).toThrow("outside the text node");
-    const restored = createSwpHintsFromSnapshot(pool, hints.toSnapshot());
-    expect(restored.toSnapshot()).toEqual(hints.toSnapshot());
+    const restored = hints.clone();
+    expect(restored.toTextRuns("abcd", inherited)).toEqual(hints.toTextRuns("abcd", inherited));
     expect(
       new SwpHints(pool, [new SwTextAttr(createSwFormatAutoFormat(pool, bold), 5, 6)]).toTextRuns(
         "ab",
@@ -628,13 +610,12 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
           node.AppendTextNode(foreign),
       ),
     ).toThrow("different documents");
-    const snapshot = node.toSnapshot();
-    const restored = SwTextNode.fromSnapshot(
-      writer.nodes,
-      writer.nodes.GetEndOfContent().StartOfSectionNode(),
-      { ...snapshot, formatCollId: "invalid" as "default" },
-    );
-    expect(restored).toMatchObject({ alignment: "justify", style: "default", text: "aYZd" });
+    const cloneDocument = createModelFixture("clone");
+    const restored = node.CloneTo(cloneDocument.nodes);
+    expect(restored.alignment).toBe(node.alignment);
+    expect(restored.style).toBe(node.style);
+    expect(restored.text).toBe("aYZd");
+    expect(createWriterDocument().paragraphs[0]?.CloneTo(cloneDocument.nodes).text).toBe("");
     node.SetText("plain");
     expect(node.runs).toEqual([{ attributes: plain, text: "plain" }]);
     node.SetText("pl");
@@ -659,6 +640,15 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     const first = writer.paragraphs[0] as SwTextNode;
     const second = writer.paragraphs[1] as SwTextNode;
     const manager = new DocumentContentOperationsManager();
+    expect(writer.GetDocumentContentOperationsManager()).toBeInstanceOf(
+      DocumentContentOperationsManager,
+    );
+    expect(writer.GetDocumentListsManager()).toBeDefined();
+    expect(writer.GetDocumentStylePoolManager()).toBeDefined();
+    const settings = writer.GetDocumentSettingManager();
+    expect(settings.get("HTML_MODE")).toBe(false);
+    settings.set("HTML_MODE", true);
+    expect(settings.get("HTML_MODE")).toBe(true);
     manager.InsertString(new SwPosition(first), "abcd");
     manager.InsertString(new SwPosition(first, 4), "");
     manager.ReplaceRange(new SwPaM(new SwPosition(first, 3), new SwPosition(first, 1)), [
@@ -689,20 +679,45 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
 
   it("round-trips the current SwDoc schema and rejects obsolete roots" /** Verifies current snapshot restoration and rejects non-canonical schemas. @returns Nothing; assertions inspect serialization. */, function restoresDocuments(): void {
     const writer = createModelFixture();
+    expect(createWriterDocument().paragraphs).toHaveLength(1);
     const current = normalizeWriterParagraphFormatting(serializeWriterDocument(writer));
     expect(current).toBeInstanceOf(SwDoc);
     expect(current).not.toBe(writer);
     expect(serializeWriterDocument(current)).toEqual(serializeWriterDocument(writer));
-    expect(normalizeWriterParagraphFormatting(writer)).toBe(writer);
     expect(
       normalizeWriterParagraphFormatting(serializeWriterDocument(writer)).paragraphs[0]?.id,
-    ).toBe("p-1");
+    ).toBe("writer-paragraph-1");
+    const encoded = serializeWriterDocument(writer);
+    expect(
+      throwing(
+        /** Decodes an invalid style identity. @returns Invalid document. */ () =>
+          normalizeWriterParagraphFormatting({
+            ...encoded,
+            textFormatCollections: [{ ...encoded.textFormatCollections[0], id: "invalid" }],
+          }),
+      ),
+    ).toThrow("style is invalid");
+    expect(
+      throwing(
+        /** Decodes an invalid node style. @returns Invalid document. */ () =>
+          normalizeWriterParagraphFormatting({
+            ...encoded,
+            textNodes: [{ ...encoded.textNodes[0], formatCollId: "invalid" }],
+          }),
+      ),
+    ).toThrow("paragraph style is invalid");
+    expect(
+      throwing(
+        /** Decodes an empty current-schema body. @returns Invalid document. */ () =>
+          normalizeWriterParagraphFormatting({ ...encoded, textNodes: [] }),
+      ),
+    ).toThrow("no body text node");
     expect(
       throwing(
         /** Normalizes a null root. @returns Invalid document. */ () =>
           normalizeWriterParagraphFormatting(null),
       ),
-    ).toThrow("invalid");
+    ).toThrow("schema is unsupported");
     expect(
       throwing(
         /** Normalizes an empty root. @returns Invalid document. */ () =>

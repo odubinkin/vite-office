@@ -72,24 +72,21 @@ export class SwFormatAutoFormat extends SfxPoolItem {
     return (
       other instanceof SwFormatAutoFormat &&
       other.Which() === this.Which() &&
-      equalSnapshots(other.styleHandle.toSnapshot(), this.styleHandle.toSnapshot())
+      equalItemSets(other.styleHandle, this.styleHandle)
     );
   }
 
   /** Exposes the contained item values to the persistence codec. @returns Nested item records. */
   public QueryValue(): readonly SfxPoolItemSnapshot[] {
-    return this.styleHandle.toSnapshot();
+    return this.styleHandle.entries().map(
+      /** Projects one nested item. @param item - Direct pooled item. @returns Primitive item record. */ (
+        item,
+      ) => ({
+        value: item.QueryValue(),
+        which: item.Which(),
+      }),
+    );
   }
-}
-
-/** Serializable representation of one bounded Writer text attribute. */
-export interface SwTextAttrSnapshot {
-  /** Exclusive text range end. */
-  readonly end: number;
-  /** Auto-format item stored by the hint. */
-  readonly format: SfxPoolItemSnapshot;
-  /** Inclusive text range start. */
-  readonly start: number;
 }
 
 /**
@@ -158,18 +155,6 @@ export class SwTextAttr<
     cloned.dontMoveAttr = this.dontMoveAttr;
     return cloned;
   }
-
-  /** Converts the attribute to cycle-free persisted data. @returns Attribute snapshot. */
-  public toSnapshot(): SwTextAttrSnapshot {
-    return {
-      end: this.end,
-      format: {
-        value: this.format.QueryValue(),
-        which: this.format.Which(),
-      },
-      start: this.start,
-    };
-  }
 }
 
 /** Creates a Writer auto-format item for direct character attributes. @param pool - Owning Writer attribute pool. @param attributes - Effective character properties. @param inherited - Inherited character properties used to retain only direct deltas. @returns Auto-format item. */
@@ -217,22 +202,17 @@ export function projectWriterCharacterAttributes(
   };
 }
 
-/** Restores one current auto-format snapshot. @param pool - Destination pool. @param snapshot - Nested item snapshot. @returns Restored auto-format item. */
-export function restoreSwFormatAutoFormat(
-  pool: SwAttrPool,
-  snapshot: SfxPoolItemSnapshot,
-): SwFormatAutoFormat {
-  if (snapshot.which !== RES_TXTATR_AUTOFMT || !Array.isArray(snapshot.value))
-    throw new Error("SwFormatAutoFormat snapshot is invalid.");
-  const items = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
-  items.restoreSnapshots(snapshot.value);
-  return new SwFormatAutoFormat(items);
-}
-
-/** Compares ordered snapshots without leaking mutable item identities. @param left - First snapshots. @param right - Second snapshots. @returns Whether equal. */
-function equalSnapshots(
-  left: readonly SfxPoolItemSnapshot[],
-  right: readonly SfxPoolItemSnapshot[],
-): boolean {
-  return JSON.stringify(left) === JSON.stringify(right);
+/** Compares direct item values without a persistence-shaped intermediate. @param left - First set. @param right - Second set. @returns Whether equal. */
+function equalItemSets(left: SfxItemSet, right: SfxItemSet): boolean {
+  const leftItems = left.entries();
+  const rightItems = right.entries();
+  return (
+    leftItems.length === rightItems.length &&
+    leftItems.every(
+      /** Compares one ordered item. @param item - Left item. @param index - Ordered offset. @returns Whether values match. */ (
+        item,
+        index,
+      ) => item.equals(rightItems[index] as SfxPoolItem),
+    )
+  );
 }

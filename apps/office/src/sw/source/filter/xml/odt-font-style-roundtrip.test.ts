@@ -8,7 +8,8 @@ import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStre
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, RES_CHRATR_FONT } from "../../../inc/hintids";
 import { getWriterOdfStyleName, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
-import { createWriterDocument } from "../../core/doc/writer";
+import { createWriterDocument } from "../../core/doc/doc";
+import { encodeWriterDocument } from "../../../browser/persistence/writer-document-codec";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
@@ -228,7 +229,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     );
     const projectStyles =
       /** Projects file-relevant style state. @param document - Writer snapshot. @returns Comparable styles. */ (
-        document: ReturnType<typeof opened.document.toSnapshot>,
+        document: ReturnType<typeof encodeWriterDocument>,
       ) =>
         document.textFormatCollections.map(
           /** Projects one style. @param style - Snapshot style. @returns Comparable style. */ (
@@ -240,8 +241,8 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
             parentId: style.parentId,
           }),
         );
-    expect(projectStyles(reopened.document.toSnapshot())).toEqual(
-      projectStyles(opened.document.toSnapshot()),
+    expect(projectStyles(encodeWriterDocument(reopened.document))).toEqual(
+      projectStyles(encodeWriterDocument(opened.document)),
     );
     expect(reopened.document.paragraphs[0]?.style).toBe("numbering-1-cont");
     expect(reopened.document.paragraphs[0]?.runs[0]?.attributes.fontFamily).toBe("Noto Sans");

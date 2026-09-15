@@ -1,7 +1,7 @@
 /** @fileoverview Implements bounded Writer delete, replace, and join undo payloads from pinned undel.cxx. */
 
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
-import { SwTextNode, type SwTextNodeSnapshot, type WriterTextRun } from "../txtnode/ndtxt";
+import { SwTextNode, type WriterTextRun } from "../txtnode/ndtxt";
 import {
   CopyUndoRuns,
   GetRunsPayloadSize,
@@ -25,7 +25,7 @@ export class SwUndoDelete extends SwUndo {
 
   /** Creates one delete action. @param paragraphId - Target node. @param start - Deleted range start. @param deletedRuns - Removed formatted fragments. @param direction - Backspace or forward delete. @param group - Optional character grouping class. @param before - Cursor before deletion. @param after - Cursor after deletion. @returns Nothing. */
   public constructor(
-    private readonly paragraphId: string,
+    private readonly paragraph: SwTextNode,
     private start: number,
     deletedRuns: readonly WriterTextRun[],
     private readonly direction: SwUndoDeleteDirection,
@@ -46,7 +46,7 @@ export class SwUndoDelete extends SwUndo {
       this.group === undefined ||
       nextAction.group !== this.group ||
       nextAction.direction !== this.direction ||
-      nextAction.paragraphId !== this.paragraphId
+      nextAction.paragraph !== this.paragraph
     )
       return false;
     if (
@@ -69,12 +69,12 @@ export class SwUndoDelete extends SwUndo {
 
   /** Restores removed text and hints. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    ReplaceUndoRange(context.GetDoc(), this.paragraphId, this.start, this.start, this.deletedRuns);
+    ReplaceUndoRange(context.GetDoc(), this.paragraph, this.start, this.start, this.deletedRuns);
   }
 
   /** Deletes the retained range again. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraphId).EraseText(
+    GetUndoTextNode(context.GetDoc(), this.paragraph).EraseText(
       this.start,
       GetUndoRunsLength(this.deletedRuns),
     );
@@ -88,7 +88,7 @@ export class SwUndoReplace extends SwUndo {
 
   /** Creates one range replacement. @param paragraphId - Target node. @param start - Replacement start. @param removedRuns - Original range content. @param insertedRuns - Replacement content. @param comment - Command label. @param before - Cursor before replacement. @param after - Cursor after replacement. @returns Nothing. */
   public constructor(
-    private readonly paragraphId: string,
+    private readonly paragraph: SwTextNode,
     private readonly start: number,
     removedRuns: readonly WriterTextRun[],
     insertedRuns: readonly WriterTextRun[],
@@ -110,7 +110,7 @@ export class SwUndoReplace extends SwUndo {
   protected override UndoImpl(context: SwUndoRedoContext): void {
     ReplaceUndoRange(
       context.GetDoc(),
-      this.paragraphId,
+      this.paragraph,
       this.start,
       this.start + GetUndoRunsLength(this.insertedRuns),
       this.removedRuns,
@@ -121,7 +121,7 @@ export class SwUndoReplace extends SwUndo {
   protected override RedoImpl(context: SwUndoRedoContext): void {
     ReplaceUndoRange(
       context.GetDoc(),
-      this.paragraphId,
+      this.paragraph,
       this.start,
       this.start + GetUndoRunsLength(this.removedRuns),
       this.insertedRuns,
@@ -133,9 +133,9 @@ export class SwUndoReplace extends SwUndo {
 export class SwUndoJoinParagraphs extends SwUndo {
   /** Creates one join action. @param precedingParagraphId - Surviving leading node. @param joinOffset - Original leading text length. @param removedParagraph - Removed trailing node state. @param before - Cursor before join. @param after - Cursor after join. @returns Nothing. */
   public constructor(
-    private readonly precedingParagraphId: string,
+    private readonly precedingParagraph: SwTextNode,
     private readonly joinOffset: number,
-    private readonly removedParagraph: SwTextNodeSnapshot,
+    private readonly removedParagraph: SwTextNode,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
@@ -144,29 +144,22 @@ export class SwUndoJoinParagraphs extends SwUndo {
 
   /** Reports one removed paragraph payload. @returns Approximate serialized units. */
   public override GetPayloadSize(): number {
-    return JSON.stringify(this.removedParagraph).length;
+    return this.removedParagraph.Len() + this.removedParagraph.runs.length;
   }
 
   /** Splits the leading node and restores the exact removed node items and hints. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
     const document = context.GetDoc();
-    const preceding = GetUndoTextNode(document, this.precedingParagraphId);
-    const provisional = preceding.SplitContent(this.joinOffset, this.removedParagraph.id);
-    document.nodes.insertTextNodeAfter(preceding, provisional);
-    const restored = SwTextNode.fromSnapshot(
-      document.nodes,
-      preceding.StartOfSectionNode(),
-      this.removedParagraph,
-    );
-    document.nodes.replaceTextNode(provisional, restored);
+    const preceding = GetUndoTextNode(document, this.precedingParagraph);
+    preceding.EraseText(this.joinOffset);
+    document.nodes.insertTextNodeAfter(preceding, this.removedParagraph);
   }
 
   /** Joins the trailing node into its predecessor again. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
     const document = context.GetDoc();
-    const preceding = GetUndoTextNode(document, this.precedingParagraphId);
-    const removed = GetUndoTextNode(document, this.removedParagraph.id);
-    preceding.AppendTextNode(removed);
-    document.nodes.removeTextNode(removed);
+    const preceding = GetUndoTextNode(document, this.precedingParagraph);
+    preceding.AppendTextNode(this.removedParagraph);
+    document.nodes.removeTextNode(this.removedParagraph);
   }
 }

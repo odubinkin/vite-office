@@ -83,13 +83,12 @@ documentation have dedicated parity evidence.
 
 Mapped modules ordinarily use the exact LibreOffice filename. The exhaustive
 `filenameDivergences` manifest field and provenance gate allow the following
-five cases only; adding, removing, or renaming one must update both the table and
+four cases only; adding, removing, or renaming one must update both the table and
 machine-checked record.
 
 | Local browser module | Pinned upstream module | Reason |
 | --- | --- | --- |
 | `svl/source/misc/recovery.ts` | `svl/source/misc/lockfilecommon.cxx` | Browser recovery coordinator at the shared lockfile ownership boundary |
-| `sw/source/core/doc/writer.ts` | `sw/source/core/doc/docnew.cxx` | Browser command façade around the `SwDoc` graph rather than only document construction |
 | `sw/source/uibase/docvw/edtwin-paragraph.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | React paragraph decomposition beneath the one editor boundary |
 | `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Typed command declaration extracted from XML configuration |
 | `vcl/browser/browser-clipboard.ts` | `vcl/source/app/ClipboardBase.cxx` | Explicit static-browser clipboard platform adapter |
@@ -103,6 +102,14 @@ The same table now also includes the active ODT file-command boundary.
 | `editeng/source/items/paraitem.ts` | `editeng/source/items/paraitem.cxx` | `SvxAdjustItem` paragraph-alignment value |
 | `editeng/source/items/textitem.ts` | `editeng/source/items/textitem.cxx` | `SvxWeightItem`, `SvxPostureItem`, and `SvxUnderlineItem` character values |
 | `svl/source/items/poolitem.ts` | `svl/source/items/poolitem.cxx` | Base and primitive pooled item values |
+| `sw/source/core/doc/doc.ts` | `sw/source/core/doc/doc.cxx`, `docnew.cxx` | Final `SwDoc` aggregate composing document managers without a parallel Writer facade |
+| `sw/source/core/doc/DocumentListsManager.ts` | `sw/source/core/doc/DocumentListsManager.cxx` | Document list and numbering-rule ownership |
+| `sw/source/core/doc/DocumentSettingManager.ts` | `sw/source/core/doc/DocumentSettingManager.cxx` | Document setting ownership |
+| `sw/source/core/doc/DocumentStateManager.ts` | `sw/source/core/doc/DocumentStateManager.cxx` | Model revision state and batched mutation notifications |
+| `sw/source/core/doc/DocumentStylePoolManager.ts` | `sw/source/core/doc/DocumentStylePoolManager.cxx` | Paragraph-style pool ownership |
+| `sw/browser/persistence/writer-document-codec.ts` | Browser adaptation | Versioned primitive persistence projection outside Writer core |
+| `sw/browser/persistence/writer-storage.ts` | Browser adaptation | Browser storage orchestration outside Writer core |
+| `sw/browser/presentation/writer-view-projection.ts` | Browser adaptation | Immutable primitive React projection with external node labels |
 | `svl/source/items/itempool.ts` | `svl/source/items/itempool.cxx` | Pool defaults and persisted-item factories |
 | `svl/source/items/itemset.ts` | `svl/source/items/itemset.cxx` | Direct item deltas, parent/default lookup, state, clone, and clear operations |
 | `package/source/zipapi/CRC32.ts` | `package/source/zipapi/CRC32.cxx` | Incremental ZIP CRC-32 calculation |

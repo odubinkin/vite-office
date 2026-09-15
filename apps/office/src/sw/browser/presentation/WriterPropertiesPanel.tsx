@@ -3,7 +3,8 @@
  * claiming LibreOffice Writer Inspector ownership.
  */
 
-import type { WriterParagraphAlignment, WriterParagraphStyle } from "../../source/core/doc/writer";
+import type { WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
+import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import {
   getWriterParagraphStyleDefinition,
   type WriterParagraphStyleDefinition,

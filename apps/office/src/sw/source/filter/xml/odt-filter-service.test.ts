@@ -3,8 +3,8 @@
 import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { createWriterSnapshot } from "../../core/doc/writer-storage";
-import { createWriterDocument } from "../../core/doc/writer";
+import { createWriterSnapshot } from "../../../browser/persistence/writer-storage";
+import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import {
@@ -55,7 +55,9 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       "import:metadata",
       "import:mapping",
     ]);
-    expect(snapshot.state.writerModel).toMatchObject({ textNodes: [{ text: "worker body" }] });
+    expect(snapshot.state.writerModel).toMatchObject({
+      textNodes: [{ runs: [{ text: "worker body" }] }],
+    });
   });
 
   it("cooperatively cancels, honors AbortSignal, and rejects closed services" /** Covers all inline lifecycle stops. @returns Completion after assertions. */, async () => {

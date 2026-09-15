@@ -3,7 +3,7 @@
  */
 
 import type { SfxItemPool } from "./itempool";
-import type { SfxPoolItem, SfxPoolItemSnapshot } from "./poolitem";
+import type { SfxPoolItem } from "./poolitem";
 
 /** Matches LibreOffice's externally significant SfxItemState numeric values. */
 export enum SfxItemState {
@@ -154,26 +154,6 @@ export class SfxItemSet {
     if (includeItems)
       for (const [which, state] of this.itemStates) clone.SetItemState(which, state);
     return clone;
-  }
-
-  /** Serializes explicit deltas only. @returns Ordered item snapshots. */
-  public toSnapshot(): readonly SfxPoolItemSnapshot[] {
-    return this.entries().map(
-      /** Serializes one direct item. @param item - Explicit item delta. @returns Item snapshot. */
-      function serializeItem(item): SfxPoolItemSnapshot {
-        return { value: item.QueryValue(), which: item.Which() };
-      },
-    );
-  }
-
-  /** Restores and stores supported persisted deltas. @param snapshots - Persisted item records. @returns Nothing. */
-  public restoreSnapshots(snapshots: readonly SfxPoolItemSnapshot[]): void {
-    snapshots.forEach(
-      /** Restores one item through the pool. @param snapshot - Persisted item record. @returns Nothing. */
-      (snapshot): void => {
-        this.Put(this.pool.CreateItem(snapshot));
-      },
-    );
   }
 
   /** Reports whether this set accepts a WhichId. @param which - Candidate identity. @returns True when contained in any range. */

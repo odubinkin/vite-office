@@ -26,7 +26,7 @@ import {
   IndexedDbDocumentStorageAdapter,
   IndexedDbRecoveryStorageAdapter,
 } from "../../../../vcl/browser/indexeddb-storage";
-import type { WriterSnapshotState } from "../../core/doc/writer-storage";
+import type { WriterSnapshotState } from "../../../browser/persistence/writer-storage";
 import {
   createInlineOdtFilterService,
   type OdtFilterService,
