@@ -5,7 +5,11 @@ import { describe, expect, it } from "vitest";
 import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
-import { RES_CHRATR_WEIGHT, WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+import {
+  RES_CHRATR_WEIGHT,
+  RES_TXTATR_INETFMT,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../../inc/hintids";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import {
   createWriterDocument,
@@ -32,6 +36,12 @@ import {
   SwTextAttr,
   type WriterCharacterAttributes,
 } from "../txtnode/txatbase";
+import {
+  equalWriterHyperlinks,
+  normalizeWriterHyperlink,
+  restoreSwFormatINetFormat,
+  SwFormatINetFormat,
+} from "../txtnode/fmtinfmt";
 
 const bold: WriterCharacterAttributes = { bold: true, italic: false, underline: false };
 const italic: WriterCharacterAttributes = { bold: false, italic: true, underline: false };
@@ -306,6 +316,110 @@ describe("Writer SwPosition and SwPaM" /** Groups model cursor and range-directi
 });
 
 describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage tests. @returns Nothing; Vitest registers cases. */, function defineHintTests(): void {
+  it("owns, normalizes, compares, and restores hyperlink pool items", /** Covers the bounded SwFormatINetFormat value and snapshot contract. @returns Nothing. */ function managesHyperlinkItems(): void {
+    const hyperlink = {
+      name: "named",
+      styleName: "Internet_20_link",
+      targetFrame: "_blank",
+      url: "https://example.test/",
+      visitedStyleName: "Visited_20_Internet_20_Link",
+    };
+    expect(normalizeWriterHyperlink(hyperlink)).toEqual(hyperlink);
+    for (const value of [undefined, null, [], "link", {}, { url: "" }])
+      expect(normalizeWriterHyperlink(value)).toBeUndefined();
+    expect(
+      normalizeWriterHyperlink({
+        name: 1,
+        styleName: "",
+        targetFrame: null,
+        url: "relative/path",
+        visitedStyleName: false,
+      }),
+    ).toEqual({ url: "relative/path" });
+    expect(equalWriterHyperlinks(undefined, undefined)).toBe(true);
+    expect(equalWriterHyperlinks(hyperlink, { ...hyperlink })).toBe(true);
+    for (const changed of [
+      { ...hyperlink, url: "changed" },
+      { ...hyperlink, name: "changed" },
+      { ...hyperlink, targetFrame: "_self" },
+      { ...hyperlink, styleName: "changed" },
+      { ...hyperlink, visitedStyleName: "changed" },
+    ])
+      expect(equalWriterHyperlinks(hyperlink, changed)).toBe(false);
+    const item = new SwFormatINetFormat(hyperlink);
+    expect(item.Which()).toBe(RES_TXTATR_INETFMT);
+    expect(item.GetValue()).toBe(hyperlink.url);
+    expect(item.GetHyperlink()).toEqual(hyperlink);
+    expect(item.GetHyperlink()).not.toBe(hyperlink);
+    expect(item.Clone()).not.toBe(item);
+    expect(item.Clone().equals(item)).toBe(true);
+    expect(item.equals(new SfxInt16Item(RES_TXTATR_INETFMT, 1))).toBe(false);
+    expect(item.equals(new SwFormatINetFormat({ url: "different" }))).toBe(false);
+    expect(restoreSwFormatINetFormat(item.toSnapshot()).equals(item)).toBe(true);
+    expect(
+      throwing(
+        /** Rejects an empty destination. @returns Invalid item. */ () =>
+          new SwFormatINetFormat({ url: "" }),
+      ),
+    ).toThrow("must not be empty");
+    for (const snapshot of [
+      { type: "SwFormatINetFormat", value: "{}", which: 52 },
+      { type: "wrong", value: "{}", which: RES_TXTATR_INETFMT },
+      { type: "SwFormatINetFormat", value: {}, which: RES_TXTATR_INETFMT },
+      { type: "SwFormatINetFormat", value: "{", which: RES_TXTATR_INETFMT },
+      { type: "SwFormatINetFormat", value: "{}", which: RES_TXTATR_INETFMT },
+    ])
+      expect(
+        throwing(
+          /** Restores an invalid hyperlink snapshot. @returns Invalid item. */ () =>
+            restoreSwFormatINetFormat(
+              snapshot as unknown as Parameters<typeof restoreSwFormatINetFormat>[0],
+            ),
+        ),
+      ).toThrow("snapshot is invalid");
+  });
+
+  it("projects overlapping character formatting and hyperlink ranges", /** Verifies different Writer hint kinds coexist while same-kind hyperlinks merge and reject overlaps. @returns Nothing. */ function projectsHyperlinkHints(): void {
+    const writer = createModelFixture();
+    const pool = writer.GetAttrPool();
+    const inherited = writer.GetDfltTextFormatColl().GetAttrSet();
+    const hyperlink = { url: "https://example.test/" };
+    const hints = new SwpHints(pool);
+    hints.setTextRuns(
+      [
+        { attributes: plain, hyperlink, text: "a" },
+        { attributes: bold, hyperlink, text: "b" },
+      ],
+      inherited,
+    );
+    expect(hints.Count()).toBe(2);
+    expect(hints.toTextRuns("ab", inherited)).toEqual([
+      { attributes: plain, hyperlink, text: "a" },
+      { attributes: bold, hyperlink, text: "b" },
+    ]);
+    expect(hints.getHyperlink("ab", 0)).toEqual(hyperlink);
+    expect(hints.getHyperlink("ab", 2)).toEqual(hyperlink);
+    expect(createSwpHintsFromSnapshot(pool, hints.toSnapshot()).toSnapshot()).toEqual(
+      hints.toSnapshot(),
+    );
+    expect(new SwpHints(pool).getHyperlink("", 0)).toBeUndefined();
+    expect(
+      throwing(
+        /** Reads a hyperlink outside the node. @returns Invalid hyperlink. */ () =>
+          hints.getHyperlink("ab", 3),
+      ),
+    ).toThrow("outside the text node");
+    expect(
+      throwing(
+        /** Creates overlapping hyperlink hints. @returns Invalid hint collection. */ () =>
+          new SwpHints(pool, [
+            new SwTextAttr(new SwFormatINetFormat(hyperlink), 0, 2),
+            new SwTextAttr(new SwFormatINetFormat({ url: "different" }), 1, 3),
+          ]),
+      ),
+    ).toThrow("Overlapping Writer");
+  });
+
   it("sorts, merges, clones, serializes, and projects auto-format hints" /** Verifies the canonical range container independently from rendering. @returns Nothing; assertions inspect hints and runs. */, function managesHints(): void {
     const writer = createModelFixture();
     const pool = writer.GetAttrPool();
@@ -450,6 +564,20 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
 });
 
 describe("Writer SwTextNode and content manager" /** Groups canonical text mutation and SwPaM operation tests. @returns Nothing; Vitest registers cases. */, function defineContentOperationTests(): void {
+  it("applies and removes hyperlinks without changing character formatting", /** Covers the SwTextNode hyperlink range mutation boundary. @returns Nothing. */ function editsNodeHyperlinks(): void {
+    const node = createModelFixture().paragraphs[0] as SwTextNode;
+    node.InsertText("abcd", 0);
+    node.SetHyperlink(0, 0, { url: "ignored" });
+    node.SetHyperlink(1, 3, { url: "https://example.test/" });
+    expect(node.runs).toEqual([
+      { attributes: plain, text: "a" },
+      { attributes: plain, hyperlink: { url: "https://example.test/" }, text: "bc" },
+      { attributes: plain, text: "d" },
+    ]);
+    node.SetHyperlink(1, 3, undefined);
+    expect(node.runs).toEqual([{ attributes: plain, text: "abcd" }]);
+  });
+
   it("keeps text and auto-format hints coherent through insert, erase, replace, split, and join" /** Verifies the bounded SwTextNode algorithms used by browser editing. @returns Nothing; assertions inspect canonical text and derived runs. */, function editsTextNodes(): void {
     const writer = createModelFixture();
     const node = writer.paragraphs[0] as SwTextNode;

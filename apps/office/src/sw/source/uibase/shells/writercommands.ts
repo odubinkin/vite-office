@@ -10,6 +10,7 @@ import {
 } from "../../../../framework/source/dispatch/dispatchprovider";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { WriterCharacterFormat } from "../../core/doc/writer";
+import type { WriterHyperlink } from "../../core/doc/writer";
 import type { WriterParagraphTextRange } from "../wrtsh/wrtsh";
 import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import {
@@ -32,6 +33,13 @@ export interface WriterCharacterCommandArguments {
   readonly fontFamily?: string;
 }
 
+/** Arguments submitted by the browser hyperlink dialog. */
+export interface WriterHyperlinkCommandArguments {
+  readonly hyperlink?: WriterHyperlink;
+  readonly range?: WriterParagraphTextRange;
+  readonly text?: string;
+}
+
 /** Persistent Writer editing-shell surface used by command descriptors. */
 export interface WriterTextCommandTarget {
   readonly CanRedo: () => boolean;
@@ -43,6 +51,7 @@ export interface WriterTextCommandTarget {
     style: string;
   }>;
   readonly GetCharacterFormatState: (format: WriterCharacterFormat) => "mixed" | "off" | "on";
+  readonly GetHyperlinkAtCursor: () => WriterHyperlink | undefined;
   readonly GetPendingCharacterAttributes: () => Readonly<{
     bold: boolean;
     fontFamily?: string;
@@ -54,6 +63,11 @@ export interface WriterTextCommandTarget {
   readonly SetParagraphListKind: (kind: "bullet" | "none" | "numbered") => boolean;
   readonly SetParagraphStyle: (style: string) => boolean;
   readonly SetFontFamily: (fontFamily: string) => boolean;
+  readonly SetHyperlink: (
+    hyperlink: WriterHyperlink | undefined,
+    text?: string,
+    range?: WriterParagraphTextRange,
+  ) => boolean;
   readonly ToggleCharacterFormat: (
     format: WriterCharacterFormat,
     range?: WriterParagraphTextRange,
@@ -144,6 +158,58 @@ export function createWriterTextCommandRegistry(
     characterCommand(WRITER_COMMAND_IDS.bold, "Bold", "bold", ["Ctrl+B", "Meta+B"]),
     characterCommand(WRITER_COMMAND_IDS.italic, "Italic", "italic", ["Ctrl+I", "Meta+I"]),
     characterCommand(WRITER_COMMAND_IDS.underline, "Underline", "underline", ["Ctrl+U", "Meta+U"]),
+    {
+      capabilityId: "CAP-0135",
+      /** Applies dialog hyperlink data to the current selection or caret. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether content changed. */
+      execute: (_context, arguments_: unknown): boolean => {
+        const args = arguments_ as WriterHyperlinkCommandArguments | undefined;
+        return args?.hyperlink === undefined
+          ? false
+          : target.SetHyperlink(args.hyperlink, args.text, args.range);
+      },
+      /** Exposes current hyperlink metadata to the dialog presenter. @returns Hyperlink or undefined. */
+      getStateValue: (): WriterHyperlink | undefined => target.GetHyperlinkAtCursor(),
+      id: WRITER_COMMAND_IDS.hyperlinkDialog,
+      invalidates: ["document", "history", "selection"],
+      label: "Hyperlink",
+      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.hyperlinkDialog),
+      shortcuts: ["Ctrl+K", "Meta+K"],
+      target: "shell",
+      undoPolicy: "record",
+    },
+    {
+      capabilityId: "CAP-0135",
+      /** Replaces the current hyperlink using dialog data. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether changed. */
+      execute: (_context, arguments_: unknown): boolean => {
+        const args = arguments_ as WriterHyperlinkCommandArguments | undefined;
+        return args?.hyperlink === undefined
+          ? false
+          : target.SetHyperlink(args.hyperlink, undefined, args.range);
+      },
+      /** Reads current hyperlink metadata for dialog initialization. @returns Hyperlink or undefined. */
+      getStateValue: (): WriterHyperlink | undefined => target.GetHyperlinkAtCursor(),
+      id: WRITER_COMMAND_IDS.editHyperlink,
+      invalidates: ["document", "history", "selection"],
+      /** Enables editing only for a uniform selected or caret link. @returns Whether enabled. */
+      isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
+      label: "Edit Hyperlink",
+      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.editHyperlink),
+      target: "shell",
+      undoPolicy: "record",
+    },
+    {
+      capabilityId: "CAP-0135",
+      /** Removes hyperlink metadata from the current selected link. @returns Whether changed. */
+      execute: (): boolean => target.SetHyperlink(undefined),
+      id: WRITER_COMMAND_IDS.removeHyperlink,
+      invalidates: ["document", "history", "selection"],
+      /** Enables removal only for a uniform selected or caret link. @returns Whether enabled. */
+      isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
+      label: "Remove Hyperlink",
+      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.removeHyperlink),
+      target: "shell",
+      undoPolicy: "record",
+    },
     {
       capabilityId: "CAP-0109",
       /** Applies a selected font. @param _context - Bound shell. @param arguments_ - Font arguments. @returns Whether changed. */

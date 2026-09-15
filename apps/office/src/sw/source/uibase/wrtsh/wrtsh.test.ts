@@ -7,6 +7,7 @@ import { createWriterDocument } from "../../core/doc/writer";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh";
 import { applyWriterTextRangeFont } from "../../core/txtnode/ndtxt";
+import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
 
 /** Creates a Writer shell with one stable paragraph. @param text - Optional initial paragraph text. @returns Shell fixture. */
 function createShell(text = ""): SwWrtShell {
@@ -21,6 +22,109 @@ function createShell(text = ""): SwWrtShell {
 }
 
 describe("Writer canonical input shell", /** Registers canonical cursor and input tests. @returns Nothing. */ function defineWriterInputShellTests(): void {
+  it("edits complete hyperlink ranges across differently formatted runs", /** Verifies caret lookup, uniform-selection state, replacement, removal, insertion, and undo. @returns Nothing. */ function editsHyperlinks(): void {
+    const shell = createShell("abcd");
+    shell.SetSelection({
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 4, paragraphId: "p-1" },
+    });
+    expect(shell.SetHyperlink({ url: "https://example.test/first" })).toBe(true);
+    expect(shell.SetHyperlink({ url: "https://example.test/first" })).toBe(false);
+    shell.SetSelection({
+      mark: { offset: 1, paragraphId: "p-1" },
+      point: { offset: 3, paragraphId: "p-1" },
+    });
+    expect(shell.ToggleCharacterFormat("bold")).toBe(true);
+    shell.SetCursor("p-1", 2);
+    expect(shell.GetHyperlinkAtCursor()).toEqual({ url: "https://example.test/first" });
+    expect(shell.SetHyperlink({ url: "https://example.test/second" })).toBe(true);
+    expect(
+      shell.GetActiveParagraph().runs.every(
+        /** Checks that formatting splits retain the edited hyperlink. @param run - Projected text run. @returns Whether the URL matches. */
+        (run) => run.hyperlink?.url === "https://example.test/second",
+      ),
+    ).toBe(true);
+    expect(shell.SetHyperlink(undefined)).toBe(true);
+    expect(shell.GetHyperlinkAtCursor()).toBeUndefined();
+    expect(shell.SetHyperlink(undefined)).toBe(false);
+    expect(shell.Undo()).toBe(true);
+    expect(shell.GetHyperlinkAtCursor()?.url).toBe("https://example.test/second");
+
+    shell.SetCursor("p-1", 4);
+    expect(shell.SetHyperlink({ url: "relative/path" }, "Shown")).toBe(true);
+    expect(shell.GetActiveParagraph().text).toBe("abcdShown");
+    const emptyShell = createShell();
+    expect(emptyShell.SetHyperlink({ url: "fallback-url" })).toBe(true);
+    expect(emptyShell.GetActiveParagraph().text).toBe("fallback-url");
+    expect(
+      shell.SetHyperlink({ url: "ignored" }, undefined, {
+        end: 1,
+        paragraphId: "missing",
+        start: 0,
+      }),
+    ).toBe(false);
+  });
+
+  it("returns no uniform hyperlink for mixed or cross-node selections", /** Covers non-uniform selection and missing-node hyperlink lookup. @returns Nothing. */ function rejectsMixedHyperlinkSelections(): void {
+    const shell = createShell("abcd");
+    shell.SetSelection({
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 2, paragraphId: "p-1" },
+    });
+    shell.SetHyperlink({ url: "first" });
+    shell.SetSelection({
+      mark: { offset: 2, paragraphId: "p-1" },
+      point: { offset: 4, paragraphId: "p-1" },
+    });
+    shell.SetHyperlink({ url: "second" });
+    shell.SetSelection({
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 4, paragraphId: "p-1" },
+    });
+    expect(shell.GetHyperlinkAtCursor()).toBeUndefined();
+    const document = shell.GetDoc();
+    expect(
+      getWriterHyperlinkAtCursor(document, {
+        mark: { offset: 0, paragraphId: "missing" },
+        point: { offset: 1, paragraphId: "missing" },
+      }),
+    ).toBeUndefined();
+    expect(
+      getWriterHyperlinkAtCursor(document, {
+        point: { offset: 0, paragraphId: "missing" },
+      }),
+    ).toBeUndefined();
+    const before = {
+      activeParagraphId: "missing",
+      pendingCharacterAttributes: { bold: false, italic: false, underline: false },
+      point: { offset: 0, paragraphId: "missing" },
+    };
+    expect(
+      /** Creates a range action for a stale paragraph. @returns Invalid action. */ () =>
+        createWriterHyperlinkAction(
+          document,
+          {
+            mark: { offset: 0, paragraphId: "missing" },
+            point: { offset: 1, paragraphId: "missing" },
+          },
+          before.pendingCharacterAttributes,
+          before,
+          { url: "link" },
+        ),
+    ).toThrow("Unknown paragraph");
+    expect(
+      /** Creates an insert action for a stale paragraph. @returns Invalid action. */ () =>
+        createWriterHyperlinkAction(
+          document,
+          { point: { offset: 0, paragraphId: "missing" } },
+          before.pendingCharacterAttributes,
+          before,
+          { url: "link" },
+          "text",
+        ),
+    ).toThrow("Unknown paragraph");
+  });
+
   it("publishes each edit and history navigation as one typed transaction" /** Verifies model, lifecycle, and cursor invalidations remain bounded. @returns Nothing. */, function aggregatesNotifications(): void {
     const shell = createShell();
     const notifications: Parameters<Parameters<SwWrtShell["Subscribe"]>[0]>[0][] = [];

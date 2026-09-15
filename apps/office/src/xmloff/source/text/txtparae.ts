@@ -12,8 +12,18 @@ export interface OdfCharacterProperties {
   readonly underline: boolean;
 }
 
+/** Hyperlink metadata supported by the bounded text importer and exporter. */
+export interface OdfHyperlink {
+  readonly name?: string;
+  readonly styleName?: string;
+  readonly targetFrame?: string;
+  readonly url: string;
+  readonly visitedStyleName?: string;
+}
+
 /** One model-owned text fragment exposed to the streaming exporter. */
 export interface XMLTextRunSource {
+  readonly hyperlink?: OdfHyperlink;
   readonly properties: OdfCharacterProperties;
   readonly text: string;
 }
@@ -276,21 +286,32 @@ function exportParagraphElement(
       : (paragraphStyleNames.get(
           paragraphStyleKey(baseStyleName, paragraph.alignment, paragraph.properties),
         ) as string);
-  const content = paragraph.runs
-    .map(
-      /** Emits one plain or styled text fragment. @param run - Neutral run. @returns Inline XML. */
-      (run) => {
-        const encoded = exportText(run.text);
-        if (equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph)))
-          return encoded;
-        const name = characterStyleNames.get(characterPropertiesKey(run.properties)) as string;
-        return `<text:span text:style-name="${name}">${encoded}</text:span>`;
-      },
-    )
-    .join("");
+  let content = "";
+  let activeHyperlink: OdfHyperlink | undefined;
+  for (const run of paragraph.runs) {
+    if (JSON.stringify(run.hyperlink) !== JSON.stringify(activeHyperlink)) {
+      if (activeHyperlink !== undefined) content += "</text:a>";
+      activeHyperlink = run.hyperlink;
+      if (activeHyperlink !== undefined) content += exportHyperlinkStart(activeHyperlink);
+    }
+    const encoded = exportText(run.text);
+    if (equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph)))
+      content += encoded;
+    else {
+      const name = characterStyleNames.get(characterPropertiesKey(run.properties)) as string;
+      content += `<text:span text:style-name="${name}">${encoded}</text:span>`;
+    }
+  }
+  if (activeHyperlink !== undefined) content += "</text:a>";
   return paragraph.style === "heading-1"
     ? `<text:h text:outline-level="1" text:style-name="${styleName}">${content}</text:h>`
     : `<text:p text:style-name="${styleName}">${content}</text:p>`;
+}
+
+/** Emits the supported upstream hyperlink attributes. @param hyperlink - Link metadata. @returns Opening text:a tag. */
+function exportHyperlinkStart(hyperlink: OdfHyperlink): string {
+  const target = hyperlink.targetFrame;
+  return `<text:a xlink:type="simple" xlink:href="${escapeXml(hyperlink.url)}"${hyperlink.name === undefined ? "" : ` office:name="${escapeXml(hyperlink.name)}"`}${target === undefined ? "" : ` office:target-frame-name="${escapeXml(target)}" xlink:show="${target === "_blank" ? "new" : "replace"}"`}${hyperlink.styleName === undefined ? "" : ` text:style-name="${escapeXml(hyperlink.styleName)}"`}${hyperlink.visitedStyleName === undefined ? "" : ` text:visited-style-name="${escapeXml(hyperlink.visitedStyleName)}"`}>`;
 }
 
 /** Validates list metadata before XML generation. @param list - Neutral list state. @returns Nothing. */

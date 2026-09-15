@@ -1,9 +1,10 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 
 import { WriterCommandToolbar } from "../../../browser/presentation/WriterCommandToolbar";
 import { WriterFormattingToolbar } from "../../../browser/presentation/WriterFormattingToolbar";
 import { WriterMenuBar } from "../../../browser/presentation/WriterMenuBar";
+import { WriterHyperlinkDialog } from "../../../browser/presentation/WriterHyperlinkDialog";
 import { WriterParagraphProperties } from "../../../browser/presentation/WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "../../../browser/presentation/WriterWorkspaceChrome";
 import { presentWriterOperationStatus } from "../../../browser/workflows/writer-workflows";
@@ -18,6 +19,8 @@ import type {
   WriterCutCommandArguments,
   WriterPasteCommandArguments,
 } from "./view-session";
+import type { WriterCommandSource } from "../../../browser/presentation/command-source";
+import type { WriterHyperlink } from "../../core/doc/writer";
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
@@ -27,6 +30,10 @@ export interface WriterWorkbenchProps {
 
 /** Projects one Writer view through browser presenters. @param props - Active view selection. @returns Writer workspace. */
 export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React.JSX.Element {
+  const [hyperlinkDialog, setHyperlinkDialog] = useState<{
+    readonly commandId: string;
+    readonly initialHyperlink?: WriterHyperlink;
+  }>();
   const snapshot = useSyncExternalStore(view.Subscribe, view.GetSnapshot, view.GetSnapshot);
   const wrtShell = view.GetWrtShell();
   const handleBeforeInput = useCallback(
@@ -93,8 +100,38 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
     [wrtShell],
   );
 
+  const commandSource = useMemo<WriterCommandSource>(
+    /** Intercepts dialog-opening commands while leaving execution in the shared dispatcher. @returns Presentation command source. */
+    () => ({
+      /** Executes or presents one command. @param commandId - Command identity. @param arguments_ - Optional payload. @returns Dispatch result. */
+      Execute(commandId, arguments_) {
+        if (
+          commandId === WRITER_COMMAND_IDS.hyperlinkDialog ||
+          commandId === WRITER_COMMAND_IDS.editHyperlink
+        ) {
+          resolveCommandArguments(commandId);
+          const initialHyperlink = view.QueryState(commandId).value as WriterHyperlink | undefined;
+          setHyperlinkDialog({
+            commandId,
+            ...(initialHyperlink === undefined ? {} : { initialHyperlink }),
+          });
+          return { commandId, status: "executed", value: undefined };
+        }
+        return view.Execute(commandId, arguments_);
+      },
+      QueryCommand:
+        /** Reads a command descriptor. @param commandId - Command identity. @returns Descriptor or undefined. */
+        (commandId) => view.QueryCommand(commandId),
+      QueryState:
+        /** Reads current command state. @param commandId - Command identity. @returns Command state. */
+        (commandId) => view.QueryState(commandId),
+    }),
+    [resolveCommandArguments, view],
+  );
+
   useWriterCommandShortcuts({
     dispatcher: view.GetViewFrame().GetDispatcher(),
+    executeCommand: commandSource.Execute,
     isActive,
     resolveArguments: resolveCommandArguments,
   });
@@ -129,14 +166,16 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
         documentTitle={snapshot.documentState.title}
         formattingToolbar={
           <WriterFormattingToolbar
-            commandSource={view}
+            commandSource={commandSource}
             resolveArguments={resolveCommandArguments}
           />
         }
         isHorizontalRulerVisible={snapshot.isHorizontalRulerVisible}
         isPropertiesSidebarVisible={snapshot.isPropertiesSidebarVisible}
         isStatusBarVisible={snapshot.isStatusBarVisible}
-        menuBar={<WriterMenuBar commandSource={view} resolveArguments={resolveCommandArguments} />}
+        menuBar={
+          <WriterMenuBar commandSource={commandSource} resolveArguments={resolveCommandArguments} />
+        }
         propertiesSidebar={
           <WriterParagraphProperties
             alignment={snapshot.activeParagraph.alignment}
@@ -147,7 +186,10 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
         }
         status={presentWriterOperationStatus(snapshot.operationStatus)}
         toolbar={
-          <WriterCommandToolbar commandSource={view} resolveArguments={resolveCommandArguments} />
+          <WriterCommandToolbar
+            commandSource={commandSource}
+            resolveArguments={resolveCommandArguments}
+          />
         }
       >
         <WriterPlainTextEditor
@@ -167,6 +209,24 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
           projectionVersion={snapshot.viewVersion}
         />
       </WriterWorkspaceChrome>
+      {hyperlinkDialog === undefined ? null : (
+        <WriterHyperlinkDialog
+          {...(hyperlinkDialog.initialHyperlink === undefined
+            ? {}
+            : { initialHyperlink: hyperlinkDialog.initialHyperlink })}
+          onCancel={
+            /** Closes the hyperlink dialog without changing the model. @returns Nothing. */ () =>
+              setHyperlinkDialog(undefined)
+          }
+          onSubmit={
+            /** Applies the hyperlink dialog payload. @param hyperlink - Link metadata. @param text - Optional inserted text. @returns Nothing. */
+            (hyperlink, text) => {
+              view.Execute(hyperlinkDialog.commandId, { hyperlink, text });
+              setHyperlinkDialog(undefined);
+            }
+          }
+        />
+      )}
     </div>
   );
 }

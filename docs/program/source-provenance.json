@@ -16,6 +16,10 @@
       "rationale": "The local contentindex.ts module follows the SwContentIndex public type name while preserving the reviewed registry/update responsibility implemented by upstream index.cxx."
     },
     {
+      "localPath": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
+      "rationale": "The local fmtinfmt.ts filename follows the upstream public fmtinfmt.hxx identity while implementing the reviewed SwFormatINetFormat behavior from fmtatr2.cxx."
+    },
+    {
       "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
       "rationale": "The local writercommands.ts module preserves the reviewed CreateSWDrawView responsibility while TypeScript decomposition or public naming requires a different filename from swriter.sdi."
     },
@@ -26,6 +30,10 @@
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
       "rationale": "The local wrtsh.ts module preserves the reviewed SwWrtShell responsibility while TypeScript decomposition or public naming requires a different filename from wrtsh1.cxx."
+    },
+    {
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
+      "rationale": "The local helper keeps selection-aware hyperlink edit actions beside SwWrtShell while preserving the bounded InsertURL responsibility implemented by upstream editsh.cxx."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
@@ -1038,6 +1046,31 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterHyperlinkDialog",
+            "path": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx",
+      "localSymbols": [
+        "WriterHyperlinkDialogProps",
+        "WriterHyperlinkDialog"
+      ],
+      "rationale": "Contains React and browser DOM adaptation behind Writer hyperlink command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the accessible browser counterpart of LibreOffice Writer's hyperlink create and edit dialog."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterMenuBar",
             "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx"
           }
@@ -1778,6 +1811,43 @@
         "SwFormatDrop::CreateDefault",
         "SwRegisterItem::CreateDefault",
         "SwNumRuleItem::CreateDefault"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwFormatINetFormat",
+            "path": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwFormatINetFormat::SwFormatINetFormat",
+            "path": "vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
+      "localSymbols": [
+        "WriterHyperlink",
+        "normalizeWriterHyperlink",
+        "equalWriterHyperlinks",
+        "SwFormatINetFormat",
+        "restoreSwFormatINetFormat"
+      ],
+      "omittedResponsibilities": [
+        "Visited-state mutation, macros, and native URL notifications outside the bounded Writer hyperlink range and ODF metadata contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Implements the SwFormatINetFormat URL, name, target-frame, style-name, equality, clone, and persistence contract."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/txtnode/fmtatr2.cxx",
+      "upstreamSymbols": [
+        "SwFormatINetFormat::SwFormatINetFormat",
+        "SwFormatINetFormat::operator=="
       ]
     },
     {
@@ -2863,6 +2933,39 @@
       "evidence": {
         "local": [
           {
+            "marker": "createWriterHyperlinkAction",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwEditShell::InsertURL",
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
+      "localSymbols": [
+        "getWriterHyperlinkAtCursor",
+        "createWriterHyperlinkAction"
+      ],
+      "omittedResponsibilities": [
+        "Native field selection, macro events, and URL execution outside bounded same-paragraph text links remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Creates selection-aware undo actions for inserting, editing, and removing Writer hyperlink ranges."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/edit/editsh.cxx",
+      "upstreamSymbols": [
+        "SwEditShell::InsertURL"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterCursorSelection",
             "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts"
           }
@@ -2879,8 +2982,13 @@
         "WriterCursorPosition",
         "WriterCursorSelection",
         "WriterParagraphTextRange",
+        "WriterCompositionState",
         "areWriterCursorSelectionsEqual",
-        "isWriterCursorOffset"
+        "isWriterCursorOffset",
+        "getWriterSelectedTextRange",
+        "createWriterRangeSelection",
+        "createWriterUndoCursorState",
+        "createWriterCollapsedCursorState"
       ],
       "omittedResponsibilities": [
         "Upstream visual, table and object selection modes outside the bounded text SwPaM projection contract remain intentionally omitted."

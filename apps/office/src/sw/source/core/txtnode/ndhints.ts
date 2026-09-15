@@ -8,21 +8,29 @@ import type { SwAttrPool } from "../attr/swatrset";
 import {
   createSwFormatAutoFormat,
   projectWriterCharacterAttributes,
-  RES_TXTATR_AUTOFMT,
   restoreSwFormatAutoFormat,
+  SwFormatAutoFormat,
   SwTextAttr,
   type SwTextAttrSnapshot,
   type WriterCharacterAttributes,
 } from "./txatbase";
+import {
+  equalWriterHyperlinks,
+  normalizeWriterHyperlink,
+  restoreSwFormatINetFormat,
+  SwFormatINetFormat,
+  type WriterHyperlink,
+} from "./fmtinfmt";
+import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
 /** Stores direct-format text portions in deterministic start/end/which order. */
 export class SwpHints {
-  private hintsByStart: SwTextAttr[] = [];
+  private hintsByStart: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
 
   /** Creates a hint container. @param pool - Owning document pool. @param hints - Initial ranged attributes. @returns Nothing. */
   public constructor(
     private readonly pool: SwAttrPool,
-    hints: readonly SwTextAttr[] = [],
+    hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [],
   ) {
     this.replace(hints);
   }
@@ -33,39 +41,46 @@ export class SwpHints {
   }
 
   /** Returns one attribute in start-sorted order. @param position - Sorted hint position. @returns Hint at position. */
-  public Get(position: number): SwTextAttr {
+  public Get(position: number): SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> {
     const hint = this.hintsByStart[position];
     if (hint === undefined) throw new Error(`Unknown SwpHints position: ${position}`);
     return hint;
   }
 
   /** Returns all attributes as an immutable start-sorted view. @returns Ordered hints. */
-  public entries(): readonly SwTextAttr[] {
+  public entries(): readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] {
     return this.hintsByStart;
   }
 
   /** Replaces all hints, removing empty item sets and merging adjacent equal auto formats. @param hints - Replacement hints. @returns Nothing. */
-  public replace(hints: readonly SwTextAttr[]): void {
+  public replace(hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]): void {
     const sorted = hints
       .filter(
         /** Keeps only non-empty supported hints. @param hint - Candidate attribute. @returns Whether meaningful. */
         (hint) =>
-          hint.Which() === RES_TXTATR_AUTOFMT &&
           hint.end > hint.start &&
-          hint.format.GetStyleHandle().Count() > 0,
+          ((hint.format instanceof SwFormatAutoFormat &&
+            hint.format.GetStyleHandle().Count() > 0) ||
+            (hint.format instanceof SwFormatINetFormat && hint.format.GetValue().length > 0)),
       )
       .map(
         /** Clones caller-owned hints. @param hint - Source hint. @returns Independent hint. */
         (hint) => hint.clone(),
       )
       .sort(compareHints);
-    const normalized: SwTextAttr[] = [];
+    const normalized: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
     sorted.forEach(
       /** Appends or merges one ordered non-overlapping hint. @param hint - Sorted hint. @returns Nothing. */
       (hint) => {
-        const previous = normalized[normalized.length - 1];
+        let previous: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat> | undefined;
+        for (let index = normalized.length - 1; index >= 0; index -= 1) {
+          const candidate = normalized[index];
+          if (candidate?.Which() !== hint.Which()) continue;
+          previous = candidate;
+          break;
+        }
         if (previous !== undefined && hint.start < previous.end)
-          throw new Error("Overlapping Writer auto-format hints are not normalized.");
+          throw new Error("Overlapping Writer same-type hints are not normalized.");
         if (
           previous !== undefined &&
           previous.end === hint.start &&
@@ -81,7 +96,7 @@ export class SwpHints {
   /** Rebuilds direct item-set hints from complete browser runs. @param runs - Complete text portions. @param inherited - Node/style item set. @returns Nothing. */
   public setTextRuns(runs: readonly WriterTextRunLike[], inherited: SfxItemSet): void {
     let offset = 0;
-    const hints: SwTextAttr[] = [];
+    const hints: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[] = [];
     const inheritedAttributes = this.projectInherited(inherited);
     runs.forEach(
       /** Converts one run to a direct item-set delta. @param run - Complete run. @returns Nothing. */
@@ -91,6 +106,9 @@ export class SwpHints {
         if (run.text.length === 0) return;
         const format = createSwFormatAutoFormat(this.pool, run.attributes, inheritedAttributes);
         if (format.GetStyleHandle().Count() > 0) hints.push(new SwTextAttr(format, start, offset));
+        const hyperlink = normalizeWriterHyperlink(run.hyperlink);
+        if (hyperlink !== undefined)
+          hints.push(new SwTextAttr(new SwFormatINetFormat(hyperlink), start, offset));
       },
     );
     this.replace(hints);
@@ -101,24 +119,45 @@ export class SwpHints {
     if (text.length === 0) return [];
     const runs: WriterTextRunLike[] = [];
     const inheritedAttributes = this.projectInherited(inherited);
-    let offset = 0;
+    const boundaries = new Set([0, text.length]);
     this.hintsByStart.forEach(
-      /** Emits an inherited gap and one hinted portion. @param hint - Ordered hint. @returns Nothing. */
-      (hint) => {
-        const start = Math.min(text.length, hint.start);
-        const end = Math.min(text.length, hint.end);
-        if (start > offset)
-          runs.push({ attributes: inheritedAttributes, text: text.slice(offset, start) });
-        if (end > start)
-          runs.push({
-            attributes: projectWriterCharacterAttributes(hint.format.GetStyleHandle(), inherited),
-            text: text.slice(start, end),
-          });
-        offset = Math.max(offset, end);
+      /** Collects visible hint boundaries. @param hint - Ordered hint. @returns Nothing. */ (
+        hint,
+      ) => {
+        boundaries.add(Math.min(text.length, hint.start));
+        boundaries.add(Math.min(text.length, hint.end));
       },
     );
-    if (offset < text.length)
-      runs.push({ attributes: inheritedAttributes, text: text.slice(offset) });
+    const ordered = [...boundaries].sort(
+      /** Orders text offsets ascending. @param left - First offset. @param right - Second offset. @returns Signed ordering. */
+      (left, right) => left - right,
+    );
+    for (let index = 0; index < ordered.length - 1; index += 1) {
+      const start = ordered[index] as number;
+      const end = ordered[index + 1] as number;
+      /* v8 ignore next -- Unique sorted hint boundaries always increase. */
+      if (end <= start) continue;
+      const auto = this.hintsByStart.find(
+        /** Finds the auto-format covering a segment. @param hint - Candidate hint. @returns Whether it covers the segment. */
+        (hint) =>
+          hint.format instanceof SwFormatAutoFormat && hint.start <= start && end <= hint.end,
+      );
+      const inet = this.hintsByStart.find(
+        /** Finds the hyperlink covering a segment. @param hint - Candidate hint. @returns Whether it covers the segment. */
+        (hint) =>
+          hint.format instanceof SwFormatINetFormat && hint.start <= start && end <= hint.end,
+      );
+      runs.push({
+        attributes:
+          auto?.format instanceof SwFormatAutoFormat
+            ? projectWriterCharacterAttributes(auto.format.GetStyleHandle(), inherited)
+            : inheritedAttributes,
+        ...(inet?.format instanceof SwFormatINetFormat
+          ? { hyperlink: inet.format.GetHyperlink() }
+          : {}),
+        text: text.slice(start, end),
+      });
+    }
     return mergeTextRuns(runs);
   }
 
@@ -134,11 +173,33 @@ export class SwpHints {
     const characterOffset = offset === 0 ? 0 : offset - 1;
     const hint = this.hintsByStart.find(
       /** Finds the hint covering the inherited character. @param candidate - Ordered hint. @returns Whether it covers the offset. */
-      (candidate) => candidate.start <= characterOffset && characterOffset < candidate.end,
+      (candidate) =>
+        candidate.format instanceof SwFormatAutoFormat &&
+        candidate.start <= characterOffset &&
+        characterOffset < candidate.end,
     );
     return hint === undefined
       ? this.projectInherited(inherited)
-      : projectWriterCharacterAttributes(hint.format.GetStyleHandle(), inherited);
+      : projectWriterCharacterAttributes(
+          (hint.format as SwFormatAutoFormat).GetStyleHandle(),
+          inherited,
+        );
+  }
+
+  /** Reads hyperlink metadata inherited by a caret. @param text - Canonical node text. @param offset - Caret offset. @returns Hyperlink or undefined. */
+  public getHyperlink(text: string, offset: number): WriterHyperlink | undefined {
+    if (!Number.isInteger(offset) || offset < 0 || offset > text.length)
+      throw new Error("Writer hyperlink caret is outside the text node.");
+    if (text.length === 0) return undefined;
+    const characterOffset = offset === 0 ? 0 : offset - 1;
+    const hint = this.hintsByStart.find(
+      /** Finds the hyperlink covering the inherited character. @param candidate - Candidate hint. @returns Whether it covers the offset. */
+      (candidate) =>
+        candidate.format instanceof SwFormatINetFormat &&
+        candidate.start <= characterOffset &&
+        characterOffset < candidate.end,
+    );
+    return hint?.format instanceof SwFormatINetFormat ? hint.format.GetHyperlink() : undefined;
   }
 
   /** Creates a deep copy safe for another text node in the same document. @returns Independent hints. */
@@ -167,6 +228,8 @@ export class SwpHints {
 export interface WriterTextRunLike {
   /** Effective character attributes for this portion. */
   readonly attributes: WriterCharacterAttributes;
+  /** Optional Writer hyperlink range metadata. */
+  readonly hyperlink?: WriterHyperlink;
   /** Visible text in this portion. */
   readonly text: string;
 }
@@ -180,7 +243,9 @@ export function createSwpHintsFromSnapshot(
     /** Restores one current auto-format hint. @param snapshot - Persisted hint. @returns Restored hint. */
     (snapshot) =>
       new SwTextAttr(
-        restoreSwFormatAutoFormat(pool, snapshot.format),
+        snapshot.format.which === RES_TXTATR_INETFMT
+          ? restoreSwFormatINetFormat(snapshot.format)
+          : restoreSwFormatAutoFormat(pool, snapshot.format),
         snapshot.start,
         snapshot.end,
       ),
@@ -189,7 +254,10 @@ export function createSwpHintsFromSnapshot(
 }
 
 /** Compares hints using LibreOffice start, end, and item ordering. @param left - First. @param right - Second. @returns Signed ordering. */
-function compareHints(left: SwTextAttr, right: SwTextAttr): number {
+function compareHints(
+  left: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
+  right: SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>,
+): number {
   return left.start - right.start || right.end - left.end;
 }
 
@@ -199,9 +267,17 @@ function mergeTextRuns(runs: readonly WriterTextRunLike[]): readonly WriterTextR
   runs.forEach(
     /** Appends or merges one projection run. @param run - Source run. @returns Nothing. */
     (run) => {
-      const copy = { attributes: { ...run.attributes }, text: run.text };
+      const copy = {
+        attributes: { ...run.attributes },
+        ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
+        text: run.text,
+      };
       const previous = merged[merged.length - 1];
-      if (previous !== undefined && equalAttributes(previous.attributes, copy.attributes))
+      if (
+        previous !== undefined &&
+        equalAttributes(previous.attributes, copy.attributes) &&
+        equalWriterHyperlinks(previous.hyperlink, copy.hyperlink)
+      )
         merged[merged.length - 1] = { ...previous, text: previous.text + copy.text };
       else merged.push(copy);
     },

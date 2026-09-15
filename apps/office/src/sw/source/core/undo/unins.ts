@@ -88,6 +88,7 @@ function haveEqualBoundaryAttributes(
     following !== undefined &&
     preceding.attributes.bold === following.attributes.bold &&
     preceding.attributes.italic === following.attributes.italic &&
-    preceding.attributes.underline === following.attributes.underline
+    preceding.attributes.underline === following.attributes.underline &&
+    JSON.stringify(preceding.hyperlink) === JSON.stringify(following.hyperlink)
   );
 }

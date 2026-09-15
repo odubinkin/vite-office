@@ -41,7 +41,7 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { getWriterOdfStyleName } from "../../../inc/poolfmt";
 import { createWriterFontAutoStylePool } from "./xmlfonte";
 
-const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}"`;
+const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc): string {
@@ -155,7 +155,11 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
     ...(directCharacterProperties === undefined ? {} : { properties: directCharacterProperties }),
     runs: node.runs.map(
       /** Projects one canonical direct-format run. @param run - Writer run. @returns Neutral run. */
-      (run) => ({ properties: { ...run.attributes }, text: run.text }),
+      (run) => ({
+        ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
+        properties: { ...run.attributes },
+        text: run.text,
+      }),
     ),
     style: node.style,
     styleName: getWriterOdfStyleName(node.style),

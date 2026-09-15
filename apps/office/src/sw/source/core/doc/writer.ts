@@ -23,6 +23,8 @@ export { SwNodes } from "../docnode/nodes";
 export { SwContentNode, SwEndNode, SwNode, SwStartNode } from "../docnode/node";
 export { SwNodeIndex, SwPaM, SwPosition } from "../crsr/pam";
 export { SwTextAttr, RES_TXTATR_AUTOFMT } from "../txtnode/txatbase";
+export { SwFormatINetFormat } from "../txtnode/fmtinfmt";
+export type { WriterHyperlink } from "../txtnode/fmtinfmt";
 export { SwpHints } from "../txtnode/ndhints";
 export { SwAttrPool, SwAttrSet } from "../attr/swatrset";
 export { SwFormat } from "../attr/format";

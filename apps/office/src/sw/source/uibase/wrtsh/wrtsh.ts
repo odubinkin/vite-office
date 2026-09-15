@@ -13,6 +13,7 @@ import {
   type WriterCharacterAttributes,
   type WriterCharacterFormat,
   type WriterDocument,
+  type WriterHyperlink,
   type WriterParagraph,
   type WriterParagraphAlignment,
   type WriterParagraphStyle,
@@ -63,24 +64,22 @@ import {
 } from "./delete";
 import {
   areWriterCursorSelectionsEqual,
+  createWriterCollapsedCursorState,
+  createWriterRangeSelection,
+  createWriterUndoCursorState,
+  getWriterSelectedTextRange,
   isWriterCursorOffset,
+  type WriterCompositionState,
   type WriterCursorSelection,
   type WriterParagraphTextRange,
 } from "./wrtsh-selection";
+import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
 
 export type {
   WriterCursorPosition,
   WriterCursorSelection,
   WriterParagraphTextRange,
 } from "./wrtsh-selection";
-
-/** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
-interface WriterCompositionState {
-  /** Cursor or selection replaced when the composition is committed. */
-  readonly cursor: SwUndoCursorState;
-  /** Latest browser composition text, not yet written into SwDoc. */
-  text: string;
-}
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwModify {
@@ -720,7 +719,7 @@ export class SwWrtShell extends SwModify {
 
   /** Returns on/off/mixed state for one direct character format at the persistent cursor. @param format - Writer direct character format. @returns Selection-aware slot state. */
   public GetCharacterFormatState(format: WriterCharacterFormat): "mixed" | "off" | "on" {
-    const range = this.GetSelectedTextRange();
+    const range = getWriterSelectedTextRange(this.GetCursorSelection());
     if (range === undefined)
       return this.cursor.HasMark()
         ? "mixed"
@@ -754,7 +753,7 @@ export class SwWrtShell extends SwModify {
         range.end > paragraph.Len()
       )
         throw new Error("Writer text range is outside the paragraph.");
-      const currentRange = this.GetSelectedTextRange();
+      const currentRange = getWriterSelectedTextRange(this.GetCursorSelection());
       if (
         currentRange?.paragraphId !== range.paragraphId ||
         currentRange.start !== range.start ||
@@ -766,7 +765,7 @@ export class SwWrtShell extends SwModify {
         });
     }
     const before = this.CaptureCursorState();
-    const selectedRange = this.GetSelectedTextRange();
+    const selectedRange = getWriterSelectedTextRange(this.GetCursorSelection());
     this.pendingCharacterAttributes = {
       ...this.pendingCharacterAttributes,
       [format]: this.GetCharacterFormatState(format) !== "on",
@@ -800,12 +799,35 @@ export class SwWrtShell extends SwModify {
     );
   }
 
+  /** Reads one uniform selected or caret hyperlink for dialog editing. @returns Hyperlink metadata or undefined. */
+  public GetHyperlinkAtCursor(): WriterHyperlink | undefined {
+    return getWriterHyperlinkAtCursor(this.GetDoc(), this.GetCursorSelection());
+  }
+
+  /** Applies or removes a hyperlink using the persistent Writer selection. @param hyperlink - Replacement metadata or undefined. @param text - Text inserted for a collapsed caret. @param range - Optional DOM-resolved range. @returns Whether the document changed. */
+  public SetHyperlink(
+    hyperlink: WriterHyperlink | undefined,
+    text?: string,
+    range?: WriterParagraphTextRange,
+  ): boolean {
+    if (range !== undefined && !this.SetSelection(createWriterRangeSelection(range))) return false;
+    const action = createWriterHyperlinkAction(
+      this.GetDoc(),
+      this.GetCursorSelection(),
+      this.pendingCharacterAttributes,
+      this.CaptureCursorState(),
+      hyperlink,
+      text,
+    );
+    return action === undefined ? false : this.ApplyAction(action);
+  }
+
   /** Applies a font family. @param fontFamily - Selected family. @returns Whether document content changed. */
   public SetFontFamily(fontFamily: string): boolean {
     const family = fontFamily.trim();
     if (family.length === 0) throw new Error("Writer font family must not be blank.");
     const before = this.CaptureCursorState();
-    const selectedRange = this.GetSelectedTextRange();
+    const selectedRange = getWriterSelectedTextRange(this.GetCursorSelection());
     this.pendingCharacterAttributes = { ...this.pendingCharacterAttributes, fontFamily: family };
     if (selectedRange === undefined) {
       this.docShell.GetUndoManager().BreakUndoGrouping();
@@ -925,42 +947,18 @@ export class SwWrtShell extends SwModify {
     );
   }
 
-  /** Returns an ordered non-empty same-node selection from the persistent SwPaM. @returns Bounded range or undefined for a caret/cross-node selection. */
-  private GetSelectedTextRange(): WriterParagraphTextRange | undefined {
-    if (!this.cursor.HasMark()) return undefined;
-    const point = this.cursor.GetPoint();
-    const mark = this.cursor.GetMark();
-    if (point.GetNode() !== mark.GetNode()) return undefined;
-    const start = Math.min(point.GetContentIndex(), mark.GetContentIndex());
-    const end = Math.max(point.GetContentIndex(), mark.GetContentIndex());
-    return start === end
-      ? undefined
-      : { end, paragraphId: (point.GetNode() as WriterParagraph).id, start };
-  }
-
   /** Captures point, mark direction, active paragraph, and pending attributes for one action boundary. @returns Complete cursor state. */
   private CaptureCursorState(): SwUndoCursorState {
-    const point = this.cursor.GetPoint();
-    const pointNode = point.GetNode() as WriterParagraph;
-    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
-    const markNode = mark?.GetNode() as WriterParagraph | undefined;
-    return {
-      activeParagraphId: this.activeParagraphId,
-      ...(mark === undefined || markNode === undefined
-        ? {}
-        : { mark: { offset: mark.GetContentIndex(), paragraphId: markNode.id } }),
-      pendingCharacterAttributes: { ...this.pendingCharacterAttributes },
-      point: { offset: point.GetContentIndex(), paragraphId: pointNode.id },
-    };
+    return createWriterUndoCursorState(
+      this.GetCursorSelection(),
+      this.activeParagraphId,
+      this.pendingCharacterAttributes,
+    );
   }
 
   /** Creates a collapsed action endpoint while retaining pending direct attributes. @param paragraphId - Target node identity. @param offset - Target content offset. @returns Complete cursor state. */
   private CreateCollapsedCursorState(paragraphId: string, offset: number): SwUndoCursorState {
-    return {
-      activeParagraphId: paragraphId,
-      pendingCharacterAttributes: { ...this.pendingCharacterAttributes },
-      point: { offset, paragraphId },
-    };
+    return createWriterCollapsedCursorState(paragraphId, offset, this.pendingCharacterAttributes);
   }
 
   /** Restores action-owned cursor state against the current mutable SwDoc graph. @param state - Stored cursor boundary. @returns Nothing. */

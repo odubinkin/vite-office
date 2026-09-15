@@ -93,15 +93,15 @@ describe("parity mapping CLI" /**
       baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
       exceptionCount: 0,
       gapCount: 66,
-      implementedCount: 33,
-      recordCount: 34,
+      implementedCount: 34,
+      recordCount: 35,
       runtime: {
-        commandCount: 29,
+        commandCount: 32,
         placeholderSuiteCount: 6,
         schemaVersion: 2,
       },
       schemaVersion: 4,
-      scopeLimitationCount: 2,
+      scopeLimitationCount: 3,
       verifiedCount: 1,
     });
   }, 30_000);

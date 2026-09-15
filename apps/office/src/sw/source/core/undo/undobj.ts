@@ -127,6 +127,7 @@ export function CopyTextRangeRuns(
           : [
               {
                 attributes: { ...run.attributes },
+                ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
                 text: run.text.slice(clippedStart - runStart, clippedEnd - runStart),
               },
             ];
@@ -140,7 +141,11 @@ export function CopyUndoRuns(runs: readonly WriterTextRun[]): readonly WriterTex
   return normalizeWriterTextRuns(
     runs.map(
       /** Copies one formatted fragment. @param run - Source run. @returns Independent fragment. */
-      (run): WriterTextRun => ({ attributes: { ...run.attributes }, text: run.text }),
+      (run): WriterTextRun => ({
+        attributes: { ...run.attributes },
+        ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
+        text: run.text,
+      }),
     ),
   );
 }
@@ -169,7 +174,7 @@ export function ReplaceUndoRange(
 export function GetRunsPayloadSize(runs: readonly WriterTextRun[]): number {
   return runs.reduce(
     /** Counts one run's text plus its bounded attribute tuple. @param total - Prior units. @param run - Current run. @returns Updated units. */
-    (total, run) => total + run.text.length + 3,
+    (total, run) => total + run.text.length + 3 + (run.hyperlink?.url.length ?? 0),
     0,
   );
 }

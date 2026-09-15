@@ -343,7 +343,8 @@
       "subsystem": "browser-presentation",
       "capabilityIds": [
         "CAP-0101",
-        "CAP-0115"
+        "CAP-0115",
+        "CAP-0135"
       ]
     },
     {
@@ -359,6 +360,16 @@
         "CAP-0109",
         "CAP-0112",
         "CAP-0115"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0135"
       ]
     },
     {
@@ -626,6 +637,17 @@
         "CAP-0112",
         "CAP-0125",
         "CAP-0127"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0135"
       ]
     },
     {
@@ -954,7 +976,8 @@
         "CAP-0112",
         "CAP-0113",
         "CAP-0114",
-        "CAP-0115"
+        "CAP-0115",
+        "CAP-0135"
       ]
     },
     {
@@ -1003,7 +1026,8 @@
         "CAP-0115",
         "CAP-0120",
         "CAP-0121",
-        "CAP-0122"
+        "CAP-0122",
+        "CAP-0135"
       ]
     },
     {
@@ -1027,6 +1051,16 @@
         "CAP-0105",
         "CAP-0107",
         "CAP-0132"
+      ]
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-shell",
+      "capabilityIds": [
+        "CAP-0135"
       ]
     },
     {
@@ -1058,7 +1092,8 @@
         "CAP-0123",
         "CAP-0124",
         "CAP-0132",
-        "CAP-0134"
+        "CAP-0134",
+        "CAP-0135"
       ]
     },
     {
@@ -1069,7 +1104,8 @@
       "subsystem": "writer-ui",
       "capabilityIds": [
         "CAP-0101",
-        "CAP-0115"
+        "CAP-0115",
+        "CAP-0135"
       ]
     },
     {
@@ -1090,7 +1126,8 @@
       "subsystem": "writer-ui",
       "capabilityIds": [
         "CAP-0101",
-        "CAP-0115"
+        "CAP-0115",
+        "CAP-0135"
       ]
     },
     {

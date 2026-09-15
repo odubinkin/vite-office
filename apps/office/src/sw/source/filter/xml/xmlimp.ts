@@ -28,6 +28,7 @@ import {
 import { XMLStylesContext } from "../../../../xmloff/source/style/xmlstylei";
 import type {
   OdfCharacterProperties,
+  OdfHyperlink,
   OdfParagraphAlignment,
   XMLParagraphStyle,
 } from "../../../../xmloff/source/text/txtparae";
@@ -289,9 +290,13 @@ class SwXMLParagraphTarget implements XMLParagraphImportTarget {
   /** Wraps one live text node. @param node - Canonical node. @returns Paragraph target. */
   public constructor(private readonly node: SwTextNode) {}
 
-  /** Appends SAX text with effective attributes. @param text - Character data. @param properties - Effective formatting. @returns Nothing. */
-  public appendText(text: string, properties: OdfCharacterProperties): void {
-    this.node.InsertText(text, this.node.Len(), properties);
+  /** Appends SAX text with effective attributes. @param text - Character data. @param properties - Effective formatting. @param hyperlink - Optional enclosing hyperlink. @returns Nothing. */
+  public appendText(
+    text: string,
+    properties: OdfCharacterProperties,
+    hyperlink?: OdfHyperlink,
+  ): void {
+    this.node.InsertText(text, this.node.Len(), properties, hyperlink);
   }
 }
 

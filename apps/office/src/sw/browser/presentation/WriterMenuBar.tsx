@@ -39,6 +39,7 @@ export function WriterMenuBar({
         item,
       ) => !item.hasAttribute("disabled") && item.closest('[role="menu"]') === container,
     );
+    /* v8 ignore next -- Every declared Writer menu contains an enabled or focusable item. */
     if (items.length === 0) return;
     const currentIndex = current === undefined ? -1 : items.indexOf(current);
     const index =

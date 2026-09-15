@@ -12,4 +12,6 @@ export const writerStandardBarItems: readonly WriterToolbarItemPlacement[] = [
   { kind: "separator" },
   { commandId: WRITER_COMMAND_IDS.undo, kind: "command" },
   { commandId: WRITER_COMMAND_IDS.redo, kind: "command" },
+  { kind: "separator" },
+  { commandId: WRITER_COMMAND_IDS.hyperlinkDialog, kind: "command" },
 ];

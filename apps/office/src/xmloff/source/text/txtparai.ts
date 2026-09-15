@@ -4,6 +4,7 @@ import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../co
 import { XMLToken } from "../core/xmltoken";
 import type {
   OdfCharacterProperties,
+  OdfHyperlink,
   OdfListLevelKind,
   OdfParagraphAlignment,
   XMLParagraphStyle,
@@ -35,7 +36,7 @@ export interface XMLParagraphListState {
 
 /** Canonical paragraph operation surface used by SAX callbacks. */
 export interface XMLParagraphImportTarget {
-  appendText(text: string, properties: OdfCharacterProperties): void;
+  appendText(text: string, properties: OdfCharacterProperties, hyperlink?: OdfHyperlink): void;
 }
 
 /** Model-facing import surface implemented by Writer's SwXMLImport. */
@@ -137,25 +138,7 @@ export class XMLParaContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element === XMLToken.TEXT_SPAN) {
-      attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
-      const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
-      return new XMLSpanContext(this.target, this.paragraph, {
-        ...this.inherited,
-        ...resolveTextStyle(name, this.target),
-      });
-    }
-    if (element === XMLToken.TEXT_S)
-      return new XMLCharacterContext(this.paragraph, this.inherited, significantSpaces(attributes));
-    if (element === XMLToken.TEXT_TAB) {
-      attributes.assertOnly([], "tab");
-      return new XMLCharacterContext(this.paragraph, this.inherited, "\t");
-    }
-    if (element === XMLToken.TEXT_LINE_BREAK) {
-      attributes.assertOnly([], "line-break");
-      return new XMLCharacterContext(this.paragraph, this.inherited, "\n");
-    }
-    return null;
+    return createInlineContext(this.target, this.paragraph, this.inherited, element, attributes);
   }
 }
 
@@ -180,46 +163,168 @@ class XMLSpanContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element === XMLToken.TEXT_SPAN) {
-      attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
-      const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
-      return new XMLSpanContext(this.target, this.paragraph, {
-        ...this.properties,
-        ...resolveTextStyle(name, this.target),
-      });
-    }
-    if (element === XMLToken.TEXT_S)
-      return new XMLCharacterContext(
-        this.paragraph,
-        this.properties,
-        significantSpaces(attributes),
-      );
-    if (element === XMLToken.TEXT_TAB || element === XMLToken.TEXT_LINE_BREAK) {
-      attributes.assertOnly([], "inline control");
-      return new XMLCharacterContext(
-        this.paragraph,
-        this.properties,
-        element === XMLToken.TEXT_TAB ? "\t" : "\n",
-      );
-    }
-    return null;
+    return createInlineContext(this.target, this.paragraph, this.properties, element, attributes);
+  }
+}
+
+/** Imports one text:a range while preserving nested character formatting. */
+class XMLHyperlinkContext extends SvXMLImportContext {
+  /** Creates a hyperlink context. @param target - Writer target. @param paragraph - Active paragraph. @param properties - Effective formatting. @param attributes - Link attributes. @returns Context. */
+  public constructor(
+    private readonly target: XMLTextImportTarget,
+    private readonly paragraph: XMLParagraphImportTarget,
+    private readonly properties: OdfCharacterProperties,
+    attributes: FastAttributeList,
+  ) {
+    super();
+    attributes.assertOnly(
+      [
+        XMLToken.XLINK_HREF,
+        XMLToken.XLINK_SHOW,
+        XMLToken.XLINK_TYPE,
+        XMLToken.OFFICE_NAME,
+        XMLToken.OFFICE_TARGET_FRAME_NAME,
+        XMLToken.TEXT_STYLE_NAME,
+        XMLToken.TEXT_VISITED_STYLE_NAME,
+      ],
+      "hyperlink",
+    );
+    const url = attributes.get(XMLToken.XLINK_HREF) ?? "";
+    const explicitTarget = attributes.get(XMLToken.OFFICE_TARGET_FRAME_NAME);
+    const show = attributes.get(XMLToken.XLINK_SHOW);
+    this.hyperlink =
+      url.length === 0
+        ? undefined
+        : {
+            ...(attributes.get(XMLToken.OFFICE_NAME) === null
+              ? {}
+              : { name: attributes.get(XMLToken.OFFICE_NAME) as string }),
+            ...(explicitTarget !== null
+              ? { targetFrame: explicitTarget }
+              : show === "new"
+                ? { targetFrame: "_blank" }
+                : show === "replace"
+                  ? { targetFrame: "_self" }
+                  : {}),
+            ...(attributes.get(XMLToken.TEXT_STYLE_NAME) === null
+              ? {}
+              : { styleName: attributes.get(XMLToken.TEXT_STYLE_NAME) as string }),
+            url,
+            ...(attributes.get(XMLToken.TEXT_VISITED_STYLE_NAME) === null
+              ? {}
+              : {
+                  visitedStyleName: attributes.get(XMLToken.TEXT_VISITED_STYLE_NAME) as string,
+                }),
+          };
+  }
+
+  private readonly hyperlink: OdfHyperlink | undefined;
+
+  /** Appends linked or plain characters. @param characters - Decoded text. @returns Nothing. */
+  public override characters(characters: string): void {
+    this.paragraph.appendText(characters, this.properties, this.hyperlink);
+  }
+
+  /** Creates supported hyperlink children except nested links. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    return createInlineContext(
+      this.target,
+      this.paragraph,
+      this.properties,
+      element,
+      attributes,
+      this.hyperlink,
+      false,
+    );
+  }
+}
+
+/** Creates one supported inline import context. @param target - Writer target. @param paragraph - Active paragraph. @param properties - Effective formatting. @param element - Child token. @param attributes - Attributes. @param hyperlink - Optional active hyperlink. @param allowHyperlink - Whether text:a may start here. @returns Child context or null. */
+function createInlineContext(
+  target: XMLTextImportTarget,
+  paragraph: XMLParagraphImportTarget,
+  properties: OdfCharacterProperties,
+  element: XMLToken,
+  attributes: FastAttributeList,
+  hyperlink?: OdfHyperlink,
+  allowHyperlink = true,
+): SvXMLImportContext | null {
+  if (element === XMLToken.TEXT_SPAN) {
+    attributes.assertOnly([XMLToken.TEXT_STYLE_NAME], "span");
+    const name = attributes.get(XMLToken.TEXT_STYLE_NAME) ?? "";
+    const effective = { ...properties, ...resolveTextStyle(name, target) };
+    return hyperlink === undefined
+      ? new XMLSpanContext(target, paragraph, effective)
+      : new XMLLinkedSpanContext(target, paragraph, effective, hyperlink);
+  }
+  if (element === XMLToken.TEXT_A && allowHyperlink)
+    return new XMLHyperlinkContext(target, paragraph, properties, attributes);
+  if (element === XMLToken.TEXT_S)
+    return new XMLCharacterContext(paragraph, properties, significantSpaces(attributes), hyperlink);
+  if (element === XMLToken.TEXT_TAB || element === XMLToken.TEXT_LINE_BREAK) {
+    attributes.assertOnly([], "inline control");
+    return new XMLCharacterContext(
+      paragraph,
+      properties,
+      element === XMLToken.TEXT_TAB ? "\t" : "\n",
+      hyperlink,
+    );
+  }
+  return null;
+}
+
+/** Imports a text:span nested inside one hyperlink. */
+class XMLLinkedSpanContext extends SvXMLImportContext {
+  /** Creates a linked span. @param target - Writer target. @param paragraph - Active paragraph. @param properties - Effective formatting. @param hyperlink - Active hyperlink. @returns Context. */
+  public constructor(
+    private readonly target: XMLTextImportTarget,
+    private readonly paragraph: XMLParagraphImportTarget,
+    private readonly properties: OdfCharacterProperties,
+    private readonly hyperlink: OdfHyperlink,
+  ) {
+    super();
+  }
+
+  /** Appends linked span text. @param characters - Decoded text. @returns Nothing. */
+  public override characters(characters: string): void {
+    this.paragraph.appendText(characters, this.properties, this.hyperlink);
+  }
+
+  /** Creates nested supported inline content without nested links. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    return createInlineContext(
+      this.target,
+      this.paragraph,
+      this.properties,
+      element,
+      attributes,
+      this.hyperlink,
+      false,
+    );
   }
 }
 
 /** Appends one empty-element character construct on start. */
 class XMLCharacterContext extends SvXMLImportContext {
-  /** Creates one inline character context. @param paragraph - Active paragraph. @param properties - Effective properties. @param value - Inserted text. @returns Context. */
+  /** Creates one inline character context. @param paragraph - Active paragraph. @param properties - Effective properties. @param value - Inserted text. @param hyperlink - Optional enclosing hyperlink. @returns Context. */
   public constructor(
     private readonly paragraph: XMLParagraphImportTarget,
     private readonly properties: OdfCharacterProperties,
     private readonly value: string,
+    private readonly hyperlink?: OdfHyperlink,
   ) {
     super();
   }
 
   /** Inserts the represented character data. @returns Nothing. */
   public override startFastElement(): void {
-    this.paragraph.appendText(this.value, this.properties);
+    this.paragraph.appendText(this.value, this.properties, this.hyperlink);
   }
 }
 

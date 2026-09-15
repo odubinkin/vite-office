@@ -266,6 +266,14 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           event,
         ) => composition.Update(event.data)
       }
+      onClick={
+        /** Keeps link activation out of the editable surface while retaining semantic anchors. @param event - Editor click. @returns Nothing. */ (
+          event,
+        ) => {
+          if ((event.target as HTMLElement).closest("a[data-writer-hyperlink]") !== null)
+            event.preventDefault();
+        }
+      }
       onCopy={
         /** Handles native copy. @param event - Clipboard event. @returns Whether copy was handled. */ (
           event,

@@ -112,6 +112,8 @@ The following documents form the program control plane:
 - [Runtime parity inventory](parity/runtime-inventory.json): exhaustive
   classification of production modules, exported operations, visible command
   IDs, UI-only behavior, internal operations, and placeholder suites.
+- [Writer hyperlinks](writer-hyperlinks.md): ranged hyperlink model, upstream ODT fixture provenance,
+  browser UI, and import/export behavior.
 - [LibreOffice baseline](libreoffice-baseline.md): immutable upstream identity,
   acquisition, provenance, and licensing boundary.
 - [Inventory contract](inventory-contract.md): deterministic validation of the

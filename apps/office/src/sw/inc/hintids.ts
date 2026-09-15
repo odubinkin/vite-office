@@ -41,6 +41,9 @@ export const RES_CHRATR_END = 49 as const;
 /** Ranged text auto-format attribute, `RES_TXTATR_WITHEND_BEGIN + 4`. */
 export const RES_TXTATR_AUTOFMT = 53 as const;
 
+/** Ranged internet-format attribute, `RES_TXTATR_WITHEND_BEGIN + 5`. */
+export const RES_TXTATR_INETFMT = 54 as const;
+
 /** Paragraph adjustment item, `RES_PARATR_BEGIN + 1`. */
 export const RES_PARATR_ADJUST = 65 as const;
 

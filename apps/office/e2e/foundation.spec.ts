@@ -43,9 +43,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await page.getByRole("button", { name: "File" }).click();
   await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
   await page.getByRole("button", { name: "Insert" }).click();
-  await expect(page.getByRole("menu", { name: "Insert menu" })).toContainText(
-    "No browser command is implemented here yet.",
-  );
+  await expect(page.getByRole("menuitem", { name: "Hyperlink…" })).toBeVisible();
   await page.getByRole("button", { name: "Table" }).click();
   await expect(page.getByRole("menu", { name: "Table menu" })).toBeVisible();
   await page.getByRole("button", { name: "Tools" }).click();

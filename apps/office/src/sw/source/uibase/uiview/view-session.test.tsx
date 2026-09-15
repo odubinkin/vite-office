@@ -101,6 +101,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       commandId: "writer.missing",
       status: "missing",
     });
+    expect(view.Execute(WRITER_COMMAND_IDS.hyperlinkDialog).status).toBe("executed");
+    expect(view.Execute(WRITER_COMMAND_IDS.editHyperlink).status).toBe("disabled");
     const listener = vi.fn();
     const unsubscribe = view.Subscribe(listener);
     expect(view.Execute(WRITER_COMMAND_IDS.alignCenter).status).toBe("executed");
@@ -206,7 +208,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
           /** Projects the command identity from one dispatch call. @param call - Captured Execute arguments. @returns Stable command ID. */
           ([commandId]) => commandId,
         ),
-    ).toEqual([WRITER_COMMAND_IDS.bold, WRITER_COMMAND_IDS.bold]);
+    ).toEqual([WRITER_COMMAND_IDS.bold, WRITER_COMMAND_IDS.bold, WRITER_COMMAND_IDS.bold]);
     expect(boldHandler).toHaveBeenCalledTimes(3);
 
     fireEvent.click(screen.getByRole("button", { name: "Ordered List" }));
@@ -233,11 +235,12 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     );
     const document = session.docShell.GetDoc();
     firstMount.unmount();
-    render(<WriterWorkbench isActive view={session.view} />);
+    const mount = render(<WriterWorkbench isActive view={session.view} />);
     expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
       "Persistent session text",
     );
     expect(session.docShell.GetDoc()).toBe(document);
+    mount.unmount();
     session.Close();
   });
 
@@ -247,6 +250,75 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const mount = render(<WriterWorkbench isActive={false} view={session.view} />);
     fireEvent.keyDown(window, { ctrlKey: true, key: "b" });
     expect(boldHandler).not.toHaveBeenCalled();
+    mount.unmount();
+    session.Close();
+  });
+
+  it("creates, edits, removes, and undoes hyperlinks through upstream-aligned UI commands", /** Verifies the Insert menu/standard toolbar dialog and Edit commands share one ranged Writer attribute. @returns Nothing. */ function editsHyperlinks(): void {
+    const session = createWriterDocumentSession(createServices());
+    const shell = session.view.GetWrtShell();
+    expect(shell.HandleInput("insertText", "Link")).toBe(true);
+    shell.SetSelection({
+      mark: { offset: 0, paragraphId: "writer-paragraph-1" },
+      point: { offset: 4, paragraphId: "writer-paragraph-1" },
+    });
+    const mount = render(<WriterWorkbench isActive view={session.view} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Hyperlink" }));
+    expect(screen.getByRole("dialog", { name: "Hyperlink" })).toBeVisible();
+    fireEvent.change(screen.getByLabelText("URL"), {
+      target: { value: "https://example.test/first" },
+    });
+    fireEvent.change(screen.getByLabelText("Target"), { target: { value: "_blank" } });
+    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    expect(screen.getByRole("link", { name: "Link" })).toHaveAttribute(
+      "href",
+      "https://example.test/first",
+    );
+    expect(shell.GetActiveParagraph().runs[0]?.hyperlink).toMatchObject({
+      targetFrame: "_blank",
+      url: "https://example.test/first",
+    });
+    expect(session.view.Execute(WRITER_COMMAND_IDS.editHyperlink).status).toBe("executed");
+
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Edit Hyperlink…" }));
+    fireEvent.change(screen.getByLabelText("URL"), {
+      target: { value: "https://example.test/updated" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    expect(shell.GetActiveParagraph().runs[0]?.hyperlink?.url).toBe("https://example.test/updated");
+
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Remove Hyperlink" }));
+    expect(screen.queryByRole("link", { name: "Link" })).not.toBeInTheDocument();
+    expect(shell.GetActiveParagraph().runs[0]?.hyperlink).toBeUndefined();
+    expect(shell.Undo()).toBe(true);
+    expect(shell.GetActiveParagraph().runs[0]?.hyperlink?.url).toBe("https://example.test/updated");
+    mount.unmount();
+    session.Close();
+  });
+
+  it("opens the hyperlink dialog by shortcut and inserts linked text at a caret", /** Covers the upstream Ctrl+K accelerator, cancel path, optional text field, and relative destinations. @returns Nothing. */ function insertsHyperlinkAtCaret(): void {
+    const session = createWriterDocumentSession(createServices());
+    const mount = render(<WriterWorkbench isActive view={session.view} />);
+    fireEvent.keyDown(window, { ctrlKey: true, key: "k" });
+    expect(screen.getByRole("dialog", { name: "Hyperlink" })).toBeVisible();
+    const emptyForm = screen.getByLabelText("URL").closest("form");
+    if (emptyForm === null) throw new Error("Hyperlink dialog form is missing.");
+    fireEvent.submit(emptyForm);
+    expect(screen.getByRole("dialog", { name: "Hyperlink" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(screen.queryByRole("dialog", { name: "Hyperlink" })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Hyperlink" }));
+    fireEvent.change(screen.getByLabelText("URL"), { target: { value: "docs/guide.html" } });
+    fireEvent.change(screen.getByLabelText("Text"), { target: { value: "Guide" } });
+    fireEvent.click(screen.getByRole("button", { name: "Apply" }));
+    const link = screen.getByRole("link", { name: "Guide" });
+    expect(link).toHaveAttribute("href", "docs/guide.html");
+    fireEvent.click(link);
+    fireEvent.click(screen.getByRole("textbox", { name: "Writer document text" }));
     mount.unmount();
     session.Close();
   });

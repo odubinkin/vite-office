@@ -35,7 +35,11 @@ interface ImportedParagraph {
   alignment?: XMLTextParagraphSource["alignment"];
   list?: XMLParagraphListState;
   properties?: Partial<OdfCharacterProperties>;
-  runs: { properties: OdfCharacterProperties; text: string }[];
+  runs: {
+    hyperlink?: XMLTextParagraphSource["runs"][number]["hyperlink"];
+    properties: OdfCharacterProperties;
+    text: string;
+  }[];
   style: XMLTextParagraphSource["style"];
 }
 
@@ -58,15 +62,21 @@ function importBody(
       };
       paragraphs.push(paragraph);
       return {
-        /** Appends text, merging adjacent equal runs like SwTextNode. @param text - Text. @param runProperties - Effective properties. @returns Nothing. */
-        appendText(text, runProperties): void {
+        /** Appends text, merging adjacent equal runs like SwTextNode. @param text - Text. @param runProperties - Effective properties. @param hyperlink - Optional hyperlink metadata. @returns Nothing. */
+        appendText(text, runProperties, hyperlink): void {
           const previous = paragraph.runs.at(-1);
           if (
             previous !== undefined &&
-            JSON.stringify(previous.properties) === JSON.stringify(runProperties)
+            JSON.stringify(previous.properties) === JSON.stringify(runProperties) &&
+            JSON.stringify(previous.hyperlink) === JSON.stringify(hyperlink)
           )
             previous.text += text;
-          else paragraph.runs.push({ properties: runProperties, text });
+          else
+            paragraph.runs.push({
+              ...(hyperlink === undefined ? {} : { hyperlink }),
+              properties: runProperties,
+              text,
+            });
         },
       };
     },
@@ -76,7 +86,7 @@ function importBody(
     getStyle: (name) => styles.get(name),
   };
   parseOdfXmlStream(
-    `<office:text xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}">${body}</office:text>`,
+    `<office:text xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:xlink="${ODF_NAMESPACES.xlink}">${body}</office:text>`,
     {
       /** Creates the text body root. @param element - Root token. @returns Context or null. */
       createFastContext(element): SvXMLImportContext | null {
@@ -404,7 +414,6 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
       '<text:p text:style-name="Missing"/>',
       "<text:p><text:span>x</text:span></text:p>",
       '<text:p><text:span text:style-name="T1"><text:span>x</text:span></text:span></text:p>',
-      "<text:p><text:a/></text:p>",
       "<text:span/>",
       "<text:p><text:list/></text:p>",
       '<text:p><text:span text:style-name="T1"><text:list/></text:span></text:p>',
@@ -419,6 +428,85 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
         /** Imports an unsupported structure. @returns Nothing. */ () =>
           importBody(body, styles, new Map([["L1", bullet]])),
       ).toThrow("Unsupported ODF");
+    expect(
+      importBody(
+        '<text:p>before <text:a xlink:href="https://example.test" xlink:type="simple" xlink:show="new" office:name="named" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">linked<text:span text:style-name="T1"> bold</text:span><text:tab/></text:a> after</text:p>',
+        styles,
+      )[0]?.runs,
+    ).toEqual([
+      { properties: { bold: false, italic: false, underline: false }, text: "before " },
+      {
+        properties: { bold: false, italic: false, underline: false },
+        hyperlink: {
+          name: "named",
+          styleName: "Internet_20_link",
+          targetFrame: "_blank",
+          url: "https://example.test",
+          visitedStyleName: "Visited_20_Internet_20_Link",
+        },
+        text: "linked",
+      },
+      {
+        properties: { bold: true, italic: false, underline: false },
+        hyperlink: {
+          name: "named",
+          styleName: "Internet_20_link",
+          targetFrame: "_blank",
+          url: "https://example.test",
+          visitedStyleName: "Visited_20_Internet_20_Link",
+        },
+        text: " bold",
+      },
+      {
+        properties: { bold: false, italic: false, underline: false },
+        hyperlink: {
+          name: "named",
+          styleName: "Internet_20_link",
+          targetFrame: "_blank",
+          url: "https://example.test",
+          visitedStyleName: "Visited_20_Internet_20_Link",
+        },
+        text: "\t",
+      },
+      { properties: { bold: false, italic: false, underline: false }, text: " after" },
+    ]);
+    expect(importBody("<text:p><text:a>plain</text:a></text:p>", styles)[0]?.runs).toEqual([
+      { properties: { bold: false, italic: false, underline: false }, text: "plain" },
+    ]);
+    expect(
+      importBody(
+        '<text:p><text:a xlink:href="same" xlink:show="replace">same</text:a><text:a xlink:href="other" xlink:show="other">other</text:a><text:a xlink:href="parent" office:target-frame-name="_parent">parent</text:a></text:p>',
+        styles,
+      )[0]?.runs,
+    ).toEqual([
+      {
+        hyperlink: { targetFrame: "_self", url: "same" },
+        properties: { bold: false, italic: false, underline: false },
+        text: "same",
+      },
+      {
+        hyperlink: { url: "other" },
+        properties: { bold: false, italic: false, underline: false },
+        text: "other",
+      },
+      {
+        hyperlink: { targetFrame: "_parent", url: "parent" },
+        properties: { bold: false, italic: false, underline: false },
+        text: "parent",
+      },
+    ]);
+    expect(
+      importBody(
+        '<text:p><text:a xlink:href="relative"><text:span text:style-name="T1">A<text:s text:c="2"/>B</text:span></text:a></text:p>',
+        styles,
+      )[0]?.runs,
+    ).toEqual([
+      {
+        hyperlink: { url: "relative" },
+        properties: { bold: true, italic: false, underline: false },
+        text: "A  B",
+      },
+    ]);
     expect(
       /** Imports a missing list style. @returns Nothing. */ () =>
         importBody(

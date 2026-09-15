@@ -33,6 +33,7 @@ import {
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwContentIndexUpdateMode } from "../bastyp/contentindex";
+import { equalWriterHyperlinks, normalizeWriterHyperlink, type WriterHyperlink } from "./fmtinfmt";
 
 /** Finds the grapheme start immediately before a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
 export function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
@@ -117,6 +118,8 @@ export type WriterCharacterFormat = (typeof WRITER_CHARACTER_FORMATS)[number];
 export interface WriterTextRun {
   /** Direct character attributes applied to every code unit in text. */
   readonly attributes: WriterCharacterAttributes;
+  /** Optional hyperlink applied to this exact text portion. */
+  readonly hyperlink?: WriterHyperlink;
   /** Non-empty UTF-16 text fragment. */
   readonly text: string;
 }
@@ -175,14 +178,20 @@ export function normalizeWriterTextRuns(candidate: unknown): readonly WriterText
     function appendNormalizedRun(item): void {
       if (!isRecord(item) || typeof item.text !== "string" || item.text.length === 0) return;
       const attributes = normalizeWriterCharacterAttributes(item.attributes);
+      const hyperlink = normalizeWriterHyperlink(item.hyperlink);
       const previous = runs[runs.length - 1];
       if (
         previous !== undefined &&
-        areWriterCharacterAttributesEqual(previous.attributes, attributes)
+        areWriterCharacterAttributesEqual(previous.attributes, attributes) &&
+        equalWriterHyperlinks(previous.hyperlink, hyperlink)
       ) {
         runs[runs.length - 1] = { ...previous, text: `${previous.text}${item.text}` };
       } else {
-        runs.push({ attributes, text: item.text });
+        runs.push({
+          attributes,
+          ...(hyperlink === undefined ? {} : { hyperlink }),
+          text: item.text,
+        });
       }
     },
   );
@@ -241,14 +250,25 @@ export function applyWriterTextRangeFont(
         return [
           ...(beforeLength === 0
             ? []
-            : [{ attributes: run.attributes, text: run.text.slice(0, beforeLength) }]),
+            : [
+                {
+                  ...run,
+                  text: run.text.slice(0, beforeLength),
+                },
+              ]),
           {
+            ...run,
             attributes: { ...run.attributes, fontFamily },
             text: run.text.slice(beforeLength, afterStart),
           },
           ...(afterStart === run.text.length
             ? []
-            : [{ attributes: run.attributes, text: run.text.slice(afterStart) }]),
+            : [
+                {
+                  ...run,
+                  text: run.text.slice(afterStart),
+                },
+              ]),
         ];
       },
     ),
@@ -315,9 +335,9 @@ export function toggleWriterTextRangeFormat(
         const after = run.text.slice(afterStart);
         const attributes = { ...run.attributes, [format]: !selectedAlreadyFormatted };
         return [
-          ...(before.length === 0 ? [] : [{ attributes: run.attributes, text: before }]),
-          { attributes, text: selected },
-          ...(after.length === 0 ? [] : [{ attributes: run.attributes, text: after }]),
+          ...(before.length === 0 ? [] : [{ ...run, text: before }]),
+          { ...run, attributes, text: selected },
+          ...(after.length === 0 ? [] : [{ ...run, text: after }]),
         ];
       },
     ),
@@ -331,6 +351,7 @@ export function toggleWriterTextRangeFormat(
  * @param offset - UTF-16 insertion offset from zero through visible text length.
  * @param text - Text to insert unchanged.
  * @param attributes - Direct attributes inherited by the inserted text.
+ * @param hyperlink - Optional hyperlink inherited by the inserted text.
  * @returns Normalized runs containing the inserted text, or the original normalized runs for empty text.
  * @throws {Error} When offset is outside visible text bounds.
  */
@@ -339,13 +360,19 @@ export function insertWriterTextRun(
   offset: number,
   text: string,
   attributes: WriterCharacterAttributes,
+  hyperlink?: WriterHyperlink,
 ): readonly WriterTextRun[] {
   const normalized = normalizeWriterTextRuns(runs);
   const textLength = getWriterTextFromRuns(normalized).length;
   if (!Number.isInteger(offset) || offset < 0 || offset > textLength)
     throw new Error("Writer text insertion offset is outside the paragraph.");
   if (text.length === 0) return normalized;
-  const inserted = { attributes: normalizeWriterCharacterAttributes(attributes), text };
+  const normalizedHyperlink = normalizeWriterHyperlink(hyperlink);
+  const inserted = {
+    attributes: normalizeWriterCharacterAttributes(attributes),
+    ...(normalizedHyperlink === undefined ? {} : { hyperlink: normalizedHyperlink }),
+    text,
+  };
   let consumed = 0;
   let insertedRun = false;
   const nextRuns = normalized.flatMap(
@@ -360,11 +387,21 @@ export function insertWriterTextRun(
       return [
         ...(localOffset === 0
           ? []
-          : [{ attributes: run.attributes, text: run.text.slice(0, localOffset) }]),
+          : [
+              {
+                ...run,
+                text: run.text.slice(0, localOffset),
+              },
+            ]),
         inserted,
         ...(localOffset === run.text.length
           ? []
-          : [{ attributes: run.attributes, text: run.text.slice(localOffset) }]),
+          : [
+              {
+                ...run,
+                text: run.text.slice(localOffset),
+              },
+            ]),
       ];
     },
   );
@@ -400,8 +437,14 @@ export function splitWriterTextRuns(
       else if (runStart >= offset) suffix.push(run);
       else {
         const localOffset = offset - runStart;
-        prefix.push({ attributes: run.attributes, text: run.text.slice(0, localOffset) });
-        suffix.push({ attributes: run.attributes, text: run.text.slice(localOffset) });
+        prefix.push({
+          ...run,
+          text: run.text.slice(0, localOffset),
+        });
+        suffix.push({
+          ...run,
+          text: run.text.slice(localOffset),
+        });
       }
     },
   );
@@ -609,14 +652,15 @@ export class SwTextNode extends SwContentNode {
     this.SetAttrListLevel(normalized.level);
   }
 
-  /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @returns Inserted text. */
+  /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @param hyperlink - Optional inherited hyperlink. @returns Inserted text. */
   public InsertText(
     text: string,
     offset: number,
     attributes = this.getCharacterAttributesAt(offset),
+    hyperlink = this.getHyperlinkAt(offset),
   ): string {
     if (text.length === 0) return text;
-    const runs = insertWriterTextRun(this.runs, offset, text, attributes);
+    const runs = insertWriterTextRun(this.runs, offset, text, attributes, hyperlink);
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
     this.setHintsFromRuns(runs);
     this.UpdateContentIndices(offset, text.length);
@@ -702,6 +746,29 @@ export class SwTextNode extends SwContentNode {
           this.GetSwAttrSet(),
         )
       : this.pSwpHints.getCharacterAttributes(this.mText, offset, this.GetSwAttrSet());
+  }
+
+  /** Reads the hyperlink inherited by a caret. @param offset - UTF-16 caret offset. @returns Hyperlink metadata or undefined. */
+  public getHyperlinkAt(offset: number): WriterHyperlink | undefined {
+    return this.pSwpHints?.getHyperlink(this.mText, offset);
+  }
+
+  /** Applies, replaces, or removes one hyperlink over a non-empty range. @param start - Inclusive range start. @param end - Exclusive range end. @param hyperlink - Replacement hyperlink or undefined to remove. @returns Nothing. */
+  public SetHyperlink(start: number, end: number, hyperlink: WriterHyperlink | undefined): void {
+    this.assertRange(start, end);
+    if (start === end) return;
+    const before = splitWriterTextRuns(this.runs, start);
+    const selected = splitWriterTextRuns(before.suffix, end - start);
+    const replacement = selected.prefix.map(
+      /** Replaces hyperlink metadata without altering direct character formatting. @param run - Selected run. @returns Updated run. */
+      (run): WriterTextRun => ({
+        attributes: run.attributes,
+        ...(hyperlink === undefined ? {} : { hyperlink }),
+        text: run.text,
+      }),
+    );
+    this.setTextRuns([...before.prefix, ...replacement, ...selected.suffix]);
+    this.GetDoc().CallSwClientNotify({ kind: "attribute-set-changed", nodeId: this.id });
   }
 
   /** Splits this node at one content offset and returns an uninserted trailing sibling. @param offset - UTF-16 split offset. @param nextId - Trailing node identity. @returns Prepared trailing text node. */

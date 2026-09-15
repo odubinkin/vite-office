@@ -33,6 +33,7 @@ import type { SwNodes } from "../docnode/nodes";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatColl } from "./fmtcol";
 import { SwNumFormat, SwNumRule } from "./number";
+import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import {
   createWriterDocument,
   normalizeWriterParagraphFormatting,
@@ -251,7 +252,9 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
       { attributes: { bold: false, italic: false, underline: false }, text: "a" },
       { attributes: { bold: true, italic: true, underline: true }, text: "b" },
     ]);
-    const handle = node.GetpSwpHints()?.Get(0).format.GetStyleHandle();
+    const format = node.GetpSwpHints()?.Get(0).format;
+    expect(format).toBeInstanceOf(SwFormatAutoFormat);
+    const handle = format instanceof SwFormatAutoFormat ? format.GetStyleHandle() : undefined;
     expect(handle?.Get(RES_CHRATR_WEIGHT)).toBeInstanceOf(SvxWeightItem);
     expect(handle?.Get(RES_CHRATR_POSTURE)).toBeInstanceOf(SvxPostureItem);
     expect(handle?.Get(RES_CHRATR_UNDERLINE)).toBeInstanceOf(SvxUnderlineItem);

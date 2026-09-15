@@ -122,6 +122,15 @@ function synchronizeWriterParagraphContent(
       bold.append(content);
       content = bold;
     }
+    if (run.hyperlink !== undefined) {
+      const hyperlink = paragraph.ownerDocument.createElement("a");
+      hyperlink.href = run.hyperlink.url;
+      hyperlink.dataset.writerHyperlink = run.hyperlink.url;
+      hyperlink.rel = "noopener noreferrer";
+      if (run.hyperlink.targetFrame !== undefined) hyperlink.target = run.hyperlink.targetFrame;
+      hyperlink.append(content);
+      content = hyperlink;
+    }
     expected.append(content);
   }
   if (paragraph.innerHTML !== expected.innerHTML) paragraph.replaceChildren(...expected.childNodes);

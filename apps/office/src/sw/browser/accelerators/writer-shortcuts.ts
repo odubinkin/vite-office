@@ -16,6 +16,8 @@ export interface WriterShortcutOptions {
   readonly isActive: boolean;
   /** Supplies DOM-adapted arguments for the resolved command identity. */
   readonly resolveArguments: (commandId: string) => unknown;
+  /** Optional presentation interceptor for commands such as dialogs. */
+  readonly executeCommand: (commandId: string, arguments_: unknown) => { readonly status: string };
 }
 
 /**
@@ -24,12 +26,14 @@ export interface WriterShortcutOptions {
  *
  * @param options - Active dispatcher, visibility, and DOM argument adapter.
  * @param options.dispatcher - Active frame dispatcher.
+ * @param options.executeCommand - Presentation-aware command executor.
  * @param options.isActive - Whether Writer may consume shortcuts.
  * @param options.resolveArguments - DOM argument adapter for the resolved command.
  * @returns Nothing; React owns listener installation and cleanup only.
  */
 export function useWriterCommandShortcuts({
   dispatcher,
+  executeCommand,
   isActive,
   resolveArguments,
 }: WriterShortcutOptions): void {
@@ -43,14 +47,15 @@ export function useWriterCommandShortcuts({
         if (shortcut === undefined) return;
         const command = dispatcher.FindCommandByShortcut(shortcut);
         if (command === undefined) return;
-        if (command.execute(resolveArguments(command.command.id)).status === "executed")
-          event.preventDefault();
+        const arguments_ = resolveArguments(command.command.id);
+        const result = executeCommand(command.command.id, arguments_);
+        if (result.status === "executed") event.preventDefault();
       }
       window.addEventListener("keydown", handleKeyDown);
       return /** Removes the frame accelerator listener. @returns Nothing. */ function removeWriterShortcuts(): void {
         window.removeEventListener("keydown", handleKeyDown);
       };
     },
-    [dispatcher, isActive, resolveArguments],
+    [dispatcher, executeCommand, isActive, resolveArguments],
   );
 }

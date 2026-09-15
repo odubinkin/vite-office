@@ -139,9 +139,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     fireEvent.click(screen.getByRole("button", { name: "Styles" }));
     expect(screen.getByRole("menu", { name: "Styles menu" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Insert" }));
-    expect(screen.getByRole("menu", { name: "Insert menu" })).toHaveTextContent(
-      "No browser command is implemented here yet.",
-    );
+    expect(screen.getByRole("menuitem", { name: "Hyperlink…" })).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: "Table" }));
     expect(screen.getByRole("menu", { name: "Table menu" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Tools" }));

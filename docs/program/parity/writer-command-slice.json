@@ -4886,6 +4886,130 @@
       "aspect": "browser-input",
       "atomicOperation": "Translate one supported beforeinput intent into a Writer mutation",
       "scopeLimitations": []
+    },
+    {
+      "id": "LO-WRITER-0135",
+      "capabilityId": "CAP-0135",
+      "suite": "writer",
+      "subsystem": "hyperlinks",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Text hyperlinks retain URL, name, target frame, unvisited style, and visited style independently from character formatting.",
+        "ODT import accepts text:a and ODT export groups adjacent linked portions into text:a elements.",
+        "Insert, standard-toolbar, Ctrl/Cmd+K, Edit, Remove, Undo, save, and reopen paths share the Writer ranged-attribute model."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React provides the accessible hyperlink dialog and prevents navigation inside the editing surface while preserving Writer model and ODF semantics."
+      },
+      "capability": "Writer text hyperlinks and ODT text:a interoperability",
+      "gaps": [],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/core/txtnode/fmtatr2.cxx",
+            "marker": "SwFormatINetFormat::SwFormatINetFormat"
+          },
+          {
+            "path": "sw/source/core/edit/editsh.cxx",
+            "marker": "SwEditShell::InsertURL"
+          },
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "XMLImpHyperlinkContext_Impl"
+          },
+          {
+            "path": "xmloff/source/text/txtparae.cxx",
+            "marker": "HyperlinkData"
+          },
+          {
+            "path": "sw/uiconfig/swriter/menubar/menubar.xml",
+            "marker": ".uno:HyperlinkDialog"
+          },
+          {
+            "path": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+            "marker": ".uno:HyperlinkDialog"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+            "marker": "hyperlink.odt"
+          },
+          {
+            "path": "sw/qa/extras/ooxmlexport/ooxmlexport16.cxx",
+            "marker": "151384Hyperlink.odt"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/02/09070000.xhp",
+            "marker": ".uno:HyperlinkDialog"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
+            "marker": "export class SwFormatINetFormat"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
+            "marker": "createWriterHyperlinkAction"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "marker": "class XMLHyperlinkContext"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+            "marker": "exportHyperlinkStart"
+          },
+          {
+            "path": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx",
+            "marker": "export function WriterHyperlinkDialog"
+          },
+          {
+            "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+            "marker": "hyperlinkDialog"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-hyperlink-roundtrip.test.ts",
+            "marker": "pinned upstream hyperlink ODT fixtures"
+          },
+          {
+            "path": "apps/office/src/sw/source/core/doc/writer-model.test.ts",
+            "marker": "projects overlapping character formatting and hyperlink ranges"
+          },
+          {
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "marker": "edits complete hyperlink ranges"
+          },
+          {
+            "path": "apps/office/e2e/writer-hyperlinks.spec.ts",
+            "marker": "round-trips hyperlinks"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-hyperlinks.md",
+            "marker": "Writer Hyperlinks"
+          },
+          {
+            "path": "docs/program/source-tree.md",
+            "marker": "SwFormatINetFormat"
+          }
+        ]
+      },
+      "aspect": "compatibility",
+      "atomicOperation": "Create, edit, remove, import, and export one Writer text hyperlink",
+      "scopeLimitations": [
+        "Hyperlink macro events, visited-state mutation, image-map links, drawing-object links, and navigation policy remain outside this text-link slice."
+      ]
     }
   ]
 }

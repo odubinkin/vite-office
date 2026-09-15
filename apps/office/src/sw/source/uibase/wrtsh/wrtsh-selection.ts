@@ -3,7 +3,16 @@
  * pinned LibreOffice `sw/source/uibase/wrtsh/select.cxx`.
  */
 
-import type { WriterParagraph } from "../../core/doc/writer";
+import type { WriterCharacterAttributes, WriterParagraph } from "../../core/doc/writer";
+import type { SwUndoCursorState } from "../../core/undo/undobj";
+
+/** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
+export interface WriterCompositionState {
+  /** Cursor or selection replaced when the composition is committed. */
+  readonly cursor: SwUndoCursorState;
+  /** Latest browser composition text, not yet written into SwDoc. */
+  text: string;
+}
 
 /** Stable browser-neutral coordinate used to synchronize a Writer SwPaM with a rendered view. */
 export interface WriterCursorPosition {
@@ -47,4 +56,50 @@ export function areWriterCursorSelectionsEqual(
     left.mark?.paragraphId === right.mark?.paragraphId &&
     left.mark?.offset === right.mark?.offset
   );
+}
+
+/** Returns an ordered non-empty same-node selection. @param selection - Cursor projection. @returns Bounded range or undefined. */
+export function getWriterSelectedTextRange(
+  selection: WriterCursorSelection,
+): WriterParagraphTextRange | undefined {
+  if (selection.mark === undefined || selection.mark.paragraphId !== selection.point.paragraphId)
+    return undefined;
+  const start = Math.min(selection.point.offset, selection.mark.offset);
+  const end = Math.max(selection.point.offset, selection.mark.offset);
+  return start === end ? undefined : { end, paragraphId: selection.point.paragraphId, start };
+}
+
+/** Creates an undo cursor snapshot. @param selection - Current cursor projection. @param activeParagraphId - Active paragraph identity. @param pendingCharacterAttributes - Pending caret attributes. @returns Complete undo cursor state. */
+export function createWriterUndoCursorState(
+  selection: WriterCursorSelection,
+  activeParagraphId: string,
+  pendingCharacterAttributes: WriterCharacterAttributes,
+): SwUndoCursorState {
+  return {
+    activeParagraphId,
+    ...(selection.mark === undefined ? {} : { mark: { ...selection.mark } }),
+    pendingCharacterAttributes: { ...pendingCharacterAttributes },
+    point: { ...selection.point },
+  };
+}
+
+/** Creates a collapsed undo cursor endpoint. @param paragraphId - Target node identity. @param offset - UTF-16 content offset. @param pendingCharacterAttributes - Pending caret attributes. @returns Complete undo cursor state. */
+export function createWriterCollapsedCursorState(
+  paragraphId: string,
+  offset: number,
+  pendingCharacterAttributes: WriterCharacterAttributes,
+): SwUndoCursorState {
+  return {
+    activeParagraphId: paragraphId,
+    pendingCharacterAttributes: { ...pendingCharacterAttributes },
+    point: { offset, paragraphId },
+  };
+}
+
+/** Converts an ordered paragraph range to a direction-preserving selection. @param range - Same-node text range. @returns Point-and-mark selection. */
+export function createWriterRangeSelection(range: WriterParagraphTextRange): WriterCursorSelection {
+  return {
+    mark: { offset: range.start, paragraphId: range.paragraphId },
+    point: { offset: range.end, paragraphId: range.paragraphId },
+  };
 }

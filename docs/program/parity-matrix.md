@@ -8,14 +8,15 @@ suite table remains a planning inventory; machine-readable JSON records are the
 source of truth for atomic capability maturity.
 
 The first authored atomic records live in
-[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Its 34
+[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Its 35
 bounded Writer records are machine-validated together with the exhaustive
 [`parity/runtime-inventory.json`](parity/runtime-inventory.json) by
 `npm run inventory:parity`. Verification is promoted per atomic operation only
 after its assertion-level upstream/local evidence and task result are recorded;
 every unresolved parity gap remains visible and does not count as parity.
-The current slice contains 33 `implemented` records and one `verified` record:
-CAP-0130, the bounded ODF fixture round trip.
+The current slice contains 34 `implemented` records and one `verified` record:
+CAP-0130, the bounded ODF fixture round trip. CAP-0135 records Writer text
+hyperlinks, their browser commands, and `text:a` interoperability.
 
 ## Stable identifier format
 

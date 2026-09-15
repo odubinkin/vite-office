@@ -3,6 +3,7 @@ import {
   ClipboardPaste,
   Copy,
   FolderOpen,
+  Link,
   Redo2,
   Save,
   Scissors,
@@ -22,6 +23,7 @@ const icons = new Map<string, LucideIcon>([
   [WRITER_COMMAND_IDS.paste, ClipboardPaste],
   [WRITER_COMMAND_IDS.undo, Undo2],
   [WRITER_COMMAND_IDS.redo, Redo2],
+  [WRITER_COMMAND_IDS.hyperlinkDialog, Link],
 ]);
 
 /** Renders a standard toolbar from descriptor-backed resource items. @param props - Shared command surface. @returns Toolbar item fragment. */

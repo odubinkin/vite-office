@@ -25,11 +25,14 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_TXTATR_AUTOFMT,
+  RES_TXTATR_INETFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
+import { SwFormatINetFormat } from "./fmtinfmt";
 
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
+export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
 /** Names the bounded direct character properties currently carried by an auto-format item. */
 export interface WriterCharacterAttributes {
@@ -99,7 +102,9 @@ export interface SwTextAttrSnapshot {
  * Flags without browser-visible behavior are retained so later ports can extend the object without
  * replacing its identity or range semantics.
  */
-export class SwTextAttr {
+export class SwTextAttr<
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
+> {
   /** Prevents expansion at the end during insertion when enabled. */
   public dontExpand = false;
   /** Prevents expansion at the start during insertion when enabled. */
@@ -116,7 +121,7 @@ export class SwTextAttr {
    * @returns Nothing; initializes this attribute.
    */
   public constructor(
-    public readonly format: SwFormatAutoFormat,
+    public readonly format: TFormat,
     public start: number,
     public end: number,
   ) {
@@ -125,8 +130,8 @@ export class SwTextAttr {
   }
 
   /** Returns the Writer pool identifier of this attribute. @returns Auto-format WhichId. */
-  public Which(): typeof RES_TXTATR_AUTOFMT {
-    return this.format.Which() as typeof RES_TXTATR_AUTOFMT;
+  public Which(): typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT {
+    return this.format.Which() as typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT;
   }
 
   /** Returns the inclusive start offset. @returns Inclusive UTF-16 offset. */
@@ -146,8 +151,12 @@ export class SwTextAttr {
   }
 
   /** Creates an independent attribute with the same item and flags. @param offset - Offset applied to the cloned range. @returns Independent attribute. */
-  public clone(offset = 0): SwTextAttr {
-    const cloned = new SwTextAttr(this.format.Clone(), this.start + offset, this.end + offset);
+  public clone(offset = 0): SwTextAttr<TFormat> {
+    const cloned = new SwTextAttr(
+      this.format.Clone() as TFormat,
+      this.start + offset,
+      this.end + offset,
+    );
     cloned.dontExpand = this.dontExpand;
     cloned.dontExpandStart = this.dontExpandStart;
     cloned.dontMoveAttr = this.dontMoveAttr;
