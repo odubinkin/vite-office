@@ -4,7 +4,7 @@ title: "Phase 0.1 exact upstream invariant manifest"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -28,6 +28,22 @@ verification:
   updated_by: "CODER"
   note: "P0.1 invariant generation, corrected WhichIds, model/snapshot schema rejection, inventory coverage, office coverage, and parity validation all pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-15T09:50:03.656Z"
+  updated_by: "EVALUATOR"
+  note: "P0.1 invariants and incompatible persistence rejection satisfy the approved acceptance contract."
+  evaluated_sha: "d600a28dd584da5a255cc5e05f67acca42f73f46"
+  blueprint_digest: "0cf005cd44c7d09a93fa65184380c5e1a2a2736d6c0bdbd224963a4a1a385072"
+  evidence_refs:
+    - ".agentplane/tasks/202609150939-2VYYDP/README.md"
+    - ".agentplane/tasks/202609150939-2VYYDP/quality/20260915-095003656-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609150939-2VYYDP/quality/20260915-095003656-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609150939-2VYYDP/quality/20260915-095003656-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609150939-2VYYDP/blueprint/resolved-snapshot.json"
+    - "docs/program/parity/upstream-invariants.json"
+  findings:
+    - "Exact pinned markers, corrected 7/22 IDs, model v6 and snapshot schema v2 are covered by 100% inventory and office tests."
 commit: null
 comments:
   -
