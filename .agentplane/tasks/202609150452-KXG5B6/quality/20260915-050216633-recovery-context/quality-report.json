@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609150452-KXG5B6",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T05:02:16.633Z",
+  "verdict": "pass",
+  "summary": "ODF bullet characters now follow the pinned LibreOffice import/store/export path without changing list-kind semantics.",
+  "evaluated_sha": "a3165f81ebaee26425d5b2702277a035eeed1566",
+  "blueprint_digest": "ad07eac8a44f17d7db5598fc8fa94f781d8e9fcc66b7df033e4154189f12a058",
+  "findings": [
+    "U+25CF imports, renders from SwNumFormat, persists in snapshots, and round-trips through ODT; missing and multi-code-point invalid states remain guarded."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609150452-KXG5B6/README.md",
+    "npm run test:coverage: 59 files, 282 tests, 100% coverage; npm run lint; npm run typecheck; node .agentplane/policy/check-routing.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
