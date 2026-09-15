@@ -1,10 +1,11 @@
 ---
 id: "202609150939-KAZPAN"
 title: "Phase 0.2 semantic provenance and boundary enforcement"
-status: "DOING"
+result_summary: "Implemented Phase 0.2 semantic provenance and boundary enforcement."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -46,11 +47,16 @@ quality_review:
     - "docs/program/parity/runtime-inventory.json"
   findings:
     - "Runtime schema v3 covers all 112 modules and records 13 current violations; the five named Phase 0 defects are detected by focused AST/API tests."
-commit: null
+commit:
+  hash: "dd20a4f2c87e36647f57978e5c5bb425e7ba8b9e"
+  message: "🚧 KAZPAN task: enforce semantic runtime provenance"
 comments:
   -
     author: "CODER"
     body: "Start: implement semantic provenance, API shape, source responsibility, and browser/core boundary enforcement for Phase 0.2."
+  -
+    author: "CODER"
+    body: "Verified: semantic schema, five Phase 0 defect guards, 100% inventory coverage, provenance, dependency, and parity checks all pass."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "P0.2 semantic provenance schema, exact AST/API violation set, boundary detection, 100% inventory coverage, source provenance, dependency, and parity checks pass."
+  -
+    type: "status"
+    at: "2026-09-15T10:05:39.000Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: semantic schema, five Phase 0 defect guards, 100% inventory coverage, provenance, dependency, and parity checks all pass."
 doc_version: 3
-doc_updated_at: "2026-09-15T10:05:09.224Z"
+doc_updated_at: "2026-09-15T10:05:39.002Z"
 doc_updated_by: "CODER"
 description: "Extend runtime inventory semantics and add AST/API, source-responsibility, and browser/core boundary checks required by Phase 0."
 sections:
