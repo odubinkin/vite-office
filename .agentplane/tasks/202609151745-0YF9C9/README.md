@@ -1,10 +1,11 @@
 ---
 id: "202609151745-0YF9C9"
 title: "Close Writer Phase 0-7 parity remediation findings"
-status: "DOING"
+result_summary: "verified-202609151745-0YF9C9"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T18:44:59.473Z"
+  updated_at: "2026-09-15T18:45:35.853Z"
   updated_by: "CODER"
   note: "verified-202609151745-0YF9C9"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "Full verify passed with 100% unit and inventory coverage, 10/10 browser E2E tests, zero runtime semantic violations, current-schema-only persistence, and clean architecture/provenance checks."
-commit: null
+commit:
+  hash: "d73f2eb0487b6c1a66d7dcda444a55e579b29765"
+  message: "🧩 0YF9C9 task: persist verification and quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: restore the seven audited Writer Phase 0-7 contracts and boundaries against the pinned LibreOffice baseline, reject prior storage schemas, and verify the complete repository before push."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609151745-0YF9C9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609151745-0YF9C9"
+  -
+    type: "verify"
+    at: "2026-09-15T18:45:35.853Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609151745-0YF9C9"
+  -
+    type: "status"
+    at: "2026-09-15T18:45:35.977Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609151745-0YF9C9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T18:44:59.525Z"
+doc_updated_at: "2026-09-15T18:45:35.977Z"
 doc_updated_by: "CODER"
 description: "Fix all seven audited Phase 0-7 contract, ownership, list/font, dispatch, browser-boundary, localization, and persistence issues against pinned LibreOffice 26.8.0.2; reject prior stored schemas; verify, commit, finish, and push main."
 sections:
@@ -139,12 +158,46 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-15T18:45:35.853Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609151745-0YF9C9
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T18:44:59.525Z, excerpt_hash=sha256:d64d5e604c2c2deb141f4a56e1b426f7fbc54ada5cb584da82b0e30150065970
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151745-0YF9C9/blueprint/resolved-snapshot.json
+    - old_digest: 5d1353a1a23cb333db21913fad3b1fbd4ec6f4f4ae4a559bf977c38eac7172d6
+    - current_digest: 5d1353a1a23cb333db21913fad3b1fbd4ec6f4f4ae4a559bf977c38eac7172d6
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151745-0YF9C9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609151745-0YF9C9 --result verified-202609151745-0YF9C9 --commit d73f2eb0487b6c1a66d7dcda444a55e579b29765
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation and deterministic task-close commits. Discard snapshots written with the new schema; do not restore compatibility for prior schemas."
   Findings: |-
     - Observation: Seven audited Phase 0-7 contract and boundary defects were remediated; runtime semanticViolationCount is 0.
       Impact: Writer item inheritance, dispatch arguments, canonical browser projection, lists, default fonts, localization, filters, and current-only persistence now follow the pinned baseline within the supported slice.
       Resolution: Implementation commit 286dc28; prior Writer storage schemas are rejected without migration.
+extensions:
+  implementation_commit:
+    hash: "286dc28d56839ac39367a88de15cd62f25f1a665"
+    message: "🚧 0YF9C9 task: implement Writer Phase 0-7 parity remediation"
 id_source: "generated"
 ---
 ## Summary
@@ -223,6 +276,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609151745-0YF9C9 --result verified-202609151745-0YF9C9 --commit 286dc28d56839ac39367a88de15cd62f25f1a665
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T18:45:35.853Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609151745-0YF9C9
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T18:44:59.525Z, excerpt_hash=sha256:d64d5e604c2c2deb141f4a56e1b426f7fbc54ada5cb584da82b0e30150065970
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151745-0YF9C9/blueprint/resolved-snapshot.json
+- old_digest: 5d1353a1a23cb333db21913fad3b1fbd4ec6f4f4ae4a559bf977c38eac7172d6
+- current_digest: 5d1353a1a23cb333db21913fad3b1fbd4ec6f4f4ae4a559bf977c38eac7172d6
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151745-0YF9C9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609151745-0YF9C9 --result verified-202609151745-0YF9C9 --commit d73f2eb0487b6c1a66d7dcda444a55e579b29765
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
