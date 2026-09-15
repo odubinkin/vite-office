@@ -1,10 +1,11 @@
 ---
 id: "202609150628-8AX7HA"
 title: "Align Writer ODT Title parent styles with LibreOffice"
-status: "DOING"
+result_summary: "verified-202609150628-8AX7HA"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T07:17:20.483Z"
+  updated_at: "2026-09-15T07:19:02.223Z"
   updated_by: "CODER"
   note: "verified-202609150628-8AX7HA"
   attempts: 0
@@ -47,7 +48,9 @@ quality_review:
     - "xmlimp.ts removes the project-invented fixed parent assertion, resets imported built-in styles before a second parent-linking pass, clears unresolved/self parents, and prevents cycles, matching the upstream CreateAndInsert/Finish separation and tolerant parent handling in xmloff/source/style/prstylei.cxx."
     - "Regression coverage exercises Title parented to Standard, save/reopen preservation, missing and self parents, a two-style cycle, canonical ODF automatic-style parent names, and retention of unrelated malformed-ODF checks."
     - "Independent evaluation reran the focused ODT suite (3 files, 20 tests), git diff --check, npm run verify (59/286 unit and 32/84 inventory tests at 100% coverage, 9/9 E2E, static/docs/file-size/source-tree/provenance/parity), ap doctor, and policy routing successfully."
-commit: null
+commit:
+  hash: "893712e7dc37b21ea08ba23dc5e1dce7abc151f2"
+  message: "🧩 8AX7HA task: Persist verification and quality artifacts"
 comments:
   -
     author: "CODER"
@@ -55,6 +58,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609150628-8AX7HA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -118,8 +124,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609150628-8AX7HA"
+  -
+    type: "verify"
+    at: "2026-09-15T07:19:02.223Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609150628-8AX7HA"
+  -
+    type: "status"
+    at: "2026-09-15T07:19:02.418Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609150628-8AX7HA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T07:17:20.600Z"
+doc_updated_at: "2026-09-15T07:19:02.419Z"
 doc_updated_by: "CODER"
 description: "Compare the bounded Writer ODT style import and export paths with pinned LibreOffice 26.8.0.2, accept upstream-valid Title parent-style relationships, emit canonical ODF parent style names, and add import/export round-trip regressions."
 sections:
@@ -376,6 +395,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-15T07:19:02.223Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609150628-8AX7HA
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T07:17:20.600Z, excerpt_hash=sha256:a5ad8c4a032c0507cc6e37edee0bd0c277f117937095abd2af3bcef473959af3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150628-8AX7HA/blueprint/resolved-snapshot.json
+    - old_digest: d78b888232cfba4b3d653e295cd1f85528a1a0bb10e80d8699619678526bbdbb
+    - current_digest: d78b888232cfba4b3d653e295cd1f85528a1a0bb10e80d8699619678526bbdbb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609150628-8AX7HA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609150628-8AX7HA --result verified-202609150628-8AX7HA --commit 893712e7dc37b21ea08ba23dc5e1dce7abc151f2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the importer validation, exporter ODF-name resolution, focused regression tests, and this task record introduced by the task. No migration, package-format version change, external write, or persistent user-data transformation is planned."
   Findings: |-
@@ -400,6 +449,10 @@ sections:
     - Observation: JSDoc validation reports missing function documentation at odt-font-style-roundtrip.test.ts lines 39, 44, 68, and 76.
       Impact: Required documentation gate is red; later file-size/source/provenance/parity stages were not reached.
       Resolution: Add repository-conforming JSDoc to replaceTitleParent and the three rewrite callbacks, restore the unrelated omitted meta argument in odt-roundtrip.test.ts if accidental, then rerun all Verify Steps.
+extensions:
+  implementation_commit:
+    hash: "30c15b0a6a036a0e0cd623eeac3f609039022f4b"
+    message: "🚧 8AX7HA task: Fix LibreOffice ODT parent style round trips"
 id_source: "generated"
 ---
 ## Summary
@@ -660,6 +713,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609150628-8AX7HA --result verified-202609150628-8AX7HA --commit 30c15b0a6a036a0e0cd623eeac3f609039022f4b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T07:19:02.223Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609150628-8AX7HA
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T07:17:20.600Z, excerpt_hash=sha256:a5ad8c4a032c0507cc6e37edee0bd0c277f117937095abd2af3bcef473959af3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150628-8AX7HA/blueprint/resolved-snapshot.json
+- old_digest: d78b888232cfba4b3d653e295cd1f85528a1a0bb10e80d8699619678526bbdbb
+- current_digest: d78b888232cfba4b3d653e295cd1f85528a1a0bb10e80d8699619678526bbdbb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609150628-8AX7HA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609150628-8AX7HA --result verified-202609150628-8AX7HA --commit 893712e7dc37b21ea08ba23dc5e1dce7abc151f2
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
