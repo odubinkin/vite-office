@@ -19,6 +19,7 @@ const ignoredStyleDefinitions = new Set([
 
 /** Consumer of completed style definitions; Writer stores canonical results. */
 export interface XMLStyleImportTarget {
+  getFontFace(name: string): string | undefined;
   registerListStyle(styleName: string, rule: XMLTextListRule): void;
   registerStyle(name: string, definition: OdfStyleDefinition): void;
 }
@@ -73,10 +74,12 @@ class XMLStyleContext extends SvXMLImportContext {
     const family = attributes.require(XMLToken.STYLE_FAMILY, "style family");
     this.supported = family === "paragraph" || family === "text";
     const displayName = attributes.get(XMLToken.STYLE_DISPLAY_NAME) ?? undefined;
+    const nextStyleName = attributes.get(XMLToken.STYLE_NEXT_STYLE_NAME) ?? undefined;
     const parentStyleName = attributes.get(XMLToken.STYLE_PARENT_STYLE_NAME) ?? undefined;
     this.definition = {
       ...(displayName === undefined ? {} : { displayName }),
       family: this.supported ? (family as "paragraph" | "text") : "text",
+      ...(nextStyleName === undefined ? {} : { nextStyleName }),
       ...(parentStyleName === undefined ? {} : { parentStyleName }),
     };
   }
@@ -97,7 +100,7 @@ class XMLStyleContext extends SvXMLImportContext {
     if (element === XMLToken.STYLE_TEXT_PROPERTIES) {
       if (this.properties !== undefined)
         throw new Error("ODF style has duplicate text-properties.");
-      this.properties = importCharacterProperties(attributes);
+      this.properties = importCharacterProperties(attributes, this.target);
       return new XMLPropertyContext();
     }
     return null;
@@ -206,10 +209,14 @@ function importAlignment(attributes: FastAttributeList): OdfParagraphAlignment |
   throw new Error(`Unsupported ODF paragraph alignment: ${value}`);
 }
 
-/** Imports supported character properties. @param attributes - Property attributes. @returns Property deltas. */
-function importCharacterProperties(attributes: FastAttributeList): Partial<OdfCharacterProperties> {
+/** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @returns Property deltas. */
+function importCharacterProperties(
+  attributes: FastAttributeList,
+  target: XMLStyleImportTarget,
+): Partial<OdfCharacterProperties> {
   const weight = attributes.get(XMLToken.FO_FONT_WEIGHT);
-  const fontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
+  const faceName = attributes.get(XMLToken.STYLE_FONT_NAME);
+  const fallbackFontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
   const posture = attributes.get(XMLToken.FO_FONT_STYLE);
   const underline = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_STYLE);
   const underlineWidth = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_WIDTH);
@@ -233,8 +240,12 @@ function importCharacterProperties(attributes: FastAttributeList): Partial<OdfCh
     attributes.get(XMLToken.STYLE_FONT_STYLE_ASIAN),
     attributes.get(XMLToken.STYLE_FONT_STYLE_COMPLEX),
   );
+  const declaredFontFamily = faceName === null ? undefined : target.getFontFace(faceName);
+  if (faceName !== null && declaredFontFamily === undefined)
+    throw new Error(`Undefined ODF font face: ${faceName}`);
+  const fontFamily = declaredFontFamily ?? fallbackFontFamily?.replace(/^(['"])(.*)\1$/, "$2");
   return {
-    ...(fontFamily === null || fontFamily.trim().length === 0 ? {} : { fontFamily }),
+    ...(fontFamily === undefined || fontFamily.trim().length === 0 ? {} : { fontFamily }),
     ...(weight === null ? {} : { bold: weight === "bold" }),
     ...(posture === null ? {} : { italic: posture === "italic" }),
     ...(underline === null ? {} : { underline: underline === "solid" }),

@@ -2391,6 +2391,40 @@
       "evidence": {
         "local": [
           {
+            "marker": "createWriterFontAutoStylePool",
+            "path": "apps/office/src/sw/source/filter/xml/xmlfonte.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlfonte.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlfonte.ts",
+      "localSymbols": [
+        "createWriterFontAutoStylePool"
+      ],
+      "omittedResponsibilities": [
+        "Font style-name, family, pitch, charset, and embedding metadata remain outside the bounded browser font item model."
+      ],
+      "preservedResponsibilities": [
+        "Collects Writer pool defaults and document font items into a deterministic document-wide XML font auto-style pool."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/xml/xmlfonte.cxx",
+      "upstreamSymbols": [
+        "SwXMLFontAutoStylePool_Impl",
+        "SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
+        "SwXMLExport::CreateFontAutoStylePool"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "exportStylesXml",
             "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts"
           }
@@ -3233,6 +3267,77 @@
       "upstreamSymbols": [
         "XMLTokenEntry",
         "GetXMLToken"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "XMLFontAutoStylePool",
+            "path": "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "XMLFontAutoStylePool::Add",
+            "path": "vendor/libreoffice-reference/xmloff/source/style/XMLFontAutoStylePool.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
+      "localSymbols": [
+        "XMLFontAutoStylePool"
+      ],
+      "omittedResponsibilities": [
+        "Font adornments, generic family, pitch, charset, and embedded font binaries remain outside the bounded browser model."
+      ],
+      "preservedResponsibilities": [
+        "Deduplicates font families, assigns collision-free face names, and exports office:font-face-decls."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/style/XMLFontAutoStylePool.cxx",
+      "upstreamSymbols": [
+        "XMLFontAutoStylePool",
+        "XMLFontAutoStylePool::Add",
+        "XMLFontAutoStylePool::Find",
+        "XMLFontAutoStylePool::exportXML"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "XMLFontStylesContext",
+            "path": "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "XMLFontStylesContext::CreateStyleChildContext",
+            "path": "vendor/libreoffice-reference/xmloff/source/style/XMLFontStylesContext.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts",
+      "localSymbols": [
+        "XMLFontStylesImportTarget",
+        "XMLFontStylesContext"
+      ],
+      "omittedResponsibilities": [
+        "Embedded font-face source URIs and font metadata beyond family names remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Imports style:font-face declarations and resolves ODF font-face names to model family names."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/style/XMLFontStylesContext.cxx",
+      "upstreamSymbols": [
+        "XMLFontStyleContextFontFace",
+        "XMLFontStylesContext",
+        "XMLFontStylesContext::CreateStyleChildContext",
+        "XMLFontStylesContext::FillProperties"
       ]
     },
     {

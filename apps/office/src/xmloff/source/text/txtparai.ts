@@ -14,6 +14,7 @@ export interface OdfStyleDefinition {
   readonly alignment?: OdfParagraphAlignment;
   readonly displayName?: string;
   readonly family: "paragraph" | "text";
+  readonly nextStyleName?: string;
   readonly parentStyleName?: string;
   readonly properties?: Partial<OdfCharacterProperties>;
 }

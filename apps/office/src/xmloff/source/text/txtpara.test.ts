@@ -132,6 +132,9 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
     expect(output.body).toContain("<text:line-break/>");
     expect(output.body).toContain("<text:h");
     expect(escapeXml("safe")).toBe("safe");
+    expect(exportCharacterAttributes({ fontFamily: "Noto Serif" })).toBe(
+      ' fo:font-family="Noto Serif"',
+    );
   });
 
   it("emits list definitions before nested and continued list references", /** Verifies list serialization. @returns Nothing. */ () => {

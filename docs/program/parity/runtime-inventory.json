@@ -831,6 +831,17 @@
       ]
     },
     {
+      "path": "apps/office/src/sw/source/filter/xml/xmlfonte.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0129"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -1173,6 +1184,28 @@
     },
     {
       "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ]
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0129"
+      ]
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",

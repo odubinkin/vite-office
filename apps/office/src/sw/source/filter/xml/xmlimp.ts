@@ -21,6 +21,10 @@ import {
   type SvXMLImport as SvXMLImportContract,
 } from "../../../../xmloff/source/core/xml-parser";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
+import {
+  XMLFontStylesContext,
+  type XMLFontStylesImportTarget,
+} from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { XMLStylesContext } from "../../../../xmloff/source/style/xmlstylei";
 import type {
   OdfCharacterProperties,
@@ -58,7 +62,6 @@ import {
 } from "../../../inc/poolfmt";
 
 const ignoredDocumentChildren = new Set([
-  XMLToken.OFFICE_FONT_FACE_DECLS,
   XMLToken.OFFICE_MASTER_STYLES,
   XMLToken.OFFICE_SETTINGS,
   XMLToken.OFFICE_SCRIPTS,
@@ -128,13 +131,14 @@ export function importWriterXml(
 }
 
 /** Writer import coordinator matching upstream SwXMLImport context ownership. */
-class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget {
+class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontStylesImportTarget {
   private expectedRoot = XMLToken.UNKNOWN;
   private officeTextCount = 0;
   private paragraphCount = 0;
   private titleSeen = false;
   private readonly styles = new Map<string, OdfStyleDefinition>();
   private readonly listRules = new Map<string, XMLTextListRule>();
+  private readonly fontFaces = new Map<string, string>();
   public title: string | undefined;
 
   /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @returns Coordinator. */
@@ -164,6 +168,19 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget {
   /** Resolves one imported style. @param styleName - ODF style name. @returns Style definition. */
   public getStyle(styleName: string): OdfStyleDefinition | undefined {
     return this.styles.get(styleName);
+  }
+
+  /** Resolves one imported font-face declaration. @param name - Face name. @returns Model family. */
+  public getFontFace(name: string): string | undefined {
+    return this.fontFaces.get(name);
+  }
+
+  /** Registers one imported font-face declaration. @param name - Face name. @param familyName - Model family. @returns Nothing. */
+  public registerFontFace(name: string, familyName: string): void {
+    const existing = this.fontFaces.get(name);
+    if (existing !== undefined && existing !== familyName)
+      throw new Error(`Conflicting ODF font face: ${name}`);
+    this.fontFaces.set(name, familyName);
   }
 
   /** Resolves pinned built-in paragraph-style names without coupling xmloff to Writer. @param styleName - ODF name. @returns Model identity. */
@@ -290,6 +307,14 @@ class SwXMLDocContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (
+      element === XMLToken.OFFICE_FONT_FACE_DECLS &&
+      (this.root === XMLToken.OFFICE_DOCUMENT_STYLES ||
+        this.root === XMLToken.OFFICE_DOCUMENT_CONTENT)
+    ) {
+      attributes.assertOnly([], "font face declarations");
+      return new XMLFontStylesContext(this.xmlImport);
+    }
+    if (
       (element === XMLToken.OFFICE_STYLES || element === XMLToken.OFFICE_AUTOMATIC_STYLES) &&
       (this.root === XMLToken.OFFICE_DOCUMENT_STYLES ||
         this.root === XMLToken.OFFICE_DOCUMENT_CONTENT)
@@ -393,6 +418,9 @@ function applyNamedParagraphStyles(
       poolStyle.id === "heading-1" && definition.parentStyleName === "Standard";
     if (definition.parentStyleName !== expectedParent && !legacyHeadingParent)
       throw new Error(`ODF ${poolStyle.name} has an invalid parent style.`);
+    const expectedNext = getWriterOdfStyleName(poolStyle.followId);
+    if (definition.nextStyleName !== undefined && definition.nextStyleName !== expectedNext)
+      throw new Error(`ODF ${poolStyle.name} has an invalid next style.`);
     const collection = document.GetTextFormatColl(poolStyle.id);
     if (definition.displayName !== undefined) collection.SetFormatName(definition.displayName);
     if (definition.alignment !== undefined)

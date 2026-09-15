@@ -39,11 +39,13 @@ import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { getWriterOdfStyleName } from "../../../inc/poolfmt";
+import { createWriterFontAutoStylePool } from "./xmlfonte";
 
-const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
+const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc): string {
+  const fonts = createWriterFontAutoStylePool(document);
   const styles = document.GetTextFormatColls().map(
     /** Emits one named Writer paragraph style. @param collection - Style collection. @returns Style XML. */
     (collection) => {
@@ -65,11 +67,18 @@ export function exportStylesXml(document: SwDoc): string {
       const textProperties =
         characterProperties === undefined
           ? ""
-          : `<style:text-properties${exportCharacterAttributes(characterProperties)}/>`;
-      return `<style:style style:name="${escapeXml(name)}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph" style:next-style-name="${escapeXml(getWriterOdfStyleName(collection.GetNextTextFormatColl().id))}"${parent}>${paragraphProperties}${textProperties}</style:style>`;
+          : `<style:text-properties${exportCharacterAttributes(
+              characterProperties,
+              /** Registers one used font. @param family - Model family. @returns Face name. */ (
+                family,
+              ) => fonts.Add(family),
+            )}/>`;
+      const nextName = getWriterOdfStyleName(collection.GetNextTextFormatColl().id);
+      const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
+      return `<style:style style:name="${escapeXml(name)}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph"${next}${parent}>${paragraphProperties}${textProperties}</style:style>`;
     },
   );
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3"><office:styles>${styles.join("")}</office:styles></office:document-styles>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}</office:styles></office:document-styles>`;
 }
 
 /** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @returns Complete XML. */
@@ -77,6 +86,7 @@ export function exportContentXml(
   document: SwDoc,
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
 ): string {
+  const fonts = createWriterFontAutoStylePool(document);
   const exported = exportTextParagraphs(
     {
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
@@ -85,8 +95,10 @@ export function exportContentXml(
       },
     },
     isCancelled,
+    /** Registers one used font. @param family - Model family. @returns Face name. */ (family) =>
+      fonts.Add(family),
   );
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3"><office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
 }
 
 /** Serializes document title metadata into meta.xml. @param title - Shell-owned title. @returns Complete XML. */
@@ -138,6 +150,7 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
       (run) => ({ properties: { ...run.attributes }, text: run.text }),
     ),
     style: node.style,
+    styleName: getWriterOdfStyleName(node.style),
   };
 }
 

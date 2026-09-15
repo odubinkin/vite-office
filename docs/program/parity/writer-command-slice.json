@@ -1443,7 +1443,7 @@
       },
       "capability": "ODF ZIP and manifest package plumbing",
       "gaps": [
-        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
+        "The package and XML APIs preserve the current SwDoc paragraphs, the complete 126-entry built-in paragraph-style pool and hierarchy, LibreOffice-encoded style names, document font-face declarations, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; script-specific font-family differences are normalized to the Western family because the browser model exposes one synchronized family, while tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases.",
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
       ],
       "upstream": {
@@ -1553,6 +1553,14 @@
             "marker": "getXMLToken"
           },
           {
+            "path": "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
+            "marker": "export class XMLFontAutoStylePool"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts",
+            "marker": "export class XMLFontStylesContext"
+          },
+          {
             "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
             "marker": "XMLStylesContext"
           },
@@ -1567,6 +1575,10 @@
           {
             "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
             "marker": "exportContentXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlfonte.ts",
+            "marker": "createWriterFontAutoStylePool"
           },
           {
             "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
@@ -3556,7 +3568,7 @@
       },
       "capability": "Writer ODF XML import",
       "gaps": [
-        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
+        "The package and XML APIs preserve the current SwDoc paragraphs, the complete 126-entry built-in paragraph-style pool and hierarchy, LibreOffice-encoded style names, document font-face declarations, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; script-specific font-family differences are normalized to the Western family because the browser model exposes one synchronized family, while tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases.",
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
       ],
       "upstream": {
@@ -3664,6 +3676,10 @@
           {
             "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
             "marker": "getXMLToken"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts",
+            "marker": "export class XMLFontStylesContext"
           },
           {
             "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
@@ -3835,7 +3851,7 @@
       },
       "capability": "Writer ODF XML export",
       "gaps": [
-        "The package and XML APIs preserve the current SwDoc paragraphs, Default and Heading 1 styles, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases, while unrelated ODF style families and properties are ignored as they are by the bounded upstream import contexts.",
+        "The package and XML APIs preserve the current SwDoc paragraphs, the complete 126-entry built-in paragraph-style pool and hierarchy, LibreOffice-encoded style names, document font-face declarations, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; script-specific font-family differences are normalized to the Western family because the browser model exposes one synchronized family, while tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases.",
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
       ],
       "upstream": {
@@ -3945,6 +3961,10 @@
             "marker": "getXMLToken"
           },
           {
+            "path": "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
+            "marker": "export class XMLFontAutoStylePool"
+          },
+          {
             "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
             "marker": "XMLStylesContext"
           },
@@ -3959,6 +3979,10 @@
           {
             "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
             "marker": "exportContentXml"
+          },
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlfonte.ts",
+            "marker": "createWriterFontAutoStylePool"
           },
           {
             "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",

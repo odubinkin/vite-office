@@ -165,9 +165,13 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(archive.hasEntry("missing")).toBe(false);
     const content = await archive.readTextEntry("content.xml");
     expect(content).toContain('office:version="1.3"');
-    expect(await archive.readTextEntry("styles.xml")).toContain('fo:font-weight="bold"');
-    expect(await archive.readTextEntry("styles.xml")).toContain('fo:font-family="Noto Serif"');
-    expect(content).toContain('fo:font-family="Noto Sans"');
+    const styles = await archive.readTextEntry("styles.xml");
+    expect(styles).toContain('fo:font-weight="bold"');
+    expect(styles).toContain("<office:font-face-decls>");
+    expect(styles).toContain('style:name="Noto Serif"');
+    expect(styles).toContain('style:font-name="Noto Serif"');
+    expect(content).toContain('style:name="Noto Sans"');
+    expect(content).toContain('style:font-name="Noto Sans"');
     expect(content).toContain('fo:font-weight="normal"');
     expect(content).toContain('<text:s text:c="2"/>');
     expect(content).toContain("<text:tab/>");
@@ -528,6 +532,16 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(importWriterXml(styles, content, metadata()).documentState.title).toBe("Imported");
     expect(
       importWriterXml(
+        styles.replace(
+          "</office:document-styles>",
+          "<office:master-styles/></office:document-styles>",
+        ),
+        content,
+        metadata(),
+      ).document.paragraphs,
+    ).toHaveLength(1);
+    expect(
+      importWriterXml(
         styles,
         content,
         metadata(),
@@ -614,6 +628,65 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           meta,
         ),
     ).toThrow("Heading 1 paragraph style is invalid");
+    expect(
+      /** Rejects a follow-style link outside the pinned Writer hierarchy. @returns Invalid document. */ () =>
+        importWriterXml(
+          styles.replace(
+            'style:next-style-name="Text_20_body"',
+            'style:next-style-name="Standard"',
+          ),
+          content,
+          metadata(),
+          meta,
+        ),
+    ).toThrow("invalid next style");
+    expect(
+      /** Rejects a text property referencing an undeclared font face. @returns Invalid document. */ () =>
+        importWriterXml(
+          styles,
+          content.replace(
+            "<office:automatic-styles>",
+            '<office:automatic-styles><style:style style:name="MissingFont" style:family="text"><style:text-properties style:font-name="Missing"/></style:style>',
+          ),
+          metadata(),
+          meta,
+        ),
+    ).toThrow("ODF XML is malformed");
+    expect(
+      /** Rejects conflicting declarations sharing an ODF face name. @returns Invalid document. */ () =>
+        importWriterXml(
+          styles.replace(
+            "<office:font-face-decls>",
+            '<office:font-face-decls><style:font-face style:name="F" svg:font-family="serif"/><style:font-face style:name="F" svg:font-family="sans-serif"/>',
+          ),
+          content,
+          metadata(),
+          meta,
+        ),
+    ).toThrow("Conflicting ODF font face");
+    expect(
+      importWriterXml(
+        styles.replace(
+          "<office:font-face-decls>",
+          '<office:font-face-decls><style:font-face style:name="Families" svg:font-family="&apos;Noto Sans&apos;, serif"/><style:font-face style:name="Empty" svg:font-family=""/><style:font-face style:name="MissingFamily"/>',
+        ),
+        content,
+        metadata(),
+        meta,
+      ).document.paragraphs,
+    ).toHaveLength(1);
+    expect(
+      /** Rejects non-font children in office:font-face-decls. @returns Invalid document. */ () =>
+        importWriterXml(
+          styles.replace(
+            "<office:font-face-decls>",
+            '<office:font-face-decls><style:style style:name="Wrong" style:family="text"/>',
+          ),
+          content,
+          metadata(),
+          meta,
+        ),
+    ).toThrow("Unsupported ODF XML element");
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () =>

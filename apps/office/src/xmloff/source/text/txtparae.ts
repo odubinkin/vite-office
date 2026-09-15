@@ -53,6 +53,7 @@ export interface XMLTextParagraphSource {
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly runs: readonly XMLTextRunSource[];
   readonly style: XMLParagraphStyle;
+  readonly styleName?: string;
 }
 
 /** Reiterable model-facing source; definitions are collected before body references. */
@@ -66,10 +67,11 @@ export interface OdfTextExport {
   readonly body: string;
 }
 
-/** Exports live Writer paragraphs into ODF automatic styles and text elements. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @returns XML fragments. */
+/** Exports live Writer paragraphs into ODF automatic styles and text elements. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @param fontFaceName - Optional family-to-face resolver. @returns XML fragments. */
 export function exportTextParagraphs(
   source: XMLTextExportSource,
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
+  fontFaceName?: (familyName: string) => string,
 ): OdfTextExport {
   const paragraphStyleNames = new Map<string, string>();
   const characterStyleNames = new Map<string, string>();
@@ -91,7 +93,11 @@ export function exportTextParagraphs(
       listRules.set(list.rule.name, list.rule);
     }
     if (paragraph.alignment !== undefined || paragraph.properties !== undefined) {
-      const key = paragraphStyleKey(paragraph.style, paragraph.alignment, paragraph.properties);
+      const key = paragraphStyleKey(
+        getOdfStyleName(paragraph),
+        paragraph.alignment,
+        paragraph.properties,
+      );
       if (!paragraphStyleNames.has(key))
         paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
     }
@@ -116,7 +122,7 @@ export function exportTextParagraphs(
         OdfParagraphAlignment | "",
         string,
       ];
-      const parent = getOdfStyleName(style);
+      const parent = style;
       const paragraphProperties =
         alignment === ""
           ? ""
@@ -125,7 +131,7 @@ export function exportTextParagraphs(
       const textProperties =
         propertiesKey === "---|"
           ? ""
-          : `<style:text-properties${exportCharacterAttributes(properties)}/>`;
+          : `<style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/>`;
       return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}">${paragraphProperties}${textProperties}</style:style>`;
     },
   );
@@ -134,7 +140,7 @@ export function exportTextParagraphs(
     (entry) => {
       const [key, name] = entry;
       const properties = parseCharacterPropertiesKey(key);
-      return `<style:style style:name="${name}" style:family="text"><style:text-properties${exportCharacterAttributes(properties)}/></style:style>`;
+      return `<style:style style:name="${name}" style:family="text"><style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/></style:style>`;
     },
   );
   const listStyleNames = new Map<string, string>();
@@ -255,12 +261,12 @@ function exportParagraphElement(
   paragraphStyleNames: ReadonlyMap<string, string>,
   characterStyleNames: ReadonlyMap<string, string>,
 ): string {
-  const baseStyleName = getOdfStyleName(paragraph.style);
+  const baseStyleName = getOdfStyleName(paragraph);
   const styleName =
     paragraph.alignment === undefined && paragraph.properties === undefined
       ? baseStyleName
       : (paragraphStyleNames.get(
-          paragraphStyleKey(paragraph.style, paragraph.alignment, paragraph.properties),
+          paragraphStyleKey(baseStyleName, paragraph.alignment, paragraph.properties),
         ) as string);
   const content = paragraph.runs
     .map(
@@ -422,12 +428,17 @@ function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterPropertie
   };
 }
 
-/** Emits supported ODF text-property attributes. @param properties - Direct properties. @returns Attribute fragment. */
-export function exportCharacterAttributes(properties: Partial<OdfCharacterProperties>): string {
+/** Emits supported ODF text-property attributes. @param properties - Direct properties. @param fontFaceName - Optional family-to-face resolver. @returns Attribute fragment. */
+export function exportCharacterAttributes(
+  properties: Partial<OdfCharacterProperties>,
+  fontFaceName?: (familyName: string) => string,
+): string {
   return [
     properties.fontFamily === undefined
       ? ""
-      : ` fo:font-family="${escapeXml(properties.fontFamily)}"`,
+      : fontFaceName === undefined
+        ? ` fo:font-family="${escapeXml(properties.fontFamily)}"`
+        : ` style:font-name="${escapeXml(fontFaceName(properties.fontFamily))}" style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamily))}" style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamily))}"`,
     properties.bold === undefined
       ? ""
       : ` fo:font-weight="${properties.bold ? "bold" : "normal"}" style:font-weight-asian="${properties.bold ? "bold" : "normal"}" style:font-weight-complex="${properties.bold ? "bold" : "normal"}"`,
@@ -440,7 +451,14 @@ export function exportCharacterAttributes(properties: Partial<OdfCharacterProper
   ].join("");
 }
 
-/** Maps stable model IDs to the two legacy ODF names retained by the filter. @param style - Model style. @returns ODF name. */
-function getOdfStyleName(style: XMLParagraphStyle): string {
-  return style === "default" ? "Standard" : style === "heading-1" ? "Heading_20_1" : style;
+/** Selects the Writer-projected ODF name while retaining the neutral legacy fallback. @param paragraph - Model paragraph projection. @returns ODF name. */
+function getOdfStyleName(paragraph: XMLTextParagraphSource): string {
+  return (
+    paragraph.styleName ??
+    (paragraph.style === "default"
+      ? "Standard"
+      : paragraph.style === "heading-1"
+        ? "Heading_20_1"
+        : paragraph.style)
+  );
 }

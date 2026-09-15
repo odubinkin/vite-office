@@ -235,18 +235,55 @@ export function getWriterParagraphStyleDefinition(
   );
 }
 
-/** Maps the two legacy names exactly and uses stable IDs for the remaining built-ins. @param id - Stable ID. @returns ODF name. */
+/** Encodes a Writer programmatic style name like SvXMLUnitConverter::encodeStyleName. @param name - Programmatic name. @returns XML style name. */
+export function encodeWriterOdfStyleName(name: string): string {
+  let encoded = "";
+  for (let index = 0; index < name.length; index += 1) {
+    const character = name[index] as string;
+    const code = character.charCodeAt(0);
+    const validAscii =
+      (code >= 0x41 && code <= 0x5a) ||
+      (code >= 0x61 && code <= 0x7a) ||
+      (index > 0 && ((code >= 0x30 && code <= 0x39) || character === "-" || character === "."));
+    const validLatin =
+      (code >= 0x00c0 && code <= 0x00d6) ||
+      (code >= 0x00d8 && code <= 0x00f6) ||
+      (code >= 0x00f8 && code <= 0x00fe);
+    const forbiddenUnicode =
+      (code >= 0xf900 && code <= 0xfffe) || (code >= 0x20dd && code <= 0x20e0);
+    const validUnicode =
+      code >= 0x00ff &&
+      !forbiddenUnicode &&
+      (/^[\p{Lu}\p{Ll}\p{Lt}\p{Lo}\p{Nl}]$/u.test(character) ||
+        (index > 0 && /^[\p{Mn}\p{Me}\p{Mc}\p{Lm}\p{Nd}]$/u.test(character)) ||
+        (code >= 0x02bb && code <= 0x02c1) ||
+        code === 0x0559 ||
+        code === 0x06e5 ||
+        code === 0x06e6 ||
+        (index > 0 && code === 0x0387));
+    if (validAscii || validLatin || validUnicode) {
+      encoded += character;
+      continue;
+    }
+    encoded += `_${code.toString(16)}_`;
+  }
+  return encoded.length <= 0x7fff ? encoded : name;
+}
+
+/** Maps a stable built-in identity to LibreOffice's encoded ODF style name. @param id - Stable ID. @returns ODF name. */
 export function getWriterOdfStyleName(id: string): string {
-  return id === "default" ? "Standard" : id === "heading-1" ? "Heading_20_1" : id;
+  const definition = getWriterParagraphStyleDefinition(id);
+  return definition === undefined ? id : encodeWriterOdfStyleName(definition.name);
 }
 
 /** Resolves an exported ODF name or a LibreOffice display name to a built-in identity. @param name - ODF name. @returns Stable ID. */
 export function getWriterStyleIdFromOdfName(name: string): string | undefined {
-  if (name === "Standard") return "default";
-  if (name === "Heading_20_1") return "heading-1";
   return WRITER_PARAGRAPH_STYLE_POOL.find(
     /** Matches an ODF or programmatic name. @param definition - Candidate. @returns Whether matching. */ (
       definition,
-    ) => definition.id === name || definition.name === name,
+    ) =>
+      definition.id === name ||
+      definition.name === name ||
+      encodeWriterOdfStyleName(definition.name) === name,
   )?.id;
 }
