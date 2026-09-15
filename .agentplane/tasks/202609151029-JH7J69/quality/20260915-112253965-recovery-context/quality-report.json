@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609151029-JH7J69",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T11:22:53.965Z",
+  "verdict": "pass",
+  "summary": "Phase 1 upstream parity slice is complete and all declared verification passed.",
+  "evaluated_sha": "b1d81176daa693d0cc7d8598e2c549b8136208b6",
+  "blueprint_digest": "f68e8007355ee16a1e68eba9d41297e7de76c7e635c7a2b1d925acf915a6dbca",
+  "findings": [
+    "Stable WhichId item restoration, Sfx request/bindings dispatch, and generated Writer UI resources satisfy the approved Phase 1 scope."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609151029-JH7J69/README.md",
+    "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
