@@ -1,10 +1,11 @@
 ---
 id: "202609150745-CP7QA2"
 title: "Implement Writer ODT hyperlinks with upstream fixtures"
-status: "DOING"
+result_summary: "verified-202609150745-CP7QA2"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T08:50:27.731Z"
+  updated_at: "2026-09-15T08:51:24.773Z"
   updated_by: "CODER"
   note: "verified-202609150745-CP7QA2"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "The implementation removes the text:a import failure, preserves hyperlink ranges and metadata through model edits and undo, exports valid text:a/xlink attributes, exposes upstream-aligned Insert/Edit/Remove UI and Ctrl/Cmd+K, and round-trips the copied upstream fixtures."
-commit: null
+commit:
+  hash: "35f05fb8ee70fabe2efae7c092625631675e89a0"
+  message: "🧩 CP7QA2 task: persist verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Implement upstream-aligned Writer hyperlink model, ODT import/export, real pinned fixtures, shell commands, accessible UI placement, and declared regression coverage."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609150745-CP7QA2. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609150745-CP7QA2"
+  -
+    type: "verify"
+    at: "2026-09-15T08:51:24.773Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609150745-CP7QA2"
+  -
+    type: "status"
+    at: "2026-09-15T08:51:24.956Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609150745-CP7QA2. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T08:50:27.806Z"
+doc_updated_at: "2026-09-15T08:51:24.957Z"
 doc_updated_by: "CODER"
 description: "Align Writer hyperlink model, ODT text:a import/export, commands, and UI placement with pinned LibreOffice 26.8.0.2; copy representative upstream ODT/FODT fixtures into tracked test data and add package round-trip regressions."
 sections:
@@ -134,6 +153,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-15T08:51:24.773Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609150745-CP7QA2
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T08:50:27.806Z, excerpt_hash=sha256:ded2a982e631aa769ce869ba6f77d8e053dab41a7d7982dd1ee2fb83277ad0e5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150745-CP7QA2/blueprint/resolved-snapshot.json
+    - old_digest: 74f510faed0b2553a9084960a7cb5fe32f1f6542580c41d883783b294df84bd3
+    - current_digest: 74f510faed0b2553a9084960a7cb5fe32f1f6542580c41d883783b294df84bd3
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609150745-CP7QA2
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609150745-CP7QA2 --result verified-202609150745-CP7QA2 --commit 35f05fb8ee70fabe2efae7c092625631675e89a0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation and close commits. This removes hyperlink model data, ODT text:a handling, Writer hyperlink commands/UI, copied upstream fixtures, and related docs without migrating existing supported snapshots; any new snapshot version handling must continue rejecting unsupported post-rollback data explicitly."
   Findings: |-
@@ -142,6 +191,10 @@ sections:
     - Observation: LibreOffice ODT hyperlinks now import, edit, render, undo, export, and reopen with upstream-derived fixtures.
       Impact: LibreOffice documents containing text:a no longer fail to open, and supported hyperlink metadata round-trips through Writer UI and ODT.
       Resolution: Implemented CAP-0135 across Writer model, xmloff filters, shell commands, UI, copied upstream fixtures, tests, and provenance documentation.
+extensions:
+  implementation_commit:
+    hash: "1339d90aa4ef03dc462c23e2fc9bd7cda3ceaeb7"
+    message: "🧩 CP7QA2 code: implement Writer ODT hyperlinks"
 id_source: "generated"
 ---
 ## Summary
@@ -216,6 +269,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609150745-CP7QA2 --result verified-202609150745-CP7QA2 --commit 1339d90aa4ef03dc462c23e2fc9bd7cda3ceaeb7
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T08:51:24.773Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609150745-CP7QA2
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T08:50:27.806Z, excerpt_hash=sha256:ded2a982e631aa769ce869ba6f77d8e053dab41a7d7982dd1ee2fb83277ad0e5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150745-CP7QA2/blueprint/resolved-snapshot.json
+- old_digest: 74f510faed0b2553a9084960a7cb5fe32f1f6542580c41d883783b294df84bd3
+- current_digest: 74f510faed0b2553a9084960a7cb5fe32f1f6542580c41d883783b294df84bd3
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609150745-CP7QA2
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609150745-CP7QA2 --result verified-202609150745-CP7QA2 --commit 35f05fb8ee70fabe2efae7c092625631675e89a0
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
