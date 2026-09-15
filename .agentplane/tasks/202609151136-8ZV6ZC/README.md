@@ -1,10 +1,11 @@
 ---
 id: "202609151136-8ZV6ZC"
 title: "Complete Phase 1.3 generated Writer UI resources"
-status: "DOING"
+result_summary: "verified-202609151136-8ZV6ZC"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -19,7 +20,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T12:16:16.023Z"
+  updated_at: "2026-09-15T12:16:40.491Z"
   updated_by: "CODER"
   note: "verified-202609151136-8ZV6ZC"
   attempts: 0
@@ -39,11 +40,16 @@ quality_review:
     - "commit 6d08db1fa326; npm run verify; npm run generate:writer-resources plus zero generated-artifact diff; npm run check:writer-resources"
   findings:
     - "Deterministic generator owns supported command identity, recursive placement order/context, labels, shortcuts, slots and structured X exclusions; runtime adapters consume generated surfaces without handwritten .uno command literals."
-commit: null
+commit:
+  hash: "0c944d24977fd9c365a2604994b8127b114d48a4"
+  message: "🧩 8ZV6ZC task: record verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609151136-8ZV6ZC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609151136-8ZV6ZC"
+  -
+    type: "verify"
+    at: "2026-09-15T12:16:40.491Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609151136-8ZV6ZC"
+  -
+    type: "status"
+    at: "2026-09-15T12:16:40.683Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609151136-8ZV6ZC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T12:16:16.107Z"
+doc_updated_at: "2026-09-15T12:16:40.684Z"
 doc_updated_by: "CODER"
 description: "Make pinned LibreOffice resources the authoritative source for the supported Writer UI graph and enforce deterministic regeneration and command-resource closure in the verification pipeline."
 sections:
@@ -161,6 +180,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-15T12:16:40.491Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609151136-8ZV6ZC
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T12:16:16.107Z, excerpt_hash=sha256:1f07dd78536b5e41b177f08f0bb410378975c86b6b2fd0453a51a04fc20f878d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151136-8ZV6ZC/blueprint/resolved-snapshot.json
+    - old_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+    - current_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151136-8ZV6ZC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609151136-8ZV6ZC --result verified-202609151136-8ZV6ZC --commit 0c944d24977fd9c365a2604994b8127b114d48a4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the implementation commit(s) for this task using a non-destructive follow-up revert. Restore the previous generator, generated artifact schema, adapters, presenter consumption, tests, and package scripts together so generated/runtime contracts do not become mixed-version. Re-run the previous resource freshness check and npm verification after rollback. Do not delete or manually rewrite task history."
   Findings: |-
@@ -169,6 +218,10 @@ sections:
     - Observation: Existing UI and parity tests encoded manual menu placements and evidence markers.
       Impact: Those expectations would preserve duplicated command metadata and bypass generated upstream context.
       Resolution: Updated tests and invariant evidence to consume the generated resource graph; unsupported entries remain structured X records.
+extensions:
+  implementation_commit:
+    hash: "6d08db1fa326d155728ba71e1008ae111f2f5ccc"
+    message: "🧩 8ZV6ZC code: complete generated Writer UI resources"
 id_source: "generated"
 ---
 ## Summary
@@ -267,6 +320,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609151136-8ZV6ZC --result verified-202609151136-8ZV6ZC --commit 6d08db1fa326d155728ba71e1008ae111f2f5ccc
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T12:16:40.491Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609151136-8ZV6ZC
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T12:16:16.107Z, excerpt_hash=sha256:1f07dd78536b5e41b177f08f0bb410378975c86b6b2fd0453a51a04fc20f878d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151136-8ZV6ZC/blueprint/resolved-snapshot.json
+- old_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+- current_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151136-8ZV6ZC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609151136-8ZV6ZC --result verified-202609151136-8ZV6ZC --commit 0c944d24977fd9c365a2604994b8127b114d48a4
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
