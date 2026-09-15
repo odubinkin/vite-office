@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609151624-6JX2KY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T17:15:19.654Z",
+  "verdict": "pass",
+  "summary": "Phase 6 scope, upstream ownership boundaries, and full verification satisfy the approved contract.",
+  "evaluated_sha": "67383e5199cb95b3af1178b905e4a49975540d92",
+  "blueprint_digest": "b98936e5717b2384a364ffbe6a70a821b533073142479222a24eefc566fb4134",
+  "findings": [
+    "React and browser composition are isolated from upstream implementation paths; shared Sfx-backed command surfaces, typed dialog completion, contextual object bars, localization, and honest chrome are covered by unit and browser tests."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609151624-6JX2KY/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
