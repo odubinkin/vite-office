@@ -107,8 +107,9 @@ The following documents form the program control plane:
 
 - [Parity matrix](parity-matrix.md): status and traceability source of truth.
 - [Writer command parity mappings](parity/writer-command-slice.json):
-  machine-validated upstream-to-local evidence for 14 bounded Writer
-  capabilities, with explicit unresolved gaps and approved exceptions.
+  machine-validated upstream-to-local evidence for 35 bounded Writer
+  capabilities, with independent implementation, contract, behavior, default,
+  and verification status plus explicit unresolved gaps and approved exceptions.
 - [Runtime parity inventory](parity/runtime-inventory.json): exhaustive
   classification of production modules, exported operations, visible command
   IDs, UI-only behavior, internal operations, and placeholder suites.

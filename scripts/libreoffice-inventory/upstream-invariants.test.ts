@@ -85,9 +85,11 @@ describe("upstream invariant manifest", /** Registers invariant tests. @returns 
     await expect(
       validateUpstreamInvariantEvidence({ ...source, baselineTag: "other" }, read, read),
     ).rejects.toThrow("baseline");
+    const firstEntry = source.entries[0];
+    if (firstEntry === undefined) throw new Error("Invariant fixture must contain an entry.");
     await expect(
       validateUpstreamInvariantEvidence(
-        { ...source, entries: [source.entries[0]!, source.entries[0]!] },
+        { ...source, entries: [firstEntry, firstEntry] },
         read,
         read,
       ),
@@ -110,7 +112,8 @@ describe("upstream invariant manifest", /** Registers invariant tests. @returns 
       /** Selects a parity entry. @param item - Invariant entry. @returns Whether values must match. */ (
         item,
       ) => item.divergenceClass === "none",
-    )!;
+    );
+    if (first === undefined) throw new Error("Invariant fixture must contain a parity entry.");
     await expect(
       validateUpstreamInvariantEvidence(
         { ...source, entries: [{ ...first, local: { ...first.local, value: -1 } }] },

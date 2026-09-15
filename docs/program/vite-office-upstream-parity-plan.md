@@ -106,9 +106,10 @@ The runtime tree currently spans `editeng`, `framework`, `package`, `sfx2`,
 ### Capability inventory
 
 `docs/program/parity/writer-command-slice.json` contains 35 Writer capability
-records, `CAP-0101` through `CAP-0135`. Thirty-four are marked `implemented`;
-only `CAP-0130` (bounded ODT round-trip compatibility) is marked `verified`.
-The current inventory command also reports 66 open gaps.
+records, `CAP-0101` through `CAP-0135`. All 35 have local implementation, but
+only `CAP-0130` (bounded ODT round-trip compatibility) has independent contract,
+behavior, default, and verification parity. The other 34 remain unresolved and
+the current inventory command reports 66 open gaps.
 
 The implemented surface comprises:
 
@@ -471,6 +472,11 @@ acceptance tests, and capability-record updates. Packages are ordered by data
 contract dependency, not UI visibility.
 
 ### Phase 0 — Make parity measurable
+
+Status: completed on 2026-09-15 by Agentplane tasks
+`202609150939-2VYYDP`, `202609150939-KAZPAN`, and `202609150939-CENAC4`.
+The resulting reports deliberately remain red on overall parity until later
+phases close the recorded semantic violations and capability gaps.
 
 #### P0.1 Exact invariant manifest
 

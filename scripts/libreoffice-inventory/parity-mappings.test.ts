@@ -21,7 +21,7 @@ function createManifestSource(overrides: Readonly<Record<string, unknown>> = {})
     baselineCommit: "pinned-commit",
     baselineTag: "pinned-tag",
     records: [createRecord("LO-WRITER-0101")],
-    schemaVersion: 4,
+    schemaVersion: 5,
     ...overrides,
   });
 }
@@ -66,10 +66,14 @@ describe("parity mappings" /**
     );
     expect(report).toEqual({
       baselineCommit: "pinned-commit",
+      behaviorParityCount: 0,
+      contractParityCount: 0,
+      defaultParityCount: 0,
       exceptionCount: 0,
       exceptions: [],
       gapCount: 1,
       implementedCount: 1,
+      parityReady: false,
       recordCount: 1,
       resolvedEvidence: [
         { kind: "implementation", path: "local-implementation.ts", side: "local" },
@@ -79,8 +83,9 @@ describe("parity mappings" /**
         { kind: "tests", path: "upstream-tests.ts", side: "upstream" },
         { kind: "docs", path: "upstream-docs.md", side: "upstream" },
       ],
-      schemaVersion: 4,
+      schemaVersion: 5,
       scopeLimitationCount: 0,
+      unresolvedParityCount: 1,
       verifiedCount: 0,
     });
   });
@@ -90,6 +95,19 @@ describe("parity mappings" /**
    *
    * @returns Nothing; all invalid inputs throw deterministic errors.
    */, function rejectsInvalidDocumentContracts(): void {
+    const verifiedRecord = {
+      ...createRecord("LO-WRITER-0101"),
+      assertionEvidence: createAssertionEvidence(
+        "The pinned upstream test asserts the bounded Writer command behavior.",
+      ),
+      behaviorParity: true,
+      contractParity: true,
+      defaultParity: true,
+      gaps: [],
+      maturity: "verified",
+      verification: createVerification(),
+      verified: true,
+    };
     expectInvalid("{");
     expectInvalid("[]");
     expectInvalid(createManifestSource({ schemaVersion: 1 }));
@@ -103,6 +121,52 @@ describe("parity mappings" /**
     );
     expectInvalid(createManifestSource({ records: [{ id: "invalid" }] }));
     expectInvalid(createManifestSource({ records: [null] }));
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), contractParity: "yes" }],
+      }),
+    );
+    expectInvalid(createManifestSource({ records: [{ ...verifiedRecord, implemented: false }] }));
+    expectInvalid(
+      createManifestSource({ records: [{ ...verifiedRecord, contractParity: false }] }),
+    );
+    expectInvalid(
+      createManifestSource({ records: [{ ...verifiedRecord, behaviorParity: false }] }),
+    );
+    expectInvalid(createManifestSource({ records: [{ ...verifiedRecord, defaultParity: false }] }));
+    expectInvalid(
+      createManifestSource({ records: [{ ...verifiedRecord, maturity: "implemented" }] }),
+    );
+    expectInvalid(createManifestSource({ records: [{ ...verifiedRecord, gaps: ["gap"] }] }));
+    expectInvalid(
+      createManifestSource({ records: [{ ...verifiedRecord, assertionEvidence: undefined }] }),
+    );
+    expectInvalid(
+      createManifestSource({ records: [{ ...verifiedRecord, verification: undefined }] }),
+    );
+    expectInvalid(createManifestSource({ records: [{ ...verifiedRecord, verification: null }] }));
+    expectInvalid(
+      createManifestSource({
+        records: [
+          { ...verifiedRecord, verification: { ...createVerification(), commit: "not-a-hash" } },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [{ ...createRecord("LO-WRITER-0101"), verification: createVerification() }],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...verifiedRecord,
+            verification: { ...createVerification(), scope: "partial" },
+          },
+        ],
+      }),
+    );
     expectInvalid(
       createManifestSource({ records: [{ ...createRecord("LO-WRITER-0101"), maturity: "bad" }] }),
     );
@@ -211,9 +275,7 @@ describe("parity mappings" /**
         records: [
           {
             ...createRecord("LO-WRITER-0101"),
-            assertionEvidence: createAssertionEvidence(
-              "The pinned upstream test asserts the bounded Writer command behavior.",
-            ),
+            contractParity: true,
             gaps: [],
             maturity: "verified",
             verification: null,
@@ -241,9 +303,7 @@ describe("parity mappings" /**
         records: [
           {
             ...createRecord("LO-WRITER-0101"),
-            assertionEvidence: createAssertionEvidence(
-              "The pinned upstream test asserts the bounded Writer command behavior.",
-            ),
+            contractParity: true,
           },
         ],
       }),
@@ -294,7 +354,9 @@ describe("parity mappings" /**
        */
       function createVocabularyRecord(coordinate, index) {
         const [id, capabilityId, suite, type, maturity, kind] = coordinate;
-        const isClosed = maturity === "verified" || maturity === "exception-approved";
+        const isVerified = maturity === "verified";
+        const isClosed = isVerified || maturity === "exception-approved";
+        const implemented = maturity === "implemented" || isVerified;
         return {
           ...createRecord(id),
           assertions: index === 0 ? [] : ["Mapped assertion."],
@@ -302,13 +364,18 @@ describe("parity mappings" /**
             ? { assertionEvidence: createAssertionEvidence("Mapped assertion.") }
             : {}),
           capabilityId,
+          behaviorParity: isVerified,
+          contractParity: isVerified,
+          defaultParity: isVerified,
           ...(maturity === "exception-approved" ? { exception } : {}),
           gaps: maturity === "verified" ? [] : ["Visible gap."],
           ...(index === 0 ? { manualContract: "Review the bounded behavior manually." } : {}),
           maturity,
+          implemented,
           stackDivergence: { kind, rationale: "Reviewed Stage 0 classification." },
           suite,
           type,
+          verified: isVerified,
           ...(isClosed ? { verification: createVerification() } : {}),
         };
       },
@@ -326,7 +393,16 @@ describe("parity mappings" /**
       },
       { local: "local-root", upstream: "upstream-root" },
     );
-    expect(report).toMatchObject({ implementedCount: 2, recordCount: 8, verifiedCount: 1 });
+    expect(report).toMatchObject({
+      behaviorParityCount: 1,
+      contractParityCount: 1,
+      defaultParityCount: 1,
+      implementedCount: 3,
+      parityReady: false,
+      recordCount: 8,
+      unresolvedParityCount: 2,
+      verifiedCount: 1,
+    });
     expect(manifest.records[0]?.manualContract).toBe("Review the bounded behavior manually.");
     expect(manifest.records[3]?.verification).toEqual(createVerification());
   });
@@ -339,10 +415,14 @@ describe("parity mappings" /**
     const verified = {
       ...createRecord("LO-WRITER-0101"),
       assertionEvidence: createAssertionEvidence(assertion),
+      behaviorParity: true,
+      contractParity: true,
+      defaultParity: true,
       gaps: [],
       maturity: "verified",
       scopeLimitations: ["Tables are outside this bounded command operation."],
       verification: createVerification(),
+      verified: true,
     };
     const manifest = parseParityMappingManifest(
       createManifestSource({ records: [verified] }),
@@ -640,10 +720,14 @@ function createRecord(id: string): Record<string, unknown> {
     aspect: "command-state",
     atomicOperation: "Dispatch one bounded Writer command and query its state",
     assertions: ["The pinned upstream test asserts the bounded Writer command behavior."],
+    behaviorParity: false,
     capability: "A bounded Writer command",
     capabilityId: id.replace("LO-WRITER", "CAP"),
+    contractParity: false,
+    defaultParity: false,
     gaps: ["Browser behavior is intentionally narrower."],
     id,
+    implemented: true,
     local: createEvidence("local"),
     maturity: "implemented",
     scopeLimitations: [],
@@ -655,6 +739,7 @@ function createRecord(id: string): Record<string, unknown> {
     suite: "writer",
     type: "command",
     upstream: createEvidence("upstream"),
+    verified: false,
   };
 }
 
@@ -671,7 +756,7 @@ function createAssertionEvidence(assertion: string): readonly Record<string, unk
 
 /** Creates complete closure evidence for exception and verified-record fixtures. @returns Valid closure evidence. */
 function createVerification(): Record<string, string> {
-  return { commit: "abcdef1", evidence: "npm test passed", taskId: "TASK-1" };
+  return { commit: "abcdef1", evidence: "npm test passed", scope: "bounded", taskId: "TASK-1" };
 }
 
 /**

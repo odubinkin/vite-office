@@ -5,7 +5,7 @@
 This matrix is the authoritative index connecting the pinned LibreOffice
 baseline to Vite Office implementation, tests, and documentation. The coarse
 suite table remains a planning inventory; machine-readable JSON records are the
-source of truth for atomic capability maturity.
+source of truth for atomic capability delivery and parity status.
 
 The first authored atomic records live in
 [`parity/writer-command-slice.json`](parity/writer-command-slice.json). Its 35
@@ -14,9 +14,12 @@ bounded Writer records are machine-validated together with the exhaustive
 `npm run inventory:parity`. Verification is promoted per atomic operation only
 after its assertion-level upstream/local evidence and task result are recorded;
 every unresolved parity gap remains visible and does not count as parity.
-The current slice contains 34 `implemented` records and one `verified` record:
-CAP-0130, the bounded ODF fixture round trip. CAP-0135 records Writer text
-hyperlinks, their browser commands, and `text:a` interoperability.
+All 35 records have local implementation, but only CAP-0130 has independently
+attested contract, behavior, default, and verification parity. Its claim is
+limited to the bounded ODF fixture round trip. The other 34 records remain
+explicitly unresolved and the aggregate report therefore has
+`parityReady: false`. CAP-0135 records Writer text hyperlinks, their browser
+commands, and `text:a` interoperability without claiming upstream parity.
 
 ## Stable identifier format
 
@@ -42,6 +45,11 @@ Each atomic capability record must contain:
 | Local implementation | TypeScript modules, components, workers, or adapters. |
 | Local tests | Executable tests and fixtures covering mapped assertions. |
 | Local docs | User, developer, API, accessibility, and format topics. |
+| Implemented | Whether executable local implementation exists, independently of parity. |
+| Contract parity | Whether the bounded local public/internal contract matches pinned upstream. |
+| Behavior parity | Whether the bounded local behavior matches the mapped upstream assertions. |
+| Default parity | Whether documented and executable defaults match pinned upstream. |
+| Verified | Whether exact differential evidence and a closed task/commit attest all three parity dimensions. |
 | Maturity | One lifecycle value from the table below. |
 | Stack divergence | Allowlisted classification and concrete rationale. |
 | Verification | Task ID, commit, and executable evidence for a closed record. |
@@ -58,14 +66,17 @@ Each atomic capability record must contain:
 | `verified` | Functional, test, and documentation evidence all pass. |
 | `exception-approved` | A user-approved divergence is documented with rationale. |
 
-Only `verified` counts toward parity. `exception-approved` is visible debt and
-does not silently count as equivalent functionality.
+Maturity is a delivery lifecycle label and is not used to derive the five
+independent implementation/parity fields. Only a true `verified` attestation,
+with contract, behavior, and default parity also true, counts toward parity.
+`exception-approved` is visible debt and does not silently count as equivalent
+functionality.
 
-A `verified` record must have no gaps, must reference an executable local test,
+A verified attestation must have no gaps, must reference an executable local test,
 and must include task, commit, and verification evidence. An
 `exception-approved` record requires the same closure evidence plus its explicit
-approval. Implemented code without complete semantic evidence stays
-`implemented` even when its local test suite is green.
+approval. Implemented code without complete semantic evidence retains false
+parity fields even when its local test suite is green.
 
 `scopeLimitations` is distinct from `gaps`: it records adjacent LibreOffice
 behavior that the deliberately bounded atomic operation does not claim. Moving

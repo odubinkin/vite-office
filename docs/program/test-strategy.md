@@ -65,7 +65,8 @@ The first executable surface is
 [`parity/writer-command-slice.json`](parity/writer-command-slice.json). Run
 `npm run inventory:parity -- --baseline docs/program/libreoffice-baseline.json
 --mappings docs/program/parity/writer-command-slice.json --local-root .
---upstream-root vendor/libreoffice-reference` to verify its exact paths and
+--runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root
+apps/office/src --upstream-root vendor/libreoffice-reference` to verify its exact paths and
 markers. Its non-zero `gapCount` is intentional until each bounded browser
 slice is behaviorally equivalent.
 

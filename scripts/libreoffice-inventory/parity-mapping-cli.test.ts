@@ -91,9 +91,13 @@ describe("parity mapping CLI" /**
     );
     expect(JSON.parse(output)).toMatchObject({
       baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
+      behaviorParityCount: 1,
+      contractParityCount: 1,
+      defaultParityCount: 1,
       exceptionCount: 0,
       gapCount: 66,
-      implementedCount: 34,
+      implementedCount: 35,
+      parityReady: false,
       recordCount: 35,
       runtime: {
         commandCount: 32,
@@ -101,8 +105,9 @@ describe("parity mapping CLI" /**
         schemaVersion: 3,
         semanticViolationCount: 13,
       },
-      schemaVersion: 4,
+      schemaVersion: 5,
       scopeLimitationCount: 3,
+      unresolvedParityCount: 34,
       verifiedCount: 1,
     });
   }, 30_000);

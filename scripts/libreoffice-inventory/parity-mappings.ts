@@ -14,10 +14,6 @@ export type ParityExceptionReason = "browser-runtime-inapplicable" | "browser-ru
 export type ParityCapabilityType =
   "command" | "filter" | "infrastructure" | "lifecycle" | "model" | "platform";
 
-/** Identifies the evidence maturity without conflating implemented and verified behavior. */
-export type ParityMaturity =
-  "exception-approved" | "implemented" | "mapped" | "planned" | "verified";
-
 /** Identifies the independently verifiable layer owned by one atomic capability. */
 export type ParityCapabilityAspect =
   | "browser-input"
@@ -27,6 +23,10 @@ export type ParityCapabilityAspect =
   | "model-operation"
   | "persistence-filter"
   | "undo-redo";
+
+/** Records the delivery lifecycle independently from the five parity attestations. */
+export type ParityMaturity =
+  "exception-approved" | "implemented" | "mapped" | "planned" | "verified";
 
 /** Records whether and why the browser stack differs from the pinned upstream stack. */
 export interface ParityStackDivergence {
@@ -42,6 +42,8 @@ export interface ParityVerificationEvidence {
   readonly commit: string;
   /** Human-readable verification command or report reference. */
   readonly evidence: string;
+  /** Whether the verification proves only the explicitly bounded operation or a full capability contract. */
+  readonly scope: "bounded" | "full";
   /** AgentPlane task that owns the closed claim. */
   readonly taskId: string;
 }
@@ -91,14 +93,20 @@ export interface ParityMappingRecord {
   readonly atomicOperation: string;
   /** Exact upstream behavior assertions or fixture expectations mapped by this record. */
   readonly assertions: readonly string[];
-  /** Required assertion-by-assertion executable evidence before maturity may become verified. */
+  /** Required assertion-by-assertion executable evidence before any parity dimension may be claimed. */
   readonly assertionEvidence?: readonly ParityAssertionEvidence[];
+  /** Whether the bounded local behavior matches the pinned upstream assertions. */
+  readonly behaviorParity: boolean;
   /** Architectural layer isolated by this atomic capability. */
   readonly aspect: ParityCapabilityAspect;
   /** User-observable bounded capability description. */
   readonly capability: string;
   /** Stable domain-agnostic identity retained even if suite ownership changes. */
   readonly capabilityId: string;
+  /** Whether the local public/internal contract matches the pinned upstream contract. */
+  readonly contractParity: boolean;
+  /** Whether upstream documented defaults match for the bounded operation. */
+  readonly defaultParity: boolean;
   /** Explicit browser, fidelity, fixture, or platform differences that prevent a verified claim. */
   readonly gaps: readonly string[];
   /** Explicit boundaries outside this atomic operation that remain unsupported without blocking its verification. */
@@ -107,12 +115,14 @@ export interface ParityMappingRecord {
   readonly exception?: ParityException;
   /** Immutable Writer parity identifier. */
   readonly id: string;
+  /** Whether executable local implementation exists, independent of parity. */
+  readonly implemented: boolean;
   /** Browser implementation, test, and documentation evidence. */
   readonly local: ParityEvidence;
+  /** Delivery lifecycle label retained independently from semantic parity fields. */
+  readonly maturity: ParityMaturity;
   /** Optional formal local contract when no upstream executable assertion applies. */
   readonly manualContract?: string;
-  /** Evidence maturity; only verified counts as parity. */
-  readonly maturity: ParityMaturity;
   /** Suite that owns the capability independently of its stable capability ID. */
   readonly suite: "base" | "calc" | "chart" | "draw" | "impress" | "math" | "shared" | "writer";
   /** Narrow owning subsystem within the suite. */
@@ -123,6 +133,8 @@ export interface ParityMappingRecord {
   readonly type: ParityCapabilityType;
   /** Pinned LibreOffice source, test, and documentation evidence. */
   readonly upstream: ParityEvidence;
+  /** Whether the parity claim has closed executable evidence. */
+  readonly verified: boolean;
   /** Required task/commit evidence for verified and exception-approved records. */
   readonly verification?: ParityVerificationEvidence;
 }
@@ -136,7 +148,7 @@ export interface ParityMappingManifest {
   /** Deterministically ordered atomic Writer mappings. */
   readonly records: readonly ParityMappingRecord[];
   /** Static schema version for strict compatibility validation. */
-  readonly schemaVersion: 4;
+  readonly schemaVersion: 5;
 }
 
 /** Represents one fully resolved evidence marker for a validation report. */
@@ -165,6 +177,12 @@ export interface ParityExceptionReportEntry {
 export interface ParityMappingReport {
   /** Shared baseline commit verified against the parsed baseline manifest. */
   readonly baselineCommit: string;
+  /** Number of capabilities with behavior parity. */
+  readonly behaviorParityCount: number;
+  /** Number of capabilities with contract parity. */
+  readonly contractParityCount: number;
+  /** Number of capabilities with default parity. */
+  readonly defaultParityCount: number;
   /** Explicitly approved non-implementable capabilities and upstream tests, kept separate from mapped evidence. */
   readonly exceptions: readonly ParityExceptionReportEntry[];
   /** Number of explicitly approved non-implementable capability or test records. */
@@ -173,6 +191,8 @@ export interface ParityMappingReport {
   readonly gapCount: number;
   /** Number of records whose code exists but semantic parity remains unverified. */
   readonly implementedCount: number;
+  /** Whether every implemented capability has contract, behavior, default, and verification parity. */
+  readonly parityReady: boolean;
   /** Number of explicit out-of-scope limitations retained by bounded capability records. */
   readonly scopeLimitationCount: number;
   /** Total bounded capability records. */
@@ -180,7 +200,9 @@ export interface ParityMappingReport {
   /** Successfully resolved evidence paths in stable record and evidence order. */
   readonly resolvedEvidence: readonly ResolvedParityEvidence[];
   /** Static report schema version. */
-  readonly schemaVersion: 4;
+  readonly schemaVersion: 5;
+  /** Number of implemented capabilities still missing at least one parity dimension or verification. */
+  readonly unresolvedParityCount: number;
   /** Number of records whose semantic evidence is complete. */
   readonly verifiedCount: number;
 }
@@ -201,7 +223,7 @@ export function parseParityMappingManifest(
   baseline: BaselineManifest,
 ): ParityMappingManifest {
   const root = parseObject(sourceText, "root");
-  if (root.schemaVersion !== 4) throw new Error("Parity mapping schemaVersion must equal 4.");
+  if (root.schemaVersion !== 5) throw new Error("Parity mapping schemaVersion must equal 5.");
   const baselineCommit = requireString(root, "baselineCommit");
   const baselineTag = requireString(root, "baselineTag");
   if (baselineCommit !== baseline.commit)
@@ -212,7 +234,7 @@ export function parseParityMappingManifest(
   const records = root.records.map(parseRecord);
   assertOrderedUniqueIds(records);
   assertOrderedUniqueCapabilityIds(records);
-  return { baselineCommit, baselineTag, records, schemaVersion: 4 };
+  return { baselineCommit, baselineTag, records, schemaVersion: 5 };
 }
 
 /**
@@ -245,14 +267,19 @@ export async function validateParityMappingEvidence(
   }
   return {
     baselineCommit: manifest.baselineCommit,
+    behaviorParityCount: manifest.records.filter(hasBehaviorParity).length,
+    contractParityCount: manifest.records.filter(hasContractParity).length,
+    defaultParityCount: manifest.records.filter(hasDefaultParity).length,
     exceptionCount: exceptions.length,
     exceptions,
     gapCount: manifest.records.flatMap(selectGaps).length,
     implementedCount: manifest.records.filter(isImplemented).length,
+    parityReady: manifest.records.every(isParityReady),
     recordCount: manifest.records.length,
     resolvedEvidence,
-    schemaVersion: 4,
+    schemaVersion: 5,
     scopeLimitationCount: manifest.records.flatMap(selectScopeLimitations).length,
+    unresolvedParityCount: manifest.records.filter(isUnresolvedParity).length,
     verifiedCount: manifest.records.filter(isVerified).length,
   };
 }
@@ -305,48 +332,70 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
   const capabilityId = requireString(candidate, "capabilityId");
   if (!/^CAP-\d{4}$/.test(capabilityId))
     throw new Error(`Invalid domain-agnostic capability ID: ${capabilityId}`);
-  const maturity = parseMaturity(candidate.maturity, id);
+  const implemented = requireBoolean(candidate, "implemented");
+  const contractParity = requireBoolean(candidate, "contractParity");
+  const behaviorParity = requireBoolean(candidate, "behaviorParity");
+  const defaultParity = requireBoolean(candidate, "defaultParity");
+  const verified = requireBoolean(candidate, "verified");
   const gaps = requireStringArray(candidate, "gaps");
   const scopeLimitations = requireStringArray(candidate, "scopeLimitations");
   const assertions = requireStringArray(candidate, "assertions");
   const assertionEvidence = parseAssertionEvidence(candidate.assertionEvidence, id, assertions);
+  const maturity = parseMaturity(candidate.maturity, id);
   const manualContract = optionalString(candidate, "manualContract");
   if (assertions.length === 0 && manualContract === undefined)
     throw new Error(`Parity record ${id} requires an upstream assertion or manual contract.`);
-  if (maturity === "verified" && gaps.length > 0)
+  if ((contractParity || behaviorParity || defaultParity || verified) && !implemented)
+    throw new Error(`Parity record ${id} cannot claim parity without implementation.`);
+  if (verified && (!contractParity || !behaviorParity || !defaultParity))
+    throw new Error(
+      `Verified parity record ${id} requires contract, behavior, and default parity.`,
+    );
+  if ((maturity === "verified") !== verified)
+    throw new Error(`Parity record ${id} must keep verified maturity and attestation aligned.`);
+  if (verified && gaps.length > 0)
     throw new Error(`Verified parity record ${id} must not retain unresolved gaps.`);
-  if (maturity === "verified" && assertionEvidence === undefined)
-    throw new Error(`Verified parity record ${id} requires assertion-level evidence.`);
-  if (maturity !== "verified" && assertionEvidence !== undefined)
-    throw new Error(`Only verified parity record ${id} may declare assertion-level evidence.`);
+  if (
+    (contractParity || behaviorParity || defaultParity || verified) &&
+    assertionEvidence === undefined
+  )
+    throw new Error(`Parity claims for ${id} require assertion-level differential evidence.`);
   const exception =
     candidate.exception === undefined
       ? undefined
       : parseException(candidate.exception, `${id}.exception`);
-  if (maturity === "exception-approved" && exception === undefined)
-    throw new Error(`Exception-approved parity record ${id} requires exception evidence.`);
-  if (maturity === "exception-approved" && gaps.length === 0)
-    throw new Error(`Exception-approved parity record ${id} requires a visible gap.`);
-  if (maturity !== "exception-approved" && exception !== undefined)
-    throw new Error(`Only exception-approved parity record ${id} may declare exception evidence.`);
+  if (maturity === "exception-approved") {
+    if (exception === undefined)
+      throw new Error(`Exception-approved parity record ${id} requires an exception.`);
+    if (gaps.length === 0)
+      throw new Error(`Exception-approved parity record ${id} requires a visible gap.`);
+  } else if (exception !== undefined) {
+    throw new Error(`Parity exception for ${id} requires exception-approved maturity.`);
+  }
   const verification =
     candidate.verification === undefined
       ? undefined
       : parseVerification(candidate.verification, `${id}.verification`);
-  if ((maturity === "verified" || maturity === "exception-approved") && verification === undefined)
+  if ((verified || maturity === "exception-approved") && verification === undefined)
     throw new Error(`Closed parity record ${id} requires task and commit verification evidence.`);
+  if (!verified && maturity !== "exception-approved" && verification !== undefined)
+    throw new Error(`Open parity record ${id} may not declare closed verification evidence.`);
   const suite = parseSuite(candidate.suite, id);
   return {
     atomicOperation: requireString(candidate, "atomicOperation"),
     assertions,
     ...(assertionEvidence === undefined ? {} : { assertionEvidence }),
     aspect: parseAspect(candidate.aspect, id),
+    behaviorParity,
     capability: requireString(candidate, "capability"),
     capabilityId,
+    contractParity,
+    defaultParity,
     ...(exception === undefined ? {} : { exception }),
     gaps,
     id,
-    local: parseEvidence(candidate.local, `${id}.local`, maturity === "exception-approved"),
+    implemented,
+    local: parseEvidence(candidate.local, `${id}.local`, exception !== undefined),
     ...(manualContract === undefined ? {} : { manualContract }),
     maturity,
     scopeLimitations,
@@ -355,8 +404,22 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
     suite,
     type: parseCapabilityType(candidate.type, id),
     upstream: parseEvidence(candidate.upstream, `${id}.upstream`, false, true),
+    verified,
     ...(verification === undefined ? {} : { verification }),
   };
+}
+
+/** Parses the delivery lifecycle label without deriving any parity attestation. @param candidate - Unknown maturity. @param id - Record ID. @returns Valid maturity. */
+function parseMaturity(candidate: unknown, id: string): ParityMaturity {
+  if (
+    candidate !== "planned" &&
+    candidate !== "mapped" &&
+    candidate !== "implemented" &&
+    candidate !== "verified" &&
+    candidate !== "exception-approved"
+  )
+    throw new Error(`Invalid parity maturity for ${id}.`);
+  return candidate;
 }
 
 /** Selects explicit out-of-scope limitations for deterministic report counting. @param record - Parsed capability. @returns Capability limitations. */
@@ -385,7 +448,7 @@ function parseAspect(candidate: unknown, id: string): ParityCapabilityAspect {
 }
 
 /**
- * Parses exact local/upstream assertion evidence for verified parity only.
+ * Parses exact local/upstream assertion evidence for explicit parity claims.
  * @param candidate - Unknown assertion-evidence array.
  * @param id - Owning parity record ID.
  * @param assertions - Exact claimed assertions.
@@ -430,24 +493,6 @@ function parseSingleReference(candidate: unknown, location: string): ParityEvide
   if (candidate.exception !== undefined)
     throw new Error(`${location} may not replace executable assertion evidence with an exception.`);
   return { marker: requireString(candidate, "marker"), path: requireString(candidate, "path") };
-}
-
-/**
- * Parses one allowed parity maturity.
- * @param candidate - Unknown authored maturity.
- * @param id - Owning parity record ID.
- * @returns Validated maturity.
- */
-function parseMaturity(candidate: unknown, id: string): ParityMaturity {
-  if (
-    candidate !== "planned" &&
-    candidate !== "mapped" &&
-    candidate !== "implemented" &&
-    candidate !== "verified" &&
-    candidate !== "exception-approved"
-  )
-    throw new Error(`Invalid parity maturity for ${id}.`);
-  return candidate;
 }
 
 /**
@@ -517,8 +562,16 @@ function parseVerification(candidate: unknown, location: string): ParityVerifica
   return {
     commit,
     evidence: requireString(candidate, "evidence"),
+    scope: parseVerificationScope(candidate.scope, location),
     taskId: requireString(candidate, "taskId"),
   };
+}
+
+/** Parses explicit verification breadth. @param candidate - Unknown scope. @param location - Diagnostic location. @returns Bounded or full scope. */
+function parseVerificationScope(candidate: unknown, location: string): "bounded" | "full" {
+  if (candidate !== "bounded" && candidate !== "full")
+    throw new Error(`${location}.scope must equal bounded or full.`);
+  return candidate;
 }
 
 /**
@@ -727,7 +780,7 @@ function selectGaps(record: ParityMappingRecord): readonly string[] {
  * @returns Whether implementation exists without verified maturity.
  */
 function isImplemented(record: ParityMappingRecord): boolean {
-  return record.maturity === "implemented";
+  return record.implemented;
 }
 
 /**
@@ -736,7 +789,35 @@ function isImplemented(record: ParityMappingRecord): boolean {
  * @returns Whether semantic evidence is verified.
  */
 function isVerified(record: ParityMappingRecord): boolean {
-  return record.maturity === "verified";
+  return record.verified;
+}
+
+/** Selects records with contract parity. @param record - Parsed record. @returns Contract parity state. */
+function hasContractParity(record: ParityMappingRecord): boolean {
+  return record.contractParity;
+}
+
+/** Selects records with behavior parity. @param record - Parsed record. @returns Behavior parity state. */
+function hasBehaviorParity(record: ParityMappingRecord): boolean {
+  return record.behaviorParity;
+}
+
+/** Selects records with default parity. @param record - Parsed record. @returns Default parity state. */
+function hasDefaultParity(record: ParityMappingRecord): boolean {
+  return record.defaultParity;
+}
+
+/** Reports whether one implemented record is fully attested. @param record - Parsed record. @returns Complete parity state. */
+function isParityReady(record: ParityMappingRecord): boolean {
+  return (
+    !record.implemented ||
+    (record.contractParity && record.behaviorParity && record.defaultParity && record.verified)
+  );
+}
+
+/** Selects implemented records with any open parity dimension. @param record - Parsed record. @returns Whether parity remains unresolved. */
+function isUnresolvedParity(record: ParityMappingRecord): boolean {
+  return record.implemented && !isParityReady(record);
 }
 
 /**
@@ -770,6 +851,14 @@ function requireString(record: Record<string, unknown>, field: string): string {
   const value = record[field];
   if (typeof value !== "string" || value.trim().length === 0)
     throw new Error(`Parity mapping ${field} must be a non-empty string.`);
+  return value;
+}
+
+/** Requires one explicit boolean without truthy coercion. @param record - Parsed object. @param field - Required field. @returns Boolean value. */
+function requireBoolean(record: Record<string, unknown>, field: string): boolean {
+  const value = record[field];
+  if (typeof value !== "boolean")
+    throw new Error(`Parity mapping ${field} must be an explicit boolean.`);
   return value;
 }
 

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "records": [
@@ -84,7 +84,12 @@
       },
       "aspect": "command-state",
       "atomicOperation": "Register, dispatch, and query one Writer command",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0102",
@@ -183,7 +188,12 @@
       },
       "aspect": "undo-redo",
       "atomicOperation": "Navigate one action-based Writer history stack",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0103",
@@ -286,7 +296,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Represent and select one bounded Writer model range",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0104",
@@ -365,7 +380,12 @@
       },
       "aspect": "command-state",
       "atomicOperation": "Toggle and query one bounded view visibility flag",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0105",
@@ -512,7 +532,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Apply or remove one default list kind",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0106",
@@ -627,7 +652,12 @@
       },
       "aspect": "compatibility",
       "atomicOperation": "Serialize one complete list selection for clipboard transfer",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0107",
@@ -746,7 +776,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Promote or demote one active list paragraph",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0108",
@@ -853,7 +888,12 @@
       },
       "aspect": "compatibility",
       "atomicOperation": "Serialize one bounded nested-list fragment",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0109",
@@ -1012,7 +1052,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Toggle one direct character attribute over one text range",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0110",
@@ -1143,7 +1188,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Replace or remove one selection through bounded clipboard transfer",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0111",
@@ -1266,7 +1316,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Own one identity-bearing Writer document graph",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0112",
@@ -1425,7 +1480,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Resolve one WhichId through the pooled item hierarchy",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0113",
@@ -1716,7 +1776,12 @@
       },
       "aspect": "persistence-filter",
       "atomicOperation": "Read and write one bounded ODF package",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0114",
@@ -1831,7 +1896,12 @@
       },
       "aspect": "persistence-filter",
       "atomicOperation": "Advance and acknowledge one document lifecycle generation",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0115",
@@ -1914,7 +1984,12 @@
       },
       "aspect": "command-placement",
       "atomicOperation": "Place one registered command in a menu, toolbar, or shortcut surface",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0116",
@@ -1997,7 +2072,12 @@
       },
       "aspect": "browser-input",
       "atomicOperation": "Navigate one Writer menu with keyboard or pointer input",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0117",
@@ -2100,7 +2180,12 @@
       },
       "aspect": "browser-input",
       "atomicOperation": "Extend a Writer selection across rendered paragraphs with the pointer",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0118",
@@ -2203,7 +2288,12 @@
       },
       "aspect": "browser-input",
       "atomicOperation": "Move a collapsed caret across a paragraph boundary",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0119",
@@ -2350,7 +2440,12 @@
       },
       "aspect": "browser-input",
       "atomicOperation": "Stage and commit one IME composition without duplicate mutation",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0120",
@@ -2481,7 +2576,12 @@
       },
       "aspect": "browser-input",
       "atomicOperation": "Intercept one native Copy, Cut, or Paste event",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0121",
@@ -2760,7 +2860,12 @@
       },
       "aspect": "browser-input",
       "atomicOperation": "Complete one browser ODT open, save, or download workflow",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0122",
@@ -2875,7 +2980,12 @@
       },
       "aspect": "browser-input",
       "atomicOperation": "Present and resolve one recovery candidate prompt",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0123",
@@ -2998,7 +3108,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Split, append, merge, move, or remove one text node",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0124",
@@ -3121,7 +3236,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Insert, delete, or replace one same-node text range",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0125",
@@ -3264,7 +3384,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Resolve one paragraph property through direct and inherited item sets",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0126",
@@ -3407,7 +3532,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Store and project one character attribute hint range",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0127",
@@ -3550,7 +3680,12 @@
       },
       "aspect": "model-operation",
       "atomicOperation": "Resolve one document-owned numbering rule and paragraph level",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0128",
@@ -3833,7 +3968,12 @@
       },
       "aspect": "persistence-filter",
       "atomicOperation": "Import one bounded ODF text stream into the Writer graph",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0129",
@@ -4120,7 +4260,12 @@
       },
       "aspect": "persistence-filter",
       "atomicOperation": "Export one Writer graph as bounded ODF XML",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0130",
@@ -4416,8 +4561,14 @@
       "verification": {
         "commit": "83da0b9553d0",
         "evidence": "npx vitest run --config scripts/libreoffice-inventory/vitest.config.ts scripts/libreoffice-inventory/parity-mappings.test.ts scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts; npm run inventory:parity",
-        "taskId": "202609141728-A97V69"
-      }
+        "taskId": "202609141728-A97V69",
+        "scope": "bounded"
+      },
+      "implemented": true,
+      "contractParity": true,
+      "behaviorParity": true,
+      "defaultParity": true,
+      "verified": true
     },
     {
       "id": "LO-WRITER-0131",
@@ -4532,7 +4683,12 @@
       },
       "aspect": "persistence-filter",
       "atomicOperation": "Persist and restore one primary IndexedDB snapshot",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0132",
@@ -4647,7 +4803,12 @@
       },
       "aspect": "undo-redo",
       "atomicOperation": "Acknowledge one completed primary save at the undo save position",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0133",
@@ -4762,7 +4923,12 @@
       },
       "aspect": "persistence-filter",
       "atomicOperation": "Schedule and retain one changed AutoRecovery generation",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0134",
@@ -4885,7 +5051,12 @@
       },
       "aspect": "browser-input",
       "atomicOperation": "Translate one supported beforeinput intent into a Writer mutation",
-      "scopeLimitations": []
+      "scopeLimitations": [],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0135",
@@ -5009,7 +5180,12 @@
       "atomicOperation": "Create, edit, remove, import, and export one Writer text hyperlink",
       "scopeLimitations": [
         "Hyperlink macro events, visited-state mutation, image-map links, drawing-object links, and navigation policy remain outside this text-link slice."
-      ]
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     }
   ]
 }
