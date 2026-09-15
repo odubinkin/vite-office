@@ -4,7 +4,7 @@ title: "Phase 0.3 re-attest Writer capability slice"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -25,11 +25,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-15T10:20:10.035Z"
+  updated_by: "CODER"
+  note: "Verified schema v5 re-attestation: 35 capability records require independent implemented/contractParity/behaviorParity/defaultParity/verified booleans; report shows implemented=35, contract=1, behavior=1, default=1, verified=1, unresolved=34, parityReady=false; CAP-0130 verification scope remains bounded; focused tests, 100% inventory coverage, inventory parity, and source provenance pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-15T10:20:16.617Z"
+  updated_by: "EVALUATOR"
+  note: "Phase 0 capability re-attestation is complete and mechanically enforced."
+  evaluated_sha: "cee2339e4282e090aaf23e18f443243b20ee21b4"
+  blueprint_digest: "7a50bbe2c528b3d57593ccc23436e4732a6743d3cbb6a5fe19f87d839a336a81"
+  evidence_refs:
+    - ".agentplane/tasks/202609150939-CENAC4/README.md"
+    - ".agentplane/tasks/202609150939-CENAC4/quality/20260915-102016617-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609150939-CENAC4/quality/20260915-102016617-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609150939-CENAC4/quality/20260915-102016617-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609150939-CENAC4/blueprint/resolved-snapshot.json"
+    - "scripts/libreoffice-inventory/parity-mappings.test.ts"
+    - "docs/program/parity/writer-command-slice.json"
+    - "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
+  findings:
+    - "Schema v5 keeps 35 implementation flags separate from contract, behavior, default, and verified parity; only bounded CAP-0130 is attested, while 34 records and every unresolved P0 capability remain non-parity."
 commit: null
 comments:
   -
@@ -43,8 +61,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: re-attest all 35 Writer capabilities with independent implementation, contract, behavior, default, and verification states."
+  -
+    type: "verify"
+    at: "2026-09-15T10:20:10.035Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified schema v5 re-attestation: 35 capability records require independent implemented/contractParity/behaviorParity/defaultParity/verified booleans; report shows implemented=35, contract=1, behavior=1, default=1, verified=1, unresolved=34, parityReady=false; CAP-0130 verification scope remains bounded; focused tests, 100% inventory coverage, inventory parity, and source provenance pass."
 doc_version: 3
-doc_updated_at: "2026-09-15T10:06:10.349Z"
+doc_updated_at: "2026-09-15T10:20:10.096Z"
 doc_updated_by: "CODER"
 description: "Re-attest all 35 Writer capabilities with separate implementation, contract, behavior, default, and verification status plus exact evidence."
 sections:
@@ -63,9 +87,48 @@ sections:
     4. Run npm run test:inventory:coverage.
     5. Run npm run inventory:parity.
     6. Run npm run check:source-provenance.
-  Verification: "Pending execution."
+  Verification: |-
+    Pending execution.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-15T10:20:10.035Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified schema v5 re-attestation: 35 capability records require independent implemented/contractParity/behaviorParity/defaultParity/verified booleans; report shows implemented=35, contract=1, behavior=1, default=1, verified=1, unresolved=34, parityReady=false; CAP-0130 verification scope remains bounded; focused tests, 100% inventory coverage, inventory parity, and source provenance pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T10:06:10.349Z, excerpt_hash=sha256:64e21362d6ed77e49da5503016f00ec721f3ae68f5eadc1a5fd156d0403961d9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150939-CENAC4/blueprint/resolved-snapshot.json
+    - old_digest: 7a50bbe2c528b3d57593ccc23436e4732a6743d3cbb6a5fe19f87d839a336a81
+    - current_digest: 7a50bbe2c528b3d57593ccc23436e4732a6743d3cbb6a5fe19f87d839a336a81
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609150939-CENAC4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609150939-CENAC4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task commit to restore the previous capability schema and records, then regenerate any derived parity output."
-  Findings: "None yet."
+  Findings: |-
+    None yet.
+
+    - Observation: Capability delivery maturity previously drove aggregate implementation and verification counts.
+      Impact: A locally working feature could be mistaken for upstream parity.
+      Resolution: Added independent parity attestations, strict closure evidence, bounded verification scope, unresolved parity reporting, and re-attested all 35 Writer capabilities.
 id_source: "generated"
 ---
 ## Summary
@@ -97,6 +160,39 @@ In scope: writer-command-slice schema and all 35 records, parity summary/reporti
 
 Pending execution.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-15T10:20:10.035Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified schema v5 re-attestation: 35 capability records require independent implemented/contractParity/behaviorParity/defaultParity/verified booleans; report shows implemented=35, contract=1, behavior=1, default=1, verified=1, unresolved=34, parityReady=false; CAP-0130 verification scope remains bounded; focused tests, 100% inventory coverage, inventory parity, and source provenance pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T10:06:10.349Z, excerpt_hash=sha256:64e21362d6ed77e49da5503016f00ec721f3ae68f5eadc1a5fd156d0403961d9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150939-CENAC4/blueprint/resolved-snapshot.json
+- old_digest: 7a50bbe2c528b3d57593ccc23436e4732a6743d3cbb6a5fe19f87d839a336a81
+- current_digest: 7a50bbe2c528b3d57593ccc23436e4732a6743d3cbb6a5fe19f87d839a336a81
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609150939-CENAC4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609150939-CENAC4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert the task commit to restore the previous capability schema and records, then regenerate any derived parity output.
@@ -104,3 +200,7 @@ Revert the task commit to restore the previous capability schema and records, th
 ## Findings
 
 None yet.
+
+- Observation: Capability delivery maturity previously drove aggregate implementation and verification counts.
+  Impact: A locally working feature could be mistaken for upstream parity.
+  Resolution: Added independent parity attestations, strict closure evidence, bounded verification scope, unresolved parity reporting, and re-attested all 35 Writer capabilities.
