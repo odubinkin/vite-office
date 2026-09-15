@@ -1,10 +1,11 @@
 ---
 id: "202609150939-CENAC4"
 title: "Phase 0.3 re-attest Writer capability slice"
-status: "DOING"
+result_summary: "verified-202609150939-CENAC4"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -26,9 +27,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T10:20:10.035Z"
+  updated_at: "2026-09-15T10:20:31.436Z"
   updated_by: "CODER"
-  note: "Verified schema v5 re-attestation: 35 capability records require independent implemented/contractParity/behaviorParity/defaultParity/verified booleans; report shows implemented=35, contract=1, behavior=1, default=1, verified=1, unresolved=34, parityReady=false; CAP-0130 verification scope remains bounded; focused tests, 100% inventory coverage, inventory parity, and source provenance pass."
+  note: "verified-202609150939-CENAC4"
   attempts: 0
 quality_review:
   state: "pass"
@@ -48,11 +49,16 @@ quality_review:
     - "scripts/libreoffice-inventory/parity-mapping-cli.test.ts"
   findings:
     - "Schema v5 keeps 35 implementation flags separate from contract, behavior, default, and verified parity; only bounded CAP-0130 is attested, while 34 records and every unresolved P0 capability remain non-parity."
-commit: null
+commit:
+  hash: "cee2339e4282e090aaf23e18f443243b20ee21b4"
+  message: "🚧 CENAC4 task: re-attest Writer parity capabilities"
 comments:
   -
     author: "CODER"
     body: "Start: re-attest all 35 Writer capabilities with independent implementation, contract, behavior, default, and verification states."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609150939-CENAC4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified schema v5 re-attestation: 35 capability records require independent implemented/contractParity/behaviorParity/defaultParity/verified booleans; report shows implemented=35, contract=1, behavior=1, default=1, verified=1, unresolved=34, parityReady=false; CAP-0130 verification scope remains bounded; focused tests, 100% inventory coverage, inventory parity, and source provenance pass."
+  -
+    type: "verify"
+    at: "2026-09-15T10:20:31.436Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609150939-CENAC4"
+  -
+    type: "status"
+    at: "2026-09-15T10:20:31.514Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609150939-CENAC4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T10:20:10.096Z"
+doc_updated_at: "2026-09-15T10:20:31.514Z"
 doc_updated_by: "CODER"
 description: "Re-attest all 35 Writer capabilities with separate implementation, contract, behavior, default, and verification status plus exact evidence."
 sections:
@@ -114,6 +133,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task verify-show 202609150939-CENAC4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-15T10:20:31.436Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609150939-CENAC4
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T10:20:10.096Z, excerpt_hash=sha256:64e21362d6ed77e49da5503016f00ec721f3ae68f5eadc1a5fd156d0403961d9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150939-CENAC4/blueprint/resolved-snapshot.json
+    - old_digest: 7a50bbe2c528b3d57593ccc23436e4732a6743d3cbb6a5fe19f87d839a336a81
+    - current_digest: 7a50bbe2c528b3d57593ccc23436e4732a6743d3cbb6a5fe19f87d839a336a81
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609150939-CENAC4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609150939-CENAC4 --result verified-202609150939-CENAC4 --commit 78a32de1183ddf008d46a1d4896d0cd1052b3850
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -184,6 +233,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609150939-CENAC4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T10:20:31.436Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609150939-CENAC4
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T10:20:10.096Z, excerpt_hash=sha256:64e21362d6ed77e49da5503016f00ec721f3ae68f5eadc1a5fd156d0403961d9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150939-CENAC4/blueprint/resolved-snapshot.json
+- old_digest: 7a50bbe2c528b3d57593ccc23436e4732a6743d3cbb6a5fe19f87d839a336a81
+- current_digest: 7a50bbe2c528b3d57593ccc23436e4732a6743d3cbb6a5fe19f87d839a336a81
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609150939-CENAC4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609150939-CENAC4 --result verified-202609150939-CENAC4 --commit 78a32de1183ddf008d46a1d4896d0cd1052b3850
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
