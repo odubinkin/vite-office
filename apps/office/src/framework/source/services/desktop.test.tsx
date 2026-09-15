@@ -210,6 +210,34 @@ describe("App" /**
     expect(editor.querySelector("strong em span")).toBeInTheDocument();
   });
 
+  it("selects local-compatible fonts and exposes the complete paragraph-style hierarchy", /** Verifies the two Writer selectors and visible style classes. @returns Nothing. */ function selectsWriterFontsAndStyles(): void {
+    render(<App />);
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    enterWriterParagraphText(editor, "Styled");
+    selectWriterParagraphText(editor);
+    const fontSelect = screen.getByLabelText("Font name");
+    expect(within(fontSelect).getByRole("option", { name: "Noto Serif" })).toBeInTheDocument();
+    fireEvent.change(fontSelect, { target: { value: "Noto Serif" } });
+    expect(editor.querySelector("span")).toHaveStyle({ fontFamily: "Noto Serif" });
+
+    const styleSelect = screen.getByLabelText("Paragraph style");
+    expect(within(styleSelect).getAllByRole("option")).toHaveLength(126);
+    for (const [style, className] of [
+      ["title", "text-3xl"],
+      ["subtitle", "text-xl"],
+      ["heading-3", "text-xl"],
+      ["heading-5", "text-lg"],
+      ["heading", "text-xl"],
+      ["preformatted-text", "font-mono"],
+      ["quotations", "italic"],
+      ["caption", "text-sm"],
+      ["footnote", "text-sm"],
+    ] as const) {
+      fireEvent.change(styleSelect, { target: { value: style } });
+      expect(editor).toHaveClass(className);
+    }
+  });
+
   it("applies a collapsed Writer character command to subsequent typed text" /** Verifies a pending direct attribute creates semantic character runs without a native range selection. @returns Nothing; the browser-visible inserted run is asserted. */, function formatsSubsequentWriterTyping(): void {
     render(<App />);
     const editor = screen.getByRole("textbox", { name: "Writer document text" });

@@ -6,6 +6,7 @@ export { ODF_NAMESPACES } from "../core/xmltoken";
 
 /** Direct character properties supported by the bounded text exporter. */
 export interface OdfCharacterProperties {
+  readonly fontFamily?: string;
   readonly bold: boolean;
   readonly italic: boolean;
   readonly underline: boolean;
@@ -18,7 +19,7 @@ export interface XMLTextRunSource {
 }
 
 /** Writer paragraph styles supported by the bounded filter. */
-export type XMLParagraphStyle = "default" | "heading-1";
+export type XMLParagraphStyle = string;
 
 /** Paragraph alignment values shared with the Writer model. */
 export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
@@ -115,14 +116,14 @@ export function exportTextParagraphs(
         OdfParagraphAlignment | "",
         string,
       ];
-      const parent = style === "heading-1" ? "Heading_20_1" : "Standard";
+      const parent = getOdfStyleName(style);
       const paragraphProperties =
         alignment === ""
           ? ""
           : `<style:paragraph-properties fo:text-align="${exportAlignment(alignment)}"/>`;
       const properties = parseCharacterPropertiesKey(propertiesKey);
       const textProperties =
-        propertiesKey === "---"
+        propertiesKey === "---|"
           ? ""
           : `<style:text-properties${exportCharacterAttributes(properties)}/>`;
       return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}">${paragraphProperties}${textProperties}</style:style>`;
@@ -254,7 +255,7 @@ function exportParagraphElement(
   paragraphStyleNames: ReadonlyMap<string, string>,
   characterStyleNames: ReadonlyMap<string, string>,
 ): string {
-  const baseStyleName = paragraph.style === "heading-1" ? "Heading_20_1" : "Standard";
+  const baseStyleName = getOdfStyleName(paragraph.style);
   const styleName =
     paragraph.alignment === undefined && paragraph.properties === undefined
       ? baseStyleName
@@ -380,23 +381,26 @@ function equalCharacterProperties(
   right: OdfCharacterProperties,
 ): boolean {
   return (
-    left.bold === right.bold && left.italic === right.italic && left.underline === right.underline
+    left.bold === right.bold &&
+    left.italic === right.italic &&
+    left.underline === right.underline &&
+    left.fontFamily === right.fontFamily
   );
 }
 
 /** Creates a stable style-deduplication key. @param properties - Character properties. @returns Key. */
 function characterPropertiesKey(properties: OdfCharacterProperties): string {
-  return `${Number(properties.bold)}${Number(properties.italic)}${Number(properties.underline)}`;
+  return `${Number(properties.bold)}${Number(properties.italic)}${Number(properties.underline)}|${encodeURIComponent(properties.fontFamily ?? "")}`;
 }
 
 /** Creates a three-state character key for automatic paragraph styles. @param properties - Optional direct deltas. @returns Stable key. */
 function partialCharacterPropertiesKey(properties?: Partial<OdfCharacterProperties>): string {
-  return [properties?.bold, properties?.italic, properties?.underline]
+  return `${[properties?.bold, properties?.italic, properties?.underline]
     .map(
       /** Encodes undefined, false, or true. @param value - Direct property. @returns One key character. */
       (value) => (value === undefined ? "-" : Number(value).toString()),
     )
-    .join("");
+    .join("")}|${encodeURIComponent(properties?.fontFamily ?? "")}`;
 }
 
 /** Restores properties from an internal key. @param key - Three-bit key. @returns Character properties. */
@@ -405,19 +409,25 @@ function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterPropertie
     /** Decodes one three-state property. @param value - Key character. @returns Direct property. */
     (value: string | undefined): boolean | undefined =>
       value === "-" || value === undefined ? undefined : value === "1";
-  const bold = decode(key[0]);
-  const italic = decode(key[1]);
-  const underline = decode(key[2]);
+  const [flags = "---", encodedFont = ""] = key.split("|");
+  const bold = decode(flags[0]);
+  const italic = decode(flags[1]);
+  const underline = decode(flags[2]);
+  const fontFamily = decodeURIComponent(encodedFont);
   return {
     ...(bold === undefined ? {} : { bold }),
     ...(italic === undefined ? {} : { italic }),
     ...(underline === undefined ? {} : { underline }),
+    ...(fontFamily.length === 0 ? {} : { fontFamily }),
   };
 }
 
 /** Emits supported ODF text-property attributes. @param properties - Direct properties. @returns Attribute fragment. */
 export function exportCharacterAttributes(properties: Partial<OdfCharacterProperties>): string {
   return [
+    properties.fontFamily === undefined
+      ? ""
+      : ` fo:font-family="${escapeXml(properties.fontFamily)}"`,
     properties.bold === undefined
       ? ""
       : ` fo:font-weight="${properties.bold ? "bold" : "normal"}" style:font-weight-asian="${properties.bold ? "bold" : "normal"}" style:font-weight-complex="${properties.bold ? "bold" : "normal"}"`,
@@ -428,4 +438,9 @@ export function exportCharacterAttributes(properties: Partial<OdfCharacterProper
       ? ""
       : ` style:text-underline-style="${properties.underline ? "solid" : "none"}"${properties.underline ? ' style:text-underline-width="auto"' : ""}`,
   ].join("");
+}
+
+/** Maps stable model IDs to the two legacy ODF names retained by the filter. @param style - Model style. @returns ODF name. */
+function getOdfStyleName(style: XMLParagraphStyle): string {
+  return style === "default" ? "Standard" : style === "heading-1" ? "Heading_20_1" : style;
 }

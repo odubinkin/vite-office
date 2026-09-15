@@ -2,8 +2,8 @@
 
 ## Implemented browser slice
 
-The static Writer workbench supports direct **Bold**, **Italic**, and single
-**Underline** formatting for one non-empty native selection contained in one
+The static Writer workbench supports direct **Bold**, **Italic**, single
+**Underline**, and **Font name** formatting for one non-empty native selection contained in one
 editable paragraph. `SwTextNode` stores canonical text in
 [`ndtxt.ts`](../../apps/office/src/sw/source/core/txtnode/ndtxt.ts), while its
 optional [`SwpHints`](../../apps/office/src/sw/source/core/txtnode/ndhints.ts)
@@ -47,7 +47,13 @@ placement evidence is `sw/uiconfig/swriter/menubar/menubar.xml` (`.uno:Bold`,
 `helpcontent2/source/text/swriter/04/01020000.xhp` and
 `helpcontent2/source/text/swriter/guide/shortcut_writing.xhp`.
 
+Font selection follows LibreOffice's device-backed `FontList`: Chromium's Local
+Font Access API supplies installed families after user permission, with a
+deterministic offline fallback when the API is absent or denied. Font family is
+stored as `SvxFontItem` deltas and participates in Undo/Redo, snapshots, bounded
+ODT interchange, rendering, and clipboard sanitization.
+
 This slice does not yet implement cross-paragraph or multi-range formatting,
-font/size/colour attributes, character styles, double underline, strikeout,
+font size/colour attributes, character styles, double underline, strikeout,
 overline, full IME behavior, Paste, RTF, or ODT/DOCX interchange. Those gaps
 remain explicit in `LO-WRITER-0109`; they are not browser-runtime exceptions.

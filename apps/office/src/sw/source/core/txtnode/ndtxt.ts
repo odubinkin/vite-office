@@ -198,10 +198,61 @@ export function normalizeWriterTextRuns(candidate: unknown): readonly WriterText
 export function normalizeWriterCharacterAttributes(candidate: unknown): WriterCharacterAttributes {
   const attributes = isRecord(candidate) ? candidate : {};
   return {
+    ...(typeof attributes.fontFamily === "string" && attributes.fontFamily.trim().length > 0
+      ? { fontFamily: attributes.fontFamily }
+      : {}),
     bold: attributes.bold === true,
     italic: attributes.italic === true,
     underline: attributes.underline === true,
   };
+}
+
+/** Applies a font family. @param runs - Source runs. @param start - Range start. @param end - Range end. @param fontFamily - Family. @returns Formatted runs. */
+export function applyWriterTextRangeFont(
+  runs: readonly WriterTextRun[],
+  start: number,
+  end: number,
+  fontFamily: string,
+): readonly WriterTextRun[] {
+  if (fontFamily.trim().length === 0) throw new Error("Writer font family must not be blank.");
+  const normalized = normalizeWriterTextRuns(runs);
+  const textLength = getWriterTextFromRuns(normalized).length;
+  if (
+    !Number.isInteger(start) ||
+    !Number.isInteger(end) ||
+    start < 0 ||
+    end > textLength ||
+    start > end
+  )
+    throw new Error("Writer font range is outside the paragraph.");
+  if (start === end) return normalized;
+  let offset = 0;
+  return normalizeWriterTextRuns(
+    normalized.flatMap(
+      /** Formats one intersecting run. @param run - Source run. @returns Replacement fragments. */ (
+        run,
+      ) => {
+        const runStart = offset;
+        const runEnd = runStart + run.text.length;
+        offset = runEnd;
+        if (runStart >= end || runEnd <= start) return [run];
+        const beforeLength = Math.max(0, start - runStart);
+        const afterStart = Math.min(run.text.length, end - runStart);
+        return [
+          ...(beforeLength === 0
+            ? []
+            : [{ attributes: run.attributes, text: run.text.slice(0, beforeLength) }]),
+          {
+            attributes: { ...run.attributes, fontFamily },
+            text: run.text.slice(beforeLength, afterStart),
+          },
+          ...(afterStart === run.text.length
+            ? []
+            : [{ attributes: run.attributes, text: run.text.slice(afterStart) }]),
+        ];
+      },
+    ),
+  );
 }
 
 /**
@@ -662,7 +713,7 @@ export class SwTextNode extends SwContentNode {
       this.GetNodes(),
       nextId,
       this.StartOfSectionNode(),
-      this.GetTextFormatColl(),
+      this.GetTextFormatColl().GetNextTextFormatColl(),
       getWriterTextFromRuns(split.suffix),
     );
     const directAttributes = this.GetpSwAttrSet();
@@ -789,7 +840,10 @@ function areWriterCharacterAttributesEqual(
   right: WriterCharacterAttributes,
 ): boolean {
   return (
-    left.bold === right.bold && left.italic === right.italic && left.underline === right.underline
+    left.bold === right.bold &&
+    left.fontFamily === right.fontFamily &&
+    left.italic === right.italic &&
+    left.underline === right.underline
   );
 }
 

@@ -7,6 +7,7 @@ import {
   FontItalic,
   FontLineStyle,
   FontWeight,
+  SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
@@ -21,6 +22,7 @@ import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_NUMRULE,
+  RES_CHRATR_FONT,
   WRITER_TEXT_NODE_WHICH_RANGES,
 } from "../../../inc/hintids";
 import { SwFormat } from "../attr/format";
@@ -66,12 +68,24 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
   it("owns pool defaults and resolves collection inheritance through lazy node deltas" /** Verifies the canonical SwDoc → style → content-node item path. @returns Nothing; assertions inspect ownership and state. */, function resolvesWriterAttributes(): void {
     const writer = createFixture();
     const pool = writer.GetAttrPool();
+    const font = new SvxFontItem("Noto Serif", RES_CHRATR_FONT);
+    expect(font.GetFamilyName()).toBe("Noto Serif");
+    expect(font.Clone()).toEqual(font);
+    expect(font.equals(new SvxFontItem("Noto Serif", RES_CHRATR_FONT))).toBe(true);
+    expect(font.equals(new SvxFontItem("Noto Sans", RES_CHRATR_FONT))).toBe(false);
+    expect(font.toSnapshot()).toEqual({ type: "SvxFontItem", value: "Noto Serif", which: 1 });
+    expect(pool.CreateItem(font.toSnapshot())).toEqual(font);
+    expect(
+      /** Rejects a blank font. @returns Invalid item. */ () => new SvxFontItem(" ", 1),
+    ).toThrow("invalid");
     const defaultStyle = writer.GetDfltTextFormatColl();
     const heading = writer.GetTextFormatColl("heading-1");
+    const headingBase = writer.GetTextFormatColl("heading");
+    const textBody = writer.GetTextFormatColl("text-body");
     const node = writer.paragraphs[0];
     if (node === undefined) throw new Error("Writer fixture has no text node.");
     expect(pool.GetDoc()).toBe(writer);
-    expect(writer.GetTextFormatColls()).toEqual([defaultStyle, heading]);
+    expect(writer.GetTextFormatColls()).toEqual([defaultStyle, headingBase, textBody, heading]);
     expect(writer.FindTextFormatColl("default")).toBe(defaultStyle);
     expect(writer.FindTextFormatColl("missing" as "default")).toBeUndefined();
     expect(
@@ -80,7 +94,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
           writer.GetTextFormatColl("missing" as "default"),
       ),
     ).toThrow("Unknown SwTextFormatColl");
-    expect(heading.DerivedFrom()).toBe(defaultStyle);
+    expect(heading.DerivedFrom()).toBe(headingBase);
     expect(defaultStyle.IsAuto()).toBe(false);
     expect(node.GetFormatColl()).toBe(defaultStyle);
     expect(node.GetTextFormatColl()).toBe(defaultStyle);
@@ -122,6 +136,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     const pool = writer.GetAttrPool();
     const parent = writer.GetDfltTextFormatColl();
     const heading = writer.GetTextFormatColl("heading-1");
+    const textBody = writer.GetTextFormatColl("text-body");
     const format = new SwFormat(pool, "Automatic", WRITER_TEXT_NODE_WHICH_RANGES, parent);
     expect(format.GetName()).toBe("Automatic");
     format.SetFormatName("Changed");
@@ -158,11 +173,11 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
           format.SetDerivedFrom(other.GetDfltTextFormatColl()),
       ),
     ).toThrow("another pool");
-    expect(heading.GetNextTextFormatColl()).toBe(heading);
+    expect(heading.GetNextTextFormatColl()).toBe(textBody);
     heading.SetNextTextFormatColl(parent);
     expect(heading.GetNextTextFormatColl()).toBe(parent);
     expect(parent.toSnapshot()).not.toHaveProperty("parentId");
-    expect(heading.toSnapshot()).toMatchObject({ id: "heading-1", parentId: "default" });
+    expect(heading.toSnapshot()).toMatchObject({ id: "heading-1", parentId: "heading" });
   });
 
   it("specializes SwAttrSet and guards content-node collection ownership" /** Covers Writer typed accessors, clones, and content-format type checks. @returns Nothing; assertions inspect subtype behavior. */, function specializesWriterSets(): void {
@@ -360,7 +375,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 4 });
+    expect(snapshot).toMatchObject({ swModelVersion: 5 });
     expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", text: "" });
     expect(snapshot.textNodes[0]).not.toHaveProperty("alignment");
     const restored = normalizeWriterParagraphFormatting(snapshot);

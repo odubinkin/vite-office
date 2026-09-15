@@ -145,7 +145,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
     "Copied selection.",
   );
   await page.getByRole("button", { name: "Styles" }).click();
-  await page.getByRole("menuitem", { name: "Heading 1" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Heading 1" }).click();
   await expect(writerEditor).toHaveCSS("font-size", "24px");
   await expect(writerEditor).toHaveCSS("font-weight", "700");
   await expect(
@@ -182,7 +182,8 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   const trailingWriterParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
   await expect(trailingWriterParagraph).toBeVisible();
   await expect(trailingWriterParagraph).toHaveText("");
-  await expect(trailingWriterParagraph).toHaveCSS("font-size", "24px");
+  await expect(trailingWriterParagraph).toHaveCSS("font-size", "16px");
+  await expect(trailingWriterParagraph).toHaveAttribute("data-style", "text-body");
   await expect(trailingWriterParagraph).toHaveCSS("text-align", "center");
   await trailingWriterParagraph.press("Backspace");
   await expect(trailingWriterParagraph).toHaveCount(0);

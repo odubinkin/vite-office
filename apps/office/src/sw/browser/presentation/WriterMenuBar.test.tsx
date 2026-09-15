@@ -26,6 +26,16 @@ function enterWriterParagraphText(paragraph: HTMLElement, text: string): void {
   fireEvent.input(paragraph);
 }
 
+/** Selects all visible text in one Writer paragraph. @param paragraph - Editable paragraph. @returns Nothing. */
+function selectWriterParagraphText(paragraph: HTMLElement): void {
+  const range = document.createRange();
+  range.selectNodeContents(paragraph);
+  const selection = window.getSelection();
+  if (selection === null) throw new Error("Writer test selection is unavailable.");
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
 /** Provides a test-owned rich ClipboardItem that retains its MIME blobs for Writer UI assertions. */
 class WriterClipboardItemFixture {
   /** MIME-typed blobs passed by the browser clipboard adapter. */
@@ -216,6 +226,11 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.click(screen.getByRole("button", { name: "Align center" }));
       fireEvent.click(screen.getByRole("button", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+      selectWriterParagraphText(editor);
+      fireEvent.change(screen.getByLabelText("Font name"), { target: { value: "Noto Serif" } });
+      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+      selectWriterParagraphText(editor);
       await act(
         /** Activates the Writer standard-toolbar Copy command. @returns A fulfilled React act promise. */
         async function copiesRichWriterSelection(): Promise<void> {
@@ -226,7 +241,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const clipboardItem = clipboardItems[0] as WriterClipboardItemFixture;
       expect(await clipboardItem.items["text/plain"]?.text()).toBe("Formatted Writer body");
       expect(await clipboardItem.items["text/html"]?.text()).toBe(
-        '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;">Formatted Writer body</p>',
+        '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><span style="font-family: &quot;Noto Serif&quot;">Formatted Writer body</span></p>',
       );
       expect(await clipboardItem.items["text/plain"]?.text()).not.toContain("Paragraph style:");
     } finally {
@@ -273,9 +288,14 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
         {
           /** Returns bounded rich or plain test clipboard text. @param type - Requested clipboard MIME type. @returns MIME-typed Blob with deterministic text. */
           async getType(type: string): Promise<Blob> {
-            return new Blob([type === "text/html" ? "<strong>Pasted</strong>" : "Pasted"], {
-              type,
-            });
+            return new Blob(
+              [
+                type === "text/html"
+                  ? '<span style="font-family: Noto Serif"><strong>Pasted</strong></span>'
+                  : "Pasted",
+              ],
+              { type },
+            );
           },
           types: ["text/html", "text/plain"],
         } as unknown as ClipboardItem,
@@ -288,6 +308,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       );
       const pastedEditor = screen.getByRole("textbox", { name: "Writer document text" });
       expect(pastedEditor.querySelector("strong")).toHaveTextContent("Pasted");
+      expect(pastedEditor.querySelector("span")).toHaveStyle({ fontFamily: "Noto Serif" });
       const replaceRange = document.createRange();
       replaceRange.selectNodeContents(pastedEditor);
       selection.removeAllRanges();

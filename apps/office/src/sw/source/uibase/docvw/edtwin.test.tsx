@@ -328,7 +328,7 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(firstParagraph).toHaveTextContent("Before");
     expect(secondParagraph).toHaveTextContent("after");
     expect(secondParagraph).toHaveFocus();
-    expect(secondParagraph).toHaveClass("text-2xl", "font-bold");
+    expect(secondParagraph).toHaveClass("text-base", "leading-7");
     expect(secondParagraph).toHaveStyle({ textAlign: "center" });
     expect(screen.getByText("Paragraph 2 is active.")).toBeInTheDocument();
     firstParagraph.focus();

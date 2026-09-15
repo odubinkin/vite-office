@@ -1,7 +1,13 @@
 /** @fileoverview Implements direct character and paragraph attribute undo from pinned LibreOffice unattr.cxx. */
 
-import type { WriterParagraphAlignment, WriterTextRun } from "../txtnode/ndtxt";
 import {
+  applyWriterTextRangeFont,
+  type SwTextNode,
+  type WriterParagraphAlignment,
+  type WriterTextRun,
+} from "../txtnode/ndtxt";
+import {
+  CopyTextRangeRuns,
   CopyUndoRuns,
   GetRunsPayloadSize,
   GetUndoRunsLength,
@@ -57,6 +63,22 @@ export class SwUndoAttr extends SwUndo {
       this.afterRuns,
     );
   }
+}
+
+/** Builds a font-family range undo action. @param paragraph - Target node. @param start - Range start. @param end - Range end. @param family - Font family. @param before - Initial cursor. @param after - Final cursor. @returns Undo action or undefined for a no-op. */
+export function CreateWriterFontUndo(
+  paragraph: SwTextNode,
+  start: number,
+  end: number,
+  family: string,
+  before: SwUndoCursorState,
+  after: SwUndoCursorState,
+): SwUndoAttr | undefined {
+  const beforeRuns = CopyTextRangeRuns(paragraph, start, end);
+  const afterRuns = applyWriterTextRangeFont(beforeRuns, 0, GetUndoRunsLength(beforeRuns), family);
+  return JSON.stringify(beforeRuns) === JSON.stringify(afterRuns)
+    ? undefined
+    : new SwUndoAttr(paragraph.id, start, beforeRuns, afterRuns, before, after);
 }
 
 /** Reversible RES_PARATR_ADJUST change for one paragraph. */

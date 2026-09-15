@@ -46,6 +46,7 @@ export interface XMLTextImportTarget {
   ): XMLParagraphImportTarget;
   getListRule(styleName: string): XMLTextListRule | undefined;
   getStyle(styleName: string): OdfStyleDefinition | undefined;
+  resolveBuiltInParagraphStyle?(styleName: string): string | undefined;
 }
 
 const DEFAULT_PROPERTIES: OdfCharacterProperties = {
@@ -310,13 +311,16 @@ interface ResolvedParagraphStyle {
 export function resolveParagraphStyle(
   name: string,
   heading: boolean,
-  target: Pick<XMLTextImportTarget, "getStyle">,
+  target: Pick<XMLTextImportTarget, "getStyle" | "resolveBuiltInParagraphStyle">,
   seen = new Set<string>(),
 ): ResolvedParagraphStyle {
   if (name === "") return { style: heading ? "heading-1" : "default" };
-  if (name === "Standard" || name === "Heading_20_1") {
+  const builtInStyle =
+    target.resolveBuiltInParagraphStyle?.(name) ??
+    (name === "Standard" ? "default" : name === "Heading_20_1" ? "heading-1" : undefined);
+  if (builtInStyle !== undefined) {
     const parent =
-      name === "Heading_20_1"
+      builtInStyle !== "default"
         ? resolveParagraphStyle("Standard", heading, target, seen)
         : { style: heading ? ("heading-1" as const) : ("default" as const) };
     const definition = target.getStyle(name);
@@ -324,7 +328,7 @@ export function resolveParagraphStyle(
       ...(definition?.properties === undefined && parent.effectiveProperties === undefined
         ? {}
         : { effectiveProperties: { ...parent.effectiveProperties, ...definition?.properties } }),
-      style: name === "Heading_20_1" ? "heading-1" : parent.style,
+      style: builtInStyle,
     };
   }
   if (seen.has(name)) throw new Error(`Cyclic ODF paragraph style: ${name}`);

@@ -872,7 +872,7 @@
       "capability": "Writer direct character formatting",
       "gaps": [
         "The browser supports one native non-empty same-paragraph range and collapsed-caret pending attributes only; cross-paragraph, table, multi-range, character-style, and full IME behavior remain unmapped.",
-        "Font family, size, colour, double underline, strikeout, overline, rich-text Paste beyond the safe HTML subset, RTF, and DOCX interchange remain separate capabilities; bounded ODT character-format interchange is recorded by LO-WRITER-0113."
+        "Font size, colour, double underline, strikeout, overline, rich-text Paste beyond the safe HTML subset, RTF, and DOCX interchange remain separate capabilities; font-family selection and bounded ODT character-format interchange are implemented."
       ],
       "upstream": {
         "implementation": [
@@ -883,6 +883,10 @@
           {
             "path": "sw/source/core/txtnode/ndtxt.cxx",
             "marker": "SwTextNode"
+          },
+          {
+            "path": "svtools/source/control/ctrltool.cxx",
+            "marker": "FontList::FontList"
           },
           {
             "path": "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -951,6 +955,10 @@
           {
             "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
             "marker": "WriterFormattingToolbar"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/font-list.ts",
+            "marker": "export class FontList"
           }
         ],
         "tests": [
@@ -973,6 +981,10 @@
           {
             "path": "apps/office/src/framework/source/services/desktop.test.tsx",
             "marker": "formats same-paragraph text"
+          },
+          {
+            "path": "apps/office/src/vcl/browser/font-list.test.ts",
+            "marker": "FontList"
           },
           {
             "path": "apps/office/e2e/writer-character-formatting.spec.ts",
@@ -1272,8 +1284,8 @@
       },
       "capability": "Writer pooled item and item-set foundation",
       "gaps": [
-        "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL weight and posture, and common underline are implemented. Font family, size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, built-in style pool, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
-        "The current version-three browser snapshot preserves the implemented ownership graph; obsolete snapshots from the preceding non-canonical model are deliberately rejected. ODT numbering is mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented."
+        "The current alignment/list WhichIds, ten per-level bullet-or-decimal SwNumFormat records, Western/CJK/CTL font family, weight and posture, common underline, and the complete 126-entry built-in paragraph-style pool are implemented. Font size, language, color, prefixes, suffixes, custom glyphs and numeric formats, the complete item universe, conditional styles, automatic-style cache, broadcasts, and item sharing remain separate work.",
+        "The current version-five browser snapshot preserves the implemented ownership graph and lazy built-in style materialization; obsolete snapshots from preceding non-canonical models are deliberately rejected. ODT numbering, fonts, and named paragraph styles are mapped by LO-WRITER-0113, while DOCX style and numbering filters remain unimplemented."
       ],
       "upstream": {
         "implementation": [
@@ -1300,6 +1312,14 @@
           {
             "path": "sw/source/core/doc/fmtcol.cxx",
             "marker": "SwTextFormatColl::SwTextFormatColl"
+          },
+          {
+            "path": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+            "marker": "GetTextCollFromPool"
+          },
+          {
+            "path": "sw/source/core/doc/poolfmt.cxx",
+            "marker": "GetPoolParent"
           },
           {
             "path": "sw/source/core/docnode/node.cxx",
@@ -1350,6 +1370,10 @@
             "marker": "export class SwTextFormatColl"
           },
           {
+            "path": "apps/office/src/sw/inc/poolfmt.ts",
+            "marker": "WRITER_PARAGRAPH_STYLE_POOL"
+          },
+          {
             "path": "apps/office/src/sw/source/core/docnode/node.ts",
             "marker": "export abstract class SwContentNode"
           },
@@ -1370,6 +1394,10 @@
           {
             "path": "apps/office/src/sw/source/core/doc/writer-attributes.test.ts",
             "marker": "Writer attribute ownership"
+          },
+          {
+            "path": "apps/office/src/sw/inc/poolfmt.test.ts",
+            "marker": "Writer paragraph-style pool"
           },
           {
             "path": "apps/office/src/editeng/source/items/textitem.test.ts",

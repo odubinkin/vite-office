@@ -92,7 +92,8 @@ alternative.
 
 Persistence accepts only the split target snapshot: transport `schemaVersion: 1`
 contains shell-owned `documentState` and a model-only `writerModel` with
-`swModelVersion: 4`. The model snapshot records document-owned style and
+`swModelVersion: 5`. The model snapshot records the complete built-in paragraph-style
+pool (including pool/group, parent, and follow identities), document-owned style and
 numbering definitions, text-node identities, direct item deltas, and text
 hints; identity, title, lifecycle, save/recovery generations, and medium state
 never enter `SwDoc`. `SwDoc.fromSnapshot()` reconstructs model ownership and

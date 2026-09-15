@@ -5,6 +5,9 @@
 /** First Writer character-format WhichId. */
 export const RES_CHRATR_BEGIN = 1 as const;
 
+/** Western font family, `RES_CHRATR_BEGIN`. */
+export const RES_CHRATR_FONT = 1 as const;
+
 /** Western font posture, `RES_CHRATR_BEGIN + 10`. */
 export const RES_CHRATR_POSTURE = 11 as const;
 
@@ -17,11 +20,17 @@ export const RES_CHRATR_WEIGHT = 15 as const;
 /** CJK font posture, `RES_CHRATR_BEGIN + 24`. */
 export const RES_CHRATR_CJK_POSTURE = 25 as const;
 
+/** CJK font family, `RES_CHRATR_BEGIN + 19`. */
+export const RES_CHRATR_CJK_FONT = 20 as const;
+
 /** CJK font weight, `RES_CHRATR_BEGIN + 25`. */
 export const RES_CHRATR_CJK_WEIGHT = 26 as const;
 
 /** Complex-text font posture, `RES_CHRATR_BEGIN + 29`. */
 export const RES_CHRATR_CTL_POSTURE = 30 as const;
+
+/** Complex-text font family, `RES_CHRATR_BEGIN + 26`. */
+export const RES_CHRATR_CTL_FONT = 27 as const;
 
 /** Complex-text font weight, `RES_CHRATR_BEGIN + 30`. */
 export const RES_CHRATR_CTL_WEIGHT = 31 as const;
@@ -46,9 +55,12 @@ export const RES_PARATR_LIST_LEVEL = 84 as const;
 
 /** WhichIds supported by the current Writer text-node auto-attribute set. */
 export const WRITER_TEXT_NODE_WHICH_RANGES = [
+  [RES_CHRATR_FONT, RES_CHRATR_FONT],
   [RES_CHRATR_POSTURE, RES_CHRATR_POSTURE],
   [RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT],
+  [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT],
   [RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT],
+  [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT],
   [RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT],
   [RES_PARATR_ADJUST, RES_PARATR_ADJUST],
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
@@ -57,9 +69,12 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
 
 /** WhichIds supported by the current Writer paragraph-style attribute set. */
 export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
+  [RES_CHRATR_FONT, RES_CHRATR_FONT],
   [RES_CHRATR_POSTURE, RES_CHRATR_POSTURE],
   [RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT],
+  [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT],
   [RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT],
+  [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT],
   [RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT],
   [RES_PARATR_ADJUST, RES_PARATR_ADJUST],
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
@@ -68,8 +83,11 @@ export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
 
 /** WhichIds stored inside the bounded SwFormatAutoFormat item set. */
 export const WRITER_CHARACTER_WHICH_RANGES = [
+  [RES_CHRATR_FONT, RES_CHRATR_FONT],
   [RES_CHRATR_POSTURE, RES_CHRATR_POSTURE],
   [RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT],
+  [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT],
   [RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT],
+  [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT],
   [RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT],
 ] as const;

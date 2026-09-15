@@ -9,6 +9,7 @@ import {
   FontItalic,
   FontLineStyle,
   FontWeight,
+  SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
@@ -19,10 +20,13 @@ import { DEFAULT_ZIP_FILE_LIMITS, ZipFile } from "../../../../package/source/zip
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_POSTURE,
+  RES_CHRATR_FONT,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
@@ -89,6 +93,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   it("writes deterministic ODF 1.3 packages and restores canonical formatting" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
     const writer = createWriterDocument("source-1");
     writer.GetDfltTextFormatColl().SetFormatName("Body < text");
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
+      writer.GetDfltTextFormatColl().SetFormatAttr(new SvxFontItem("Noto Serif", which));
     writer
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
@@ -123,7 +129,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     first?.SetParagraphAlignment("right");
     first?.ReplaceRange(0, 0, [
       {
-        attributes: { bold: true, italic: false, underline: false },
+        attributes: { bold: true, fontFamily: "Noto Sans", italic: false, underline: false },
         text: "Bold  text",
       },
       {
@@ -160,6 +166,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const content = await archive.readTextEntry("content.xml");
     expect(content).toContain('office:version="1.3"');
     expect(await archive.readTextEntry("styles.xml")).toContain('fo:font-weight="bold"');
+    expect(await archive.readTextEntry("styles.xml")).toContain('fo:font-family="Noto Serif"');
+    expect(content).toContain('fo:font-family="Noto Sans"');
     expect(content).toContain('fo:font-weight="normal"');
     expect(content).toContain('<text:s text:c="2"/>');
     expect(content).toContain("<text:tab/>");
@@ -513,6 +521,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
 
   it("validates XML roots, declarations, required Writer styles, and body structure" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
     const writer = createWriterDocument("p1");
+    writer.GetTextFormatColl("heading-1");
     const styles = exportStylesXml(writer);
     const content = exportContentXml(writer);
     const meta = exportMetaXml(metadata().title);

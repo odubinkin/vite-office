@@ -5,6 +5,7 @@ import {
   FontItalic,
   FontLineStyle,
   FontWeight,
+  SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
@@ -39,14 +40,22 @@ import { SwNumFormat, SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_FONT,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
 } from "../../../inc/hintids";
+import {
+  getWriterOdfStyleName,
+  getWriterStyleIdFromOdfName,
+  WRITER_PARAGRAPH_STYLE_POOL,
+} from "../../../inc/poolfmt";
 
 const ignoredDocumentChildren = new Set([
   XMLToken.OFFICE_FONT_FACE_DECLS,
@@ -155,6 +164,11 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget {
   /** Resolves one imported style. @param styleName - ODF style name. @returns Style definition. */
   public getStyle(styleName: string): OdfStyleDefinition | undefined {
     return this.styles.get(styleName);
+  }
+
+  /** Resolves pinned built-in paragraph-style names without coupling xmloff to Writer. @param styleName - ODF name. @returns Model identity. */
+  public resolveBuiltInParagraphStyle(styleName: string): string | undefined {
+    return getWriterStyleIdFromOdfName(styleName);
   }
 
   /** Resolves one document-owned list rule. @param styleName - ODF list style name. @returns Rule view. */
@@ -360,43 +374,38 @@ class XMLTitleContext extends SvXMLImportContext {
   }
 }
 
-/** Applies Standard and Heading 1 style state. @param document - Destination. @param styles - Imported styles. @returns Nothing. */
+/** Applies built-in named style state. @param document - Destination. @param styles - Parsed styles. @returns Nothing. */
 function applyNamedParagraphStyles(
   document: SwDoc,
   styles: ReadonlyMap<string, OdfStyleDefinition>,
 ): void {
   const standard = styles.get("Standard");
-  const heading = styles.get("Heading_20_1");
   if (standard?.family !== "paragraph")
     throw new Error("ODF Writer Standard paragraph style is missing.");
-  if (heading !== undefined && heading.family !== "paragraph")
-    throw new Error("ODF Writer Heading 1 paragraph style is invalid.");
-  if (heading !== undefined && heading.parentStyleName !== "Standard")
-    throw new Error("ODF Heading 1 must derive from Standard.");
-  if (standard.displayName !== undefined)
-    document.GetDfltTextFormatColl().SetFormatName(standard.displayName);
-  if (heading?.displayName !== undefined)
-    document.GetTextFormatColl("heading-1").SetFormatName(heading.displayName);
-  if (standard.alignment !== undefined)
-    document
-      .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxAdjustItem(toSvxAdjust(standard.alignment), RES_PARATR_ADJUST));
-  if (heading?.alignment !== undefined)
-    document
-      .GetTextFormatColl("heading-1")
-      .SetFormatAttr(new SvxAdjustItem(toSvxAdjust(heading.alignment), RES_PARATR_ADJUST));
-  if (standard.properties !== undefined)
-    putCharacterProperties(
-      standard.properties,
-      /** Applies a default-style item. @param item - Pooled item. @returns Set result. */
-      (item) => document.GetDfltTextFormatColl().SetFormatAttr(item),
-    );
-  if (heading?.properties !== undefined)
-    putCharacterProperties(
-      heading.properties,
-      /** Applies a heading-style item. @param item - Pooled item. @returns Set result. */
-      (item) => document.GetTextFormatColl("heading-1").SetFormatAttr(item),
-    );
+  for (const poolStyle of WRITER_PARAGRAPH_STYLE_POOL) {
+    const definition = styles.get(getWriterOdfStyleName(poolStyle.id));
+    if (definition === undefined) continue;
+    if (definition.family !== "paragraph")
+      throw new Error(`ODF Writer ${poolStyle.name} paragraph style is invalid.`);
+    const expectedParent =
+      poolStyle.parentId === undefined ? undefined : getWriterOdfStyleName(poolStyle.parentId);
+    const legacyHeadingParent =
+      poolStyle.id === "heading-1" && definition.parentStyleName === "Standard";
+    if (definition.parentStyleName !== expectedParent && !legacyHeadingParent)
+      throw new Error(`ODF ${poolStyle.name} has an invalid parent style.`);
+    const collection = document.GetTextFormatColl(poolStyle.id);
+    if (definition.displayName !== undefined) collection.SetFormatName(definition.displayName);
+    if (definition.alignment !== undefined)
+      collection.SetFormatAttr(
+        new SvxAdjustItem(toSvxAdjust(definition.alignment), RES_PARATR_ADJUST),
+      );
+    if (definition.properties !== undefined)
+      putCharacterProperties(
+        definition.properties,
+        /** Applies one style item. @param item - Imported item. @returns Set result. */ (item) =>
+          collection.SetFormatAttr(item),
+      );
+  }
 }
 
 /** Converts ODF character deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @returns Nothing. */
@@ -404,6 +413,9 @@ function putCharacterProperties(
   properties: Partial<OdfCharacterProperties>,
   put: (item: SfxPoolItem) => unknown,
 ): void {
+  if (properties.fontFamily !== undefined)
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
+      put(new SvxFontItem(properties.fontFamily, which));
   if (properties.bold !== undefined)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       put(new SvxWeightItem(properties.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));

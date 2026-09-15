@@ -11,8 +11,10 @@ import {
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { WriterCharacterFormat } from "../../core/doc/writer";
 import type { WriterParagraphTextRange } from "../wrtsh/wrtsh";
+import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import {
   WRITER_COMMAND_IDS,
+  getWriterParagraphStyleCommandId,
   writerMenuPlacements,
 } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { writerNumObjectBarItems } from "../../../uiconfig/swriter/toolbar/numobjectbar";
@@ -27,6 +29,7 @@ import type {
 export interface WriterCharacterCommandArguments {
   /** Same-paragraph model range, omitted for pending collapsed-caret formatting. */
   readonly range?: WriterParagraphTextRange;
+  readonly fontFamily?: string;
 }
 
 /** Persistent Writer editing-shell surface used by command descriptors. */
@@ -37,18 +40,20 @@ export interface WriterTextCommandTarget {
   readonly GetActiveParagraph: () => Readonly<{
     alignment: "center" | "justify" | "left" | "right";
     list: Readonly<{ kind: "bullet" | "none" | "numbered"; level: number }>;
-    style: "default" | "heading-1";
+    style: string;
   }>;
   readonly GetCharacterFormatState: (format: WriterCharacterFormat) => "mixed" | "off" | "on";
   readonly GetPendingCharacterAttributes: () => Readonly<{
     bold: boolean;
+    fontFamily?: string;
     italic: boolean;
     underline: boolean;
   }>;
   readonly Redo: () => boolean;
   readonly SetParagraphAlignment: (alignment: "center" | "justify" | "left" | "right") => boolean;
   readonly SetParagraphListKind: (kind: "bullet" | "none" | "numbered") => boolean;
-  readonly SetParagraphStyle: (style: "default" | "heading-1") => boolean;
+  readonly SetParagraphStyle: (style: string) => boolean;
+  readonly SetFontFamily: (fontFamily: string) => boolean;
   readonly ToggleCharacterFormat: (
     format: WriterCharacterFormat,
     range?: WriterParagraphTextRange,
@@ -139,6 +144,28 @@ export function createWriterTextCommandRegistry(
     characterCommand(WRITER_COMMAND_IDS.bold, "Bold", "bold", ["Ctrl+B", "Meta+B"]),
     characterCommand(WRITER_COMMAND_IDS.italic, "Italic", "italic", ["Ctrl+I", "Meta+I"]),
     characterCommand(WRITER_COMMAND_IDS.underline, "Underline", "underline", ["Ctrl+U", "Meta+U"]),
+    {
+      capabilityId: "CAP-0109",
+      /** Applies a selected font. @param _context - Bound shell. @param arguments_ - Font arguments. @returns Whether changed. */
+      execute: (_context, arguments_: unknown): boolean => {
+        const args = arguments_ as WriterCharacterCommandArguments | undefined;
+        return args?.fontFamily === undefined ? false : target.SetFontFamily(args.fontFamily);
+      },
+      /** Reads the caret font. @returns Current family. */
+      getStateValue: (): string =>
+        target.GetPendingCharacterAttributes().fontFamily ?? "Liberation Serif",
+      id: WRITER_COMMAND_IDS.fontName,
+      invalidates: ["document", "history", "selection"],
+      label: "Font name",
+      presentation: createWriterCommandPresentation(
+        WRITER_COMMAND_IDS.fontName,
+        "value",
+        "action",
+        false,
+      ),
+      target: "shell",
+      undoPolicy: "record",
+    },
     ...(["left", "center", "right", "justify"] as const).map(
       /** Creates one paragraph-alignment descriptor. @param alignment - Supported alignment. @returns Command descriptor. */
       (alignment) => ({
@@ -174,30 +201,25 @@ export function createWriterTextCommandRegistry(
         undoPolicy: "record" as const,
       }),
     ),
-    ...(["default", "heading-1"] as const).map(
+    ...WRITER_PARAGRAPH_STYLE_POOL.map(
       /** Creates one paragraph-style descriptor. @param style - Supported style. @returns Command descriptor. */
       (style) => ({
         capabilityId: "CAP-0112" as const,
         /** Applies the captured style. @returns Whether content changed. */
-        execute: (): boolean => target.SetParagraphStyle(style),
+        execute: (): boolean => target.SetParagraphStyle(style.id),
         /** Reads the active paragraph style value. @returns Stable style ID. */
         getStateValue: (): string => active().style,
-        id:
-          style === "default"
-            ? WRITER_COMMAND_IDS.defaultParagraphStyle
-            : WRITER_COMMAND_IDS.headingOne,
+        id: getWriterParagraphStyleCommandId(style.id),
         invalidates: ["document", "history", "selection"],
         /** Compares the active style with this command. @returns Checked state. */
-        isChecked: (): boolean => active().style === style,
-        label: style === "default" ? "Default Paragraph Style" : "Heading 1",
+        isChecked: (): boolean => active().style === style.id,
+        label: style.name === "Standard" ? "Default Paragraph Style" : style.name,
         presentation: createWriterCommandPresentation(
-          style === "default"
-            ? WRITER_COMMAND_IDS.defaultParagraphStyle
-            : WRITER_COMMAND_IDS.headingOne,
+          getWriterParagraphStyleCommandId(style.id),
           "value",
           "radio",
           false,
-          style,
+          style.id,
         ),
         target: "shell" as const,
         undoPolicy: "record" as const,

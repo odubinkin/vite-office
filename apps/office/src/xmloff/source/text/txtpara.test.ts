@@ -109,14 +109,20 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
         {
           alignment: "left",
           runs: [{ properties: { ...plain, bold: true }, text: "reuse" }],
+          style: "title",
+        },
+        {
+          alignment: "left",
+          runs: [{ properties: plain, text: "same paragraph style" }],
           style: "default",
         },
       ]),
     );
-    expect(output.automaticStyles.match(/style:name="P/g)).toHaveLength(2);
+    expect(output.automaticStyles.match(/style:name="P/g)).toHaveLength(3);
     expect(output.automaticStyles.match(/style:name="T/g)).toHaveLength(2);
     expect(output.automaticStyles).toContain('fo:text-align="start"');
     expect(output.automaticStyles).toContain('fo:text-align="end"');
+    expect(output.automaticStyles).toContain('style:parent-style-name="title"');
     expect(output.body).toContain("&amp;");
     expect(output.body).toContain("&lt;");
     expect(output.body).toContain("&quot;");

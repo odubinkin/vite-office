@@ -4,6 +4,10 @@
  */
 
 import type { WriterParagraphAlignment, WriterParagraphStyle } from "../../source/core/doc/writer";
+import {
+  getWriterParagraphStyleDefinition,
+  type WriterParagraphStyleDefinition,
+} from "../../inc/poolfmt";
 import type { WriterParagraphListKind } from "../../source/core/doc/list";
 
 /** Maps serializable alignment literals to concise reader-facing property values. */
@@ -12,12 +16,6 @@ const alignmentLabels: Readonly<Record<WriterParagraphAlignment, string>> = {
   justify: "Justified",
   left: "Left",
   right: "Right",
-};
-
-/** Maps serializable paragraph-style literals to their focused properties labels. */
-const styleLabels: Readonly<Record<WriterParagraphStyle, string>> = {
-  default: "Default Paragraph Style",
-  "heading-1": "Heading 1",
 };
 
 /** Maps serializable list literals to concise focused properties labels. */
@@ -70,7 +68,9 @@ export function WriterParagraphProperties({
         <dt className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
           Style
         </dt>
-        <dd className="mt-1 text-sm font-bold text-slate-900">{styleLabels[style]}</dd>
+        <dd className="mt-1 text-sm font-bold text-slate-900">
+          {(getWriterParagraphStyleDefinition(style) as WriterParagraphStyleDefinition).name}
+        </dd>
         <dt className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
           List
         </dt>

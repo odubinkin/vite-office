@@ -6,10 +6,12 @@ import { SwModify } from "../../../inc/calbck";
 import { SwAttrPool } from "../attr/swatrset";
 import { SwNodes } from "../docnode/nodes";
 import {
+  createWriterTextFormatColl,
   SwTextFormatColl,
   type SwTextFormatCollSnapshot,
   type WriterParagraphStyle,
 } from "./fmtcol";
+import { getWriterParagraphStyleDefinition } from "../../../inc/poolfmt";
 import { SwNumRule, type SwNumRuleSnapshot } from "./number";
 import type { SwTextNode, SwTextNodeSnapshot } from "../txtnode/ndtxt";
 
@@ -22,13 +24,14 @@ export interface SwDocSnapshot {
   /** Document-owned paragraph style collections. */
   readonly textFormatCollections: readonly SwTextFormatCollSnapshot[];
   /** Writer model schema discriminator. */
-  readonly swModelVersion: 4;
+  readonly swModelVersion: 5;
 }
 
 /** Owns only the Writer document model graph. */
 export class SwDoc extends SwModify {
   private readonly attrPool: SwAttrPool;
-  private readonly textFormatCollections: SwTextFormatColl[];
+  private readonly textFormatCollections: SwTextFormatColl[] = [];
+  private readonly textFormatCollectionsById = new Map<string, SwTextFormatColl>();
   private readonly numRules = new Map<string, SwNumRule>();
   public readonly nodes: SwNodes;
 
@@ -36,14 +39,7 @@ export class SwDoc extends SwModify {
   public constructor(initialTextNodeId?: string) {
     super();
     this.attrPool = new SwAttrPool(this);
-    const defaultTextFormatColl = new SwTextFormatColl(this.attrPool, "default", "Paragraph style");
-    const headingOne = new SwTextFormatColl(
-      this.attrPool,
-      "heading-1",
-      "Heading 1",
-      defaultTextFormatColl,
-    );
-    this.textFormatCollections = [defaultTextFormatColl, headingOne];
+    this.GetTextFormatColl("default");
     this.nodes = new SwNodes(this);
     if (initialTextNodeId !== undefined) this.nodes.MakeTextNode(initialTextNodeId);
   }
@@ -70,18 +66,23 @@ export class SwDoc extends SwModify {
 
   /** Finds one supported paragraph style collection. @param id - Programmatic style identity. @returns Matching collection, when present. */
   public FindTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl | undefined {
-    return this.textFormatCollections.find(
-      /** Matches a style collection identity. @param collection - Document style. @returns True when IDs match. */
-      function hasStyleId(collection): boolean {
-        return collection.id === id;
-      },
-    );
+    return this.textFormatCollectionsById.get(id);
   }
 
   /** Returns one supported paragraph style or throws for a broken style table. @param id - Programmatic style identity. @returns Matching collection. */
   public GetTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl {
-    const collection = this.FindTextFormatColl(id);
-    if (collection === undefined) throw new Error(`Unknown SwTextFormatColl: ${id}`);
+    const existing = this.FindTextFormatColl(id);
+    if (existing !== undefined) return existing;
+    const definition = getWriterParagraphStyleDefinition(id);
+    if (definition === undefined) throw new Error(`Unknown SwTextFormatColl: ${id}`);
+    const parent =
+      definition.parentId === undefined ? undefined : this.GetTextFormatColl(definition.parentId);
+    const collection = createWriterTextFormatColl(this.attrPool, definition, parent);
+    this.textFormatCollectionsById.set(id, collection);
+    this.textFormatCollections.push(collection);
+    collection.SetNextTextFormatColl(
+      definition.followId === id ? collection : this.GetTextFormatColl(definition.followId),
+    );
     return collection;
   }
 
@@ -146,7 +147,7 @@ export class SwDoc extends SwModify {
           return rule.toSnapshot();
         },
       ),
-      swModelVersion: 4,
+      swModelVersion: 5,
       textNodes: this.paragraphs.map(
         /** Serializes one regular body text node. @param node - Canonical SwTextNode. @returns Persisted node record. */
         function serializeTextNode(node): SwTextNodeSnapshot {
@@ -185,6 +186,15 @@ export class SwDoc extends SwModify {
         collection.SetFormatName(snapshot.name);
         collection.ResetAllFormatAttr();
         collection.GetAttrSet().restoreSnapshots(snapshot.items);
+      },
+    );
+    snapshots.forEach(
+      /** Restores follow links after collection state. @param snapshot - Persisted collection. @returns Nothing. */ (
+        snapshot,
+      ) => {
+        this.GetTextFormatColl(snapshot.id).SetNextTextFormatColl(
+          this.GetTextFormatColl(snapshot.followId),
+        );
       },
     );
     snapshots.forEach(

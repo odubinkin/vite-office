@@ -10,6 +10,10 @@ import {
   Outdent,
   type LucideIcon,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { FontList, FALLBACK_FONT_FAMILIES } from "../../../vcl/browser/font-list";
+import { WRITER_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
+import { getWriterParagraphStyleCommandId } from "../../uiconfig/swriter/menubar/menubar-commands";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerNumObjectBarItems } from "../../uiconfig/swriter/toolbar/numobjectbar";
@@ -61,19 +65,15 @@ function renderToolbarItem(
         key={`separator-${index}`}
       />
     );
-  if (item.kind === "unavailable-control")
+  if (item.kind === "font-select")
     return (
-      <label className="contents" key={item.label}>
-        <span className="sr-only">{item.label}</span>
-        <select
-          aria-label={item.label}
-          className="h-8 min-w-36 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-600"
-          disabled
-          value={item.value}
-        >
-          <option>{item.value}</option>
-        </select>
-      </label>
+      <FontNameSelect
+        commandId={item.commandId}
+        commandSource={commandSource}
+        key={item.commandId}
+        label={item.label}
+        resolveArguments={resolveArguments}
+      />
     );
   if (item.kind === "command-select") {
     const selectedCommandId = item.options.find(
@@ -106,19 +106,7 @@ function renderToolbarItem(
           }
           value={selected}
         >
-          {item.options.map(
-            /** Renders one command-backed select option. @param id - Command identity. @returns Select option or null. */ (
-              id,
-            ) => {
-              const command = commandSource.QueryCommand(id);
-              /* v8 ignore next -- Resource/registry consistency is validated before presentation. */
-              return command === undefined ? null : (
-                <option key={id} value={command.presentation?.selectionValue ?? id}>
-                  {command.label}
-                </option>
-              );
-            },
-          )}
+          {renderParagraphStyleOptions(commandSource)}
         </select>
       </label>
     );
@@ -154,5 +142,121 @@ function renderToolbarItem(
     >
       {Icon === undefined ? (shortLabel as string) : <Icon aria-hidden="true" size={17} />}
     </button>
+  );
+}
+
+/** Renders upstream pool ranges with hierarchy. @param commandSource - Command lookup. @returns Options. */
+function renderParagraphStyleOptions(
+  commandSource: WriterCommandSurfaceProps["commandSource"],
+): React.ReactNode {
+  const labels = {
+    text: "Text styles",
+    lists: "List styles",
+    extra: "Special styles",
+    index: "Index styles",
+    document: "Chapter and document",
+    html: "HTML styles",
+  } as const;
+  return Object.entries(labels).map(
+    /** Renders one group. @param entry - Group and label. @returns Option group. */ ([
+      group,
+      label,
+    ]) => (
+      <optgroup key={group} label={label}>
+        {WRITER_PARAGRAPH_STYLE_POOL.filter(
+          /** Selects group styles. @param style - Candidate. @returns Whether included. */ (
+            style,
+          ) => style.group === group,
+        ).map(
+          /** Renders one style. @param style - Pool style. @returns Option. */ (style) => {
+            let depth = 0;
+            let parentId = style.parentId;
+            while (parentId !== undefined && depth < 8) {
+              depth += 1;
+              parentId = WRITER_PARAGRAPH_STYLE_POOL.find(
+                /** Finds the current parent. @param candidate - Candidate. @returns Whether matching. */ (
+                  candidate,
+                ) => candidate.id === parentId,
+              )?.parentId;
+            }
+            const id = getWriterParagraphStyleCommandId(style.id);
+            const command = commandSource.QueryCommand(id) as {
+              readonly label: string;
+              readonly presentation: { readonly selectionValue: string };
+            };
+            return (
+              <option key={id} value={command.presentation.selectionValue}>
+                {`${"\u00a0\u00a0".repeat(depth)}${command.label}`}
+              </option>
+            );
+          },
+        )}
+      </optgroup>
+    ),
+  );
+}
+
+/** Device-backed font selector. @param props - Command surface properties. @returns Selector. */
+function FontNameSelect({
+  commandId,
+  commandSource,
+  label,
+  resolveArguments,
+}: {
+  readonly commandId: string;
+  readonly commandSource: WriterCommandSurfaceProps["commandSource"];
+  readonly label: string;
+  readonly resolveArguments: WriterCommandSurfaceProps["resolveArguments"];
+}): React.JSX.Element {
+  const [fonts, setFonts] = useState<readonly string[]>(FALLBACK_FONT_FAMILIES);
+  const selected = String(commandSource.QueryState(commandId).value);
+  useEffect(
+    /** Loads device fonts after mount. @returns Cleanup. */ () => {
+      let active = true;
+      void FontList.FromBrowser().then(
+        /** Publishes the font list. @param fontList - Loaded fonts. @returns Nothing. */ (
+          fontList,
+        ) => {
+          if (active) setFonts(fontList.GetFontNames());
+        },
+      );
+      return /** Prevents stale publication. @returns Nothing. */ () => {
+        active = false;
+      };
+    },
+    [],
+  );
+  /* v8 ignore next -- Imported fonts outside the device list are retained for round-trip fidelity. */
+  const options = fonts.includes(selected) ? fonts : [selected, ...fonts];
+  return (
+    <label className="contents">
+      <span className="sr-only">{label}</span>
+      <select
+        aria-label={label}
+        className="h-8 min-w-40 max-w-52 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700"
+        onChange={
+          /** Applies the selected font. @param event - Select change. @returns Nothing. */ (
+            event,
+          ) => {
+            const base = resolveArguments(commandId);
+            commandSource.Execute(commandId, {
+              /* v8 ignore next -- The Writer view always resolves font arguments to a cursor object. */
+              ...(typeof base === "object" && base !== null ? base : {}),
+              fontFamily: event.target.value,
+            });
+          }
+        }
+        style={{ fontFamily: selected }}
+        value={selected}
+      >
+        {options.map(
+          /** Renders one font family. @param font - Family. @returns Option. */ (font) => (
+            <option key={font} style={{ fontFamily: font }}>
+              {font}
+            </option>
+          ),
+        )}
+      </select>
+    </label>
   );
 }

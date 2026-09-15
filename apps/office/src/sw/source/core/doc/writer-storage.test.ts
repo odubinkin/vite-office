@@ -62,7 +62,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
       state: {
         documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
         schemaVersion: 1,
-        writerModel: { swModelVersion: 4 },
+        writerModel: { swModelVersion: 5 },
       },
       version: 1,
     });

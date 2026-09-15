@@ -102,15 +102,16 @@
         "FontWeight",
         "FontItalic",
         "FontLineStyle",
+        "SvxFontItem",
         "SvxWeightItem",
         "SvxPostureItem",
         "SvxUnderlineItem"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside FontWeight, FontItalic, FontLineStyle, SvxWeightItem and the bounded FontWeight, FontItalic, FontLineStyle contract remain intentionally omitted."
+        "Upstream obligations outside FontWeight, FontItalic, FontLineStyle, SvxFontItem, SvxWeightItem and the bounded font-family, weight, posture, and underline contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Reimplements bounded EditEngine character items from pinned `editeng/source/items/textitem.cxx`."
+        "Reimplements bounded EditEngine font-family, weight, posture, and underline items from pinned `editeng/source/items/textitem.cxx`."
       ],
       "status": "mapped",
       "upstreamPath": "editeng/source/items/textitem.cxx",
@@ -118,6 +119,7 @@
         "FontWeight",
         "FontItalic",
         "FontLineStyle",
+        "SvxFontItem",
         "SvxWeightItem"
       ]
     },
@@ -1253,6 +1255,42 @@
         "SwFormatChangeHint",
         "InsertText",
         "DeleteText"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WRITER_PARAGRAPH_STYLE_POOL",
+            "path": "apps/office/src/sw/inc/poolfmt.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "GetPoolParent",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/poolfmt.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/inc/poolfmt.ts",
+      "localSymbols": [
+        "WRITER_PARAGRAPH_STYLE_POOL",
+        "getWriterOdfStyleName",
+        "getWriterParagraphStyleDefinition",
+        "getWriterParagraphStyleId",
+        "getWriterStyleIdFromOdfName"
+      ],
+      "omittedResponsibilities": [
+        "Conditional styles, localized UI-name resources, user-defined styles, and complete native style attribute initialization remain outside the browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Preserves all 126 built-in Writer paragraph-style pool identities, group ranges, parent links, follow links, and stable ODF names."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/poolfmt.cxx",
+      "upstreamSymbols": [
+        "GetPoolParent"
       ]
     },
     {
@@ -3081,6 +3119,27 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "export class FontList",
+            "path": "apps/office/src/vcl/browser/font-list.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/vcl/browser/font-list.ts",
+      "rationale": "Adapts LibreOffice FontList device enumeration to the browser Local Font Access API with deterministic metric-compatible fallbacks when access is unavailable.",
+      "responsibilities": [
+        "Enumerates, deduplicates, sorts, and exposes font families available to the active browser environment."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "The Local Font Access API replaces LibreOffice OutputDevice font enumeration."
       },
       "status": "local-only"
     },

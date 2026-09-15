@@ -13,7 +13,7 @@ test("copies visible formatted Writer content through the native browser copy ev
   const writerEditor = page.getByRole("textbox", { name: "Writer document text" });
   await writerEditor.fill("Copied Writer heading");
   await page.getByRole("button", { name: "Styles" }).click();
-  await page.getByRole("menuitem", { name: "Heading 1" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Heading 1" }).click();
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Align center" }).click();
   await page.getByRole("button", { name: "Edit" }).click();

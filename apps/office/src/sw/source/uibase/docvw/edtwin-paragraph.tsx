@@ -41,7 +41,7 @@ export function WriterEditableParagraph({
   return (
     <div className={isLast ? "" : "mb-4"} data-active={isActive}>
       <span className="sr-only" id={styleDescriptionId} contentEditable={false}>
-        Paragraph style: {paragraph.style === "heading-1" ? "Heading 1" : "Default Paragraph Style"}
+        Paragraph style: {paragraph.GetTextFormatColl().GetName()}
         {listMarker === undefined
           ? ""
           : ` Paragraph list: ${paragraph.list.kind === "bullet" ? "Unordered List" : "Ordered List"}.`}
@@ -65,7 +65,7 @@ export function WriterEditableParagraph({
           aria-describedby={styleDescriptionId}
           aria-label={label}
           aria-multiline="true"
-          className={`min-h-7 whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"} ${paragraph.style === "heading-1" ? "text-2xl font-bold leading-9" : "text-base leading-7"}`}
+          className={`min-h-7 whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"} ${getParagraphStyleClass(paragraph.style)}`}
           data-alignment={paragraph.alignment}
           data-list-kind={paragraph.list.kind}
           data-list-level={paragraph.list.level}
@@ -81,7 +81,10 @@ export function WriterEditableParagraph({
             }
           }
           role="textbox"
-          style={{ textAlign: paragraph.alignment }}
+          style={{
+            fontFamily: paragraph.runs[0]?.attributes.fontFamily,
+            textAlign: paragraph.alignment,
+          }}
           tabIndex={-1}
         />
       </div>
@@ -103,6 +106,12 @@ function synchronizeWriterParagraphContent(
       underline.append(content);
       content = underline;
     }
+    if (run.attributes.fontFamily !== undefined) {
+      const font = paragraph.ownerDocument.createElement("span");
+      font.style.fontFamily = run.attributes.fontFamily;
+      font.append(content);
+      content = font;
+    }
     if (run.attributes.italic) {
       const italic = paragraph.ownerDocument.createElement("em");
       italic.append(content);
@@ -116,4 +125,27 @@ function synchronizeWriterParagraphContent(
     expected.append(content);
   }
   if (paragraph.innerHTML !== expected.innerHTML) paragraph.replaceChildren(...expected.childNodes);
+}
+
+/** Maps visible built-ins. @param style - Style identity. @returns CSS classes. */
+function getParagraphStyleClass(style: string): string {
+  if (style === "title") return "text-3xl font-bold leading-10 text-center";
+  if (style === "subtitle") return "text-xl italic leading-8 text-center";
+  const heading = /^heading-(\d+)$/.exec(style);
+  if (heading !== null) {
+    const level = Number(heading[1]);
+    return level <= 2
+      ? "text-2xl font-bold leading-9"
+      : level <= 4
+        ? "text-xl font-bold leading-8"
+        : "text-lg font-semibold leading-7";
+  }
+  if (style === "heading" || style.endsWith("-heading")) return "text-xl font-bold leading-8";
+  if (style === "preformatted-text") return "font-mono text-sm leading-6";
+  if (style === "quotations") return "italic ms-8 text-base leading-7";
+  if (style === "caption" || ["illustration", "table", "text", "figure", "drawing"].includes(style))
+    return "text-sm italic leading-6";
+  if (style === "footnote" || style === "endnote" || style === "comment")
+    return "text-sm leading-6";
+  return "text-base leading-7";
 }

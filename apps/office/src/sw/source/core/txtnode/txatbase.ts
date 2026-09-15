@@ -6,6 +6,7 @@ import {
   FontItalic,
   FontLineStyle,
   FontWeight,
+  SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
@@ -14,8 +15,11 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_FONT,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
@@ -29,6 +33,8 @@ export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 
 /** Names the bounded direct character properties currently carried by an auto-format item. */
 export interface WriterCharacterAttributes {
+  /** Explicit font family; absent means the paragraph style or document default. */
+  readonly fontFamily?: string;
   /** Whether the text uses a bold font weight. */
   readonly bold: boolean;
   /** Whether the text uses an italic posture. */
@@ -165,6 +171,9 @@ export function createSwFormatAutoFormat(
   inherited: WriterCharacterAttributes = { bold: false, italic: false, underline: false },
 ): SwFormatAutoFormat {
   const items = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
+  if (attributes.fontFamily !== inherited.fontFamily && attributes.fontFamily !== undefined)
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
+      items.Put(new SvxFontItem(attributes.fontFamily, which));
   if (attributes.bold !== inherited.bold)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       items.Put(new SvxWeightItem(attributes.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
@@ -190,7 +199,10 @@ export function projectWriterCharacterAttributes(
     /** Resolves a direct, inherited, or pool-default item. @param which - Character WhichId. @returns Effective item. */
     (which: number): SfxPoolItem =>
       items.GetItemIfSet(which, false) ?? inherited?.Get(which) ?? items.Get(which);
+  const font =
+    items.GetItemIfSet(RES_CHRATR_FONT, false) ?? inherited?.GetItemIfSet(RES_CHRATR_FONT);
   return {
+    ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     bold: (get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
     italic: (get(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
     underline: (get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),

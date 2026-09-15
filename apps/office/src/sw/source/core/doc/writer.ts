@@ -62,7 +62,7 @@ export function normalizeWriterParagraphFormatting(candidate: unknown): WriterDo
   if (candidate instanceof SwDoc) return candidate;
   if (!isRecord(candidate)) throw new Error("Stored Writer document is invalid.");
   if (
-    candidate.swModelVersion === 4 &&
+    candidate.swModelVersion === 5 &&
     Array.isArray(candidate.numRules) &&
     Array.isArray(candidate.textFormatCollections) &&
     Array.isArray(candidate.textNodes)

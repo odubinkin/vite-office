@@ -467,6 +467,16 @@
       ]
     },
     {
+      "path": "apps/office/src/sw/inc/poolfmt.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ]
+    },
+    {
       "path": "apps/office/src/sw/source/core/attr/format.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -1125,6 +1135,16 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0121"
+      ]
+    },
+    {
+      "path": "apps/office/src/vcl/browser/font-list.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-platform",
+      "capabilityIds": [
+        "CAP-0109"
       ]
     },
     {

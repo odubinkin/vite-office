@@ -6,6 +6,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/writer";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh";
+import { applyWriterTextRangeFont } from "../../core/txtnode/ndtxt";
 
 /** Creates a Writer shell with one stable paragraph. @param text - Optional initial paragraph text. @returns Shell fixture. */
 function createShell(text = ""): SwWrtShell {
@@ -442,5 +443,66 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       /** Rejects an unsupported list kind at the shell boundary. @returns Invalid command. */ () =>
         shell.SetParagraphListKind("outline" as "bullet"),
     ).toThrow("Unsupported Writer paragraph list kind");
+  });
+
+  it("applies a font family through range hints and restores it through history", /** Verifies font formatting history. @returns Nothing. */ () => {
+    const shell = createShell("abcd");
+    expect(shell.SetFontFamily("Noto Sans")).toBe(false);
+    expect(shell.GetPendingCharacterAttributes().fontFamily).toBe("Noto Sans");
+    expect(
+      /** Rejects a blank font. @returns Invalid mutation. */ () => shell.SetFontFamily(" "),
+    ).toThrow("blank");
+    shell.SetSelection({
+      mark: { offset: 1, paragraphId: "p-1" },
+      point: { offset: 3, paragraphId: "p-1" },
+    });
+    expect(shell.SetFontFamily("Noto Serif")).toBe(true);
+    expect(shell.GetActiveParagraph().runs).toEqual([
+      { attributes: { bold: false, italic: false, underline: false }, text: "a" },
+      {
+        attributes: { bold: false, fontFamily: "Noto Serif", italic: false, underline: false },
+        text: "bc",
+      },
+      { attributes: { bold: false, italic: false, underline: false }, text: "d" },
+    ]);
+    expect(shell.Undo()).toBe(true);
+    expect(shell.GetActiveParagraph().runs).toEqual([
+      { attributes: { bold: false, italic: false, underline: false }, text: "abcd" },
+    ]);
+    expect(shell.Redo()).toBe(true);
+    expect(shell.GetActiveParagraph().runs[1]?.attributes.fontFamily).toBe("Noto Serif");
+    expect(shell.SetFontFamily("Noto Serif")).toBe(false);
+    expect(
+      /** Rejects a range outside the source runs. @returns Invalid formatting. */ () =>
+        applyWriterTextRangeFont(shell.GetActiveParagraph().runs, 0, 99, "Noto Serif"),
+    ).toThrow("outside");
+    const plainRuns = [
+      { attributes: { bold: false, italic: false, underline: false }, text: "abcd" },
+    ] as const;
+    expect(applyWriterTextRangeFont(plainRuns, 1, 3, "Noto Sans")).toEqual([
+      { attributes: { bold: false, italic: false, underline: false }, text: "a" },
+      {
+        attributes: { bold: false, fontFamily: "Noto Sans", italic: false, underline: false },
+        text: "bc",
+      },
+      { attributes: { bold: false, italic: false, underline: false }, text: "d" },
+    ]);
+    expect(applyWriterTextRangeFont(plainRuns, 1, 1, "Noto Sans")).toEqual(plainRuns);
+    expect(
+      applyWriterTextRangeFont(
+        [
+          { attributes: { bold: true, italic: false, underline: false }, text: "a" },
+          { attributes: { bold: false, italic: false, underline: false }, text: "bc" },
+          { attributes: { bold: false, italic: true, underline: false }, text: "d" },
+        ],
+        1,
+        3,
+        "Noto Sans",
+      ),
+    ).toHaveLength(3);
+    expect(
+      /** Rejects an empty family at the range helper boundary. @returns Invalid formatting. */ () =>
+        applyWriterTextRangeFont(plainRuns, 0, 1, " "),
+    ).toThrow("blank");
   });
 });

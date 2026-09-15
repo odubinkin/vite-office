@@ -209,6 +209,7 @@ function importAlignment(attributes: FastAttributeList): OdfParagraphAlignment |
 /** Imports supported character properties. @param attributes - Property attributes. @returns Property deltas. */
 function importCharacterProperties(attributes: FastAttributeList): Partial<OdfCharacterProperties> {
   const weight = attributes.get(XMLToken.FO_FONT_WEIGHT);
+  const fontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
   const posture = attributes.get(XMLToken.FO_FONT_STYLE);
   const underline = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_STYLE);
   const underlineWidth = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_WIDTH);
@@ -233,6 +234,7 @@ function importCharacterProperties(attributes: FastAttributeList): Partial<OdfCh
     attributes.get(XMLToken.STYLE_FONT_STYLE_COMPLEX),
   );
   return {
+    ...(fontFamily === null || fontFamily.trim().length === 0 ? {} : { fontFamily }),
     ...(weight === null ? {} : { bold: weight === "bold" }),
     ...(posture === null ? {} : { italic: posture === "italic" }),
     ...(underline === null ? {} : { underline: underline === "solid" }),

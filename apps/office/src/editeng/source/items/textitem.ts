@@ -4,6 +4,39 @@
 
 import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../svl/source/items/poolitem";
 
+/** Pooled font-family item following LibreOffice's SvxFontItem value boundary. */
+export class SvxFontItem extends SfxPoolItem {
+  /** Creates a font-family item. @param familyName - CSS/LibreOffice family name. @param which - Script-specific WhichId. @returns Nothing. */
+  public constructor(
+    private readonly familyName: string,
+    which: number,
+  ) {
+    super(which);
+    if (familyName.trim().length === 0) throw new Error("SvxFontItem family name is invalid.");
+  }
+
+  /** Returns the family name. @returns Font family. */
+  public GetFamilyName(): string {
+    return this.familyName;
+  }
+  /** Creates an independent item. @returns Cloned item. */
+  public Clone(): SvxFontItem {
+    return new SvxFontItem(this.familyName, this.Which());
+  }
+  /** Compares item identity and value. @param other - Candidate item. @returns Whether equal. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxFontItem &&
+      other.Which() === this.Which() &&
+      other.familyName === this.familyName
+    );
+  }
+  /** Serializes the item. @returns Snapshot. */
+  public toSnapshot(): SfxPoolItemSnapshot {
+    return { type: "SvxFontItem", value: this.familyName, which: this.Which() };
+  }
+}
+
 /** Matches LibreOffice FontWeight ordering from tools/fontenum.hxx. */
 export enum FontWeight {
   DONTKNOW,

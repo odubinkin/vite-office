@@ -44,4 +44,4 @@ export type WriterToolbarItemPlacement =
   | WriterCommandPlacement
   | WriterSeparatorPlacement
   | Readonly<{ kind: "command-select"; label: string; options: readonly string[] }>
-  | Readonly<{ kind: "unavailable-control"; label: string; value: string }>;
+  | Readonly<{ commandId: string; kind: "font-select"; label: string }>;

@@ -260,6 +260,11 @@ function getWriterClipboardNodeAttributes(
   inheritedAttributes: WriterCharacterAttributes,
 ): WriterCharacterAttributes {
   return {
+    ...(element.tagName === "SPAN" && element.style.fontFamily.trim().length > 0
+      ? { fontFamily: element.style.fontFamily }
+      : inheritedAttributes.fontFamily === undefined
+        ? {}
+        : { fontFamily: inheritedAttributes.fontFamily }),
     bold: inheritedAttributes.bold || element.tagName === "STRONG",
     italic: inheritedAttributes.italic || element.tagName === "EM",
     underline:
@@ -473,9 +478,13 @@ function sanitizeWriterInlineHtml(container: HTMLElement): string {
         const content = sanitizeWriterInlineHtml(node);
         if (node.tagName === "STRONG") return `<strong>${content}</strong>`;
         if (node.tagName === "EM") return `<em>${content}</em>`;
-        return node.style.textDecoration === "underline"
-          ? `<span style="text-decoration: underline">${content}</span>`
-          : content;
+        const styles = [
+          node.style.textDecoration === "underline" ? "text-decoration: underline" : "",
+          node.style.fontFamily.trim().length > 0
+            ? `font-family: ${escapeWriterClipboardHtml(node.style.fontFamily)}`
+            : "",
+        ].filter(Boolean);
+        return styles.length > 0 ? `<span style="${styles.join("; ")}">${content}</span>` : content;
       },
     )
     .join("");

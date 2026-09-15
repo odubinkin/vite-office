@@ -4,6 +4,7 @@
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
+  SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
@@ -20,8 +21,11 @@ import {
 } from "../../../../xmloff/source/text/txtparae";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_FONT,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
@@ -34,6 +38,7 @@ import {
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { getWriterOdfStyleName } from "../../../inc/poolfmt";
 
 const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
 
@@ -46,8 +51,12 @@ export function exportStylesXml(document: SwDoc): string {
       const alignment = getDirectAlignment(
         collection.GetAttrSet().GetItemIfSet(RES_PARATR_ADJUST, false),
       );
-      const name = collection.id === "default" ? "Standard" : "Heading_20_1";
-      const parent = collection.id === "heading-1" ? ' style:parent-style-name="Standard"' : "";
+      const name = getWriterOdfStyleName(collection.id);
+      const parentCollection = collection.DerivedFrom();
+      const parent =
+        parentCollection instanceof Object && "id" in parentCollection
+          ? ` style:parent-style-name="${getWriterOdfStyleName(String(parentCollection.id))}"`
+          : "";
       const paragraphProperties =
         alignment === undefined
           ? ""
@@ -57,7 +66,7 @@ export function exportStylesXml(document: SwDoc): string {
         characterProperties === undefined
           ? ""
           : `<style:text-properties${exportCharacterAttributes(characterProperties)}/>`;
-      return `<style:style style:name="${name}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph"${parent}>${paragraphProperties}${textProperties}</style:style>`;
+      return `<style:style style:name="${escapeXml(name)}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph" style:next-style-name="${escapeXml(getWriterOdfStyleName(collection.GetNextTextFormatColl().id))}"${parent}>${paragraphProperties}${textProperties}</style:style>`;
     },
   );
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3"><office:styles>${styles.join("")}</office:styles></office:document-styles>`;
@@ -140,11 +149,14 @@ function assertSupportedItems(
 ): void {
   const supported = new Set<number>([
     RES_CHRATR_POSTURE,
+    RES_CHRATR_FONT,
     RES_CHRATR_UNDERLINE,
     RES_CHRATR_WEIGHT,
     RES_CHRATR_CJK_POSTURE,
+    RES_CHRATR_CJK_FONT,
     RES_CHRATR_CJK_WEIGHT,
     RES_CHRATR_CTL_POSTURE,
+    RES_CHRATR_CTL_FONT,
     RES_CHRATR_CTL_WEIGHT,
     RES_PARATR_ADJUST,
   ]);
@@ -176,7 +188,9 @@ function getCharacterProperties(
     (which) => set.GetItemIfSet(which, false) !== undefined,
   );
   const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
-  if (!inherited && !directWeight && !directPosture && !directUnderline) return undefined;
+  const font = set.GetItemIfSet(RES_CHRATR_FONT, inherited);
+  if (!inherited && !directWeight && !directPosture && !directUnderline && font === undefined)
+    return undefined;
   const weight = set.Get(RES_CHRATR_WEIGHT, inherited);
   const asianWeight = set.Get(RES_CHRATR_CJK_WEIGHT, inherited);
   const complexWeight = set.Get(RES_CHRATR_CTL_WEIGHT, inherited);
@@ -202,6 +216,7 @@ function getCharacterProperties(
   )
     throw new Error("ODT export does not support script-specific character formatting.");
   return {
+    ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     ...(inherited || directWeight ? { bold: weight.GetBoolValue() } : {}),
     ...(inherited || directPosture ? { italic: posture.GetBoolValue() } : {}),
     ...(inherited || directUnderline ? { underline: underline.GetBoolValue() } : {}),

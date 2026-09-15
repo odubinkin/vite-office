@@ -486,7 +486,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     writer.nodes.insertTextNodeAfter(node, trailing);
     expect(node.text).toBe("aY");
     expect(trailing.text).toBe("Zd");
-    expect(trailing).toMatchObject({ alignment: "justify", style: "heading-1" });
+    expect(trailing).toMatchObject({ alignment: "justify", style: "text-body" });
     node.AppendTextNode(trailing);
     expect(node.text).toBe("aYZd");
     expect(

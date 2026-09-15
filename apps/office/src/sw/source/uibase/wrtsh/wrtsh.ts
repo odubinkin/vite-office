@@ -1,7 +1,4 @@
-/**
- * @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from
- * pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`.
- */
+/** @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
 
 import {
   createCommandShell,
@@ -48,7 +45,7 @@ import {
   type SwUndoDeleteDirection,
 } from "../../core/undo/undel";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
-import { SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
+import { CreateWriterFontUndo, SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
 import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import { SwUndoInsNum, SwUndoNumLevel } from "../../core/undo/unnum";
 import type { WriterClipboardPaste, WriterClipboardPasteParagraph } from "../dochdl/swdtflvr";
@@ -801,6 +798,32 @@ export class SwWrtShell extends SwModify {
     return this.ApplyAction(
       new SwUndoAttr(paragraph.id, selectedRange.start, beforeRuns, afterRuns, before, before),
     );
+  }
+
+  /** Applies a font family. @param fontFamily - Selected family. @returns Whether document content changed. */
+  public SetFontFamily(fontFamily: string): boolean {
+    const family = fontFamily.trim();
+    if (family.length === 0) throw new Error("Writer font family must not be blank.");
+    const before = this.CaptureCursorState();
+    const selectedRange = this.GetSelectedTextRange();
+    this.pendingCharacterAttributes = { ...this.pendingCharacterAttributes, fontFamily: family };
+    if (selectedRange === undefined) {
+      this.docShell.GetUndoManager().BreakUndoGrouping();
+      this.NotifySelection();
+      return false;
+    }
+    const paragraph = this.GetDoc().nodes.findTextNode(selectedRange.paragraphId);
+    /* v8 ignore next -- SetSelection validates paragraph identity before it becomes active. */
+    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${selectedRange.paragraphId}`);
+    const action = CreateWriterFontUndo(
+      paragraph,
+      selectedRange.start,
+      selectedRange.end,
+      family,
+      before,
+      this.CaptureCursorState(),
+    );
+    return action === undefined ? false : this.ApplyAction(action);
   }
 
   /** Applies paragraph alignment through one shell-owned history transition. @param alignment - Next alignment. @returns Whether content changed. */

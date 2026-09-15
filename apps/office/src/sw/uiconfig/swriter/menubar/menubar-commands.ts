@@ -1,5 +1,15 @@
 /** @fileoverview Declares the supported Writer menu hierarchy in pinned LibreOffice resource order. */
 import type { WriterMenuPlacement } from "../ui-resource";
+import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+
+/** Creates a stable style command ID. @param styleId - Model style ID. @returns Command ID. */
+export function getWriterParagraphStyleCommandId(styleId: string): string {
+  return styleId === "default"
+    ? "writer.style.default-paragraph"
+    : styleId === "heading-1"
+      ? "writer.style.heading-one"
+      : `writer.style.${styleId}`;
+}
 
 export const WRITER_COMMAND_IDS = {
   alignCenter: "writer.format.align-center",
@@ -9,6 +19,7 @@ export const WRITER_COMMAND_IDS = {
   bold: "writer.format.bold",
   copy: "writer.edit.copy",
   cut: "writer.edit.cut",
+  fontName: "writer.format.font-name",
   defaultParagraphStyle: "writer.style.default-paragraph",
   demote: "writer.list.demote",
   exportText: "writer.file.export-text",
@@ -167,8 +178,14 @@ export const writerMenuPlacements: readonly WriterMenuPlacement[] = [
     id: "styles",
     label: "Styles",
     items: [
-      { commandId: WRITER_COMMAND_IDS.defaultParagraphStyle, kind: "command" },
-      { commandId: WRITER_COMMAND_IDS.headingOne, kind: "command" },
+      ...WRITER_PARAGRAPH_STYLE_POOL.map(
+        /** Places one style command. @param style - Pool style. @returns Placement. */ (
+          style,
+        ) => ({
+          commandId: getWriterParagraphStyleCommandId(style.id),
+          kind: "command" as const,
+        }),
+      ),
     ],
   },
   { id: "table", items: unavailable, label: "Table" },

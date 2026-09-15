@@ -1,42 +1,38 @@
 # Browser Writer paragraph styles
 
-The Writer workbench supports two document-owned `SwTextFormatColl` instances:
-**Default Paragraph Style** and **Heading 1**. `SwDoc` owns their ordered table;
-Heading 1 derives from the default collection through the same parent item-set
-lookup used by Writer formats. Each `SwContentNode` registers in one collection,
-and its optional direct `SwAttrSet` is reparented when the collection changes.
-`WriterParagraph.style` is the collection ID projected for the browser.
-`SwWrtShell.SetParagraphStyle` changes that registration on the live graph via
-`SwUndoFormatColl`; a no-op retains state and a change participates in
-lifecycle, history, snapshot, undo, and redo contracts.
+The Writer workbench supports all 126 built-in paragraph styles from the pinned
+LibreOffice Writer pool. `sw/inc/poolfmt.ts` retains the six upstream ranges,
+numeric pool identities, programmatic names, parent links, and follow-style
+links. `SwDoc` owns their ordered `SwTextFormatColl` table, and each
+`SwContentNode` registers in one collection. Direct `SwAttrSet` values continue
+to inherit through the collection parent graph.
 
-The existing **Paragraph style** select in the formatting toolbar applies its
-value to the focused editable paragraph. `Heading 1` is visibly larger and bold in the
-bounded browser editing surface, and its accessible description and properties
-sidebar state identify the style. This is paragraph-level styling, not an HTML
-heading tree or a replacement for Writer's document semantics.
+`SwWrtShell.SetParagraphStyle` changes the live registration through
+`SwUndoFormatColl`, so application participates in lifecycle, history,
+snapshots, Undo, and Redo. Enter uses the current collection's follow style;
+headings continue with Text body, matching Writer's pool behavior.
 
-Version-three snapshots persist collection definitions, their direct item
-deltas, parent IDs, and each node's collection ID; older non-canonical schemas
-are rejected. The bounded ODT filter maps Default Paragraph Style and Heading 1
-names, inheritance, and supported properties through named ODF styles.
+The formatting toolbar groups the complete catalog into Text, List, Special,
+Index, Chapter/Document, and HTML ranges. Options are indented by parent depth.
+The browser renders representative built-in typography while canonical style
+identity and hierarchy remain model-owned rather than inferred from HTML tags.
+
+Snapshots persist collection definitions, pool/group identities, direct item
+deltas, parent/follow IDs, and each node's collection ID. The ODT filter emits
+the complete built-in named-style table with parent and next-style names and
+resolves those identities on import.
 
 ## Pinned LibreOffice provenance
 
-The pinned LibreOffice reference declares `.uno:StyleApply` and paragraph-style
-entries such as `Heading 1` in
-`sw/uiconfig/swriter/ui/notebookbar_compact.ui`. Its
-`sw/qa/extras/uiwriter/uiwriter9.cxx` dispatches `.uno:StyleApply` and asserts
-the `ParaStyleName` values for Writer paragraphs. The narrowed browser feature
-maps only focused application of the two listed style choices; it does not map
-the upstream test's multiple selections, list behavior, import/export, or
-layout assertions.
+The catalog and hierarchy map `sw/inc/poolfmt.hxx`,
+`sw/source/core/doc/poolfmt.cxx`, `sw/source/core/doc/SwStyleNameMapper.cxx`,
+and `sw/source/core/doc/DocumentStylePoolManager.cxx`. Command placement maps
+`.uno:StyleApply` entries in Writer UI resources.
 
 ## Deliberate limits
 
-The bounded two-style hierarchy is not the complete Writer style system. There
-is no custom style creation/editing UI, conditional style logic, automatic-style
-cache, complete follow-style behavior, outline assignment, character/page/list
-styles, locale-aware built-in style pool, OOXML style import/export,
-pagination, navigation outline, or print/PDF parity. Each requires an
-independently mapped feature task.
+Custom style creation/editing, conditional styles, locale-translated UI names,
+page/frame/character style families, complete print layout, and OOXML style
+interchange remain outside this slice. Properties whose exact result depends on
+pagination, printer metrics, or locale retain their style identity/hierarchy but
+use representative browser presentation.

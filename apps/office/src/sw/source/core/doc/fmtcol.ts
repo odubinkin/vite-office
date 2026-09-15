@@ -6,23 +6,37 @@ import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem"
 import { WRITER_TEXT_FORMAT_COLL_WHICH_RANGES } from "../../../inc/hintids";
 import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
+import {
+  WRITER_PARAGRAPH_STYLE_POOL,
+  type WriterParagraphStyleDefinition,
+  type WriterParagraphStyleGroup,
+} from "../../../inc/poolfmt";
 
 /** Programmatic paragraph-style identities currently exposed by the browser UI. */
-export const WRITER_PARAGRAPH_STYLES = ["default", "heading-1"] as const;
+export const WRITER_PARAGRAPH_STYLES: readonly string[] = WRITER_PARAGRAPH_STYLE_POOL.map(
+  /** Projects a stable identity. @param definition - Pool metadata. @returns ID. */ (definition) =>
+    definition.id,
+);
 
 /** Identifies one current Writer paragraph-style collection. */
-export type WriterParagraphStyle = (typeof WRITER_PARAGRAPH_STYLES)[number];
+export type WriterParagraphStyle = string;
 
 /** Persisted paragraph-style collection definition. */
 export interface SwTextFormatCollSnapshot {
   /** Programmatic collection identity. */
   readonly id: WriterParagraphStyle;
+  /** Stable built-in LibreOffice pool identity. */
+  readonly poolId: number;
+  /** Built-in style category. */
+  readonly group: WriterParagraphStyleGroup;
   /** Direct collection attribute deltas. */
   readonly items: readonly SfxPoolItemSnapshot[];
   /** User-facing format name. */
   readonly name: string;
   /** Optional parent collection identity. */
   readonly parentId?: WriterParagraphStyle;
+  /** Style selected for the paragraph created by Enter. */
+  readonly followId: WriterParagraphStyle;
 }
 
 /** Named Writer format collection; unlike SwFormat it is not automatic. */
@@ -38,12 +52,14 @@ export class SwFormatColl extends SwFormat {
 export class SwTextFormatColl extends SwFormatColl {
   private nextTextFormatColl: SwTextFormatColl;
 
-  /** Creates a paragraph style. @param pool - Owning Writer pool. @param id - Programmatic identity. @param name - UI name. @param parent - Optional parent style. @returns Nothing. */
+  /** Creates a paragraph style. @param pool - Owning Writer pool. @param id - Programmatic identity. @param name - UI name. @param parent - Optional parent style. @param poolId - Built-in pool ID. @param group - Built-in group. @returns Nothing. */
   public constructor(
     pool: SwAttrPool,
     public readonly id: WriterParagraphStyle,
     name: string,
     parent?: SwTextFormatColl,
+    public readonly poolId = 0,
+    public readonly group: WriterParagraphStyleGroup = "text",
   ) {
     super(pool, name, parent);
     this.nextTextFormatColl = this;
@@ -64,8 +80,11 @@ export class SwTextFormatColl extends SwFormatColl {
     const parent = this.DerivedFrom();
     return {
       id: this.id,
+      followId: this.nextTextFormatColl.id,
+      group: this.group,
       items: this.GetAttrSet().toSnapshot(),
       name: this.GetName(),
+      poolId: this.poolId,
       ...(parent instanceof SwTextFormatColl ? { parentId: parent.id } : {}),
     };
   }
@@ -73,5 +92,21 @@ export class SwTextFormatColl extends SwFormatColl {
 
 /** Checks one runtime paragraph-style identity. @param value - Unknown value. @returns True for a supported style ID. */
 export function isWriterParagraphStyle(value: unknown): value is WriterParagraphStyle {
-  return WRITER_PARAGRAPH_STYLES.includes(value as WriterParagraphStyle);
+  return typeof value === "string" && WRITER_PARAGRAPH_STYLES.includes(value);
+}
+
+/** Creates a collection from pinned pool metadata. @param pool - Attribute pool. @param definition - Style metadata. @param parent - Parent collection. @returns Collection. */
+export function createWriterTextFormatColl(
+  pool: SwAttrPool,
+  definition: WriterParagraphStyleDefinition,
+  parent?: SwTextFormatColl,
+): SwTextFormatColl {
+  return new SwTextFormatColl(
+    pool,
+    definition.id,
+    definition.name === "Standard" ? "Default Paragraph Style" : definition.name,
+    parent,
+    definition.poolId,
+    definition.group,
+  );
 }

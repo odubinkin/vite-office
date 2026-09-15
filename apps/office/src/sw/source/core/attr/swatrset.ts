@@ -7,6 +7,7 @@ import {
   FontItalic,
   FontLineStyle,
   FontWeight,
+  SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
@@ -16,8 +17,11 @@ import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/it
 import { SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_FONT,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
@@ -35,6 +39,12 @@ export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
+      this.RegisterDefaultItem(
+        new SvxFontItem("Liberation Serif", which),
+        /** Restores a font item. @param value - Persisted family. @returns Font item. */ (value) =>
+          new SvxFontItem(String(value), which),
+      );
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       this.RegisterDefaultItem(
         new SvxPostureItem(FontItalic.NONE, which),
