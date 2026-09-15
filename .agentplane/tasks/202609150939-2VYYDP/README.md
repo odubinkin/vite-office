@@ -1,10 +1,11 @@
 ---
 id: "202609150939-2VYYDP"
 title: "Phase 0.1 exact upstream invariant manifest"
-status: "DOING"
+result_summary: "Implemented Phase 0.1 exact invariant manifest and persistence compatibility gate."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -44,11 +45,16 @@ quality_review:
     - "docs/program/parity/upstream-invariants.json"
   findings:
     - "Exact pinned markers, corrected 7/22 IDs, model v6 and snapshot schema v2 are covered by 100% inventory and office tests."
-commit: null
+commit:
+  hash: "d600a28dd584da5a255cc5e05f67acca42f73f46"
+  message: "🚧 2VYYDP task: implement pinned Writer invariant gate"
 comments:
   -
     author: "CODER"
     body: "Start: implement exact upstream invariant manifest, corrected WhichIds, and incompatible persistence rejection for Phase 0.1."
+  -
+    author: "CODER"
+    body: "Verified: 34 pinned invariants, corrected WhichIds, schema rejection, inventory coverage, office coverage, and parity validation all pass."
 events:
   -
     type: "status"
@@ -63,8 +69,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "P0.1 invariant generation, corrected WhichIds, model/snapshot schema rejection, inventory coverage, office coverage, and parity validation all pass."
+  -
+    type: "status"
+    at: "2026-09-15T09:50:21.875Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: 34 pinned invariants, corrected WhichIds, schema rejection, inventory coverage, office coverage, and parity validation all pass."
 doc_version: 3
-doc_updated_at: "2026-09-15T09:49:28.852Z"
+doc_updated_at: "2026-09-15T09:50:21.877Z"
 doc_updated_by: "CODER"
 description: "Generate and enforce pinned Writer/editeng/svl invariants, correct character WhichIds, and reject incompatible browser persistence records."
 sections:
