@@ -1,17 +1,17 @@
-/** @fileoverview Declares the supported subset of pinned Writer `standardbar.xml` placement data. */
-import { WRITER_COMMAND_IDS } from "../menubar/menubar-commands";
-import type { WriterToolbarItemPlacement } from "../ui-resource";
+/** @fileoverview Adapts the generated pinned Writer standard toolbar resource. */
 
-export const writerStandardBarItems: readonly WriterToolbarItemPlacement[] = [
-  { commandId: WRITER_COMMAND_IDS.openOdt, kind: "command" },
-  { commandId: WRITER_COMMAND_IDS.saveOdt, kind: "command" },
-  { kind: "separator" },
-  { commandId: WRITER_COMMAND_IDS.cut, kind: "command" },
-  { commandId: WRITER_COMMAND_IDS.copy, kind: "command" },
-  { commandId: WRITER_COMMAND_IDS.paste, kind: "command" },
-  { kind: "separator" },
-  { commandId: WRITER_COMMAND_IDS.undo, kind: "command" },
-  { commandId: WRITER_COMMAND_IDS.redo, kind: "command" },
-  { kind: "separator" },
-  { commandId: WRITER_COMMAND_IDS.hyperlinkDialog, kind: "command" },
-];
+import { normalizeWriterToolbarItems, type WriterToolbarItemPlacement } from "../ui-resource";
+import generated from "../writer-ui.generated.json" with { type: "json" };
+
+/** Supported visible standard-toolbar entries in exact generated upstream order. */
+export const writerStandardBarItems: readonly WriterToolbarItemPlacement[] =
+  normalizeWriterToolbarItems(
+    generated.surfaces.standardbar.flatMap(
+      /** Adapts one generated toolbar node. @param item - Generated node. @returns Presentation placements. */ (
+        item,
+      ): readonly WriterToolbarItemPlacement[] =>
+        item.kind === "separator"
+          ? [{ kind: "separator" }]
+          : [{ commandId: item.commandUrl as string, kind: "command" }],
+    ),
+  );

@@ -5,5 +5,9 @@
     "noEmit": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["scripts/libreoffice-inventory/**/*.ts"]
+  "include": [
+    "scripts/generate-writer-ui-resources.ts",
+    "scripts/libreoffice-inventory/**/*.ts",
+    "scripts/writer-ui-resource-model.ts"
+  ]
 }

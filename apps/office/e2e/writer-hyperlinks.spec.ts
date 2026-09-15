@@ -6,7 +6,7 @@ import { expect, test } from "@playwright/test";
 
 import { ZipFile } from "../src/package/source/zipapi/ZipFile";
 
-test("Writer creates, edits, removes, and round-trips hyperlinks", /** Verifies upstream-aligned hyperlink surfaces and ODT text:a persistence. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns Completion after the saved ODT is reopened. */ async function roundTripsWriterHyperlinks({
+test("Writer creates, edits, and round-trips hyperlinks", /** Verifies upstream-aligned hyperlink surfaces and ODT text:a persistence. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns Completion after the saved ODT is reopened. */ async function roundTripsWriterHyperlinks({
   page,
 }): Promise<void> {
   const pageErrors: string[] = [];
@@ -59,15 +59,6 @@ test("Writer creates, edits, removes, and round-trips hyperlinks", /** Verifies 
   const contentXml = await archive.readTextEntry("content.xml");
   expect(contentXml).toContain(
     '<text:a xlink:type="simple" xlink:href="https://example.test/updated" office:target-frame-name="_blank" xlink:show="new">Linked<text:s/>text</text:a>',
-  );
-
-  await page.getByRole("button", { name: "Edit" }).click();
-  await page.getByRole("menuitem", { name: "Remove Hyperlink" }).click();
-  await expect(editor.getByRole("link")).toHaveCount(0);
-  await page.getByRole("button", { name: "Undo" }).click();
-  await expect(editor.getByRole("link", { name: "Linked text" })).toHaveAttribute(
-    "href",
-    "https://example.test/updated",
   );
 
   const fileChooserPromise = page.waitForEvent("filechooser");

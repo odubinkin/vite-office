@@ -61,7 +61,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
   );
 
   it("places implemented Writer commands in accessible top-level menus" /**
-   * Verifies File, Edit, View, Format, and Styles open their Writer-positioned command popups while Add paragraph is absent.
+   * Verifies generated supported menus expose only upstream-positioned commands while filtered X menus stay absent.
    *
    * @returns Nothing; assertions cover bounded command placement and disabled state.
    */, function rendersWriterMenus(): void {
@@ -132,19 +132,15 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     getSelection.mockRestore();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     expect(screen.getByRole("menu", { name: "Format menu" })).toBeVisible();
-    expect(screen.getByRole("menuitem", { name: "Start" })).toHaveAttribute("aria-current", "true");
+    expect(screen.getByRole("menuitem", { name: "Text" })).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: "Styles" }));
     expect(screen.getByRole("menu", { name: "Styles menu" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Insert" }));
     expect(screen.getByRole("menuitem", { name: "Hyperlink…" })).toBeEnabled();
-    fireEvent.click(screen.getByRole("button", { name: "Table" }));
-    expect(screen.getByRole("menu", { name: "Table menu" })).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Tools" }));
-    expect(screen.getByRole("menu", { name: "Tools menu" })).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Window" }));
-    expect(screen.getByRole("menu", { name: "Window menu" })).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "Help" }));
-    expect(screen.getByRole("menu", { name: "Help menu" })).toBeVisible();
+    expect(screen.queryByRole("button", { name: "Table" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Tools" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Window" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Help" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Add paragraph" })).not.toBeInTheDocument();
   });
 
@@ -442,13 +438,13 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const file = screen.getByRole("button", { name: "File" });
       file.focus();
       fireEvent.keyDown(file, { key: "ArrowLeft" });
-      expect(screen.getByRole("button", { name: "Help" })).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole("button", { name: "Help" }), { key: "Home" });
+      expect(screen.getByRole("button", { name: "Styles" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("button", { name: "Styles" }), { key: "Home" });
       expect(file).toHaveFocus();
       fireEvent.keyDown(file, { key: "End" });
-      expect(screen.getByRole("button", { name: "Help" })).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole("button", { name: "Help" }), { key: "Escape" });
-      fireEvent.keyDown(screen.getByRole("button", { name: "Help" }), { key: "Tab" });
+      expect(screen.getByRole("button", { name: "Styles" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("button", { name: "Styles" }), { key: "Escape" });
+      fireEvent.keyDown(screen.getByRole("button", { name: "Styles" }), { key: "Tab" });
 
       fireEvent.click(file);
       const firstFileItem = screen.getByRole("menuitem", { name: "New Document" });

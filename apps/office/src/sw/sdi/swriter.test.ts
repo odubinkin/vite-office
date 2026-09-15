@@ -20,7 +20,13 @@ describe("generated Writer slots", /** Exercises generated SDI identities and or
   });
 
   it("records the supported toolbar subsequence in exact upstream order" /** Verifies generated resource ordering. @returns Nothing. */, () => {
-    expect(generated.resourceOrder["sw/uiconfig/swriter/toolbar/standardbar.xml"]).toEqual([
+    expect(
+      generated.surfaces.standardbar.flatMap(
+        /** Collects one command node. @param item - Generated node. @returns Command URL if present. */ (
+          item,
+        ) => (item.kind === "command" ? [item.commandUrl] : []),
+      ),
+    ).toEqual([
       ".uno:AddDirect",
       ".uno:Open",
       ".uno:SaveAs",

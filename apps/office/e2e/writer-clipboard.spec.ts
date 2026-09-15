@@ -14,8 +14,7 @@ test("copies visible formatted Writer content through the native browser copy ev
   await writerEditor.fill("Copied Writer heading");
   await page.getByRole("button", { name: "Styles" }).click();
   await page.getByRole("menuitem", { exact: true, name: "Heading 1" }).click();
-  await page.getByRole("button", { name: "Format" }).click();
-  await page.getByRole("menuitem", { name: "Center" }).click();
+  await page.getByRole("button", { name: "Center" }).click();
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await writerEditor.evaluate(
@@ -60,7 +59,7 @@ test("Writer list clipboard" /**
   const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
   await firstParagraph.fill("First item");
   await page.getByRole("button", { name: "Format" }).click();
-  await page.getByRole("menuitem", { name: "Bullets and Numbering" }).click();
+  await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitem", { exact: true, name: "Ordered List" }).click();
   await firstParagraph.evaluate(
     /** Places the browser typing caret at the first list item's end. @param element - Editable first list paragraph. @returns Nothing; the browser selection is updated. */
@@ -79,7 +78,7 @@ test("Writer list clipboard" /**
   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
   await secondParagraph.fill("Second item");
   await page.getByRole("button", { name: "Format" }).click();
-  await page.getByRole("menuitem", { name: "Bullets and Numbering" }).click();
+  await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitem", { exact: true, name: "Demote Outline Level" }).click();
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();

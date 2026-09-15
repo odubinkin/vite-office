@@ -9,7 +9,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and text-object 
   const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
   await firstParagraph.fill("First list item");
   await page.getByRole("button", { name: "Format" }).click();
-  await page.getByRole("menuitem", { name: "Bullets and Numbering" }).click();
+  await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitem", { exact: true, name: "Ordered List" }).click();
   const firstMarker = page.getByTestId("writer-list-marker-writer-paragraph-1");
   await expect(firstMarker).toHaveText("1.");
@@ -40,7 +40,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and text-object 
   await expect(secondParagraph).toHaveText("Second list item");
   await expect(secondParagraph).toHaveAccessibleDescription(/Paragraph list: Unordered List/);
   await page.getByRole("button", { name: "Format" }).click();
-  await page.getByRole("menuitem", { name: "Bullets and Numbering" }).click();
+  await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitem", { name: "Demote Outline Level" }).click();
   await expect(secondParagraph).toHaveAttribute("data-list-level", "1");
   expect(
@@ -57,7 +57,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and text-object 
     .click();
   await expect(secondParagraph).toHaveAttribute("data-list-level", "0");
   await page.getByRole("button", { name: "Format" }).click();
-  await page.getByRole("menuitem", { name: "Bullets and Numbering" }).click();
+  await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitem", { name: "No List" }).click();
   await expect(page.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveCount(0);
   await expect(secondParagraph).toHaveText("Second list item");

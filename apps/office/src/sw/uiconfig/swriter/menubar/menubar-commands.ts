@@ -1,219 +1,121 @@
-/** @fileoverview Declares the supported Writer menu hierarchy in pinned LibreOffice resource order. */
-import type { WriterMenuPlacement } from "../ui-resource";
-import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
-import { getWriterCommandResource } from "../writer-command-resources";
+/** @fileoverview Adapts the generated pinned Writer menubar graph to presentation types. */
 
-/** Creates a stable style command ID. @param styleId - Model style ID. @returns Command ID. */
+import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import type { WriterMenuItemPlacement, WriterMenuPlacement } from "../ui-resource";
+import { getWriterCommandResource } from "../writer-command-resources";
+import generated from "../writer-ui.generated.json" with { type: "json" };
+
+/** All stable supported command aliases are generated from the one resource manifest. */
+export const WRITER_COMMAND_IDS = generated.commandAliases;
+
+/** Creates a stable parameterized StyleApply URL. @param styleId - Model style ID. @returns Command URL. */
 export function getWriterParagraphStyleCommandId(styleId: string): string {
   const style = WRITER_PARAGRAPH_STYLE_POOL.find(
-    /** Matches a Writer style identity. @param candidate - Supported style. @returns Whether IDs match. */
-    (candidate) => candidate.id === styleId,
+    /** Matches a Writer style identity. @param candidate - Pool style. @returns Whether IDs match. */ (
+      candidate,
+    ) => candidate.id === styleId,
   );
   if (style === undefined) throw new Error(`Unknown Writer paragraph style: ${styleId}`);
   const programmaticName = style.name === "Standard" ? "Default Paragraph Style" : style.name;
-  return `.uno:StyleApply?Style:string=${encodeURIComponent(programmaticName)}&FamilyName:string=ParagraphStyles`;
+  return `${WRITER_COMMAND_IDS.styleApply}?Style:string=${encodeURIComponent(programmaticName)}&FamilyName:string=ParagraphStyles`;
 }
 
-export const WRITER_COMMAND_IDS = {
-  alignCenter: ".uno:CenterPara",
-  alignJustify: ".uno:JustifyPara",
-  alignLeft: ".uno:StartPara",
-  alignRight: ".uno:EndPara",
-  bold: ".uno:Bold",
-  copy: ".uno:Copy",
-  cut: ".uno:Cut",
-  fontName: ".uno:CharFontName",
-  defaultParagraphStyle:
-    ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles",
-  demote: ".uno:DecrementLevel",
-  exportText: ".uno:ExportTo",
-  editHyperlink: ".uno:EditHyperlink",
-  headingOne: ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles",
-  italic: ".uno:Italic",
-  hyperlinkDialog: ".uno:HyperlinkDialog",
-  newDocument: ".uno:AddDirect",
-  openLocal: "vnd.vite-office.browser:OpenLocal",
-  openOdt: ".uno:Open",
-  orderedList: ".uno:DefaultNumbering",
-  paste: ".uno:Paste",
-  promote: ".uno:IncrementLevel",
-  redo: ".uno:Redo",
-  removeHyperlink: ".uno:RemoveHyperlink",
-  removeBullets: ".uno:RemoveBullets",
-  saveLocal: "vnd.vite-office.browser:SaveLocal",
-  saveOdt: ".uno:SaveAs",
-  selectAll: ".uno:SelectAll",
-  toggleHorizontalRuler: ".uno:Ruler",
-  toggleSidebar: ".uno:Sidebar",
-  toggleStatusBar: ".uno:StatusBarVisible",
-  underline: ".uno:Underline",
-  undo: ".uno:Undo",
-  unorderedList: ".uno:DefaultBullet",
-} as const;
-
-/** Inventory projection retained for parity validation; generated resources own UI metadata. */
+/** Inventory projection generated from the supported command manifest. */
 export const writerUserCommands: readonly Readonly<{
   capabilityId: `CAP-${string}`;
   id: string;
   label: string;
-}>[] = [
-  ["CAP-0112", WRITER_COMMAND_IDS.alignCenter],
-  ["CAP-0112", WRITER_COMMAND_IDS.alignJustify],
-  ["CAP-0112", WRITER_COMMAND_IDS.alignLeft],
-  ["CAP-0112", WRITER_COMMAND_IDS.alignRight],
-  ["CAP-0109", WRITER_COMMAND_IDS.bold],
-  ["CAP-0106", WRITER_COMMAND_IDS.copy],
-  ["CAP-0110", WRITER_COMMAND_IDS.cut],
-  ["CAP-0112", WRITER_COMMAND_IDS.defaultParagraphStyle],
-  ["CAP-0107", WRITER_COMMAND_IDS.demote],
-  ["CAP-0101", WRITER_COMMAND_IDS.exportText],
-  ["CAP-0135", WRITER_COMMAND_IDS.editHyperlink],
-  ["CAP-0112", WRITER_COMMAND_IDS.headingOne],
-  ["CAP-0109", WRITER_COMMAND_IDS.italic],
-  ["CAP-0135", WRITER_COMMAND_IDS.hyperlinkDialog],
-  ["CAP-0114", WRITER_COMMAND_IDS.newDocument],
-  ["CAP-0114", WRITER_COMMAND_IDS.openLocal],
-  ["CAP-0113", WRITER_COMMAND_IDS.openOdt],
-  ["CAP-0105", WRITER_COMMAND_IDS.orderedList],
-  ["CAP-0110", WRITER_COMMAND_IDS.paste],
-  ["CAP-0107", WRITER_COMMAND_IDS.promote],
-  ["CAP-0102", WRITER_COMMAND_IDS.redo],
-  ["CAP-0135", WRITER_COMMAND_IDS.removeHyperlink],
-  ["CAP-0105", WRITER_COMMAND_IDS.removeBullets],
-  ["CAP-0114", WRITER_COMMAND_IDS.saveLocal],
-  ["CAP-0113", WRITER_COMMAND_IDS.saveOdt],
-  ["CAP-0103", WRITER_COMMAND_IDS.selectAll],
-  ["CAP-0104", WRITER_COMMAND_IDS.toggleHorizontalRuler],
-  ["CAP-0104", WRITER_COMMAND_IDS.toggleSidebar],
-  ["CAP-0104", WRITER_COMMAND_IDS.toggleStatusBar],
-  ["CAP-0109", WRITER_COMMAND_IDS.underline],
-  ["CAP-0102", WRITER_COMMAND_IDS.undo],
-  ["CAP-0105", WRITER_COMMAND_IDS.unorderedList],
-].map(
-  /** Converts the compact audit tuple to its named inventory record. @param tuple - Capability and command identity. @returns Inventory record. */ ([
+}>[] = generated.commandInventory.map(
+  /** Projects one generated inventory record. @param record - Generated capability mapping. @returns Public inventory entry. */ ({
     capabilityId,
-    id,
-  ]) => ({
+    commandUrl,
+  }) => ({
     capabilityId: capabilityId as `CAP-${string}`,
-    id: id as string,
-    label: getWriterCommandResource(id as string).label,
+    id: commandUrl,
+    label: getWriterCommandResource(commandUrl).label,
   }),
 );
 
-const unavailable = [
-  { kind: "unavailable", label: "No browser command is implemented here yet." },
-] as const;
+/** Structural view of recursive nodes inferred too broadly from generated JSON. */
+type GeneratedMenuNode =
+  | Readonly<{ kind: "command"; commandUrl: string }>
+  | Readonly<{ kind: "separator" }>
+  | GeneratedMenu;
 
-export const writerMenuPlacements: readonly WriterMenuPlacement[] = [
-  {
-    id: "file",
-    label: "File",
-    items: [
-      { commandId: WRITER_COMMAND_IDS.newDocument, kind: "command" },
-      { kind: "separator" },
-      { commandId: WRITER_COMMAND_IDS.openOdt, kind: "command", showsDialog: true },
-      { commandId: WRITER_COMMAND_IDS.openLocal, kind: "command", showsDialog: true },
-      { kind: "separator" },
-      { commandId: WRITER_COMMAND_IDS.saveOdt, kind: "command", showsDialog: true },
-      { commandId: WRITER_COMMAND_IDS.saveLocal, kind: "command" },
-      { commandId: WRITER_COMMAND_IDS.exportText, kind: "command", showsDialog: true },
-    ],
-  },
-  {
-    id: "edit",
-    label: "Edit",
-    items: [
-      { commandId: WRITER_COMMAND_IDS.undo, kind: "command" },
-      { commandId: WRITER_COMMAND_IDS.redo, kind: "command" },
-      { kind: "separator" },
-      { commandId: WRITER_COMMAND_IDS.cut, kind: "command" },
-      { commandId: WRITER_COMMAND_IDS.copy, kind: "command" },
-      { commandId: WRITER_COMMAND_IDS.paste, kind: "command" },
-      { kind: "separator" },
-      { commandId: WRITER_COMMAND_IDS.editHyperlink, kind: "command", showsDialog: true },
-      { commandId: WRITER_COMMAND_IDS.removeHyperlink, kind: "command" },
-      { kind: "separator" },
-      { commandId: WRITER_COMMAND_IDS.selectAll, kind: "command" },
-    ],
-  },
-  {
-    id: "view",
-    label: "View",
-    items: [
-      { commandId: WRITER_COMMAND_IDS.toggleStatusBar, kind: "command" },
-      {
-        id: "rulers",
-        items: [{ commandId: WRITER_COMMAND_IDS.toggleHorizontalRuler, kind: "command" }],
-        kind: "submenu",
-        label: "Rulers",
-      },
-      { commandId: WRITER_COMMAND_IDS.toggleSidebar, kind: "command" },
-    ],
-  },
-  {
-    id: "insert",
-    items: [{ commandId: WRITER_COMMAND_IDS.hyperlinkDialog, kind: "command", showsDialog: true }],
-    label: "Insert",
-  },
-  {
-    id: "format",
-    label: "Format",
-    items: [
-      {
-        id: "text",
-        items: [
-          { commandId: WRITER_COMMAND_IDS.bold, kind: "command" },
-          { commandId: WRITER_COMMAND_IDS.italic, kind: "command" },
-          { commandId: WRITER_COMMAND_IDS.underline, kind: "command" },
-        ],
-        kind: "submenu",
-        label: "Text",
-      },
-      { kind: "separator" },
-      { commandId: WRITER_COMMAND_IDS.alignLeft, kind: "command" },
-      { commandId: WRITER_COMMAND_IDS.alignCenter, kind: "command" },
-      { commandId: WRITER_COMMAND_IDS.alignRight, kind: "command" },
-      { commandId: WRITER_COMMAND_IDS.alignJustify, kind: "command" },
-      { kind: "separator" },
-      {
-        id: "bullets-and-numbering",
-        items: [
-          { commandId: WRITER_COMMAND_IDS.unorderedList, kind: "command" },
-          { commandId: WRITER_COMMAND_IDS.orderedList, kind: "command" },
-          { commandId: WRITER_COMMAND_IDS.removeBullets, kind: "command" },
-          { kind: "separator" },
-          { commandId: WRITER_COMMAND_IDS.demote, kind: "command" },
-          { commandId: WRITER_COMMAND_IDS.promote, kind: "command" },
-        ],
-        kind: "submenu",
-        label: "Bullets and Numbering",
-      },
-    ],
-  },
-  {
-    id: "styles",
-    label: "Styles",
-    items: [
-      ...WRITER_PARAGRAPH_STYLE_POOL.map(
-        /** Places one style command. @param style - Pool style. @returns Placement. */ (
-          style,
-        ) => ({
-          commandId: getWriterParagraphStyleCommandId(style.id),
-          kind: "command" as const,
-        }),
-      ),
-    ],
-  },
-  { id: "table", items: unavailable, label: "Table" },
-  { id: "tools", items: unavailable, label: "Tools" },
-  { id: "window", items: unavailable, label: "Window" },
-  { id: "help", items: unavailable, label: "Help" },
-];
+/** One generated recursive menu. */
+interface GeneratedMenu {
+  readonly id: string;
+  readonly items: readonly GeneratedMenuNode[];
+  readonly kind: "menu";
+  readonly label: string;
+}
 
-/** Collects nested command IDs in resource order. @param items - Menu items to traverse. @returns Ordered command IDs. */
+const generatedMenubar = generated.surfaces.menubar as unknown as readonly GeneratedMenu[];
+
+/** Converts generated resource nodes and expands the bounded StyleApply collection. @param nodes - Generated nodes. @returns Presentation placements. */
+function adaptItems(nodes: readonly GeneratedMenuNode[]): readonly WriterMenuItemPlacement[] {
+  return nodes.flatMap(
+    /** Adapts one generated menu node. @param node - Generated node. @returns Presentation placements. */ (
+      node,
+    ): readonly WriterMenuItemPlacement[] => {
+      if (node.kind === "separator") return [{ kind: "separator" }];
+      if (node.kind === "command") {
+        const commandUrl = node.commandUrl;
+        if (commandUrl === WRITER_COMMAND_IDS.styleApply)
+          return WRITER_PARAGRAPH_STYLE_POOL.map(
+            /** Expands one style. @param style - Pool style. @returns Parameterized placement. */ (
+              style,
+            ) => ({
+              commandId: getWriterParagraphStyleCommandId(style.id),
+              kind: "command" as const,
+            }),
+          );
+        const resource = getWriterCommandResource(commandUrl);
+        return [
+          {
+            commandId: commandUrl,
+            kind: "command",
+            ...(resource.showsDialog ? { showsDialog: true } : {}),
+          },
+        ];
+      }
+      return [
+        {
+          id: resourceId(node.id),
+          items: adaptItems(node.items),
+          kind: "submenu",
+          label: node.label,
+        },
+      ];
+    },
+  );
+}
+
+/** Converts an upstream URL into a stable DOM-safe presentation key. @param value - Resource URL. @returns DOM key. */
+function resourceId(value: string): string {
+  return value
+    .replace(/^\.uno:/, "")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .toLowerCase();
+}
+
+/** Complete supported menubar, filtered and ordered by the generated upstream graph. */
+export const writerMenuPlacements: readonly WriterMenuPlacement[] = generatedMenubar.map(
+  /** Adapts one generated top-level menu. @param menu - Generated menu. @returns Presentation menu. */ (
+    menu,
+  ) => {
+    return {
+      id: resourceId(menu.id),
+      items: adaptItems(menu.items),
+      label: menu.label,
+    };
+  },
+);
+
+/** Collects nested command IDs in generated resource order. @param items - Menu items. @returns Command IDs. */
 function collectCommandIds(items: WriterMenuPlacement["items"]): string[] {
   return items.flatMap(
-    /** Collects one nested resource item. @param item - Resource item. @returns Referenced command IDs. */ (
+    /** Collects one menu node. @param item - Menu item. @returns Nested command IDs. */ (
       item,
     ): string[] =>
       item.kind === "command"
@@ -225,7 +127,6 @@ function collectCommandIds(items: WriterMenuPlacement["items"]): string[] {
 }
 
 export const writerMenuCommandIds = writerMenuPlacements.flatMap(
-  /** Collects command identities from one top-level menu. @param menu - Menu resource. @returns Ordered command IDs. */ (
-    menu,
-  ) => collectCommandIds(menu.items),
+  /** Collects one generated menu. @param menu - Menu placement. @returns Command IDs. */ (menu) =>
+    collectCommandIds(menu.items),
 );

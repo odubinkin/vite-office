@@ -21,7 +21,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "generate:writer-resources": "tsx scripts/generate-writer-ui-resources.ts",
-    "check:writer-resources": "tsx scripts/generate-writer-ui-resources.ts --check",
+    "check:writer-resources": "tsx scripts/generate-writer-ui-resources.ts --check && vitest run scripts/writer-ui-resource-model.test.ts",
     "inventory:validate": "tsx scripts/libreoffice-inventory/cli.ts",
     "inventory:modules": "tsx scripts/libreoffice-inventory/modules-cli.ts",
     "inventory:parity": "tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",

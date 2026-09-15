@@ -11,6 +11,8 @@ import { writerNumObjectBarItems } from "../toolbar/numobjectbar";
 import { writerStandardBarItems } from "../toolbar/standardbar";
 import { writerTextObjectBarItems } from "../toolbar/textobjectbar";
 import { getWriterCommandResource } from "../writer-command-resources";
+import { normalizeWriterToolbarItems } from "../ui-resource";
+import generated from "../writer-ui.generated.json" with { type: "json" };
 
 describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @returns Nothing. */, function defineWriterUiResourceTests(): void {
   it("preserves supported pinned menu and toolbar ordering without React" /** Verifies menu and toolbar resource ordering. @returns Nothing. */, function validatesPlacementOrder(): void {
@@ -20,19 +22,10 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
           menu,
         ) => menu.id,
       ),
-    ).toEqual([
-      "file",
-      "edit",
-      "view",
-      "insert",
-      "format",
-      "styles",
-      "table",
-      "tools",
-      "window",
-      "help",
-    ]);
+    ).toEqual(["picklist", "editmenu", "viewmenu", "insertmenu", "formatmenu", "formatstylesmenu"]);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.bold);
+    expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.alignLeft);
+    expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.underline);
     expect(
       writerStandardBarItems
         .filter(
@@ -46,6 +39,7 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
           ) => item.commandId,
         ),
     ).toEqual([
+      WRITER_COMMAND_IDS.newDocument,
       WRITER_COMMAND_IDS.openOdt,
       WRITER_COMMAND_IDS.saveOdt,
       WRITER_COMMAND_IDS.cut,
@@ -66,6 +60,22 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       { commandId: WRITER_COMMAND_IDS.demote, kind: "command" },
       { commandId: WRITER_COMMAND_IDS.promote, kind: "command" },
     ]);
+    expect(
+      normalizeWriterToolbarItems([
+        { kind: "separator" },
+        { commandId: WRITER_COMMAND_IDS.bold, kind: "command" },
+        { kind: "separator" },
+        { kind: "separator" },
+      ]),
+    ).toEqual([{ commandId: WRITER_COMMAND_IDS.bold, kind: "command" }]);
+    expect(generated.locale).toBe("en-US");
+    expect(
+      generated.unsupported["sw/uiconfig/swriter/menubar/menubar.xml"].every(
+        /** Requires every filtered resource to retain an auditable X record. @param entry - Filtered resource. @returns Whether classification is complete. */ (
+          entry,
+        ) => entry.classification === "X" && entry.sourceUrl.length > 0,
+      ),
+    ).toBe(true);
     expect(
       /** Resolves a missing style. @returns Missing command URL. */ () =>
         getWriterParagraphStyleCommandId("missing-style"),

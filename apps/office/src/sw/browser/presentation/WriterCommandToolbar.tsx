@@ -2,6 +2,7 @@
 import {
   ClipboardPaste,
   Copy,
+  FilePlus,
   FolderOpen,
   Link,
   Redo2,
@@ -17,6 +18,7 @@ import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-
 import type { WriterCommandSurfaceProps } from "./command-surface";
 
 const icons = new Map<string, LucideIcon>([
+  [WRITER_COMMAND_IDS.newDocument, FilePlus],
   [WRITER_COMMAND_IDS.openOdt, FolderOpen],
   [WRITER_COMMAND_IDS.saveOdt, Save],
   [WRITER_COMMAND_IDS.cut, Scissors],

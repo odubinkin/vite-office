@@ -3,12 +3,21 @@
 import { readFile, writeFile } from "node:fs/promises";
 
 import { format } from "prettier";
+import {
+  assertGeneratedResourceFresh,
+  buildResourceGraph,
+  collectResourceCommands,
+  validateGeneratedClosure,
+  type ResourceNode,
+} from "./writer-ui-resource-model";
 
 /** One supported command and any explicit browser-bound divergence. */
 interface CommandSpec {
+  readonly browserControlLabel?: string;
   readonly browserLabel?: string;
   readonly browserSlotId?: number;
   readonly commandUrl: string;
+  readonly showsDialog?: boolean;
   readonly semantics?: "action" | "check" | "radio";
   readonly sourceUrl?: string;
 }
@@ -24,18 +33,19 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:Copy" },
   { commandUrl: ".uno:Cut" },
   { commandUrl: ".uno:DecrementLevel" },
-  { commandUrl: ".uno:EditHyperlink" },
-  { commandUrl: ".uno:ExportTo" },
-  { commandUrl: ".uno:CharFontName" },
-  { commandUrl: ".uno:HyperlinkDialog" },
+  { commandUrl: ".uno:EditHyperlink", showsDialog: true },
+  { commandUrl: ".uno:ExportTo", showsDialog: true },
+  { browserControlLabel: "Font name", commandUrl: ".uno:CharFontName" },
+  { commandUrl: ".uno:HyperlinkDialog", showsDialog: true },
   { commandUrl: ".uno:Italic", semantics: "check" },
   { commandUrl: ".uno:AddDirect" },
   {
     browserLabel: "Open Local Copy",
     browserSlotId: 65_001,
     commandUrl: "vnd.vite-office.browser:OpenLocal",
+    showsDialog: true,
   },
-  { commandUrl: ".uno:Open", sourceUrl: ".uno:OpenFromWriter" },
+  { commandUrl: ".uno:Open", showsDialog: true, sourceUrl: ".uno:OpenFromWriter" },
   { commandUrl: ".uno:DefaultNumbering", semantics: "radio" },
   { commandUrl: ".uno:Paste" },
   { commandUrl: ".uno:IncrementLevel" },
@@ -47,16 +57,125 @@ const specs: readonly CommandSpec[] = [
     browserSlotId: 65_002,
     commandUrl: "vnd.vite-office.browser:SaveLocal",
   },
-  { commandUrl: ".uno:SaveAs" },
+  { commandUrl: ".uno:SaveAs", showsDialog: true },
   { commandUrl: ".uno:SelectAll" },
   { commandUrl: ".uno:Ruler", semantics: "check" },
   { commandUrl: ".uno:Sidebar", semantics: "check" },
   { commandUrl: ".uno:StatusBarVisible", semantics: "check" },
-  { commandUrl: ".uno:StyleApply", semantics: "radio" },
+  { browserControlLabel: "Paragraph style", commandUrl: ".uno:StyleApply", semantics: "radio" },
   { commandUrl: ".uno:Underline", semantics: "check" },
   { commandUrl: ".uno:Undo" },
   { commandUrl: ".uno:DefaultBullet", semantics: "radio" },
 ];
+
+const commandAliases = {
+  alignCenter: ".uno:CenterPara",
+  alignJustify: ".uno:JustifyPara",
+  alignLeft: ".uno:StartPara",
+  alignRight: ".uno:EndPara",
+  bold: ".uno:Bold",
+  copy: ".uno:Copy",
+  cut: ".uno:Cut",
+  defaultParagraphStyle:
+    ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles",
+  demote: ".uno:DecrementLevel",
+  editHyperlink: ".uno:EditHyperlink",
+  exportText: ".uno:ExportTo",
+  fontName: ".uno:CharFontName",
+  hyperlinkDialog: ".uno:HyperlinkDialog",
+  headingOne: ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles",
+  italic: ".uno:Italic",
+  newDocument: ".uno:AddDirect",
+  openLocal: "vnd.vite-office.browser:OpenLocal",
+  openOdt: ".uno:Open",
+  orderedList: ".uno:DefaultNumbering",
+  paste: ".uno:Paste",
+  promote: ".uno:IncrementLevel",
+  redo: ".uno:Redo",
+  removeBullets: ".uno:RemoveBullets",
+  removeHyperlink: ".uno:RemoveHyperlink",
+  saveLocal: "vnd.vite-office.browser:SaveLocal",
+  saveOdt: ".uno:SaveAs",
+  selectAll: ".uno:SelectAll",
+  styleApply: ".uno:StyleApply",
+  toggleHorizontalRuler: ".uno:Ruler",
+  toggleSidebar: ".uno:Sidebar",
+  toggleStatusBar: ".uno:StatusBarVisible",
+  underline: ".uno:Underline",
+  undo: ".uno:Undo",
+  unorderedList: ".uno:DefaultBullet",
+} as const;
+
+const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
+  ".uno:AddDirect": "CAP-0114",
+  ".uno:Bold": "CAP-0109",
+  ".uno:CenterPara": "CAP-0112",
+  ".uno:Copy": "CAP-0106",
+  ".uno:Cut": "CAP-0110",
+  ".uno:DecrementLevel": "CAP-0107",
+  ".uno:DefaultBullet": "CAP-0105",
+  ".uno:DefaultNumbering": "CAP-0105",
+  ".uno:EditHyperlink": "CAP-0135",
+  ".uno:EndPara": "CAP-0112",
+  ".uno:ExportTo": "CAP-0101",
+  ".uno:HyperlinkDialog": "CAP-0135",
+  ".uno:IncrementLevel": "CAP-0107",
+  ".uno:Italic": "CAP-0109",
+  ".uno:JustifyPara": "CAP-0112",
+  ".uno:Open": "CAP-0113",
+  ".uno:Paste": "CAP-0110",
+  ".uno:Redo": "CAP-0102",
+  ".uno:RemoveBullets": "CAP-0105",
+  ".uno:RemoveHyperlink": "CAP-0135",
+  ".uno:Ruler": "CAP-0104",
+  ".uno:SaveAs": "CAP-0113",
+  ".uno:SelectAll": "CAP-0103",
+  ".uno:Sidebar": "CAP-0104",
+  ".uno:StartPara": "CAP-0112",
+  ".uno:StatusBarVisible": "CAP-0104",
+  ".uno:Underline": "CAP-0109",
+  ".uno:Undo": "CAP-0102",
+  "vnd.vite-office.browser:OpenLocal": "CAP-0114",
+  "vnd.vite-office.browser:SaveLocal": "CAP-0114",
+  ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles":
+    "CAP-0112",
+  ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles": "CAP-0112",
+};
+
+const inventoryAliasNames = [
+  "alignCenter",
+  "alignJustify",
+  "alignLeft",
+  "alignRight",
+  "bold",
+  "copy",
+  "cut",
+  "defaultParagraphStyle",
+  "demote",
+  "exportText",
+  "editHyperlink",
+  "headingOne",
+  "italic",
+  "hyperlinkDialog",
+  "newDocument",
+  "openLocal",
+  "openOdt",
+  "orderedList",
+  "paste",
+  "promote",
+  "redo",
+  "removeHyperlink",
+  "removeBullets",
+  "saveLocal",
+  "saveOdt",
+  "selectAll",
+  "toggleHorizontalRuler",
+  "toggleSidebar",
+  "toggleStatusBar",
+  "underline",
+  "undo",
+  "unorderedList",
+] as const;
 
 const resourcePaths = [
   "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -131,9 +250,14 @@ const commands = Object.fromEntries(
       return [
         spec.commandUrl,
         {
+          browserOwned: spec.browserLabel !== undefined,
+          capabilityId: commandCapabilities[spec.commandUrl],
+          controlLabel: spec.browserControlLabel ?? stripMnemonic(label),
           label: stripMnemonic(label),
-          placements,
+          placements:
+            spec.browserLabel === undefined ? placements : ["browser-extension:file-menu"],
           semantics: spec.semantics ?? "action",
+          showsDialog: spec.showsDialog ?? false,
           shortcuts,
           slotId:
             spec.browserSlotId ??
@@ -144,13 +268,6 @@ const commands = Object.fromEntries(
   ),
 );
 
-const supportedSourceUrls = new Set(
-  specs.map(
-    /** Resolves the upstream URL used for placement matching. @param spec - Command specification. @returns Source URL. */ (
-      spec,
-    ) => spec.sourceUrl ?? spec.commandUrl,
-  ),
-);
 const sourceToCommand = new Map(
   specs.map(
     /** Maps one upstream source URL to the public command URL. @param spec - Command specification. @returns Source and public URL pair. */ (
@@ -158,65 +275,141 @@ const sourceToCommand = new Map(
     ) => [spec.sourceUrl ?? spec.commandUrl, spec.commandUrl] as const,
   ),
 );
-const resourceOrder = Object.fromEntries(
+const resourceGraphs = Object.fromEntries(
   resourcePaths.map(
-    /** Extracts supported commands in exact upstream order. @param path - Resource path. @param index - Resource index. @returns Path and command sequence. */ (
+    /** Builds one source graph. @param path - Upstream resource path. @param index - Resource-text index. @returns Path and graph pair. */ (
       path,
       index,
     ) => [
       path,
-      [...(resourceTexts[index] ?? "").matchAll(/(?:menu:id|xlink:href)="([^"]+)"/g)]
-        .map(
-          /** Maps a resource URL to its public supported URL. @param match - XML URL match. @returns Public URL when supported. */ (
-            match,
-          ) => sourceToCommand.get(match[1] as string),
-        )
-        .filter(
-          /** Removes unsupported resource URLs. @param commandUrl - Possible supported URL. @returns Whether supported. */ (
-            commandUrl,
-          ): commandUrl is string => commandUrl !== undefined,
-        ),
+      buildResourceGraph(
+        resourceTexts[index] ?? "",
+        sourceToCommand,
+        /** Resolves a menu label. @param sourceUrl - Menu URL. @returns Pinned label. */ (
+          sourceUrl,
+        ) => stripMnemonic(findEnglishLabel(sourceUrl, genericCommands, writerCommands)),
+      ),
     ],
   ),
 );
+
+const menuPath = resourcePaths[0];
+const menuGraph = resourceGraphs[menuPath];
+if (menuGraph === undefined) throw new Error("Generated Writer menubar graph is missing.");
+const augmentedMenu = addBrowserMenuExtensions(menuGraph.nodes);
+const surfaces = {
+  menubar: augmentedMenu,
+  numobjectbar: resourceGraphs[resourcePaths[3]]?.nodes ?? [],
+  popupText: resourceGraphs[resourcePaths[4]]?.nodes ?? [],
+  standardbar: resourceGraphs[resourcePaths[1]]?.nodes ?? [],
+  textobjectbar: resourceGraphs[resourcePaths[2]]?.nodes ?? [],
+};
+const visibleCommandUrls = [
+  ...new Set(
+    Object.values(surfaces).flatMap(
+      /** Collects commands for one surface. @param nodes - Surface graph. @returns Command URLs. */ (
+        nodes,
+      ) => collectResourceCommands(nodes),
+    ),
+  ),
+];
+validateGeneratedClosure(commands, visibleCommandUrls);
 const unsupported = Object.fromEntries(
   resourcePaths.map(
-    /** Extracts explicit X-class resource commands. @param path - Resource path. @param index - Resource index. @returns Path and unsupported sequence. */ (
+    /** Projects exclusions for one source. @param path - Resource path. @returns Path and exclusions. */ (
       path,
-      index,
-    ) => [
-      path,
-      [...(resourceTexts[index] ?? "").matchAll(/(?:menu:id|xlink:href)="([^"]+)"/g)]
-        .map(
-          /** Extracts the matched command URL. @param match - XML URL match. @returns Command URL. */ (
-            match,
-          ) => match[1] as string,
-        )
-        .filter(
-          /** Keeps URLs outside the supported slice. @param commandUrl - Resource URL. @returns Whether unsupported. */ (
-            commandUrl,
-          ) => !supportedSourceUrls.has(commandUrl),
-        ),
-    ],
+    ) => [path, resourceGraphs[path]?.exclusions ?? []],
   ),
 );
 const generated = await format(
   JSON.stringify({
     baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
+    commandAliases,
+    commandInventory: inventoryAliasNames.map(
+      /** Projects one public inventory alias. @param alias - Stable alias. @returns Capability mapping. */ (
+        alias,
+      ) => ({
+        capabilityId: commandCapabilities[commandAliases[alias]],
+        commandUrl: commandAliases[alias],
+      }),
+    ),
     commands,
-    resourceOrder,
-    schemaVersion: 1,
+    locale: "en-US",
+    schemaVersion: 2,
+    surfaces,
     unsupported,
   }),
-  { parser: "json" },
+  { parser: "json", printWidth: 100 },
 );
 
-if (process.argv.includes("--check")) {
-  if ((await readFile(outputPath, "utf8")) !== generated)
+const runtimeResourcePaths = [
+  "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+  "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.ts",
+  "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
+  "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
+  "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+] as const;
+for (const [index, text] of (
+  await Promise.all(
+    runtimeResourcePaths.map(
+      /** Reads one runtime adapter. @param path - Adapter path. @returns Source text. */ (path) =>
+        readFile(path, "utf8"),
+    ),
+  )
+).entries()) {
+  if (/['"]\.uno:/.test(text))
     throw new Error(
-      "Generated Writer UI resources are stale; run npm run generate:writer-resources.",
+      `Handwritten Writer command URL is forbidden in generated resource adapter: ${runtimeResourcePaths[index]}`,
     );
+}
+
+if (process.argv.includes("--check")) {
+  assertGeneratedResourceFresh(await readFile(outputPath, "utf8"), generated);
 } else await writeFile(outputPath, generated);
+
+/** Adds explicitly browser-owned commands and the bounded style collection without changing upstream command identity. @param nodes - Generated upstream menu nodes. @returns Extended menu nodes. */
+function addBrowserMenuExtensions(nodes: readonly ResourceNode[]): readonly ResourceNode[] {
+  /** Applies browser extensions recursively while retaining generated order. @param node - Generated node. @returns Extended node. */
+  function extend(node: ResourceNode): ResourceNode {
+    if (node.kind !== "menu") return node;
+    let items: readonly ResourceNode[] = node.items.map(extend);
+    if (node.id === ".uno:PickList") {
+      items = insertAfter(items, ".uno:Open", {
+        commandUrl: commandAliases.openLocal,
+        kind: "command",
+        visible: true,
+      });
+      items = insertAfter(items, ".uno:SaveAs", {
+        commandUrl: commandAliases.saveLocal,
+        kind: "command",
+        visible: true,
+      });
+    }
+    if (node.id === ".uno:FormatStylesMenu")
+      items = [
+        { commandUrl: ".uno:StyleApply", kind: "command", visible: true },
+        { kind: "separator" },
+        ...items,
+      ];
+    return { ...node, items };
+  }
+  return nodes.map(extend);
+}
+
+/** Inserts a browser resource after a supported upstream anchor. @param nodes - Sibling nodes. @param anchor - Upstream command URL. @param inserted - Browser resource. @returns Extended siblings. */
+function insertAfter(
+  nodes: readonly ResourceNode[],
+  anchor: string,
+  inserted: ResourceNode,
+): readonly ResourceNode[] {
+  const index = nodes.findIndex(
+    /** Finds the upstream anchor. @param node - Candidate node. @returns Whether it matches. */ (
+      node,
+    ) => node.kind === "command" && node.commandUrl === anchor,
+  );
+  if (index < 0) throw new Error(`Browser resource anchor is missing: ${anchor}`);
+  return [...nodes.slice(0, index + 1), inserted, ...nodes.slice(index + 1)];
+}
 
 /** Finds the pinned English command label. @param commandUrl - UNO command URL. @param catalogs - XCU command catalogs. @returns Localized label. */
 function findEnglishLabel(commandUrl: string, ...catalogs: readonly string[]): string {

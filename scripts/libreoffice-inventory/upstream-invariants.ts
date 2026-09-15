@@ -222,8 +222,8 @@ const commandUrls: readonly UpstreamInvariant[] = [
       id: `writer.command-url.${id}`,
       kind: "command-url",
       local: {
-        marker: `${id}: "${localValue}"`,
-        path: "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        marker: `"${id}": "${localValue}"`,
+        path: "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         value: String(localValue),
       },
       upstream: {

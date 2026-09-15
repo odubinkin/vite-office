@@ -260,7 +260,7 @@ describe("App" /**
     expect(screen.queryByRole("button", { name: "Move paragraph 1 up" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Paragraph actions")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menuitem", { name: "No List" })).toHaveAttribute(
       "aria-current",
       "true",
@@ -283,7 +283,7 @@ describe("App" /**
       within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menuitem", { name: "Demote Outline Level" })).toBeEnabled();
     fireEvent.click(screen.getByRole("menuitem", { name: "Demote Outline Level" }));
     expect(paragraph).toHaveAttribute("data-list-level", "1");
@@ -293,12 +293,12 @@ describe("App" /**
     );
     expect(paragraph).toHaveAttribute("data-list-level", "0");
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
-    expect(screen.getByRole("menu", { name: "Bullets and Numbering menu" })).toBeVisible();
+    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
+    expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
     fireEvent.click(screen.getByRole("menuitem", { name: "No List" }));
     expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "No List" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
   });
@@ -545,7 +545,7 @@ describe("App" /**
       );
       fireEvent.focus(screen.getByRole("textbox", { name: "Writer paragraph 2" }));
       fireEvent.click(screen.getByRole("button", { name: "Format" }));
-      fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+      fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
       fireEvent.click(screen.getByRole("menuitem", { name: /^Unordered List$/ }));
       expect(screen.getByTestId("writer-list-marker-writer-paragraph-3")).toHaveTextContent("•");
     } finally {

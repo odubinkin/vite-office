@@ -1,45 +1,144 @@
 {
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "commandAliases": {
+    "alignCenter": ".uno:CenterPara",
+    "alignJustify": ".uno:JustifyPara",
+    "alignLeft": ".uno:StartPara",
+    "alignRight": ".uno:EndPara",
+    "bold": ".uno:Bold",
+    "copy": ".uno:Copy",
+    "cut": ".uno:Cut",
+    "defaultParagraphStyle": ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles",
+    "demote": ".uno:DecrementLevel",
+    "editHyperlink": ".uno:EditHyperlink",
+    "exportText": ".uno:ExportTo",
+    "fontName": ".uno:CharFontName",
+    "hyperlinkDialog": ".uno:HyperlinkDialog",
+    "headingOne": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles",
+    "italic": ".uno:Italic",
+    "newDocument": ".uno:AddDirect",
+    "openLocal": "vnd.vite-office.browser:OpenLocal",
+    "openOdt": ".uno:Open",
+    "orderedList": ".uno:DefaultNumbering",
+    "paste": ".uno:Paste",
+    "promote": ".uno:IncrementLevel",
+    "redo": ".uno:Redo",
+    "removeBullets": ".uno:RemoveBullets",
+    "removeHyperlink": ".uno:RemoveHyperlink",
+    "saveLocal": "vnd.vite-office.browser:SaveLocal",
+    "saveOdt": ".uno:SaveAs",
+    "selectAll": ".uno:SelectAll",
+    "styleApply": ".uno:StyleApply",
+    "toggleHorizontalRuler": ".uno:Ruler",
+    "toggleSidebar": ".uno:Sidebar",
+    "toggleStatusBar": ".uno:StatusBarVisible",
+    "underline": ".uno:Underline",
+    "undo": ".uno:Undo",
+    "unorderedList": ".uno:DefaultBullet"
+  },
+  "commandInventory": [
+    { "capabilityId": "CAP-0112", "commandUrl": ".uno:CenterPara" },
+    { "capabilityId": "CAP-0112", "commandUrl": ".uno:JustifyPara" },
+    { "capabilityId": "CAP-0112", "commandUrl": ".uno:StartPara" },
+    { "capabilityId": "CAP-0112", "commandUrl": ".uno:EndPara" },
+    { "capabilityId": "CAP-0109", "commandUrl": ".uno:Bold" },
+    { "capabilityId": "CAP-0106", "commandUrl": ".uno:Copy" },
+    { "capabilityId": "CAP-0110", "commandUrl": ".uno:Cut" },
+    {
+      "capabilityId": "CAP-0112",
+      "commandUrl": ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles"
+    },
+    { "capabilityId": "CAP-0107", "commandUrl": ".uno:DecrementLevel" },
+    { "capabilityId": "CAP-0101", "commandUrl": ".uno:ExportTo" },
+    { "capabilityId": "CAP-0135", "commandUrl": ".uno:EditHyperlink" },
+    {
+      "capabilityId": "CAP-0112",
+      "commandUrl": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles"
+    },
+    { "capabilityId": "CAP-0109", "commandUrl": ".uno:Italic" },
+    { "capabilityId": "CAP-0135", "commandUrl": ".uno:HyperlinkDialog" },
+    { "capabilityId": "CAP-0114", "commandUrl": ".uno:AddDirect" },
+    { "capabilityId": "CAP-0114", "commandUrl": "vnd.vite-office.browser:OpenLocal" },
+    { "capabilityId": "CAP-0113", "commandUrl": ".uno:Open" },
+    { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultNumbering" },
+    { "capabilityId": "CAP-0110", "commandUrl": ".uno:Paste" },
+    { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementLevel" },
+    { "capabilityId": "CAP-0102", "commandUrl": ".uno:Redo" },
+    { "capabilityId": "CAP-0135", "commandUrl": ".uno:RemoveHyperlink" },
+    { "capabilityId": "CAP-0105", "commandUrl": ".uno:RemoveBullets" },
+    { "capabilityId": "CAP-0114", "commandUrl": "vnd.vite-office.browser:SaveLocal" },
+    { "capabilityId": "CAP-0113", "commandUrl": ".uno:SaveAs" },
+    { "capabilityId": "CAP-0103", "commandUrl": ".uno:SelectAll" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:Ruler" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:Sidebar" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:StatusBarVisible" },
+    { "capabilityId": "CAP-0109", "commandUrl": ".uno:Underline" },
+    { "capabilityId": "CAP-0102", "commandUrl": ".uno:Undo" },
+    { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultBullet" }
+  ],
   "commands": {
     ".uno:CenterPara": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0112",
+      "controlLabel": "Center",
       "label": "Center",
       "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
       "semantics": "radio",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+E", "Meta+E"],
       "slotId": 10030
     },
     ".uno:JustifyPara": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0112",
+      "controlLabel": "Justified",
       "label": "Justified",
       "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
       "semantics": "radio",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+J", "Meta+J"],
       "slotId": 10031
     },
     ".uno:StartPara": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0112",
+      "controlLabel": "Start",
       "label": "Start",
       "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
       "semantics": "radio",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 11579
     },
     ".uno:EndPara": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0112",
+      "controlLabel": "End",
       "label": "End",
       "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
       "semantics": "radio",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 11580
     },
     ".uno:Bold": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Bold",
       "label": "Bold",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
       ],
       "semantics": "check",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+B", "Meta+B"],
       "slotId": 10009
     },
     ".uno:Copy": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0106",
+      "controlLabel": "Copy",
       "label": "Copy",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -47,10 +146,14 @@
         "sw/uiconfig/swriter/popupmenu/text.xml"
       ],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+C", "Meta+C", "COPY", "Ctrl+INSERT", "Meta+INSERT"],
       "slotId": 5711
     },
     ".uno:Cut": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0110",
+      "controlLabel": "Cut",
       "label": "Cut",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -58,10 +161,14 @@
         "sw/uiconfig/swriter/popupmenu/text.xml"
       ],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+X", "Meta+X", "CUT", "Shift+DELETE"],
       "slotId": 5710
     },
     ".uno:DecrementLevel": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0107",
+      "controlLabel": "Demote Outline Level",
       "label": "Demote Outline Level",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -69,81 +176,116 @@
         "sw/uiconfig/swriter/popupmenu/text.xml"
       ],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 20130
     },
     ".uno:EditHyperlink": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0135",
+      "controlLabel": "Hyperlink",
       "label": "Hyperlink",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/popupmenu/text.xml"
       ],
       "semantics": "action",
+      "showsDialog": true,
       "shortcuts": [],
       "slotId": 10978
     },
     ".uno:ExportTo": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0101",
+      "controlLabel": "Export",
       "label": "Export",
       "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
       "semantics": "action",
+      "showsDialog": true,
       "shortcuts": [],
       "slotId": 5829
     },
     ".uno:CharFontName": {
+      "browserOwned": false,
+      "controlLabel": "Font name",
       "label": "Font Name",
       "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 10007
     },
     ".uno:HyperlinkDialog": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0135",
+      "controlLabel": "Hyperlink",
       "label": "Hyperlink",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ],
       "semantics": "action",
+      "showsDialog": true,
       "shortcuts": ["Ctrl+K", "Meta+K"],
       "slotId": 5678
     },
     ".uno:Italic": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Italic",
       "label": "Italic",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
       ],
       "semantics": "check",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+I", "Meta+I"],
       "slotId": 10008
     },
     ".uno:AddDirect": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0114",
+      "controlLabel": "New Document",
       "label": "New Document",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+N", "Meta+N"],
       "slotId": 5537
     },
     "vnd.vite-office.browser:OpenLocal": {
+      "browserOwned": true,
+      "capabilityId": "CAP-0114",
+      "controlLabel": "Open Local Copy",
       "label": "Open Local Copy",
-      "placements": [],
+      "placements": ["browser-extension:file-menu"],
       "semantics": "action",
+      "showsDialog": true,
       "shortcuts": [],
       "slotId": 65001
     },
     ".uno:Open": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0113",
+      "controlLabel": "Open",
       "label": "Open",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ],
       "semantics": "action",
+      "showsDialog": true,
       "shortcuts": ["Ctrl+O", "Meta+O", "OPEN"],
       "slotId": 5501
     },
     ".uno:DefaultNumbering": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0105",
+      "controlLabel": "Ordered List",
       "label": "Ordered List",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -151,10 +293,14 @@
         "sw/uiconfig/swriter/toolbar/numobjectbar.xml"
       ],
       "semantics": "radio",
+      "showsDialog": false,
       "shortcuts": ["F12"],
       "slotId": 20144
     },
     ".uno:Paste": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0110",
+      "controlLabel": "Paste",
       "label": "Paste",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -162,10 +308,14 @@
         "sw/uiconfig/swriter/popupmenu/text.xml"
       ],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+V", "Meta+V", "Shift+INSERT", "PASTE"],
       "slotId": 5712
     },
     ".uno:IncrementLevel": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0107",
+      "controlLabel": "Promote Outline Level",
       "label": "Promote Outline Level",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -173,112 +323,163 @@
         "sw/uiconfig/swriter/popupmenu/text.xml"
       ],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 20131
     },
     ".uno:Redo": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0102",
+      "controlLabel": "Redo",
       "label": "Redo",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+Shift+Z", "Meta+Shift+Z", "Ctrl+Y", "Meta+Y"],
       "slotId": 5700
     },
     ".uno:RemoveBullets": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0105",
+      "controlLabel": "No List",
       "label": "No List",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/popupmenu/text.xml"
       ],
       "semantics": "radio",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+Shift+F12", "Meta+Shift+F12"],
       "slotId": 20137
     },
     ".uno:RemoveHyperlink": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0135",
+      "controlLabel": "Remove Hyperlink",
       "label": "Remove Hyperlink",
       "placements": ["sw/uiconfig/swriter/popupmenu/text.xml"],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 10459
     },
     "vnd.vite-office.browser:SaveLocal": {
+      "browserOwned": true,
+      "capabilityId": "CAP-0114",
+      "controlLabel": "Save Local Copy",
       "label": "Save Local Copy",
-      "placements": [],
+      "placements": ["browser-extension:file-menu"],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 65002
     },
     ".uno:SaveAs": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0113",
+      "controlLabel": "Save As",
       "label": "Save As",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ],
       "semantics": "action",
+      "showsDialog": true,
       "shortcuts": ["Ctrl+Shift+S", "Meta+Shift+S"],
       "slotId": 5502
     },
     ".uno:SelectAll": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0103",
+      "controlLabel": "Select All",
       "label": "Select All",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
       ],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+A", "Meta+A"],
       "slotId": 5723
     },
     ".uno:Ruler": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Rulers",
       "label": "Rulers",
       "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
       "semantics": "check",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 20211
     },
     ".uno:Sidebar": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Sidebar",
       "label": "Sidebar",
       "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
       "semantics": "check",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+F5", "Meta+F5"],
       "slotId": 10336
     },
     ".uno:StatusBarVisible": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Status Bar",
       "label": "Status Bar",
       "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
       "semantics": "check",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 5920
     },
     ".uno:StyleApply": {
+      "browserOwned": false,
+      "controlLabel": "Paragraph style",
       "label": "Apply Style",
       "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
       "semantics": "radio",
+      "showsDialog": false,
       "shortcuts": [],
       "slotId": 5552
     },
     ".uno:Underline": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Underline",
       "label": "Underline",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
       ],
       "semantics": "check",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+U", "Meta+U"],
       "slotId": 10014
     },
     ".uno:Undo": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0102",
+      "controlLabel": "Undo",
       "label": "Undo",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ],
       "semantics": "action",
+      "showsDialog": false,
       "shortcuts": ["Ctrl+Z", "Meta+Z", "Alt+BACKSPACE", "UNDO"],
       "slotId": 5701
     },
     ".uno:DefaultBullet": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0105",
+      "controlLabel": "Unordered List",
       "label": "Unordered List",
       "placements": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -286,775 +487,4147 @@
         "sw/uiconfig/swriter/toolbar/numobjectbar.xml"
       ],
       "semantics": "radio",
+      "showsDialog": false,
       "shortcuts": ["Shift+F12"],
       "slotId": 20138
     }
   },
-  "resourceOrder": {
-    "sw/uiconfig/swriter/menubar/menubar.xml": [
-      ".uno:AddDirect",
-      ".uno:Open",
-      ".uno:SaveAs",
-      ".uno:ExportTo",
-      ".uno:Undo",
-      ".uno:Redo",
-      ".uno:Cut",
-      ".uno:Copy",
-      ".uno:Paste",
-      ".uno:SelectAll",
-      ".uno:EditHyperlink",
-      ".uno:StatusBarVisible",
-      ".uno:Ruler",
-      ".uno:Sidebar",
-      ".uno:HyperlinkDialog",
-      ".uno:Bold",
-      ".uno:Italic",
-      ".uno:RemoveBullets",
-      ".uno:DefaultBullet",
-      ".uno:DefaultNumbering",
-      ".uno:DecrementLevel",
-      ".uno:IncrementLevel",
-      ".uno:RemoveBullets"
+  "locale": "en-US",
+  "schemaVersion": 2,
+  "surfaces": {
+    "menubar": [
+      {
+        "id": ".uno:PickList",
+        "items": [
+          { "commandUrl": ".uno:AddDirect", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Open", "kind": "command", "visible": true },
+          { "commandUrl": "vnd.vite-office.browser:OpenLocal", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SaveAs", "kind": "command", "visible": true },
+          { "commandUrl": "vnd.vite-office.browser:SaveLocal", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:ExportTo", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "File"
+      },
+      {
+        "id": ".uno:EditMenu",
+        "items": [
+          { "commandUrl": ".uno:Undo", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Cut", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Edit"
+      },
+      {
+        "id": ".uno:ViewMenu",
+        "items": [
+          { "commandUrl": ".uno:StatusBarVisible", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          {
+            "id": ".uno:RulerMenu",
+            "items": [{ "commandUrl": ".uno:Ruler", "kind": "command", "visible": true }],
+            "kind": "menu",
+            "label": "Rulers"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:Sidebar", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "View"
+      },
+      {
+        "id": ".uno:InsertMenu",
+        "items": [{ "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Insert"
+      },
+      {
+        "id": ".uno:FormatMenu",
+        "items": [
+          {
+            "id": ".uno:FormatTextMenu",
+            "items": [
+              { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:Italic", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Text"
+          },
+          { "kind": "separator" },
+          {
+            "id": ".uno:FormatBulletsMenu",
+            "items": [
+              { "commandUrl": ".uno:RemoveBullets", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DefaultBullet", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DefaultNumbering", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:DecrementLevel", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:IncrementLevel", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Lists"
+          }
+        ],
+        "kind": "menu",
+        "label": "Format"
+      },
+      {
+        "id": ".uno:FormatStylesMenu",
+        "items": [
+          { "commandUrl": ".uno:StyleApply", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:RemoveBullets", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "Styles"
+      }
     ],
-    "sw/uiconfig/swriter/toolbar/standardbar.xml": [
-      ".uno:AddDirect",
-      ".uno:Open",
-      ".uno:SaveAs",
-      ".uno:Cut",
-      ".uno:Copy",
-      ".uno:Paste",
-      ".uno:Undo",
-      ".uno:Redo",
-      ".uno:HyperlinkDialog"
+    "numobjectbar": [
+      { "commandUrl": ".uno:DecrementLevel", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:IncrementLevel", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:DefaultBullet", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:DefaultNumbering", "kind": "command", "visible": false }
     ],
-    "sw/uiconfig/swriter/toolbar/textobjectbar.xml": [
-      ".uno:StyleApply",
-      ".uno:CharFontName",
-      ".uno:Bold",
-      ".uno:Italic",
-      ".uno:Underline",
-      ".uno:StartPara",
-      ".uno:CenterPara",
-      ".uno:EndPara",
-      ".uno:JustifyPara",
-      ".uno:DefaultBullet",
-      ".uno:DefaultNumbering",
-      ".uno:SelectAll"
+    "popupText": [
+      { "commandUrl": ".uno:Cut", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      {
+        "id": ".uno:NumberingMenu",
+        "items": [
+          { "commandUrl": ".uno:RemoveBullets", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:IncrementLevel", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:DecrementLevel", "kind": "command", "visible": true }
+        ],
+        "kind": "menu",
+        "label": "List"
+      },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:RemoveHyperlink", "kind": "command", "visible": true }
     ],
-    "sw/uiconfig/swriter/toolbar/numobjectbar.xml": [
-      ".uno:DecrementLevel",
-      ".uno:IncrementLevel",
-      ".uno:DefaultBullet",
-      ".uno:DefaultNumbering"
+    "standardbar": [
+      { "commandUrl": ".uno:AddDirect", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Open", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:SaveAs", "kind": "command", "visible": false },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Cut", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Copy", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Undo", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true }
     ],
-    "sw/uiconfig/swriter/popupmenu/text.xml": [
-      ".uno:Cut",
-      ".uno:Copy",
-      ".uno:Paste",
-      ".uno:RemoveBullets",
-      ".uno:IncrementLevel",
-      ".uno:DecrementLevel",
-      ".uno:EditHyperlink",
-      ".uno:RemoveHyperlink"
+    "textobjectbar": [
+      { "commandUrl": ".uno:StyleApply", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:CharFontName", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:Underline", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:StartPara", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:CenterPara", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:EndPara", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:JustifyPara", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:DefaultBullet", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DefaultNumbering", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": false }
     ]
   },
-  "schemaVersion": 1,
   "unsupported": {
     "sw/uiconfig/swriter/menubar/menubar.xml": [
-      "menubar",
-      ".uno:PickList",
-      ".uno:OpenRemote",
-      ".uno:RecentFileList",
-      ".uno:CloseDoc",
-      ".uno:AutoPilotMenu",
-      ".uno:TemplateMenu",
-      ".uno:OpenTemplate",
-      ".uno:SaveAsTemplate",
-      ".uno:NewDoc",
-      ".uno:CompareDocuments",
-      ".uno:MergeDocuments",
-      ".uno:Reload",
-      ".uno:VersionDialog",
-      ".uno:Save",
-      ".uno:SaveAsRemote",
-      ".uno:SaveACopy",
-      ".uno:SaveAll",
-      ".uno:CheckOut",
-      ".uno:CancelCheckOut",
-      ".uno:CheckIn",
-      ".uno:ExportAsMenu",
-      ".uno:ExportToPDF",
-      ".uno:ExportDirectToPDF",
-      ".uno:ExportToEPUB",
-      ".uno:ExportDirectToEPUB",
-      ".uno:SendToMenu",
-      ".uno:SendMail",
-      ".uno:SendMailDocAsOOo",
-      ".uno:SendMailDocAsMS",
-      ".uno:SendMailDocAsPDF",
-      ".uno:SendViaBluetooth",
-      ".uno:NewGlobalDoc",
-      ".uno:NewHtmlDoc",
-      ".uno:SendOutlineToStarImpress",
-      ".uno:SendOutlineToClipboard",
-      ".uno:CreateAbstract",
-      ".uno:SendAbstractToStarImpress",
-      ".uno:WebHtml",
-      ".uno:PrintPreview",
-      ".uno:Print",
-      ".uno:PrinterSetup",
-      ".uno:SetDocumentProperties",
-      ".uno:SignaturesMenu",
-      ".uno:Signature",
-      ".uno:SignPDF",
-      ".uno:Quit",
-      ".uno:EditMenu",
-      ".uno:Repeat",
-      ".uno:PasteSpecialMenu",
-      ".uno:PasteUnformatted",
-      ".uno:PasteSpecial",
-      ".uno:PasteNestedTable",
-      ".uno:PasteRowsBefore",
-      ".uno:PasteColumnsBefore",
-      ".uno:SelectionModeMenu",
-      ".uno:SelectionModeDefault",
-      ".uno:SelectionModeBlock",
-      ".uno:SelectTextMode",
-      "vnd.sun.star.findbar:FocusToFindbar",
-      ".uno:SearchDialog",
-      ".uno:GotoPage",
-      ".uno:ChangesMenu",
-      ".uno:TrackChanges",
-      ".uno:ShowTrackedChanges",
-      ".uno:AcceptTrackedChanges",
-      ".uno:PreviousTrackedChange",
-      ".uno:NextTrackedChange",
-      ".uno:AcceptTrackedChange",
-      ".uno:AcceptTrackedChangeToNext",
-      ".uno:AcceptAllTrackedChanges",
-      ".uno:RejectTrackedChange",
-      ".uno:RejectTrackedChangeToNext",
-      ".uno:RejectAllTrackedChanges",
-      ".uno:ReinstateTrackedChange",
-      ".uno:ReinstateTrackedChangeToNext",
-      ".uno:ReinstateAllTrackedChanges",
-      ".uno:CommentChangeTracking",
-      ".uno:ProtectTraceChangeMode",
-      ".uno:EditCommentsMenu",
-      ".uno:ReplyComment",
-      ".uno:ResolveComment",
-      ".uno:ResolveCommentThread",
-      ".uno:PromoteComment",
-      ".uno:DeleteComment",
-      ".uno:DeleteCommentThread",
-      ".uno:DeleteAuthor",
-      ".uno:DeleteAllNotes",
-      ".uno:EditLinksMenu",
-      ".uno:EditFootnote",
-      ".uno:IndexEntryDialog",
-      ".uno:AuthoritiesEntryDialog",
-      ".uno:FieldDialog",
-      ".uno:LinkDialog",
-      ".uno:ObjectMenue",
-      ".uno:ChangeDatabaseField",
-      ".uno:ShadowCursor",
-      ".uno:EditDoc",
-      ".uno:ViewMenu",
-      ".uno:PrintLayout",
-      ".uno:BrowseView",
-      ".uno:DraftView",
-      ".uno:PagesLayout",
-      ".uno:SinglePagePerRow",
-      ".uno:MultiplePagesPerRow",
-      ".uno:BookView",
-      ".uno:UIPicker",
-      ".uno:AvailableToolbars",
-      ".uno:RulerMenu",
-      ".uno:VRuler",
-      ".uno:ScrollBarMenu",
-      ".uno:HScroll",
-      ".uno:VScroll",
-      ".uno:GridsMenu",
-      ".uno:GridVisible",
-      ".uno:GridUse",
-      ".uno:HelplinesMove",
-      ".uno:BaselineGridVisible",
-      ".uno:ControlCodes",
-      ".uno:ShowBoundaries",
-      ".uno:ShowGraphics",
-      ".uno:ShowWhitespace",
-      ".uno:ViewTrackChanges",
-      ".uno:ShowAnnotations",
-      ".uno:ShowResolvedAnnotations",
-      ".uno:Marks",
-      ".uno:Fieldnames",
-      ".uno:ShowHiddenParagraphs",
-      ".uno:ViewSidebarStyles",
-      ".uno:Gallery",
-      ".uno:Navigator",
-      ".uno:ViewDataSourceBrowser",
-      ".uno:FullScreen",
-      ".uno:ZoomMenu",
-      ".uno:ZoomPage",
-      ".uno:ZoomPageWidth",
-      ".uno:ZoomOptimal",
-      ".uno:Zoom50Percent",
-      ".uno:Zoom75Percent",
-      ".uno:Zoom100Percent",
-      ".uno:Zoom150Percent",
-      ".uno:Zoom200Percent",
-      ".uno:Zoom",
-      ".uno:InsertMenu",
-      ".uno:InsertPagebreak",
-      ".uno:BreaksMenu",
-      ".uno:InsertLinebreak",
-      ".uno:InsertColumnBreak",
-      ".uno:InsertLandscapePage",
-      ".uno:InsertBreak",
-      ".uno:InsertGraphic",
-      ".uno:InsertObjectChart",
-      ".uno:GraphicMenu",
-      ".uno:Gallery",
-      ".uno:Scan",
-      ".uno:TwainSelect",
-      ".uno:TwainTransfer",
-      ".uno:InsertAVMedia",
-      ".uno:ObjectMenu",
-      ".uno:InsertObjectStarMath",
-      ".uno:InsertQrCode",
-      ".uno:InsertObject",
-      ".uno:ShapesMenu",
-      ".uno:ShapesLineMenu",
-      ".uno:Line",
-      ".uno:Freeline_Unfilled",
-      ".uno:Freeline",
-      ".uno:Bezier_Unfilled",
-      ".uno:BezierFill",
-      ".uno:Polygon_Unfilled",
-      ".uno:Polygon_Diagonal_Unfilled",
-      ".uno:Polygon_Diagonal",
-      ".uno:ConnectorToolbox",
-      ".uno:BasicShapes",
-      ".uno:ArrowShapes",
-      ".uno:SymbolShapes",
-      ".uno:StarShapes",
-      ".uno:CalloutShapes",
-      ".uno:FlowChartShapes",
-      ".uno:InsertSection",
-      ".uno:InsertDoc",
-      ".uno:DrawText",
-      ".uno:InsertAnnotation",
-      ".uno:InsertFrameMenu",
-      ".uno:InsertFrameInteract",
-      ".uno:InsertFrame",
-      ".uno:FontworkGalleryFloater",
-      ".uno:InsertCaptionDialog",
-      ".uno:InsertBookmark",
-      ".uno:InsertReferenceField",
-      ".uno:InsertSymbol",
-      ".uno:FormattingMarkMenu",
-      ".uno:InsertNonBreakingSpace",
-      ".uno:InsertHardHyphen",
-      ".uno:InsertSoftHyphen",
-      ".uno:InsertNarrowNobreakSpace",
-      ".uno:InsertZWSP",
-      ".uno:InsertWJ",
-      ".uno:InsertLRM",
-      ".uno:InsertRLM",
-      ".uno:InsertFootnotesMenu",
-      ".uno:InsertFootnote",
-      ".uno:InsertEndnote",
-      ".uno:InsertFootnoteDialog",
-      ".uno:IndexesMenu",
-      ".uno:InsertMultiIndex",
-      ".uno:InsertIndexesEntry",
-      ".uno:InsertAuthoritiesEntry",
-      ".uno:PageNumberWizard",
-      ".uno:InsertFieldCtrl",
-      ".uno:InsertHeaderFooterMenu",
-      ".uno:InsertPageHeader",
-      ".uno:InsertPageFooter",
-      ".uno:UseHeaderFooterMenu",
-      ".uno:InsertEnvelope",
-      ".uno:InsertSignatureLine",
-      ".uno:FormatMenu",
-      ".uno:FormatTextMenu",
-      ".uno:UnderlineSingle",
-      ".uno:UnderlineDouble",
-      ".uno:Strikeout",
-      ".uno:Overline",
-      ".uno:SuperScript",
-      ".uno:SubScript",
-      ".uno:Shadowed",
-      ".uno:OutlineFont",
-      ".uno:Grow",
-      ".uno:Shrink",
-      ".uno:ChangeCaseToUpper",
-      ".uno:ChangeCaseToLower",
-      ".uno:ChangeCaseRotateCase",
-      ".uno:ChangeCaseToSentenceCase",
-      ".uno:ChangeCaseToTitleCase",
-      ".uno:ChangeCaseToToggleCase",
-      ".uno:SmallCaps",
-      ".uno:ChangeCaseToHalfWidth",
-      ".uno:ChangeCaseToFullWidth",
-      ".uno:ChangeCaseToHiragana",
-      ".uno:ChangeCaseToKatakana",
-      ".uno:FormatSpacingMenu",
-      ".uno:SpacePara1",
-      ".uno:SpacePara115",
-      ".uno:SpacePara15",
-      ".uno:SpacePara2",
-      ".uno:ParaspaceIncrease",
-      ".uno:ParaspaceDecrease",
-      ".uno:IncrementIndent",
-      ".uno:DecrementIndent",
-      ".uno:TextAlign",
-      ".uno:CommonAlignStart",
-      ".uno:CommonAlignHorizontalCenter",
-      ".uno:CommonAlignEnd",
-      ".uno:CommonAlignJustified",
-      ".uno:CommonAlignLeft",
-      ".uno:CommonAlignRight",
-      ".uno:CommonAlignTop",
-      ".uno:CommonAlignVerticalCenter",
-      ".uno:CommonAlignBottom",
-      ".uno:FormatPaintbrush",
-      ".uno:ResetAttributes",
-      ".uno:SpotlightMenu",
-      ".uno:HighlightCharDF",
-      ".uno:SpotlightParaStyles",
-      ".uno:SpotlightCharStyles",
-      ".uno:FontDialog",
-      ".uno:ParagraphDialog",
-      ".uno:FormatBulletsMenu",
-      ".uno:DecrementSubLevels",
-      ".uno:IncrementSubLevels",
-      ".uno:MoveDown",
-      ".uno:MoveUp",
-      ".uno:MoveDownSubItems",
-      ".uno:MoveUpSubItems",
-      ".uno:InsertNeutralParagraph",
-      ".uno:NumberingStart",
-      ".uno:ContinueNumbering",
-      ".uno:JumpDownThisLevel",
-      ".uno:JumpUpThisLevel",
-      ".uno:OutlineBullet",
-      ".uno:ThemeDialog",
-      ".uno:PageDialog",
-      ".uno:TitlePageDialog",
-      ".uno:FormatAllNotes",
-      ".uno:RubyDialog",
-      ".uno:FormatColumns",
-      ".uno:Watermark",
-      ".uno:EditRegion",
-      ".uno:FormatImageMenu",
-      ".uno:Crop",
-      ".uno:ExternalEdit",
-      ".uno:ChangePicture",
-      ".uno:CompressGraphic",
-      ".uno:SaveGraphic",
-      ".uno:FormatImageFilterMenu",
-      ".uno:GraphicFilterSepia",
-      ".uno:GraphicFilterSobel",
-      ".uno:GraphicFilterInvert",
-      ".uno:GraphicFilterMosaic",
-      ".uno:GraphicFilterPopart",
-      ".uno:GraphicFilterPoster",
-      ".uno:GraphicFilterRelief",
-      ".uno:GraphicFilterRemoveNoise",
-      ".uno:GraphicFilterSharpen",
-      ".uno:GraphicFilterSmooth",
-      ".uno:GraphicFilterSolarize",
-      ".uno:ColorSettings",
-      ".uno:GraphicDialog",
-      ".uno:GraphicSizeCheck",
-      ".uno:FormatObjectMenu",
-      ".uno:TransformDialog",
-      ".uno:FormatLine",
-      ".uno:ConnectorAttributes",
-      ".uno:FormatArea",
-      ".uno:TextAttributes",
-      ".uno:FontWork",
-      ".uno:FormatFrameMenu",
-      ".uno:ChainFrames",
-      ".uno:UnhainFrames",
-      ".uno:FrameDialog",
-      ".uno:NameGroup",
-      ".uno:ObjectTitleDescription",
-      ".uno:AnchorMenu",
-      ".uno:WrapMenu",
-      ".uno:WrapOff",
-      ".uno:WrapOn",
-      ".uno:WrapIdeal",
-      ".uno:WrapLeft",
-      ".uno:WrapRight",
-      ".uno:WrapThrough",
-      ".uno:WrapThroughTransparencyToggle",
-      ".uno:WrapContour",
-      ".uno:ContourDialog",
-      ".uno:WrapAnchorOnly",
-      ".uno:TextWrap",
-      ".uno:ArrangeMenu",
-      ".uno:BringToFront",
-      ".uno:ObjectForwardOne",
-      ".uno:ObjectBackOne",
-      ".uno:SendToBack",
-      ".uno:SetObjectToForeground",
-      ".uno:SetObjectToBackground",
-      ".uno:RotateFlipMenu",
-      ".uno:ToggleObjectRotateMode",
-      ".uno:RotateLeft",
-      ".uno:RotateRight",
-      ".uno:Rotate180",
-      ".uno:RotateReset",
-      ".uno:FlipVertical",
-      ".uno:FlipHorizontal",
-      ".uno:GroupMenu",
-      ".uno:FormatGroup",
-      ".uno:FormatUngroup",
-      ".uno:EnterGroup",
-      ".uno:LeaveGroup",
-      ".uno:FormatStylesMenu",
-      ".uno:TextBodyParaStyle",
-      ".uno:TitleParaStyle",
-      ".uno:SubtitleParaStyle",
-      ".uno:Heading1ParaStyle",
-      ".uno:Heading2ParaStyle",
-      ".uno:Heading3ParaStyle",
-      ".uno:QuoteParaStyle",
-      ".uno:PreformattedParaStyle",
-      ".uno:HorizontalLine",
-      ".uno:DefaultCharStyle",
-      ".uno:EmphasisCharStyle",
-      ".uno:StrongEmphasisCharStyle",
-      ".uno:QuoteCharStyle",
-      ".uno:SourceCharStyle",
-      ".uno:BulletListStyle",
-      ".uno:NumberListStyle",
-      ".uno:AlphaListStyle",
-      ".uno:AlphaLowListStyle",
-      ".uno:RomanListStyle",
-      ".uno:RomanLowListStyle",
-      ".uno:EditStyle",
-      ".uno:StyleUpdateByExample",
-      ".uno:StyleNewByExample",
-      ".uno:LoadStyles",
-      ".uno:DesignerDialog",
-      ".uno:TableMenu",
-      ".uno:InsertTable",
-      ".uno:TableInsertMenu",
-      ".uno:InsertRowsBefore",
-      ".uno:InsertRowsAfter",
-      ".uno:InsertRowDialog",
-      ".uno:InsertColumnsBefore",
-      ".uno:InsertColumnsAfter",
-      ".uno:InsertColumnDialog",
-      ".uno:TableDeleteMenu",
-      ".uno:DeleteRows",
-      ".uno:DeleteColumns",
-      ".uno:DeleteTable",
-      ".uno:TableSelectMenu",
-      ".uno:EntireCell",
-      ".uno:EntireRow",
-      ".uno:EntireColumn",
-      ".uno:SelectTable",
-      ".uno:TableAutoFitMenu",
-      ".uno:SetRowHeight",
-      ".uno:SetMinimalRowHeight",
-      ".uno:SetOptimalRowHeight",
-      ".uno:DistributeRows",
-      ".uno:SetColumnWidth",
-      ".uno:SetMinimalColumnWidth",
-      ".uno:SetOptimalColumnWidth",
-      ".uno:DistributeColumns",
-      ".uno:MergeCells",
-      ".uno:SplitCell",
-      ".uno:MergeTable",
-      ".uno:SplitTable",
-      ".uno:Protect",
-      ".uno:UnsetCellsReadOnly",
-      ".uno:AutoFormat",
-      ".uno:TableNumberFormatDialog",
-      ".uno:TableNumberRecognition",
-      ".uno:HeadingRowsRepeat",
-      ".uno:RowSplit",
-      ".uno:TableConvertMenu",
-      ".uno:ConvertTextToTable",
-      ".uno:ConvertTableToText",
-      ".uno:InsertFormula",
-      ".uno:TableSort",
-      ".uno:TableDialog",
-      ".uno:FormatFormMenu",
-      ".uno:SwitchControlDesignMode",
-      ".uno:UseWizards",
-      ".uno:Label",
-      ".uno:Edit",
-      ".uno:CheckBox",
-      ".uno:RadioButton",
-      ".uno:ListBox",
-      ".uno:ComboBox",
-      ".uno:Pushbutton",
-      ".uno:Imagebutton",
-      ".uno:FormattedField",
-      ".uno:FormMoreFieldsMenu",
-      ".uno:DateField",
-      ".uno:TimeField",
-      ".uno:NumericField",
-      ".uno:CurrencyField",
-      ".uno:PatternField",
-      ".uno:GroupBox",
-      ".uno:ImageControl",
-      ".uno:FileControl",
-      ".uno:Grid",
-      ".uno:NavigationBar",
-      ".uno:ControlProperties",
-      ".uno:FormProperties",
-      ".uno:ShowFmExplorer",
-      ".uno:TabDialog",
-      ".uno:OpenReadOnly",
-      ".uno:AutoControlFocus",
-      ".uno:ContentControlsMenu",
-      ".uno:InsertContentControl",
-      ".uno:InsertPlainTextContentControl",
-      ".uno:InsertPictureContentControl",
-      ".uno:InsertCheckboxContentControl",
-      ".uno:InsertComboBoxContentControl",
-      ".uno:InsertDropdownContentControl",
-      ".uno:InsertDateContentControl",
-      ".uno:ContentControlProperties",
-      ".uno:ToolsMenu",
-      ".uno:SpellingAndGrammarDialog",
-      ".uno:SpellOnline",
-      ".uno:ThesaurusDialog",
-      ".uno:LanguageMenu",
-      ".uno:SetLanguageSelectionMenu",
-      ".uno:SetLanguageParagraphMenu",
-      ".uno:SetLanguageAllTextMenu",
-      ".uno:Hyphenate",
-      ".uno:ChineseConversion",
-      ".uno:HangulHanjaConversion",
-      ".uno:MoreDictionaries",
-      ".uno:WordCountDialog",
-      ".uno:AccessibilityCheck",
-      ".uno:AccessibilityCheckOnline",
-      ".uno:AutoFormatMenu",
-      ".uno:OnlineAutoFormat",
-      ".uno:AutoFormatApply",
-      ".uno:AutoFormatRedlineApply",
-      ".uno:AutoCorrectDlg",
-      ".uno:EditGlossary",
-      ".uno:ImageMapDialog",
-      ".uno:RedactDoc",
-      ".uno:AutoRedactDoc",
-      ".uno:ChapterNumberingDialog",
-      ".uno:LineNumberingDialog",
-      ".uno:FootnoteDialog",
-      ".uno:MailMergeWizard",
-      ".uno:BibliographyComponent",
-      ".uno:AddressBookSource",
-      ".uno:UpdateMenu",
-      ".uno:UpdateAll",
-      ".uno:Repaginate",
-      ".uno:UpdateSelectedField",
-      ".uno:ConvertSelectedField",
-      ".uno:UpdateFields?UnlockSoftFixed:bool=1",
-      ".uno:UpdateAllIndexes",
-      ".uno:UpdateCurIndex",
-      ".uno:UpdateAllLinks",
-      ".uno:UpdateCharts",
-      ".uno:ProtectMenu",
-      ".uno:ProtectFields",
-      ".uno:ProtectBookmarks",
-      ".uno:CalculateSel",
-      ".uno:SortDialog",
-      ".uno:MacrosMenu",
-      ".uno:MacroManager",
-      ".uno:MacroRecorder",
-      ".uno:RunMacro",
-      ".uno:BasicIDEAppear",
-      ".uno:ScriptOrganizer",
-      ".uno:MacroSignature",
-      ".uno:MacroOrganizer?TabId:short=1",
-      ".uno:DevelopmentToolsDockingWindow",
-      ".uno:OpenXMLFilterSettings",
-      ".uno:ExtensionManager",
-      ".uno:ConfigureDialog",
-      ".uno:OptionsTreeDialog",
-      ".uno:WindowList",
-      ".uno:NewWindow",
-      ".uno:CloseWin",
-      ".uno:HelpMenu",
-      ".uno:HelpIndex",
-      ".uno:ExtendedHelp",
-      ".uno:Documentation",
-      ".uno:TipOfTheDay",
-      ".uno:CommandPopup",
-      ".uno:QuestionAnswers",
-      ".uno:SendFeedback",
-      ".uno:SafeMode",
-      ".uno:GetInvolved",
-      ".uno:Donation",
-      ".uno:ShowLicense",
-      ".uno:About"
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenRemote"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RecentFileList"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CloseDoc"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AutoPilotMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:TemplateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenTemplate"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:TemplateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SaveAsTemplate"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:TemplateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NewDoc"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:TemplateMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CompareDocuments"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MergeDocuments"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Reload"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:VersionDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Save"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SaveAsRemote"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SaveACopy"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SaveAll"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CheckOut"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CancelCheckOut"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CheckIn"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:ExportAsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExportToPDF"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:ExportAsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExportDirectToPDF"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:ExportAsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExportToEPUB"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:ExportAsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExportDirectToEPUB"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ExportAsMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendMail"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendMailDocAsOOo"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendMailDocAsMS"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendMailDocAsPDF"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendViaBluetooth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NewGlobalDoc"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NewHtmlDoc"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendOutlineToStarImpress"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendOutlineToClipboard"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CreateAbstract"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SendToMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendAbstractToStarImpress"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:SendToMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WebHtml"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PrintPreview"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Print"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PrinterSetup"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetDocumentProperties"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SignaturesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Signature"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList", ".uno:SignaturesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SignPDF"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:SignaturesMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PickList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Quit"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Repeat"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteUnformatted"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteSpecial"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteNestedTable"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteRowsBefore"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteColumnsBefore"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:PasteSpecialMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:SelectionModeMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SelectionModeDefault"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:SelectionModeMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SelectionModeBlock"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:SelectionModeMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SelectTextMode"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": "vnd.sun.star.findbar:FocusToFindbar"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SearchDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GotoPage"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TrackChanges"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowTrackedChanges"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AcceptTrackedChanges"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PreviousTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NextTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AcceptTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AcceptTrackedChangeToNext"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AcceptAllTrackedChanges"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RejectTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RejectTrackedChangeToNext"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RejectAllTrackedChanges"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ReinstateTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ReinstateTrackedChangeToNext"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ReinstateAllTrackedChanges"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommentChangeTracking"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:ChangesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ProtectTraceChangeMode"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ChangesMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ReplyComment"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ResolveComment"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ResolveCommentThread"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PromoteComment"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteComment"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteCommentThread"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteAuthor"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditCommentsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteAllNotes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:EditCommentsMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditLinksMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditFootnote"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditLinksMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:IndexEntryDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu", ".uno:EditLinksMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AuthoritiesEntryDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:EditLinksMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FieldDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:LinkDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ObjectMenue"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeDatabaseField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShadowCursor"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:EditMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditDoc"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PrintLayout"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BrowseView"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DraftView"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:PagesLayout"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SinglePagePerRow"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:PagesLayout"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MultiplePagesPerRow"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:PagesLayout"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BookView"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:PagesLayout"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UIPicker"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AvailableToolbars"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:RulerMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:VRuler"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ScrollBarMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:HScroll"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ScrollBarMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:VScroll"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ScrollBarMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:GridsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GridVisible"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:GridsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GridUse"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:GridsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:HelplinesMove"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:GridsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BaselineGridVisible"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:GridsMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ControlCodes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowBoundaries"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowGraphics"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowWhitespace"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ViewTrackChanges"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowAnnotations"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowResolvedAnnotations"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Marks"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Fieldnames"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowHiddenParagraphs"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ViewSidebarStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Gallery"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Navigator"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ViewDataSourceBrowser"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FullScreen"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ZoomMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ZoomPage"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ZoomMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ZoomPageWidth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ZoomMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ZoomOptimal"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ZoomMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Zoom50Percent"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ZoomMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Zoom75Percent"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ZoomMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Zoom100Percent"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ZoomMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Zoom150Percent"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ZoomMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Zoom200Percent"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu", ".uno:ZoomMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Zoom"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ViewMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ZoomMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertPagebreak"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:BreaksMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertLinebreak"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:BreaksMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertColumnBreak"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:BreaksMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertLandscapePage"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:BreaksMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertBreak"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:BreaksMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertGraphic"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertObjectChart"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:GraphicMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Gallery"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:GraphicMenu", ".uno:Scan"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TwainSelect"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:GraphicMenu", ".uno:Scan"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TwainTransfer"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:GraphicMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:Scan"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:GraphicMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertAVMedia"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:GraphicMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ObjectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertObjectStarMath"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ObjectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertQrCode"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ObjectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertObject"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ObjectMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu", ".uno:ShapesLineMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Line"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu", ".uno:ShapesLineMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Freeline_Unfilled"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu", ".uno:ShapesLineMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Freeline"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu", ".uno:ShapesLineMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Bezier_Unfilled"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu", ".uno:ShapesLineMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BezierFill"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu", ".uno:ShapesLineMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Polygon_Unfilled"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu", ".uno:ShapesLineMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Polygon_Diagonal_Unfilled"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu", ".uno:ShapesLineMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Polygon_Diagonal"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ShapesLineMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ConnectorToolbox"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BasicShapes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ArrowShapes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SymbolShapes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StarShapes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CalloutShapes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:ShapesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FlowChartShapes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ShapesMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertSection"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertDoc"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DrawText"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertAnnotation"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:InsertFrameMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFrameInteract"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:InsertFrameMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFrame"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:InsertFrameMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FontworkGalleryFloater"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertCaptionDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertBookmark"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertReferenceField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertSymbol"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:FormattingMarkMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertNonBreakingSpace"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:FormattingMarkMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertHardHyphen"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:FormattingMarkMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertSoftHyphen"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:FormattingMarkMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertNarrowNobreakSpace"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:FormattingMarkMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertZWSP"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:FormattingMarkMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertWJ"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:FormattingMarkMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertLRM"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:FormattingMarkMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertRLM"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:FormattingMarkMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:InsertFootnotesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFootnote"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:InsertFootnotesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertEndnote"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:InsertFootnotesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFootnoteDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:InsertFootnotesMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:IndexesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertMultiIndex"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:IndexesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertIndexesEntry"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:IndexesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertAuthoritiesEntry"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:IndexesMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PageNumberWizard"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFieldCtrl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:InsertHeaderFooterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertPageHeader"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:InsertHeaderFooterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertPageFooter"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu", ".uno:InsertHeaderFooterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UseHeaderFooterMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:InsertHeaderFooterMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertEnvelope"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:InsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertSignatureLine"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UnderlineSingle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UnderlineDouble"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Strikeout"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Overline"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SuperScript"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SubScript"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Shadowed"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OutlineFont"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Grow"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Shrink"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToUpper"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToLower"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseRotateCase"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToSentenceCase"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToTitleCase"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToToggleCase"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SmallCaps"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToHalfWidth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToFullWidth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToHiragana"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatTextMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToKatakana"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpacePara1"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpacePara115"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpacePara15"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpacePara2"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ParaspaceIncrease"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ParaspaceDecrease"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:IncrementIndent"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DecrementIndent"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:FormatSpacingMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:TextAlign"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommonAlignStart"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:TextAlign"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommonAlignHorizontalCenter"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:TextAlign"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommonAlignEnd"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:TextAlign"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommonAlignJustified"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:TextAlign"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommonAlignLeft"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:TextAlign"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommonAlignRight"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:TextAlign"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommonAlignTop"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:TextAlign"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommonAlignVerticalCenter"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:TextAlign"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommonAlignBottom"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:TextAlign"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatPaintbrush"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ResetAttributes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:SpotlightMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:HighlightCharDF"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:SpotlightMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpotlightParaStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:SpotlightMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpotlightCharStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:SpotlightMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FontDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ParagraphDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DecrementSubLevels"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:IncrementSubLevels"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MoveDown"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MoveUp"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MoveDownSubItems"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MoveUpSubItems"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertNeutralParagraph"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberingStart"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ContinueNumbering"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:JumpDownThisLevel"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:JumpUpThisLevel"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OutlineBullet"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ThemeDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PageDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TitlePageDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatAllNotes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RubyDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatColumns"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Watermark"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditRegion"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Crop"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExternalEdit"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangePicture"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CompressGraphic"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SaveGraphic"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterSepia"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterSobel"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterInvert"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterMosaic"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterPopart"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterPoster"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterRelief"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterRemoveNoise"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterSharpen"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterSmooth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu", ".uno:FormatImageFilterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicFilterSolarize"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:FormatImageFilterMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ColorSettings"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatImageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GraphicSizeCheck"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:FormatImageMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatObjectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TransformDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatObjectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatLine"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatObjectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ConnectorAttributes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatObjectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatArea"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatObjectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TextAttributes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatObjectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FontWork"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:FormatObjectMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatFrameMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChainFrames"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatFrameMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UnhainFrames"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:FormatFrameMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FrameDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:FormatFrameMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NameGroup"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ObjectTitleDescription"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AnchorMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WrapOff"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WrapOn"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WrapIdeal"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WrapLeft"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WrapRight"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WrapThrough"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WrapThroughTransparencyToggle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WrapContour"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ContourDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WrapAnchorOnly"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:WrapMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TextWrap"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:WrapMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:ArrangeMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BringToFront"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:ArrangeMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ObjectForwardOne"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:ArrangeMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ObjectBackOne"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:ArrangeMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendToBack"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:ArrangeMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetObjectToForeground"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:ArrangeMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetObjectToBackground"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ArrangeMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:RotateFlipMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ToggleObjectRotateMode"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:RotateFlipMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RotateLeft"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:RotateFlipMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RotateRight"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:RotateFlipMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Rotate180"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:RotateFlipMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RotateReset"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:RotateFlipMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FlipVertical"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:RotateFlipMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FlipHorizontal"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:RotateFlipMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:GroupMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatGroup"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:GroupMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatUngroup"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:GroupMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EnterGroup"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu", ".uno:GroupMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:LeaveGroup"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:GroupMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TextBodyParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TitleParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SubtitleParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Heading1ParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Heading2ParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Heading3ParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:QuoteParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PreformattedParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:HorizontalLine"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DefaultCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EmphasisCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StrongEmphasisCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:QuoteCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SourceCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BulletListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AlphaListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AlphaLowListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RomanListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RomanLowListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleUpdateByExample"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleNewByExample"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:LoadStyles"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatStylesMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DesignerDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertTable"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertRowsBefore"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertRowsAfter"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertRowDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertColumnsBefore"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertColumnsAfter"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableInsertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertColumnDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:TableInsertMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableDeleteMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteRows"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableDeleteMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteColumns"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableDeleteMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteTable"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:TableDeleteMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EntireCell"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EntireRow"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EntireColumn"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableSelectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SelectTable"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:TableSelectMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetRowHeight"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetMinimalRowHeight"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetOptimalRowHeight"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DistributeRows"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetColumnWidth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetMinimalColumnWidth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetOptimalColumnWidth"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableAutoFitMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DistributeColumns"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:TableAutoFitMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MergeCells"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SplitCell"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MergeTable"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SplitTable"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Protect"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UnsetCellsReadOnly"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AutoFormat"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TableNumberFormatDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TableNumberRecognition"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:HeadingRowsRepeat"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RowSplit"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableConvertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ConvertTextToTable"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu", ".uno:TableConvertMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ConvertTableToText"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:TableConvertMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFormula"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TableSort"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:TableMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TableDialog"
+      },
+      { "classification": "X", "context": [], "entryKind": "menu", "sourceUrl": ".uno:TableMenu" },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SwitchControlDesignMode"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UseWizards"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Label"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Edit"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CheckBox"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RadioButton"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ListBox"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ComboBox"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Pushbutton"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Imagebutton"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormattedField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:FormMoreFieldsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DateField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:FormMoreFieldsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TimeField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:FormMoreFieldsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumericField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:FormMoreFieldsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CurrencyField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:FormMoreFieldsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PatternField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:FormMoreFieldsMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GroupBox"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ImageControl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FileControl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Grid"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NavigationBar"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ControlProperties"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormProperties"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowFmExplorer"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TabDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenReadOnly"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AutoControlFocus"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:ContentControlsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertContentControl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:ContentControlsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertPlainTextContentControl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:ContentControlsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertPictureContentControl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:ContentControlsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertCheckboxContentControl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:ContentControlsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertComboBoxContentControl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:ContentControlsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertDropdownContentControl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:ContentControlsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertDateContentControl"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu", ".uno:ContentControlsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ContentControlProperties"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:FormatFormMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ContentControlsMenu"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:FormatFormMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpellingAndGrammarDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpellOnline"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ThesaurusDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:LanguageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetLanguageSelectionMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:LanguageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetLanguageParagraphMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:LanguageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetLanguageAllTextMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:LanguageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Hyphenate"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:LanguageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChineseConversion"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:LanguageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:HangulHanjaConversion"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:LanguageMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MoreDictionaries"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:LanguageMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:WordCountDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AccessibilityCheck"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AccessibilityCheckOnline"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:AutoFormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OnlineAutoFormat"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:AutoFormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AutoFormatApply"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:AutoFormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AutoFormatRedlineApply"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:AutoFormatMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AutoCorrectDlg"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:AutoFormatMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditGlossary"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ImageMapDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RedactDoc"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AutoRedactDoc"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChapterNumberingDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:LineNumberingDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FootnoteDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MailMergeWizard"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BibliographyComponent"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AddressBookSource"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:UpdateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateAll"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:UpdateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Repaginate"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:UpdateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateSelectedField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:UpdateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ConvertSelectedField"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:UpdateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateFields?UnlockSoftFixed:bool=1"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:UpdateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateAllIndexes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:UpdateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateCurIndex"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:UpdateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateAllLinks"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:UpdateMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateCharts"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:UpdateMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:ProtectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ProtectFields"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:ProtectMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ProtectBookmarks"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ProtectMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CalculateSel"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SortDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:MacrosMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MacroManager"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:MacrosMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MacroRecorder"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:MacrosMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RunMacro"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:MacrosMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BasicIDEAppear"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:MacrosMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ScriptOrganizer"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:MacrosMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MacroSignature"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu", ".uno:MacrosMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MacroOrganizer?TabId:short=1"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:MacrosMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DevelopmentToolsDockingWindow"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenXMLFilterSettings"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExtensionManager"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ConfigureDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ToolsMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OptionsTreeDialog"
+      },
+      { "classification": "X", "context": [], "entryKind": "menu", "sourceUrl": ".uno:ToolsMenu" },
+      {
+        "classification": "X",
+        "context": [".uno:WindowList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NewWindow"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:WindowList"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CloseWin"
+      },
+      { "classification": "X", "context": [], "entryKind": "menu", "sourceUrl": ".uno:WindowList" },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:HelpIndex"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExtendedHelp"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Documentation"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TipOfTheDay"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CommandPopup"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:QuestionAnswers"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendFeedback"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SafeMode"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:GetInvolved"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Donation"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowLicense"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:HelpMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:About"
+      },
+      { "classification": "X", "context": [], "entryKind": "menu", "sourceUrl": ".uno:HelpMenu" }
     ],
     "sw/uiconfig/swriter/toolbar/standardbar.xml": [
-      ".uno:OpenUrl",
-      ".uno:NewDoc",
-      ".uno:OpenRemote",
-      ".uno:Save",
-      ".uno:SendMail",
-      ".uno:EditDoc",
-      ".uno:ReadOnlyDoc",
-      ".uno:ExportDirectToPDF",
-      ".uno:ExportDirectToEPUB",
-      ".uno:Print",
-      ".uno:PrintDefault",
-      ".uno:PrintPreview",
-      ".uno:FormatPaintbrush",
-      ".uno:ResetAttributes",
-      ".uno:SearchDialog",
-      ".uno:Navigator",
-      ".uno:SpellingAndGrammarDialog",
-      ".uno:SpellOnline",
-      ".uno:ControlCodes",
-      ".uno:InsertTable",
-      ".uno:InsertGraphic",
-      ".uno:InsertObjectChart",
-      ".uno:InsertObjectStarMath",
-      ".uno:DrawText",
-      ".uno:VerticalText",
-      ".uno:InsertPagebreak",
-      ".uno:InsertFieldCtrl",
-      ".uno:CharmapControl",
-      ".uno:InsertFootnote",
-      ".uno:InsertEndnote",
-      ".uno:InsertBookmark",
-      ".uno:InsertReferenceField",
-      ".uno:InsertIndexesEntry",
-      ".uno:InsertAnnotation",
-      ".uno:ShowTrackedChanges",
-      ".uno:TrackChanges",
-      ".uno:TrackChangesBar",
-      ".uno:Line",
-      ".uno:BasicShapes",
-      ".uno:InsertDraw",
-      ".uno:ViewDataSourceBrowser",
-      ".uno:Zoom",
-      ".uno:HelpIndex",
-      ".uno:ExtendedHelp"
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:OpenUrl" },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:NewDoc" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenRemote"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Save" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SendMail"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:EditDoc" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ReadOnlyDoc"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExportDirectToPDF"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExportDirectToEPUB"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Print" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PrintDefault"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PrintPreview"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatPaintbrush"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ResetAttributes"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SearchDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Navigator"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpellingAndGrammarDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SpellOnline"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ControlCodes"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertTable"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertGraphic"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertObjectChart"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertObjectStarMath"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DrawText"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:VerticalText"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertPagebreak"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFieldCtrl"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CharmapControl"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertFootnote"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertEndnote"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertBookmark"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertReferenceField"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertIndexesEntry"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertAnnotation"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ShowTrackedChanges"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TrackChanges"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TrackChangesBar"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Line" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BasicShapes"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertDraw"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ViewDataSourceBrowser"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Zoom" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:HelpIndex"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ExtendedHelp"
+      }
     ],
     "sw/uiconfig/swriter/toolbar/textobjectbar.xml": [
-      ".uno:DesignerDialog",
-      ".uno:StyleUpdateByExample",
-      ".uno:StyleNewByExample",
-      ".uno:EditStyle",
-      ".uno:FontHeight",
-      ".uno:Grow",
-      ".uno:Shrink",
-      ".uno:UnderlineDouble",
-      ".uno:Strikeout",
-      ".uno:Overline",
-      ".uno:SuperScript",
-      ".uno:SubScript",
-      ".uno:Shadowed",
-      ".uno:OutlineFont",
-      ".uno:ResetAttributes",
-      ".uno:ChangeCaseToLower",
-      ".uno:ChangeCaseToUpper",
-      ".uno:SmallCaps",
-      ".uno:Color",
-      ".uno:CharBackColor",
-      ".uno:BackgroundColor",
-      ".uno:CellVertTop",
-      ".uno:CellVertCenter",
-      ".uno:CellVertBottom",
-      ".uno:SetOutline",
-      ".uno:IncrementIndent",
-      ".uno:DecrementIndent",
-      ".uno:LineSpacing",
-      ".uno:Spacing",
-      ".uno:ParaspaceIncrease",
-      ".uno:ParaspaceDecrease",
-      ".uno:ParaLeftToRight",
-      ".uno:ParaRightToLeft",
-      ".uno:FontDialog",
-      ".uno:ParagraphDialog"
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DesignerDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleUpdateByExample"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StyleNewByExample"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditStyle"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FontHeight"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Grow" },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Shrink" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UnderlineDouble"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Strikeout"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Overline"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SuperScript"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SubScript"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Shadowed"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OutlineFont"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ResetAttributes"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToLower"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ChangeCaseToUpper"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SmallCaps"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Color" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CharBackColor"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BackgroundColor"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CellVertTop"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CellVertCenter"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CellVertBottom"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetOutline"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:IncrementIndent"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DecrementIndent"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:LineSpacing"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Spacing" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ParaspaceIncrease"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ParaspaceDecrease"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ParaLeftToRight"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ParaRightToLeft"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FontDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ParagraphDialog"
+      }
     ],
     "sw/uiconfig/swriter/toolbar/numobjectbar.xml": [
-      ".uno:DecrementSubLevels",
-      ".uno:IncrementSubLevels",
-      ".uno:MoveDown",
-      ".uno:MoveUp",
-      ".uno:MoveDownSubItems",
-      ".uno:MoveUpSubItems",
-      ".uno:InsertNeutralParagraph",
-      ".uno:NumberingStart",
-      ".uno:ContinueNumbering",
-      ".uno:JumpDownThisLevel",
-      ".uno:JumpUpThisLevel",
-      ".uno:SetOutline",
-      ".uno:OutlineBullet"
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DecrementSubLevels"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:IncrementSubLevels"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MoveDown"
+      },
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:MoveUp" },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MoveDownSubItems"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:MoveUpSubItems"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertNeutralParagraph"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberingStart"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ContinueNumbering"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:JumpDownThisLevel"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:JumpUpThisLevel"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SetOutline"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OutlineBullet"
+      }
     ],
     "sw/uiconfig/swriter/popupmenu/text.xml": [
-      ".uno:NoBreak",
-      ".uno:PasteSpecialMenu",
-      ".uno:PasteUnformatted",
-      ".uno:PasteSpecial",
-      ".uno:UpdateCurIndex",
-      ".uno:EditCurIndex",
-      ".uno:RemoveTableOf",
-      ".uno:UpdateSelectedField",
-      ".uno:ConvertSelectedField",
-      ".uno:FieldDialog",
-      ".uno:ContentControlProperties",
-      ".uno:DeleteContentControl",
-      ".uno:EditFootnote",
-      ".uno:IndexEntryDialog",
-      ".uno:AuthoritiesEntryDialog",
-      ".uno:FormatPaintbrush",
-      ".uno:ResetAttributes",
-      ".uno:CharacterMenu",
-      ".uno:FontDialog",
-      ".uno:DefaultCharStyle",
-      ".uno:EmphasisCharStyle",
-      ".uno:StrongEmphasisCharStyle",
-      ".uno:QuoteCharStyle",
-      ".uno:SourceCharStyle",
-      ".uno:ParagraphMenu",
-      ".uno:ParagraphDialog",
-      ".uno:TextBodyParaStyle",
-      ".uno:Heading1ParaStyle",
-      ".uno:Heading2ParaStyle",
-      ".uno:Heading3ParaStyle",
-      ".uno:QuotationsParStyle",
-      ".uno:PreformattedParaStyle",
-      ".uno:EditStyle",
-      ".uno:NumberingMenu",
-      ".uno:OutlineBullet",
-      ".uno:BulletListStyle",
-      ".uno:NumberListStyle",
-      ".uno:AlphaListStyle",
-      ".uno:AlphaLowListStyle",
-      ".uno:RomanListStyle",
-      ".uno:RomanLowListStyle",
-      ".uno:NumberingStart",
-      ".uno:ContinueNumbering",
-      ".uno:InsertAnnotation",
-      ".uno:AcceptTrackedChange",
-      ".uno:RejectTrackedChange",
-      ".uno:ReinstateTrackedChange",
-      ".uno:NextTrackedChange",
-      ".uno:PreviousTrackedChange",
-      ".uno:InsertHyperlink",
-      ".uno:OpenHyperlinkOnCursor",
-      ".uno:CopyHyperlinkLocation",
-      ".uno:OpenLocalURL",
-      ".uno:OpenSmartTagMenuOnCursor",
-      ".uno:ThesaurusFromContext",
-      ".uno:CurrentFootnoteDialog",
-      ".uno:EditCurrentRegion",
-      ".uno:PageDialog"
+      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:NoBreak" },
+      {
+        "classification": "X",
+        "context": [".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteUnformatted"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:PasteSpecialMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PasteSpecial"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:PasteSpecialMenu"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateCurIndex"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditCurIndex"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RemoveTableOf"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:UpdateSelectedField"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ConvertSelectedField"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FieldDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ContentControlProperties"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DeleteContentControl"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditFootnote"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:IndexEntryDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AuthoritiesEntryDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FormatPaintbrush"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ResetAttributes"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:FontDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:DefaultCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EmphasisCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:StrongEmphasisCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:QuoteCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:CharacterMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:SourceCharStyle"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:CharacterMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ParagraphDialog"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:TextBodyParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Heading1ParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Heading2ParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:Heading3ParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:QuotationsParStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PreformattedParaStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:ParagraphMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditStyle"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "menu",
+        "sourceUrl": ".uno:ParagraphMenu"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OutlineBullet"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:BulletListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AlphaListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AlphaLowListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RomanListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RomanLowListStyle"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NumberingStart"
+      },
+      {
+        "classification": "X",
+        "context": [".uno:NumberingMenu"],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ContinueNumbering"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertAnnotation"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:AcceptTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:RejectTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ReinstateTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:NextTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PreviousTrackedChange"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:InsertHyperlink"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenHyperlinkOnCursor"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CopyHyperlinkLocation"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenLocalURL"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:OpenSmartTagMenuOnCursor"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:ThesaurusFromContext"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:CurrentFootnoteDialog"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:EditCurrentRegion"
+      },
+      {
+        "classification": "X",
+        "context": [],
+        "entryKind": "command",
+        "sourceUrl": ".uno:PageDialog"
+      }
     ]
   }
 }

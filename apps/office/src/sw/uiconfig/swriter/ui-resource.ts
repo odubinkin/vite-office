@@ -14,12 +14,6 @@ export interface WriterSubmenuPlacement {
   readonly label: string;
 }
 
-/** Preserves a resource position whose feature is unavailable. */
-export interface WriterUnavailablePlacement {
-  readonly kind: "unavailable";
-  readonly label: string;
-}
-
 /** Separates adjacent command groups. */
 export interface WriterSeparatorPlacement {
   readonly kind: "separator";
@@ -27,10 +21,7 @@ export interface WriterSeparatorPlacement {
 
 /** All supported declarative menu item shapes. */
 export type WriterMenuItemPlacement =
-  | WriterCommandPlacement
-  | WriterSeparatorPlacement
-  | WriterSubmenuPlacement
-  | WriterUnavailablePlacement;
+  WriterCommandPlacement | WriterSeparatorPlacement | WriterSubmenuPlacement;
 
 /** Declares one top-level menu and its ordered items. */
 export interface WriterMenuPlacement {
@@ -45,3 +36,20 @@ export type WriterToolbarItemPlacement =
   | WriterSeparatorPlacement
   | Readonly<{ kind: "command-select"; label: string; options: readonly string[] }>
   | Readonly<{ commandId: string; kind: "font-select"; label: string }>;
+
+/** Removes separators orphaned when hidden or unsupported toolbar commands are filtered. @param items - Filtered placements. @returns Normalized placements. */
+export function normalizeWriterToolbarItems(
+  items: readonly WriterToolbarItemPlacement[],
+): readonly WriterToolbarItemPlacement[] {
+  const normalized: WriterToolbarItemPlacement[] = [];
+  for (const item of items) {
+    if (
+      item.kind === "separator" &&
+      (normalized.length === 0 || normalized.at(-1)?.kind === "separator")
+    )
+      continue;
+    normalized.push(item);
+  }
+  if (normalized.at(-1)?.kind === "separator") normalized.pop();
+  return normalized;
+}

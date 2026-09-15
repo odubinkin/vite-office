@@ -44,14 +44,14 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
   await page.getByRole("button", { name: "Insert" }).click();
   await expect(page.getByRole("menuitem", { name: "Hyperlink…" })).toBeVisible();
-  await page.getByRole("button", { name: "Table" }).click();
-  await expect(page.getByRole("menu", { name: "Table menu" })).toBeVisible();
-  await page.getByRole("button", { name: "Tools" }).click();
-  await expect(page.getByRole("menu", { name: "Tools menu" })).toBeVisible();
-  await page.getByRole("button", { name: "Window" }).click();
-  await expect(page.getByRole("menu", { name: "Window menu" })).toBeVisible();
-  await page.getByRole("button", { name: "Help" }).click();
-  await expect(page.getByRole("menu", { name: "Help menu" })).toBeVisible();
+  await expect(writerMenuBar.getByRole("button")).toHaveText([
+    "File",
+    "Edit",
+    "View",
+    "Insert",
+    "Format",
+    "Styles",
+  ]);
   await expect(page.getByRole("toolbar", { name: "Writer standard toolbar" })).toBeVisible();
   await expect(
     page
@@ -149,8 +149,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toContainText("Heading 1");
-  await page.getByRole("button", { name: "Format" }).click();
-  await page.getByRole("menuitem", { name: "Center" }).click();
+  await page.getByRole("button", { name: "Center" }).click();
   await expect(writerEditor).toHaveCSS("text-align", "center");
   await expect(page.getByRole("button", { name: "Center" })).toHaveAttribute(
     "aria-pressed",

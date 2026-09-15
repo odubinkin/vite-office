@@ -67,8 +67,8 @@
       "id": "writer.command-url.bold",
       "kind": "command-url",
       "local": {
-        "marker": "bold: \".uno:Bold\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"bold\": \".uno:Bold\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:Bold"
       },
       "upstream": {
@@ -82,8 +82,8 @@
       "id": "writer.command-url.copy",
       "kind": "command-url",
       "local": {
-        "marker": "copy: \".uno:Copy\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"copy\": \".uno:Copy\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:Copy"
       },
       "upstream": {
@@ -97,8 +97,8 @@
       "id": "writer.command-url.cut",
       "kind": "command-url",
       "local": {
-        "marker": "cut: \".uno:Cut\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"cut\": \".uno:Cut\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:Cut"
       },
       "upstream": {
@@ -112,8 +112,8 @@
       "id": "writer.command-url.italic",
       "kind": "command-url",
       "local": {
-        "marker": "italic: \".uno:Italic\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"italic\": \".uno:Italic\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:Italic"
       },
       "upstream": {
@@ -127,8 +127,8 @@
       "id": "writer.command-url.orderedList",
       "kind": "command-url",
       "local": {
-        "marker": "orderedList: \".uno:DefaultNumbering\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"orderedList\": \".uno:DefaultNumbering\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:DefaultNumbering"
       },
       "upstream": {
@@ -142,8 +142,8 @@
       "id": "writer.command-url.paste",
       "kind": "command-url",
       "local": {
-        "marker": "paste: \".uno:Paste\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"paste\": \".uno:Paste\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:Paste"
       },
       "upstream": {
@@ -157,8 +157,8 @@
       "id": "writer.command-url.redo",
       "kind": "command-url",
       "local": {
-        "marker": "redo: \".uno:Redo\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"redo\": \".uno:Redo\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:Redo"
       },
       "upstream": {
@@ -172,8 +172,8 @@
       "id": "writer.command-url.selectAll",
       "kind": "command-url",
       "local": {
-        "marker": "selectAll: \".uno:SelectAll\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"selectAll\": \".uno:SelectAll\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:SelectAll"
       },
       "upstream": {
@@ -187,8 +187,8 @@
       "id": "writer.command-url.underline",
       "kind": "command-url",
       "local": {
-        "marker": "underline: \".uno:Underline\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"underline\": \".uno:Underline\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:Underline"
       },
       "upstream": {
@@ -202,8 +202,8 @@
       "id": "writer.command-url.undo",
       "kind": "command-url",
       "local": {
-        "marker": "undo: \".uno:Undo\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"undo\": \".uno:Undo\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:Undo"
       },
       "upstream": {
@@ -217,8 +217,8 @@
       "id": "writer.command-url.unorderedList",
       "kind": "command-url",
       "local": {
-        "marker": "unorderedList: \".uno:DefaultBullet\"",
-        "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        "marker": "\"unorderedList\": \".uno:DefaultBullet\"",
+        "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
         "value": ".uno:DefaultBullet"
       },
       "upstream": {

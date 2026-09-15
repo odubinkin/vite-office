@@ -214,7 +214,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     fireEvent.click(screen.getByRole("button", { name: "Ordered List" }));
     fireEvent.click(screen.getByRole("button", { name: "Demote Outline Level" }));
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Promote Outline Level" }));
 
     enterText("Persistent session text");
@@ -254,7 +254,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     session.Close();
   });
 
-  it("creates, edits, removes, and undoes hyperlinks through upstream-aligned UI commands", /** Verifies the Insert menu/standard toolbar dialog and Edit commands share one ranged Writer attribute. @returns Nothing. */ function editsHyperlinks(): void {
+  it("creates, edits, removes, and undoes hyperlinks through upstream-aligned UI commands", /** Verifies generated placements and direct command execution share one ranged Writer attribute. @returns Completion after bindings reproject the model. */ async function editsHyperlinks(): Promise<void> {
     const session = createWriterDocumentSession(createServices());
     const shell = session.view.GetWrtShell();
     expect(shell.HandleInput("insertText", "Link")).toBe(true);
@@ -289,9 +289,11 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     fireEvent.click(screen.getByRole("button", { name: "Apply" }));
     expect(shell.GetActiveParagraph().runs[0]?.hyperlink?.url).toBe("https://example.test/updated");
 
-    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Remove Hyperlink" }));
-    expect(screen.queryByRole("link", { name: "Link" })).not.toBeInTheDocument();
+    session.view.Execute(WRITER_COMMAND_IDS.removeHyperlink);
+    await waitFor(
+      /** Waits for bindings invalidation to reproject the hyperlink-free model. @returns Assertion result. */ () =>
+        expect(screen.queryByRole("link", { name: "Link" })).not.toBeInTheDocument(),
+    );
     expect(shell.GetActiveParagraph().runs[0]?.hyperlink).toBeUndefined();
     expect(shell.Undo()).toBe(true);
     expect(shell.GetActiveParagraph().runs[0]?.hyperlink?.url).toBe("https://example.test/updated");

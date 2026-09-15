@@ -221,12 +221,6 @@ export function WriterMenuBar({
               key={`separator-${index}`}
             />
           );
-        if (item.kind === "unavailable")
-          return (
-            <span className="block px-3 py-2 text-sm text-slate-400" key={`unavailable-${index}`}>
-              {item.label}
-            </span>
-          );
         if (item.kind === "submenu") {
           const isOpen = openSubmenuId === item.id;
           return (
