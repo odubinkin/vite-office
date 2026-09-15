@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202609150900-RD8B9V",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T09:26:25.457Z",
+  "verdict": "pass",
+  "summary": "The replacement plan is complete, evidence-based, and executable against the pinned LibreOffice baseline.",
+  "evaluated_sha": "f352473f5368dc09ced950cd7cfd0c9b663b4afa",
+  "blueprint_digest": "5aa00cbcc04fdd718cc26ea1ecaf0f2cf14495930be60f0846fb30f3a20cd3d8",
+  "findings": [
+    "All 35 current Writer capabilities are individually inventoried; concrete contract, ownership, default, path, UI/DOM, persistence, and verification gaps are mapped to nine dependency-ordered phases with acceptance criteria and risk controls."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609150900-RD8B9V/README.md",
+    "docs/program/vite-office-upstream-parity-plan.md",
+    "npm test: 60/296 application and 32/84 inventory tests passed with 100% reported coverage",
+    "npm run format:check; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [
+    "The six non-Writer suites are launcher placeholders and remain outside implemented-module parity until separately approved."
+  ],
+  "residual_risks": [
+    "The plan identifies rather than fixes the P0 WhichId and command-contract defects; feature work should pause until Phase 0 and affected Phase 1 tasks close."
+  ]
+}
