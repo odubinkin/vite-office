@@ -654,14 +654,14 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           metadata(),
         ),
     ).toThrow("Unsupported ODF XML element");
-    for (const changed of [
-      styles.replace(/<style:style style:name="Standard"[\s\S]*?<\/style:style>/, ""),
-      styles.replace('style:parent-style-name="Standard"', 'style:parent-style-name="Other"'),
-    ])
-      expect(
-        /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-        () => importWriterXml(changed, content, metadata(), meta),
-      ).toThrow("ODF");
+    const withoutStandard = styles.replace(
+      /<style:style style:name="Standard"[\s\S]*?<\/style:style>/,
+      "",
+    );
+    expect(
+      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */ () =>
+        importWriterXml(withoutStandard, content, metadata(), meta),
+    ).toThrow("ODF");
     expect(
       importWriterXml(
         styles.replace(/<style:style style:name="Heading_20_1"[\s\S]*?<\/style:style>/, ""),

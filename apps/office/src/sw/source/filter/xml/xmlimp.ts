@@ -39,6 +39,7 @@ import {
   type XMLTextImportTarget,
   type XMLTextListRule,
 } from "../../../../xmloff/source/text/txtparai";
+import type { SwFormat } from "../../core/attr/format";
 import { SwDoc } from "../../core/doc/doc";
 import { SwNumFormat, SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -415,16 +416,11 @@ function applyNamedParagraphStyles(
     if (definition === undefined) continue;
     if (definition.family !== "paragraph")
       throw new Error(`ODF Writer ${poolStyle.name} paragraph style is invalid.`);
-    const expectedParent =
-      poolStyle.parentId === undefined ? undefined : getWriterOdfStyleName(poolStyle.parentId);
-    const legacyHeadingParent =
-      poolStyle.id === "heading-1" && definition.parentStyleName === "Standard";
-    if (definition.parentStyleName !== expectedParent && !legacyHeadingParent)
-      throw new Error(`ODF ${poolStyle.name} has an invalid parent style.`);
     const expectedNext = getWriterOdfStyleName(poolStyle.followId);
     if (definition.nextStyleName !== undefined && definition.nextStyleName !== expectedNext)
       throw new Error(`ODF ${poolStyle.name} has an invalid next style.`);
     const collection = document.GetTextFormatColl(poolStyle.id);
+    collection.SetDerivedFrom(undefined);
     if (definition.displayName !== undefined) collection.SetFormatName(definition.displayName);
     if (definition.alignment !== undefined)
       collection.SetFormatAttr(
@@ -437,6 +433,25 @@ function applyNamedParagraphStyles(
           collection.SetFormatAttr(item),
       );
   }
+  for (const poolStyle of WRITER_PARAGRAPH_STYLE_POOL) {
+    const definition = styles.get(getWriterOdfStyleName(poolStyle.id));
+    if (definition?.family !== "paragraph") continue;
+    const collection = document.GetTextFormatColl(poolStyle.id);
+    const parentId =
+      definition.parentStyleName === undefined
+        ? undefined
+        : getWriterStyleIdFromOdfName(definition.parentStyleName);
+    const parent = parentId === undefined ? undefined : document.GetTextFormatColl(parentId);
+    if (parent === collection || derivesFrom(parent, collection)) continue;
+    collection.SetDerivedFrom(parent);
+  }
+}
+
+/** Detects whether assigning a parent would form an inheritance cycle. @param format - Candidate parent. @param ancestor - Style that must not occur in the parent chain. @returns Whether the candidate derives from the style. */
+function derivesFrom(format: SwFormat | undefined, ancestor: SwFormat): boolean {
+  for (let current = format; current !== undefined; current = current.DerivedFrom())
+    if (current === ancestor) return true;
+  return false;
 }
 
 /** Converts ODF character deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @returns Nothing. */

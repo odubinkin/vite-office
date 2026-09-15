@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, RES_CHRATR_FONT } from "../../../inc/hintids";
 import { getWriterOdfStyleName, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
@@ -11,7 +12,96 @@ import { createWriterDocument } from "../../core/doc/writer";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
+/** Rebuilds an ODT after transforming its named-style stream. @param bytes - Source package. @param transform - styles.xml transform. @returns Rebuilt package. */
+async function rewriteStylesXml(
+  bytes: Uint8Array,
+  transform: (styles: string) => string,
+): Promise<Uint8Array> {
+  const input = new ZipFile(bytes);
+  const output = new ZipOutputStream();
+  for (const name of input.getEntryNames())
+    output.putNextEntry(
+      name,
+      name === "styles.xml"
+        ? new TextEncoder().encode(transform(await input.readTextEntry(name)))
+        : await input.readEntry(name),
+    );
+  return output.finish();
+}
+
 describe("Writer ODT font and style compatibility", /** Groups file compatibility tests. @returns Nothing. */ () => {
+  it("preserves LibreOffice-declared Title parents across export and import", /** Verifies named-style parent linkage follows the ODF declaration instead of the built-in pool default. @returns Nothing. */ async () => {
+    const writer = createWriterDocument("title-parent");
+    writer.GetTextFormatColl("title");
+    writer.GetTextFormatColl("subtitle");
+    const state = createDocument({ id: "title-parent", suiteId: "writer", title: "Title parent" });
+    const bytes = writeOdtDocument(writer, state);
+    const replaceTitleParent =
+      /** Replaces Title's declared parent. @param styles - Named-style XML. @param parent - Replacement ODF style name. @returns Updated XML. */ (
+        styles: string,
+        parent: string,
+      ): string =>
+        styles.replace(
+          /(<style:style style:name="Title"[^>]*style:parent-style-name=")[^"]+/,
+          `$1${parent}`,
+        );
+    const standardBytes = await rewriteStylesXml(
+      bytes,
+      /** Selects Standard as Title's parent. @param styles - Named-style XML. @returns Updated XML. */ (
+        styles,
+      ) => replaceTitleParent(styles, "Standard"),
+    );
+
+    const imported = await readOdtDocument(standardBytes, state);
+    expect(imported.document.GetTextFormatColl("title").DerivedFrom()).toBe(
+      imported.document.GetDfltTextFormatColl(),
+    );
+    const exported = new ZipFile(writeOdtDocument(imported.document, imported.documentState));
+    expect(await exported.readTextEntry("styles.xml")).toMatch(
+      /<style:style style:name="Title"[^>]*style:parent-style-name="Standard"/,
+    );
+    const reopened = await readOdtDocument(
+      writeOdtDocument(imported.document, imported.documentState),
+      state,
+    );
+    expect(reopened.document.GetTextFormatColl("title").DerivedFrom()).toBe(
+      reopened.document.GetDfltTextFormatColl(),
+    );
+
+    for (const parent of ["Missing", "Title"])
+      expect(
+        (
+          await readOdtDocument(
+            await rewriteStylesXml(
+              bytes,
+              /** Selects one invalid Title parent. @param styles - Named-style XML. @returns Updated XML. */ (
+                styles,
+              ) => replaceTitleParent(styles, parent),
+            ),
+            state,
+          )
+        ).document
+          .GetTextFormatColl("title")
+          .DerivedFrom(),
+      ).toBeUndefined();
+
+    const cycleBytes = await rewriteStylesXml(
+      bytes,
+      /** Creates a two-style inheritance cycle. @param styles - Named-style XML. @returns Updated XML. */ (
+        styles,
+      ) =>
+        replaceTitleParent(styles, "Subtitle").replace(
+          /(<style:style style:name="Subtitle"[^>]*style:parent-style-name=")[^"]+/,
+          "$1Title",
+        ),
+    );
+    const cycle = await readOdtDocument(cycleBytes, state);
+    expect(cycle.document.GetTextFormatColl("title").DerivedFrom()).toBe(
+      cycle.document.GetTextFormatColl("subtitle"),
+    );
+    expect(cycle.document.GetTextFormatColl("subtitle").DerivedFrom()).toBeUndefined();
+  });
+
   it("round-trips the complete LibreOffice paragraph-style hierarchy and font-face references", /** Verifies open-save-reopen semantics. @returns Nothing. */ async () => {
     const writer = createWriterDocument("all-styles");
     for (const style of WRITER_PARAGRAPH_STYLE_POOL) writer.GetTextFormatColl(style.id);

@@ -110,6 +110,12 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
           alignment: "left",
           runs: [{ properties: { ...plain, bold: true }, text: "reuse" }],
           style: "title",
+          styleName: "Title",
+        },
+        {
+          alignment: "center",
+          runs: [{ properties: plain, text: "legacy style name" }],
+          style: "title",
         },
         {
           alignment: "left",
@@ -118,10 +124,12 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
         },
       ]),
     );
-    expect(output.automaticStyles.match(/style:name="P/g)).toHaveLength(3);
+    expect(output.automaticStyles.match(/style:name="P/g)).toHaveLength(4);
     expect(output.automaticStyles.match(/style:name="T/g)).toHaveLength(2);
     expect(output.automaticStyles).toContain('fo:text-align="start"');
     expect(output.automaticStyles).toContain('fo:text-align="end"');
+    expect(output.automaticStyles).toContain('style:parent-style-name="Heading_20_1"');
+    expect(output.automaticStyles).toContain('style:parent-style-name="Title"');
     expect(output.automaticStyles).toContain('style:parent-style-name="title"');
     expect(output.body).toContain("&amp;");
     expect(output.body).toContain("&lt;");
