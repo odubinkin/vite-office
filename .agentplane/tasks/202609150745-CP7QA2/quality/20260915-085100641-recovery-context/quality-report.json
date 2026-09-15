@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202609150745-CP7QA2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T08:51:00.641Z",
+  "verdict": "pass",
+  "summary": "Writer ODT hyperlink support satisfies the approved upstream-parity scope and is ready to close.",
+  "evaluated_sha": "1339d90aa4ef03dc462c23e2fc9bd7cda3ceaeb7",
+  "blueprint_digest": "74f510faed0b2553a9084960a7cb5fe32f1f6542580c41d883783b294df84bd3",
+  "findings": [
+    "The implementation removes the text:a import failure, preserves hyperlink ranges and metadata through model edits and undo, exports valid text:a/xlink attributes, exposes upstream-aligned Insert/Edit/Remove UI and Ctrl/Cmd+K, and round-trips the copied upstream fixtures."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609150745-CP7QA2/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [
+    "none"
+  ],
+  "hidden_assumptions": [
+    "The pinned LibreOffice reference commit remains the parity authority for this task."
+  ],
+  "residual_risks": [
+    "ODF hyperlink constructs outside the documented supported metadata and nested inline formatting remain governed by the existing bounded-import policy."
+  ]
+}
