@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202609150024-9ZHZPC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T00:29:34.339Z",
+  "verdict": "pass",
+  "summary": "Unknown and context-unsupported ODF attributes now warn and are ignored without weakening structural or supported-value validation.",
+  "evaluated_sha": "e08eac7a5b2e0e658a7ebaeca2a4a30e3b6446e8",
+  "blueprint_digest": "6a4f67c9fd3a6a72ef1a374d633632a22c9279ebd954dca12f32e3e7eab2134c",
+  "findings": [
+    "Regression coverage verifies style:default-outline-level, arbitrary unknown attributes, and successful Writer import; the complete repository verification passes."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609150024-9ZHZPC/README.md",
+    "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+    "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
