@@ -11,6 +11,7 @@ import type { OdfStyleDefinition, XMLTextListRule } from "../text/txtparai";
 
 const ignoredStyleDefinitions = new Set([
   XMLToken.STYLE_DEFAULT_STYLE,
+  XMLToken.STYLE_DEFAULT_PAGE_LAYOUT,
   XMLToken.STYLE_PAGE_LAYOUT,
   XMLToken.TEXT_OUTLINE_STYLE,
   XMLToken.TEXT_LINENUMBERING_CONFIGURATION,

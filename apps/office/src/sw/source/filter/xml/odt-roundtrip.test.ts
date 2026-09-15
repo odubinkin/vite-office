@@ -90,6 +90,46 @@ function findZipSignature(bytes: Uint8Array, signature: number): number {
 }
 
 describe("Writer ODF XML filters" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
+  it("opens LibreOffice ODTs containing a default page layout", /** Verifies the upstream style container accepts the default page-layout subtree even though the bounded Writer model does not consume page properties. @returns Nothing. */ async () => {
+    const bytes = basicOdt();
+    const archive = new ZipFile(bytes);
+    const styles = (await archive.readTextEntry("styles.xml")).replace(
+      "<office:styles>",
+      "<office:styles><style:default-page-layout><style:page-layout-properties/></style:default-page-layout>",
+    );
+
+    const imported = await readOdtDocument(
+      await rewritePackage(bytes, { "styles.xml": styles }),
+      metadata(),
+    );
+
+    expect(imported.document.paragraphs).toHaveLength(1);
+  });
+
+  it("opens ODTs containing unknown extension subtrees", /** Verifies upstream-compatible unknown children are diagnosed and skipped without importing their descendants. @returns Nothing. */ async () => {
+    const bytes = basicOdt();
+    const archive = new ZipFile(bytes);
+    const styles = (await archive.readTextEntry("styles.xml")).replace(
+      "<office:styles>",
+      '<office:styles><foreign:extension xmlns:foreign="urn:foreign"><style:style style:name="Standard" style:family="paragraph"/></foreign:extension>',
+    );
+    const warn = vi
+      .spyOn(console, "warn")
+      .mockImplementation(
+        /** Suppresses the expected diagnostic. @returns Nothing. */ () => undefined,
+      );
+    try {
+      const imported = await readOdtDocument(
+        await rewritePackage(bytes, { "styles.xml": styles }),
+        metadata(),
+      );
+      expect(imported.document.paragraphs).toHaveLength(1);
+      expect(warn).toHaveBeenCalledWith("Unknown ODF element ignored: foreign:extension");
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
   it("writes deterministic ODF 1.3 packages and restores canonical formatting" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
     const writer = createWriterDocument("source-1");
     writer.GetDfltTextFormatColl().SetFormatName("Body < text");

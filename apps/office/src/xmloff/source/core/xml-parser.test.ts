@@ -89,6 +89,31 @@ describe("ODF fast SAX parser", /** Groups fast parser tests. @returns Nothing. 
     });
   });
 
+  it("logs and ignores undeclared unknown child subtrees", /** Matches upstream's non-fatal unknown-child context fallback. @returns Nothing. */ () => {
+    const events: string[] = [];
+    const warn = vi
+      .spyOn(console, "warn")
+      .mockImplementation(
+        /** Suppresses the expected diagnostic. @returns Nothing. */ () => undefined,
+      );
+    try {
+      parseOdfXmlStream(
+        `<office:text xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:foreign="urn:foreign"><foreign:extension><text:p>hidden</text:p></foreign:extension><text:p>visible</text:p></office:text>`,
+        recordingImport(events),
+      );
+      expect(warn).toHaveBeenCalledWith("Unknown ODF element ignored: foreign:extension");
+      expect(events).toEqual([
+        `start:${XMLToken.OFFICE_TEXT}:`,
+        `start:${XMLToken.TEXT_P}:`,
+        "text:visible",
+        `end:${XMLToken.TEXT_P}`,
+        `end:${XMLToken.OFFICE_TEXT}`,
+      ]);
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
   it("provides inert base hooks and rejects undeclared known children", /** Covers the default context contract. @returns Nothing. */ () => {
     const context = new InertContext();
     const attributes = new FastAttributeList([]);

@@ -185,7 +185,13 @@ export function parseOdfXmlStream(
           : token === XMLToken.UNKNOWN
             ? parent.context.createUnknownChildContext(tag.uri, tag.local, fastAttributes)
             : parent.context.createFastChildContext(token, fastAttributes);
-      if (context === null) throw new Error(`Unsupported ODF XML element: ${tag.name}`);
+      if (context === null) {
+        if (parent === undefined || token !== XMLToken.UNKNOWN)
+          throw new Error(`Unsupported ODF XML element: ${tag.name}`);
+        console.warn(`Unknown ODF element ignored: ${tag.name}`);
+        stack.push({ context: new SvXMLIgnoreContext(), token });
+        return;
+      }
       stack.push({ context, token });
       context.startFastElement(token, fastAttributes);
     },
