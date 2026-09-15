@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609151717-Z8ZB8Z",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T17:34:00.032Z",
+  "verdict": "pass",
+  "summary": "Phase 7 implementation matches the approved filter, persistence, recovery, and ODT evidence scope.",
+  "evaluated_sha": "aa5f1c7df1784a03d09e03a1ee2ccbd076ebc52a",
+  "blueprint_digest": "bd9e4edb0798b69a7f11dd9b15b3ea852b723c5d6d7e63e0f44e97e26f07d521",
+  "findings": [
+    "ODT filter transport no longer carries lifecycle snapshots; browser storage is current-only and baseline-identified; recovery failure modes and pinned fixture reopen behavior are covered."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609151717-Z8ZB8Z/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
