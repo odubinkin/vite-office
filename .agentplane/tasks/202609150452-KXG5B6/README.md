@@ -1,10 +1,11 @@
 ---
 id: "202609150452-KXG5B6"
 title: "Preserve LibreOffice ODF bullet characters"
-status: "DOING"
+result_summary: "verified-202609150452-KXG5B6"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T05:02:26.309Z"
+  updated_at: "2026-09-15T05:03:07.066Z"
   updated_by: "CODER"
   note: "verified-202609150452-KXG5B6"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run test:coverage: 59 files, 282 tests, 100% coverage; npm run lint; npm run typecheck; node .agentplane/policy/check-routing.mjs"
   findings:
     - "U+25CF imports, renders from SwNumFormat, persists in snapshots, and round-trips through ODT; missing and multi-code-point invalid states remain guarded."
-commit: null
+commit:
+  hash: "237d1dff11966b1b41c3af491f9033e1465b9945"
+  message: "🧪 KXG5B6 task: persist verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609150452-KXG5B6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609150452-KXG5B6"
+  -
+    type: "verify"
+    at: "2026-09-15T05:03:07.066Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609150452-KXG5B6"
+  -
+    type: "status"
+    at: "2026-09-15T05:03:07.253Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609150452-KXG5B6. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T05:02:26.386Z"
+doc_updated_at: "2026-09-15T05:03:07.254Z"
 doc_updated_by: "CODER"
 description: "Align Writer ODT list-style import and round-trip behavior with pinned LibreOffice upstream so documents using U+25CF and other valid bullet characters open without rejection."
 sections:
@@ -143,12 +162,46 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-15T05:03:07.066Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609150452-KXG5B6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T05:02:26.386Z, excerpt_hash=sha256:3e83e56c40e23d860bed26b500a985def8ac2453b13f6622df5c95e40e76f24c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150452-KXG5B6/blueprint/resolved-snapshot.json
+    - old_digest: ad07eac8a44f17d7db5598fc8fa94f781d8e9fcc66b7df033e4154189f12a058
+    - current_digest: ad07eac8a44f17d7db5598fc8fa94f781d8e9fcc66b7df033e4154189f12a058
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609150452-KXG5B6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609150452-KXG5B6 --result verified-202609150452-KXG5B6 --commit 237d1dff11966b1b41c3af491f9033e1465b9945
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation commit and Agentplane close commit; no data migration or external state is involved."
   Findings: |-
     - Observation: The originally declared focused npm command used repository-root test paths after npm changed cwd to apps/office, so Vitest found no files.
       Impact: No implementation test executed in that invocation; it was a command-path issue, not a product failure.
       Resolution: Ran the same three focused tests with workspace-relative paths (19/19 pass), then ran the complete coverage suite (282/282 pass at 100%).
+extensions:
+  implementation_commit:
+    hash: "a3165f81ebaee26425d5b2702277a035eeed1566"
+    message: "🐛 KXG5B6 code: preserve ODF bullet characters"
 id_source: "generated"
 ---
 ## Summary
@@ -231,6 +284,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609150452-KXG5B6 --result verified-202609150452-KXG5B6 --commit a3165f81ebaee26425d5b2702277a035eeed1566
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T05:03:07.066Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609150452-KXG5B6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T05:02:26.386Z, excerpt_hash=sha256:3e83e56c40e23d860bed26b500a985def8ac2453b13f6622df5c95e40e76f24c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150452-KXG5B6/blueprint/resolved-snapshot.json
+- old_digest: ad07eac8a44f17d7db5598fc8fa94f781d8e9fcc66b7df033e4154189f12a058
+- current_digest: ad07eac8a44f17d7db5598fc8fa94f781d8e9fcc66b7df033e4154189f12a058
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609150452-KXG5B6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609150452-KXG5B6 --result verified-202609150452-KXG5B6 --commit 237d1dff11966b1b41c3af491f9033e1465b9945
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
