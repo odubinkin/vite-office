@@ -22,20 +22,24 @@ import {
   createDownloadFilename,
 } from "../../../vcl/browser/browser-download";
 import { createBrowserDocumentOpenPort } from "../../../vcl/browser/browser-file";
+import { createBrowserDefaultFontDevice } from "../../../vcl/browser/default-font-device";
 import {
   IndexedDbDocumentStorageAdapter,
   IndexedDbRecoveryStorageAdapter,
 } from "../../../vcl/browser/indexeddb-storage";
-import type { WriterSnapshotState } from "../persistence/writer-storage";
+import type { WriterSnapshotState } from "../../source/filter/basflt/writer-storage";
 import {
   createInlineOdtFilterService,
   type OdtFilterService,
 } from "../../source/filter/xml/odt-filter-service";
-import { createBrowserOdtFilterService } from "../../source/filter/xml/odt-worker-client";
+import { createBrowserOdtFilterService } from "../filter/xml/odt-worker-client";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterRecoveryPrompt } from "../presentation/WriterRecoveryPrompt";
-import { createWriterViewControllerFactory } from "../workflows/writer-workflows";
-import { SwView, type WriterSessionServices } from "../../source/uibase/uiview/view";
+import {
+  createWriterViewControllerFactory,
+  type WriterSessionServices,
+} from "../workflows/writer-workflows";
+import { SwView } from "../../source/uibase/uiview/view";
 import { createWriterWorkbenchDocument } from "../../source/uibase/uiview/viewfunc";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 
@@ -97,7 +101,10 @@ export function createWriterDocumentSession(
     title: "Untitled Writer Document",
   });
   const docShell = new SwDocShell(
-    createWriterWorkbenchDocument(),
+    createWriterWorkbenchDocument({
+      defaultFontDevice: createBrowserDefaultFontDevice(globalThis.document),
+      locale: globalThis.navigator?.language ?? "en-US",
+    }),
     documentState,
     { kind: "untitled", name: "Untitled Writer Document" },
     odtFilter,

@@ -44,3 +44,13 @@ export function getWriterFontScript(language: string): WriterFontScript {
   if (["zh", "ja", "ko"].includes(primary)) return "cjk";
   return "western";
 }
+
+/** Selects the language used for one script-specific default slot. @param documentLocale - Document locale. @param script - Requested Writer script. @returns Locale for default-font lookup. */
+export function getWriterDefaultFontLanguage(
+  documentLocale: string,
+  script: WriterFontScript,
+): string {
+  return getWriterFontScript(documentLocale) === script
+    ? documentLocale
+    : { cjk: "zh-CN", ctl: "ar-SA", western: "en-US" }[script];
+}

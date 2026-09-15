@@ -4,23 +4,35 @@
  */
 
 import type { PrimarySavePort, StoredDocumentOpenPort } from "../../../sfx2/source/doc/docfile";
+import type { AutoRecoveryEnvironment } from "../../../framework/source/services/autorecovery";
+import type { RecoverySavePort } from "../../../svl/source/misc/recovery";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../vcl/browser/browser-clipboard";
-import type { WriterSnapshotState } from "../persistence/writer-storage";
-import {
-  parseWriterClipboardPaste,
-  type WriterClipboardPaste,
-} from "../../source/filter/html/swhtml";
+import type { WriterSnapshotState } from "../../source/filter/basflt/writer-storage";
+import { parseWriterClipboardPaste, type WriterClipboardPaste } from "../filter/html/swhtml";
 import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import type {
   WriterCutCommandArguments,
   WriterPasteCommandArguments,
-  WriterSessionServices,
   WriterViewControllerFactory,
 } from "../../source/uibase/uiview/view";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
 import { SwViewOption } from "../../inc/viewopt";
+import { WriterViewProjection } from "../presentation/writer-view-projection";
+
+/** Browser capabilities injected by the Writer module composition root. */
+export interface WriterSessionServices {
+  readonly copyRichText: (selection: WriterClipboardSelection) => Promise<void>;
+  readonly documentOpen: DocumentOpenPort;
+  readonly documentExport: DocumentExportPort;
+  readonly createDownloadFilename: (title: string, extension: string) => string;
+  readonly readRichClipboard: () => Promise<RichClipboardPayload>;
+  readonly primarySave?: PrimarySavePort<WriterSnapshotState>;
+  readonly storedDocumentOpen?: StoredDocumentOpenPort<WriterSnapshotState>;
+  readonly recoverySave?: RecoverySavePort<WriterSnapshotState>;
+  readonly recoveryEnvironment?: AutoRecoveryEnvironment;
+}
 
 /** Explicit platform failure retained by Sfx command completion state. */
 export class WriterPlatformError extends Error {
@@ -140,7 +152,6 @@ export class WriterClipboardWorkflowController {
   /** Inserts native or asynchronously read clipboard content. @param arguments_ - Adapted Paste request. @returns Completion after insertion. */
   public async Paste(arguments_?: unknown): Promise<void> {
     const request = arguments_ as WriterPasteCommandArguments | undefined;
-    const target = this.wrtShell.GetCursorSelection();
     let paste: WriterClipboardPaste;
     if (request?.paste !== undefined) paste = request.paste;
     else if (request?.clipboardHandled === true) {
@@ -156,7 +167,7 @@ export class WriterClipboardWorkflowController {
         throw new WriterPlatformError("clipboard-empty", "Clipboard has no text to paste.");
       paste = parsed;
     }
-    this.wrtShell.Paste(target, paste);
+    this.wrtShell.PasteAtCursor(paste);
   }
 }
 
@@ -173,6 +184,7 @@ export function createWriterViewControllerFactory(
           clipboardWorkflow: new WriterClipboardWorkflowController(wrtShell, ports),
           fileWorkflow: new WriterFileWorkflowController(docShell, ports),
           localStorageWorkflow: new WriterLocalStorageController(docShell, ports),
+          presentationProjector: new WriterViewProjection(),
         };
       },
   };

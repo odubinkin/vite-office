@@ -3,6 +3,7 @@
 import type { DocumentStateManager } from "./DocumentStateManager";
 import { SwNumRule } from "./number";
 import { SwList } from "./list";
+import type { SwTextNode } from "../txtnode/ndtxt";
 
 /** Owns the numbering-rule table required by the supported Writer slice. */
 export class DocumentListsManager {
@@ -72,21 +73,16 @@ export class DocumentListsManager {
   }
 
   /** Registers a text node after an ODF/persistence item-set restore. @param node - List-capable canonical node. @returns Nothing. */
-  public RegisterListItem(node: {
-    readonly id: string;
-    GetAttrListLevel(): number;
-    GetListId(): string;
-    GetNumRuleName(): string;
-  }): void {
+  public RegisterListItem(node: SwTextNode): void {
     const ruleName = node.GetNumRuleName();
     const listId = node.GetListId();
     if (ruleName.length === 0 || listId.length === 0) return;
-    this.CreateList(ruleName, listId).InsertListItem(node.id, node.GetAttrListLevel());
+    this.CreateList(ruleName, listId).InsertListItem(node);
   }
 
   /** Removes a text node from its current document list. @param nodeId - Canonical text-node id. @param listId - Current list identity. @returns Nothing. */
-  public UnregisterListItem(nodeId: string, listId: string): void {
-    if (listId.length > 0) this.GetListByName(listId)?.RemoveListItem(nodeId);
+  public UnregisterListItem(node: SwTextNode, listId: string): void {
+    if (listId.length > 0) this.GetListByName(listId)?.RemoveListItem(node);
   }
 
   /** Invalidates every list after canonical node ordering changes. @returns Nothing. */

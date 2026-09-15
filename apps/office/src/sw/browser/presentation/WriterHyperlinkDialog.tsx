@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import type { WriterHyperlink } from "../../source/core/txtnode/fmtinfmt";
 
 /** Hyperlink dialog properties. */
@@ -17,6 +18,8 @@ export function WriterHyperlinkDialog({
   onCancel,
   onSubmit,
 }: WriterHyperlinkDialogProps): React.JSX.Element {
+  const localization = useBrowserLocalization();
+  const title = localization.GetText("writer.hyperlink.title", "Hyperlink");
   const [url, setUrl] = useState(initialHyperlink?.url ?? "");
   const [text, setText] = useState("");
   const [targetFrame, setTargetFrame] = useState(initialHyperlink?.targetFrame ?? "");
@@ -28,7 +31,7 @@ export function WriterHyperlinkDialog({
   );
   return (
     <div
-      aria-label="Hyperlink"
+      aria-label={title}
       aria-modal="true"
       className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4"
       role="dialog"
@@ -55,10 +58,10 @@ export function WriterHyperlinkDialog({
           }
         }
       >
-        <h2 className="text-lg font-bold text-slate-950">Hyperlink</h2>
+        <h2 className="text-lg font-bold text-slate-950">{title}</h2>
         <div className="mt-4 grid gap-4">
           <label className="grid gap-1 text-sm font-semibold text-slate-700">
-            URL
+            {localization.GetText("writer.hyperlink.url", "URL")}
             <input
               className="rounded-md border border-slate-300 px-3 py-2 font-normal"
               id="writer-hyperlink-url"
@@ -74,20 +77,23 @@ export function WriterHyperlinkDialog({
           </label>
           {initialHyperlink === undefined ? (
             <label className="grid gap-1 text-sm font-semibold text-slate-700">
-              Text
+              {localization.GetText("writer.hyperlink.text", "Text")}
               <input
                 className="rounded-md border border-slate-300 px-3 py-2 font-normal"
                 onChange={
                   /** Updates optional inserted text. @param event - Input change. @returns Nothing. */
                   (event) => setText(event.target.value)
                 }
-                placeholder="Uses the URL when empty"
+                placeholder={localization.GetText(
+                  "writer.hyperlink.text-placeholder",
+                  "Uses the URL when empty",
+                )}
                 value={text}
               />
             </label>
           ) : null}
           <label className="grid gap-1 text-sm font-semibold text-slate-700">
-            Target
+            {localization.GetText("writer.hyperlink.target", "Target")}
             <select
               className="rounded-md border border-slate-300 px-3 py-2 font-normal"
               onChange={
@@ -96,9 +102,15 @@ export function WriterHyperlinkDialog({
               }
               value={targetFrame}
             >
-              <option value="">Current frame</option>
-              <option value="_blank">New window</option>
-              <option value="_self">Same frame</option>
+              <option value="">
+                {localization.GetText("writer.hyperlink.target-current", "Current frame")}
+              </option>
+              <option value="_blank">
+                {localization.GetText("writer.hyperlink.target-new", "New window")}
+              </option>
+              <option value="_self">
+                {localization.GetText("writer.hyperlink.target-same", "Same frame")}
+              </option>
             </select>
           </label>
         </div>
@@ -108,13 +120,13 @@ export function WriterHyperlinkDialog({
             onClick={onCancel}
             type="button"
           >
-            Cancel
+            {localization.GetText("writer.common.cancel", "Cancel")}
           </button>
           <button
             className="rounded-md bg-indigo-700 px-4 py-2 text-sm font-semibold text-white"
             type="submit"
           >
-            Apply
+            {localization.GetText("writer.common.apply", "Apply")}
           </button>
         </div>
       </form>

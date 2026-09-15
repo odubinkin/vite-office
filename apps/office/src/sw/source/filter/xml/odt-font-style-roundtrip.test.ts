@@ -9,7 +9,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, RES_CHRATR_FONT } from "../../../inc/hintids";
 import { getWriterOdfStyleName, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { createWriterDocument } from "../../core/doc/doc";
-import { encodeWriterDocument } from "../../../browser/persistence/writer-document-codec";
+import { encodeWriterDocument } from "../basflt/writer-document-codec";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 

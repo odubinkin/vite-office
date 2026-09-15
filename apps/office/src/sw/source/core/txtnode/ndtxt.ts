@@ -3,11 +3,13 @@
  */
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
-import { SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_PARATR_ADJUST,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
+  RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
 } from "../../../inc/hintids";
 import {
@@ -499,9 +501,15 @@ export class SwTextNode extends SwContentNode {
     const rule = this.GetNumRule();
     if (rule === undefined) return createDefaultWriterParagraphList();
     const level = this.GetAttrListLevel();
-    return rule.IsAutoRule()
-      ? { kind: rule.GetNumFormat(level).GetKind(), level }
-      : { kind: rule.GetNumFormat(level).GetKind(), level, styleId: ruleName };
+    const restart = this.IsListRestart();
+    const startValue = this.HasAttrListRestartValue() ? this.GetAttrListRestartValue() : undefined;
+    return {
+      kind: rule.GetNumFormat(level).GetKind(),
+      level,
+      ...(rule.IsAutoRule() ? {} : { styleId: ruleName }),
+      ...(restart ? { restart: true } : {}),
+      ...(startValue === undefined ? {} : { startValue }),
+    };
   }
 
   /** Returns the SwNumRuleItem value applied to this text node. @returns Rule name, or an empty string. */
@@ -526,6 +534,45 @@ export class SwTextNode extends SwContentNode {
       throw new Error(`Writer list level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
     if (level === 0) this.ResetAttr(RES_PARATR_LIST_LEVEL);
     else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, level));
+  }
+
+  /** Sets Writer's direct list restart attributes. @param restart - Whether this item restarts. @param value - Optional explicit start value. @returns Nothing. */
+  public SetListRestart(restart: boolean, value?: number): void {
+    if (!restart) {
+      this.ResetAttr(RES_PARATR_LIST_ISRESTART);
+      this.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
+      return;
+    }
+    this.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISRESTART, true));
+    if (value === undefined) this.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
+    else {
+      if (!Number.isInteger(value) || value < 0 || value > 32_767)
+        throw new Error("Writer list restart value is outside the supported range.");
+      this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, value));
+    }
+  }
+
+  /** Reports Writer's list restart flag. @returns Restart state. */
+  public IsListRestart(): boolean {
+    return (this.GetAttr(RES_PARATR_LIST_ISRESTART) as SfxBoolItem).GetValue();
+  }
+
+  /** Reports whether an explicit restart value is directly set. @returns Direct-value state. */
+  public HasAttrListRestartValue(): boolean {
+    return this.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_LIST_RESTARTVALUE, false) !== undefined;
+  }
+
+  /** Returns the direct list restart value. @returns Explicit value. */
+  public GetAttrListRestartValue(): number {
+    if (!this.HasAttrListRestartValue()) throw new Error("Writer list restart value is not set.");
+    return (this.GetAttr(RES_PARATR_LIST_RESTARTVALUE, false) as SfxInt16Item).GetValue();
+  }
+
+  /** Returns the explicit or format-defined list start value. @returns Effective start. */
+  public GetActualListStartValue(): number {
+    if (this.IsListRestart() && this.HasAttrListRestartValue())
+      return this.GetAttrListRestartValue();
+    return this.GetNumRule()?.GetNumFormat(this.GetAttrListLevel()).GetStart() ?? 1;
   }
 
   /** Returns RES_PARATR_LIST_ID, falling back to the rule's default list id like Writer. @returns Effective list identity. */
@@ -567,12 +614,10 @@ export class SwTextNode extends SwContentNode {
   public SetParagraphList(list: WriterParagraphList): void {
     const previousListId = this.GetListId();
     if (previousListId.length > 0)
-      this.GetDoc()
-        .GetDocumentListsManager()
-        .GetListByName(previousListId)
-        ?.RemoveListItem(this.id);
+      this.GetDoc().GetDocumentListsManager().GetListByName(previousListId)?.RemoveListItem(this);
     const normalized = normalizeWriterParagraphList(list);
     if (normalized.kind === "none") {
+      this.SetListRestart(false);
       this.SetNumRule("");
       if (normalized.styleId === undefined) this.ResetAttr(RES_PARATR_LIST_ID);
       else this.SetListId(normalized.styleId);
@@ -617,7 +662,8 @@ export class SwTextNode extends SwContentNode {
         : documentLists.CreateList(rule.GetName(), continuedListId);
     this.SetListId(documentList.GetListId());
     this.SetAttrListLevel(normalized.level);
-    documentList.InsertListItem(this.id, normalized.level);
+    this.SetListRestart(normalized.restart === true, normalized.startValue);
+    documentList.InsertListItem(this, normalized.level);
   }
 
   /** Captures list items including internal automatic identities for exact undo/redo. @returns Complete list state. */
@@ -635,14 +681,8 @@ export class SwTextNode extends SwContentNode {
     if (listId.length === 0) return undefined;
     const list = this.GetDoc().GetDocumentListsManager().GetListByName(listId);
     if (list === undefined) return undefined;
-    list.ValidateListTree(
-      this.GetDoc().paragraphs.map(
-        /** Projects one canonical identity for tree ordering. @param node - Body node. @returns Node id. */ (
-          node,
-        ) => node.id,
-      ),
-    );
-    return list.GetListItemNumber(this.id);
+    list.ValidateListTree(this.GetDoc().paragraphs);
+    return list.GetListItemNumber(this);
   }
 
   /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @param hyperlink - Optional inherited hyperlink. @returns Inserted text. */

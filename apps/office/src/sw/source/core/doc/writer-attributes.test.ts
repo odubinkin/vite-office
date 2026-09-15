@@ -1,13 +1,13 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
 
 import { describe, expect, it } from "vitest";
-import { encodeSfxItemSet, encodeSfxPoolItem } from "../../../browser/persistence/item-codec";
+import { encodeSfxItemSet, encodeSfxPoolItem } from "../../filter/basflt/item-codec";
 import {
   decodeWriterDocument,
   decodeWriterDocument as normalizeWriterParagraphFormatting,
   encodeWriterDocument,
   encodeWriterDocument as serializeWriterDocument,
-} from "../../../browser/persistence/writer-document-codec";
+} from "../../filter/basflt/writer-document-codec";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
@@ -20,14 +20,17 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
-import { SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_PARATR_ADJUST,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_ISCOUNTED,
+  RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_LEVEL,
+  RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
   RES_CHRATR_FONT,
   WRITER_TEXT_NODE_WHICH_RANGES,
@@ -80,6 +83,15 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
       which: RES_CHRATR_FONT,
     });
     expect(pool.CreateItem(encodeSfxPoolItem(font))).toEqual(font);
+    expect(pool.CreateItem({ value: true, which: RES_PARATR_LIST_ISRESTART })).toEqual(
+      new SfxBoolItem(RES_PARATR_LIST_ISRESTART, true),
+    );
+    expect(pool.CreateItem({ value: 6, which: RES_PARATR_LIST_RESTARTVALUE })).toEqual(
+      new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, 6),
+    );
+    expect(pool.CreateItem({ value: false, which: RES_PARATR_LIST_ISCOUNTED })).toEqual(
+      new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, false),
+    );
     expect(
       /** Rejects a blank font. @returns Invalid item. */ () => new SvxFontItem(" ", 1),
     ).toThrow("invalid");
@@ -373,7 +385,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 9 });
+    expect(snapshot).toMatchObject({ swModelVersion: 10 });
     expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", runs: [] });
     expect(snapshot.textNodes[0]).not.toHaveProperty("alignment");
     const restored = normalizeWriterParagraphFormatting(snapshot);

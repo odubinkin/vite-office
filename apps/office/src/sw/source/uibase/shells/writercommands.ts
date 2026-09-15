@@ -19,12 +19,24 @@ import {
 import { getWriterSlotId } from "../../../sdi/swriter";
 import { getWriterCommandResource } from "../../../uiconfig/swriter/writer-command-resources";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
+import { SfxUnoAnyItem, type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 
 /** Writer shell handler before generated resource and slot metadata are attached. */
 type WriterCommandHandlerDefinition<Context> = Omit<
   CommandDefinition<Context>,
   "label" | "shortcut" | "shortcuts" | "slotId"
 >;
+
+/** Reads the UNO Any item installed by the presentation/dispatch boundary. @param arguments_ - SfxRequest item arguments. @returns Typed boundary value when present. */
+function getWriterCommandArguments<Value>(arguments_: unknown): Value | undefined {
+  /* v8 ignore next -- SfxDispatcher always supplies the SfxRequest item array. */
+  if (!Array.isArray(arguments_)) return undefined;
+  const item = (arguments_ as readonly SfxPoolItem[]).find(
+    /** Finds the Any item that carries a structured UNO argument. @param candidate - Request item. @returns Whether this is an Any item. */
+    (candidate): candidate is SfxUnoAnyItem => candidate instanceof SfxUnoAnyItem,
+  );
+  return item?.GetValue() as Value | undefined;
+}
 
 /** Adds the generated numeric slot identity to Writer shell descriptors. @param commands - Handler descriptors. @returns Validated command registry. */
 function createWriterCommandRegistry<Context>(
@@ -74,6 +86,7 @@ export interface WriterTextCommandTarget {
     style: string;
   }>;
   readonly GetCharacterFormatState: (format: WriterCharacterFormat) => "mixed" | "off" | "on";
+  readonly GetDefaultFontFamily: () => string;
   readonly GetHyperlinkAtCursor: () => WriterHyperlink | undefined;
   readonly GetPendingCharacterAttributes: () => Readonly<{
     bold: boolean;
@@ -136,7 +149,7 @@ export function createWriterTextCommandRegistry(
       execute: (_context: WriterTextCommandTarget, arguments_: unknown): boolean =>
         target.ToggleCharacterFormat(
           format,
-          (arguments_ as WriterCharacterCommandArguments | undefined)?.range,
+          getWriterCommandArguments<WriterCharacterCommandArguments>(arguments_)?.range,
         ),
       id,
       invalidates: ["document", "history", "selection"],
@@ -177,7 +190,7 @@ export function createWriterTextCommandRegistry(
       capabilityId: "CAP-0135",
       /** Applies dialog hyperlink data to the current selection or caret. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether content changed. */
       execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
-        const args = arguments_ as WriterHyperlinkCommandArguments | undefined;
+        const args = getWriterCommandArguments<WriterHyperlinkCommandArguments>(arguments_);
         if (args?.hyperlink !== undefined)
           return target.SetHyperlink(args.hyperlink, args.text, args.range);
         return dialogController
@@ -200,7 +213,7 @@ export function createWriterTextCommandRegistry(
       capabilityId: "CAP-0135",
       /** Replaces the current hyperlink using dialog data. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether changed. */
       execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
-        const args = arguments_ as WriterHyperlinkCommandArguments | undefined;
+        const args = getWriterCommandArguments<WriterHyperlinkCommandArguments>(arguments_);
         if (args?.hyperlink !== undefined)
           return target.SetHyperlink(args.hyperlink, undefined, args.range);
         return dialogController
@@ -235,12 +248,12 @@ export function createWriterTextCommandRegistry(
       capabilityId: "CAP-0109",
       /** Applies a selected font. @param _context - Bound shell. @param arguments_ - Font arguments. @returns Whether changed. */
       execute: (_context, arguments_: unknown): boolean => {
-        const args = arguments_ as WriterCharacterCommandArguments | undefined;
+        const args = getWriterCommandArguments<WriterCharacterCommandArguments>(arguments_);
         return args?.fontFamily === undefined ? false : target.SetFontFamily(args.fontFamily);
       },
       /** Reads the caret font. @returns Current family. */
       getStateValue: (): string =>
-        target.GetPendingCharacterAttributes().fontFamily ?? "Liberation Serif",
+        target.GetPendingCharacterAttributes().fontFamily ?? target.GetDefaultFontFamily(),
       id: WRITER_COMMAND_IDS.fontName,
       invalidates: ["document", "history", "selection"],
       target: "shell",
@@ -375,7 +388,8 @@ export function createWriterViewCommandRegistry(
     {
       capabilityId: "CAP-0106",
       /** Copies DOM-adapted selection data. @param _context - Bound view context. @param arguments_ - Selection arguments. @returns Clipboard completion. */
-      execute: (_context, arguments_): Promise<void> => target.Copy(arguments_),
+      execute: (_context, arguments_): Promise<void> =>
+        target.Copy(getWriterCommandArguments<unknown>(arguments_)),
       id: WRITER_COMMAND_IDS.copy,
       invalidates: ["lifecycle"],
       target: "view",
@@ -384,7 +398,8 @@ export function createWriterViewCommandRegistry(
     {
       capabilityId: "CAP-0110",
       /** Cuts DOM-adapted selection data. @param _context - Bound view context. @param arguments_ - Cut arguments. @returns Clipboard completion. */
-      execute: (_context, arguments_): Promise<void> => target.Cut(arguments_),
+      execute: (_context, arguments_): Promise<void> =>
+        target.Cut(getWriterCommandArguments<unknown>(arguments_)),
       id: WRITER_COMMAND_IDS.cut,
       invalidates: ["document", "history", "selection", "lifecycle"],
       target: "view",
@@ -393,7 +408,8 @@ export function createWriterViewCommandRegistry(
     {
       capabilityId: "CAP-0110",
       /** Pastes DOM-adapted clipboard data. @param _context - Bound view context. @param arguments_ - Paste arguments. @returns Clipboard completion. */
-      execute: (_context, arguments_): Promise<void> => target.Paste(arguments_),
+      execute: (_context, arguments_): Promise<void> =>
+        target.Paste(getWriterCommandArguments<unknown>(arguments_)),
       id: WRITER_COMMAND_IDS.paste,
       invalidates: ["document", "history", "selection", "lifecycle"],
       target: "view",

@@ -12,49 +12,56 @@ import {
   type SfxDispatcher,
   type SfxShell,
 } from "../../../../framework/source/dispatch/dispatchprovider";
-import type { AutoRecoveryEnvironment } from "../../../../framework/source/services/autorecovery";
-import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import type {
-  PrimarySavePort,
-  SfxMediumOperationStatus,
-  StoredDocumentOpenPort,
-} from "../../../../sfx2/source/doc/docfile";
-import type { RecoverySavePort } from "../../../../svl/source/misc/recovery";
-import type { DocumentExportPort, DocumentOpenPort } from "../../../../svl/source/misc/storage";
-import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipboard";
-import type { WriterSnapshotState } from "../../../browser/persistence/writer-storage";
+import { createDocument, type OfficeDocument } from "../../../../sfx2/source/doc/objsh";
+import type { SfxMediumOperationStatus } from "../../../../sfx2/source/doc/docfile";
 import type { SwModelHint } from "../../../inc/hints";
-import {
-  WriterViewProjection,
-  type WriterPresentationProjection,
-} from "../../../browser/presentation/writer-view-projection";
-import type { WriterClipboardPaste } from "../../filter/html/swhtml";
-import type { WriterClipboardSelection } from "../dochdl/swdtflvr";
+import type { WriterClipboardPaste } from "../../filter/html/html-filter-types";
+import type { SwDoc } from "../../core/doc/doc";
+import type { WriterParagraphList } from "../../core/doc/list";
+import type { WriterParagraphStyle } from "../../core/doc/fmtcol";
+import type { WriterParagraphAlignment, WriterTextRun, SwTextNode } from "../../core/txtnode/ndtxt";
+import type { SwPaM } from "../../core/crsr/pam";
+import { SwPosition } from "../../core/crsr/pam";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
 import { SwWrtShell } from "../wrtsh/wrtsh";
+import type { WriterCursorSelection } from "../wrtsh/wrtsh-selection";
 
-/** Browser capabilities injected by the Writer module composition root. */
-export interface WriterSessionServices {
-  /** Writes a sanitized rich/plain pair to the browser clipboard. */
-  readonly copyRichText: (selection: WriterClipboardSelection) => Promise<void>;
-  /** Opens one external document through an injected platform adapter. */
-  readonly documentOpen: DocumentOpenPort;
-  /** Exports one representation through an injected platform adapter. */
-  readonly documentExport: DocumentExportPort;
-  /** Creates the browser-safe filename used by download adapters. */
-  readonly createDownloadFilename: (title: string, extension: string) => string;
-  /** Reads rich clipboard MIME values after a user gesture. */
-  readonly readRichClipboard: () => Promise<RichClipboardPayload>;
-  /** Optional primary-save port, independently replaceable from stored-document open. */
-  readonly primarySave?: PrimarySavePort<WriterSnapshotState>;
-  /** Optional stored-document open port, independently replaceable from primary save. */
-  readonly storedDocumentOpen?: StoredDocumentOpenPort<WriterSnapshotState>;
-  /** Optional recovery-only durable history adapter. */
-  readonly recoverySave?: RecoverySavePort<WriterSnapshotState>;
-  /** Optional injected browser lifecycle boundary for application AutoRecovery. */
-  readonly recoveryEnvironment?: AutoRecoveryEnvironment;
+/** Primitive/resource-ID projection of one text node. */
+export interface WriterParagraphProjection {
+  readonly alignment: WriterParagraphAlignment;
+  readonly bulletChar?: string;
+  readonly id: string;
+  readonly list: WriterParagraphList;
+  readonly listId: string;
+  readonly listMarker?: string;
+  readonly numRuleName: string;
+  readonly runs: readonly WriterTextRun[];
+  readonly style: WriterParagraphStyle;
+  readonly styleDisplayName: string;
+  readonly text: string;
+}
+
+/** Immutable presentation value with no mutable model references. */
+export interface WriterPresentationProjection {
+  readonly activeParagraph: WriterParagraphProjection;
+  readonly activeParagraphIndex: number;
+  readonly cursorSelection: WriterCursorSelection;
+  readonly documentState: OfficeDocument;
+  readonly modelRevision: number;
+  readonly paragraphs: readonly WriterParagraphProjection[];
+}
+
+/** Browser-owned projector injected into the upstream-shaped view shell. */
+export interface WriterPresentationProjector {
+  readonly Project: (
+    document: SwDoc,
+    activeParagraph: SwTextNode,
+    cursor: SwPaM,
+    documentState: OfficeDocument,
+  ) => WriterPresentationProjection;
+  readonly ResolveNode: (document: SwDoc, projectionId: string) => SwTextNode | undefined;
 }
 
 /** DOM-adapted Cut arguments accepted by the unified command. */
@@ -95,6 +102,7 @@ export interface WriterViewControllers {
     readonly Load: () => Promise<void>;
     readonly Save: () => Promise<void>;
   };
+  readonly presentationProjector: WriterPresentationProjector;
 }
 
 /** Composition-root factory that binds browser ports after SwView creates its editing shell. */
@@ -136,7 +144,7 @@ export class SwView {
   private readonly listeners = new Set<() => void>();
   private readonly localStorageWorkflow: WriterViewControllers["localStorageWorkflow"];
   private readonly viewCommandShell: SfxShell;
-  private readonly viewProjection = new WriterViewProjection();
+  private readonly viewProjection: WriterPresentationProjector;
   private readonly wrtShell: SwWrtShell;
   private readonly wrtShellSubscription: () => void;
 
@@ -156,6 +164,7 @@ export class SwView {
     this.fileWorkflow = controllers.fileWorkflow;
     this.localStorageWorkflow = controllers.localStorageWorkflow;
     this.clipboardWorkflow = controllers.clipboardWorkflow;
+    this.viewProjection = controllers.presentationProjector;
     this.viewCommandShell = createCommandShell(this, createWriterViewCommandRegistry(this));
     this.wrtShellSubscription = this.wrtShell.Subscribe(
       /** Converts typed Writer hints into dispatcher dependency invalidation. @param hint - Typed Writer hint. @returns Nothing. */ (
@@ -212,7 +221,7 @@ export class SwView {
       const projection = this.viewProjection.Project(
         document,
         activeParagraph,
-        this.wrtShell.GetCursorSelection(),
+        this.wrtShell.GetCursor(),
         this.docShell.GetDocumentState(),
       );
       this.cachedSnapshot = Object.freeze({
@@ -240,6 +249,32 @@ export class SwView {
   /** Dispatches a stable Writer command through the active frame shell stack. @param commandId - Stable command identity. @param arguments_ - Typed UI-adapter arguments. @returns Explicit dispatch result. */
   public Execute(commandId: string, arguments_?: unknown): CommandDispatchResult<unknown> {
     return this.GetDispatcher().Execute(commandId, arguments_);
+  }
+
+  /** Resolves a browser projection key and focuses the canonical node. @param projectionId - View-only node key. @returns Whether it resolved. */
+  public FocusProjectedParagraph(projectionId: string): boolean {
+    const node = this.viewProjection.ResolveNode(this.docShell.GetDoc(), projectionId);
+    if (node === undefined) return false;
+    this.wrtShell.FocusNode(node);
+    return true;
+  }
+
+  /** Converts browser projection endpoints to canonical SwPositions before entering SwWrtShell. @param selection - View-only selection. @returns Whether the PaM changed. */
+  public SetProjectedSelection(selection: WriterCursorSelection): boolean {
+    const document = this.docShell.GetDoc();
+    const pointNode = this.viewProjection.ResolveNode(document, selection.point.paragraphId);
+    const markNode =
+      selection.mark === undefined
+        ? undefined
+        : this.viewProjection.ResolveNode(document, selection.mark.paragraphId);
+    if (pointNode === undefined || (selection.mark !== undefined && markNode === undefined))
+      return false;
+    return this.wrtShell.SetPaM(
+      new SwPosition(pointNode, selection.point.offset),
+      selection.mark === undefined || markNode === undefined
+        ? undefined
+        : new SwPosition(markNode, selection.mark.offset),
+    );
   }
 
   /** Queries enabled/checked/value state from the same resolving shell used for execution. @param commandId - Stable command identity. @returns Current command state. */

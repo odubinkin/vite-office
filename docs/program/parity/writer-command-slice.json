@@ -1129,7 +1129,7 @@
             "marker": "public ReplaceRange"
           },
           {
-            "path": "apps/office/src/sw/source/filter/html/swhtml.ts",
+            "path": "apps/office/src/sw/browser/filter/html/swhtml.ts",
             "marker": "parseWriterClipboardPaste"
           },
           {
@@ -1657,15 +1657,15 @@
             "marker": "export interface OdtFilterService"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
             "marker": "export class OdtWorkerClient"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts",
             "marker": "export class OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker.ts",
             "marker": "new OdtWorkerRuntime"
           },
           {
@@ -1853,7 +1853,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
+            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {
@@ -2517,7 +2517,7 @@
             "marker": "public ReplaceRange"
           },
           {
-            "path": "apps/office/src/sw/source/filter/html/swhtml.ts",
+            "path": "apps/office/src/sw/browser/filter/html/swhtml.ts",
             "marker": "parseWriterClipboardPaste"
           },
           {
@@ -2741,15 +2741,15 @@
             "marker": "export interface OdtFilterService"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
             "marker": "export class OdtWorkerClient"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts",
             "marker": "export class OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker.ts",
             "marker": "new OdtWorkerRuntime"
           },
           {
@@ -2937,7 +2937,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
+            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {
@@ -3849,15 +3849,15 @@
             "marker": "export interface OdtFilterService"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
             "marker": "export class OdtWorkerClient"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts",
             "marker": "export class OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker.ts",
             "marker": "new OdtWorkerRuntime"
           },
           {
@@ -4141,15 +4141,15 @@
             "marker": "export interface OdtFilterService"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
             "marker": "export class OdtWorkerClient"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts",
             "marker": "export class OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker.ts",
             "marker": "new OdtWorkerRuntime"
           },
           {
@@ -4435,15 +4435,15 @@
             "marker": "export interface OdtFilterService"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
             "marker": "export class OdtWorkerClient"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts",
             "marker": "export class OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-worker.ts",
             "marker": "new OdtWorkerRuntime"
           },
           {
@@ -4640,7 +4640,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
+            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {
@@ -4760,7 +4760,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
+            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {
@@ -4880,7 +4880,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
+            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {

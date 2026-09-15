@@ -82,7 +82,7 @@ export class SwFormatAutoFormat extends SfxPoolItem {
       /** Projects one nested item. @param item - Direct pooled item. @returns Primitive item record. */ (
         item,
       ) => ({
-        value: item.QueryValue(),
+        value: item.QueryValue() as SfxPoolItemSnapshot["value"],
         which: item.Which(),
       }),
     );

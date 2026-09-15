@@ -9,6 +9,7 @@ import { SwTransferable } from "../dochdl/swdtflvr";
 import { SwWrtShell } from "./wrtsh";
 import { applyWriterTextRangeFont } from "../../core/txtnode/ndtxt";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
+import { SwPosition } from "../../core/crsr/pam";
 
 /** Creates a Writer shell with one stable paragraph. @param text - Optional initial paragraph text. @returns Shell fixture. */
 function createShell(text = ""): SwWrtShell {
@@ -181,6 +182,14 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         point: { offset: 0, paragraphId: "p-1" },
       }),
     ).toBe(false);
+    const ownNode = shell.GetDoc().paragraphs[0];
+    const foreignNode = createShell("foreign").GetDoc().paragraphs[0];
+    if (ownNode === undefined || foreignNode === undefined)
+      throw new Error("Writer cursor fixture has no paragraph.");
+    expect(shell.SetPaM(new SwPosition(foreignNode, 0))).toBe(false);
+    expect(shell.SetPaM(new SwPosition(ownNode, 0), new SwPosition(foreignNode, 0))).toBe(false);
+    shell.FocusNode(foreignNode);
+    expect(shell.GetActiveParagraph()).toBe(ownNode);
     shell.FocusParagraph("p-1");
     shell.SelectAll();
     expect(shell.GetCursor()).toBe(cursor);
@@ -188,6 +197,9 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 2, paragraphId: "p-1" },
     });
+    const second = shell.GetDoc().nodes.MakeTextNode("p-2", "next");
+    shell.FocusParagraph(second.id);
+    expect(shell.GetActiveParagraph()).toBe(second);
   });
 
   it("executes the complete supported beforeinput intent set" /** Verifies insertion, forward deletion, paragraph breaks, history, replacement, and unsupported intent handling. @returns Nothing. */, function executesInputIntents(): void {

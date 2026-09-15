@@ -238,6 +238,20 @@ describe("command registry" /**
     expect(dispatcher.ExecuteRequest(".uno:BooleanResult", boolRequest).status).toBe("executed");
     expect(requestArguments).toEqual([[argument]]);
     expect(boolRequest.GetReturnValue()).toEqual(new SfxBoolItem(101, true));
+    dispatcher.Execute(".uno:BooleanResult", [argument]);
+    dispatcher.Execute(".uno:BooleanResult", true);
+    dispatcher.Execute(".uno:BooleanResult", "argument");
+    dispatcher.Execute(".uno:BooleanResult", 7);
+    dispatcher.Execute(".uno:BooleanResult", { Name: "Argument" });
+    expect(
+      requestArguments
+        .slice(1)
+        .map(
+          /** Reads the first converted argument value. @param items - Request item array. @returns First value. */ (
+            items,
+          ) => (items as SfxStringItem[])[0]?.QueryValue(),
+        ),
+    ).toEqual(["argument", true, "argument", 7, { Name: "Argument" }]);
     const stringRequest = new SfxRequest(102);
     dispatcher.ExecuteRequest(".uno:StringResult", stringRequest);
     expect(stringRequest.GetReturnValue()).toEqual(new SfxStringItem(102, "done"));

@@ -152,7 +152,7 @@ export class SwNodes {
     if (next !== undefined) node.CollapseContentIndicesTo(next, 0);
     else node.CollapseContentIndicesTo(previous as SwTextNode, (previous as SwTextNode).Len());
     const nodeIndex = node.GetIndex();
-    this.document.GetDocumentListsManager().UnregisterListItem(node.id, node.GetListId());
+    this.document.GetDocumentListsManager().UnregisterListItem(node, node.GetListId());
     this.nodeArray.splice(nodeIndex, 1);
     this.document.NotifyModelChange({ index: nodeIndex, kind: "node-removed" });
   }
@@ -166,7 +166,7 @@ export class SwNodes {
     if (duplicate !== undefined && duplicate !== node)
       throw new Error(`Duplicate paragraph: ${replacement.id}`);
     node.MoveAllContentIndicesTo(replacement);
-    this.document.GetDocumentListsManager().UnregisterListItem(node.id, node.GetListId());
+    this.document.GetDocumentListsManager().UnregisterListItem(node, node.GetListId());
     this.nodeArray[index] = replacement;
     this.document.GetDocumentListsManager().RegisterListItem(replacement);
     this.document.NotifyModelChange({ index, kind: "node-removed" });

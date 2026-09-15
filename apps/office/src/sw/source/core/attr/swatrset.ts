@@ -14,7 +14,7 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
-import { SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONT,
@@ -29,21 +29,35 @@ import {
   RES_PARATR_ADJUST,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
+  RES_PARATR_LIST_ISCOUNTED,
+  RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem } from "../para/paratr";
-import { getDefaultFont } from "../doc/default-font";
+import { getDefaultFont, getWriterDefaultFontLanguage } from "../doc/default-font";
 
 /** Writer-owned item pool with defaults for the currently implemented paragraph WhichIds. */
 export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    const device = document.GetDefaultFontDevice();
+    const locale = document.GetLocale();
     const defaults = new Map([
-      [RES_CHRATR_FONT, getDefaultFont(undefined, "text", "en-US", "western")],
-      [RES_CHRATR_CJK_FONT, getDefaultFont(undefined, "text", "zh-CN", "cjk")],
-      [RES_CHRATR_CTL_FONT, getDefaultFont(undefined, "text", "ar-SA", "ctl")],
+      [
+        RES_CHRATR_FONT,
+        getDefaultFont(device, "text", getWriterDefaultFontLanguage(locale, "western"), "western"),
+      ],
+      [
+        RES_CHRATR_CJK_FONT,
+        getDefaultFont(device, "text", getWriterDefaultFontLanguage(locale, "cjk"), "cjk"),
+      ],
+      [
+        RES_CHRATR_CTL_FONT,
+        getDefaultFont(device, "text", getWriterDefaultFontLanguage(locale, "ctl"), "ctl"),
+      ],
     ]);
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       this.RegisterDefaultItem(
@@ -95,6 +109,24 @@ export class SwAttrPool extends SfxItemPool {
       function restoreListLevel(value): SfxInt16Item {
         return new SfxInt16Item(RES_PARATR_LIST_LEVEL, Number(value));
       },
+    );
+    this.RegisterDefaultItem(
+      new SfxBoolItem(RES_PARATR_LIST_ISRESTART, false),
+      /** Restores the list-restart flag. @param value - Persisted flag. @returns Boolean item. */ (
+        value,
+      ) => new SfxBoolItem(RES_PARATR_LIST_ISRESTART, Boolean(value)),
+    );
+    this.RegisterDefaultItem(
+      new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, 0),
+      /** Restores the list restart value. @param value - Persisted counter. @returns Integer item. */ (
+        value,
+      ) => new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, Number(value)),
+    );
+    this.RegisterDefaultItem(
+      new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, true),
+      /** Restores the list-counted flag. @param value - Persisted flag. @returns Boolean item. */ (
+        value,
+      ) => new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, Boolean(value)),
     );
   }
 

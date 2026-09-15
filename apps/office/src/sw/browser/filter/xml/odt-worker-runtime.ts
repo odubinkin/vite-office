@@ -19,7 +19,7 @@ import {
   type OdtFilterProgressStage,
   type OdtFilterDocument,
   type OdtFilterService,
-} from "./odt-filter-service";
+} from "../../../source/filter/xml/odt-filter-service";
 
 /** Import request transferred into the worker. */
 export interface OdtWorkerImportRequest {

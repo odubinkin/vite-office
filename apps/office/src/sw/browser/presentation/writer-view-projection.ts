@@ -1,53 +1,48 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
 
-import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
 import type { SwDoc } from "../../source/core/doc/doc";
-import type { WriterParagraphList } from "../../source/core/doc/list";
-import type {
-  WriterParagraphAlignment,
-  WriterTextRun,
-  SwTextNode,
-} from "../../source/core/txtnode/ndtxt";
-import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
+import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
 import type { WriterCursorSelection } from "../../source/uibase/wrtsh/wrtsh-selection";
+import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
+import type { SwPaM } from "../../source/core/crsr/pam";
+import type {
+  WriterParagraphProjection,
+  WriterPresentationProjection,
+  WriterPresentationProjector,
+} from "../../source/uibase/uiview/view";
 
-/** Primitive/resource-ID projection of one text node. */
-export interface WriterParagraphProjection {
-  readonly alignment: WriterParagraphAlignment;
-  readonly bulletChar?: string;
-  readonly id: string;
-  readonly list: WriterParagraphList;
-  readonly listId: string;
-  readonly listMarker?: string;
-  readonly numRuleName: string;
-  readonly runs: readonly WriterTextRun[];
-  readonly style: WriterParagraphStyle;
-  readonly styleDisplayName: string;
-  readonly text: string;
-}
-
-/** Immutable React store value with no mutable model references. */
-export interface WriterPresentationProjection {
-  readonly activeParagraph: WriterParagraphProjection;
-  readonly activeParagraphIndex: number;
-  readonly cursorSelection: WriterCursorSelection;
-  readonly documentState: OfficeDocument;
-  readonly modelRevision: number;
-  readonly paragraphs: readonly WriterParagraphProjection[];
-}
+export type {
+  WriterParagraphProjection,
+  WriterPresentationProjection,
+} from "../../source/uibase/uiview/view";
 
 /** Keeps React keys outside SwTextNode and projects one live revision at a time. */
-export class WriterViewProjection {
+export class WriterViewProjection implements WriterPresentationProjector {
+  private nextNodeId = 1;
+  private readonly nodeIds = new WeakMap<SwTextNode, string>();
+  private readonly projectedNodes = new Map<string, SwTextNode>();
+
   /** Returns a stable view-only key for one live node. @param node - Canonical text node. @returns Projection key. */
   public GetNodeId(node: SwTextNode): string {
-    return node.id;
+    const existing = this.nodeIds.get(node);
+    if (existing !== undefined) return existing;
+    const id = `writer-node-${this.nextNodeId++}`;
+    this.nodeIds.set(node, id);
+    this.projectedNodes.set(id, node);
+    return id;
+  }
+
+  /** Resolves a view-only key without adding identity to SwNode. @param document - Expected owner. @param projectionId - View key. @returns Current node. */
+  public ResolveNode(document: SwDoc, projectionId: string): SwTextNode | undefined {
+    const node = this.projectedNodes.get(projectionId);
+    return node?.GetDoc() === document && document.paragraphs.includes(node) ? node : undefined;
   }
 
   /** Projects the current model revision without retaining mutable nodes. @param document - Canonical graph. @param activeParagraph - Shell target. @param cursorSelection - Browser cursor DTO. @param documentState - Shell state. @returns Immutable value graph. */
   public Project(
     document: SwDoc,
     activeParagraph: SwTextNode,
-    cursorSelection: WriterCursorSelection,
+    cursor: SwPaM,
     documentState: OfficeDocument,
   ): WriterPresentationProjection {
     const paragraphs = document.paragraphs.map(
@@ -82,6 +77,22 @@ export class WriterViewProjection {
       },
     );
     const activeParagraphIndex = document.paragraphs.indexOf(activeParagraph);
+    const point = cursor.GetPoint();
+    const mark = cursor.HasMark() ? cursor.GetMark() : undefined;
+    const cursorSelection: WriterCursorSelection = {
+      ...(mark === undefined
+        ? {}
+        : {
+            mark: {
+              offset: mark.GetContentIndex(),
+              paragraphId: this.GetNodeId(mark.GetNode() as SwTextNode),
+            },
+          }),
+      point: {
+        offset: point.GetContentIndex(),
+        paragraphId: this.GetNodeId(point.GetNode() as SwTextNode),
+      },
+    };
     return Object.freeze({
       activeParagraph: paragraphs[activeParagraphIndex] as WriterParagraphProjection,
       activeParagraphIndex,

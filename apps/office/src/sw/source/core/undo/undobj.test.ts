@@ -1,7 +1,7 @@
 /** @fileoverview Verifies semantic Writer actions, grouping, cursor restoration, lifecycle, limits, and payload scaling. */
 
 import { describe, expect, it } from "vitest";
-import { encodeWriterDocument } from "../../../browser/persistence/writer-document-codec";
+import { encodeWriterDocument } from "../../filter/basflt/writer-document-codec";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../doc/doc";
 import { SwPosition } from "../crsr/pam";

@@ -1,29 +1,24 @@
 /**
  * @fileoverview Imports the bounded browser HTML transfer subset at the pinned
- * LibreOffice `sw/source/filter/html/swhtml.cxx` boundary.
+ * LibreOffice HTML import subset through a browser-owned DOM adapter.
  */
 
-import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
+import { WRITER_MAX_LIST_LEVEL } from "../../../source/core/doc/list";
 import {
   createWriterTextRuns,
   normalizeWriterTextRuns,
   type WriterCharacterAttributes,
   type WriterTextRun,
-} from "../../core/txtnode/ndtxt";
+} from "../../../source/core/txtnode/ndtxt";
+import type {
+  WriterClipboardPaste,
+  WriterClipboardPasteParagraph,
+} from "../../../source/filter/html/html-filter-types";
 
-/** One safe paragraph imported from a transfer document. */
-export interface WriterClipboardPasteParagraph {
-  readonly listKind: "bullet" | "none" | "numbered";
-  readonly listLevel: number;
-  readonly runs: readonly WriterTextRun[];
-}
-
-/** Bounded Writer text imported from rich or plain clipboard formats. */
-export interface WriterClipboardPaste {
-  readonly isBlock: boolean;
-  readonly paragraphs: readonly WriterClipboardPasteParagraph[];
-  readonly source: "html" | "plain-text";
-}
+export type {
+  WriterClipboardPaste,
+  WriterClipboardPasteParagraph,
+} from "../../../source/filter/html/html-filter-types";
 
 const defaultPasteCharacterAttributes: WriterCharacterAttributes = {
   bold: false,

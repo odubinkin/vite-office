@@ -1,22 +1,30 @@
-/** @fileoverview Browser persistence codec for the canonical Writer document graph. */
+/** @fileoverview Structured Writer graph transport shared by filter and browser persistence boundaries. */
 
-import type { SfxPoolItemSnapshot } from "../../../svl/source/items/poolitem";
-import { SwDoc } from "../../source/core/doc/doc";
+import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
+import { SwDoc } from "../../core/doc/doc";
 import {
   isWriterParagraphStyle,
   SwTextFormatColl,
   type WriterParagraphStyle,
-} from "../../source/core/doc/fmtcol";
-import { SwNumFormat, SwNumRule } from "../../source/core/doc/number";
-import type { WriterParagraphStyleGroup } from "../../inc/poolfmt";
-import type { WriterParagraphListKind } from "../../source/core/doc/list";
-import type { WriterTextRun } from "../../source/core/txtnode/ndtxt";
+} from "../../core/doc/fmtcol";
+import { SwNumFormat, SwNumRule } from "../../core/doc/number";
+import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
+import type { WriterParagraphListKind } from "../../core/doc/list";
+import type { WriterTextRun } from "../../core/txtnode/ndtxt";
 import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 
 /** Primitive persistence record for one numbering level. */
 interface WriterNumberFormatRecord {
+  readonly bulletFont: string;
   readonly bulletChar?: string;
+  readonly firstLineIndent: number;
+  readonly indentAt: number;
   readonly kind: Exclude<WriterParagraphListKind, "none">;
+  readonly labelFollowedBy: "listtab" | "nothing" | "space";
+  readonly listTabPosition: number;
+  readonly prefix: string;
+  readonly start: number;
+  readonly suffix: string;
 }
 
 /** Primitive persistence record for one document numbering rule. */
@@ -48,7 +56,7 @@ interface WriterTextNodeRecord {
 /** Current graph transport. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly numRules: readonly WriterNumberRuleRecord[];
-  readonly swModelVersion: 9;
+  readonly swModelVersion: 10;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -69,8 +77,16 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
           ) => {
             const format = rule.GetNumFormat(level);
             return {
+              bulletFont: format.GetBulletFont(),
               ...(format.GetKind() === "bullet" ? { bulletChar: format.GetBulletChar() } : {}),
+              firstLineIndent: format.GetFirstLineIndent(),
+              indentAt: format.GetIndentAt(),
               kind: format.GetKind(),
+              labelFollowedBy: format.GetLabelFollowedBy(),
+              listTabPosition: format.GetListtabPos(),
+              prefix: format.GetPrefix(),
+              start: format.GetStart(),
+              suffix: format.GetSuffix(),
             };
           },
         ),
@@ -78,7 +94,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         name: rule.GetName(),
       }),
     ),
-    swModelVersion: 9,
+    swModelVersion: 10,
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -114,7 +130,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
 export function decodeWriterDocument(candidate: unknown): SwDoc {
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 9 ||
+    candidate.swModelVersion !== 10 ||
     !Array.isArray(candidate.numRules) ||
     !Array.isArray(candidate.textFormatCollections) ||
     !Array.isArray(candidate.textNodes)
@@ -143,7 +159,17 @@ export function decodeWriterDocument(candidate: unknown): SwDoc {
         rule.formats.map(
           /** Decodes one numbering level. @param format - Primitive format record. @returns Model format. */ (
             format,
-          ) => new SwNumFormat(format.kind, format.bulletChar),
+          ) =>
+            new SwNumFormat(format.kind, format.bulletChar, {
+              bulletFont: format.bulletFont,
+              firstLineIndent: format.firstLineIndent,
+              indentAt: format.indentAt,
+              labelFollowedBy: format.labelFollowedBy,
+              listTabPosition: format.listTabPosition,
+              prefix: format.prefix,
+              start: format.start,
+              suffix: format.suffix,
+            }),
         ),
         rule.listId,
         rule.automatic,

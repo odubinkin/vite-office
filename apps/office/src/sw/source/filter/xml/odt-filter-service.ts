@@ -9,7 +9,7 @@ import {
   decodeWriterDocument,
   encodeWriterDocument,
   type WriterDocumentRecord,
-} from "../../../browser/persistence/writer-document-codec";
+} from "../basflt/writer-document-codec";
 import type { SwDoc } from "../../core/doc/doc";
 import { readOdtDocument, type OdtImportProgressStage } from "./swxml";
 import { writeOdtDocument, type OdtExportProgressStage } from "./wrtxml";
@@ -18,10 +18,21 @@ import { writeOdtDocument, type OdtExportProgressStage } from "./wrtxml";
 export type OdtFilterProgressStage =
   `import:${OdtImportProgressStage}` | `export:${OdtExportProgressStage}`;
 
+/** Platform-neutral cancellation subset implemented by AbortSignal at the browser boundary. */
+export interface OdtCancellationSignal {
+  readonly aborted: boolean;
+  addEventListener(
+    type: "abort",
+    listener: () => void,
+    options?: { readonly once?: boolean },
+  ): void;
+  removeEventListener(type: "abort", listener: () => void): void;
+}
+
 /** Per-operation controls that cross no document ownership boundary. */
 export interface OdtFilterOperationOptions {
   /** Optional cancellation signal observed by clients and inline execution. */
-  readonly signal?: AbortSignal;
+  readonly signal?: OdtCancellationSignal;
   /** Optional progress receiver. */
   readonly onProgress?: (stage: OdtFilterProgressStage) => void;
   /** Optional stricter ZIP input limits used by tests or callers. */
@@ -143,7 +154,7 @@ export class InlineOdtFilterService implements OdtFilterService {
   }
 
   /** Starts one operation after checking permanent/AbortSignal state. @param signal - Optional caller cancellation. @returns Nothing. */
-  private Begin(signal?: AbortSignal): void {
+  private Begin(signal?: OdtCancellationSignal): void {
     if (this.closed) throw new OdtFilterError("internal", "ODT filter service is closed.");
     this.cancelled = false;
     if (signal?.aborted === true)
@@ -151,7 +162,7 @@ export class InlineOdtFilterService implements OdtFilterService {
   }
 
   /** Reads cooperative cancellation state. @param signal - Optional caller cancellation. @returns Whether work must stop. */
-  private IsCancelled(signal?: AbortSignal): boolean {
+  private IsCancelled(signal?: OdtCancellationSignal): boolean {
     return this.cancelled || signal?.aborted === true;
   }
 }

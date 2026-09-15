@@ -16,7 +16,7 @@ import {
   OdtWorkerRuntime,
   type OdtWorkerRequestPayload,
   type OdtWorkerRuntimeScope,
-} from "./odt-worker-runtime";
+} from "../../../browser/filter/xml/odt-worker-runtime";
 
 /** Capturing worker scope test double. */
 class CapturingScope implements OdtWorkerRuntimeScope {

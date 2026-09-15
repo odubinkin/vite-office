@@ -11,7 +11,8 @@ test("Writer bullets and numbering" /** Verifies Format submenu and context-sens
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitemradio", { exact: true, name: "Ordered List" }).click();
-  const firstMarker = page.getByTestId("writer-list-marker-writer-paragraph-1");
+  const firstProjectionId = await firstParagraph.getAttribute("data-writer-paragraph-id");
+  const firstMarker = page.locator(`[data-writer-list-marker="${firstProjectionId}"]`);
   await expect(firstMarker).toHaveText("1.");
   await expect(firstParagraph).toHaveText("First list item");
   await expect(firstParagraph).toHaveAttribute("data-list-kind", "numbered");
@@ -30,8 +31,10 @@ test("Writer bullets and numbering" /** Verifies Format submenu and context-sens
   );
   await firstParagraph.press("Enter");
   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
+  const secondProjectionId = await secondParagraph.getAttribute("data-writer-paragraph-id");
   await secondParagraph.fill("Second list item");
-  await expect(page.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveText("2.");
+  const secondMarker = page.locator(`[data-writer-list-marker="${secondProjectionId}"]`);
+  await expect(secondMarker).toHaveText("2.");
   const formattingToolbar = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
   await expect(formattingToolbar.getByRole("button", { name: "Bold" })).toHaveCount(0);
   await expect(
@@ -40,7 +43,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and context-sens
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitemradio", { exact: true, name: "Unordered List" }).click();
-  await expect(page.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveText("•");
+  await expect(secondMarker).toHaveText("•");
   await expect(secondParagraph).toHaveText("Second list item");
   await expect(secondParagraph).toHaveAccessibleDescription(/Paragraph list: Unordered List/);
   await page.getByRole("button", { name: "Format" }).click();
@@ -63,6 +66,6 @@ test("Writer bullets and numbering" /** Verifies Format submenu and context-sens
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitemradio", { name: "No List" }).click();
-  await expect(page.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveCount(0);
+  await expect(secondMarker).toHaveCount(0);
   await expect(secondParagraph).toHaveText("Second list item");
 });

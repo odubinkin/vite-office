@@ -107,8 +107,8 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/core/doc/DocumentSettingManager.ts` | `sw/source/core/doc/DocumentSettingManager.cxx` | Document setting ownership |
 | `sw/source/core/doc/DocumentStateManager.ts` | `sw/source/core/doc/DocumentStateManager.cxx` | Model revision state and batched mutation notifications |
 | `sw/source/core/doc/DocumentStylePoolManager.ts` | `sw/source/core/doc/DocumentStylePoolManager.cxx` | Paragraph-style pool ownership |
-| `sw/browser/persistence/writer-document-codec.ts` | Browser adaptation | Versioned primitive persistence projection outside Writer core |
-| `sw/browser/persistence/writer-storage.ts` | Browser adaptation | Browser storage orchestration outside Writer core |
+| `sw/source/filter/basflt/writer-document-codec.ts` | TypeScript filter adaptation | Versioned primitive transport shared by filters and storage ports |
+| `sw/source/filter/basflt/writer-storage.ts` | TypeScript filter adaptation | Port-neutral storage orchestration outside Writer core |
 | `sw/browser/presentation/writer-view-projection.ts` | Browser adaptation | Immutable primitive React projection with external node labels |
 | `svl/source/items/itempool.ts` | `svl/source/items/itempool.cxx` | Pool defaults and persisted-item factories |
 | `svl/source/items/itemset.ts` | `svl/source/items/itemset.cxx` | Direct item deltas, parent/default lookup, state, clone, and clear operations |
@@ -146,9 +146,10 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Bounded nested semantic `ul`/`ol`/`li` clipboard HTML serialization |
 | `sw/source/filter/ascii/ascatr.ts` | `sw/source/filter/ascii/ascatr.cxx` | Level-indented plain-text list-marker clipboard serialization |
 | `sw/source/filter/xml/odt-filter-service.ts` | Browser-only | Asynchronous neutral snapshot/byte filter boundary |
-| `sw/source/filter/xml/odt-worker-client.ts` | Browser-only | Transferable requests, cancellation, timeout, stale-result rejection, and worker lifecycle |
-| `sw/source/filter/xml/odt-worker-runtime.ts` | Browser-only | Dedicated Worker request dispatch, progress, and structured failures |
-| `sw/source/filter/xml/odt-worker.ts` | Browser-only | Vite module-worker entrypoint |
+| `sw/browser/filter/html/swhtml.ts` | Browser-only | DOM parsing adapter feeding neutral Writer HTML-filter records |
+| `sw/browser/filter/xml/odt-worker-client.ts` | Browser-only | Transferable requests, cancellation, timeout, stale-result rejection, and worker lifecycle |
+| `sw/browser/filter/xml/odt-worker-runtime.ts` | Browser-only | Dedicated Worker request dispatch, progress, and structured failures |
+| `sw/browser/filter/xml/odt-worker.ts` | Browser-only | Vite module-worker entrypoint |
 | `sw/source/filter/xml/xmlexp.ts` | `sw/source/filter/xml/xmlexp.cxx` | `SwDoc` to ODF styles/content/meta stream bridge |
 | `sw/source/filter/xml/xmlimp.ts` | `sw/source/filter/xml/xmlimp.cxx` | ODF styles/content/meta stream to `SwDoc` bridge |
 | `sw/source/filter/xml/wrtxml.ts` | `sw/source/filter/xml/wrtxml.cxx` | Styles-before-content ODT package writer orchestration |

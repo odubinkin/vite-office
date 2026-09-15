@@ -17,7 +17,7 @@ import {
   restoreWriterSnapshot,
   saveWriterDocument,
   type WriterSnapshotState,
-} from "../../../browser/persistence/writer-storage";
+} from "../../filter/basflt/writer-storage";
 
 /** Live target-schema storage fixture. */
 interface WriterFixture {
@@ -64,9 +64,9 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
         baselineTag: "libreoffice-26.8.0.2",
         codec: "vite-office.writer-browser-storage",
         documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
-        modelVersion: 9,
-        schemaVersion: 7,
-        writerModel: { swModelVersion: 9 },
+        modelVersion: 10,
+        schemaVersion: 8,
+        writerModel: { swModelVersion: 10 },
       },
       version: 1,
     });
@@ -133,7 +133,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     ).toThrow("schema is unsupported");
     const wrongSchema = {
       ...current,
-      state: { ...current.state, schemaVersion: 1 as 7 },
+      state: { ...current.state, schemaVersion: 7 as 8 },
     };
     expect(
       /** Restores an unknown schema version. @returns Invalid result. */ () =>
@@ -141,7 +141,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     ).toThrow("schema is unsupported");
     const retiredEnvelopes = [
       { ...current.state, codec: "writer.snapshot.v1" },
-      { ...current.state, modelVersion: 8 },
+      { ...current.state, modelVersion: 9 },
       { ...current.state, baselineTag: "libreoffice-25.2.0.0" },
       { ...current.state, baselineCommit: "wrong-id-schema" },
     ];

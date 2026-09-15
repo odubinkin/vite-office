@@ -30,7 +30,7 @@ import {
   restoreWriterSnapshot,
   saveWriterDocument,
   type WriterSnapshotState,
-} from "../../../browser/persistence/writer-storage";
+} from "../../filter/basflt/writer-storage";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import {
   createOdtFilterDocument,

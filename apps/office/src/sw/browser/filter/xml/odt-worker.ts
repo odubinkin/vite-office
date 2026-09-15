@@ -1,4 +1,5 @@
 /** @fileoverview Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker. */
+/* v8 ignore file -- Dedicated Worker bootstrapping is exercised through the runtime boundary. */
 
 import { OdtWorkerRuntime, type OdtWorkerRuntimeScope } from "./odt-worker-runtime";
 

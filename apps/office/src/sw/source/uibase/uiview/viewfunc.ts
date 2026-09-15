@@ -1,11 +1,11 @@
 /** @fileoverview Provides pure Writer workbench document and paragraph identity helpers. */
 
-import { SwDoc as WriterDocument } from "../../core/doc/doc";
+import { SwDoc as WriterDocument, type SwDocOptions } from "../../core/doc/doc";
 import type { SwTextNode as WriterParagraph } from "../../core/txtnode/ndtxt";
 
-/** Creates the initial empty Writer document used by the browser session. @returns New canonical SwDoc. */
-export function createWriterWorkbenchDocument(): WriterDocument {
-  return new WriterDocument("writer-paragraph-1");
+/** Creates the initial empty Writer document used by the browser session. @param options - Locale, device, and initial-node options. @returns New canonical SwDoc. */
+export function createWriterWorkbenchDocument(options: SwDocOptions = {}): WriterDocument {
+  return new WriterDocument(options);
 }
 
 /** Derives the first available numeric paragraph identity. @param writerDocument - Current Writer graph. @returns Stable non-colliding identity. */

@@ -56,6 +56,15 @@ export const RES_PARATR_LIST_ID = 83 as const;
 /** Paragraph list level. */
 export const RES_PARATR_LIST_LEVEL = 84 as const;
 
+/** Paragraph list restart flag. */
+export const RES_PARATR_LIST_ISRESTART = 85 as const;
+
+/** Paragraph explicit list restart value. */
+export const RES_PARATR_LIST_RESTARTVALUE = 86 as const;
+
+/** Paragraph counted-in-list flag. */
+export const RES_PARATR_LIST_ISCOUNTED = 87 as const;
+
 /** WhichIds supported by the current Writer text-node auto-attribute set. */
 export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_CHRATR_FONT, RES_CHRATR_FONT],
@@ -67,7 +76,7 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT],
   [RES_PARATR_ADJUST, RES_PARATR_ADJUST],
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
-  [RES_PARATR_LIST_ID, RES_PARATR_LIST_LEVEL],
+  [RES_PARATR_LIST_ID, RES_PARATR_LIST_ISCOUNTED],
 ] as const;
 
 /** WhichIds supported by the current Writer paragraph-style attribute set. */

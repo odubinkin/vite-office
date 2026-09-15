@@ -1,10 +1,7 @@
 /** @fileoverview Adapts native clipboard events to model selections and Writer command ports. */
 
 import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
-import {
-  parseWriterClipboardPaste,
-  type WriterClipboardPaste,
-} from "../../source/filter/html/swhtml";
+import { parseWriterClipboardPaste, type WriterClipboardPaste } from "../filter/html/swhtml";
 
 /** Translates native DataTransfer MIME values into the bounded Writer HTML import. @param data - Native transfer reader. @param document - Detached-element owner used by the HTML filter. @returns Parsed bounded paste or undefined for an empty transfer. */
 export function readBrowserWriterClipboardPaste(

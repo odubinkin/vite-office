@@ -10,6 +10,8 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
   await firstParagraph.fill("First Writer paragraph");
   await firstParagraph.press("Enter");
   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
+  const firstProjectionId = await firstParagraph.getAttribute("data-writer-paragraph-id");
+  const secondProjectionId = await secondParagraph.getAttribute("data-writer-paragraph-id");
   await secondParagraph.fill("Second Writer paragraph");
   await secondParagraph.click();
   await page.keyboard.press("Home");
@@ -36,8 +38,8 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
       };
     },
   );
-  expect(shiftSelection.anchor).toBe("writer-paragraph-2");
-  expect(shiftSelection.focus).toBe("writer-paragraph-1");
+  expect(shiftSelection.anchor).toBe(secondProjectionId);
+  expect(shiftSelection.focus).toBe(firstProjectionId);
   await secondParagraph.press("Control+A");
   const selectAllSelection = await secondParagraph.evaluate(
     /**

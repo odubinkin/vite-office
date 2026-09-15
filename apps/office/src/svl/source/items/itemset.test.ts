@@ -5,7 +5,7 @@ import {
   decodeSfxItemSet,
   encodeSfxItemSet,
   encodeSfxPoolItem,
-} from "../../../sw/browser/persistence/item-codec";
+} from "../../../sw/source/filter/basflt/item-codec";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
 import { SfxItemPool } from "./itempool";
@@ -212,6 +212,9 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     const source = new SfxItemSet(pool, [[1, 2]]);
     source.Put(new SfxInt16Item(2, 7));
     expect(child.PutSet(source)).toBe(true);
+    const widerSource = new SfxItemSet(pool, [[1, 3]]);
+    widerSource.InvalidateItem(3);
+    expect(child.PutSet(widerSource)).toBe(false);
     expect(
       child
         .entries()
@@ -262,6 +265,22 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(child.Clone().GetItemState(1)).toBe(SfxItemState.INVALID);
     expect(child.Clone().GetItemState(2)).toBe(SfxItemState.DISABLED);
     expect(child.ClearItem()).toBe(2);
+  });
+
+  it("propagates inherited invalid and disabled states and copies sentinels" /** Matches recursive SfxItemSet state lookup and Put semantics. @returns Nothing. */, () => {
+    const pool = createPool();
+    const parent = new SfxItemSet(pool, [[1, 2]]);
+    parent.InvalidateItem(1);
+    parent.DisableItem(2);
+    const child = new SfxItemSet(pool, [[1, 2]], parent);
+    expect(child.GetItemState(1)).toBe(SfxItemState.INVALID);
+    expect(child.GetItemState(2)).toBe(SfxItemState.DISABLED);
+    expect(child.GetItemState(1, false)).toBe(SfxItemState.DEFAULT);
+    const copy = new SfxItemSet(pool, [[1, 2]]);
+    expect(copy.PutSet(parent)).toBe(true);
+    expect(copy.GetItemState(1)).toBe(SfxItemState.INVALID);
+    expect(copy.GetItemState(2)).toBe(SfxItemState.DISABLED);
+    expect(copy.PutSet(parent)).toBe(false);
   });
 
   it("rejects invalid ranges, parents, WhichIds, and missing defaults" /** Covers structural item-set invariants. @returns Nothing; assertions inspect errors. */, function rejectsInvalidSets(): void {

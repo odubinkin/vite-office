@@ -7,15 +7,43 @@ import { WRITER_MAX_LIST_LEVEL } from "./list";
 
 /** Numbering format owned by one level of a SwNumRule. */
 export class SwNumFormat {
-  /** Creates one supported level format. @param kind - Bullet or decimal numbering family. @param bulletChar - Character-special marker. @returns Nothing. */
+  private readonly bulletFont: string;
+  private readonly firstLineIndent: number;
+  private readonly indentAt: number;
+  private readonly labelFollowedBy: "listtab" | "nothing" | "space";
+  private readonly listTabPosition: number;
+  private readonly prefix: string;
+  private readonly start: number;
+  private readonly suffix: string;
+  /** Creates one supported level format. @param kind - Bullet or decimal numbering family. @param bulletChar - Character-special marker. @param options - Upstream-compatible spacing, prefix, suffix, and start options. @returns Nothing. */
   public constructor(
     private readonly kind: Exclude<WriterParagraphListKind, "none">,
     private readonly bulletChar = kind === "bullet" ? "•" : "",
+    options: Readonly<{
+      bulletFont?: string;
+      firstLineIndent?: number;
+      indentAt?: number;
+      labelFollowedBy?: "listtab" | "nothing" | "space";
+      listTabPosition?: number;
+      prefix?: string;
+      start?: number;
+      suffix?: string;
+    }> = {},
   ) {
     if (kind !== "bullet" && kind !== "numbered")
       throw new Error("SwNumFormat kind must be bullet or numbered.");
     if (kind === "bullet" && [...bulletChar].length > 1)
       throw new Error("SwNumFormat bullet character must contain at most one Unicode code point.");
+    this.bulletFont = options.bulletFont ?? (kind === "bullet" ? "OpenSymbol" : "");
+    this.firstLineIndent = options.firstLineIndent ?? -360;
+    this.indentAt = options.indentAt ?? 720;
+    this.labelFollowedBy = options.labelFollowedBy ?? "listtab";
+    this.listTabPosition = options.listTabPosition ?? this.indentAt;
+    this.prefix = options.prefix ?? "";
+    this.start = options.start ?? 1;
+    this.suffix = options.suffix ?? (kind === "numbered" ? "." : "");
+    if (!Number.isInteger(this.start) || this.start < 0)
+      throw new Error("SwNumFormat start value is invalid.");
   }
 
   /** Returns the marker family for this list level. @returns Bullet or numbered kind. */
@@ -28,9 +56,51 @@ export class SwNumFormat {
     return this.bulletChar;
   }
 
+  /** Returns the bullet font family. @returns Bullet family or empty for numbering. */
+  public GetBulletFont(): string {
+    return this.bulletFont;
+  }
+  /** Returns the first-line indent in twips. @returns Signed indent. */
+  public GetFirstLineIndent(): number {
+    return this.firstLineIndent;
+  }
+  /** Returns the body indent in twips. @returns Indent position. */
+  public GetIndentAt(): number {
+    return this.indentAt;
+  }
+  /** Returns the label-follow separator mode. @returns Separator mode. */
+  public GetLabelFollowedBy(): "listtab" | "nothing" | "space" {
+    return this.labelFollowedBy;
+  }
+  /** Returns the list-tab position in twips. @returns Tab position. */
+  public GetListtabPos(): number {
+    return this.listTabPosition;
+  }
+  /** Returns the label prefix. @returns Prefix. */
+  public GetPrefix(): string {
+    return this.prefix;
+  }
+  /** Returns the first number. @returns Start value. */
+  public GetStart(): number {
+    return this.start;
+  }
+  /** Returns the label suffix. @returns Suffix. */
+  public GetSuffix(): string {
+    return this.suffix;
+  }
+
   /** Creates an independent format record. @returns Cloned format. */
   public clone(): SwNumFormat {
-    return new SwNumFormat(this.kind, this.bulletChar);
+    return new SwNumFormat(this.kind, this.bulletChar, {
+      bulletFont: this.bulletFont,
+      firstLineIndent: this.firstLineIndent,
+      indentAt: this.indentAt,
+      labelFollowedBy: this.labelFollowedBy,
+      listTabPosition: this.listTabPosition,
+      prefix: this.prefix,
+      start: this.start,
+      suffix: this.suffix,
+    });
   }
 }
 
@@ -99,8 +169,21 @@ function createUniformFormats(
 ): readonly SwNumFormat[] {
   return Array.from(
     { length: WRITER_MAX_LIST_LEVEL + 1 },
-    /** Creates one independent level format. @returns New format. */
-    () => new SwNumFormat(kind),
+    /** Creates one independent level format. @param _unused - Array placeholder. @param level - Zero-based list level. @returns New format. */
+    (_unused, level) => {
+      const indentAt = 720 + level * 360;
+      const bullets = ["•", "◦", "▪"] as const;
+      return new SwNumFormat(kind, kind === "bullet" ? bullets[level % bullets.length] : "", {
+        bulletFont: kind === "bullet" ? "OpenSymbol" : "",
+        firstLineIndent: -360,
+        indentAt,
+        labelFollowedBy: "listtab",
+        listTabPosition: indentAt,
+        prefix: "",
+        start: 1,
+        suffix: kind === "numbered" ? "." : "",
+      });
+    },
   );
 }
 

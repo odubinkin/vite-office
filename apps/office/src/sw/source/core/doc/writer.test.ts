@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   decodeWriterDocument,
   encodeWriterDocument,
-} from "../../../browser/persistence/writer-document-codec";
+} from "../../filter/basflt/writer-document-codec";
 import { isWriterParagraphAlignment } from "../txtnode/ndtxt";
 import { createWriterDocument, SwDoc } from "./doc";
 

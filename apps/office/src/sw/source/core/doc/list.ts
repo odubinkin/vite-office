@@ -3,6 +3,7 @@
  */
 
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
+import type { SwTextNode } from "../txtnode/ndtxt";
 
 /** Enumerates list variants currently mapped to LibreOffice Writer's default bullet and numbering commands. */
 export const WRITER_PARAGRAPH_LIST_KINDS = ["none", "bullet", "numbered"] as const;
@@ -13,7 +14,7 @@ export const WRITER_MAX_LIST_LEVEL = 9;
 /** Document-owned list with the supported single document-range counter tree. */
 export class SwList {
   private invalid = true;
-  private readonly nodes = new Map<string, SwNodeNum>();
+  private readonly nodes = new Map<SwTextNode, SwNodeNum>();
 
   /** Creates a list. @param listId - Unique list identity. @param defaultListStyleName - Owning numbering rule. @returns Nothing. */
   public constructor(
@@ -34,40 +35,56 @@ export class SwList {
     this.defaultListStyleName = name;
   }
   /** Registers or updates one item. @param nodeId - Text-node id. @param level - Bounded level. @returns Nothing. */
-  public InsertListItem(nodeId: string, level: number): void {
+  public InsertListItem(node: SwTextNode, level = node.GetAttrListLevel()): void {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`SwList level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
-    this.nodes.set(nodeId, new SwNodeNum(nodeId, level));
+    this.nodes.set(node, new SwNodeNum(node, level));
     this.invalid = true;
   }
   /** Removes one item. @param nodeId - Text-node id. @returns Nothing. */
-  public RemoveListItem(nodeId: string): void {
-    if (this.nodes.delete(nodeId)) this.invalid = true;
+  public RemoveListItem(node: SwTextNode): void {
+    if (this.nodes.delete(node)) this.invalid = true;
   }
   /** Invalidates counters after document ordering or level changes. @returns Nothing. */
   public InvalidateListTree(): void {
     this.invalid = true;
   }
   /** Recalculates the bounded tree in canonical document order. @param orderedNodeIds - Body-node order. @returns Nothing. */
-  public ValidateListTree(orderedNodeIds: readonly string[]): void {
+  public ValidateListTree(orderedNodes: readonly SwTextNode[]): void {
     if (!this.invalid) return;
     const counters = Array.from(
       { length: WRITER_MAX_LIST_LEVEL + 1 },
       /** Creates one zeroed level counter. @returns Initial counter. */ () => 0,
     );
-    for (const nodeId of orderedNodeIds) {
-      const node = this.nodes.get(nodeId);
+    const levelNodes: Array<SwNodeNum | undefined> = Array.from({
+      length: WRITER_MAX_LIST_LEVEL + 1,
+    });
+    for (const node of this.nodes.values()) node.ResetTree();
+    for (const textNode of orderedNodes) {
+      const node = this.nodes.get(textNode);
       if (node === undefined) continue;
       const level = node.level;
-      counters[level] = (counters[level] as number) + 1;
+      node.SetParent(level === 0 ? undefined : levelNodes[level - 1]);
+      levelNodes[level] = node;
+      for (let child = level + 1; child <= WRITER_MAX_LIST_LEVEL; child += 1)
+        levelNodes[child] = undefined;
+      const start = textNode.IsListRestart()
+        ? textNode.GetActualListStartValue()
+        : (textNode.GetNumRule()?.GetNumFormat(level).GetStart() ?? 1);
+      counters[level] =
+        textNode.IsListRestart() || counters[level] === 0 ? start : (counters[level] as number) + 1;
       for (let child = level + 1; child <= WRITER_MAX_LIST_LEVEL; child += 1) counters[child] = 0;
       node.SetNumber(counters[level] as number);
     }
     this.invalid = false;
   }
   /** Gets a calculated node counter. @param nodeId - Text-node id. @returns Counter when registered. */
-  public GetListItemNumber(nodeId: string): number | undefined {
-    return this.nodes.get(nodeId)?.GetNumber();
+  public GetListItemNumber(node: SwTextNode): number | undefined {
+    return this.nodes.get(node)?.GetNumber();
+  }
+  /** Returns the validated number-tree node. @param node - Canonical text node. @returns Tree record. */
+  public GetListItem(node: SwTextNode): SwNodeNum | undefined {
+    return this.nodes.get(node);
   }
   /** Reports whether this list has registered items. @returns True when non-empty. */
   public HasNodes(): boolean {
@@ -91,6 +108,10 @@ export interface WriterParagraphList {
   readonly ruleName?: string;
   /** Internal list identity retained by undo and continuation. */
   readonly listId?: string;
+  /** Whether numbering restarts at this paragraph. */
+  readonly restart?: boolean;
+  /** Explicit restart value; otherwise the level format start is used. */
+  readonly startValue?: number;
 }
 
 /**
@@ -143,11 +164,18 @@ export function normalizeWriterParagraphList(value: unknown): WriterParagraphLis
     typeof candidate.listId === "string" && candidate.listId.trim().length > 0
       ? candidate.listId
       : undefined;
+  const restart = candidate.restart === true;
+  const startValue =
+    Number.isInteger(candidate.startValue) && (candidate.startValue as number) >= 0
+      ? candidate.startValue
+      : undefined;
   return {
     kind,
     level,
     ...(styleId === undefined ? {} : { styleId }),
     ...(ruleName === undefined ? {} : { ruleName }),
     ...(listId === undefined ? {} : { listId }),
+    ...(restart ? { restart: true } : {}),
+    ...(startValue === undefined ? {} : { startValue }),
   };
 }

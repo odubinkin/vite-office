@@ -16,7 +16,7 @@ import { writeOdtDocument } from "../../../sw/source/filter/xml/wrtxml";
 import {
   saveWriterDocument,
   type WriterSnapshotState,
-} from "../../../sw/browser/persistence/writer-storage";
+} from "../../../sw/source/filter/basflt/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-storage";
 import { createWriterModuleFactory } from "../../../sw/browser/composition/writer-module";
 import { SwDocShell } from "../../../sw/source/uibase/app/docsh";
@@ -285,9 +285,10 @@ describe("App" /**
   it("applies and toggles Writer list commands from their pinned toolbar and Format submenu" /** Verifies visible list markers, active command state, accessible list descriptions, and no-op removal history behavior. @returns Nothing; assertions cover both list command placements. */, function appliesWriterLists(): void {
     render(<App />);
     const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    const paragraphId = paragraph.dataset.writerParagraphId as string;
     const formattingToolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Unordered List" }));
-    expect(screen.getByTestId("writer-list-marker-writer-paragraph-1")).toHaveTextContent("•");
+    expect(screen.getByTestId(`writer-list-marker-${paragraphId}`)).toHaveTextContent("•");
     expect(paragraph).toHaveAccessibleDescription(/Paragraph list: Unordered List/);
     expect(paragraph.textContent).not.toContain("•");
     expect(
@@ -299,10 +300,10 @@ describe("App" /**
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitemradio", { name: "Unordered List" }));
-    expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
+    expect(screen.queryByTestId(`writer-list-marker-${paragraphId}`)).not.toBeInTheDocument();
     expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Ordered List" }));
-    expect(screen.getByTestId("writer-list-marker-writer-paragraph-1")).toHaveTextContent("1.");
+    expect(screen.getByTestId(`writer-list-marker-${paragraphId}`)).toHaveTextContent("1.");
     expect(
       within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
     ).toBeDisabled();
@@ -564,11 +565,16 @@ describe("App" /**
           );
         },
       );
-      fireEvent.focus(screen.getByRole("textbox", { name: "Writer paragraph 2" }));
+      const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
+      fireEvent.focus(secondParagraph);
       fireEvent.click(screen.getByRole("button", { name: "Format" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
       fireEvent.click(screen.getByRole("menuitemradio", { name: /^Unordered List$/ }));
-      expect(screen.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveTextContent("•");
+      expect(
+        screen.getByTestId(
+          `writer-list-marker-${secondParagraph.dataset.writerParagraphId as string}`,
+        ),
+      ).toHaveTextContent("•");
     } finally {
       Object.defineProperty(globalThis, "indexedDB", {
         configurable: true,

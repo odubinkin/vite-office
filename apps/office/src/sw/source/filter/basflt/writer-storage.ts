@@ -8,9 +8,9 @@ import {
   type SavedSnapshotResult,
   type SerializableValue,
   type StoredDocumentOpenPort,
-} from "../../../sfx2/source/doc/docfile";
-import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
-import type { SwDoc } from "../../source/core/doc/doc";
+} from "../../../../sfx2/source/doc/docfile";
+import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
+import type { SwDoc } from "../../core/doc/doc";
 import { decodeWriterDocument, encodeWriterDocument } from "./writer-document-codec";
 
 /** Stable identifier for the browser persistence codec, distinct from the Writer model version. */
@@ -29,8 +29,8 @@ export type WriterSnapshotState = {
   readonly baselineTag: typeof WRITER_STORAGE_BASELINE_TAG;
   readonly codec: typeof WRITER_STORAGE_CODEC;
   readonly documentState: SerializableValue;
-  readonly modelVersion: 9;
-  readonly schemaVersion: 7;
+  readonly modelVersion: 10;
+  readonly schemaVersion: 8;
   readonly writerModel: SerializableValue;
 };
 
@@ -50,8 +50,8 @@ export function createWriterSnapshot(
     baselineTag: WRITER_STORAGE_BASELINE_TAG,
     codec: WRITER_STORAGE_CODEC,
     documentState: { ...documentState } as unknown as SerializableValue,
-    modelVersion: 9,
-    schemaVersion: 7,
+    modelVersion: 10,
+    schemaVersion: 8,
     writerModel: encodeWriterDocument(document) as unknown as SerializableValue,
   };
   return Object.freeze({
@@ -67,9 +67,9 @@ export function restoreWriterSnapshot(
   purpose: "primary" | "recovery",
 ): RestoredWriterSnapshot {
   if (
-    snapshot.state.schemaVersion !== 7 ||
+    snapshot.state.schemaVersion !== 8 ||
     snapshot.state.codec !== WRITER_STORAGE_CODEC ||
-    snapshot.state.modelVersion !== 9 ||
+    snapshot.state.modelVersion !== 10 ||
     snapshot.state.baselineTag !== WRITER_STORAGE_BASELINE_TAG ||
     snapshot.state.baselineCommit !== WRITER_STORAGE_BASELINE_COMMIT
   )

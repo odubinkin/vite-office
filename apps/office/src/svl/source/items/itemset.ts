@@ -76,15 +76,7 @@ export class SfxItemSet {
 
   /** Returns one item's direct, inherited, or default state. @param which - Queried WhichId. @param searchInParent - Whether inherited sets participate. @returns Item state. */
   public GetItemState(which: number, searchInParent = true): SfxItemState {
-    if (this.items.has(which)) return SfxItemState.SET;
-    const explicitState = this.itemStates.get(which);
-    if (explicitState !== undefined) return explicitState;
-    const localState = this.containsWhich(which) ? SfxItemState.DEFAULT : SfxItemState.UNKNOWN;
-    if (searchInParent && this.parent !== undefined) {
-      const parentState = this.parent.GetItemState(which, true);
-      if (parentState === SfxItemState.SET) return parentState;
-    }
-    return localState;
+    return this.GetItemStateWithFallback(SfxItemState.UNKNOWN, which, searchInParent);
   }
 
   /** Returns an explicitly set item, optionally searching parents. @param which - Queried WhichId. @param searchInParent - Whether parents participate. @returns Set item or undefined. */
@@ -120,6 +112,12 @@ export class SfxItemSet {
         changed = this.Put(item) !== undefined || changed;
       },
     );
+    for (const [which, state] of source.itemStates) {
+      if (!this.containsWhich(which)) continue;
+      if (this.GetItemState(which, false) === state) continue;
+      this.SetItemState(which, state);
+      changed = true;
+    }
     return changed;
   }
 
@@ -176,6 +174,21 @@ export class SfxItemSet {
     this.assertWhich(which);
     this.items.delete(which);
     this.itemStates.set(which, state);
+  }
+
+  /** Mirrors the recursive eState accumulator used by SfxItemSet::GetItemState_Impl. @param fallback - State accumulated by the child set. @param which - Queried WhichId. @param searchInParent - Whether inherited sets participate. @returns Effective item state. */
+  private GetItemStateWithFallback(
+    fallback: SfxItemState,
+    which: number,
+    searchInParent: boolean,
+  ): SfxItemState {
+    if (this.items.has(which)) return SfxItemState.SET;
+    const explicitState = this.itemStates.get(which);
+    if (explicitState !== undefined) return explicitState;
+    const localState = this.containsWhich(which) ? SfxItemState.DEFAULT : fallback;
+    if (searchInParent && this.parent !== undefined)
+      return this.parent.GetItemStateWithFallback(localState, which, true);
+    return localState;
   }
 }
 

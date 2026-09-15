@@ -34,7 +34,7 @@ import {
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { createWriterDocument } from "../../core/doc/doc";
-import { encodeWriterDocument } from "../../../browser/persistence/writer-document-codec";
+import { encodeWriterDocument } from "../basflt/writer-document-codec";
 import { readOdtDocument, SwXMLReader } from "./swxml";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml, parseOdfXml } from "./xmlimp";

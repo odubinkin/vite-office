@@ -12,9 +12,12 @@ import type {
 } from "../../../sfx2/source/doc/docfile";
 import type { RecoverySavePort } from "../../../svl/source/misc/recovery";
 import { createDownloadFilename } from "../../../vcl/browser/browser-download";
-import { createWriterViewControllerFactory } from "../workflows/writer-workflows";
+import {
+  createWriterViewControllerFactory,
+  type WriterSessionServices,
+} from "../workflows/writer-workflows";
 import { SwDoc } from "../../source/core/doc/doc";
-import type { WriterSnapshotState } from "../persistence/writer-storage";
+import type { WriterSnapshotState } from "../../source/filter/basflt/writer-storage";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import {
@@ -22,7 +25,8 @@ import {
   createWriterDocumentSession,
 } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
-import { SwView, type WriterSessionServices } from "../../source/uibase/uiview/view";
+import { WriterViewProjection } from "./writer-view-projection";
+import { SwView } from "../../source/uibase/uiview/view";
 
 /** Creates deterministic injected browser services without requiring real platform APIs. @returns Test session services. */
 function createServices(): WriterSessionServices {
@@ -117,6 +121,17 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const cursor = wrtShell.GetCursor();
     const initialDocument = docShell.GetDoc();
     const initialSnapshot = view.GetSnapshot();
+    expect(
+      view.SetProjectedSelection({ point: { offset: 0, paragraphId: "missing-projection" } }),
+    ).toBe(false);
+    expect(view.FocusProjectedParagraph("missing-projection")).toBe(false);
+    expect(view.FocusProjectedParagraph(initialSnapshot.activeParagraph.id)).toBe(true);
+    expect(
+      view.SetProjectedSelection({
+        mark: { offset: 0, paragraphId: "missing-mark" },
+        point: initialSnapshot.cursorSelection.point,
+      }),
+    ).toBe(false);
     expect(view.GetSnapshot()).toBe(initialSnapshot);
     expect(frame.GetActiveView()).toBe(view);
     expect(wrtShell.GetDocShell()).toBe(docShell);
@@ -575,5 +590,18 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       () => session.view.AttachFrame(session.frame),
     ).toThrow("already attached");
     session.Close();
+  });
+
+  it("keeps projection keys scoped to their live canonical document", /** Verifies browser keys cannot resolve into another document graph. @returns Nothing. */ function scopesProjectionKeys(): void {
+    const first = new SwDoc("first");
+    const second = new SwDoc("second");
+    const projection = new WriterViewProjection();
+    const firstNode = first.paragraphs[0];
+    if (firstNode === undefined) throw new Error("First Writer document has no paragraph.");
+    const projectionId = projection.GetNodeId(firstNode);
+    expect(projection.GetNodeId(firstNode)).toBe(projectionId);
+    expect(projection.ResolveNode(first, projectionId)).toBe(firstNode);
+    expect(projection.ResolveNode(second, projectionId)).toBeUndefined();
+    expect(projection.ResolveNode(first, "missing-projection")).toBeUndefined();
   });
 });

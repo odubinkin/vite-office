@@ -166,4 +166,14 @@ describe("createWriterModuleFactory", /** Registers lazy module tests. @returns 
       vi.unstubAllGlobals();
     }
   });
+
+  it("falls back to the Writer en-US locale when navigator is unavailable", /** Covers non-window construction used by browser integration tests. @returns Nothing. */ function fallsBackWithoutNavigator(): void {
+    vi.stubGlobal("navigator", undefined);
+    try {
+      const session = createTestSession();
+      session.Close();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
 });

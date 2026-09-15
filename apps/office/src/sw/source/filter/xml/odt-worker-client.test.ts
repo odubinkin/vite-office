@@ -9,7 +9,7 @@ import {
   createBrowserOdtFilterService,
   OdtWorkerClient,
   type OdtWorkerTransport,
-} from "./odt-worker-client";
+} from "../../../browser/filter/xml/odt-worker-client";
 import { createOdtFilterDocument } from "./odt-filter-service";
 
 /** Deterministic Worker transport test double. */

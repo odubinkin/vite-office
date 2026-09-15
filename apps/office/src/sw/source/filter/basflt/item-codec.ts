@@ -3,18 +3,47 @@
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
 
-import type { SfxItemPool } from "../../../svl/source/items/itempool";
-import type { SfxItemSet } from "../../../svl/source/items/itemset";
-import type { SfxPoolItem, SfxPoolItemSnapshot } from "../../../svl/source/items/poolitem";
-import { normalizeWriterHyperlink, SwFormatINetFormat } from "../../source/core/txtnode/fmtinfmt";
-import { RES_TXTATR_INETFMT } from "../../inc/hintids";
+import type { SfxItemPool } from "../../../../svl/source/items/itempool";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import {
+  SfxUnoAnyItem,
+  type SfxPoolItem,
+  type SfxPoolItemSnapshot,
+} from "../../../../svl/source/items/poolitem";
+import { normalizeWriterHyperlink, SwFormatINetFormat } from "../../core/txtnode/fmtinfmt";
+import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
+  if (item instanceof SfxUnoAnyItem)
+    throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
+  const value = item.QueryValue();
+  if (!isSfxPoolItemValue(value)) throw new Error("SfxPoolItem is not persistence-safe.");
   return {
-    value: item.QueryValue(),
+    value,
     which: item.Which(),
   };
+}
+
+/** Narrows values supported by the browser/filter persistence record. @param value - Candidate item value. @returns Whether JSON-safe. */
+function isSfxPoolItemValue(value: unknown): value is SfxPoolItemSnapshot["value"] {
+  return (
+    typeof value === "boolean" ||
+    typeof value === "number" ||
+    typeof value === "string" ||
+    (Array.isArray(value) && value.every(isSfxPoolItemSnapshot))
+  );
+}
+
+/** Validates one recursively encoded pooled item. @param value - Candidate nested item. @returns Whether it is a valid snapshot. */
+function isSfxPoolItemSnapshot(value: unknown): value is SfxPoolItemSnapshot {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  const candidate = value as Partial<SfxPoolItemSnapshot>;
+  return (
+    Number.isInteger(candidate.which) &&
+    (candidate.which as number) > 0 &&
+    isSfxPoolItemValue(candidate.value)
+  );
 }
 
 /** Encodes direct deltas in ascending WhichId order. @param set - Core item set. @returns JSON records. */

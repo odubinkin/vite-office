@@ -1310,24 +1310,24 @@
       }
     },
     {
-      "path": "apps/office/src/sw/browser/persistence/item-codec.ts",
+      "path": "apps/office/src/sw/browser/filter/html/swhtml.ts",
       "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
-      "subsystem": "storage-contract",
+      "subsystem": "clipboard-transfer",
       "capabilityIds": [
-        "CAP-0112",
-        "CAP-0131"
+        "CAP-0110"
       ],
       "semantic": {
-        "behaviorStatus": "not-applicable",
+        "behaviorStatus": "unverified",
         "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/persistence/item-codec.ts#encodeSfxPoolItem"
+          "apps/office/src/sw/browser/filter/html/swhtml.ts#parseWriterClipboardPaste",
+          "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx#SwHTMLParser::CallParser"
         ],
-        "justification": "Owns JSON discrimination for pooled items at the browser persistence boundary so core SfxPoolItem subclasses expose only canonical value operations.",
+        "justification": "The bounded import follows the upstream swhtml ownership boundary, while browser DOM parsing remains an explicit platform divergence from LibreOffice's SvParser-based implementation.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1336,53 +1336,79 @@
       }
     },
     {
-      "path": "apps/office/src/sw/browser/persistence/writer-document-codec.ts",
+      "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
       "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
-      "subsystem": "document-lifecycle",
+      "subsystem": "odf-filter",
       "capabilityIds": [
-        "CAP-0111"
+        "CAP-0113",
+        "CAP-0130"
       ],
       "semantic": {
-        "behaviorStatus": "not-applicable",
+        "behaviorStatus": "unverified",
         "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
+        "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/persistence/writer-document-codec.ts#WriterDocumentRecord"
+          "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts#ODT_WORKER_TIMEOUT_MS"
         ],
-        "justification": "Browser-only projection or persistence adaptation kept outside the canonical Writer model.",
+        "justification": "Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with transferables, stale-result rejection, cancellation, timeout, and deterministic termination. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
         "localSymbols": [],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
     },
     {
-      "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
-      "classification": "local-infrastructure",
+      "path": "apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts",
+      "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
-      "subsystem": "document-lifecycle",
+      "subsystem": "odf-filter",
       "capabilityIds": [
-        "CAP-0114",
-        "CAP-0131",
-        "CAP-0132"
+        "CAP-0113",
+        "CAP-0130"
       ],
       "semantic": {
-        "behaviorStatus": "not-applicable",
+        "behaviorStatus": "unverified",
         "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
+        "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/persistence/writer-storage.ts#WriterSnapshotState"
+          "apps/office/src/sw/browser/filter/xml/odt-worker-runtime.ts#OdtWorkerImportRequest"
         ],
-        "justification": "Defines Writer-specific snapshot creation, restoration, and persistence evidence over the generic browser storage contract without acknowledging or cloning the live document. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "justification": "Executes bounded Writer ODT filter requests inside a Dedicated Worker and returns only neutral snapshots or transferable byte buffers to the document-shell client. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
         "localSymbols": [],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/odt-worker.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0130"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/filter/xml/odt-worker.ts#Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker."
+        ],
+        "justification": "Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -2913,6 +2939,107 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/filter/basflt/item-codec.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "storage-contract",
+      "capabilityIds": [
+        "CAP-0112",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/filter/basflt/item-codec.ts#encodeSfxPoolItem"
+        ],
+        "justification": "Owns JSON discrimination for pooled items at the browser persistence boundary so core SfxPoolItem subclasses expose only canonical value operations.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/basflt/writer-document-codec.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/filter/basflt/writer-document-codec.ts#WriterDocumentRecord"
+        ],
+        "justification": "Browser-only projection or persistence adaptation kept outside the canonical Writer model.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0114",
+        "CAP-0131",
+        "CAP-0132"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/filter/basflt/writer-storage.ts#WriterSnapshotState"
+        ],
+        "justification": "Defines Writer-specific snapshot creation, restoration, and persistence evidence over the generic browser storage contract without acknowledging or cloning the live document. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/html-filter-types.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "clipboard-transfer",
+      "capabilityIds": ["CAP-0110"],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/filter/html/html-filter-types.ts#WriterClipboardPaste"
+        ],
+        "justification": "Defines structured-clone-safe neutral records between the browser DOM parser and Writer shell without importing browser APIs into the source tree.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -2946,44 +3073,8 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/filter/html/swhtml.ts",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "clipboard-transfer",
-      "capabilityIds": [
-        "CAP-0110"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
-        "defaultStatus": "unverified",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/source/filter/html/swhtml.ts#parseWriterClipboardPaste",
-          "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx#SwHTMLParser::CallParser"
-        ],
-        "justification": "The bounded import follows the upstream swhtml ownership boundary, while browser DOM parsing remains an explicit platform divergence from LibreOffice's SvParser-based implementation.",
-        "knownViolations": [
-          "browser-api-in-upstream-core"
-        ],
-        "localSymbols": [
-          "WriterClipboardPasteParagraph",
-          "WriterClipboardPaste",
-          "parseWriterClipboardPaste"
-        ],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": "sw/source/filter/html/swhtml.cxx",
-        "upstreamSymbols": [
-          "SwHTMLParser",
-          "SwHTMLParser::CallParser",
-          "SwHTMLParser::Continue"
-        ]
-      }
-    },
-    {
       "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
-      "classification": "browser-adaptation",
+      "classification": "local-infrastructure",
       "state": "active",
       "suite": "writer",
       "subsystem": "odf-filter",
@@ -2993,103 +3084,16 @@
       ],
       "semantic": {
         "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
+        "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
+        "divergenceClass": "B",
         "evidence": [
           "apps/office/src/sw/source/filter/xml/odt-filter-service.ts#OdtFilterProgressStage"
         ],
         "justification": "Defines the neutral asynchronous ODT filter service used by SwDocShell and by the Dedicated Worker adapter while retaining package/xmloff/sw ownership inside the filter. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
-        "knownViolations": [
-          "browser-adapter-upstream-path"
-        ],
+        "knownViolations": [],
         "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "odf-filter",
-      "capabilityIds": [
-        "CAP-0113",
-        "CAP-0130"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/sw/source/filter/xml/odt-worker-client.ts#ODT_WORKER_TIMEOUT_MS"
-        ],
-        "justification": "Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with transferables, stale-result rejection, cancellation, timeout, and deterministic termination. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
-        "knownViolations": [
-          "browser-adapter-upstream-path",
-          "browser-api-in-upstream-core"
-        ],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "odf-filter",
-      "capabilityIds": [
-        "CAP-0113",
-        "CAP-0130"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts#OdtWorkerImportRequest"
-        ],
-        "justification": "Executes bounded Writer ODT filter requests inside a Dedicated Worker and returns only neutral snapshots or transferable byte buffers to the document-shell client. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
-        "knownViolations": [
-          "browser-adapter-upstream-path"
-        ],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "odf-filter",
-      "capabilityIds": [
-        "CAP-0113",
-        "CAP-0130"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/sw/source/filter/xml/odt-worker.ts#Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker."
-        ],
-        "justification": "Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
-        "knownViolations": [
-          "browser-adapter-upstream-path"
-        ],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -3498,13 +3502,13 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/uiview/view.ts#WriterSessionServices",
+          "apps/office/src/sw/source/uibase/uiview/view.ts#WriterPresentationProjector",
           "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx#SwView"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/uiview/view.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
         "knownViolations": [],
         "localSymbols": [
-          "WriterSessionServices",
+          "WriterPresentationProjector",
           "WriterCutCommandArguments",
           "WriterPasteCommandArguments",
           "WriterViewControllers",
@@ -3649,7 +3653,6 @@
           "WriterCursorSelection",
           "WriterParagraphTextRange",
           "WriterCompositionState",
-          "areWriterCursorSelectionsEqual",
           "isWriterCursorOffset",
           "getWriterSelectedTextRange",
           "createWriterRangeSelection",
@@ -3975,6 +3978,29 @@
           "apps/office/src/vcl/browser/browser-file.ts#selectBrowserFile"
         ],
         "justification": "Implements browser-only file selection and byte reading behind injectable DOM capabilities. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/vcl/browser/default-font-device.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-platform",
+      "capabilityIds": ["CAP-0109"],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/vcl/browser/default-font-device.ts#createBrowserDefaultFontDevice"
+        ],
+        "justification": "Adapts synchronous CSS Font Loading availability checks to Writer's narrow VCL-like default-font device contract.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",

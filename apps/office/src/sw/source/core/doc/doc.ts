@@ -13,6 +13,14 @@ import type { SwNumRule } from "./number";
 import type { SwAtomicModelHint } from "../../../inc/hints";
 import { SfxUndoManager } from "../../../../svl/source/undo/undo";
 import type { SwUndoRedoContext } from "../undo/undobj";
+import type { DefaultFontDevice } from "./default-font";
+
+/** Construction policy for locale/device-dependent Writer defaults. */
+export interface SwDocOptions {
+  readonly createInitialTextNode?: boolean;
+  readonly defaultFontDevice?: DefaultFontDevice;
+  readonly locale?: string;
+}
 
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
@@ -23,19 +31,34 @@ export class SwDoc {
   private readonly stateManager = new DocumentStateManager();
   private readonly stylePoolManager: DocumentStylePoolManager;
   private readonly undoManager = new SfxUndoManager<SwUndoRedoContext>();
+  private readonly defaultFontDevice: DefaultFontDevice | undefined;
+  private readonly locale: string;
   public readonly nodes: SwNodes;
 
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
-  public constructor(createInitialTextNode: boolean | string = true) {
+  public constructor(createInitialTextNode: boolean | string | SwDocOptions = true) {
+    const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
+    this.defaultFontDevice = options?.defaultFontDevice;
+    this.locale = options?.locale ?? "en-US";
     this.attrPool = new SwAttrPool(this);
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
     this.listsManager = new DocumentListsManager(this.stateManager);
     this.nodes = new SwNodes(this);
     this.contentOperationsManager = new DocumentContentOperationsManager();
-    if (createInitialTextNode !== false)
+    if (options?.createInitialTextNode !== false && createInitialTextNode !== false)
       this.nodes.MakeTextNode(
         typeof createInitialTextNode === "string" ? createInitialTextNode : "writer-paragraph-1",
       );
+  }
+
+  /** Returns the document locale used for script-specific defaults. @returns BCP 47 locale. */
+  public GetLocale(): string {
+    return this.locale;
+  }
+
+  /** Returns the injected output-device font resolver. @returns Device or undefined. */
+  public GetDefaultFontDevice(): DefaultFontDevice | undefined {
+    return this.defaultFontDevice;
   }
 
   /** Returns Writer's complete node array. @returns Owned node array. */

@@ -60,13 +60,13 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
   );
   const handleParagraphFocus = useCallback(
     /** Moves the shell cursor to a focused projection. @param paragraphId - Stable Writer paragraph ID. @returns Nothing. */
-    (paragraphId: string): void => wrtShell.FocusParagraph(paragraphId),
-    [wrtShell],
+    (paragraphId: string): void => void view.FocusProjectedParagraph(paragraphId),
+    [view],
   );
   const handleSelectionChange = useCallback(
     /** Stores native selection endpoints as the shell PaM. @param selection - Canonical Writer endpoints. @returns Whether the selection changed. */
-    (selection: WriterCursorSelection): boolean => wrtShell.SetSelection(selection),
-    [wrtShell],
+    (selection: WriterCursorSelection): boolean => view.SetProjectedSelection(selection),
+    [view],
   );
   const handleSelectAll = useCallback(
     /** Dispatches the canonical Select All command. @returns Nothing. */ () => {

@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { parseWriterClipboardPaste } from "./swhtml";
+import { parseWriterClipboardPaste } from "../../../browser/filter/html/swhtml";
 
 describe("Writer HTML transfer import", /** Groups bounded HTML filter tests. @returns Nothing. */ function defineWriterHtmlTransferTests(): void {
   it("imports only bounded direct formats and ignores unsafe markup", /** Verifies allowlisted inline semantics. @returns Nothing. */ function importsSafeRuns(): void {

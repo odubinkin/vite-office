@@ -1,13 +1,24 @@
 /** @fileoverview Verifies Writer script/language default-font selection. */
 
 import { describe, expect, it } from "vitest";
-import { getDefaultFont, getWriterFontScript, type DefaultFontDevice } from "./default-font";
+import {
+  getDefaultFont,
+  getWriterDefaultFontLanguage,
+  getWriterFontScript,
+  type DefaultFontDevice,
+} from "./default-font";
+import { SwDoc } from "./doc";
+import { RES_CHRATR_CJK_FONT } from "../../../inc/hintids";
+import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 
 describe("Writer default-font policy", /** Registers default-font tests. @returns Nothing. */ () => {
   it("classifies representative Western, CJK, and CTL languages", /** Verifies language-to-script mapping. @returns Nothing. */ () => {
     expect(getWriterFontScript("en-US")).toBe("western");
     expect(getWriterFontScript("ja-JP")).toBe("cjk");
     expect(getWriterFontScript("ar-SA")).toBe("ctl");
+    expect(getWriterDefaultFontLanguage("ja-JP", "cjk")).toBe("ja-JP");
+    expect(getWriterDefaultFontLanguage("ja-JP", "western")).toBe("en-US");
+    expect(getWriterDefaultFontLanguage("en-GB", "ctl")).toBe("ar-SA");
   });
 
   it("keeps document defaults stable when the device cannot resolve a font", /** Verifies unavailable-device fallback. @returns Nothing. */ () => {
@@ -29,5 +40,13 @@ describe("Writer default-font policy", /** Registers default-font tests. @return
         "Source Han Sans",
     };
     expect(getDefaultFont(device, "heading", "zh-CN", "cjk")).toBe("Source Han Sans");
+    const document = new SwDoc({ defaultFontDevice: device, locale: "ja-JP" });
+    expect(document.GetLocale()).toBe("ja-JP");
+    expect(document.GetDefaultFontDevice()).toBe(device);
+    expect(
+      (
+        document.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
+      ).GetFamilyName(),
+    ).toBe("Source Han Sans");
   });
 });

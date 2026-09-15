@@ -47,7 +47,10 @@ import { CreateWriterFontUndo, SwUndoAttr, SwUndoParagraphFormat } from "../../c
 import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import { SwUndoInsNum, SwUndoNumLevel } from "../../core/undo/unnum";
 import { SwTransferable } from "../dochdl/swdtflvr";
-import type { WriterClipboardPaste, WriterClipboardPasteParagraph } from "../../filter/html/swhtml";
+import type {
+  WriterClipboardPaste,
+  WriterClipboardPasteParagraph,
+} from "../../filter/html/html-filter-types";
 import {
   CopyTextRangeRuns,
   CopyUndoRuns,
@@ -57,7 +60,6 @@ import {
 } from "../../core/undo/undobj";
 import { getWriterTypingCharacterClass } from "./delete";
 import {
-  areWriterCursorSelectionsEqual,
   createWriterCollapsedCursorState,
   createWriterRangeSelection,
   createWriterUndoCursorState,
@@ -68,6 +70,8 @@ import {
   type WriterParagraphTextRange,
 } from "./wrtsh-selection";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
+import { RES_CHRATR_FONT } from "../../../inc/hintids";
+import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 
 export type {
@@ -78,7 +82,7 @@ export type {
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwModify {
-  private activeParagraphId: string;
+  private activeParagraph: WriterParagraph;
   private readonly commandShell: SfxShell;
   private composition: WriterCompositionState | undefined;
   private readonly cursor: SwPaM;
@@ -95,7 +99,7 @@ export class SwWrtShell extends SwModify {
   ) {
     super();
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
-    this.activeParagraphId = paragraph.id;
+    this.activeParagraph = paragraph;
     this.cursor = new SwPaM(new SwPosition(paragraph, paragraph.text.length));
     this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(
       paragraph.runs,
@@ -158,13 +162,19 @@ export class SwWrtShell extends SwModify {
   public GetListShell(): SwListShell {
     return this.listShell;
   }
-  /** Returns the active paragraph with the Writer first-paragraph fallback. @returns Active text node. */
+  /** Returns the active document-owned paragraph. @returns Active text node. */
   public GetActiveParagraph(): WriterParagraph {
-    return getActiveWriterParagraph(this.GetDoc(), this.activeParagraphId);
+    return this.activeParagraph;
   }
   /** Returns pending direct attributes for a collapsed caret. @returns Copied attribute state. */
   public GetPendingCharacterAttributes(): WriterCharacterAttributes {
     return { ...this.pendingCharacterAttributes };
+  }
+  /** Returns the locale/device-resolved Western text default. @returns Font family. */
+  public GetDefaultFontFamily(): string {
+    return (
+      this.GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_FONT) as SvxFontItem
+    ).GetFamilyName();
   }
   /** Returns whether the shell-owned history can move backward. @returns True when Undo is enabled. */
   public CanUndo(): boolean {
@@ -176,7 +186,6 @@ export class SwWrtShell extends SwModify {
     this.docShell.EnsureOpen();
     return this.docShell.GetUndoManager().GetRedoActionCount() > 0;
   }
-
   /** Subscribes to cursor and pending-attribute changes. @param listener - View invalidation callback. @returns Cleanup removing it. */
   public Subscribe(listener: (hint: SwModelHint) => void): () => void {
     return subscribeToSwModify(
@@ -187,7 +196,6 @@ export class SwWrtShell extends SwModify {
       ) => listener(hint),
     );
   }
-
   /** Rebinds cursor state before propagating one document-shell hint. @param hint - Typed shell hint. @returns Nothing. */
   private ReceiveDocShellHint(hint: SwModelHint): void {
     this.RunNotificationTransaction(
@@ -208,11 +216,10 @@ export class SwWrtShell extends SwModify {
       },
     );
   }
-
   /** Rebinds the persistent PaM after explicit document replacement. @returns Nothing. */
   public DocumentReplaced(): void {
     const paragraph = this.GetDoc().paragraphs[0] as WriterParagraph;
-    this.activeParagraphId = paragraph.id;
+    this.activeParagraph = paragraph;
     this.composition = undefined;
     this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(
       paragraph.runs,
@@ -221,14 +228,12 @@ export class SwWrtShell extends SwModify {
     this.AssignCursor(paragraph, paragraph.text.length);
     this.NotifySelection();
   }
-
   /** Releases the persistent PaM and broadcaster registrations. @returns Nothing. */
   public Close(): void {
     this.docShellSubscription();
     this.cursor.Dispose();
     this.DisposeModify();
   }
-
   /** Selects one paragraph as the command target. @param paragraphId - Existing paragraph identity. @param offset - Optional logical caret offset, defaulting to paragraph end. @returns Nothing. */
   public SetCursor(paragraphId: string, offset?: number): void {
     const paragraph = getActiveWriterParagraph(this.GetDoc(), paragraphId);
@@ -236,17 +241,15 @@ export class SwWrtShell extends SwModify {
       point: { offset: offset ?? paragraph.text.length, paragraphId: paragraph.id },
     });
   }
-
   /** Uses paragraph-end fallback only when focus crosses nodes before the browser publishes selectionchange. @param paragraphId - Focused paragraph identity. @returns Nothing. */
   public FocusParagraph(paragraphId: string): void {
     const paragraph = getActiveWriterParagraph(this.GetDoc(), paragraphId);
     if (this.cursor.GetPoint().GetNode() === paragraph) {
-      this.activeParagraphId = paragraph.id;
+      this.activeParagraph = paragraph;
       return;
     }
     this.SetCursor(paragraph.id);
   }
-
   /** Synchronizes an externally changed view selection into the persistent SwPaM. @param selection - Stable point-and-mark coordinates from a view adapter. @returns Whether canonical cursor state changed. */
   public SetSelection(selection: WriterCursorSelection): boolean {
     const document = this.GetDoc();
@@ -262,24 +265,50 @@ export class SwWrtShell extends SwModify {
         (markNode === undefined || !isWriterCursorOffset(markNode, selection.mark.offset)))
     )
       return false;
-    const current = this.GetCursorSelection();
-    if (areWriterCursorSelectionsEqual(current, selection)) return false;
-    this.activeParagraphId = pointNode.id;
-    this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(
-      pointNode.runs,
-      selection.point.offset,
-    );
-    this.docShell.GetUndoManager().BreakUndoGrouping();
-    this.cursor.Assign(
+    return this.SetPaM(
       new SwPosition(pointNode, selection.point.offset),
       selection.mark === undefined || markNode === undefined
         ? undefined
         : new SwPosition(markNode, selection.mark.offset),
     );
+  }
+  /** Assigns canonical Writer positions to the persistent PaM. @param point - Moving endpoint. @param mark - Optional fixed endpoint. @returns Whether the cursor changed. */
+  public SetPaM(point: SwPosition, mark?: SwPosition): boolean {
+    const pointNode = point.GetNode() as WriterParagraph;
+    const markNode = mark?.GetNode() as WriterParagraph | undefined;
+    if (
+      pointNode.GetDoc() !== this.GetDoc() ||
+      (markNode !== undefined && markNode.GetDoc() !== this.GetDoc())
+    )
+      return false;
+    const currentPoint = this.cursor.GetPoint();
+    const currentMark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
+    if (
+      currentPoint.GetNode() === pointNode &&
+      currentPoint.GetContentIndex() === point.GetContentIndex() &&
+      currentMark?.GetNode() === markNode &&
+      currentMark?.GetContentIndex() === mark?.GetContentIndex()
+    )
+      return false;
+    this.activeParagraph = pointNode;
+    this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(
+      pointNode.runs,
+      point.GetContentIndex(),
+    );
+    this.docShell.GetUndoManager().BreakUndoGrouping();
+    this.cursor.Assign(point, mark);
     this.NotifySelection();
     return true;
   }
-
+  /** Focuses a canonical text node without accepting a UI key. @param paragraph - Document-owned node. @returns Nothing. */
+  public FocusNode(paragraph: WriterParagraph): void {
+    if (paragraph.GetDoc() !== this.GetDoc()) return;
+    if (this.cursor.GetPoint().GetNode() === paragraph) {
+      this.activeParagraph = paragraph;
+      return;
+    }
+    this.SetPaM(new SwPosition(paragraph, paragraph.Len()));
+  }
   /** Selects the complete current Writer body through the persistent shell cursor. @returns Nothing. */
   public SelectAll(): void {
     const document = this.GetDoc();
@@ -289,6 +318,10 @@ export class SwWrtShell extends SwModify {
       mark: { offset: 0, paragraphId: first.id },
       point: { offset: last.Len(), paragraphId: last.id },
     });
+  }
+  /** Pastes at the current canonical PaM without a projected string selection. @param paste - Parsed clipboard content. @returns Whether content changed. */
+  public PasteAtCursor(paste: WriterClipboardPaste): boolean {
+    return this.Paste(this.GetCursorSelection(), paste);
   }
 
   /** Inserts text at the persistent Writer cursor, matching the bounded SwWrtShell insertion boundary. @param text - Text to insert or replace the selection with. @returns Whether the document changed. */
@@ -943,8 +976,8 @@ export class SwWrtShell extends SwModify {
       state.mark === undefined || markNode === undefined
         ? undefined
         : new SwPosition(markNode, Math.min(state.mark.offset, markNode.Len()));
-    this.activeParagraphId =
-      state.activeParagraph.GetDoc() === document ? state.activeParagraph.id : pointNode.id;
+    this.activeParagraph =
+      state.activeParagraph.GetDoc() === document ? state.activeParagraph : pointNode;
     this.pendingCharacterAttributes = { ...state.pendingCharacterAttributes };
     this.cursor.Assign(point, mark);
   }

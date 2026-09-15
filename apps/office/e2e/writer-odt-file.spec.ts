@@ -7,6 +7,7 @@ import { expect, test } from "@playwright/test";
 import { ZipFile } from "../src/package/source/zipapi/ZipFile";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { createWriterDocument } from "../src/sw/source/core/doc/doc";
+import { SwPosition } from "../src/sw/source/core/crsr/pam";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
 import { SwWrtShell } from "../src/sw/source/uibase/wrtsh/wrtsh";
@@ -25,10 +26,12 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   shell.Insert("BrowserODTContent");
   shell.SetParagraphStyle("heading-1");
   shell.SetParagraphAlignment("center");
-  shell.SetSelection({
-    mark: { offset: 0, paragraphId: "fixture-paragraph" },
-    point: { offset: "BrowserODTContent".length, paragraphId: "fixture-paragraph" },
-  });
+  const sourceParagraph = source.paragraphs[0];
+  if (sourceParagraph === undefined) throw new Error("ODT fixture has no paragraph.");
+  shell.SetPaM(
+    new SwPosition(sourceParagraph, "BrowserODTContent".length),
+    new SwPosition(sourceParagraph, 0),
+  );
   shell.SetParagraphListKind("numbered");
   shell.ChangeParagraphListLevel("demote");
   const sourceBytes = writeOdtDocument(source, docShell.GetDocumentState());
@@ -53,7 +56,8 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   await expect(editor.locator("strong")).toHaveText("BrowserODTContent");
   await expect(editor).toHaveAttribute("data-list-kind", "numbered");
   await expect(editor).toHaveAttribute("data-list-level", "1");
-  await expect(page.getByTestId("writer-list-marker-writer-paragraph-1")).toHaveText("1.");
+  const projectionId = await editor.getAttribute("data-writer-paragraph-id");
+  await expect(page.locator(`[data-writer-list-marker="${projectionId}"]`)).toHaveText("1.");
   await expect(page.getByText("Browser ODT Fixture")).toBeVisible();
 
   const downloadPromise = page.waitForEvent("download");

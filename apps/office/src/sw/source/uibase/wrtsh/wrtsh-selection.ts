@@ -48,19 +48,6 @@ export function isWriterCursorOffset(paragraph: WriterParagraph, offset: number)
   return Number.isInteger(offset) && offset >= 0 && offset <= paragraph.Len();
 }
 
-/** Compares two direction-preserving browser-neutral cursor projections. @param left - Current selection. @param right - Candidate selection. @returns True when point and optional mark are identical. */
-export function areWriterCursorSelectionsEqual(
-  left: WriterCursorSelection,
-  right: WriterCursorSelection,
-): boolean {
-  return (
-    left.point.paragraphId === right.point.paragraphId &&
-    left.point.offset === right.point.offset &&
-    left.mark?.paragraphId === right.mark?.paragraphId &&
-    left.mark?.offset === right.mark?.offset
-  );
-}
-
 /** Returns an ordered non-empty same-node selection. @param selection - Cursor projection. @returns Bounded range or undefined. */
 export function getWriterSelectedTextRange(
   selection: WriterCursorSelection,

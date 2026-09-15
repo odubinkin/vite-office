@@ -114,6 +114,18 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     ).toThrow("at most one Unicode code point");
     const bullet = new SwNumFormat("bullet", "●");
     expect(bullet.GetBulletChar()).toBe("●");
+    expect(bullet.GetBulletFont()).toBe("OpenSymbol");
+    expect(bullet.GetFirstLineIndent()).toBe(-360);
+    expect(bullet.GetIndentAt()).toBe(720);
+    expect(bullet.GetLabelFollowedBy()).toBe("listtab");
+    expect(bullet.GetListtabPos()).toBe(720);
+    expect(bullet.GetPrefix()).toBe("");
+    expect(bullet.GetStart()).toBe(1);
+    expect(bullet.GetSuffix()).toBe("");
+    expect(
+      /** Creates an invalid negative list start. @returns Invalid format. */ () =>
+        new SwNumFormat("numbered", "", { start: -1 }),
+    ).toThrow("start value");
     const dots = new SwNumRule("dots", [
       bullet,
       ...Array.from(
@@ -153,7 +165,28 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(getWriterParagraphListMarker(document.paragraphs, "first")).toBe("1.");
     expect(getWriterParagraphListMarker(document.paragraphs, "nested")).toBe("1.");
     expect(getWriterParagraphListMarker(document.paragraphs, "second")).toBe("2.");
+    expect(nested.GetActualListStartValue()).toBe(1);
     nested.SetParagraphList({ kind: "numbered", level: 0 });
     expect(getWriterParagraphListMarker(document.paragraphs, "second")).toBe("3.");
+    second.SetParagraphList({ kind: "numbered", level: 0, restart: true, startValue: 5 });
+    expect(second.IsListRestart()).toBe(true);
+    expect(second.HasAttrListRestartValue()).toBe(true);
+    expect(second.GetAttrListRestartValue()).toBe(5);
+    expect(second.GetActualListStartValue()).toBe(5);
+    expect(second.GetListItemNumber()).toBe(5);
+    expect(second.list).toMatchObject({ restart: true, startValue: 5 });
+    second.SetListRestart(true);
+    expect(second.HasAttrListRestartValue()).toBe(false);
+    expect(
+      /** Reads a missing explicit restart value. @returns Missing value. */ () =>
+        second.GetAttrListRestartValue(),
+    ).toThrow("is not set");
+    expect(
+      /** Installs an out-of-range restart value. @returns Nothing. */ () =>
+        second.SetListRestart(true, 40_000),
+    ).toThrow("outside the supported range");
+    second.SetParagraphList({ kind: "none", level: 0 });
+    expect(second.IsListRestart()).toBe(false);
+    expect(second.GetActualListStartValue()).toBe(1);
   });
 });

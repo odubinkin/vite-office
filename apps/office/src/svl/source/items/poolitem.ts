@@ -32,7 +32,40 @@ export abstract class SfxPoolItem {
   public abstract equals(other: SfxPoolItem): boolean;
 
   /** Exposes the UNO-compatible value used by filter and persistence boundaries. @returns Item value. */
-  public abstract QueryValue(): SfxPoolItemValue;
+  public abstract QueryValue(): unknown;
+}
+
+/** UNO Any-valued request item used only at dispatch boundaries, matching SfxUnoAnyItem. */
+export class SfxUnoAnyItem extends SfxPoolItem {
+  /** Creates an Any argument item. @param which - Slot/argument identity. @param value - Caller-owned immutable boundary value. @returns Nothing. */
+  public constructor(
+    which: number,
+    private readonly value: unknown,
+  ) {
+    super(which);
+  }
+
+  /** Returns the stored Any value. @returns Boundary value. */
+  public GetValue(): unknown {
+    return this.value;
+  }
+
+  /** Creates an independent item wrapper. @returns Cloned item. */
+  public Clone(): SfxUnoAnyItem {
+    return new SfxUnoAnyItem(this.Which(), this.value);
+  }
+
+  /** Compares the item identity and Any value identity. @param other - Candidate item. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SfxUnoAnyItem && other.Which() === this.Which() && other.value === this.value
+    );
+  }
+
+  /** Exposes the UNO Any value. @returns Boundary value. */
+  public QueryValue(): unknown {
+    return this.value;
+  }
 }
 
 /** String-valued SfxPoolItem counterpart. */

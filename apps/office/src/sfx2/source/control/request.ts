@@ -10,11 +10,10 @@ export class SfxRequest {
   private done = false;
   private returnValue: SfxPoolItem | undefined;
 
-  /** Creates one request. @param slot - Numeric Sfx slot ID. @param arguments_ - Argument items. @param browserPayload - Narrow browser adapter payload. @returns Nothing. */
+  /** Creates one request. Browser-only payloads are deliberately not part of this upstream-shaped record. @param slot - Numeric Sfx slot ID. @param arguments_ - Argument items. @returns Nothing. */
   public constructor(
     private readonly slot: number,
     private readonly arguments_: readonly SfxPoolItem[] = [],
-    private readonly browserPayload?: unknown,
   ) {
     if (!Number.isInteger(slot) || slot <= 0) throw new Error("SfxRequest slot is invalid.");
   }
@@ -27,11 +26,6 @@ export class SfxRequest {
   /** Returns immutable argument items. @returns Request arguments. */
   public GetArgs(): readonly SfxPoolItem[] {
     return this.arguments_;
-  }
-
-  /** Returns the browser-bound payload kept outside the upstream item contract. @returns Adapter payload. */
-  public GetBrowserPayload(): unknown {
-    return this.browserPayload;
   }
 
   /** Completes the request with an optional return item. @param returnValue - Slot return item. @returns Nothing. */

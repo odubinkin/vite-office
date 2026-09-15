@@ -4,11 +4,11 @@ import { describe, expect, it } from "vitest";
 import {
   decodeSwFormatINetFormat as restoreSwFormatINetFormat,
   encodeSfxPoolItem,
-} from "../../../browser/persistence/item-codec";
+} from "../../filter/basflt/item-codec";
 import {
   decodeWriterDocument as normalizeWriterParagraphFormatting,
   encodeWriterDocument as serializeWriterDocument,
-} from "../../../browser/persistence/writer-document-codec";
+} from "../../filter/basflt/writer-document-codec";
 
 import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";

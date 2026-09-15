@@ -1,14 +1,45 @@
-/** @fileoverview Bounded browser counterpart of Writer's sw/inc/SwNodeNum.hxx counter-tree node. */
+/** @fileoverview Bounded counterpart of Writer's sw/inc/SwNodeNum.hxx counter-tree node. */
+
+import type { SwTextNode } from "../txtnode/ndtxt";
 
 /** A registered list item and its calculated one-based counter. */
 export class SwNodeNum {
+  private children: SwNodeNum[] = [];
+  private parent: SwNodeNum | undefined;
   private value = 0;
 
-  /** Creates a node-number record. @param nodeId - Canonical text-node identity. @param level - Zero-based list level. @returns Nothing. */
+  /** Creates a node-number record. @param textNode - Canonical text node. @param level - Zero-based list level. @returns Nothing. */
   public constructor(
-    public readonly nodeId: string,
+    private readonly textNode: SwTextNode,
     public readonly level: number,
   ) {}
+
+  /** Returns the canonical list item. @returns Text node. */
+  public GetTextNode(): SwTextNode {
+    return this.textNode;
+  }
+
+  /** Reparents this number-tree node during validation. @param parent - Nearest preceding shallower item. @returns Nothing. */
+  public SetParent(parent: SwNodeNum | undefined): void {
+    this.parent = parent;
+    parent?.children.push(this);
+  }
+
+  /** Clears previously calculated tree links. @returns Nothing. */
+  public ResetTree(): void {
+    this.parent = undefined;
+    this.children = [];
+  }
+
+  /** Returns the calculated parent. @returns Parent item for nested nodes. */
+  public GetParent(): SwNodeNum | undefined {
+    return this.parent;
+  }
+
+  /** Returns calculated direct children. @returns Child items. */
+  public GetChildren(): readonly SwNodeNum[] {
+    return this.children;
+  }
 
   /** Stores the calculated counter after list-tree validation. @param value - One-based counter. @returns Nothing. */
   public SetNumber(value: number): void {

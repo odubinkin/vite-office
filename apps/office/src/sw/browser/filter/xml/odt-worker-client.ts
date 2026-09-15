@@ -18,9 +18,10 @@ import {
   OdtFilterError,
   type OdtFilterOperationOptions,
   type OdtFilterDocument,
+  type OdtCancellationSignal,
   type OdtFilterProgressStage,
   type OdtFilterService,
-} from "./odt-filter-service";
+} from "../../../source/filter/xml/odt-filter-service";
 import type { OdtWorkerRequestPayload, OdtWorkerResultPayload } from "./odt-worker-runtime";
 
 /** Default wall-clock ceiling for one browser ODT operation. */
@@ -46,7 +47,7 @@ interface PendingRequest {
   readonly onProgress?: (stage: OdtFilterProgressStage) => void;
   readonly reject: (reason: OdtFilterError) => void;
   readonly resolve: (value: OdtWorkerResultPayload) => void;
-  readonly signal?: AbortSignal;
+  readonly signal?: OdtCancellationSignal;
   readonly abortListener?: () => void;
   readonly timeout: ReturnType<typeof setTimeout>;
 }

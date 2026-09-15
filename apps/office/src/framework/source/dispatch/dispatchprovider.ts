@@ -8,7 +8,8 @@ import {
   SfxBoolItem,
   SfxInt16Item,
   SfxStringItem,
-  type SfxPoolItem,
+  SfxUnoAnyItem,
+  SfxPoolItem,
 } from "../../../svl/source/items/poolitem";
 
 /** Identifies the shell layer that owns one command handler. */
@@ -387,7 +388,8 @@ export class SfxDispatcher {
   public Execute(commandId: string, arguments_?: unknown): CommandDispatchResult<unknown> {
     const command = this.QueryDispatch(commandId);
     if (command === undefined) return { commandId, status: "missing" };
-    const request = new SfxRequest(command.command.slotId ?? 1, [], arguments_);
+    const slot = command.command.slotId ?? 1;
+    const request = new SfxRequest(slot, createRequestArguments(slot, arguments_));
     return this.ExecuteRequest(commandId, request);
   }
 
@@ -397,11 +399,8 @@ export class SfxDispatcher {
     if (command === undefined) return { commandId, status: "missing" };
     if (command.command.slotId !== undefined && request.GetSlot() !== command.command.slotId)
       throw new Error(`SfxRequest slot does not match command: ${commandId}`);
-    const browserPayload = request.GetBrowserPayload();
     this.lastCommandError = undefined;
-    const result = command.execute(
-      browserPayload === undefined ? request.GetArgs() : browserPayload,
-    );
+    const result = command.execute(request.GetArgs());
     if (result.status === "executed" && !isPromiseLike(result.value))
       request.Done(createRequestReturnItem(request.GetSlot(), result.value));
     if (result.status !== "executed" || !isPromiseLike(result.value)) return result;
@@ -557,6 +556,25 @@ function createRequestReturnItem(slot: number, value: unknown): SfxPoolItem | un
   if (typeof value === "number" && Number.isInteger(value) && value >= -32_768 && value <= 32_767)
     return new SfxInt16Item(slot, value);
   return undefined;
+}
+
+/** Converts presentation-bound values into Sfx request items before shell execution. @param slot - Executed slot. @param value - Optional presentation argument. @returns Immutable item arguments. */
+function createRequestArguments(slot: number, value: unknown): readonly SfxPoolItem[] {
+  if (value === undefined) return [];
+  if (
+    Array.isArray(value) &&
+    value.every(
+      /** Checks one prebuilt request argument. @param item - Candidate value. @returns Whether it is pooled. */ (
+        item,
+      ) => item instanceof SfxPoolItem,
+    )
+  )
+    return value as readonly SfxPoolItem[];
+  if (typeof value === "boolean") return [new SfxBoolItem(slot, value)];
+  if (typeof value === "string") return [new SfxStringItem(slot, value)];
+  if (typeof value === "number" && Number.isInteger(value) && value >= -32_768 && value <= 32_767)
+    return [new SfxInt16Item(slot, value)];
+  return [new SfxUnoAnyItem(slot, value)];
 }
 
 /**
