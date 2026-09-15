@@ -130,6 +130,12 @@ The Stage 0 tooling fails when:
 - a capability ID or visible Writer command ID is duplicated or unknown;
 - a production runtime module, exported domain operation, UI-only behavior, or
   internal operation is absent from the runtime inventory;
+- a runtime module omits semantic provenance, an exact local/upstream symbol
+  mapping, independent contract/behavior/default status, or divergence evidence;
+- AST/API inheritance or exported-symbol checks differ from the recorded result;
+- React, DOM, Worker, IndexedDB, or browser globals cross a protected core,
+  `inc`, shell, filter, or uiconfig boundary without an exact recorded finding;
+- a `B` divergence lacks concrete browser evidence or justification;
 - a `verified` row lacks any required evidence field;
 - a `verified` row retains a gap or lacks an exact assertion/manual contract and
   executable local test;

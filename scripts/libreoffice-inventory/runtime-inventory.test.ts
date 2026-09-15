@@ -3,6 +3,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  analyzeRuntimeModuleSemantics,
   extractExportedOperations,
   parseRuntimeInventoryManifest,
   selectRuntimeModulePaths,
@@ -32,6 +33,7 @@ function source(overrides: Readonly<Record<string, unknown>> = {}): string {
         classification: "local-infrastructure",
         infrastructureExemption: "Synthetic local bootstrap with no domain capability.",
         path: "src/a.ts",
+        semantic: semanticRecord(),
         state: "foundation",
         subsystem: "bootstrap",
         suite: "shared",
@@ -40,13 +42,14 @@ function source(overrides: Readonly<Record<string, unknown>> = {}): string {
         capabilityIds: ["CAP-0001"],
         classification: "upstream-mechanism",
         path: "src/b.tsx",
+        semantic: semanticRecord({ upstreamFile: "upstream/b.cxx" }),
         state: "active",
         subsystem: "writer",
         suite: "writer",
       },
     ],
     placeholderSuites: ["base", "calc"],
-    schemaVersion: 2,
+    schemaVersion: 3,
     uiBehaviors: [
       {
         classification: "browser-adaptation",
@@ -79,7 +82,8 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
       exportedOperationCount: 4,
       internalOperationCount: 1,
       placeholderSuiteCount: 2,
-      schemaVersion: 2,
+      schemaVersion: 3,
+      semanticViolationCount: 0,
       uiBehaviorCount: 1,
     });
     expect(reportedOperations(report.modules)).toEqual([
@@ -121,6 +125,65 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
     expectInvalid(source({ modules: [moduleRecord({ subsystem: "" })] }));
     expectInvalid(source({ modules: [moduleRecord({ capabilityIds: [""] })] }));
     expectInvalid(source({ modules: [moduleRecord({ infrastructureExemption: "" })] }));
+    expectInvalid(source({ modules: [moduleRecord({ semantic: null })] }));
+    expectInvalid(
+      source({ modules: [moduleRecord({ semantic: semanticRecord({ divergenceClass: "bad" }) })] }),
+    );
+    expectInvalid(
+      source({ modules: [moduleRecord({ semantic: semanticRecord({ behaviorStatus: "bad" }) })] }),
+    );
+    expectInvalid(
+      source({ modules: [moduleRecord({ semantic: semanticRecord({ justification: "short" }) })] }),
+    );
+    expectInvalid(
+      source({ modules: [moduleRecord({ semantic: semanticRecord({ upstreamFile: 7 }) })] }),
+    );
+    expectInvalid(
+      source({ modules: [moduleRecord({ semantic: semanticRecord({ expectedBaseClass: 7 }) })] }),
+    );
+    expectInvalid(
+      source({ modules: [moduleRecord({ semantic: semanticRecord({ expectedBaseClass: "" }) })] }),
+    );
+    expectInvalid(
+      source({
+        modules: [moduleRecord({ semantic: semanticRecord({ sourceResponsibility: "bad" }) })],
+      }),
+    );
+    expectInvalid(
+      source({
+        modules: [
+          moduleRecord({ semantic: semanticRecord({ divergenceClass: "B", evidence: [] }) }),
+        ],
+      }),
+    );
+    expectInvalid(source({ modules: [moduleRecord({ classification: "upstream-mechanism" })] }));
+    expectInvalid(
+      source({
+        modules: [moduleRecord({ semantic: semanticRecord({ upstreamFile: "upstream/a.cxx" }) })],
+      }),
+    );
+    expectInvalid(
+      source({
+        modules: [moduleRecord({ semantic: semanticRecord({ knownViolations: ["defect"] }) })],
+      }),
+    );
+    expect(
+      parseRuntimeInventoryManifest(
+        source({
+          modules: [
+            moduleRecord({
+              semantic: semanticRecord({
+                behaviorStatus: "parity",
+                contractStatus: "parity",
+                defaultStatus: "parity",
+                divergenceClass: "X",
+                sourceResponsibility: "aligned",
+              }),
+            }),
+          ],
+        }),
+      ).modules[0]?.semantic,
+    ).toMatchObject({ divergenceClass: "X", sourceResponsibility: "aligned" });
     expectInvalid(source({ internalOperations: [null] }));
     expectInvalid(source({ uiBehaviors: [null] }));
     expectInvalid(source({ internalOperations: [itemRecord({ classification: "bad" })] }));
@@ -257,6 +320,118 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
       ),
     ).rejects.toThrowError(/expected none/u);
   });
+
+  it("detects the five Phase 0 semantic and boundary defects", /** Verifies AST/API and source-boundary findings. @returns Nothing. */ function detectsSemanticDefects(): void {
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          path: "apps/office/src/sw/source/core/doc/doc.ts",
+          semantic: semanticRecord({ expectedBaseClass: null, localSymbols: ["SwDoc"] }),
+        }) as never,
+        "export class SwDoc extends SwModify {}",
+      ),
+    ).toContain("inheritance:SwDoc:SwModify");
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          classification: "browser-adaptation",
+          path: "apps/office/src/sw/source/uibase/uiview/view.tsx",
+        }) as never,
+        'import React from "react"; export function WriterWorkbench() {}',
+      ),
+    ).toEqual(["browser-adapter-upstream-path", "browser-api-in-upstream-core"]);
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({ path: "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts" }) as never,
+        "export function createTransfer(selection: Selection): void {}",
+      ),
+    ).toContain("browser-api-in-upstream-core");
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          path: "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+        }) as never,
+        'export const command = "writer.format.bold";',
+      ),
+    ).toContain("custom-command-namespace");
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          classification: "upstream-mechanism",
+          path: "apps/office/src/sw/source/uibase/shells/listsh.ts",
+        }) as never,
+        'export type WriterListAction = "promote" | "demote";',
+      ),
+    ).toContain("placeholder-upstream-mechanism");
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          path: "apps/office/src/sw/source/core/example.ts",
+          semantic: semanticRecord({
+            expectedBaseClass: "Base",
+            localSymbols: ["Alpha", "Mode", "run", "Shape", "Alias", "value", "method"],
+          }),
+        }) as never,
+        "export class Alpha extends Base { method(): void {} } export enum Mode { One } export function run(): void {} export interface Shape {} export type Alias = string; export const value = 1;",
+      ),
+    ).toEqual([]);
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          path: "apps/office/src/sw/source/core/base.ts",
+          semantic: semanticRecord({ expectedBaseClass: null, localSymbols: ["Alpha"] }),
+        }) as never,
+        "export class Alpha {}",
+      ),
+    ).toEqual([]);
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          path: "apps/office/src/sw/source/core/unknown.ts",
+          semantic: semanticRecord({ expectedBaseClass: null, localSymbols: [] }),
+        }) as never,
+        "",
+      ),
+    ).toEqual(["inheritance:unknown:none"]);
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          path: "apps/office/src/sw/source/core/missing.ts",
+          semantic: semanticRecord({ expectedBaseClass: null, localSymbols: ["Missing"] }),
+        }) as never,
+        "globalThis.document; globalThis.getSelection; globalThis.indexedDB; globalThis.window;",
+      ),
+    ).toEqual([
+      "browser-api-in-upstream-core",
+      "inheritance:Missing:none",
+      "missing-local-symbol:Missing",
+    ]);
+    for (const browserGlobal of ["getSelection", "indexedDB", "window"])
+      expect(
+        analyzeRuntimeModuleSemantics(
+          moduleRecord({ path: "apps/office/src/sw/source/core/global.ts" }) as never,
+          `globalThis.${browserGlobal};`,
+        ),
+      ).toContain("browser-api-in-upstream-core");
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          classification: "browser-adaptation",
+          path: "apps/office/src/sw/browser/editor/selection.ts",
+        }) as never,
+        "export const selection = 1;",
+      ),
+    ).toEqual([]);
+    expect(
+      analyzeRuntimeModuleSemantics(
+        moduleRecord({
+          classification: "upstream-mechanism",
+          path: "apps/office/src/sw/source/uibase/shells/listsh.ts",
+        }) as never,
+        "export class SwListShell {}",
+      ),
+    ).toEqual([]);
+  });
 });
 
 /**
@@ -269,9 +444,30 @@ function moduleRecord(overrides: Readonly<Record<string, unknown>> = {}): Record
     capabilityIds: [],
     classification: "local-infrastructure",
     path: "src/a.ts",
+    semantic: semanticRecord(),
     state: "internal",
     subsystem: "test",
     suite: "shared",
+    ...overrides,
+  };
+}
+
+/** Creates valid semantic provenance with targeted overrides. @param overrides - Semantic overrides. @returns Valid semantic record. */
+function semanticRecord(
+  overrides: Readonly<Record<string, unknown>> = {},
+): Record<string, unknown> {
+  return {
+    behaviorStatus: "unverified",
+    contractStatus: "unverified",
+    defaultStatus: "unverified",
+    divergenceClass: "none",
+    evidence: ["synthetic evidence"],
+    justification: "Synthetic semantic provenance used by the strict runtime inventory tests.",
+    knownViolations: [],
+    localSymbols: [],
+    sourceResponsibility: "unverified",
+    upstreamFile: null,
+    upstreamSymbols: [],
     ...overrides,
   };
 }

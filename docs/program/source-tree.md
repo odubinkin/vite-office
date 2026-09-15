@@ -55,7 +55,12 @@ production runtime module and its exported operations as an upstream mechanism,
 browser adaptation, local infrastructure, overly broad mapping, or explicitly
 out of parity scope. The same validation covers visible command IDs, UI-only
 behavior, internal operations, and placeholder suites; this makes active code
-without a capability record a hard inventory failure.
+without a capability record a hard inventory failure. Schema version 3 also
+records each module's exact upstream file and symbols, local symbols, independent
+contract/behavior/default status, source responsibility, divergence class,
+justification, evidence, and the complete set of currently detected semantic or
+browser-boundary violations. AST/API validation makes those violations an exact
+set: an unrecorded defect or a stale resolved finding both fail the inventory.
 
 ## Complete current runtime provenance
 

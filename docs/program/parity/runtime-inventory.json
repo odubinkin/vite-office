@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "modules": [
     {
       "path": "apps/office/src/editeng/source/items/paraitem.ts",
@@ -9,7 +9,31 @@
       "subsystem": "formatting-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/editeng/source/items/paraitem.ts#SvxAdjust",
+          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxAdjust"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against editeng/source/items/paraitem.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SvxAdjust",
+          "SvxAdjustItem"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "editeng/source/items/paraitem.cxx",
+        "upstreamSymbols": [
+          "SvxAdjust",
+          "SvxAdjustItem",
+          "SvxLineSpacingItem::CreateDefault",
+          "SvxAdjustItem::CreateDefault"
+        ]
+      }
     },
     {
       "path": "apps/office/src/editeng/source/items/textitem.ts",
@@ -19,7 +43,37 @@
       "subsystem": "formatting-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/editeng/source/items/textitem.ts#FontWeight",
+          "vendor/libreoffice-reference/editeng/source/items/textitem.cxx#FontWeight"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against editeng/source/items/textitem.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "FontWeight",
+          "FontItalic",
+          "FontLineStyle",
+          "SvxFontItem",
+          "SvxWeightItem",
+          "SvxPostureItem",
+          "SvxUnderlineItem"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "editeng/source/items/textitem.cxx",
+        "upstreamSymbols": [
+          "FontWeight",
+          "FontItalic",
+          "FontLineStyle",
+          "SvxFontItem",
+          "SvxWeightItem"
+        ]
+      }
     },
     {
       "path": "apps/office/src/framework/source/accelerators/keymapping.ts",
@@ -29,7 +83,22 @@
       "subsystem": "accelerators",
       "capabilityIds": [
         "CAP-0101"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/source/accelerators/keymapping.ts#BrowserShortcutEvent"
+        ],
+        "justification": "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/framework/source/dispatch/dispatchprovider.ts",
@@ -38,7 +107,22 @@
       "suite": "shared",
       "subsystem": "dispatch",
       "capabilityIds": [],
-      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure."
+      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/source/dispatch/dispatchprovider.ts#CommandTarget"
+        ],
+        "justification": "Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes at the LibreOffice `framework/source/dispatch/dispatchprovider.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/framework/source/services/SuiteCard.tsx",
@@ -47,7 +131,22 @@
       "suite": "shared",
       "subsystem": "application-services",
       "capabilityIds": [],
-      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure."
+      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/source/services/SuiteCard.tsx#SuiteCardProps"
+        ],
+        "justification": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/framework/source/services/autorecovery.ts",
@@ -59,7 +158,35 @@
         "CAP-0114",
         "CAP-0122",
         "CAP-0133"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/framework/source/services/autorecovery.ts#AutoRecoverySaveReason",
+          "vendor/libreoffice-reference/framework/source/services/autorecovery.cxx#cppu::supportsService"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against framework/source/services/autorecovery.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "AutoRecoverySaveReason",
+          "AutoRecoverySaveResult",
+          "AutoRecoveryRestoreResult",
+          "AutoRecoveryCandidate",
+          "AutoRecoveryEnvironment",
+          "AutoRecoveryOptions"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "framework/source/services/autorecovery.cxx",
+        "upstreamSymbols": [
+          "cppu::supportsService",
+          "OWeakObject::acquire",
+          "OWeakObject::release",
+          "svtools::ConfigItems"
+        ]
+      }
     },
     {
       "path": "apps/office/src/framework/source/services/bootstrap.tsx",
@@ -68,7 +195,22 @@
       "suite": "shared",
       "subsystem": "application-services",
       "capabilityIds": [],
-      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure."
+      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/source/services/bootstrap.tsx#mountApplication"
+        ],
+        "justification": "Mounts the React application into a caller-provided browser root with an explicit missing-root failure. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/framework/source/services/desktop.tsx",
@@ -78,7 +220,22 @@
       "subsystem": "application-services",
       "capabilityIds": [
         "CAP-0101"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/source/services/desktop.tsx#Desktop"
+        ],
+        "justification": "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/framework/source/services/messages.ts",
@@ -88,7 +245,22 @@
       "subsystem": "application-services",
       "capabilityIds": [
         "CAP-0101"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/source/services/messages.ts#MessageCatalog"
+        ],
+        "justification": "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/framework/source/services/modulemanager.ts",
@@ -98,7 +270,22 @@
       "subsystem": "application-services",
       "capabilityIds": [
         "CAP-0101"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/source/services/modulemanager.ts#SuiteId"
+        ],
+        "justification": "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/framework/source/services/worker-protocol.ts",
@@ -109,7 +296,22 @@
       "capabilityIds": [
         "CAP-0101",
         "CAP-0113"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/source/services/worker-protocol.ts#WORKER_PROTOCOL_VERSION"
+        ],
+        "justification": "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/main.tsx",
@@ -118,7 +320,22 @@
       "suite": "shared",
       "subsystem": "composition",
       "capabilityIds": [],
-      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure."
+      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/main.tsx#Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter."
+        ],
+        "justification": "Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
@@ -128,7 +345,32 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/package/source/manifest/ManifestExport.ts#ODT_MIMETYPE",
+          "vendor/libreoffice-reference/package/source/manifest/ManifestExport.cxx#ManifestExport::ManifestExport"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against package/source/manifest/ManifestExport.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "ODT_MIMETYPE",
+          "createOdtManifestXml",
+          "validateOdtManifestXml"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "package/source/manifest/ManifestExport.cxx",
+        "upstreamSymbols": [
+          "ManifestExport::ManifestExport",
+          "Base64::encode",
+          "OUString::number",
+          "uno::RuntimeException"
+        ]
+      }
     },
     {
       "path": "apps/office/src/package/source/zipapi/CRC32.ts",
@@ -138,7 +380,30 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/package/source/zipapi/CRC32.ts#CRC32",
+          "vendor/libreoffice-reference/package/source/zipapi/CRC32.cxx#CRC32::CRC32"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/CRC32.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "CRC32"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "package/source/zipapi/CRC32.cxx",
+        "upstreamSymbols": [
+          "CRC32::CRC32",
+          "CRC32::reset",
+          "CRC32::getValue",
+          "CRC32::updateSegment"
+        ]
+      }
     },
     {
       "path": "apps/office/src/package/source/zipapi/ZipFile.ts",
@@ -148,7 +413,33 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/package/source/zipapi/ZipFile.ts#ZipFileLimits",
+          "vendor/libreoffice-reference/package/source/zipapi/ZipFile.cxx#ZipFile::ZipFile"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/ZipFile.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "ZipFileLimits",
+          "DEFAULT_ZIP_FILE_LIMITS",
+          "ZipFile",
+          "assertSafeZipEntryName"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "package/source/zipapi/ZipFile.cxx",
+        "upstreamSymbols": [
+          "ZipFile::ZipFile",
+          "std::move",
+          "ZipFile::~ZipFile",
+          "ZipFile::setInputStream"
+        ]
+      }
     },
     {
       "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
@@ -158,7 +449,30 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/package/source/zipapi/ZipOutputStream.ts#ZipOutputStream",
+          "vendor/libreoffice-reference/package/source/zipapi/ZipOutputStream.cxx#ZipOutputStream::ZipOutputStream"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against package/source/zipapi/ZipOutputStream.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "ZipOutputStream"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "package/source/zipapi/ZipOutputStream.cxx",
+        "upstreamSymbols": [
+          "ZipOutputStream::ZipOutputStream",
+          "ThreadPool::createThreadTaskTag",
+          "ZipOutputStream::~ZipOutputStream",
+          "ZipOutputStream::setEntry"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sfx2/source/doc/docfile.ts",
@@ -169,7 +483,38 @@
       "capabilityIds": [
         "CAP-0114",
         "CAP-0131"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/doc/docfile.ts#createSfxMediumDescriptor",
+          "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx#SfxMedium::SfxMedium()"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sfx2/source/doc/docfile.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxMediumDescriptor",
+          "SfxMediumKind",
+          "SfxMediumOrigin",
+          "SfxMediumSource",
+          "SfxMediumDestination",
+          "SfxMediumOperation",
+          "createSfxMediumDescriptor"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sfx2/source/doc/docfile.cxx",
+        "upstreamSymbols": [
+          "SfxMedium::SfxMedium",
+          "SfxMedium::GetName",
+          "SfxMedium::GetOrigURL",
+          "SfxMedium::SetName",
+          "SfxMedium::IsReadOnly",
+          "SfxMedium::Transfer_Impl"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sfx2/source/doc/objsh.ts",
@@ -180,7 +525,30 @@
       "capabilityIds": [
         "CAP-0114",
         "CAP-0132"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/doc/objsh.ts#SfxObjectShell",
+          "vendor/libreoffice-reference/include/sfx2/objsh.hxx#class SfxObjectShell"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against include/sfx2/objsh.hxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxObjectShell",
+          "OfficeDocument",
+          "markDocumentDirty",
+          "markDocumentSaved"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "include/sfx2/objsh.hxx",
+        "upstreamSymbols": [
+          "SfxObjectShell"
+        ]
+      }
     },
     {
       "path": "apps/office/src/svl/source/items/itempool.ts",
@@ -190,7 +558,31 @@
       "subsystem": "formatting-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/svl/source/items/itempool.ts#SfxPoolItemFactory",
+          "vendor/libreoffice-reference/svl/source/items/itempool.cxx#SfxItemPool"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against svl/source/items/itempool.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxPoolItemFactory",
+          "SfxItemPool"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "svl/source/items/itempool.cxx",
+        "upstreamSymbols": [
+          "SfxItemPool",
+          "ScDocument::UpdateFontCharSet",
+          "ScDocument::GetDocColors",
+          "SwDoc::GetDocColors"
+        ]
+      }
     },
     {
       "path": "apps/office/src/svl/source/items/itemset.ts",
@@ -200,7 +592,33 @@
       "subsystem": "formatting-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/svl/source/items/itemset.ts#SfxItemState",
+          "vendor/libreoffice-reference/svl/source/items/itemset.cxx#SfxItemState"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against svl/source/items/itemset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxItemState",
+          "WhichRange",
+          "WhichRangesContainer",
+          "SfxItemSet"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "svl/source/items/itemset.cxx",
+        "upstreamSymbols": [
+          "SfxItemState",
+          "WhichRange",
+          "WhichRangesContainer",
+          "SfxItemSet"
+        ]
+      }
     },
     {
       "path": "apps/office/src/svl/source/items/poolitem.ts",
@@ -210,7 +628,34 @@
       "subsystem": "formatting-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/svl/source/items/poolitem.ts#SfxPoolItemValue",
+          "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#SfxPoolItem"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against svl/source/items/poolitem.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxPoolItemValue",
+          "SfxPoolItemSnapshot",
+          "SfxPoolItem",
+          "SfxStringItem",
+          "SfxInt16Item"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "svl/source/items/poolitem.cxx",
+        "upstreamSymbols": [
+          "SfxPoolItem",
+          "DefaultItemInstanceManager::find",
+          "SfxPoolItem::getItemInstanceManager",
+          "SfxPoolItem::SfxPoolItem"
+        ]
+      }
     },
     {
       "path": "apps/office/src/svl/source/misc/recovery.ts",
@@ -222,7 +667,22 @@
         "CAP-0114",
         "CAP-0122",
         "CAP-0133"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/svl/source/misc/recovery.ts#RecoverySavePort"
+        ],
+        "justification": "Coordinates deterministic browser recovery storage over an injected versioned-storage contract. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/svl/source/misc/storage.ts",
@@ -233,7 +693,22 @@
       "capabilityIds": [
         "CAP-0114",
         "CAP-0131"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/svl/source/misc/storage.ts#SerializableValue"
+        ],
+        "justification": "Defines neutral serializable versioned-record storage used by application services and browser adapters without depending on a document shell. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/svl/source/notify/broadcast.ts",
@@ -243,7 +718,32 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0111"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/svl/source/notify/broadcast.ts#SfxBroadcaster",
+          "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::Broadcast"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against svl/source/notify/SfxBroadcaster.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxHint",
+          "SfxListenerTarget",
+          "SfxBroadcaster"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "svl/source/notify/SfxBroadcaster.cxx",
+        "upstreamSymbols": [
+          "SfxBroadcaster::AddListener",
+          "SfxBroadcaster::RemoveListener",
+          "SfxBroadcaster::Broadcast",
+          "SfxBroadcaster::~SfxBroadcaster"
+        ]
+      }
     },
     {
       "path": "apps/office/src/svl/source/notify/listener.ts",
@@ -253,7 +753,30 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0111"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/svl/source/notify/listener.ts#SfxListener",
+          "vendor/libreoffice-reference/svl/source/notify/lstner.cxx#SfxListener::StartListening"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against svl/source/notify/lstner.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxListener"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "svl/source/notify/lstner.cxx",
+        "upstreamSymbols": [
+          "SfxListener::StartListening",
+          "SfxListener::EndListening",
+          "SfxListener::EndListeningAll",
+          "SfxListener::RemoveBroadcaster_Impl"
+        ]
+      }
     },
     {
       "path": "apps/office/src/svl/source/undo/undo.ts",
@@ -264,7 +787,33 @@
       "capabilityIds": [
         "CAP-0102",
         "CAP-0132"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/svl/source/undo/undo.ts#DEFAULT_MAX_UNDO_ACTION_COUNT",
+          "vendor/libreoffice-reference/svl/source/undo/undo.cxx#SfxUndoAction"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against svl/source/undo/undo.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "DEFAULT_MAX_UNDO_ACTION_COUNT",
+          "SfxUndoAction",
+          "SfxListUndoAction",
+          "SfxUndoManager"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "svl/source/undo/undo.cxx",
+        "upstreamSymbols": [
+          "SfxUndoAction",
+          "SfxListUndoAction",
+          "SfxUndoManager",
+          "SfxRepeatTarget::~SfxRepeatTarget"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/browser/accelerators/writer-shortcuts.ts",
@@ -276,7 +825,22 @@
         "CAP-0102",
         "CAP-0109",
         "CAP-0115"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/accelerators/writer-shortcuts.ts#useWriterCommandShortcuts"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
@@ -288,7 +852,22 @@
         "CAP-0103",
         "CAP-0106",
         "CAP-0120"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/writer-clipboard-events.ts#BrowserWriterClipboardEvents"
+        ],
+        "justification": "Isolates native ClipboardEvent and DataTransfer mechanics behind canonical Writer selection and command ports; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/editor/writer-composition.ts",
@@ -299,7 +878,22 @@
       "capabilityIds": [
         "CAP-0103",
         "CAP-0118"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/writer-composition.ts#BrowserWriterCompositionAdapter"
+        ],
+        "justification": "Owns browser IME staging and trailing event suppression while delegating extended-text-input semantics to SwWrtShell; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/editor/writer-edit-controller.ts",
@@ -311,7 +905,22 @@
         "CAP-0103",
         "CAP-0117",
         "CAP-0118"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/writer-edit-controller.ts#BrowserWriterEditController"
+        ],
+        "justification": "Normalizes browser Input Events intent before invoking the Writer shell and exposes guarded fallback diagnostics; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/editor/writer-geometry.ts",
@@ -321,7 +930,22 @@
       "subsystem": "browser-editor",
       "capabilityIds": [
         "CAP-0117"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/writer-geometry.ts#getBrowserWriterCaretFromPoint"
+        ],
+        "justification": "Contains the optional browser caretRangeFromPoint geometry fallback behind an injected surface; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
@@ -333,7 +957,22 @@
         "CAP-0103",
         "CAP-0117",
         "CAP-0118"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/writer-selection.ts#getWriterDomSelection"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -345,7 +984,22 @@
         "CAP-0101",
         "CAP-0115",
         "CAP-0135"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx#WriterCommandToolbar"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
@@ -360,7 +1014,22 @@
         "CAP-0109",
         "CAP-0112",
         "CAP-0115"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx#WriterFormattingToolbar"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx",
@@ -370,7 +1039,22 @@
       "subsystem": "browser-presentation",
       "capabilityIds": [
         "CAP-0135"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx#WriterHyperlinkDialog"
+        ],
+        "justification": "Contains React and browser DOM adaptation behind Writer hyperlink command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
@@ -382,7 +1066,22 @@
         "CAP-0101",
         "CAP-0115",
         "CAP-0116"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx#WriterMenuBar"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
@@ -397,7 +1096,22 @@
         "CAP-0109",
         "CAP-0112",
         "CAP-0115"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx#WriterParagraphProperties"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx",
@@ -409,7 +1123,22 @@
         "CAP-0114",
         "CAP-0122",
         "CAP-0133"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx#WriterRecoveryPresentationController"
+        ],
+        "justification": "Presents browser recovery candidates and requires an explicit restore, discard, or clean-continue choice; no native dialog implementation is claimed.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx",
@@ -420,7 +1149,22 @@
       "capabilityIds": [
         "CAP-0101",
         "CAP-0115"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx#WriterWorkspaceChrome"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/presentation/command-source.ts",
@@ -430,7 +1174,22 @@
       "subsystem": "browser-presentation",
       "capabilityIds": [
         "CAP-0115"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/command-source.ts#WriterCommandSource"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
@@ -445,7 +1204,22 @@
         "CAP-0114",
         "CAP-0120",
         "CAP-0131"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/workflows/writer-workflows.ts#WriterFileWorkflowController"
+        ],
+        "justification": "Owns browser file, download, clipboard, IndexedDB, chrome-preference, and operation-presentation workflows behind narrow injected ports; no native platform source file is claimed.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/inc/calbck.ts",
@@ -455,7 +1229,31 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0111"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/inc/calbck.ts#SwModify",
+          "vendor/libreoffice-reference/sw/source/core/attr/calbck.cxx#SwModify::CallSwClientNotify"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/attr/calbck.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwClient",
+          "SwModify",
+          "subscribeToSwModify"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/attr/calbck.cxx",
+        "upstreamSymbols": [
+          "SwModify::CallSwClientNotify",
+          "SwModify::SwClientNotify",
+          "SwModify::RemoveAllWriterListeners"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/inc/hintids.ts",
@@ -465,7 +1263,35 @@
       "subsystem": "formatting-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/inc/hintids.ts#RES_CHRATR_BEGIN",
+          "vendor/libreoffice-reference/sw/inc/hintids.hxx#RES_CHRATR_BEGIN"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/inc/hintids.hxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "RES_CHRATR_BEGIN",
+          "RES_CHRATR_POSTURE",
+          "RES_CHRATR_UNDERLINE",
+          "RES_CHRATR_WEIGHT",
+          "RES_CHRATR_CJK_POSTURE",
+          "RES_CHRATR_CJK_WEIGHT"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/inc/hintids.hxx",
+        "upstreamSymbols": [
+          "RES_CHRATR_BEGIN",
+          "RES_CHRATR_POSTURE",
+          "RES_CHRATR_UNDERLINE",
+          "RES_CHRATR_WEIGHT"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/inc/hints.ts",
@@ -475,7 +1301,31 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0111"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/inc/hints.ts#SwAtomicModelHint",
+          "vendor/libreoffice-reference/sw/inc/hints.hxx#class SwFormatChangeHint"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/inc/hints.hxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwAtomicModelHint",
+          "SwModelTransactionHint",
+          "SwModelHint"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/inc/hints.hxx",
+        "upstreamSymbols": [
+          "SwFormatChangeHint",
+          "InsertText",
+          "DeleteText"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/inc/poolfmt.ts",
@@ -485,7 +1335,31 @@
       "subsystem": "formatting-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/inc/poolfmt.ts#WRITER_PARAGRAPH_STYLE_POOL",
+          "vendor/libreoffice-reference/sw/source/core/doc/poolfmt.cxx#GetPoolParent"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/poolfmt.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WRITER_PARAGRAPH_STYLE_POOL",
+          "getWriterOdfStyleName",
+          "getWriterParagraphStyleDefinition",
+          "getWriterParagraphStyleId",
+          "getWriterStyleIdFromOdfName"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/poolfmt.cxx",
+        "upstreamSymbols": [
+          "GetPoolParent"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/attr/format.ts",
@@ -495,7 +1369,30 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/attr/format.ts#SwFormat",
+          "vendor/libreoffice-reference/sw/source/core/attr/format.cxx#SwFormat"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/attr/format.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwFormat"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/attr/format.cxx",
+        "upstreamSymbols": [
+          "SwFormat",
+          "SwFmt::getIDocumentSettingAccess",
+          "SwFormat::SwFormat",
+          "sw::BorderCacheOwner"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
@@ -505,7 +1402,31 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/attr/swatrset.ts#SwAttrPool",
+          "vendor/libreoffice-reference/sw/source/core/attr/swatrset.cxx#SwAttrPool"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/attr/swatrset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwAttrPool",
+          "SwAttrSet"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/attr/swatrset.cxx",
+        "upstreamSymbols": [
+          "SwAttrPool",
+          "SwAttrSet",
+          "SwAttrPool::SwAttrPool",
+          "o3tl::convert"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/bastyp/contentindex.ts",
@@ -515,7 +1436,32 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0111"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/bastyp/contentindex.ts#SwContentIndex",
+          "vendor/libreoffice-reference/sw/source/core/bastyp/index.cxx#SwContentIndexReg::Update"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/bastyp/index.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwContentIndexOwnerKind",
+          "SwContentIndexUpdateMode",
+          "SwContentIndexRegistry",
+          "SwContentIndex"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/bastyp/index.cxx",
+        "upstreamSymbols": [
+          "SwContentIndex",
+          "SwContentIndexReg::Update",
+          "SwContentIndexReg::MoveTo"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/crsr/pam.ts",
@@ -525,7 +1471,32 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0111"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/crsr/pam.ts#SwNodeIndex",
+          "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx#SwNodeIndex"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/crsr/pam.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwNodeIndex",
+          "SwPosition",
+          "SwPaM"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/crsr/pam.cxx",
+        "upstreamSymbols": [
+          "SwNodeIndex",
+          "SwPosition",
+          "SwPaM",
+          "SwPosition::SwPosition"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
@@ -537,7 +1508,30 @@
         "CAP-0110",
         "CAP-0111",
         "CAP-0124"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts#DocumentContentOperationsManager",
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx#IDocumentMarkAccess::GetType"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/DocumentContentOperationsManager.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "DocumentContentOperationsManager"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
+        "upstreamSymbols": [
+          "IDocumentMarkAccess::GetType",
+          "std::lower_bound",
+          "sw::CalcBreaks",
+          "o3tl::make_unsigned"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/doc/doc.ts",
@@ -547,7 +1541,34 @@
       "subsystem": "document-model",
       "capabilityIds": [
         "CAP-0111"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "unverified",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/doc.ts#SwDocSnapshot",
+          "vendor/libreoffice-reference/sw/source/core/doc/doc.cxx#SwDoc"
+        ],
+        "expectedBaseClass": null,
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/doc.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [
+          "inheritance:SwDoc:SwModify"
+        ],
+        "localSymbols": [
+          "SwDoc",
+          "SwDocSnapshot"
+        ],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": "sw/source/core/doc/doc.cxx",
+        "upstreamSymbols": [
+          "SwDoc",
+          "SwDoc::acquire",
+          "SwDoc::release",
+          "SwDoc::getReferenceCount"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/doc/fmtcol.ts",
@@ -557,7 +1578,35 @@
       "subsystem": "formatting-model",
       "capabilityIds": [
         "CAP-0112"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/fmtcol.ts#WRITER_PARAGRAPH_STYLES",
+          "vendor/libreoffice-reference/sw/source/core/doc/fmtcol.cxx#SwFormatColl"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/fmtcol.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WRITER_PARAGRAPH_STYLES",
+          "WriterParagraphStyle",
+          "SwTextFormatCollSnapshot",
+          "SwFormatColl",
+          "SwTextFormatColl",
+          "isWriterParagraphStyle"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/fmtcol.cxx",
+        "upstreamSymbols": [
+          "SwFormatColl",
+          "SwTextFormatColl",
+          "SwTextFormatColl::SwTextFormatColl",
+          "SwTextFormatColl::~SwTextFormatColl"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/doc/list.ts",
@@ -568,7 +1617,35 @@
       "capabilityIds": [
         "CAP-0112",
         "CAP-0127"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/list.ts#WRITER_PARAGRAPH_LIST_KINDS",
+          "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::SwList"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/list.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WRITER_PARAGRAPH_LIST_KINDS",
+          "WRITER_MAX_LIST_LEVEL",
+          "WriterParagraphListKind",
+          "WriterParagraphList",
+          "createDefaultWriterParagraphList",
+          "isWriterParagraphListKind"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/list.cxx",
+        "upstreamSymbols": [
+          "SwList::SwList",
+          "std::move",
+          "uno::RuntimeException",
+          "SwList::~SwList"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/doc/number.ts",
@@ -579,7 +1656,35 @@
       "capabilityIds": [
         "CAP-0112",
         "CAP-0127"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/number.ts#DEFAULT_BULLET_RULE_NAME",
+          "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumFormat"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/number.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "DEFAULT_BULLET_RULE_NAME",
+          "DEFAULT_NUMBERING_RULE_NAME",
+          "SwNumFormatSnapshot",
+          "SwNumFormat",
+          "SwNumRuleSnapshot",
+          "SwNumRule"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/number.cxx",
+        "upstreamSymbols": [
+          "SwNumFormat",
+          "SwNumRule",
+          "o3tl::toTwips",
+          "SwNumRule::GetOutlineRuleName"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/doc/writer-storage.ts",
@@ -591,7 +1696,22 @@
         "CAP-0114",
         "CAP-0131",
         "CAP-0132"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/writer-storage.ts#WriterSnapshotState"
+        ],
+        "justification": "Defines Writer-specific snapshot creation, restoration, and persistence evidence over the generic browser storage contract without acknowledging or cloning the live document. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/doc/writer.ts",
@@ -603,7 +1723,22 @@
         "CAP-0111",
         "CAP-0123",
         "CAP-0124"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/writer.ts#SwDoc"
+        ],
+        "justification": "Exposes Writer construction, model types, and persistence serialization without owning a parallel mutation path. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/docnode/node.ts",
@@ -614,7 +1749,34 @@
       "capabilityIds": [
         "CAP-0111",
         "CAP-0123"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/docnode/node.ts#SwNodeType",
+          "vendor/libreoffice-reference/sw/source/core/docnode/node.cxx#SwNodeType"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/docnode/node.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwNodeType",
+          "SwNode",
+          "SwStartNode",
+          "SwEndNode",
+          "SwContentNode"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/docnode/node.cxx",
+        "upstreamSymbols": [
+          "SwNodeType",
+          "SwNode",
+          "SwStartNode",
+          "SwEndNode"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
@@ -625,7 +1787,30 @@
       "capabilityIds": [
         "CAP-0111",
         "CAP-0123"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/docnode/nodes.ts#SwNodes",
+          "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx#SwNodes"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/docnode/nodes.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwNodes"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/docnode/nodes.cxx",
+        "upstreamSymbols": [
+          "SwNodes",
+          "SwNodes::SwNodes",
+          "SwNodes::~SwNodes",
+          "SwNodes::ChgNode"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/para/paratr.ts",
@@ -637,7 +1822,30 @@
         "CAP-0112",
         "CAP-0125",
         "CAP-0127"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/para/paratr.ts#SwNumRuleItem",
+          "vendor/libreoffice-reference/sw/source/core/para/paratr.cxx#SwNumRuleItem"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/para/paratr.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwNumRuleItem"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/para/paratr.cxx",
+        "upstreamSymbols": [
+          "SwNumRuleItem",
+          "SwFormatDrop::CreateDefault",
+          "SwRegisterItem::CreateDefault",
+          "SwNumRuleItem::CreateDefault"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
@@ -648,7 +1856,32 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0135"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts#SwFormatINetFormat",
+          "vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx#SwFormatINetFormat::SwFormatINetFormat"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/txtnode/fmtatr2.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterHyperlink",
+          "normalizeWriterHyperlink",
+          "equalWriterHyperlinks",
+          "SwFormatINetFormat",
+          "restoreSwFormatINetFormat"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/txtnode/fmtatr2.cxx",
+        "upstreamSymbols": [
+          "SwFormatINetFormat::SwFormatINetFormat",
+          "SwFormatINetFormat::operator=="
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
@@ -659,7 +1892,32 @@
       "capabilityIds": [
         "CAP-0111",
         "CAP-0126"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/txtnode/ndhints.ts#SwpHints",
+          "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx#SwpHints"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/txtnode/ndhints.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwpHints",
+          "WriterTextRunLike",
+          "createSwpHintsFromSnapshot"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/txtnode/ndhints.cxx",
+        "upstreamSymbols": [
+          "SwpHints",
+          "CompareSwpHtWhichStart::operator",
+          "CompareSwpHtEnd::operator",
+          "SwpHints::Insert"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
@@ -672,7 +1930,34 @@
         "CAP-0123",
         "CAP-0124",
         "CAP-0126"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/txtnode/ndtxt.ts#WriterCharacterAttributes",
+          "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/txtnode/ndtxt.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WRITER_CHARACTER_FORMATS",
+          "WriterCharacterFormat",
+          "WriterTextRun",
+          "DEFAULT_WRITER_CHARACTER_ATTRIBUTES",
+          "WRITER_PARAGRAPH_ALIGNMENTS"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/txtnode/ndtxt.cxx",
+        "upstreamSymbols": [
+          "SwTextNode",
+          "SwNodes::MakeTextNode",
+          "SwTextNode::SwTextNode",
+          "sw::TextNodeNotificationSuppressor"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
@@ -683,7 +1968,34 @@
       "capabilityIds": [
         "CAP-0111",
         "CAP-0126"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/txtnode/txatbase.ts#RES_TXTATR_AUTOFMT",
+          "vendor/libreoffice-reference/sw/source/core/txtnode/txatbase.cxx#RES_TXTATR_AUTOFMT"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/txtnode/txatbase.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterCharacterAttributes",
+          "SwFormatAutoFormat",
+          "SwTextAttrSnapshot",
+          "SwTextAttr",
+          "createSwFormatAutoFormat"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/txtnode/txatbase.cxx",
+        "upstreamSymbols": [
+          "RES_TXTATR_AUTOFMT",
+          "SwTextAttr",
+          "SwTextAttr::SwTextAttr",
+          "SwTextAttr::~SwTextAttr"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/undo/unattr.ts",
@@ -693,7 +2005,31 @@
       "subsystem": "undo-redo",
       "capabilityIds": [
         "CAP-0102"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/unattr.ts#SwUndoAttr",
+          "vendor/libreoffice-reference/sw/source/core/undo/unattr.cxx#SwUndoAttr"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/unattr.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoAttr",
+          "SwUndoParagraphFormat"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/undo/unattr.cxx",
+        "upstreamSymbols": [
+          "SwUndoAttr",
+          "SwUndoFormatAttrHelper::SwUndoFormatAttrHelper",
+          "SwUndoFormatAttrHelper::SwClientNotify",
+          "SwDocModifyAndUndoGuard::SwDocModifyAndUndoGuard"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/undo/undel.ts",
@@ -703,7 +2039,34 @@
       "subsystem": "undo-redo",
       "capabilityIds": [
         "CAP-0102"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/undel.ts#SwUndoDeleteDirection",
+          "vendor/libreoffice-reference/sw/source/core/undo/undel.cxx#SwUndoDelete"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/undel.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoDeleteDirection",
+          "SwUndoDeleteGroup",
+          "SwUndoDelete",
+          "SwUndoReplace",
+          "SwUndoJoinParagraphs"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/undo/undel.cxx",
+        "upstreamSymbols": [
+          "SwUndoDelete",
+          "SwUndoDelete::SwUndoDelete",
+          "SwUndoDelete::SaveContent",
+          "SwUndoDelete::CanGrouping"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/undo/undobj.ts",
@@ -713,7 +2076,35 @@
       "subsystem": "undo-redo",
       "capabilityIds": [
         "CAP-0102"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/undobj.ts#SwUndoCursorPosition",
+          "vendor/libreoffice-reference/sw/source/core/undo/undobj.cxx#SwUndo"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/undobj.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoCursorPosition",
+          "SwUndoCursorState",
+          "SwUndoRedoContext",
+          "SwUndo",
+          "GetUndoTextNode",
+          "CopyTextRangeRuns"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/undo/undobj.cxx",
+        "upstreamSymbols": [
+          "SwUndo",
+          "SwUndRng::SwUndRng",
+          "SwUndRng::SetValues",
+          "SwUndRng::SetPaM"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/undo/unfmco.ts",
@@ -723,7 +2114,30 @@
       "subsystem": "undo-redo",
       "capabilityIds": [
         "CAP-0102"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/unfmco.ts#SwUndoFormatColl",
+          "vendor/libreoffice-reference/sw/source/core/undo/unfmco.cxx#SwUndoFormatColl"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/unfmco.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoFormatColl"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/undo/unfmco.cxx",
+        "upstreamSymbols": [
+          "SwUndoFormatColl",
+          "SwUndoFormatColl::SwUndoFormatColl",
+          "SwUndoFormatColl::~SwUndoFormatColl",
+          "SwUndoFormatColl::UndoImpl"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/undo/unins.ts",
@@ -733,7 +2147,31 @@
       "subsystem": "undo-redo",
       "capabilityIds": [
         "CAP-0102"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/unins.ts#SwUndoInsertGroup",
+          "vendor/libreoffice-reference/sw/source/core/undo/unins.cxx#SwUndoInsert"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/unins.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoInsertGroup",
+          "SwUndoInsert"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/undo/unins.cxx",
+        "upstreamSymbols": [
+          "SwUndoInsert",
+          "SwUndoInsert::GetTextFromDoc",
+          "SwUndoInsert::Init",
+          "SwUndoInsert::SwUndoInsert"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/undo/unnum.ts",
@@ -743,7 +2181,31 @@
       "subsystem": "undo-redo",
       "capabilityIds": [
         "CAP-0102"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/unnum.ts#SwUndoInsNum",
+          "vendor/libreoffice-reference/sw/source/core/undo/unnum.cxx#SwUndoInsNum"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/unnum.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoInsNum",
+          "SwUndoNumLevel"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/undo/unnum.cxx",
+        "upstreamSymbols": [
+          "SwUndoInsNum",
+          "SwUndoInsNum::SwUndoInsNum",
+          "std::move",
+          "SwUndoInsNum::~SwUndoInsNum"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/core/undo/unspnd.ts",
@@ -753,7 +2215,30 @@
       "subsystem": "undo-redo",
       "capabilityIds": [
         "CAP-0102"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/unspnd.ts#SwUndoSplitNode",
+          "vendor/libreoffice-reference/sw/source/core/undo/unspnd.cxx#SwUndoSplitNode"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/undo/unspnd.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoSplitNode"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/undo/unspnd.cxx",
+        "upstreamSymbols": [
+          "SwUndoSplitNode",
+          "SwUndoSplitNode::SwUndoSplitNode",
+          "SwUndoSplitNode::~SwUndoSplitNode",
+          "SwUndoSplitNode::UndoImpl"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/ascii/ascatr.ts",
@@ -763,7 +2248,30 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/ascii/ascatr.ts#serializeWriterClipboardPlainText",
+          "vendor/libreoffice-reference/sw/source/filter/ascii/ascatr.cxx#SwASC_AttrIter::SwASC_AttrIter"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/ascii/ascatr.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "serializeWriterClipboardPlainText"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/filter/ascii/ascatr.cxx",
+        "upstreamSymbols": [
+          "SwASC_AttrIter::SwASC_AttrIter",
+          "SwASC_AttrIter::SearchNext",
+          "SwASC_AttrIter::OutAttr",
+          "std::make_pair"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
@@ -773,7 +2281,30 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/html/htmlnumwriter.ts#serializeWriterClipboardHtml",
+          "vendor/libreoffice-reference/sw/source/filter/html/htmlnumwriter.cxx#SwHTMLWriter::FillNextNumInfo"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/html/htmlnumwriter.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "serializeWriterClipboardHtml"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/filter/html/htmlnumwriter.cxx",
+        "upstreamSymbols": [
+          "SwHTMLWriter::FillNextNumInfo",
+          "SwHTMLWriter::ClearNextNumInfo",
+          "SwHTMLWriter::SetNextNumInfo",
+          "std::move"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
@@ -784,7 +2315,24 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0130"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/odt-filter-service.ts#OdtFilterProgressStage"
+        ],
+        "justification": "Defines the neutral asynchronous ODT filter service used by SwDocShell and by the Dedicated Worker adapter while retaining package/xmloff/sw ownership inside the filter. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [
+          "browser-adapter-upstream-path"
+        ],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/odt-worker-client.ts",
@@ -795,7 +2343,25 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0130"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/odt-worker-client.ts#ODT_WORKER_TIMEOUT_MS"
+        ],
+        "justification": "Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with transferables, stale-result rejection, cancellation, timeout, and deterministic termination. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [
+          "browser-adapter-upstream-path",
+          "browser-api-in-upstream-core"
+        ],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts",
@@ -806,7 +2372,24 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0130"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/odt-worker-runtime.ts#OdtWorkerImportRequest"
+        ],
+        "justification": "Executes bounded Writer ODT filter requests inside a Dedicated Worker and returns only neutral snapshots or transferable byte buffers to the document-shell client. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [
+          "browser-adapter-upstream-path"
+        ],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/odt-worker.ts",
@@ -817,7 +2400,24 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0130"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/odt-worker.ts#Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker."
+        ],
+        "justification": "Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [
+          "browser-adapter-upstream-path"
+        ],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
@@ -828,7 +2428,34 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0128"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/swxml.ts#ODT_XML_STREAM_BYTE_LIMIT",
+          "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx#XMLReader::XMLReader"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/swxml.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "ODT_XML_STREAM_BYTE_LIMIT",
+          "OdtImportProgressStage",
+          "OdtImportControl",
+          "SwXMLReader",
+          "readOdtDocument"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/filter/xml/swxml.cxx",
+        "upstreamSymbols": [
+          "XMLReader::XMLReader",
+          "XMLReader::GetReaderType",
+          "OUString::createFromAscii",
+          "Parser::create"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/wrtxml.ts",
@@ -839,7 +2466,34 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0129"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/wrtxml.ts#ODT_EXPORT_BYTE_LIMIT",
+          "vendor/libreoffice-reference/sw/source/filter/xml/wrtxml.cxx#SwXMLWriter"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/wrtxml.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "ODT_EXPORT_BYTE_LIMIT",
+          "OdtExportProgressStage",
+          "OdtExportControl",
+          "SwXMLWriter",
+          "writeOdtDocument"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/filter/xml/wrtxml.cxx",
+        "upstreamSymbols": [
+          "SwXMLWriter",
+          "SwXMLWriter::SwXMLWriter",
+          "SwXMLWriter::~SwXMLWriter",
+          "SwXMLWriter::Write_"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
@@ -850,7 +2504,32 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0129"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/xmlexp.ts#exportStylesXml",
+          "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx#SwXMLExport::SwXMLExport"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/xmlexp.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "exportStylesXml",
+          "exportContentXml",
+          "exportMetaXml"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/filter/xml/xmlexp.cxx",
+        "upstreamSymbols": [
+          "SwXMLExport::SwXMLExport",
+          "SwXMLExport::exportDoc",
+          "SvXMLUnitConverter::GetMeasureUnit",
+          "SwModule::get"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/xmlfonte.ts",
@@ -861,7 +2540,29 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0129"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/xmlfonte.ts#createWriterFontAutoStylePool",
+          "vendor/libreoffice-reference/sw/source/filter/xml/xmlfonte.cxx#SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/xmlfonte.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "createWriterFontAutoStylePool"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/filter/xml/xmlfonte.cxx",
+        "upstreamSymbols": [
+          "SwXMLFontAutoStylePool_Impl",
+          "SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl",
+          "SwXMLExport::CreateFontAutoStylePool"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
@@ -872,7 +2573,31 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0128"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/xmlimp.ts#importWriterXml",
+          "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx#SwXMLBodyContext_Impl::SwXMLBodyContext_Impl"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/xmlimp.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "importWriterXml",
+          "parseOdfXml"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/filter/xml/xmlimp.cxx",
+        "upstreamSymbols": [
+          "SwXMLBodyContext_Impl::SwXMLBodyContext_Impl",
+          "SwXMLBodyContext_Impl::createFastChildContext",
+          "SwXMLDocContext_Impl::SwXMLDocContext_Impl",
+          "SwXMLDocContext_Impl::createFastChildContext"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
@@ -887,7 +2612,30 @@
         "CAP-0130",
         "CAP-0131",
         "CAP-0132"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/app/docsh.ts#SwDocShell",
+          "vendor/libreoffice-reference/sw/source/uibase/app/docsh.cxx#SwDocShell"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/app/docsh.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwDocShell"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/app/docsh.cxx",
+        "upstreamSymbols": [
+          "SwDocShell",
+          "SwDocShell::InitInterface_Impl",
+          "SwDocShell::InsertGeneratedStream",
+          "sw::XTextRangeToSwPaM"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/app/swmodule.tsx",
@@ -899,7 +2647,34 @@
         "CAP-0101",
         "CAP-0122",
         "CAP-0133"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/app/swmodule.tsx#WriterDocumentSession",
+          "vendor/libreoffice-reference/sw/source/uibase/app/swmodule.cxx#SwModule::SwModule"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/app/swmodule.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterDocumentSession",
+          "WriterModuleFactoryOptions",
+          "createWriterBrowserSessionServices",
+          "createWriterDocumentSession",
+          "createWriterModuleFactory"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/app/swmodule.cxx",
+        "upstreamSymbols": [
+          "SwModule::SwModule",
+          "SvtCTLOptions::GetCTLTextNumerals",
+          "SvxErrorHandler::ensure",
+          "comphelper::IsFuzzing"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -913,7 +2688,37 @@
         "CAP-0108",
         "CAP-0110",
         "CAP-0120"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "unverified",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts#WriterClipboardSelection",
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#o3tl::convert"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/dochdl/swdtflvr.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [
+          "browser-api-in-upstream-core"
+        ],
+        "localSymbols": [
+          "WriterClipboardSelection",
+          "WriterClipboardPaste",
+          "WriterClipboardPasteParagraph",
+          "WriterClipboardParagraph",
+          "readWriterClipboardPaste",
+          "parseWriterClipboardPaste"
+        ],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": "sw/source/uibase/dochdl/swdtflvr.cxx",
+        "upstreamSymbols": [
+          "o3tl::convert",
+          "UITestLogger::getInstance",
+          "SwTransferable::SwTransferable",
+          "URIHelper::removePassword"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
@@ -928,7 +2733,24 @@
         "CAP-0118",
         "CAP-0119",
         "CAP-0134"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx#WriterEditableParagraph"
+        ],
+        "justification": "Projects canonical Writer text nodes into browser DOM descendants that inherit editability from one root host; it no longer claims native SwEditWin ownership.",
+        "knownViolations": [
+          "browser-adapter-upstream-path"
+        ],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
@@ -944,7 +2766,24 @@
         "CAP-0119",
         "CAP-0120",
         "CAP-0134"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/docvw/edtwin.tsx#WriterPlainTextEditor"
+        ],
+        "justification": "Binds isolated browser editor adapters to one React document projection and one logical contenteditable host; it no longer claims native SwEditWin ownership.",
+        "knownViolations": [
+          "browser-adapter-upstream-path"
+        ],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/shells/listsh.ts",
@@ -955,7 +2794,32 @@
       "capabilityIds": [
         "CAP-0107",
         "CAP-0127"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "divergent",
+        "contractStatus": "divergent",
+        "defaultStatus": "unverified",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/shells/listsh.ts#WriterListLevelCommand",
+          "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx#SwListShell::InitInterface_Impl"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/shells/listsh.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [
+          "placeholder-upstream-mechanism"
+        ],
+        "localSymbols": [
+          "WriterListLevelCommand"
+        ],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": "sw/source/uibase/shells/listsh.cxx",
+        "upstreamSymbols": [
+          "SwListShell::InitInterface_Impl",
+          "SwListShell::Execute",
+          "SwListShell::GetState",
+          "SwListShell::SwListShell"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
@@ -978,7 +2842,34 @@
         "CAP-0114",
         "CAP-0115",
         "CAP-0135"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/shells/writercommands.ts#WriterCharacterCommandArguments",
+          "vendor/libreoffice-reference/sw/sdi/swriter.sdi#CreateSWDrawView"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/sdi/swriter.sdi; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterCharacterCommandArguments",
+          "WriterTextCommandTarget",
+          "WriterViewCommandTarget",
+          "createWriterTextCommandRegistry",
+          "createWriterViewCommandRegistry"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/sdi/swriter.sdi",
+        "upstreamSymbols": [
+          "CreateSWDrawView",
+          "AcceptTrackedChanges",
+          "TrackChanges",
+          "TrackChangesBar"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
@@ -1004,7 +2895,37 @@
         "CAP-0122",
         "CAP-0131",
         "CAP-0133"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/uiview/view-session.ts#WriterSessionServices",
+          "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx#SwView"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/uiview/view.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterOperationStatus",
+          "WriterSessionServices",
+          "WriterCutCommandArguments",
+          "WriterPasteCommandArguments",
+          "WriterViewControllers",
+          "WriterViewControllerFactory",
+          "WriterViewSnapshot",
+          "SwView"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/uiview/view.cxx",
+        "upstreamSymbols": [
+          "SwView",
+          "SwView::GetDispatcher",
+          "SwView::ImpSetVerb",
+          "SwView::GotFocus"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/uiview/view.tsx",
@@ -1028,7 +2949,25 @@
         "CAP-0121",
         "CAP-0122",
         "CAP-0135"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/uiview/view.tsx#WriterWorkbenchProps"
+        ],
+        "justification": "Renders the Writer view as a React projection of a persistent SwView session. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [
+          "browser-adapter-upstream-path",
+          "browser-api-in-upstream-core"
+        ],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
@@ -1038,7 +2977,32 @@
       "subsystem": "workbench-session",
       "capabilityIds": [
         "CAP-0101"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/uiview/viewfunc.ts#createWriterWorkbenchDocument",
+          "vendor/libreoffice-reference/sw/source/uibase/uiview/viewfunc.hxx#Point"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/uiview/viewfunc.hxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "createWriterWorkbenchDocument",
+          "getNextWriterParagraphId",
+          "getActiveWriterParagraph"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/uiview/viewfunc.hxx",
+        "upstreamSymbols": [
+          "Point",
+          "SfxPrinter",
+          "Size",
+          "SvxRuler"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/wrtsh/delete.ts",
@@ -1051,7 +3015,30 @@
         "CAP-0105",
         "CAP-0107",
         "CAP-0132"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/wrtsh/delete.ts#getWriterDeleteGrouping",
+          "vendor/libreoffice-reference/sw/source/uibase/wrtsh/delete.cxx#SwWrtShell::DelLeft"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/delete.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "getWriterDeleteGrouping",
+          "getWriterInsertGroup",
+          "getWriterTypingCharacterClass"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/wrtsh/delete.cxx",
+        "upstreamSymbols": [
+          "SwWrtShell::DelLeft",
+          "SwWrtShell::DelRight"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
@@ -1061,7 +3048,28 @@
       "subsystem": "writer-shell",
       "capabilityIds": [
         "CAP-0135"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts#createWriterHyperlinkAction",
+          "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx#SwEditShell::InsertURL"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/core/edit/editsh.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "getWriterHyperlinkAtCursor",
+          "createWriterHyperlinkAction"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/edit/editsh.cxx",
+        "upstreamSymbols": [
+          "SwEditShell::InsertURL"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
@@ -1073,7 +3081,36 @@
         "CAP-0102",
         "CAP-0105",
         "CAP-0134"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts#WriterCursorSelection",
+          "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx#SwWrtShell::SelAll"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/select.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterCursorPosition",
+          "WriterCursorSelection",
+          "WriterParagraphTextRange",
+          "WriterCompositionState",
+          "areWriterCursorSelectionsEqual",
+          "isWriterCursorOffset",
+          "getWriterSelectedTextRange",
+          "createWriterRangeSelection",
+          "createWriterUndoCursorState",
+          "createWriterCollapsedCursorState"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/wrtsh/select.cxx",
+        "upstreamSymbols": [
+          "SwWrtShell::SelAll"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
@@ -1094,7 +3131,31 @@
         "CAP-0132",
         "CAP-0134",
         "CAP-0135"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts#WriterCursorPosition",
+          "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx#SwWrtShell"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/wrtsh1.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwWrtShell",
+          "SwWrtShellHistory"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+        "upstreamSymbols": [
+          "SwWrtShell",
+          "UITestLogger::getInstance",
+          "SvxAutoCorrCfg::Get",
+          "SwWrtShell::NoEdit"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
@@ -1106,7 +3167,35 @@
         "CAP-0101",
         "CAP-0115",
         "CAP-0135"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "divergent",
+        "divergenceClass": "P",
+        "evidence": [
+          "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts#writerMenuPlacements",
+          "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml#.uno:PickList"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/uiconfig/swriter/menubar/menubar.xml; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [
+          "custom-command-namespace"
+        ],
+        "localSymbols": [
+          "writerMenuPlacements",
+          "WRITER_COMMAND_IDS",
+          "writerMenuCommandIds",
+          "writerUserCommands"
+        ],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "upstreamSymbols": [
+          ".uno:PickList",
+          ".uno:AddDirect",
+          ".uno:OpenFromWriter",
+          ".uno:OpenRemote"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
@@ -1116,7 +3205,30 @@
       "subsystem": "numbering",
       "capabilityIds": [
         "CAP-0107"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts#writerNumObjectBarItems",
+          "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/numobjectbar.xml#.uno:DecrementLevel"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/uiconfig/swriter/toolbar/numobjectbar.xml; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "writerNumObjectBarItems"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
+        "upstreamSymbols": [
+          ".uno:DecrementLevel",
+          ".uno:IncrementLevel",
+          ".uno:DecrementSubLevels",
+          ".uno:IncrementSubLevels"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.ts",
@@ -1128,7 +3240,27 @@
         "CAP-0101",
         "CAP-0115",
         "CAP-0135"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.ts#writerStandardBarItems",
+          "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/standardbar.xml#.uno:"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/uiconfig/swriter/toolbar/standardbar.xml; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "writerStandardBarItems"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "upstreamSymbols": [
+          ".uno:"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts",
@@ -1138,7 +3270,30 @@
       "subsystem": "numbering",
       "capabilityIds": [
         "CAP-0105"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/uiconfig/swriter/toolbar/textobjectbar.ts#writerTextObjectBarItems",
+          "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/textobjectbar.xml#.uno:DesignerDialog"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sw/uiconfig/swriter/toolbar/textobjectbar.xml; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "writerTextObjectBarItems"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "upstreamSymbols": [
+          ".uno:DesignerDialog",
+          ".uno:StyleApply",
+          ".uno:StyleUpdateByExample",
+          ".uno:StyleNewByExample"
+        ]
+      }
     },
     {
       "path": "apps/office/src/sw/uiconfig/swriter/ui-resource.ts",
@@ -1148,7 +3303,22 @@
       "subsystem": "writer-ui",
       "capabilityIds": [
         "CAP-0115"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/uiconfig/swriter/ui-resource.ts#WriterMenuPlacement"
+        ],
+        "justification": "Defines local typed composition data without claiming a LibreOffice implementation source.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/vcl/browser/browser-clipboard.ts",
@@ -1160,7 +3330,22 @@
         "CAP-0106",
         "CAP-0110",
         "CAP-0120"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/vcl/browser/browser-clipboard.ts#BrowserClipboardEnvironment"
+        ],
+        "justification": "Copies plain and bounded rich text through browser Clipboard APIs with a local plain-text fallback for static browser deployments. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/vcl/browser/browser-download.ts",
@@ -1172,7 +3357,22 @@
         "CAP-0101",
         "CAP-0113",
         "CAP-0121"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/vcl/browser/browser-download.ts#DownloadAnchor"
+        ],
+        "justification": "Implements a browser-only text Blob download adapter with injectable DOM and object-URL capabilities for deterministic tests. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/vcl/browser/browser-file.ts",
@@ -1183,7 +3383,22 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0121"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/vcl/browser/browser-file.ts#selectBrowserFile"
+        ],
+        "justification": "Implements browser-only file selection and byte reading behind injectable DOM capabilities. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/vcl/browser/font-list.ts",
@@ -1193,7 +3408,22 @@
       "subsystem": "browser-platform",
       "capabilityIds": [
         "CAP-0109"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/vcl/browser/font-list.ts#export class FontList"
+        ],
+        "justification": "Adapts LibreOffice FontList device enumeration to the browser Local Font Access API with deterministic metric-compatible fallbacks when access is unavailable.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/vcl/browser/indexeddb-storage.ts",
@@ -1206,7 +3436,22 @@
         "CAP-0122",
         "CAP-0131",
         "CAP-0133"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/vcl/browser/indexeddb-storage.ts#DEFAULT_RECOVERY_GENERATION_LIMIT"
+        ],
+        "justification": "Implements a browser-native IndexedDB adapter for versioned JSON document snapshots without backend, autosave, or file-picker policy. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
     },
     {
       "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
@@ -1217,7 +3462,31 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0128"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/core/xml-parser.ts#parseOdfXmlStream",
+          "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against sax/source/fastparser/fastparser.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "DEFAULT_ODF_XML_LIMITS",
+          "FastAttributeList",
+          "SvXMLImportContext",
+          "parseOdfXmlStream"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sax/source/fastparser/fastparser.cxx",
+        "upstreamSymbols": [
+          "FastSaxParserImpl",
+          "FastSaxParserImpl::parseStream"
+        ]
+      }
     },
     {
       "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
@@ -1228,7 +3497,30 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0128"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/core/xmltoken.ts#getXMLToken",
+          "vendor/libreoffice-reference/xmloff/source/core/xmltoken.cxx#GetXMLToken"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/core/xmltoken.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "ODF_NAMESPACES",
+          "XMLToken",
+          "getXMLToken"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/core/xmltoken.cxx",
+        "upstreamSymbols": [
+          "XMLTokenEntry",
+          "GetXMLToken"
+        ]
+      }
     },
     {
       "path": "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts",
@@ -1239,7 +3531,30 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0129"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/style/XMLFontAutoStylePool.ts#XMLFontAutoStylePool",
+          "vendor/libreoffice-reference/xmloff/source/style/XMLFontAutoStylePool.cxx#XMLFontAutoStylePool::Add"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/XMLFontAutoStylePool.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "XMLFontAutoStylePool"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/style/XMLFontAutoStylePool.cxx",
+        "upstreamSymbols": [
+          "XMLFontAutoStylePool",
+          "XMLFontAutoStylePool::Add",
+          "XMLFontAutoStylePool::Find",
+          "XMLFontAutoStylePool::exportXML"
+        ]
+      }
     },
     {
       "path": "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts",
@@ -1250,7 +3565,31 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0128"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/style/XMLFontStylesContext.ts#XMLFontStylesContext",
+          "vendor/libreoffice-reference/xmloff/source/style/XMLFontStylesContext.cxx#XMLFontStylesContext::CreateStyleChildContext"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/XMLFontStylesContext.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "XMLFontStylesImportTarget",
+          "XMLFontStylesContext"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/style/XMLFontStylesContext.cxx",
+        "upstreamSymbols": [
+          "XMLFontStyleContextFontFace",
+          "XMLFontStylesContext",
+          "XMLFontStylesContext::CreateStyleChildContext",
+          "XMLFontStylesContext::FillProperties"
+        ]
+      }
     },
     {
       "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
@@ -1261,7 +3600,29 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0128"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/style/xmlstylei.ts#XMLStylesContext",
+          "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx#SvXMLStylesContext::createFastChildContext"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/xmlstyle.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "XMLStyleImportTarget",
+          "XMLStylesContext"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/style/xmlstyle.cxx",
+        "upstreamSymbols": [
+          "SvXMLStylesContext",
+          "SvXMLStylesContext::createFastChildContext"
+        ]
+      }
     },
     {
       "path": "apps/office/src/xmloff/source/text/txtparae.ts",
@@ -1272,7 +3633,34 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0129"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/text/txtparae.ts#ODF_NAMESPACES",
+          "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx#HyperlinkData::HyperlinkData"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/text/txtparae.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "OdfCharacterProperties",
+          "OdfParagraphAlignment",
+          "OdfListLevelKind",
+          "XMLTextExportSource",
+          "exportTextParagraphs"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/text/txtparae.cxx",
+        "upstreamSymbols": [
+          "HyperlinkData::HyperlinkData",
+          "HyperlinkData::addHyperlinkAttributes",
+          "HyperlinkData::exportEvents",
+          "BoundFrames::Fill"
+        ]
+      }
     },
     {
       "path": "apps/office/src/xmloff/source/text/txtparai.ts",
@@ -1283,7 +3671,33 @@
       "capabilityIds": [
         "CAP-0113",
         "CAP-0128"
-      ]
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/text/txtparai.ts#OdfStyleDefinition",
+          "vendor/libreoffice-reference/xmloff/source/text/txtparai.cxx#XMLHints_Impl::push_back"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against xmloff/source/text/txtparai.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "OdfStyleDefinition",
+          "XMLTextBodyContext",
+          "XMLParaContext",
+          "resolveParagraphStyle"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/text/txtparai.cxx",
+        "upstreamSymbols": [
+          "XMLHints_Impl::push_back",
+          "std::move",
+          "XMLCharContext::XMLCharContext",
+          "sax_fastparser::castToFastAttributeList"
+        ]
+      }
     }
   ],
   "internalOperations": [

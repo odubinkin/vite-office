@@ -1,4 +1,6 @@
-/** @fileoverview Validates the complete local runtime surface independently from upstream parity maturity. */
+/** @fileoverview Validates the complete local runtime surface and its semantic upstream contract disposition. */
+
+import ts from "typescript";
 
 /** Allowed classification outcomes from the Stage 0 reinventory. */
 export type RuntimeClassification =
@@ -11,12 +13,35 @@ export type RuntimeClassification =
 /** Current connection state of a runtime module. */
 export type RuntimeModuleState = "active" | "foundation" | "internal";
 
+/** Independent semantic parity state for one contract dimension. */
+export type RuntimeParityStatus = "divergent" | "not-applicable" | "parity" | "unverified";
+
+/** Approved parity-plan divergence classifications. */
+export type RuntimeDivergenceClass = "A" | "B" | "P" | "X" | "none";
+
+/** Semantic provenance and boundary evidence attached to every runtime module. */
+export interface RuntimeSemanticProvenance {
+  readonly behaviorStatus: RuntimeParityStatus;
+  readonly contractStatus: RuntimeParityStatus;
+  readonly defaultStatus: RuntimeParityStatus;
+  readonly divergenceClass: RuntimeDivergenceClass;
+  readonly evidence: readonly string[];
+  readonly expectedBaseClass?: string | null;
+  readonly justification: string;
+  readonly knownViolations: readonly string[];
+  readonly localSymbols: readonly string[];
+  readonly sourceResponsibility: "aligned" | "browser-owned" | "divergent" | "unverified";
+  readonly upstreamFile: string | null;
+  readonly upstreamSymbols: readonly string[];
+}
+
 /** One exact production TypeScript module and its audited disposition. */
 export interface RuntimeModuleRecord {
   readonly capabilityIds: readonly string[];
   readonly classification: RuntimeClassification;
   readonly infrastructureExemption?: string;
   readonly path: string;
+  readonly semantic: RuntimeSemanticProvenance;
   readonly state: RuntimeModuleState;
   readonly subsystem: string;
   readonly suite: "shared" | "writer";
@@ -41,7 +66,7 @@ export interface RuntimeInventoryManifest {
   readonly internalOperations: readonly RuntimeInternalOperation[];
   readonly modules: readonly RuntimeModuleRecord[];
   readonly placeholderSuites: readonly string[];
-  readonly schemaVersion: 2;
+  readonly schemaVersion: 3;
   readonly uiBehaviors: readonly RuntimeInventoryItem[];
 }
 
@@ -64,7 +89,8 @@ export interface RuntimeInventoryReport {
   readonly internalOperationCount: number;
   readonly modules: readonly RuntimeModuleReportEntry[];
   readonly placeholderSuiteCount: number;
-  readonly schemaVersion: 2;
+  readonly schemaVersion: 3;
+  readonly semanticViolationCount: number;
   readonly uiBehaviorCount: number;
 }
 
@@ -75,7 +101,7 @@ export interface RuntimeInventoryReport {
  */
 export function parseRuntimeInventoryManifest(sourceText: string): RuntimeInventoryManifest {
   const root = parseObject(sourceText);
-  if (root.schemaVersion !== 2) throw new Error("Runtime inventory schemaVersion must equal 2.");
+  if (root.schemaVersion !== 3) throw new Error("Runtime inventory schemaVersion must equal 3.");
   const modules = requireArray(root.modules, "modules").map(parseModule);
   assertOrderedUnique(modules.map(selectPath), "Runtime module paths");
   const internalOperations = parseInternalOperations(root.internalOperations);
@@ -86,7 +112,7 @@ export function parseRuntimeInventoryManifest(sourceText: string): RuntimeInvent
     internalOperations,
     modules,
     placeholderSuites,
-    schemaVersion: 2,
+    schemaVersion: 3,
     uiBehaviors,
   };
 }
@@ -125,6 +151,7 @@ export async function validateRuntimeInventory(
     assertKnownCapability(item.capabilityId, knownCapabilityIds, item.id);
   const modules: RuntimeModuleReportEntry[] = [];
   const operationsByModule = new Map<string, readonly string[]>();
+  let semanticViolationCount = 0;
   for (const module of manifest.modules) {
     if (module.capabilityIds.length === 0 && module.infrastructureExemption === undefined)
       throw new Error(
@@ -138,6 +165,13 @@ export async function validateRuntimeInventory(
     for (const capabilityId of module.capabilityIds)
       assertKnownCapability(capabilityId, knownCapabilityIds, module.path);
     const source = await readModule(module.path);
+    const semanticViolations = analyzeRuntimeModuleSemantics(module, source);
+    assertSameValues(
+      [...semanticViolations].sort(),
+      [...module.semantic.knownViolations].sort(),
+      `Runtime semantic violations for ${module.path}`,
+    );
+    semanticViolationCount += semanticViolations.length;
     const exportedOperations = extractExportedOperations(source);
     operationsByModule.set(module.path, exportedOperations);
     modules.push({ ...module, exportedOperations });
@@ -179,7 +213,8 @@ export async function validateRuntimeInventory(
     internalOperationCount: manifest.internalOperations.length,
     modules,
     placeholderSuiteCount: manifest.placeholderSuites.length,
-    schemaVersion: 2,
+    schemaVersion: 3,
+    semanticViolationCount,
     uiBehaviorCount: manifest.uiBehaviors.length,
   };
 }
@@ -244,6 +279,226 @@ export function extractExportedOperations(source: string): readonly string[] {
 }
 
 /**
+ * Detects AST/API and browser-boundary divergences whose exact disposition must be authored.
+ * @param module - Runtime module and semantic contract.
+ * @param source - Complete TypeScript source.
+ * @returns Stable violation identifiers detected in the source.
+ */
+export function analyzeRuntimeModuleSemantics(
+  module: RuntimeModuleRecord,
+  source: string,
+): readonly string[] {
+  const sourceFile = ts.createSourceFile(
+    module.path,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    module.path.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+  );
+  const violations = new Set<string>();
+  const declaredSymbols = collectDeclaredSymbols(sourceFile);
+  for (const symbol of module.semantic.localSymbols)
+    if (!declaredSymbols.has(symbol)) violations.add(`missing-local-symbol:${symbol}`);
+
+  if (module.semantic.expectedBaseClass !== undefined) {
+    const classDeclaration = findClassDeclaration(sourceFile, module.semantic.localSymbols[0]);
+    const actualBaseClass =
+      classDeclaration === undefined ? undefined : getBaseClass(classDeclaration);
+    if (actualBaseClass !== module.semantic.expectedBaseClass)
+      violations.add(
+        `inheritance:${module.semantic.localSymbols[0] ?? "unknown"}:${actualBaseClass ?? "none"}`,
+      );
+  }
+
+  const protectedPath =
+    /\/(?:inc|source\/(?:core|filter|uibase\/(?:dochdl|shells|uiview))|uiconfig)\//u.test(
+      module.path,
+    );
+  if (protectedPath && containsBrowserApi(sourceFile))
+    violations.add("browser-api-in-upstream-core");
+  if (
+    module.classification === "browser-adaptation" &&
+    /\/(?:source|uiconfig)\//u.test(module.path)
+  )
+    violations.add("browser-adapter-upstream-path");
+  if (
+    module.path.endsWith("/sw/uiconfig/swriter/menubar/menubar-commands.ts") &&
+    /["']writer\.[a-z0-9.-]+["']/u.test(source)
+  )
+    violations.add("custom-command-namespace");
+  if (
+    module.path.endsWith("/sw/source/uibase/shells/listsh.ts") &&
+    module.classification === "upstream-mechanism" &&
+    !declaredSymbols.has("SwListShell")
+  )
+    violations.add("placeholder-upstream-mechanism");
+  return [...violations].sort();
+}
+
+/** Collects declared top-level and class-member API names. @param sourceFile - Parsed source file. @returns Declared symbol set. */
+function collectDeclaredSymbols(sourceFile: ts.SourceFile): ReadonlySet<string> {
+  const symbols = new Set<string>();
+  /** Visits declarations recursively. @param node - Current syntax node. @returns Nothing. */
+  function visit(node: ts.Node): void {
+    if (
+      (ts.isClassDeclaration(node) ||
+        ts.isEnumDeclaration(node) ||
+        ts.isFunctionDeclaration(node) ||
+        ts.isInterfaceDeclaration(node) ||
+        ts.isTypeAliasDeclaration(node) ||
+        ts.isVariableDeclaration(node) ||
+        ts.isMethodDeclaration(node)) &&
+      node.name !== undefined
+    )
+      symbols.add(node.name.getText(sourceFile));
+    ts.forEachChild(node, visit);
+  }
+  visit(sourceFile);
+  return symbols;
+}
+
+/** Finds a named class declaration. @param sourceFile - Parsed source. @param name - Expected class name. @returns Matching declaration or undefined. */
+function findClassDeclaration(
+  sourceFile: ts.SourceFile,
+  name: string | undefined,
+): ts.ClassDeclaration | undefined {
+  return sourceFile.statements.find(
+    /** Matches one class statement. @param statement - Top-level statement. @returns Whether it declares the requested class. */ (
+      statement,
+    ): statement is ts.ClassDeclaration =>
+      ts.isClassDeclaration(statement) && statement.name?.text === name,
+  );
+}
+
+/** Reads one class's extends expression. @param declaration - Class declaration. @returns Base-class text or null. */
+function getBaseClass(declaration: ts.ClassDeclaration): string | null {
+  const heritage = declaration.heritageClauses?.find(
+    /** Selects an extends clause. @param clause - Heritage clause. @returns Whether it is extends. */ (
+      clause,
+    ) => clause.token === ts.SyntaxKind.ExtendsKeyword,
+  );
+  return heritage?.types[0]?.expression.getText(declaration.getSourceFile()) ?? null;
+}
+
+/** Detects React, DOM, Worker, IndexedDB, or browser-global usage in a parsed module. @param sourceFile - Parsed source. @returns Whether a browser boundary is present. */
+function containsBrowserApi(sourceFile: ts.SourceFile): boolean {
+  const browserIdentifiers = new Set([
+    "ClipboardEvent",
+    "Document",
+    "HTMLElement",
+    "IDBDatabase",
+    "Range",
+    "Selection",
+    "Worker",
+    "indexedDB",
+  ]);
+  let found = false;
+  /** Visits browser-sensitive syntax. @param node - Current syntax node. @returns Nothing. */
+  function visit(node: ts.Node): void {
+    if (found) return;
+    if (
+      ts.isImportDeclaration(node) &&
+      ts.isStringLiteral(node.moduleSpecifier) &&
+      node.moduleSpecifier.text === "react"
+    )
+      found = true;
+    else if (ts.isIdentifier(node) && browserIdentifiers.has(node.text)) found = true;
+    else if (
+      ts.isPropertyAccessExpression(node) &&
+      node.expression.getText(sourceFile) === "globalThis" &&
+      (node.name.text === "document" ||
+        node.name.text === "getSelection" ||
+        node.name.text === "indexedDB" ||
+        node.name.text === "window")
+    )
+      found = true;
+    else ts.forEachChild(node, visit);
+  }
+  visit(sourceFile);
+  return found;
+}
+
+/** Parses semantic provenance required for every runtime module. @param candidate - Unknown semantic record. @param modulePath - Owning module path. @returns Validated semantic provenance. */
+function parseSemanticProvenance(
+  candidate: unknown,
+  modulePath: string,
+): RuntimeSemanticProvenance {
+  if (!isRecord(candidate))
+    throw new Error(`Runtime module ${modulePath} requires semantic provenance.`);
+  const divergenceClass = parseDivergenceClass(candidate.divergenceClass, modulePath);
+  const evidence = requireStringArray(candidate, "evidence");
+  const justification = requireString(candidate, "justification");
+  if (justification.length < 40)
+    throw new Error(`Runtime semantic justification is too short for ${modulePath}.`);
+  if (divergenceClass === "B" && evidence.length === 0)
+    throw new Error(`Browser divergence ${modulePath} requires exact evidence.`);
+  const upstreamFile = candidate.upstreamFile;
+  if (upstreamFile !== null && (typeof upstreamFile !== "string" || upstreamFile.length === 0))
+    throw new Error(`Runtime semantic upstreamFile is invalid for ${modulePath}.`);
+  const expectedBaseClass = candidate.expectedBaseClass;
+  if (
+    expectedBaseClass !== undefined &&
+    expectedBaseClass !== null &&
+    (typeof expectedBaseClass !== "string" || expectedBaseClass.length === 0)
+  )
+    throw new Error(`Runtime semantic expectedBaseClass is invalid for ${modulePath}.`);
+  return {
+    behaviorStatus: parseParityStatus(candidate.behaviorStatus, modulePath),
+    contractStatus: parseParityStatus(candidate.contractStatus, modulePath),
+    defaultStatus: parseParityStatus(candidate.defaultStatus, modulePath),
+    divergenceClass,
+    evidence,
+    ...(expectedBaseClass === undefined ? {} : { expectedBaseClass }),
+    justification,
+    knownViolations: requireStringArray(candidate, "knownViolations"),
+    localSymbols: requireStringArray(candidate, "localSymbols"),
+    sourceResponsibility: parseSourceResponsibility(candidate.sourceResponsibility, modulePath),
+    upstreamFile,
+    upstreamSymbols: requireStringArray(candidate, "upstreamSymbols"),
+  };
+}
+
+/** Parses one parity status. @param candidate - Unknown status. @param modulePath - Diagnostic path. @returns Valid status. */
+function parseParityStatus(candidate: unknown, modulePath: string): RuntimeParityStatus {
+  if (
+    candidate !== "divergent" &&
+    candidate !== "not-applicable" &&
+    candidate !== "parity" &&
+    candidate !== "unverified"
+  )
+    throw new Error(`Runtime semantic parity status is invalid for ${modulePath}.`);
+  return candidate;
+}
+
+/** Parses one divergence class. @param candidate - Unknown class. @param modulePath - Diagnostic path. @returns Valid class. */
+function parseDivergenceClass(candidate: unknown, modulePath: string): RuntimeDivergenceClass {
+  if (
+    candidate !== "A" &&
+    candidate !== "B" &&
+    candidate !== "P" &&
+    candidate !== "X" &&
+    candidate !== "none"
+  )
+    throw new Error(`Runtime semantic divergence class is invalid for ${modulePath}.`);
+  return candidate;
+}
+
+/** Parses source responsibility state. @param candidate - Unknown state. @param modulePath - Diagnostic path. @returns Valid state. */
+function parseSourceResponsibility(
+  candidate: unknown,
+  modulePath: string,
+): RuntimeSemanticProvenance["sourceResponsibility"] {
+  if (
+    candidate !== "aligned" &&
+    candidate !== "browser-owned" &&
+    candidate !== "divergent" &&
+    candidate !== "unverified"
+  )
+    throw new Error(`Runtime source responsibility is invalid for ${modulePath}.`);
+  return candidate;
+}
+
+/**
  * Parses one exact module record.
  * @param candidate - Unknown authored record.
  * @param index - Source array index used in errors.
@@ -252,11 +507,21 @@ export function extractExportedOperations(source: string): readonly string[] {
 function parseModule(candidate: unknown, index: number): RuntimeModuleRecord {
   if (!isRecord(candidate)) throw new Error(`Runtime modules[${index}] must be an object.`);
   const infrastructureExemption = optionalString(candidate, "infrastructureExemption");
+  const path = requireString(candidate, "path");
+  const classification = parseClassification(candidate.classification);
+  const semantic = parseSemanticProvenance(candidate.semantic, path);
+  if (classification === "upstream-mechanism" && semantic.upstreamFile === null)
+    throw new Error(`Upstream mechanism ${path} requires an exact upstreamFile.`);
+  if (classification !== "upstream-mechanism" && semantic.upstreamFile !== null)
+    throw new Error(`Local or browser module ${path} cannot claim an upstreamFile.`);
+  if (semantic.knownViolations.length > 0 && semantic.divergenceClass === "none")
+    throw new Error(`Runtime module ${path} has unclassified semantic violations.`);
   return {
     capabilityIds: requireStringArray(candidate, "capabilityIds"),
-    classification: parseClassification(candidate.classification),
+    classification,
     ...(infrastructureExemption === undefined ? {} : { infrastructureExemption }),
-    path: requireString(candidate, "path"),
+    path,
+    semantic,
     state: parseState(candidate.state),
     subsystem: requireString(candidate, "subsystem"),
     suite: parseRuntimeSuite(candidate.suite),
