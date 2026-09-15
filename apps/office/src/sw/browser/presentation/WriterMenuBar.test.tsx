@@ -22,8 +22,20 @@ function App(): React.JSX.Element {
  * @returns Nothing; React receives the browser input event after the DOM text changes.
  */
 function enterWriterParagraphText(paragraph: HTMLElement, text: string): void {
-  paragraph.textContent = text;
-  fireEvent.input(paragraph);
+  const range = document.createRange();
+  range.selectNodeContents(paragraph);
+  const selection = window.getSelection() as Selection;
+  selection.removeAllRanges();
+  selection.addRange(range);
+  fireEvent(
+    paragraph,
+    new InputEvent("beforeinput", {
+      bubbles: true,
+      cancelable: true,
+      data: text,
+      inputType: "insertReplacementText",
+    }),
+  );
 }
 
 /** Selects all visible text in one Writer paragraph. @param paragraph - Editable paragraph. @returns Nothing. */
@@ -34,6 +46,7 @@ function selectWriterParagraphText(paragraph: HTMLElement): void {
   if (selection === null) throw new Error("Writer test selection is unavailable.");
   selection.removeAllRanges();
   selection.addRange(range);
+  document.dispatchEvent(new Event("selectionchange"));
 }
 
 /** Provides a test-owned rich ClipboardItem that retains its MIME blobs for Writer UI assertions. */
@@ -272,6 +285,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       selectedRange.selectNodeContents(editor);
       selection.removeAllRanges();
       selection.addRange(selectedRange);
+      document.dispatchEvent(new Event("selectionchange"));
       fireEvent.click(screen.getByRole("button", { name: "Edit" }));
       await act(
         /** Executes the menu Cut command after preparing one same-paragraph selection. @returns A fulfilled React act promise. */
@@ -310,6 +324,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       replaceRange.selectNodeContents(pastedEditor);
       selection.removeAllRanges();
       selection.addRange(replaceRange);
+      document.dispatchEvent(new Event("selectionchange"));
       fireEvent.click(screen.getByRole("button", { name: "Edit" }));
       await act(
         /** Replaces a same-paragraph selection through the Edit Paste command. @returns A fulfilled React act promise. */
@@ -341,6 +356,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const failedCutSelection = window.getSelection() as Selection;
       failedCutSelection.removeAllRanges();
       failedCutSelection.addRange(failedCutRange);
+      document.dispatchEvent(new Event("selectionchange"));
       expect(failedCutSelection.toString()).toBe("PastedPasted");
       writeText.mockRejectedValueOnce(new Error("Denied"));
       Object.defineProperty(document, "execCommand", {

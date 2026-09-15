@@ -30,7 +30,7 @@ function createWriterFixture(): WriterFixture {
   const document = createWriterDocument("p-1");
   const state = createDocument({ id: "writer-store", suiteId: "writer", title: "Writer" });
   const shell = new SwDocShell(document, state);
-  new SwWrtShell(shell).InsertText("p-1", "Saved text", 10, "insertText");
+  new SwWrtShell(shell).Insert("Saved text");
   return { document, shell };
 }
 

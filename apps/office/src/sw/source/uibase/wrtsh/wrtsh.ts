@@ -23,7 +23,6 @@ import {
   getWriterNextGraphemeBoundary,
   getWriterPreviousGraphemeBoundary,
   getWriterTextAttributesAtOffset,
-  getWriterTextChange,
   normalizeWriterTextRuns,
   toggleWriterTextRangeFormat,
 } from "../../core/txtnode/ndtxt";
@@ -47,11 +46,8 @@ import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { CreateWriterFontUndo, SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
 import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import { SwUndoInsNum, SwUndoNumLevel } from "../../core/undo/unnum";
-import {
-  SwTransferable,
-  type WriterClipboardPaste,
-  type WriterClipboardPasteParagraph,
-} from "../dochdl/swdtflvr";
+import { SwTransferable } from "../dochdl/swdtflvr";
+import type { WriterClipboardPaste, WriterClipboardPasteParagraph } from "../../filter/html/swhtml";
 import {
   CopyTextRangeRuns,
   CopyUndoRuns,
@@ -59,11 +55,7 @@ import {
   type SwUndoCursorState,
   type SwUndoRedoContext,
 } from "../../core/undo/undobj";
-import {
-  getWriterDeleteGrouping,
-  getWriterInsertGroup,
-  getWriterTypingCharacterClass,
-} from "./delete";
+import { getWriterTypingCharacterClass } from "./delete";
 import {
   areWriterCursorSelectionsEqual,
   createWriterCollapsedCursorState,
@@ -292,6 +284,11 @@ export class SwWrtShell extends SwModify {
     });
   }
 
+  /** Inserts text at the persistent Writer cursor, matching the bounded SwWrtShell insertion boundary. @param text - Text to insert or replace the selection with. @returns Whether the document changed. */
+  public Insert(text: string): boolean {
+    return text.length > 0 && this.InsertAtCursor(text, false);
+  }
+
   /** Executes a supported browser edit intent against the persistent SwPaM before native DOM mutation. @param inputType - Native beforeinput operation. @param data - Inserted text supplied by InputEvent. @returns True when the intent belongs to the modeled Writer input subset. */
   public HandleInput(inputType: string, data: string | null): boolean {
     switch (inputType) {
@@ -308,6 +305,30 @@ export class SwWrtShell extends SwModify {
         return true;
       case "deleteContentForward":
         this.DeleteAtCursor("delete");
+        return true;
+      case "deleteByCut":
+      case "deleteByDrag":
+      case "deleteContent":
+        this.DeleteSelection();
+        return true;
+      case "formatBold":
+        this.ToggleCharacterFormat("bold");
+        return true;
+      case "formatItalic":
+        this.ToggleCharacterFormat("italic");
+        return true;
+      case "formatUnderline":
+        this.ToggleCharacterFormat("underline");
+        return true;
+      case "insertOrderedList":
+        this.SetParagraphListKind("numbered");
+        return true;
+      case "insertUnorderedList":
+        this.SetParagraphListKind("bullet");
+        return true;
+      case "insertFromComposition":
+      case "insertFromDrop":
+      case "insertFromPaste":
         return true;
       case "historyUndo":
         this.Undo();
@@ -347,66 +368,6 @@ export class SwWrtShell extends SwModify {
     /* v8 ignore next -- non-empty composition at a valid registered cursor always inserts. */
     if (!changed) this.NotifySelection();
     return changed;
-  }
-
-  /** Applies one explicitly isolated post-DOM fallback replacement for unsupported browser input kinds. @param paragraphId - Edited paragraph. @param text - Complete next visible text. @param caretOffset - Collapsed caret after input. @param inputType - Native input operation. @returns Whether document content changed. */
-  public InsertText(
-    paragraphId: string,
-    text: string,
-    caretOffset: number | undefined,
-    inputType: string,
-  ): boolean {
-    const document = this.GetDoc();
-    const paragraph = getActiveWriterParagraph(document, paragraphId);
-    const change = getWriterTextChange(paragraph.text, text);
-    const nextOffset = caretOffset ?? text.length;
-    if (change === undefined && paragraph.text === text) {
-      this.activeParagraphId = paragraph.id;
-      this.AssignCursor(paragraph, nextOffset);
-      this.NotifySelection();
-      return false;
-    }
-    const before =
-      change?.kind === "insert"
-        ? this.CreateCollapsedCursorState(paragraph.id, change.offset)
-        : change?.kind === "delete"
-          ? this.CreateCollapsedCursorState(
-              paragraph.id,
-              inputType === "deleteContentBackward" ? change.end : change.start,
-            )
-          : this.CaptureCursorState();
-    const after = this.CreateCollapsedCursorState(paragraph.id, nextOffset);
-    if (change?.kind === "insert") {
-      const group = getWriterInsertGroup(change, inputType, before, caretOffset);
-      return this.ApplyAction(
-        new SwUndoInsert(
-          paragraph,
-          change.offset,
-          [{ attributes: { ...this.pendingCharacterAttributes }, text: change.text }],
-          group,
-          before,
-          after,
-        ),
-        group !== undefined,
-      );
-    }
-    if (change?.kind === "delete") {
-      const grouping = getWriterDeleteGrouping(change, inputType, before, caretOffset);
-      return this.ApplyAction(
-        new SwUndoDelete(
-          paragraph,
-          change.start,
-          CopyTextRangeRuns(paragraph, change.start, change.end),
-          grouping?.direction ?? (inputType === "deleteContentBackward" ? "backspace" : "delete"),
-          grouping?.group,
-          before,
-          after,
-        ),
-        grouping !== undefined,
-      );
-    }
-    this.RestoreCursorState(before);
-    return false;
   }
 
   /** Inserts text at the persistent point, replacing a same-node selection like SwWrtShell::Insert. @param text - Non-empty inserted text. @param allowGrouping - Whether ordinary typing may merge with the preceding insert action. @returns Whether the document changed. */

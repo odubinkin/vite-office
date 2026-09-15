@@ -23,7 +23,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
     const service = createInlineOdtFilterService();
     const document = createWriterDocument("p-1");
     const shell = new SwDocShell(document, metadata());
-    new SwWrtShell(shell).InsertText("p-1", "worker body", 11, "insertText");
+    new SwWrtShell(shell).Insert("worker body");
     const progress: string[] = [];
     const bytes = await service.Export(createWriterSnapshot(document, shell.GetDocumentState()), {
       onProgress:

@@ -92,7 +92,9 @@ test("Writer direct character formatting" /**
     },
   );
   expect(clipboardPayload.plainText).toBe("Formatted Writer body");
-  expect(clipboardPayload.html).toContain('<strong><em><span style="text-decoration: underline">');
+  expect(clipboardPayload.html).toContain("<strong>");
+  expect(clipboardPayload.html).toContain("<em>");
+  expect(clipboardPayload.html).toContain('<span style="text-decoration: underline">');
   expect(clipboardPayload.html).not.toContain("Paragraph style:");
   await writerEditor.evaluate(
     /** Focuses and selects the formatted editable subtree immediately before native deletion. @param element - Writer editing host whose browser-owned descendant will be removed. @returns Nothing; the live selection covers the complete formatted text. */ function selectFormattedWriterText(

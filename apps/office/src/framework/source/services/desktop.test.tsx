@@ -32,11 +32,25 @@ function App(): React.JSX.Element {
  *
  * @param paragraph - Accessible contenteditable paragraph rendered by the Writer document page.
  * @param text - Complete replacement text that the bounded paragraph model should store.
- * @returns Nothing; React receives the browser input event after the DOM text changes.
+ * @returns Nothing; Writer receives the browser editing intent through beforeinput.
  */
 function enterWriterParagraphText(paragraph: HTMLElement, text: string): void {
-  paragraph.textContent = text;
-  fireEvent.input(paragraph);
+  const range = document.createRange();
+  range.selectNodeContents(paragraph);
+  const selection = globalThis.getSelection();
+  if (selection === null) throw new Error("Browser selection must be available in Writer tests.");
+  selection.removeAllRanges();
+  selection.addRange(range);
+  document.dispatchEvent(new Event("selectionchange"));
+  fireEvent(
+    paragraph,
+    new InputEvent("beforeinput", {
+      bubbles: true,
+      cancelable: true,
+      data: text,
+      inputType: "insertReplacementText",
+    }),
+  );
 }
 
 /**
@@ -52,6 +66,7 @@ function selectWriterParagraphText(paragraph: HTMLElement): void {
   if (selection === null) throw new Error("Browser selection must be available in Writer tests.");
   selection.removeAllRanges();
   selection.addRange(range);
+  document.dispatchEvent(new Event("selectionchange"));
 }
 
 /** Invokes one Writer File menu command by its accessible label. @param name - Visible command label. @returns A promise fulfilled after asynchronous command state settles. */
@@ -345,12 +360,7 @@ describe("App" /**
   it("opens a supported ODT atomically and starts a parseable ODT download" /** Verifies the product File boundary uses the existing Writer package filters. @returns A fulfilled assertion promise. */, async () => {
     const importedState = createDocument({ id: "fixture", suiteId: "writer", title: "Opened ODT" });
     const imported = createWriterDocument("fixture-p-1");
-    new SwWrtShell(new SwDocShell(imported, importedState)).InsertText(
-      "fixture-p-1",
-      "Imported package body",
-      "Imported package body".length,
-      "insertText",
-    );
+    new SwWrtShell(new SwDocShell(imported, importedState)).Insert("Imported package body");
     const inputClick = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(
       /** Supplies the generated ODT to the transient browser chooser. @param this - Transient file input. @returns Nothing. */
       function chooseOdt(this: HTMLInputElement): void {

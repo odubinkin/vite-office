@@ -10,8 +10,8 @@ import type { WriterSnapshotState } from "../persistence/writer-storage";
 import {
   parseWriterClipboardPaste,
   type WriterClipboardPaste,
-  type WriterClipboardSelection,
-} from "../../source/uibase/dochdl/swdtflvr";
+} from "../../source/filter/html/swhtml";
+import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import type {
   WriterCutCommandArguments,
@@ -127,35 +127,31 @@ export class WriterClipboardWorkflowController {
   /** Copies then deletes a canonical Writer selection. @param arguments_ - Adapted Cut request. @returns Completion after transfer and deletion. */
   public async Cut(arguments_?: unknown): Promise<void> {
     const request = arguments_ as WriterCutCommandArguments | undefined;
-    if (request?.cursorSelection === undefined) {
-      throw new WriterPlatformError("selection-required", "Select text to cut.");
-    }
-    if (!request.clipboardHandled) {
-      this.wrtShell.SetSelection(request.cursorSelection);
+    if (!request?.clipboardHandled) {
       const selection = this.wrtShell.CreateTransferable().CreateSelection();
       if (selection === undefined)
         throw new WriterPlatformError("selection-required", "Select text to cut.");
       await this.ports.copyRichText(selection);
     }
-    this.wrtShell.DeleteSelection(request.cursorSelection);
+    if (!this.wrtShell.DeleteSelection())
+      throw new WriterPlatformError("selection-required", "Select text to cut.");
   }
 
   /** Inserts native or asynchronously read clipboard content. @param arguments_ - Adapted Paste request. @returns Completion after insertion. */
   public async Paste(arguments_?: unknown): Promise<void> {
     const request = arguments_ as WriterPasteCommandArguments | undefined;
-    const active = this.wrtShell.GetActiveParagraph();
-    const target = request?.cursorSelection ?? {
-      end: active.text.length,
-      paragraphId: active.id,
-      start: active.text.length,
-    };
+    const target = this.wrtShell.GetCursorSelection();
     let paste: WriterClipboardPaste;
     if (request?.paste !== undefined) paste = request.paste;
     else if (request?.clipboardHandled === true) {
       throw new WriterPlatformError("clipboard-empty", "Clipboard has no text to paste.");
     } else {
       const clipboard = await this.ports.readRichClipboard();
-      const parsed = parseWriterClipboardPaste(clipboard.html, clipboard.plainText);
+      const parsed = parseWriterClipboardPaste(
+        clipboard.html,
+        clipboard.plainText,
+        globalThis.document,
+      );
       if (parsed === undefined)
         throw new WriterPlatformError("clipboard-empty", "Clipboard has no text to paste.");
       paste = parsed;

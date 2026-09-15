@@ -8,16 +8,12 @@ import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
 import { WriterParagraphProperties } from "./WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { useWriterCommandShortcuts } from "../accelerators/writer-shortcuts";
-import { getWriterDomSelection } from "../editor/writer-selection";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { readWriterClipboardPaste } from "../../source/uibase/dochdl/swdtflvr";
+import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
+import { readBrowserWriterClipboardPaste } from "../editor/writer-clipboard-events";
 import { WriterPlainTextEditor } from "../../source/uibase/docvw/edtwin";
 import type { WriterCursorSelection } from "../../source/uibase/wrtsh/wrtsh";
-import type {
-  SwView,
-  WriterCutCommandArguments,
-  WriterPasteCommandArguments,
-} from "../../source/uibase/uiview/view";
+import type { SwView, WriterPasteCommandArguments } from "../../source/uibase/uiview/view";
 import type { WriterCommandSource } from "./command-surface";
 import type { WriterHyperlink } from "../../source/core/txtnode/fmtinfmt";
 
@@ -64,18 +60,6 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
     (selection: WriterCursorSelection): boolean => wrtShell.SetSelection(selection),
     [wrtShell],
   );
-  const handleTextChange = useCallback(
-    /** Reconciles one unsupported native paragraph mutation. @param paragraphId - Stable Writer paragraph ID. @param text - Mutated visible text. @param caretOffset - Optional caret offset. @param inputType - Unsupported browser input type. @returns Nothing. */
-    (
-      paragraphId: string,
-      text: string,
-      caretOffset: number | undefined,
-      inputType: string,
-    ): void => {
-      wrtShell.InsertText(paragraphId, text, caretOffset, inputType);
-    },
-    [wrtShell],
-  );
   const handleSelectAll = useCallback(
     /** Dispatches the canonical Select All command. @returns Nothing. */ () => {
       view.Execute(WRITER_COMMAND_IDS.selectAll);
@@ -84,18 +68,12 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
   );
 
   const resolveCommandArguments = useCallback(
-    /** Resolves browser selection-dependent command arguments. @param commandId - Stable command identity. @returns Browser-derived command arguments. */
-    function resolveWriterCommandArguments(commandId: string): unknown {
-      const selection = globalThis.getSelection();
-      const cursor = getWriterDomSelection(selection);
-      if (cursor !== undefined) wrtShell.SetSelection(cursor);
-      if (commandId === WRITER_COMMAND_IDS.copy) return undefined;
-      if (commandId === WRITER_COMMAND_IDS.cut) return createWriterCutCommandArguments(selection);
-      if (commandId === WRITER_COMMAND_IDS.paste)
-        return cursor === undefined ? undefined : { cursorSelection: cursor };
+    /** Resolves command arguments without reading the rendered DOM. @param commandId - Stable command identity. @returns No browser-derived arguments. */
+    function resolveWriterCommandArguments(commandId: string): undefined {
+      void commandId;
       return undefined;
     },
-    [wrtShell],
+    [],
   );
 
   const commandSource = useMemo<WriterCommandSource>(
@@ -134,24 +112,28 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
     resolveArguments: resolveCommandArguments,
   });
 
+  const createNativeTransfer = useCallback(
+    /** Serializes the shell-owned SwPaM without consulting rendered descendants. @returns Model transfer data, if selected. */
+    function createNativeTransfer(): WriterClipboardSelection | undefined {
+      return wrtShell.CreateTransferable().CreateSelection();
+    },
+    [wrtShell],
+  );
+
   const executeNativeCut = useCallback(
-    /** Dispatches an already browser-handled native Cut. @param selection - Selected model range. @returns Nothing. */
-    function dispatchNativeCut(selection: WriterCursorSelection): void {
-      view.Execute(WRITER_COMMAND_IDS.cut, { clipboardHandled: true, cursorSelection: selection });
+    /** Dispatches an already browser-handled native Cut against the shell-owned SwPaM. @returns Nothing. */
+    function dispatchNativeCut(): void {
+      view.Execute(WRITER_COMMAND_IDS.cut, { clipboardHandled: true });
     },
     [view],
   );
 
   const executeNativePaste = useCallback(
     /** Dispatches an already browser-handled native Paste. @param selection - Replacement selection. @param clipboardData - Native clipboard data. @returns Nothing. */
-    function dispatchNativePaste(
-      selection: WriterCursorSelection,
-      clipboardData: DataTransfer,
-    ): void {
-      const paste = readWriterClipboardPaste(clipboardData);
+    function dispatchNativePaste(clipboardData: DataTransfer): void {
+      const paste = readBrowserWriterClipboardPaste(clipboardData, globalThis.document);
       view.Execute(WRITER_COMMAND_IDS.paste, {
         clipboardHandled: true,
-        cursorSelection: selection,
         ...(paste === undefined ? {} : { paste }),
       } satisfies WriterPasteCommandArguments);
     },
@@ -197,10 +179,10 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
           onCompositionEnd={handleCompositionEnd}
           onCompositionStart={handleCompositionStart}
           onCompositionUpdate={handleCompositionUpdate}
+          onCreateTransfer={createNativeTransfer}
           onParagraphFocus={handleParagraphFocus}
           onSelectAll={handleSelectAll}
           onSelectionChange={handleSelectionChange}
-          onTextChange={handleTextChange}
           onTextCut={executeNativeCut}
           onTextPaste={executeNativePaste}
           paragraphs={snapshot.paragraphs}
@@ -308,10 +290,4 @@ function presentWriterCommandError(view: SwView): string | undefined {
   }
   /* v8 ignore next -- an attached SwView dispatcher contains only the exhaustively mapped Writer commands above. */
   return failure.error;
-}
-
-/** Creates exact-optional Cut arguments. @param selection - Current browser selection. @returns Sanitized arguments. */
-function createWriterCutCommandArguments(selection: Selection | null): WriterCutCommandArguments {
-  const cursorSelection = getWriterDomSelection(selection);
-  return cursorSelection === undefined ? {} : { cursorSelection };
 }

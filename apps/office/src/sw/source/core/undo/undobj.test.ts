@@ -55,12 +55,12 @@ function cursorState(paragraph: SwTextNode, offset = 0): SwUndoCursorState {
 describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance coverage. @returns Nothing. */, function defineWriterUndoTests(): void {
   it("groups compatible typing, separates delimiter and cursor boundaries, and truncates redo" /** Verifies SwUndoInsert::CanGrouping behavior and branch replacement. @returns Nothing. */, function groupsTyping(): void {
     const { docShell, document, shell } = createSession();
-    shell.InsertText("p-1", "a", 1, "insertText");
-    shell.InsertText("p-1", "ab", 2, "insertText");
+    shell.HandleInput("insertText", "a");
+    shell.HandleInput("insertText", "b");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoInsert);
     expect(document.paragraphs[0]?.text).toBe("ab");
-    shell.InsertText("p-1", "ab ", 3, "insertText");
+    shell.HandleInput("insertText", " ");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(2);
     expect(shell.Undo()).toBe(true);
     expect(document.paragraphs[0]?.text).toBe("ab");
@@ -69,7 +69,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(shell.Redo()).toBe(true);
     expect(document.paragraphs[0]?.text).toBe("ab");
     shell.SetCursor("p-1", 2);
-    shell.InsertText("p-1", "abx", 3, "insertText");
+    shell.HandleInput("insertText", "x");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(2);
     expect(docShell.GetUndoManager().GetRedoActionCount()).toBe(0);
     expect(shell.Redo()).toBe(false);
@@ -83,8 +83,8 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     ]);
     backward.docShell.GetUndoManager().Clear();
     backward.shell.SetCursor("p-1", 4);
-    backward.shell.InsertText("p-1", "abc", 3, "deleteContentBackward");
-    backward.shell.InsertText("p-1", "ab", 2, "deleteContentBackward");
+    backward.shell.HandleInput("deleteContentBackward", null);
+    backward.shell.HandleInput("deleteContentBackward", null);
     expect(backward.docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     expect(backward.docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoDelete);
     backward.shell.Undo();
@@ -95,15 +95,15 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
 
     const forward = createSession("abcd");
     forward.shell.SetCursor("p-1", 0);
-    forward.shell.InsertText("p-1", "bcd", 0, "deleteContentForward");
-    forward.shell.InsertText("p-1", "cd", 0, "deleteContentForward");
+    forward.shell.HandleInput("deleteContentForward", null);
+    forward.shell.HandleInput("deleteContentForward", null);
     expect(forward.docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     forward.shell.Undo();
     expect(forward.document.paragraphs[0]?.text).toBe("abcd");
 
     const delimiter = createSession("a ");
     delimiter.shell.SetCursor("p-1", 2);
-    delimiter.shell.InsertText("p-1", "a", 1, "deleteContentBackward");
+    delimiter.shell.HandleInput("deleteContentBackward", null);
     expect(delimiter.docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoDelete);
   });
 
@@ -113,7 +113,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     shell.UpdateComposition("あい");
     shell.EndComposition();
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
-    expect(shell.InsertText("p-1", "AX", 2, "insertText")).toBe(false);
+    expect(shell.HandleInput("insertTranspose", "AX")).toBe(false);
     expect(document.paragraphs[0]?.text).toBe("あい");
     shell.Undo();
     expect(document.paragraphs[0]?.text).toBe("");
@@ -217,13 +217,13 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
 
   it("preserves lifecycle generations and the moved save mark across action navigation" /** Verifies document lifecycle ownership after removing historical snapshots. @returns A fulfilled assertion promise. */, async function preservesSaveMark(): Promise<void> {
     const { docShell, shell } = createSession();
-    shell.InsertText("p-1", "a", 1, "insertText");
+    shell.HandleInput("insertText", "a");
     await docShell.Save(
       /** Confirms the generation accepted by the test primary medium. @returns Matching storage evidence. */ async () => ({
         generation: docShell.GetDocumentState().contentGeneration,
       }),
     );
-    shell.InsertText("p-1", "ab", 2, "insertText");
+    shell.HandleInput("insertText", "b");
     expect(docShell.GetDocumentState()).toMatchObject({
       contentGeneration: 2,
       isModified: true,
@@ -246,11 +246,11 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
   it("keeps bounded history state valid after old actions are discarded" /** Verifies the current document is never rolled back merely because history reaches its limit. @returns Nothing. */, function boundsWriterHistory(): void {
     const { docShell, document, shell } = createSession();
     docShell.GetUndoManager().SetMaxUndoActionCount(2);
-    shell.InsertText("p-1", "a", 1, "insertText");
+    shell.Insert("a");
     docShell.GetUndoManager().BreakUndoGrouping();
-    shell.InsertText("p-1", "ab", 2, "insertText");
+    shell.Insert("b");
     docShell.GetUndoManager().BreakUndoGrouping();
-    shell.InsertText("p-1", "abc", 3, "insertText");
+    shell.Insert("c");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(2);
     shell.Undo();
     shell.Undo();
@@ -264,11 +264,11 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     for (let index = 2; index <= 200; index += 1)
       large.document.nodes.MakeTextNode(`p-${index}`, "y".repeat(200));
     const smallStart = performance.now();
-    small.shell.InsertText("p-1", "xa", 2, "insertText");
+    small.shell.Insert("a");
     const smallLatency = performance.now() - smallStart;
     large.shell.SetCursor("p-1", 20_000);
     const largeStart = performance.now();
-    large.shell.InsertText("p-1", `${"x".repeat(20_000)}a`, 20_001, "insertText");
+    large.shell.Insert("a");
     const largeLatency = performance.now() - largeStart;
     const smallUndoStart = performance.now();
     small.shell.Undo();

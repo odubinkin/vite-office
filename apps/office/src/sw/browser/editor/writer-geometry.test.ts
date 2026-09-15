@@ -64,7 +64,15 @@ describe("browser Writer geometry" /** Groups injected geometry behavior. @retur
         caretRangeFromPoint: /** Returns mutable fixture geometry. @returns Active range. */ () =>
           activeRange,
       },
-      /** Reads the fixture selection. @returns Fixture selection. */ () => selection,
+      /** Applies a fixture selection. @param anchorNode - Fixed node. @param anchorOffset - Fixed offset. @param focusNode - Moving node. @param focusOffset - Moving offset. @returns Success. */ (
+        anchorNode,
+        anchorOffset,
+        focusNode,
+        focusOffset,
+      ) => {
+        selection.setBaseAndExtent(anchorNode, anchorOffset, focusNode, focusOffset);
+        return true;
+      },
     );
     controller.Start(1, 0, 0);
     expect(controller.Move(0, 0)).toBe(false);
@@ -75,6 +83,8 @@ describe("browser Writer geometry" /** Groups injected geometry behavior. @retur
     expect(selection.toString()).toContain("rst");
     expect(controller.End()).toBe(true);
     expect(controller.End()).toBe(false);
+    expect(controller.Place(0, 0)).toBe(true);
+    expect(selection.isCollapsed).toBe(true);
 
     activeRange = first;
     const unavailable = new BrowserWriterPointerSelectionController(
@@ -82,10 +92,11 @@ describe("browser Writer geometry" /** Groups injected geometry behavior. @retur
         caretRangeFromPoint: /** Returns mutable fixture geometry. @returns Active range. */ () =>
           activeRange,
       },
-      /** Simulates missing native selection. @returns Null selection. */ () => null,
+      /** Simulates missing native selection. @returns Failure. */ () => false,
     );
     unavailable.Start(0, 0, 0);
     activeRange = second;
     expect(unavailable.Move(0, 0)).toBe(false);
+    expect(unavailable.Place(0, 0)).toBe(false);
   });
 });

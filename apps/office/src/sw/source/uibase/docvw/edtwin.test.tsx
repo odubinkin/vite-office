@@ -20,8 +20,12 @@ function App(): React.JSX.Element {
  * @returns Nothing; React receives the browser input event after the DOM text changes.
  */
 function enterWriterParagraphText(paragraph: HTMLElement, text: string): void {
-  paragraph.textContent = text;
-  fireEvent.input(paragraph);
+  const range = document.createRange();
+  range.selectNodeContents(paragraph);
+  const selection = window.getSelection() as Selection;
+  selection.removeAllRanges();
+  selection.addRange(range);
+  beforeInputWriterParagraph(paragraph, "insertReplacementText", text);
 }
 
 /**
@@ -58,17 +62,6 @@ function placeWriterCaret(paragraph: HTMLElement, offset: number): void {
  * @param caretOffset - Collapsed caret after the browser mutation.
  * @returns Nothing; the DOM mutation is committed through the Writer input boundary.
  */
-function inputWriterParagraphText(
-  paragraph: HTMLElement,
-  text: string,
-  inputType: string,
-  caretOffset = text.length,
-): void {
-  paragraph.textContent = text;
-  placeWriterCaret(paragraph, caretOffset);
-  fireEvent.input(paragraph, { inputType });
-}
-
 /** Dispatches one cancelable edit intent before any browser-owned DOM mutation. @param paragraph - Editable Writer paragraph. @param inputType - Native beforeinput operation. @param data - Optional inserted text. @returns Dispatched native event for cancellation assertions. */
 function beforeInputWriterParagraph(
   paragraph: HTMLElement,
@@ -160,9 +153,8 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     render(<App />);
     const firstParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     enterWriterParagraphText(firstParagraph, "Before after");
-    firstParagraph.textContent = "Before Xafter";
-    placeWriterCaret(firstParagraph, 8);
-    fireEvent.input(firstParagraph);
+    placeWriterCaret(firstParagraph, 7);
+    beforeInputWriterParagraph(firstParagraph, "insertText", "X");
     expect(window.getSelection()?.getRangeAt(0).startOffset).toBe(8);
     expect(window.getSelection()?.isCollapsed).toBe(true);
     fireEvent.keyDown(firstParagraph, { ctrlKey: true, key: "a" });
@@ -181,35 +173,27 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(window.getSelection()?.toString()).toContain("Second paragraph");
   });
 
-  it("keeps native contenteditable deletion outside React child reconciliation" /**
-   * Reproduces Chromium removing a formatted descendant before React commits the corresponding Writer model update.
-   * @returns Nothing; the browser-owned DOM deletion and a longer selection replacement commit without NotFoundError or stale text.
-   */, function handlesBrowserOwnedFormattedDeletion(): void {
+  it("prevents unsupported DOM mutation and keeps React as the rendering owner" /**
+   * Verifies unsupported browser editing intents cannot replace canonical formatted descendants.
+   * @returns Nothing; the model projection remains intact.
+   */, function rejectsBrowserOwnedFormattedDeletion(): void {
     render(<App />);
     const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
-    inputWriterParagraphText(paragraph, "Bold", "insertText");
+    enterWriterParagraphText(paragraph, "aBoldz");
     const selection = window.getSelection() as Selection;
     const range = document.createRange();
-    range.selectNodeContents(paragraph);
+    range.setStart(paragraph.firstChild as Text, 1);
+    range.setEnd(paragraph.firstChild as Text, 5);
     selection.removeAllRanges();
     selection.addRange(range);
+    document.dispatchEvent(new Event("selectionchange"));
     fireEvent.click(screen.getByRole("button", { name: "Bold" }));
     const formattedParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     expect(formattedParagraph.querySelector("strong")).toHaveTextContent("Bold");
-    formattedParagraph.querySelector("strong")?.remove();
-    expect(
-      /** Commits browser-owned descendant removal through React. @returns Nothing; Writer receives the empty text. */ function commitNativeDeletion(): void {
-        fireEvent.input(formattedParagraph, { inputType: "deleteContentBackward" });
-      },
-    ).not.toThrow();
-    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent("");
-
-    const emptyParagraph = screen.getByRole("textbox", { name: "Writer document text" });
-    inputWriterParagraphText(emptyParagraph, "a", "insertText");
-    inputWriterParagraphText(emptyParagraph, "longer", "insertText");
-    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
-      "longer",
+    expect(beforeInputWriterParagraph(formattedParagraph, "insertTranspose").defaultPrevented).toBe(
+      true,
     );
+    expect(formattedParagraph.querySelector("strong")).toHaveTextContent("Bold");
   });
 
   it("executes beforeinput against SwPaM and deletes complete Unicode graphemes" /** Verifies supported typing and deletion are canceled before DOM mutation while emoji and combining sequences follow Writer character boundaries. @returns Nothing; canonical text and undo cursor behavior are asserted. */, function handlesCanonicalBeforeInput(): void {
@@ -217,10 +201,11 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
     window.getSelection()?.removeAllRanges();
     expect(beforeInputWriterParagraph(paragraph, "insertText", "ignored").defaultPrevented).toBe(
-      false,
+      true,
     );
+    expect(paragraph).toHaveTextContent("");
     placeWriterCaret(paragraph, 0);
-    expect(beforeInputWriterParagraph(paragraph, "formatBold").defaultPrevented).toBe(false);
+    expect(beforeInputWriterParagraph(paragraph, "formatBold").defaultPrevented).toBe(true);
     const inserted = beforeInputWriterParagraph(paragraph, "insertText", "👩‍💻e\u0301");
     expect(inserted.defaultPrevented).toBe(true);
     expect(paragraph).toHaveTextContent("👩‍💻é");
@@ -241,7 +226,6 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
     placeWriterCaret(paragraph, 0);
     fireEvent.compositionStart(paragraph);
-    paragraph.textContent = "にほ";
     fireEvent.compositionUpdate(paragraph, { data: "にほ" });
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
     fireEvent.compositionEnd(paragraph, { data: "日本" });
@@ -259,7 +243,6 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     );
     window.getSelection()?.removeAllRanges();
     fireEvent.compositionStart(paragraph);
-    paragraph.textContent = "cancelled";
     fireEvent.compositionUpdate(paragraph, { data: "cancelled" });
     expect(
       beforeInputWriterParagraph(paragraph, "insertCompositionText", "cancelled").defaultPrevented,
@@ -278,26 +261,29 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
    */, function groupsWriterTypingHistory(): void {
     render(<App />);
     const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
-    for (const text of ["a", "ab", "abc", "abc ", "abc d", "abc de", "abc def"])
-      inputWriterParagraphText(paragraph, text, "insertText");
+    for (const text of ["a", "b", "c", " ", "d", "e", "f"])
+      beforeInputWriterParagraph(paragraph, "insertText", text);
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(paragraph.textContent).toBe("abc ");
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(paragraph).toHaveTextContent("abc");
-    inputWriterParagraphText(paragraph, "ab", "deleteContentBackward");
-    inputWriterParagraphText(paragraph, "a", "deleteContentBackward");
+    placeWriterCaret(paragraph, 3);
+    beforeInputWriterParagraph(paragraph, "deleteContentBackward");
+    beforeInputWriterParagraph(paragraph, "deleteContentBackward");
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(paragraph).toHaveTextContent("abc");
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(paragraph).toHaveTextContent("");
 
-    for (const text of ["a", "ab", "abc"]) inputWriterParagraphText(paragraph, text, "insertText");
-    inputWriterParagraphText(paragraph, "bc", "deleteContentForward", 0);
-    inputWriterParagraphText(paragraph, "c", "deleteContentForward", 0);
+    for (const text of ["a", "b", "c"]) beforeInputWriterParagraph(paragraph, "insertText", text);
+    placeWriterCaret(paragraph, 0);
+    beforeInputWriterParagraph(paragraph, "deleteContentForward");
+    beforeInputWriterParagraph(paragraph, "deleteContentForward");
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(paragraph).toHaveTextContent("abc");
-    inputWriterParagraphText(paragraph, "ac", "deleteByDrag", 1);
-    inputWriterParagraphText(paragraph, "ax c", "insertText", 3);
+    enterWriterParagraphText(paragraph, "ac");
+    placeWriterCaret(paragraph, 1);
+    beforeInputWriterParagraph(paragraph, "insertText", "x ");
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(paragraph).toHaveTextContent("ac");
   });
@@ -428,6 +414,37 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(screen.queryByText("Clipboard has no text to paste.")).not.toBeInTheDocument();
   });
 
+  it("routes native drag formats and drop insertion through the Writer transfer boundary", /** Verifies native drag events stay model-owned. @returns Nothing. */ function handlesNativeDragAndDrop(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    const documentBody = screen.getByRole("article", { name: "Writer document body" });
+    enterWriterParagraphText(paragraph, "Dragged");
+    const range = document.createRange();
+    range.selectNodeContents(paragraph);
+    const selection = window.getSelection() as Selection;
+    selection.removeAllRanges();
+    selection.addRange(range);
+    const values = new Map<string, string>();
+    const dataTransfer = {
+      getData:
+        /** Reads one fixture MIME value. @param type - MIME type. @returns Stored value or empty text. */ (
+          type: string,
+        ): string => values.get(type) ?? "",
+      /** Stores one fixture MIME value. @param type - MIME type. @param value - Transfer value. @returns Nothing. */
+      setData: (type: string, value: string): void => {
+        values.set(type, value);
+      },
+    } as DataTransfer;
+    fireEvent.dragStart(paragraph, { dataTransfer });
+    expect(values.get("text/plain")).toBe("Dragged");
+    expect(values.get("text/html")).toContain("Dragged");
+    expect(fireEvent.dragOver(documentBody, { dataTransfer })).toBe(false);
+    expect(fireEvent.drop(documentBody, { clientX: 0, clientY: 0, dataTransfer })).toBe(false);
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
+      "Dragged",
+    );
+  });
+
   it("uses one editing host and deletes a cross-paragraph SwPaM through beforeinput" /** Verifies paragraph projections inherit one contenteditable root and canonical deletion joins selected nodes in one undo unit. @returns Nothing. */, function deletesCrossParagraphSelection(): void {
     render(<App />);
     const editingHost = screen.getByRole("article", { name: "Writer document body" });
@@ -436,7 +453,7 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(first).not.toHaveAttribute("contenteditable");
     fireEvent.focus(editingHost);
     enterWriterParagraphText(first, "First");
-    expect(editingHost).toHaveAttribute("data-writer-fallback-count", "1");
+    expect(editingHost).not.toHaveAttribute("data-writer-fallback-count");
     placeWriterCaret(first, first.textContent.length);
     beforeInputWriterParagraph(first, "insertParagraph");
     const second = screen.getByRole("textbox", { name: "Writer paragraph 2" });

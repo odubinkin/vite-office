@@ -2700,6 +2700,42 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/filter/html/swhtml.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "clipboard-transfer",
+      "capabilityIds": [
+        "CAP-0110"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "divergent",
+        "defaultStatus": "unverified",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/filter/html/swhtml.ts#parseWriterClipboardPaste",
+          "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx#SwHTMLParser::CallParser"
+        ],
+        "justification": "The bounded import follows the upstream swhtml ownership boundary, while browser DOM parsing remains an explicit platform divergence from LibreOffice's SvParser-based implementation.",
+        "knownViolations": [
+          "browser-api-in-upstream-core"
+        ],
+        "localSymbols": [
+          "WriterClipboardPasteParagraph",
+          "WriterClipboardPaste",
+          "parseWriterClipboardPaste"
+        ],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": "sw/source/filter/html/swhtml.cxx",
+        "upstreamSymbols": [
+          "SwHTMLParser",
+          "SwHTMLParser::CallParser",
+          "SwHTMLParser::Continue"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -3088,22 +3124,17 @@
         "defaultStatus": "unverified",
         "divergenceClass": "A",
         "evidence": [
-          "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts#WriterClipboardSelection",
-          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#o3tl::convert"
+          "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts#SwTransferable",
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::SwTransferable"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/dochdl/swdtflvr.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
-        "knownViolations": [
-          "browser-api-in-upstream-core"
-        ],
+        "justification": "The bounded transfer owner now consumes only the canonical SwDoc and persistent SwPaM, matching upstream ownership while retaining a deliberately smaller browser format set.",
+        "knownViolations": [],
         "localSymbols": [
           "WriterClipboardSelection",
-          "WriterClipboardPaste",
-          "WriterClipboardPasteParagraph",
           "WriterClipboardParagraph",
-          "readWriterClipboardPaste",
-          "parseWriterClipboardPaste"
+          "SwTransferable"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/uibase/dochdl/swdtflvr.cxx",
         "upstreamSymbols": [
           "o3tl::convert",
@@ -3372,14 +3403,12 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/wrtsh/delete.ts#getWriterDeleteGrouping",
+          "apps/office/src/sw/source/uibase/wrtsh/delete.ts#getWriterTypingCharacterClass",
           "vendor/libreoffice-reference/sw/source/uibase/wrtsh/delete.cxx#SwWrtShell::DelLeft"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/delete.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
         "knownViolations": [],
         "localSymbols": [
-          "getWriterDeleteGrouping",
-          "getWriterInsertGroup",
           "getWriterTypingCharacterClass"
         ],
         "sourceResponsibility": "unverified",

@@ -24,7 +24,7 @@ function fixture(text = "", title = "Shell document", id = "shell-document") {
   const document = createWriterDocument("p-1");
   const shell = new SwDocShell(document, metadata(title, id));
   const writerShell = new SwWrtShell(shell);
-  if (text.length > 0) writerShell.InsertText("p-1", text, text.length, "insertText");
+  if (text.length > 0) writerShell.Insert(text);
   return { document, shell, writerShell };
 }
 
@@ -101,7 +101,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     });
     const stableMedium = active.shell.GetMedium();
 
-    active.writerShell.InsertText("p-1", "dirty!", 6, "insertText");
+    active.writerShell.Insert("!");
     expect(active.shell.GetMedium()).toBe(stableMedium);
     const changedGeneration = active.shell.GetDocumentState().contentGeneration;
     let exportMedium;
@@ -145,7 +145,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
 
   it("keeps a concurrent edit dirty after an older save completes", /** Verifies generation-aware acknowledgement. @returns Completion after assertions. */ async () => {
     const active = fixture();
-    active.writerShell.InsertText("p-1", "saved", 5, "insertText");
+    active.writerShell.Insert("saved");
     const savedGeneration = active.shell.GetDocumentState().contentGeneration;
     let completeWrite: (() => void) | undefined;
     const completed = new Promise<void>(
@@ -160,7 +160,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
         return { generation: savedGeneration };
       },
     );
-    active.writerShell.InsertText("p-1", "saved later", 11, "insertText");
+    active.writerShell.Insert(" later");
     completeWrite?.();
     await saving;
     expect(active.shell.GetDocumentState()).toMatchObject({
@@ -300,7 +300,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     active.document.GetDocumentStateManager().CallSwClientNotify({ kind: "document-disposed" });
     expect(active.shell.GetDocumentState().contentGeneration).toBe(0);
     hints.length = 0;
-    active.writerShell.InsertText("p-1", "A", 1, "insertText");
+    active.writerShell.Insert("A");
     expect(hints).toEqual(["model-transaction"]);
     expect(active.writerShell.Undo()).toBe(true);
     expect(active.shell.GetDocumentState()).toMatchObject({ contentGeneration: 2 });
@@ -317,7 +317,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     ).toThrow("Closed document shells");
     expect(
       /** Executes a command after close. @returns Invalid result. */ () =>
-        active.writerShell.InsertText("p-1", "late", 4, "insertText"),
+        active.writerShell.Insert("late"),
     ).toThrow("Closed document shells");
   });
 });

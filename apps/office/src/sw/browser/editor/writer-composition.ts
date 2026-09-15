@@ -14,7 +14,6 @@ export interface BrowserWriterCompositionPort {
 
 /** Owns transient IME state and suppression of the trailing browser input echo. */
 export class BrowserWriterCompositionAdapter {
-  private composing = false;
   private suppressNextCommittedInput = false;
 
   /** Creates an adapter over a replaceable Writer shell port. @param port - Extended-text-input operations. @returns Nothing. */
@@ -23,7 +22,6 @@ export class BrowserWriterCompositionAdapter {
   /** Starts native composition after capturing the canonical Writer selection. @returns Nothing. */
   public Start(): void {
     this.port.synchronizeSelection();
-    this.composing = true;
     this.suppressNextCommittedInput = false;
     this.port.start();
   }
@@ -35,23 +33,9 @@ export class BrowserWriterCompositionAdapter {
 
   /** Commits or cancels the composition and schedules suppression of its DOM echo. @param text - Final IME text. @returns Whether SwDoc changed. */
   public End(text: string): boolean {
-    this.composing = false;
     this.suppressNextCommittedInput = true;
     this.port.update(text);
     return this.port.end();
-  }
-
-  /** Reports whether post-DOM input belongs to transient composition. @param inputType - Native operation identifier. @returns Whether fallback reconciliation must be skipped. */
-  public ConsumeInput(inputType: string): boolean {
-    if (
-      this.composing ||
-      inputType === "insertCompositionText" ||
-      inputType === "deleteCompositionText"
-    )
-      return true;
-    if (inputType !== "insertFromComposition" && !this.suppressNextCommittedInput) return false;
-    this.suppressNextCommittedInput = false;
-    return true;
   }
 
   /** Suppresses the cancelable trailing `insertFromComposition` event after shell commit. @param inputType - Native operation identifier. @returns Whether the event belongs to the completed composition. */

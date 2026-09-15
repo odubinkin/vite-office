@@ -28,10 +28,11 @@ import {
   WriterViewProjection,
   type WriterPresentationProjection,
 } from "../../../browser/presentation/writer-view-projection";
-import { type WriterClipboardPaste, type WriterClipboardSelection } from "../dochdl/swdtflvr";
+import type { WriterClipboardPaste } from "../../filter/html/swhtml";
+import type { WriterClipboardSelection } from "../dochdl/swdtflvr";
 import { SwDocShell } from "../app/docsh";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
-import { SwWrtShell, type WriterCursorSelection } from "../wrtsh/wrtsh";
+import { SwWrtShell } from "../wrtsh/wrtsh";
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
@@ -59,16 +60,12 @@ export interface WriterSessionServices {
 export interface WriterCutCommandArguments {
   /** True when a native Cut event already populated event.clipboardData. */
   readonly clipboardHandled?: boolean;
-  /** Direction-preserving canonical selection deleted after clipboard preparation. */
-  readonly cursorSelection?: WriterCursorSelection;
 }
 
 /** DOM-adapted Paste arguments accepted by native and explicit Paste surfaces. */
 export interface WriterPasteCommandArguments {
   /** True when a native Paste event supplied the complete clipboard payload, including empty. */
   readonly clipboardHandled?: boolean;
-  /** Canonical caret or cross-paragraph selection replaced by the paste operation. */
-  readonly cursorSelection?: WriterCursorSelection;
   /** Already parsed native clipboard document, omitted for asynchronous toolbar Paste. */
   readonly paste?: WriterClipboardPaste;
 }

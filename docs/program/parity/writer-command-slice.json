@@ -250,7 +250,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
-            "marker": "createWriterClipboardSelection"
+            "marker": "export class SwTransferable"
           },
           {
             "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
@@ -268,7 +268,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
-            "marker": "omits accessibility descriptions"
+            "marker": "serializes only SwPaM model data"
           },
           {
             "path": "apps/office/e2e/writer-clipboard.spec.ts",
@@ -602,7 +602,7 @@
         "implementation": [
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
-            "marker": "createWriterClipboardSelection"
+            "marker": "export class SwTransferable"
           },
           {
             "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
@@ -620,7 +620,7 @@
         "tests": [
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
-            "marker": "delegates contiguous complete list items"
+            "marker": "serializes only SwPaM model data"
           },
           {
             "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.test.ts",
@@ -842,7 +842,7 @@
         "implementation": [
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
-            "marker": "getWriterListLevel"
+            "marker": "listLevel: complete"
           },
           {
             "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
@@ -856,7 +856,7 @@
         "tests": [
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
-            "marker": "delegates bounded list levels"
+            "marker": "serializes only SwPaM model data"
           },
           {
             "path": "apps/office/src/sw/source/filter/html/htmlnumwriter.test.ts",
@@ -982,11 +982,11 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
-            "marker": "synchronizeWriterParagraphContent"
+            "marker": "WriterTextRunProjection"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
-            "marker": "wrapUniformWriterInlineFormatting"
+            "marker": "serializeRuns"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
@@ -1016,7 +1016,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
-            "marker": "preserves only supported direct"
+            "marker": "serializes only SwPaM model data"
           },
           {
             "path": "apps/office/src/framework/source/services/desktop.test.tsx",
@@ -1129,7 +1129,7 @@
             "marker": "public ReplaceRange"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+            "path": "apps/office/src/sw/source/filter/html/swhtml.ts",
             "marker": "parseWriterClipboardPaste"
           },
           {
@@ -1155,8 +1155,8 @@
             "marker": "pastes structured list paragraphs"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
-            "marker": "parses only bounded"
+            "path": "apps/office/src/sw/source/filter/html/swhtml.test.ts",
+            "marker": "imports only bounded direct formats"
           },
           {
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",
@@ -2134,7 +2134,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
-            "marker": "createWriterClipboardSelection"
+            "marker": "export class SwTransferable"
           },
           {
             "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
@@ -2152,7 +2152,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
-            "marker": "omits accessibility descriptions"
+            "marker": "serializes only SwPaM model data"
           },
           {
             "path": "apps/office/e2e/writer-clipboard.spec.ts",
@@ -2242,7 +2242,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
-            "marker": "createWriterClipboardSelection"
+            "marker": "export class SwTransferable"
           },
           {
             "path": "apps/office/src/sw/browser/editor/writer-selection.ts",
@@ -2260,7 +2260,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
-            "marker": "omits accessibility descriptions"
+            "marker": "serializes only SwPaM model data"
           },
           {
             "path": "apps/office/e2e/writer-clipboard.spec.ts",
@@ -2378,11 +2378,11 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
-            "marker": "synchronizeWriterParagraphContent"
+            "marker": "WriterTextRunProjection"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
-            "marker": "wrapUniformWriterInlineFormatting"
+            "marker": "serializeRuns"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
@@ -2408,7 +2408,7 @@
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
-            "marker": "preserves only supported direct"
+            "marker": "serializes only SwPaM model data"
           },
           {
             "path": "apps/office/src/framework/source/services/desktop.test.tsx",
@@ -2517,7 +2517,7 @@
             "marker": "public ReplaceRange"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
+            "path": "apps/office/src/sw/source/filter/html/swhtml.ts",
             "marker": "parseWriterClipboardPaste"
           },
           {
@@ -2543,8 +2543,8 @@
             "marker": "pastes structured list paragraphs"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
-            "marker": "parses only bounded"
+            "path": "apps/office/src/sw/source/filter/html/swhtml.test.ts",
+            "marker": "imports only bounded direct formats"
           },
           {
             "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",

@@ -5,15 +5,13 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { getWriterParagraphListMarker } from "../../core/doc/number";
 import type { WriterParagraphProjection as WriterParagraph } from "../../../browser/presentation/writer-view-projection";
 import { WriterEditableParagraph } from "./edtwin-paragraph";
-import {
-  BrowserWriterSelectionMapper,
-  getWriterCollapsedCaretOffset,
-} from "../../../browser/editor/writer-selection";
+import { BrowserWriterSelectionMapper } from "../../../browser/editor/writer-selection";
 import { BrowserWriterEditController } from "../../../browser/editor/writer-edit-controller";
 import { BrowserWriterCompositionAdapter } from "../../../browser/editor/writer-composition";
 import { BrowserWriterClipboardEvents } from "../../../browser/editor/writer-clipboard-events";
 import { BrowserWriterPointerSelectionController } from "../../../browser/editor/writer-geometry";
 import type { WriterCursorSelection } from "../wrtsh/wrtsh";
+import type { WriterClipboardSelection } from "../dochdl/swdtflvr";
 
 /** Defines immutable projection state and model-facing Writer operations. */
 export interface WriterPlainTextEditorProps {
@@ -28,14 +26,9 @@ export interface WriterPlainTextEditorProps {
   readonly onSelectionChange: (selection: WriterCursorSelection) => boolean;
   readonly paragraphs: readonly WriterParagraph[];
   readonly projectionVersion: number;
-  readonly onTextChange: (
-    paragraphId: string,
-    text: string,
-    caretOffset: number | undefined,
-    inputType: string,
-  ) => void;
-  readonly onTextCut: (selection: WriterCursorSelection) => void;
-  readonly onTextPaste: (selection: WriterCursorSelection, clipboardData: DataTransfer) => void;
+  readonly onCreateTransfer: () => WriterClipboardSelection | undefined;
+  readonly onTextCut: () => void;
+  readonly onTextPaste: (clipboardData: DataTransfer) => void;
 }
 
 /** Renders one root `contenteditable` while paragraph nodes remain semantic model projections. @param props - Immutable projection state and Writer operations. @returns Logical Writer document editing host. */
@@ -45,10 +38,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     onCompositionEnd,
     onCompositionStart,
     onCompositionUpdate,
+    onCreateTransfer,
     onParagraphFocus,
     onSelectAll,
     onSelectionChange,
-    onTextChange,
     onTextCut,
     onTextPaste,
   } = props;
@@ -80,25 +73,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     () =>
       new BrowserWriterEditController({
         executeIntent: onBeforeInput,
-        reportFallback:
-          /** Exposes guarded DOM reconciliation in host diagnostics. @param inputType - Unsupported browser input type. @returns Nothing. */ (
-            inputType,
-          ) => {
-            const root = globalThis.document.querySelector<HTMLElement>(
-              "[data-writer-editing-host]",
-            );
-            /* c8 ignore next -- fallback input can only bubble from a mounted editing host. */
-            if (root !== null) {
-              const count = Number(root.dataset.writerFallbackCount ?? "0") + 1;
-              root.dataset.writerFallbackCount = String(count);
-              root.dataset.writerFallbackInputType = inputType;
-            }
-            /* c8 ignore next -- production builds intentionally omit development diagnostics. */
-            if (import.meta.env.DEV)
-              console.warn(
-                `Writer used guarded DOM reconciliation for ${inputType || "unknown input"}.`,
-              );
-          },
         synchronizeSelection:
           /** Commits browser endpoints into the shell before editing. @returns Whether a Writer selection was available. */ () => {
             const selection = selectionMapper.Read();
@@ -134,16 +108,18 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     /** Creates native clipboard event bindings. @returns Stable clipboard adapter. */
     () =>
       new BrowserWriterClipboardEvents({
+        createSelection: onCreateTransfer,
         cut: onTextCut,
-        getSelection:
-          /** Reads the native selection for clipboard text. @returns Current browser selection. */ () =>
-            globalThis.getSelection(),
-        mapSelection:
-          /** Reads canonical Writer clipboard endpoints. @returns Current Writer selection, if mapped. */ () =>
-            selectionMapper.Read(),
         paste: onTextPaste,
+        synchronizeSelection:
+          /** Commits the one native selection into the shell before transfer. @returns Whether it belongs to Writer. */ () => {
+            const selection = selectionMapper.Read();
+            if (selection === undefined) return false;
+            onSelectionChange(selection);
+            return true;
+          },
       }),
-    [onTextCut, onTextPaste, selectionMapper],
+    [onCreateTransfer, onSelectionChange, onTextCut, onTextPaste, selectionMapper],
   );
   /* c8 ignore start -- JSDOM has no caretRangeFromPoint; the isolated adapter has unit coverage and Chromium covers the bound event flow. */
   const pointerSelection = useMemo(
@@ -153,11 +129,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       );
       return new BrowserWriterPointerSelectionController(
         caretRangeFromPoint === undefined ? {} : { caretRangeFromPoint },
-        /** Reads the native selection to extend. @returns Current browser selection. */ () =>
-          globalThis.getSelection(),
+        selectionMapper.SetBaseAndExtent.bind(selectionMapper),
       );
     },
-    [],
+    [selectionMapper],
   );
   /* c8 ignore stop */
 
@@ -194,7 +169,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
             data: input.data,
             inputType: input.inputType,
           });
-          if (disposition === "handled") input.preventDefault();
+          if (disposition !== "native-composition") input.preventDefault();
         };
       root.addEventListener("beforeinput", handleBeforeInput);
       return /** Removes the root native listener. @returns Nothing. */ () =>
@@ -207,22 +182,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   function resolveEventParagraph(target: EventTarget | null): HTMLParagraphElement | undefined {
     const element = target as HTMLElement;
     return element.closest<HTMLParagraphElement>("[data-writer-paragraph-id]") ?? undefined;
-  }
-
-  /** Runs guarded compatibility reconciliation only after an unsupported native mutation. @param event - Root input event. @returns Nothing. */
-  function handleInput(event: React.FormEvent<HTMLElement>): void {
-    const input = event.nativeEvent as InputEvent;
-    if (composition.ConsumeInput(input.inputType)) return;
-    const paragraph = resolveEventParagraph(event.target);
-    /* c8 ignore next -- input bubbling from the editing host has a projected paragraph target. */
-    if (paragraph === undefined) return;
-    editController.ReportFallback(input.inputType);
-    onTextChange(
-      paragraph.dataset.writerParagraphId as string,
-      paragraph.textContent,
-      getWriterCollapsedCaretOffset(paragraph),
-      input.inputType,
-    );
   }
 
   /** Keeps Select All command identity shared with menus and shortcuts. @param event - Root keyboard event. @returns Nothing. */
@@ -257,7 +216,9 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       onCompositionEnd={
         /** Commits one IME transaction. @param event - Composition end event. @returns Whether Writer changed. */ (
           event,
-        ) => composition.End(event.data)
+        ) => {
+          composition.End(event.data);
+        }
       }
       onCompositionStart={
         /** Starts transient IME state. @returns Nothing. */ () => composition.Start()
@@ -285,6 +246,30 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           event,
         ) => clipboard.Cut(event)
       }
+      onDragOver={
+        /** Allows a bounded textual drop to reach the Writer adapter. @param event - Native drag event. @returns Nothing. */ (
+          event,
+        ) => event.preventDefault()
+      }
+      onDragStart={
+        /** Seeds native drag formats from the shell-owned SwPaM. @param event - Native drag event. @returns Nothing. */ (
+          event,
+        ) => {
+          clipboard.DragStart(event.dataTransfer);
+        }
+      }
+      onDrop={
+        /** Maps the drop point to Writer and inserts filtered transfer content through the shell. @param event - Native drag event. @returns Nothing. */ (
+          event,
+        ) => {
+          pointerSelection.Place(event.clientX, event.clientY);
+          clipboard.Drop(
+            event.dataTransfer,
+            /** Cancels browser-owned drop insertion. @returns Nothing. */ () =>
+              event.preventDefault(),
+          );
+        }
+      }
       onFocus={
         /** Focuses the projected paragraph containing the event target. @param event - Root focus event. @returns Nothing. */ (
           event,
@@ -294,7 +279,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
             onParagraphFocus(paragraph.dataset.writerParagraphId as string);
         }
       }
-      onInput={handleInput}
       onKeyDown={handleKeyDown}
       onMouseDown={handlePointerDown}
       onMouseMove={handlePointerMove}

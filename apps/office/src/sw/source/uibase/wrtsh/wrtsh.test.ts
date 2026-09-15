@@ -136,7 +136,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       ) => notifications.push(hint),
     );
 
-    shell.InsertText("p-1", "A", 1, "insertText");
+    shell.Insert("A");
     expect(notifications).toHaveLength(1);
     expect(notifications[0]).toMatchObject({ kind: "model-transaction" });
     if (notifications[0]?.kind === "model-transaction")
@@ -194,7 +194,9 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     const shell = createShell();
     expect(shell.HandleInput("insertText", null)).toBe(true);
     expect(shell.HandleInput("insertReplacementText", "")).toBe(true);
-    expect(shell.HandleInput("formatBold", null)).toBe(false);
+    expect(shell.HandleInput("formatBold", null)).toBe(true);
+    expect(shell.GetPendingCharacterAttributes().bold).toBe(true);
+    expect(shell.HandleInput("formatBold", null)).toBe(true);
     expect(shell.HandleInput("insertText", "a b")).toBe(true);
     shell.SetCursor("p-1", 1);
     expect(shell.HandleInput("deleteContentForward", null)).toBe(true);
@@ -220,6 +222,38 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
           ) => paragraph.text,
         ),
     ).toEqual(["A", "b"]);
+  });
+
+  it("routes formatting, list, transfer echoes, and selection deletion intents", /** Verifies the extended beforeinput subset. @returns Nothing. */ function routesExtendedBrowserIntents(): void {
+    const shell = createShell("selected");
+    shell.SetSelection({
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 8, paragraphId: "p-1" },
+    });
+    expect(shell.HandleInput("formatItalic", null)).toBe(true);
+    expect(shell.HandleInput("formatUnderline", null)).toBe(true);
+    expect(shell.GetActiveParagraph().runs).toMatchObject([
+      { attributes: { italic: true, underline: true }, text: "selected" },
+    ]);
+    expect(shell.HandleInput("insertOrderedList", null)).toBe(true);
+    expect(shell.GetActiveParagraph().list.kind).toBe("numbered");
+    expect(shell.HandleInput("insertUnorderedList", null)).toBe(true);
+    expect(shell.GetActiveParagraph().list.kind).toBe("bullet");
+    expect(shell.HandleInput("insertFromPaste", null)).toBe(true);
+    expect(shell.HandleInput("insertFromDrop", null)).toBe(true);
+    expect(shell.HandleInput("insertFromComposition", null)).toBe(true);
+    expect(shell.HandleInput("deleteByCut", null)).toBe(true);
+    expect(shell.GetActiveParagraph().text).toBe("");
+    shell.Insert("again");
+    expect(
+      shell.DeleteSelection({
+        mark: { offset: 0, paragraphId: "p-1" },
+        point: { offset: 5, paragraphId: "p-1" },
+      }),
+    ).toBe(true);
+    shell.Insert("dragged");
+    shell.SelectAll();
+    expect(shell.HandleInput("deleteByDrag", null)).toBe(true);
   });
 
   it("applies selection replacement, deletion, and splitting across text nodes" /** Verifies the registered SwPaM remains authoritative for same-node and cross-node editing. @returns Nothing. */, function appliesBoundedSelectionInput(): void {

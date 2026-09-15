@@ -1,8 +1,9 @@
 /** @fileoverview Verifies explicit Writer browser-platform failures. */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { WriterPlatformError } from "./writer-workflows";
+import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
+import { WriterClipboardWorkflowController, WriterPlatformError } from "./writer-workflows";
 
 describe("WriterPlatformError", /** Registers platform-error tests. @returns Nothing. */ function definePlatformErrorTests(): void {
   it("retains a stable machine-readable code for Sfx command completion", /** Verifies stable failure identity. @returns Nothing. */ function retainsCode(): void {
@@ -11,6 +12,20 @@ describe("WriterPlatformError", /** Registers platform-error tests. @returns Not
       code: "storage-unavailable",
       message: "Browser storage is unavailable.",
       name: "WriterPlatformError",
+    });
+  });
+
+  it("rejects a browser-handled Cut when the canonical SwPaM is collapsed", /** Verifies model deletion remains authoritative after native transfer handling. @returns Completion after rejection. */ async function rejectsCollapsedHandledCut(): Promise<void> {
+    const controller = new WriterClipboardWorkflowController(
+      {
+        CreateTransferable: vi.fn(),
+        DeleteSelection: /** Represents a collapsed persistent cursor. @returns False. */ () =>
+          false,
+      } as unknown as SwWrtShell,
+      { copyRichText: vi.fn(), readRichClipboard: vi.fn() },
+    );
+    await expect(controller.Cut({ clipboardHandled: true })).rejects.toMatchObject({
+      code: "selection-required",
     });
   });
 });

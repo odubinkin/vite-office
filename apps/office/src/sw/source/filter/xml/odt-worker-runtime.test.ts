@@ -71,7 +71,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     const runtime = new OdtWorkerRuntime(scope);
     const document = createWriterDocument("p-1");
     const shell = new SwDocShell(document, metadata());
-    new SwWrtShell(shell).InsertText("p-1", "runtime body", 12, "insertText");
+    new SwWrtShell(shell).Insert("runtime body");
     runtime.HandleMessage(
       request({
         bytes: writeOdtDocument(document, shell.GetDocumentState()).buffer as ArrayBuffer,

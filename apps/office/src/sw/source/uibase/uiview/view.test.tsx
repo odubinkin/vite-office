@@ -74,8 +74,20 @@ class SessionRecoveryStorage implements RecoverySavePort<WriterSnapshotState> {
 /** Replaces the visible browser-owned editable paragraph text. @param text - Next paragraph text. @returns Nothing. */
 function enterText(text: string): void {
   const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
-  paragraph.textContent = text;
-  fireEvent.input(paragraph);
+  const range = document.createRange();
+  range.selectNodeContents(paragraph);
+  const selection = window.getSelection() as Selection;
+  selection.removeAllRanges();
+  selection.addRange(range);
+  fireEvent(
+    paragraph,
+    new InputEvent("beforeinput", {
+      bubbles: true,
+      cancelable: true,
+      data: text,
+      inputType: "insertReplacementText",
+    }),
+  );
 }
 
 describe("persistent Writer view session" /** Groups Stage 2 ownership and dispatch acceptance tests. @returns Nothing. */, function definePersistentSessionTests(): void {
@@ -385,7 +397,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     };
     const session = createWriterDocumentSession(services);
     const paragraphId = session.view.GetWrtShell().GetActiveParagraph().id;
-    session.view.GetWrtShell().InsertText(paragraphId, "dirty", 0, "insertText");
+    session.view.GetWrtShell().SetCursor(paragraphId, 0);
+    session.view.GetWrtShell().Insert("dirty");
     const dirtyGeneration = session.docShell.GetDocumentState().contentGeneration;
 
     await session.view.SaveOdt();
@@ -434,7 +447,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       recoverySave: recoveryStorage,
     });
     const paragraphId = first.view.GetWrtShell().GetActiveParagraph().id;
-    first.view.GetWrtShell().InsertText(paragraphId, "Recovered text", 0, "insertText");
+    first.view.GetWrtShell().SetCursor(paragraphId, 0);
+    first.view.GetWrtShell().Insert("Recovered text");
     await expect(first.autoRecovery?.SaveDocument("writer-workbench")).resolves.toMatchObject({
       status: "saved",
     });

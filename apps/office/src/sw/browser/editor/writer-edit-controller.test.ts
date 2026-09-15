@@ -6,14 +6,14 @@ import { BrowserWriterEditController } from "./writer-edit-controller";
 import { BrowserWriterCompositionAdapter } from "./writer-composition";
 
 describe("BrowserWriterEditController" /** Groups edit-controller behavior. @returns Nothing. */, () => {
-  it("sends normalized supported intents to Writer and reports fallback separately" /** Verifies supported, composition, and fallback dispositions. @returns Nothing. */, () => {
+  it("sends normalized supported intents to Writer and rejects unsupported intents" /** Verifies supported, composition, and unsupported dispositions. @returns Nothing. */, () => {
     const executeIntent = vi.fn(
-      /** Accepts a normalized edit intent. @returns Handled. */ () => true,
+      /** Accepts a normalized edit intent. @param inputType - Browser operation. @returns Whether supported. */ (
+        inputType: string,
+      ) => inputType !== "insertTranspose",
     );
-    const reportFallback = vi.fn();
     const controller = new BrowserWriterEditController({
       executeIntent,
-      reportFallback,
       synchronizeSelection: /** Synchronizes the fixture selection. @returns Available. */ () =>
         true,
     });
@@ -22,8 +22,9 @@ describe("BrowserWriterEditController" /** Groups edit-controller behavior. @ret
     expect(controller.HandleIntent({ data: "ime", inputType: "insertCompositionText" })).toBe(
       "native-composition",
     );
-    controller.ReportFallback("insertTranspose");
-    expect(reportFallback).toHaveBeenCalledWith("insertTranspose");
+    expect(controller.HandleIntent({ data: null, inputType: "insertTranspose" })).toBe(
+      "unsupported",
+    );
   });
 
   it("fails safely before execution when selection cannot enter Writer" /** Verifies unavailable selection blocks mutation. @returns Nothing. */, () => {
@@ -32,7 +33,6 @@ describe("BrowserWriterEditController" /** Groups edit-controller behavior. @ret
     );
     const controller = new BrowserWriterEditController({
       executeIntent,
-      reportFallback: vi.fn(),
       synchronizeSelection:
         /** Rejects fixture selection synchronization. @returns Unavailable. */ () => false,
     });
@@ -57,7 +57,6 @@ describe("BrowserWriterCompositionAdapter" /** Groups IME adapter behavior. @ret
     });
     adapter.Start();
     adapter.Update("にほ");
-    expect(adapter.ConsumeInput("insertCompositionText")).toBe(true);
     expect(adapter.End("日本")).toBe(true);
     expect(start).toHaveBeenCalledTimes(1);
     expect(update).toHaveBeenLastCalledWith("日本");

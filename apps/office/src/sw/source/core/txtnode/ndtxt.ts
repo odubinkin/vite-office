@@ -42,40 +42,6 @@ export function getWriterNextGraphemeBoundary(text: string, offset: number): num
   return text.length;
 }
 
-/** Exact contiguous text mutation detected between two Writer text states. */
-export type WriterTextChange =
-  | Readonly<{ kind: "delete"; end: number; start: number; text: string }>
-  | Readonly<{ kind: "insert"; offset: number; text: string }>;
-
-/** Detects one contiguous insertion, deletion, or a replacement requiring fallback handling. @param previousText - Canonical text. @param nextText - New text. @returns Exact insertion/deletion when representable. */
-export function getWriterTextChange(
-  previousText: string,
-  nextText: string,
-): WriterTextChange | undefined {
-  if (nextText === previousText) return undefined;
-  let prefixLength = 0;
-  while (
-    prefixLength < previousText.length &&
-    previousText.charAt(prefixLength) === nextText.charAt(prefixLength)
-  )
-    prefixLength += 1;
-  let suffixLength = 0;
-  while (
-    suffixLength < previousText.length - prefixLength &&
-    previousText.charAt(previousText.length - suffixLength - 1) ===
-      nextText.charAt(nextText.length - suffixLength - 1)
-  )
-    suffixLength += 1;
-  const previousEnd = previousText.length - suffixLength;
-  const removedText = previousText.slice(prefixLength, previousEnd);
-  const insertedText = nextText.slice(prefixLength, nextText.length - suffixLength);
-  if (removedText.length === 0 && insertedText.length > 0)
-    return { kind: "insert", offset: prefixLength, text: insertedText };
-  if (insertedText.length === 0 && removedText.length > 0)
-    return { kind: "delete", end: previousEnd, start: prefixLength, text: removedText };
-  return undefined;
-}
-
 /** Enumerates UTF-16 grapheme boundaries with a code-point fallback. @param text - Paragraph text. @returns Ordered boundaries including zero and text length. */
 function getWriterGraphemeBoundaries(text: string): readonly number[] {
   const boundaries = [0];

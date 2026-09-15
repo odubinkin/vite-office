@@ -47,6 +47,19 @@ export class BrowserWriterSelectionMapper {
     );
   }
 
+  /** Installs native point-and-mark endpoints owned by a browser geometry adapter. @param anchorNode - Fixed endpoint node. @param anchorOffset - Fixed endpoint offset. @param focusNode - Moving endpoint node. @param focusOffset - Moving endpoint offset. @returns Whether the browser exposes a selection surface. */
+  public SetBaseAndExtent(
+    anchorNode: Node,
+    anchorOffset: number,
+    focusNode: Node,
+    focusOffset: number,
+  ): boolean {
+    const selection = this.environment.getSelection();
+    if (selection === null) return false;
+    selection.setBaseAndExtent(anchorNode, anchorOffset, focusNode, focusOffset);
+    return true;
+  }
+
   /** Subscribes to native selection changes. @param listener - Canonical selection consumer. @returns Cleanup callback. */
   public Subscribe(listener: (selection: WriterCursorSelection) => void): () => void {
     const synchronize =
@@ -97,7 +110,7 @@ export function getWriterDomSelection(
 export function restoreWriterDomSelection(
   cursor: WriterCursorSelection,
   resolveParagraph: WriterParagraphElementResolver,
-  browserSelection: Selection | null = globalThis.getSelection(),
+  browserSelection: Selection | null,
 ): boolean {
   const selection = browserSelection;
   /* c8 ignore next -- Writer requires browser selection support to mount its editable body. */
@@ -107,21 +120,6 @@ export function restoreWriterDomSelection(
     cursor.mark === undefined ? undefined : resolveParagraph(cursor.mark.paragraphId);
   if (pointParagraph === undefined || (cursor.mark !== undefined && markParagraph === undefined))
     return false;
-  if (
-    cursor.mark !== undefined &&
-    markParagraph !== undefined &&
-    markParagraph !== pointParagraph &&
-    cursor.mark.offset === 0 &&
-    cursor.point.offset === (pointParagraph.textContent?.length ?? 0) &&
-    (markParagraph.compareDocumentPosition(pointParagraph) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0
-  ) {
-    const range = pointParagraph.ownerDocument.createRange();
-    range.setStartBefore(markParagraph);
-    range.setEndAfter(pointParagraph);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    return true;
-  }
   const point = getWriterTextCaretPoint(pointParagraph, cursor.point.offset);
   if (cursor.mark === undefined || markParagraph === undefined) {
     pointParagraph.focus();
@@ -141,12 +139,13 @@ export function restoreWriterDomSelection(
  * Reads a collapsed browser selection as a UTF-16 offset relative to one editable Writer paragraph.
  *
  * @param paragraphElement - Editable paragraph that must contain the selection's caret endpoint.
+ * @param selection - Current native selection.
  * @returns Caret offset for a collapsed in-paragraph selection, or undefined when the browser selection cannot be safely split.
  */
 export function getWriterCollapsedCaretOffset(
   paragraphElement: HTMLParagraphElement,
+  selection: Selection | null,
 ): number | undefined {
-  const selection = globalThis.getSelection();
   if (selection === null || !selection.isCollapsed || selection.rangeCount !== 1) return undefined;
   const caretRange = selection.getRangeAt(0);
   if (!paragraphElement.contains(caretRange.startContainer)) return undefined;
@@ -161,15 +160,21 @@ export function getWriterCollapsedCaretOffset(
  *
  * @param paragraph - Rendered Writer paragraph that should receive browser focus.
  * @param offset - Requested UTF-16 caret offset, clamped to the currently rendered text length.
+ * @param selection - Native selection surface to update.
  * @returns Nothing; selection is left unchanged when the browser cannot safely restore a text caret.
  */
-export function restoreWriterCollapsedCaret(paragraph: HTMLParagraphElement, offset: number): void {
+export function restoreWriterCollapsedCaret(
+  paragraph: HTMLParagraphElement,
+  offset: number,
+  selection: Selection | null,
+): void {
   restoreWriterDomSelection(
     {
       point: { offset, paragraphId: paragraph.dataset.writerParagraphId as string },
     },
     /** Resolves the one supplied paragraph whose identity constructed the cursor above. @returns Supplied paragraph. */ () =>
       paragraph,
+    selection,
   );
 }
 

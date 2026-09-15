@@ -35,10 +35,15 @@ export class BrowserWriterPointerSelectionController {
   private anchor: BrowserWriterCaretPoint | undefined;
   private focus: BrowserWriterCaretPoint | undefined;
 
-  /** Creates a controller over injected geometry and selection surfaces. @param geometry - Browser hit testing. @param getSelection - Native selection getter. @returns Nothing. */
+  /** Creates a controller over injected geometry and the central selection adapter. @param geometry - Browser hit testing. @param setBaseAndExtent - Native selection writer. @returns Nothing. */
   public constructor(
     private readonly geometry: BrowserWriterCaretGeometry,
-    private readonly getSelection: () => Selection | null,
+    private readonly setBaseAndExtent: (
+      anchorNode: Node,
+      anchorOffset: number,
+      focusNode: Node,
+      focusOffset: number,
+    ) => boolean,
   ) {}
 
   /** Captures a primary-button pointer anchor. @param button - Mouse button. @param x - Viewport x. @param y - Viewport y. @returns Nothing. */
@@ -56,19 +61,25 @@ export class BrowserWriterPointerSelectionController {
       this.anchor.paragraph === focus.paragraph
     )
       return false;
-    const selection = this.getSelection();
-    if (selection === null) return false;
     this.focus = focus;
-    selection.setBaseAndExtent(this.anchor.node, this.anchor.offset, focus.node, focus.offset);
-    return true;
+    return this.setBaseAndExtent(this.anchor.node, this.anchor.offset, focus.node, focus.offset);
+  }
+
+  /** Places a collapsed native caret at a browser drop point. @param x - Viewport x. @param y - Viewport y. @returns Whether the point belongs to Writer. */
+  public Place(x: number, y: number): boolean {
+    const point = getBrowserWriterCaretFromPoint(this.geometry, x, y);
+    return (
+      point !== undefined &&
+      this.setBaseAndExtent(point.node, point.offset, point.node, point.offset)
+    );
   }
 
   /** Reapplies the completed cross-paragraph range and clears transient geometry state. @returns Whether a range was reapplied. */
   public End(): boolean {
-    const selection = this.getSelection();
-    const completed = this.anchor !== undefined && this.focus !== undefined && selection !== null;
-    if (completed)
-      selection.setBaseAndExtent(
+    const completed = this.anchor !== undefined && this.focus !== undefined;
+    const restored =
+      completed &&
+      this.setBaseAndExtent(
         (this.anchor as BrowserWriterCaretPoint).node,
         (this.anchor as BrowserWriterCaretPoint).offset,
         (this.focus as BrowserWriterCaretPoint).node,
@@ -76,6 +87,6 @@ export class BrowserWriterPointerSelectionController {
       );
     this.anchor = undefined;
     this.focus = undefined;
-    return completed;
+    return restored;
   }
 }

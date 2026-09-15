@@ -2685,6 +2685,42 @@
       ]
     },
     {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "parseWriterClipboardPaste",
+            "path": "apps/office/src/sw/source/filter/html/swhtml.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwHTMLParser::CallParser",
+            "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/html/swhtml.ts",
+      "localSymbols": [
+        "WriterClipboardPasteParagraph",
+        "WriterClipboardPaste",
+        "parseWriterClipboardPaste"
+      ],
+      "omittedResponsibilities": [
+        "The full SvParser token stream, document-loading lifecycle, fields, tables, images, CSS cascade, and unsupported HTML transfer formats remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Imports the bounded clipboard HTML subset at LibreOffice Writer's sw/source/filter/html/swhtml.cxx ownership boundary before shell insertion."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/html/swhtml.cxx",
+      "upstreamSymbols": [
+        "SwHTMLParser",
+        "SwHTMLParser::CallParser",
+        "SwHTMLParser::Continue"
+      ]
+    },
+    {
       "classification": "browser-adaptation",
       "evidence": {
         "local": [
@@ -3032,13 +3068,13 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterClipboardSelection",
+            "marker": "SwTransferable",
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts"
           }
         ],
         "upstream": [
           {
-            "marker": "o3tl::convert",
+            "marker": "SwTransferable::SwTransferable",
             "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx"
           }
         ]
@@ -3046,17 +3082,14 @@
       "localPath": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
       "localSymbols": [
         "WriterClipboardSelection",
-        "WriterClipboardPaste",
-        "WriterClipboardPasteParagraph",
         "WriterClipboardParagraph",
-        "readWriterClipboardPaste",
-        "parseWriterClipboardPaste"
+        "SwTransferable"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside o3tl::convert, UITestLogger::getInstance, SwTransferable::SwTransferable, URIHelper::removePassword and the bounded WriterClipboardSelection, WriterClipboardPaste, WriterClipboardPasteParagraph contract remain intentionally omitted."
+        "The native transferable flavor matrix, embedded objects, tables, tracked changes, and non-browser exchange formats remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Prepares an isolated browser Writer transfer document from a native selection, mirroring LibreOffice Writer's `sw/source/uibase/dochdl/swdtflvr.cxx` ownership boundary."
+        "Prepares bounded transfer content exclusively from SwDoc and SwPaM model state, mirroring LibreOffice Writer's sw/source/uibase/dochdl/swdtflvr.cxx ownership boundary."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx",
@@ -3267,7 +3300,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "getWriterDeleteGrouping",
+            "marker": "getWriterTypingCharacterClass",
             "path": "apps/office/src/sw/source/uibase/wrtsh/delete.ts"
           }
         ],
@@ -3280,8 +3313,6 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/delete.ts",
       "localSymbols": [
-        "getWriterDeleteGrouping",
-        "getWriterInsertGroup",
         "getWriterTypingCharacterClass"
       ],
       "omittedResponsibilities": [

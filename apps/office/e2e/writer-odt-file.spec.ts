@@ -22,12 +22,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   const source = createWriterDocument("fixture-paragraph");
   const docShell = new SwDocShell(source, metadata);
   const shell = new SwWrtShell(docShell);
-  shell.InsertText(
-    "fixture-paragraph",
-    "BrowserODTContent",
-    "BrowserODTContent".length,
-    "insertText",
-  );
+  shell.Insert("BrowserODTContent");
   shell.SetParagraphStyle("heading-1");
   shell.SetParagraphAlignment("center");
   shell.SetSelection({
