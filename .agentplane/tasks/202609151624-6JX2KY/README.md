@@ -1,10 +1,11 @@
 ---
 id: "202609151624-6JX2KY"
 title: "Implement Writer upstream parity Phase 6"
-status: "DOING"
+result_summary: "verified-202609151624-6JX2KY"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T17:15:10.418Z"
+  updated_at: "2026-09-15T17:15:44.771Z"
   updated_by: "CODER"
   note: "verified-202609151624-6JX2KY"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "React and browser composition are isolated from upstream implementation paths; shared Sfx-backed command surfaces, typed dialog completion, contextual object bars, localization, and honest chrome are covered by unit and browser tests."
-commit: null
+commit:
+  hash: "67383e5199cb95b3af1178b905e4a49975540d92"
+  message: "🚧 6JX2KY task: implement Writer upstream parity phase 6"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609151624-6JX2KY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609151624-6JX2KY"
+  -
+    type: "verify"
+    at: "2026-09-15T17:15:44.771Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609151624-6JX2KY"
+  -
+    type: "status"
+    at: "2026-09-15T17:15:44.896Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609151624-6JX2KY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T17:15:10.472Z"
+doc_updated_at: "2026-09-15T17:15:44.897Z"
 doc_updated_by: "CODER"
 description: "Rebuild React presentation over pinned LibreOffice contracts: browser-only composition paths, generic Sfx resource-driven controls, typed dialog requests, honest shell/layout chrome, and centralized localization; no legacy persisted-model compatibility."
 sections:
@@ -150,6 +169,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202609151624-6JX2KY --result verified-202609151624-6JX2KY --commit 67383e5199cb95b3af1178b905e4a49975540d92
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-15T17:15:44.771Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609151624-6JX2KY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T17:15:10.472Z, excerpt_hash=sha256:fd999fb5ed5b06a2dae98018530559b01705f926f7578df600159c19b3daa0a6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151624-6JX2KY/blueprint/resolved-snapshot.json
+    - old_digest: b98936e5717b2384a364ffbe6a70a821b533073142479222a24eefc566fb4134
+    - current_digest: b98936e5717b2384a364ffbe6a70a821b533073142479222a24eefc566fb4134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151624-6JX2KY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609151624-6JX2KY --result verified-202609151624-6JX2KY --commit ab88da848ce4c915a07fe8b8611fe6ff1eb1e2b1
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -256,6 +305,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609151624-6JX2KY --result verified-202609151624-6JX2KY --commit 67383e5199cb95b3af1178b905e4a49975540d92
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T17:15:44.771Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609151624-6JX2KY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T17:15:10.472Z, excerpt_hash=sha256:fd999fb5ed5b06a2dae98018530559b01705f926f7578df600159c19b3daa0a6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151624-6JX2KY/blueprint/resolved-snapshot.json
+- old_digest: b98936e5717b2384a364ffbe6a70a821b533073142479222a24eefc566fb4134
+- current_digest: b98936e5717b2384a364ffbe6a70a821b533073142479222a24eefc566fb4134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151624-6JX2KY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609151624-6JX2KY --result verified-202609151624-6JX2KY --commit ab88da848ce4c915a07fe8b8611fe6ff1eb1e2b1
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
