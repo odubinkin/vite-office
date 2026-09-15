@@ -1,10 +1,11 @@
 ---
 id: "202609150900-RD8B9V"
 title: "Plan upstream LibreOffice parity for implemented functionality"
-status: "DOING"
+result_summary: "verified-202609150900-RD8B9V"
+status: "DONE"
 priority: "med"
 owner: "PLANNER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T09:26:36.624Z"
+  updated_at: "2026-09-15T09:26:53.758Z"
   updated_by: "CODER"
   note: "verified-202609150900-RD8B9V"
   attempts: 0
@@ -40,11 +41,16 @@ quality_review:
     - "npm run format:check; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check"
   findings:
     - "All 35 current Writer capabilities are individually inventoried; concrete contract, ownership, default, path, UI/DOM, persistence, and verification gaps are mapped to nine dependency-ordered phases with acceptance criteria and risk controls."
-commit: null
+commit:
+  hash: "087be808267f94fef6f7f33d9bdef0252362819f"
+  message: "🧪 RD8B9V task: record parity plan quality review"
 comments:
   -
     author: "PLANNER"
     body: "Start: inventory local implementation and pinned LibreOffice sources, classify parity deviations, and author the approved upstream-parity plan."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609150900-RD8B9V. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -71,9 +77,22 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609150900-RD8B9V"
+  -
+    type: "verify"
+    at: "2026-09-15T09:26:53.758Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609150900-RD8B9V"
+  -
+    type: "status"
+    at: "2026-09-15T09:26:53.888Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609150900-RD8B9V. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T09:26:36.675Z"
-doc_updated_by: "PLANNER"
+doc_updated_at: "2026-09-15T09:26:53.888Z"
+doc_updated_by: "CODER"
 description: "Inventory implemented vite-office functionality against the locally pinned LibreOffice upstream; identify unjustified architectural, data-model, contract, default-behavior, file-layout, UI adapter, and refactoring deviations; write an executable remediation plan to docs/program/vite-office-upstream-parity-plan.md."
 sections:
   Summary: "Create a fresh, evidence-based plan for bringing the currently implemented vite-office functionality into architectural, data-model, contract, file-layout, and default-behavior parity with the locally pinned LibreOffice upstream."
@@ -183,6 +202,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-15T09:26:53.758Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609150900-RD8B9V
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T09:26:36.675Z, excerpt_hash=sha256:e809aea743640c89ba3e9e0f548871f306e1db924c33f68682f34fe9da4f0a72
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150900-RD8B9V/blueprint/resolved-snapshot.json
+    - old_digest: 5aa00cbcc04fdd718cc26ea1ecaf0f2cf14495930be60f0846fb30f3a20cd3d8
+    - current_digest: 5aa00cbcc04fdd718cc26ea1ecaf0f2cf14495930be60f0846fb30f3a20cd3d8
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609150900-RD8B9V
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609150900-RD8B9V --result verified-202609150900-RD8B9V --commit 087be808267f94fef6f7f33d9bdef0252362819f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Remove only docs/program/vite-office-upstream-parity-plan.md and close or supersede this task through Agentplane. Do not restore the previously deleted plan because the user explicitly requested a fresh replacement."
   Findings: |-
@@ -191,6 +240,10 @@ sections:
     - Observation: The current parity inventory resolves evidence but does not detect semantic defects such as incorrect Writer WhichIds, incompatible command identities, ownership divergence, or browser/React imports in upstream core paths.
       Impact: Existing implemented labels cannot be treated as upstream parity; feature expansion before correcting the P0 contracts would compound incompatible persisted data, dispatch, and selection models.
       Resolution: The plan begins with generated pinned invariants, semantic provenance and boundary enforcement, and capability re-attestation, then migrates core ownership, defaults, shells, browser projection, React presentation, filters, and persistence in dependency order.
+extensions:
+  implementation_commit:
+    hash: "f352473f5368dc09ced950cd7cfd0c9b663b4afa"
+    message: "📝 RD8B9V task: document LibreOffice upstream parity plan"
 id_source: "generated"
 ---
 ## Summary
@@ -304,6 +357,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609150900-RD8B9V --result verified-202609150900-RD8B9V --commit f352473f5368dc09ced950cd7cfd0c9b663b4afa
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T09:26:53.758Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609150900-RD8B9V
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T09:26:36.675Z, excerpt_hash=sha256:e809aea743640c89ba3e9e0f548871f306e1db924c33f68682f34fe9da4f0a72
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609150900-RD8B9V/blueprint/resolved-snapshot.json
+- old_digest: 5aa00cbcc04fdd718cc26ea1ecaf0f2cf14495930be60f0846fb30f3a20cd3d8
+- current_digest: 5aa00cbcc04fdd718cc26ea1ecaf0f2cf14495930be60f0846fb30f3a20cd3d8
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609150900-RD8B9V
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609150900-RD8B9V --result verified-202609150900-RD8B9V --commit 087be808267f94fef6f7f33d9bdef0252362819f
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
