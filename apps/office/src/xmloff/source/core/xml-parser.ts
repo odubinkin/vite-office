@@ -37,10 +37,12 @@ export class FastAttributeList {
   public constructor(private readonly attributes: readonly SaxesAttributeNS[]) {
     for (const attribute of attributes) {
       const token = getXMLToken(attribute.uri, attribute.local);
-      if (token !== XMLToken.UNKNOWN) {
-        if (this.byToken.has(token)) throw new Error(`Duplicate ODF attribute: ${attribute.name}`);
-        this.byToken.set(token, attribute.value);
+      if (token === XMLToken.UNKNOWN) {
+        console.warn(`Unknown ODF attribute ignored: ${attribute.name}`);
+        continue;
       }
+      if (this.byToken.has(token)) throw new Error(`Duplicate ODF attribute: ${attribute.name}`);
+      this.byToken.set(token, attribute.value);
     }
   }
 
@@ -56,18 +58,14 @@ export class FastAttributeList {
     return value;
   }
 
-  /** Enforces the owning context's attribute policy. @param allowed - Allowed tokens. @param owner - Diagnostic owner. @returns Nothing. */
+  /** Reports attributes outside the owning context's bounded policy. @param allowed - Allowed tokens. @param owner - Diagnostic owner. @returns Nothing. */
   public assertOnly(allowed: readonly XMLToken[], owner: string): void {
     const allowedSet = new Set(allowed);
-    const unsupported = this.attributes.find(
-      /** Finds the first unsupported attribute. @param attribute - SAX attribute. @returns Whether unsupported. */
-      (attribute) => {
-        const token = getXMLToken(attribute.uri, attribute.local);
-        return token === XMLToken.UNKNOWN || !allowedSet.has(token);
-      },
-    );
-    if (unsupported !== undefined)
-      throw new Error(`Unsupported ODF ${owner} attribute: ${unsupported.name}`);
+    for (const attribute of this.attributes) {
+      const token = getXMLToken(attribute.uri, attribute.local);
+      if (token !== XMLToken.UNKNOWN && !allowedSet.has(token))
+        console.warn(`Unsupported ODF ${owner} attribute ignored: ${attribute.name}`);
+    }
   }
 }
 

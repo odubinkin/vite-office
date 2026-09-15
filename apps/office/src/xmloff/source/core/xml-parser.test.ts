@@ -1,6 +1,6 @@
 /** @fileoverview Verifies tokenized SAX ordering, context ownership, and resource ceilings. */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import {
   FastAttributeList,
@@ -126,6 +126,33 @@ describe("ODF fast SAX parser", /** Groups fast parser tests. @returns Nothing. 
           },
         ] as never),
     ).toThrow("Duplicate ODF attribute");
+  });
+
+  it("logs and ignores unknown and context-unsupported attributes", /** Matches upstream's non-fatal attribute policy. @returns Nothing. */ () => {
+    const warn = vi
+      .spyOn(console, "warn")
+      .mockImplementation(
+        /** Suppresses expected diagnostics. @returns Nothing. */ () => undefined,
+      );
+    try {
+      parseOdfXmlStream(
+        `<office:text xmlns:office="${ODF_NAMESPACES.office}" xmlns:foreign="urn:foreign" foreign:property="value"/>`,
+        recordingImport([]),
+      );
+      const attributes = new FastAttributeList([
+        {
+          local: "style-name",
+          name: "text:style-name",
+          uri: ODF_NAMESPACES.text,
+          value: "Standard",
+        },
+      ] as never);
+      attributes.assertOnly([], "test");
+      expect(warn).toHaveBeenCalledWith("Unknown ODF attribute ignored: foreign:property");
+      expect(warn).toHaveBeenCalledWith("Unsupported ODF test attribute ignored: text:style-name");
+    } finally {
+      warn.mockRestore();
+    }
   });
 
   it("rejects DTDs, comments, malformed XML, cancellation, and every resource limit", /** Verifies parser guards. @returns Nothing. */ () => {

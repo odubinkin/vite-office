@@ -2,7 +2,7 @@
  * @fileoverview Verifies the source-shaped Writer ODF package and XML filter slice.
  */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
@@ -290,14 +290,24 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         }),
       ),
     );
+    const warn = vi
+      .spyOn(console, "warn")
+      .mockImplementation(
+        /** Suppresses expected diagnostics. @returns Nothing. */ () => undefined,
+      );
     expect(
-      /** Imports an unsupported list-item attribute. @returns Invalid document. */ () =>
-        importWriterXml(
-          styles,
-          content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
-          metadata(),
-        ),
-    ).toThrow("Unsupported ODF list attribute");
+      importWriterXml(
+        styles,
+        content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
+        metadata(),
+      ).document.paragraphs.map(
+        /** Reads imported text after ignoring an unsupported list attribute. @param node - Writer node. @returns Text. */ (
+          node,
+        ) => node.text,
+      ),
+    ).toContain("alpha");
+    expect(warn).toHaveBeenCalledWith("Unknown ODF attribute ignored: text:start-value");
+    warn.mockRestore();
     expect(
       /** Imports an unsupported numbering suffix. @returns Invalid document. */ () =>
         importWriterXml(
@@ -315,10 +325,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           content.replace("</office:automatic-styles>", `${fragment}</office:automatic-styles>`),
           metadata(),
         );
-    const numberedLevel =
-      /** Builds a numbered level fragment. @param attributes - Extra level attributes. @returns ODF list-level XML. */ (
-        attributes = "",
-      ) => `<text:list-level-style-number text:level="1" style:num-format="1"${attributes}/>`;
     for (const [fragment, message] of [
       [
         '<text:list-style style:name="L1"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>',
@@ -345,14 +351,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         "Unsupported ODF numbering format",
       ],
       ['<text:list-style style:name="Empty"/>', "has no levels"],
-      [
-        `<text:list-style style:name="Extra" style:family="list">${numberedLevel()}</text:list-style>`,
-        "Unsupported ODF style property",
-      ],
-      [
-        `<text:list-style style:name="ExtraLevel">${numberedLevel(' style:num-prefix="("')}</text:list-style>`,
-        "Unsupported ODF style property",
-      ],
     ] as const)
       expect(
         /** Imports an invalid list-style definition. @returns Invalid document. */ () =>
@@ -637,6 +635,29 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           meta.replace("</office:meta>", "<dc:title>again</dc:title></office:meta>"),
         ),
     ).toThrow("duplicate titles");
+  });
+
+  it("logs and ignores LibreOffice and unknown style attributes", /** Verifies tolerant upstream-shaped attribute import. @returns Nothing. */ () => {
+    const writer = createWriterDocument("p1");
+    const styles = exportStylesXml(writer).replace(
+      'style:family="paragraph"',
+      'style:family="paragraph" style:default-outline-level="0" fo:color="#000000"',
+    );
+    const content = exportContentXml(writer);
+    const warn = vi
+      .spyOn(console, "warn")
+      .mockImplementation(
+        /** Suppresses expected diagnostics. @returns Nothing. */ () => undefined,
+      );
+    try {
+      expect(importWriterXml(styles, content, metadata()).document.paragraphs).toHaveLength(1);
+      expect(warn).toHaveBeenCalledWith(
+        "Unknown ODF attribute ignored: style:default-outline-level",
+      );
+      expect(warn).toHaveBeenCalledWith("Unknown ODF attribute ignored: fo:color");
+    } finally {
+      warn.mockRestore();
+    }
   });
 
   it("rejects malformed style records and unsupported semantic properties" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
