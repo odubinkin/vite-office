@@ -1,10 +1,11 @@
 ---
 id: "202609151533-247WK4"
 title: "Implement Writer upstream parity Phase 5"
-status: "DOING"
+result_summary: "verified-202609151533-247WK4"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T16:21:35.153Z"
+  updated_at: "2026-09-15T16:22:16.438Z"
   updated_by: "CODER"
-  note: "Phase 5 verified: npm run verify passed; 311 application tests and 88 inventory tests reached 100% coverage, 10 Chromium E2E tests passed, and typecheck/lint/build/static/docs/source-tree/provenance/parity checks passed."
+  note: "verified-202609151533-247WK4"
   attempts: 0
 quality_review:
   state: "pass"
@@ -40,11 +41,16 @@ quality_review:
     - "apps/office/src/sw/source/filter/html/swhtml.ts"
   findings:
     - "The browser editor is a projection of canonical Writer state: selection is centralized, unsupported native mutation is blocked, transfer is SwPaM/model-owned, and React no longer reconciles DOM text."
-commit: null
+commit:
+  hash: "19948aed18db0ad4d6b0501cfd3cbb1cc65ca77d"
+  message: "🧩 247WK4 task: record verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement Phase 5 browser projection, canonical SwPaM selection, explicit input intents, and model-owned transfer against pinned LibreOffice."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609151533-247WK4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -59,8 +65,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Phase 5 verified: npm run verify passed; 311 application tests and 88 inventory tests reached 100% coverage, 10 Chromium E2E tests passed, and typecheck/lint/build/static/docs/source-tree/provenance/parity checks passed."
+  -
+    type: "verify"
+    at: "2026-09-15T16:22:16.438Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609151533-247WK4"
+  -
+    type: "status"
+    at: "2026-09-15T16:22:16.630Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609151533-247WK4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T16:21:35.234Z"
+doc_updated_at: "2026-09-15T16:22:16.631Z"
 doc_updated_by: "CODER"
 description: "Make the browser editor a projection: central DOM-to-SwPaM mapping, complete supported input-intent routing, single rendering owner, and model-based transfer, following pinned LibreOffice 26.8.0.2. No compatibility layer for prior stored model versions."
 sections:
@@ -123,6 +142,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-15T16:22:16.438Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609151533-247WK4
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T16:21:35.234Z, excerpt_hash=sha256:c45f6443929ad14977f9def6349c72f9e8eb37d3a2a6511db67c9cb464efa188
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151533-247WK4/blueprint/resolved-snapshot.json
+    - old_digest: 339c03520979b755394d6ad4a1b95d673a6a65870713d8dc40725e06e73f3012
+    - current_digest: 339c03520979b755394d6ad4a1b95d673a6a65870713d8dc40725e06e73f3012
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151533-247WK4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609151533-247WK4 --result verified-202609151533-247WK4 --commit 19948aed18db0ad4d6b0501cfd3cbb1cc65ca77d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert the Phase 5 implementation commit and the deterministic AgentPlane close commit.
@@ -132,6 +181,10 @@ sections:
     - Observation: Writer editing, selection, IME, clipboard, drag/drop, and React projection now use canonical SwPaM/SwWrtShell state without DOM reconciliation.
       Impact: DOM shape and browser-native mutations can no longer become an independent Writer document model.
       Resolution: Centralized selection mapping, model-owned SwTransferable serialization, bounded swhtml import, beforeinput intent routing, and deterministic React run projection.
+extensions:
+  implementation_commit:
+    hash: "79a72d7d78af1013f8b7ff64a8c3b678e45ca45d"
+    message: "🧩 247WK4 task: make Writer browser editor a model projection"
 id_source: "generated"
 ---
 ## Summary
@@ -195,6 +248,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609151533-247WK4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T16:22:16.438Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609151533-247WK4
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T16:21:35.234Z, excerpt_hash=sha256:c45f6443929ad14977f9def6349c72f9e8eb37d3a2a6511db67c9cb464efa188
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151533-247WK4/blueprint/resolved-snapshot.json
+- old_digest: 339c03520979b755394d6ad4a1b95d673a6a65870713d8dc40725e06e73f3012
+- current_digest: 339c03520979b755394d6ad4a1b95d673a6a65870713d8dc40725e06e73f3012
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151533-247WK4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609151533-247WK4 --result verified-202609151533-247WK4 --commit 19948aed18db0ad4d6b0501cfd3cbb1cc65ca77d
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
