@@ -1,10 +1,11 @@
 ---
 id: "202609151029-JH7J69"
 title: "Implement LibreOffice parity Phase 1"
-status: "DOING"
+result_summary: "Implemented Phase 1 with stable WhichId item persistence, SfxRequest/SfxBindings dispatch, generated LibreOffice UI metadata, and end-to-end slot execution."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json"
   findings:
     - "Stable WhichId item restoration, Sfx request/bindings dispatch, and generated Writer UI resources satisfy the approved Phase 1 scope."
-commit: null
+commit:
+  hash: "b1d81176daa693d0cc7d8598e2c549b8136208b6"
+  message: "🧩 JH7J69 task: implement LibreOffice parity Phase 1"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved LibreOffice parity Phase 1 contracts and resources in the current direct-mode checkout."
+  -
+    author: "CODER"
+    body: "Verified: Phase 1 upstream item, dispatch, bindings, slot, and generated Writer UI resource parity implemented; all declared checks passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Phase 1 verified: full npm run verify passed; 305 office tests and 88 inventory tests at 100% coverage; 10 Playwright e2e tests passed; typecheck, lint, dependency, generated-resource, static, source-tree, provenance, invariant, parity, routing, and doctor checks passed."
+  -
+    type: "status"
+    at: "2026-09-15T11:23:23.661Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Phase 1 upstream item, dispatch, bindings, slot, and generated Writer UI resource parity implemented; all declared checks passed."
 doc_version: 3
-doc_updated_at: "2026-09-15T11:22:06.921Z"
+doc_updated_at: "2026-09-15T11:23:23.663Z"
 doc_updated_by: "CODER"
 description: "Restore item contracts, Sfx slot/dispatch/bindings pipeline, pinned .uno command identities, and generated Writer UI resources per docs/program/vite-office-upstream-parity-plan.md Phase 1."
 sections:
