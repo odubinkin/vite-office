@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609150939-KAZPAN",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T10:05:30.044Z",
+  "verdict": "pass",
+  "summary": "P0.2 makes semantic provenance and boundary defects exact, reviewable, and test-enforced.",
+  "evaluated_sha": "dd20a4f2c87e36647f57978e5c5bb425e7ba8b9e",
+  "blueprint_digest": "4261233a16cdc8c159bdf8fe19453d47279906b08edb76168e31376dd1acb5d2",
+  "findings": [
+    "Runtime schema v3 covers all 112 modules and records 13 current violations; the five named Phase 0 defects are detected by focused AST/API tests."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609150939-KAZPAN/README.md",
+    "docs/program/parity/runtime-inventory.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
