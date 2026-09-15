@@ -49,8 +49,8 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "export function WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "export function CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -263,7 +263,7 @@
             "marker": "replaces native keyboard Copy data"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",
+            "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx",
             "marker": "keeps the typing caret stable"
           },
           {
@@ -353,14 +353,14 @@
             "marker": "isPropertiesSidebarVisible"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           }
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
-            "marker": "Rulers"
+            "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.test.ts",
+            "marker": "hides the ruler command"
           },
           {
             "path": "apps/office/e2e/foundation.spec.ts",
@@ -473,12 +473,12 @@
             "marker": "SetParagraphListKind"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
+            "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
             "marker": "data-writer-list-marker"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
@@ -507,7 +507,7 @@
             "marker": "routes formatting and list commands"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
             "marker": "applies and toggles Writer list commands"
           },
           {
@@ -729,15 +729,15 @@
             "marker": "class SwUndoNumLevel"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/uiconfig/swriter/toolbar/numobjectbar.ts",
             "marker": "writerNumObjectBarItems"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
+            "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
             "marker": "data-list-level"
           }
         ],
@@ -751,7 +751,7 @@
             "marker": "normalizes malformed command metadata"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
             "marker": "applies and toggles Writer list commands"
           },
           {
@@ -981,7 +981,7 @@
             "marker": "getWriterSameParagraphSelection"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
+            "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
             "marker": "WriterTextRunProjection"
           },
           {
@@ -989,8 +989,8 @@
             "marker": "serializeRuns"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
@@ -1019,7 +1019,7 @@
             "marker": "serializes only SwPaM model data"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
             "marker": "formats same-paragraph text"
           },
           {
@@ -1141,8 +1141,8 @@
             "marker": "BrowserWriterClipboardEvents"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -1159,7 +1159,7 @@
             "marker": "imports only bounded direct formats"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",
+            "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx",
             "marker": "intercepts native Cut and Paste"
           },
           {
@@ -1689,8 +1689,8 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -1747,7 +1747,7 @@
             "marker": "browser file selection"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
             "marker": "opens a supported ODT atomically"
           },
           {
@@ -1949,8 +1949,8 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "export function WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "export function CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -2037,8 +2037,8 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "export function WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "export function CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -2147,7 +2147,7 @@
             "marker": "replaces native keyboard Copy data"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",
+            "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx",
             "marker": "keeps the typing caret stable"
           },
           {
@@ -2255,7 +2255,7 @@
             "marker": "replaces native keyboard Copy data"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",
+            "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx",
             "marker": "keeps the typing caret stable"
           },
           {
@@ -2377,7 +2377,7 @@
             "marker": "getWriterSameParagraphSelection"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
+            "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
             "marker": "WriterTextRunProjection"
           },
           {
@@ -2385,8 +2385,8 @@
             "marker": "serializeRuns"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
@@ -2411,7 +2411,7 @@
             "marker": "serializes only SwPaM model data"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
             "marker": "formats same-paragraph text"
           },
           {
@@ -2529,8 +2529,8 @@
             "marker": "BrowserWriterClipboardEvents"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -2547,7 +2547,7 @@
             "marker": "imports only bounded direct formats"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.test.tsx",
+            "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx",
             "marker": "intercepts native Cut and Paste"
           },
           {
@@ -2773,8 +2773,8 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -2831,7 +2831,7 @@
             "marker": "browser file selection"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
             "marker": "opens a supported ODT atomically"
           },
           {
@@ -3881,8 +3881,8 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -3939,7 +3939,7 @@
             "marker": "browser file selection"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
             "marker": "opens a supported ODT atomically"
           },
           {
@@ -4173,8 +4173,8 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -4231,7 +4231,7 @@
             "marker": "browser file selection"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
             "marker": "opens a supported ODT atomically"
           },
           {
@@ -4467,8 +4467,8 @@
             "marker": "public async OpenOdt"
           },
           {
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-            "marker": "WriterMenuBar"
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+            "marker": "CommandMenuBar"
           },
           {
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
@@ -4525,7 +4525,7 @@
             "marker": "browser file selection"
           },
           {
-            "path": "apps/office/src/framework/source/services/desktop.test.tsx",
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
             "marker": "opens a supported ODT atomically"
           },
           {

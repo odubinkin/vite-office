@@ -18,6 +18,7 @@ import {
 } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterSlotId } from "../../../sdi/swriter";
 import { getWriterCommandResource } from "../../../uiconfig/swriter/writer-command-resources";
+import type { WriterDialogController } from "../dialog/writer-dialog-controller";
 
 /** Writer shell handler before generated resource and slot metadata are attached. */
 type WriterCommandHandlerDefinition<Context> = Omit<
@@ -118,9 +119,10 @@ export interface WriterViewCommandTarget {
   readonly ToggleStatusBar: () => void;
 }
 
-/** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @returns Validated immutable descriptors. */
+/** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @returns Validated immutable descriptors. */
 export function createWriterTextCommandRegistry(
   target: WriterTextCommandTarget,
+  dialogController: WriterDialogController,
 ): CommandRegistry<WriterTextCommandTarget> {
   const active =
     /** Reads the currently targeted paragraph. @returns Active paragraph projection. */ (): ReturnType<
@@ -174,11 +176,18 @@ export function createWriterTextCommandRegistry(
     {
       capabilityId: "CAP-0135",
       /** Applies dialog hyperlink data to the current selection or caret. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether content changed. */
-      execute: (_context, arguments_: unknown): boolean => {
+      execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
         const args = arguments_ as WriterHyperlinkCommandArguments | undefined;
-        return args?.hyperlink === undefined
-          ? false
-          : target.SetHyperlink(args.hyperlink, args.text, args.range);
+        if (args?.hyperlink !== undefined)
+          return target.SetHyperlink(args.hyperlink, args.text, args.range);
+        return dialogController
+          .RequestHyperlinkDialog(WRITER_COMMAND_IDS.hyperlinkDialog, target.GetHyperlinkAtCursor())
+          .then(
+            /** Applies only an accepted controller result. @param result - Typed dialog fields or cancellation. @returns Whether Writer changed. */ (
+              result,
+            ) =>
+              result === undefined ? false : target.SetHyperlink(result.hyperlink, result.text),
+          );
       },
       /** Exposes current hyperlink metadata to the dialog presenter. @returns Hyperlink or undefined. */
       getStateValue: (): WriterHyperlink | undefined => target.GetHyperlinkAtCursor(),
@@ -190,11 +199,17 @@ export function createWriterTextCommandRegistry(
     {
       capabilityId: "CAP-0135",
       /** Replaces the current hyperlink using dialog data. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether changed. */
-      execute: (_context, arguments_: unknown): boolean => {
+      execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
         const args = arguments_ as WriterHyperlinkCommandArguments | undefined;
-        return args?.hyperlink === undefined
-          ? false
-          : target.SetHyperlink(args.hyperlink, undefined, args.range);
+        if (args?.hyperlink !== undefined)
+          return target.SetHyperlink(args.hyperlink, undefined, args.range);
+        return dialogController
+          .RequestHyperlinkDialog(WRITER_COMMAND_IDS.editHyperlink, target.GetHyperlinkAtCursor())
+          .then(
+            /** Applies only an accepted controller result. @param result - Typed dialog fields or cancellation. @returns Whether Writer changed. */ (
+              result,
+            ) => (result === undefined ? false : target.SetHyperlink(result.hyperlink)),
+          );
       },
       /** Reads current hyperlink metadata for dialog initialization. @returns Hyperlink or undefined. */
       getStateValue: (): WriterHyperlink | undefined => target.GetHyperlinkAtCursor(),

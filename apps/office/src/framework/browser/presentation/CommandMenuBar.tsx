@@ -1,16 +1,57 @@
-/** @fileoverview Renders upstream-derived Writer menu resources through one command-driven state machine. */
+/** @fileoverview Renders generated menu resources through one reusable command-driven state machine. */
 import { useEffect, useRef, useState } from "react";
 
-import { writerMenuPlacements } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
-import type { WriterMenuItemPlacement } from "../../uiconfig/swriter/ui-resource";
-import type { WriterCommandSurfaceProps } from "./command-surface";
+import type { BrowserCommandSurfaceProps } from "./command-surface";
+
+/** Command resource fields consumed by an accessible menu item. */
+export interface MenuCommandResource {
+  readonly label: string;
+  readonly semantics: "action" | "check" | "radio";
+  readonly shortcuts: readonly string[];
+}
+
+/** Generic recursive generated menu placement. */
+export type CommandMenuItemPlacement =
+  | Readonly<{ commandId: string; kind: "command"; showsDialog?: boolean }>
+  | Readonly<{ kind: "separator" }>
+  | Readonly<{
+      id: string;
+      items: readonly CommandMenuItemPlacement[];
+      kind: "submenu";
+      label: string;
+    }>;
+
+/** Generic generated top-level menu placement. */
+export interface CommandMenuPlacement {
+  readonly id: string;
+  readonly items: readonly CommandMenuItemPlacement[];
+  readonly label: string;
+}
+
+/** Inputs for one shared generated-resource menubar presenter. */
+export interface CommandMenuBarProps extends BrowserCommandSurfaceProps {
+  readonly ariaLabel: string;
+  readonly getCommandResource: (commandUrl: string) => MenuCommandResource;
+  readonly getMenuLabel?: (id: string, fallback: string) => string;
+  readonly idPrefix: string;
+  readonly menus: readonly CommandMenuPlacement[];
+}
+
+/** Returns a generated fallback menu label unchanged. @param _id - Stable menu identity. @param fallback - Generated label. @returns Generated label. */
+function useFallbackMenuLabel(_id: string, fallback: string): string {
+  return fallback;
+}
 
 /** Renders the supported menu resource. @param props - Shared command surface. @returns Accessible menu bar. */
-export function WriterMenuBar({
+export function CommandMenuBar({
+  ariaLabel,
   commandSource,
+  getCommandResource,
+  getMenuLabel = useFallbackMenuLabel,
+  idPrefix,
+  menus,
   resolveArguments,
-}: WriterCommandSurfaceProps): React.JSX.Element {
+}: CommandMenuBarProps): React.JSX.Element {
   const [openMenuIndex, setOpenMenuIndex] = useState<number>();
   const [openSubmenuId, setOpenSubmenuId] = useState<string>();
   const [activeTriggerIndex, setActiveTriggerIndex] = useState(0);
@@ -67,12 +108,21 @@ export function WriterMenuBar({
     function restoreRequestedMenuFocus(): void {
       if (openMenuIndex === undefined || pendingMenuFocus.current === "none") return;
       const menu = rootRef.current?.querySelector<HTMLElement>(
-        `#writer-${writerMenuPlacements[openMenuIndex]?.id}-menu`,
+        `#${idPrefix}-${menus[openMenuIndex]?.id}-menu`,
       );
       if (menu !== null && menu !== undefined) focusMenuItem(menu, pendingMenuFocus.current);
       pendingMenuFocus.current = "none";
     },
-    [openMenuIndex],
+    [idPrefix, menus, openMenuIndex],
+  );
+
+  useEffect(
+    /** Clears the typeahead timer when the menubar unmounts. @returns Timer cleanup. */ function clearTypeaheadOnUnmount(): () => void {
+      return /** Clears the retained timeout. @returns Nothing. */ () => {
+        if (typeaheadTimer.current !== undefined) clearTimeout(typeaheadTimer.current);
+      };
+    },
+    [],
   );
 
   useEffect(
@@ -117,7 +167,7 @@ export function WriterMenuBar({
     if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
       event.preventDefault();
       const delta = event.key === "ArrowRight" ? 1 : -1;
-      const next = (index + delta + writerMenuPlacements.length) % writerMenuPlacements.length;
+      const next = (index + delta + menus.length) % menus.length;
       setActiveTriggerIndex(next);
       triggerRefs.current[next]?.focus();
       if (openMenuIndex !== undefined) openMenu(next, "first");
@@ -126,7 +176,7 @@ export function WriterMenuBar({
       openMenu(index, event.key === "ArrowDown" ? "first" : "last");
     } else if (event.key === "Home" || event.key === "End") {
       event.preventDefault();
-      const next = event.key === "Home" ? 0 : writerMenuPlacements.length - 1;
+      const next = event.key === "Home" ? 0 : menus.length - 1;
       setActiveTriggerIndex(next);
       triggerRefs.current[next]?.focus();
     } else if (event.key === "Escape") closeMenu(true);
@@ -169,17 +219,13 @@ export function WriterMenuBar({
       event.preventDefault();
       if (target.getAttribute("aria-haspopup") === "menu") {
         target.click();
-      } else openMenu((menuIndex + 1) % writerMenuPlacements.length, "first");
+      } else openMenu((menuIndex + 1) % menus.length, "first");
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
       if (menu.dataset.submenu !== undefined) {
         setOpenSubmenuId(undefined);
         menu.parentElement?.querySelector<HTMLElement>('[aria-haspopup="menu"]')?.focus();
-      } else
-        openMenu(
-          (menuIndex - 1 + writerMenuPlacements.length) % writerMenuPlacements.length,
-          "first",
-        );
+      } else openMenu((menuIndex - 1 + menus.length) % menus.length, "first");
     } else if (event.key.length === 1 && /\S/.test(event.key)) {
       typeahead.current += event.key.toLocaleLowerCase();
       if (typeaheadTimer.current !== undefined) clearTimeout(typeaheadTimer.current);
@@ -205,7 +251,7 @@ export function WriterMenuBar({
 
   /** Renders resource items recursively. @param items - Resource items. @param menuIndex - Owning menu index. @returns Rendered items. */
   function renderItems(
-    items: readonly WriterMenuItemPlacement[],
+    items: readonly CommandMenuItemPlacement[],
     menuIndex: number,
   ): React.ReactNode {
     return items.map(
@@ -223,6 +269,7 @@ export function WriterMenuBar({
           );
         if (item.kind === "submenu") {
           const isOpen = openSubmenuId === item.id;
+          const label = getMenuLabel(item.id, item.label);
           return (
             <div className="relative" key={item.id}>
               <button
@@ -237,12 +284,12 @@ export function WriterMenuBar({
                 tabIndex={-1}
                 type="button"
               >
-                {item.label}
+                {label}
                 <span aria-hidden="true">›</span>
               </button>
               {isOpen ? (
                 <div
-                  aria-label={`${item.label} menu`}
+                  aria-label={`${label} menu`}
                   className="absolute left-full top-0 z-30 ml-1 w-56 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
                   data-submenu={item.id}
                   onKeyDown={
@@ -262,18 +309,20 @@ export function WriterMenuBar({
         /* v8 ignore next -- Resource/registry consistency is validated before presentation. */
         if (command === undefined) return null;
         const state = commandSource.QueryState(item.commandId);
-        const resource = getWriterCommandResource(item.commandId);
-        const role = resource.semantics === "check" ? "menuitemcheckbox" : "menuitem";
+        const resource = getCommandResource(item.commandId);
+        const role =
+          resource.semantics === "check"
+            ? "menuitemcheckbox"
+            : resource.semantics === "radio"
+              ? "menuitemradio"
+              : "menuitem";
         const label = `${resource.label}${item.showsDialog === true ? "…" : ""}`;
         return (
           <button
-            aria-checked={role === "menuitemcheckbox" ? state.checked === true : undefined}
-            aria-current={
-              resource.semantics === "radio" && state.checked === true ? "true" : undefined
-            }
+            aria-checked={role === "menuitem" ? undefined : state.checked === true}
             aria-keyshortcuts={resource.shortcuts[0]}
             className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
-            disabled={!state.enabled}
+            disabled={!state.enabled || state.pending === true}
             key={item.commandId}
             onClick={
               /** Dispatches this command and dismisses the popup. @returns Nothing. */ () => {
@@ -294,65 +343,63 @@ export function WriterMenuBar({
   }
 
   return (
-    <div
-      aria-label="Writer menu bar"
-      className="flex items-center gap-1"
-      ref={rootRef}
-      role="menubar"
-    >
-      {writerMenuPlacements.map(
+    <div aria-label={ariaLabel} className="flex items-center gap-1" ref={rootRef} role="menubar">
+      {menus.map(
         /** Renders one top-level menu resource. @param menu - Menu placement. @param index - Menu index. @returns Menubar entry. */ (
           menu,
           index,
-        ) => (
-          <div className="relative" key={menu.id}>
-            <button
-              aria-controls={`writer-${menu.id}-menu`}
-              aria-expanded={openMenuIndex === index}
-              aria-haspopup="menu"
-              className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
-              onClick={
-                /** Toggles this top-level menu. @returns Nothing. */ () =>
-                  openMenuIndex === index ? closeMenu() : openMenu(index)
-              }
-              onFocus={
-                /** Activates this trigger for roving tabindex. @returns Nothing. */ () =>
-                  setActiveTriggerIndex(index)
-              }
-              onKeyDown={
-                /** Routes top-level keyboard input. @param event - Trigger keyboard event. @returns Nothing. */ (
-                  event,
-                ) => handleTriggerKeyDown(event, index)
-              }
-              ref={
-                /** Retains a trigger for focus movement. @param element - Mounted trigger or null. @returns Nothing. */ (
-                  element,
-                ) => {
-                  triggerRefs.current[index] = element;
+        ) => {
+          const label = getMenuLabel(menu.id, menu.label);
+          return (
+            <div className="relative" key={menu.id}>
+              <button
+                aria-controls={`${idPrefix}-${menu.id}-menu`}
+                aria-expanded={openMenuIndex === index}
+                aria-haspopup="menu"
+                className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                onClick={
+                  /** Toggles this top-level menu. @returns Nothing. */ () =>
+                    openMenuIndex === index ? closeMenu() : openMenu(index)
                 }
-              }
-              tabIndex={index === activeTriggerIndex ? 0 : -1}
-              type="button"
-            >
-              {menu.label}
-            </button>
-            {openMenuIndex === index ? (
-              <div
-                aria-label={`${menu.label} menu`}
-                className="absolute left-0 top-full z-20 mt-1 w-56 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
-                id={`writer-${menu.id}-menu`}
+                onFocus={
+                  /** Activates this trigger for roving tabindex. @returns Nothing. */ () =>
+                    setActiveTriggerIndex(index)
+                }
                 onKeyDown={
-                  /** Routes popup keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
+                  /** Routes top-level keyboard input. @param event - Trigger keyboard event. @returns Nothing. */ (
                     event,
-                  ) => handleMenuKeyDown(event, index)
+                  ) => handleTriggerKeyDown(event, index)
                 }
-                role="menu"
+                ref={
+                  /** Retains a trigger for focus movement. @param element - Mounted trigger or null. @returns Nothing. */ (
+                    element,
+                  ) => {
+                    triggerRefs.current[index] = element;
+                  }
+                }
+                tabIndex={index === activeTriggerIndex ? 0 : -1}
+                type="button"
               >
-                {renderItems(menu.items, index)}
-              </div>
-            ) : null}
-          </div>
-        ),
+                {label}
+              </button>
+              {openMenuIndex === index ? (
+                <div
+                  aria-label={`${label} menu`}
+                  className="absolute left-0 top-full z-20 mt-1 w-56 rounded-lg border border-slate-200 bg-white p-1 shadow-lg"
+                  id={`${idPrefix}-${menu.id}-menu`}
+                  onKeyDown={
+                    /** Routes popup keyboard input. @param event - Menu keyboard event. @returns Nothing. */ (
+                      event,
+                    ) => handleMenuKeyDown(event, index)
+                  }
+                  role="menu"
+                >
+                  {renderItems(menu.items, index)}
+                </div>
+              ) : null}
+            </div>
+          );
+        },
       )}
     </div>
   );

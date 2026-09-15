@@ -1,5 +1,5 @@
 /**
- * @fileoverview Mounts the React application into a caller-provided browser root with an explicit missing-root failure.
+ * @fileoverview Mounts React through the explicit framework browser adapter.
  */
 
 import { createRoot } from "react-dom/client";
@@ -7,6 +7,8 @@ import type { Root } from "react-dom/client";
 
 import { Desktop } from "./desktop";
 import type { OfficeModuleDescriptor } from "./modulemanager";
+import { BrowserLocalizationProvider } from "../localization/BrowserLocalizationProvider";
+import { createBrowserLocalizationService } from "../localization/browser-localization";
 
 /**
  * Mounts the office foundation into an existing DOM element.
@@ -25,6 +27,10 @@ export function mountApplication(
   }
 
   const root = createRoot(rootElement);
-  root.render(<Desktop modules={modules} />);
+  root.render(
+    <BrowserLocalizationProvider service={createBrowserLocalizationService()}>
+      <Desktop modules={modules} />
+    </BrowserLocalizationProvider>,
+  );
   return root;
 }

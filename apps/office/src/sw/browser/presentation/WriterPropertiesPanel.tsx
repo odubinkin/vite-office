@@ -10,6 +10,7 @@ import {
   type WriterParagraphStyleDefinition,
 } from "../../inc/poolfmt";
 import type { WriterParagraphListKind } from "../../source/core/doc/list";
+import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 
 /** Maps serializable alignment literals to concise reader-facing property values. */
 const alignmentLabels: Readonly<Record<WriterParagraphAlignment, string>> = {
@@ -54,31 +55,49 @@ export function WriterParagraphProperties({
   paragraphNumber,
   style,
 }: WriterParagraphPropertiesProps): React.JSX.Element {
+  const localization = useBrowserLocalization();
+  const styleName = (getWriterParagraphStyleDefinition(style) as WriterParagraphStyleDefinition)
+    .name;
   return (
     <>
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-700">
-        Properties
+        {localization.GetText("writer.properties.title", "Properties")}
       </p>
-      <h2 className="mt-1 text-base font-bold text-slate-950">Paragraph</h2>
-      <p className="mt-1 text-sm text-slate-600">Paragraph {paragraphNumber} is active.</p>
+      <h2 className="mt-1 text-base font-bold text-slate-950">
+        {localization.GetText("writer.properties.paragraph", "Paragraph")}
+      </h2>
+      <p className="mt-1 text-sm text-slate-600">
+        {localization.GetText(
+          "writer.properties.active-paragraph",
+          "Paragraph {number} is active.",
+          { number: paragraphNumber },
+        )}
+      </p>
       <dl className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-3">
         <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-          Alignment
-        </dt>
-        <dd className="mt-1 text-sm font-bold text-slate-900">{alignmentLabels[alignment]}</dd>
-        <dt className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-          Style
+          {localization.GetText("writer.properties.alignment", "Alignment")}
         </dt>
         <dd className="mt-1 text-sm font-bold text-slate-900">
-          {(getWriterParagraphStyleDefinition(style) as WriterParagraphStyleDefinition).name}
+          {localization.GetText(`writer.alignment.${alignment}`, alignmentLabels[alignment])}
         </dd>
         <dt className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-          List
+          {localization.GetText("writer.properties.style", "Style")}
         </dt>
-        <dd className="mt-1 text-sm font-bold text-slate-900">{listLabels[listKind]}</dd>
+        <dd className="mt-1 text-sm font-bold text-slate-900">
+          {localization.GetText(`writer.style.${style}`, styleName)}
+        </dd>
+        <dt className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+          {localization.GetText("writer.properties.list", "List")}
+        </dt>
+        <dd className="mt-1 text-sm font-bold text-slate-900">
+          {localization.GetText(`writer.list.${listKind}`, listLabels[listKind])}
+        </dd>
       </dl>
       <p className="mt-5 text-sm leading-6 text-slate-600">
-        Indents, spacing, text flow, and character formatting are separate Writer features.
+        {localization.GetText(
+          "writer.properties.scope-note",
+          "Indents, spacing, text flow, and character formatting are separate Writer features.",
+        )}
       </p>
     </>
   );

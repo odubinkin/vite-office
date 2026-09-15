@@ -1,10 +1,9 @@
 /**
- * @fileoverview Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary.
+ * @fileoverview Composes the pathname-routed browser-office launcher outside upstream paths.
  */
 
 import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "lucide-react";
 
-import { createDocument } from "../../../sfx2/source/doc/objsh";
 import type { OfficeModuleDescriptor, SuiteDefinition } from "./modulemanager";
 import { SuiteCard } from "./SuiteCard";
 
@@ -129,16 +128,10 @@ interface FoundationWorkspaceProps {
  * Renders the existing honest foundation interface as a full-page application workspace.
  *
  * @param props - Selected planned suite.
- * @param props.suite - Suite metadata used by the placeholder and document lifecycle preview.
+ * @param props.suite - Suite metadata used by the unavailable-module placeholder.
  * @returns The full-page foundation workspace for one not-yet-implemented suite.
  */
 function FoundationWorkspace({ suite }: FoundationWorkspaceProps): React.JSX.Element {
-  const previewDocument = createDocument({
-    id: `preview-${suite.id}`,
-    suiteId: suite.id,
-    title: `Untitled ${suite.name} Document`,
-  });
-
   return (
     <section className="flex min-h-screen flex-col bg-white">
       <header className="flex flex-wrap items-center gap-3 border-b border-slate-200 bg-slate-50/80 px-5 py-4">
@@ -192,11 +185,10 @@ function FoundationWorkspace({ suite }: FoundationWorkspaceProps): React.JSX.Ele
             </article>
             <article className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <FilePlus2 aria-hidden="true" className="text-indigo-700" size={20} />
-              <h3 className="mt-3 font-bold text-slate-900">Document lifecycle contract</h3>
+              <h3 className="mt-3 font-bold text-slate-900">Module unavailable</h3>
               <p className="mt-1 text-sm leading-6 text-slate-600">
-                {previewDocument.title} is a serializable {previewDocument.lifecycle} document
-                preview at content generation {previewDocument.contentGeneration}; editing and
-                storage are not yet enabled.
+                No document model, editing shell, persistence, or command surface is registered for
+                this suite.
               </p>
             </article>
           </div>
@@ -210,7 +202,7 @@ function FoundationWorkspace({ suite }: FoundationWorkspaceProps): React.JSX.Ele
         <span className="font-semibold text-white">{suite.name}: Foundation only</span>
         <span>Static build</span>
         <span>Keyboard reachable</span>
-        <span className="sm:ml-auto">Task 202608100659-GY449B</span>
+        <span className="sm:ml-auto">No document session created</span>
       </footer>
     </section>
   );

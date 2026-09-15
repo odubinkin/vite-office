@@ -1,5 +1,5 @@
 /**
- * @fileoverview Verifies deterministic React mounting and the explicit missing-root bootstrap failure.
+ * @fileoverview Verifies deterministic browser React mounting and missing-root failure.
  */
 
 import { act, screen } from "@testing-library/react";

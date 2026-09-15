@@ -5,9 +5,9 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Desktop } from "../../../framework/source/services/desktop";
-import { createOfficeModuleDescriptors } from "../../../framework/source/services/modulemanager";
-import { createWriterModuleFactory } from "../../source/uibase/app/swmodule";
+import { Desktop } from "../../../framework/browser/app/desktop";
+import { createOfficeModuleDescriptors } from "../../../framework/browser/app/modulemanager";
+import { createWriterModuleFactory } from "../composition/writer-module";
 
 /** Renders the desktop through the same Writer module registration used by the composition root. @returns Configured desktop element. */
 function App(): React.JSX.Element {
@@ -104,25 +104,8 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     fireEvent.click(hiddenSidebarMenuItem);
     expect(screen.getByRole("complementary", { name: "Writer properties sidebar" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "View" }));
-    const rulersMenuItem = screen.getByRole("menuitem", { name: "Rulers" });
-    expect(rulersMenuItem).toHaveAttribute("aria-expanded", "false");
-    fireEvent.click(rulersMenuItem);
-    const horizontalRulerMenuItem = screen.getByRole("menuitemcheckbox", {
-      name: "Rulers",
-    });
-    expect(horizontalRulerMenuItem).toHaveAttribute("aria-checked", "true");
-    fireEvent.click(horizontalRulerMenuItem);
+    expect(screen.queryByRole("menuitem", { name: "Rulers" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Writer horizontal ruler")).not.toBeInTheDocument();
-    expect(screen.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Rulers" }));
-    const hiddenHorizontalRulerMenuItem = screen.getByRole("menuitemcheckbox", {
-      name: "Rulers",
-    });
-    expect(hiddenHorizontalRulerMenuItem).toHaveAttribute("aria-checked", "false");
-    fireEvent.click(hiddenHorizontalRulerMenuItem);
-    expect(screen.getByLabelText("Writer horizontal ruler")).toBeVisible();
-    fireEvent.click(screen.getByRole("button", { name: "View" }));
     const statusBarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Status Bar" });
     expect(statusBarMenuItem).toHaveAttribute("aria-checked", "true");
     fireEvent.click(statusBarMenuItem);
@@ -504,18 +487,28 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
 
       const view = screen.getByRole("button", { name: "View" });
       fireEvent.keyDown(view, { key: "ArrowUp" });
-      expect(screen.getByRole("menuitemcheckbox", { name: "Sidebar" })).toHaveFocus();
-      fireEvent.click(screen.getByRole("menuitem", { name: "Rulers" }));
-      const horizontal = screen.getByRole("menuitemcheckbox", { name: "Rulers" });
-      expect(horizontal).toHaveFocus();
-      fireEvent.keyDown(horizontal, { key: "Escape" });
-      expect(screen.getByRole("menuitem", { name: "Rulers" })).toHaveFocus();
-      fireEvent.click(screen.getByRole("menuitem", { name: "Rulers" }));
-      fireEvent.click(screen.getByRole("menuitem", { name: "Rulers" }));
+      const sidebar = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
+      expect(sidebar).toHaveFocus();
+      fireEvent.keyDown(sidebar, { key: "Escape" });
+      expect(view).toHaveFocus();
 
       const insert = screen.getByRole("button", { name: "Insert" });
       fireEvent.keyDown(insert, { key: "ArrowDown" });
       expect(screen.getByRole("menu", { name: "Insert menu" })).toBeVisible();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Hyperlink…" }), { key: "Escape" });
+
+      const format = screen.getByRole("button", { name: "Format" });
+      fireEvent.keyDown(format, { key: "ArrowDown" });
+      const lists = screen.getByRole("menuitem", { name: "Lists" });
+      fireEvent.keyDown(lists, { key: "ArrowRight" });
+      const noList = screen.getByRole("menuitemradio", { name: "No List" });
+      expect(noList).toHaveFocus();
+      fireEvent.keyDown(noList, { key: "Escape" });
+      expect(lists).toHaveFocus();
+      fireEvent.click(lists);
+      expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
+      fireEvent.click(lists);
+      expect(screen.queryByRole("menu", { name: "Lists menu" })).not.toBeInTheDocument();
     } finally {
       vi.useRealTimers();
     }

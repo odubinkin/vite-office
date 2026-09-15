@@ -80,25 +80,9 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "View" }).click();
-  const rulersMenuItem = page.getByRole("menuitem", { name: "Rulers" });
-  await expect(rulersMenuItem).toHaveAttribute("aria-expanded", "false");
-  await rulersMenuItem.click();
-  const horizontalRulerMenuItem = page.getByRole("menuitemcheckbox", {
-    name: "Rulers",
-  });
-  await expect(horizontalRulerMenuItem).toHaveAttribute("aria-checked", "true");
-  await horizontalRulerMenuItem.click();
+  await expect(page.getByRole("menuitem", { name: "Rulers" })).toHaveCount(0);
   await expect(page.getByLabel("Writer horizontal ruler")).toHaveCount(0);
   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
-  await page.getByRole("button", { name: "View" }).click();
-  await page.getByRole("menuitem", { name: "Rulers" }).click();
-  const hiddenHorizontalRulerMenuItem = page.getByRole("menuitemcheckbox", {
-    name: "Rulers",
-  });
-  await expect(hiddenHorizontalRulerMenuItem).toHaveAttribute("aria-checked", "false");
-  await hiddenHorizontalRulerMenuItem.click();
-  await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
-  await page.getByRole("button", { name: "View" }).click();
   const statusBarMenuItem = page.getByRole("menuitemcheckbox", { name: "Status Bar" });
   await expect(statusBarMenuItem).toHaveAttribute("aria-checked", "true");
   await statusBarMenuItem.click();
@@ -143,7 +127,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
     "Document has unsaved changes.",
   );
   await page.getByRole("button", { name: "Styles" }).click();
-  await page.getByRole("menuitem", { exact: true, name: "Heading 1" }).click();
+  await page.getByRole("menuitemradio", { exact: true, name: "Heading 1" }).click();
   await expect(writerEditor).toHaveCSS("font-size", "24px");
   await expect(writerEditor).toHaveCSS("font-weight", "700");
   await expect(

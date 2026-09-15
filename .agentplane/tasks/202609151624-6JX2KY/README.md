@@ -4,7 +4,7 @@ title: "Implement Writer upstream parity Phase 6"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-15T17:14:17.820Z"
+  updated_by: "CODER"
+  note: "Phase 6 implementation verified: npm run verify passed, including 320 unit tests and 88 inventory tests at 100% coverage, 10 Playwright tests, production/static builds, source-tree/provenance, invariants, and parity inventory; AgentPlane doctor and routing checks passed."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-09-15T17:14:17.820Z"
+    author: "CODER"
+    state: "ok"
+    note: "Phase 6 implementation verified: npm run verify passed, including 320 unit tests and 88 inventory tests at 100% coverage, 10 Playwright tests, production/static builds, source-tree/provenance, invariants, and parity inventory; AgentPlane doctor and routing checks passed."
 doc_version: 3
-doc_updated_at: "2026-09-15T16:25:01.592Z"
+doc_updated_at: "2026-09-15T17:14:17.875Z"
 doc_updated_by: "CODER"
 description: "Rebuild React presentation over pinned LibreOffice contracts: browser-only composition paths, generic Sfx resource-driven controls, typed dialog requests, honest shell/layout chrome, and centralized localization; no legacy persisted-model compatibility."
 sections:
@@ -69,6 +75,36 @@ sections:
     10. `git push` — the completed Phase 6 commit and deterministic close commit are present on the configured upstream branch.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-15T17:14:17.820Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Phase 6 implementation verified: npm run verify passed, including 320 unit tests and 88 inventory tests at 100% coverage, 10 Playwright tests, production/static builds, source-tree/provenance, invariants, and parity inventory; AgentPlane doctor and routing checks passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T16:25:01.592Z, excerpt_hash=sha256:fd999fb5ed5b06a2dae98018530559b01705f926f7578df600159c19b3daa0a6
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151624-6JX2KY/blueprint/resolved-snapshot.json
+    - old_digest: b98936e5717b2384a364ffbe6a70a821b533073142479222a24eefc566fb4134
+    - current_digest: b98936e5717b2384a364ffbe6a70a821b533073142479222a24eefc566fb4134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151624-6JX2KY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609151624-6JX2KY
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert the Phase 6 implementation and AgentPlane close commits.
@@ -115,6 +151,36 @@ Rebuild React presentation over pinned LibreOffice contracts: browser-only compo
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-15T17:14:17.820Z — VERIFY — ok
+
+By: CODER
+
+Note: Phase 6 implementation verified: npm run verify passed, including 320 unit tests and 88 inventory tests at 100% coverage, 10 Playwright tests, production/static builds, source-tree/provenance, invariants, and parity inventory; AgentPlane doctor and routing checks passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T16:25:01.592Z, excerpt_hash=sha256:fd999fb5ed5b06a2dae98018530559b01705f926f7578df600159c19b3daa0a6
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151624-6JX2KY/blueprint/resolved-snapshot.json
+- old_digest: b98936e5717b2384a364ffbe6a70a821b533073142479222a24eefc566fb4134
+- current_digest: b98936e5717b2384a364ffbe6a70a821b533073142479222a24eefc566fb4134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151624-6JX2KY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609151624-6JX2KY
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

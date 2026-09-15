@@ -4,6 +4,10 @@
   "baselineTag": "libreoffice-26.8.0.2",
   "filenameDivergences": [
     {
+      "localPath": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts",
+      "rationale": "The focused TypeScript controller uses a descriptive filename while preserving the bounded SfxDialogController lifecycle implemented by upstream basedlgs.cxx."
+    },
+    {
       "localPath": "apps/office/src/svl/source/notify/broadcast.ts",
       "rationale": "The local lowercase broadcast.ts filename follows the repository module convention while preserving the reviewed SfxBroadcaster responsibility implemented by upstream SfxBroadcaster.cxx."
     },
@@ -24,12 +28,12 @@
       "rationale": "The local fmtinfmt.ts filename follows the upstream public fmtinfmt.hxx identity while implementing the reviewed SwFormatINetFormat behavior from fmtatr2.cxx."
     },
     {
-      "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
-      "rationale": "The local writercommands.ts module preserves the reviewed CreateSWDrawView responsibility while TypeScript decomposition or public naming requires a different filename from swriter.sdi."
+      "localPath": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
+      "rationale": "The focused Writer dialog facade separates typed request ownership from the broader SwTextShell::Execute implementation in upstream textsh1.cxx."
     },
     {
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
-      "rationale": "The local wrtsh.ts module preserves the reviewed SwWrtShell responsibility while TypeScript decomposition or public naming requires a different filename from wrtsh1.cxx."
+      "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
+      "rationale": "The local writercommands.ts module preserves the reviewed CreateSWDrawView responsibility while TypeScript decomposition or public naming requires a different filename from swriter.sdi."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
@@ -38,6 +42,10 @@
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
       "rationale": "The local wrtsh-selection.ts module preserves the reviewed SwWrtShell selection responsibility while the retired select.ts source-tree path remains reserved by the repository migration guard."
+    },
+    {
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+      "rationale": "The local wrtsh.ts module preserves the reviewed SwWrtShell responsibility while TypeScript decomposition or public naming requires a different filename from wrtsh1.cxx."
     },
     {
       "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
@@ -140,6 +148,242 @@
       "evidence": {
         "local": [
           {
+            "marker": "SuiteCardProps",
+            "path": "apps/office/src/framework/browser/app/SuiteCard.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/app/SuiteCard.tsx",
+      "rationale": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Renders one accessible suite link for the office application launcher."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "mountApplication",
+            "path": "apps/office/src/framework/browser/app/bootstrap.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/app/bootstrap.tsx",
+      "rationale": "Mounts the React application into a caller-provided browser root with an explicit missing-root failure. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Mounts the React application into a caller-provided browser root with an explicit missing-root failure."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "Desktop",
+            "path": "apps/office/src/framework/browser/app/desktop.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/app/desktop.tsx",
+      "rationale": "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SuiteId",
+            "path": "apps/office/src/framework/browser/app/modulemanager.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/app/modulemanager.ts",
+      "rationale": "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserLocalizationProvider",
+            "path": "apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx",
+      "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Provides one browser localization service to the React presentation tree."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "useBrowserLocalization",
+            "path": "apps/office/src/framework/browser/localization/browser-localization-context.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/localization/browser-localization-context.ts",
+      "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Adapts the browser localization service to React context."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserLocalizationService",
+            "path": "apps/office/src/framework/browser/localization/browser-localization.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/localization/browser-localization.ts",
+      "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Selects the browser locale and resolves catalog text with generated-resource fallback."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "CommandMenuBar",
+            "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+      "localSymbols": [
+        "WriterFormatMenuProps",
+        "WriterFormatMenu"
+      ],
+      "status": "local-only",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the bounded Writer Format popup and pinned Bullets and Numbering submenu at the LibreOffice `sw/uiconfig/swriter/menubar/menubar.xml` ownership boundary.",
+        "Renders the implemented Writer commands in their pinned LibreOffice menu locations without copying native menu visuals."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      }
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "CommandToolbarItems",
+            "path": "apps/office/src/framework/browser/presentation/CommandToolbar.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/presentation/CommandToolbar.tsx",
+      "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Projects generated toolbar placements through frame-owned Sfx command state and dispatch."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserCommandSource",
+            "path": "apps/office/src/framework/browser/presentation/command-surface.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/presentation/command-surface.ts",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Defines the replaceable command query and dispatch port consumed by browser presenters."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "useCommandShortcuts",
+            "path": "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Adapts browser keyboard events to registered Writer command dispatch."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
             "marker": "BrowserShortcutEvent",
             "path": "apps/office/src/framework/source/accelerators/keymapping.ts"
           }
@@ -170,27 +414,6 @@
       "rationale": "Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes at the LibreOffice `framework/source/dispatch/dispatchprovider.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
       "responsibilities": [
         "Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes at the LibreOffice `framework/source/dispatch/dispatchprovider.cxx` ownership boundary."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SuiteCardProps",
-            "path": "apps/office/src/framework/source/services/SuiteCard.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/source/services/SuiteCard.tsx",
-      "rationale": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Renders one accessible suite link for the office application launcher."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -243,48 +466,6 @@
       "evidence": {
         "local": [
           {
-            "marker": "mountApplication",
-            "path": "apps/office/src/framework/source/services/bootstrap.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/source/services/bootstrap.tsx",
-      "rationale": "Mounts the React application into a caller-provided browser root with an explicit missing-root failure. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Mounts the React application into a caller-provided browser root with an explicit missing-root failure."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "Desktop",
-            "path": "apps/office/src/framework/source/services/desktop.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/source/services/desktop.tsx",
-      "rationale": "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
             "marker": "MessageCatalog",
             "path": "apps/office/src/framework/source/services/messages.ts"
           }
@@ -294,27 +475,6 @@
       "rationale": "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
       "responsibilities": [
         "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SuiteId",
-            "path": "apps/office/src/framework/source/services/modulemanager.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/source/services/modulemanager.ts",
-      "rationale": "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -571,6 +731,38 @@
       "upstreamPath": "sfx2/source/control/request.cxx",
       "upstreamSymbols": [
         "SfxRequest::SfxRequest"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxDialogController",
+            "path": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxDialogController",
+            "path": "vendor/libreoffice-reference/sfx2/source/dialog/basedlgs.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts",
+      "localSymbols": [
+        "SfxDialogController"
+      ],
+      "omittedResponsibilities": [
+        "Upstream obligations outside SfxDialogController and the bounded SfxDialogController contract remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Ports the bounded asynchronous Sfx dialog-controller lifecycle while leaving rendering to the browser adapter."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sfx2/source/dialog/basedlgs.cxx",
+      "upstreamSymbols": [
+        "SfxDialogController"
       ]
     },
     {
@@ -923,19 +1115,61 @@
       "evidence": {
         "local": [
           {
-            "marker": "useWriterCommandShortcuts",
-            "path": "apps/office/src/sw/browser/accelerators/writer-shortcuts.ts"
+            "marker": "WriterDocumentSession",
+            "path": "apps/office/src/sw/browser/composition/writer-module.tsx"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/browser/accelerators/writer-shortcuts.ts",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "localPath": "apps/office/src/sw/browser/composition/writer-module.tsx",
+      "status": "local-only",
+      "rationale": "Composes the browser Writer session outside upstream implementation paths; no native LibreOffice source file is claimed as its owner.",
       "responsibilities": [
-        "Adapts browser keyboard events to registered Writer command dispatch."
+        "Creates and disposes the browser Writer document session from document, shell, frame, persistence, and presentation adapters."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+        "rationale": "Browser composition and React replace native module bootstrap at the outer application boundary."
+      }
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterEditableParagraph",
+            "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+      "rationale": "Projects canonical Writer text nodes into browser DOM descendants that inherit editability from one root host; it no longer claims native SwEditWin ownership.",
+      "responsibilities": [
+        "Projects paragraph attributes and formatted runs without owning input or document mutation."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM projection replace native VCL painting at the outer presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterPlainTextEditor",
+            "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+      "rationale": "Binds isolated browser editor adapters to one React document projection and one logical contenteditable host; it no longer claims native SwEditWin ownership.",
+      "responsibilities": [
+        "Renders Writer paragraphs inside one browser editing host and binds model-neutral adapter entry points."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM event binding replace the native VCL window boundary."
       },
       "status": "local-only"
     },
@@ -1183,32 +1417,6 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterMenuBar",
-            "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-      "localSymbols": [
-        "WriterFormatMenuProps",
-        "WriterFormatMenu"
-      ],
-      "status": "local-only",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
-      "responsibilities": [
-        "Renders the bounded Writer Format popup and pinned Bullets and Numbering submenu at the LibreOffice `sw/uiconfig/swriter/menubar/menubar.xml` ownership boundary.",
-        "Renders the implemented Writer commands in their pinned LibreOffice menu locations without copying native menu visuals."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-      }
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
             "marker": "WriterParagraphProperties",
             "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx"
           }
@@ -1273,15 +1481,15 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterCommandSource",
-            "path": "apps/office/src/sw/browser/presentation/command-surface.ts"
+            "marker": "writerBrowserMenuPlacements",
+            "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/browser/presentation/command-surface.ts",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "localPath": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts",
+      "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
       "responsibilities": [
-        "Defines the replaceable command query and dispatch port consumed by browser presenters."
+        "Filters generated Writer resources to commands backed by honest browser capabilities."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -3029,38 +3237,31 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterDocumentSession",
-            "path": "apps/office/src/sw/source/uibase/app/swmodule.tsx"
+            "marker": "WriterDialogController",
+            "path": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts"
           }
         ],
         "upstream": [
           {
-            "marker": "SwModule::SwModule",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/app/swmodule.cxx"
+            "marker": "SwTextShell::Execute",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/source/uibase/app/swmodule.tsx",
+      "localPath": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
       "localSymbols": [
-        "WriterDocumentSession",
-        "WriterModuleFactoryOptions",
-        "createWriterBrowserSessionServices",
-        "createWriterDocumentSession",
-        "createWriterModuleFactory"
+        "WriterDialogController"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwModule::SwModule, SvtCTLOptions::GetCTLTextNumerals, SvxErrorHandler::ensure, comphelper::IsFuzzing and the bounded WriterDocumentSession, createWriterBrowserSessionServices, createWriterDocumentSession contract remain intentionally omitted."
+        "Upstream obligations outside SwTextShell::Execute and the bounded WriterDialogController contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Registers a resource-free Writer module factory and creates one explicitly disposable Writer document session only when its workspace mounts."
+        "Preserves Writer ownership of hyperlink child-window requests initiated by normal slot execution."
       ],
       "status": "mapped",
-      "upstreamPath": "sw/source/uibase/app/swmodule.cxx",
+      "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
       "upstreamSymbols": [
-        "SwModule::SwModule",
-        "SvtCTLOptions::GetCTLTextNumerals",
-        "SvxErrorHandler::ensure",
-        "comphelper::IsFuzzing"
+        "SwTextShell::Execute"
       ]
     },
     {
@@ -3099,48 +3300,6 @@
         "SwTransferable::SwTransferable",
         "URIHelper::removePassword"
       ]
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterEditableParagraph",
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
-      "rationale": "Projects canonical Writer text nodes into browser DOM descendants that inherit editability from one root host; it no longer claims native SwEditWin ownership.",
-      "responsibilities": [
-        "Projects paragraph attributes and formatted runs without owning input or document mutation."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "React and DOM projection replace native VCL painting at the outer presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterPlainTextEditor",
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-      "rationale": "Binds isolated browser editor adapters to one React document projection and one logical contenteditable host; it no longer claims native SwEditWin ownership.",
-      "responsibilities": [
-        "Renders Writer paragraphs inside one browser editing host and binds model-neutral adapter entry points."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "React and DOM event binding replace the native VCL window boundary."
-      },
-      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",

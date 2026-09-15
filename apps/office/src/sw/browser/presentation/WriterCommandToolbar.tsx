@@ -9,15 +9,19 @@ import {
   Save,
   Scissors,
   Undo2,
-  type LucideIcon,
 } from "lucide-react";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerStandardBarItems } from "../../uiconfig/swriter/toolbar/standardbar";
 import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
-import type { WriterCommandSurfaceProps } from "./command-surface";
+import {
+  CommandToolbarItems,
+  type CommandIcon,
+} from "../../../framework/browser/presentation/CommandToolbar";
+import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
+import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 
-const icons = new Map<string, LucideIcon>([
+const icons = new Map<string, CommandIcon>([
   [WRITER_COMMAND_IDS.newDocument, FilePlus],
   [WRITER_COMMAND_IDS.openOdt, FolderOpen],
   [WRITER_COMMAND_IDS.saveOdt, Save],
@@ -33,48 +37,25 @@ const icons = new Map<string, LucideIcon>([
 export function WriterCommandToolbar({
   commandSource,
   resolveArguments,
-}: WriterCommandSurfaceProps): React.JSX.Element {
+}: BrowserCommandSurfaceProps): React.JSX.Element {
+  const localization = useBrowserLocalization();
   return (
-    <>
-      {writerStandardBarItems.map(
-        /** Renders one standard-toolbar resource item. @param item - Resource item. @param index - Stable resource index. @returns Toolbar control or separator. */ (
-          item,
-          index,
+    <CommandToolbarItems
+      commandSource={commandSource}
+      getCommandResource={
+        /** Localizes one generated toolbar resource. @param commandUrl - Command URL. @returns Localized resource. */ (
+          commandUrl,
         ) => {
-          if (item.kind === "separator")
-            return (
-              <span
-                aria-hidden="true"
-                className="mx-1 h-6 border-l border-slate-200"
-                key={`separator-${index}`}
-              />
-            );
-          /* v8 ignore next -- The pinned standard resource contains only commands and separators. */
-          if (item.kind !== "command") return null;
-          const command = commandSource.QueryCommand(item.commandId);
-          /* v8 ignore next -- Resource/registry consistency is validated before presentation. */
-          if (command === undefined) return null;
-          const state = commandSource.QueryState(item.commandId);
-          const resource = getWriterCommandResource(item.commandId);
-          const Icon = icons.get(item.commandId) as LucideIcon;
-          return (
-            <button
-              aria-label={resource.label}
-              className="grid size-9 place-items-center rounded-lg text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={!state.enabled}
-              key={item.commandId}
-              onClick={
-                /** Dispatches this toolbar command. @returns Command result discarded by React. */ () =>
-                  commandSource.Execute(item.commandId, resolveArguments(item.commandId))
-              }
-              title={resource.label}
-              type="button"
-            >
-              <Icon aria-hidden="true" size={18} />
-            </button>
-          );
-        },
-      )}
-    </>
+          const resource = getWriterCommandResource(commandUrl);
+          return {
+            ...resource,
+            label: localization.GetText(`writer.command.${commandUrl}.label`, resource.label),
+          };
+        }
+      }
+      icons={icons}
+      items={writerStandardBarItems}
+      resolveArguments={resolveArguments}
+    />
   );
 }

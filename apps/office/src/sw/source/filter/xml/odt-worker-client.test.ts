@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterSnapshot } from "../../../browser/persistence/writer-storage";
 import { createWriterDocument } from "../../core/doc/doc";
-import { createWriterModuleFactory } from "../../uibase/app/swmodule";
+import { createWriterModuleFactory } from "../../../browser/composition/writer-module";
 import {
   createBrowserOdtFilterService,
   OdtWorkerClient,

@@ -68,6 +68,7 @@ import {
   type WriterParagraphTextRange,
 } from "./wrtsh-selection";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
+import { WriterDialogController } from "../dialog/writer-dialog-controller";
 
 export type {
   WriterCursorPosition,
@@ -87,8 +88,11 @@ export class SwWrtShell extends SwModify {
     ...DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
   };
   private readonly undoContext: SwUndoRedoContext;
-  /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @returns Nothing. */
-  public constructor(private readonly docShell: SwDocShell) {
+  /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @param dialogController - Writer dialog lifecycle controller. @returns Nothing. */
+  public constructor(
+    private readonly docShell: SwDocShell,
+    dialogController: WriterDialogController = new WriterDialogController(),
+  ) {
     super();
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
     this.activeParagraphId = paragraph.id;
@@ -105,7 +109,10 @@ export class SwWrtShell extends SwModify {
           state,
         ) => this.RestoreCursorState(state),
     };
-    this.commandShell = createCommandShell(this, createWriterTextCommandRegistry(this));
+    this.commandShell = createCommandShell(
+      this,
+      createWriterTextCommandRegistry(this, dialogController),
+    );
     this.listShell = new SwListShell(this);
     this.docShellSubscription = docShell.Subscribe(
       /** Relays one document-shell hint into the editing shell. @param hint - Typed shell hint. @returns Nothing. */ (

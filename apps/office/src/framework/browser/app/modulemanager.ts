@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity.
+ * @fileoverview Defines browser-only suite routing and lazy React workspace composition.
  */
 
 /** Identifies a planned office-suite domain with a stable browser-facing key. */

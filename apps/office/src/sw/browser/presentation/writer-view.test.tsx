@@ -1,25 +1,28 @@
-/** @fileoverview Verifies persistent Writer session ownership, shell dispatch, React subscription, and remount behavior. */
+/** @fileoverview Verifies browser projection over persistent Writer view and shell dispatch. */
 
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
-import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { createDocument } from "../../../sfx2/source/doc/objsh";
 import type {
   DocumentSnapshot,
   PrimarySavePort,
   StoredDocumentOpenPort,
-} from "../../../../sfx2/source/doc/docfile";
-import type { RecoverySavePort } from "../../../../svl/source/misc/recovery";
-import { createDownloadFilename } from "../../../../vcl/browser/browser-download";
-import { createWriterViewControllerFactory } from "../../../browser/workflows/writer-workflows";
-import { SwDoc } from "../../core/doc/doc";
-import type { WriterSnapshotState } from "../../../browser/persistence/writer-storage";
-import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
-import { SwDocShell } from "../app/docsh";
-import { createWriterBrowserSessionServices, createWriterDocumentSession } from "../app/swmodule";
-import { WriterWorkbench } from "../../../browser/presentation/writer-view";
-import { SwView, type WriterSessionServices } from "./view";
+} from "../../../sfx2/source/doc/docfile";
+import type { RecoverySavePort } from "../../../svl/source/misc/recovery";
+import { createDownloadFilename } from "../../../vcl/browser/browser-download";
+import { createWriterViewControllerFactory } from "../workflows/writer-workflows";
+import { SwDoc } from "../../source/core/doc/doc";
+import type { WriterSnapshotState } from "../persistence/writer-storage";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
+import { SwDocShell } from "../../source/uibase/app/docsh";
+import {
+  createWriterBrowserSessionServices,
+  createWriterDocumentSession,
+} from "../composition/writer-module";
+import { WriterWorkbench } from "./writer-view";
+import { SwView, type WriterSessionServices } from "../../source/uibase/uiview/view";
 
 /** Creates deterministic injected browser services without requiring real platform APIs. @returns Test session services. */
 function createServices(): WriterSessionServices {
@@ -125,12 +128,33 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       target: "shell",
       undoPolicy: "record",
     });
+    expect(view.QueryCommand(WRITER_COMMAND_IDS.alignCenter)?.id).toBe(
+      WRITER_COMMAND_IDS.alignCenter,
+    );
     expect(view.Execute("writer.missing")).toEqual({
       commandId: "writer.missing",
       status: "missing",
     });
-    expect(view.Execute(WRITER_COMMAND_IDS.hyperlinkDialog).status).toBe("executed");
+    const dialogDispatch = view.Execute(WRITER_COMMAND_IDS.hyperlinkDialog);
+    expect(dialogDispatch.status).toBe("executed");
+    if (dialogDispatch.status !== "executed") throw new Error("Hyperlink command did not execute.");
+    const dialogRequest = view.GetDialogController().GetSnapshot();
+    if (dialogRequest === undefined) throw new Error("Hyperlink request was not published.");
+    expect(view.GetDialogController().Cancel(dialogRequest.id)).toBe(true);
+    await expect(dialogDispatch.value).resolves.toBe(false);
     expect(view.Execute(WRITER_COMMAND_IDS.editHyperlink).status).toBe("disabled");
+    expect(
+      view.Execute(WRITER_COMMAND_IDS.hyperlinkDialog, {
+        hyperlink: { url: "https://example.test/direct" },
+        text: "Direct link",
+      }).status,
+    ).toBe("executed");
+    expect(
+      view.Execute(WRITER_COMMAND_IDS.editHyperlink, {
+        hyperlink: { url: "https://example.test/edited" },
+      }).status,
+    ).toBe("executed");
+    expect(wrtShell.GetHyperlinkAtCursor()?.url).toBe("https://example.test/edited");
     const listener = vi.fn();
     const unsubscribe = view.Subscribe(listener);
     expect(view.Execute(WRITER_COMMAND_IDS.alignCenter).status).toBe("executed");
@@ -149,6 +173,9 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     });
     expect(view.QueryState(WRITER_COMMAND_IDS.unorderedList).checked).toBe(false);
     expect(view.QueryState(WRITER_COMMAND_IDS.toggleHorizontalRuler).checked).toBe(true);
+    expect(view.Execute(WRITER_COMMAND_IDS.toggleHorizontalRuler).status).toBe("executed");
+    expect(view.QueryState(WRITER_COMMAND_IDS.toggleHorizontalRuler).checked).toBe(false);
+    expect(view.Execute(WRITER_COMMAND_IDS.toggleHorizontalRuler).status).toBe("executed");
     expect(view.QueryState(WRITER_COMMAND_IDS.toggleSidebar).checked).toBe(true);
     expect(view.QueryState(WRITER_COMMAND_IDS.toggleStatusBar).checked).toBe(true);
     expect(view.GetSnapshot()).not.toBe(initialSnapshot);
@@ -216,7 +243,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
   it("routes toolbar, menu, and shortcut through one command ID and survives React remount" /** Verifies shared dispatch handler/state and view lifetime independent from React. @returns Completion after async browser adapters settle. */, async function convergesCommandSurfaces(): Promise<void> {
     const services = createServices();
     const session = createWriterDocumentSession(services);
-    const execute = vi.spyOn(session.view, "Execute");
+    const execute = vi.spyOn(session.frame.GetDispatcher(), "Execute");
     const boldHandler = vi.spyOn(session.view.GetWrtShell(), "ToggleCharacterFormat");
     const firstMount = render(<WriterWorkbench isActive view={session.view} />);
     const formattingToolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
@@ -301,15 +328,24 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     });
     fireEvent.change(screen.getByLabelText("Target"), { target: { value: "_blank" } });
     fireEvent.click(screen.getByRole("button", { name: "Apply" }));
-    expect(screen.getByRole("link", { name: "Link" })).toHaveAttribute(
-      "href",
-      "https://example.test/first",
+    await waitFor(
+      /** Waits for the accepted dialog request to reach the Writer shell. @returns Assertion result. */ () =>
+        expect(screen.getByRole("link", { name: "Link" })).toHaveAttribute(
+          "href",
+          "https://example.test/first",
+        ),
     );
     expect(shell.GetActiveParagraph().runs[0]?.hyperlink).toMatchObject({
       targetFrame: "_blank",
       url: "https://example.test/first",
     });
     expect(session.view.Execute(WRITER_COMMAND_IDS.editHyperlink).status).toBe("executed");
+    expect(await screen.findByRole("dialog", { name: "Hyperlink" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+    await waitFor(
+      /** Waits for cancelled edit dispatch to release the command. @returns Assertion result. */ () =>
+        expect(screen.getByRole("button", { name: "Hyperlink" })).toBeEnabled(),
+    );
 
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Hyperlink…" }));
@@ -317,7 +353,12 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       target: { value: "https://example.test/updated" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Apply" }));
-    expect(shell.GetActiveParagraph().runs[0]?.hyperlink?.url).toBe("https://example.test/updated");
+    await waitFor(
+      /** Waits for the edited hyperlink to be committed by dispatch completion. @returns Assertion result. */ () =>
+        expect(shell.GetActiveParagraph().runs[0]?.hyperlink?.url).toBe(
+          "https://example.test/updated",
+        ),
+    );
 
     session.view.Execute(WRITER_COMMAND_IDS.removeHyperlink);
     await waitFor(
@@ -331,7 +372,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     session.Close();
   });
 
-  it("opens the hyperlink dialog by shortcut and inserts linked text at a caret", /** Covers the upstream Ctrl+K accelerator, cancel path, optional text field, and relative destinations. @returns Nothing. */ function insertsHyperlinkAtCaret(): void {
+  it("opens the hyperlink dialog by shortcut and inserts linked text at a caret", /** Covers the upstream Ctrl+K accelerator, cancel path, optional text field, and relative destinations. @returns Completion after dialog dispatch settles. */ async function insertsHyperlinkAtCaret(): Promise<void> {
     const session = createWriterDocumentSession(createServices());
     const mount = render(<WriterWorkbench isActive view={session.view} />);
     fireEvent.keyDown(window, { ctrlKey: true, key: "k" });
@@ -343,11 +384,15 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
     expect(screen.queryByRole("dialog", { name: "Hyperlink" })).not.toBeInTheDocument();
 
+    await waitFor(
+      /** Waits for the cancelled dispatch to release its command binding. @returns Assertion result. */ () =>
+        expect(screen.getByRole("button", { name: "Hyperlink" })).toBeEnabled(),
+    );
     fireEvent.click(screen.getByRole("button", { name: "Hyperlink" }));
     fireEvent.change(screen.getByLabelText("URL"), { target: { value: "docs/guide.html" } });
     fireEvent.change(screen.getByLabelText("Text"), { target: { value: "Guide" } });
     fireEvent.click(screen.getByRole("button", { name: "Apply" }));
-    const link = screen.getByRole("link", { name: "Guide" });
+    const link = await screen.findByRole("link", { name: "Guide" });
     expect(link).toHaveAttribute("href", "docs/guide.html");
     fireEvent.click(link);
     fireEvent.click(screen.getByRole("textbox", { name: "Writer document text" }));

@@ -1,17 +1,17 @@
-/** @fileoverview Verifies lazy Writer module construction and deterministic workspace disposal. */
+/** @fileoverview Verifies lazy browser Writer construction and deterministic workspace disposal. */
 
 import { render, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { Desktop } from "../../../../framework/source/services/desktop";
-import { createOfficeModuleDescriptors } from "../../../../framework/source/services/modulemanager";
-import { createDownloadFilename } from "../../../../vcl/browser/browser-download";
-import type { OdtFilterService } from "../../filter/xml/odt-filter-service";
+import { Desktop } from "../../../framework/browser/app/desktop";
+import { createOfficeModuleDescriptors } from "../../../framework/browser/app/modulemanager";
+import { createDownloadFilename } from "../../../vcl/browser/browser-download";
+import type { OdtFilterService } from "../../source/filter/xml/odt-filter-service";
 import {
   createWriterDocumentSession,
   createWriterModuleFactory,
   type WriterDocumentSession,
-} from "./swmodule";
+} from "./writer-module";
 
 /** Creates a deterministic session without browser persistence or lifecycle resources. @returns Active test session. */
 function createTestSession(): WriterDocumentSession {

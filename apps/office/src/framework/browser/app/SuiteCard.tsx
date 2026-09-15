@@ -1,5 +1,5 @@
 /**
- * @fileoverview Renders one accessible suite link for the office application launcher.
+ * @fileoverview Renders one browser suite link without claiming framework service ownership.
  */
 
 import {

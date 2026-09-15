@@ -1,17 +1,17 @@
-/** @fileoverview Projects Writer paragraphs into one browser editing host. */
+/** @fileoverview Projects Writer paragraphs into one browser editing host outside upstream paths. */
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { getWriterParagraphListMarker } from "../../core/doc/number";
-import type { WriterParagraphProjection as WriterParagraph } from "../../../browser/presentation/writer-view-projection";
-import { WriterEditableParagraph } from "./edtwin-paragraph";
-import { BrowserWriterSelectionMapper } from "../../../browser/editor/writer-selection";
-import { BrowserWriterEditController } from "../../../browser/editor/writer-edit-controller";
-import { BrowserWriterCompositionAdapter } from "../../../browser/editor/writer-composition";
-import { BrowserWriterClipboardEvents } from "../../../browser/editor/writer-clipboard-events";
-import { BrowserWriterPointerSelectionController } from "../../../browser/editor/writer-geometry";
-import type { WriterCursorSelection } from "../wrtsh/wrtsh";
-import type { WriterClipboardSelection } from "../dochdl/swdtflvr";
+import { getWriterParagraphListMarker } from "../../source/core/doc/number";
+import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
+import { WriterEditableParagraph } from "./WriterEditableParagraph";
+import { BrowserWriterSelectionMapper } from "./writer-selection";
+import { BrowserWriterEditController } from "./writer-edit-controller";
+import { BrowserWriterCompositionAdapter } from "./writer-composition";
+import { BrowserWriterClipboardEvents } from "./writer-clipboard-events";
+import { BrowserWriterPointerSelectionController } from "./writer-geometry";
+import type { WriterCursorSelection } from "../../source/uibase/wrtsh/wrtsh";
+import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
 
 /** Defines immutable projection state and model-facing Writer operations. */
 export interface WriterPlainTextEditorProps {

@@ -1,11 +1,11 @@
-/** @fileoverview Verifies browser-visible Enter paragraph breaks in the integrated Writer document canvas. */
+/** @fileoverview Verifies browser-visible paragraph breaks in the Writer projection. */
 
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { Desktop } from "../../../../framework/source/services/desktop";
-import { createOfficeModuleDescriptors } from "../../../../framework/source/services/modulemanager";
-import { createWriterModuleFactory } from "../app/swmodule";
+import { Desktop } from "../../../framework/browser/app/desktop";
+import { createOfficeModuleDescriptors } from "../../../framework/browser/app/modulemanager";
+import { createWriterModuleFactory } from "../composition/writer-module";
 
 /** Renders the desktop through the same Writer module registration used by the composition root. @returns Configured desktop element. */
 function App(): React.JSX.Element {

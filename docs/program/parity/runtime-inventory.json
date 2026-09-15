@@ -76,6 +76,285 @@
       }
     },
     {
+      "path": "apps/office/src/framework/browser/app/SuiteCard.tsx",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": [],
+      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/browser/app/SuiteCard.tsx#SuiteCardProps"
+        ],
+        "justification": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/app/bootstrap.tsx",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": [],
+      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/browser/app/bootstrap.tsx#mountApplication"
+        ],
+        "justification": "Mounts the React application into a caller-provided browser root with an explicit missing-root failure. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/app/desktop.tsx",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/browser/app/desktop.tsx#Desktop"
+        ],
+        "justification": "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/app/modulemanager.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/framework/browser/app/modulemanager.ts#SuiteId"
+        ],
+        "justification": "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx#BrowserLocalizationProvider"
+        ],
+        "justification": "Provides the single browser locale service to the React presentation tree without owning document or command behavior.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/localization/browser-localization-context.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/localization/browser-localization-context.ts#useBrowserLocalization"
+        ],
+        "justification": "Adapts the application localization service to React context without owning document or command behavior.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/localization/browser-localization.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/localization/browser-localization.ts#BrowserLocalizationService"
+        ],
+        "justification": "Owns browser locale selection and catalog fallback outside LibreOffice implementation paths.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115",
+        "CAP-0116"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx#CommandMenuBar"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/presentation/CommandToolbar.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0112",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/presentation/CommandToolbar.tsx#CommandToolbarItems"
+        ],
+        "justification": "Projects generated toolbar placements through frame-owned Sfx command state and dispatch.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/presentation/command-surface.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/presentation/command-surface.ts#BrowserCommandSource"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "accelerators",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0109",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/presentation/use-command-shortcuts.ts#useCommandShortcuts"
+        ],
+        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/framework/source/accelerators/keymapping.ts",
       "classification": "local-infrastructure",
       "state": "active",
@@ -125,30 +404,6 @@
       }
     },
     {
-      "path": "apps/office/src/framework/source/services/SuiteCard.tsx",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "shared",
-      "subsystem": "application-services",
-      "capabilityIds": [],
-      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/framework/source/services/SuiteCard.tsx#SuiteCardProps"
-        ],
-        "justification": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
       "path": "apps/office/src/framework/source/services/autorecovery.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -189,55 +444,6 @@
       }
     },
     {
-      "path": "apps/office/src/framework/source/services/bootstrap.tsx",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "shared",
-      "subsystem": "application-services",
-      "capabilityIds": [],
-      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/framework/source/services/bootstrap.tsx#mountApplication"
-        ],
-        "justification": "Mounts the React application into a caller-provided browser root with an explicit missing-root failure. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/framework/source/services/desktop.tsx",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "shared",
-      "subsystem": "application-services",
-      "capabilityIds": [
-        "CAP-0101"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/framework/source/services/desktop.tsx#Desktop"
-        ],
-        "justification": "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
       "path": "apps/office/src/framework/source/services/messages.ts",
       "classification": "local-infrastructure",
       "state": "foundation",
@@ -255,31 +461,6 @@
           "apps/office/src/framework/source/services/messages.ts#MessageCatalog"
         ],
         "justification": "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/framework/source/services/modulemanager.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "shared",
-      "subsystem": "application-services",
-      "capabilityIds": [
-        "CAP-0101"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/framework/source/services/modulemanager.ts#SuiteId"
-        ],
-        "justification": "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "divergent",
@@ -532,6 +713,36 @@
         "upstreamFile": "sfx2/source/control/request.cxx",
         "upstreamSymbols": [
           "SfxRequest"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0135"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/dialog/dialogcontroller.ts#SfxDialogController",
+          "vendor/libreoffice-reference/sfx2/source/dialog/basedlgs.cxx#SfxDialogController"
+        ],
+        "justification": "Ports the bounded asynchronous dialog-controller lifecycle while leaving rendering to the browser adapter.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxDialogController"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sfx2/source/dialog/basedlgs.cxx",
+        "upstreamSymbols": [
+          "SfxDialogController"
         ]
       }
     },
@@ -879,15 +1090,15 @@
       }
     },
     {
-      "path": "apps/office/src/sw/browser/accelerators/writer-shortcuts.ts",
+      "path": "apps/office/src/sw/browser/composition/writer-module.tsx",
       "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
-      "subsystem": "accelerators",
+      "subsystem": "application-services",
       "capabilityIds": [
-        "CAP-0102",
-        "CAP-0109",
-        "CAP-0115"
+        "CAP-0101",
+        "CAP-0122",
+        "CAP-0133"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -895,9 +1106,70 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/accelerators/writer-shortcuts.ts#useWriterCommandShortcuts"
+          "apps/office/src/sw/browser/composition/writer-module.tsx#WriterDocumentSession"
         ],
-        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "justification": "Composes the browser Writer session from document, shell, frame, persistence, and presentation adapters without claiming the upstream swmodule implementation path.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0111",
+        "CAP-0117",
+        "CAP-0118",
+        "CAP-0119",
+        "CAP-0134"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx#WriterEditableParagraph"
+        ],
+        "justification": "Projects canonical Writer text nodes into browser DOM descendants that inherit editability from one root host; it no longer claims native SwEditWin ownership.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0111",
+        "CAP-0117",
+        "CAP-0118",
+        "CAP-0119",
+        "CAP-0120",
+        "CAP-0134"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#WriterPlainTextEditor"
+        ],
+        "justification": "Binds isolated browser editor adapters to one React document projection and one logical contenteditable host; it no longer claims native SwEditWin ownership.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1198,33 +1470,6 @@
       }
     },
     {
-      "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "browser-presentation",
-      "capabilityIds": [
-        "CAP-0101",
-        "CAP-0115",
-        "CAP-0116"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/browser/presentation/WriterMenuBar.tsx#WriterMenuBar"
-        ],
-        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
       "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1308,12 +1553,13 @@
       }
     },
     {
-      "path": "apps/office/src/sw/browser/presentation/command-surface.ts",
+      "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts",
       "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
       "subsystem": "browser-presentation",
       "capabilityIds": [
+        "CAP-0104",
         "CAP-0115"
       ],
       "semantic": {
@@ -1322,9 +1568,9 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/presentation/command-surface.ts#WriterCommandSource"
+          "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts#writerBrowserMenuPlacements"
         ],
-        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "justification": "Filters generated Writer resources to commands backed by honest browser capabilities.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -3067,41 +3313,32 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/uibase/app/swmodule.tsx",
+      "path": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "writer",
-      "subsystem": "application-services",
+      "subsystem": "dispatch",
       "capabilityIds": [
-        "CAP-0101",
-        "CAP-0122",
-        "CAP-0133"
+        "CAP-0135"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
         "contractStatus": "unverified",
-        "defaultStatus": "unverified",
+        "defaultStatus": "not-applicable",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/app/swmodule.tsx#WriterDocumentSession",
-          "vendor/libreoffice-reference/sw/source/uibase/app/swmodule.cxx#SwModule::SwModule"
+          "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts#WriterDialogController",
+          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SwTextShell::Execute"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/app/swmodule.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Models the Writer-owned hyperlink child-window request initiated by normal slot execution.",
         "knownViolations": [],
         "localSymbols": [
-          "WriterDocumentSession",
-          "WriterModuleFactoryOptions",
-          "createWriterBrowserSessionServices",
-          "createWriterDocumentSession",
-          "createWriterModuleFactory"
+          "WriterDialogController"
         ],
         "sourceResponsibility": "unverified",
-        "upstreamFile": "sw/source/uibase/app/swmodule.cxx",
+        "upstreamFile": "sw/source/uibase/shells/textsh1.cxx",
         "upstreamSymbols": [
-          "SwModule::SwModule",
-          "SvtCTLOptions::GetCTLTextNumerals",
-          "SvxErrorHandler::ensure",
-          "comphelper::IsFuzzing"
+          "SwTextShell::Execute"
         ]
       }
     },
@@ -3142,71 +3379,6 @@
           "SwTransferable::SwTransferable",
           "URIHelper::removePassword"
         ]
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "editing-view",
-      "capabilityIds": [
-        "CAP-0103",
-        "CAP-0111",
-        "CAP-0117",
-        "CAP-0118",
-        "CAP-0119",
-        "CAP-0134"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/sw/source/uibase/docvw/edtwin-paragraph.tsx#WriterEditableParagraph"
-        ],
-        "justification": "Projects canonical Writer text nodes into browser DOM descendants that inherit editability from one root host; it no longer claims native SwEditWin ownership.",
-        "knownViolations": [
-          "browser-adapter-upstream-path"
-        ],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.tsx",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "editing-view",
-      "capabilityIds": [
-        "CAP-0103",
-        "CAP-0111",
-        "CAP-0117",
-        "CAP-0118",
-        "CAP-0119",
-        "CAP-0120",
-        "CAP-0134"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/sw/source/uibase/docvw/edtwin.tsx#WriterPlainTextEditor"
-        ],
-        "justification": "Binds isolated browser editor adapters to one React document projection and one logical contenteditable host; it no longer claims native SwEditWin ownership.",
-        "knownViolations": [
-          "browser-adapter-upstream-path"
-        ],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
       }
     },
     {

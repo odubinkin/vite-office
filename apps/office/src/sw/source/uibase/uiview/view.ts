@@ -31,6 +31,7 @@ import {
 import type { WriterClipboardPaste } from "../../filter/html/swhtml";
 import type { WriterClipboardSelection } from "../dochdl/swdtflvr";
 import { SwDocShell } from "../app/docsh";
+import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 
@@ -117,6 +118,8 @@ export interface WriterViewSnapshot extends WriterPresentationProjection {
   readonly isStatusBarVisible: boolean;
   /** Current operation state owned by the retained SfxMedium. */
   readonly mediumOperation: Readonly<SfxMediumOperationStatus>;
+  /** Active object bar selected from the real Writer paragraph/list context. */
+  readonly objectBar: "numbering" | "text";
   /** Monotonic dispatcher invalidation version. */
   readonly viewVersion: number;
 }
@@ -126,6 +129,7 @@ export class SwView {
   private cachedSnapshot: WriterViewSnapshot | undefined;
   private readonly chromePreferences: WriterViewControllers["chromePreferences"];
   private readonly clipboardWorkflow: WriterViewControllers["clipboardWorkflow"];
+  private readonly dialogController = new WriterDialogController();
   private dispatcherSubscription: (() => void) | undefined;
   private readonly fileWorkflow: WriterViewControllers["fileWorkflow"];
   private frame: OfficeFrame<SwView> | undefined;
@@ -141,7 +145,7 @@ export class SwView {
     private readonly docShell: SwDocShell,
     controllerFactory: WriterViewControllerFactory,
   ) {
-    this.wrtShell = new SwWrtShell(docShell);
+    this.wrtShell = new SwWrtShell(docShell, this.dialogController);
     const controllers = controllerFactory.Create(
       docShell,
       this.wrtShell,
@@ -182,6 +186,11 @@ export class SwView {
     return this.wrtShell;
   }
 
+  /** Returns the view-owned typed child-window request controller. @returns Writer dialog controller. */
+  public GetDialogController(): WriterDialogController {
+    return this.dialogController;
+  }
+
   /** Returns the SwView command shell for bottom-to-top frame registration. @returns View command shell. */
   public GetCommandShell(): SfxShell {
     return this.viewCommandShell;
@@ -213,6 +222,7 @@ export class SwView {
         isStatusBarVisible: this.chromePreferences.IsStatusBarVisible(),
         isStoragePending: this.docShell.GetMedium().lastOperation.state === "pending",
         mediumOperation: this.docShell.GetMedium().GetLastOperation(),
+        objectBar: activeParagraph.list.kind === "none" ? "text" : "numbering",
         viewVersion: this.GetViewFrame().GetBindings().GetVersion(),
       });
       return this.cachedSnapshot;

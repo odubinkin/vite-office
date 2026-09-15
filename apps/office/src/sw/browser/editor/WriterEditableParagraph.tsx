@@ -1,9 +1,9 @@
-/** @fileoverview Projects one canonical Writer paragraph inside the shared editing host. */
+/** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
 
 import { Fragment, useRef } from "react";
 
-import type { WriterTextRun } from "../../core/txtnode/ndtxt";
-import type { WriterParagraphProjection as WriterParagraph } from "../../../browser/presentation/writer-view-projection";
+import type { WriterTextRun } from "../../source/core/txtnode/ndtxt";
+import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
 
 /** Immutable projection properties for one Writer text node. */
 export interface WriterEditableParagraphProps {

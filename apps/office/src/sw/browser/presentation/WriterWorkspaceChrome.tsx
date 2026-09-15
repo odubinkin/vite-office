@@ -4,6 +4,7 @@
  */
 
 import type { ReactNode } from "react";
+import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 
 /** Defines the content injected into stable Writer workspace chrome regions. */
 export interface WriterWorkspaceChromeProps {
@@ -15,8 +16,6 @@ export interface WriterWorkspaceChromeProps {
   readonly menuBar: ReactNode;
   /** Implemented controls placed in the Writer formatting toolbar. */
   readonly formattingToolbar: ReactNode;
-  /** Whether the horizontal Writer ruler is rendered below the formatting toolbar. */
-  readonly isHorizontalRulerVisible: boolean;
   /** Whether the Writer properties sidebar is rendered beside the document canvas. */
   readonly isPropertiesSidebarVisible: boolean;
   /** Whether the Writer status bar is rendered below the document canvas. */
@@ -36,7 +35,6 @@ export interface WriterWorkspaceChromeProps {
  * @param props.children - Current document editing surface.
  * @param props.documentTitle - Title shown in the workspace title row.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
- * @param props.isHorizontalRulerVisible - Whether the horizontal measurement ruler remains visible.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
  * @param props.isStatusBarVisible - Whether the status feedback row remains visible below the canvas.
  * @param props.menuBar - Functional Writer menus located below the document title row.
@@ -49,7 +47,6 @@ export function WriterWorkspaceChrome({
   children,
   documentTitle,
   formattingToolbar,
-  isHorizontalRulerVisible,
   isPropertiesSidebarVisible,
   isStatusBarVisible,
   menuBar,
@@ -57,6 +54,7 @@ export function WriterWorkspaceChrome({
   status,
   toolbar,
 }: WriterWorkspaceChromeProps): React.JSX.Element {
+  const localization = useBrowserLocalization();
   return (
     <section aria-label="Writer workspace" className="overflow-hidden bg-slate-100">
       <header className="border-b border-slate-200 bg-white">
@@ -64,7 +62,7 @@ export function WriterWorkspaceChrome({
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-slate-950">{documentTitle}</p>
             <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-700">
-              Writer · browser workbench
+              {localization.GetText("writer.workspace.subtitle", "Writer · browser workbench")}
             </p>
           </div>
         </div>
@@ -86,21 +84,6 @@ export function WriterWorkspaceChrome({
         >
           {formattingToolbar}
         </div>
-
-        {isHorizontalRulerVisible ? (
-          <div
-            aria-label="Writer horizontal ruler"
-            className="relative h-7 overflow-hidden border-b border-slate-300 bg-white px-12 text-[10px] text-slate-400"
-          >
-            <div className="absolute inset-x-12 top-3 border-t border-slate-300" />
-            <span className="absolute left-[14%] top-0.5">1</span>
-            <span className="absolute left-[28%] top-0.5">2</span>
-            <span className="absolute left-[42%] top-0.5">3</span>
-            <span className="absolute left-[56%] top-0.5">4</span>
-            <span className="absolute left-[70%] top-0.5">5</span>
-            <span className="absolute left-[84%] top-0.5">6</span>
-          </div>
-        ) : null}
       </header>
 
       <div
@@ -133,9 +116,6 @@ export function WriterWorkspaceChrome({
           className="flex flex-wrap items-center gap-x-5 gap-y-1 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
           role="status"
         >
-          <span className="font-semibold text-white">Page 1 of 1</span>
-          <span>Plain text</span>
-          <span>English (USA)</span>
           <span aria-live="polite" className="sm:ml-auto">
             {status}
           </span>

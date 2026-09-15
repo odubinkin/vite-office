@@ -1,5 +1,5 @@
 /**
- * @fileoverview Verifies the visible foundation status, suite navigation, and selection behavior of the workbench.
+ * @fileoverview Verifies browser launcher navigation and Writer selection behavior.
  */
 
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
@@ -18,7 +18,7 @@ import {
   type WriterSnapshotState,
 } from "../../../sw/browser/persistence/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-storage";
-import { createWriterModuleFactory } from "../../../sw/source/uibase/app/swmodule";
+import { createWriterModuleFactory } from "../../../sw/browser/composition/writer-module";
 import { SwDocShell } from "../../../sw/source/uibase/app/docsh";
 import { SwWrtShell } from "../../../sw/source/uibase/wrtsh/wrtsh";
 
@@ -276,8 +276,8 @@ describe("App" /**
     expect(screen.queryByLabelText("Paragraph actions")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
-    expect(screen.getByRole("menuitem", { name: "No List" })).toHaveAttribute(
-      "aria-current",
+    expect(screen.getByRole("menuitemradio", { name: "No List" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
   });
@@ -290,8 +290,17 @@ describe("App" /**
     expect(screen.getByTestId("writer-list-marker-writer-paragraph-1")).toHaveTextContent("•");
     expect(paragraph).toHaveAccessibleDescription(/Paragraph list: Unordered List/);
     expect(paragraph.textContent).not.toContain("•");
-    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Unordered List" }));
+    expect(
+      within(formattingToolbar).queryByRole("button", { name: "Bold" }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
+    ).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
+    fireEvent.click(screen.getByRole("menuitemradio", { name: "Unordered List" }));
     expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
+    expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Ordered List" }));
     expect(screen.getByTestId("writer-list-marker-writer-paragraph-1")).toHaveTextContent("1.");
     expect(
@@ -310,11 +319,11 @@ describe("App" /**
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
-    fireEvent.click(screen.getByRole("menuitem", { name: "No List" }));
+    fireEvent.click(screen.getByRole("menuitemradio", { name: "No List" }));
     expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "No List" }));
+    fireEvent.click(screen.getByRole("menuitemradio", { name: "No List" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
   });
 
@@ -343,7 +352,9 @@ describe("App" /**
     expect(screen.getByText("Calc: Foundation only")).toBeInTheDocument();
     expect(screen.getByText(/Worksheets, formulas, analysis/)).toBeInTheDocument();
     expect(
-      screen.getByText(/Untitled Calc Document is a serializable new document/),
+      screen.getByText(
+        /No document model, editing shell, persistence, or command surface is registered/,
+      ),
     ).toBeInTheDocument();
     expect(screen.queryByRole("textbox", { name: "Writer document text" })).not.toBeInTheDocument();
     expect(screen.getByText("No editor features enabled")).toBeInTheDocument();
@@ -556,7 +567,7 @@ describe("App" /**
       fireEvent.focus(screen.getByRole("textbox", { name: "Writer paragraph 2" }));
       fireEvent.click(screen.getByRole("button", { name: "Format" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
-      fireEvent.click(screen.getByRole("menuitem", { name: /^Unordered List$/ }));
+      fireEvent.click(screen.getByRole("menuitemradio", { name: /^Unordered List$/ }));
       expect(screen.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveTextContent("•");
     } finally {
       Object.defineProperty(globalThis, "indexedDB", {

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Verifies the stable, honest browser module-manager suite inventory consumed by the foundation navigation.
+ * @fileoverview Verifies the stable browser module inventory consumed by launcher navigation.
  */
 
 import { describe, expect, it } from "vitest";

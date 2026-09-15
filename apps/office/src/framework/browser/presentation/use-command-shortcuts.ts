@@ -1,15 +1,14 @@
 /**
- * @fileoverview Adapts browser key events to the active Writer SfxDispatcher without claiming
- * LibreOffice `textsh.cxx` command-shell ownership.
+ * @fileoverview Adapts browser key events to an active SfxDispatcher without owning commands.
  */
 
 import { useEffect } from "react";
 
-import { getBrowserShortcut } from "../../../framework/source/accelerators/keymapping";
-import type { SfxDispatcher } from "../../../framework/source/dispatch/dispatchprovider";
+import { getBrowserShortcut } from "../../source/accelerators/keymapping";
+import type { SfxDispatcher } from "../../source/dispatch/dispatchprovider";
 
 /** Options used by the browser accelerator adapter. */
-export interface WriterShortcutOptions {
+export interface BrowserShortcutOptions {
   /** Active frame dispatcher that resolves every shortcut command. */
   readonly dispatcher: SfxDispatcher;
   /** Whether the Writer frame may currently consume browser accelerators. */
@@ -31,15 +30,15 @@ export interface WriterShortcutOptions {
  * @param options.resolveArguments - DOM argument adapter for the resolved command.
  * @returns Nothing; React owns listener installation and cleanup only.
  */
-export function useWriterCommandShortcuts({
+export function useCommandShortcuts({
   dispatcher,
   executeCommand,
   isActive,
   resolveArguments,
-}: WriterShortcutOptions): void {
+}: BrowserShortcutOptions): void {
   useEffect(
     /** Installs the active frame accelerator adapter. @returns Cleanup removing the listener. */
-    function installWriterShortcuts(): () => void {
+    function installCommandShortcuts(): () => void {
       /** Resolves and executes one registered shortcut command. @param event - Browser keyboard event. @returns Nothing. */
       function handleKeyDown(event: KeyboardEvent): void {
         if (!isActive) return;
@@ -52,7 +51,7 @@ export function useWriterCommandShortcuts({
         if (result.status === "executed") event.preventDefault();
       }
       window.addEventListener("keydown", handleKeyDown);
-      return /** Removes the frame accelerator listener. @returns Nothing. */ function removeWriterShortcuts(): void {
+      return /** Removes the frame accelerator listener. @returns Nothing. */ function removeCommandShortcuts(): void {
         window.removeEventListener("keydown", handleKeyDown);
       };
     },

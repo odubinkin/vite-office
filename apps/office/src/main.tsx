@@ -2,9 +2,9 @@
  * @fileoverview Boots the static browser entrypoint by connecting the HTML root to the documented React mount adapter.
  */
 
-import { mountApplication } from "./framework/source/services/bootstrap";
-import { createOfficeModuleDescriptors } from "./framework/source/services/modulemanager";
-import { createWriterModuleFactory } from "./sw/source/uibase/app/swmodule";
+import { mountApplication } from "./framework/browser/app/bootstrap";
+import { createOfficeModuleDescriptors } from "./framework/browser/app/modulemanager";
+import { createWriterModuleFactory } from "./sw/browser/composition/writer-module";
 import "./vcl/browser/styles.css";
 
 mountApplication(

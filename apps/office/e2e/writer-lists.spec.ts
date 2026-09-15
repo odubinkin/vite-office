@@ -2,7 +2,7 @@
 
 import { expect, test } from "@playwright/test";
 
-test("Writer bullets and numbering" /** Verifies Format submenu and text-object toolbar list controls retain editable text while rendering Writer markers. @param root0 - Playwright fixture object. @param root0.page - Chromium page exercising the built browser application. @returns A promise resolved after list commands, inheritance, and removal are asserted. */, async function verifiesWriterLists({
+test("Writer bullets and numbering" /** Verifies Format submenu and context-sensitive numbering toolbar controls retain editable text while rendering Writer markers. @param root0 - Playwright fixture object. @param root0.page - Chromium page exercising the built browser application. @returns A promise resolved after list commands, inheritance, and removal are asserted. */, async function verifiesWriterLists({
   page,
 }): Promise<void> {
   await page.goto("/writer");
@@ -10,7 +10,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and text-object 
   await firstParagraph.fill("First list item");
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
-  await page.getByRole("menuitem", { exact: true, name: "Ordered List" }).click();
+  await page.getByRole("menuitemradio", { exact: true, name: "Ordered List" }).click();
   const firstMarker = page.getByTestId("writer-list-marker-writer-paragraph-1");
   await expect(firstMarker).toHaveText("1.");
   await expect(firstParagraph).toHaveText("First list item");
@@ -32,10 +32,14 @@ test("Writer bullets and numbering" /** Verifies Format submenu and text-object 
   const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
   await secondParagraph.fill("Second list item");
   await expect(page.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveText("2.");
-  await page
-    .getByRole("toolbar", { name: "Writer formatting toolbar" })
-    .getByRole("button", { name: "Unordered List" })
-    .click();
+  const formattingToolbar = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
+  await expect(formattingToolbar.getByRole("button", { name: "Bold" })).toHaveCount(0);
+  await expect(
+    formattingToolbar.getByRole("button", { name: "Promote Outline Level" }),
+  ).toBeDisabled();
+  await page.getByRole("button", { name: "Format" }).click();
+  await page.getByRole("menuitem", { name: "Lists" }).click();
+  await page.getByRole("menuitemradio", { exact: true, name: "Unordered List" }).click();
   await expect(page.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveText("•");
   await expect(secondParagraph).toHaveText("Second list item");
   await expect(secondParagraph).toHaveAccessibleDescription(/Paragraph list: Unordered List/);
@@ -58,7 +62,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and text-object 
   await expect(secondParagraph).toHaveAttribute("data-list-level", "0");
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
-  await page.getByRole("menuitem", { name: "No List" }).click();
+  await page.getByRole("menuitemradio", { name: "No List" }).click();
   await expect(page.getByTestId("writer-list-marker-writer-paragraph-2")).toHaveCount(0);
   await expect(secondParagraph).toHaveText("Second list item");
 });

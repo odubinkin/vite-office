@@ -1,5 +1,5 @@
 /**
- * @fileoverview Registers a lazy Writer module and owns one disposable document session per
+ * @fileoverview Composes a lazy browser Writer module and owns one disposable document session per
  * mounted workspace without exposing Writer implementation to framework core.
  */
 
@@ -7,37 +7,37 @@
 
 import { useEffect, useState } from "react";
 
-import { OfficeFrame } from "../../../../framework/source/dispatch/dispatchprovider";
-import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { OfficeFrame } from "../../../framework/source/dispatch/dispatchprovider";
+import { createDocument } from "../../../sfx2/source/doc/objsh";
 import {
   AutoRecovery,
   type AutoRecoveryCandidate,
   type AutoRecoveryEnvironment,
   type AutoRecoveryRestoreResult,
-} from "../../../../framework/source/services/autorecovery";
-import type { OfficeModuleFactory } from "../../../../framework/source/services/modulemanager";
-import { copyRichText, readRichClipboard } from "../../../../vcl/browser/browser-clipboard";
+} from "../../../framework/source/services/autorecovery";
+import type { OfficeModuleFactory } from "../../../framework/browser/app/modulemanager";
+import { copyRichText, readRichClipboard } from "../../../vcl/browser/browser-clipboard";
 import {
   createBrowserDocumentExportPort,
   createDownloadFilename,
-} from "../../../../vcl/browser/browser-download";
-import { createBrowserDocumentOpenPort } from "../../../../vcl/browser/browser-file";
+} from "../../../vcl/browser/browser-download";
+import { createBrowserDocumentOpenPort } from "../../../vcl/browser/browser-file";
 import {
   IndexedDbDocumentStorageAdapter,
   IndexedDbRecoveryStorageAdapter,
-} from "../../../../vcl/browser/indexeddb-storage";
-import type { WriterSnapshotState } from "../../../browser/persistence/writer-storage";
+} from "../../../vcl/browser/indexeddb-storage";
+import type { WriterSnapshotState } from "../persistence/writer-storage";
 import {
   createInlineOdtFilterService,
   type OdtFilterService,
-} from "../../filter/xml/odt-filter-service";
-import { createBrowserOdtFilterService } from "../../filter/xml/odt-worker-client";
-import { WriterWorkbench } from "../../../browser/presentation/writer-view";
-import { WriterRecoveryPrompt } from "../../../browser/presentation/WriterRecoveryPrompt";
-import { createWriterViewControllerFactory } from "../../../browser/workflows/writer-workflows";
-import { SwView, type WriterSessionServices } from "../uiview/view";
-import { createWriterWorkbenchDocument } from "../uiview/viewfunc";
-import { SwDocShell } from "./docsh";
+} from "../../source/filter/xml/odt-filter-service";
+import { createBrowserOdtFilterService } from "../../source/filter/xml/odt-worker-client";
+import { WriterWorkbench } from "../presentation/writer-view";
+import { WriterRecoveryPrompt } from "../presentation/WriterRecoveryPrompt";
+import { createWriterViewControllerFactory } from "../workflows/writer-workflows";
+import { SwView, type WriterSessionServices } from "../../source/uibase/uiview/view";
+import { createWriterWorkbenchDocument } from "../../source/uibase/uiview/viewfunc";
+import { SwDocShell } from "../../source/uibase/app/docsh";
 
 /** Persistent ownership chain created once per Writer module factory. */
 export interface WriterDocumentSession {
