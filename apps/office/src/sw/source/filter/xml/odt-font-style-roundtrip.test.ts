@@ -102,6 +102,62 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(cycle.document.GetTextFormatColl("subtitle").DerivedFrom()).toBeUndefined();
   });
 
+  it("preserves LibreOffice-declared Title follow styles across export and import", /** Verifies named-style follow linkage is resolved after style creation with upstream fallback semantics. @returns Nothing. */ async () => {
+    const writer = createWriterDocument("title-follow");
+    writer.GetTextFormatColl("title");
+    writer.GetTextFormatColl("subtitle");
+    const state = createDocument({ id: "title-follow", suiteId: "writer", title: "Title follow" });
+    const bytes = writeOdtDocument(writer, state);
+    const replaceTitleFollow =
+      /** Replaces Title's declared follow style. @param styles - Named-style XML. @param follow - Replacement ODF style name. @returns Updated XML. */ (
+        styles: string,
+        follow: string,
+      ): string =>
+        styles.replace(
+          /(<style:style style:name="Title"[^>]*style:next-style-name=")[^"]+/,
+          `$1${follow}`,
+        );
+
+    const subtitleBytes = await rewriteStylesXml(
+      bytes,
+      /** Selects Subtitle as Title's follow style. @param styles - Named-style XML. @returns Updated XML. */ (
+        styles,
+      ) => replaceTitleFollow(styles, "Subtitle"),
+    );
+    const imported = await readOdtDocument(subtitleBytes, state);
+    expect(imported.document.GetTextFormatColl("title").GetNextTextFormatColl()).toBe(
+      imported.document.GetTextFormatColl("subtitle"),
+    );
+    const exported = new ZipFile(writeOdtDocument(imported.document, imported.documentState));
+    expect(await exported.readTextEntry("styles.xml")).toMatch(
+      /<style:style style:name="Title"[^>]*style:next-style-name="Subtitle"/,
+    );
+    const reopened = await readOdtDocument(
+      writeOdtDocument(imported.document, imported.documentState),
+      state,
+    );
+    expect(reopened.document.GetTextFormatColl("title").GetNextTextFormatColl()).toBe(
+      reopened.document.GetTextFormatColl("subtitle"),
+    );
+
+    for (const transform of [
+      /** Removes Title's follow declaration. @param styles - Named-style XML. @returns Updated XML. */ (
+        styles: string,
+      ) =>
+        styles.replace(
+          /(<style:style style:name="Title"[^>]*) style:next-style-name="[^"]+"/,
+          "$1",
+        ),
+      /** Selects an unresolved Title follow style. @param styles - Named-style XML. @returns Updated XML. */ (
+        styles: string,
+      ) => replaceTitleFollow(styles, "Missing"),
+    ]) {
+      const fallback = await readOdtDocument(await rewriteStylesXml(bytes, transform), state);
+      const title = fallback.document.GetTextFormatColl("title");
+      expect(title.GetNextTextFormatColl()).toBe(title);
+    }
+  });
+
   it("round-trips the complete LibreOffice paragraph-style hierarchy and font-face references", /** Verifies open-save-reopen semantics. @returns Nothing. */ async () => {
     const writer = createWriterDocument("all-styles");
     for (const style of WRITER_PARAGRAPH_STYLE_POOL) writer.GetTextFormatColl(style.id);

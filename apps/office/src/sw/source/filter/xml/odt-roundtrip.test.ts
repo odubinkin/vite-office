@@ -684,18 +684,18 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           meta,
         ),
     ).toThrow("Heading 1 paragraph style is invalid");
-    expect(
-      /** Rejects a follow-style link outside the pinned Writer hierarchy. @returns Invalid document. */ () =>
-        importWriterXml(
-          styles.replace(
-            'style:next-style-name="Text_20_body"',
-            'style:next-style-name="Standard"',
-          ),
-          content,
-          metadata(),
-          meta,
-        ),
-    ).toThrow("invalid next style");
+    const alternateFollow = importWriterXml(
+      styles.replace(
+        /(<style:style style:name="Heading_20_1"[^>]*style:next-style-name=")[^"]+/,
+        "$1Standard",
+      ),
+      content,
+      metadata(),
+      meta,
+    );
+    expect(alternateFollow.document.GetTextFormatColl("heading-1").GetNextTextFormatColl()).toBe(
+      alternateFollow.document.GetDfltTextFormatColl(),
+    );
     expect(
       /** Rejects a text property referencing an undeclared font face. @returns Invalid document. */ () =>
         importWriterXml(

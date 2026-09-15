@@ -416,9 +416,6 @@ function applyNamedParagraphStyles(
     if (definition === undefined) continue;
     if (definition.family !== "paragraph")
       throw new Error(`ODF Writer ${poolStyle.name} paragraph style is invalid.`);
-    const expectedNext = getWriterOdfStyleName(poolStyle.followId);
-    if (definition.nextStyleName !== undefined && definition.nextStyleName !== expectedNext)
-      throw new Error(`ODF ${poolStyle.name} has an invalid next style.`);
     const collection = document.GetTextFormatColl(poolStyle.id);
     collection.SetDerivedFrom(undefined);
     if (definition.displayName !== undefined) collection.SetFormatName(definition.displayName);
@@ -442,8 +439,15 @@ function applyNamedParagraphStyles(
         ? undefined
         : getWriterStyleIdFromOdfName(definition.parentStyleName);
     const parent = parentId === undefined ? undefined : document.GetTextFormatColl(parentId);
-    if (parent === collection || derivesFrom(parent, collection)) continue;
-    collection.SetDerivedFrom(parent);
+    if (parent !== collection && !derivesFrom(parent, collection))
+      collection.SetDerivedFrom(parent);
+    const followId =
+      definition.nextStyleName === undefined
+        ? undefined
+        : getWriterStyleIdFromOdfName(definition.nextStyleName);
+    collection.SetNextTextFormatColl(
+      followId === undefined ? collection : document.GetTextFormatColl(followId),
+    );
   }
 }
 
