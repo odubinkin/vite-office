@@ -6,7 +6,7 @@ import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext
 
 /** Shared reversible paragraph list-item transition. */
 abstract class SwUndoParagraphList extends SwUndo {
-  private readonly afterList: WriterParagraphList;
+  private afterList: WriterParagraphList;
   private readonly beforeList: WriterParagraphList;
 
   /** Creates one list transition. @param comment - Command label. @param paragraphId - Target node. @param beforeList - Original list items. @param afterList - New list items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
@@ -35,7 +35,9 @@ abstract class SwUndoParagraphList extends SwUndo {
 
   /** Reapplies paragraph numbering items. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphList(this.afterList);
+    const paragraph = GetUndoTextNode(context.GetDoc(), this.paragraph);
+    paragraph.SetParagraphList(this.afterList);
+    this.afterList = paragraph.CaptureParagraphListState();
   }
 }
 

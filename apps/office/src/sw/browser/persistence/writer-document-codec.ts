@@ -21,6 +21,7 @@ interface WriterNumberFormatRecord {
 
 /** Primitive persistence record for one document numbering rule. */
 interface WriterNumberRuleRecord {
+  readonly automatic: boolean;
   readonly formats: readonly WriterNumberFormatRecord[];
   readonly listId: string;
   readonly name: string;
@@ -47,7 +48,7 @@ interface WriterTextNodeRecord {
 /** Current graph transport. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly numRules: readonly WriterNumberRuleRecord[];
-  readonly swModelVersion: 7;
+  readonly swModelVersion: 8;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -59,6 +60,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
       /** Encodes one document rule. @param rule - Model rule. @returns Primitive rule record. */ (
         rule,
       ) => ({
+        automatic: rule.IsAutoRule(),
         formats: Array.from(
           { length: 10 },
           /** Encodes one rule level. @param _unused - Array placeholder. @param level - Numbering level. @returns Primitive level record. */ (
@@ -76,7 +78,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         name: rule.GetName(),
       }),
     ),
-    swModelVersion: 7,
+    swModelVersion: 8,
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -112,7 +114,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
 export function decodeWriterDocument(candidate: unknown): SwDoc {
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 7 ||
+    candidate.swModelVersion !== 8 ||
     !Array.isArray(candidate.numRules) ||
     !Array.isArray(candidate.textFormatCollections) ||
     !Array.isArray(candidate.textNodes)
@@ -144,6 +146,7 @@ export function decodeWriterDocument(candidate: unknown): SwDoc {
           ) => new SwNumFormat(format.kind, format.bulletChar),
         ),
         rule.listId,
+        rule.automatic,
       ),
     );
   for (const [index, nodeRecord] of record.textNodes.entries()) {
@@ -153,6 +156,7 @@ export function decodeWriterDocument(candidate: unknown): SwDoc {
     node.ChgFormatColl(document.GetTextFormatColl(nodeRecord.formatCollId));
     for (const item of nodeRecord.autoAttributes)
       node.SetAttr(document.GetAttrPool().CreateItem(item));
+    document.GetDocumentListsManager().RegisterListItem(node);
     node.ReplaceRange(0, 0, nodeRecord.runs);
   }
   if (document.paragraphs.length === 0)

@@ -532,9 +532,9 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       list: { kind: "numbered", level: 1 },
       style: "heading-1",
     });
-    expect(document.paragraphs[0]?.runs[1]).toMatchObject({
+    expect(document.paragraphs[0]?.runs[0]).toMatchObject({
       attributes: { bold: true },
-      text: "od",
+      text: "Body",
     });
     expect(shell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(5);
     expect(shell.Undo()).toBe(true);

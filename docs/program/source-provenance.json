@@ -16,6 +16,10 @@
       "rationale": "The local contentindex.ts module follows the SwContentIndex public type name while preserving the reviewed registry/update responsibility implemented by upstream index.cxx."
     },
     {
+      "localPath": "apps/office/src/sw/source/core/doc/default-font.ts",
+      "rationale": "The focused TypeScript module extracts Writer's lcl_SetDfltFont policy from DocumentStylePoolManager.cxx while keeping the browser device adapter outside domain core."
+    },
+    {
       "localPath": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
       "rationale": "The local fmtinfmt.ts filename follows the upstream public fmtinfmt.hxx identity while implementing the reviewed SwFormatINetFormat behavior from fmtatr2.cxx."
     },
@@ -1860,6 +1864,43 @@
       "evidence": {
         "local": [
           {
+            "marker": "getDefaultFont",
+            "path": "apps/office/src/sw/source/core/doc/default-font.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "lcl_SetDfltFont",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/default-font.ts",
+      "localSymbols": [
+        "WriterFontScript",
+        "WriterDefaultFontType",
+        "DefaultFontDevice",
+        "getDefaultFont",
+        "getWriterFontScript"
+      ],
+      "omittedResponsibilities": [
+        "Native font configuration and physical-device enumeration remain behind the injected output-device contract."
+      ],
+      "preservedResponsibilities": [
+        "Selects stable Western, CJK, and CTL Writer defaults by language and font role."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+      "upstreamSymbols": [
+        "lcl_SetDfltFont",
+        "OutputDevice::GetDefaultFont"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "WRITER_PARAGRAPH_STYLES",
             "path": "apps/office/src/sw/source/core/doc/fmtcol.ts"
           }
@@ -1914,16 +1955,18 @@
       "localSymbols": [
         "WRITER_PARAGRAPH_LIST_KINDS",
         "WRITER_MAX_LIST_LEVEL",
+        "SwList",
         "WriterParagraphListKind",
         "WriterParagraphList",
         "createDefaultWriterParagraphList",
-        "isWriterParagraphListKind"
+        "isWriterParagraphListKind",
+        "normalizeWriterParagraphList"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwList::SwList, std::move, uno::RuntimeException, SwList::~SwList and the bounded WRITER_PARAGRAPH_LIST_KINDS, WRITER_MAX_LIST_LEVEL, WriterParagraphListKind contract remain intentionally omitted."
+        "Upstream obligations outside SwList::SwList, std::move, uno::RuntimeException, SwList::~SwList and the bounded SwList and WriterParagraphList contracts remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Defines the browser projection and command-boundary normalization for Writer list state at LibreOffice's `sw/source/core/doc/list.cxx` ownership boundary."
+        "Ports the bounded document-owned SwList registration, invalidation, and counter-tree behavior while retaining browser command-boundary normalization at LibreOffice's `sw/source/core/doc/list.cxx` ownership boundary."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/list.cxx",
@@ -1939,7 +1982,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "DEFAULT_BULLET_RULE_NAME",
+            "marker": "SwNumFormat",
             "path": "apps/office/src/sw/source/core/doc/number.ts"
           }
         ],
@@ -1952,13 +1995,11 @@
       },
       "localPath": "apps/office/src/sw/source/core/doc/number.ts",
       "localSymbols": [
-        "DEFAULT_BULLET_RULE_NAME",
-        "DEFAULT_NUMBERING_RULE_NAME",
         "SwNumFormat",
         "SwNumRule"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwNumFormat, SwNumRule, o3tl::toTwips, SwNumRule::GetOutlineRuleName and the bounded DEFAULT_BULLET_RULE_NAME, DEFAULT_NUMBERING_RULE_NAME, SwNumFormatSnapshot contract remain intentionally omitted."
+        "Upstream obligations outside SwNumFormat, SwNumRule, o3tl::toTwips, SwNumRule::GetOutlineRuleName and the bounded numbering contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
         "Calculates browser-visible Writer list markers at the `sw/source/core/doc/number.cxx` ownership boundary without changing editable paragraph text."
@@ -1970,6 +2011,39 @@
         "SwNumRule",
         "o3tl::toTwips",
         "SwNumRule::GetOutlineRuleName"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwNodeNum",
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwNodeNum",
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "localSymbols": [
+        "SwNodeNum"
+      ],
+      "omittedResponsibilities": [
+        "Redline-specific parallel trees and layout notification remain outside the supported browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Stores a list item's level and validated counter under document-list ownership."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "upstreamSymbols": [
+        "SwNodeNum::SwNodeNum",
+        "SwNodeNum::GetStartValue"
       ]
     },
     {

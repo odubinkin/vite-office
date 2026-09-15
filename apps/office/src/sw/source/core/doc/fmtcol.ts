@@ -10,6 +10,12 @@ import {
   type WriterParagraphStyleDefinition,
   type WriterParagraphStyleGroup,
 } from "../../../inc/poolfmt";
+import {
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_WEIGHT,
+} from "../../../inc/hintids";
+import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 
 /** Programmatic paragraph-style identities currently exposed by the browser UI. */
 export const WRITER_PARAGRAPH_STYLES: readonly string[] = WRITER_PARAGRAPH_STYLE_POOL.map(
@@ -32,6 +38,7 @@ export class SwFormatColl extends SwFormat {
 /** Identity-bearing Writer paragraph style with follow-style linkage. */
 export class SwTextFormatColl extends SwFormatColl {
   private nextTextFormatColl: SwTextFormatColl;
+  private assignedOutlineLevel: number | undefined;
 
   /** Creates a paragraph style. @param pool - Owning Writer pool. @param id - Programmatic identity. @param name - UI name. @param parent - Optional parent style. @param poolId - Built-in pool ID. @param group - Built-in group. @returns Nothing. */
   public constructor(
@@ -55,6 +62,18 @@ export class SwTextFormatColl extends SwFormatColl {
   public GetNextTextFormatColl(): SwTextFormatColl {
     return this.nextTextFormatColl;
   }
+
+  /** Assigns this collection to Writer's outline rule. @param level - Zero-based outline level. @returns Nothing. */
+  public AssignToListLevelOfOutlineStyle(level: number): void {
+    if (!Number.isInteger(level) || level < 0 || level > 9)
+      throw new Error("Writer outline level is outside 0-9.");
+    this.assignedOutlineLevel = level;
+  }
+
+  /** Returns the assigned outline level. @returns Zero-based level when assigned. */
+  public GetAssignedOutlineStyleLevel(): number | undefined {
+    return this.assignedOutlineLevel;
+  }
 }
 
 /** Checks one runtime paragraph-style identity. @param value - Unknown value. @returns True for a supported style ID. */
@@ -68,7 +87,7 @@ export function createWriterTextFormatColl(
   definition: WriterParagraphStyleDefinition,
   parent?: SwTextFormatColl,
 ): SwTextFormatColl {
-  return new SwTextFormatColl(
+  const collection = new SwTextFormatColl(
     pool,
     definition.id,
     definition.name === "Standard" ? "Default Paragraph Style" : definition.name,
@@ -76,4 +95,12 @@ export function createWriterTextFormatColl(
     definition.poolId,
     definition.group,
   );
+  const heading = /^heading-(10|[1-9])$/.exec(definition.id);
+  if (heading !== null) {
+    const level = Number(heading[1]) - 1;
+    collection.AssignToListLevelOfOutlineStyle(level);
+    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+      collection.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, which));
+  }
+  return collection;
 }

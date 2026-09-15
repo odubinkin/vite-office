@@ -295,7 +295,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         level: 0,
         listId: "list1",
         ruleName: "Numbering 1",
-        styleId: "Numbering 1",
         text: "alpha",
       },
       {
@@ -303,17 +302,15 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         level: 0,
         listId: "list1",
         ruleName: "Numbering 1",
-        styleId: "Numbering 1",
         text: "beta",
       },
-      { kind: "bullet", level: 1, listId: "list1", ruleName: "L2", styleId: "L2", text: "nested" },
+      { kind: "bullet", level: 1, listId: "list1", ruleName: "L2", text: "nested" },
       { kind: "none", level: 0, listId: "", ruleName: "", text: "gap" },
       {
         kind: "numbered",
         level: 0,
         listId: "list1",
         ruleName: "Numbering 1",
-        styleId: "Numbering 1",
         text: "gamma",
       },
     ]);

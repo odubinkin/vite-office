@@ -7,6 +7,7 @@ import {
   isWriterParagraphListKind,
   normalizeWriterParagraphList,
 } from "./list";
+import { SwList } from "./list";
 
 describe("Writer list state" /** Groups serializable list-state tests. @returns Nothing; Vitest registers enclosed cases. */, function defineWriterListTests(): void {
   it("creates and recognizes the bounded default Writer list kinds" /** Verifies the executable list enum accepts only current commands. @returns Nothing; assertions cover valid and invalid runtime values. */, function createsAndRecognizesKinds(): void {
@@ -38,5 +39,29 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
       kind: "bullet",
       level: 9,
     });
+  });
+
+  it("owns, invalidates, validates, and removes bounded SwNodeNum items", /** Verifies the supported SwList lifecycle. @returns Nothing. */ () => {
+    const list = new SwList("list-a", "Numbering 1");
+    expect(list.GetListId()).toBe("list-a");
+    expect(list.GetDefaultListStyleName()).toBe("Numbering 1");
+    expect(list.HasNodes()).toBe(false);
+    list.SetDefaultListStyleName("Numbering 2");
+    expect(list.GetDefaultListStyleName()).toBe("Numbering 2");
+    expect(
+      /** Inserts an invalid level. @returns Nothing. */ () => list.InsertListItem("bad", 10),
+    ).toThrow("outside 0-9");
+    list.InsertListItem("first", 0);
+    list.InsertListItem("nested", 1);
+    list.ValidateListTree(["missing", "first", "nested"]);
+    list.ValidateListTree(["first", "nested"]);
+    expect(list.GetListItemNumber("first")).toBe(1);
+    expect(list.GetListItemNumber("nested")).toBe(1);
+    expect(list.HasNodes()).toBe(true);
+    list.InvalidateListTree();
+    list.RemoveListItem("nested");
+    list.RemoveListItem("missing");
+    list.ValidateListTree(["first"]);
+    expect(list.GetListItemNumber("nested")).toBeUndefined();
   });
 });

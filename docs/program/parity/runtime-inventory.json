@@ -1559,6 +1559,38 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112",
+        "CAP-0127"
+      ],
+      "semantic": {
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "parity",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts#SwNodeNum",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx#SwNodeNum::SwNodeNum"
+        ],
+        "justification": "Ports the supported counter value and level node owned by Writer's document list tree.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwNodeNum"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+        "upstreamSymbols": [
+          "SwNodeNum::SwNodeNum",
+          "SwNodeNum::GetStartValue"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/attr/format.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -1851,6 +1883,41 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/doc/default-font.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "parity",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/default-font.ts#getDefaultFont",
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx#lcl_SetDfltFont"
+        ],
+        "justification": "Ports the supported Writer script/language default-font decision and keeps output-device resolution behind an injected contract.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterFontScript",
+          "WriterDefaultFontType",
+          "DefaultFontDevice",
+          "getDefaultFont",
+          "getWriterFontScript"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+        "upstreamSymbols": [
+          "lcl_SetDfltFont",
+          "OutputDevice::GetDefaultFont"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/doc/doc.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -1946,10 +2013,12 @@
         "localSymbols": [
           "WRITER_PARAGRAPH_LIST_KINDS",
           "WRITER_MAX_LIST_LEVEL",
+          "SwList",
           "WriterParagraphListKind",
           "WriterParagraphList",
           "createDefaultWriterParagraphList",
-          "isWriterParagraphListKind"
+          "isWriterParagraphListKind",
+          "normalizeWriterParagraphList"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/doc/list.cxx",
@@ -1977,14 +2046,12 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/core/doc/number.ts#DEFAULT_BULLET_RULE_NAME",
+          "apps/office/src/sw/source/core/doc/number.ts#SwNumFormat",
           "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumFormat"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/number.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
         "knownViolations": [],
         "localSymbols": [
-          "DEFAULT_BULLET_RULE_NAME",
-          "DEFAULT_NUMBERING_RULE_NAME",
           "SwNumFormat",
           "SwNumRule"
         ],

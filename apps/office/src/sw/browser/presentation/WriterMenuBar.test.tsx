@@ -232,7 +232,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const clipboardItem = clipboardItems[0] as WriterClipboardItemFixture;
       expect(await clipboardItem.items["text/plain"]?.text()).toBe("Formatted Writer body");
       expect(await clipboardItem.items["text/html"]?.text()).toBe(
-        '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><span style="font-family: &quot;Noto Serif&quot;">Formatted Writer body</span></p>',
+        '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><strong><span style="font-family: &quot;Noto Serif&quot;">Formatted Writer body</span></strong></p>',
       );
       expect(await clipboardItem.items["text/plain"]?.text()).not.toContain("Paragraph style:");
     } finally {
@@ -394,7 +394,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(setData).toHaveBeenNthCalledWith(
       2,
       "text/html",
-      '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;">Keyboard copied heading</p>',
+      '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><strong>Keyboard copied heading</strong></p>',
     );
     expect(setData).not.toHaveBeenCalledWith(
       "text/plain",

@@ -32,10 +32,16 @@ function enterWriterParagraphText(paragraph: HTMLElement, text: string): void {
  * @returns Nothing; the browser selection is replaced with the requested collapsed range.
  */
 function placeWriterCaret(paragraph: HTMLElement, offset: number): void {
-  const textNode = paragraph.firstChild;
+  const walker = document.createTreeWalker(paragraph, NodeFilter.SHOW_TEXT);
+  let textNode = walker.nextNode();
+  let remaining = offset;
+  while (textNode !== null && remaining > (textNode.textContent?.length ?? 0)) {
+    remaining -= textNode.textContent?.length ?? 0;
+    textNode = walker.nextNode();
+  }
   const range = document.createRange();
   if (textNode === null) range.setStart(paragraph, 0);
-  else range.setStart(textNode, offset);
+  else range.setStart(textNode, remaining);
   range.collapse(true);
   const selection = window.getSelection();
   if (selection === null) throw new Error("Browser selection must be available in Writer tests.");

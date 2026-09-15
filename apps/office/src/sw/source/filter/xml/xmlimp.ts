@@ -227,6 +227,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
           (kind, level) => new SwNumFormat(kind, rule.bulletChars?.[level]),
         ),
         rule.name,
+        this.expectedRoot === XMLToken.OFFICE_DOCUMENT_CONTENT,
       ),
     );
   }
@@ -262,6 +263,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
       node.SetNumRule(list.ruleName);
       node.SetListId(list.listId);
       node.SetAttrListLevel(list.level);
+      this.document.GetDocumentListsManager().RegisterListItem(node);
     }
     if (properties !== undefined)
       putCharacterProperties(

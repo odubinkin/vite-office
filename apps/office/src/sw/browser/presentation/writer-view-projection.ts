@@ -18,6 +18,7 @@ export interface WriterParagraphProjection {
   readonly id: string;
   readonly list: WriterParagraphList;
   readonly listId: string;
+  readonly listMarker?: string;
   readonly numRuleName: string;
   readonly runs: readonly WriterTextRun[];
   readonly style: WriterParagraphStyle;
@@ -57,12 +58,15 @@ export class WriterViewProjection {
           node.list.kind === "bullet"
             ? node.GetNumRule()?.GetNumFormat(node.list.level).GetBulletChar()
             : undefined;
+        const number = node.list.kind === "numbered" ? node.GetListItemNumber() : undefined;
+        const listMarker = bulletChar ?? (number === undefined ? undefined : `${number}.`);
         return Object.freeze({
           alignment: node.alignment,
           ...(bulletChar === undefined ? {} : { bulletChar }),
           id: this.GetNodeId(node),
           list: Object.freeze({ ...node.list }),
           listId: node.GetListId(),
+          ...(listMarker === undefined ? {} : { listMarker }),
           numRuleName: node.GetNumRuleName(),
           runs: Object.freeze(
             node.runs.map(

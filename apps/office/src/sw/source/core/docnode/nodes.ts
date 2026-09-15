@@ -133,6 +133,7 @@ export class SwNodes {
     if (this.findTextNode(node.id) !== undefined)
       throw new Error(`Duplicate paragraph: ${node.id}`);
     this.nodeArray.splice(source.GetIndex() + 1, 0, node);
+    this.document.GetDocumentListsManager().RegisterListItem(node);
     this.document.NotifyModelChange({
       index: node.GetIndex(),
       kind: "node-inserted",
@@ -151,6 +152,7 @@ export class SwNodes {
     if (next !== undefined) node.CollapseContentIndicesTo(next, 0);
     else node.CollapseContentIndicesTo(previous as SwTextNode, (previous as SwTextNode).Len());
     const nodeIndex = node.GetIndex();
+    this.document.GetDocumentListsManager().UnregisterListItem(node.id, node.GetListId());
     this.nodeArray.splice(nodeIndex, 1);
     this.document.NotifyModelChange({ index: nodeIndex, kind: "node-removed" });
   }
@@ -164,7 +166,9 @@ export class SwNodes {
     if (duplicate !== undefined && duplicate !== node)
       throw new Error(`Duplicate paragraph: ${replacement.id}`);
     node.MoveAllContentIndicesTo(replacement);
+    this.document.GetDocumentListsManager().UnregisterListItem(node.id, node.GetListId());
     this.nodeArray[index] = replacement;
+    this.document.GetDocumentListsManager().RegisterListItem(replacement);
     this.document.NotifyModelChange({ index, kind: "node-removed" });
     this.document.NotifyModelChange({ index, kind: "node-inserted" });
   }
@@ -182,6 +186,7 @@ export class SwNodes {
     const otherIndex = other.GetIndex();
     this.nodeArray[currentIndex] = other;
     this.nodeArray[otherIndex] = node;
+    this.document.GetDocumentListsManager().InvalidateAllLists();
     this.document.NotifyModelChange({
       index: currentIndex,
       kind: "node-inserted",
@@ -191,11 +196,15 @@ export class SwNodes {
 
   /** Copies body text nodes from another array into this array's content section. @param source - Source node array. @returns Nothing. */
   public copyContentFrom(source: SwNodes): void {
+    for (const rule of source.GetDoc().GetNumRuleTable())
+      if (this.document.FindNumRulePtr(rule.GetName()) === undefined)
+        this.document.AddNumRule(rule);
     source.getTextNodes().forEach(
       /** Clones one source text node before the content end sentinel. @param node - Source body node. @returns Nothing. */
       (node): void => {
         const clone = node.CloneTo(this);
         this.nodeArray.splice(this.endOfContent.GetIndex(), 0, clone);
+        this.document.GetDocumentListsManager().RegisterListItem(clone);
       },
     );
   }

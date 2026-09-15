@@ -37,6 +37,12 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       expect(collection.GetNextTextFormatColl().id).toBe(style.followId);
     }
     expect(document.GetTextFormatColls()).toHaveLength(126);
+    expect(document.GetTextFormatColl("heading-1").GetAssignedOutlineStyleLevel()).toBe(0);
+    expect(document.GetTextFormatColl("heading-10").GetAssignedOutlineStyleLevel()).toBe(9);
+    expect(
+      /** Assigns an invalid outline level. @returns Nothing. */ () =>
+        document.GetTextFormatColl("heading-1").AssignToListLevelOfOutlineStyle(10),
+    ).toThrow("outside 0-9");
   });
 
   it("uses LibreOffice XML style-name encoding for the complete pool", /** Verifies SvXMLUnitConverter-compatible names and reverse lookup. @returns Nothing. */ () => {

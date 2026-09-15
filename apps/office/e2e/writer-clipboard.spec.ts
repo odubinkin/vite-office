@@ -44,7 +44,7 @@ test("copies visible formatted Writer content through the native browser copy ev
   expect(clipboardPayload.plainText).toBe("Copied Writer heading");
   expect(clipboardPayload.plainText).not.toContain("Paragraph style:");
   expect(clipboardPayload.html).toBe(
-    '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;">Copied Writer heading</p>',
+    '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><strong>Copied Writer heading</strong></p>',
   );
 });
 

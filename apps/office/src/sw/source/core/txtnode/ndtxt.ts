@@ -17,11 +17,7 @@ import {
   type WriterParagraphList,
 } from "../doc/list";
 import { type SwTextFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
-import {
-  DEFAULT_BULLET_RULE_NAME,
-  DEFAULT_NUMBERING_RULE_NAME,
-  type SwNumRule,
-} from "../doc/number";
+import { type SwNumRule } from "../doc/number";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwContentIndexUpdateMode } from "../bastyp/contentindex";
@@ -537,9 +533,7 @@ export class SwTextNode extends SwContentNode {
     const rule = this.GetNumRule();
     if (rule === undefined) return createDefaultWriterParagraphList();
     const level = this.GetAttrListLevel();
-    const builtIn =
-      ruleName === DEFAULT_BULLET_RULE_NAME || ruleName === DEFAULT_NUMBERING_RULE_NAME;
-    return builtIn
+    return rule.IsAutoRule()
       ? { kind: rule.GetNumFormat(level).GetKind(), level }
       : { kind: rule.GetNumFormat(level).GetKind(), level, styleId: ruleName };
   }
@@ -605,6 +599,12 @@ export class SwTextNode extends SwContentNode {
 
   /** Sets the bounded numbering/list items. @param list - New list items. @returns Nothing. */
   public SetParagraphList(list: WriterParagraphList): void {
+    const previousListId = this.GetListId();
+    if (previousListId.length > 0)
+      this.GetDoc()
+        .GetDocumentListsManager()
+        .GetListByName(previousListId)
+        ?.RemoveListItem(this.id);
     const normalized = normalizeWriterParagraphList(list);
     if (normalized.kind === "none") {
       this.SetNumRule("");
@@ -613,21 +613,70 @@ export class SwTextNode extends SwContentNode {
       this.SetAttrListLevel(normalized.level);
       return;
     }
-    let ruleName =
-      normalized.styleId ??
-      (normalized.kind === "bullet" ? DEFAULT_BULLET_RULE_NAME : DEFAULT_NUMBERING_RULE_NAME);
+    let ruleName = normalized.styleId ?? normalized.ruleName ?? "";
+    if (ruleName.length === 0) {
+      const index = this.GetDoc().paragraphs.indexOf(this);
+      const previous = index > 0 ? this.GetDoc().paragraphs[index - 1] : undefined;
+      const previousRule = previous?.GetNumRule();
+      ruleName =
+        previousRule?.IsAutoRule() === true && previous?.list.kind === normalized.kind
+          ? previousRule.GetName()
+          : this.GetDoc()
+              .GetDocumentListsManager()
+              .CreateAutomaticNumRule(normalized.kind)
+              .GetName();
+    }
     const namedRule = this.GetDoc().FindNumRulePtr(ruleName);
     if (
       normalized.styleId !== undefined &&
       namedRule !== undefined &&
       namedRule.GetNumFormat(normalized.level).GetKind() !== normalized.kind
     )
-      ruleName =
-        normalized.kind === "bullet" ? DEFAULT_BULLET_RULE_NAME : DEFAULT_NUMBERING_RULE_NAME;
+      ruleName = this.GetDoc()
+        .GetDocumentListsManager()
+        .CreateAutomaticNumRule(normalized.kind)
+        .GetName();
     const rule = this.GetDoc().EnsureNumRule(ruleName, normalized.kind, normalized.level);
     this.SetNumRule(rule.GetName());
-    this.SetListId(rule.GetDefaultListId());
+    const documentLists = this.GetDoc().GetDocumentListsManager();
+    const continuedListId =
+      normalized.listId ??
+      (this.GetDoc().paragraphs[this.GetDoc().paragraphs.indexOf(this) - 1]?.GetNumRuleName() ===
+      rule.GetName()
+        ? this.GetDoc().paragraphs[this.GetDoc().paragraphs.indexOf(this) - 1]?.GetListId()
+        : undefined);
+    const documentList =
+      continuedListId === undefined
+        ? documentLists.GetListForListStyle(rule.GetName())
+        : documentLists.CreateList(rule.GetName(), continuedListId);
+    this.SetListId(documentList.GetListId());
     this.SetAttrListLevel(normalized.level);
+    documentList.InsertListItem(this.id, normalized.level);
+  }
+
+  /** Captures list items including internal automatic identities for exact undo/redo. @returns Complete list state. */
+  public CaptureParagraphListState(): WriterParagraphList {
+    const visible = this.list;
+    const rule = this.GetNumRule();
+    return rule?.IsAutoRule() === true
+      ? { ...visible, listId: this.GetListId(), ruleName: rule.GetName() }
+      : visible;
+  }
+
+  /** Returns the document-owned list counter after validation. @returns One-based value for numbered list items. */
+  public GetListItemNumber(): number | undefined {
+    const listId = this.GetListId();
+    if (listId.length === 0) return undefined;
+    const list = this.GetDoc().GetDocumentListsManager().GetListByName(listId);
+    if (list === undefined) return undefined;
+    list.ValidateListTree(
+      this.GetDoc().paragraphs.map(
+        /** Projects one canonical identity for tree ordering. @param node - Body node. @returns Node id. */ (
+          node,
+        ) => node.id,
+      ),
+    );
+    return list.GetListItemNumber(this.id);
   }
 
   /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @param hyperlink - Optional inherited hyperlink. @returns Inserted text. */

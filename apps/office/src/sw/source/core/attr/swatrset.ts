@@ -33,15 +33,21 @@ import {
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem } from "../para/paratr";
+import { getDefaultFont } from "../doc/default-font";
 
 /** Writer-owned item pool with defaults for the currently implemented paragraph WhichIds. */
 export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    const defaults = new Map([
+      [RES_CHRATR_FONT, getDefaultFont(undefined, "text", "en-US", "western")],
+      [RES_CHRATR_CJK_FONT, getDefaultFont(undefined, "text", "zh-CN", "cjk")],
+      [RES_CHRATR_CTL_FONT, getDefaultFont(undefined, "text", "ar-SA", "ctl")],
+    ]);
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       this.RegisterDefaultItem(
-        new SvxFontItem("Liberation Serif", which),
+        new SvxFontItem(defaults.get(which) as string, which),
         /** Restores a font item. @param value - Persisted family. @returns Font item. */ (value) =>
           new SvxFontItem(String(value), which),
       );

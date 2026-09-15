@@ -872,8 +872,9 @@ export class SwWrtShell extends SwModify {
     const paragraph = this.GetActiveParagraph();
     if (paragraph.list.kind === kind) return false;
     const cursor = this.CaptureCursorState();
+    const before = paragraph.CaptureParagraphListState();
     return this.ApplyAction(
-      new SwUndoInsNum(paragraph, paragraph.list, { ...paragraph.list, kind }, cursor, cursor),
+      new SwUndoInsNum(paragraph, before, { ...paragraph.list, kind }, cursor, cursor),
     );
   }
 
@@ -886,8 +887,9 @@ export class SwWrtShell extends SwModify {
     const level = paragraph.list.level + (command === "demote" ? 1 : -1);
     if (level < 0 || level > WRITER_MAX_LIST_LEVEL) return false;
     const cursor = this.CaptureCursorState();
+    const before = paragraph.CaptureParagraphListState();
     return this.ApplyAction(
-      new SwUndoNumLevel(paragraph, paragraph.list, { ...paragraph.list, level }, cursor, cursor),
+      new SwUndoNumLevel(paragraph, before, { ...before, level }, cursor, cursor),
     );
   }
 
@@ -897,7 +899,9 @@ export class SwWrtShell extends SwModify {
     const nextList = { kind: paragraph.listKind, level: paragraph.listLevel } as const;
     if (target.list.kind === nextList.kind && target.list.level === nextList.level) return false;
     const cursor = this.CaptureCursorState();
-    return this.ApplyAction(new SwUndoInsNum(target, target.list, nextList, cursor, cursor));
+    return this.ApplyAction(
+      new SwUndoInsNum(target, target.CaptureParagraphListState(), nextList, cursor, cursor),
+    );
   }
 
   /** Restores the preceding Writer history state. @returns Whether navigation occurred. */

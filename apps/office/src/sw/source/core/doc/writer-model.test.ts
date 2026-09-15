@@ -617,7 +617,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(restored.text).toBe("aYZd");
     expect(createWriterDocument().paragraphs[0]?.CloneTo(cloneDocument.nodes).text).toBe("");
     node.SetText("plain");
-    expect(node.runs).toEqual([{ attributes: plain, text: "plain" }]);
+    expect(node.runs).toEqual([{ attributes: bold, text: "plain" }]);
     node.SetText("pl");
     node.SetText("pl");
     node.SetText("xy");

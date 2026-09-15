@@ -314,11 +314,16 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(node.list).toEqual({ kind: "none", level: 0 });
     node.SetParagraphList({ kind: "numbered", level: 0, styleId: "Custom" });
     node.SetParagraphList({ kind: "bullet", level: 0, styleId: "Custom" });
-    expect(node.GetNumRuleName()).toBe("__WriterDefaultBullet");
+    const automaticRuleName = node.GetNumRuleName();
+    expect(automaticRuleName).toBe("List 2");
+    expect(writer.FindNumRulePtr(automaticRuleName)?.IsAutoRule()).toBe(true);
     node.SetListId("");
-    expect(node.GetListId()).toBe("__WriterDefaultBullet");
+    expect(node.GetListId()).toBe("list1");
     node.SetNumRule("");
     expect(node.GetListId()).toBe("");
+    expect(node.GetListItemNumber()).toBeUndefined();
+    node.SetListId("orphan");
+    expect(node.GetListItemNumber()).toBeUndefined();
     for (const level of [-1, 0.5, 10])
       expect(
         /** Assigns an invalid list level. @returns Nothing. */ () => node.SetAttrListLevel(level),
@@ -368,7 +373,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 7 });
+    expect(snapshot).toMatchObject({ swModelVersion: 8 });
     expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", runs: [] });
     expect(snapshot.textNodes[0]).not.toHaveProperty("alignment");
     const restored = normalizeWriterParagraphFormatting(snapshot);
@@ -381,6 +386,10 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const copied = new SwDoc();
     copied.nodes.copyContentFrom(restored.nodes);
     expect(copied.paragraphs[1]?.runs).toEqual(restored.paragraphs[0]?.runs);
+    const copiedWithRule = new SwDoc();
+    copiedWithRule.AddNumRule(restored.GetNumRuleTable()[0] as SwNumRule);
+    copiedWithRule.nodes.copyContentFrom(restored.nodes);
+    expect(copiedWithRule.paragraphs[1]?.list).toEqual(restored.paragraphs[0]?.list);
   });
 
   it("rejects obsolete snapshot schemas instead of preserving pre-canonical models" /** Keeps the core contract limited to the current LO-shaped schema. @returns Nothing. */, function rejectsObsoleteSchemas(): void {

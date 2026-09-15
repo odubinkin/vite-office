@@ -34,7 +34,6 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
     mark: { offset: 0, paragraphId: "fixture-paragraph" },
     point: { offset: "BrowserODTContent".length, paragraphId: "fixture-paragraph" },
   });
-  shell.ToggleCharacterFormat("bold");
   shell.SetParagraphListKind("numbered");
   shell.ChangeParagraphListLevel("demote");
   const sourceBytes = writeOdtDocument(source, docShell.GetDocumentState());

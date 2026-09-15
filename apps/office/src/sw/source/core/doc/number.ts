@@ -5,12 +5,6 @@
 import type { WriterParagraphList, WriterParagraphListKind } from "./list";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 
-/** Internal rule name used by the bounded default-bullet command. */
-export const DEFAULT_BULLET_RULE_NAME = "__WriterDefaultBullet";
-
-/** Internal rule name used by the bounded default-numbering command. */
-export const DEFAULT_NUMBERING_RULE_NAME = "__WriterDefaultNumbering";
-
 /** Numbering format owned by one level of a SwNumRule. */
 export class SwNumFormat {
   /** Creates one supported level format. @param kind - Bullet or decimal numbering family. @param bulletChar - Character-special marker. @returns Nothing. */
@@ -42,11 +36,12 @@ export class SwNumFormat {
 
 /** Document-owned numbering rule referenced by paragraph item sets. */
 export class SwNumRule {
-  /** Creates one bounded numbering rule. @param name - Document-unique rule name. @param kind - Bullet or numbering marker family. @param defaultListId - Default list identity. @returns Nothing. */
+  /** Creates one bounded numbering rule. @param name - Document-unique rule name. @param kind - Bullet or numbering marker family. @param defaultListId - Default list identity. @param automatic - Whether Writer may reuse the rule. @returns Nothing. */
   public constructor(
     private readonly name: string,
     format: Exclude<WriterParagraphListKind, "none"> | readonly SwNumFormat[],
     private readonly defaultListId = name,
+    private readonly automatic = false,
   ) {
     if (name.trim().length === 0 || defaultListId.trim().length === 0)
       throw new Error("SwNumRule name and list id must not be blank.");
@@ -87,9 +82,14 @@ export class SwNumRule {
     return this.defaultListId;
   }
 
+  /** Reports whether Writer may reuse this rule for NumOrBulletOn. @returns Automatic-rule flag. */
+  public IsAutoRule(): boolean {
+    return this.automatic;
+  }
+
   /** Creates an independent numbering rule. @returns Cloned rule. */
   public clone(): SwNumRule {
-    return new SwNumRule(this.name, this.formats, this.defaultListId);
+    return new SwNumRule(this.name, this.formats, this.defaultListId, this.automatic);
   }
 }
 
@@ -120,8 +120,12 @@ export interface WriterNumberingParagraph {
   readonly numRuleName?: string;
   /** Optional canonical numbering rule used to resolve per-level bullet characters. */
   readonly GetNumRule?: () => SwNumRule | undefined;
+  /** Canonical list-tree counter supplied by SwTextNode. */
+  readonly GetListItemNumber?: () => number | undefined;
   /** Primitive bullet marker supplied by a presentation projection. */
   readonly bulletChar?: string;
+  /** Primitive marker calculated before crossing the presentation boundary. */
+  readonly listMarker?: string;
 }
 
 /**
@@ -143,36 +147,14 @@ export function getWriterParagraphListMarker(
   );
   const paragraph = paragraphs[paragraphIndex];
   if (paragraph === undefined || paragraph.list.kind === "none") return undefined;
+  if (paragraph.listMarker !== undefined) return paragraph.listMarker;
   if (paragraph.list.kind === "bullet")
     return (
       paragraph.bulletChar ??
       paragraph.GetNumRule?.()?.GetNumFormat(paragraph.list.level).GetBulletChar() ??
       "•"
     );
-  const identity = getNumberingIdentity(paragraph);
-  let itemNumber = 1;
-  for (let index = paragraphIndex - 1; index >= 0; index -= 1) {
-    const previousParagraph = paragraphs[index] as WriterNumberingParagraph;
-    if (previousParagraph.list.kind === "none") break;
-    if (getNumberingIdentity(previousParagraph) !== identity) break;
-    if (previousParagraph.list.level < paragraph.list.level) break;
-    if (
-      previousParagraph.list.level === paragraph.list.level &&
-      previousParagraph.list.kind === "numbered"
-    )
-      itemNumber += 1;
-  }
-  return `${itemNumber}.`;
-}
-
-/** Returns the canonical list/rule pair when available, or a stable browser-projection fallback. @param paragraph - List-capable paragraph. @returns Stable numbering identity. */
-function getNumberingIdentity(paragraph: WriterNumberingParagraph): string {
-  const listId = paragraph.listId ?? paragraph.GetListId?.() ?? "";
-  if (listId.length > 0) return listId;
-  const ruleName =
-    paragraph.numRuleName ??
-    paragraph.GetNumRuleName?.() ??
-    paragraph.list.styleId ??
-    paragraph.list.kind;
-  return `\u0000${ruleName}`;
+  const documentNumber = paragraph.GetListItemNumber?.();
+  if (documentNumber !== undefined) return `${documentNumber}.`;
+  return undefined;
 }
