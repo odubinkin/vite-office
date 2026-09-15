@@ -63,13 +63,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.bold",
       "kind": "command-url",
       "local": {
-        "marker": "bold: \"writer.format.bold\"",
+        "marker": "bold: \".uno:Bold\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.format.bold"
+        "value": ".uno:Bold"
       },
       "upstream": {
         "marker": "menu:id=\".uno:Bold\"",
@@ -78,13 +78,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.copy",
       "kind": "command-url",
       "local": {
-        "marker": "copy: \"writer.edit.copy\"",
+        "marker": "copy: \".uno:Copy\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.edit.copy"
+        "value": ".uno:Copy"
       },
       "upstream": {
         "marker": "menu:id=\".uno:Copy\"",
@@ -93,13 +93,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.cut",
       "kind": "command-url",
       "local": {
-        "marker": "cut: \"writer.edit.cut\"",
+        "marker": "cut: \".uno:Cut\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.edit.cut"
+        "value": ".uno:Cut"
       },
       "upstream": {
         "marker": "menu:id=\".uno:Cut\"",
@@ -108,13 +108,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.italic",
       "kind": "command-url",
       "local": {
-        "marker": "italic: \"writer.format.italic\"",
+        "marker": "italic: \".uno:Italic\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.format.italic"
+        "value": ".uno:Italic"
       },
       "upstream": {
         "marker": "menu:id=\".uno:Italic\"",
@@ -123,13 +123,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.orderedList",
       "kind": "command-url",
       "local": {
-        "marker": "orderedList: \"writer.list.default-numbering\"",
+        "marker": "orderedList: \".uno:DefaultNumbering\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.list.default-numbering"
+        "value": ".uno:DefaultNumbering"
       },
       "upstream": {
         "marker": "menu:id=\".uno:DefaultNumbering\"",
@@ -138,13 +138,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.paste",
       "kind": "command-url",
       "local": {
-        "marker": "paste: \"writer.edit.paste\"",
+        "marker": "paste: \".uno:Paste\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.edit.paste"
+        "value": ".uno:Paste"
       },
       "upstream": {
         "marker": "menu:id=\".uno:Paste\"",
@@ -153,13 +153,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.redo",
       "kind": "command-url",
       "local": {
-        "marker": "redo: \"writer.redo\"",
+        "marker": "redo: \".uno:Redo\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.redo"
+        "value": ".uno:Redo"
       },
       "upstream": {
         "marker": "menu:id=\".uno:Redo\"",
@@ -168,13 +168,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.selectAll",
       "kind": "command-url",
       "local": {
-        "marker": "selectAll: \"writer.edit.select-all\"",
+        "marker": "selectAll: \".uno:SelectAll\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.edit.select-all"
+        "value": ".uno:SelectAll"
       },
       "upstream": {
         "marker": "menu:id=\".uno:SelectAll\"",
@@ -183,13 +183,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.underline",
       "kind": "command-url",
       "local": {
-        "marker": "underline: \"writer.format.underline\"",
+        "marker": "underline: \".uno:Underline\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.format.underline"
+        "value": ".uno:Underline"
       },
       "upstream": {
         "marker": "xlink:href=\".uno:Underline\"",
@@ -198,13 +198,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.undo",
       "kind": "command-url",
       "local": {
-        "marker": "undo: \"writer.undo\"",
+        "marker": "undo: \".uno:Undo\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.undo"
+        "value": ".uno:Undo"
       },
       "upstream": {
         "marker": "menu:id=\".uno:Undo\"",
@@ -213,13 +213,13 @@
       }
     },
     {
-      "divergenceClass": "P",
+      "divergenceClass": "none",
       "id": "writer.command-url.unorderedList",
       "kind": "command-url",
       "local": {
-        "marker": "unorderedList: \"writer.list.default-bullet\"",
+        "marker": "unorderedList: \".uno:DefaultBullet\"",
         "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-        "value": "writer.list.default-bullet"
+        "value": ".uno:DefaultBullet"
       },
       "upstream": {
         "marker": "menu:id=\".uno:DefaultBullet\"",

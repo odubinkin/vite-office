@@ -198,27 +198,27 @@ const enumEntries: readonly UpstreamInvariant[] = [
 );
 
 const commandUrls: readonly UpstreamInvariant[] = [
-  ["bold", "writer.format.bold", ".uno:Bold"],
-  ["copy", "writer.edit.copy", ".uno:Copy"],
-  ["cut", "writer.edit.cut", ".uno:Cut"],
-  ["italic", "writer.format.italic", ".uno:Italic"],
-  ["orderedList", "writer.list.default-numbering", ".uno:DefaultNumbering"],
-  ["paste", "writer.edit.paste", ".uno:Paste"],
-  ["redo", "writer.redo", ".uno:Redo"],
-  ["selectAll", "writer.edit.select-all", ".uno:SelectAll"],
+  ["bold", ".uno:Bold", ".uno:Bold"],
+  ["copy", ".uno:Copy", ".uno:Copy"],
+  ["cut", ".uno:Cut", ".uno:Cut"],
+  ["italic", ".uno:Italic", ".uno:Italic"],
+  ["orderedList", ".uno:DefaultNumbering", ".uno:DefaultNumbering"],
+  ["paste", ".uno:Paste", ".uno:Paste"],
+  ["redo", ".uno:Redo", ".uno:Redo"],
+  ["selectAll", ".uno:SelectAll", ".uno:SelectAll"],
   [
     "underline",
-    "writer.format.underline",
+    ".uno:Underline",
     ".uno:Underline",
     "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
   ],
-  ["undo", "writer.undo", ".uno:Undo"],
-  ["unorderedList", "writer.list.default-bullet", ".uno:DefaultBullet"],
+  ["undo", ".uno:Undo", ".uno:Undo"],
+  ["unorderedList", ".uno:DefaultBullet", ".uno:DefaultBullet"],
 ].map(
   /** Converts one known divergent command identity to an invariant. @param tuple - Local key/value and upstream URL. @returns Command invariant. */
   ([id, localValue, upstreamValue, upstreamPath]) =>
     entry({
-      divergenceClass: "P",
+      divergenceClass: "none",
       id: `writer.command-url.${id}`,
       kind: "command-url",
       local: {

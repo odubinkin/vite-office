@@ -1,10 +1,16 @@
 /** @fileoverview Verifies Writer placement resources independently from React rendering. */
 import { describe, expect, it } from "vitest";
 
-import { WRITER_COMMAND_IDS, writerMenuCommandIds, writerMenuPlacements } from "./menubar-commands";
+import {
+  WRITER_COMMAND_IDS,
+  getWriterParagraphStyleCommandId,
+  writerMenuCommandIds,
+  writerMenuPlacements,
+} from "./menubar-commands";
 import { writerNumObjectBarItems } from "../toolbar/numobjectbar";
 import { writerStandardBarItems } from "../toolbar/standardbar";
 import { writerTextObjectBarItems } from "../toolbar/textobjectbar";
+import { getWriterCommandResource } from "../writer-command-resources";
 
 describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @returns Nothing. */, function defineWriterUiResourceTests(): void {
   it("preserves supported pinned menu and toolbar ordering without React" /** Verifies menu and toolbar resource ordering. @returns Nothing. */, function validatesPlacementOrder(): void {
@@ -60,5 +66,19 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       { commandId: WRITER_COMMAND_IDS.demote, kind: "command" },
       { commandId: WRITER_COMMAND_IDS.promote, kind: "command" },
     ]);
+    expect(
+      /** Resolves a missing style. @returns Missing command URL. */ () =>
+        getWriterParagraphStyleCommandId("missing-style"),
+    ).toThrow("Unknown Writer paragraph style");
+    expect(
+      /** Resolves a missing command resource. @returns Missing resource. */ () =>
+        getWriterCommandResource(".uno:Missing"),
+    ).toThrow("Missing generated Writer command resource");
+    expect(
+      /** Resolves an unsupported parameterized style. @returns Missing resource. */ () =>
+        getWriterCommandResource(
+          ".uno:StyleApply?Style:string=Missing&FamilyName:string=ParagraphStyles",
+        ),
+    ).toThrow("Missing generated Writer command resource");
   });
 });

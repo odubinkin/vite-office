@@ -18,8 +18,9 @@ import { getWriterParagraphStyleCommandId } from "../../uiconfig/swriter/menubar
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerNumObjectBarItems } from "../../uiconfig/swriter/toolbar/numobjectbar";
 import { writerTextObjectBarItems } from "../../uiconfig/swriter/toolbar/textobjectbar";
+import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import type { WriterToolbarItemPlacement } from "../../uiconfig/swriter/ui-resource";
-import type { WriterCommandSurfaceProps } from "./command-source";
+import type { WriterCommandSurfaceProps } from "./command-surface";
 
 const icons = new Map<string, LucideIcon>([
   [WRITER_COMMAND_IDS.alignLeft, AlignLeft],
@@ -81,8 +82,7 @@ function renderToolbarItem(
         id,
       ) => commandSource.QueryState(id).checked === true,
     ) as string;
-    const selected = commandSource.QueryCommand(selectedCommandId)?.presentation
-      ?.selectionValue as string;
+    const selected = getWriterCommandResource(selectedCommandId).selectionValue as string;
     return (
       <label className="contents" key={item.label}>
         <span className="sr-only">{item.label}</span>
@@ -96,9 +96,7 @@ function renderToolbarItem(
               const id = item.options.find(
                 /** Finds the command descriptor matching the selected value. @param candidate - Candidate command identity. @returns Whether its selection value matches. */ (
                   candidate,
-                ) =>
-                  commandSource.QueryCommand(candidate)?.presentation?.selectionValue ===
-                  event.target.value,
+                ) => getWriterCommandResource(candidate).selectionValue === event.target.value,
               );
               /* v8 ignore next -- Native select values are constrained to rendered options. */
               if (id !== undefined) commandSource.Execute(id, resolveArguments(id));
@@ -106,7 +104,7 @@ function renderToolbarItem(
           }
           value={selected}
         >
-          {renderParagraphStyleOptions(commandSource)}
+          {renderParagraphStyleOptions()}
         </select>
       </label>
     );
@@ -115,6 +113,7 @@ function renderToolbarItem(
   /* v8 ignore next -- Resource/registry consistency is validated before presentation. */
   if (command === undefined) return null;
   const state = commandSource.QueryState(item.commandId);
+  const resource = getWriterCommandResource(item.commandId);
   const Icon = icons.get(item.commandId);
   const shortLabel =
     item.commandId === WRITER_COMMAND_IDS.bold
@@ -126,10 +125,8 @@ function renderToolbarItem(
           : undefined;
   return (
     <button
-      aria-label={command.label}
-      aria-pressed={
-        command.presentation?.semantics !== "action" ? state.checked === true : undefined
-      }
+      aria-label={resource.label}
+      aria-pressed={resource.semantics !== "action" ? state.checked === true : undefined}
       className={`grid size-8 place-items-center rounded-md border transition ${state.checked === true ? "border-indigo-700 bg-indigo-700 text-white" : "border-slate-300 bg-white text-slate-700 hover:border-indigo-400 hover:text-indigo-800"} ${item.commandId === WRITER_COMMAND_IDS.bold ? "font-black" : item.commandId === WRITER_COMMAND_IDS.italic ? "font-serif italic" : item.commandId === WRITER_COMMAND_IDS.underline ? "underline" : ""}`}
       disabled={!state.enabled}
       key={item.commandId}
@@ -137,7 +134,7 @@ function renderToolbarItem(
         /** Dispatches this toolbar command. @returns Command result discarded by React. */ () =>
           commandSource.Execute(item.commandId, resolveArguments(item.commandId))
       }
-      title={command.label}
+      title={resource.label}
       type="button"
     >
       {Icon === undefined ? (shortLabel as string) : <Icon aria-hidden="true" size={17} />}
@@ -146,9 +143,7 @@ function renderToolbarItem(
 }
 
 /** Renders upstream pool ranges with hierarchy. @param commandSource - Command lookup. @returns Options. */
-function renderParagraphStyleOptions(
-  commandSource: WriterCommandSurfaceProps["commandSource"],
-): React.ReactNode {
+function renderParagraphStyleOptions(): React.ReactNode {
   const labels = {
     text: "Text styles",
     lists: "List styles",
@@ -180,13 +175,10 @@ function renderParagraphStyleOptions(
               )?.parentId;
             }
             const id = getWriterParagraphStyleCommandId(style.id);
-            const command = commandSource.QueryCommand(id) as {
-              readonly label: string;
-              readonly presentation: { readonly selectionValue: string };
-            };
+            const resource = getWriterCommandResource(id);
             return (
-              <option key={id} value={command.presentation.selectionValue}>
-                {`${"\u00a0\u00a0".repeat(depth)}${command.label}`}
+              <option key={id} value={resource.selectionValue}>
+                {`${"\u00a0\u00a0".repeat(depth)}${resource.label}`}
               </option>
             );
           },

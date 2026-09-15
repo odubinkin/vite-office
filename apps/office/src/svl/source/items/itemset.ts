@@ -23,6 +23,7 @@ export type WhichRangesContainer = readonly WhichRange[];
 /** Stores only explicit item deltas and resolves inherited/default values on demand. */
 export class SfxItemSet {
   private readonly items = new Map<number, SfxPoolItem>();
+  private readonly itemStates = new Map<number, SfxItemState.INVALID | SfxItemState.DISABLED>();
   private parent: SfxItemSet | undefined;
 
   /** Creates an item set for one pool and bounded WhichId ranges. @param pool - Owning item pool. @param ranges - Accepted WhichId ranges. @param parent - Optional inherited item set. @returns Nothing. */
@@ -60,7 +61,7 @@ export class SfxItemSet {
 
   /** Returns the number of explicitly set items. @returns Direct item count. */
   public Count(): number {
-    return this.items.size;
+    return this.items.size + this.itemStates.size;
   }
 
   /** Returns explicit items in ascending WhichId order. @returns Direct items. */
@@ -76,6 +77,8 @@ export class SfxItemSet {
   /** Returns one item's direct, inherited, or default state. @param which - Queried WhichId. @param searchInParent - Whether inherited sets participate. @returns Item state. */
   public GetItemState(which: number, searchInParent = true): SfxItemState {
     if (this.items.has(which)) return SfxItemState.SET;
+    const explicitState = this.itemStates.get(which);
+    if (explicitState !== undefined) return explicitState;
     const localState = this.containsWhich(which) ? SfxItemState.DEFAULT : SfxItemState.UNKNOWN;
     if (searchInParent && this.parent !== undefined) {
       const parentState = this.parent.GetItemState(which, true);
@@ -88,6 +91,7 @@ export class SfxItemSet {
   public GetItemIfSet(which: number, searchInParent = true): SfxPoolItem | undefined {
     const local = this.items.get(which);
     if (local !== undefined) return local;
+    if (this.itemStates.has(which)) return undefined;
     return searchInParent ? this.parent?.GetItemIfSet(which, true) : undefined;
   }
 
@@ -102,6 +106,7 @@ export class SfxItemSet {
     const current = this.items.get(item.Which());
     if (current?.equals(item) === true) return undefined;
     const stored = item.Clone();
+    this.itemStates.delete(stored.Which());
     this.items.set(stored.Which(), stored);
     return stored;
   }
@@ -123,15 +128,31 @@ export class SfxItemSet {
     if (which === 0) {
       const count = this.items.size;
       this.items.clear();
-      return count;
+      const stateCount = this.itemStates.size;
+      this.itemStates.clear();
+      return count + stateCount;
     }
-    return this.items.delete(which) ? 1 : 0;
+    const removedItem = this.items.delete(which);
+    const removedState = this.itemStates.delete(which);
+    return removedItem || removedState ? 1 : 0;
+  }
+
+  /** Marks one accepted WhichId invalid, matching INVALID_POOL_ITEM state. @param which - Item identity. @returns Nothing. */
+  public InvalidateItem(which: number): void {
+    this.SetItemState(which, SfxItemState.INVALID);
+  }
+
+  /** Marks one accepted WhichId disabled, matching DISABLED_POOL_ITEM state. @param which - Item identity. @returns Nothing. */
+  public DisableItem(which: number): void {
+    this.SetItemState(which, SfxItemState.DISABLED);
   }
 
   /** Creates an independent item set, optionally without deltas or in another pool. @param includeItems - Whether direct deltas are copied. @param pool - Destination pool. @returns Cloned item set. */
   public Clone(includeItems = true, pool = this.pool): SfxItemSet {
     const clone = new SfxItemSet(pool, this.ranges, pool === this.pool ? this.parent : undefined);
     if (includeItems) clone.PutSet(this);
+    if (includeItems)
+      for (const [which, state] of this.itemStates) clone.SetItemState(which, state);
     return clone;
   }
 
@@ -140,7 +161,7 @@ export class SfxItemSet {
     return this.entries().map(
       /** Serializes one direct item. @param item - Explicit item delta. @returns Item snapshot. */
       function serializeItem(item): SfxPoolItemSnapshot {
-        return item.toSnapshot();
+        return { value: item.QueryValue(), which: item.Which() };
       },
     );
   }
@@ -168,6 +189,13 @@ export class SfxItemSet {
   /** Rejects unsupported WhichIds before mutation. @param which - Candidate identity. @returns Nothing. */
   private assertWhich(which: number): void {
     if (!this.containsWhich(which)) throw new Error(`SfxItemSet does not accept WhichId: ${which}`);
+  }
+
+  /** Stores an explicit non-value state. @param which - Item identity. @param state - Invalid or disabled. @returns Nothing. */
+  private SetItemState(which: number, state: SfxItemState.INVALID | SfxItemState.DISABLED): void {
+    this.assertWhich(which);
+    this.items.delete(which);
+    this.itemStates.set(which, state);
   }
 }
 

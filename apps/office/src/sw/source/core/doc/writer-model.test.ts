@@ -1,6 +1,7 @@
 /** @fileoverview Verifies the LibreOffice-shaped Writer node graph, model positions, selections, hints, and content-operation ownership. */
 
 import { describe, expect, it } from "vitest";
+import { encodeSfxPoolItem } from "../../../browser/persistence/item-codec";
 
 import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -355,7 +356,7 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     expect(item.Clone().equals(item)).toBe(true);
     expect(item.equals(new SfxInt16Item(RES_TXTATR_INETFMT, 1))).toBe(false);
     expect(item.equals(new SwFormatINetFormat({ url: "different" }))).toBe(false);
-    expect(restoreSwFormatINetFormat(item.toSnapshot()).equals(item)).toBe(true);
+    expect(restoreSwFormatINetFormat(encodeSfxPoolItem(item)).equals(item)).toBe(true);
     expect(
       throwing(
         /** Rejects an empty destination. @returns Invalid item. */ () =>
@@ -363,11 +364,10 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
       ),
     ).toThrow("must not be empty");
     for (const snapshot of [
-      { type: "SwFormatINetFormat", value: "{}", which: 52 },
-      { type: "wrong", value: "{}", which: RES_TXTATR_INETFMT },
-      { type: "SwFormatINetFormat", value: {}, which: RES_TXTATR_INETFMT },
-      { type: "SwFormatINetFormat", value: "{", which: RES_TXTATR_INETFMT },
-      { type: "SwFormatINetFormat", value: "{}", which: RES_TXTATR_INETFMT },
+      { value: "{}", which: 52 },
+      { value: {}, which: RES_TXTATR_INETFMT },
+      { value: "{", which: RES_TXTATR_INETFMT },
+      { value: "{}", which: RES_TXTATR_INETFMT },
     ])
       expect(
         throwing(
@@ -440,9 +440,8 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
       projectWriterCharacterAttributes(new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES)),
     ).toEqual(plain);
     for (const snapshot of [
-      { type: "SwFormatAutoFormat", value: [], which: 52 },
-      { type: "wrong", value: [], which: RES_TXTATR_AUTOFMT },
-      { type: "SwFormatAutoFormat", value: 1, which: RES_TXTATR_AUTOFMT },
+      { value: [], which: 52 },
+      { value: 1, which: RES_TXTATR_AUTOFMT },
     ])
       expect(
         throwing(

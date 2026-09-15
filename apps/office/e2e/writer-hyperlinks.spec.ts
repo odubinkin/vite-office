@@ -42,7 +42,7 @@ test("Writer creates, edits, removes, and round-trips hyperlinks", /** Verifies 
   );
 
   await page.getByRole("button", { name: "Edit" }).click();
-  await page.getByRole("menuitem", { name: "Edit Hyperlink…" }).click();
+  await page.getByRole("menuitem", { name: "Hyperlink…" }).click();
   await page.getByLabel("URL").fill("https://example.test/updated");
   await page.getByRole("button", { name: "Apply" }).click();
   await expect(editor.getByRole("link", { name: "Linked text" })).toHaveAttribute(
@@ -51,7 +51,7 @@ test("Writer creates, edits, removes, and round-trips hyperlinks", /** Verifies 
   );
 
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Save as ODT" }).click();
+  await page.getByRole("button", { name: "Save As" }).click();
   const download = await downloadPromise;
   const downloadPath = await download.path();
   if (downloadPath === null) throw new Error("Chromium did not expose the saved ODT path.");
@@ -71,7 +71,7 @@ test("Writer creates, edits, removes, and round-trips hyperlinks", /** Verifies 
   );
 
   const fileChooserPromise = page.waitForEvent("filechooser");
-  await page.getByRole("button", { name: "Open ODT" }).click();
+  await page.getByRole("button", { name: "Open" }).click();
   const fileChooser = await fileChooserPromise;
   await fileChooser.setFiles(downloadPath);
   await expect(editor.getByRole("link", { name: "Linked text" })).toHaveAttribute(

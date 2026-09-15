@@ -1,0 +1,31 @@
+/**
+ * @fileoverview Browser persistence codec for the bounded SfxPoolItem graph.
+ * Core items expose values and equality only; JSON type discrimination lives here.
+ */
+
+import type { SfxItemPool } from "../../../svl/source/items/itempool";
+import type { SfxItemSet } from "../../../svl/source/items/itemset";
+import type { SfxPoolItem, SfxPoolItemSnapshot } from "../../../svl/source/items/poolitem";
+
+/** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
+export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
+  return {
+    value: item.QueryValue(),
+    which: item.Which(),
+  };
+}
+
+/** Encodes direct deltas in ascending WhichId order. @param set - Core item set. @returns JSON records. */
+export function encodeSfxItemSet(set: SfxItemSet): readonly SfxPoolItemSnapshot[] {
+  return set.entries().map(encodeSfxPoolItem);
+}
+
+/** Restores one item via the document pool's registered concrete factory. @param pool - Destination pool. @param snapshot - Current-schema record. @returns Core item. */
+export function decodeSfxPoolItem(pool: SfxItemPool, snapshot: SfxPoolItemSnapshot): SfxPoolItem {
+  return pool.CreateItem(snapshot);
+}
+
+/** Restores direct deltas into an existing set. @param set - Destination set. @param snapshots - Current-schema records. @returns Nothing. */
+export function decodeSfxItemSet(set: SfxItemSet, snapshots: readonly SfxPoolItemSnapshot[]): void {
+  for (const snapshot of snapshots) set.Put(decodeSfxPoolItem(set.GetPool(), snapshot));
+}

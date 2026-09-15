@@ -69,11 +69,11 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
 
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     expect(screen.getByRole("menu", { name: "File menu" })).toBeVisible();
-    expect(screen.getByRole("menuitem", { name: "New" })).toBeEnabled();
-    expect(screen.getByRole("menuitem", { name: "Open ODT…" })).toBeEnabled();
-    expect(screen.getByRole("menuitem", { name: "Save as ODT…" })).toBeEnabled();
-    expect(screen.getByRole("menuitem", { name: "Open local copy…" })).toBeEnabled();
-    expect(screen.getByRole("menuitem", { name: "Save local copy" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "New Document" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "Open…" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "Save As…" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "Open Local Copy…" })).toBeEnabled();
+    expect(screen.getByRole("menuitem", { name: "Save Local Copy" })).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     expect(screen.queryByRole("menu", { name: "File menu" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "View" }));
@@ -95,7 +95,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(rulersMenuItem).toHaveAttribute("aria-expanded", "false");
     fireEvent.click(rulersMenuItem);
     const horizontalRulerMenuItem = screen.getByRole("menuitemcheckbox", {
-      name: "Horizontal ruler",
+      name: "Rulers",
     });
     expect(horizontalRulerMenuItem).toHaveAttribute("aria-checked", "true");
     fireEvent.click(horizontalRulerMenuItem);
@@ -104,7 +104,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     fireEvent.click(screen.getByRole("button", { name: "View" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Rulers" }));
     const hiddenHorizontalRulerMenuItem = screen.getByRole("menuitemcheckbox", {
-      name: "Horizontal ruler",
+      name: "Rulers",
     });
     expect(hiddenHorizontalRulerMenuItem).toHaveAttribute("aria-checked", "false");
     fireEvent.click(hiddenHorizontalRulerMenuItem);
@@ -132,10 +132,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     getSelection.mockRestore();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     expect(screen.getByRole("menu", { name: "Format menu" })).toBeVisible();
-    expect(screen.getByRole("menuitem", { name: "Align left" })).toHaveAttribute(
-      "aria-current",
-      "true",
-    );
+    expect(screen.getByRole("menuitem", { name: "Start" })).toHaveAttribute("aria-current", "true");
     fireEvent.click(screen.getByRole("button", { name: "Styles" }));
     expect(screen.getByRole("menu", { name: "Styles menu" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Insert" }));
@@ -221,7 +218,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.change(screen.getByLabelText("Paragraph style"), {
         target: { value: "heading-1" },
       });
-      fireEvent.click(screen.getByRole("button", { name: "Align center" }));
+      fireEvent.click(screen.getByRole("button", { name: "Center" }));
       fireEvent.click(screen.getByRole("button", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
       selectWriterParagraphText(editor);
@@ -390,7 +387,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     fireEvent.change(screen.getByLabelText("Paragraph style"), {
       target: { value: "heading-1" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Align center" }));
+    fireEvent.click(screen.getByRole("button", { name: "Center" }));
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
     const setData = vi.fn();
@@ -454,17 +451,17 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.keyDown(screen.getByRole("button", { name: "Help" }), { key: "Tab" });
 
       fireEvent.click(file);
-      const firstFileItem = screen.getByRole("menuitem", { name: "New" });
+      const firstFileItem = screen.getByRole("menuitem", { name: "New Document" });
       firstFileItem.focus();
       fireEvent.keyDown(firstFileItem, { key: "ArrowDown" });
-      expect(screen.getByRole("menuitem", { name: "Open ODT…" })).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Open ODT…" }), {
+      expect(screen.getByRole("menuitem", { name: "Open…" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Open…" }), {
         key: "ArrowUp",
       });
       expect(firstFileItem).toHaveFocus();
       fireEvent.keyDown(firstFileItem, { key: "End" });
-      expect(screen.getByRole("menuitem", { name: "Save as text…" })).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Save as text…" }), {
+      expect(screen.getByRole("menuitem", { name: "Export…" })).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole("menuitem", { name: "Export…" }), {
         key: "Home",
       });
       expect(firstFileItem).toHaveFocus();
@@ -491,7 +488,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.keyDown(view, { key: "ArrowUp" });
       expect(screen.getByRole("menuitemcheckbox", { name: "Sidebar" })).toHaveFocus();
       fireEvent.click(screen.getByRole("menuitem", { name: "Rulers" }));
-      const horizontal = screen.getByRole("menuitemcheckbox", { name: "Horizontal ruler" });
+      const horizontal = screen.getByRole("menuitemcheckbox", { name: "Rulers" });
       expect(horizontal).toHaveFocus();
       fireEvent.keyDown(horizontal, { key: "Escape" });
       expect(screen.getByRole("menuitem", { name: "Rulers" })).toHaveFocus();

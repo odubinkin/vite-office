@@ -61,7 +61,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
       id: "writer-store",
       state: {
         documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
-        schemaVersion: 2,
+        schemaVersion: 4,
         writerModel: { swModelVersion: 6 },
       },
       version: 1,
@@ -129,7 +129,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     ).toThrow("incompatible with corrected Writer attribute identifiers");
     const wrongSchema = {
       ...current,
-      state: { ...current.state, schemaVersion: 1 as 2 },
+      state: { ...current.state, schemaVersion: 1 as 4 },
     };
     expect(
       /** Restores an unknown schema version. @returns Invalid result. */ () =>

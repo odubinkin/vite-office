@@ -2,7 +2,7 @@
  * @fileoverview Reimplements the bounded SvxAdjustItem paragraph-alignment value from pinned `editeng/source/items/paraitem.cxx`.
  */
 
-import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../svl/source/items/poolitem";
+import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
 /** Matches the pinned SvxAdjust enumeration order. */
 export enum SvxAdjust {
@@ -48,7 +48,7 @@ export class SvxAdjustItem extends SfxPoolItem {
   }
 
   /** Creates a persisted adjustment item record. @returns Item snapshot. */
-  public toSnapshot(): SfxPoolItemSnapshot {
-    return { type: "SvxAdjustItem", value: this.adjust, which: this.Which() };
+  public QueryValue(): SvxAdjust {
+    return this.adjust;
   }
 }

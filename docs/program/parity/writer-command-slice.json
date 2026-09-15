@@ -360,7 +360,7 @@
         "tests": [
           {
             "path": "apps/office/src/sw/browser/presentation/WriterMenuBar.test.tsx",
-            "marker": "Horizontal ruler"
+            "marker": "Rulers"
           },
           {
             "path": "apps/office/e2e/foundation.spec.ts",

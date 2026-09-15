@@ -1,21 +1,22 @@
-/** @fileoverview Browser presentation boundary for querying and dispatching shared command descriptors. */
+/** @fileoverview Browser-only adapter exposing Sfx dispatch and bindings to React controls. */
+
 import type {
   CommandDefinition,
   CommandDispatchResult,
   CommandState,
 } from "../../../framework/source/dispatch/dispatchprovider";
 
-/** Supplies descriptor, state, and execution access to browser command surfaces. */
+/** Browser presentation view of one active Sfx frame. */
 export interface WriterCommandSource {
-  readonly Execute: (commandId: string, arguments_?: unknown) => CommandDispatchResult<unknown>;
+  readonly Execute: (commandUrl: string, arguments_?: unknown) => CommandDispatchResult<unknown>;
   readonly QueryCommand: (
-    commandId: string,
+    commandUrl: string,
   ) => CommandDefinition<unknown, unknown, unknown> | undefined;
-  readonly QueryState: (commandId: string) => CommandState;
+  readonly QueryState: (commandUrl: string) => CommandState;
 }
 
 /** Common properties consumed by generic Writer command presenters. */
 export interface WriterCommandSurfaceProps {
   readonly commandSource: WriterCommandSource;
-  readonly resolveArguments: (commandId: string) => unknown;
+  readonly resolveArguments: (commandUrl: string) => unknown;
 }

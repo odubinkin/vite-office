@@ -209,7 +209,7 @@ export class SwView {
     if (this.frame !== undefined) throw new Error("SwView is already attached to an OfficeFrame.");
     this.frame = frame;
     this.dispatcherSubscription = frame
-      .GetDispatcher()
+      .GetBindings()
       .Subscribe(
         /** Publishes one external-store update after dispatcher invalidation. @returns Nothing. */ () =>
           this.PublishSnapshotInvalidation(),
@@ -255,7 +255,7 @@ export class SwView {
         isStatusBarVisible: this.chromePreferences.IsStatusBarVisible(),
         isStoragePending: this.operationState.IsPending(),
         operationStatus: this.operationState.GetStatus(),
-        viewVersion: this.GetDispatcher().GetVersion(),
+        viewVersion: this.GetViewFrame().GetBindings().GetVersion(),
       });
       return this.cachedSnapshot;
     };
@@ -276,7 +276,7 @@ export class SwView {
 
   /** Queries enabled/checked/value state from the same resolving shell used for execution. @param commandId - Stable command identity. @returns Current command state. */
   public QueryState(commandId: string): CommandState {
-    return this.GetDispatcher().QueryState(commandId);
+    return this.GetViewFrame().GetBindings().QueryState(commandId);
   }
 
   /** Returns the same resolved descriptor used by every presentation surface. @param commandId - Stable command identity. @returns Resolved descriptor or undefined. */

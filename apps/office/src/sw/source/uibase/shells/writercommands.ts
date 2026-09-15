@@ -5,7 +5,7 @@
 
 import {
   createCommandRegistry,
-  type CommandPresentation,
+  type CommandDefinition,
   type CommandRegistry,
 } from "../../../../framework/source/dispatch/dispatchprovider";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
@@ -16,15 +16,38 @@ import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import {
   WRITER_COMMAND_IDS,
   getWriterParagraphStyleCommandId,
-  writerMenuPlacements,
 } from "../../../uiconfig/swriter/menubar/menubar-commands";
-import { writerNumObjectBarItems } from "../../../uiconfig/swriter/toolbar/numobjectbar";
-import { writerStandardBarItems } from "../../../uiconfig/swriter/toolbar/standardbar";
-import { writerTextObjectBarItems } from "../../../uiconfig/swriter/toolbar/textobjectbar";
-import type {
-  WriterMenuItemPlacement,
-  WriterToolbarItemPlacement,
-} from "../../../uiconfig/swriter/ui-resource";
+import { getWriterSlotId } from "../../../sdi/swriter";
+import { getWriterCommandResource } from "../../../uiconfig/swriter/writer-command-resources";
+
+/** Writer shell handler before generated resource and slot metadata are attached. */
+type WriterCommandHandlerDefinition<Context> = Omit<
+  CommandDefinition<Context>,
+  "label" | "shortcut" | "shortcuts" | "slotId"
+>;
+
+/** Adds the generated numeric slot identity to Writer shell descriptors. @param commands - Handler descriptors. @returns Validated command registry. */
+function createWriterCommandRegistry<Context>(
+  commands: readonly WriterCommandHandlerDefinition<Context>[],
+): CommandRegistry<Context> {
+  return createCommandRegistry(
+    commands.map(
+      /** Attaches generated command presentation and slot metadata. @param command - Writer handler. @returns Complete command definition. */ (
+        command,
+      ) => {
+        const resource = getWriterCommandResource(command.id);
+        const [shortcut, ...shortcuts] = resource.shortcuts;
+        return {
+          ...command,
+          label: resource.label,
+          ...(shortcut === undefined ? {} : { shortcut }),
+          ...(shortcuts.length === 0 ? {} : { shortcuts }),
+          slotId: getWriterSlotId(command.id),
+        };
+      },
+    ),
+  );
+}
 
 /** Arguments supplied by the DOM selection adapter to a character-format command. */
 export interface WriterCharacterCommandArguments {
@@ -105,8 +128,8 @@ export function createWriterTextCommandRegistry(
       WriterTextCommandTarget["GetActiveParagraph"]
     > => target.GetActiveParagraph();
   const characterCommand =
-    /** Creates one direct-character command descriptor. @param id - Stable ID. @param label - Accessible label. @param format - Character attribute. @param shortcuts - Platform shortcuts. @returns Command descriptor. */
-    (id: string, label: string, format: WriterCharacterFormat, shortcuts: readonly string[]) => ({
+    /** Creates one direct-character command descriptor. @param id - Stable ID. @param format - Character attribute. @returns Command descriptor. */
+    (id: string, format: WriterCharacterFormat) => ({
       capabilityId: "CAP-0109" as const,
       /** Toggles direct formatting through the editing shell. @param _context - Bound shell context. @param arguments_ - Optional selection range. @returns Whether content changed. */
       execute: (_context: WriterTextCommandTarget, arguments_: unknown): boolean =>
@@ -120,13 +143,10 @@ export function createWriterTextCommandRegistry(
       isChecked: (): boolean => target.GetCharacterFormatState(format) === "on",
       /** Reports a mixed direct-format selection. @returns True when selected text has both values. */
       isMixed: (): boolean => target.GetCharacterFormatState(format) === "mixed",
-      label,
-      presentation: createWriterCommandPresentation(id, "boolean", "check", true),
-      shortcuts,
       target: "shell" as const,
       undoPolicy: "record" as const,
     });
-  return createCommandRegistry([
+  return createWriterCommandRegistry([
     {
       capabilityId: "CAP-0102",
       /** Restores the previous history state. @returns Whether navigation occurred. */
@@ -135,9 +155,6 @@ export function createWriterTextCommandRegistry(
       invalidates: ["document", "history", "selection"],
       /** Reads Undo availability. @returns Whether Undo is enabled. */
       isEnabled: (): boolean => target.CanUndo(),
-      label: "Undo",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.undo),
-      shortcuts: ["Ctrl+Z", "Meta+Z"],
       target: "shell",
       undoPolicy: "none",
     },
@@ -149,15 +166,12 @@ export function createWriterTextCommandRegistry(
       invalidates: ["document", "history", "selection"],
       /** Reads Redo availability. @returns Whether Redo is enabled. */
       isEnabled: (): boolean => target.CanRedo(),
-      label: "Redo",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.redo),
-      shortcuts: ["Ctrl+Shift+Z", "Meta+Shift+Z"],
       target: "shell",
       undoPolicy: "none",
     },
-    characterCommand(WRITER_COMMAND_IDS.bold, "Bold", "bold", ["Ctrl+B", "Meta+B"]),
-    characterCommand(WRITER_COMMAND_IDS.italic, "Italic", "italic", ["Ctrl+I", "Meta+I"]),
-    characterCommand(WRITER_COMMAND_IDS.underline, "Underline", "underline", ["Ctrl+U", "Meta+U"]),
+    characterCommand(WRITER_COMMAND_IDS.bold, "bold"),
+    characterCommand(WRITER_COMMAND_IDS.italic, "italic"),
+    characterCommand(WRITER_COMMAND_IDS.underline, "underline"),
     {
       capabilityId: "CAP-0135",
       /** Applies dialog hyperlink data to the current selection or caret. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether content changed. */
@@ -171,9 +185,6 @@ export function createWriterTextCommandRegistry(
       getStateValue: (): WriterHyperlink | undefined => target.GetHyperlinkAtCursor(),
       id: WRITER_COMMAND_IDS.hyperlinkDialog,
       invalidates: ["document", "history", "selection"],
-      label: "Hyperlink",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.hyperlinkDialog),
-      shortcuts: ["Ctrl+K", "Meta+K"],
       target: "shell",
       undoPolicy: "record",
     },
@@ -192,8 +203,6 @@ export function createWriterTextCommandRegistry(
       invalidates: ["document", "history", "selection"],
       /** Enables editing only for a uniform selected or caret link. @returns Whether enabled. */
       isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
-      label: "Edit Hyperlink",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.editHyperlink),
       target: "shell",
       undoPolicy: "record",
     },
@@ -205,8 +214,6 @@ export function createWriterTextCommandRegistry(
       invalidates: ["document", "history", "selection"],
       /** Enables removal only for a uniform selected or caret link. @returns Whether enabled. */
       isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
-      label: "Remove Hyperlink",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.removeHyperlink),
       target: "shell",
       undoPolicy: "record",
     },
@@ -222,13 +229,6 @@ export function createWriterTextCommandRegistry(
         target.GetPendingCharacterAttributes().fontFamily ?? "Liberation Serif",
       id: WRITER_COMMAND_IDS.fontName,
       invalidates: ["document", "history", "selection"],
-      label: "Font name",
-      presentation: createWriterCommandPresentation(
-        WRITER_COMMAND_IDS.fontName,
-        "value",
-        "action",
-        false,
-      ),
       target: "shell",
       undoPolicy: "record",
     },
@@ -247,22 +247,6 @@ export function createWriterTextCommandRegistry(
         invalidates: ["document", "history", "selection"],
         /** Compares the active alignment with this command. @returns Checked state. */
         isChecked: (): boolean => active().alignment === alignment,
-        label: {
-          center: "Align center",
-          justify: "Justify paragraph",
-          left: "Align left",
-          right: "Align right",
-        }[alignment],
-        presentation: createWriterCommandPresentation(
-          {
-            center: WRITER_COMMAND_IDS.alignCenter,
-            justify: WRITER_COMMAND_IDS.alignJustify,
-            left: WRITER_COMMAND_IDS.alignLeft,
-            right: WRITER_COMMAND_IDS.alignRight,
-          }[alignment],
-          "boolean",
-          "radio",
-        ),
         target: "shell" as const,
         undoPolicy: "record" as const,
       }),
@@ -279,14 +263,6 @@ export function createWriterTextCommandRegistry(
         invalidates: ["document", "history", "selection"],
         /** Compares the active style with this command. @returns Checked state. */
         isChecked: (): boolean => active().style === style.id,
-        label: style.name === "Standard" ? "Default Paragraph Style" : style.name,
-        presentation: createWriterCommandPresentation(
-          getWriterParagraphStyleCommandId(style.id),
-          "value",
-          "radio",
-          false,
-          style.id,
-        ),
         target: "shell" as const,
         undoPolicy: "record" as const,
       }),
@@ -308,20 +284,6 @@ export function createWriterTextCommandRegistry(
         invalidates: ["document", "history", "selection"],
         /** Compares the active list kind with this command. @returns Checked state. */
         isChecked: (): boolean => active().list.kind === kind,
-        label: {
-          bullet: "Unordered List",
-          none: "Remove Bullets",
-          numbered: "Ordered List",
-        }[kind],
-        presentation: createWriterCommandPresentation(
-          {
-            bullet: WRITER_COMMAND_IDS.unorderedList,
-            none: WRITER_COMMAND_IDS.removeBullets,
-            numbered: WRITER_COMMAND_IDS.orderedList,
-          }[kind],
-          "boolean",
-          "radio",
-        ),
         target: "shell" as const,
         undoPolicy: "record" as const,
       }),
@@ -335,8 +297,6 @@ export function createWriterTextCommandRegistry(
       /** Reads whether another demotion is valid. @returns Enabled state. */
       isEnabled: (): boolean =>
         active().list.kind !== "none" && active().list.level < WRITER_MAX_LIST_LEVEL,
-      label: "Demote",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.demote),
       target: "shell",
       undoPolicy: "record",
     },
@@ -348,8 +308,6 @@ export function createWriterTextCommandRegistry(
       invalidates: ["document", "history", "selection"],
       /** Reads whether another promotion is valid. @returns Enabled state. */
       isEnabled: (): boolean => active().list.kind !== "none" && active().list.level > 0,
-      label: "Promote",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.promote),
       target: "shell",
       undoPolicy: "record",
     },
@@ -363,7 +321,7 @@ export function createWriterViewCommandRegistry(
   const lifecycleEnabled =
     /** Reads lifecycle command availability. @returns True outside a pending medium operation. */ (): boolean =>
       !target.IsStoragePending();
-  return createCommandRegistry([
+  return createWriterCommandRegistry([
     {
       capabilityId: "CAP-0114",
       /** Creates a new document in the persistent shell. @returns Nothing. */
@@ -371,8 +329,6 @@ export function createWriterViewCommandRegistry(
       id: WRITER_COMMAND_IDS.newDocument,
       invalidates: ["document", "history", "lifecycle", "selection"],
       isEnabled: lifecycleEnabled,
-      label: "New",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.newDocument),
       target: "view",
       undoPolicy: "none",
     },
@@ -383,8 +339,6 @@ export function createWriterViewCommandRegistry(
       id: WRITER_COMMAND_IDS.openOdt,
       invalidates: ["document", "history", "lifecycle", "selection"],
       isEnabled: lifecycleEnabled,
-      label: "Open ODT",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.openOdt),
       target: "view",
       undoPolicy: "none",
     },
@@ -395,8 +349,6 @@ export function createWriterViewCommandRegistry(
       id: WRITER_COMMAND_IDS.saveOdt,
       invalidates: ["lifecycle"],
       isEnabled: lifecycleEnabled,
-      label: "Save as ODT",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.saveOdt),
       target: "view",
       undoPolicy: "none",
     },
@@ -407,8 +359,6 @@ export function createWriterViewCommandRegistry(
       id: WRITER_COMMAND_IDS.openLocal,
       invalidates: ["document", "history", "lifecycle", "selection"],
       isEnabled: lifecycleEnabled,
-      label: "Open local copy",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.openLocal),
       target: "view",
       undoPolicy: "none",
     },
@@ -419,8 +369,6 @@ export function createWriterViewCommandRegistry(
       id: WRITER_COMMAND_IDS.saveLocal,
       invalidates: ["document", "lifecycle"],
       isEnabled: lifecycleEnabled,
-      label: "Save local copy",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.saveLocal),
       target: "view",
       undoPolicy: "none",
     },
@@ -430,8 +378,6 @@ export function createWriterViewCommandRegistry(
       execute: (): void => target.ExportText(),
       id: WRITER_COMMAND_IDS.exportText,
       invalidates: ["lifecycle"],
-      label: "Save as text",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.exportText),
       target: "view",
       undoPolicy: "none",
     },
@@ -441,13 +387,6 @@ export function createWriterViewCommandRegistry(
       execute: (_context, arguments_): Promise<void> => target.Copy(arguments_),
       id: WRITER_COMMAND_IDS.copy,
       invalidates: ["lifecycle"],
-      label: "Copy",
-      presentation: createWriterCommandPresentation(
-        WRITER_COMMAND_IDS.copy,
-        "none",
-        "action",
-        true,
-      ),
       target: "view",
       undoPolicy: "none",
     },
@@ -457,8 +396,6 @@ export function createWriterViewCommandRegistry(
       execute: (_context, arguments_): Promise<void> => target.Cut(arguments_),
       id: WRITER_COMMAND_IDS.cut,
       invalidates: ["document", "history", "selection", "lifecycle"],
-      label: "Cut",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.cut, "none", "action", true),
       target: "view",
       undoPolicy: "record",
     },
@@ -468,13 +405,6 @@ export function createWriterViewCommandRegistry(
       execute: (_context, arguments_): Promise<void> => target.Paste(arguments_),
       id: WRITER_COMMAND_IDS.paste,
       invalidates: ["document", "history", "selection", "lifecycle"],
-      label: "Paste",
-      presentation: createWriterCommandPresentation(
-        WRITER_COMMAND_IDS.paste,
-        "none",
-        "action",
-        true,
-      ),
       target: "view",
       undoPolicy: "record",
     },
@@ -484,8 +414,6 @@ export function createWriterViewCommandRegistry(
       execute: (): void => target.RequestSelectAll(),
       id: WRITER_COMMAND_IDS.selectAll,
       invalidates: ["selection"],
-      label: "Select All",
-      presentation: createWriterCommandPresentation(WRITER_COMMAND_IDS.selectAll),
       target: "view",
       undoPolicy: "none",
     },
@@ -497,12 +425,6 @@ export function createWriterViewCommandRegistry(
       invalidates: ["view"],
       /** Reads status-bar visibility. @returns Checked state. */
       isChecked: (): boolean => target.IsStatusBarVisible(),
-      label: "Status Bar",
-      presentation: createWriterCommandPresentation(
-        WRITER_COMMAND_IDS.toggleStatusBar,
-        "boolean",
-        "check",
-      ),
       target: "view",
       undoPolicy: "none",
     },
@@ -514,12 +436,6 @@ export function createWriterViewCommandRegistry(
       invalidates: ["view"],
       /** Reads horizontal-ruler visibility. @returns Checked state. */
       isChecked: (): boolean => target.IsHorizontalRulerVisible(),
-      label: "Horizontal ruler",
-      presentation: createWriterCommandPresentation(
-        WRITER_COMMAND_IDS.toggleHorizontalRuler,
-        "boolean",
-        "check",
-      ),
       target: "view",
       undoPolicy: "none",
     },
@@ -531,70 +447,8 @@ export function createWriterViewCommandRegistry(
       invalidates: ["view"],
       /** Reads sidebar visibility. @returns Checked state. */
       isChecked: (): boolean => target.IsSidebarVisible(),
-      label: "Sidebar",
-      presentation: createWriterCommandPresentation(
-        WRITER_COMMAND_IDS.toggleSidebar,
-        "boolean",
-        "check",
-      ),
       target: "view",
       undoPolicy: "none",
     },
   ]);
-}
-
-/** Builds one descriptor's presentation contract from upstream-derived resource placements. @param commandId - Stable Writer command identity. @param stateType - Published state shape. @param semantics - Interaction semantics. @param acceptsArguments - Whether browser adapters may supply arguments. @param selectionValue - Optional select-control value. @returns Complete presentation contract. */
-function createWriterCommandPresentation(
-  commandId: string,
-  stateType: CommandPresentation["stateType"] = "none",
-  semantics: CommandPresentation["semantics"] = "action",
-  acceptsArguments = false,
-  selectionValue?: string,
-): CommandPresentation {
-  return {
-    ...(acceptsArguments
-      ? { argumentSchema: { description: "Browser adapter arguments for the active selection." } }
-      : {}),
-    labelKey: `commands.${commandId}`,
-    placements: getWriterCommandPlacements(commandId),
-    ...(selectionValue === undefined ? {} : { selectionValue }),
-    semantics,
-    stateType,
-  };
-}
-
-/** Resolves all menu and toolbar resources that reference one command identity. @param commandId - Stable Writer command identity. @returns Referencing resource paths. */
-function getWriterCommandPlacements(commandId: string): string[] {
-  const placements: string[] = [];
-  /** Recursively checks a menu resource. @param items - Menu resource items. @returns Whether an item references the command. */
-  function containsMenuCommand(items: readonly WriterMenuItemPlacement[]): boolean {
-    return items.some(
-      /** Checks one recursive resource item. @param item - Menu item candidate. @returns Whether the item references the command. */ (
-        item,
-      ) =>
-        item.kind === "command"
-          ? item.commandId === commandId
-          : item.kind === "submenu" && containsMenuCommand(item.items),
-    );
-  }
-  for (const menu of writerMenuPlacements)
-    if (containsMenuCommand(menu.items)) placements.push(`menubar/${menu.id}`);
-  const toolbars: readonly (readonly [string, readonly WriterToolbarItemPlacement[]])[] = [
-    ["toolbar/standardbar", writerStandardBarItems],
-    ["toolbar/textobjectbar", writerTextObjectBarItems],
-    ["toolbar/numobjectbar", writerNumObjectBarItems],
-  ];
-  for (const [resource, items] of toolbars)
-    if (
-      items.some(
-        /** Checks one toolbar resource item. @param item - Toolbar item candidate. @returns Whether the item references the command. */ (
-          item,
-        ) =>
-          item.kind === "command"
-            ? item.commandId === commandId
-            : item.kind === "command-select" && item.options.includes(commandId),
-      )
-    )
-      placements.push(resource);
-  return placements;
 }

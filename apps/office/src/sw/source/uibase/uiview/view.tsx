@@ -19,7 +19,7 @@ import type {
   WriterCutCommandArguments,
   WriterPasteCommandArguments,
 } from "./view-session";
-import type { WriterCommandSource } from "../../../browser/presentation/command-source";
+import type { WriterCommandSource } from "../../../browser/presentation/command-surface";
 import type { WriterHyperlink } from "../../core/doc/writer";
 
 /** Properties selecting a persistent Writer view for projection. */

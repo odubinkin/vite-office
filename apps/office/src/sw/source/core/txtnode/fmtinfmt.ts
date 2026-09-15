@@ -77,23 +77,15 @@ export class SwFormatINetFormat extends SfxPoolItem {
     );
   }
 
-  /** Serializes the hyperlink as a JSON string accepted by the shared pool snapshot contract. @returns Snapshot. */
-  public toSnapshot(): SfxPoolItemSnapshot {
-    return {
-      type: "SwFormatINetFormat",
-      value: JSON.stringify(this.hyperlink),
-      which: RES_TXTATR_INETFMT,
-    };
+  /** Exposes the bounded hyperlink value for filter/persistence codecs. @returns JSON value. */
+  public QueryValue(): string {
+    return JSON.stringify(this.hyperlink);
   }
 }
 
 /** Restores a hyperlink item from a persisted snapshot. @param snapshot - Candidate snapshot. @returns Restored item. */
 export function restoreSwFormatINetFormat(snapshot: SfxPoolItemSnapshot): SwFormatINetFormat {
-  if (
-    snapshot.which !== RES_TXTATR_INETFMT ||
-    snapshot.type !== "SwFormatINetFormat" ||
-    typeof snapshot.value !== "string"
-  )
+  if (snapshot.which !== RES_TXTATR_INETFMT || typeof snapshot.value !== "string")
     throw new Error("SwFormatINetFormat snapshot is invalid.");
   let parsed: unknown;
   try {

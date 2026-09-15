@@ -143,7 +143,10 @@ export async function validateRuntimeInventory(
   const commandIds = commands.map(selectCommandId);
   assertUnique(commandIds, "Runtime command IDs");
   for (const command of commands) {
-    if (!/^writer\.[a-zA-Z0-9.-]+$/.test(command.id) || command.label.trim().length === 0)
+    if (
+      !/^(?:\.uno:\S+|vnd\.vite-office\.browser:[A-Za-z0-9.-]+)$/.test(command.id) ||
+      command.label.trim().length === 0
+    )
       throw new Error(`Invalid runtime command record: ${command.id}`);
     assertKnownCapability(command.capabilityId, knownCapabilityIds, command.id);
   }

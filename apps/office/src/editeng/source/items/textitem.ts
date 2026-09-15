@@ -2,7 +2,7 @@
  * @fileoverview Reimplements bounded EditEngine character items from pinned `editeng/source/items/textitem.cxx`.
  */
 
-import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../svl/source/items/poolitem";
+import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
 /** Pooled font-family item following LibreOffice's SvxFontItem value boundary. */
 export class SvxFontItem extends SfxPoolItem {
@@ -32,8 +32,8 @@ export class SvxFontItem extends SfxPoolItem {
     );
   }
   /** Serializes the item. @returns Snapshot. */
-  public toSnapshot(): SfxPoolItemSnapshot {
-    return { type: "SvxFontItem", value: this.familyName, which: this.Which() };
+  public QueryValue(): string {
+    return this.familyName;
   }
 }
 
@@ -119,8 +119,8 @@ export class SvxWeightItem extends SfxPoolItem {
   }
 
   /** Serializes the item. @returns Snapshot. */
-  public toSnapshot(): SfxPoolItemSnapshot {
-    return { type: "SvxWeightItem", value: this.weight, which: this.Which() };
+  public QueryValue(): FontWeight {
+    return this.weight;
   }
 }
 
@@ -160,8 +160,8 @@ export class SvxPostureItem extends SfxPoolItem {
   }
 
   /** Serializes the item. @returns Snapshot. */
-  public toSnapshot(): SfxPoolItemSnapshot {
-    return { type: "SvxPostureItem", value: this.posture, which: this.Which() };
+  public QueryValue(): FontItalic {
+    return this.posture;
   }
 }
 
@@ -201,8 +201,8 @@ export class SvxUnderlineItem extends SfxPoolItem {
   }
 
   /** Serializes the item. @returns Snapshot. */
-  public toSnapshot(): SfxPoolItemSnapshot {
-    return { type: "SvxUnderlineItem", value: this.style, which: this.Which() };
+  public QueryValue(): FontLineStyle {
+    return this.style;
   }
 }
 

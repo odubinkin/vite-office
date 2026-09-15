@@ -212,10 +212,10 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(boldHandler).toHaveBeenCalledTimes(3);
 
     fireEvent.click(screen.getByRole("button", { name: "Ordered List" }));
-    fireEvent.click(screen.getByRole("button", { name: "Demote" }));
+    fireEvent.click(screen.getByRole("button", { name: "Demote Outline Level" }));
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Promote" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Promote Outline Level" }));
 
     enterText("Persistent session text");
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
@@ -223,12 +223,12 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Redo" }));
     fireEvent.click(screen.getByRole("button", { name: "File" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Save as ODT…" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Save As…" }));
     await waitFor(
       /** Waits for asynchronous ODT serialization and download dispatch. @returns Nothing. */
       () => expect(services.documentExport.export).toHaveBeenCalled(),
     );
-    fireEvent.click(screen.getByRole("button", { name: "Open ODT" }));
+    fireEvent.click(screen.getByRole("button", { name: "Open" }));
     await waitFor(
       /** Asserts that toolbar Open reached the injected file service. @returns Nothing. */
       () => expect(services.documentOpen.open).toHaveBeenCalled(),
@@ -282,7 +282,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(session.view.Execute(WRITER_COMMAND_IDS.editHyperlink).status).toBe("executed");
 
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Edit Hyperlink…" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Hyperlink…" }));
     fireEvent.change(screen.getByLabelText("URL"), {
       target: { value: "https://example.test/updated" },
     });

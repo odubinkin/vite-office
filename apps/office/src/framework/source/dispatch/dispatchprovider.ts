@@ -2,6 +2,15 @@
  * @fileoverview Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes at the LibreOffice `framework/source/dispatch/dispatchprovider.cxx` ownership boundary.
  */
 
+import { SfxBindings } from "../../../sfx2/source/control/bindings";
+import { SfxRequest } from "../../../sfx2/source/control/request";
+import {
+  SfxBoolItem,
+  SfxInt16Item,
+  SfxStringItem,
+  type SfxPoolItem,
+} from "../../../svl/source/items/poolitem";
+
 /** Identifies the shell layer that owns one command handler. */
 export type CommandTarget = "application" | "frame" | "shell" | "view";
 
@@ -48,6 +57,8 @@ export interface CommandDefinition<Context, Result = unknown, Arguments = unknow
   readonly debugLabel?: string;
   /** Stable non-blank command identifier selected by the owning domain. */
   readonly id: string;
+  /** Numeric slot identity generated from the pinned HRC/SDI declaration. */
+  readonly slotId?: number;
   /** State dependencies invalidated after relevant document or view changes. */
   readonly invalidates?: readonly string[];
   /** Non-blank human-readable label for future accessible command surfaces. */
@@ -166,6 +177,11 @@ export function createCommandRegistry<Context>(
        */
       function copyCommand(command): CommandDefinition<Context> {
         assertNonBlank(command.id, "Command id");
+        if (
+          (command.id.startsWith(".uno:") || command.id.startsWith("vnd.vite-office.browser:")) &&
+          (!Number.isInteger(command.slotId) || (command.slotId ?? 0) <= 0)
+        )
+          throw new Error(`Command slot id is invalid: ${command.id}`);
         assertNonBlank(command.label, "Command label");
         if (command.presentation !== undefined) {
           assertNonBlank(command.presentation.labelKey, "Command label key");
@@ -370,7 +386,22 @@ export class SfxDispatcher {
   public Execute(commandId: string, arguments_?: unknown): CommandDispatchResult<unknown> {
     const command = this.QueryDispatch(commandId);
     if (command === undefined) return { commandId, status: "missing" };
-    const result = command.execute(arguments_);
+    const request = new SfxRequest(command.command.slotId ?? 1, [], arguments_);
+    return this.ExecuteRequest(commandId, request);
+  }
+
+  /** Executes a caller-owned SfxRequest and records its return item. @param commandId - Canonical command URL. @param request - Slot request and item arguments. @returns Explicit dispatch outcome. */
+  public ExecuteRequest(commandId: string, request: SfxRequest): CommandDispatchResult<unknown> {
+    const command = this.QueryDispatch(commandId);
+    if (command === undefined) return { commandId, status: "missing" };
+    if (command.command.slotId !== undefined && request.GetSlot() !== command.command.slotId)
+      throw new Error(`SfxRequest slot does not match command: ${commandId}`);
+    const browserPayload = request.GetBrowserPayload();
+    const result = command.execute(
+      browserPayload === undefined ? request.GetArgs() : browserPayload,
+    );
+    if (result.status === "executed" && !isPromiseLike(result.value))
+      request.Done(createRequestReturnItem(request.GetSlot(), result.value));
     if (result.status !== "executed" || !isPromiseLike(result.value)) return result;
     this.asyncStates.set(commandId, { pending: true });
     this.Invalidate("command-async");
@@ -378,12 +409,14 @@ export class SfxDispatcher {
       /** Clears pending state after fulfillment. @param value - Fulfilled command value. @returns Original command value. */
       (value) => {
         this.asyncStates.delete(commandId);
+        request.Done(createRequestReturnItem(request.GetSlot(), value));
         this.Invalidate("command-async");
         return value;
       },
       /** Publishes a normalized asynchronous failure. @param error - Rejected command value. @returns Undefined after recording the failure. */
       (error: unknown) => {
         this.asyncStates.set(commandId, { error: getErrorMessage(error), pending: false });
+        request.Done();
         this.Invalidate("command-async");
         return undefined;
       },
@@ -470,7 +503,13 @@ function getErrorMessage(error: unknown): string {
 /** Owns the active view and its dispatcher, matching the minimal browser frame responsibility. */
 export class OfficeFrame<View> {
   private activeView: View | undefined;
+  private readonly bindings: SfxBindings;
   private readonly dispatcher = new SfxDispatcher();
+
+  /** Creates an empty frame and its bindings. @returns Nothing. */
+  public constructor() {
+    this.bindings = new SfxBindings(this.dispatcher);
+  }
 
   /** Activates one view and replaces the frame's shell stack. @param view - Active suite view. @param shells - Bottom-to-top shell order. @returns Nothing. */
   public SetActiveView(view: View, shells: readonly SfxShell[]): void {
@@ -484,6 +523,11 @@ export class OfficeFrame<View> {
     return this.dispatcher;
   }
 
+  /** Returns frame-owned command-state bindings. @returns Active bindings. */
+  public GetBindings(): SfxBindings {
+    return this.bindings;
+  }
+
   /** Returns the active view, when one is installed. @returns Current view or undefined. */
   public GetActiveView(): View | undefined {
     return this.activeView;
@@ -495,6 +539,15 @@ export class OfficeFrame<View> {
       this.dispatcher.Pop(this.dispatcher.GetShell(0) as SfxShell);
     this.activeView = undefined;
   }
+}
+
+/** Converts the bounded primitive command result subset to an Sfx return item. @param slot - Executed slot. @param value - Handler result. @returns Matching item or undefined for void/complex results. */
+function createRequestReturnItem(slot: number, value: unknown): SfxPoolItem | undefined {
+  if (typeof value === "boolean") return new SfxBoolItem(slot, value);
+  if (typeof value === "string") return new SfxStringItem(slot, value);
+  if (typeof value === "number" && Number.isInteger(value) && value >= -32_768 && value <= 32_767)
+    return new SfxInt16Item(slot, value);
+  return undefined;
 }
 
 /**

@@ -44,6 +44,10 @@
       "rationale": "The local menubar-commands.ts module preserves the reviewed .uno:PickList responsibility while TypeScript decomposition or public naming requires a different filename from menubar.xml."
     },
     {
+      "localPath": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+      "rationale": "The generated-resource loader combines the supported command metadata projected from pinned Writer menu, toolbar, accelerator, and XCU catalogs rather than claiming one native XML filename."
+    },
+    {
       "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
       "rationale": "The browser-facing xml-parser.ts name describes the saxes adapter while preserving the reviewed context-stack responsibility implemented by upstream fastparser.cxx."
     },
@@ -503,6 +507,70 @@
         "ThreadPool::createThreadTaskTag",
         "ZipOutputStream::~ZipOutputStream",
         "ZipOutputStream::setEntry"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxBindings",
+            "path": "apps/office/src/sfx2/source/control/bindings.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxBindings::SfxBindings",
+            "path": "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/control/bindings.ts",
+      "localSymbols": [
+        "SfxBindings"
+      ],
+      "omittedResponsibilities": [
+        "Native controllers, timers, dispatch-result listeners, and UNO state conversion remain outside the bounded browser dispatcher."
+      ],
+      "preservedResponsibilities": [
+        "Preserves frame-owned command state queries, invalidation generations, and listener publication for the supported slot subset."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sfx2/source/control/bindings.cxx",
+      "upstreamSymbols": [
+        "SfxBindings::SfxBindings"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxRequest",
+            "path": "apps/office/src/sfx2/source/control/request.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxRequest::SfxRequest",
+            "path": "vendor/libreoffice-reference/sfx2/source/control/request.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/control/request.ts",
+      "localSymbols": [
+        "SfxRequest"
+      ],
+      "omittedResponsibilities": [
+        "Recording, macro calls, UNO transforms, and native call-mode flags remain outside the supported browser request slice."
+      ],
+      "preservedResponsibilities": [
+        "Preserves numeric slot identity, pooled argument items, completion state, and optional return items."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sfx2/source/control/request.cxx",
+      "upstreamSymbols": [
+        "SfxRequest::SfxRequest"
       ]
     },
     {
@@ -979,12 +1047,33 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterCommandSource",
-            "path": "apps/office/src/sw/browser/presentation/command-source.ts"
+            "marker": "encodeSfxPoolItem",
+            "path": "apps/office/src/sw/browser/persistence/item-codec.ts"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/browser/presentation/command-source.ts",
+      "localPath": "apps/office/src/sw/browser/persistence/item-codec.ts",
+      "rationale": "Keeps JSON type discrimination and restoration outside SfxPoolItem subclasses at the explicit browser persistence boundary.",
+      "responsibilities": [
+        "Encodes and restores the bounded pooled-item and item-set persistence graph."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "JSON persistence is a browser storage adaptation and is not part of the native SfxPoolItem value contract."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterCommandSource",
+            "path": "apps/office/src/sw/browser/presentation/command-surface.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/command-surface.ts",
       "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
       "responsibilities": [
         "Defines the replaceable command query and dispatch port consumed by browser presenters."
@@ -1324,6 +1413,39 @@
       "upstreamPath": "sw/source/core/doc/poolfmt.cxx",
       "upstreamSymbols": [
         "GetPoolParent"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "getWriterSlotId",
+            "path": "apps/office/src/sw/sdi/swriter.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxVoidItem",
+            "path": "vendor/libreoffice-reference/sw/sdi/swriter.sdi"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/sdi/swriter.ts",
+      "localSymbols": [
+        "getWriterSlotId",
+        "WRITER_UPSTREAM_SLOT_IDS"
+      ],
+      "omittedResponsibilities": [
+        "Slots outside the implemented browser command subset remain explicitly filtered."
+      ],
+      "preservedResponsibilities": [
+        "Exposes exact supported numeric slot identities generated from pinned SDI declarations and HRC expressions."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/sdi/swriter.sdi",
+      "upstreamSymbols": [
+        "SfxVoidItem"
       ]
     },
     {
@@ -3200,6 +3322,40 @@
         "kind": "local-infrastructure",
         "rationale": "Typed local composition contract with no single native LibreOffice implementation unit."
       }
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "getWriterCommandResource",
+            "path": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": ".uno:AddDirect",
+            "path": "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+      "localSymbols": [
+        "WriterCommandResource",
+        "getWriterCommandResource",
+        "WRITER_FILTERED_X_COMMANDS"
+      ],
+      "omittedResponsibilities": [
+        "Unsupported desktop resource entries are recorded as filtered X entries instead of receiving local replacement commands."
+      ],
+      "preservedResponsibilities": [
+        "Loads generated labels, placement context, semantics, shortcuts, and slot identities from the pinned Writer resources."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/uiconfig/swriter/menubar/menubar.xml",
+      "upstreamSymbols": [
+        ".uno:AddDirect"
+      ]
     },
     {
       "classification": "browser-adaptation",

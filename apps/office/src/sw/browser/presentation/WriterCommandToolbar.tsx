@@ -13,7 +13,8 @@ import {
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerStandardBarItems } from "../../uiconfig/swriter/toolbar/standardbar";
-import type { WriterCommandSurfaceProps } from "./command-source";
+import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
+import type { WriterCommandSurfaceProps } from "./command-surface";
 
 const icons = new Map<string, LucideIcon>([
   [WRITER_COMMAND_IDS.openOdt, FolderOpen],
@@ -52,10 +53,11 @@ export function WriterCommandToolbar({
           /* v8 ignore next -- Resource/registry consistency is validated before presentation. */
           if (command === undefined) return null;
           const state = commandSource.QueryState(item.commandId);
+          const resource = getWriterCommandResource(item.commandId);
           const Icon = icons.get(item.commandId) as LucideIcon;
           return (
             <button
-              aria-label={command.label}
+              aria-label={resource.label}
               className="grid size-9 place-items-center rounded-lg text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!state.enabled}
               key={item.commandId}
@@ -63,7 +65,7 @@ export function WriterCommandToolbar({
                 /** Dispatches this toolbar command. @returns Command result discarded by React. */ () =>
                   commandSource.Execute(item.commandId, resolveArguments(item.commandId))
               }
-              title={command.label}
+              title={resource.label}
               type="button"
             >
               <Icon aria-hidden="true" size={18} />

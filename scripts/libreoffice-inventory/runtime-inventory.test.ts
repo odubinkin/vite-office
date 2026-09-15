@@ -74,7 +74,7 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
           ? "export function alpha() {}"
           : "export async function beta() {}\nexport function gamma() {}\nexport function replaceWriterParagraph() {}";
       },
-      [{ capabilityId: "CAP-0001", id: "writer.test", label: "Test" }],
+      [{ capabilityId: "CAP-0001", id: ".uno:Test", label: "Test" }],
       new Set(["CAP-0001"]),
     );
     expect(report).toMatchObject({
@@ -200,8 +200,8 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
       manifest,
       ["src/a.ts", "src/b.tsx"],
       [
-        { capabilityId: "CAP-0001", id: "writer.same", label: "One" },
-        { capabilityId: "CAP-0001", id: "writer.same", label: "Two" },
+        { capabilityId: "CAP-0001", id: ".uno:Same", label: "One" },
+        { capabilityId: "CAP-0001", id: ".uno:Same", label: "Two" },
       ],
       new Set(["CAP-0001"]),
     );
@@ -214,7 +214,7 @@ describe("runtime inventory" /** Groups strict parser and complete-coverage chec
     await expectValidationFailure(
       manifest,
       ["src/a.ts", "src/b.tsx"],
-      [{ capabilityId: "CAP-9999", id: "writer.bad", label: "Bad" }],
+      [{ capabilityId: "CAP-9999", id: ".uno:Bad", label: "Bad" }],
       new Set(["CAP-0001"]),
     );
     const unknownItem = parseRuntimeInventoryManifest(

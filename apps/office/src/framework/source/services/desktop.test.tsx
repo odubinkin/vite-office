@@ -156,11 +156,11 @@ describe("App" /**
 
     const firstParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     const formattingToolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
-    expect(within(formattingToolbar).getByRole("button", { name: "Align left" })).toHaveAttribute(
+    expect(within(formattingToolbar).getByRole("button", { name: "Start" })).toHaveAttribute(
       "aria-pressed",
       "true",
     );
-    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align left" }));
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Start" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
     fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "default" } });
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
@@ -175,7 +175,7 @@ describe("App" /**
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(screen.getByLabelText("Paragraph style")).toHaveValue("default");
     fireEvent.click(screen.getByRole("button", { name: "Redo" }));
-    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Align center" }));
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Center" }));
     expect(firstParagraph).toHaveStyle({ textAlign: "center" });
     expect(screen.getByText("Centered")).toBeInTheDocument();
   });
@@ -261,7 +261,7 @@ describe("App" /**
     expect(screen.queryByLabelText("Paragraph actions")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
-    expect(screen.getByRole("menuitem", { name: "Remove Bullets" })).toHaveAttribute(
+    expect(screen.getByRole("menuitem", { name: "No List" })).toHaveAttribute(
       "aria-current",
       "true",
     );
@@ -279,23 +279,27 @@ describe("App" /**
     expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Ordered List" }));
     expect(screen.getByTestId("writer-list-marker-writer-paragraph-1")).toHaveTextContent("1.");
-    expect(within(formattingToolbar).getByRole("button", { name: "Promote" })).toBeDisabled();
+    expect(
+      within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
+    ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
-    expect(screen.getByRole("menuitem", { name: "Demote" })).toBeEnabled();
-    fireEvent.click(screen.getByRole("menuitem", { name: "Demote" }));
+    expect(screen.getByRole("menuitem", { name: "Demote Outline Level" })).toBeEnabled();
+    fireEvent.click(screen.getByRole("menuitem", { name: "Demote Outline Level" }));
     expect(paragraph).toHaveAttribute("data-list-level", "1");
     expect(paragraph.parentElement).toHaveStyle({ marginInlineStart: "2rem" });
-    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Promote" }));
+    fireEvent.click(
+      within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
+    );
     expect(paragraph).toHaveAttribute("data-list-level", "0");
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
     expect(screen.getByRole("menu", { name: "Bullets and Numbering menu" })).toBeVisible();
-    fireEvent.click(screen.getByRole("menuitem", { name: "Remove Bullets" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "No List" }));
     expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Bullets and Numbering" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Remove Bullets" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "No List" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
   });
 
@@ -388,7 +392,7 @@ describe("App" /**
         screen.getByRole("textbox", { name: "Writer document text" }),
         "Discarded current body",
       );
-      await invokeWriterFileCommand("Open ODT…");
+      await invokeWriterFileCommand("Open…");
       await waitFor(
         /** Waits for the imported session. @returns Nothing. */
         () => expect(screen.getByText("Imported package body")).toBeInTheDocument(),
@@ -397,7 +401,7 @@ describe("App" /**
       expect(screen.getByText("Opened fixture.odt.")).toBeInTheDocument();
       expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
 
-      fireEvent.click(screen.getByRole("button", { name: "Save as ODT" }));
+      fireEvent.click(screen.getByRole("button", { name: "Save As" }));
       await waitFor(
         /** Waits for worker-shaped asynchronous ODT serialization. @returns Nothing. */
         () => expect(anchorClick).toHaveBeenCalledOnce(),
@@ -437,7 +441,7 @@ describe("App" /**
           this.dispatchEvent(new Event("cancel"));
         },
       );
-      await invokeWriterFileCommand("Open ODT…");
+      await invokeWriterFileCommand("Open…");
       expect(editor).toHaveTextContent("Current body");
       expect(screen.getByText("ODT open cancelled.")).toBeInTheDocument();
 
@@ -451,11 +455,11 @@ describe("App" /**
           this.dispatchEvent(new Event("change"));
         },
       );
-      await invokeWriterFileCommand("Open ODT…");
+      await invokeWriterFileCommand("Open…");
       expect(editor).toHaveTextContent("Current body");
       expect(screen.getByText(/Could not open ODT:/)).toBeInTheDocument();
 
-      await invokeWriterFileCommand("New");
+      await invokeWriterFileCommand("New Document");
       expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent("");
       expect(screen.getByText("Untitled Writer Document")).toBeInTheDocument();
       expect(screen.getByText("Created a new Writer document.")).toBeInTheDocument();
@@ -481,7 +485,7 @@ describe("App" /**
       fireEvent.change(screen.getByLabelText("Paragraph style"), {
         target: { value: "heading-1" },
       });
-      await invokeWriterFileCommand("Save local copy");
+      await invokeWriterFileCommand("Save Local Copy");
       await waitFor(
         /** Waits for successful save feedback. @returns A fulfilled polling promise. */
         async function verifiesSavedStatus(): Promise<void> {
@@ -489,7 +493,7 @@ describe("App" /**
         },
       );
       enterWriterParagraphText(editor, "Changed body");
-      await invokeWriterFileCommand("Open local copy…");
+      await invokeWriterFileCommand("Open Local Copy…");
       await waitFor(
         /** Waits for restored text and load feedback. @returns A fulfilled polling promise. */
         async function verifiesLoadedDocument(): Promise<void> {
@@ -530,7 +534,7 @@ describe("App" /**
       irregular.nodes.MakeTextNode("writer-paragraph-3", "Third stored paragraph");
       await saveWriterDocument(adapter, irregular, irregularState);
       render(<App />);
-      await invokeWriterFileCommand("Open local copy…");
+      await invokeWriterFileCommand("Open Local Copy…");
       await waitFor(
         /** Waits for the loaded body to become visible. @returns A fulfilled polling promise. */
         async function verifiesIrregularBody(): Promise<void> {
@@ -560,7 +564,7 @@ describe("App" /**
     Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: new IDBFactory() });
     try {
       render(<App />);
-      await invokeWriterFileCommand("Open local copy…");
+      await invokeWriterFileCommand("Open Local Copy…");
       await waitFor(
         /** Waits for missing-snapshot feedback. @returns A fulfilled polling promise. */
         async function verifiesMissing(): Promise<void> {
@@ -572,9 +576,9 @@ describe("App" /**
     }
     cleanup();
     render(<App />);
-    await invokeWriterFileCommand("Save local copy");
+    await invokeWriterFileCommand("Save Local Copy");
     expect(screen.getByText("Browser storage is unavailable.")).toBeInTheDocument();
-    await invokeWriterFileCommand("Open local copy…");
+    await invokeWriterFileCommand("Open Local Copy…");
     cleanup();
     Object.defineProperty(globalThis, "indexedDB", {
       configurable: true,
@@ -587,14 +591,14 @@ describe("App" /**
       },
     });
     render(<App />);
-    await invokeWriterFileCommand("Save local copy");
+    await invokeWriterFileCommand("Save Local Copy");
     await waitFor(
       /** Waits for save-failure feedback. @returns A fulfilled polling promise. */
       async function verifiesSaveFailure(): Promise<void> {
         expect(screen.getByText("Could not save locally.")).toBeInTheDocument();
       },
     );
-    await invokeWriterFileCommand("Open local copy…");
+    await invokeWriterFileCommand("Open Local Copy…");
     await waitFor(
       /** Waits for load-failure feedback. @returns A fulfilled polling promise. */
       async function verifiesFailure(): Promise<void> {
@@ -640,7 +644,7 @@ describe("App" /**
       "Download body",
     );
     fireEvent.click(screen.getByRole("button", { name: "File" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Save as text…" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Export…" }));
     expect(screen.getByText("Plain-text download started.")).toBeInTheDocument();
     expect(await downloadedBlob?.text()).toBe("Download body");
     createObjectUrl.mockImplementationOnce(
@@ -650,7 +654,7 @@ describe("App" /**
       },
     );
     fireEvent.click(screen.getByRole("button", { name: "File" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Save as text…" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Export…" }));
     expect(screen.getByText("Could not start plain-text download.")).toBeInTheDocument();
     createObjectUrl.mockImplementationOnce(
       /** Simulates a non-Error browser capability rejection. @returns No URL because this call throws. */
@@ -659,7 +663,7 @@ describe("App" /**
         throw rejection;
       },
     );
-    fireEvent.click(screen.getByRole("button", { name: "Save as ODT" }));
+    fireEvent.click(screen.getByRole("button", { name: "Save As" }));
     await waitFor(
       /** Waits for asynchronous ODT export failure feedback. @returns Nothing. */
       () => expect(screen.getByText("Could not save ODT: download denied")).toBeInTheDocument(),

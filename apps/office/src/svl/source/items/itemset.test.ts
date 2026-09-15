@@ -1,11 +1,12 @@
 /** @fileoverview Verifies the bounded SfxPoolItem, SfxItemPool, and SfxItemSet contracts ported from SVL. */
 
 import { describe, expect, it } from "vitest";
+import { encodeSfxPoolItem } from "../../../sw/browser/persistence/item-codec";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
 import { SfxItemPool } from "./itempool";
 import { SfxItemSet, SfxItemState } from "./itemset";
-import { SfxInt16Item, SfxStringItem } from "./poolitem";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "./poolitem";
 
 /** Registers two simple test WhichIds. @returns Prepared item pool. */
 function createPool(): SfxItemPool {
@@ -43,14 +44,20 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
     expect(stringItem.equals(new SfxStringItem(1, "other"))).toBe(false);
     expect(stringItem.equals(new SfxStringItem(2, "value"))).toBe(false);
     expect(stringItem.equals(integerItem)).toBe(false);
-    expect(stringItem.toSnapshot()).toEqual({ type: "SfxStringItem", value: "value", which: 1 });
+    expect(encodeSfxPoolItem(stringItem)).toEqual({
+      value: "value",
+      which: 1,
+    });
     expect(integerItem.GetValue()).toBe(12);
     expect(integerItem.Clone()).not.toBe(integerItem);
     expect(integerItem.Clone().equals(integerItem)).toBe(true);
     expect(integerItem.equals(new SfxInt16Item(2, 13))).toBe(false);
     expect(integerItem.equals(new SfxInt16Item(3, 12))).toBe(false);
     expect(integerItem.equals(stringItem)).toBe(false);
-    expect(integerItem.toSnapshot()).toEqual({ type: "SfxInt16Item", value: 12, which: 2 });
+    expect(encodeSfxPoolItem(integerItem)).toEqual({
+      value: 12,
+      which: 2,
+    });
     expect(
       throwing(
         /** Creates a zero WhichId. @returns Invalid item. */ () => new SfxStringItem(0, "x"),
@@ -79,6 +86,17 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
     ).toThrow("16-bit");
   });
 
+  it("implements the boolean request and state item value contract" /** Verifies boolean item cloning, values, and equality. @returns Nothing. */, () => {
+    const item = new SfxBoolItem(3, true);
+    expect(item.GetValue()).toBe(true);
+    expect(item.QueryValue()).toBe(true);
+    expect(item.Clone()).not.toBe(item);
+    expect(item.Clone().equals(item)).toBe(true);
+    expect(item.equals(new SfxBoolItem(3, false))).toBe(false);
+    expect(item.equals(new SfxBoolItem(4, true))).toBe(false);
+    expect(item.equals(new SfxStringItem(3, "true"))).toBe(false);
+  });
+
   it("implements the numeric SvxAdjust item contract" /** Verifies the EditEngine paragraph item subtype. @returns Nothing; assertions inspect enum behavior. */, function verifiesAdjustItem(): void {
     const item = new SvxAdjustItem(SvxAdjust.Center, 65);
     expect(item.GetAdjust()).toBe(SvxAdjust.Center);
@@ -87,7 +105,9 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
     expect(item.equals(new SvxAdjustItem(SvxAdjust.Right, 65))).toBe(false);
     expect(item.equals(new SvxAdjustItem(SvxAdjust.Center, 66))).toBe(false);
     expect(item.equals(new SfxInt16Item(65, SvxAdjust.Center))).toBe(false);
-    expect(item.toSnapshot()).toMatchObject({ type: "SvxAdjustItem", value: SvxAdjust.Center });
+    expect(encodeSfxPoolItem(item)).toMatchObject({
+      value: SvxAdjust.Center,
+    });
     expect(
       throwing(
         /** Creates an invalid enum value. @returns Invalid item. */ () =>
@@ -115,8 +135,7 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(pool.IsWhich(1)).toBe(true);
     expect(pool.IsWhich(9)).toBe(false);
     expect(pool.GetUserOrPoolDefaultItem(1)).toMatchObject({});
-    expect(pool.CreateItem({ type: "ignored", value: "saved", which: 1 }).toSnapshot()).toEqual({
-      type: "SfxStringItem",
+    expect(encodeSfxPoolItem(pool.CreateItem({ value: "saved", which: 1 }))).toEqual({
       value: "saved",
       which: 1,
     });
@@ -139,7 +158,7 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(
       throwing(
         /** Restores an unknown WhichId. @returns Unknown item. */ () =>
-          pool.CreateItem({ type: "x", value: 0, which: 9 }),
+          pool.CreateItem({ value: 0, which: 9 }),
       ),
     ).toThrow("Unknown pooled");
     const broken = new SfxItemPool();
@@ -151,7 +170,7 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(
       throwing(
         /** Invokes a factory that changes WhichId. @returns Invalid item. */ () =>
-          broken.CreateItem({ type: "x", value: "", which: 1 }),
+          broken.CreateItem({ value: "", which: 1 }),
       ),
     ).toThrow("changed the WhichId");
   });
@@ -199,8 +218,8 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
         ),
     ).toEqual([1, 2]);
     expect(child.toSnapshot()).toEqual([
-      { type: "SfxStringItem", value: "child", which: 1 },
-      { type: "SfxInt16Item", value: 7, which: 2 },
+      { value: "child", which: 1 },
+      { value: 7, which: 2 },
     ]);
     expect(child.ClearItem(9)).toBe(0);
     expect(child.ClearItem(1)).toBe(1);
@@ -221,6 +240,24 @@ describe("SfxItemPool and SfxItemSet" /** Groups pool ownership, inheritance, an
     expect(restored.toSnapshot()).toEqual(child.toSnapshot());
     child.SetParent(undefined);
     expect(child.GetParent()).toBeUndefined();
+  });
+
+  it("masks inherited values with explicit invalid and disabled states" /** Verifies explicit state sentinels stop parent lookup. @returns Nothing. */, () => {
+    const pool = createPool();
+    const parent = new SfxItemSet(pool, [[1, 2]]);
+    parent.Put(new SfxStringItem(1, "parent"));
+    parent.Put(new SfxInt16Item(2, 2));
+    const child = new SfxItemSet(pool, [[1, 2]], parent);
+    child.InvalidateItem(1);
+    child.DisableItem(2);
+    expect(child.Count()).toBe(2);
+    expect(child.GetItemState(1)).toBe(SfxItemState.INVALID);
+    expect(child.GetItemState(2)).toBe(SfxItemState.DISABLED);
+    expect(child.GetItemIfSet(1)).toBeUndefined();
+    expect(child.GetItemIfSet(2)).toBeUndefined();
+    expect(child.Clone().GetItemState(1)).toBe(SfxItemState.INVALID);
+    expect(child.Clone().GetItemState(2)).toBe(SfxItemState.DISABLED);
+    expect(child.ClearItem()).toBe(2);
   });
 
   it("rejects invalid ranges, parents, WhichIds, and missing defaults" /** Covers structural item-set invariants. @returns Nothing; assertions inspect errors. */, function rejectsInvalidSets(): void {

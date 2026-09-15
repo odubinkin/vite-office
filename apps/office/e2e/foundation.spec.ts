@@ -84,7 +84,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(rulersMenuItem).toHaveAttribute("aria-expanded", "false");
   await rulersMenuItem.click();
   const horizontalRulerMenuItem = page.getByRole("menuitemcheckbox", {
-    name: "Horizontal ruler",
+    name: "Rulers",
   });
   await expect(horizontalRulerMenuItem).toHaveAttribute("aria-checked", "true");
   await horizontalRulerMenuItem.click();
@@ -93,7 +93,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await page.getByRole("button", { name: "View" }).click();
   await page.getByRole("menuitem", { name: "Rulers" }).click();
   const hiddenHorizontalRulerMenuItem = page.getByRole("menuitemcheckbox", {
-    name: "Horizontal ruler",
+    name: "Rulers",
   });
   await expect(hiddenHorizontalRulerMenuItem).toHaveAttribute("aria-checked", "false");
   await hiddenHorizontalRulerMenuItem.click();
@@ -150,9 +150,9 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toContainText("Heading 1");
   await page.getByRole("button", { name: "Format" }).click();
-  await page.getByRole("menuitem", { name: "Align center" }).click();
+  await page.getByRole("menuitem", { name: "Center" }).click();
   await expect(writerEditor).toHaveCSS("text-align", "center");
-  await expect(page.getByRole("button", { name: "Align center" })).toHaveAttribute(
+  await expect(page.getByRole("button", { name: "Center" })).toHaveAttribute(
     "aria-pressed",
     "true",
   );

@@ -475,6 +475,67 @@
       }
     },
     {
+      "path": "apps/office/src/sfx2/source/control/bindings.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/control/bindings.ts#SfxBindings",
+          "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx#SfxBindings"
+        ],
+        "justification": "Ports the bounded frame-owned state query, invalidation, version, and subscription responsibilities used by the supported Writer slot slice.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxBindings"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sfx2/source/control/bindings.cxx",
+        "upstreamSymbols": [
+          "SfxBindings"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/request.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/control/request.ts#SfxRequest",
+          "vendor/libreoffice-reference/sfx2/source/control/request.cxx#SfxRequest"
+        ],
+        "justification": "Ports the bounded slot, item-argument, completion, and return-item request contract while exposing browser payloads only at the adapter boundary.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxRequest"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sfx2/source/control/request.cxx",
+        "upstreamSymbols": [
+          "SfxRequest"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sfx2/source/doc/docfile.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -975,6 +1036,32 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/persistence/item-codec.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "storage-contract",
+      "capabilityIds": [
+        "CAP-0112",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/persistence/item-codec.ts#encodeSfxPoolItem"
+        ],
+        "justification": "Owns JSON discrimination for pooled items at the browser persistence boundary so core SfxPoolItem subclasses expose only canonical value operations.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1167,7 +1254,7 @@
       }
     },
     {
-      "path": "apps/office/src/sw/browser/presentation/command-source.ts",
+      "path": "apps/office/src/sw/browser/presentation/command-surface.ts",
       "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
@@ -1181,7 +1268,7 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/presentation/command-source.ts#WriterCommandSource"
+          "apps/office/src/sw/browser/presentation/command-surface.ts#WriterCommandSource"
         ],
         "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
@@ -1358,6 +1445,39 @@
         "upstreamFile": "sw/source/core/doc/poolfmt.cxx",
         "upstreamSymbols": [
           "GetPoolParent"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/sdi/swriter.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "command-shell",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/sdi/swriter.ts#getWriterSlotId",
+          "vendor/libreoffice-reference/sw/sdi/swriter.sdi"
+        ],
+        "justification": "Exposes the supported slot identities deterministically generated from pinned sw, sfx2, and svx SDI declarations and their HRC macro values.",
+        "knownViolations": [],
+        "localSymbols": [
+          "getWriterSlotId",
+          "WRITER_UPSTREAM_SLOT_IDS"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/sdi/swriter.sdi",
+        "upstreamSymbols": [
+          "SfxRequest",
+          "SfxSlot"
         ]
       }
     },
@@ -3170,24 +3290,22 @@
       ],
       "semantic": {
         "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
-        "defaultStatus": "divergent",
-        "divergenceClass": "P",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts#writerMenuPlacements",
           "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml#.uno:PickList"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/uiconfig/swriter/menubar/menubar.xml; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
-        "knownViolations": [
-          "custom-command-namespace"
-        ],
+        "knownViolations": [],
         "localSymbols": [
           "writerMenuPlacements",
           "WRITER_COMMAND_IDS",
           "writerMenuCommandIds",
           "writerUserCommands"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "unverified",
         "upstreamFile": "sw/uiconfig/swriter/menubar/menubar.xml",
         "upstreamSymbols": [
           ".uno:PickList",
@@ -3318,6 +3436,39 @@
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-ui",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts#getWriterCommandResource",
+          "vendor/libreoffice-reference/sw/uiconfig/swriter/menubar/menubar.xml"
+        ],
+        "justification": "Loads generated command labels, placement context, semantics, shortcuts, and filtered X entries from the pinned Writer UI resources.",
+        "knownViolations": [],
+        "localSymbols": [
+          "getWriterCommandResource",
+          "WRITER_FILTERED_X_COMMANDS"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/uiconfig/swriter/menubar/menubar.xml",
+        "upstreamSymbols": [
+          ".uno:AddDirect",
+          ".uno:OpenFromWriter"
+        ]
       }
     },
     {

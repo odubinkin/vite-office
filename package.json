@@ -20,6 +20,8 @@
     "dev": "npm run dev --workspace @vite-office/office",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "generate:writer-resources": "tsx scripts/generate-writer-ui-resources.ts",
+    "check:writer-resources": "tsx scripts/generate-writer-ui-resources.ts --check",
     "inventory:validate": "tsx scripts/libreoffice-inventory/cli.ts",
     "inventory:modules": "tsx scripts/libreoffice-inventory/modules-cli.ts",
     "inventory:parity": "tsx scripts/libreoffice-inventory/parity-mapping-cli.ts --baseline docs/program/libreoffice-baseline.json --mappings docs/program/parity/writer-command-slice.json --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root apps/office/src --local-root . --upstream-root vendor/libreoffice-reference",
@@ -44,7 +46,7 @@
     "test:static": "npm run build && node scripts/check-static-build.mjs",
     "typecheck": "npm run typecheck:tools && npm run typecheck --workspace @vite-office/office",
     "typecheck:tools": "tsc --project tsconfig.tools.json",
-    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity"
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

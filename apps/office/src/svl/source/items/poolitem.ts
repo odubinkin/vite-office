@@ -7,8 +7,6 @@ export type SfxPoolItemValue = boolean | number | string | readonly SfxPoolItemS
 
 /** JSON-compatible persisted form of one pooled item. */
 export interface SfxPoolItemSnapshot {
-  /** Runtime item class discriminator. */
-  readonly type: string;
   /** Persisted item value. */
   readonly value: SfxPoolItemValue;
   /** Writer/SVL WhichId. */
@@ -33,8 +31,8 @@ export abstract class SfxPoolItem {
   /** Compares item class, WhichId, and concrete value. @param other - Candidate item. @returns True for equal items. */
   public abstract equals(other: SfxPoolItem): boolean;
 
-  /** Creates a persisted item record. @returns Cycle-free item snapshot. */
-  public abstract toSnapshot(): SfxPoolItemSnapshot;
+  /** Exposes the UNO-compatible value used by filter and persistence boundaries. @returns Item value. */
+  public abstract QueryValue(): SfxPoolItemValue;
 }
 
 /** String-valued SfxPoolItem counterpart. */
@@ -64,9 +62,9 @@ export class SfxStringItem extends SfxPoolItem {
     );
   }
 
-  /** Creates a persisted string item record. @returns Item snapshot. */
-  public toSnapshot(): SfxPoolItemSnapshot {
-    return { type: "SfxStringItem", value: this.value, which: this.Which() };
+  /** Returns the string value through the generic item contract. @returns String value. */
+  public QueryValue(): string {
+    return this.value;
   }
 }
 
@@ -99,8 +97,41 @@ export class SfxInt16Item extends SfxPoolItem {
     );
   }
 
-  /** Creates a persisted integer item record. @returns Item snapshot. */
-  public toSnapshot(): SfxPoolItemSnapshot {
-    return { type: "SfxInt16Item", value: this.value, which: this.Which() };
+  /** Returns the integer value through the generic item contract. @returns Integer value. */
+  public QueryValue(): number {
+    return this.value;
+  }
+}
+
+/** Boolean SfxPoolItem used by request arguments, return values, and checked state. */
+export class SfxBoolItem extends SfxPoolItem {
+  /** Creates a boolean item. @param which - Item identity. @param value - Boolean value. @returns Nothing. */
+  public constructor(
+    which: number,
+    private readonly value: boolean,
+  ) {
+    super(which);
+  }
+
+  /** Returns the stored boolean. @returns Boolean value. */
+  public GetValue(): boolean {
+    return this.value;
+  }
+
+  /** Creates an independent boolean item. @returns Cloned item. */
+  public Clone(): SfxBoolItem {
+    return new SfxBoolItem(this.Which(), this.value);
+  }
+
+  /** Compares boolean item identity and value. @param other - Candidate item. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SfxBoolItem && other.Which() === this.Which() && other.value === this.value
+    );
+  }
+
+  /** Returns the boolean through the generic item contract. @returns Boolean value. */
+  public QueryValue(): boolean {
+    return this.value;
   }
 }

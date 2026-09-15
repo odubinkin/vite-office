@@ -41,7 +41,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
 
   await page.goto("/writer");
   const fileChooserPromise = page.waitForEvent("filechooser");
-  await page.getByRole("button", { name: "Open ODT" }).click();
+  await page.getByRole("button", { name: "Open" }).click();
   const fileChooser = await fileChooserPromise;
   await fileChooser.setFiles({
     buffer: Buffer.from(sourceBytes),
@@ -49,6 +49,9 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
     name: "browser-fixture.odt",
   });
 
+  await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
+    "Opened browser-fixture.odt.",
+  );
   const editor = page.getByRole("textbox", { name: "Writer document text" });
   await expect(editor).toHaveText("BrowserODTContent");
   await expect(editor).toHaveCSS("font-size", "24px");
@@ -58,12 +61,9 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   await expect(editor).toHaveAttribute("data-list-level", "1");
   await expect(page.getByTestId("writer-list-marker-paragraph-1")).toHaveText("1.");
   await expect(page.getByText("Browser ODT Fixture")).toBeVisible();
-  await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
-    "Opened browser-fixture.odt.",
-  );
 
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Save as ODT" }).click();
+  await page.getByRole("button", { name: "Save As" }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe("Browser ODT Fixture.odt");
   const downloadPath = await download.path();
@@ -77,10 +77,10 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   expect(contentXml).toContain("<text:list-item>");
 
   await page.getByRole("button", { name: "File" }).click();
-  await expect(page.getByRole("menuitem", { name: "Open local copy…" })).toBeVisible();
-  await expect(page.getByRole("menuitem", { name: "Save local copy" })).toBeVisible();
-  await expect(page.getByRole("menuitem", { name: "Save as text…" })).toBeVisible();
-  await page.getByRole("menuitem", { name: "New" }).click();
+  await expect(page.getByRole("menuitem", { name: "Open Local Copy…" })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: "Save Local Copy" })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: "Export…" })).toBeVisible();
+  await page.getByRole("menuitem", { name: "New Document" }).click();
   await expect(page.getByRole("textbox", { name: "Writer document text" })).toHaveText("");
   await expect(page.getByText("Untitled Writer Document", { exact: true })).toBeVisible();
 });

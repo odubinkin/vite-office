@@ -1,6 +1,7 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
 
 import { describe, expect, it } from "vitest";
+import { encodeSfxPoolItem } from "../../../browser/persistence/item-codec";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
 import {
@@ -74,12 +75,11 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(font.Clone()).toEqual(font);
     expect(font.equals(new SvxFontItem("Noto Serif", RES_CHRATR_FONT))).toBe(true);
     expect(font.equals(new SvxFontItem("Noto Sans", RES_CHRATR_FONT))).toBe(false);
-    expect(font.toSnapshot()).toEqual({
-      type: "SvxFontItem",
+    expect(encodeSfxPoolItem(font)).toEqual({
       value: "Noto Serif",
       which: RES_CHRATR_FONT,
     });
-    expect(pool.CreateItem(font.toSnapshot())).toEqual(font);
+    expect(pool.CreateItem(encodeSfxPoolItem(font))).toEqual(font);
     expect(
       /** Rejects a blank font. @returns Invalid item. */ () => new SvxFontItem(" ", 1),
     ).toThrow("invalid");

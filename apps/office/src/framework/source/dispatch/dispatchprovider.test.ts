@@ -3,6 +3,8 @@
  */
 
 import { describe, expect, it } from "vitest";
+import { SfxRequest } from "../../../sfx2/source/control/request";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../svl/source/items/poolitem";
 
 import {
   OfficeFrame,
@@ -177,6 +179,101 @@ describe("command registry" /**
     expect(frame.GetActiveView()).toBeUndefined();
   });
 
+  it("executes SfxRequest item arguments and records bounded return items" /** Verifies slot matching, sync and async completion, primitive return items, and rejection state. @returns Completion after asynchronous requests settle. */, async function executesRequests(): Promise<void> {
+    const dispatcher = new SfxDispatcher();
+    const requestArguments: unknown[] = [];
+    const shell = createCommandShell(
+      {},
+      createCommandRegistry([
+        {
+          /** Captures request arguments and returns a boolean result. @param _context - Test context. @param arguments_ - Request arguments. @returns True. */
+          execute: (_context, arguments_: unknown): boolean => {
+            requestArguments.push(arguments_);
+            return true;
+          },
+          id: ".uno:BooleanResult",
+          label: "Boolean result",
+          slotId: 101,
+        },
+        {
+          /** Returns a string command result. @returns Result text. */
+          execute: (): string => "done",
+          id: ".uno:StringResult",
+          label: "String result",
+          slotId: 102,
+        },
+        {
+          /** Returns a numeric command result. @returns Result number. */
+          execute: (): number => 12,
+          id: ".uno:NumberResult",
+          label: "Number result",
+          slotId: 103,
+        },
+        {
+          /** Returns an unsupported complex result. @returns Complex result. */
+          execute: (): Readonly<{ ok: boolean }> => ({ ok: true }),
+          id: ".uno:ComplexResult",
+          label: "Complex result",
+          slotId: 104,
+        },
+        {
+          /** Resolves an asynchronous command result. @returns Boolean promise. */
+          execute: async (): Promise<boolean> => true,
+          id: ".uno:AsyncResult",
+          label: "Async result",
+          slotId: 105,
+        },
+        {
+          /** Rejects an asynchronous command result. @returns Rejected promise. */
+          execute: async (): Promise<void> => Promise.reject(new Error("request failed")),
+          id: ".uno:RejectedResult",
+          label: "Rejected result",
+          slotId: 106,
+        },
+      ]),
+    );
+    dispatcher.Push(shell);
+    const argument = new SfxStringItem(201, "argument");
+    const boolRequest = new SfxRequest(101, [argument]);
+    expect(dispatcher.ExecuteRequest(".uno:BooleanResult", boolRequest).status).toBe("executed");
+    expect(requestArguments).toEqual([[argument]]);
+    expect(boolRequest.GetReturnValue()).toEqual(new SfxBoolItem(101, true));
+    const stringRequest = new SfxRequest(102);
+    dispatcher.ExecuteRequest(".uno:StringResult", stringRequest);
+    expect(stringRequest.GetReturnValue()).toEqual(new SfxStringItem(102, "done"));
+    const numberRequest = new SfxRequest(103);
+    dispatcher.ExecuteRequest(".uno:NumberResult", numberRequest);
+    expect(numberRequest.GetReturnValue()).toEqual(new SfxInt16Item(103, 12));
+    const complexRequest = new SfxRequest(104);
+    dispatcher.ExecuteRequest(".uno:ComplexResult", complexRequest);
+    expect(complexRequest.IsDone()).toBe(true);
+    expect(complexRequest.GetReturnValue()).toBeUndefined();
+    const asyncRequest = new SfxRequest(105);
+    const asyncResult = dispatcher.ExecuteRequest(".uno:AsyncResult", asyncRequest);
+    expect(asyncRequest.IsDone()).toBe(false);
+    await expect(
+      asyncResult.status === "executed" ? asyncResult.value : Promise.reject(new Error("missing")),
+    ).resolves.toBe(true);
+    expect(asyncRequest.GetReturnValue()).toEqual(new SfxBoolItem(105, true));
+    const rejectedRequest = new SfxRequest(106);
+    const rejectedResult = dispatcher.ExecuteRequest(".uno:RejectedResult", rejectedRequest);
+    await expect(
+      rejectedResult.status === "executed"
+        ? rejectedResult.value
+        : Promise.reject(new Error("missing")),
+    ).resolves.toBeUndefined();
+    expect(rejectedRequest.IsDone()).toBe(true);
+    expect(dispatcher.QueryState(".uno:RejectedResult").error).toBe("request failed");
+    expect(
+      /** Executes a mismatched request. @returns Invalid dispatch result. */ () =>
+        dispatcher.ExecuteRequest(".uno:BooleanResult", new SfxRequest(999)),
+    ).toThrow("SfxRequest slot does not match command");
+    expect(dispatcher.ExecuteRequest(".uno:Missing", new SfxRequest(999))).toEqual({
+      commandId: ".uno:Missing",
+      status: "missing",
+    });
+  });
+
   it("returns explicit dispatch outcomes and rejects invalid registry input" /**
    * Verifies executed, disabled, missing, blank, duplicate, and malformed-shortcut paths.
    *
@@ -230,6 +327,35 @@ describe("command registry" /**
           },
         ]),
     ).toThrow("Check commands require boolean state.");
+    expect(
+      /** Registers a UNO command without a numeric slot. @returns Invalid registry. */ () =>
+        createCommandRegistry([
+          {
+            /** Returns nothing for the invalid fixture. @returns Nothing. */
+            execute: (): void => undefined,
+            id: ".uno:MissingSlot",
+            label: "Missing slot",
+          },
+        ]),
+    ).toThrow("Command slot id is invalid");
+    expect(
+      /** Registers malformed command arguments. @returns Invalid registry. */ () =>
+        createCommandRegistry([
+          {
+            /** Returns nothing for the invalid fixture. @returns Nothing. */
+            execute: (): void => undefined,
+            id: "invalid.arguments",
+            label: "Invalid arguments",
+            presentation: {
+              argumentSchema: { description: " " },
+              labelKey: "commands.invalid.arguments",
+              placements: [],
+              semantics: "action",
+              stateType: "none",
+            },
+          },
+        ]),
+    ).toThrow("Command argument schema description must not be blank");
     expect(
       /** Attempts radio-command registration without radio state. @returns Invalid registry result; creation throws. */ () =>
         createCommandRegistry([

@@ -76,13 +76,9 @@ export class SwFormatAutoFormat extends SfxPoolItem {
     );
   }
 
-  /** Serializes the contained item set. @returns Nested pooled-item snapshot. */
-  public toSnapshot(): SfxPoolItemSnapshot {
-    return {
-      type: "SwFormatAutoFormat",
-      value: this.styleHandle.toSnapshot(),
-      which: this.Which(),
-    };
+  /** Exposes the contained item values to the persistence codec. @returns Nested item records. */
+  public QueryValue(): readonly SfxPoolItemSnapshot[] {
+    return this.styleHandle.toSnapshot();
   }
 }
 
@@ -167,7 +163,10 @@ export class SwTextAttr<
   public toSnapshot(): SwTextAttrSnapshot {
     return {
       end: this.end,
-      format: this.format.toSnapshot(),
+      format: {
+        value: this.format.QueryValue(),
+        which: this.format.Which(),
+      },
       start: this.start,
     };
   }
@@ -223,11 +222,7 @@ export function restoreSwFormatAutoFormat(
   pool: SwAttrPool,
   snapshot: SfxPoolItemSnapshot,
 ): SwFormatAutoFormat {
-  if (
-    snapshot.which !== RES_TXTATR_AUTOFMT ||
-    snapshot.type !== "SwFormatAutoFormat" ||
-    !Array.isArray(snapshot.value)
-  )
+  if (snapshot.which !== RES_TXTATR_AUTOFMT || !Array.isArray(snapshot.value))
     throw new Error("SwFormatAutoFormat snapshot is invalid.");
   const items = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
   items.restoreSnapshots(snapshot.value);

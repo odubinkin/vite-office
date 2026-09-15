@@ -302,7 +302,7 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     const firstParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     enterWriterParagraphText(firstParagraph, "Before after");
     fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "heading-1" } });
-    fireEvent.click(screen.getByRole("button", { name: "Align center" }));
+    fireEvent.click(screen.getByRole("button", { name: "Center" }));
     firstParagraph.focus();
     placeWriterCaret(firstParagraph, 0);
     beforeInputWriterParagraph(firstParagraph, "deleteContentBackward");

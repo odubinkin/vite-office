@@ -1,6 +1,7 @@
 /** @fileoverview Verifies bounded LibreOffice character item value contracts. */
 
 import { describe, expect, it } from "vitest";
+import { encodeSfxPoolItem } from "../../../sw/browser/persistence/item-codec";
 
 import { SfxInt16Item } from "../../../svl/source/items/poolitem";
 import {
@@ -45,8 +46,7 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(bold.equals(normal)).toBe(false);
     expect(bold.equals(new SvxWeightItem(FontWeight.BOLD, alternateWhich))).toBe(false);
     expect(bold.equals(new SfxInt16Item(weightWhich, FontWeight.BOLD))).toBe(false);
-    expect(black.toSnapshot()).toEqual({
-      type: "SvxWeightItem",
+    expect(encodeSfxPoolItem(black)).toEqual({
       value: FontWeight.BLACK,
       which: alternateWhich,
     });
@@ -79,8 +79,7 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(italic.equals(oblique)).toBe(false);
     expect(italic.equals(new SvxPostureItem(FontItalic.NORMAL, postureWhich))).toBe(false);
     expect(italic.equals(new SfxInt16Item(alternateWhich, FontItalic.NORMAL))).toBe(false);
-    expect(italic.toSnapshot()).toEqual({
-      type: "SvxPostureItem",
+    expect(encodeSfxPoolItem(italic)).toEqual({
       value: FontItalic.NORMAL,
       which: alternateWhich,
     });
@@ -108,8 +107,7 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(single.equals(none)).toBe(false);
     expect(single.equals(new SvxUnderlineItem(FontLineStyle.SINGLE, alternateWhich))).toBe(false);
     expect(single.equals(new SfxInt16Item(underlineWhich, 1))).toBe(false);
-    expect(single.toSnapshot()).toEqual({
-      type: "SvxUnderlineItem",
+    expect(encodeSfxPoolItem(single)).toEqual({
       value: FontLineStyle.SINGLE,
       which: underlineWhich,
     });

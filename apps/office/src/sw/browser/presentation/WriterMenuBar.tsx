@@ -2,8 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 
 import { writerMenuPlacements } from "../../uiconfig/swriter/menubar/menubar-commands";
+import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import type { WriterMenuItemPlacement } from "../../uiconfig/swriter/ui-resource";
-import type { WriterCommandSurfaceProps } from "./command-source";
+import type { WriterCommandSurfaceProps } from "./command-surface";
 
 /** Renders the supported menu resource. @param props - Shared command surface. @returns Accessible menu bar. */
 export function WriterMenuBar({
@@ -267,17 +268,16 @@ export function WriterMenuBar({
         /* v8 ignore next -- Resource/registry consistency is validated before presentation. */
         if (command === undefined) return null;
         const state = commandSource.QueryState(item.commandId);
-        const role = command.presentation?.semantics === "check" ? "menuitemcheckbox" : "menuitem";
-        const label = `${command.label}${item.showsDialog === true ? "…" : ""}`;
+        const resource = getWriterCommandResource(item.commandId);
+        const role = resource.semantics === "check" ? "menuitemcheckbox" : "menuitem";
+        const label = `${resource.label}${item.showsDialog === true ? "…" : ""}`;
         return (
           <button
             aria-checked={role === "menuitemcheckbox" ? state.checked === true : undefined}
             aria-current={
-              command.presentation?.semantics === "radio" && state.checked === true
-                ? "true"
-                : undefined
+              resource.semantics === "radio" && state.checked === true ? "true" : undefined
             }
-            aria-keyshortcuts={command.shortcut}
+            aria-keyshortcuts={resource.shortcuts[0]}
             className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
             disabled={!state.enabled}
             key={item.commandId}

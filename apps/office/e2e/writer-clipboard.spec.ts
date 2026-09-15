@@ -15,7 +15,7 @@ test("copies visible formatted Writer content through the native browser copy ev
   await page.getByRole("button", { name: "Styles" }).click();
   await page.getByRole("menuitem", { exact: true, name: "Heading 1" }).click();
   await page.getByRole("button", { name: "Format" }).click();
-  await page.getByRole("menuitem", { name: "Align center" }).click();
+  await page.getByRole("menuitem", { name: "Center" }).click();
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await writerEditor.evaluate(
@@ -80,7 +80,7 @@ test("Writer list clipboard" /**
   await secondParagraph.fill("Second item");
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Bullets and Numbering" }).click();
-  await page.getByRole("menuitem", { exact: true, name: "Demote" }).click();
+  await page.getByRole("menuitem", { exact: true, name: "Demote Outline Level" }).click();
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await firstParagraph.evaluate(
