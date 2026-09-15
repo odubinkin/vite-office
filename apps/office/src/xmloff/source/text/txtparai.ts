@@ -21,6 +21,7 @@ export interface OdfStyleDefinition {
 
 /** Document-owned numbering rule view used while applying list paragraphs. */
 export interface XMLTextListRule {
+  readonly bulletChars?: readonly (string | undefined)[];
   readonly formats: readonly OdfListLevelKind[];
   readonly name: string;
 }

@@ -41,6 +41,27 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(getWriterParagraphListMarker(paragraphs, "missing")).toBeUndefined();
     expect(getWriterParagraphListMarker(paragraphs, "none")).toBeUndefined();
     expect(getWriterParagraphListMarker(paragraphs, "bullet")).toBe("•");
+    expect(
+      getWriterParagraphListMarker(
+        [
+          {
+            /** Returns the circle-bullet numbering rule. @returns Canonical rule. */
+            GetNumRule: () =>
+              new SwNumRule(
+                "circle",
+                Array.from(
+                  { length: 10 },
+                  /** Creates one circle-bullet level. @returns Bullet format. */ () =>
+                    new SwNumFormat("bullet", "●"),
+                ),
+              ),
+            id: "circle",
+            list: { kind: "bullet", level: 0 },
+          },
+        ],
+        "circle",
+      ),
+    ).toBe("●");
     expect(getWriterParagraphListMarker(paragraphs, "first")).toBe("1.");
     expect(getWriterParagraphListMarker(paragraphs, "second")).toBe("2.");
     expect(getWriterParagraphListMarker(paragraphs, "nested")).toBe("1.");
@@ -85,5 +106,25 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
         /** Reads an invalid numbering level. @returns Invalid format. */ () =>
           rule.GetNumFormat(level),
       ).toThrow("outside 0-9");
+    expect(
+      /** Creates a multi-character bullet marker. @returns Invalid format. */ () =>
+        new SwNumFormat("bullet", "ab"),
+    ).toThrow("at most one Unicode code point");
+    const bullet = new SwNumFormat("bullet", "●");
+    expect(bullet.GetBulletChar()).toBe("●");
+    expect(
+      SwNumRule.fromSnapshot(
+        new SwNumRule("dots", [
+          bullet,
+          ...Array.from(
+            { length: 9 },
+            /** Creates one default-bullet level. @returns Bullet format. */ () =>
+              new SwNumFormat("bullet"),
+          ),
+        ]).toSnapshot(),
+      )
+        .GetNumFormat(0)
+        .GetBulletChar(),
+    ).toBe("●");
   });
 });

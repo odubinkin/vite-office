@@ -135,6 +135,14 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
             listId,
             level,
             rule: {
+              bulletChars: Array.from(
+                { length: WRITER_MAX_LIST_LEVEL + 1 },
+                /** Projects one SwNumFormat character-special marker. @param _unused - Array value. @param index - Writer list level. @returns Bullet character when applicable. */
+                (_unused, index) => {
+                  const format = rule.GetNumFormat(index);
+                  return format.GetKind() === "bullet" ? format.GetBulletChar() : undefined;
+                },
+              ),
               formats: Array.from(
                 { length: WRITER_MAX_LIST_LEVEL + 1 },
                 /** Projects one SwNumFormat family. @param _unused - Array value. @param index - Writer list level. @returns Marker family. */

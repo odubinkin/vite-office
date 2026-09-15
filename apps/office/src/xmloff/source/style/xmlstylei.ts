@@ -119,6 +119,7 @@ class XMLStyleContext extends SvXMLImportContext {
 
 /** Accumulates one bounded list style. */
 class XMLListStyleContext extends SvXMLImportContext {
+  private readonly bulletChars: (string | undefined)[] = Array.from({ length: 10 });
   private readonly formats: (OdfListLevelKind | undefined)[] = Array.from({ length: 10 });
   private readonly name: string;
   private readonly ruleName: string;
@@ -158,8 +159,9 @@ class XMLListStyleContext extends SvXMLImportContext {
     if (this.formats[level - 1] !== undefined)
       throw new Error(`Duplicate ODF list level: ${rawLevel}`);
     if (kind === "bullet") {
-      const bullet = attributes.require(XMLToken.TEXT_BULLET_CHAR, "bullet character");
-      if (bullet !== "•") throw new Error(`Unsupported ODF bullet character: ${bullet}`);
+      const bullet = attributes.get(XMLToken.TEXT_BULLET_CHAR);
+      if (bullet === null) throw new Error("ODF bullet character is missing.");
+      this.bulletChars[level - 1] = [...bullet][0] ?? "";
     } else {
       const format = attributes.require(XMLToken.STYLE_NUM_FORMAT, "number format");
       if (format !== "1") throw new Error(`Unsupported ODF numbering format: ${format}`);
@@ -186,7 +188,16 @@ class XMLListStyleContext extends SvXMLImportContext {
       (format) => format !== undefined,
     );
     if (fallback === undefined) throw new Error(`ODF list style has no levels: ${this.name}`);
+    const fallbackBulletChar =
+      fallback === "bullet" ? this.bulletChars[this.formats.indexOf(fallback)] : undefined;
     this.target.registerListStyle(this.name, {
+      bulletChars: this.formats.map(
+        /** Completes character-special state alongside an undeclared level's fallback format. @param format - Optional kind. @param level - Level index. @returns Bullet character when applicable. */
+        (format, level) =>
+          (format ?? fallback) === "bullet"
+            ? (this.bulletChars[level] ?? fallbackBulletChar)
+            : undefined,
+      ),
       formats: this.formats.map(
         /** Completes an undeclared level. @param format - Optional kind. @returns Complete kind. */
         (format) => format ?? fallback,

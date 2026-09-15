@@ -208,7 +208,10 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
       if (
         rule.formats.some(
           /** Detects a conflicting canonical level. @param kind - Imported kind. @param level - Level. @returns Whether conflicting. */
-          (kind, level) => existing.GetNumFormat(level).GetKind() !== kind,
+          (kind, level) =>
+            existing.GetNumFormat(level).GetKind() !== kind ||
+            (kind === "bullet" &&
+              existing.GetNumFormat(level).GetBulletChar() !== (rule.bulletChars?.[level] ?? "•")),
         )
       )
         throw new Error(`Conflicting ODF list rule: ${rule.name}`);
@@ -218,8 +221,8 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
       new SwNumRule(
         rule.name,
         rule.formats.map(
-          /** Creates one canonical level format. @param kind - Marker family. @returns Writer format. */
-          (kind) => new SwNumFormat(kind),
+          /** Creates one canonical level format. @param kind - Marker family. @param level - Zero-based level. @returns Writer format. */
+          (kind, level) => new SwNumFormat(kind, rule.bulletChars?.[level]),
         ),
         rule.name,
       ),

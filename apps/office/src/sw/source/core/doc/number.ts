@@ -13,16 +13,23 @@ export const DEFAULT_NUMBERING_RULE_NAME = "__WriterDefaultNumbering";
 
 /** Persisted subset of one LibreOffice SwNumFormat level. */
 export interface SwNumFormatSnapshot {
+  /** Imported Unicode bullet character for character-special levels. */
+  readonly bulletChar?: string;
   /** Browser-supported numbering family for this level. */
   readonly kind: Exclude<WriterParagraphListKind, "none">;
 }
 
 /** Numbering format owned by one level of a SwNumRule. */
 export class SwNumFormat {
-  /** Creates one supported level format. @param kind - Bullet or decimal numbering family. @returns Nothing. */
-  public constructor(private readonly kind: Exclude<WriterParagraphListKind, "none">) {
+  /** Creates one supported level format. @param kind - Bullet or decimal numbering family. @param bulletChar - Character-special marker. @returns Nothing. */
+  public constructor(
+    private readonly kind: Exclude<WriterParagraphListKind, "none">,
+    private readonly bulletChar = kind === "bullet" ? "•" : "",
+  ) {
     if (kind !== "bullet" && kind !== "numbered")
       throw new Error("SwNumFormat kind must be bullet or numbered.");
+    if (kind === "bullet" && [...bulletChar].length > 1)
+      throw new Error("SwNumFormat bullet character must contain at most one Unicode code point.");
   }
 
   /** Returns the marker family for this list level. @returns Bullet or numbered kind. */
@@ -30,14 +37,22 @@ export class SwNumFormat {
     return this.kind;
   }
 
+  /** Returns the character-special marker stored by this level. @returns Bullet character or an empty string. */
+  public GetBulletChar(): string {
+    return this.bulletChar;
+  }
+
   /** Creates an independent format record. @returns Cloned format. */
   public clone(): SwNumFormat {
-    return new SwNumFormat(this.kind);
+    return new SwNumFormat(this.kind, this.bulletChar);
   }
 
   /** Creates a persisted level-format record. @returns Format snapshot. */
   public toSnapshot(): SwNumFormatSnapshot {
-    return { kind: this.kind };
+    return {
+      ...(this.kind === "bullet" ? { bulletChar: this.bulletChar } : {}),
+      kind: this.kind,
+    };
   }
 }
 
@@ -121,7 +136,7 @@ export class SwNumRule {
       throw new Error("Stored SwNumRule formats are invalid.");
     const formats = snapshot.formats.map(
       /** Restores one persisted level format. @param format - Stored format. @returns Restored format. */
-      (format) => new SwNumFormat(format.kind),
+      (format) => new SwNumFormat(format.kind, format.bulletChar),
     );
     return new SwNumRule(snapshot.name, formats, snapshot.listId);
   }
@@ -148,6 +163,8 @@ export interface WriterNumberingParagraph {
   readonly GetListId?: () => string;
   /** Optional canonical SwTextNode rule name used to distinguish numbering definitions. */
   readonly GetNumRuleName?: () => string;
+  /** Optional canonical numbering rule used to resolve per-level bullet characters. */
+  readonly GetNumRule?: () => SwNumRule | undefined;
 }
 
 /**
@@ -169,7 +186,8 @@ export function getWriterParagraphListMarker(
   );
   const paragraph = paragraphs[paragraphIndex];
   if (paragraph === undefined || paragraph.list.kind === "none") return undefined;
-  if (paragraph.list.kind === "bullet") return "•";
+  if (paragraph.list.kind === "bullet")
+    return paragraph.GetNumRule?.()?.GetNumFormat(paragraph.list.level).GetBulletChar() ?? "•";
   const identity = getNumberingIdentity(paragraph);
   let itemNumber = 1;
   for (let index = paragraphIndex - 1; index >= 0; index -= 1) {

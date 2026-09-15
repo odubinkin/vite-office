@@ -139,6 +139,10 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
 
   it("emits list definitions before nested and continued list references", /** Verifies list serialization. @returns Nothing. */ () => {
     const rule = {
+      bulletChars: Array.from(
+        { length: 10 },
+        /** Selects a test bullet character. @returns Character-special marker. */ () => "●",
+      ),
       formats: Array.from(
         { length: 10 },
         /** Selects a test level kind. @param _unused - Empty slot. @param level - Level. @returns Marker kind. */
@@ -159,6 +163,7 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
       ]),
     );
     expect(output.automaticStyles).toContain('<text:list-style style:name="L1"');
+    expect(output.automaticStyles).toContain('text:bullet-char="●"');
     expect(output.automaticStyles).toContain('<text:list-level-style-number text:level="2"');
     expect(output.body).toContain('xml:id="list-a"');
     expect(output.body).toContain('text:continue-list="list-a"');
@@ -191,6 +196,55 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
           ]),
         ),
     ).toThrow("define ten Writer levels");
+    expect(
+      /** Exports an incomplete bullet-character table. @returns Nothing. */ () =>
+        exportTextParagraphs(
+          source([
+            {
+              list: {
+                level: 0,
+                listId: "id",
+                rule: {
+                  bulletChars: ["●"],
+                  formats: Array.from(
+                    { length: 10 },
+                    /** Creates one bullet level. @returns Bullet kind. */ () => "bullet",
+                  ),
+                  name: "short",
+                },
+              },
+              runs: [],
+              style: "default",
+            },
+          ]),
+        ),
+    ).toThrow("define ten Writer bullet characters");
+    expect(
+      /** Exports a multi-character bullet marker. @returns Nothing. */ () =>
+        exportTextParagraphs(
+          source([
+            {
+              list: {
+                level: 0,
+                listId: "id",
+                rule: {
+                  bulletChars: Array.from(
+                    { length: 10 },
+                    /** Creates one invalid marker. @returns Multi-character marker. */ () => "ab",
+                  ),
+                  formats: Array.from(
+                    { length: 10 },
+                    /** Creates one bullet level. @returns Bullet kind. */ () => "bullet",
+                  ),
+                  name: "invalid",
+                },
+              },
+              runs: [],
+              style: "default",
+            },
+          ]),
+        ),
+    ).toThrow("at most one Unicode code point");
     let checks = 0;
     expect(
       /** Exports with cancellation. @returns Nothing. */ () =>

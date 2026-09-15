@@ -29,6 +29,8 @@ export type OdfListLevelKind = "bullet" | "numbered";
 
 /** Neutral projection of one document-owned Writer numbering rule. */
 export interface XMLTextListRuleSource {
+  /** Per-level character-special markers in zero-based Writer order. */
+  readonly bulletChars?: readonly (string | undefined)[];
   /** Per-level marker families in zero-based Writer order. */
   readonly formats: readonly OdfListLevelKind[];
   /** Canonical SwNumRule name. */
@@ -84,10 +86,16 @@ export function exportTextParagraphs(
       const existing = listRules.get(list.rule.name);
       if (
         existing !== undefined &&
-        existing.formats.some(
+        (existing.formats.some(
           /** Detects a conflicting list level. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
           (kind, index) => kind !== list.rule.formats[index],
-        )
+        ) ||
+          existing.formats.some(
+            /** Detects a conflicting character-special marker. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
+            (kind, index) =>
+              kind === "bullet" &&
+              (existing.bulletChars?.[index] ?? "•") !== (list.rule.bulletChars?.[index] ?? "•"),
+          ))
       )
         throw new Error(`Conflicting ODF list rule: ${list.rule.name}`);
       listRules.set(list.rule.name, list.rule);
@@ -154,7 +162,7 @@ export function exportTextParagraphs(
           /** Emits one list-level style. @param kind - Marker family. @param level - Zero-based Writer level. @returns Level XML. */
           (kind, level) =>
             kind === "bullet"
-              ? `<text:list-level-style-bullet text:level="${level + 1}" text:bullet-char="•"/>`
+              ? `<text:list-level-style-bullet text:level="${level + 1}" text:bullet-char="${escapeXml(rule.bulletChars?.[level] ?? "•")}"/>`
               : `<text:list-level-style-number text:level="${level + 1}" style:num-format="1"/>`,
         )
         .join("");
@@ -293,6 +301,15 @@ function assertList(list: XMLTextListSource): void {
     throw new Error("ODF list identity and rule name must not be blank.");
   if (list.rule.formats.length !== 10)
     throw new Error("ODF list rule must define ten Writer levels.");
+  if (list.rule.bulletChars !== undefined && list.rule.bulletChars.length !== 10)
+    throw new Error("ODF list rule must define ten Writer bullet characters.");
+  list.rule.bulletChars?.forEach(
+    /** Validates one upstream-shaped character-special marker. @param bulletChar - Marker value. @returns Nothing. */
+    (bulletChar) => {
+      if (bulletChar !== undefined && [...bulletChar].length > 1)
+        throw new Error("ODF bullet character must contain at most one Unicode code point.");
+    },
+  );
 }
 
 /** Creates a unique XML ID while preserving already-valid Writer list ids. @param value - Canonical list identity. @param used - IDs already emitted. @returns Unique XML ID. */

@@ -225,7 +225,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const styles = exportStylesXml(empty);
     const listStyles = [
       '<text:list-style style:name="L1" style:display-name="Numbering 1"><text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="1"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"/></text:list-level-style-number></text:list-style>',
-      '<text:list-style style:name="L2"><text:list-level-style-bullet text:level="1" text:bullet-char="•"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"/></text:list-level-style-bullet></text:list-style>',
+      '<text:list-style style:name="L2"><text:list-level-style-bullet text:level="1" text:bullet-char="●"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"/></text:list-level-style-bullet></text:list-style>',
     ].join("");
     const body = [
       '<text:list xml:id="list1" text:style-name="L1">',
@@ -277,6 +277,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         text: "gamma",
       },
     ]);
+    expect(imported.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("●");
     const roundTripped = await readOdtDocument(
       writeTargetOdt(imported.document, imported.documentState),
       metadata(),
@@ -302,6 +303,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         }),
       ),
     );
+    expect(roundTripped.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("●");
     const warn = vi
       .spyOn(console, "warn")
       .mockImplementation(
@@ -337,6 +339,14 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           content.replace("</office:automatic-styles>", `${fragment}</office:automatic-styles>`),
           metadata(),
         );
+    expect(
+      importWithListStyle(
+        '<text:list-style style:name="Blank"><text:list-level-style-bullet text:level="1" text:bullet-char=""/></text:list-style>',
+      )
+        .document.FindNumRulePtr("Blank")
+        ?.GetNumFormat(0)
+        .GetBulletChar(),
+    ).toBe("");
     for (const [fragment, message] of [
       [
         '<text:list-style style:name="L1"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>',
@@ -355,8 +365,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         "Duplicate ODF list level",
       ],
       [
-        '<text:list-style style:name="Bullet"><text:list-level-style-bullet text:level="1" text:bullet-char="-"/></text:list-style>',
-        "Unsupported ODF bullet character",
+        '<text:list-style style:name="Bullet"><text:list-level-style-bullet text:level="1"/></text:list-style>',
+        "bullet character is missing",
       ],
       [
         '<text:list-style style:name="Roman"><text:list-level-style-number text:level="1" style:num-format="i"/></text:list-style>',
@@ -379,6 +389,12 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Imports matching aliases followed by a conflicting canonical rule name. @returns Invalid document. */ () =>
         importWithListStyle(
           '<text:list-style style:name="Alias1" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias2" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias3" style:display-name="Shared"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>',
+        ),
+    ).toThrow("Conflicting ODF list rule");
+    expect(
+      /** Imports aliases whose canonical bullet characters conflict. @returns Invalid document. */ () =>
+        importWithListStyle(
+          '<text:list-style style:name="DotAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="CircleAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="●"/></text:list-style>',
         ),
     ).toThrow("Conflicting ODF list rule");
   });
