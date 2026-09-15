@@ -1,10 +1,11 @@
 ---
 id: "202609151221-FGN8SF"
 title: "Implement Phase 2 Writer document graph parity"
-status: "DOING"
+result_summary: "verified-202609151221-FGN8SF"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-15T13:18:41.253Z"
+  updated_at: "2026-09-15T13:19:47.602Z"
   updated_by: "CODER"
   note: "verified-202609151221-FGN8SF"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "SwDoc manager composition, canonical node-reference undo, SwModify reparenting, browser-owned codecs, and primitive presentation projection pass all declared checks."
-commit: null
+commit:
+  hash: "baf002879094f15bc9666ad2c658faece3907540"
+  message: "🧪 FGN8SF task: record phase 2 quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Phase 2 Writer document graph parity with upstream-derived ownership, positions, listeners, codecs, projections, tests, and parity evidence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609151221-FGN8SF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609151221-FGN8SF"
+  -
+    type: "verify"
+    at: "2026-09-15T13:19:47.602Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609151221-FGN8SF"
+  -
+    type: "status"
+    at: "2026-09-15T13:19:47.883Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609151221-FGN8SF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-15T13:18:41.338Z"
+doc_updated_at: "2026-09-15T13:19:47.884Z"
 doc_updated_by: "CODER"
 description: "Implement Phase 2 from docs/program/vite-office-upstream-parity-plan.md against pinned LibreOffice upstream: document managers, canonical positions and SwPaM, Writer listener semantics, persistence codecs, presentation projection, and removal of snapshot-shaped core."
 sections:
@@ -139,9 +158,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-15T13:19:47.602Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609151221-FGN8SF
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T13:18:41.338Z, excerpt_hash=sha256:e9179102a2fc0b00e62bfbbce96b1d41c9cb342e3dd9fd310eb5546bd40a3334
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151221-FGN8SF/blueprint/resolved-snapshot.json
+    - old_digest: e3870c68a8da8ea1e327b6cad3bb068a152b9fb88dd883eaeb7a6bbb3e31c50b
+    - current_digest: e3870c68a8da8ea1e327b6cad3bb068a152b9fb88dd883eaeb7a6bbb3e31c50b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151221-FGN8SF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609151221-FGN8SF --result verified-202609151221-FGN8SF --commit baf002879094f15bc9666ad2c658faece3907540
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation commit and deterministic task-close commit. The persisted schema intentionally has no old-model compatibility path; rollback restores the previous code and schema together."
   Findings: "No findings yet."
+extensions:
+  implementation_commit:
+    hash: "2a8ea1144828aa89bdd3ae7b29ad971e067239de"
+    message: "🚧 FGN8SF task: implement Writer upstream parity phase 2"
 id_source: "generated"
 ---
 ## Summary
@@ -220,6 +273,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609151221-FGN8SF --result verified-202609151221-FGN8SF --commit 2a8ea1144828aa89bdd3ae7b29ad971e067239de
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T13:19:47.602Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609151221-FGN8SF
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T13:18:41.338Z, excerpt_hash=sha256:e9179102a2fc0b00e62bfbbce96b1d41c9cb342e3dd9fd310eb5546bd40a3334
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151221-FGN8SF/blueprint/resolved-snapshot.json
+- old_digest: e3870c68a8da8ea1e327b6cad3bb068a152b9fb88dd883eaeb7a6bbb3e31c50b
+- current_digest: e3870c68a8da8ea1e327b6cad3bb068a152b9fb88dd883eaeb7a6bbb3e31c50b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151221-FGN8SF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609151221-FGN8SF --result verified-202609151221-FGN8SF --commit baf002879094f15bc9666ad2c658faece3907540
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
