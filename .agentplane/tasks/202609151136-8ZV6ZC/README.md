@@ -4,7 +4,7 @@ title: "Complete Phase 1.3 generated Writer UI resources"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,11 +18,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-15T12:16:16.023Z"
+  updated_by: "CODER"
+  note: "verified-202609151136-8ZV6ZC"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-15T12:15:45.831Z"
+  updated_by: "EVALUATOR"
+  note: "Generated Writer UI resources satisfy Phase 1.3 and default pipeline enforcement."
+  evaluated_sha: "6d08db1fa326d155728ba71e1008ae111f2f5ccc"
+  blueprint_digest: "1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93"
+  evidence_refs:
+    - ".agentplane/tasks/202609151136-8ZV6ZC/README.md"
+    - ".agentplane/tasks/202609151136-8ZV6ZC/quality/20260915-121545831-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609151136-8ZV6ZC/quality/20260915-121545831-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609151136-8ZV6ZC/quality/20260915-121545831-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609151136-8ZV6ZC/blueprint/resolved-snapshot.json"
+    - "commit 6d08db1fa326; npm run verify; npm run generate:writer-resources plus zero generated-artifact diff; npm run check:writer-resources"
+  findings:
+    - "Deterministic generator owns supported command identity, recursive placement order/context, labels, shortcuts, slots and structured X exclusions; runtime adapters consume generated surfaces without handwritten .uno command literals."
 commit: null
 comments:
   -
@@ -36,8 +52,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-09-15T12:15:36.314Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full npm run verify passed: 305 office tests and 88 inventory tests at 100% coverage, 10 Chromium e2e tests, static build, docs, provenance, invariant and parity gates. Writer resource generation is deterministic and the committed generated artifact remains unchanged after npm run generate:writer-resources. check:writer-resources now enforces stale output and closure tests in the default verify pipeline."
+  -
+    type: "verify"
+    at: "2026-09-15T12:16:16.023Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609151136-8ZV6ZC"
 doc_version: 3
-doc_updated_at: "2026-09-15T11:37:22.156Z"
+doc_updated_at: "2026-09-15T12:16:16.107Z"
 doc_updated_by: "CODER"
 description: "Make pinned LibreOffice resources the authoritative source for the supported Writer UI graph and enforce deterministic regeneration and command-resource closure in the verification pipeline."
 sections:
@@ -69,9 +97,78 @@ sections:
     7. Run `node .agentplane/policy/check-routing.mjs`; it must pass.
     8. Run `ap doctor`; it must pass or any unrelated pre-existing warning must be recorded with impact.
     9. Run `git status --short --untracked-files=all` and confirm only intentional task-scoped changes remain. Review `git diff` to confirm no handwritten Writer-specific placement/order/label/shortcut source remains for generated upstream commands and no unsupported command is presented as implemented parity.
-  Verification: "Pending implementation. The verifier must record each declared command, pass/fail result, concise evidence, and covered scope through `ap verify` and task findings when needed."
+  Verification: |-
+    Pending implementation. The verifier must record each declared command, pass/fail result, concise evidence, and covered scope through `ap verify` and task findings when needed.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-15T12:15:36.314Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full npm run verify passed: 305 office tests and 88 inventory tests at 100% coverage, 10 Chromium e2e tests, static build, docs, provenance, invariant and parity gates. Writer resource generation is deterministic and the committed generated artifact remains unchanged after npm run generate:writer-resources. check:writer-resources now enforces stale output and closure tests in the default verify pipeline.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T11:37:22.156Z, excerpt_hash=sha256:1f07dd78536b5e41b177f08f0bb410378975c86b6b2fd0453a51a04fc20f878d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151136-8ZV6ZC/blueprint/resolved-snapshot.json
+    - old_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+    - current_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151136-8ZV6ZC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609151136-8ZV6ZC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-15T12:16:16.023Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609151136-8ZV6ZC
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T12:15:36.394Z, excerpt_hash=sha256:1f07dd78536b5e41b177f08f0bb410378975c86b6b2fd0453a51a04fc20f878d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151136-8ZV6ZC/blueprint/resolved-snapshot.json
+    - old_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+    - current_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151136-8ZV6ZC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609151136-8ZV6ZC --result verified-202609151136-8ZV6ZC --commit 6d08db1fa326d155728ba71e1008ae111f2f5ccc
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the implementation commit(s) for this task using a non-destructive follow-up revert. Restore the previous generator, generated artifact schema, adapters, presenter consumption, tests, and package scripts together so generated/runtime contracts do not become mixed-version. Re-run the previous resource freshness check and npm verification after rollback. Do not delete or manually rewrite task history."
-  Findings: "No findings yet. Record task-local implementation discoveries, approved deviations, residual risks, and structured verification evidence here."
+  Findings: |-
+    No findings yet. Record task-local implementation discoveries, approved deviations, residual risks, and structured verification evidence here.
+
+    - Observation: Existing UI and parity tests encoded manual menu placements and evidence markers.
+      Impact: Those expectations would preserve duplicated command metadata and bypass generated upstream context.
+      Resolution: Updated tests and invariant evidence to consume the generated resource graph; unsupported entries remain structured X records.
 id_source: "generated"
 ---
 ## Summary
@@ -116,6 +213,69 @@ Implement the nine-step plan in the task README for the bounded supported Writer
 
 Pending implementation. The verifier must record each declared command, pass/fail result, concise evidence, and covered scope through `ap verify` and task findings when needed.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-15T12:15:36.314Z — VERIFY — ok
+
+By: CODER
+
+Note: Full npm run verify passed: 305 office tests and 88 inventory tests at 100% coverage, 10 Chromium e2e tests, static build, docs, provenance, invariant and parity gates. Writer resource generation is deterministic and the committed generated artifact remains unchanged after npm run generate:writer-resources. check:writer-resources now enforces stale output and closure tests in the default verify pipeline.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T11:37:22.156Z, excerpt_hash=sha256:1f07dd78536b5e41b177f08f0bb410378975c86b6b2fd0453a51a04fc20f878d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151136-8ZV6ZC/blueprint/resolved-snapshot.json
+- old_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+- current_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151136-8ZV6ZC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609151136-8ZV6ZC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-15T12:16:16.023Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609151136-8ZV6ZC
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T12:15:36.394Z, excerpt_hash=sha256:1f07dd78536b5e41b177f08f0bb410378975c86b6b2fd0453a51a04fc20f878d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151136-8ZV6ZC/blueprint/resolved-snapshot.json
+- old_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+- current_digest: 1862b759b741580d011414159612be35875d9dcc03ec52f557063d7995913e93
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151136-8ZV6ZC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609151136-8ZV6ZC --result verified-202609151136-8ZV6ZC --commit 6d08db1fa326d155728ba71e1008ae111f2f5ccc
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert only the implementation commit(s) for this task using a non-destructive follow-up revert. Restore the previous generator, generated artifact schema, adapters, presenter consumption, tests, and package scripts together so generated/runtime contracts do not become mixed-version. Re-run the previous resource freshness check and npm verification after rollback. Do not delete or manually rewrite task history.
@@ -123,3 +283,7 @@ Revert only the implementation commit(s) for this task using a non-destructive f
 ## Findings
 
 No findings yet. Record task-local implementation discoveries, approved deviations, residual risks, and structured verification evidence here.
+
+- Observation: Existing UI and parity tests encoded manual menu placements and evidence markers.
+  Impact: Those expectations would preserve duplicated command metadata and bypass generated upstream context.
+  Resolution: Updated tests and invariant evidence to consume the generated resource graph; unsupported entries remain structured X records.
