@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609150610-6YSBSR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-15T06:23:27.640Z",
+  "verdict": "pass",
+  "summary": "ODF importer behavior matches the pinned upstream boundaries requested by the task.",
+  "evaluated_sha": "aa8595254152abda6427fd65e274ec2d396eeffa",
+  "blueprint_digest": "51d7c29e5c0d998b6362882ade0d5833cc1c374d01c27178447562c64a6b9ee8",
+  "findings": [
+    "default-page-layout is tokenized and accepted; unknown foreign child subtrees are diagnosed and ignored; unknown roots and known unsupported ODF elements remain strict."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609150610-6YSBSR/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
