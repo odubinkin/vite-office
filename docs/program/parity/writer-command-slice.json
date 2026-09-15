@@ -245,7 +245,7 @@
             "marker": "copyRichText"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async Copy"
           },
           {
@@ -280,7 +280,7 @@
           },
           {
             "path": "apps/office/e2e/foundation.spec.ts",
-            "marker": "Copied selection"
+            "marker": "Document has unsaved changes"
           }
         ],
         "docs": [
@@ -349,7 +349,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "isPropertiesSidebarVisible"
           },
           {
@@ -1133,7 +1133,7 @@
             "marker": "parseWriterClipboardPaste"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async Paste"
           },
           {
@@ -1685,7 +1685,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async OpenOdt"
           },
           {
@@ -1854,7 +1854,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
-            "marker": "markDocumentSaved"
+            "marker": "restoreWriterSnapshot"
           },
           {
             "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
@@ -1864,7 +1864,7 @@
         "tests": [
           {
             "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
-            "marker": "advances every dirty mutation"
+            "marker": "owns modified and persistence generations"
           },
           {
             "path": "apps/office/src/svl/source/misc/recovery.test.ts",
@@ -2129,7 +2129,7 @@
             "marker": "copyRichText"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async Copy"
           },
           {
@@ -2164,7 +2164,7 @@
           },
           {
             "path": "apps/office/e2e/foundation.spec.ts",
-            "marker": "Copied selection"
+            "marker": "Document has unsaved changes"
           }
         ],
         "docs": [
@@ -2237,7 +2237,7 @@
             "marker": "copyRichText"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async Copy"
           },
           {
@@ -2272,7 +2272,7 @@
           },
           {
             "path": "apps/office/e2e/foundation.spec.ts",
-            "marker": "Copied selection"
+            "marker": "Document has unsaved changes"
           }
         ],
         "docs": [
@@ -2521,7 +2521,7 @@
             "marker": "parseWriterClipboardPaste"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async Paste"
           },
           {
@@ -2769,7 +2769,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async OpenOdt"
           },
           {
@@ -2938,7 +2938,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
-            "marker": "markDocumentSaved"
+            "marker": "restoreWriterSnapshot"
           },
           {
             "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
@@ -2948,7 +2948,7 @@
         "tests": [
           {
             "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
-            "marker": "advances every dirty mutation"
+            "marker": "owns modified and persistence generations"
           },
           {
             "path": "apps/office/src/svl/source/misc/recovery.test.ts",
@@ -3877,7 +3877,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async OpenOdt"
           },
           {
@@ -4169,7 +4169,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async OpenOdt"
           },
           {
@@ -4463,7 +4463,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
             "marker": "public async OpenOdt"
           },
           {
@@ -4641,7 +4641,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
-            "marker": "markDocumentSaved"
+            "marker": "restoreWriterSnapshot"
           },
           {
             "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
@@ -4651,7 +4651,7 @@
         "tests": [
           {
             "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
-            "marker": "advances every dirty mutation"
+            "marker": "owns modified and persistence generations"
           },
           {
             "path": "apps/office/src/svl/source/misc/recovery.test.ts",
@@ -4761,7 +4761,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
-            "marker": "markDocumentSaved"
+            "marker": "restoreWriterSnapshot"
           },
           {
             "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
@@ -4771,7 +4771,7 @@
         "tests": [
           {
             "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
-            "marker": "advances every dirty mutation"
+            "marker": "owns modified and persistence generations"
           },
           {
             "path": "apps/office/src/svl/source/misc/recovery.test.ts",
@@ -4881,7 +4881,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/persistence/writer-storage.ts",
-            "marker": "markDocumentSaved"
+            "marker": "restoreWriterSnapshot"
           },
           {
             "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
@@ -4891,7 +4891,7 @@
         "tests": [
           {
             "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
-            "marker": "advances every dirty mutation"
+            "marker": "owns modified and persistence generations"
           },
           {
             "path": "apps/office/src/svl/source/misc/recovery.test.ts",

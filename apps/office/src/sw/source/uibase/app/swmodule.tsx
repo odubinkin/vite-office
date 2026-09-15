@@ -32,10 +32,10 @@ import {
   type OdtFilterService,
 } from "../../filter/xml/odt-filter-service";
 import { createBrowserOdtFilterService } from "../../filter/xml/odt-worker-client";
-import { WriterWorkbench } from "../uiview/view";
+import { WriterWorkbench } from "../../../browser/presentation/writer-view";
 import { WriterRecoveryPrompt } from "../../../browser/presentation/WriterRecoveryPrompt";
 import { createWriterViewControllerFactory } from "../../../browser/workflows/writer-workflows";
-import { SwView, type WriterSessionServices } from "../uiview/view-session";
+import { SwView, type WriterSessionServices } from "../uiview/view";
 import { createWriterWorkbenchDocument } from "../uiview/viewfunc";
 import { SwDocShell } from "./docsh";
 
@@ -115,7 +115,11 @@ export function createWriterDocumentSession(
         });
   const unregisterRecovery = autoRecovery?.RegisterDocument(docShell);
   view.AttachFrame(frame);
-  frame.SetActiveView(view, [view.GetCommandShell(), view.GetWrtShell().GetCommandShell()]);
+  frame.SetActiveView(view, [
+    view.GetCommandShell(),
+    view.GetWrtShell().GetCommandShell(),
+    view.GetWrtShell().GetListShell().GetCommandShell(),
+  ]);
   let closed = false;
   return {
     autoRecovery,

@@ -1,18 +1,16 @@
-/** @fileoverview Verifies shared Writer browser-workflow state invariants. */
+/** @fileoverview Verifies explicit Writer browser-platform failures. */
 
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { WriterOperationStateController } from "./writer-workflows";
+import { WriterPlatformError } from "./writer-workflows";
 
-describe("WriterOperationStateController", /** Registers operation-state tests. @returns Nothing. */ function defineOperationStateTests(): void {
-  it("invalidates only when pending state changes", /** Verifies duplicate pending values do not publish. @returns Nothing. */ function avoidsDuplicatePendingInvalidation(): void {
-    const invalidate = vi.fn();
-    const state = new WriterOperationStateController(invalidate);
-    state.SetPending(false);
-    expect(invalidate).not.toHaveBeenCalled();
-    state.SetPending(true);
-    state.SetPending(true);
-    expect(state.IsPending()).toBe(true);
-    expect(invalidate).toHaveBeenCalledTimes(1);
+describe("WriterPlatformError", /** Registers platform-error tests. @returns Nothing. */ function definePlatformErrorTests(): void {
+  it("retains a stable machine-readable code for Sfx command completion", /** Verifies stable failure identity. @returns Nothing. */ function retainsCode(): void {
+    const error = new WriterPlatformError("storage-unavailable", "Browser storage is unavailable.");
+    expect(error).toMatchObject({
+      code: "storage-unavailable",
+      message: "Browser storage is unavailable.",
+      name: "WriterPlatformError",
+    });
   });
 });

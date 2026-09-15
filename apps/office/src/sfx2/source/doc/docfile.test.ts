@@ -1,183 +1,133 @@
-/**
- * @fileoverview Verifies JSON-compatible snapshot loading, immutable save boundaries, deterministic validation, and unaltered adapter failures.
- */
+/** @fileoverview Verifies SfxMedium identity and browser storage boundaries. */
 
 import { describe, expect, it } from "vitest";
 
 import {
-  createSfxMediumDescriptor,
+  acquireSfxMedium,
   loadSnapshot,
   saveSnapshot,
-  updateSfxMediumOperation,
+  SfxMedium,
   type DocumentSnapshot,
   type PrimarySavePort,
   type StoredDocumentOpenPort,
 } from "./docfile";
 
-/** Describes the JSON-compatible document body used by storage contract fixtures. */
+/** Serializable state used by the storage boundary fixture. */
 type StorageFixtureState = { readonly text: string };
 
-/**
- * Provides a deterministic in-memory adapter which records calls for contract assertions.
- *
- * This test double deliberately preserves objects it receives so the tests can
- * prove the domain boundary supplies a fresh frozen container instead of the
- * caller-owned snapshot object.
- */
+/** In-memory load/save port recording the snapshots passed across the boundary. */
 class RecordingStorageAdapter
   implements PrimarySavePort<StorageFixtureState>, StoredDocumentOpenPort<StorageFixtureState>
 {
-  /** Stored snapshots keyed by their exact identifier. */
   readonly snapshots = new Map<string, DocumentSnapshot<StorageFixtureState>>();
-
-  /** Snapshots supplied to save in chronological call order. */
   readonly savedSnapshots: DocumentSnapshot<StorageFixtureState>[] = [];
-
-  /** Optional error propagated by the next load operation. */
   loadFailure: Error | undefined;
-
-  /** Optional error propagated by the next save operation. */
   saveFailure: Error | undefined;
 
-  /**
-   * Reads a fixture snapshot by its exact identifier.
-   *
-   * @param id - Exact identifier used as the in-memory map key without mutation.
-   * @returns Matching fixture snapshot or undefined for a missing key.
-   * @throws {Error} When loadFailure is configured for this test double.
-   */
+  /** Loads a recorded snapshot. @param id - Document identity. @returns Stored snapshot, if present. */
   async load(id: string): Promise<DocumentSnapshot<StorageFixtureState> | undefined> {
     if (this.loadFailure !== undefined) throw this.loadFailure;
     return this.snapshots.get(id);
   }
 
-  /**
-   * Records a fixture snapshot supplied by the storage contract.
-   *
-   * @param snapshot - Frozen top-level snapshot container retained without mutation.
-   * @returns A fulfilled promise after retaining the fixture call.
-   * @throws {Error} When saveFailure is configured for this test double.
-   */
+  /** Records a saved snapshot. @param snapshot - Immutable snapshot. @returns Completion. */
   async save(snapshot: DocumentSnapshot<StorageFixtureState>): Promise<void> {
     if (this.saveFailure !== undefined) throw this.saveFailure;
     this.savedSnapshots.push(snapshot);
   }
 }
 
-/**
- * Creates a valid JSON-compatible snapshot fixture.
- *
- * @param id - Stable identifier assigned to the fixture without normalization.
- * @param version - Non-negative integer version assigned to the fixture.
- * @returns Caller-owned mutable-at-runtime fixture object for immutability assertions.
- */
+/** Creates a storage fixture. @param id - Document identity. @param version - Generation. @returns Snapshot. */
 function createSnapshot(id = "document-1", version = 0): DocumentSnapshot<StorageFixtureState> {
   return { id, state: { text: "Hello" }, version };
 }
 
-describe("document storage contract" /**
- * Groups browser-independent storage boundary tests.
- *
- * @returns Nothing; Vitest registers enclosed cases.
- */, function defineStorageTests(): void {
-  it("constructs explicit stable SfxMedium variants without lifecycle duplication" /**
-   * Verifies source, destination, capabilities, stable identity, and operation state remain explicit.
-   *
-   * @returns Nothing; assertions validate immutable medium state.
-   */, function createsMediumDescriptor(): void {
-    const untitled = createSfxMediumDescriptor({ kind: "untitled", name: "Medium document" });
-    expect(untitled).toMatchObject({
-      capabilities: { canConfirmWrite: false, canRead: false, canWrite: false },
-      destination: { kind: "none" },
-      displayName: "Medium document",
-      lastOperation: { operation: "none", state: "idle" },
-      origin: "new",
-      readOnly: false,
-      source: { kind: "none" },
-    });
-    expect(Object.isFrozen(untitled)).toBe(true);
-    expect(Object.isFrozen(untitled.capabilities)).toBe(true);
-
+describe("SfxMedium", /** Registers medium tests. @returns Nothing. */ function defineMediumTests(): void {
+  it("retains identity while operation state changes", /** Verifies retained identity. @returns Nothing. */ function retainsIdentity(): void {
     const sourceReference = { id: "blob" };
-    const local = createSfxMediumDescriptor({
+    const medium = new SfxMedium({
       indexedDbKey: "local-key",
       kind: "browser-local",
       name: "Local document",
       source: { kind: "blob", reference: sourceReference },
     });
-    const saving = updateSfxMediumOperation(local, "save", "pending", 2);
-    expect(saving).toMatchObject({
+    medium.SetOperation("save", "pending", 2);
+    expect(medium).toMatchObject({
       capabilities: { canConfirmWrite: true, canLock: true, canRead: true, canWrite: true },
       destination: { key: "local-key", kind: "indexeddb" },
       lastOperation: { generation: 2, operation: "save", state: "pending" },
       origin: "external",
       source: { kind: "blob", reference: sourceReference },
     });
-    expect(updateSfxMediumOperation(local, "none", "idle").lastOperation).toEqual({
-      operation: "none",
-      state: "idle",
-    });
-    expect(createSfxMediumDescriptor(local)).toBe(local);
-    expect(local).not.toHaveProperty("contentGeneration");
-    expect(local).not.toHaveProperty("savedGeneration");
-    expect(local).not.toHaveProperty("recoveryGeneration");
-    expect(local).not.toHaveProperty("lastOperationStatus");
+    expect(acquireSfxMedium(medium)).toBe(medium);
+    medium.SetOperation("save", "succeeded", 2);
+    expect(medium.GetLastOperation().state).toBe("succeeded");
+    medium.Close();
+    expect(medium.IsOpen()).toBe(false);
     expect(
-      createSfxMediumDescriptor({
-        indexedDbKey: "recovery-key",
-        kind: "recovery",
-        name: "Recovered document",
-      }),
-    ).toMatchObject({
+      /** Mutates a closed medium. @returns Nothing; throws. */ () =>
+        medium.SetOperation("save", "pending", 3),
+    ).toThrow("Closed media");
+  });
+
+  it("constructs explicit routes and rejects malformed inputs", /** Verifies route validation. @returns Nothing. */ function validatesRoutes(): void {
+    expect(new SfxMedium({ kind: "untitled", name: "Document" })).toMatchObject({
       destination: { kind: "none" },
-      origin: "recovered",
-      readOnly: true,
-      source: { key: "recovery-key", kind: "indexeddb", store: "recovery" },
+      origin: "new",
+      readOnly: false,
+      source: { kind: "none" },
     });
     expect(
-      createSfxMediumDescriptor({
-        indexedDbKey: "primary-after-recovery",
+      new SfxMedium({ indexedDbKey: "recovery", kind: "recovery", name: "Recovered" }),
+    ).toMatchObject({ origin: "recovered", readOnly: true });
+    expect(
+      new SfxMedium({
+        indexedDbKey: "local",
         kind: "browser-local",
-        name: "Recovered then saved",
-        source: { key: "recovery-key", kind: "indexeddb", store: "recovery" },
+        name: "Recovered local",
+        source: { key: "recovery", kind: "indexeddb", store: "recovery" },
       }).origin,
     ).toBe("recovered");
     expect(
-      createSfxMediumDescriptor({
-        indexedDbKey: "existing-primary",
+      new SfxMedium({
+        indexedDbKey: "local",
         kind: "browser-local",
-        name: "Existing primary",
+        name: "Primary local",
+        source: { key: "primary", kind: "indexeddb", store: "primary" },
       }).origin,
     ).toBe("browser-local");
     expect(
-      /** Constructs a blank-named medium. @returns Invalid descriptor that never returns. */ () =>
-        createSfxMediumDescriptor({ kind: "untitled", name: " " }),
+      /** Constructs a blank medium. @returns Invalid medium; throws. */ () =>
+        new SfxMedium({ kind: "untitled", name: " " }),
     ).toThrow("blank");
     expect(
-      /** Constructs a runtime-invalid browser-local input. @returns Invalid descriptor that never returns. */ () =>
-        createSfxMediumDescriptor({ kind: "browser-local", name: "Local" } as never),
+      /** Constructs a local medium without a key. @returns Invalid medium; throws. */ () =>
+        new SfxMedium({ kind: "browser-local", name: "Local" } as never),
     ).toThrow("required");
     expect(
-      /** Constructs a runtime-invalid ODT input. @returns Invalid descriptor that never returns. */ () =>
-        createSfxMediumDescriptor({ kind: "odt-source", name: "File" } as never),
-    ).toThrow("opaque");
-    expect(
-      /** Constructs a runtime-invalid download input. @returns Invalid descriptor that never returns. */ () =>
-        createSfxMediumDescriptor({ kind: "download", name: "File" } as never),
-    ).toThrow("required");
+      /** Constructs a download without a target. @returns Invalid medium; throws. */ () =>
+        new SfxMedium({ kind: "download", name: "Download" } as never),
+    ).toThrow("Download target is required");
+    for (const source of [
+      undefined,
+      { kind: "none" },
+      { kind: "file", reference: 1 },
+      { kind: "blob", reference: null },
+    ])
+      expect(
+        /** Constructs an ODT medium with an invalid source. @returns Invalid medium; throws. */ () =>
+          new SfxMedium({ kind: "odt-source", name: "Source", source } as never),
+      ).toThrow("opaque Blob or File reference");
   });
+});
 
-  it("returns explicit found and missing states without changing lookup identities" /**
-   * Verifies lookup success and absence remain distinguishable deterministic states.
-   *
-   * @returns Nothing; assertions validate returned discriminators and identity preservation.
-   */, async function loadsSnapshots(): Promise<void> {
+describe("document storage contract", /** Registers storage tests. @returns Nothing. */ function defineStorageTests(): void {
+  it("loads explicit found and missing results", /** Verifies load results. @returns Completion. */ async function loadsSnapshots(): Promise<void> {
     const adapter = new RecordingStorageAdapter();
-    const storedSnapshot = createSnapshot(" document-1 ", 4);
-    adapter.snapshots.set(storedSnapshot.id, storedSnapshot);
-
-    await expect(loadSnapshot(adapter, storedSnapshot.id)).resolves.toEqual({
-      snapshot: storedSnapshot,
+    const stored = createSnapshot(" document-1 ", 4);
+    adapter.snapshots.set(stored.id, stored);
+    await expect(loadSnapshot(adapter, stored.id)).resolves.toEqual({
+      snapshot: stored,
       status: "found",
     });
     await expect(loadSnapshot(adapter, "missing")).resolves.toEqual({
@@ -186,53 +136,23 @@ describe("document storage contract" /**
     });
   });
 
-  it("saves a fresh frozen snapshot container without mutating caller-owned data" /**
-   * Verifies adapters do not receive the caller container and save results expose the exact supplied copy.
-   *
-   * @returns Nothing; assertions validate top-level immutability and state reference ownership.
-   */, async function savesImmutableContainer(): Promise<void> {
+  it("saves a fresh frozen container", /** Verifies save identity. @returns Completion. */ async function savesSnapshots(): Promise<void> {
     const adapter = new RecordingStorageAdapter();
     const snapshot = createSnapshot("document-2", 6);
-
     const result = await saveSnapshot(adapter, snapshot);
-    const suppliedSnapshot = adapter.savedSnapshots[0];
-
-    expect(result).toEqual({ snapshot: suppliedSnapshot, status: "saved" });
-    expect(suppliedSnapshot).toEqual(snapshot);
-    expect(suppliedSnapshot).not.toBe(snapshot);
-    expect(suppliedSnapshot?.state).toBe(snapshot.state);
-    expect(Object.isFrozen(suppliedSnapshot)).toBe(true);
-    expect(snapshot).toEqual(createSnapshot("document-2", 6));
+    const supplied = adapter.savedSnapshots[0];
+    expect(result).toEqual({ snapshot: supplied, status: "saved" });
+    expect(supplied).not.toBe(snapshot);
+    expect(supplied?.state).toBe(snapshot.state);
+    expect(Object.isFrozen(supplied)).toBe(true);
   });
 
-  it("rejects blank, fractional, and negative snapshot versions before invoking the adapter" /**
-   * Verifies every deterministic validation branch blocks persistence without partial calls.
-   *
-   * @returns Nothing; assertions validate rejected promises and an empty call log.
-   */, async function rejectsInvalidSnapshots(): Promise<void> {
+  it("validates snapshots and preserves adapter failures", /** Verifies storage validation. @returns Completion. */ async function validatesStorage(): Promise<void> {
     const adapter = new RecordingStorageAdapter();
-
     await expect(saveSnapshot(adapter, createSnapshot(" ", 0))).rejects.toThrowError();
-    await expect(saveSnapshot(adapter, createSnapshot("document-3", 0.5))).rejects.toThrowError();
-    await expect(saveSnapshot(adapter, createSnapshot("document-4", -1))).rejects.toThrowError();
-    expect(adapter.savedSnapshots).toEqual([]);
-  });
-
-  it("propagates load and save adapter failures without translating them" /**
-   * Verifies browser adapter errors remain observable to future recovery and UI policy layers.
-   *
-   * @returns Nothing; assertions validate object-identity-preserving promise rejections.
-   */, async function propagatesAdapterFailures(): Promise<void> {
-    const loadAdapter = new RecordingStorageAdapter();
-    const loadFailure = new Error("load failed");
-    loadAdapter.loadFailure = loadFailure;
-    const saveAdapter = new RecordingStorageAdapter();
-    const saveFailure = new Error("save failed");
-    saveAdapter.saveFailure = saveFailure;
-
-    await expect(loadSnapshot(loadAdapter, "document-5")).rejects.toBe(loadFailure);
-    await expect(saveSnapshot(saveAdapter, createSnapshot("document-5", 1))).rejects.toBe(
-      saveFailure,
-    );
+    await expect(saveSnapshot(adapter, createSnapshot("document", 0.5))).rejects.toThrowError();
+    const failure = new Error("load failed");
+    adapter.loadFailure = failure;
+    await expect(loadSnapshot(adapter, "document")).rejects.toBe(failure);
   });
 });

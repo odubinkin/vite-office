@@ -546,26 +546,26 @@
         "CAP-0131"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "parity",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sfx2/source/doc/docfile.ts#createSfxMediumDescriptor",
+          "apps/office/src/sfx2/source/doc/docfile.ts#SfxMedium",
           "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx#SfxMedium::SfxMedium()"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sfx2/source/doc/docfile.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "The bounded browser medium now preserves object identity and owns load/save/filter operation state; native stream and UCB mechanics remain explicitly excluded.",
         "knownViolations": [],
         "localSymbols": [
-          "SfxMediumDescriptor",
+          "SfxMedium",
           "SfxMediumKind",
           "SfxMediumOrigin",
           "SfxMediumSource",
           "SfxMediumDestination",
           "SfxMediumOperation",
-          "createSfxMediumDescriptor"
+          "acquireSfxMedium"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sfx2/source/doc/docfile.cxx",
         "upstreamSymbols": [
           "SfxMedium::SfxMedium",
@@ -588,23 +588,25 @@
         "CAP-0132"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
-        "divergenceClass": "none",
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "parity",
+        "divergenceClass": "B",
         "evidence": [
           "apps/office/src/sfx2/source/doc/objsh.ts#SfxObjectShell",
-          "vendor/libreoffice-reference/include/sfx2/objsh.hxx#class SfxObjectShell"
+          "vendor/libreoffice-reference/sfx2/source/doc/objmisc.cxx#void SfxObjectShell::SetModified"
         ],
-        "justification": "Mapped provenance remains semantically unverified against include/sfx2/objsh.hxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "SfxObjectShell owns modified/save/close transitions. Monotonic primary and recovery generations are the documented browser extension required for asynchronous persistence.",
         "knownViolations": [],
         "localSymbols": [
           "SfxObjectShell",
           "OfficeDocument",
-          "markDocumentDirty",
-          "markDocumentSaved"
+          "SetModified",
+          "SaveCompleted",
+          "RecoverySaveCompleted",
+          "SetHistorySavePosition"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "include/sfx2/objsh.hxx",
         "upstreamSymbols": [
           "SfxObjectShell"
@@ -850,15 +852,15 @@
         "CAP-0132"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "parity",
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/svl/source/undo/undo.ts#DEFAULT_MAX_UNDO_ACTION_COUNT",
           "vendor/libreoffice-reference/svl/source/undo/undo.cxx#SfxUndoAction"
         ],
-        "justification": "Mapped provenance remains semantically unverified against svl/source/undo/undo.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "The bounded SfxUndoManager preserves action grouping, compound actions, save marks, cursor-safe failure handling, redo truncation, and the pinned SfxUndoManager constructor default of 20 actions.",
         "knownViolations": [],
         "localSymbols": [
           "DEFAULT_MAX_UNDO_ACTION_COUNT",
@@ -866,7 +868,7 @@
           "SfxListUndoAction",
           "SfxUndoManager"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "svl/source/undo/undo.cxx",
         "upstreamSymbols": [
           "SfxUndoAction",
@@ -1356,6 +1358,45 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0102",
+        "CAP-0103",
+        "CAP-0104",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0110",
+        "CAP-0113",
+        "CAP-0114",
+        "CAP-0115",
+        "CAP-0120",
+        "CAP-0121",
+        "CAP-0122",
+        "CAP-0135"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/writer-view.tsx#WriterWorkbenchProps"
+        ],
+        "justification": "Contains the React projection of SwView behind Writer shell, command, and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1370,14 +1411,14 @@
         "CAP-0131"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
+        "behaviorStatus": "parity",
         "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
           "apps/office/src/sw/browser/workflows/writer-workflows.ts#WriterFileWorkflowController"
         ],
-        "justification": "Owns browser file, download, clipboard, IndexedDB, chrome-preference, and operation-presentation workflows behind narrow injected ports; no native platform source file is claimed.",
+        "justification": "Adapts browser file, clipboard, download, and IndexedDB ports while document operations remain owned by SwDocShell and transfer creation remains owned by SwTransferable/SwWrtShell.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1522,6 +1563,36 @@
         "upstreamFile": "sw/source/core/doc/poolfmt.cxx",
         "upstreamSymbols": [
           "GetPoolParent"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/inc/viewopt.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0104"
+      ],
+      "semantic": {
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "parity",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/inc/viewopt.ts#SwViewOption",
+          "vendor/libreoffice-reference/sw/inc/viewopt.hxx#class SwViewOption"
+        ],
+        "justification": "Implements the supported per-view visibility option subset with upstream ownership; unsupported layout and native-window flags are omitted.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwViewOption"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/inc/viewopt.hxx",
+        "upstreamSymbols": [
+          "SwViewOption"
         ]
       }
     },
@@ -3118,22 +3189,22 @@
         "CAP-0127"
       ],
       "semantic": {
-        "behaviorStatus": "divergent",
-        "contractStatus": "divergent",
-        "defaultStatus": "unverified",
-        "divergenceClass": "A",
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "parity",
+        "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/shells/listsh.ts#WriterListLevelCommand",
-          "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx#SwListShell::InitInterface_Impl"
+          "apps/office/src/sw/source/uibase/shells/listsh.ts#SwListShell",
+          "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx#SwListShell::Execute",
+          "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx#SwListShell::GetState"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/shells/listsh.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
-        "knownViolations": [
-          "placeholder-upstream-mechanism"
-        ],
+        "justification": "The supported list-level commands execute and query enablement through a dedicated top-priority SwListShell using the generated upstream slots.",
+        "knownViolations": [],
         "localSymbols": [
+          "SwListShell",
           "WriterListLevelCommand"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/uibase/shells/listsh.cxx",
         "upstreamSymbols": [
           "SwListShell::InitInterface_Impl",
@@ -3194,7 +3265,7 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+      "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "writer",
@@ -3224,13 +3295,12 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/uiview/view-session.ts#WriterSessionServices",
+          "apps/office/src/sw/source/uibase/uiview/view.ts#WriterSessionServices",
           "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx#SwView"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/uiview/view.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
         "knownViolations": [],
         "localSymbols": [
-          "WriterOperationStatus",
           "WriterSessionServices",
           "WriterCutCommandArguments",
           "WriterPasteCommandArguments",
@@ -3247,48 +3317,6 @@
           "SwView::ImpSetVerb",
           "SwView::GotFocus"
         ]
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/uiview/view.tsx",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "workbench-session",
-      "capabilityIds": [
-        "CAP-0101",
-        "CAP-0102",
-        "CAP-0103",
-        "CAP-0104",
-        "CAP-0105",
-        "CAP-0107",
-        "CAP-0109",
-        "CAP-0110",
-        "CAP-0113",
-        "CAP-0114",
-        "CAP-0115",
-        "CAP-0120",
-        "CAP-0121",
-        "CAP-0122",
-        "CAP-0135"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/sw/source/uibase/uiview/view.tsx#WriterWorkbenchProps"
-        ],
-        "justification": "Renders the Writer view as a React projection of a persistent SwView session. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
-        "knownViolations": [
-          "browser-adapter-upstream-path",
-          "browser-api-in-upstream-core"
-        ],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
       }
     },
     {
@@ -4055,60 +4083,12 @@
   ],
   "internalOperations": [
     {
-      "id": "writer.internal.close-document",
-      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
-      "symbol": "closeDocument",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper closeDocument owned by apps/office/src/sfx2/source/doc/objsh.ts."
-    },
-    {
       "id": "writer.internal.insert-writer-text-run",
       "modulePath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
       "symbol": "insertWriterTextRun",
       "classification": "upstream-mechanism",
       "capabilityId": "CAP-0124",
       "description": "Exported non-command mutation helper insertWriterTextRun owned by apps/office/src/sw/source/core/txtnode/ndtxt.ts."
-    },
-    {
-      "id": "writer.internal.mark-document-dirty",
-      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
-      "symbol": "markDocumentDirty",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentDirty owned by apps/office/src/sfx2/source/doc/objsh.ts."
-    },
-    {
-      "id": "writer.internal.mark-document-history-restored",
-      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
-      "symbol": "markDocumentHistoryRestored",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentHistoryRestored owned by apps/office/src/sfx2/source/doc/objsh.ts."
-    },
-    {
-      "id": "writer.internal.mark-document-history-save-position",
-      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
-      "symbol": "markDocumentHistorySavePosition",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentHistorySavePosition owned by apps/office/src/sfx2/source/doc/objsh.ts."
-    },
-    {
-      "id": "writer.internal.mark-document-recovery-saved",
-      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
-      "symbol": "markDocumentRecoverySaved",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentRecoverySaved owned by apps/office/src/sfx2/source/doc/objsh.ts."
-    },
-    {
-      "id": "writer.internal.mark-document-saved",
-      "modulePath": "apps/office/src/sfx2/source/doc/objsh.ts",
-      "symbol": "markDocumentSaved",
-      "classification": "local-infrastructure",
-      "capabilityId": "CAP-0114",
-      "description": "Exported non-command mutation helper markDocumentSaved owned by apps/office/src/sfx2/source/doc/objsh.ts."
     },
     {
       "id": "writer.internal.split-writer-text-runs",

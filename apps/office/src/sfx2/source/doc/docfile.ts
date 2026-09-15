@@ -62,18 +62,22 @@ export interface SfxMediumCapabilities {
   readonly canWrite: boolean;
 }
 
-/** Complete SfxMedium-like descriptor retained by a document shell. */
-export interface SfxMediumDescriptor {
-  /** Optional adapter capabilities; always populated by createSfxMediumDescriptor. */
-  readonly capabilities: SfxMediumCapabilities;
+/**
+ * Identity-bearing browser port of the bounded SfxMedium contract.
+ *
+ * LibreOffice retains one SfxMedium object while load/save state changes. The
+ * browser port follows that ownership rule: immutable routing data belongs to
+ * the instance and operation completion mutates only that same instance.
+ */
+export class SfxMedium {
+  readonly capabilities: Readonly<SfxMediumCapabilities>;
   /** Current primary destination, distinct from the source used to open the session. */
-  readonly destination: SfxMediumDestination;
+  readonly destination: Readonly<SfxMediumDestination>;
   /** Stable user-facing title. */
   readonly displayName: string;
   /** Browser-adapted primary medium family. */
   readonly kind: SfxMediumKind;
-  /** Latest operation status retained independently of document modified state. */
-  readonly lastOperation: SfxMediumOperationStatus;
+  private lastOperationState: Readonly<SfxMediumOperationStatus>;
   /** MIME type selected by the owning document filter, when applicable. */
   readonly mediaType?: string;
   /** Stable user-facing or storage-facing medium name. */
@@ -83,11 +87,70 @@ export interface SfxMediumDescriptor {
   /** Whether normal Save is prohibited. */
   readonly readOnly: boolean;
   /** Source used by Open or recovery; never rewritten by a destination change. */
-  readonly source: SfxMediumSource;
+  readonly source: Readonly<SfxMediumSource>;
   /** Filter identity selected independently of its MIME type. */
   readonly filterId?: string;
   /** Browser download target, which does not imply a confirmed write. */
   readonly downloadTarget?: string;
+  private open = true;
+
+  /** Creates one explicit medium identity. @param input - Validated browser medium route. @returns Nothing. */
+  public constructor(input: SfxMediumInput) {
+    assertNonBlank(input.name, "Medium name");
+    assertMediumInput(input);
+    const defaults = getMediumDefaults(input.kind);
+    const source = getMediumSource(input);
+    this.capabilities = Object.freeze(defaults.capabilities);
+    this.destination = Object.freeze(getMediumDestination(input));
+    this.displayName = input.displayName ?? input.name;
+    this.kind = input.kind;
+    this.lastOperationState = Object.freeze(
+      input.lastOperation ?? { operation: "none" as const, state: "idle" as const },
+    );
+    this.name = input.name;
+    this.origin = input.kind === "browser-local" ? getBrowserLocalOrigin(source) : defaults.origin;
+    this.readOnly = defaults.readOnly;
+    this.source = Object.freeze(source);
+    if (input.kind === "download") this.downloadTarget = input.downloadTarget;
+    if (input.filterId !== undefined) this.filterId = input.filterId;
+    if (input.mediaType !== undefined) this.mediaType = input.mediaType;
+  }
+
+  /** Returns the current operation record without replacing medium identity. @returns Current operation. */
+  public GetLastOperation(): Readonly<SfxMediumOperationStatus> {
+    return this.lastOperationState;
+  }
+
+  /** Retains property-style access for read-only command state. @returns Current operation. */
+  public get lastOperation(): Readonly<SfxMediumOperationStatus> {
+    return this.GetLastOperation();
+  }
+
+  /** Records one operation transition on this medium identity. @param operation - Operation kind. @param state - Operation state. @param generation - Optional content generation. @param message - Optional diagnostic. @returns Nothing. */
+  public SetOperation(
+    operation: SfxMediumOperation,
+    state: SfxMediumOperationState,
+    generation?: number,
+    message?: string,
+  ): void {
+    if (!this.open) throw new Error("Closed media cannot perform operations.");
+    this.lastOperationState = Object.freeze({
+      ...(generation === undefined ? {} : { generation }),
+      ...(message === undefined ? {} : { message }),
+      operation,
+      state,
+    });
+  }
+
+  /** Marks the medium closed while retaining its stable identity for diagnostics. @returns Nothing. */
+  public Close(): void {
+    this.open = false;
+  }
+
+  /** Reports whether the medium still accepts operations. @returns Whether open. */
+  public IsOpen(): boolean {
+    return this.open;
+  }
 }
 
 /** Fields shared by every explicit medium construction route. */
@@ -137,57 +200,12 @@ export type SfxMediumInput =
   | SfxRecoveryMediumInput
   | SfxUntitledMediumInput;
 
-/** Accepts either one construction route or an already normalized descriptor. */
-export type SfxMediumDescriptorInput = SfxMediumDescriptor | SfxMediumInput;
+/** Accepts construction data or an already-owned medium at shell boundaries. */
+export type SfxMediumInputOrInstance = SfxMedium | SfxMediumInput;
 
-/** Creates a complete immutable descriptor from one explicit construction route. @param input - Caller-owned discriminated medium data. @returns Complete frozen descriptor. */
-export function createSfxMediumDescriptor(input: SfxMediumDescriptorInput): SfxMediumDescriptor {
-  if (isSfxMediumDescriptor(input)) return input;
-  assertNonBlank(input.name, "Medium name");
-  assertMediumInput(input);
-  const defaults = getMediumDefaults(input.kind);
-  const source = getMediumSource(input);
-  const destination = getMediumDestination(input);
-  return Object.freeze({
-    capabilities: Object.freeze(defaults.capabilities),
-    destination: Object.freeze(destination),
-    displayName: input.displayName ?? input.name,
-    kind: input.kind,
-    lastOperation: Object.freeze(
-      input.lastOperation ?? { operation: "none" as const, state: "idle" as const },
-    ),
-    name: input.name,
-    origin: input.kind === "browser-local" ? getBrowserLocalOrigin(source) : defaults.origin,
-    readOnly: defaults.readOnly,
-    source: Object.freeze(source),
-    ...(input.kind === "download" ? { downloadTarget: input.downloadTarget } : {}),
-    ...(input.filterId === undefined ? {} : { filterId: input.filterId }),
-    ...(input.mediaType === undefined ? {} : { mediaType: input.mediaType }),
-  });
-}
-
-/** Recognizes a complete normalized descriptor without accepting partial compatibility shapes. @param input - Medium construction value. @returns Whether input is already normalized. */
-function isSfxMediumDescriptor(input: SfxMediumDescriptorInput): input is SfxMediumDescriptor {
-  return "capabilities" in input && "destination" in input && "source" in input;
-}
-
-/** Returns a medium with one new operation state. @param medium - Existing descriptor. @param operation - Operation being recorded. @param state - New operation state. @param generation - Optional captured generation. @param message - Optional failure diagnostic. @returns Updated descriptor. */
-export function updateSfxMediumOperation(
-  medium: SfxMediumDescriptor,
-  operation: SfxMediumOperation,
-  state: SfxMediumOperationState,
-  generation?: number,
-  message?: string,
-): SfxMediumDescriptor {
-  return Object.freeze({
-    ...medium,
-    lastOperation: Object.freeze({
-      ...(generation === undefined ? {} : { generation }),
-      ...(message === undefined ? {} : { message }),
-      operation,
-      state,
-    }),
-  });
+/** Preserves an existing medium identity or constructs the explicit replacement. @param input - Existing medium or construction route. @returns Retained or created medium. */
+export function acquireSfxMedium(input: SfxMediumInputOrInstance): SfxMedium {
+  return input instanceof SfxMedium ? input : new SfxMedium(input);
 }
 
 /** Returns default routing properties for one browser-adapted medium family. @param kind - Medium family. @returns Immutable defaults. */

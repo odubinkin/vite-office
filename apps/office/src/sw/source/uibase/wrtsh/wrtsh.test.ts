@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
+import { SwTransferable } from "../dochdl/swdtflvr";
 import { SwWrtShell } from "./wrtsh";
 import { applyWriterTextRangeFont } from "../../core/txtnode/ndtxt";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
@@ -609,5 +610,62 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       /** Rejects an empty family at the range helper boundary. @returns Invalid formatting. */ () =>
         applyWriterTextRangeFont(plainRuns, 0, 1, " "),
     ).toThrow("blank");
+  });
+
+  it("creates clipboard transfer data from the shell SwPaM without rendered DOM", /** Verifies model-owned transfer serialization. @returns Nothing. */ function createsModelTransfer(): void {
+    const shell = createShell("alpha beta");
+    shell.SetSelection({
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 5, paragraphId: "p-1" },
+    });
+    shell.ToggleCharacterFormat("bold");
+    shell.ToggleCharacterFormat("italic");
+    shell.ToggleCharacterFormat("underline");
+    shell.SetFontFamily("Noto Serif");
+    const transfer = shell.CreateTransferable().CreateSelection();
+    expect(transfer).toEqual({
+      html: expect.stringContaining(
+        '<span style="text-decoration: underline; font-family: Noto Serif"><em><strong>alpha</strong></em></span>',
+      ),
+      plainText: "alpha",
+    });
+    shell.SetSelection({
+      mark: { offset: 5, paragraphId: "p-1" },
+      point: { offset: 0, paragraphId: "p-1" },
+    });
+    expect(shell.CreateTransferable().CreateSelection()?.plainText).toBe("alpha");
+    shell.SetCursor("p-1", 5);
+    expect(shell.CreateTransferable().CreateSelection()).toBeUndefined();
+
+    const multiParagraph = createShell("firstsecond");
+    const secondId = multiParagraph.SplitParagraph("p-1", 5);
+    multiParagraph.SetCursor("p-1", 0);
+    multiParagraph.SetParagraphListKind("bullet");
+    multiParagraph.SetCursor(secondId, 0);
+    multiParagraph.SetParagraphListKind("numbered");
+    multiParagraph.SetSelection({
+      mark: { offset: 6, paragraphId: secondId },
+      point: { offset: 0, paragraphId: "p-1" },
+    });
+    expect(multiParagraph.CreateTransferable().CreateSelection()).toMatchObject({
+      plainText: expect.stringContaining("first"),
+    });
+
+    const emptyParagraphs = createShell();
+    const emptySecondId = emptyParagraphs.SplitParagraph("p-1", 0);
+    emptyParagraphs.SetSelection({
+      mark: { offset: 0, paragraphId: emptySecondId },
+      point: { offset: 0, paragraphId: "p-1" },
+    });
+    expect(emptyParagraphs.CreateTransferable().CreateSelection()).toBeUndefined();
+
+    const foreign = createShell("foreign");
+    foreign.SetSelection({
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 7, paragraphId: "p-1" },
+    });
+    expect(
+      new SwTransferable(shell.GetDoc(), foreign.GetCursor()).CreateSelection(),
+    ).toBeUndefined();
   });
 });

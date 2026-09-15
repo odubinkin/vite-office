@@ -14,7 +14,11 @@ import {
 } from "../../../../framework/source/dispatch/dispatchprovider";
 import type { AutoRecoveryEnvironment } from "../../../../framework/source/services/autorecovery";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import type { PrimarySavePort, StoredDocumentOpenPort } from "../../../../sfx2/source/doc/docfile";
+import type {
+  PrimarySavePort,
+  SfxMediumOperationStatus,
+  StoredDocumentOpenPort,
+} from "../../../../sfx2/source/doc/docfile";
 import type { RecoverySavePort } from "../../../../svl/source/misc/recovery";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../../vcl/browser/browser-clipboard";
@@ -28,33 +32,6 @@ import { type WriterClipboardPaste, type WriterClipboardSelection } from "../doc
 import { SwDocShell } from "../app/docsh";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
 import { SwWrtShell, type WriterCursorSelection } from "../wrtsh/wrtsh";
-
-/** Stable, presentation-neutral outcome of a Writer browser workflow. */
-export type WriterOperationStatus =
-  | { readonly kind: "idle" }
-  | { readonly kind: "new-document" }
-  | { readonly kind: "odt-open-cancelled" }
-  | { readonly kind: "odt-opened"; readonly name: string }
-  | { readonly detail: string; readonly kind: "odt-open-failed" }
-  | { readonly kind: "odt-download-started"; readonly name: string }
-  | { readonly detail: string; readonly kind: "odt-download-failed" }
-  | { readonly kind: "local-storage-unavailable" }
-  | { readonly kind: "local-saved" }
-  | { readonly kind: "local-save-failed" }
-  | { readonly kind: "local-missing" }
-  | { readonly kind: "local-loaded" }
-  | { readonly kind: "local-load-failed" }
-  | { readonly kind: "text-download-started" }
-  | { readonly kind: "text-download-failed" }
-  | { readonly kind: "copy-selection-required" }
-  | { readonly kind: "copied" }
-  | { readonly kind: "copy-failed" }
-  | { readonly kind: "cut-selection-required" }
-  | { readonly kind: "cut" }
-  | { readonly kind: "cut-failed" }
-  | { readonly kind: "paste-empty" }
-  | { readonly kind: "pasted" }
-  | { readonly kind: "paste-read-failed" };
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
@@ -84,8 +61,6 @@ export interface WriterCutCommandArguments {
   readonly clipboardHandled?: boolean;
   /** Direction-preserving canonical selection deleted after clipboard preparation. */
   readonly cursorSelection?: WriterCursorSelection;
-  /** Sanitized selection used by toolbar or menu Cut. */
-  readonly selection?: WriterClipboardSelection;
 }
 
 /** DOM-adapted Paste arguments accepted by native and explicit Paste surfaces. */
@@ -114,18 +89,13 @@ export interface WriterViewControllers {
     readonly Paste: (arguments_?: unknown) => Promise<void>;
   };
   readonly fileWorkflow: {
-    readonly ExportText: () => void;
+    readonly ExportText: () => Promise<void>;
     readonly OpenOdt: () => Promise<void>;
     readonly SaveOdt: () => Promise<void>;
   };
   readonly localStorageWorkflow: {
     readonly Load: () => Promise<void>;
     readonly Save: () => Promise<void>;
-  };
-  readonly operationState: {
-    readonly GetStatus: () => WriterOperationStatus;
-    readonly IsPending: () => boolean;
-    readonly SetStatus: (status: WriterOperationStatus) => void;
   };
 }
 
@@ -134,7 +104,6 @@ export interface WriterViewControllerFactory {
   readonly Create: (
     docShell: SwDocShell,
     wrtShell: SwWrtShell,
-    invalidateLifecycle: () => void,
     invalidateView: () => void,
   ) => WriterViewControllers;
 }
@@ -149,8 +118,8 @@ export interface WriterViewSnapshot extends WriterPresentationProjection {
   readonly isStoragePending: boolean;
   /** Status-bar visibility in this view. */
   readonly isStatusBarVisible: boolean;
-  /** Typed lifecycle or browser-operation outcome formatted by presentation code. */
-  readonly operationStatus: WriterOperationStatus;
+  /** Current operation state owned by the retained SfxMedium. */
+  readonly mediumOperation: Readonly<SfxMediumOperationStatus>;
   /** Monotonic dispatcher invalidation version. */
   readonly viewVersion: number;
 }
@@ -165,7 +134,6 @@ export class SwView {
   private frame: OfficeFrame<SwView> | undefined;
   private readonly listeners = new Set<() => void>();
   private readonly localStorageWorkflow: WriterViewControllers["localStorageWorkflow"];
-  private readonly operationState: WriterViewControllers["operationState"];
   private readonly viewCommandShell: SfxShell;
   private readonly viewProjection = new WriterViewProjection();
   private readonly wrtShell: SwWrtShell;
@@ -180,12 +148,9 @@ export class SwView {
     const controllers = controllerFactory.Create(
       docShell,
       this.wrtShell,
-      /** Invalidates lifecycle command and snapshot state. @returns Nothing. */ () =>
-        this.Invalidate("lifecycle"),
       /** Invalidates view-only presentation state. @returns Nothing. */ () =>
         this.Invalidate("view"),
     );
-    this.operationState = controllers.operationState;
     this.chromePreferences = controllers.chromePreferences;
     this.fileWorkflow = controllers.fileWorkflow;
     this.localStorageWorkflow = controllers.localStorageWorkflow;
@@ -249,8 +214,8 @@ export class SwView {
         isHorizontalRulerVisible: this.chromePreferences.IsHorizontalRulerVisible(),
         isPropertiesSidebarVisible: this.chromePreferences.IsSidebarVisible(),
         isStatusBarVisible: this.chromePreferences.IsStatusBarVisible(),
-        isStoragePending: this.operationState.IsPending(),
-        operationStatus: this.operationState.GetStatus(),
+        isStoragePending: this.docShell.GetMedium().lastOperation.state === "pending",
+        mediumOperation: this.docShell.GetMedium().GetLastOperation(),
         viewVersion: this.GetViewFrame().GetBindings().GetVersion(),
       });
       return this.cachedSnapshot;
@@ -290,7 +255,6 @@ export class SwView {
       }),
       "writer-paragraph-1",
     );
-    this.operationState.SetStatus({ kind: "new-document" });
   }
 
   /** Selects and atomically opens one ODT through the persistent document shell. @returns Completion after browser feedback. */
@@ -313,9 +277,9 @@ export class SwView {
     await this.localStorageWorkflow.Load();
   }
 
-  /** Starts the existing plain-text export through the injected browser adapter. @returns Nothing. */
-  public ExportText(): void {
-    this.fileWorkflow.ExportText();
+  /** Starts the existing plain-text export through the injected browser adapter. @returns Completion after the browser port settles. */
+  public ExportText(): Promise<void> {
+    return this.fileWorkflow.ExportText();
   }
 
   /** Copies one DOM-adapted Writer selection. @param arguments_ - Optional sanitized selection. @returns Completion after feedback. */
@@ -355,7 +319,7 @@ export class SwView {
 
   /** Returns whether a medium operation gates lifecycle commands. @returns Pending state. */
   public IsStoragePending(): boolean {
-    return this.operationState.IsPending();
+    return this.docShell.GetMedium().lastOperation.state === "pending";
   }
 
   /** Toggles horizontal-ruler visibility. @returns Nothing. */

@@ -9,11 +9,7 @@ import {
   type SerializableValue,
   type StoredDocumentOpenPort,
 } from "../../../sfx2/source/doc/docfile";
-import {
-  markDocumentRecoverySaved,
-  markDocumentSaved,
-  type OfficeDocument,
-} from "../../../sfx2/source/doc/objsh";
+import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
 import type { SwDoc } from "../../source/core/doc/doc";
 import { decodeWriterDocument, encodeWriterDocument } from "./writer-document-codec";
 
@@ -21,7 +17,7 @@ import { decodeWriterDocument, encodeWriterDocument } from "./writer-document-co
 export type WriterSnapshotState = {
   readonly [key: string]: SerializableValue;
   readonly documentState: SerializableValue;
-  readonly schemaVersion: 5;
+  readonly schemaVersion: 6;
   readonly writerModel: SerializableValue;
 };
 
@@ -40,7 +36,7 @@ export function createWriterSnapshot(
     id: documentState.id,
     state: {
       documentState: { ...documentState } as unknown as SerializableValue,
-      schemaVersion: 5 as const,
+      schemaVersion: 6 as const,
       writerModel: encodeWriterDocument(document) as unknown as SerializableValue,
     },
     version: documentState.contentGeneration,
@@ -52,21 +48,35 @@ export function restoreWriterSnapshot(
   snapshot: DocumentSnapshot<WriterSnapshotState>,
   purpose: "primary" | "recovery",
 ): RestoredWriterSnapshot {
-  if (snapshot.state.schemaVersion !== 5)
+  if (snapshot.state.schemaVersion !== 6)
     throw new Error(
       "Stored Writer snapshot schema is unsupported; open an ODT file or discard the browser copy.",
     );
   const document = decodeWriterDocument(snapshot.state.writerModel);
   const rawState = snapshot.state.documentState;
   if (!isOfficeDocument(rawState)) throw new Error("Stored Writer lifecycle state is invalid.");
-  if (rawState.id !== snapshot.id)
+  const restoredState = rawState as unknown as OfficeDocument;
+  if (restoredState.lifecycle === "closed")
+    throw new Error("Closed documents cannot be restored into an active shell.");
+  if (restoredState.id !== snapshot.id)
     throw new Error("Writer snapshot identity does not match its stored record.");
-  if (rawState.contentGeneration !== snapshot.version)
+  if (restoredState.contentGeneration !== snapshot.version)
     throw new Error("Writer snapshot generation does not match its stored record.");
-  const documentState =
+  const documentState: OfficeDocument = Object.freeze(
     purpose === "primary"
-      ? markDocumentSaved(rawState, snapshot.version)
-      : markDocumentRecoverySaved(rawState, snapshot.version);
+      ? {
+          ...restoredState,
+          isModified: false,
+          lifecycle: "saved",
+          savedGeneration: snapshot.version,
+        }
+      : {
+          ...restoredState,
+          isModified: true,
+          lifecycle: "dirty",
+          recoveryGeneration: snapshot.version,
+        },
+  );
   return { document, documentState };
 }
 

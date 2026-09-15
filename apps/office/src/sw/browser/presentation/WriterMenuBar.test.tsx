@@ -2,7 +2,7 @@
  * @fileoverview Verifies Writer menu placement and browser-owned copy commands through the application shell.
  */
 
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Desktop } from "../../../framework/source/services/desktop";
@@ -158,7 +158,10 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const getSelection = vi.spyOn(window, "getSelection").mockReturnValue(null);
       fireEvent.click(screen.getByRole("button", { name: "Copy" }));
       getSelection.mockRestore();
-      expect(screen.getByText("Select text to copy.")).toBeInTheDocument();
+      await waitFor(
+        /** Waits for Sfx command failure presentation. @returns Nothing. */ () =>
+          expect(screen.getByText("Select text to copy.")).toBeInTheDocument(),
+      );
       enterWriterParagraphText(editor, "Copied Writer body");
       fireEvent.click(screen.getByRole("button", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
@@ -171,7 +174,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
         },
       );
       expect(writeText).toHaveBeenCalledWith("Copied Writer body");
-      expect(screen.getByText("Copied selection.")).toBeInTheDocument();
+      expect(screen.getByText("Document has unsaved changes.")).toBeInTheDocument();
       writeText.mockRejectedValueOnce(new Error("Denied"));
       fireEvent.click(screen.getByRole("button", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
@@ -232,7 +235,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const clipboardItem = clipboardItems[0] as WriterClipboardItemFixture;
       expect(await clipboardItem.items["text/plain"]?.text()).toBe("Formatted Writer body");
       expect(await clipboardItem.items["text/html"]?.text()).toBe(
-        '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><strong><span style="font-family: &quot;Noto Serif&quot;">Formatted Writer body</span></strong></p>',
+        '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><span style="font-family: Noto Serif"><strong>Formatted Writer body</strong></span></p>',
       );
       expect(await clipboardItem.items["text/plain"]?.text()).not.toContain("Paragraph style:");
     } finally {
@@ -259,7 +262,10 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       render(<App />);
       const editor = screen.getByRole("textbox", { name: "Writer document text" });
       fireEvent.click(screen.getByRole("button", { name: "Cut" }));
-      expect(screen.getByText("Select text in one paragraph to cut.")).toBeInTheDocument();
+      await waitFor(
+        /** Waits for Sfx command failure presentation. @returns Nothing. */ () =>
+          expect(screen.getByText("Select text to cut.")).toBeInTheDocument(),
+      );
       enterWriterParagraphText(editor, "Cut me");
       const selection = window.getSelection() as Selection;
       const selectedRange = document.createRange();

@@ -264,6 +264,12 @@ describe("command registry" /**
     ).resolves.toBeUndefined();
     expect(rejectedRequest.IsDone()).toBe(true);
     expect(dispatcher.QueryState(".uno:RejectedResult").error).toBe("request failed");
+    expect(dispatcher.GetLastCommandError()).toEqual({
+      commandId: ".uno:RejectedResult",
+      error: "request failed",
+    });
+    dispatcher.ExecuteRequest(".uno:BooleanResult", new SfxRequest(101));
+    expect(dispatcher.GetLastCommandError()).toBeUndefined();
     expect(
       /** Executes a mismatched request. @returns Invalid dispatch result. */ () =>
         dispatcher.ExecuteRequest(".uno:BooleanResult", new SfxRequest(999)),

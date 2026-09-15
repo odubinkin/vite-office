@@ -61,7 +61,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
       id: "writer-store",
       state: {
         documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
-        schemaVersion: 5,
+        schemaVersion: 6,
         writerModel: { swModelVersion: 8 },
       },
       version: 1,
@@ -129,7 +129,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     ).toThrow("schema is unsupported");
     const wrongSchema = {
       ...current,
-      state: { ...current.state, schemaVersion: 1 as 5 },
+      state: { ...current.state, schemaVersion: 1 as 6 },
     };
     expect(
       /** Restores an unknown schema version. @returns Invalid result. */ () =>

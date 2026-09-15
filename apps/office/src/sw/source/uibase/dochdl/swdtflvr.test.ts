@@ -241,11 +241,11 @@ describe("createWriterClipboardSelection" /** Groups selected Writer paragraph c
 
   it("preserves only supported direct character semantics in rich Writer clipboard HTML" /** Verifies strong, emphasis, and single underline survive selection Copy while arbitrary editable markup is flattened. @returns Nothing; bounded semantic HTML and plain text are asserted. */, function serializesDirectCharacterFormatting(): void {
     document.body.innerHTML =
-      '<p data-alignment="left" data-style="default" data-writer-paragraph-id="p-1"><strong>Bold <em>italic</em></strong><span style="text-decoration: underline">under</span><mark>plain</mark></p>';
+      '<p data-alignment="left" data-style="default" data-writer-paragraph-id="p-1"><strong>Bold <em>italic</em></strong><span style="text-decoration: underline; font-family: Noto Serif">under</span><mark>plain</mark></p>';
     const paragraph = document.querySelector("p") as HTMLParagraphElement;
     const selection = selectCompleteNodes(paragraph, paragraph);
     expect(createWriterClipboardSelection(selection)).toEqual({
-      html: '<p style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;"><strong>Bold <em>italic</em></strong><span style="text-decoration: underline">under</span>plain</p>',
+      html: '<p style="text-align: left; font-size: 1rem; font-weight: 400; line-height: 1.75rem;"><strong>Bold <em>italic</em></strong><span style="text-decoration: underline; font-family: &quot;Noto Serif&quot;">under</span>plain</p>',
       plainText: "Bold italicunderplain",
     });
     const textNode = paragraph.querySelector("strong")?.firstChild as Text;

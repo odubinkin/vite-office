@@ -8,7 +8,6 @@ import {
   type CommandDefinition,
   type CommandRegistry,
 } from "../../../../framework/source/dispatch/dispatchprovider";
-import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { WriterCharacterFormat } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import type { WriterParagraphTextRange } from "../wrtsh/wrtsh";
@@ -102,7 +101,7 @@ export interface WriterTextCommandTarget {
 export interface WriterViewCommandTarget {
   readonly Copy: (arguments_?: unknown) => Promise<void>;
   readonly Cut: (arguments_?: unknown) => Promise<void>;
-  readonly ExportText: () => void;
+  readonly ExportText: () => Promise<void>;
   readonly IsHorizontalRulerVisible: () => boolean;
   readonly IsSidebarVisible: () => boolean;
   readonly IsStatusBarVisible: () => boolean;
@@ -288,29 +287,6 @@ export function createWriterTextCommandRegistry(
         undoPolicy: "record" as const,
       }),
     ),
-    {
-      capabilityId: "CAP-0107",
-      /** Demotes the active list paragraph. @returns Whether content changed. */
-      execute: (): boolean => target.ChangeParagraphListLevel("demote"),
-      id: WRITER_COMMAND_IDS.demote,
-      invalidates: ["document", "history", "selection"],
-      /** Reads whether another demotion is valid. @returns Enabled state. */
-      isEnabled: (): boolean =>
-        active().list.kind !== "none" && active().list.level < WRITER_MAX_LIST_LEVEL,
-      target: "shell",
-      undoPolicy: "record",
-    },
-    {
-      capabilityId: "CAP-0107",
-      /** Promotes the active list paragraph. @returns Whether content changed. */
-      execute: (): boolean => target.ChangeParagraphListLevel("promote"),
-      id: WRITER_COMMAND_IDS.promote,
-      invalidates: ["document", "history", "selection"],
-      /** Reads whether another promotion is valid. @returns Enabled state. */
-      isEnabled: (): boolean => active().list.kind !== "none" && active().list.level > 0,
-      target: "shell",
-      undoPolicy: "record",
-    },
   ]);
 }
 
@@ -375,7 +351,7 @@ export function createWriterViewCommandRegistry(
     {
       capabilityId: "CAP-0101",
       /** Starts plain-text export. @returns Nothing. */
-      execute: (): void => target.ExportText(),
+      execute: (): Promise<void> => target.ExportText(),
       id: WRITER_COMMAND_IDS.exportText,
       invalidates: ["lifecycle"],
       target: "view",

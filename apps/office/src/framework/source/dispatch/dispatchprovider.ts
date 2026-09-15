@@ -349,6 +349,7 @@ export function createCommandShell<Context>(
  */
 export class SfxDispatcher {
   private readonly asyncStates = new Map<string, Readonly<{ error?: string; pending: boolean }>>();
+  private lastCommandError: Readonly<{ commandId: string; error: string }> | undefined;
   private readonly listeners = new Set<() => void>();
   private readonly shells: SfxShell[] = [];
   private version = 0;
@@ -397,6 +398,7 @@ export class SfxDispatcher {
     if (command.command.slotId !== undefined && request.GetSlot() !== command.command.slotId)
       throw new Error(`SfxRequest slot does not match command: ${commandId}`);
     const browserPayload = request.GetBrowserPayload();
+    this.lastCommandError = undefined;
     const result = command.execute(
       browserPayload === undefined ? request.GetArgs() : browserPayload,
     );
@@ -415,13 +417,20 @@ export class SfxDispatcher {
       },
       /** Publishes a normalized asynchronous failure. @param error - Rejected command value. @returns Undefined after recording the failure. */
       (error: unknown) => {
-        this.asyncStates.set(commandId, { error: getErrorMessage(error), pending: false });
+        const message = getErrorMessage(error);
+        this.asyncStates.set(commandId, { error: message, pending: false });
+        this.lastCommandError = { commandId, error: message };
         request.Done();
         this.Invalidate("command-async");
         return undefined;
       },
     );
     return { ...result, value: tracked };
+  }
+
+  /** Returns the most recent asynchronous command failure, independent of Writer presentation. @returns Command identity and normalized error. */
+  public GetLastCommandError(): Readonly<{ commandId: string; error: string }> | undefined {
+    return this.lastCommandError;
   }
 
   /** Queries the active shell state for one command. @param commandId - Stable slot-like identity. @returns Disabled state when no shell provides the command. */

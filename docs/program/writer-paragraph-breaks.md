@@ -9,7 +9,7 @@ item, toolbar button, or canvas action button for paragraph creation.
 uses the browser selection API to calculate the UTF-16 caret offset relative to
 the editable paragraph. When that selection is collapsed and belongs to the
 paragraph, it prevents the browser's uncontrolled DOM mutation and asks
-[`view`](../../apps/office/src/sw/source/uibase/uiview/view.tsx) to dispatch the
+[`writer-view`](../../apps/office/src/sw/browser/presentation/writer-view.tsx) to dispatch the
 edit to the persistent `SwWrtShell`. The shell applies `SwUndoSplitNode` to the
 same `SwDoc` graph and records one action-history boundary.
 

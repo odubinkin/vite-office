@@ -3,12 +3,7 @@
  * `include/sfx2/objsh.hxx` and `sfx2/source/doc/objmisc.cxx`.
  */
 
-import {
-  createSfxMediumDescriptor,
-  type SfxMediumDescriptor,
-  type SfxMediumDescriptorInput,
-  type SfxMediumInput,
-} from "./docfile";
+import { acquireSfxMedium, type SfxMedium, type SfxMediumInputOrInstance } from "./docfile";
 
 /** Identifies the permitted lifecycle states for a locally held browser document. */
 export type DocumentLifecycle = "closed" | "dirty" | "new" | "saved";
@@ -49,12 +44,13 @@ export interface CreateDocumentInput {
 /** Framework document shell owning identity, lifecycle generations, and the current medium. */
 export class SfxObjectShell {
   protected documentState: OfficeDocument;
-  protected medium: SfxMediumDescriptor;
+  protected medium: SfxMedium;
 
   /** Creates an object shell from explicit lifecycle and medium inputs. @param document - Lifecycle state. @param medium - Current medium. @returns Nothing. */
-  public constructor(document: OfficeDocument, medium: SfxMediumInput) {
-    this.documentState = { ...document };
-    this.medium = createSfxMediumDescriptor(medium);
+  public constructor(document: OfficeDocument, medium: SfxMediumInputOrInstance) {
+    assertDocumentState(document);
+    this.documentState = Object.freeze({ ...document });
+    this.medium = acquireSfxMedium(medium);
   }
 
   /** Returns immutable lifecycle state owned by this shell. @returns Current state. */
@@ -63,7 +59,7 @@ export class SfxObjectShell {
   }
 
   /** Returns the stable current medium; lifecycle state remains owned separately by this shell. @returns Medium descriptor. */
-  public GetMedium(): SfxMediumDescriptor {
+  public GetMedium(): SfxMedium {
     return this.medium;
   }
 
@@ -74,22 +70,72 @@ export class SfxObjectShell {
   }
 
   /** Replaces shell-owned lifecycle and medium atomically. @param document - New lifecycle. @param medium - New medium. @returns Nothing. */
-  protected ReplaceObjectState(document: OfficeDocument, medium: SfxMediumDescriptorInput): void {
-    this.documentState = { ...document };
-    this.medium = createSfxMediumDescriptor(medium);
+  protected ReplaceObjectState(document: OfficeDocument, medium: SfxMediumInputOrInstance): void {
+    assertDocumentState(document);
+    const previousMedium = this.medium;
+    this.documentState = Object.freeze({ ...document });
+    this.medium = acquireSfxMedium(medium);
+    if (previousMedium !== this.medium) previousMedium.Close();
   }
 
   /** Stores a lifecycle transition owned by this framework shell. @param document - New state. @returns Whether state identity changed. */
   protected SetDocumentState(document: OfficeDocument): boolean {
-    if (document === this.documentState) return false;
-    this.documentState = document;
+    assertDocumentState(document);
+    if (isSameDocumentState(document, this.documentState)) return false;
+    this.documentState = Object.freeze({ ...document });
     return true;
+  }
+
+  /** Mirrors SfxObjectShell::SetModified and advances the browser content generation only for model changes. @param modified - Next modified flag. @param contentChanged - Whether content generation advances. @returns Whether state changed. */
+  protected SetModified(modified = true, contentChanged = false): boolean {
+    this.EnsureOpen();
+    const nextGeneration = contentChanged
+      ? this.documentState.contentGeneration + 1
+      : this.documentState.contentGeneration;
+    const lifecycle: DocumentLifecycle = modified
+      ? "dirty"
+      : this.documentState.savedGeneration === null
+        ? "new"
+        : "saved";
+    return this.SetDocumentState({
+      ...this.documentState,
+      contentGeneration: nextGeneration,
+      isModified: modified,
+      lifecycle,
+    });
+  }
+
+  /** Completes a confirmed primary-medium save without replacing shell identity. @param generation - Confirmed generation. @returns Whether state changed. */
+  protected SaveCompleted(generation = this.documentState.contentGeneration): boolean {
+    this.EnsureOpen();
+    assertAcknowledgedGeneration(this.documentState, generation, "Saved generation");
+    const isModified = generation !== this.documentState.contentGeneration;
+    return this.SetDocumentState({
+      ...this.documentState,
+      isModified,
+      lifecycle: isModified ? "dirty" : "saved",
+      savedGeneration: generation,
+    });
+  }
+
+  /** Acknowledges the browser recovery extension independently of primary save completion. @param generation - Recovered generation. @returns Whether state changed. */
+  protected RecoverySaveCompleted(generation = this.documentState.contentGeneration): boolean {
+    this.EnsureOpen();
+    assertAcknowledgedGeneration(this.documentState, generation, "Recovery generation");
+    return this.SetDocumentState({ ...this.documentState, recoveryGeneration: generation });
+  }
+
+  /** Reconciles modified state with the document undo manager save position. @param isSavePosition - Whether history matches the save mark. @returns Whether state changed. */
+  protected SetHistorySavePosition(isSavePosition: boolean): boolean {
+    return this.SetModified(!isSavePosition, false);
   }
 
   /** Marks this shell closed without mutating its underlying document model. @returns Whether closure changed state. */
   protected CloseObjectShell(): boolean {
-    const next = closeDocument(this.documentState);
-    return this.SetDocumentState(next);
+    if (this.documentState.lifecycle === "closed") return false;
+    this.documentState = Object.freeze({ ...this.documentState, lifecycle: "closed" });
+    this.medium.Close();
+    return true;
   }
 }
 
@@ -104,7 +150,7 @@ export function createDocument(input: CreateDocumentInput): OfficeDocument {
   assertNonBlank(input.id, "Document id");
   assertNonBlank(input.suiteId, "Document module id");
   assertNonBlank(input.title, "Document title");
-  return {
+  return Object.freeze({
     contentGeneration: 0,
     id: input.id,
     isModified: false,
@@ -113,128 +159,7 @@ export function createDocument(input: CreateDocumentInput): OfficeDocument {
     savedGeneration: null,
     suiteId: input.suiteId,
     title: input.title,
-  };
-}
-
-/**
- * Marks an open document dirty after a future body-editing operation has changed its serializable content.
- *
- * @param document - Immutable prior document state that is not mutated.
- * @returns A new dirty document with an incremented content generation.
- * @throws {Error} When the document is closed.
- */
-export function markDocumentDirty(document: OfficeDocument): OfficeDocument {
-  assertOpen(document);
-  return {
-    ...document,
-    contentGeneration: document.contentGeneration + 1,
-    isModified: true,
-    lifecycle: "dirty",
-  };
-}
-
-/**
- * Marks an open document saved after a future persistence adapter completes successfully.
- *
- * @param document - Immutable prior document state that is not mutated.
- * @param generation - Generation whose primary-medium write completed successfully.
- * @returns State acknowledging exactly the persisted generation without changing content generation.
- * @throws {Error} When the document is closed.
- */
-export function markDocumentSaved(
-  document: OfficeDocument,
-  generation = document.contentGeneration,
-): OfficeDocument {
-  assertOpen(document);
-  assertAcknowledgedGeneration(document, generation, "Saved generation");
-  const isModified = generation !== document.contentGeneration;
-  if (
-    document.savedGeneration === generation &&
-    document.isModified === isModified &&
-    document.lifecycle === (isModified ? "dirty" : "saved")
-  )
-    return document;
-  return {
-    ...document,
-    isModified,
-    lifecycle: isModified ? "dirty" : "saved",
-    savedGeneration: generation,
-  };
-}
-
-/**
- * Acknowledges a successfully persisted recovery snapshot independently of the primary medium.
- *
- * @param document - Immutable prior document state that is not mutated.
- * @param generation - Content generation written to recovery storage.
- * @returns State with updated recovery generation and unchanged modified/save semantics.
- */
-export function markDocumentRecoverySaved(
-  document: OfficeDocument,
-  generation = document.contentGeneration,
-): OfficeDocument {
-  assertOpen(document);
-  assertAcknowledgedGeneration(document, generation, "Recovery generation");
-  return document.recoveryGeneration === generation
-    ? document
-    : { ...document, recoveryGeneration: generation };
-}
-
-/**
- * Marks whether a historical entry is the current primary save position without changing content.
- *
- * LibreOffice keeps this concern in `SwUndoManager::m_UndoSaveMark`; the browser snapshot history
- * stores the equivalent bit on each entry so a moved save mark remains deterministic.
- *
- * @param document - Open historical document metadata.
- * @param isSavePosition - Whether this entry is the current primary save position.
- * @returns Metadata with matching modified and lifecycle state but unchanged generations.
- */
-export function markDocumentHistorySavePosition(
-  document: OfficeDocument,
-  isSavePosition: boolean,
-): OfficeDocument {
-  assertOpen(document);
-  const isModified = !isSavePosition;
-  const lifecycle = isSavePosition ? "saved" : "dirty";
-  return document.isModified === isModified && document.lifecycle === lifecycle
-    ? document
-    : { ...document, isModified, lifecycle };
-}
-
-/**
- * Applies a history navigation as a fresh content mutation while retaining current save/recovery checkpoints.
- *
- * @param current - Current lifecycle state before Undo or Redo.
- * @param restored - Historical content state selected by Undo or Redo.
- * @returns Restored lifecycle metadata with a new monotonic content generation.
- */
-export function markDocumentHistoryRestored(
-  current: OfficeDocument,
-  restored: OfficeDocument,
-): OfficeDocument {
-  assertOpen(current);
-  assertOpen(restored);
-  if (current.id !== restored.id) throw new Error("History document identity must remain stable.");
-  const contentGeneration = current.contentGeneration + 1;
-  return {
-    ...restored,
-    contentGeneration,
-    isModified: restored.isModified,
-    lifecycle: restored.isModified ? "dirty" : "saved",
-    recoveryGeneration: current.recoveryGeneration,
-    savedGeneration: current.savedGeneration,
-  };
-}
-
-/**
- * Closes an open document without performing persistence; save prompting belongs to a future workbench policy.
- *
- * @param document - Immutable prior document state that is not mutated.
- * @returns A new closed document without changing content or persistence generations.
- */
-export function closeDocument(document: OfficeDocument): OfficeDocument {
-  return document.lifecycle === "closed" ? document : { ...document, lifecycle: "closed" };
+  });
 }
 
 /**
@@ -273,6 +198,30 @@ function assertNonBlank(value: string, label: string): void {
  * @returns Nothing; closed state throws an Error.
  * @throws {Error} When document.lifecycle is closed.
  */
-function assertOpen(document: OfficeDocument): void {
-  if (document.lifecycle === "closed") throw new Error("Closed documents cannot transition.");
+function assertDocumentState(document: OfficeDocument): void {
+  assertNonBlank(document.id, "Document id");
+  assertNonBlank(document.suiteId, "Document module id");
+  assertNonBlank(document.title, "Document title");
+  if (!Number.isInteger(document.contentGeneration) || document.contentGeneration < 0)
+    throw new Error("Content generation must be a non-negative integer.");
+  for (const generation of [document.savedGeneration, document.recoveryGeneration])
+    if (
+      generation !== null &&
+      (!Number.isInteger(generation) || generation < 0 || generation > document.contentGeneration)
+    )
+      throw new Error("Persistence generations must identify existing document content.");
+}
+
+/** Compares value state while preserving the shell as its sole mutation owner. @param left - First state. @param right - Second state. @returns Whether equal. */
+function isSameDocumentState(left: OfficeDocument, right: OfficeDocument): boolean {
+  return (
+    left.contentGeneration === right.contentGeneration &&
+    left.id === right.id &&
+    left.isModified === right.isModified &&
+    left.lifecycle === right.lifecycle &&
+    left.recoveryGeneration === right.recoveryGeneration &&
+    left.savedGeneration === right.savedGeneration &&
+    left.suiteId === right.suiteId &&
+    left.title === right.title
+  );
 }

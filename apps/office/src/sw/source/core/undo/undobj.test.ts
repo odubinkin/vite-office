@@ -107,16 +107,16 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(delimiter.docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoDelete);
   });
 
-  it("keeps composition and mixed replacements outside typing groups" /** Verifies explicit input and transaction grouping boundaries. @returns Nothing. */, function separatesInputKinds(): void {
+  it("keeps composition outside typing groups and rejects whole-paragraph DOM fallback" /** Verifies explicit input grouping and canonical-operation ownership. @returns Nothing. */, function separatesInputKinds(): void {
     const { docShell, document, shell } = createSession();
-    shell.InsertText("p-1", "あ", 1, "insertCompositionText");
-    shell.InsertText("p-1", "あい", 2, "insertCompositionText");
-    expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(2);
-    shell.InsertText("p-1", "AX", 2, "insertText");
-    expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoReplace);
-    shell.Undo();
+    shell.StartComposition();
+    shell.UpdateComposition("あい");
+    shell.EndComposition();
+    expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
+    expect(shell.InsertText("p-1", "AX", 2, "insertText")).toBe(false);
     expect(document.paragraphs[0]?.text).toBe("あい");
-    expect(shell.InsertText("p-1", "あい", 2, "insertText")).toBe(false);
+    shell.Undo();
+    expect(document.paragraphs[0]?.text).toBe("");
   });
 
   it("undoes paste and cut as range actions with exact direct formatting" /** Verifies compound replacement semantics without document snapshots. @returns Nothing. */, function replacesRanges(): void {

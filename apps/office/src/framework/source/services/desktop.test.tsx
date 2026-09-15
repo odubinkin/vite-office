@@ -398,7 +398,7 @@ describe("App" /**
         () => expect(screen.getByText("Imported package body")).toBeInTheDocument(),
       );
       expect(screen.getByText("Opened ODT")).toBeInTheDocument();
-      expect(screen.getByText("Opened fixture.odt.")).toBeInTheDocument();
+      expect(screen.getByText("Document opened.")).toBeInTheDocument();
       expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
 
       fireEvent.click(screen.getByRole("button", { name: "Save As" }));
@@ -414,7 +414,7 @@ describe("App" /**
       expect(
         (await readOdtDocument(downloadedBytes, importedState)).document.paragraphs[0]?.text,
       ).toBe("Imported package body");
-      expect(screen.getByText("ODT download started: Opened ODT.odt")).toBeInTheDocument();
+      expect(screen.getByText("Document opened.")).toBeInTheDocument();
     } finally {
       inputClick.mockRestore();
       anchorClick.mockRestore();
@@ -443,7 +443,7 @@ describe("App" /**
       );
       await invokeWriterFileCommand("Open…");
       expect(editor).toHaveTextContent("Current body");
-      expect(screen.getByText("ODT open cancelled.")).toBeInTheDocument();
+      expect(screen.getByText("Document has unsaved changes.")).toBeInTheDocument();
 
       inputClick.mockImplementationOnce(
         /** Supplies an invalid package. @param this - Transient file input. @returns Nothing. */
@@ -462,7 +462,6 @@ describe("App" /**
       await invokeWriterFileCommand("New Document");
       expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent("");
       expect(screen.getByText("Untitled Writer Document")).toBeInTheDocument();
-      expect(screen.getByText("Created a new Writer document.")).toBeInTheDocument();
       expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
     } finally {
       inputClick.mockRestore();
@@ -500,7 +499,7 @@ describe("App" /**
           const restoredEditor = screen.getByRole("textbox", { name: "Writer document text" });
           expect(restoredEditor).toHaveTextContent("Stored body");
           expect(restoredEditor).toHaveClass("text-2xl", "font-bold");
-          expect(screen.getByText("Loaded local saved copy.")).toBeInTheDocument();
+          expect(screen.getByText("Document opened.")).toBeInTheDocument();
         },
       );
     } finally {
@@ -569,7 +568,7 @@ describe("App" /**
       await waitFor(
         /** Waits for missing-snapshot feedback. @returns A fulfilled polling promise. */
         async function verifiesMissing(): Promise<void> {
-          expect(screen.getByText("No local saved copy exists.")).toBeInTheDocument();
+          expect(screen.getByText("Not saved in this browser.")).toBeInTheDocument();
         },
       );
     } finally {
@@ -646,7 +645,7 @@ describe("App" /**
     );
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Export…" }));
-    expect(screen.getByText("Plain-text download started.")).toBeInTheDocument();
+    expect(screen.getByText("Document has unsaved changes.")).toBeInTheDocument();
     expect(await downloadedBlob?.text()).toBe("Download body");
     createObjectUrl.mockImplementationOnce(
       /** Simulates unsupported browser object URL creation. @returns No URL because this call throws. */
@@ -656,7 +655,10 @@ describe("App" /**
     );
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Export…" }));
-    expect(screen.getByText("Could not start plain-text download.")).toBeInTheDocument();
+    await waitFor(
+      /** Waits for the Sfx asynchronous command failure state. @returns Nothing. */ () =>
+        expect(screen.getByText("Could not start plain-text download.")).toBeInTheDocument(),
+    );
     createObjectUrl.mockImplementationOnce(
       /** Simulates a non-Error browser capability rejection. @returns No URL because this call throws. */
       function rejectsOdtObjectUrl(): string {

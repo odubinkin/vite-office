@@ -28,10 +28,6 @@
       "rationale": "The local writercommands.ts module preserves the reviewed CreateSWDrawView responsibility while TypeScript decomposition or public naming requires a different filename from swriter.sdi."
     },
     {
-      "localPath": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
-      "rationale": "The local view-session.ts module preserves the reviewed SwView responsibility while TypeScript decomposition or public naming requires a different filename from view.cxx."
-    },
-    {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
       "rationale": "The local wrtsh.ts module preserves the reviewed SwWrtShell responsibility while TypeScript decomposition or public naming requires a different filename from wrtsh1.cxx."
     },
@@ -182,6 +178,27 @@
       "status": "local-only"
     },
     {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SuiteCardProps",
+            "path": "apps/office/src/framework/source/services/SuiteCard.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/source/services/SuiteCard.tsx",
+      "rationale": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Renders one accessible suite link for the office application launcher."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
       "classification": "upstream-mechanism",
       "evidence": {
         "local": [
@@ -298,27 +315,6 @@
       "rationale": "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
       "responsibilities": [
         "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SuiteCardProps",
-            "path": "apps/office/src/framework/source/services/SuiteCard.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/source/services/SuiteCard.tsx",
-      "rationale": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Renders one accessible suite link for the office application launcher."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -582,7 +578,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "createSfxMediumDescriptor",
+            "marker": "export class SfxMedium",
             "path": "apps/office/src/sfx2/source/doc/docfile.ts"
           }
         ],
@@ -595,19 +591,19 @@
       },
       "localPath": "apps/office/src/sfx2/source/doc/docfile.ts",
       "localSymbols": [
-        "SfxMediumDescriptor",
+        "SfxMedium",
         "SfxMediumKind",
         "SfxMediumOrigin",
         "SfxMediumSource",
         "SfxMediumDestination",
         "SfxMediumOperation",
-        "createSfxMediumDescriptor"
+        "acquireSfxMedium"
       ],
       "omittedResponsibilities": [
         "Native streams, UCB content, lock files, item sets, interaction handlers, temporary files, and protocol-specific transfer mechanics remain outside the bounded browser medium."
       ],
       "preservedResponsibilities": [
-        "Preserves stable SfxMedium identity, distinct original source and current destination, filter metadata, read-only routing, and explicit transfer status without duplicating document lifecycle state."
+        "Preserves one stable SfxMedium object identity, distinct original source and current destination, filter metadata, read-only routing, close state, and in-place operation completion without duplicating document lifecycle state."
       ],
       "status": "mapped",
       "upstreamPath": "sfx2/source/doc/docfile.cxx",
@@ -640,14 +636,16 @@
       "localSymbols": [
         "SfxObjectShell",
         "OfficeDocument",
-        "markDocumentDirty",
-        "markDocumentSaved"
+        "SetModified",
+        "SaveCompleted",
+        "RecoverySaveCompleted",
+        "SetHistorySavePosition"
       ],
       "omittedResponsibilities": [
         "UNO model integration, native storage, signing, macro, printer, and desktop UI obligations remain outside the bounded browser object-shell layer."
       ],
       "preservedResponsibilities": [
-        "Owns document identity, modified state, lifecycle transitions, and the current medium outside the Writer model graph."
+        "Owns document identity, modified state, save completion, close state, browser generation extensions, and the retained SfxMedium outside the Writer model graph."
       ],
       "status": "mapped",
       "upstreamPath": "include/sfx2/objsh.hxx",
@@ -1114,48 +1112,6 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterCommandSource",
-            "path": "apps/office/src/sw/browser/presentation/command-surface.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/command-surface.ts",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
-      "responsibilities": [
-        "Defines the replaceable command query and dispatch port consumed by browser presenters."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterViewProjection",
-            "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
-      "rationale": "Projects live Writer nodes into immutable primitive presentation values. This browser boundary has no single native LibreOffice implementation unit and remains explicit in the parity inventory.",
-      "responsibilities": [
-        "Projects live Writer nodes into immutable primitive presentation values."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "The browser-specific WriterViewProjection boundary has no single native LibreOffice implementation unit and therefore remains explicit."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
             "marker": "WriterCommandToolbar",
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx"
           }
@@ -1317,16 +1273,79 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterCommandSource",
+            "path": "apps/office/src/sw/browser/presentation/command-surface.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/command-surface.ts",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Defines the replaceable command query and dispatch port consumed by browser presenters."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterViewProjection",
+            "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "rationale": "Projects live Writer nodes into immutable primitive presentation values. This browser boundary has no single native LibreOffice implementation unit and remains explicit in the parity inventory.",
+      "responsibilities": [
+        "Projects live Writer nodes into immutable primitive presentation values."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "The browser-specific WriterViewProjection boundary has no single native LibreOffice implementation unit and therefore remains explicit."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterWorkbenchProps",
+            "path": "apps/office/src/sw/browser/presentation/writer-view.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/writer-view.tsx",
+      "rationale": "Renders the Writer view as a browser-owned React projection of the upstream-shaped SwView shell. No native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the Writer view as a browser-owned React projection of the upstream-shaped SwView shell."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterFileWorkflowController",
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-      "rationale": "Owns browser file, download, clipboard, IndexedDB, chrome-preference, and operation-presentation workflows behind narrow injected ports; no native platform source file is claimed.",
+      "rationale": "Adapts browser file, clipboard, download, and IndexedDB ports while document operations remain owned by SwDocShell and transfer creation remains owned by SwTransferable/SwWrtShell.",
       "responsibilities": [
-        "Adapts browser file, export, clipboard, and local-storage operations without assigning their policy to SwView.",
-        "Stores transient chrome preferences and typed operation outcomes outside Writer model classes."
+        "Binds browser ports to shell-owned file/storage operations.",
+        "Surfaces platform failures through Sfx asynchronous command completion instead of a parallel workflow status model."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1487,6 +1506,38 @@
       "evidence": {
         "local": [
           {
+            "marker": "export class SwViewOption",
+            "path": "apps/office/src/sw/inc/viewopt.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "class SwViewOption",
+            "path": "vendor/libreoffice-reference/sw/inc/viewopt.hxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/inc/viewopt.ts",
+      "localSymbols": [
+        "SwViewOption"
+      ],
+      "omittedResponsibilities": [
+        "Layout, zoom, field shading, formatting marks, browse mode, and native window flags remain outside the bounded browser view-visibility slice."
+      ],
+      "preservedResponsibilities": [
+        "Owns per-view visibility flags and publishes changes without storing them in browser workflow DTOs."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/inc/viewopt.hxx",
+      "upstreamSymbols": [
+        "SwViewOption"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "getWriterSlotId",
             "path": "apps/office/src/sw/sdi/swriter.ts"
           }
@@ -1513,6 +1564,39 @@
       "upstreamPath": "sw/sdi/swriter.sdi",
       "upstreamSymbols": [
         "SfxVoidItem"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwNodeNum",
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwNodeNum",
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "localSymbols": [
+        "SwNodeNum"
+      ],
+      "omittedResponsibilities": [
+        "Redline-specific parallel trees and layout notification remain outside the supported browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Stores a list item's level and validated counter under document-list ownership."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "upstreamSymbols": [
+        "SwNodeNum::SwNodeNum",
+        "SwNodeNum::GetStartValue"
       ]
     },
     {
@@ -1658,42 +1742,6 @@
         "SwPosition",
         "SwPaM",
         "SwPosition::SwPosition"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SwDoc",
-            "path": "apps/office/src/sw/source/core/doc/doc.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwDoc",
-            "path": "vendor/libreoffice-reference/sw/source/core/doc/doc.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/doc/doc.ts",
-      "localSymbols": [
-        "SwDoc",
-        "createWriterDocument"
-      ],
-      "omittedResponsibilities": [
-        "Upstream subsystems outside the bounded SwDoc aggregate remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Owns the final Writer document aggregate and composes upstream-shaped content, list, setting, state, style, and undo managers."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/doc/doc.cxx",
-      "upstreamSymbols": [
-        "SwDoc",
-        "SwDoc::acquire",
-        "SwDoc::release",
-        "SwDoc::getReferenceCount"
       ]
     },
     {
@@ -1901,6 +1949,42 @@
       "evidence": {
         "local": [
           {
+            "marker": "SwDoc",
+            "path": "apps/office/src/sw/source/core/doc/doc.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwDoc",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/doc.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/doc.ts",
+      "localSymbols": [
+        "SwDoc",
+        "createWriterDocument"
+      ],
+      "omittedResponsibilities": [
+        "Upstream subsystems outside the bounded SwDoc aggregate remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns the final Writer document aggregate and composes upstream-shaped content, list, setting, state, style, and undo managers."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/doc.cxx",
+      "upstreamSymbols": [
+        "SwDoc",
+        "SwDoc::acquire",
+        "SwDoc::release",
+        "SwDoc::getReferenceCount"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "WRITER_PARAGRAPH_STYLES",
             "path": "apps/office/src/sw/source/core/doc/fmtcol.ts"
           }
@@ -2011,39 +2095,6 @@
         "SwNumRule",
         "o3tl::toTwips",
         "SwNumRule::GetOutlineRuleName"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SwNodeNum",
-            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwNodeNum",
-            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
-      "localSymbols": [
-        "SwNodeNum"
-      ],
-      "omittedResponsibilities": [
-        "Redline-specific parallel trees and layout notification remain outside the supported browser slice."
-      ],
-      "preservedResponsibilities": [
-        "Stores a list item's level and validated counter under document-list ownership."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
-      "upstreamSymbols": [
-        "SwNodeNum::SwNodeNum",
-        "SwNodeNum::GetStartValue"
       ]
     },
     {
@@ -3063,7 +3114,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterListLevelCommand",
+            "marker": "export class SwListShell",
             "path": "apps/office/src/sw/source/uibase/shells/listsh.ts"
           }
         ],
@@ -3076,13 +3127,14 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/shells/listsh.ts",
       "localSymbols": [
+        "SwListShell",
         "WriterListLevelCommand"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwListShell::InitInterface_Impl, SwListShell::Execute, SwListShell::GetState, SwListShell::SwListShell and the bounded WriterListLevelCommand identity remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Declares the bounded Writer list-level command identity consumed by the single SwWrtShell mutation path."
+        "Implements bounded SwListShell execution and state for promote/demote commands through generated Sfx slots and the active SwWrtShell."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/shells/listsh.cxx",
@@ -3138,7 +3190,7 @@
         "local": [
           {
             "marker": "WriterSessionServices",
-            "path": "apps/office/src/sw/source/uibase/uiview/view-session.ts"
+            "path": "apps/office/src/sw/source/uibase/uiview/view.ts"
           }
         ],
         "upstream": [
@@ -3148,9 +3200,8 @@
           }
         ]
       },
-      "localPath": "apps/office/src/sw/source/uibase/uiview/view-session.ts",
+      "localPath": "apps/office/src/sw/source/uibase/uiview/view.ts",
       "localSymbols": [
-        "WriterOperationStatus",
         "WriterSessionServices",
         "WriterCutCommandArguments",
         "WriterPasteCommandArguments",
@@ -3163,7 +3214,7 @@
         "Upstream obligations outside SwView, SwView::GetDispatcher, SwView::ImpSetVerb, SwView::GotFocus and the bounded WriterSessionServices, WriterCutCommandArguments, WriterPasteCommandArguments contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements the active SwView shell/frame relationship, view command routing, and external-store snapshot while delegating browser workflows and presentation state to injected controllers."
+        "Implements the active SwView shell/frame relationship, view command routing, SwViewOption state, Sfx bindings invalidation, and an immutable browser presentation projection."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/uiview/view.cxx",
@@ -3173,27 +3224,6 @@
         "SwView::ImpSetVerb",
         "SwView::GotFocus"
       ]
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterWorkbenchProps",
-            "path": "apps/office/src/sw/source/uibase/uiview/view.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/uiview/view.tsx",
-      "rationale": "Renders the Writer view as a React projection of a persistent SwView session. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
-      "responsibilities": [
-        "Renders the Writer view as a React projection of a persistent SwView session."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
-      },
-      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",

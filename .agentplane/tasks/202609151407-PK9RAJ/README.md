@@ -4,7 +4,7 @@ title: "Implement Writer upstream parity Phase 4"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-15T15:17:59.627Z"
+  updated_by: "CODER"
+  note: "Phase 4 verified: 76 focused tests passed; full npm run verify passed with 312 unit tests and 88 inventory tests at 100% coverage, 10 browser e2e tests, build/static/docs/source-tree/provenance/invariant/parity checks; Agentplane doctor and policy routing passed."
   attempts: 0
 commit: null
 comments:
@@ -36,8 +36,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-09-15T15:17:59.627Z"
+    author: "CODER"
+    state: "ok"
+    note: "Phase 4 verified: 76 focused tests passed; full npm run verify passed with 312 unit tests and 88 inventory tests at 100% coverage, 10 browser e2e tests, build/static/docs/source-tree/provenance/invariant/parity checks; Agentplane doctor and policy routing passed."
 doc_version: 3
-doc_updated_at: "2026-09-15T14:33:58.258Z"
+doc_updated_at: "2026-09-15T15:17:59.708Z"
 doc_updated_by: "CODER"
 description: "Restore shell, medium, lifecycle, browser workflow, and undo ownership for the supported Writer slice using pinned LibreOffice 26.8.0.2 semantics; update tests and parity evidence; verify and push main."
 sections:
@@ -61,12 +67,45 @@ sections:
     6. `git status --short --untracked-files=all` — expected: no unintended changes or unreviewed artifacts remain before finish/push.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-15T15:17:59.627Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Phase 4 verified: 76 focused tests passed; full npm run verify passed with 312 unit tests and 88 inventory tests at 100% coverage, 10 browser e2e tests, build/static/docs/source-tree/provenance/invariant/parity checks; Agentplane doctor and policy routing passed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T14:33:58.258Z, excerpt_hash=sha256:f045d4d5a3018a986e8fc6a07b3ced54736317d808992566669b59793d20b22e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151407-PK9RAJ/blueprint/resolved-snapshot.json
+    - old_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+    - current_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609151407-PK9RAJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609151407-PK9RAJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert only the Phase 4 implementation and Agentplane lifecycle commits.
     - Do not restore compatibility shims for the superseded persistence model.
     - Re-run focused tests and npm run verify after rollback.
-  Findings: ""
+  Findings: |-
+    - Observation: Writer Phase 4 shell, lifecycle, view, clipboard, list, persistence schema, and dispatch ownership changes pass the declared verification contract.
+      Impact: The implementation is ready for a task-scoped commit and direct-workflow finish.
+      Resolution: Recorded successful focused and full repository verification.
 id_source: "generated"
 ---
 ## Summary
@@ -99,6 +138,36 @@ Implement approved Phase 4 as one atomic CODER-owned deliverable with upstream-d
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-15T15:17:59.627Z — VERIFY — ok
+
+By: CODER
+
+Note: Phase 4 verified: 76 focused tests passed; full npm run verify passed with 312 unit tests and 88 inventory tests at 100% coverage, 10 browser e2e tests, build/static/docs/source-tree/provenance/invariant/parity checks; Agentplane doctor and policy routing passed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-15T14:33:58.258Z, excerpt_hash=sha256:f045d4d5a3018a986e8fc6a07b3ced54736317d808992566669b59793d20b22e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609151407-PK9RAJ/blueprint/resolved-snapshot.json
+- old_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+- current_digest: a2fda36bd4479a998deadcd1b205e1980eb4ed2bbf5058c2617eff20269772eb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609151407-PK9RAJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609151407-PK9RAJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -108,3 +177,7 @@ Implement approved Phase 4 as one atomic CODER-owned deliverable with upstream-d
 - Re-run focused tests and npm run verify after rollback.
 
 ## Findings
+
+- Observation: Writer Phase 4 shell, lifecycle, view, clipboard, list, persistence schema, and dispatch ownership changes pass the declared verification contract.
+  Impact: The implementation is ready for a task-scoped commit and direct-workflow finish.
+  Resolution: Recorded successful focused and full repository verification.

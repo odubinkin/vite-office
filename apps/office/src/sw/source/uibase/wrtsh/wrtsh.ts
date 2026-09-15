@@ -19,7 +19,6 @@ import type {
   WriterTextRun,
 } from "../../core/txtnode/ndtxt";
 import {
-  createWriterTextRuns,
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
   getWriterNextGraphemeBoundary,
   getWriterPreviousGraphemeBoundary,
@@ -33,7 +32,7 @@ import {
   WRITER_MAX_LIST_LEVEL,
   type WriterParagraphListKind,
 } from "../../core/doc/list";
-import type { WriterListLevelCommand } from "../shells/listsh";
+import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
 import { createWriterTextCommandRegistry } from "../shells/writercommands";
 import type { SwDocShell } from "../app/docsh";
 import { getActiveWriterParagraph } from "../uiview/viewfunc";
@@ -48,7 +47,11 @@ import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { CreateWriterFontUndo, SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
 import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import { SwUndoInsNum, SwUndoNumLevel } from "../../core/undo/unnum";
-import type { WriterClipboardPaste, WriterClipboardPasteParagraph } from "../dochdl/swdtflvr";
+import {
+  SwTransferable,
+  type WriterClipboardPaste,
+  type WriterClipboardPasteParagraph,
+} from "../dochdl/swdtflvr";
 import {
   CopyTextRangeRuns,
   CopyUndoRuns,
@@ -87,6 +90,7 @@ export class SwWrtShell extends SwModify {
   private composition: WriterCompositionState | undefined;
   private readonly cursor: SwPaM;
   private readonly docShellSubscription: () => void;
+  private readonly listShell: SwListShell;
   private pendingCharacterAttributes: WriterCharacterAttributes = {
     ...DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
   };
@@ -110,6 +114,7 @@ export class SwWrtShell extends SwModify {
         ) => this.RestoreCursorState(state),
     };
     this.commandShell = createCommandShell(this, createWriterTextCommandRegistry(this));
+    this.listShell = new SwListShell(this);
     this.docShellSubscription = docShell.Subscribe(
       /** Relays one document-shell hint into the editing shell. @param hint - Typed shell hint. @returns Nothing. */ (
         hint,
@@ -129,6 +134,10 @@ export class SwWrtShell extends SwModify {
   public GetCursor(): SwPaM {
     return this.cursor;
   }
+  /** Creates a model-based transfer object over the current persistent selection. @returns Transfer object. */
+  public CreateTransferable(): SwTransferable {
+    return new SwTransferable(this.GetDoc(), this.cursor);
+  }
   /** Projects the persistent SwPaM to stable Writer node coordinates. @returns Copied direction-preserving cursor state. */
   public GetCursorSelection(): WriterCursorSelection {
     const point = this.cursor.GetPoint();
@@ -142,28 +151,27 @@ export class SwWrtShell extends SwModify {
       point: { offset: point.GetContentIndex(), paragraphId: pointNode.id },
     };
   }
-
   /** Returns the Writer editing command shell for top-priority frame registration. @returns SfxShell adapter. */
   public GetCommandShell(): SfxShell {
     return this.commandShell;
   }
-
+  /** Returns the context shell that owns list toolbar execution and state. @returns Active list shell. */
+  public GetListShell(): SwListShell {
+    return this.listShell;
+  }
   /** Returns the active paragraph with the Writer first-paragraph fallback. @returns Active text node. */
   public GetActiveParagraph(): WriterParagraph {
     return getActiveWriterParagraph(this.GetDoc(), this.activeParagraphId);
   }
-
   /** Returns pending direct attributes for a collapsed caret. @returns Copied attribute state. */
   public GetPendingCharacterAttributes(): WriterCharacterAttributes {
     return { ...this.pendingCharacterAttributes };
   }
-
   /** Returns whether the shell-owned history can move backward. @returns True when Undo is enabled. */
   public CanUndo(): boolean {
     this.docShell.EnsureOpen();
     return this.docShell.GetUndoManager().GetUndoActionCount() > 0;
   }
-
   /** Returns whether the shell-owned history can move forward. @returns True when Redo is enabled. */
   public CanRedo(): boolean {
     this.docShell.EnsureOpen();
@@ -397,17 +405,8 @@ export class SwWrtShell extends SwModify {
         grouping !== undefined,
       );
     }
-    return this.ApplyAction(
-      new SwUndoReplace(
-        paragraph,
-        0,
-        CopyTextRangeRuns(paragraph, 0, paragraph.Len()),
-        createWriterTextRuns(text),
-        "Replace",
-        before,
-        after,
-      ),
-    );
+    this.RestoreCursorState(before);
+    return false;
   }
 
   /** Inserts text at the persistent point, replacing a same-node selection like SwWrtShell::Insert. @param text - Non-empty inserted text. @param allowGrouping - Whether ordinary typing may merge with the preceding insert action. @returns Whether the document changed. */

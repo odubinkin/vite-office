@@ -140,7 +140,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await page.getByRole("button", { name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Copy" }).click();
   await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
-    "Copied selection.",
+    "Document has unsaved changes.",
   );
   await page.getByRole("button", { name: "Styles" }).click();
   await page.getByRole("menuitem", { exact: true, name: "Heading 1" }).click();

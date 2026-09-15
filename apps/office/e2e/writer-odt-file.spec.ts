@@ -49,7 +49,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   });
 
   await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
-    "Opened browser-fixture.odt.",
+    "Document opened.",
   );
   const editor = page.getByRole("textbox", { name: "Writer document text" });
   await expect(editor).toHaveText("BrowserODTContent");

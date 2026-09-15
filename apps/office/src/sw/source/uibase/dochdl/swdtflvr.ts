@@ -8,9 +8,13 @@ import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import {
   createWriterTextRuns,
   normalizeWriterTextRuns,
+  splitWriterTextRuns,
+  type SwTextNode,
   type WriterCharacterAttributes,
   type WriterTextRun,
 } from "../../core/txtnode/ndtxt";
+import type { SwDoc } from "../../core/doc/doc";
+import type { SwPaM, SwPosition } from "../../core/crsr/pam";
 
 /** Describes the two clipboard representations emitted for a visible Writer selection. */
 export interface WriterClipboardSelection {
@@ -65,6 +69,124 @@ const defaultPasteCharacterAttributes: WriterCharacterAttributes = {
   italic: false,
   underline: false,
 };
+
+/** Model-owned transferable created from the shell SwPaM, independent of rendered DOM. */
+export class SwTransferable {
+  /** Creates a model-owned transfer object. @param document - Canonical Writer model. @param pam - Shell-owned selection. @returns Nothing. */
+  public constructor(
+    private readonly document: SwDoc,
+    private readonly pam: SwPaM,
+  ) {}
+
+  /** Serializes the canonical Writer selection through the bounded HTML/ASCII writers. @returns Clipboard payload, if non-empty. */
+  public CreateSelection(): WriterClipboardSelection | undefined {
+    if (!this.pam.HasMark()) return undefined;
+    const point = this.pam.GetPoint();
+    const mark = this.pam.GetMark();
+    const ordered = orderPositions(this.document, point, mark);
+    const startIndex = this.document.paragraphs.indexOf(ordered.start.GetNode() as SwTextNode);
+    const endIndex = this.document.paragraphs.indexOf(ordered.end.GetNode() as SwTextNode);
+    if (startIndex < 0 || endIndex < 0) return undefined;
+    const paragraphs = this.document.paragraphs.slice(startIndex, endIndex + 1).map(
+      /** Serializes one selected paragraph slice. @param paragraph - Canonical paragraph. @param relativeIndex - Slice-relative index. @returns Clipboard paragraph. */ (
+        paragraph,
+        relativeIndex,
+      ): WriterClipboardParagraph => {
+        const index = startIndex + relativeIndex;
+        const start = index === startIndex ? ordered.start.GetContentIndex() : 0;
+        const end = index === endIndex ? ordered.end.GetContentIndex() : paragraph.Len();
+        const runs = getSelectedRuns(paragraph, start, end);
+        const complete = start === 0 && end === paragraph.Len();
+        const listKind = complete ? paragraph.list.kind : "none";
+        const number = listKind === "numbered" ? paragraph.GetListItemNumber() : undefined;
+        const marker =
+          listKind === "bullet"
+            ? paragraph.GetNumRule()?.GetNumFormat(paragraph.list.level).GetBulletChar()
+            : number === undefined
+              ? undefined
+              : `${number}.`;
+        return {
+          html: serializeRuns(runs),
+          listKind,
+          listLevel: complete ? paragraph.list.level : 0,
+          marker,
+          style: getModelParagraphStyle(paragraph),
+          text: runs
+            .map(
+              /** Projects one modeled run to text. @param run - Writer text run. @returns Run text. */ (
+                run,
+              ) => run.text,
+            )
+            .join(""),
+        };
+      },
+    );
+    if (
+      paragraphs.every(
+        /** Tests one serialized paragraph for visible text. @param paragraph - Clipboard paragraph. @returns Whether empty. */ (
+          paragraph,
+        ) => paragraph.text.length === 0,
+      )
+    )
+      return undefined;
+    return {
+      html: serializeWriterClipboardHtml(paragraphs),
+      plainText: serializeWriterClipboardPlainText(paragraphs),
+    };
+  }
+}
+
+/** Orders persistent Writer positions in document order. @param document - Canonical model. @param left - First position. @param right - Second position. @returns Ordered endpoints. */
+function orderPositions(
+  document: SwDoc,
+  left: SwPosition,
+  right: SwPosition,
+): Readonly<{ end: SwPosition; start: SwPosition }> {
+  const leftIndex = document.paragraphs.indexOf(left.GetNode() as SwTextNode);
+  const rightIndex = document.paragraphs.indexOf(right.GetNode() as SwTextNode);
+  const leftFirst =
+    leftIndex < rightIndex ||
+    (leftIndex === rightIndex && left.GetContentIndex() <= right.GetContentIndex());
+  return leftFirst ? { end: right, start: left } : { end: left, start: right };
+}
+
+/** Copies a normalized run slice without mutating the source text node. @param paragraph - Source text node. @param start - Start offset. @param end - End offset. @returns Sliced runs. */
+function getSelectedRuns(
+  paragraph: SwTextNode,
+  start: number,
+  end: number,
+): readonly WriterTextRun[] {
+  const fromStart = splitWriterTextRuns(paragraph.runs, start).suffix;
+  return splitWriterTextRuns(fromStart, end - start).prefix;
+}
+
+/** Serializes modeled inline attributes without consulting DOM descendants. @param runs - Selected model runs. @returns Bounded HTML. */
+function serializeRuns(runs: readonly WriterTextRun[]): string {
+  return runs
+    .map(
+      /** Serializes one modeled text run. @param run - Writer text run. @returns Bounded HTML. */ (
+        run,
+      ) => {
+        let html = escapeWriterClipboardHtml(run.text);
+        if (run.attributes.bold) html = `<strong>${html}</strong>`;
+        if (run.attributes.italic) html = `<em>${html}</em>`;
+        const styles = [
+          run.attributes.underline ? "text-decoration: underline" : "",
+          run.attributes.fontFamily === undefined
+            ? ""
+            : `font-family: ${escapeWriterClipboardHtml(run.attributes.fontFamily)}`,
+        ].filter(Boolean);
+        return styles.length === 0 ? html : `<span style="${styles.join("; ")}">${html}</span>`;
+      },
+    )
+    .join("");
+}
+
+/** Projects the bounded paragraph attributes used by the clipboard writer. @param paragraph - Writer paragraph. @returns Inline style declaration. */
+function getModelParagraphStyle(paragraph: SwTextNode): string {
+  const heading = paragraph.style === "heading-1";
+  return `text-align: ${paragraph.alignment}; font-size: ${heading ? "1.5rem" : "1rem"}; font-weight: ${heading ? "700" : "400"}; line-height: ${heading ? "2.25rem" : "1.75rem"};`;
+}
 
 /**
  * Reads one browser clipboard transfer into safe bounded Writer text runs without inserting arbitrary HTML into the editing host.

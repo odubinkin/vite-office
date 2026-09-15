@@ -424,7 +424,8 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
         getData: (): string => "",
       },
     });
-    expect(screen.getByText("Clipboard has no text to paste.")).toBeInTheDocument();
+    expect(restoredParagraph).toHaveTextContent("Pasted");
+    expect(screen.queryByText("Clipboard has no text to paste.")).not.toBeInTheDocument();
   });
 
   it("uses one editing host and deletes a cross-paragraph SwPaM through beforeinput" /** Verifies paragraph projections inherit one contenteditable root and canonical deletion joins selected nodes in one undo unit. @returns Nothing. */, function deletesCrossParagraphSelection(): void {

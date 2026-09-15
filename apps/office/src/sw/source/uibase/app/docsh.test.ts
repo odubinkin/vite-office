@@ -104,17 +104,35 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     active.writerShell.InsertText("p-1", "dirty!", 6, "insertText");
     expect(active.shell.GetMedium()).toBe(stableMedium);
     const changedGeneration = active.shell.GetDocumentState().contentGeneration;
+    let exportMedium;
     await active.shell.Export(
       { downloadTarget: "copy.odt", kind: "download", name: "copy.odt" },
-      /** Completes export. @returns Nothing. */ () => undefined,
+      /** Completes export. @param _document - Active model. @param medium - Export medium. @returns Nothing. */ (
+        _document,
+        medium,
+      ) => {
+        exportMedium = medium;
+      },
     );
+    let downloadMedium;
     active.shell.Download(
       { downloadTarget: "copy.odt", kind: "download", name: "copy.odt" },
-      /** Starts download. @returns Nothing. */ () => undefined,
+      /** Starts download. @param _document - Active model. @param medium - Download medium. @returns Nothing. */ (
+        _document,
+        medium,
+      ) => {
+        downloadMedium = medium;
+      },
     );
     expect(active.shell.GetMedium()).toMatchObject({
       destination: { key: "primary-key", kind: "indexeddb" },
       kind: "browser-local",
+      lastOperation: { operation: "save-as", state: "succeeded" },
+    });
+    expect(exportMedium).toMatchObject({
+      lastOperation: { operation: "export", state: "succeeded" },
+    });
+    expect(downloadMedium).toMatchObject({
       lastOperation: { operation: "download", state: "unconfirmed" },
     });
     expect(active.shell.GetDocumentState().isModified).toBe(true);
@@ -180,17 +198,25 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
         ),
       ).rejects.toThrow("confirmed writable medium");
 
+    let failedExportMedium;
     await expect(
       active.shell.Export(
         { downloadTarget: "failed.odt", kind: "download", name: "failed.odt" },
-        /** Rejects export with a non-Error platform value. @returns Rejected completion. */ async () =>
-          Promise.reject("export failed"),
+        /** Rejects export with a non-Error platform value. @param _document - Active model. @param medium - Export medium. @returns Rejected completion. */ async (
+          _document,
+          medium,
+        ) => {
+          failedExportMedium = medium;
+          return Promise.reject("export failed");
+        },
       ),
     ).rejects.toBe("export failed");
-    expect(active.shell.GetMedium().lastOperation).toMatchObject({
-      message: "export failed",
-      operation: "export",
-      state: "failed",
+    expect(failedExportMedium).toMatchObject({
+      lastOperation: {
+        message: "export failed",
+        operation: "export",
+        state: "failed",
+      },
     });
     const mediumBeforeRecoveryFailure = active.shell.GetMedium();
     active.shell.RecoverySaveStarted(1);
@@ -213,6 +239,22 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     ).rejects.toBe(storageFailure);
     expect(active.shell.GetDocumentState()).toBe(stateBeforePrimaryFailure);
     expect(active.shell.GetMedium()).toBe(mediumBeforePrimaryFailure);
+
+    const writable = new SwDocShell(createWriterDocument("writable-p-1"), dirtyState, {
+      indexedDbKey: dirtyState.id,
+      kind: "browser-local",
+      name: dirtyState.title,
+    });
+    await expect(
+      writable.Save(
+        /** Rejects a write through the retained primary medium. @returns Rejected completion. */ async () =>
+          Promise.reject(storageFailure),
+      ),
+    ).rejects.toBe(storageFailure);
+    expect(writable.GetMedium().lastOperation).toMatchObject({
+      operation: "save",
+      state: "failed",
+    });
 
     await expect(
       active.shell.SaveAs(

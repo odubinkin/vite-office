@@ -164,7 +164,8 @@ The same table now also includes the active ODT file-command boundary.
 
 | Local browser module | Pinned LibreOffice module | Responsibility |
 | --- | --- | --- |
-| `sw/source/uibase/uiview/view.tsx` | `sw/source/uibase/uiview/view.cxx` | Browser Writer view/workbench ownership |
+| `sw/source/uibase/uiview/view.ts` | `sw/source/uibase/uiview/view.cxx` | Persistent Writer view shell, frame, and command ownership |
+| `sw/browser/presentation/writer-view.tsx` | Browser-only | React projection of the persistent `SwView` |
 | `sw/source/uibase/uiview/viewfunc.ts` | `sw/source/uibase/uiview/viewfunc.hxx` | Pure focused-document, identity, formatting-command, and command-history helpers |
 | `sw/source/uibase/uiview/viewstat.ts` | `sw/source/uibase/uiview/viewstat.cxx` | Browser view-status and visibility state |
 | `sw/browser/presentation/WriterWorkspaceChrome.tsx` | Browser-only | Writer workspace chrome regions |

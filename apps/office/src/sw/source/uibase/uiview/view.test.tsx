@@ -18,8 +18,8 @@ import type { WriterSnapshotState } from "../../../browser/persistence/writer-st
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../app/docsh";
 import { createWriterBrowserSessionServices, createWriterDocumentSession } from "../app/swmodule";
-import { WriterWorkbench } from "./view";
-import { SwView, type WriterSessionServices } from "./view-session";
+import { WriterWorkbench } from "../../../browser/presentation/writer-view";
+import { SwView, type WriterSessionServices } from "./view";
 
 /** Creates deterministic injected browser services without requiring real platform APIs. @returns Test session services. */
 function createServices(): WriterSessionServices {
@@ -79,6 +79,22 @@ function enterText(text: string): void {
 }
 
 describe("persistent Writer view session" /** Groups Stage 2 ownership and dispatch acceptance tests. @returns Nothing. */, function definePersistentSessionTests(): void {
+  it("presents otherwise unclassified medium completion states at the browser boundary", /** Verifies presentation-only medium fallbacks. @returns Nothing. */ function presentsMediumFallbacks(): void {
+    const failed = createWriterDocumentSession(createServices());
+    failed.docShell.GetMedium().SetOperation("open", "failed");
+    const failedMount = render(<WriterWorkbench isActive view={failed.view} />);
+    expect(screen.getByText("Document operation failed.")).toBeInTheDocument();
+    failedMount.unmount();
+    failed.Close();
+
+    const saving = createWriterDocumentSession(createServices());
+    saving.docShell.GetMedium().SetOperation("save", "unconfirmed");
+    const savingMount = render(<WriterWorkbench isActive view={saving.view} />);
+    expect(screen.getByText("Saving document.")).toBeInTheDocument();
+    savingMount.unmount();
+    saving.Close();
+  });
+
   it("executes domain commands without DOM through the top Writer shell" /** Verifies stable ownership identities, top-shell resolution, command metadata/state, invalidation, persistent PaM, and New replacement. @returns Completion after clipboard adapter checks. */, async function executesDomainCommands(): Promise<void> {
     const session = createWriterDocumentSession(createServices());
     const { docShell, frame, view } = session;
@@ -89,7 +105,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(view.GetSnapshot()).toBe(initialSnapshot);
     expect(frame.GetActiveView()).toBe(view);
     expect(wrtShell.GetDocShell()).toBe(docShell);
-    expect(frame.GetDispatcher().GetShell(0)).toBe(wrtShell.GetCommandShell());
+    expect(frame.GetDispatcher().GetShell(0)).toBe(wrtShell.GetListShell().GetCommandShell());
     expect(
       frame.GetDispatcher().QueryDispatch(WRITER_COMMAND_IDS.alignCenter)?.command,
     ).toMatchObject({
@@ -136,8 +152,10 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(0);
     expect(wrtShell.Undo()).toBe(false);
     expect(wrtShell.Redo()).toBe(false);
-    await view.Paste();
-    await view.Paste({ clipboardHandled: true });
+    await expect(view.Paste()).rejects.toThrow("Clipboard has no text to paste.");
+    await expect(view.Paste({ clipboardHandled: true })).rejects.toThrow(
+      "Clipboard has no text to paste.",
+    );
     unsubscribe();
     session.Close();
     expect(frame.GetActiveView()).toBeUndefined();
@@ -377,7 +395,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     });
     expect(session.docShell.GetMedium()).toMatchObject({
       kind: "untitled",
-      lastOperation: { operation: "download", state: "unconfirmed" },
+      lastOperation: { operation: "none", state: "idle" },
     });
 
     await session.view.SaveLocal();
@@ -392,7 +410,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       lastOperation: { operation: "save-as", state: "succeeded" },
     });
 
-    session.view.GetWrtShell().InsertText(paragraphId, "!", 5, "insertText");
+    session.view.GetWrtShell().SetCursor(paragraphId, 5);
+    session.view.GetWrtShell().HandleInput("insertText", "!");
     const nextGeneration = session.docShell.GetDocumentState().contentGeneration;
     session.view.ExportText();
     expect(session.docShell.GetDocumentState()).toMatchObject({
