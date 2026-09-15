@@ -1,10 +1,11 @@
 ---
 id: "202609150422-02D0CJ"
 title: "Align Writer ODT font and style round-trip with LibreOffice"
-status: "DOING"
+result_summary: "Implemented LibreOffice-compatible ODT font/style round-trip; npm run verify passes."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "commit f5e65e1470fc"
   findings:
     - "All 126 built-in styles retain encoded ODF identities, parent/follow links, and selected font families across open-save-reopen."
-commit: null
+commit:
+  hash: "f5e65e1470fce1a9e41edb606235bbd15fd72a05"
+  message: "✨ 02D0CJ task: align Writer ODT font style round trip"
 comments:
   -
     author: "CODER"
     body: "Start: implement upstream-compatible Writer ODT font-face declarations, style naming, hierarchy import/export, and open-save-reopen verification."
+  -
+    author: "CODER"
+    body: "Verified: complete Writer paragraph-style hierarchy and document font-face declarations now round-trip through ODT open, save, and reopen using upstream-compatible names and stream structure."
 events:
   -
     type: "status"
@@ -58,8 +64,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full npm run verify passed after implementation commit f5e65e1470fc; 282 application tests and 84 inventory tests passed at 100% coverage, 9 browser E2E tests passed, static build and all repository gates passed."
+  -
+    type: "status"
+    at: "2026-09-15T04:49:20.794Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: complete Writer paragraph-style hierarchy and document font-face declarations now round-trip through ODT open, save, and reopen using upstream-compatible names and stream structure."
 doc_version: 3
-doc_updated_at: "2026-09-15T04:49:01.660Z"
+doc_updated_at: "2026-09-15T04:49:20.796Z"
 doc_updated_by: "CODER"
 description: "Implement upstream-compatible ODF style-name encoding, font-face declarations and font-name references for all built-in Writer paragraph styles and font formatting across open, save, and reopen workflows."
 sections:
