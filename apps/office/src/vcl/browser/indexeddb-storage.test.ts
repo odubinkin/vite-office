@@ -224,6 +224,30 @@ describe("IndexedDbRecoveryStorageAdapter" /**
     );
   });
 
+  it("keeps the newest committed recovery generation after an interrupted write" /**
+   * Verifies the generation row and pruning work in one transaction, so an uncloneable payload
+   * cannot replace or delete the last valid recovery entry.
+   *
+   * @returns Completion after the failed transaction and recovery reload.
+   */, async function preservesCommittedGeneration(): Promise<void> {
+    databaseSequence += 1;
+    const adapter = new IndexedDbRecoveryStorageAdapter<IndexedDbFixtureState>(
+      `vite-office-recovery-${databaseSequence}`,
+      new IDBFactory(),
+      2,
+    );
+    const committed = createSnapshot("interrupted", 1, "committed");
+    await adapter.save(committed);
+    const interrupted = {
+      id: "interrupted",
+      state: { body: Symbol("cannot-clone") },
+      version: 2,
+    } as unknown as VersionedStorageRecord<IndexedDbFixtureState>;
+
+    await expect(adapter.save(interrupted)).rejects.toBeDefined();
+    await expect(adapter.loadGenerations("interrupted")).resolves.toEqual([committed]);
+  });
+
   it("coordinates leases across adapters sharing one recovery database" /**
    * Verifies active owners exclude other tabs and expired leases can be reclaimed.
    *

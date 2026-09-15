@@ -1,6 +1,6 @@
 /**
  * @fileoverview Executes bounded Writer ODT filter requests inside a Dedicated Worker and returns
- * only neutral snapshots or transferable byte buffers to the document-shell client.
+ * only neutral filter documents or transferable byte buffers to the document-shell client.
  */
 
 import {
@@ -13,28 +13,26 @@ import {
   type WorkerResult,
 } from "../../../../framework/source/services/worker-protocol";
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
-import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
-import type { DocumentSnapshot } from "../../../../sfx2/source/doc/docfile";
-import type { WriterSnapshotState } from "../../../browser/persistence/writer-storage";
 import {
   createInlineOdtFilterService,
   normalizeOdtFilterError,
   type OdtFilterProgressStage,
+  type OdtFilterDocument,
   type OdtFilterService,
 } from "./odt-filter-service";
 
 /** Import request transferred into the worker. */
 export interface OdtWorkerImportRequest {
   readonly bytes: ArrayBuffer;
-  readonly metadata: OfficeDocument;
+  readonly metadata: Readonly<{ title: string }>;
   readonly operation: "import";
   readonly zipLimits?: ZipFileLimits;
 }
 
 /** Export request carrying a structured-clone Writer snapshot. */
 export interface OdtWorkerExportRequest {
+  readonly document: OdtFilterDocument;
   readonly operation: "export";
-  readonly snapshot: DocumentSnapshot<WriterSnapshotState>;
 }
 
 /** Supported worker request payloads. */
@@ -42,8 +40,8 @@ export type OdtWorkerRequestPayload = OdtWorkerExportRequest | OdtWorkerImportRe
 
 /** Neutral import result validated again by SwDocShell. */
 export interface OdtWorkerImportResult {
+  readonly document: OdtFilterDocument;
   readonly operation: "import";
-  readonly snapshot: DocumentSnapshot<WriterSnapshotState>;
 }
 
 /** Transferable export result. */
@@ -87,7 +85,7 @@ export class OdtWorkerRuntime {
     this.active.set(request.id, service);
     try {
       if (request.payload.operation === "import") {
-        const snapshot = await service.Import(
+        const document = await service.Import(
           new Uint8Array(request.payload.bytes),
           request.payload.metadata,
           {
@@ -97,9 +95,9 @@ export class OdtWorkerRuntime {
               : { zipLimits: request.payload.zipLimits }),
           },
         );
-        this.PostResult(request.id, { operation: "import", snapshot });
+        this.PostResult(request.id, { document, operation: "import" });
       } else {
-        const bytes = await service.Export(request.payload.snapshot, {
+        const bytes = await service.Export(request.payload.document, {
           onProgress: this.PostProgress.bind(this, request.id),
         });
         const buffer = exactArrayBuffer(bytes);
@@ -174,7 +172,7 @@ function isRequest(value: unknown): value is WorkerRequest<OdtWorkerRequestPaylo
     return false;
   return value.payload.operation === "import"
     ? value.payload.bytes instanceof ArrayBuffer && isRecord(value.payload.metadata)
-    : value.payload.operation === "export" && isRecord(value.payload.snapshot);
+    : value.payload.operation === "export" && isRecord(value.payload.document);
 }
 
 /** Extracts a safe request identity for protocol diagnostics. @param value - Untrusted message. @returns Positive id or zero. */

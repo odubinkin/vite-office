@@ -5,13 +5,12 @@
 
 import type { WorkerErrorCategory } from "../../../../framework/source/services/worker-protocol";
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
-import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
-import type { DocumentSnapshot } from "../../../../sfx2/source/doc/docfile";
 import {
-  createWriterSnapshot,
-  restoreWriterSnapshot,
-  type WriterSnapshotState,
-} from "../../../browser/persistence/writer-storage";
+  decodeWriterDocument,
+  encodeWriterDocument,
+  type WriterDocumentRecord,
+} from "../../../browser/persistence/writer-document-codec";
+import type { SwDoc } from "../../core/doc/doc";
 import { readOdtDocument, type OdtImportProgressStage } from "./swxml";
 import { writeOdtDocument, type OdtExportProgressStage } from "./wrtxml";
 
@@ -29,23 +28,41 @@ export interface OdtFilterOperationOptions {
   readonly zipLimits?: ZipFileLimits;
 }
 
+/** Structured-clone boundary used only to cross the browser Worker port. */
+export interface OdtFilterDocument {
+  readonly document: WriterDocumentRecord;
+  readonly metadata: Readonly<{ title: string }>;
+}
+
+/** Captures the canonical graph for the Worker adaptation without shell lifecycle state. @param document - Canonical Writer graph. @param title - Shell-owned title copied as filter metadata. @returns Cloneable filter input. */
+export function createOdtFilterDocument(document: SwDoc, title: string): OdtFilterDocument {
+  return { document: encodeWriterDocument(document), metadata: { title } };
+}
+
+/** Restores a Worker transfer into a canonical graph and filter metadata. @param input - Cloneable filter value. @returns Decoded graph and title. */
+export function restoreOdtFilterDocument(input: OdtFilterDocument): {
+  readonly document: SwDoc;
+  readonly title: string;
+} {
+  if (!isRecord(input) || !isRecord(input.metadata) || typeof input.metadata.title !== "string")
+    throw new Error("ODT filter document metadata is invalid.");
+  return { document: decodeWriterDocument(input.document), title: input.metadata.title };
+}
+
 /** Asynchronous filter contract returning structured-clone values only. */
 export interface OdtFilterService {
   /** Cancels the current request without closing the reusable service. @returns Nothing. */
   Cancel(): void;
   /** Releases worker/runtime resources and rejects pending work. @returns Nothing. */
   Close(): void;
-  /** Exports one validated Writer snapshot. @param snapshot - Immutable document snapshot. @param options - Cancellation/progress controls. @returns Complete STORE-only ODT bytes. */
-  Export(
-    snapshot: DocumentSnapshot<WriterSnapshotState>,
-    options?: OdtFilterOperationOptions,
-  ): Promise<Uint8Array>;
-  /** Imports one ODT into a neutral validated snapshot. @param bytes - Complete package bytes. @param metadata - Fallback identity/title. @param options - Cancellation/progress/resource controls. @returns Candidate snapshot for main-thread validation. */
+  /** Exports one validated Writer transfer. @param input - Canonical graph transfer without lifecycle DTOs. @param options - Cancellation/progress controls. @returns Complete STORE-only ODT bytes. */
+  Export(input: OdtFilterDocument, options?: OdtFilterOperationOptions): Promise<Uint8Array>;
+  /** Imports one ODT into a neutral validated transfer. @param bytes - Complete package bytes. @param metadata - Fallback filter metadata. @param options - Cancellation/progress/resource controls. @returns Candidate graph transfer for main-thread validation. */
   Import(
     bytes: Uint8Array,
-    metadata: OfficeDocument,
+    metadata: Readonly<{ title: string }>,
     options?: OdtFilterOperationOptions,
-  ): Promise<DocumentSnapshot<WriterSnapshotState>>;
+  ): Promise<OdtFilterDocument>;
 }
 
 /** Typed operation error reconstructed from worker-safe details. */
@@ -76,34 +93,38 @@ export class InlineOdtFilterService implements OdtFilterService {
     this.closed = true;
   }
 
-  /** Exports through the existing Writer XML/package filter. @param snapshot - Validated Writer snapshot. @param options - Cooperative controls. @returns ODT bytes. */
+  /** Exports through the existing Writer XML/package filter. @param input - Validated filter transfer. @param options - Cooperative controls. @returns ODT bytes. */
   public async Export(
-    snapshot: DocumentSnapshot<WriterSnapshotState>,
+    input: OdtFilterDocument,
     options: OdtFilterOperationOptions = {},
   ): Promise<Uint8Array> {
     this.Begin(options.signal);
     try {
-      const restored = restoreWriterSnapshot(snapshot, "primary");
-      return writeOdtDocument(restored.document, restored.documentState, {
-        isCancelled:
-          /** Reads the current cooperative cancellation flag. @returns Whether export must stop. */ () =>
-            this.IsCancelled(options.signal),
-        onProgress:
-          /** Qualifies one export progress stage. @param stage - Writer export stage. @returns Nothing. */ (
-            stage,
-          ) => options.onProgress?.(`export:${stage}`),
-      });
+      const restored = restoreOdtFilterDocument(input);
+      return writeOdtDocument(
+        restored.document,
+        { title: restored.title },
+        {
+          isCancelled:
+            /** Reads the current cooperative cancellation flag. @returns Whether export must stop. */ () =>
+              this.IsCancelled(options.signal),
+          onProgress:
+            /** Qualifies one export progress stage. @param stage - Writer export stage. @returns Nothing. */ (
+              stage,
+            ) => options.onProgress?.(`export:${stage}`),
+        },
+      );
     } catch (error) {
       throw normalizeOdtFilterError(error);
     }
   }
 
-  /** Imports through the existing package/XML filter and serializes the candidate graph. @param bytes - Complete package. @param metadata - Fallback metadata. @param options - Cooperative controls. @returns Candidate snapshot. */
+  /** Imports through the existing package/XML filter and serializes the candidate graph. @param bytes - Complete package. @param metadata - Fallback metadata. @param options - Cooperative controls. @returns Candidate filter transfer. */
   public async Import(
     bytes: Uint8Array,
-    metadata: OfficeDocument,
+    metadata: Readonly<{ title: string }>,
     options: OdtFilterOperationOptions = {},
-  ): Promise<DocumentSnapshot<WriterSnapshotState>> {
+  ): Promise<OdtFilterDocument> {
     this.Begin(options.signal);
     try {
       const imported = await readOdtDocument(bytes, metadata, options.zipLimits, {
@@ -115,7 +136,7 @@ export class InlineOdtFilterService implements OdtFilterService {
             stage,
           ) => options.onProgress?.(`import:${stage}`),
       });
-      return createWriterSnapshot(imported.document, imported.documentState);
+      return createOdtFilterDocument(imported.document, imported.title);
     } catch (error) {
       throw normalizeOdtFilterError(error);
     }
@@ -153,4 +174,9 @@ export function normalizeOdtFilterError(error: unknown): OdtFilterError {
         ? "unsupported"
         : "format";
   return new OdtFilterError(category, message);
+}
+
+/** Checks for a structured-clone object. @param value - Candidate. @returns Whether object-like. */
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }

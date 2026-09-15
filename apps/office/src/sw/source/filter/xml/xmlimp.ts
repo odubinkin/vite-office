@@ -11,7 +11,6 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import {
   FastAttributeList,
   parseOdfXmlStream,
@@ -80,10 +79,10 @@ const ignoredMetadataChildren = new Set([
   XMLToken.DC_DATE,
 ]);
 
-/** Imported model plus shell-owned lifecycle candidate. */
+/** Imported model plus filter-owned metadata; lifecycle remains in SfxObjectShell. */
 export interface ImportedWriterDocument {
   readonly document: SwDoc;
-  readonly documentState: OfficeDocument;
+  readonly title: string;
 }
 
 /** Validates one expected ODF document root through the streaming parser. @param xml - XML stream. @param expectedRoot - Root local name. @param maxDepth - Optional depth ceiling. @returns Nothing. */
@@ -115,7 +114,7 @@ export function parseOdfXml(xml: string, expectedRoot: string, maxDepth?: number
 export function importWriterXml(
   stylesXml: string,
   contentXml: string,
-  metadata: OfficeDocument,
+  metadata: Readonly<{ title: string }>,
   metaXml?: string,
   options: OdfXmlParseOptions = {},
 ): ImportedWriterDocument {
@@ -127,8 +126,7 @@ export function importWriterXml(
   if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
   return {
     document: xmlImport.document,
-    documentState:
-      xmlImport.title === undefined ? metadata : { ...metadata, title: xmlImport.title },
+    title: xmlImport.title ?? metadata.title,
   };
 }
 

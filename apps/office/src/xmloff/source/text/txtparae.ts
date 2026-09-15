@@ -79,117 +79,133 @@ export interface OdfTextExport {
   readonly body: string;
 }
 
-/** Exports live Writer paragraphs into ODF automatic styles and text elements. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @param fontFaceName - Optional family-to-face resolver. @returns XML fragments. */
+/** Bounded xmloff export context owning one complete text export pass. */
+export class XMLTextParagraphExport {
+  /** Captures the live model source and operation ports. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @param fontFaceName - Optional family-to-face resolver. @returns Nothing. */
+  public constructor(
+    private readonly source: XMLTextExportSource,
+    private readonly isCancelled: () => boolean,
+    private readonly fontFaceName?: (familyName: string) => string,
+  ) {}
+
+  /** Exports automatic styles and text elements under this context's ownership. @returns XML fragments. */
+  public Export(): OdfTextExport {
+    const { fontFaceName, isCancelled, source } = this;
+    const paragraphStyleNames = new Map<string, string>();
+    const characterStyleNames = new Map<string, string>();
+    const listRules = new Map<string, XMLTextListRuleSource>();
+    for (const paragraph of source.paragraphs()) {
+      if (isCancelled()) throw new Error("ODT operation was cancelled.");
+      if (paragraph.list !== undefined) {
+        const list = paragraph.list;
+        assertList(list);
+        const existing = listRules.get(list.rule.name);
+        if (
+          existing !== undefined &&
+          (existing.formats.some(
+            /** Detects a conflicting list level. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
+            (kind, index) => kind !== list.rule.formats[index],
+          ) ||
+            existing.formats.some(
+              /** Detects a conflicting character-special marker. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
+              (kind, index) =>
+                kind === "bullet" &&
+                (existing.bulletChars?.[index] ?? "•") !== (list.rule.bulletChars?.[index] ?? "•"),
+            ))
+        )
+          throw new Error(`Conflicting ODF list rule: ${list.rule.name}`);
+        listRules.set(list.rule.name, list.rule);
+      }
+      if (paragraph.alignment !== undefined || paragraph.properties !== undefined) {
+        const key = paragraphStyleKey(
+          getOdfStyleName(paragraph),
+          paragraph.alignment,
+          paragraph.properties,
+        );
+        if (!paragraphStyleNames.has(key))
+          paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
+      }
+      paragraph.runs.forEach(
+        /** Collects one used character style. @param run - Live text run. @returns Nothing. */
+        (run) => {
+          if (run.text.length === 0) throw new Error("ODF text runs must not be empty.");
+          if (!equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph))) {
+            const key = characterPropertiesKey(run.properties);
+            if (!characterStyleNames.has(key))
+              characterStyleNames.set(key, `T${characterStyleNames.size + 1}`);
+          }
+        },
+      );
+    }
+    const paragraphStyles = [...paragraphStyleNames].map(
+      /** Emits one automatic paragraph style. @param entry - Internal key and ODF name. @returns Style XML. */
+      (entry) => {
+        const [key, name] = entry;
+        const [style, alignment, propertiesKey] = key.split(":") as [
+          XMLParagraphStyle,
+          OdfParagraphAlignment | "",
+          string,
+        ];
+        const parent = style;
+        const paragraphProperties =
+          alignment === ""
+            ? ""
+            : `<style:paragraph-properties fo:text-align="${exportAlignment(alignment)}"/>`;
+        const properties = parseCharacterPropertiesKey(propertiesKey);
+        const textProperties =
+          propertiesKey === "---|"
+            ? ""
+            : `<style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/>`;
+        return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}">${paragraphProperties}${textProperties}</style:style>`;
+      },
+    );
+    const characterStyles = [...characterStyleNames].map(
+      /** Emits one automatic character style. @param entry - Internal key and ODF name. @returns Style XML. */
+      (entry) => {
+        const [key, name] = entry;
+        const properties = parseCharacterPropertiesKey(key);
+        return `<style:style style:name="${name}" style:family="text"><style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/></style:style>`;
+      },
+    );
+    const listStyleNames = new Map<string, string>();
+    const listStyles = [...listRules.values()].map(
+      /** Emits one automatic ODF list style. @param rule - Writer numbering rule. @param index - Stable style index. @returns Style XML. */
+      (rule, index) => {
+        const name = `L${index + 1}`;
+        listStyleNames.set(rule.name, name);
+        const levels = rule.formats
+          .map(
+            /** Emits one list-level style. @param kind - Marker family. @param level - Zero-based Writer level. @returns Level XML. */
+            (kind, level) =>
+              kind === "bullet"
+                ? `<text:list-level-style-bullet text:level="${level + 1}" text:bullet-char="${escapeXml(rule.bulletChars?.[level] ?? "•")}"/>`
+                : `<text:list-level-style-number text:level="${level + 1}" style:num-format="1"/>`,
+          )
+          .join("");
+        return `<text:list-style style:name="${name}" style:display-name="${escapeXml(rule.name)}">${levels}</text:list-style>`;
+      },
+    );
+    const body = exportParagraphBody(
+      source.paragraphs(),
+      paragraphStyleNames,
+      characterStyleNames,
+      listStyleNames,
+      isCancelled,
+    );
+    return {
+      automaticStyles: [...paragraphStyles, ...characterStyles, ...listStyles].join(""),
+      body,
+    };
+  }
+}
+
+/** Exports live Writer paragraphs through an owned xmloff export context. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @param fontFaceName - Optional family-to-face resolver. @returns XML fragments. */
 export function exportTextParagraphs(
   source: XMLTextExportSource,
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
   fontFaceName?: (familyName: string) => string,
 ): OdfTextExport {
-  const paragraphStyleNames = new Map<string, string>();
-  const characterStyleNames = new Map<string, string>();
-  const listRules = new Map<string, XMLTextListRuleSource>();
-  for (const paragraph of source.paragraphs()) {
-    if (isCancelled()) throw new Error("ODT operation was cancelled.");
-    if (paragraph.list !== undefined) {
-      const list = paragraph.list;
-      assertList(list);
-      const existing = listRules.get(list.rule.name);
-      if (
-        existing !== undefined &&
-        (existing.formats.some(
-          /** Detects a conflicting list level. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
-          (kind, index) => kind !== list.rule.formats[index],
-        ) ||
-          existing.formats.some(
-            /** Detects a conflicting character-special marker. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
-            (kind, index) =>
-              kind === "bullet" &&
-              (existing.bulletChars?.[index] ?? "•") !== (list.rule.bulletChars?.[index] ?? "•"),
-          ))
-      )
-        throw new Error(`Conflicting ODF list rule: ${list.rule.name}`);
-      listRules.set(list.rule.name, list.rule);
-    }
-    if (paragraph.alignment !== undefined || paragraph.properties !== undefined) {
-      const key = paragraphStyleKey(
-        getOdfStyleName(paragraph),
-        paragraph.alignment,
-        paragraph.properties,
-      );
-      if (!paragraphStyleNames.has(key))
-        paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
-    }
-    paragraph.runs.forEach(
-      /** Collects one used character style. @param run - Live text run. @returns Nothing. */
-      (run) => {
-        if (run.text.length === 0) throw new Error("ODF text runs must not be empty.");
-        if (!equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph))) {
-          const key = characterPropertiesKey(run.properties);
-          if (!characterStyleNames.has(key))
-            characterStyleNames.set(key, `T${characterStyleNames.size + 1}`);
-        }
-      },
-    );
-  }
-  const paragraphStyles = [...paragraphStyleNames].map(
-    /** Emits one automatic paragraph style. @param entry - Internal key and ODF name. @returns Style XML. */
-    (entry) => {
-      const [key, name] = entry;
-      const [style, alignment, propertiesKey] = key.split(":") as [
-        XMLParagraphStyle,
-        OdfParagraphAlignment | "",
-        string,
-      ];
-      const parent = style;
-      const paragraphProperties =
-        alignment === ""
-          ? ""
-          : `<style:paragraph-properties fo:text-align="${exportAlignment(alignment)}"/>`;
-      const properties = parseCharacterPropertiesKey(propertiesKey);
-      const textProperties =
-        propertiesKey === "---|"
-          ? ""
-          : `<style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/>`;
-      return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}">${paragraphProperties}${textProperties}</style:style>`;
-    },
-  );
-  const characterStyles = [...characterStyleNames].map(
-    /** Emits one automatic character style. @param entry - Internal key and ODF name. @returns Style XML. */
-    (entry) => {
-      const [key, name] = entry;
-      const properties = parseCharacterPropertiesKey(key);
-      return `<style:style style:name="${name}" style:family="text"><style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/></style:style>`;
-    },
-  );
-  const listStyleNames = new Map<string, string>();
-  const listStyles = [...listRules.values()].map(
-    /** Emits one automatic ODF list style. @param rule - Writer numbering rule. @param index - Stable style index. @returns Style XML. */
-    (rule, index) => {
-      const name = `L${index + 1}`;
-      listStyleNames.set(rule.name, name);
-      const levels = rule.formats
-        .map(
-          /** Emits one list-level style. @param kind - Marker family. @param level - Zero-based Writer level. @returns Level XML. */
-          (kind, level) =>
-            kind === "bullet"
-              ? `<text:list-level-style-bullet text:level="${level + 1}" text:bullet-char="${escapeXml(rule.bulletChars?.[level] ?? "•")}"/>`
-              : `<text:list-level-style-number text:level="${level + 1}" style:num-format="1"/>`,
-        )
-        .join("");
-      return `<text:list-style style:name="${name}" style:display-name="${escapeXml(rule.name)}">${levels}</text:list-style>`;
-    },
-  );
-  const body = exportParagraphBody(
-    source.paragraphs(),
-    paragraphStyleNames,
-    characterStyleNames,
-    listStyleNames,
-    isCancelled,
-  );
-  return {
-    automaticStyles: [...paragraphStyles, ...characterStyles, ...listStyles].join(""),
-    body,
-  };
+  return new XMLTextParagraphExport(source, isCancelled, fontFaceName).Export();
 }
 
 /** Emits the ordered paragraph stream, nesting list paragraphs in text:list/text:list-item elements. @param paragraphs - Flat paragraph sequence. @param paragraphStyleNames - Automatic paragraph styles. @param characterStyleNames - Automatic text styles. @param listStyleNames - Automatic list styles. @param isCancelled - Cancellation probe. @returns ODF body fragment. */

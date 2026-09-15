@@ -6,9 +6,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../apps/office/src/sfx2/source/doc/objsh";
+import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
 import type { SwDoc } from "../../apps/office/src/sw/source/core/doc/doc";
 import { readOdtDocument } from "../../apps/office/src/sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrtxml";
@@ -63,11 +64,96 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         text: "Hello World!",
       });
       const roundTripped = await readOdtDocument(
-        writeOdtDocument(imported.document, imported.documentState),
+        writeOdtDocument(imported.document, { title: imported.title }),
         metadata,
       );
       expect(normalizeWriterSemantics(roundTripped.document)).toEqual(
         normalizeWriterSemantics(imported.document),
       );
+    });
+
+  const supportedWriterFixtures = [
+    {
+      /** Verifies the supported upstream numbered-list model. @param document - Imported graph. @returns Nothing. */
+      assert(document: SwDoc): void {
+        expect(
+          document.paragraphs.map(
+            /** Projects list paragraph text. @param paragraph - Imported paragraph. @returns Text. */
+            (paragraph) => paragraph.text,
+          ),
+        ).toEqual(["One", "Two", "Three", ""]);
+        expect(
+          document.paragraphs.every(
+            /** Checks one imported list paragraph. @param paragraph - Imported paragraph. @returns Whether numbered. */
+            (paragraph) => paragraph.list.kind === "numbered",
+          ),
+        ).toBe(true);
+      },
+      file: "sw/qa/extras/uiwriter/data/tdf113877_insert_numbered_list.odt",
+    },
+    {
+      /** Verifies supported upstream paragraph-style mapping. @param document - Imported graph. @returns Nothing. */
+      assert(document: SwDoc): void {
+        expect(
+          document.paragraphs.map(
+            /** Projects one imported style identifier. @param paragraph - Imported paragraph. @returns Style identity. */
+            (paragraph) => paragraph.style,
+          ),
+        ).toEqual(["default", "default", "default", "title", "text-body"]);
+      },
+      file: "sw/qa/uitest/data/styles.odt",
+    },
+    {
+      /** Verifies supported upstream hyperlink metadata. @param document - Imported graph. @returns Nothing. */
+      assert(document: SwDoc): void {
+        expect(document.paragraphs[0]?.runs).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              hyperlink: expect.objectContaining({ url: "http://example.com/" }),
+            }),
+          ]),
+        );
+      },
+      file: "sw/qa/extras/tiledrendering/data/hyperlink.odt",
+    },
+  ] as const;
+
+  for (const fixture of supportedWriterFixtures)
+    it(`normalizes and reopens supported Writer fixture ${fixture.file}` /** Covers list, style, hyperlink, metadata, and manifest behavior with pinned packages. @returns Completion after assertions. */, async () => {
+      const warning = vi.spyOn(console, "warn").mockImplementation(
+        /** Suppresses expected diagnostics for unsupported out-of-slice fixture properties. @returns Nothing. */
+        () => undefined,
+      );
+      try {
+        const bytes = new Uint8Array(
+          fs.readFileSync(path.join("vendor/libreoffice-reference", fixture.file)),
+        );
+        const imported = await readOdtDocument(bytes, { title: "Pinned Writer fixture" });
+        fixture.assert(imported.document);
+        const normalized = writeOdtDocument(imported.document, { title: "Phase 7 parity" });
+        const archive = new ZipFile(normalized);
+        expect(archive.getEntryNames()).toEqual([
+          "mimetype",
+          "META-INF/manifest.xml",
+          "styles.xml",
+          "content.xml",
+          "meta.xml",
+        ]);
+        expect(await archive.readTextEntry("META-INF/manifest.xml")).toContain(
+          'manifest:full-path="content.xml"',
+        );
+        expect(await archive.readTextEntry("meta.xml")).toContain(
+          "<dc:title>Phase 7 parity</dc:title>",
+        );
+        const reopened = await readOdtDocument(normalized, { title: "fallback" });
+        expect(normalizeWriterSemantics(reopened.document)).toEqual(
+          normalizeWriterSemantics(imported.document),
+        );
+        const second = new ZipFile(writeOdtDocument(reopened.document, { title: reopened.title }));
+        for (const entry of ["META-INF/manifest.xml", "styles.xml", "content.xml", "meta.xml"])
+          expect(await second.readTextEntry(entry)).toBe(await archive.readTextEntry(entry));
+      } finally {
+        warning.mockRestore();
+      }
     });
 });

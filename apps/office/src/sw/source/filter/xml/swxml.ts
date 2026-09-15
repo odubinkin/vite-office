@@ -2,7 +2,6 @@
  * @fileoverview Reimplements the bounded SwXMLReader package orchestration from pinned LibreOffice `sw/source/filter/xml/swxml.cxx`.
  */
 
-import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import {
   validateOdtManifestXml,
   ODT_MIMETYPE,
@@ -32,7 +31,7 @@ export class SwXMLReader {
   /** Imports one ODF 1.3 text package. @param bytes - Complete ODT bytes. @param metadata - Caller identity and lifecycle. @param limits - Optional ZIP ceilings. @param control - Cooperative progress/cancellation controls. @returns Canonical SwDoc. */
   public async Read(
     bytes: Uint8Array,
-    metadata: OfficeDocument,
+    metadata: Readonly<{ title: string }>,
     limits?: ZipFileLimits,
     control: OdtImportControl = {},
   ): Promise<ImportedWriterDocument> {
@@ -60,7 +59,7 @@ export class SwXMLReader {
 /** Convenience ODT import boundary. @param bytes - Complete ODT bytes. @param metadata - Caller document identity. @param limits - Optional ZIP ceilings. @param control - Cooperative progress/cancellation controls. @returns Canonical SwDoc. */
 export async function readOdtDocument(
   bytes: Uint8Array,
-  metadata: OfficeDocument,
+  metadata: Readonly<{ title: string }>,
   limits?: ZipFileLimits,
   control?: OdtImportControl,
 ): Promise<ImportedWriterDocument> {

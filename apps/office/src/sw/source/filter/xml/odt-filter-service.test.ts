@@ -3,12 +3,12 @@
 import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { createWriterSnapshot } from "../../../browser/persistence/writer-storage";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import {
   createInlineOdtFilterService,
+  createOdtFilterDocument,
   normalizeOdtFilterError,
   OdtFilterError,
 } from "./odt-filter-service";
@@ -19,19 +19,22 @@ function metadata() {
 }
 
 describe("ODT filter service" /** Groups asynchronous inline filter behavior. @returns Nothing. */, () => {
-  it("round-trips a neutral snapshot and reports import/export stages" /** Verifies the same service contract used by the worker runtime. @returns Completion after assertions. */, async () => {
+  it("round-trips a neutral filter document and reports import/export stages" /** Verifies the same service contract used by the worker runtime. @returns Completion after assertions. */, async () => {
     const service = createInlineOdtFilterService();
     const document = createWriterDocument("p-1");
     const shell = new SwDocShell(document, metadata());
     new SwWrtShell(shell).Insert("worker body");
     const progress: string[] = [];
-    const bytes = await service.Export(createWriterSnapshot(document, shell.GetDocumentState()), {
-      onProgress:
-        /** Records an export stage. @param stage - Qualified stage. @returns New array length. */ (
-          stage,
-        ) => progress.push(stage),
-    });
-    const snapshot = await service.Import(bytes, metadata(), {
+    const bytes = await service.Export(
+      createOdtFilterDocument(document, shell.GetDocumentState().title),
+      {
+        onProgress:
+          /** Records an export stage. @param stage - Qualified stage. @returns New array length. */ (
+            stage,
+          ) => progress.push(stage),
+      },
+    );
+    const imported = await service.Import(bytes, metadata(), {
       onProgress:
         /** Records an import stage. @param stage - Qualified stage. @returns New array length. */ (
           stage,
@@ -55,7 +58,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       "import:metadata",
       "import:mapping",
     ]);
-    expect(snapshot.state.writerModel).toMatchObject({
+    expect(imported.document).toMatchObject({
       textNodes: [{ runs: [{ text: "worker body" }] }],
     });
   });
@@ -64,7 +67,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
     const service = createInlineOdtFilterService();
     const document = createWriterDocument("p-1");
     const state = metadata();
-    const bytes = await service.Export(createWriterSnapshot(document, state));
+    const bytes = await service.Export(createOdtFilterDocument(document, state.title));
     await expect(
       service.Import(bytes, metadata(), {
         onProgress:
@@ -86,7 +89,9 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       category: "format",
     });
     service.Close();
-    await expect(service.Export(createWriterSnapshot(document, state))).rejects.toMatchObject({
+    await expect(
+      service.Export(createOdtFilterDocument(document, state.title)),
+    ).rejects.toMatchObject({
       category: "internal",
     });
   });

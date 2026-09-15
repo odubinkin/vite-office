@@ -13,11 +13,24 @@ import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
 import type { SwDoc } from "../../source/core/doc/doc";
 import { decodeWriterDocument, encodeWriterDocument } from "./writer-document-codec";
 
+/** Stable identifier for the browser persistence codec, distinct from the Writer model version. */
+export const WRITER_STORAGE_CODEC = "vite-office.writer-browser-storage";
+
+/** Pinned upstream tag whose contracts define the serialized model. */
+export const WRITER_STORAGE_BASELINE_TAG = "libreoffice-26.8.0.2";
+
+/** Pinned upstream commit whose contracts define the serialized model. */
+export const WRITER_STORAGE_BASELINE_COMMIT = "9bc445578031fecf56086729d8e4940c77e14d65";
+
 /** Current persisted Writer workbench shape. Old schemas are intentionally rejected. */
 export type WriterSnapshotState = {
   readonly [key: string]: SerializableValue;
+  readonly baselineCommit: typeof WRITER_STORAGE_BASELINE_COMMIT;
+  readonly baselineTag: typeof WRITER_STORAGE_BASELINE_TAG;
+  readonly codec: typeof WRITER_STORAGE_CODEC;
   readonly documentState: SerializableValue;
-  readonly schemaVersion: 6;
+  readonly modelVersion: 9;
+  readonly schemaVersion: 7;
   readonly writerModel: SerializableValue;
 };
 
@@ -32,13 +45,18 @@ export function createWriterSnapshot(
   document: SwDoc,
   documentState: OfficeDocument,
 ): DocumentSnapshot<WriterSnapshotState> {
+  const state: WriterSnapshotState = {
+    baselineCommit: WRITER_STORAGE_BASELINE_COMMIT,
+    baselineTag: WRITER_STORAGE_BASELINE_TAG,
+    codec: WRITER_STORAGE_CODEC,
+    documentState: { ...documentState } as unknown as SerializableValue,
+    modelVersion: 9,
+    schemaVersion: 7,
+    writerModel: encodeWriterDocument(document) as unknown as SerializableValue,
+  };
   return Object.freeze({
     id: documentState.id,
-    state: {
-      documentState: { ...documentState } as unknown as SerializableValue,
-      schemaVersion: 6 as const,
-      writerModel: encodeWriterDocument(document) as unknown as SerializableValue,
-    },
+    state,
     version: documentState.contentGeneration,
   });
 }
@@ -48,7 +66,13 @@ export function restoreWriterSnapshot(
   snapshot: DocumentSnapshot<WriterSnapshotState>,
   purpose: "primary" | "recovery",
 ): RestoredWriterSnapshot {
-  if (snapshot.state.schemaVersion !== 6)
+  if (
+    snapshot.state.schemaVersion !== 7 ||
+    snapshot.state.codec !== WRITER_STORAGE_CODEC ||
+    snapshot.state.modelVersion !== 9 ||
+    snapshot.state.baselineTag !== WRITER_STORAGE_BASELINE_TAG ||
+    snapshot.state.baselineCommit !== WRITER_STORAGE_BASELINE_COMMIT
+  )
     throw new Error(
       "Stored Writer snapshot schema is unsupported; open an ODT file or discard the browser copy.",
     );

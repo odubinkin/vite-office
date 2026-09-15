@@ -33,8 +33,10 @@ import {
 } from "../../../browser/persistence/writer-storage";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import {
+  createOdtFilterDocument,
   createInlineOdtFilterService,
   OdtFilterError,
+  restoreOdtFilterDocument,
   type OdtFilterOperationOptions,
   type OdtFilterService,
 } from "../../filter/xml/odt-filter-service";
@@ -179,10 +181,18 @@ export class SwDocShell extends SfxObjectShell {
     this.EnsureOpen();
     this.odtFilter.Cancel();
     const requestGeneration = ++this.odtRequestGeneration;
-    const snapshot = await this.odtFilter.Import(bytes, metadata, options);
+    const transfer = await this.odtFilter.Import(bytes, { title: metadata.title }, options);
     if (requestGeneration !== this.odtRequestGeneration)
       throw new OdtFilterError("stale", "ODT open result is stale.");
-    const loaded = restoreWriterSnapshot(snapshot, "primary");
+    const loaded = restoreOdtFilterDocument(transfer);
+    const loadedState: OfficeDocument = Object.freeze({
+      ...metadata,
+      isModified: false,
+      lifecycle: "saved",
+      recoveryGeneration: null,
+      savedGeneration: metadata.contentGeneration,
+      title: loaded.title,
+    });
     const openMedium =
       medium ??
       ({
@@ -194,12 +204,12 @@ export class SwDocShell extends SfxObjectShell {
       } satisfies SfxMediumInput);
     return this.ReplaceDocument(
       loaded.document,
-      loaded.documentState,
+      loadedState,
       setMediumOperation(
         acquireSfxMedium(openMedium),
         "open",
         "succeeded",
-        loaded.documentState.contentGeneration,
+        loadedState.contentGeneration,
       ),
     );
   }
@@ -349,7 +359,10 @@ export class SwDocShell extends SfxObjectShell {
   /** Serializes a captured active model/state snapshot without changing medium state. @param options - Filter controls. @returns ODT bytes. */
   public SerializeOdt(options?: OdtFilterOperationOptions): Promise<Uint8Array> {
     this.EnsureOpen();
-    return this.odtFilter.Export(createWriterSnapshot(this.document, this.documentState), options);
+    return this.odtFilter.Export(
+      createOdtFilterDocument(this.document, this.documentState.title),
+      options,
+    );
   }
 
   /** Saves to the current confirmed writable primary medium. @param persist - Confirmed write adapter. @returns Completion after acknowledgement. */

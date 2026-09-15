@@ -7,11 +7,11 @@ import {
   createWorkerClientState,
 } from "../../../../framework/source/services/worker-protocol";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { createWriterSnapshot } from "../../../browser/persistence/writer-storage";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { writeOdtDocument } from "./wrtxml";
+import { createOdtFilterDocument } from "./odt-filter-service";
 import {
   OdtWorkerRuntime,
   type OdtWorkerRequestPayload,
@@ -66,7 +66,7 @@ async function terminal(scope: CapturingScope): Promise<Record<string, unknown>>
 }
 
 describe("ODT worker runtime" /** Groups worker execution behavior. @returns Nothing. */, () => {
-  it("imports into a neutral snapshot with ordered progress" /** Verifies worker-side ZIP/XML work. @returns Completion after result. */, async () => {
+  it("imports into a neutral filter document with ordered progress" /** Verifies worker-side ZIP/XML work. @returns Completion after result. */, async () => {
     const scope = new CapturingScope();
     const runtime = new OdtWorkerRuntime(scope);
     const document = createWriterDocument("p-1");
@@ -110,13 +110,13 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     });
   });
 
-  it("exports a snapshot with an exact transferable buffer" /** Verifies worker export and ownership transfer. @returns Completion after result. */, async () => {
+  it("exports a filter document with an exact transferable buffer" /** Verifies worker export and ownership transfer. @returns Completion after result. */, async () => {
     const scope = new CapturingScope();
     const runtime = new OdtWorkerRuntime(scope);
     runtime.HandleMessage(
       request({
         operation: "export",
-        snapshot: createWriterSnapshot(createWriterDocument("p-1"), metadata()),
+        document: createOdtFilterDocument(createWriterDocument("p-1"), metadata().title),
       }),
     );
     const result = await terminal(scope);

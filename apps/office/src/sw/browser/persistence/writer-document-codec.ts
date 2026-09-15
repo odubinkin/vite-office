@@ -48,7 +48,7 @@ interface WriterTextNodeRecord {
 /** Current graph transport. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly numRules: readonly WriterNumberRuleRecord[];
-  readonly swModelVersion: 8;
+  readonly swModelVersion: 9;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -78,7 +78,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         name: rule.GetName(),
       }),
     ),
-    swModelVersion: 8,
+    swModelVersion: 9,
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -114,7 +114,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
 export function decodeWriterDocument(candidate: unknown): SwDoc {
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 8 ||
+    candidate.swModelVersion !== 9 ||
     !Array.isArray(candidate.numRules) ||
     !Array.isArray(candidate.textFormatCollections) ||
     !Array.isArray(candidate.textNodes)

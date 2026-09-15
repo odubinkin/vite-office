@@ -3,7 +3,6 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { createWriterSnapshot } from "../../../browser/persistence/writer-storage";
 import { createWriterDocument } from "../../core/doc/doc";
 import { createWriterModuleFactory } from "../../../browser/composition/writer-module";
 import {
@@ -11,6 +10,7 @@ import {
   OdtWorkerClient,
   type OdtWorkerTransport,
 } from "./odt-worker-client";
+import { createOdtFilterDocument } from "./odt-filter-service";
 
 /** Deterministic Worker transport test double. */
 class FakeWorker implements OdtWorkerTransport {
@@ -53,9 +53,9 @@ function metadata() {
   return createDocument({ id: "worker-client", suiteId: "writer", title: "Client" });
 }
 
-/** Creates one target-schema snapshot for transport tests. @returns Current Writer snapshot. */
+/** Creates one filter-only document transfer for transport tests. @returns Current Writer transfer. */
 function snapshot() {
-  return createWriterSnapshot(createWriterDocument("p-1"), metadata());
+  return createOdtFilterDocument(createWriterDocument("p-1"), metadata().title);
 }
 
 /** Reads the last posted request identity. @param worker - Fake transport. @returns Request ID. */
@@ -91,7 +91,7 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
     worker.emit({ id: importId, protocol: 1, stage: "import:package", type: "progress" });
     worker.emit({
       id: importId,
-      payload: { operation: "import", snapshot: importedSnapshot },
+      payload: { document: importedSnapshot, operation: "import" },
       protocol: 1,
       type: "result",
     });
@@ -143,7 +143,7 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
         new MessageEvent("message", {
           data: {
             id: 1,
-            payload: { operation: "import", snapshot: {} },
+            payload: { document: {}, operation: "import" },
             protocol: 1,
             type: "result",
           },
@@ -153,7 +153,7 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
       const secondId = postedId(currentWorker);
       currentWorker.emit({
         id: secondId,
-        payload: { operation: "import", snapshot: {} },
+        payload: { document: {}, operation: "import" },
         protocol: 1,
         type: "result",
       });

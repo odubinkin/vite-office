@@ -14,12 +14,10 @@ import {
   type WorkerProgress,
   type WorkerResult,
 } from "../../../../framework/source/services/worker-protocol";
-import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
-import type { DocumentSnapshot } from "../../../../sfx2/source/doc/docfile";
-import type { WriterSnapshotState } from "../../../browser/persistence/writer-storage";
 import {
   OdtFilterError,
   type OdtFilterOperationOptions,
+  type OdtFilterDocument,
   type OdtFilterProgressStage,
   type OdtFilterService,
 } from "./odt-filter-service";
@@ -82,12 +80,12 @@ export class OdtWorkerClient implements OdtFilterService {
     this.TerminateWorker();
   }
 
-  /** Exports one structured-clone snapshot. @param snapshot - Current Writer snapshot. @param options - Cancellation/progress controls. @returns Transferable ODT bytes. */
+  /** Exports one structured-clone filter document. @param document - Current Writer transfer. @param options - Cancellation/progress controls. @returns Transferable ODT bytes. */
   public async Export(
-    snapshot: DocumentSnapshot<WriterSnapshotState>,
+    document: OdtFilterDocument,
     options: OdtFilterOperationOptions = {},
   ): Promise<Uint8Array> {
-    const result = await this.Run({ operation: "export", snapshot }, [], options);
+    const result = await this.Run({ document, operation: "export" }, [], options);
     if (result.operation !== "export")
       throw new OdtFilterError("protocol", "ODT worker returned the wrong result kind.");
     return new Uint8Array(result.bytes);
@@ -96,9 +94,9 @@ export class OdtWorkerClient implements OdtFilterService {
   /** Imports transferred package bytes. @param bytes - Complete ODT bytes copied before transfer. @param metadata - Fallback document metadata. @param options - Cancellation/progress/resource controls. @returns Neutral candidate snapshot. */
   public async Import(
     bytes: Uint8Array,
-    metadata: OfficeDocument,
+    metadata: Readonly<{ title: string }>,
     options: OdtFilterOperationOptions = {},
-  ): Promise<DocumentSnapshot<WriterSnapshotState>> {
+  ): Promise<OdtFilterDocument> {
     const buffer = bytes.slice().buffer;
     const result = await this.Run(
       {
@@ -112,7 +110,7 @@ export class OdtWorkerClient implements OdtFilterService {
     );
     if (result.operation !== "import")
       throw new OdtFilterError("protocol", "ODT worker returned the wrong result kind.");
-    return result.snapshot;
+    return result.document;
   }
 
   /** Issues one latest-only request. @param payload - Operation payload. @param transfer - Ownership transfers. @param options - Cancellation/progress controls. @returns Terminal worker payload. */

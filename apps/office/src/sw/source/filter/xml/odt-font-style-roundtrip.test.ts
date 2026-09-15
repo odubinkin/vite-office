@@ -57,12 +57,12 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(imported.document.GetTextFormatColl("title").DerivedFrom()).toBe(
       imported.document.GetDfltTextFormatColl(),
     );
-    const exported = new ZipFile(writeOdtDocument(imported.document, imported.documentState));
+    const exported = new ZipFile(writeOdtDocument(imported.document, { title: imported.title }));
     expect(await exported.readTextEntry("styles.xml")).toMatch(
       /<style:style style:name="Title"[^>]*style:parent-style-name="Standard"/,
     );
     const reopened = await readOdtDocument(
-      writeOdtDocument(imported.document, imported.documentState),
+      writeOdtDocument(imported.document, { title: imported.title }),
       state,
     );
     expect(reopened.document.GetTextFormatColl("title").DerivedFrom()).toBe(
@@ -129,12 +129,12 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(imported.document.GetTextFormatColl("title").GetNextTextFormatColl()).toBe(
       imported.document.GetTextFormatColl("subtitle"),
     );
-    const exported = new ZipFile(writeOdtDocument(imported.document, imported.documentState));
+    const exported = new ZipFile(writeOdtDocument(imported.document, { title: imported.title }));
     expect(await exported.readTextEntry("styles.xml")).toMatch(
       /<style:style style:name="Title"[^>]*style:next-style-name="Subtitle"/,
     );
     const reopened = await readOdtDocument(
-      writeOdtDocument(imported.document, imported.documentState),
+      writeOdtDocument(imported.document, { title: imported.title }),
       state,
     );
     expect(reopened.document.GetTextFormatColl("title").GetNextTextFormatColl()).toBe(
@@ -224,7 +224,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(opened.document.paragraphs[0]?.runs[0]?.attributes.fontFamily).toBe("Noto Sans");
 
     const reopened = await readOdtDocument(
-      writeOdtDocument(opened.document, opened.documentState),
+      writeOdtDocument(opened.document, { title: opened.title }),
       state,
     );
     const projectStyles =

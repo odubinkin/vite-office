@@ -373,7 +373,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 8 });
+    expect(snapshot).toMatchObject({ swModelVersion: 9 });
     expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", runs: [] });
     expect(snapshot.textNodes[0]).not.toHaveProperty("alignment");
     const restored = normalizeWriterParagraphFormatting(snapshot);

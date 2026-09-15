@@ -60,9 +60,13 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     expect(saved.snapshot).toMatchObject({
       id: "writer-store",
       state: {
+        baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
+        baselineTag: "libreoffice-26.8.0.2",
+        codec: "vite-office.writer-browser-storage",
         documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
-        schemaVersion: 6,
-        writerModel: { swModelVersion: 8 },
+        modelVersion: 9,
+        schemaVersion: 7,
+        writerModel: { swModelVersion: 9 },
       },
       version: 1,
     });
@@ -129,12 +133,23 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     ).toThrow("schema is unsupported");
     const wrongSchema = {
       ...current,
-      state: { ...current.state, schemaVersion: 1 as 6 },
+      state: { ...current.state, schemaVersion: 1 as 7 },
     };
     expect(
       /** Restores an unknown schema version. @returns Invalid result. */ () =>
         restoreWriterSnapshot(wrongSchema, "primary"),
     ).toThrow("schema is unsupported");
+    const retiredEnvelopes = [
+      { ...current.state, codec: "writer.snapshot.v1" },
+      { ...current.state, modelVersion: 8 },
+      { ...current.state, baselineTag: "libreoffice-25.2.0.0" },
+      { ...current.state, baselineCommit: "wrong-id-schema" },
+    ];
+    for (const state of retiredEnvelopes)
+      expect(
+        /** Rejects one non-current storage identity without migration. @returns Invalid result. */ () =>
+          restoreWriterSnapshot({ ...current, state: state as WriterSnapshotState }, "primary"),
+      ).toThrow("schema is unsupported");
   });
 
   it("rejects malformed target lifecycle records" /** Exercises target-schema runtime validation without legacy fallbacks. @returns Nothing. */, function rejectsMalformedLifecycle(): void {

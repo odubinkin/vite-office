@@ -4,13 +4,13 @@ import { describe, expect, it } from "vitest";
 
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import type { DocumentSnapshot, SfxMediumInput } from "../../../../sfx2/source/doc/docfile";
+import type { SfxMediumInput } from "../../../../sfx2/source/doc/docfile";
 import { createWriterDocument } from "../../core/doc/doc";
 import {
-  createWriterSnapshot,
-  type WriterSnapshotState,
-} from "../../../browser/persistence/writer-storage";
-import type { OdtFilterService } from "../../filter/xml/odt-filter-service";
+  createOdtFilterDocument,
+  type OdtFilterDocument,
+  type OdtFilterService,
+} from "../../filter/xml/odt-filter-service";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 import { SwDocShell } from "./docsh";
 
@@ -61,7 +61,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
   });
 
   it("rejects an import superseded by document replacement", /** Verifies stale request rejection. @returns Completion after assertions. */ async () => {
-    let resolveImport: ((snapshot: DocumentSnapshot<WriterSnapshotState>) => void) | undefined;
+    let resolveImport: ((document: OdtFilterDocument) => void) | undefined;
     const filter: OdtFilterService = {
       Cancel: /** Cancels the fake request. @returns Nothing. */ () => undefined,
       Close: /** Closes the fake filter. @returns Nothing. */ () => undefined,
@@ -78,7 +78,9 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     const opening = shell.Open(new Uint8Array([1]), metadata("Incoming"));
     const replacement = shell.InitNew(metadata("Replacement"), "replacement-p-1");
     const candidateState = metadata("Candidate", "candidate");
-    resolveImport?.(createWriterSnapshot(createWriterDocument("candidate-p-1"), candidateState));
+    resolveImport?.(
+      createOdtFilterDocument(createWriterDocument("candidate-p-1"), candidateState.title),
+    );
     await expect(opening).rejects.toMatchObject({ category: "stale" });
     expect(shell.GetDoc()).toBe(replacement);
   });

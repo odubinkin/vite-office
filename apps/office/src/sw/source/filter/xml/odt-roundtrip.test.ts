@@ -223,7 +223,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(
       encodeWriterDocument((await new SwXMLReader().Read(bytes, metadata())).document),
     ).toEqual(encodeWriterDocument(restored.document));
-    expect(restored.documentState.title).toBe("Round & Trip");
+    expect(restored.title).toBe("Round & Trip");
     expect(restored.document.GetDfltTextFormatColl().GetName()).toBe("Body < text");
     expect(restored.document.GetDfltTextFormatColl().GetAttrSet().GetWeight().GetBoolValue()).toBe(
       true,
@@ -316,7 +316,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     ]);
     expect(imported.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("●");
     const roundTripped = await readOdtDocument(
-      writeTargetOdt(imported.document, imported.documentState),
+      writeTargetOdt(imported.document, { ...metadata(), title: imported.title }),
       metadata(),
     );
     expect(
@@ -582,7 +582,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const styles = exportStylesXml(writer);
     const content = exportContentXml(writer);
     const meta = exportMetaXml(metadata().title);
-    expect(importWriterXml(styles, content, metadata()).documentState.title).toBe("Imported");
+    expect(importWriterXml(styles, content, metadata()).title).toBe("Imported");
     expect(
       importWriterXml(
         styles.replace(
@@ -599,7 +599,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         content,
         metadata(),
         meta.replace("<dc:title>Imported</dc:title>", "<dc:title></dc:title>"),
-      ).documentState.title,
+      ).title,
     ).toBe("Imported");
     expect(
       importWriterXml(
@@ -607,7 +607,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         content,
         metadata(),
         meta.replace(/<dc:title>[\s\S]*?<\/dc:title>/, ""),
-      ).documentState.title,
+      ).title,
     ).toBe("Imported");
     for (const [xml, root] of [
       ["<!DOCTYPE x>" + content, "document-content"],

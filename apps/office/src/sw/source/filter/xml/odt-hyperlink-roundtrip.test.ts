@@ -1,6 +1,8 @@
 /** @fileoverview Verifies Writer hyperlink import and export against exact pinned LibreOffice ODT fixtures. */
 
 import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
@@ -12,7 +14,11 @@ import { writeOdtDocument } from "./wrtxml";
 
 /** Reads an exact tracked upstream ODT fixture. @param relativePath - Path below the mirrored sw/qa tree. @returns Fixture bytes. */
 function upstreamOdt(relativePath: string): Uint8Array {
-  return new Uint8Array(readFileSync(`src/sw/qa/${relativePath}`));
+  return new Uint8Array(
+    readFileSync(
+      path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../../qa", relativePath),
+    ),
+  );
 }
 
 describe("Writer upstream hyperlink ODT fixtures", /** Runs exact LibreOffice package compatibility cases. @returns Nothing. */ () => {
@@ -69,7 +75,7 @@ describe("Writer upstream hyperlink ODT fixtures", /** Runs exact LibreOffice pa
         url: fixture.href,
         visitedStyleName: "Visited_20_Internet_20_Link",
       });
-      const exported = writeOdtDocument(imported.document, imported.documentState);
+      const exported = writeOdtDocument(imported.document, { title: imported.title });
       expect(await new ZipFile(exported).readTextEntry("content.xml")).toContain(
         `xlink:href="${fixture.href}"`,
       );
