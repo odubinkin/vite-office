@@ -2,7 +2,11 @@
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
 
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  SvxAdjust,
+  SvxAdjustItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/source/items/paraitem";
 import {
   FontItalic,
   FontLineStyle,
@@ -27,6 +31,7 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
+  RES_MARGIN_TEXTLEFT,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_ISCOUNTED,
@@ -88,6 +93,12 @@ export class SwAttrPool extends SfxItemPool {
       function restoreAdjust(value): SvxAdjustItem {
         return new SvxAdjustItem(value as SvxAdjust, RES_PARATR_ADJUST);
       },
+    );
+    this.RegisterDefaultItem(
+      new SvxTextLeftMarginItem(0, RES_MARGIN_TEXTLEFT),
+      /** Restores a direct text-left margin. @param value - Persisted twip margin. @returns Concrete margin item. */ (
+        value,
+      ) => new SvxTextLeftMarginItem(Number(value), RES_MARGIN_TEXTLEFT),
     );
     this.RegisterDefaultItem(
       new SwNumRuleItem(),

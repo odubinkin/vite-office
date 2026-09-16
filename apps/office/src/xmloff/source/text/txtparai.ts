@@ -15,6 +15,8 @@ export interface OdfStyleDefinition {
   readonly alignment?: OdfParagraphAlignment;
   readonly displayName?: string;
   readonly family: "paragraph" | "text";
+  /** Direct text-left margin imported from paragraph properties, in twips. */
+  readonly leftMargin?: number;
   readonly nextStyleName?: string;
   readonly parentStyleName?: string;
   readonly properties?: Partial<OdfCharacterProperties>;
@@ -44,6 +46,7 @@ export interface XMLTextImportTarget {
   createParagraph(
     style: XMLParagraphStyle,
     alignment: OdfParagraphAlignment | undefined,
+    leftMargin: number | undefined,
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
   ): XMLParagraphImportTarget;
@@ -123,6 +126,7 @@ export class XMLParaContext extends SvXMLImportContext {
     this.paragraph = target.createParagraph(
       resolved.style,
       resolved.alignment,
+      resolved.leftMargin,
       resolved.properties,
       list,
     );
@@ -410,6 +414,7 @@ class XMLListItemContext extends SvXMLImportContext {
 interface ResolvedParagraphStyle {
   readonly alignment?: OdfParagraphAlignment;
   readonly effectiveProperties?: Partial<OdfCharacterProperties>;
+  readonly leftMargin?: number;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly style: XMLParagraphStyle;
 }
@@ -435,6 +440,7 @@ export function resolveParagraphStyle(
       ...(definition?.properties === undefined && parent.effectiveProperties === undefined
         ? {}
         : { effectiveProperties: { ...parent.effectiveProperties, ...definition?.properties } }),
+      ...(definition?.leftMargin === undefined ? {} : { leftMargin: definition.leftMargin }),
       style: builtInStyle,
     };
   }
@@ -451,6 +457,7 @@ export function resolveParagraphStyle(
   );
   return {
     ...(definition.alignment === undefined ? {} : { alignment: definition.alignment }),
+    ...(definition.leftMargin === undefined ? {} : { leftMargin: definition.leftMargin }),
     ...(parent.effectiveProperties === undefined && definition.properties === undefined
       ? {}
       : { effectiveProperties: { ...parent.effectiveProperties, ...definition.properties } }),

@@ -248,12 +248,14 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   public createParagraph(
     style: XMLParagraphStyle,
     alignment: OdfParagraphAlignment | undefined,
+    leftMargin: number | undefined,
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
   ): XMLParagraphImportTarget {
     const node = this.document.nodes.MakeTextNode(`paragraph-${++this.paragraphCount}`);
     node.ChgFormatColl(this.document.GetTextFormatColl(style));
     if (alignment !== undefined) node.SetParagraphAlignment(alignment);
+    if (leftMargin !== undefined) node.SetParagraphTextLeftMargin(leftMargin);
     if (list !== undefined) {
       /* v8 ignore next -- list contexts only expose rules registered in this same temporary document. */
       if (this.document.FindNumRulePtr(list.ruleName) === undefined)
@@ -281,7 +283,8 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   public finishContent(): void {
     if (this.officeTextCount !== 1)
       throw new Error("ODF content must contain exactly one office:text.");
-    if (this.paragraphCount === 0) this.createParagraph("default", undefined, undefined, undefined);
+    if (this.paragraphCount === 0)
+      this.createParagraph("default", undefined, undefined, undefined, undefined);
   }
 }
 

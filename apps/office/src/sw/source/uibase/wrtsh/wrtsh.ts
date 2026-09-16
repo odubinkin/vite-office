@@ -26,11 +26,7 @@ import {
   normalizeWriterTextRuns,
   toggleWriterTextRangeFormat,
 } from "../../core/txtnode/ndtxt";
-import {
-  isWriterParagraphListKind,
-  WRITER_MAX_LIST_LEVEL,
-  type WriterParagraphListKind,
-} from "../../core/doc/list";
+import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
 import { createWriterTextCommandRegistry } from "../shells/writercommands";
 import type { SwDocShell } from "../app/docsh";
@@ -45,7 +41,7 @@ import {
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import { CreateWriterFontUndo, SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
 import { SwUndoFormatColl } from "../../core/undo/unfmco";
-import { SwUndoInsNum, SwUndoNumLevel } from "../../core/undo/unnum";
+import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwTransferable } from "../dochdl/swdtflvr";
 import type {
   WriterClipboardPaste,
@@ -70,6 +66,11 @@ import {
   type WriterParagraphTextRange,
 } from "./wrtsh-selection";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
+import {
+  canChangeWriterParagraphIndent,
+  changeWriterParagraphIndent,
+  changeWriterParagraphListLevel,
+} from "./wrtsh-indent";
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
@@ -880,17 +881,17 @@ export class SwWrtShell extends SwModify {
 
   /** Promotes or demotes the active list paragraph. @param command - Level transition. @returns Whether content changed. */
   public ChangeParagraphListLevel(command: WriterListLevelCommand): boolean {
-    if (command !== "demote" && command !== "promote")
-      throw new Error(`Unsupported Writer list-level command: ${command}`);
-    const paragraph = this.GetActiveParagraph();
-    if (paragraph.list.kind === "none") return false;
-    const level = paragraph.list.level + (command === "demote" ? 1 : -1);
-    if (level < 0 || level > WRITER_MAX_LIST_LEVEL) return false;
-    const cursor = this.CaptureCursorState();
-    const before = paragraph.CaptureParagraphListState();
-    return this.ApplyAction(
-      new SwUndoNumLevel(paragraph, before, { ...before, level }, cursor, cursor),
-    );
+    return changeWriterParagraphListLevel(this, command);
+  }
+
+  /** Executes the text-shell indent command: list levels for list items and a direct left margin otherwise. @param increase - Whether to increase indentation. @returns Whether content changed. */
+  public ChangeParagraphIndent(increase: boolean): boolean {
+    return changeWriterParagraphIndent(this, increase);
+  }
+
+  /** Reports whether the text-shell indent command has an available transition. @param increase - Whether to increase indentation. @returns Whether enabled. */
+  public CanChangeParagraphIndent(increase: boolean): boolean {
+    return canChangeWriterParagraphIndent(this.GetActiveParagraph(), increase);
   }
 
   /** Applies one clipboard paragraph's complete bounded list tuple through Writer numbering undo. @param paragraph - Parsed clipboard paragraph. @returns Whether list metadata changed. */
@@ -921,7 +922,7 @@ export class SwWrtShell extends SwModify {
   }
 
   /** Executes one semantic action and publishes cursor-state invalidation. @param action - Reversible Writer action. @param tryMerge - Whether adjacent typing/deletion grouping is allowed. @returns True after successful execution. */
-  private ApplyAction(action: SfxUndoAction<SwUndoRedoContext>, tryMerge = false): boolean {
+  public ApplyAction(action: SfxUndoAction<SwUndoRedoContext>, tryMerge = false): boolean {
     return this.RunNotificationTransaction(
       /** Aggregates model, lifecycle, and cursor changes. @returns True after execution. */ () => {
         this.docShell.ApplyUndoAction(action, this.undoContext, tryMerge);
@@ -943,7 +944,7 @@ export class SwWrtShell extends SwModify {
   }
 
   /** Captures point, mark direction, active paragraph, and pending attributes for one action boundary. @returns Complete cursor state. */
-  private CaptureCursorState(): SwUndoCursorState {
+  public CaptureCursorState(): SwUndoCursorState {
     const point = this.cursor.GetPoint();
     const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
     return createWriterUndoCursorState(

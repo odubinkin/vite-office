@@ -30,6 +30,7 @@ import {
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
+  RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
@@ -121,9 +122,12 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
   const alignment = getDirectAlignment(
     node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_ADJUST, false),
   );
+  const hasDirectLeftMargin =
+    node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_TEXTLEFT, false) !== undefined;
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
   return {
     ...(alignment === undefined ? {} : { alignment }),
+    ...(hasDirectLeftMargin ? { leftMargin: node.textLeftMargin } : {}),
     inheritedProperties: getCharacterProperties(
       node.GetSwAttrSet(),
       true,
@@ -184,6 +188,7 @@ function assertSupportedItems(
     RES_CHRATR_CTL_FONT,
     RES_CHRATR_CTL_WEIGHT,
     RES_PARATR_ADJUST,
+    RES_MARGIN_TEXTLEFT,
   ]);
   if (allowListItems)
     for (const which of [RES_PARATR_LIST_ID, RES_PARATR_LIST_LEVEL, RES_PARATR_NUMRULE])

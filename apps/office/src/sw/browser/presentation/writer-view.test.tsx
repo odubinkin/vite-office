@@ -1,6 +1,6 @@
 /** @fileoverview Verifies browser projection over persistent Writer view and shell dispatch. */
 
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
 import { describe, expect, it, vi } from "vitest";
 
@@ -340,7 +340,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(boldHandler).toHaveBeenCalledTimes(3);
 
     fireEvent.click(screen.getByRole("button", { name: "Ordered List" }));
-    fireEvent.click(screen.getByRole("button", { name: "Demote Outline Level" }));
+    expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Increase" }));
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Promote Outline Level" }));

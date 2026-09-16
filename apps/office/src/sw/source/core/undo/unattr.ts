@@ -109,3 +109,32 @@ export class SwUndoParagraphFormat extends SwUndo {
     GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphAlignment(this.afterAlignment);
   }
 }
+
+/** Reversible direct text-left margin change for one paragraph. */
+export class SwUndoMoveLeftMargin extends SwUndo {
+  /** Creates a margin action. @param paragraph - Target paragraph. @param beforeMargin - Original twip margin. @param afterMargin - New twip margin. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
+  public constructor(
+    private readonly paragraph: SwTextNode,
+    private readonly beforeMargin: number,
+    private readonly afterMargin: number,
+    before: SwUndoCursorState,
+    after: SwUndoCursorState,
+  ) {
+    super("Move Left Margin", before, after);
+  }
+
+  /** Reports two scalar margin values. @returns Payload units. */
+  public override GetPayloadSize(): number {
+    return 2;
+  }
+
+  /** Restores the previous direct text-left margin. @param context - Active Writer context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphTextLeftMargin(this.beforeMargin);
+  }
+
+  /** Reapplies the direct text-left margin. @param context - Active Writer context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    GetUndoTextNode(context.GetDoc(), this.paragraph).SetParagraphTextLeftMargin(this.afterMargin);
+  }
+}

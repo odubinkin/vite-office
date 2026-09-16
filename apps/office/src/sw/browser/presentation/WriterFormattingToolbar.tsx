@@ -22,7 +22,6 @@ import { WRITER_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import { getWriterParagraphStyleCommandId } from "../../uiconfig/swriter/menubar/menubar-commands";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { writerNumObjectBarItems } from "../../uiconfig/swriter/toolbar/numobjectbar";
 import { writerTextObjectBarItems } from "../../uiconfig/swriter/toolbar/textobjectbar";
 import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import type { WriterToolbarItemPlacement } from "../../uiconfig/swriter/ui-resource";
@@ -34,23 +33,19 @@ const icons = new Map<string, CommandIcon>([
   [WRITER_COMMAND_IDS.alignJustify, AlignJustify],
   [WRITER_COMMAND_IDS.unorderedList, List],
   [WRITER_COMMAND_IDS.orderedList, ListOrdered],
-  [WRITER_COMMAND_IDS.demote, IndentIncrease],
-  [WRITER_COMMAND_IDS.promote, Outdent],
+  [WRITER_COMMAND_IDS.increaseIndent, IndentIncrease],
+  [WRITER_COMMAND_IDS.decreaseIndent, Outdent],
 ]);
 
-/** Inputs selecting the active upstream object bar. */
-export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps {
-  readonly objectBar: "numbering" | "text";
-}
+/** Inputs shared by the complete Writer text formatting toolbar. */
+export type WriterFormattingToolbarProps = BrowserCommandSurfaceProps;
 
-/** Renders the active text or numbering object bar without merging their resources. @param props - Shared command surface and shell context. @returns Toolbar item fragment. */
+/** Renders the complete Writer text toolbar. Its generic indent commands select list-level or paragraph-margin behavior in the text shell. @param props - Shared command surface and shell context. @returns Toolbar item fragment. */
 export function WriterFormattingToolbar({
   commandSource,
-  objectBar,
   resolveArguments,
 }: WriterFormattingToolbarProps): React.JSX.Element {
   const localization = useBrowserLocalization();
-  const items = objectBar === "numbering" ? writerNumObjectBarItems : writerTextObjectBarItems;
   const getCommandResource =
     /** Localizes one generated formatting resource. @param commandUrl - Command URL. @returns Localized resource. */ (
       commandUrl: string,
@@ -72,7 +67,7 @@ export function WriterFormattingToolbar({
       getButtonContent={getWriterButtonContent}
       getCommandResource={getCommandResource}
       icons={icons}
-      items={items}
+      items={writerTextObjectBarItems}
       renderSpecialItem={
         /** Renders Writer selector placements. @param item - Generic special placement. @returns Writer selector. */ (
           item,

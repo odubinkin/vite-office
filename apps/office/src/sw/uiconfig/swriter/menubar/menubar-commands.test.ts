@@ -56,6 +56,14 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
         ) => item.kind === "command-select",
       ),
     ).toBe(true);
+    expect(writerTextObjectBarItems).toContainEqual({
+      commandId: WRITER_COMMAND_IDS.increaseIndent,
+      kind: "command",
+    });
+    expect(writerTextObjectBarItems).toContainEqual({
+      commandId: WRITER_COMMAND_IDS.decreaseIndent,
+      kind: "command",
+    });
     expect(writerNumObjectBarItems).toEqual([
       { commandId: WRITER_COMMAND_IDS.demote, kind: "command" },
       { commandId: WRITER_COMMAND_IDS.promote, kind: "command" },

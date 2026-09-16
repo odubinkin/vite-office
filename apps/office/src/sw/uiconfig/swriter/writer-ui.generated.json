@@ -9,6 +9,7 @@
     "copy": ".uno:Copy",
     "cut": ".uno:Cut",
     "defaultParagraphStyle": ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles",
+    "decreaseIndent": ".uno:DecrementIndent",
     "demote": ".uno:DecrementLevel",
     "editHyperlink": ".uno:EditHyperlink",
     "exportText": ".uno:ExportTo",
@@ -16,6 +17,7 @@
     "hyperlinkDialog": ".uno:HyperlinkDialog",
     "headingOne": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles",
     "italic": ".uno:Italic",
+    "increaseIndent": ".uno:IncrementIndent",
     "newDocument": ".uno:AddDirect",
     "openLocal": "vnd.vite-office.browser:OpenLocal",
     "openOdt": ".uno:Open",
@@ -48,6 +50,7 @@
       "capabilityId": "CAP-0112",
       "commandUrl": ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles"
     },
+    { "capabilityId": "CAP-0107", "commandUrl": ".uno:DecrementIndent" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:DecrementLevel" },
     { "capabilityId": "CAP-0101", "commandUrl": ".uno:ExportTo" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:EditHyperlink" },
@@ -56,6 +59,7 @@
       "commandUrl": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles"
     },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Italic" },
+    { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementIndent" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:HyperlinkDialog" },
     { "capabilityId": "CAP-0114", "commandUrl": ".uno:AddDirect" },
     { "capabilityId": "CAP-0114", "commandUrl": "vnd.vite-office.browser:OpenLocal" },
@@ -179,6 +183,20 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 20130
+    },
+    ".uno:DecrementIndent": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0107",
+      "controlLabel": "Decrease",
+      "label": "Decrease",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10461
     },
     ".uno:EditHyperlink": {
       "browserOwned": false,
@@ -326,6 +344,20 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 20131
+    },
+    ".uno:IncrementIndent": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0107",
+      "controlLabel": "Increase",
+      "label": "Increase",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10462
     },
     ".uno:Redo": {
       "browserOwned": false,
@@ -563,6 +595,15 @@
             "kind": "menu",
             "label": "Text"
           },
+          {
+            "id": ".uno:FormatSpacingMenu",
+            "items": [
+              { "commandUrl": ".uno:IncrementIndent", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:DecrementIndent", "kind": "command", "visible": true }
+            ],
+            "kind": "menu",
+            "label": "Spacing"
+          },
           { "kind": "separator" },
           {
             "id": ".uno:FormatBulletsMenu",
@@ -649,6 +690,9 @@
       { "kind": "separator" },
       { "commandUrl": ".uno:DefaultBullet", "kind": "command", "visible": true },
       { "commandUrl": ".uno:DefaultNumbering", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:IncrementIndent", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:DecrementIndent", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": false }
     ]
@@ -2076,24 +2120,6 @@
         "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:ParaspaceDecrease"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:IncrementIndent"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu", ".uno:FormatSpacingMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DecrementIndent"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu"],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:FormatSpacingMenu"
       },
       {
         "classification": "X",
@@ -4158,18 +4184,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:SetOutline"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:IncrementIndent"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:DecrementIndent"
       },
       {
         "classification": "X",

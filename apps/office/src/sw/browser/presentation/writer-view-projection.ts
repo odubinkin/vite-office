@@ -73,6 +73,7 @@ export class WriterViewProjection implements WriterPresentationProjector {
           style: node.style,
           styleDisplayName: node.GetTextFormatColl().GetName(),
           text: node.text,
+          textLeftMargin: node.textLeftMargin,
         });
       },
     );

@@ -160,7 +160,6 @@ export function WriterWorkbench({
         formattingToolbar={
           <WriterFormattingToolbar
             commandSource={commandSource}
-            objectBar={snapshot.objectBar}
             resolveArguments={resolveCommandArguments}
           />
         }

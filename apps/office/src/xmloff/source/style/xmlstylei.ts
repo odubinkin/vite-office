@@ -48,10 +48,11 @@ export class XMLStylesContext extends SvXMLImportContext {
 /** Accumulates one bounded style definition. */
 class XMLStyleContext extends SvXMLImportContext {
   private alignment: OdfParagraphAlignment | undefined;
+  private leftMargin: number | undefined;
   private hasParagraphProperties = false;
   private properties: Partial<OdfCharacterProperties> | undefined;
   private readonly name: string;
-  private readonly definition: Omit<OdfStyleDefinition, "alignment" | "properties">;
+  private readonly definition: Omit<OdfStyleDefinition, "alignment" | "leftMargin" | "properties">;
   private readonly supported: boolean;
 
   /** Reads style identity attributes. @param target - Definition consumer. @param attributes - Style attributes. @returns Context. */
@@ -96,6 +97,7 @@ class XMLStyleContext extends SvXMLImportContext {
         throw new Error("ODF style has duplicate paragraph-properties.");
       this.hasParagraphProperties = true;
       this.alignment = importAlignment(attributes);
+      this.leftMargin = importLeftMargin(attributes);
       return new XMLPropertyContext();
     }
     if (element === XMLToken.STYLE_TEXT_PROPERTIES) {
@@ -113,6 +115,7 @@ class XMLStyleContext extends SvXMLImportContext {
     this.target.registerStyle(this.name, {
       ...this.definition,
       ...(this.alignment === undefined ? {} : { alignment: this.alignment }),
+      ...(this.leftMargin === undefined ? {} : { leftMargin: this.leftMargin }),
       ...(this.properties === undefined ? {} : { properties: this.properties }),
     });
   }
@@ -219,6 +222,25 @@ function importAlignment(attributes: FastAttributeList): OdfParagraphAlignment |
   if (value === "end" || value === "right") return "right";
   if (value === "center" || value === "justify") return value;
   throw new Error(`Unsupported ODF paragraph alignment: ${value}`);
+}
+
+/** Imports a non-negative `fo:margin-left` length into Writer twips. @param attributes - Property attributes. @returns Margin or undefined. */
+function importLeftMargin(attributes: FastAttributeList): number | undefined {
+  const value = attributes.get(XMLToken.FO_MARGIN_LEFT);
+  if (value === null) return undefined;
+  const match = /^(0|[0-9]+(?:\.[0-9]+)?)(cm|in|mm|pt)$/.exec(value);
+  if (match === null) throw new Error(`Unsupported ODF paragraph left margin: ${value}`);
+  const amount = Number(match[1]);
+  const unit = match[2];
+  const twips =
+    unit === "cm"
+      ? (amount * 1440) / 2.54
+      : unit === "in"
+        ? amount * 1440
+        : unit === "mm"
+          ? (amount * 1440) / 25.4
+          : amount * 20;
+  return Math.round(twips);
 }
 
 /** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @returns Property deltas. */

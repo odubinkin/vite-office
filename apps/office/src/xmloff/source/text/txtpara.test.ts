@@ -33,6 +33,7 @@ function source(paragraphs: readonly XMLTextParagraphSource[]): XMLTextExportSou
 /** Canonical paragraph operations captured by the fake Writer target. */
 interface ImportedParagraph {
   alignment?: XMLTextParagraphSource["alignment"];
+  leftMargin?: number;
   list?: XMLParagraphListState;
   properties?: Partial<OdfCharacterProperties>;
   runs: {
@@ -51,10 +52,11 @@ function importBody(
 ): ImportedParagraph[] {
   const paragraphs: ImportedParagraph[] = [];
   const target: XMLTextImportTarget = {
-    /** Creates one canonical paragraph operation target. @param style - Resolved style. @param alignment - Alignment. @param properties - Direct properties. @param list - List state. @returns Text sink. */
-    createParagraph(style, alignment, properties, list): XMLParagraphImportTarget {
+    /** Creates one canonical paragraph operation target. @param style - Resolved style. @param alignment - Alignment. @param leftMargin - Direct text-left margin. @param properties - Direct properties. @param list - List state. @returns Text sink. */
+    createParagraph(style, alignment, leftMargin, properties, list): XMLParagraphImportTarget {
       const paragraph: ImportedParagraph = {
         ...(alignment === undefined ? {} : { alignment }),
+        ...(leftMargin === undefined ? {} : { leftMargin }),
         ...(list === undefined ? {} : { list }),
         ...(properties === undefined ? {} : { properties }),
         runs: [],

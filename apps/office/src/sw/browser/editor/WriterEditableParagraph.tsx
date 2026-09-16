@@ -76,6 +76,10 @@ export function WriterEditableParagraph({
           role="textbox"
           style={{
             fontFamily: paragraph.runs[0]?.attributes.fontFamily,
+            marginInlineStart:
+              paragraph.list.kind === "none" && paragraph.textLeftMargin > 0
+                ? `${paragraph.textLeftMargin / 20}pt`
+                : undefined,
             textAlign: paragraph.alignment,
           }}
           tabIndex={-1}

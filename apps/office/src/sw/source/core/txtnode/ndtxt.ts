@@ -2,10 +2,15 @@
  * @fileoverview Implements Writer text nodes plus derived browser text runs at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
 
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  SvxAdjust,
+  SvxAdjustItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/source/items/paraitem";
 import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_PARATR_ADJUST,
+  RES_MARGIN_TEXTLEFT,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_ISRESTART,
@@ -488,6 +493,11 @@ export class SwTextNode extends SwContentNode {
     return getWriterParagraphAlignment(adjust);
   }
 
+  /** Returns the effective direct text-left margin in twips. */
+  public get textLeftMargin(): number {
+    return (this.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft();
+  }
+
   /** Returns a copy of the bounded numbering/list items. @returns Paragraph list items. */
   public get list(): WriterParagraphList {
     const ruleName = this.GetNumRuleName();
@@ -608,6 +618,11 @@ export class SwTextNode extends SwContentNode {
   /** Sets the paragraph adjustment item. @param alignment - New paragraph alignment. @returns Nothing. */
   public SetParagraphAlignment(alignment: WriterParagraphAlignment): void {
     this.SetAttr(new SvxAdjustItem(getSvxAdjust(alignment), RES_PARATR_ADJUST));
+  }
+
+  /** Sets the direct text-left margin in twips. @param margin - Non-negative margin. @returns Nothing. */
+  public SetParagraphTextLeftMargin(margin: number): void {
+    this.SetAttr(new SvxTextLeftMarginItem(margin, RES_MARGIN_TEXTLEFT));
   }
 
   /** Sets the bounded numbering/list items. @param list - New list items. @returns Nothing. */

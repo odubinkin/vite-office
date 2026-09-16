@@ -61,6 +61,8 @@ export interface XMLTextListSource {
 export interface XMLTextParagraphSource {
   readonly alignment?: OdfParagraphAlignment;
   readonly inheritedProperties?: OdfCharacterProperties;
+  /** Direct text-left margin in twips. */
+  readonly leftMargin?: number;
   readonly list?: XMLTextListSource;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly runs: readonly XMLTextRunSource[];
@@ -116,10 +118,15 @@ export class XMLTextParagraphExport {
           throw new Error(`Conflicting ODF list rule: ${list.rule.name}`);
         listRules.set(list.rule.name, list.rule);
       }
-      if (paragraph.alignment !== undefined || paragraph.properties !== undefined) {
+      if (
+        paragraph.alignment !== undefined ||
+        paragraph.leftMargin !== undefined ||
+        paragraph.properties !== undefined
+      ) {
         const key = paragraphStyleKey(
           getOdfStyleName(paragraph),
           paragraph.alignment,
+          paragraph.leftMargin,
           paragraph.properties,
         );
         if (!paragraphStyleNames.has(key))
@@ -141,16 +148,21 @@ export class XMLTextParagraphExport {
       /** Emits one automatic paragraph style. @param entry - Internal key and ODF name. @returns Style XML. */
       (entry) => {
         const [key, name] = entry;
-        const [style, alignment, propertiesKey] = key.split(":") as [
+        const [style, alignment, leftMargin, propertiesKey] = key.split(":") as [
           XMLParagraphStyle,
           OdfParagraphAlignment | "",
           string,
+          string,
         ];
         const parent = style;
+        const paragraphAttributes = [
+          ...(alignment === "" ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
+          ...(leftMargin === "" ? [] : [`fo:margin-left="${exportOdfLength(Number(leftMargin))}"`]),
+        ];
         const paragraphProperties =
-          alignment === ""
+          paragraphAttributes.length === 0
             ? ""
-            : `<style:paragraph-properties fo:text-align="${exportAlignment(alignment)}"/>`;
+            : `<style:paragraph-properties ${paragraphAttributes.join(" ")}/>`;
         const properties = parseCharacterPropertiesKey(propertiesKey);
         const textProperties =
           propertiesKey === "---|"
@@ -297,10 +309,17 @@ function exportParagraphElement(
 ): string {
   const baseStyleName = getOdfStyleName(paragraph);
   const styleName =
-    paragraph.alignment === undefined && paragraph.properties === undefined
+    paragraph.alignment === undefined &&
+    paragraph.leftMargin === undefined &&
+    paragraph.properties === undefined
       ? baseStyleName
       : (paragraphStyleNames.get(
-          paragraphStyleKey(baseStyleName, paragraph.alignment, paragraph.properties),
+          paragraphStyleKey(
+            baseStyleName,
+            paragraph.alignment,
+            paragraph.leftMargin,
+            paragraph.properties,
+          ),
         ) as string);
   let content = "";
   let activeHyperlink: OdfHyperlink | undefined;
@@ -373,9 +392,16 @@ function createXmlId(value: string, used: Set<string>): string {
 function paragraphStyleKey(
   style: XMLParagraphStyle,
   alignment?: OdfParagraphAlignment,
+  leftMargin?: number,
   properties?: Partial<OdfCharacterProperties>,
 ): string {
-  return `${style}:${alignment ?? ""}:${partialCharacterPropertiesKey(properties)}`;
+  return `${style}:${alignment ?? ""}:${leftMargin ?? ""}:${partialCharacterPropertiesKey(properties)}`;
+}
+
+/** Serializes a bounded twip margin as an ODF centimetre length. @param twips - Margin in twips. @returns ODF length. */
+function exportOdfLength(twips: number): string {
+  const centimetres = (twips * 2.54) / 1440;
+  return `${Number(centimetres.toFixed(4))}cm`;
 }
 
 /** Escapes XML character data. @param value - Raw text. @returns XML-safe text. */

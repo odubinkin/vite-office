@@ -65,6 +65,9 @@ export const RES_PARATR_LIST_RESTARTVALUE = 86 as const;
 /** Paragraph counted-in-list flag. */
 export const RES_PARATR_LIST_ISCOUNTED = 87 as const;
 
+/** Direct paragraph text-left margin, matching `RES_MARGIN_TEXTLEFT`. */
+export const RES_MARGIN_TEXTLEFT = 93 as const;
+
 /** WhichIds supported by the current Writer text-node auto-attribute set. */
 export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_CHRATR_FONT, RES_CHRATR_FONT],
@@ -77,6 +80,7 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_PARATR_ADJUST, RES_PARATR_ADJUST],
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
   [RES_PARATR_LIST_ID, RES_PARATR_LIST_ISCOUNTED],
+  [RES_MARGIN_TEXTLEFT, RES_MARGIN_TEXTLEFT],
 ] as const;
 
 /** WhichIds supported by the current Writer paragraph-style attribute set. */

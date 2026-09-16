@@ -24,6 +24,23 @@ function createShell(text = ""): SwWrtShell {
 }
 
 describe("Writer canonical input shell", /** Registers canonical cursor and input tests. @returns Nothing. */ function defineWriterInputShellTests(): void {
+  it("matches text-shell indent dispatch for ordinary and list paragraphs", /** Verifies `SID_INC_INDENT` changes margins outside lists and levels inside them. @returns Nothing. */ function routesContextualIndent(): void {
+    const shell = createShell("Body");
+    const paragraph = shell.GetActiveParagraph();
+    expect(shell.CanChangeParagraphIndent(false)).toBe(false);
+    expect(shell.ChangeParagraphIndent(true)).toBe(true);
+    expect(paragraph.textLeftMargin).toBe(1134);
+    expect(shell.CanChangeParagraphIndent(false)).toBe(true);
+    expect(shell.Undo()).toBe(true);
+    expect(paragraph.textLeftMargin).toBe(0);
+    expect(shell.Redo()).toBe(true);
+    expect(paragraph.textLeftMargin).toBe(1134);
+    expect(shell.SetParagraphListKind("numbered")).toBe(true);
+    expect(shell.ChangeParagraphIndent(true)).toBe(true);
+    expect(paragraph.list).toMatchObject({ kind: "numbered", level: 1 });
+    expect(paragraph.textLeftMargin).toBe(1134);
+  });
+
   it("edits complete hyperlink ranges across differently formatted runs", /** Verifies caret lookup, uniform-selection state, replacement, removal, insertion, and undo. @returns Nothing. */ function editsHyperlinks(): void {
     const shell = createShell("abcd");
     shell.SetSelection({

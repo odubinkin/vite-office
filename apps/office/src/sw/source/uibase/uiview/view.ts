@@ -36,6 +36,8 @@ export interface WriterParagraphProjection {
   readonly list: WriterParagraphList;
   readonly listId: string;
   readonly listMarker?: string;
+  /** Direct text-left margin in twips. */
+  readonly textLeftMargin: number;
   readonly numRuleName: string;
   readonly runs: readonly WriterTextRun[];
   readonly style: WriterParagraphStyle;
@@ -126,8 +128,6 @@ export interface WriterViewSnapshot extends WriterPresentationProjection {
   readonly isStatusBarVisible: boolean;
   /** Current operation state owned by the retained SfxMedium. */
   readonly mediumOperation: Readonly<SfxMediumOperationStatus>;
-  /** Active object bar selected from the real Writer paragraph/list context. */
-  readonly objectBar: "numbering" | "text";
   /** Monotonic dispatcher invalidation version. */
   readonly viewVersion: number;
 }
@@ -231,7 +231,6 @@ export class SwView {
         isStatusBarVisible: this.chromePreferences.IsStatusBarVisible(),
         isStoragePending: this.docShell.GetMedium().lastOperation.state === "pending",
         mediumOperation: this.docShell.GetMedium().GetLastOperation(),
-        objectBar: activeParagraph.list.kind === "none" ? "text" : "numbering",
         viewVersion: this.GetViewFrame().GetBindings().GetVersion(),
       });
       return this.cachedSnapshot;

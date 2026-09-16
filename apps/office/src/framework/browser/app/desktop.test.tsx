@@ -291,12 +291,8 @@ describe("App" /**
     expect(screen.getByTestId(`writer-list-marker-${paragraphId}`)).toHaveTextContent("•");
     expect(paragraph).toHaveAccessibleDescription(/Paragraph list: Unordered List/);
     expect(paragraph.textContent).not.toContain("•");
-    expect(
-      within(formattingToolbar).queryByRole("button", { name: "Bold" }),
-    ).not.toBeInTheDocument();
-    expect(
-      within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
-    ).toBeDisabled();
+    expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
+    expect(within(formattingToolbar).getByRole("button", { name: "Decrease" })).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitemradio", { name: "Unordered List" }));
@@ -304,18 +300,14 @@ describe("App" /**
     expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Ordered List" }));
     expect(screen.getByTestId(`writer-list-marker-${paragraphId}`)).toHaveTextContent("1.");
-    expect(
-      within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
-    ).toBeDisabled();
+    expect(within(formattingToolbar).getByRole("button", { name: "Decrease" })).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menuitem", { name: "Demote Outline Level" })).toBeEnabled();
     fireEvent.click(screen.getByRole("menuitem", { name: "Demote Outline Level" }));
     expect(paragraph).toHaveAttribute("data-list-level", "1");
     expect(paragraph.parentElement).toHaveStyle({ marginInlineStart: "2rem" });
-    fireEvent.click(
-      within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
-    );
+    fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Decrease" }));
     expect(paragraph).toHaveAttribute("data-list-level", "0");
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
     fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));

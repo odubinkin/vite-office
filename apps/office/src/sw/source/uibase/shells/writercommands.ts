@@ -79,6 +79,8 @@ export interface WriterHyperlinkCommandArguments {
 export interface WriterTextCommandTarget {
   readonly CanRedo: () => boolean;
   readonly CanUndo: () => boolean;
+  readonly CanChangeParagraphIndent: (increase: boolean) => boolean;
+  readonly ChangeParagraphIndent: (increase: boolean) => boolean;
   readonly ChangeParagraphListLevel: (command: "demote" | "promote") => boolean;
   readonly GetActiveParagraph: () => Readonly<{
     alignment: "center" | "justify" | "left" | "right";
@@ -274,6 +276,21 @@ export function createWriterTextCommandRegistry(
         invalidates: ["document", "history", "selection"],
         /** Compares the active alignment with this command. @returns Checked state. */
         isChecked: (): boolean => active().alignment === alignment,
+        target: "shell" as const,
+        undoPolicy: "record" as const,
+      }),
+    ),
+    ...([true, false] as const).map(
+      /** Creates one context-sensitive text-shell indent descriptor. @param increase - Whether indentation increases. @returns Command descriptor. */ (
+        increase,
+      ) => ({
+        capabilityId: "CAP-0107" as const,
+        /** Routes list paragraphs to NumUpDown and ordinary paragraphs to MoveLeftMargin semantics. @returns Whether content changed. */
+        execute: (): boolean => target.ChangeParagraphIndent(increase),
+        id: increase ? WRITER_COMMAND_IDS.increaseIndent : WRITER_COMMAND_IDS.decreaseIndent,
+        invalidates: ["document", "history", "selection"],
+        /** Mirrors the upstream text-shell availability query for the active paragraph context. @returns Whether enabled. */
+        isEnabled: (): boolean => target.CanChangeParagraphIndent(increase),
         target: "shell" as const,
         undoPolicy: "record" as const,
       }),
