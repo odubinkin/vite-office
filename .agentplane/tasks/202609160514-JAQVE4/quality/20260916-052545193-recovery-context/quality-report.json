@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609160514-JAQVE4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-16T05:25:45.193Z",
+  "verdict": "pass",
+  "summary": "Menu interaction and visibility indicators meet the approved acceptance criteria.",
+  "evaluated_sha": "6814dc5fceb53ecaf2a84f542a8fc77db565ac8e",
+  "blueprint_digest": "56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20",
+  "findings": [
+    "CommandMenuBar switches between top-level menus on hover only after one menu is open and renders a left checkmark for checked check/radio commands; tests and static gates pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609160514-JAQVE4/README.md",
+    "npm run test:coverage --workspace @vite-office/office"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

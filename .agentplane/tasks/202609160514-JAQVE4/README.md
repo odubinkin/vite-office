@@ -4,7 +4,7 @@ title: "Fix Writer menu hover and checkmarks"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-16T05:25:33.446Z"
+  updated_by: "CODER"
+  note: "verified-202609160514-JAQVE4"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-16T05:25:45.193Z"
+  updated_by: "EVALUATOR"
+  note: "Menu interaction and visibility indicators meet the approved acceptance criteria."
+  evaluated_sha: "6814dc5fceb53ecaf2a84f542a8fc77db565ac8e"
+  blueprint_digest: "56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20"
+  evidence_refs:
+    - ".agentplane/tasks/202609160514-JAQVE4/README.md"
+    - ".agentplane/tasks/202609160514-JAQVE4/quality/20260916-052545193-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609160514-JAQVE4/quality/20260916-052545193-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609160514-JAQVE4/quality/20260916-052545193-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609160514-JAQVE4/blueprint/resolved-snapshot.json"
+    - "npm run test:coverage --workspace @vite-office/office"
+  findings:
+    - "CommandMenuBar switches between top-level menus on hover only after one menu is open and renders a left checkmark for checked check/radio commands; tests and static gates pass."
 commit: null
 comments:
   -
@@ -35,8 +51,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement hover switching for open Writer top-level menus and visible checkmarks for checked menu commands within the approved menubar scope."
+  -
+    type: "verify"
+    at: "2026-09-16T05:24:41.339Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: top-level menus switch on hover after opening, checkable menu commands show a left checkmark only when checked, and all final validation gates pass."
+  -
+    type: "verify"
+    at: "2026-09-16T05:25:33.446Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609160514-JAQVE4"
 doc_version: 3
-doc_updated_at: "2026-09-16T05:14:47.079Z"
+doc_updated_at: "2026-09-16T05:25:33.520Z"
 doc_updated_by: "CODER"
 description: "Make Writer top-level menus switch on hover while a menu is open, and render left-side checkmarks for enabled View visibility commands."
 sections:
@@ -63,11 +91,74 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-16T05:24:41.339Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: top-level menus switch on hover after opening, checkable menu commands show a left checkmark only when checked, and all final validation gates pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T05:14:47.079Z, excerpt_hash=sha256:58f00a5e80e34f34c6fd8fe48662aaf3226e5125dd1f98e2c11481a43133ee6a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160514-JAQVE4/blueprint/resolved-snapshot.json
+    - old_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+    - current_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609160514-JAQVE4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609160514-JAQVE4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-16T05:25:33.446Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609160514-JAQVE4
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T05:24:41.419Z, excerpt_hash=sha256:58f00a5e80e34f34c6fd8fe48662aaf3226e5125dd1f98e2c11481a43133ee6a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160514-JAQVE4/blueprint/resolved-snapshot.json
+    - old_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+    - current_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609160514-JAQVE4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609160514-JAQVE4 --result verified-202609160514-JAQVE4 --commit 6814dc5fceb53ecaf2a84f542a8fc77db565ac8e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: Command: npm run test:coverage --workspace @vite-office/office; Result: pass; Evidence: 72 test files and 330 tests passed with 100% statements, branches, functions, and lines; Scope: full office unit/component suite.
+      Impact: Command: focused Vitest, npm run format:check, npm run lint, npm run typecheck, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check; Result: pass; Evidence: focused 2 files/10 tests passed and all commands exited 0; Scope: changed menubar source/tests and repository policy gates.
+      Resolution: Implemented hover switching and checkmark rendering in CommandMenuBar; added generic regression coverage for closed/open/same/neighbor hover states and checked/unchecked indicators.
 id_source: "generated"
 ---
 ## Summary
@@ -102,6 +193,66 @@ PLANNER fallback scaffold for "Fix Writer menu hover and checkmarks". Replace wi
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-16T05:24:41.339Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: top-level menus switch on hover after opening, checkable menu commands show a left checkmark only when checked, and all final validation gates pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T05:14:47.079Z, excerpt_hash=sha256:58f00a5e80e34f34c6fd8fe48662aaf3226e5125dd1f98e2c11481a43133ee6a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160514-JAQVE4/blueprint/resolved-snapshot.json
+- old_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+- current_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609160514-JAQVE4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609160514-JAQVE4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-16T05:25:33.446Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609160514-JAQVE4
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T05:24:41.419Z, excerpt_hash=sha256:58f00a5e80e34f34c6fd8fe48662aaf3226e5125dd1f98e2c11481a43133ee6a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160514-JAQVE4/blueprint/resolved-snapshot.json
+- old_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+- current_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609160514-JAQVE4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609160514-JAQVE4 --result verified-202609160514-JAQVE4 --commit 6814dc5fceb53ecaf2a84f542a8fc77db565ac8e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -110,3 +261,7 @@ PLANNER fallback scaffold for "Fix Writer menu hover and checkmarks". Replace wi
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: Command: npm run test:coverage --workspace @vite-office/office; Result: pass; Evidence: 72 test files and 330 tests passed with 100% statements, branches, functions, and lines; Scope: full office unit/component suite.
+  Impact: Command: focused Vitest, npm run format:check, npm run lint, npm run typecheck, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check; Result: pass; Evidence: focused 2 files/10 tests passed and all commands exited 0; Scope: changed menubar source/tests and repository policy gates.
+  Resolution: Implemented hover switching and checkmark rendering in CommandMenuBar; added generic regression coverage for closed/open/same/neighbor hover states and checked/unchecked indicators.
