@@ -153,7 +153,7 @@ export function WriterWorkspaceChrome({
         {isPropertiesSidebarVisible ? (
           <aside
             aria-label="Writer properties sidebar"
-            className="min-h-0 overflow-hidden border-l border-slate-200 bg-white p-4"
+            className="hidden min-h-0 overflow-hidden border-l border-slate-200 bg-white p-4 lg:block"
           >
             {propertiesSidebar}
           </aside>

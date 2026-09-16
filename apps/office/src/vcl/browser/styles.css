@@ -29,6 +29,13 @@ body {
   margin: 0;
 }
 
+html:has(#workspace),
+body:has(#workspace),
+body:has(#workspace) #root {
+  height: 100%;
+  overflow: hidden;
+}
+
 button,
 a {
   -webkit-tap-highlight-color: transparent;
