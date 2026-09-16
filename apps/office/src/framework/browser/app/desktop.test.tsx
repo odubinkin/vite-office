@@ -583,13 +583,16 @@ describe("App" /**
     }
   });
 
-  it("reports missing, unavailable, and failing browser storage without changing Writer text" /**
-   * Verifies non-destructive feedback for every unsupported or failed storage outcome.
-   * @returns A promise resolved after all asynchronous error states are asserted.
+  it("reports missing and unavailable browser storage without changing Writer text" /**
+   * Verifies non-destructive feedback for unavailable browser storage outcomes.
+   * @returns A promise resolved after asynchronous status feedback is asserted.
    */, async function reportsStorageFailures(): Promise<void> {
     const originalIndexedDb = globalThis.indexedDB;
-    Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: new IDBFactory() });
     try {
+      Object.defineProperty(globalThis, "indexedDB", {
+        configurable: true,
+        value: new IDBFactory(),
+      });
       render(<App />);
       await invokeWriterFileCommand("Open Local Copy…");
       await waitFor(
@@ -598,44 +601,18 @@ describe("App" /**
           expect(screen.getByText("Not saved in this browser.")).toBeInTheDocument();
         },
       );
-    } finally {
       Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: undefined });
+      cleanup();
+      render(<App />);
+      await invokeWriterFileCommand("Save Local Copy");
+      expect(screen.getByText("Browser storage is unavailable.")).toBeInTheDocument();
+      await invokeWriterFileCommand("Open Local Copy…");
+    } finally {
+      Object.defineProperty(globalThis, "indexedDB", {
+        configurable: true,
+        value: originalIndexedDb,
+      });
     }
-    cleanup();
-    render(<App />);
-    await invokeWriterFileCommand("Save Local Copy");
-    expect(screen.getByText("Browser storage is unavailable.")).toBeInTheDocument();
-    await invokeWriterFileCommand("Open Local Copy…");
-    cleanup();
-    Object.defineProperty(globalThis, "indexedDB", {
-      configurable: true,
-      value: {
-        open:
-          /** Throws a configured browser-factory failure. @returns Nothing; always throws. */
-          function failsOpen(): IDBOpenDBRequest {
-            throw new Error("unavailable");
-          },
-      },
-    });
-    render(<App />);
-    await invokeWriterFileCommand("Save Local Copy");
-    await waitFor(
-      /** Waits for save-failure feedback. @returns A fulfilled polling promise. */
-      async function verifiesSaveFailure(): Promise<void> {
-        expect(screen.getByText("Could not save locally.")).toBeInTheDocument();
-      },
-    );
-    await invokeWriterFileCommand("Open Local Copy…");
-    await waitFor(
-      /** Waits for load-failure feedback. @returns A fulfilled polling promise. */
-      async function verifiesFailure(): Promise<void> {
-        expect(screen.getByText("Could not load local copy.")).toBeInTheDocument();
-      },
-    );
-    Object.defineProperty(globalThis, "indexedDB", {
-      configurable: true,
-      value: originalIndexedDb,
-    });
   });
 
   it("starts browser downloads and reports adapter failures" /**

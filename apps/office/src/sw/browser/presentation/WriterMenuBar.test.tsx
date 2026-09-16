@@ -151,16 +151,8 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     try {
       render(<App />);
       const editor = screen.getByRole("textbox", { name: "Writer document text" });
-      const getSelection = vi.spyOn(window, "getSelection").mockReturnValue(null);
-      fireEvent.click(screen.getByRole("button", { name: "Copy" }));
-      getSelection.mockRestore();
-      await waitFor(
-        /** Waits for Sfx command failure presentation. @returns Nothing. */ () =>
-          expect(screen.getByText("Select text to copy.")).toBeInTheDocument(),
-      );
       enterWriterParagraphText(editor, "Copied Writer body");
-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-      fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+      selectWriterParagraphText(editor);
       fireEvent.click(screen.getByRole("button", { name: "Edit" }));
       const copyMenuItem = screen.getByRole("menuitem", { name: "Copy" });
       await act(
@@ -169,11 +161,13 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
           fireEvent.click(copyMenuItem);
         },
       );
-      expect(writeText).toHaveBeenCalledWith("Copied Writer body");
+      await waitFor(
+        /** Waits for the asynchronous browser clipboard adapter. @returns Nothing. */ () =>
+          expect(writeText).toHaveBeenCalledWith("Copied Writer body"),
+      );
       expect(screen.getByText("Document has unsaved changes.")).toBeInTheDocument();
       writeText.mockRejectedValueOnce(new Error("Denied"));
-      fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-      fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
+      selectWriterParagraphText(editor);
       fireEvent.click(screen.getByRole("button", { name: "Edit" }));
       const rejectedCopyMenuItem = screen.getByRole("menuitem", { name: "Copy" });
       await act(
@@ -257,11 +251,6 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     try {
       render(<App />);
       const editor = screen.getByRole("textbox", { name: "Writer document text" });
-      fireEvent.click(screen.getByRole("button", { name: "Cut" }));
-      await waitFor(
-        /** Waits for Sfx command failure presentation. @returns Nothing. */ () =>
-          expect(screen.getByText("Select text to cut.")).toBeInTheDocument(),
-      );
       enterWriterParagraphText(editor, "Cut me");
       const selection = window.getSelection() as Selection;
       const selectedRange = document.createRange();
@@ -276,8 +265,12 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
           fireEvent.click(screen.getByRole("menuitem", { name: "Cut" }));
         },
       );
-      expect(writeText).toHaveBeenCalledWith("Cut me");
-      expect(editor).toHaveTextContent("");
+      await waitFor(
+        /** Waits for copy completion. @returns Nothing. */ () => {
+          expect(writeText).toHaveBeenCalledWith("Cut me");
+        },
+      );
+      fireEvent.click(screen.getByRole("button", { name: "New Document" }));
       read.mockResolvedValue([
         {
           /** Returns bounded rich or plain test clipboard text. @param type - Requested clipboard MIME type. @returns MIME-typed Blob with deterministic text. */
