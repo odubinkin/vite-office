@@ -195,7 +195,9 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   /* c8 ignore start -- Pointer geometry is covered by the isolated adapter and Chromium E2E. */
   /** Starts root-level pointer selection stabilization. @param event - Native mouse-down event. @returns Nothing. */
   function handlePointerDown(event: React.MouseEvent<HTMLElement>): void {
-    pointerSelection.Start(event.button, event.clientX, event.clientY);
+    if (!pointerSelection.Start(event.button, event.clientX, event.clientY)) return;
+    const selection = selectionMapper.Read();
+    if (selection !== undefined) onSelectionChange(selection);
   }
   /** Extends root-level pointer selection stabilization. @param event - Native mouse-move event. @returns Nothing. */
   function handlePointerMove(event: React.MouseEvent<HTMLElement>): void {

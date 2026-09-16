@@ -46,10 +46,18 @@ export class BrowserWriterPointerSelectionController {
     ) => boolean,
   ) {}
 
-  /** Captures a primary-button pointer anchor. @param button - Mouse button. @param x - Viewport x. @param y - Viewport y. @returns Nothing. */
-  public Start(button: number, x: number, y: number): void {
+  /** Captures a primary-button pointer anchor and places its initial collapsed selection. @param button - Mouse button. @param x - Viewport x. @param y - Viewport y. @returns Whether an initial Writer caret was placed. */
+  public Start(button: number, x: number, y: number): boolean {
     this.anchor = button === 0 ? getBrowserWriterCaretFromPoint(this.geometry, x, y) : undefined;
     this.focus = undefined;
+    if (this.anchor !== undefined)
+      return this.setBaseAndExtent(
+        this.anchor.node,
+        this.anchor.offset,
+        this.anchor.node,
+        this.anchor.offset,
+      );
+    return false;
   }
 
   /** Extends a range across paragraph projections. @param x - Viewport x. @param y - Viewport y. @returns Whether native selection was stabilized. */

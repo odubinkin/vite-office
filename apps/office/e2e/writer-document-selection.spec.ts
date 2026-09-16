@@ -123,3 +123,41 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
   );
   expect(reversePointerSelection).toEqual({ anchorOffset: 6, focusOffset: 5 });
 });
+
+test("places the caret at the first clicked position in a different paragraph" /** Verifies a first click is not replaced by the paragraph-focus end fallback. @param root0 - Playwright fixture object for the isolated browser flow. @param root0.page - Chromium page used to edit and inspect the clicked caret. @returns A promise resolved after the browser caret offset is asserted. */, async function verifiesFirstClickCaretPosition({
+  page,
+}): Promise<void> {
+  await page.goto("/writer");
+  const firstParagraph = page.getByRole("textbox", { name: "Writer document text" });
+  await firstParagraph.fill("First Writer paragraph");
+  await firstParagraph.press("Enter");
+  const secondParagraph = page.getByRole("textbox", { name: "Writer paragraph 2" });
+  await secondParagraph.fill("Second Writer paragraph");
+
+  const clickPoint = await firstParagraph.evaluate(
+    /** Resolves a viewport point at the left edge of the sixth character. @param paragraph - Rendered Writer paragraph. @returns Viewport point for the first click. */
+    function resolveFirstClickPoint(paragraph): Readonly<{ x: number; y: number }> {
+      const text = paragraph.firstChild as Text;
+      const range = document.createRange();
+      range.setStart(text, 5);
+      range.setEnd(text, 6);
+      const rectangle = range.getBoundingClientRect();
+      return { x: rectangle.left + 1, y: rectangle.top + rectangle.height / 2 };
+    },
+  );
+  await page.mouse.click(clickPoint.x, clickPoint.y);
+
+  const caretOffset = await firstParagraph.evaluate(
+    /** Reads the collapsed selection offset after the first click. @returns UTF-16 caret offset relative to the clicked paragraph. */
+    function readCaretOffset(paragraph): number {
+      const selection = window.getSelection();
+      if (selection === null || !selection.isCollapsed) return -1;
+      const range = selection.getRangeAt(0);
+      const prefix = document.createRange();
+      prefix.selectNodeContents(paragraph);
+      prefix.setEnd(range.startContainer, range.startOffset);
+      return prefix.toString().length;
+    },
+  );
+  expect(caretOffset).toBe(5);
+});

@@ -76,7 +76,10 @@ describe("browser Writer geometry" /** Groups injected geometry behavior. @retur
     );
     controller.Start(1, 0, 0);
     expect(controller.Move(0, 0)).toBe(false);
-    controller.Start(0, 0, 0);
+    expect(controller.Start(0, 0, 0)).toBe(true);
+    expect(selection.isCollapsed).toBe(true);
+    expect(selection.anchorNode).toBe(paragraphs[0]?.firstChild);
+    expect(selection.anchorOffset).toBe(2);
     expect(controller.Move(0, 0)).toBe(false);
     activeRange = second;
     expect(controller.Move(0, 0)).toBe(true);
