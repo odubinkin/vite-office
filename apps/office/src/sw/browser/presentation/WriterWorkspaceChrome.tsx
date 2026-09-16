@@ -40,7 +40,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
  * @param props.isStatusBarVisible - Whether the status feedback row remains visible below the canvas.
- * @param props.menuBar - Functional Writer menus located below the document title row.
+ * @param props.menuBar - Functional Writer menus placed beside the document title row.
  * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
  * @param props.status - Current storage or download feedback.
  * @param props.toolbar - Implemented command buttons in the standard toolbar.
@@ -113,9 +113,8 @@ export function WriterWorkspaceChrome({
               {localization.GetText("writer.workspace.subtitle", "Writer · browser workbench")}
             </p>
           </div>
+          <div className="shrink-0">{menuBar}</div>
         </div>
-
-        {menuBar}
 
         <div
           aria-label="Writer standard toolbar"
