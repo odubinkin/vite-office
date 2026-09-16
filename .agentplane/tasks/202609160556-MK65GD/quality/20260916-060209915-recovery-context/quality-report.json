@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609160556-MK65GD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-16T06:02:09.915Z",
+  "verdict": "pass",
+  "summary": "Long-document Writer scroll chaining contained",
+  "evaluated_sha": "e54facdaaac92c941f4d3d463a2bbd55d1038e57",
+  "blueprint_digest": "e4d1a10508fa27932ce50d3108a8fa2c3f2f805be4ce2e9f07de7121b9e31f58",
+  "findings": [
+    "Real Chromium probe confirms the document canvas is the only scroll container at the end of a long document; page height and fixed chrome remain stable."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609160556-MK65GD/README.md",
+    "Playwright long-document probe; npm run build; npm run lint; npx prettier --check; npx vitest run Writer UI tests; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
