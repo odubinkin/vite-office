@@ -316,10 +316,12 @@ export function CommandMenuBar({
             : resource.semantics === "radio"
               ? "menuitemradio"
               : "menuitem";
+        const isCheckable = role !== "menuitem";
+        const isChecked = state.checked === true;
         const label = `${resource.label}${item.showsDialog === true ? "…" : ""}`;
         return (
           <button
-            aria-checked={role === "menuitem" ? undefined : state.checked === true}
+            aria-checked={isCheckable ? isChecked : undefined}
             aria-keyshortcuts={resource.shortcuts[0]}
             className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
             disabled={!state.enabled || state.pending === true}
@@ -335,7 +337,14 @@ export function CommandMenuBar({
             title={state.error}
             type="button"
           >
-            {label}
+            <span
+              aria-hidden="true"
+              className="flex w-4 shrink-0 justify-center font-semibold text-indigo-700"
+              data-menu-checkmark="true"
+            >
+              {isCheckable && isChecked ? "✓" : null}
+            </span>
+            <span>{label}</span>
           </button>
         );
       },
@@ -364,6 +373,11 @@ export function CommandMenuBar({
                 onFocus={
                   /** Activates this trigger for roving tabindex. @returns Nothing. */ () =>
                     setActiveTriggerIndex(index)
+                }
+                onMouseEnter={
+                  /** Switches to a neighboring menu after the menubar has been opened. @returns Nothing. */ () => {
+                    if (openMenuIndex !== undefined && openMenuIndex !== index) openMenu(index);
+                  }
                 }
                 onKeyDown={
                   /** Routes top-level keyboard input. @param event - Trigger keyboard event. @returns Nothing. */ (
