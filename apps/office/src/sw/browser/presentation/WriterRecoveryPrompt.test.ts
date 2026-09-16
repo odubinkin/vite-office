@@ -345,36 +345,56 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
   it("renders each explicit recovery choice through its controller", /** Verifies prompt buttons and workspace reveal. @returns Completion after UI actions. */ async function rendersRecoveryChoices(): Promise<void> {
     const restorePort = createRecoveryPort();
     const restored = render(
-      createElement(
-        WriterRecoveryPrompt,
-        { recovery: restorePort },
-        createElement("div", undefined, "Writer workspace"),
-      ),
+      createElement(WriterRecoveryPrompt, {
+        children: (notice: string | undefined) =>
+          createElement(
+            "div",
+            undefined,
+            createElement("output", { "aria-label": "Recovery status" }, notice),
+            "Writer workspace",
+          ),
+        recovery: restorePort,
+      }),
     );
     fireEvent.click(await screen.findByRole("button", { name: "Restore" }));
-    await screen.findByText("Recovered document generation 5.");
+    expect(await screen.findByRole("status", { name: "Recovery status" })).toHaveTextContent(
+      "Recovered document generation 5.",
+    );
+    expect(screen.queryByText("Recover Writer document?")).not.toBeInTheDocument();
     expect(screen.getByText("Writer workspace")).toBeInTheDocument();
     restored.unmount();
 
     const discardPort = createRecoveryPort();
     const discarded = render(
-      createElement(
-        WriterRecoveryPrompt,
-        { recovery: discardPort },
-        createElement("div", undefined, "Discarded workspace"),
-      ),
+      createElement(WriterRecoveryPrompt, {
+        children: (notice: string | undefined) =>
+          createElement(
+            "div",
+            undefined,
+            createElement("output", { "aria-label": "Recovery status" }, notice),
+            "Discarded workspace",
+          ),
+        recovery: discardPort,
+      }),
     );
     fireEvent.click(await screen.findByRole("button", { name: "Discard" }));
-    await screen.findByText("Recovery data was discarded.");
+    expect(await screen.findByRole("status", { name: "Recovery status" })).toHaveTextContent(
+      "Recovery data was discarded.",
+    );
     discarded.unmount();
 
     const continuePort = createRecoveryPort();
     render(
-      createElement(
-        WriterRecoveryPrompt,
-        { recovery: continuePort },
-        createElement("div", undefined, "Continued workspace"),
-      ),
+      createElement(WriterRecoveryPrompt, {
+        children: (notice: string | undefined) =>
+          createElement(
+            "div",
+            undefined,
+            createElement("output", { "aria-label": "Recovery status" }, notice),
+            "Continued workspace",
+          ),
+        recovery: continuePort,
+      }),
     );
     fireEvent.click(await screen.findByRole("button", { name: "Continue without restoring" }));
     await waitFor(

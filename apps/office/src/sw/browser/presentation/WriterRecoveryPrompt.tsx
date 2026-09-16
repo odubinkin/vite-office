@@ -119,7 +119,8 @@ export class WriterRecoveryPresentationController {
 
 /** Props for the recovery gate wrapping a lazily created Writer workspace. */
 interface WriterRecoveryPromptProps {
-  readonly children?: React.ReactNode;
+  /** Renders the workspace with the recovery result available to its status surface. */
+  readonly children?: (notice?: string) => React.ReactNode;
   readonly recovery: WriterRecoveryPresentationPort;
 }
 
@@ -151,7 +152,7 @@ export function WriterRecoveryPrompt({
         <div className="sr-only" role="status">
           Checking recovery data…
         </div>
-        {children}
+        {children?.()}
       </>
     );
   if (state.kind === "opening")
@@ -211,14 +212,5 @@ export function WriterRecoveryPrompt({
         </div>
       </section>
     );
-  return (
-    <>
-      {state.notice === undefined ? null : (
-        <div className="bg-amber-50 px-4 py-2 text-center text-sm text-amber-900" role="status">
-          {state.notice}
-        </div>
-      )}
-      {children}
-    </>
-  );
+  return <>{children?.(state.notice)}</>;
 }

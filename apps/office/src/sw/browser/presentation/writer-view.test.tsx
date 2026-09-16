@@ -114,6 +114,22 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     saving.Close();
   });
 
+  it("presents recovery results through the existing Writer status bar", /** Verifies recovery feedback uses the footer status surface without an additional notice panel. @returns Nothing. */ function presentsRecoveryStatusInFooter(): void {
+    const session = createWriterDocumentSession(createServices());
+    const mount = render(
+      <WriterWorkbench
+        isActive
+        recoveryNotice="Recovered document generation 5."
+        view={session.view}
+      />,
+    );
+    const statusBar = screen.getByRole("status", { name: "Writer status bar" });
+    expect(statusBar).toHaveTextContent("Recovered document generation 5.");
+    expect(screen.getAllByText("Recovered document generation 5.")).toHaveLength(1);
+    mount.unmount();
+    session.Close();
+  });
+
   it("edits the document title from the workspace header", /** Verifies click-to-edit commits on Enter and blur. @returns Nothing. */ function editsDocumentTitle(): void {
     const session = createWriterDocumentSession(createServices());
     const mount = render(<WriterWorkbench isActive view={session.view} />);

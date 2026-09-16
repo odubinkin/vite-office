@@ -25,11 +25,17 @@ import type { SwView, WriterPasteCommandArguments } from "../../source/uibase/ui
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
   readonly isActive: boolean;
+  /** Recovery result shown through the existing Writer footer status surface. */
+  readonly recoveryNotice?: string;
   readonly view: SwView;
 }
 
 /** Projects one Writer view through browser presenters. @param props - Active view selection. @returns Writer workspace. */
-export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React.JSX.Element {
+export function WriterWorkbench({
+  isActive,
+  recoveryNotice,
+  view,
+}: WriterWorkbenchProps): React.JSX.Element {
   const localization = useBrowserLocalization();
   const snapshot = useSyncExternalStore(view.Subscribe, view.GetSnapshot, view.GetSnapshot);
   const dialogController = view.GetDialogController();
@@ -185,7 +191,10 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
             style={snapshot.activeParagraph.style}
           />
         }
-        status={presentWriterStatus(view, snapshot, localization.GetText.bind(localization))}
+        status={
+          recoveryNotice ??
+          presentWriterStatus(view, snapshot, localization.GetText.bind(localization))
+        }
         toolbar={
           <WriterCommandToolbar
             commandSource={commandSource}

@@ -4,7 +4,7 @@ title: "Move document recovery messages to footer status"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 5
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: move recovery result messages into the existing Writer footer status while preserving the current status presentation model."
 doc_version: 3
-doc_updated_at: "2026-09-16T06:49:18.172Z"
+doc_updated_at: "2026-09-16T06:54:40.102Z"
 doc_updated_by: "CODER"
 description: "Move Writer document recovery result messages from the standalone top notice panel into the existing Writer footer status area. Preserve the current status presentation model for all operation and command statuses; do not refactor status precedence or introduce a last-event status history."
 sections:
@@ -53,11 +53,11 @@ sections:
     3. Update recovery presentation tests and relevant integration assertions to verify recovery messages appear in Writer status bar and no top notice panel is rendered.
     4. Run targeted tests, formatting/lint/typecheck checks, Agentplane doctor and routing validation; record evidence.
   Verify Steps: |-
-    PLANNER fallback scaffold for "Move document recovery messages to footer status". Replace with task-specific acceptance checks when PLANNER context is available.
-
-    1. Review the requested outcome for "Move document recovery messages to footer status". Expected: the visible result matches ## Summary and stays inside approved scope.
-    2. Run the most relevant validation step for this task. Expected: it succeeds without unexpected regressions in touched behavior.
-    3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
+    1. Run the focused recovery, Writer view, and Writer module Vitest suites from apps/office; expected: all tests pass, including recovery feedback rendered in the Writer status bar and no standalone notice panel.
+    2. Run npm run typecheck --workspace @vite-office/office; expected: TypeScript passes.
+    3. Run targeted ESLint and Prettier checks for the five changed files; expected: both pass.
+    4. Run npm run build, ap doctor, and node .agentplane/policy/check-routing.mjs; expected: build succeeds, doctor is OK, and policy routing passes.
+    5. Inspect git diff --check and final git status; expected: no whitespace errors and only approved implementation/task artifacts are present.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
@@ -87,11 +87,11 @@ Move Writer document recovery result messages from the standalone top notice pan
 
 ## Verify Steps
 
-PLANNER fallback scaffold for "Move document recovery messages to footer status". Replace with task-specific acceptance checks when PLANNER context is available.
-
-1. Review the requested outcome for "Move document recovery messages to footer status". Expected: the visible result matches ## Summary and stays inside approved scope.
-2. Run the most relevant validation step for this task. Expected: it succeeds without unexpected regressions in touched behavior.
-3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
+1. Run the focused recovery, Writer view, and Writer module Vitest suites from apps/office; expected: all tests pass, including recovery feedback rendered in the Writer status bar and no standalone notice panel.
+2. Run npm run typecheck --workspace @vite-office/office; expected: TypeScript passes.
+3. Run targeted ESLint and Prettier checks for the five changed files; expected: both pass.
+4. Run npm run build, ap doctor, and node .agentplane/policy/check-routing.mjs; expected: build succeeds, doctor is OK, and policy routing passes.
+5. Inspect git diff --check and final git status; expected: no whitespace errors and only approved implementation/task artifacts are present.
 
 ## Verification
 
