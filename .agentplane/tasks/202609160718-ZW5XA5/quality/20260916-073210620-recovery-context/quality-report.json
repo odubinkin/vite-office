@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609160718-ZW5XA5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-16T07:32:10.620Z",
+  "verdict": "pass",
+  "summary": "Test-only stabilization verified.",
+  "evaluated_sha": "c48dd444416836986c7b0b7c00be0a306baa83cd",
+  "blueprint_digest": "0230887ac64aa4992a674e79ee27489543ba4704d1773c88f15fd433c542918a",
+  "findings": [
+    "No production paths changed; targeted and split-suite tests passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609160718-ZW5XA5/README.md",
+    "npx vitest run src/framework src/vcl/browser; src/sw/browser; src/sw/source/core src/sw/source/uibase; src/sw/source/filter; src/package src/sfx2 src/svl src/vcl (71 files, 257 tests)"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
