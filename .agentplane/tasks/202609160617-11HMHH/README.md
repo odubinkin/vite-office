@@ -4,7 +4,7 @@ title: "Fix Writer page scroll and narrow sidebar"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 4
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-16T06:19:36.231Z"
+  updated_by: "CODER"
+  note: "Verified: long Writer documents no longer create a page-level scroll layer, and the properties sidebar is hidden below the lg breakpoint instead of moving below the canvas."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-16T06:19:36.844Z"
+  updated_by: "EVALUATOR"
+  note: "Writer long-document scroll and responsive sidebar verified"
+  evaluated_sha: "de02d08bd07777cb601cc8044bc6862b502772d0"
+  blueprint_digest: "ddaa7724dcd6deb70e2f0fe4c014a1c9f4ac99caca1d5c28a7f9d4439cc9d8ae"
+  evidence_refs:
+    - ".agentplane/tasks/202609160617-11HMHH/README.md"
+    - ".agentplane/tasks/202609160617-11HMHH/quality/20260916-061936844-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609160617-11HMHH/quality/20260916-061936844-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609160617-11HMHH/quality/20260916-061936844-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609160617-11HMHH/blueprint/resolved-snapshot.json"
+    - "Playwright scroll-boundary probes; npm run build; npm run lint; npx prettier --check touched files; npx vitest run Writer UI tests (22 passed); ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check"
+  findings:
+    - "Real Chromium probes pass for long content and narrow viewport; build, lint, focused tests, formatting, doctor, policy routing, and diff checks pass."
 commit: null
 comments:
   -
@@ -35,8 +51,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: fix long-document Writer page scrolling and narrow-screen sidebar behavior."
+  -
+    type: "verify"
+    at: "2026-09-16T06:19:36.231Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: long Writer documents no longer create a page-level scroll layer, and the properties sidebar is hidden below the lg breakpoint instead of moving below the canvas."
 doc_version: 3
-doc_updated_at: "2026-09-16T06:17:22.865Z"
+doc_updated_at: "2026-09-16T06:19:36.320Z"
 doc_updated_by: "CODER"
 description: "Prevent the outer page from scrolling for long Writer documents and hide the properties sidebar on narrow screens instead of moving it below the canvas. Preserve fixed Writer chrome and keep the document canvas as the only scroll container."
 sections:
@@ -69,11 +91,44 @@ sections:
     3. Compare the final result against ## Scope and record any residual follow-up in ## Findings. Expected: open edges are explicit rather than implicit.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-16T06:19:36.231Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: long Writer documents no longer create a page-level scroll layer, and the properties sidebar is hidden below the lg breakpoint instead of moving below the canvas.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T06:17:22.865Z, excerpt_hash=sha256:a081dabc9e0af1b5cc7a561bb2bed8cefa347c73f0960644cecd653368c9040f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160617-11HMHH/blueprint/resolved-snapshot.json
+    - old_digest: ddaa7724dcd6deb70e2f0fe4c014a1c9f4ac99caca1d5c28a7f9d4439cc9d8ae
+    - current_digest: ddaa7724dcd6deb70e2f0fe4c014a1c9f4ac99caca1d5c28a7f9d4439cc9d8ae
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609160617-11HMHH
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609160617-11HMHH
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: Command: Playwright long multi-paragraph scroll-boundary and narrow-viewport probes; Result: pass. Evidence: at 700x720, sidebar computed display is none; with 220 wrapped paragraphs body/html scrollHeight remain 720 and window.scrollY remains 0 after wheel(0,100000), while canvas scrollTop reaches maxScrollTop. At 1280px sidebar is visible beside the canvas. Scope: Writer route responsive layout and long-document scrolling.
+      Impact: Previously a long document could expose outer page scrolling after the canvas reached its end, and the sidebar occupied a row below the canvas on narrow screens.
+      Resolution: Added route-scoped overflow hidden to html/body/#root when #workspace exists and hidden lg:block to the properties sidebar; retained canvas overscroll containment.
 id_source: "generated"
 ---
 ## Summary
@@ -114,6 +169,36 @@ PLANNER fallback scaffold for "Fix Writer page scroll and narrow sidebar". Repla
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-16T06:19:36.231Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: long Writer documents no longer create a page-level scroll layer, and the properties sidebar is hidden below the lg breakpoint instead of moving below the canvas.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T06:17:22.865Z, excerpt_hash=sha256:a081dabc9e0af1b5cc7a561bb2bed8cefa347c73f0960644cecd653368c9040f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160617-11HMHH/blueprint/resolved-snapshot.json
+- old_digest: ddaa7724dcd6deb70e2f0fe4c014a1c9f4ac99caca1d5c28a7f9d4439cc9d8ae
+- current_digest: ddaa7724dcd6deb70e2f0fe4c014a1c9f4ac99caca1d5c28a7f9d4439cc9d8ae
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609160617-11HMHH
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609160617-11HMHH
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -122,3 +207,7 @@ PLANNER fallback scaffold for "Fix Writer page scroll and narrow sidebar". Repla
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: Command: Playwright long multi-paragraph scroll-boundary and narrow-viewport probes; Result: pass. Evidence: at 700x720, sidebar computed display is none; with 220 wrapped paragraphs body/html scrollHeight remain 720 and window.scrollY remains 0 after wheel(0,100000), while canvas scrollTop reaches maxScrollTop. At 1280px sidebar is visible beside the canvas. Scope: Writer route responsive layout and long-document scrolling.
+  Impact: Previously a long document could expose outer page scrolling after the canvas reached its end, and the sidebar occupied a row below the canvas on narrow screens.
+  Resolution: Added route-scoped overflow hidden to html/body/#root when #workspace exists and hidden lg:block to the properties sidebar; retained canvas overscroll containment.
