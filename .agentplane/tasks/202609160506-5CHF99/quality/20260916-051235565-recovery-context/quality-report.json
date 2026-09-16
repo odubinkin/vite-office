@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609160506-5CHF99",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-16T05:12:35.565Z",
+  "verdict": "pass",
+  "summary": "Writer shell scrolling layout verified",
+  "evaluated_sha": "b345425c2bc430fc5af9e1e4271eb3d85e85b16b",
+  "blueprint_digest": "c5dc96c634becf5d675a40f1616e10a16c7f3258e416150f37affe3672c1aa42",
+  "findings": [
+    "Viewport flex shell keeps header/footer fixed, central layout keeps sidebar fixed, and document canvas is the sole scroll container."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609160506-5CHF99/README.md",
+    "npm run build; npm run lint; npx prettier --check apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx; git diff --check; npx vitest run src/sw/browser/presentation/writer-view.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
