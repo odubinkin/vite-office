@@ -1,10 +1,11 @@
 ---
 id: "202609160632-S87387"
 title: "Refine Writer submenu hover behavior"
-status: "DOING"
+result_summary: "verified-202609160632-S87387"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: "User approved expansion to update two existing click-based submenu tests."
 verification:
   state: "ok"
-  updated_at: "2026-09-16T06:47:23.983Z"
+  updated_at: "2026-09-16T06:48:04.452Z"
   updated_by: "CODER"
   note: "verified-202609160632-S87387"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run test:coverage --workspace @vite-office/office"
   findings:
     - "The checkmark now inherits the menu default color; nested submenus open on hover, close on leave, do not toggle on mouse click, and retain keyboard access. All affected fixtures and coverage checks pass."
-commit: null
+commit:
+  hash: "4283a6ee8decfaa8f06054fd794c36f73588822e"
+  message: "🧩 S87387 task: persist quality artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: Remove the blue checkmark override and change nested Writer submenus to hover-open behavior with keyboard support preserved."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609160632-S87387. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609160632-S87387"
+  -
+    type: "verify"
+    at: "2026-09-16T06:48:04.452Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609160632-S87387"
+  -
+    type: "status"
+    at: "2026-09-16T06:48:04.658Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609160632-S87387. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-16T06:47:24.059Z"
+doc_updated_at: "2026-09-16T06:48:04.659Z"
 doc_updated_by: "CODER"
 description: "Use default checkmark color and make nested Writer menu sections open on hover rather than mouse click while preserving keyboard access."
 sections:
@@ -151,6 +170,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-16T06:48:04.452Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609160632-S87387
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T06:47:24.059Z, excerpt_hash=sha256:d419ca4dc58b559e773aa0f0d74fd2f2bb0b45e714f3999beb23da4c2f7f4827
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160632-S87387/blueprint/resolved-snapshot.json
+    - old_digest: f30abed8000d851299dd7b4811d239318b39e1dc7a57c0389d91ad7ac29853e2
+    - current_digest: f30abed8000d851299dd7b4811d239318b39e1dc7a57c0389d91ad7ac29853e2
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609160632-S87387
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609160632-S87387 --result verified-202609160632-S87387 --commit 4283a6ee8decfaa8f06054fd794c36f73588822e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -159,6 +208,10 @@ sections:
     - Observation: Command: npm run test:coverage --workspace @vite-office/office; Result: pass; Evidence: 72 test files and 332 tests passed with 100% statements, branches, functions, and lines; Scope: full office unit/component suite.
       Impact: Command: focused Vitest for CommandMenuBar, WriterMenuBar, desktop, and writer-view; npm run format:check; npm run lint; npm run typecheck; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check; Result: pass; Evidence: focused 4 files/39 tests passed and every command exited 0; Scope: changed menu source, all affected tests, and repository policy gates.
       Resolution: Removed the explicit blue checkmark class, implemented pointer hover open/leave close for nested submenus, preserved keyboard submenu opening, and updated all click-based submenu fixtures plus the stale workspace class assertion.
+extensions:
+  implementation_commit:
+    hash: "600a9950fe15222f754510825d8595b9a2e253eb"
+    message: "🚧 S87387 task: refine Writer submenu hover behavior"
 id_source: "generated"
 ---
 ## Summary
@@ -246,6 +299,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609160632-S87387 --result verified-202609160632-S87387 --commit 600a9950fe15222f754510825d8595b9a2e253eb
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-16T06:48:04.452Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609160632-S87387
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T06:47:24.059Z, excerpt_hash=sha256:d419ca4dc58b559e773aa0f0d74fd2f2bb0b45e714f3999beb23da4c2f7f4827
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160632-S87387/blueprint/resolved-snapshot.json
+- old_digest: f30abed8000d851299dd7b4811d239318b39e1dc7a57c0389d91ad7ac29853e2
+- current_digest: f30abed8000d851299dd7b4811d239318b39e1dc7a57c0389d91ad7ac29853e2
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609160632-S87387
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609160632-S87387 --result verified-202609160632-S87387 --commit 4283a6ee8decfaa8f06054fd794c36f73588822e
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
