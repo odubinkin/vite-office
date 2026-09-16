@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609160632-S87387",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-16T06:47:36.368Z",
+  "verdict": "pass",
+  "summary": "Writer menu visual and submenu interactions meet the approved acceptance criteria.",
+  "evaluated_sha": "600a9950fe15222f754510825d8595b9a2e253eb",
+  "blueprint_digest": "f30abed8000d851299dd7b4811d239318b39e1dc7a57c0389d91ad7ac29853e2",
+  "findings": [
+    "The checkmark now inherits the menu default color; nested submenus open on hover, close on leave, do not toggle on mouse click, and retain keyboard access. All affected fixtures and coverage checks pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609160632-S87387/README.md",
+    "npm run test:coverage --workspace @vite-office/office"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
