@@ -1,10 +1,11 @@
 ---
 id: "202609160556-MK65GD"
 title: "Contain Writer canvas scrolling"
-status: "DOING"
+result_summary: "Contained long-document Writer page scroll chaining"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "Playwright long-document probe; npm run build; npm run lint; npx prettier --check; npx vitest run Writer UI tests; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check"
   findings:
     - "Real Chromium probe confirms the document canvas is the only scroll container at the end of a long document; page height and fixed chrome remain stable."
-commit: null
+commit:
+  hash: "1ebd5833bf8c7027cf4b58e8832e7e28074415a3"
+  message: "🧩 MK65GD task: persist quality artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: contain long-document Writer canvas scrolling in the current checkout."
+  -
+    author: "CODER"
+    body: "Verified: long-document Writer scrolling is contained to the document canvas; the page stays at scrollY 0 and fixed chrome keeps stable viewport bounds after the canvas reaches its end."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: long Writer documents stay inside the viewport shell. Canvas scrollTop reaches maxScrollTop while window.scrollY and document height remain unchanged; header, sidebar, and footer keep identical viewport coordinates."
+  -
+    type: "status"
+    at: "2026-09-16T06:02:38.508Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: long-document Writer scrolling is contained to the document canvas; the page stays at scrollY 0 and fixed chrome keeps stable viewport bounds after the canvas reaches its end."
 doc_version: 3
-doc_updated_at: "2026-09-16T06:02:04.214Z"
+doc_updated_at: "2026-09-16T06:02:38.510Z"
 doc_updated_by: "CODER"
 description: "Prevent the outer page from scrolling after the Writer document canvas reaches its end. Keep the Writer shell within the viewport and make the canvas the only vertical scroll container, preserving fixed header, footer, and sidebar behavior."
 sections:
@@ -129,6 +142,10 @@ sections:
     - Observation: Command: /Users/odubinkin/.codex/skills/playwright/scripts/playwright_cli.sh run-code async long-document scroll-boundary probe; Result: pass. Evidence: 1200-word document produced canvas clientHeight=505 and scrollHeight=22772; after wheel(0,100000), canvas scrollTop=22267=maxScrollTop, window.scrollY=0, body/documentElement scrollHeight=720, and header/sidebar/footer bounds were unchanged. Scope: real Chromium Writer route with long content and end-of-canvas wheel chaining.
       Impact: The earlier layout constrained the inner canvas but left the routed workspace/page able to participate in scroll chaining for long content.
       Resolution: Constrained the routed #workspace to h-screen/min-h-0/overflow-hidden and added overscroll-contain to the document canvas.
+extensions:
+  implementation_commit:
+    hash: "e54facdaaac92c941f4d3d463a2bbd55d1038e57"
+    message: "🚧 MK65GD task: contain Writer page scrolling"
 id_source: "generated"
 ---
 ## Summary
