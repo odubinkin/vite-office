@@ -1,10 +1,11 @@
 ---
 id: "202609160514-JAQVE4"
 title: "Fix Writer menu hover and checkmarks"
-status: "DOING"
+result_summary: "verified-202609160514-JAQVE4"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-16T05:25:33.446Z"
+  updated_at: "2026-09-16T05:26:10.573Z"
   updated_by: "CODER"
   note: "verified-202609160514-JAQVE4"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run test:coverage --workspace @vite-office/office"
   findings:
     - "CommandMenuBar switches between top-level menus on hover only after one menu is open and renders a left checkmark for checked check/radio commands; tests and static gates pass."
-commit: null
+commit:
+  hash: "182bbfe94b2477946bad824ad6fbbec9e6d83782"
+  message: "🧩 JAQVE4 task: persist quality artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: Implement hover switching for open Writer top-level menus and visible checkmarks for checked menu commands within the approved menubar scope."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609160514-JAQVE4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609160514-JAQVE4"
+  -
+    type: "verify"
+    at: "2026-09-16T05:26:10.573Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609160514-JAQVE4"
+  -
+    type: "status"
+    at: "2026-09-16T05:26:10.765Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609160514-JAQVE4. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-16T05:25:33.520Z"
+doc_updated_at: "2026-09-16T05:26:10.765Z"
 doc_updated_by: "CODER"
 description: "Make Writer top-level menus switch on hover while a menu is open, and render left-side checkmarks for enabled View visibility commands."
 sections:
@@ -151,6 +170,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-16T05:26:10.573Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609160514-JAQVE4
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T05:25:33.520Z, excerpt_hash=sha256:58f00a5e80e34f34c6fd8fe48662aaf3226e5125dd1f98e2c11481a43133ee6a
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160514-JAQVE4/blueprint/resolved-snapshot.json
+    - old_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+    - current_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609160514-JAQVE4
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609160514-JAQVE4 --result verified-202609160514-JAQVE4 --commit 182bbfe94b2477946bad824ad6fbbec9e6d83782
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -159,6 +208,10 @@ sections:
     - Observation: Command: npm run test:coverage --workspace @vite-office/office; Result: pass; Evidence: 72 test files and 330 tests passed with 100% statements, branches, functions, and lines; Scope: full office unit/component suite.
       Impact: Command: focused Vitest, npm run format:check, npm run lint, npm run typecheck, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check; Result: pass; Evidence: focused 2 files/10 tests passed and all commands exited 0; Scope: changed menubar source/tests and repository policy gates.
       Resolution: Implemented hover switching and checkmark rendering in CommandMenuBar; added generic regression coverage for closed/open/same/neighbor hover states and checked/unchecked indicators.
+extensions:
+  implementation_commit:
+    hash: "6814dc5fceb53ecaf2a84f542a8fc77db565ac8e"
+    message: "🚧 JAQVE4 task: fix Writer menu hover and checkmarks"
 id_source: "generated"
 ---
 ## Summary
@@ -246,6 +299,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609160514-JAQVE4 --result verified-202609160514-JAQVE4 --commit 6814dc5fceb53ecaf2a84f542a8fc77db565ac8e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-16T05:26:10.573Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609160514-JAQVE4
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T05:25:33.520Z, excerpt_hash=sha256:58f00a5e80e34f34c6fd8fe48662aaf3226e5125dd1f98e2c11481a43133ee6a
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160514-JAQVE4/blueprint/resolved-snapshot.json
+- old_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+- current_digest: 56266e4a33c9f390a4a20b966c1e839781b27b19ef63b2f62c334cc9e0955c20
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609160514-JAQVE4
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609160514-JAQVE4 --result verified-202609160514-JAQVE4 --commit 182bbfe94b2477946bad824ad6fbbec9e6d83782
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
