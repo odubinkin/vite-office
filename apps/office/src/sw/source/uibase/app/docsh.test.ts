@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SfxMediumInput } from "../../../../sfx2/source/doc/docfile";
+import type { SwModelHint } from "../../../inc/hints";
 import { createWriterDocument } from "../../core/doc/doc";
 import {
   createOdtFilterDocument,
@@ -50,6 +51,28 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       title: "Shell document",
     });
     expect(loaded.paragraphs[0]?.text).toBe("ODT body");
+  });
+
+  it("renames the document through shell state", /** Verifies title metadata is validated, published, and marked dirty. @returns Nothing. */ () => {
+    const active = fixture();
+    const hints: SwModelHint[] = [];
+    const unsubscribe = active.shell.Subscribe((hint) => hints.push(hint));
+
+    expect(active.shell.RenameDocument("  Renamed document  ")).toBe(true);
+    expect(active.shell.GetDocumentState()).toMatchObject({
+      isModified: true,
+      lifecycle: "dirty",
+      title: "Renamed document",
+    });
+    expect(hints).toEqual([
+      { kind: "document-modified", modified: true },
+      { kind: "document-state-changed" },
+    ]);
+    expect(active.shell.RenameDocument(" ")).toBe(false);
+    expect(active.shell.RenameDocument("Renamed document")).toBe(false);
+
+    unsubscribe();
+    active.shell.Close();
   });
 
   it("retains the active graph when ODT loading fails", /** Verifies candidate-first replacement. @returns Completion after assertions. */ async () => {

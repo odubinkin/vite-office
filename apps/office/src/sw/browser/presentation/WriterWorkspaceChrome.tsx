@@ -3,7 +3,7 @@
  * claiming LibreOffice `mainwn.cxx` progress-window ownership.
  */
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 
 /** Defines the content injected into stable Writer workspace chrome regions. */
@@ -12,6 +12,8 @@ export interface WriterWorkspaceChromeProps {
   readonly children: ReactNode;
   /** Human-readable title of the open Writer document. */
   readonly documentTitle: string;
+  /** Applies a committed document title from the browser presentation. */
+  readonly onDocumentTitleChange: (title: string) => void;
   /** Implemented Writer menu popups placed in the standard top-level menu order. */
   readonly menuBar: ReactNode;
   /** Implemented controls placed in the Writer formatting toolbar. */
@@ -34,6 +36,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props - Stable Writer chrome content supplied by the stateful workbench.
  * @param props.children - Current document editing surface.
  * @param props.documentTitle - Title shown in the workspace title row.
+ * @param props.onDocumentTitleChange - Applies a committed document title.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
  * @param props.isStatusBarVisible - Whether the status feedback row remains visible below the canvas.
@@ -50,11 +53,22 @@ export function WriterWorkspaceChrome({
   isPropertiesSidebarVisible,
   isStatusBarVisible,
   menuBar,
+  onDocumentTitleChange,
   propertiesSidebar,
   status,
   toolbar,
 }: WriterWorkspaceChromeProps): React.JSX.Element {
   const localization = useBrowserLocalization();
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [draftTitle, setDraftTitle] = useState(documentTitle);
+
+  const commitTitle = (): void => {
+    const nextTitle = draftTitle.trim();
+    if (nextTitle.length > 0 && nextTitle !== documentTitle) onDocumentTitleChange(nextTitle);
+    setDraftTitle(nextTitle.length > 0 ? nextTitle : documentTitle);
+    setIsEditingTitle(false);
+  };
+
   return (
     <section
       aria-label="Writer workspace"
@@ -63,7 +77,38 @@ export function WriterWorkspaceChrome({
       <header className="shrink-0 border-b border-slate-200 bg-white">
         <div className="flex min-h-12 flex-wrap items-center gap-3 border-b border-slate-200 px-4 py-2 sm:px-5">
           <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-slate-950">{documentTitle}</p>
+            {isEditingTitle ? (
+              <input
+                aria-label={localization.GetText("writer.workspace.title-label", "Document title")}
+                autoFocus
+                className="w-full min-w-48 rounded border border-indigo-300 px-1 text-sm font-bold text-slate-950 outline-none ring-indigo-200 focus:ring-2"
+                onBlur={commitTitle}
+                onChange={(event) => setDraftTitle(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    event.preventDefault();
+                    event.currentTarget.blur();
+                  }
+                }}
+                type="text"
+                value={draftTitle}
+              />
+            ) : (
+              <button
+                aria-label={localization.GetText(
+                  "writer.workspace.edit-title",
+                  "Edit document title",
+                )}
+                className="block max-w-full truncate text-left text-sm font-bold text-slate-950 hover:text-indigo-700"
+                onClick={() => {
+                  setDraftTitle(documentTitle);
+                  setIsEditingTitle(true);
+                }}
+                type="button"
+              >
+                {documentTitle}
+              </button>
+            )}
             <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-indigo-700">
               {localization.GetText("writer.workspace.subtitle", "Writer · browser workbench")}
             </p>

@@ -74,6 +74,13 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
     },
     [view],
   );
+  const handleDocumentTitleChange = useCallback(
+    /** Persists an inline-edited document title through the owning shell. @param title - Committed title. @returns Nothing. */
+    (title: string): void => {
+      view.GetDocShell().RenameDocument(title);
+    },
+    [view],
+  );
 
   const resolveCommandArguments = useCallback(
     /** Resolves command arguments without reading the rendered DOM. @param commandId - Stable command identity. @returns No browser-derived arguments. */
@@ -169,6 +176,7 @@ export function WriterWorkbench({ isActive, view }: WriterWorkbenchProps): React
             resolveArguments={resolveCommandArguments}
           />
         }
+        onDocumentTitleChange={handleDocumentTitleChange}
         propertiesSidebar={
           <WriterParagraphProperties
             alignment={snapshot.activeParagraph.alignment}

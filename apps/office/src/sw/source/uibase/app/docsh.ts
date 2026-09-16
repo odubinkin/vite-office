@@ -78,6 +78,19 @@ export class SwDocShell extends SfxObjectShell {
     return this.document.GetUndoManager();
   }
 
+  /** Renames the active document and marks the metadata change as unsaved. @param title - New user-facing title. @returns Whether the title changed. */
+  public RenameDocument(title: string): boolean {
+    this.EnsureOpen();
+    const nextTitle = title.trim();
+    if (nextTitle.length === 0 || nextTitle === this.documentState.title) return false;
+    return this.SetDocumentState({
+      ...this.documentState,
+      isModified: true,
+      lifecycle: "dirty",
+      title: nextTitle,
+    });
+  }
+
   /** Subscribes one typed shell consumer through the Writer notification graph. @param listener - Typed receiver. @returns Cleanup callback. */
   public Subscribe(listener: (hint: SwModelHint) => void): () => void {
     return subscribeToSwModify(

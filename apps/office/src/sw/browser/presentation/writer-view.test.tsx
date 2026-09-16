@@ -114,6 +114,30 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     saving.Close();
   });
 
+  it("edits the document title from the workspace header", /** Verifies click-to-edit commits on Enter and blur. @returns Nothing. */ function editsDocumentTitle(): void {
+    const session = createWriterDocumentSession(createServices());
+    const mount = render(<WriterWorkbench isActive view={session.view} />);
+    const titleButton = screen.getByRole("button", { name: "Edit document title" });
+
+    fireEvent.click(titleButton);
+    const titleInput = screen.getByRole("textbox", { name: "Document title" });
+    fireEvent.change(titleInput, { target: { value: "Renamed with Enter" } });
+    fireEvent.keyDown(titleInput, { key: "Enter" });
+    expect(session.docShell.GetDocumentState().title).toBe("Renamed with Enter");
+    expect(screen.getByRole("button", { name: "Edit document title" })).toHaveTextContent(
+      "Renamed with Enter",
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    const blurInput = screen.getByRole("textbox", { name: "Document title" });
+    fireEvent.change(blurInput, { target: { value: "Renamed on blur" } });
+    fireEvent.blur(blurInput);
+    expect(session.docShell.GetDocumentState().title).toBe("Renamed on blur");
+
+    mount.unmount();
+    session.Close();
+  });
+
   it("executes domain commands without DOM through the top Writer shell" /** Verifies stable ownership identities, top-shell resolution, command metadata/state, invalidation, persistent PaM, and New replacement. @returns Completion after clipboard adapter checks. */, async function executesDomainCommands(): Promise<void> {
     const session = createWriterDocumentSession(createServices());
     const { docShell, frame, view } = session;
