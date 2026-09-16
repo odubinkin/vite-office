@@ -153,6 +153,7 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
     const menuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
     expect(menuItem).toHaveAttribute("aria-checked", "true");
     expect(menuItem.querySelector("[data-menu-checkmark]")).toHaveTextContent("✓");
+    expect(menuItem.querySelector("[data-menu-checkmark]")).not.toHaveClass("text-indigo-700");
     fireEvent.click(menuItem);
     fireEvent.click(screen.getByRole("button", { name: "View" }));
     const uncheckedMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });

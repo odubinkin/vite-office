@@ -190,7 +190,9 @@ export function CommandMenuBar({
     if (menu === null) return;
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      target.click();
+      if (target.getAttribute("aria-haspopup") === "menu")
+        setOpenSubmenuId(target.dataset.submenuTrigger);
+      else target.click();
     } else if (
       event.key === "ArrowDown" ||
       event.key === "ArrowUp" ||
@@ -218,7 +220,7 @@ export function CommandMenuBar({
     } else if (event.key === "ArrowRight") {
       event.preventDefault();
       if (target.getAttribute("aria-haspopup") === "menu") {
-        target.click();
+        setOpenSubmenuId(target.dataset.submenuTrigger);
       } else openMenu((menuIndex + 1) % menus.length, "first");
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
@@ -271,15 +273,24 @@ export function CommandMenuBar({
           const isOpen = openSubmenuId === item.id;
           const label = getMenuLabel(item.id, item.label);
           return (
-            <div className="relative" key={item.id}>
+            <div
+              className="relative"
+              key={item.id}
+              onMouseEnter={
+                /** Opens this submenu while the pointer is inside its trigger region. @returns Nothing. */ () =>
+                  setOpenSubmenuId(item.id)
+              }
+              onMouseLeave={
+                /** Closes this submenu after the pointer leaves its trigger and popup region. @returns Nothing. */ () => {
+                  if (openSubmenuId === item.id) setOpenSubmenuId(undefined);
+                }
+              }
+            >
               <button
                 aria-expanded={isOpen}
                 aria-haspopup="menu"
                 className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100"
-                onClick={
-                  /** Toggles this submenu. @returns Nothing. */ () =>
-                    setOpenSubmenuId(isOpen ? undefined : item.id)
-                }
+                data-submenu-trigger={item.id}
                 role="menuitem"
                 tabIndex={-1}
                 type="button"
@@ -339,7 +350,7 @@ export function CommandMenuBar({
           >
             <span
               aria-hidden="true"
-              className="flex w-4 shrink-0 justify-center font-semibold text-indigo-700"
+              className="flex w-4 shrink-0 justify-center font-semibold"
               data-menu-checkmark="true"
             >
               {isCheckable && isChecked ? "✓" : null}

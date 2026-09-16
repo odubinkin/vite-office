@@ -134,6 +134,22 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     fireEvent.blur(blurInput);
     expect(session.docShell.GetDocumentState().title).toBe("Renamed on blur");
 
+    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    const blankInput = screen.getByRole("textbox", { name: "Document title" });
+    fireEvent.change(blankInput, { target: { value: "   " } });
+    fireEvent.keyDown(blankInput, { key: "Escape" });
+    expect(screen.getByRole("textbox", { name: "Document title" })).toBeVisible();
+    fireEvent.blur(blankInput);
+    expect(screen.getByRole("button", { name: "Edit document title" })).toHaveTextContent(
+      "Renamed on blur",
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    const sameTitleInput = screen.getByRole("textbox", { name: "Document title" });
+    fireEvent.change(sameTitleInput, { target: { value: "Renamed on blur" } });
+    fireEvent.blur(sameTitleInput);
+    expect(session.docShell.GetDocumentState().title).toBe("Renamed on blur");
+
     mount.unmount();
     session.Close();
   });
@@ -291,7 +307,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     );
     expect(screen.getByRole("button", { name: "Bold" })).toHaveAttribute("aria-pressed", "true");
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Text" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
     fireEvent.click(screen.getByRole("menuitemcheckbox", { name: "Bold" }));
     fireEvent.keyDown(window, { ctrlKey: true, key: "b" });
     expect(
@@ -310,7 +326,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     fireEvent.click(screen.getByRole("button", { name: "Ordered List" }));
     fireEvent.click(screen.getByRole("button", { name: "Demote Outline Level" }));
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Promote Outline Level" }));
 
     enterText("Persistent session text");

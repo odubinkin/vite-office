@@ -432,6 +432,12 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(screen.getByRole("menuitemcheckbox", { name: "Bold" })).toHaveFocus();
     fireEvent.keyDown(screen.getByRole("menuitemcheckbox", { name: "Bold" }), { key: "ArrowLeft" });
     expect(text).toHaveFocus();
+    fireEvent.keyDown(text, { key: "Enter" });
+    expect(screen.getByRole("menuitemcheckbox", { name: "Bold" })).toHaveFocus();
+    fireEvent.keyDown(screen.getByRole("menuitemcheckbox", { name: "Bold" }), {
+      key: "Escape",
+    });
+    expect(text).toHaveFocus();
     fireEvent.pointerDown(screen.getByRole("region", { name: "Writer document canvas" }));
     expect(screen.queryByRole("menu", { name: "Format menu" })).not.toBeInTheDocument();
   });
@@ -500,14 +506,17 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       const format = screen.getByRole("button", { name: "Format" });
       fireEvent.keyDown(format, { key: "ArrowDown" });
       const lists = screen.getByRole("menuitem", { name: "Lists" });
+      fireEvent.mouseLeave(lists.parentElement as HTMLElement);
       fireEvent.keyDown(lists, { key: "ArrowRight" });
       const noList = screen.getByRole("menuitemradio", { name: "No List" });
       expect(noList).toHaveFocus();
       fireEvent.keyDown(noList, { key: "Escape" });
       expect(lists).toHaveFocus();
       fireEvent.click(lists);
+      expect(screen.queryByRole("menu", { name: "Lists menu" })).not.toBeInTheDocument();
+      fireEvent.mouseEnter(lists);
       expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
-      fireEvent.click(lists);
+      fireEvent.mouseLeave(lists.parentElement as HTMLElement);
       expect(screen.queryByRole("menu", { name: "Lists menu" })).not.toBeInTheDocument();
     } finally {
       vi.useRealTimers();

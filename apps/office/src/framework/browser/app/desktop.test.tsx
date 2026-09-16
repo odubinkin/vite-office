@@ -213,7 +213,7 @@ describe("App" /**
     );
     selectWriterParagraphText(editor);
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Text" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Text" }));
     fireEvent.click(screen.getByRole("menuitemcheckbox", { name: "Italic" }));
     expect(editor.querySelector("strong em")).toHaveTextContent("Body");
     selectWriterParagraphText(editor);
@@ -275,7 +275,7 @@ describe("App" /**
     expect(screen.queryByRole("button", { name: "Move paragraph 1 up" })).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Paragraph actions")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menuitemradio", { name: "No List" })).toHaveAttribute(
       "aria-checked",
       "true",
@@ -298,7 +298,7 @@ describe("App" /**
       within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitemradio", { name: "Unordered List" }));
     expect(screen.queryByTestId(`writer-list-marker-${paragraphId}`)).not.toBeInTheDocument();
     expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
@@ -308,7 +308,7 @@ describe("App" /**
       within(formattingToolbar).getByRole("button", { name: "Promote Outline Level" }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menuitem", { name: "Demote Outline Level" })).toBeEnabled();
     fireEvent.click(screen.getByRole("menuitem", { name: "Demote Outline Level" }));
     expect(paragraph).toHaveAttribute("data-list-level", "1");
@@ -318,12 +318,12 @@ describe("App" /**
     );
     expect(paragraph).toHaveAttribute("data-list-level", "0");
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     expect(screen.getByRole("menu", { name: "Lists menu" })).toBeVisible();
     fireEvent.click(screen.getByRole("menuitemradio", { name: "No List" }));
     expect(screen.queryByTestId("writer-list-marker-writer-paragraph-1")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Format" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
+    fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
     fireEvent.click(screen.getByRole("menuitemradio", { name: "No List" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
   });
@@ -359,7 +359,7 @@ describe("App" /**
     ).toBeInTheDocument();
     expect(screen.queryByRole("textbox", { name: "Writer document text" })).not.toBeInTheDocument();
     expect(screen.getByText("No editor features enabled")).toBeInTheDocument();
-    expect(document.querySelector("#workspace")).toHaveClass("min-h-screen");
+    expect(document.querySelector("#workspace")).toHaveClass("h-screen");
     expect(screen.queryByText("Vite Office")).not.toBeInTheDocument();
 
     cleanup();
@@ -568,7 +568,7 @@ describe("App" /**
       const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
       fireEvent.focus(secondParagraph);
       fireEvent.click(screen.getByRole("button", { name: "Format" }));
-      fireEvent.click(screen.getByRole("menuitem", { name: "Lists" }));
+      fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
       fireEvent.click(screen.getByRole("menuitemradio", { name: /^Unordered List$/ }));
       expect(
         screen.getByTestId(
