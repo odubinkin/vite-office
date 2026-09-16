@@ -4,7 +4,7 @@ title: "Fix first-click caret placement in Writer paragraphs"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,22 @@ verification:
   updated_by: "CODER"
   note: "Verified: first primary clicks now commit the browser hit-tested caret before focus fallback; focused unit, Chromium selection, format, lint, typecheck, doctor, routing, and diff checks passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-16T05:35:00.267Z"
+  updated_by: "EVALUATOR"
+  note: "First-click Writer caret placement is fixed and regression-covered."
+  evaluated_sha: "e6da1797b6b01d2ee2e00d35e415ec66649c86a0"
+  blueprint_digest: "7a9dd1d7c706bc35c54dc83f75bb753a08084a761473b140e935d947ab835c73"
+  evidence_refs:
+    - ".agentplane/tasks/202609160530-P43ZK6/README.md"
+    - ".agentplane/tasks/202609160530-P43ZK6/quality/20260916-053500267-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609160530-P43ZK6/quality/20260916-053500267-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609160530-P43ZK6/quality/20260916-053500267-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609160530-P43ZK6/blueprint/resolved-snapshot.json"
+    - "npx playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-document-selection.spec.ts"
+  findings:
+    - "The pointer start path now commits the hit-tested collapsed caret before focus fallback; existing cross-paragraph drag selection remains passing."
 commit: null
 comments:
   -
