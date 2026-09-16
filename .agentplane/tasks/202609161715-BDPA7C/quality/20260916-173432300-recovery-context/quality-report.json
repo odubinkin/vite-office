@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609161715-BDPA7C",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-16T17:34:32.300Z",
+  "verdict": "pass",
+  "summary": "Writer toolbar and indent parity implementation passed focused UI, shell, ODT, static, and policy checks.",
+  "evaluated_sha": "330bef55dcc5943df3d15227c3f835c04dd2da21",
+  "blueprint_digest": "f6dfa777649541818f595a8b52ee74042782e2b44e2cb3a8eda335088cfa3e99",
+  "findings": [
+    "The persistent text toolbar exposes generic indent controls; they change list levels in lists and direct margins otherwise, and ODT round trips preserve fo:margin-left."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609161715-BDPA7C/README.md",
+    "npm exec --workspace @vite-office/office vitest run src/sw/source/uibase/wrtsh/wrtsh.test.ts src/sw/source/filter/xml/odt-paragraph-indent-roundtrip.test.ts src/sw/browser/presentation/writer-view.test.tsx src/framework/browser/app/desktop.test.tsx src/sw/uiconfig/swriter/menubar/menubar-commands.test.ts src/xmloff/source/text/txtpara.test.ts; npm run format:check; npm run typecheck; npm run check:writer-resources; npm run lint; npm run check:dependencies; npm run check:file-size; ap doctor; node .agentplane/policy/check-routing.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
