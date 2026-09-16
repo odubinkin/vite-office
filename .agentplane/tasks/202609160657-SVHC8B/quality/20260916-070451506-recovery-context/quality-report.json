@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609160657-SVHC8B",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-16T07:04:51.506Z",
+  "verdict": "pass",
+  "summary": "Writer header layout matches the approved single-row placement",
+  "evaluated_sha": "a8570f934c74ccc0d94b0627db3c2a32fef38d76",
+  "blueprint_digest": "b04eb919f2e037d24da86bfa7f3d03820071176c31721cda1be9978d4864a741",
+  "findings": [
+    "WriterWorkspaceChrome now places the existing menubar beside the document title and workbench subtitle; format/lint/typecheck/build/routing/doctor and direct Playwright geometry checks pass. Full Vitest has four unrelated async clipboard/storage/download failures, and the standard e2e runner is blocked by an occupied 4173 port."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609160657-SVHC8B/README.md",
+    "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx; npm run build; npm run format:check; npm run lint; npm run typecheck; node .agentplane/policy/check-routing.mjs; Playwright CLI result: sameRow=true, menuStartsAfterTitle=true"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
