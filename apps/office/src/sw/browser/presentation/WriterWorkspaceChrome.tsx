@@ -56,8 +56,11 @@ export function WriterWorkspaceChrome({
 }: WriterWorkspaceChromeProps): React.JSX.Element {
   const localization = useBrowserLocalization();
   return (
-    <section aria-label="Writer workspace" className="overflow-hidden bg-slate-100">
-      <header className="border-b border-slate-200 bg-white">
+    <section
+      aria-label="Writer workspace"
+      className="flex h-screen min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
+    >
+      <header className="shrink-0 border-b border-slate-200 bg-white">
         <div className="flex min-h-12 flex-wrap items-center gap-3 border-b border-slate-200 px-4 py-2 sm:px-5">
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-slate-950">{documentTitle}</p>
@@ -87,13 +90,15 @@ export function WriterWorkspaceChrome({
       </header>
 
       <div
-        className={`min-h-[620px] ${
-          isPropertiesSidebarVisible ? "grid lg:grid-cols-[minmax(0,1fr)_240px]" : "block"
+        className={`min-h-0 min-w-0 flex-1 overflow-hidden ${
+          isPropertiesSidebarVisible
+            ? "grid grid-rows-[minmax(0,1fr)_auto] lg:grid-cols-[minmax(0,1fr)_240px] lg:grid-rows-1"
+            : "flex"
         }`}
       >
         <div
           aria-label="Writer document canvas"
-          className="overflow-auto bg-slate-200/70 p-5 sm:p-8"
+          className="min-h-0 min-w-0 flex-1 overflow-auto bg-slate-200/70 p-5 sm:p-8"
           role="region"
         >
           <div className="mx-auto min-h-[720px] max-w-3xl bg-white px-7 py-10 shadow-xl shadow-slate-400/30 sm:px-12 sm:py-14">
@@ -103,7 +108,7 @@ export function WriterWorkspaceChrome({
         {isPropertiesSidebarVisible ? (
           <aside
             aria-label="Writer properties sidebar"
-            className="border-l border-slate-200 bg-white p-4"
+            className="min-h-0 overflow-hidden border-l border-slate-200 bg-white p-4"
           >
             {propertiesSidebar}
           </aside>
@@ -113,7 +118,7 @@ export function WriterWorkspaceChrome({
       {isStatusBarVisible ? (
         <footer
           aria-label="Writer status bar"
-          className="flex flex-wrap items-center gap-x-5 gap-y-1 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
+          className="flex shrink-0 flex-wrap items-center gap-x-5 gap-y-1 border-t border-slate-700 bg-slate-950 px-4 py-2 text-xs text-slate-300"
           role="status"
         >
           <span aria-live="polite" className="sm:ml-auto">
