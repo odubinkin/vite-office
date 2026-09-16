@@ -1,10 +1,11 @@
 ---
 id: "202609160657-SVHC8B"
 title: "Move editor menus into document title bar"
-status: "DOING"
+result_summary: "verified-202609160657-SVHC8B"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-16T07:04:34.242Z"
+  updated_at: "2026-09-16T07:05:12.719Z"
   updated_by: "CODER"
   note: "verified-202609160657-SVHC8B"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx; npm run build; npm run format:check; npm run lint; npm run typecheck; node .agentplane/policy/check-routing.mjs; Playwright CLI result: sameRow=true, menuStartsAfterTitle=true"
   findings:
     - "WriterWorkspaceChrome now places the existing menubar beside the document title and workbench subtitle; format/lint/typecheck/build/routing/doctor and direct Playwright geometry checks pass. Full Vitest has four unrelated async clipboard/storage/download failures, and the standard e2e runner is blocked by an occupied 4173 port."
-commit: null
+commit:
+  hash: "8b2b81b0978e899fcd7af7ab436611e4b68aaf82"
+  message: "🧩 SVHC8B task: persist quality review artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: inspect the editor header/menu layout, implement the approved single-row placement, and verify the scoped UI change."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609160657-SVHC8B. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609160657-SVHC8B"
+  -
+    type: "verify"
+    at: "2026-09-16T07:05:12.719Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609160657-SVHC8B"
+  -
+    type: "status"
+    at: "2026-09-16T07:05:12.908Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609160657-SVHC8B. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-16T07:04:34.317Z"
+doc_updated_at: "2026-09-16T07:05:12.909Z"
 doc_updated_by: "CODER"
 description: "Move the File/Edit/etc. menu row into the same top row as the document name and the writer - browser workbench label, immediately to its right, to increase usable vertical space. Preserve existing menu behavior and limit changes to the UI layout/styles needed for this header."
 sections:
@@ -161,6 +180,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-16T07:05:12.719Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609160657-SVHC8B
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T07:04:34.317Z, excerpt_hash=sha256:550ef25111cb3dca2fc1993bb513f34a5ea90c0a7c8a27d4b1c7227e449d3bfa
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160657-SVHC8B/blueprint/resolved-snapshot.json
+    - old_digest: b04eb919f2e037d24da86bfa7f3d03820071176c31721cda1be9978d4864a741
+    - current_digest: b04eb919f2e037d24da86bfa7f3d03820071176c31721cda1be9978d4864a741
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609160657-SVHC8B
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609160657-SVHC8B --result verified-202609160657-SVHC8B --commit 8b2b81b0978e899fcd7af7ab436611e4b68aaf82
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -173,6 +222,10 @@ sections:
     - Observation: The project Vitest run reports four existing async clipboard/storage/download assertion failures, and the standard e2e runner cannot bind because port 4173 is occupied while reuseExistingServer=false.
       Impact: The requested layout is browser-verified, but the full automated suite is not green and the standard e2e command has no fresh run.
       Resolution: Reproduced the clipboard failures in isolated targeted runs, confirmed build and direct Playwright layout geometry, and recorded the residual gaps in the task Findings.
+extensions:
+  implementation_commit:
+    hash: "a8570f934c74ccc0d94b0627db3c2a32fef38d76"
+    message: "✨ SVHC8B task: move Writer menus into document title bar"
 id_source: "generated"
 ---
 ## Summary
@@ -271,6 +324,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609160657-SVHC8B --result verified-202609160657-SVHC8B --commit a8570f934c74ccc0d94b0627db3c2a32fef38d76
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-16T07:05:12.719Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609160657-SVHC8B
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T07:04:34.317Z, excerpt_hash=sha256:550ef25111cb3dca2fc1993bb513f34a5ea90c0a7c8a27d4b1c7227e449d3bfa
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160657-SVHC8B/blueprint/resolved-snapshot.json
+- old_digest: b04eb919f2e037d24da86bfa7f3d03820071176c31721cda1be9978d4864a741
+- current_digest: b04eb919f2e037d24da86bfa7f3d03820071176c31721cda1be9978d4864a741
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609160657-SVHC8B
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609160657-SVHC8B --result verified-202609160657-SVHC8B --commit 8b2b81b0978e899fcd7af7ab436611e4b68aaf82
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
