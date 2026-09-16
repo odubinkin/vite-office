@@ -4,7 +4,7 @@ title: "Move document recovery messages to footer status"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-16T06:56:03.391Z"
+  updated_by: "CODER"
+  note: "verified-202609160648-V90A5T"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-16T06:56:15.422Z"
+  updated_by: "EVALUATOR"
+  note: "Recovery feedback is routed into the existing Writer footer status without altering ordinary status presentation."
+  evaluated_sha: "bf1233f26f22880ac1167aa2c9a86b875533d12b"
+  blueprint_digest: "c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe"
+  evidence_refs:
+    - ".agentplane/tasks/202609160648-V90A5T/README.md"
+    - ".agentplane/tasks/202609160648-V90A5T/quality/20260916-065615422-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609160648-V90A5T/quality/20260916-065615422-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609160648-V90A5T/quality/20260916-065615422-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609160648-V90A5T/blueprint/resolved-snapshot.json"
+    - "npm exec vitest -- --config vite.config.ts run src/sw/browser/presentation/WriterRecoveryPrompt.test.ts src/sw/browser/presentation/writer-view.test.tsx src/sw/browser/composition/writer-module.test.tsx; npm run build; node .agentplane/policy/check-routing.mjs; git diff --check; git status --short --untracked-files=all"
+  findings:
+    - "Focused Vitest 27/27, workspace typecheck, targeted ESLint and Prettier, production build, policy routing, and diff checks passed; final tracked state is clean."
 commit: null
 comments:
   -
@@ -35,8 +51,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: move recovery result messages into the existing Writer footer status while preserving the current status presentation model."
+  -
+    type: "verify"
+    at: "2026-09-16T06:55:54.401Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: recovery result messages now render through the existing Writer footer status; the standalone top notice panel was removed without changing presentWriterStatus for ordinary command and operation statuses. Focused Vitest suites pass 27/27; workspace typecheck, targeted ESLint, targeted Prettier, production build, policy routing, git diff check, and clean final status all pass. ap doctor is OK with one pre-existing warning about an archived close commit and fallback pre-push script."
+  -
+    type: "verify"
+    at: "2026-09-16T06:56:03.391Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609160648-V90A5T"
 doc_version: 3
-doc_updated_at: "2026-09-16T06:54:40.102Z"
+doc_updated_at: "2026-09-16T06:56:03.467Z"
 doc_updated_by: "CODER"
 description: "Move Writer document recovery result messages from the standalone top notice panel into the existing Writer footer status area. Preserve the current status presentation model for all operation and command statuses; do not refactor status precedence or introduce a last-event status history."
 sections:
@@ -60,6 +88,66 @@ sections:
     5. Inspect git diff --check and final git status; expected: no whitespace errors and only approved implementation/task artifacts are present.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-16T06:55:54.401Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: recovery result messages now render through the existing Writer footer status; the standalone top notice panel was removed without changing presentWriterStatus for ordinary command and operation statuses. Focused Vitest suites pass 27/27; workspace typecheck, targeted ESLint, targeted Prettier, production build, policy routing, git diff check, and clean final status all pass. ap doctor is OK with one pre-existing warning about an archived close commit and fallback pre-push script.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T06:54:40.102Z, excerpt_hash=sha256:207761e96d41c4dfc8e70f7f424824e3f4a4d59b8a61e56bd8ce04102eda485f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160648-V90A5T/blueprint/resolved-snapshot.json
+    - old_digest: c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe
+    - current_digest: c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609160648-V90A5T
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609160648-V90A5T
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-16T06:56:03.391Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609160648-V90A5T
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T06:55:54.482Z, excerpt_hash=sha256:207761e96d41c4dfc8e70f7f424824e3f4a4d59b8a61e56bd8ce04102eda485f
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160648-V90A5T/blueprint/resolved-snapshot.json
+    - old_digest: c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe
+    - current_digest: c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609160648-V90A5T
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609160648-V90A5T --result verified-202609160648-V90A5T --commit bf1233f26f22880ac1167aa2c9a86b875533d12b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -96,6 +184,66 @@ Move Writer document recovery result messages from the standalone top notice pan
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-16T06:55:54.401Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: recovery result messages now render through the existing Writer footer status; the standalone top notice panel was removed without changing presentWriterStatus for ordinary command and operation statuses. Focused Vitest suites pass 27/27; workspace typecheck, targeted ESLint, targeted Prettier, production build, policy routing, git diff check, and clean final status all pass. ap doctor is OK with one pre-existing warning about an archived close commit and fallback pre-push script.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T06:54:40.102Z, excerpt_hash=sha256:207761e96d41c4dfc8e70f7f424824e3f4a4d59b8a61e56bd8ce04102eda485f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160648-V90A5T/blueprint/resolved-snapshot.json
+- old_digest: c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe
+- current_digest: c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609160648-V90A5T
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609160648-V90A5T
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-16T06:56:03.391Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609160648-V90A5T
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T06:55:54.482Z, excerpt_hash=sha256:207761e96d41c4dfc8e70f7f424824e3f4a4d59b8a61e56bd8ce04102eda485f
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160648-V90A5T/blueprint/resolved-snapshot.json
+- old_digest: c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe
+- current_digest: c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609160648-V90A5T
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609160648-V90A5T --result verified-202609160648-V90A5T --commit bf1233f26f22880ac1167aa2c9a86b875533d12b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

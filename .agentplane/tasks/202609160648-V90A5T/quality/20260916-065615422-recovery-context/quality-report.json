@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609160648-V90A5T",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-16T06:56:15.422Z",
+  "verdict": "pass",
+  "summary": "Recovery feedback is routed into the existing Writer footer status without altering ordinary status presentation.",
+  "evaluated_sha": "bf1233f26f22880ac1167aa2c9a86b875533d12b",
+  "blueprint_digest": "c372016c9bb708429205a27e21fbec51b33070bcbf8d56e76fc8b7f6ba38ecfe",
+  "findings": [
+    "Focused Vitest 27/27, workspace typecheck, targeted ESLint and Prettier, production build, policy routing, and diff checks passed; final tracked state is clean."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609160648-V90A5T/README.md",
+    "npm exec vitest -- --config vite.config.ts run src/sw/browser/presentation/WriterRecoveryPrompt.test.ts src/sw/browser/presentation/writer-view.test.tsx src/sw/browser/composition/writer-module.test.tsx; npm run build; node .agentplane/policy/check-routing.mjs; git diff --check; git status --short --untracked-files=all"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
