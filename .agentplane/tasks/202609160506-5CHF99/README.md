@@ -1,10 +1,11 @@
 ---
 id: "202609160506-5CHF99"
 title: "Fix Writer shell layout"
-status: "DOING"
+result_summary: "verified-202609160506-5CHF99"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-16T05:12:42.640Z"
+  updated_at: "2026-09-16T05:13:30.845Z"
   updated_by: "CODER"
   note: "verified-202609160506-5CHF99"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run build; npm run lint; npx prettier --check apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx; git diff --check; npx vitest run src/sw/browser/presentation/writer-view.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx"
   findings:
     - "Viewport flex shell keeps header/footer fixed, central layout keeps sidebar fixed, and document canvas is the sole scroll container."
-commit: null
+commit:
+  hash: "c4d560b3286dda6a12349f852992667ac972b77e"
+  message: "🧩 5CHF99 task: persist quality artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved Writer shell scrolling layout in the current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609160506-5CHF99. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609160506-5CHF99"
+  -
+    type: "verify"
+    at: "2026-09-16T05:13:30.845Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609160506-5CHF99"
+  -
+    type: "status"
+    at: "2026-09-16T05:13:31.038Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609160506-5CHF99. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-16T05:12:42.717Z"
+doc_updated_at: "2026-09-16T05:13:31.039Z"
 doc_updated_by: "CODER"
 description: "Make the Writer header, footer, and sidebar fixed while restricting scrolling to the Writer document canvas. Keep the change within the existing frontend layout/CSS scope and preserve current behavior outside scrolling/layout."
 sections:
@@ -193,6 +212,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-16T05:13:30.845Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609160506-5CHF99
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T05:12:42.717Z, excerpt_hash=sha256:97ad702a11bd2706de3f49ae7c291645d7d2826d0ca978471f2e8799f97cc847
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160506-5CHF99/blueprint/resolved-snapshot.json
+    - old_digest: c5dc96c634becf5d675a40f1616e10a16c7f3258e416150f37affe3672c1aa42
+    - current_digest: c5dc96c634becf5d675a40f1616e10a16c7f3258e416150f37affe3672c1aa42
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609160506-5CHF99
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609160506-5CHF99 --result verified-202609160506-5CHF99 --commit c4d560b3286dda6a12349f852992667ac972b77e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -201,6 +250,10 @@ sections:
     - Observation: Command: npm run build; npm run lint; npx prettier --check apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx; git diff --check; npx vitest run src/sw/browser/presentation/writer-view.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx. Result: pass. Evidence: production build completed, ESLint and Prettier passed, diff check clean, 2 test files and 21 tests passed. Scope: WriterWorkspaceChrome layout and relevant Writer UI behavior.
       Impact: The targeted coverage wrapper was not used as evidence because it returned non-zero after the 2 tests passed due the repository-wide 100% coverage threshold when only two files were selected.
       Resolution: Validated the same Writer tests with plain vitest without coverage; all 21 tests passed, and full build/lint/format checks passed.
+extensions:
+  implementation_commit:
+    hash: "b345425c2bc430fc5af9e1e4271eb3d85e85b16b"
+    message: "🚧 5CHF99 task: fix Writer shell scrolling"
 id_source: "generated"
 ---
 ## Summary
@@ -324,6 +377,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609160506-5CHF99 --result verified-202609160506-5CHF99 --commit b345425c2bc430fc5af9e1e4271eb3d85e85b16b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-16T05:13:30.845Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609160506-5CHF99
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-16T05:12:42.717Z, excerpt_hash=sha256:97ad702a11bd2706de3f49ae7c291645d7d2826d0ca978471f2e8799f97cc847
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609160506-5CHF99/blueprint/resolved-snapshot.json
+- old_digest: c5dc96c634becf5d675a40f1616e10a16c7f3258e416150f37affe3672c1aa42
+- current_digest: c5dc96c634becf5d675a40f1616e10a16c7f3258e416150f37affe3672c1aa42
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609160506-5CHF99
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609160506-5CHF99 --result verified-202609160506-5CHF99 --commit c4d560b3286dda6a12349f852992667ac972b77e
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
