@@ -1,10 +1,11 @@
 ---
 id: "202609160617-11HMHH"
 title: "Fix Writer page scroll and narrow sidebar"
-status: "DOING"
+result_summary: "Fixed long-document Writer page scrolling and narrow-screen sidebar layout"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "Playwright scroll-boundary probes; npm run build; npm run lint; npx prettier --check touched files; npx vitest run Writer UI tests (22 passed); ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check"
   findings:
     - "Real Chromium probes pass for long content and narrow viewport; build, lint, focused tests, formatting, doctor, policy routing, and diff checks pass."
-commit: null
+commit:
+  hash: "8e33dcf9ee3ba7373044a7ff1bbc87cc8db590a1"
+  message: "🧩 11HMHH task: persist quality artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: fix long-document Writer page scrolling and narrow-screen sidebar behavior."
+  -
+    author: "CODER"
+    body: "Verified: long multi-paragraph Writer documents remain inside a viewport-locked page; canvas is the only scroll container, and the properties sidebar is hidden below the lg breakpoint instead of moving below the document."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified: long Writer documents no longer create a page-level scroll layer, and the properties sidebar is hidden below the lg breakpoint instead of moving below the canvas."
+  -
+    type: "status"
+    at: "2026-09-16T06:19:54.799Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: long multi-paragraph Writer documents remain inside a viewport-locked page; canvas is the only scroll container, and the properties sidebar is hidden below the lg breakpoint instead of moving below the document."
 doc_version: 3
-doc_updated_at: "2026-09-16T06:19:36.320Z"
+doc_updated_at: "2026-09-16T06:19:54.800Z"
 doc_updated_by: "CODER"
 description: "Prevent the outer page from scrolling for long Writer documents and hide the properties sidebar on narrow screens instead of moving it below the canvas. Preserve fixed Writer chrome and keep the document canvas as the only scroll container."
 sections:
@@ -129,6 +142,10 @@ sections:
     - Observation: Command: Playwright long multi-paragraph scroll-boundary and narrow-viewport probes; Result: pass. Evidence: at 700x720, sidebar computed display is none; with 220 wrapped paragraphs body/html scrollHeight remain 720 and window.scrollY remains 0 after wheel(0,100000), while canvas scrollTop reaches maxScrollTop. At 1280px sidebar is visible beside the canvas. Scope: Writer route responsive layout and long-document scrolling.
       Impact: Previously a long document could expose outer page scrolling after the canvas reached its end, and the sidebar occupied a row below the canvas on narrow screens.
       Resolution: Added route-scoped overflow hidden to html/body/#root when #workspace exists and hidden lg:block to the properties sidebar; retained canvas overscroll containment.
+extensions:
+  implementation_commit:
+    hash: "de02d08bd07777cb601cc8044bc6862b502772d0"
+    message: "🚧 11HMHH task: contain Writer page and sidebar layout"
 id_source: "generated"
 ---
 ## Summary
