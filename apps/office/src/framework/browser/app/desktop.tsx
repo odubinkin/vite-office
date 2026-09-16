@@ -29,7 +29,7 @@ export function Desktop({ modules }: DesktopProps): React.JSX.Element {
   if (activeModule === undefined) return <OfficeLauncher modules={modules} />;
 
   return (
-    <main className="min-h-screen min-w-0 bg-slate-100" id="workspace">
+    <main className="h-screen min-h-0 min-w-0 overflow-hidden bg-slate-100" id="workspace">
       {activeModule.createWorkspace === undefined ? (
         <FoundationWorkspace suite={activeModule} />
       ) : (

@@ -98,7 +98,7 @@ export function WriterWorkspaceChrome({
       >
         <div
           aria-label="Writer document canvas"
-          className="min-h-0 min-w-0 flex-1 overflow-auto bg-slate-200/70 p-5 sm:p-8"
+          className="min-h-0 min-w-0 flex-1 overscroll-contain overflow-auto bg-slate-200/70 p-5 sm:p-8"
           role="region"
         >
           <div className="mx-auto min-h-[720px] max-w-3xl bg-white px-7 py-10 shadow-xl shadow-slate-400/30 sm:px-12 sm:py-14">
