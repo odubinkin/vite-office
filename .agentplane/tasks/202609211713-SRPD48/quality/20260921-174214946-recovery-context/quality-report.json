@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202609211713-SRPD48",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T17:42:14.946Z",
+  "verdict": "pass",
+  "summary": "P2 ownership refactor is complete and all declared verification gates pass.",
+  "evaluated_sha": "99116e38599dd82e8f1e2bc856f18b013a537781",
+  "blueprint_digest": "47e80c7318b1989f57c8c26973479ff02816ecb9a9f915d35d573c45c8e2cfdc",
+  "findings": [
+    "SwView now owns only Writer/Sfx coordination; browser workflow commands terminate in sw/browser, inner-layer reverse dependencies are rejected, and provenance/inventory describe the resulting responsibilities."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609211713-SRPD48/README.md",
+    "npm run verify",
+    "node .agentplane/policy/check-routing.mjs",
+    "apps/office/src/sw/source/uibase/uiview/view.ts",
+    "scripts/check-module-boundaries.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

@@ -4,7 +4,7 @@ title: "Implement P2 Writer view and ownership boundaries"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,29 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T17:41:08.220Z"
+  updated_at: "2026-09-21T17:42:02.734Z"
   updated_by: "CODER"
-  note: "P2 Writer view/workflow ownership, inner-layer dependency enforcement, provenance stack constraints, detailed inventory updates, focused tests, full npm run verify, routing check, and doctor all passed."
+  note: "verified-202609211713-SRPD48"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-21T17:42:14.946Z"
+  updated_by: "EVALUATOR"
+  note: "P2 ownership refactor is complete and all declared verification gates pass."
+  evaluated_sha: "99116e38599dd82e8f1e2bc856f18b013a537781"
+  blueprint_digest: "47e80c7318b1989f57c8c26973479ff02816ecb9a9f915d35d573c45c8e2cfdc"
+  evidence_refs:
+    - ".agentplane/tasks/202609211713-SRPD48/README.md"
+    - ".agentplane/tasks/202609211713-SRPD48/quality/20260921-174214946-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609211713-SRPD48/quality/20260921-174214946-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609211713-SRPD48/quality/20260921-174214946-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609211713-SRPD48/blueprint/resolved-snapshot.json"
+    - "npm run verify"
+    - "node .agentplane/policy/check-routing.mjs"
+    - "apps/office/src/sw/source/uibase/uiview/view.ts"
+    - "scripts/check-module-boundaries.test.ts"
+  findings:
+    - "SwView now owns only Writer/Sfx coordination; browser workflow commands terminate in sw/browser, inner-layer reverse dependencies are rejected, and provenance/inventory describe the resulting responsibilities."
 commit: null
 comments:
   -
@@ -42,8 +61,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "P2 Writer view/workflow ownership, inner-layer dependency enforcement, provenance stack constraints, detailed inventory updates, focused tests, full npm run verify, routing check, and doctor all passed."
+  -
+    type: "verify"
+    at: "2026-09-21T17:42:02.734Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211713-SRPD48"
 doc_version: 3
-doc_updated_at: "2026-09-21T17:41:08.294Z"
+doc_updated_at: "2026-09-21T17:42:02.815Z"
 doc_updated_by: "CODER"
 description: "Implement P2-1 and P2-2 from docs/program/vite-office-upstream-parity-plan.md: remove browser presentation/workflow responsibilities from SwView, move them to sw/browser adapters, enforce inner-layer ownership and browser-import prohibitions, and update provenance/inventory within the existing inventory model."
 sections:
@@ -84,6 +109,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task verify-show 202609211713-SRPD48
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-21T17:42:02.734Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211713-SRPD48
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T17:41:08.294Z, excerpt_hash=sha256:434b4694b13f92af4983b32f8e632e06189ccff7bc73441bb69368ac80c06d4c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211713-SRPD48/blueprint/resolved-snapshot.json
+    - old_digest: 47e80c7318b1989f57c8c26973479ff02816ecb9a9f915d35d573c45c8e2cfdc
+    - current_digest: 47e80c7318b1989f57c8c26973479ff02816ecb9a9f915d35d573c45c8e2cfdc
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211713-SRPD48
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211713-SRPD48 --result verified-202609211713-SRPD48 --commit 99116e38599dd82e8f1e2bc856f18b013a537781
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -146,6 +201,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609211713-SRPD48
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T17:42:02.734Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211713-SRPD48
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T17:41:08.294Z, excerpt_hash=sha256:434b4694b13f92af4983b32f8e632e06189ccff7bc73441bb69368ac80c06d4c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211713-SRPD48/blueprint/resolved-snapshot.json
+- old_digest: 47e80c7318b1989f57c8c26973479ff02816ecb9a9f915d35d573c45c8e2cfdc
+- current_digest: 47e80c7318b1989f57c8c26973479ff02816ecb9a9f915d35d573c45c8e2cfdc
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211713-SRPD48
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211713-SRPD48 --result verified-202609211713-SRPD48 --commit 99116e38599dd82e8f1e2bc856f18b013a537781
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
