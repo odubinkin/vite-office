@@ -1,10 +1,11 @@
 ---
 id: "202609211412-TMXJBS"
 title: "Fix formatted typing undo grouping"
-status: "DOING"
+result_summary: "verified-202609211412-TMXJBS"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T14:16:33.057Z"
+  updated_at: "2026-09-21T14:17:13.911Z"
   updated_by: "CODER"
-  note: "Command: npx vitest run src/sw/source/uibase/wrtsh/wrtsh.test.ts; npm run verify; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check. Result: pass. Evidence: focused 17/17; full 350 office and 95 inventory tests at 100% coverage, 11 E2E, all build/static/architecture/provenance/invariant/parity checks pass; routing OK; doctor OK with one pre-existing historical-task warning; diff check clean. Scope: SwUndoInsert formatted hint grouping and SwWrtShell undo/redo regression."
+  note: "verified-202609211412-TMXJBS"
   attempts: 0
 quality_review:
   state: "pass"
@@ -39,11 +40,16 @@ quality_review:
     - "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
   findings:
     - "SwUndoInsert uses SwpHints.equals for structural native hint comparison; focused regression and full repository verification pass."
-commit: null
+commit:
+  hash: "37fa58df433c4a4ea432930bd090ddb05c4002e5"
+  message: "🧪 TMXJBS task: record formatted typing verification"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609211412-TMXJBS. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -58,8 +64,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Command: npx vitest run src/sw/source/uibase/wrtsh/wrtsh.test.ts; npm run verify; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check. Result: pass. Evidence: focused 17/17; full 350 office and 95 inventory tests at 100% coverage, 11 E2E, all build/static/architecture/provenance/invariant/parity checks pass; routing OK; doctor OK with one pre-existing historical-task warning; diff check clean. Scope: SwUndoInsert formatted hint grouping and SwWrtShell undo/redo regression."
+  -
+    type: "verify"
+    at: "2026-09-21T14:17:13.911Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211412-TMXJBS"
+  -
+    type: "status"
+    at: "2026-09-21T14:17:14.164Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609211412-TMXJBS. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-21T14:16:33.136Z"
+doc_updated_at: "2026-09-21T14:17:14.164Z"
 doc_updated_by: "CODER"
 description: "Replace cyclic JSON hint comparison in SwUndoInsert grouping, add regression coverage for consecutive formatted typing and undo consistency, and run the repository verification contract."
 sections:
@@ -108,11 +127,45 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-21T14:17:13.911Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211412-TMXJBS
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T14:16:33.136Z, excerpt_hash=sha256:af280dd9404baf417213aca5effb476b237227d1311845c3966c032a011eb22c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211412-TMXJBS/blueprint/resolved-snapshot.json
+    - old_digest: 07846ca0c1d2954cbf9f1d0a8bbd673e4f84e718a66e786ed2795ba7eb5e946c
+    - current_digest: 07846ca0c1d2954cbf9f1d0a8bbd673e4f84e718a66e786ed2795ba7eb5e946c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211412-TMXJBS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211412-TMXJBS --result verified-202609211412-TMXJBS --commit 37fa58df433c4a4ea432930bd090ddb05c4002e5
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "05857819ade66d6a02369a618c680b2aebfe74be"
+    message: "🔧 TMXJBS task: fix formatted Writer undo grouping"
 id_source: "generated"
 ---
 ## Summary
@@ -163,6 +216,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane commit 202609211412-TMXJBS -m 🧩 TMXJBS task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T14:17:13.911Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211412-TMXJBS
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T14:16:33.136Z, excerpt_hash=sha256:af280dd9404baf417213aca5effb476b237227d1311845c3966c032a011eb22c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211412-TMXJBS/blueprint/resolved-snapshot.json
+- old_digest: 07846ca0c1d2954cbf9f1d0a8bbd673e4f84e718a66e786ed2795ba7eb5e946c
+- current_digest: 07846ca0c1d2954cbf9f1d0a8bbd673e4f84e718a66e786ed2795ba7eb5e946c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211412-TMXJBS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211412-TMXJBS --result verified-202609211412-TMXJBS --commit 37fa58df433c4a4ea432930bd090ddb05c4002e5
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
