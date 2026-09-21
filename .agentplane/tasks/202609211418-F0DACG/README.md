@@ -1,10 +1,11 @@
 ---
 id: "202609211418-F0DACG"
 title: "Implement Writer P1 upstream parity refactor"
-status: "DOING"
+result_summary: "verified-202609211418-F0DACG"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T14:51:42.233Z"
+  updated_at: "2026-09-21T14:52:07.717Z"
   updated_by: "CODER"
   note: "verified-202609211418-F0DACG"
   attempts: 0
@@ -39,11 +40,16 @@ quality_review:
     - "commit 15905862268b"
   findings:
     - "Full verify passed with complete coverage, e2e, static build, source provenance, inventory, and policy checks."
-commit: null
+commit:
+  hash: "711f6e03a8993eaf227076a9b2ccadffa25fbfd0"
+  message: "🧪 F0DACG task: record verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609211418-F0DACG. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609211418-F0DACG"
+  -
+    type: "verify"
+    at: "2026-09-21T14:52:07.717Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211418-F0DACG"
+  -
+    type: "status"
+    at: "2026-09-21T14:52:07.845Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609211418-F0DACG. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-21T14:51:42.285Z"
+doc_updated_at: "2026-09-21T14:52:07.846Z"
 doc_updated_by: "CODER"
 description: "Implement P1-1 through P1-6 from docs/program/vite-office-upstream-parity-plan.md against the pinned LibreOffice baseline. Preserve the existing inventory model while filling records accurately; do not add backward compatibility for changed persisted document schemas."
 sections:
@@ -135,12 +154,46 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-21T14:52:07.717Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211418-F0DACG
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T14:51:42.285Z, excerpt_hash=sha256:4224c2133480783a7cc6b9bf0ee4c48a8904c0923474a12b153187340456f3e1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211418-F0DACG/blueprint/resolved-snapshot.json
+    - old_digest: d0c6f37f747c7aaa7e5428978274d0d3a06821436ba7aeaaa857e4c60a943fd9
+    - current_digest: d0c6f37f747c7aaa7e5428978274d0d3a06821436ba7aeaaa857e4c60a943fd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211418-F0DACG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211418-F0DACG --result verified-202609211418-F0DACG --commit 711f6e03a8993eaf227076a9b2ccadffa25fbfd0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only commits and files attributed to task 202609211418-F0DACG. Persisted schema compatibility is intentionally not retained; rollback restores the prior schema and implementation together."
   Findings: |-
     - Observation: Writer P1 ownership and boundary changes pass all repository quality gates.
       Impact: Content mutations, shell ownership, numbering labels, lifecycle adapters, storage/worker contracts, and ODT claims are covered without expanding the P0 inventory mechanism.
       Resolution: Accepted implementation commit 15905862268b.
+extensions:
+  implementation_commit:
+    hash: "15905862268bddd6e006a3d35fc33d890c69e20d"
+    message: "🧩 F0DACG code: implement Writer P1 upstream parity"
 id_source: "generated"
 ---
 ## Summary
@@ -215,6 +268,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609211418-F0DACG --result verified-202609211418-F0DACG --commit 15905862268bddd6e006a3d35fc33d890c69e20d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T14:52:07.717Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211418-F0DACG
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T14:51:42.285Z, excerpt_hash=sha256:4224c2133480783a7cc6b9bf0ee4c48a8904c0923474a12b153187340456f3e1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211418-F0DACG/blueprint/resolved-snapshot.json
+- old_digest: d0c6f37f747c7aaa7e5428978274d0d3a06821436ba7aeaaa857e4c60a943fd9
+- current_digest: d0c6f37f747c7aaa7e5428978274d0d3a06821436ba7aeaaa857e4c60a943fd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211418-F0DACG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211418-F0DACG --result verified-202609211418-F0DACG --commit 711f6e03a8993eaf227076a9b2ccadffa25fbfd0
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
