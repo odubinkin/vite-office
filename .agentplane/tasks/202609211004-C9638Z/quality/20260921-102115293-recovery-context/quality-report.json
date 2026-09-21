@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202609211004-C9638Z",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T10:21:15.293Z",
+  "verdict": "pass",
+  "summary": "The newly authored parity plan fully covers the implemented Writer-centric surface, separates justified browser adaptations from architectural divergence, and supplies dependency-ordered remediation and executable acceptance criteria.",
+  "evaluated_sha": "f1d4a1937bf5d063b87fbae5158f8298e92b0793",
+  "blueprint_digest": "1570bc7dde1b9258e3520f4055b17f9ba39947b63b51d238e92551d5efbe59ea",
+  "findings": [
+    "Evidence is concrete and internally consistent: material findings cite local modules and pinned LibreOffice owners; the plan explicitly identifies the unsupported 35/35 marker-based closure and makes inventory truth restoration the first work package."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609211004-C9638Z/README.md",
+    "docs/program/vite-office-upstream-parity-plan.md",
+    "node .agentplane/policy/check-routing.mjs",
+    "agentplane doctor",
+    "npm run check:dependencies && npm run check:source-tree && npm run check:source-provenance && npm run inventory:parity"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The audit is static and plan-scoped; individual remediation packages must still validate their behavioral assumptions against executable upstream oracles before parity promotion."
+  ]
+}
