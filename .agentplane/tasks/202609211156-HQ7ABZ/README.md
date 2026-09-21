@@ -1,10 +1,11 @@
 ---
 id: "202609211156-HQ7ABZ"
 title: "Complete Writer P0 upstream parity remediation"
-status: "DOING"
+result_summary: "Completed Writer P0-2 through P0-5 parity remediation"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -33,7 +34,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T12:32:22.552Z"
+  updated_at: "2026-09-21T12:32:40.632Z"
   updated_by: "CODER"
   note: "verified-202609211156-HQ7ABZ"
   attempts: 0
@@ -53,11 +54,19 @@ quality_review:
     - "npm run verify"
   findings:
     - "No blocking defects found in implementation commit c3a6e0f581b7."
-commit: null
+commit:
+  hash: "09214a1bf3811e3b1a02353fb51698c548b0b4e7"
+  message: "🧪 HQ7ABZ task: record verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: complete the approved P0-2 through P0-5 remediation without changing P0-1 mechanics."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609211156-HQ7ABZ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: completed Writer P0-2 through P0-5 remediation; P0-1 remains unchanged."
 events:
   -
     type: "status"
@@ -78,8 +87,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609211156-HQ7ABZ"
+  -
+    type: "verify"
+    at: "2026-09-21T12:32:40.632Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211156-HQ7ABZ"
+  -
+    type: "status"
+    at: "2026-09-21T12:32:40.768Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609211156-HQ7ABZ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-09-21T12:33:21.354Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: completed Writer P0-2 through P0-5 remediation; P0-1 remains unchanged."
 doc_version: 3
-doc_updated_at: "2026-09-21T12:32:22.612Z"
+doc_updated_at: "2026-09-21T12:33:21.355Z"
 doc_updated_by: "CODER"
 description: "Complete the missing P0-2 through P0-5 requirements identified by review; keep P0-1 inventory model and behavior unchanged."
 sections:
@@ -157,12 +186,46 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-21T12:32:40.632Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211156-HQ7ABZ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T12:32:22.612Z, excerpt_hash=sha256:b3901a9d1bd7c8cc3a7a3cad13305b891b7f43a3a66f9303e3e8eb39b7c23678
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211156-HQ7ABZ/blueprint/resolved-snapshot.json
+    - old_digest: b2967a2de731344879a100ced820d655312bcf3325e8e46a272e66788299b9b5
+    - current_digest: b2967a2de731344879a100ced820d655312bcf3325e8e46a272e66788299b9b5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211156-HQ7ABZ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211156-HQ7ABZ --result verified-202609211156-HQ7ABZ --commit 09214a1bf3811e3b1a02353fb51698c548b0b4e7
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation commit and the deterministic AgentPlane close commit; no legacy schema migration is added."
   Findings: |-
     - Observation: npm run verify passed: 348 unit tests and 95 inventory tests at 100% coverage, 11 Playwright E2E tests, build/static/docs/file-size/source/provenance/invariant/parity gates.
       Impact: Sfx execution metadata removed; Writer core uses node references and native text/hint undo payloads; only supported style defaults are exposed; requested and resolved fonts are distinct.
       Resolution: Implementation commit c3a6e0f581b7 satisfies the approved scope.
+extensions:
+  implementation_commit:
+    hash: "c3a6e0f581b7c289de97edfa9f2af6271a474b0b"
+    message: "🚧 HQ7ABZ task: implement Writer P0 parity remediation"
 id_source: "generated"
 ---
 ## Summary
@@ -244,6 +307,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609211156-HQ7ABZ --result verified-202609211156-HQ7ABZ --commit c3a6e0f581b7c289de97edfa9f2af6271a474b0b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T12:32:40.632Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211156-HQ7ABZ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T12:32:22.612Z, excerpt_hash=sha256:b3901a9d1bd7c8cc3a7a3cad13305b891b7f43a3a66f9303e3e8eb39b7c23678
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211156-HQ7ABZ/blueprint/resolved-snapshot.json
+- old_digest: b2967a2de731344879a100ced820d655312bcf3325e8e46a272e66788299b9b5
+- current_digest: b2967a2de731344879a100ced820d655312bcf3325e8e46a272e66788299b9b5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211156-HQ7ABZ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211156-HQ7ABZ --result verified-202609211156-HQ7ABZ --commit 09214a1bf3811e3b1a02353fb51698c548b0b4e7
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
