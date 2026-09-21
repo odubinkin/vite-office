@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609211501-E1TGFY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T15:30:27.957Z",
+  "verdict": "pass",
+  "summary": "Writer P1 remediation follows the pinned upstream ownership boundaries and passes the complete verification contract.",
+  "evaluated_sha": "c3a0aa6af3798b91bc3697f53fafaab398852a8e",
+  "blueprint_digest": "7e504fa92e780088f7ef2348919b59b8e3f4d29b81bb93a326836dda19d3483f",
+  "findings": [
+    "Document operations are document-bound; shell registration is split by text/view/list ownership; worker and durable DTOs are independent; ODT claims are atomic and conservatively unverified where upstream evidence is incomplete."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609211501-E1TGFY/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
