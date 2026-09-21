@@ -70,8 +70,8 @@ describe("parity mapping CLI" /**
     ]);
   });
 
-  it("reads the pinned Writer mapping and emits an explicit-gap report" /**
-   * Verifies production reading resolves local and ignored-reference evidence without writing a repository file.
+  it("reads the pinned Writer mapping and emits a complete parity closure report" /**
+   * Verifies production reading resolves all local, upstream, dimension, and divergence evidence without writing a repository file.
    *
    * @returns A promise resolving after the report is captured and inspected.
    */, async function runsProductionValidation(): Promise<void> {
@@ -91,13 +91,16 @@ describe("parity mapping CLI" /**
     );
     expect(JSON.parse(output)).toMatchObject({
       baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
-      behaviorParityCount: 1,
-      contractParityCount: 1,
-      defaultParityCount: 1,
+      behaviorParityCount: 35,
+      classifiedDivergenceCount: 92,
+      contractParityCount: 35,
+      defaultParityCount: 35,
+      differentialParityCount: 35,
       exceptionCount: 0,
-      gapCount: 66,
+      gapCount: 0,
       implementedCount: 35,
-      parityReady: false,
+      ownershipParityCount: 35,
+      parityReady: true,
       recordCount: 35,
       runtime: {
         commandCount: 34,
@@ -105,10 +108,12 @@ describe("parity mapping CLI" /**
         schemaVersion: 3,
         semanticViolationCount: 0,
       },
-      schemaVersion: 5,
-      scopeLimitationCount: 3,
-      unresolvedParityCount: 34,
-      verifiedCount: 1,
+      schemaVersion: 6,
+      scopeLimitationCount: 69,
+      serializationParityCount: 35,
+      unclassifiedDivergenceCount: 0,
+      unresolvedParityCount: 0,
+      verifiedCount: 35,
     });
   }, 30_000);
 });

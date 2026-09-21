@@ -3,6 +3,19 @@
  */
 
 import type { BaselineManifest } from "./contracts";
+import {
+  assertOrderedUniqueRecords,
+  isRecord,
+  optionalString,
+  parseEvidence,
+  parseException,
+  parseObject,
+  parseSingleReference,
+  requireBoolean,
+  requireString,
+  requireStringArray,
+  validateSide,
+} from "./parity-mapping-support";
 
 /** Identifies the evidence category whose referenced paths must resolve. */
 export type ParityEvidenceKind = "docs" | "implementation" | "source" | "tests";
@@ -87,6 +100,58 @@ export interface ParityEvidence {
   readonly tests: readonly ParityEvidenceReference[];
 }
 
+/** Names each independently evidenced parity closure parity dimension. */
+export type ParityClosureDimension =
+  | "behavior"
+  | "contract"
+  | "defaults"
+  | "differential"
+  | "operationCycle"
+  | "ownership"
+  | "serialization";
+
+/** Records executable evidence, or an explicit non-applicable disposition, for one dimension. */
+export interface ParityDimensionEvidence {
+  readonly local?: ParityEvidenceReference;
+  readonly method:
+    | "api-invariant"
+    | "browser-test"
+    | "not-applicable"
+    | "pinned-fixture"
+    | "source-derived-golden"
+    | "unit-test";
+  readonly rationale: string;
+  readonly status: "not-applicable" | "pass";
+  readonly upstream?: ParityEvidenceReference;
+}
+
+/** Classifies one remaining browser adaptation or excluded desktop-only boundary. */
+export interface ParityDivergenceEvidence {
+  readonly classification: "B" | "X";
+  readonly description: string;
+  readonly local: ParityEvidenceReference;
+  readonly upstream: ParityEvidenceReference;
+}
+
+/** Provides complete parity closure evidence for one bounded capability. */
+export interface ParityClosureEvidence {
+  readonly behavior: ParityDimensionEvidence;
+  readonly contract: ParityDimensionEvidence;
+  readonly defaults: ParityDimensionEvidence;
+  readonly differential: ParityDimensionEvidence;
+  readonly divergences: readonly ParityDivergenceEvidence[];
+  readonly operationCycle: ParityDimensionEvidence;
+  readonly ownership: ParityDimensionEvidence;
+  readonly serialization: ParityDimensionEvidence;
+}
+
+/** One resolved parity closure reference included in the inventory report. */
+export interface ResolvedParityClosureEvidence {
+  readonly dimension: ParityClosureDimension | "divergence";
+  readonly path: string;
+  readonly side: "local" | "upstream";
+}
+
 /** Describes one bounded capability whose equivalent browser behavior remains incomplete. */
 export interface ParityMappingRecord {
   /** One independently testable operation rather than an umbrella feature label. */
@@ -129,6 +194,8 @@ export interface ParityMappingRecord {
   readonly subsystem: string;
   /** Reviewed stack relationship to upstream. */
   readonly stackDivergence: ParityStackDivergence;
+  /** Executable contract, ownership, behavior, default, serialization, lifecycle, differential, and divergence evidence. */
+  readonly closure?: ParityClosureEvidence;
   /** Architecture-neutral capability category. */
   readonly type: ParityCapabilityType;
   /** Pinned LibreOffice source, test, and documentation evidence. */
@@ -148,7 +215,7 @@ export interface ParityMappingManifest {
   /** Deterministically ordered atomic Writer mappings. */
   readonly records: readonly ParityMappingRecord[];
   /** Static schema version for strict compatibility validation. */
-  readonly schemaVersion: 5;
+  readonly schemaVersion: 6;
 }
 
 /** Represents one fully resolved evidence marker for a validation report. */
@@ -193,6 +260,14 @@ export interface ParityMappingReport {
   readonly implementedCount: number;
   /** Whether every implemented capability has contract, behavior, default, and verification parity. */
   readonly parityReady: boolean;
+  /** Number of classified B and X differences retained after closure. */
+  readonly classifiedDivergenceCount: number;
+  /** Number of verified records with executable differential evidence. */
+  readonly differentialParityCount: number;
+  /** Number of verified records with explicit ownership evidence. */
+  readonly ownershipParityCount: number;
+  /** Exact resolved parity dimension and divergence references. */
+  readonly closureEvidence: readonly ResolvedParityClosureEvidence[];
   /** Number of explicit out-of-scope limitations retained by bounded capability records. */
   readonly scopeLimitationCount: number;
   /** Total bounded capability records. */
@@ -200,7 +275,11 @@ export interface ParityMappingReport {
   /** Successfully resolved evidence paths in stable record and evidence order. */
   readonly resolvedEvidence: readonly ResolvedParityEvidence[];
   /** Static report schema version. */
-  readonly schemaVersion: 5;
+  readonly schemaVersion: 6;
+  /** Number of verified records whose relevant serialization dimension passed or was explicitly inapplicable. */
+  readonly serializationParityCount: number;
+  /** Remaining differences without a B or X disposition; always zero for a valid schema-six manifest. */
+  readonly unclassifiedDivergenceCount: number;
   /** Number of implemented capabilities still missing at least one parity dimension or verification. */
   readonly unresolvedParityCount: number;
   /** Number of records whose semantic evidence is complete. */
@@ -223,7 +302,7 @@ export function parseParityMappingManifest(
   baseline: BaselineManifest,
 ): ParityMappingManifest {
   const root = parseObject(sourceText, "root");
-  if (root.schemaVersion !== 5) throw new Error("Parity mapping schemaVersion must equal 5.");
+  if (root.schemaVersion !== 6) throw new Error("Parity mapping schemaVersion must equal 6.");
   const baselineCommit = requireString(root, "baselineCommit");
   const baselineTag = requireString(root, "baselineTag");
   if (baselineCommit !== baseline.commit)
@@ -232,9 +311,8 @@ export function parseParityMappingManifest(
   if (!Array.isArray(root.records) || root.records.length === 0)
     throw new Error("Parity mapping records must be a non-empty array.");
   const records = root.records.map(parseRecord);
-  assertOrderedUniqueIds(records);
-  assertOrderedUniqueCapabilityIds(records);
-  return { baselineCommit, baselineTag, records, schemaVersion: 5 };
+  assertOrderedUniqueRecords(records);
+  return { baselineCommit, baselineTag, records, schemaVersion: 6 };
 }
 
 /**
@@ -252,6 +330,7 @@ export async function validateParityMappingEvidence(
   roots: Readonly<{ local: string; upstream: string }>,
 ): Promise<ParityMappingReport> {
   const resolvedEvidence: ResolvedParityEvidence[] = [];
+  const closureEvidence: ResolvedParityClosureEvidence[] = [];
   const exceptions: ParityExceptionReportEntry[] = [];
   for (const record of manifest.records) {
     await validateSide(record.local, "local", roots.local, readEvidence, resolvedEvidence);
@@ -263,23 +342,33 @@ export async function validateParityMappingEvidence(
         readEvidence,
         resolvedEvidence,
       );
+    if (record.closure !== undefined)
+      closureEvidence.push(
+        ...(await validateParityClosureEvidence(record.closure, roots, readEvidence)),
+      );
     collectExceptions(record, exceptions);
   }
   return {
     baselineCommit: manifest.baselineCommit,
     behaviorParityCount: manifest.records.filter(hasBehaviorParity).length,
+    classifiedDivergenceCount: manifest.records.flatMap(selectClassifiedDivergences).length,
     contractParityCount: manifest.records.filter(hasContractParity).length,
     defaultParityCount: manifest.records.filter(hasDefaultParity).length,
+    differentialParityCount: manifest.records.filter(hasDifferentialParity).length,
     exceptionCount: exceptions.length,
     exceptions,
     gapCount: manifest.records.flatMap(selectGaps).length,
     implementedCount: manifest.records.filter(isImplemented).length,
     parityReady: manifest.records.every(isParityReady),
+    ownershipParityCount: manifest.records.filter(hasOwnershipParity).length,
+    closureEvidence,
     recordCount: manifest.records.length,
     resolvedEvidence,
-    schemaVersion: 5,
+    schemaVersion: 6,
+    serializationParityCount: manifest.records.filter(hasSerializationParity).length,
     scopeLimitationCount: manifest.records.flatMap(selectScopeLimitations).length,
     unresolvedParityCount: manifest.records.filter(isUnresolvedParity).length,
+    unclassifiedDivergenceCount: 0,
     verifiedCount: manifest.records.filter(isVerified).length,
   };
 }
@@ -314,6 +403,231 @@ async function validateAssertionEvidence(
       resolvedEvidence,
     );
   }
+}
+
+const closureDimensions = [
+  "contract",
+  "ownership",
+  "behavior",
+  "defaults",
+  "serialization",
+  "operationCycle",
+  "differential",
+] as const satisfies readonly ParityClosureDimension[];
+
+/** Parses complete closure evidence. @param candidate - Candidate closure. @param id - Record ID. @param scopeLimitations - X boundaries. @param stackKind - Stack classification. @returns Parsed closure. */
+export function parseParityClosure(
+  candidate: unknown,
+  id: string,
+  scopeLimitations: readonly string[],
+  stackKind: ParityStackDivergence["kind"],
+): ParityClosureEvidence {
+  if (!isRecord(candidate)) throw new Error(`parity closure for ${id} must be an object.`);
+  const parsed = Object.fromEntries(
+    closureDimensions.map(
+      /** Parses one named dimension entry. @param dimension - Dimension name. @returns Dimension and evidence pair. */
+      function parseDimensionEntry(dimension) {
+        return [dimension, parseParityClosureDimension(candidate[dimension], id, dimension)];
+      },
+    ),
+  ) as unknown as Omit<ParityClosureEvidence, "divergences">;
+  const divergences = parseParityDivergences(candidate.divergences, id);
+  for (const dimension of [
+    "contract",
+    "ownership",
+    "behavior",
+    "defaults",
+    "differential",
+  ] as const) {
+    if (parsed[dimension].status !== "pass")
+      throw new Error(`Verified parity record ${id} requires passing ${dimension} evidence.`);
+  }
+  if (
+    parsed.differential.method !== "pinned-fixture" &&
+    parsed.differential.method !== "source-derived-golden"
+  ) {
+    throw new Error(
+      `Verified parity record ${id} requires differential fixture or golden evidence.`,
+    );
+  }
+  validateParityDivergences(divergences, scopeLimitations, stackKind, id);
+  return { ...parsed, divergences };
+}
+
+/** Parses one parity dimension. @param candidate - Candidate evidence. @param id - Record ID. @param dimension - Dimension name. @returns Parsed evidence. */
+function parseParityClosureDimension(
+  candidate: unknown,
+  id: string,
+  dimension: ParityClosureDimension,
+): ParityDimensionEvidence {
+  const location = `${id}.closure.${dimension}`;
+  if (!isRecord(candidate)) throw new Error(`${location} must be an object.`);
+  const status = candidate.status;
+  const method = candidate.method;
+  if (
+    method !== "api-invariant" &&
+    method !== "browser-test" &&
+    method !== "unit-test" &&
+    method !== "pinned-fixture" &&
+    method !== "source-derived-golden" &&
+    method !== "not-applicable"
+  ) {
+    throw new Error(`${location}.method is invalid.`);
+  }
+  const rationale = requireString(candidate, "rationale");
+  if (status === "not-applicable") {
+    if (
+      method !== "not-applicable" ||
+      candidate.local !== undefined ||
+      candidate.upstream !== undefined
+    )
+      throw new Error(`${location} must be evidence-free and use the not-applicable method.`);
+    return { method, rationale, status };
+  }
+  if (status !== "pass" || method === "not-applicable")
+    throw new Error(`${location} pass evidence needs an executable method.`);
+  return {
+    local: parseSingleReference(candidate.local, `${location}.local`),
+    method,
+    rationale,
+    status,
+    upstream: parseSingleReference(candidate.upstream, `${location}.upstream`),
+  };
+}
+
+/** Parses B/X divergence evidence. @param candidate - Candidate list. @param id - Record ID. @returns Parsed divergences. */
+function parseParityDivergences(
+  candidate: unknown,
+  id: string,
+): readonly ParityDivergenceEvidence[] {
+  if (!Array.isArray(candidate)) throw new Error(`${id}.closure.divergences must be an array.`);
+  return candidate.map(
+    /** Parses one divergence. @param value - Candidate divergence. @param index - Array index. @returns Parsed divergence. */
+    function parseDivergence(value, index): ParityDivergenceEvidence {
+      const location = `${id}.closure.divergences[${index}]`;
+      if (!isRecord(value)) throw new Error(`${location} must be an object.`);
+      if (value.classification !== "B" && value.classification !== "X")
+        throw new Error(`${location}.classification must equal B or X.`);
+      return {
+        classification: value.classification,
+        description: requireString(value, "description"),
+        local: parseSingleReference(value.local, `${location}.local`),
+        upstream: parseSingleReference(value.upstream, `${location}.upstream`),
+      };
+    },
+  );
+}
+
+/** Validates divergence coverage. @param divergences - Classified differences. @param scopeLimitations - X boundaries. @param stackKind - Stack classification. @param id - Record ID. @returns Nothing after validation. */
+function validateParityDivergences(
+  divergences: readonly ParityDivergenceEvidence[],
+  scopeLimitations: readonly string[],
+  stackKind: ParityStackDivergence["kind"],
+  id: string,
+): void {
+  const browserCount = divergences.filter(
+    /** Selects browser adaptations. @param item - Divergence evidence. @returns Whether it is class B. */
+    function isBrowser(item): boolean {
+      return item.classification === "B";
+    },
+  ).length;
+  if (stackKind === "browser-adaptation" && browserCount === 0)
+    throw new Error(`parity record ${id} must classify its browser adaptation as B.`);
+  if (stackKind === "none" && browserCount > 0)
+    throw new Error(`parity record ${id} may not claim B without a browser adaptation.`);
+  if (stackKind === "local-infrastructure")
+    throw new Error(`parity record ${id} must remove class A local infrastructure before closure.`);
+  const excluded = divergences
+    .filter(
+      /** Selects exclusions. @param item - Divergence evidence. @returns Whether it is class X. */
+      function isExcluded(item): boolean {
+        return item.classification === "X";
+      },
+    )
+    .map(
+      /** Selects the classified description. @param item - Divergence evidence. @returns Description. */
+      function selectDescription(item): string {
+        return item.description;
+      },
+    );
+  if (
+    excluded.length !== scopeLimitations.length ||
+    excluded.some(
+      /** Compares one classified limitation. @param value - Classified text. @param index - Source index. @returns Whether it differs. */
+      function differs(value, index): boolean {
+        return value !== scopeLimitations[index];
+      },
+    )
+  )
+    throw new Error(`parity record ${id} must classify every scope limitation as X in order.`);
+}
+
+/** Resolves closure markers. @param closure - Parsed closure. @param roots - Evidence roots. @param readEvidence - Text reader. @returns Resolved evidence. */
+export async function validateParityClosureEvidence(
+  closure: ParityClosureEvidence,
+  roots: Readonly<{ local: string; upstream: string }>,
+  readEvidence: ParityEvidenceReader,
+): Promise<readonly ResolvedParityClosureEvidence[]> {
+  const resolved: ResolvedParityClosureEvidence[] = [];
+  for (const dimension of closureDimensions) {
+    const evidence = closure[dimension];
+    if (evidence.status === "pass") {
+      await resolveParityClosureReference(
+        evidence.local,
+        dimension,
+        "local",
+        roots.local,
+        readEvidence,
+        resolved,
+      );
+      await resolveParityClosureReference(
+        evidence.upstream,
+        dimension,
+        "upstream",
+        roots.upstream,
+        readEvidence,
+        resolved,
+      );
+    }
+  }
+  for (const divergence of closure.divergences) {
+    await resolveParityClosureReference(
+      divergence.local,
+      "divergence",
+      "local",
+      roots.local,
+      readEvidence,
+      resolved,
+    );
+    await resolveParityClosureReference(
+      divergence.upstream,
+      "divergence",
+      "upstream",
+      roots.upstream,
+      readEvidence,
+      resolved,
+    );
+  }
+  return resolved;
+}
+
+/** Resolves one closure marker. @param reference - Marker reference. @param dimension - Dimension name. @param side - Evidence side. @param root - Evidence root. @param readEvidence - Text reader. @param resolved - Result accumulator. @returns Completion after resolution. */
+async function resolveParityClosureReference(
+  reference: ParityEvidenceReference | undefined,
+  dimension: ParityClosureDimension | "divergence",
+  side: "local" | "upstream",
+  root: string,
+  readEvidence: ParityEvidenceReader,
+  resolved: ResolvedParityClosureEvidence[],
+): Promise<void> {
+  if (reference === undefined)
+    throw new Error(`Missing ${dimension} ${side} parity closure evidence.`);
+  const contents = await readEvidence(`${root}/${reference.path}`);
+  if (!contents.includes(reference.marker))
+    throw new Error(
+      `parity closure ${side} ${dimension} marker is absent: ${reference.path} :: ${reference.marker}`,
+    );
+  resolved.push({ dimension, path: reference.path, side });
 }
 
 /**
@@ -381,6 +695,15 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
   if (!verified && maturity !== "exception-approved" && verification !== undefined)
     throw new Error(`Open parity record ${id} may not declare closed verification evidence.`);
   const suite = parseSuite(candidate.suite, id);
+  const stackDivergence = parseStackDivergence(candidate.stackDivergence, id);
+  const closure =
+    candidate.closure === undefined
+      ? undefined
+      : parseParityClosure(candidate.closure, id, scopeLimitations, stackDivergence.kind);
+  if (verified && closure === undefined)
+    throw new Error(`Verified parity record ${id} requires complete parity closure evidence.`);
+  if (!verified && closure !== undefined)
+    throw new Error(`Open parity record ${id} may not declare parity closure evidence.`);
   return {
     atomicOperation: requireString(candidate, "atomicOperation"),
     assertions,
@@ -398,8 +721,9 @@ function parseRecord(candidate: unknown, index: number): ParityMappingRecord {
     local: parseEvidence(candidate.local, `${id}.local`, exception !== undefined),
     ...(manualContract === undefined ? {} : { manualContract }),
     maturity,
+    ...(closure === undefined ? {} : { closure }),
     scopeLimitations,
-    stackDivergence: parseStackDivergence(candidate.stackDivergence, id),
+    stackDivergence,
     subsystem: requireString(candidate, "subsystem"),
     suite,
     type: parseCapabilityType(candidate.type, id),
@@ -483,19 +807,6 @@ function parseAssertionEvidence(
 }
 
 /**
- * Parses one path-and-marker reference without exception metadata.
- * @param candidate - Unknown evidence reference.
- * @param location - Diagnostic field location.
- * @returns Validated evidence reference.
- */
-function parseSingleReference(candidate: unknown, location: string): ParityEvidenceReference {
-  if (!isRecord(candidate)) throw new Error(`${location} must be an object.`);
-  if (candidate.exception !== undefined)
-    throw new Error(`${location} may not replace executable assertion evidence with an exception.`);
-  return { marker: requireString(candidate, "marker"), path: requireString(candidate, "path") };
-}
-
-/**
  * Parses one architecture-neutral capability type.
  * @param candidate - Unknown authored type.
  * @param id - Owning parity record ID.
@@ -575,105 +886,6 @@ function parseVerificationScope(candidate: unknown, location: string): "bounded"
 }
 
 /**
- * Parses the source, test, and documentation evidence group for one mapping side.
- *
- * @param candidate - Unknown JSON evidence object.
- * @param location - Human-readable record side used in errors.
- * @param allowMissingImplementationAndTests - Whether a whole-capability exception may omit local implementation and test evidence.
- * @param allowTestExceptions - Whether exception metadata is valid on these test references.
- * @returns Strict evidence groups with non-empty references.
- * @throws {Error} When any evidence category is absent or malformed.
- */
-function parseEvidence(
-  candidate: unknown,
-  location: string,
-  allowMissingImplementationAndTests: boolean,
-  allowTestExceptions = false,
-): ParityEvidence {
-  if (!isRecord(candidate)) throw new Error(`${location} must be an object.`);
-  return {
-    docs: parseReferences(candidate.docs, `${location}.docs`, false),
-    implementation: parseReferences(
-      candidate.implementation,
-      `${location}.implementation`,
-      allowMissingImplementationAndTests,
-    ),
-    tests: parseReferences(
-      candidate.tests,
-      `${location}.tests`,
-      allowMissingImplementationAndTests,
-      allowTestExceptions,
-    ),
-  };
-}
-
-/**
- * Parses a non-empty evidence-reference array.
- *
- * @param candidate - Unknown JSON candidate expected to be an array of references.
- * @param location - Human-readable field location used in errors.
- * @param allowEmpty - Whether this evidence category may be empty for a whole-capability exception.
- * @param allowExceptions - Whether evidence references in this category may carry test exceptions.
- * @returns Strict path-and-marker references in authored order.
- * @throws {Error} When a reference omits a non-empty path or marker.
- */
-function parseReferences(
-  candidate: unknown,
-  location: string,
-  allowEmpty: boolean,
-  allowExceptions = false,
-): readonly ParityEvidenceReference[] {
-  if (!Array.isArray(candidate) || (!allowEmpty && candidate.length === 0))
-    throw new Error(`${location} must be a non-empty array.`);
-  return candidate.map(
-    /**
-     * Parses one evidence reference at a deterministic input index.
-     *
-     * @param reference - Unknown JSON reference.
-     * @param index - Zero-based array index used in validation errors.
-     * @returns A strict evidence path and marker pair.
-     */
-    function parseReference(reference: unknown, index: number): ParityEvidenceReference {
-      if (!isRecord(reference)) throw new Error(`${location}[${index}] must be an object.`);
-      const exception =
-        reference.exception === undefined
-          ? undefined
-          : parseException(reference.exception, `${location}[${index}].exception`);
-      if (exception !== undefined && !allowExceptions)
-        throw new Error(`${location}[${index}] may not declare a parity exception.`);
-      return {
-        ...(exception === undefined ? {} : { exception }),
-        marker: requireString(reference, "marker"),
-        path: requireString(reference, "path"),
-      };
-    },
-  );
-}
-
-/**
- * Parses one explicit exception whose approval and browser rationale must remain reviewable.
- *
- * @param candidate - Unknown JSON exception object.
- * @param location - Human-readable field location used in errors.
- * @returns Strict approved-by and rationale evidence.
- * @throws {Error} When either required exception field is absent or blank.
- */
-function parseException(candidate: unknown, location: string): ParityException {
-  if (!isRecord(candidate)) throw new Error(`${location} must be an object.`);
-  if (candidate.disposition !== "not-implementable")
-    throw new Error(`${location}.disposition must equal not-implementable.`);
-  const reason = candidate.reason;
-  if (reason !== "browser-runtime-inapplicable" && reason !== "browser-runtime-supersedes")
-    throw new Error(`${location}.reason must name a browser-runtime exception reason.`);
-  return {
-    approvedBy: requireString(candidate, "approvedBy"),
-    disposition: "not-implementable",
-    reason,
-    rationale: requireString(candidate, "rationale"),
-  };
-}
-
-/**
  * Collects visible whole-capability and upstream-test exceptions in deterministic evidence order.
  *
  * @param record - Parsed atomic parity record that may own exception metadata.
@@ -694,73 +906,6 @@ function collectExceptions(
         reference,
         scope: "upstream-test",
       });
-  }
-}
-
-/**
- * Resolves one side's references in fixed evidence-kind order.
- *
- * @param evidence - Parsed source, test, and documentation evidence.
- * @param side - Local or upstream side whose root must be used.
- * @param root - Prefix prepended to each relative evidence path.
- * @param readEvidence - Injected UTF-8 evidence reader.
- * @param resolvedEvidence - Mutable report collection owned by the caller.
- * @returns A promise resolving after every reference has been checked.
- * @throws {Error} When a marker is absent from a readable referenced file.
- */
-async function validateSide(
-  evidence: ParityEvidence,
-  side: "local" | "upstream",
-  root: string,
-  readEvidence: ParityEvidenceReader,
-  resolvedEvidence: ResolvedParityEvidence[],
-): Promise<void> {
-  for (const kind of ["implementation", "tests", "docs"] as const) {
-    for (const reference of evidence[kind]) {
-      const path = `${root}/${reference.path}`;
-      const contents = await readEvidence(path);
-      if (!contents.includes(reference.marker))
-        throw new Error(
-          `Parity ${side} ${kind} marker is absent: ${reference.path} :: ${reference.marker}`,
-        );
-      resolvedEvidence.push({ kind, path: reference.path, side });
-    }
-  }
-}
-
-/**
- * Rejects duplicate or non-lexicographically ordered immutable parity identifiers.
- *
- * @param records - Parsed mapping records in authored order.
- * @returns Nothing; invalid ordering throws an error.
- * @throws {Error} When a parity ID repeats or records are not ordered by ID.
- */
-function assertOrderedUniqueIds(records: readonly ParityMappingRecord[]): void {
-  for (let index = 1; index < records.length; index += 1) {
-    const previous = records[index - 1];
-    const current = records[index];
-    /* v8 ignore next 3 -- loop bounds prove both indexed records exist; this guard satisfies noUncheckedIndexedAccess. */
-    if (previous === undefined || current === undefined)
-      throw new Error("Parity mapping record ordering could not be determined.");
-    if (previous.id >= current.id)
-      throw new Error("Parity mapping records must have unique lexicographically ordered IDs.");
-  }
-}
-
-/**
- * Rejects duplicate or non-ordered domain-agnostic capability identifiers.
- * @param records - Parsed records in authored order.
- * @returns Nothing after order and uniqueness are proven.
- */
-function assertOrderedUniqueCapabilityIds(records: readonly ParityMappingRecord[]): void {
-  for (let index = 1; index < records.length; index += 1) {
-    const previous = records[index - 1];
-    const current = records[index];
-    /* v8 ignore next 3 -- loop bounds prove both indexed records exist; this guard satisfies noUncheckedIndexedAccess. */
-    if (previous === undefined || current === undefined)
-      throw new Error("Capability record ordering could not be determined.");
-    if (previous.capabilityId >= current.capabilityId)
-      throw new Error("Parity records must have unique ordered capability IDs.");
   }
 }
 
@@ -807,106 +952,39 @@ function hasDefaultParity(record: ParityMappingRecord): boolean {
   return record.defaultParity;
 }
 
+/** Selects classified parity closure differences. @param record - Parsed record. @returns B/X evidence records. */
+function selectClassifiedDivergences(record: ParityMappingRecord): readonly unknown[] {
+  return record.closure?.divergences ?? [];
+}
+
+/** Selects records with explicit ownership parity evidence. @param record - Parsed record. @returns Ownership parity state. */
+function hasOwnershipParity(record: ParityMappingRecord): boolean {
+  return record.verified && record.closure?.ownership.status === "pass";
+}
+
+/** Selects records with relevant serialization closure. @param record - Parsed record. @returns Serialization parity state. */
+function hasSerializationParity(record: ParityMappingRecord): boolean {
+  return record.verified && record.closure?.serialization.status !== undefined;
+}
+
+/** Selects records with executable differential closure. @param record - Parsed record. @returns Differential parity state. */
+function hasDifferentialParity(record: ParityMappingRecord): boolean {
+  return record.verified && record.closure?.differential.status === "pass";
+}
+
 /** Reports whether one implemented record is fully attested. @param record - Parsed record. @returns Complete parity state. */
 function isParityReady(record: ParityMappingRecord): boolean {
   return (
     !record.implemented ||
-    (record.contractParity && record.behaviorParity && record.defaultParity && record.verified)
+    (record.contractParity &&
+      record.behaviorParity &&
+      record.defaultParity &&
+      record.verified &&
+      record.closure !== undefined)
   );
 }
 
 /** Selects implemented records with any open parity dimension. @param record - Parsed record. @returns Whether parity remains unresolved. */
 function isUnresolvedParity(record: ParityMappingRecord): boolean {
   return record.implemented && !isParityReady(record);
-}
-
-/**
- * Parses source text as a JSON object.
- *
- * @param sourceText - UTF-8 JSON source.
- * @param location - Human-readable location used in errors.
- * @returns Parsed JSON object.
- * @throws {Error} When JSON is invalid or the parsed root is not an object.
- */
-function parseObject(sourceText: string, location: string): Record<string, unknown> {
-  try {
-    const parsed = JSON.parse(sourceText) as unknown;
-    if (!isRecord(parsed)) throw new Error(`${location} must be an object.`);
-    return parsed;
-  } catch (error) {
-    if (error instanceof Error && error.message.endsWith("must be an object.")) throw error;
-    throw new Error(`${location} must be valid JSON.`, { cause: error });
-  }
-}
-
-/**
- * Requires a non-empty string value from a parsed object.
- *
- * @param record - Parsed object carrying the required field.
- * @param field - Required field name.
- * @returns Trim-preserving non-empty string.
- * @throws {Error} When the field is missing, non-string, or blank.
- */
-function requireString(record: Record<string, unknown>, field: string): string {
-  const value = record[field];
-  if (typeof value !== "string" || value.trim().length === 0)
-    throw new Error(`Parity mapping ${field} must be a non-empty string.`);
-  return value;
-}
-
-/** Requires one explicit boolean without truthy coercion. @param record - Parsed object. @param field - Required field. @returns Boolean value. */
-function requireBoolean(record: Record<string, unknown>, field: string): boolean {
-  const value = record[field];
-  if (typeof value !== "boolean")
-    throw new Error(`Parity mapping ${field} must be an explicit boolean.`);
-  return value;
-}
-
-/**
- * Reads an optional non-blank string while rejecting explicit blank values.
- * @param record - Parsed object carrying the optional field.
- * @param field - Optional field name.
- * @returns The authored string or undefined when absent.
- */
-function optionalString(record: Record<string, unknown>, field: string): string | undefined {
-  const value = record[field];
-  if (value === undefined) return undefined;
-  if (typeof value !== "string" || value.trim().length === 0)
-    throw new Error(`Parity mapping ${field} must be a non-empty string when supplied.`);
-  return value;
-}
-
-/**
- * Requires an array of non-empty strings from a parsed object.
- *
- * @param record - Parsed object carrying the required field.
- * @param field - Required field name.
- * @returns Strict non-empty strings in authored order.
- * @throws {Error} When the field is not an array of non-empty strings.
- */
-function requireStringArray(record: Record<string, unknown>, field: string): readonly string[] {
-  const value = record[field];
-  if (!Array.isArray(value) || value.some(isNotNonEmptyString))
-    throw new Error(`Parity mapping ${field} must be an array of non-empty strings.`);
-  return value;
-}
-
-/**
- * Determines whether an unknown value is not a non-empty string.
- *
- * @param value - Unknown array member to inspect.
- * @returns True when the value cannot be accepted as a parity gap string.
- */
-function isNotNonEmptyString(value: unknown): boolean {
-  return typeof value !== "string" || value.trim().length === 0;
-}
-
-/**
- * Determines whether an unknown JSON value is a non-null object rather than an array.
- *
- * @param value - Unknown parsed JSON value.
- * @returns True only for plain object-shaped values usable as field records.
- */
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
 }

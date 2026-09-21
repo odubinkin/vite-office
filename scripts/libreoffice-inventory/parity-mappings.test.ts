@@ -21,7 +21,7 @@ function createManifestSource(overrides: Readonly<Record<string, unknown>> = {})
     baselineCommit: "pinned-commit",
     baselineTag: "pinned-tag",
     records: [createRecord("LO-WRITER-0101")],
-    schemaVersion: 5,
+    schemaVersion: 6,
     ...overrides,
   });
 }
@@ -67,13 +67,17 @@ describe("parity mappings" /**
     expect(report).toEqual({
       baselineCommit: "pinned-commit",
       behaviorParityCount: 0,
+      classifiedDivergenceCount: 0,
       contractParityCount: 0,
       defaultParityCount: 0,
+      differentialParityCount: 0,
       exceptionCount: 0,
       exceptions: [],
       gapCount: 1,
       implementedCount: 1,
       parityReady: false,
+      ownershipParityCount: 0,
+      closureEvidence: [],
       recordCount: 1,
       resolvedEvidence: [
         { kind: "implementation", path: "local-implementation.ts", side: "local" },
@@ -83,9 +87,11 @@ describe("parity mappings" /**
         { kind: "tests", path: "upstream-tests.ts", side: "upstream" },
         { kind: "docs", path: "upstream-docs.md", side: "upstream" },
       ],
-      schemaVersion: 5,
+      schemaVersion: 6,
+      serializationParityCount: 0,
       scopeLimitationCount: 0,
       unresolvedParityCount: 1,
+      unclassifiedDivergenceCount: 0,
       verifiedCount: 0,
     });
   });
@@ -105,6 +111,7 @@ describe("parity mappings" /**
       defaultParity: true,
       gaps: [],
       maturity: "verified",
+      closure: createClosureEvidence([], "browser-adaptation"),
       verification: createVerification(),
       verified: true,
     };
@@ -140,6 +147,17 @@ describe("parity mappings" /**
     expectInvalid(createManifestSource({ records: [{ ...verifiedRecord, gaps: ["gap"] }] }));
     expectInvalid(
       createManifestSource({ records: [{ ...verifiedRecord, assertionEvidence: undefined }] }),
+    );
+    expectInvalid(createManifestSource({ records: [{ ...verifiedRecord, closure: undefined }] }));
+    expectInvalid(
+      createManifestSource({
+        records: [
+          {
+            ...createRecord("LO-WRITER-0101"),
+            closure: createClosureEvidence([], "browser-adaptation"),
+          },
+        ],
+      }),
     );
     expectInvalid(
       createManifestSource({ records: [{ ...verifiedRecord, verification: undefined }] }),
@@ -361,7 +379,10 @@ describe("parity mappings" /**
           ...createRecord(id),
           assertions: index === 0 ? [] : ["Mapped assertion."],
           ...(maturity === "verified"
-            ? { assertionEvidence: createAssertionEvidence("Mapped assertion.") }
+            ? {
+                assertionEvidence: createAssertionEvidence("Mapped assertion."),
+                closure: createClosureEvidence([], kind),
+              }
             : {}),
           capabilityId,
           behaviorParity: isVerified,
@@ -420,6 +441,10 @@ describe("parity mappings" /**
       defaultParity: true,
       gaps: [],
       maturity: "verified",
+      closure: createClosureEvidence(
+        ["Tables are outside this bounded command operation."],
+        "browser-adaptation",
+      ),
       scopeLimitations: ["Tables are outside this bounded command operation."],
       verification: createVerification(),
       verified: true,
@@ -757,6 +782,71 @@ function createAssertionEvidence(assertion: string): readonly Record<string, unk
 /** Creates complete closure evidence for exception and verified-record fixtures. @returns Valid closure evidence. */
 function createVerification(): Record<string, string> {
   return { commit: "abcdef1", evidence: "npm test passed", scope: "bounded", taskId: "TASK-1" };
+}
+
+/** Creates closure evidence. @param scopeLimitations - X boundaries. @param stackKind - Stack classification. @returns Closure fixture. */
+function createClosureEvidence(
+  scopeLimitations: readonly string[],
+  stackKind: "browser-adaptation" | "local-infrastructure" | "none",
+): Record<string, unknown> {
+  const implementation = {
+    local: { marker: "local-implementation", path: "local-implementation.ts" },
+    method: "api-invariant",
+    rationale: "The bounded API is checked against the pinned implementation symbol.",
+    status: "pass",
+    upstream: { marker: "upstream-implementation", path: "upstream-implementation.ts" },
+  };
+  const tests = {
+    local: { marker: "local-tests", path: "local-tests.ts" },
+    method: "unit-test",
+    rationale: "The bounded behavior is covered by paired executable assertions.",
+    status: "pass",
+    upstream: { marker: "upstream-tests", path: "upstream-tests.ts" },
+  };
+  return {
+    behavior: tests,
+    contract: implementation,
+    defaults: tests,
+    differential: {
+      ...tests,
+      method: "source-derived-golden",
+      rationale: "A focused local golden is derived from the pinned upstream assertion.",
+    },
+    divergences: [
+      ...(stackKind === "browser-adaptation"
+        ? [
+            {
+              classification: "B",
+              description: "The browser supplies the platform integration boundary.",
+              local: { marker: "local-docs", path: "local-docs.md" },
+              upstream: { marker: "upstream-implementation", path: "upstream-implementation.ts" },
+            },
+          ]
+        : []),
+      ...scopeLimitations.map(
+        /** Creates one excluded boundary. @param description - Boundary text. @returns X evidence. */
+        function createExcludedDifference(description) {
+          return {
+            classification: "X",
+            description,
+            local: { marker: "local-docs", path: "local-docs.md" },
+            upstream: { marker: "upstream-implementation", path: "upstream-implementation.ts" },
+          };
+        },
+      ),
+    ],
+    operationCycle: {
+      method: "not-applicable",
+      rationale: "This synthetic command-state fixture has no serialization lifecycle.",
+      status: "not-applicable",
+    },
+    ownership: implementation,
+    serialization: {
+      method: "not-applicable",
+      rationale: "This synthetic command-state fixture has no serialization contract.",
+      status: "not-applicable",
+    },
+  };
 }
 
 /**
