@@ -1,10 +1,11 @@
 ---
 id: "202609211501-E1TGFY"
 title: "Close Writer P1 upstream parity gaps"
-status: "DOING"
+result_summary: "verified-202609211501-E1TGFY"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T15:30:39.370Z"
+  updated_at: "2026-09-21T15:31:09.366Z"
   updated_by: "CODER"
-  note: "verified-202609211501-E1TGFY"
+  note: "Writer P1 upstream parity gaps corrected and fully verified"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "Document operations are document-bound; shell registration is split by text/view/list ownership; worker and durable DTOs are independent; ODT claims are atomic and conservatively unverified where upstream evidence is incomplete."
-commit: null
+commit:
+  hash: "c3a0aa6af3798b91bc3697f53fafaab398852a8e"
+  message: "🚧 E1TGFY task: fix Writer P1 upstream parity gaps"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved Writer P1 gap remediation in the current direct-mode checkout with upstream ownership and canonical mutation boundaries."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609211501-E1TGFY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -69,8 +75,27 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609211501-E1TGFY"
+  -
+    type: "verify"
+    at: "2026-09-21T15:30:51.850Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211501-E1TGFY"
+  -
+    type: "status"
+    at: "2026-09-21T15:30:51.994Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609211501-E1TGFY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "verify"
+    at: "2026-09-21T15:31:09.366Z"
+    author: "CODER"
+    state: "ok"
+    note: "Writer P1 upstream parity gaps corrected and fully verified"
 doc_version: 3
-doc_updated_at: "2026-09-21T15:30:39.458Z"
+doc_updated_at: "2026-09-21T15:31:09.440Z"
 doc_updated_by: "CODER"
 description: "Correct the reviewed P1-1, P1-2, P1-5, and P1-6 gaps: document-bound canonical mutations and import, upstream-responsibility shell decomposition, independent storage and worker DTOs, and atomic ODT parity evidence."
 sections:
@@ -163,6 +188,66 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202609211501-E1TGFY --result verified-202609211501-E1TGFY --commit c3a0aa6af3798b91bc3697f53fafaab398852a8e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-21T15:30:51.850Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211501-E1TGFY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T15:30:39.458Z, excerpt_hash=sha256:7ba7a1a702ae75f2903b5745e0f6934bc8d9e65a36406bcf1b8a762023f0a8af
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211501-E1TGFY/blueprint/resolved-snapshot.json
+    - old_digest: 7e504fa92e780088f7ef2348919b59b8e3f4d29b81bb93a326836dda19d3483f
+    - current_digest: 7e504fa92e780088f7ef2348919b59b8e3f4d29b81bb93a326836dda19d3483f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211501-E1TGFY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211501-E1TGFY --result verified-202609211501-E1TGFY --commit f5a607a1612a59bf2ef04453bc3cabe34e86d1a9
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-21T15:31:09.366Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Writer P1 upstream parity gaps corrected and fully verified
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T15:30:51.994Z, excerpt_hash=sha256:7ba7a1a702ae75f2903b5745e0f6934bc8d9e65a36406bcf1b8a762023f0a8af
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211501-E1TGFY/blueprint/resolved-snapshot.json
+    - old_digest: 7e504fa92e780088f7ef2348919b59b8e3f4d29b81bb93a326836dda19d3483f
+    - current_digest: 7e504fa92e780088f7ef2348919b59b8e3f4d29b81bb93a326836dda19d3483f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211501-E1TGFY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202609211501-E1TGFY --close --unstage-others
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -306,6 +391,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609211501-E1TGFY --result verified-202609211501-E1TGFY --commit c3a0aa6af3798b91bc3697f53fafaab398852a8e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T15:30:51.850Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211501-E1TGFY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T15:30:39.458Z, excerpt_hash=sha256:7ba7a1a702ae75f2903b5745e0f6934bc8d9e65a36406bcf1b8a762023f0a8af
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211501-E1TGFY/blueprint/resolved-snapshot.json
+- old_digest: 7e504fa92e780088f7ef2348919b59b8e3f4d29b81bb93a326836dda19d3483f
+- current_digest: 7e504fa92e780088f7ef2348919b59b8e3f4d29b81bb93a326836dda19d3483f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211501-E1TGFY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211501-E1TGFY --result verified-202609211501-E1TGFY --commit f5a607a1612a59bf2ef04453bc3cabe34e86d1a9
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T15:31:09.366Z — VERIFY — ok
+
+By: CODER
+
+Note: Writer P1 upstream parity gaps corrected and fully verified
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T15:30:51.994Z, excerpt_hash=sha256:7ba7a1a702ae75f2903b5745e0f6934bc8d9e65a36406bcf1b8a762023f0a8af
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211501-E1TGFY/blueprint/resolved-snapshot.json
+- old_digest: 7e504fa92e780088f7ef2348919b59b8e3f4d29b81bb93a326836dda19d3483f
+- current_digest: 7e504fa92e780088f7ef2348919b59b8e3f4d29b81bb93a326836dda19d3483f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211501-E1TGFY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202609211501-E1TGFY --close --unstage-others
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
