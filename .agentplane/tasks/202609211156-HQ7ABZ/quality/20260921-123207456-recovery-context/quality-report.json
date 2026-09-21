@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609211156-HQ7ABZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T12:32:07.456Z",
+  "verdict": "pass",
+  "summary": "Approved P0-2 through P0-5 remediation is complete and fully verified; P0-1 remains unchanged by design.",
+  "evaluated_sha": "c3a6e0f581b7c289de97edfa9f2af6271a474b0b",
+  "blueprint_digest": "b2967a2de731344879a100ced820d655312bcf3325e8e46a272e66788299b9b5",
+  "findings": [
+    "No blocking defects found in implementation commit c3a6e0f581b7."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609211156-HQ7ABZ/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The retained 126-style catalogue remains available internally for import/export identity, while only 37 implemented styles are exposed to commands and UI."
+  ]
+}
