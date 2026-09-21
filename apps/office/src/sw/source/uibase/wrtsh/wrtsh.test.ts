@@ -312,6 +312,25 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     ).toEqual(["A", "b"]);
   });
 
+  it("groups consecutive formatted typing without serializing native hints", /** Verifies pooled hint comparison, grouped undo, and redo for pending caret formatting. @returns Nothing. */ function groupsFormattedTyping(): void {
+    const shell = createShell();
+    expect(shell.ToggleCharacterFormat("bold")).toBe(false);
+
+    expect(shell.Insert("a")).toBe(true);
+    expect(shell.Insert("b")).toBe(true);
+    expect(shell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(1);
+    expect(shell.GetActiveParagraph().runs).toEqual([
+      { attributes: { bold: true, italic: false, underline: false }, text: "ab" },
+    ]);
+
+    expect(shell.Undo()).toBe(true);
+    expect(shell.GetActiveParagraph().text).toBe("");
+    expect(shell.Redo()).toBe(true);
+    expect(shell.GetActiveParagraph().runs).toEqual([
+      { attributes: { bold: true, italic: false, underline: false }, text: "ab" },
+    ]);
+  });
+
   it("routes formatting, list, transfer echoes, and selection deletion intents", /** Verifies the extended beforeinput subset. @returns Nothing. */ function routesExtendedBrowserIntents(): void {
     const shell = createShell("selected");
     setTestSelection(shell, {

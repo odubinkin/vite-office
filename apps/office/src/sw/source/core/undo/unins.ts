@@ -81,7 +81,7 @@ export class SwUndoInsert extends SwUndo {
   }
 }
 
-/** Compares the two fragments that become adjacent after grouping. @param left - Earlier inserted runs. @param right - Later inserted runs. @returns Whether direct attributes agree. */
+/** Compares the two fragments that become adjacent after grouping. @param left - Earlier inserted fragment. @param right - Later inserted fragment. @returns Whether native hint state agrees. */
 function haveEqualBoundaryHints(left: SwTextFragment, right: SwTextFragment): boolean {
-  return JSON.stringify(left.hints.entries()) === JSON.stringify(right.hints.entries());
+  return left.hints.equals(right.hints);
 }
