@@ -36,10 +36,11 @@ export class SwUndoSplitNode extends SwUndo {
     const document = context.GetDoc();
     const source = GetUndoTextNode(document, this.sourceParagraph);
     const splitPosition = new SwPosition(source, this.offset, "redline");
-    const provisional = document.GetDocumentContentOperationsManager().SplitNode(splitPosition);
+    const operations = document.GetDocumentContentOperationsManager();
+    const provisional = operations.SplitNode(splitPosition);
     splitPosition.Dispose();
     if (this.trailingParagraph === undefined) this.trailingParagraph = provisional;
-    else document.nodes.replaceTextNode(provisional, this.trailingParagraph);
+    else operations.RestoreSplitTextNode(provisional, this.trailingParagraph);
     const trailing = this.trailingParagraph;
     const after = this.GetAfterCursorState();
     this.SetAfterCursor({

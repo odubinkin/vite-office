@@ -2,6 +2,7 @@
 
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SwPosition } from "../../core/crsr/pam";
 import { SwDoc } from "../../core/doc/doc";
 import {
   isWriterParagraphStyle,
@@ -230,8 +231,6 @@ export function decodeWriterDocument(candidate: unknown): SwDoc {
     node.ChgFormatColl(document.GetTextFormatColl(nodeRecord.formatCollId));
     for (const item of nodeRecord.autoAttributes)
       node.SetAttr(document.GetAttrPool().CreateItem(item));
-    document.GetDocumentListsManager().RegisterListItem(node);
-    node.SetText(nodeRecord.text);
     const hints = nodeRecord.hints.map(
       /** Restores one canonical text attribute. @param hint - Primitive hint record. @returns Writer hint. */ (
         hint,
@@ -243,7 +242,16 @@ export function decodeWriterDocument(candidate: unknown): SwDoc {
         return new SwTextAttr(new SwFormatAutoFormat(items), hint.start, hint.end);
       },
     );
-    node.SetTextHints(new SwpHints(document.GetAttrPool(), hints));
+    const position = new SwPosition(node, 0, "redline");
+    try {
+      document.GetDocumentContentOperationsManager().InsertTextFragment(position, {
+        hints: new SwpHints(document.GetAttrPool(), hints),
+        text: nodeRecord.text,
+      });
+    } finally {
+      position.Dispose();
+    }
+    document.GetDocumentListsManager().RegisterListItem(node);
   }
   if (document.paragraphs.length === 0)
     throw new Error("Stored Writer document has no body text node.");

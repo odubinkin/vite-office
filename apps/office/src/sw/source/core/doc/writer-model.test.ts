@@ -663,6 +663,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     node.SetText("pl");
     node.SetText("pl");
     node.SetText("xy");
+    node.SetTextHints(new SwpHints(writer.GetAttrPool()));
     expect(node.text).toBe("xy");
     expect(
       throwing(/** Erases before text. @returns Nothing. */ () => node.EraseText(-1, 1)),
@@ -680,7 +681,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     const writer = appendFixtureParagraph(createModelFixture(), "p-2");
     const first = writer.paragraphs[0] as SwTextNode;
     const second = writer.paragraphs[1] as SwTextNode;
-    const manager = new DocumentContentOperationsManager();
+    const manager = writer.GetDocumentContentOperationsManager();
     expect(writer.GetDocumentContentOperationsManager()).toBeInstanceOf(
       DocumentContentOperationsManager,
     );
@@ -765,7 +766,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     const second = writer.paragraphs[1] as SwTextNode;
     const third = writer.paragraphs[2] as SwTextNode;
     const foreign = other.paragraphs[0] as SwTextNode;
-    const manager = new DocumentContentOperationsManager();
+    const manager = writer.GetDocumentContentOperationsManager();
     manager.InsertString(new SwPaM(new SwPosition(first)), "abcd");
     expect(
       manager.ReplaceRange(
@@ -784,11 +785,42 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
         /** Joins nodes from different documents. @returns Nothing. */ () =>
           manager.JoinTextNodes(first, foreign),
       ),
-    ).toThrow("adjacent SwTextNodes");
+    ).toThrow("belongs to another document");
     const detached = new SwTextNode(
       writer.nodes,
       writer.nodes.GetEndOfContent().StartOfSectionNode(),
     );
+    expect(
+      throwing(
+        /** Restores a joined node from another document. @returns Nothing. */ () =>
+          manager.RestoreJoinedTextNode(first, first.Len(), foreign),
+      ),
+    ).toThrow("belongs to another document");
+    expect(
+      throwing(
+        /** Restores a joined node that is still connected. @returns Nothing. */ () =>
+          manager.RestoreJoinedTextNode(first, first.Len(), second),
+      ),
+    ).toThrow("detached trailing SwTextNode");
+    expect(
+      throwing(
+        /** Reuses a split node from another document. @returns Nothing. */ () =>
+          manager.RestoreSplitTextNode(second, foreign),
+      ),
+    ).toThrow("belongs to another document");
+    expect(
+      throwing(
+        /** Reuses a retained split node that is still connected. @returns Nothing. */ () =>
+          manager.RestoreSplitTextNode(second, first),
+      ),
+    ).toThrow("detached retained SwTextNode");
+    detached.SetText("different");
+    expect(
+      throwing(
+        /** Reuses retained split content that differs from the provisional node. @returns Nothing. */ () =>
+          manager.RestoreSplitTextNode(second, detached),
+      ),
+    ).toThrow("does not match the provisional split");
     expect(
       throwing(
         /** Inserts into a detached text node. @returns Nothing. */ () =>
@@ -805,16 +837,22 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     const source = new SwPaM(new SwPosition(first, 3), new SwPosition(first, 1));
     expect(
       throwing(
+        /** Inserts through a manager owned by another document. @returns Nothing. */ () =>
+          manager.InsertString(new SwPosition(foreign), "x"),
+      ),
+    ).toThrow("belongs to another document");
+    expect(
+      throwing(
         /** Copies across documents. @returns Nothing. */ () =>
           manager.CopyRange(source, new SwPosition(foreign)),
       ),
-    ).toThrow("different documents");
+    ).toThrow("belongs to another document");
     expect(
       throwing(
         /** Moves across documents. @returns Nothing. */ () =>
           manager.MoveRange(source, new SwPosition(foreign)),
       ),
-    ).toThrow("different documents");
+    ).toThrow("belongs to another document");
     expect(
       throwing(
         /** Moves a range into itself. @returns Nothing. */ () =>

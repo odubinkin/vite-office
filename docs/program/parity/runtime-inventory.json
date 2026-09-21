@@ -3236,7 +3236,9 @@
       "state": "active",
       "suite": "writer",
       "subsystem": "clipboard-transfer",
-      "capabilityIds": ["CAP-0110"],
+      "capabilityIds": [
+        "CAP-0110"
+      ],
       "semantic": {
         "behaviorStatus": "not-applicable",
         "contractStatus": "not-applicable",
@@ -3346,7 +3348,9 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113",
-        "CAP-0128"
+        "CAP-0128",
+        "CAP-0136",
+        "CAP-0137"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -3385,7 +3389,9 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113",
-        "CAP-0129"
+        "CAP-0129",
+        "CAP-0136",
+        "CAP-0137"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -3424,7 +3430,14 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113",
-        "CAP-0129"
+        "CAP-0129",
+        "CAP-0138",
+        "CAP-0139",
+        "CAP-0140",
+        "CAP-0141",
+        "CAP-0142",
+        "CAP-0143",
+        "CAP-0144"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -3494,7 +3507,14 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113",
-        "CAP-0128"
+        "CAP-0128",
+        "CAP-0138",
+        "CAP-0139",
+        "CAP-0140",
+        "CAP-0141",
+        "CAP-0142",
+        "CAP-0143",
+        "CAP-0144"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -3691,7 +3711,8 @@
         "justification": "Owns registration of the supported text, character, paragraph, history, and hyperlink slots as a dedicated text context shell while SwWrtShell supplies cursor operations.",
         "knownViolations": [],
         "localSymbols": [
-          "SwTextShell"
+          "SwTextShell",
+          "createWriterTextCommandRegistry"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/uibase/shells/textsh1.cxx",
@@ -3729,7 +3750,8 @@
         "justification": "Owns registration of lifecycle, clipboard, and chrome slots outside SwView so the view retains frame and document coordination rather than command descriptor construction.",
         "knownViolations": [],
         "localSymbols": [
-          "SwViewCommandShell"
+          "SwViewCommandShell",
+          "createWriterViewCommandRegistry"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/uibase/uiview/view.cxx",
@@ -3773,10 +3795,11 @@
         "knownViolations": [],
         "localSymbols": [
           "WriterCharacterCommandArguments",
+          "WriterHyperlinkCommandArguments",
           "WriterTextCommandTarget",
           "WriterViewCommandTarget",
-          "createWriterTextCommandRegistry",
-          "createWriterViewCommandRegistry"
+          "createWriterCommandRegistry",
+          "getWriterCommandArguments"
         ],
         "sourceResponsibility": "divergent",
         "upstreamFile": "sw/sdi/swriter.sdi",
@@ -4360,7 +4383,9 @@
       "state": "active",
       "suite": "shared",
       "subsystem": "browser-platform",
-      "capabilityIds": ["CAP-0109"],
+      "capabilityIds": [
+        "CAP-0109"
+      ],
       "semantic": {
         "behaviorStatus": "unverified",
         "contractStatus": "not-applicable",
@@ -4609,7 +4634,12 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113",
-        "CAP-0129"
+        "CAP-0129",
+        "CAP-0138",
+        "CAP-0139",
+        "CAP-0140",
+        "CAP-0141",
+        "CAP-0144"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -4647,7 +4677,12 @@
       "subsystem": "odf-filter",
       "capabilityIds": [
         "CAP-0113",
-        "CAP-0128"
+        "CAP-0128",
+        "CAP-0138",
+        "CAP-0139",
+        "CAP-0140",
+        "CAP-0141",
+        "CAP-0144"
       ],
       "semantic": {
         "behaviorStatus": "unverified",

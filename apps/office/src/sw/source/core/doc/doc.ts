@@ -44,7 +44,7 @@ export class SwDoc {
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
     this.listsManager = new DocumentListsManager(this.stateManager);
     this.nodes = new SwNodes(this);
-    this.contentOperationsManager = new DocumentContentOperationsManager();
+    this.contentOperationsManager = new DocumentContentOperationsManager(this);
     if (options?.createInitialTextNode !== false && createInitialTextNode !== false)
       this.nodes.MakeTextNode();
   }

@@ -3590,7 +3590,8 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts",
       "localSymbols": [
-        "SwTextShell"
+        "SwTextShell",
+        "createWriterTextCommandRegistry"
       ],
       "omittedResponsibilities": [
         "Native-only text-shell slots and unsupported Writer feature families remain omitted."
@@ -3623,7 +3624,8 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/shells/viewsh.ts",
       "localSymbols": [
-        "SwViewCommandShell"
+        "SwViewCommandShell",
+        "createWriterViewCommandRegistry"
       ],
       "omittedResponsibilities": [
         "Native VCL view construction and unsupported view slots remain omitted."
@@ -3656,10 +3658,11 @@
       "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
       "localSymbols": [
         "WriterCharacterCommandArguments",
+        "WriterHyperlinkCommandArguments",
         "WriterTextCommandTarget",
         "WriterViewCommandTarget",
-        "createWriterTextCommandRegistry",
-        "createWriterViewCommandRegistry"
+        "createWriterCommandRegistry",
+        "getWriterCommandArguments"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside CreateSWDrawView, AcceptTrackedChanges, TrackChanges, TrackChangesBar and the bounded WriterCharacterCommandArguments, WriterTextCommandTarget, WriterViewCommandTarget contract remain intentionally omitted."

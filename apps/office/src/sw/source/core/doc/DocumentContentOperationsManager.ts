@@ -5,9 +5,13 @@
 
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
+import type { SwDoc } from "./doc";
 
 /** Applies every supported canonical content mutation through SwPosition and SwPaM. */
 export class DocumentContentOperationsManager {
+  /** Binds the operation manager to exactly one canonical document graph. @param document - Owning SwDoc. @returns Nothing. */
+  public constructor(private readonly document: SwDoc) {}
+
   /** Replaces a same-node point-and-mark range with native Writer text and hints. @param range - Model range to replace. @param replacement - Replacement content. @returns Whether content changed. */
   public ReplaceRange(range: SwPaM, replacement: SwTextFragment): boolean {
     const { end, node, start } = this.GetSameTextNodeRange(range, "replacement");
@@ -23,6 +27,14 @@ export class DocumentContentOperationsManager {
     const position = range instanceof SwPaM ? range.GetPoint() : range;
     const node = this.GetTextNode(position, "insertion");
     node.InsertText(text, position.GetContentIndex());
+    return true;
+  }
+
+  /** Inserts a native Writer fragment at one canonical position. @param position - Insertion position. @param fragment - Text plus canonical hints. @returns Whether content changed. */
+  public InsertTextFragment(position: SwPosition, fragment: SwTextFragment): boolean {
+    if (fragment.text.length === 0 && fragment.hints.Count() === 0) return false;
+    const node = this.GetTextNode(position, "fragment insertion");
+    node.ReplaceRange(position.GetContentIndex(), position.GetContentIndex(), fragment);
     return true;
   }
 
@@ -60,18 +72,37 @@ export class DocumentContentOperationsManager {
   /** Restores a detached trailing node after splitting the surviving prefix. @param preceding - Current joined node. @param offset - Original join offset. @param trailing - Detached node retained by undo. @returns Nothing. */
   public RestoreJoinedTextNode(preceding: SwTextNode, offset: number, trailing: SwTextNode): void {
     this.AssertConnectedTextNode(preceding, "join undo");
+    if (trailing.GetDoc() !== this.document)
+      throw new Error("Writer join undo node belongs to another document.");
+    if (trailing.GetNodes().indexOfOrUndefined(trailing) !== undefined)
+      throw new Error("Writer join undo requires a detached trailing SwTextNode.");
     if (!Number.isInteger(offset) || offset < 0 || offset > preceding.Len())
       throw new Error("Writer join undo offset is outside its SwTextNode.");
     preceding.EraseText(offset);
     preceding.GetNodes().insertTextNodeAfter(preceding, trailing);
   }
 
+  /** Replaces a provisional split result with the retained undo node identity. @param provisional - Newly connected split node. @param retained - Detached node retained by undo. @returns Nothing. */
+  public RestoreSplitTextNode(provisional: SwTextNode, retained: SwTextNode): void {
+    this.AssertConnectedTextNode(provisional, "split redo");
+    if (retained.GetDoc() !== this.document)
+      throw new Error("Writer split redo node belongs to another document.");
+    if (retained.GetNodes().indexOfOrUndefined(retained) !== undefined)
+      throw new Error("Writer split redo requires a detached retained SwTextNode.");
+    const provisionalFragment = provisional.CaptureTextFragment(0, provisional.Len());
+    const retainedFragment = retained.CaptureTextFragment(0, retained.Len());
+    if (
+      provisionalFragment.text !== retainedFragment.text ||
+      !provisionalFragment.hints.equals(retainedFragment.hints)
+    )
+      throw new Error("Writer split redo retained node does not match the provisional split.");
+    provisional.GetNodes().replaceTextNode(provisional, retained);
+  }
+
   /** Copies a supported same-node range to one canonical insertion position. @param source - Source range. @param target - Destination position. @returns Inserted UTF-16 length. */
   public CopyRange(source: SwPaM, target: SwPosition): number {
     const { end, node, start } = this.GetSameTextNodeRange(source, "copy");
     const targetNode = this.GetTextNode(target, "copy destination");
-    if (targetNode.GetDoc() !== node.GetDoc())
-      throw new Error("Writer copy range and destination belong to different documents.");
     const fragment = node.CaptureTextFragment(start, end);
     targetNode.ReplaceRange(target.GetContentIndex(), target.GetContentIndex(), fragment);
     return fragment.text.length;
@@ -81,8 +112,6 @@ export class DocumentContentOperationsManager {
   public MoveRange(source: SwPaM, target: SwPosition): SwPosition {
     const { end, node, start } = this.GetSameTextNodeRange(source, "move");
     const targetNode = this.GetTextNode(target, "move destination");
-    if (targetNode.GetDoc() !== node.GetDoc())
-      throw new Error("Writer move range and destination belong to different documents.");
     const targetOffset = target.GetContentIndex();
     if (targetNode === node && targetOffset >= start && targetOffset <= end)
       throw new Error("Writer cannot move a range into itself.");
@@ -118,6 +147,8 @@ export class DocumentContentOperationsManager {
 
   /** Rejects detached nodes before a canonical mutation. @param node - Candidate text node. @param operation - Error context. @returns Nothing. */
   private AssertConnectedTextNode(node: SwTextNode, operation: string): void {
+    if (node.GetDoc() !== this.document)
+      throw new Error(`Writer ${operation} node belongs to another document.`);
     if (node.GetNodes().indexOfOrUndefined(node) === undefined)
       throw new Error(`Writer ${operation} requires a connected SwTextNode.`);
   }

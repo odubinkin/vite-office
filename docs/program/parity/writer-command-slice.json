@@ -3137,7 +3137,7 @@
       "suite": "writer",
       "subsystem": "odf-filter",
       "type": "filter",
-      "maturity": "verified",
+      "maturity": "implemented",
       "assertions": [
         "The pinned upstream and local assertion markers cover this atomic operation: Read and write one bounded ODF package."
       ],
@@ -3146,7 +3146,9 @@
         "rationale": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline."
       },
       "capability": "ODF ZIP and manifest package plumbing",
-      "gaps": [],
+      "gaps": [
+        "Umbrella command association only; semantic promotion is tracked by atomic ODT stream/property records."
+      ],
       "upstream": {
         "implementation": [
           {
@@ -3422,160 +3424,10 @@
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
       ],
       "implemented": true,
-      "contractParity": true,
-      "behaviorParity": true,
-      "defaultParity": true,
-      "verified": true,
-      "assertionEvidence": [
-        {
-          "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Read and write one bounded ODF package.",
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        }
-      ],
-      "verification": {
-        "commit": "7632bdc505ec",
-        "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
-        "scope": "bounded",
-        "taskId": "202609210851-1GHX09"
-      },
-      "closure": {
-        "contract": {
-          "local": {
-            "marker": "export class CRC32",
-            "path": "apps/office/src/package/source/zipapi/CRC32.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0113 API and identifiers resolve to exact local and pinned upstream symbols.",
-          "status": "pass",
-          "upstream": {
-            "marker": "CRC32::updateSegment",
-            "path": "package/source/zipapi/CRC32.cxx"
-          }
-        },
-        "ownership": {
-          "local": {
-            "marker": "export class CRC32",
-            "path": "apps/office/src/package/source/zipapi/CRC32.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0113 owner is checked at the mapped local and upstream implementation boundary.",
-          "status": "pass",
-          "upstream": {
-            "marker": "CRC32::updateSegment",
-            "path": "package/source/zipapi/CRC32.cxx"
-          }
-        },
-        "behavior": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "unit-test",
-          "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "defaults": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "serialization": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The relevant bounded serialization or persistence representation is compared with pinned upstream evidence.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "operationCycle": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "differential": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "divergences": [
-          {
-            "classification": "B",
-            "description": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline.",
-            "local": {
-              "marker": "Writer ODF 1.3 package slice",
-              "path": "docs/program/writer-odt-format.md"
-            },
-            "upstream": {
-              "marker": "CRC32::updateSegment",
-              "path": "package/source/zipapi/CRC32.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "The package and XML APIs preserve the current SwDoc paragraphs, the complete 126-entry built-in paragraph-style pool and hierarchy, LibreOffice-encoded style names, document font-face declarations, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; script-specific font-family differences are normalized to the Western family because the browser model exposes one synchronized family, while tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases.",
-            "local": {
-              "marker": "Writer ODF 1.3 package slice",
-              "path": "docs/program/writer-odt-format.md"
-            },
-            "upstream": {
-              "marker": "CRC32::updateSegment",
-              "path": "package/source/zipapi/CRC32.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips.",
-            "local": {
-              "marker": "Writer ODF 1.3 package slice",
-              "path": "docs/program/writer-odt-format.md"
-            },
-            "upstream": {
-              "marker": "CRC32::updateSegment",
-              "path": "package/source/zipapi/CRC32.cxx"
-            }
-          }
-        ]
-      }
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0114",
@@ -7347,7 +7199,7 @@
       "suite": "writer",
       "subsystem": "odf-filter",
       "type": "filter",
-      "maturity": "verified",
+      "maturity": "implemented",
       "assertions": [
         "The pinned upstream and local assertion markers cover this atomic operation: Import one bounded ODF text stream into the Writer graph."
       ],
@@ -7356,7 +7208,9 @@
         "rationale": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline."
       },
       "capability": "Writer ODF XML import",
-      "gaps": [],
+      "gaps": [
+        "Umbrella command association only; semantic promotion is tracked by atomic ODT stream/property records."
+      ],
       "upstream": {
         "implementation": [
           {
@@ -7624,160 +7478,10 @@
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
       ],
       "implemented": true,
-      "contractParity": true,
-      "behaviorParity": true,
-      "defaultParity": true,
-      "verified": true,
-      "assertionEvidence": [
-        {
-          "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Import one bounded ODF text stream into the Writer graph.",
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        }
-      ],
-      "verification": {
-        "commit": "7632bdc505ec",
-        "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
-        "scope": "bounded",
-        "taskId": "202609210851-1GHX09"
-      },
-      "closure": {
-        "contract": {
-          "local": {
-            "marker": "export class CRC32",
-            "path": "apps/office/src/package/source/zipapi/CRC32.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0128 API and identifiers resolve to exact local and pinned upstream symbols.",
-          "status": "pass",
-          "upstream": {
-            "marker": "CRC32::updateSegment",
-            "path": "package/source/zipapi/CRC32.cxx"
-          }
-        },
-        "ownership": {
-          "local": {
-            "marker": "export class CRC32",
-            "path": "apps/office/src/package/source/zipapi/CRC32.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0128 owner is checked at the mapped local and upstream implementation boundary.",
-          "status": "pass",
-          "upstream": {
-            "marker": "CRC32::updateSegment",
-            "path": "package/source/zipapi/CRC32.cxx"
-          }
-        },
-        "behavior": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "unit-test",
-          "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "defaults": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "serialization": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The relevant bounded serialization or persistence representation is compared with pinned upstream evidence.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "operationCycle": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "differential": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "divergences": [
-          {
-            "classification": "B",
-            "description": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline.",
-            "local": {
-              "marker": "Writer ODF 1.3 package slice",
-              "path": "docs/program/writer-odt-format.md"
-            },
-            "upstream": {
-              "marker": "CRC32::updateSegment",
-              "path": "package/source/zipapi/CRC32.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "The package and XML APIs preserve the current SwDoc paragraphs, the complete 126-entry built-in paragraph-style pool and hierarchy, LibreOffice-encoded style names, document font-face declarations, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; script-specific font-family differences are normalized to the Western family because the browser model exposes one synchronized family, while tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases.",
-            "local": {
-              "marker": "Writer ODF 1.3 package slice",
-              "path": "docs/program/writer-odt-format.md"
-            },
-            "upstream": {
-              "marker": "CRC32::updateSegment",
-              "path": "package/source/zipapi/CRC32.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips.",
-            "local": {
-              "marker": "Writer ODF 1.3 package slice",
-              "path": "docs/program/writer-odt-format.md"
-            },
-            "upstream": {
-              "marker": "CRC32::updateSegment",
-              "path": "package/source/zipapi/CRC32.cxx"
-            }
-          }
-        ]
-      }
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0129",
@@ -7785,7 +7489,7 @@
       "suite": "writer",
       "subsystem": "odf-filter",
       "type": "filter",
-      "maturity": "verified",
+      "maturity": "implemented",
       "assertions": [
         "The pinned upstream and local assertion markers cover this atomic operation: Export one Writer graph as bounded ODF XML."
       ],
@@ -7794,7 +7498,9 @@
         "rationale": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline."
       },
       "capability": "Writer ODF XML export",
-      "gaps": [],
+      "gaps": [
+        "Umbrella command association only; semantic promotion is tracked by atomic ODT stream/property records."
+      ],
       "upstream": {
         "implementation": [
           {
@@ -8066,160 +7772,10 @@
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
       ],
       "implemented": true,
-      "contractParity": true,
-      "behaviorParity": true,
-      "defaultParity": true,
-      "verified": true,
-      "assertionEvidence": [
-        {
-          "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Export one Writer graph as bounded ODF XML.",
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        }
-      ],
-      "verification": {
-        "commit": "7632bdc505ec",
-        "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
-        "scope": "bounded",
-        "taskId": "202609210851-1GHX09"
-      },
-      "closure": {
-        "contract": {
-          "local": {
-            "marker": "export class CRC32",
-            "path": "apps/office/src/package/source/zipapi/CRC32.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0129 API and identifiers resolve to exact local and pinned upstream symbols.",
-          "status": "pass",
-          "upstream": {
-            "marker": "CRC32::updateSegment",
-            "path": "package/source/zipapi/CRC32.cxx"
-          }
-        },
-        "ownership": {
-          "local": {
-            "marker": "export class CRC32",
-            "path": "apps/office/src/package/source/zipapi/CRC32.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0129 owner is checked at the mapped local and upstream implementation boundary.",
-          "status": "pass",
-          "upstream": {
-            "marker": "CRC32::updateSegment",
-            "path": "package/source/zipapi/CRC32.cxx"
-          }
-        },
-        "behavior": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "unit-test",
-          "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "defaults": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "serialization": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The relevant bounded serialization or persistence representation is compared with pinned upstream evidence.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "operationCycle": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "differential": {
-          "local": {
-            "marker": "standard ZIP checksum",
-            "path": "apps/office/src/package/source/zipapi/CRC32.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testFeatureText",
-            "path": "sw/qa/extras/odfimport/odffeatures.cxx"
-          }
-        },
-        "divergences": [
-          {
-            "classification": "B",
-            "description": "Browser byte, Dedicated Worker, transferable, and download adapters replace native streams and scheduling around the mapped ODF pipeline.",
-            "local": {
-              "marker": "Writer ODF 1.3 package slice",
-              "path": "docs/program/writer-odt-format.md"
-            },
-            "upstream": {
-              "marker": "CRC32::updateSegment",
-              "path": "package/source/zipapi/CRC32.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "The package and XML APIs preserve the current SwDoc paragraphs, the complete 126-entry built-in paragraph-style pool and hierarchy, LibreOffice-encoded style names, document font-face declarations, alignment, title, significant whitespace, inherited/direct pooled bold, italic, and single underline formatting, plus default bullet and decimal list rules, identities, continuation blocks, and levels zero through nine; script-specific font-family differences are normalized to the Western family because the browser model exposes one synchronized family, while tables, images, fields, sections, page styles, annotations, redlines, objects, RDF, scripts, signatures, encryption, ZIP64, custom bullet glyphs, and non-decimal numbering remain explicit unsupported cases.",
-            "local": {
-              "marker": "Writer ODF 1.3 package slice",
-              "path": "docs/program/writer-odt-format.md"
-            },
-            "upstream": {
-              "marker": "CRC32::updateSegment",
-              "path": "package/source/zipapi/CRC32.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips.",
-            "local": {
-              "marker": "Writer ODF 1.3 package slice",
-              "path": "docs/program/writer-odt-format.md"
-            },
-            "upstream": {
-              "marker": "CRC32::updateSegment",
-              "path": "package/source/zipapi/CRC32.cxx"
-            }
-          }
-        ]
-      }
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     },
     {
       "id": "LO-WRITER-0130",
@@ -9995,6 +9551,627 @@
           }
         ]
       }
+    },
+    {
+      "id": "LO-WRITER-0136",
+      "capabilityId": "CAP-0136",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Validate that mimetype is the first uncompressed ZIP entry with the ODT media type."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Validate the ODT mimetype entry",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "XMLReader::Read"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
+            "marker": "ODT mimetype must be the first ZIP entry."
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "validates package order, media type, required streams, and explicit limits"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Validate that mimetype is the first uncompressed ZIP entry with the ODT media type",
+      "scopeLimitations": [
+        "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
+    },
+    {
+      "id": "LO-WRITER-0137",
+      "capabilityId": "CAP-0137",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Require manifest.xml, styles.xml, content.xml, and meta.xml within explicit resource limits."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Validate required ODT package streams",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/filter/xml/swxml.cxx",
+            "marker": "styles.xml"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
+            "marker": "ODT_XML_STREAM_BYTE_LIMIT"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "validates package order, media type, required streams, and explicit limits"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Require manifest.xml, styles.xml, content.xml, and meta.xml within explicit resource limits",
+      "scopeLimitations": [
+        "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
+    },
+    {
+      "id": "LO-WRITER-0138",
+      "capabilityId": "CAP-0138",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Round-trip text:p content including text:s, text:tab, and text:line-break."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Import and export ODF paragraph text",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "XMLParaContext::XMLParaContext"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "marker": "XMLParaContext"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "restores canonical formatting"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Round-trip text:p content including text:s, text:tab, and text:line-break",
+      "scopeLimitations": [
+        "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
+    },
+    {
+      "id": "LO-WRITER-0139",
+      "capabilityId": "CAP-0139",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Map fo:font-weight to pooled Writer weight hints and back."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Import and export ODF bold",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "XMLCharContext::XMLCharContext"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextBold"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "marker": "RES_CHRATR_WEIGHT"
+          }
+        ],
+        "tests": [
+          {
+            "path": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+            "marker": "feature_text_bold.odt"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Map fo:font-weight to pooled Writer weight hints and back",
+      "scopeLimitations": [
+        "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
+    },
+    {
+      "id": "LO-WRITER-0140",
+      "capabilityId": "CAP-0140",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Map fo:font-style to pooled Writer posture hints and back."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Import and export ODF italic",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "XMLCharContext::XMLCharContext"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureTextItalic"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "marker": "RES_CHRATR_POSTURE"
+          }
+        ],
+        "tests": [
+          {
+            "path": "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+            "marker": "feature_text_italic.odt"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Map fo:font-style to pooled Writer posture hints and back",
+      "scopeLimitations": [
+        "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
+    },
+    {
+      "id": "LO-WRITER-0141",
+      "capabilityId": "CAP-0141",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Map single solid underline attributes to pooled Writer underline hints and back."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Import and export ODF underline",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "xmloff/source/text/txtparae.cxx",
+            "marker": "XMLTextParagraphExport::exportText"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+            "marker": "style:text-underline-style"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "rejects malformed style records and unsupported semantic properties"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Map single solid underline attributes to pooled Writer underline hints and back",
+      "scopeLimitations": [
+        "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
+    },
+    {
+      "id": "LO-WRITER-0142",
+      "capabilityId": "CAP-0142",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Map fo:text-align values and Writer defaults without presentation CSS."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Import and export ODF paragraph alignment",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/filter/xml/xmlimp.cxx",
+            "marker": "SwXMLBodyContext_Impl::SwXMLBodyContext_Impl"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "marker": "RES_PARATR_ADJUST"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "maps every supported SvxAdjust variant and rejects invalid adjustment items"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Map fo:text-align values and Writer defaults without presentation CSS",
+      "scopeLimitations": [
+        "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
+    },
+    {
+      "id": "LO-WRITER-0143",
+      "capabilityId": "CAP-0143",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Map decimal and bullet list levels, identities, continuation, and restart fields."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Import and export ODF list rules",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "sw/source/filter/xml/xmlimp.cxx",
+            "marker": "SwXMLDocContext_Impl::SwXMLDocContext_Impl"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+            "marker": "SwNumFormat"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "Unsupported ODF numbering format"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Map decimal and bullet list levels, identities, continuation, and restart fields",
+      "scopeLimitations": [
+        "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
+    },
+    {
+      "id": "LO-WRITER-0144",
+      "capabilityId": "CAP-0144",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Map text:a and xlink attributes to SwFormatINetFormat hints and back."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Import and export ODF hyperlinks",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "XMLCharContext::XMLCharContext"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "marker": "XMLCharacterContext"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "restores canonical formatting"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "Writer ODF 1.3 package slice"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Map text:a and xlink attributes to SwFormatINetFormat hints and back",
+      "scopeLimitations": [
+        "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
     }
   ]
 }

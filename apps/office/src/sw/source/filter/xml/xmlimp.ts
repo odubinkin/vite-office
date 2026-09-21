@@ -40,6 +40,7 @@ import {
   type XMLTextListRule,
 } from "../../../../xmloff/source/text/txtparai";
 import type { SwFormat } from "../../core/attr/format";
+import { SwPosition } from "../../core/crsr/pam";
 import { SwDoc } from "../../core/doc/doc";
 import { SwNumFormat, SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -300,7 +301,18 @@ class SwXMLParagraphTarget implements XMLParagraphImportTarget {
     properties: OdfCharacterProperties,
     hyperlink?: OdfHyperlink,
   ): void {
-    this.node.InsertText(text, this.node.Len(), properties, hyperlink);
+    const position = new SwPosition(this.node, this.node.Len(), "redline");
+    try {
+      this.node
+        .GetDoc()
+        .GetDocumentContentOperationsManager()
+        .InsertTextFragment(
+          position,
+          this.node.CreateTextFragmentFromText(text, properties, hyperlink),
+        );
+    } finally {
+      position.Dispose();
+    }
   }
 }
 

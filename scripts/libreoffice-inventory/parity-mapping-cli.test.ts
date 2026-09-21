@@ -70,8 +70,8 @@ describe("parity mapping CLI" /**
     ]);
   });
 
-  it("reads the pinned Writer mapping and emits a complete parity closure report" /**
-   * Verifies production reading resolves all local, upstream, dimension, and divergence evidence without writing a repository file.
+  it("reads the pinned Writer mapping and reports bounded unresolved ODT parity" /**
+   * Verifies production reading preserves atomic ODT gaps while resolving all declared local, upstream, and divergence evidence without writing a repository file.
    *
    * @returns A promise resolving after the report is captured and inspected.
    */, async function runsProductionValidation(): Promise<void> {
@@ -91,17 +91,17 @@ describe("parity mapping CLI" /**
     );
     expect(JSON.parse(output)).toMatchObject({
       baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
-      behaviorParityCount: 35,
-      classifiedDivergenceCount: 92,
-      contractParityCount: 35,
-      defaultParityCount: 35,
-      differentialParityCount: 35,
+      behaviorParityCount: 32,
+      classifiedDivergenceCount: 83,
+      contractParityCount: 32,
+      defaultParityCount: 32,
+      differentialParityCount: 32,
       exceptionCount: 0,
-      gapCount: 0,
-      implementedCount: 35,
-      ownershipParityCount: 35,
-      parityReady: true,
-      recordCount: 35,
+      gapCount: 12,
+      implementedCount: 44,
+      ownershipParityCount: 32,
+      parityReady: false,
+      recordCount: 44,
       runtime: {
         commandCount: 34,
         placeholderSuiteCount: 6,
@@ -109,11 +109,11 @@ describe("parity mapping CLI" /**
         semanticViolationCount: 0,
       },
       schemaVersion: 6,
-      scopeLimitationCount: 69,
-      serializationParityCount: 35,
+      scopeLimitationCount: 78,
+      serializationParityCount: 32,
       unclassifiedDivergenceCount: 0,
-      unresolvedParityCount: 0,
-      verifiedCount: 35,
+      unresolvedParityCount: 12,
+      verifiedCount: 32,
     });
   }, 30_000);
 });
