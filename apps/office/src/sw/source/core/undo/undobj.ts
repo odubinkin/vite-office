@@ -4,6 +4,7 @@
  */
 
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwTextFragment, WriterCharacterAttributes } from "../txtnode/ndtxt";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
@@ -120,7 +121,37 @@ export function ReplaceUndoRange(
   end: number,
   fragment: SwTextFragment,
 ): void {
-  GetUndoTextNode(document, node).ReplaceRange(start, end, fragment);
+  const target = GetUndoTextNode(document, node);
+  const point = new SwPosition(target, end, "redline");
+  const mark = new SwPosition(target, start, "redline");
+  const range = new SwPaM(point, mark);
+  try {
+    document.GetDocumentContentOperationsManager().ReplaceRange(range, fragment);
+  } finally {
+    range.Dispose();
+    point.Dispose();
+    mark.Dispose();
+  }
+}
+
+/** Deletes one retained undo range through IDocumentContentOperations. @param document - Mutated graph. @param node - Target node. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */
+export function DeleteUndoRange(
+  document: SwDoc,
+  node: SwTextNode,
+  start: number,
+  end: number,
+): void {
+  const target = GetUndoTextNode(document, node);
+  const point = new SwPosition(target, end, "redline");
+  const mark = new SwPosition(target, start, "redline");
+  const range = new SwPaM(point, mark);
+  try {
+    document.GetDocumentContentOperationsManager().DeleteRange(range);
+  } finally {
+    range.Dispose();
+    point.Dispose();
+    mark.Dispose();
+  }
 }
 
 /** Estimates retained native text and hint payload. @param fragment - Native fragment. @returns Approximate scalar units. */

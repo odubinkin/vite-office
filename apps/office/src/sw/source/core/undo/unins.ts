@@ -4,9 +4,9 @@ import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SwTextFragment, SwTextNode } from "../txtnode/ndtxt";
 import {
   CopyUndoFragment,
+  DeleteUndoRange,
   GetFragmentPayloadSize,
   GetUndoFragmentLength,
-  GetUndoTextNode,
   ReplaceUndoRange,
   SwUndo,
   type SwUndoCursorState,
@@ -63,9 +63,11 @@ export class SwUndoInsert extends SwUndo {
 
   /** Removes the exact inserted range. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraph).EraseText(
+    DeleteUndoRange(
+      context.GetDoc(),
+      this.paragraph,
       this.offset,
-      GetUndoFragmentLength(this.insertedFragment),
+      this.offset + GetUndoFragmentLength(this.insertedFragment),
     );
   }
 

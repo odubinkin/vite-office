@@ -121,8 +121,11 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(bullet.GetBulletFont()).toBe("OpenSymbol");
     expect(bullet.GetFirstLineIndent()).toBe(-360);
     expect(bullet.GetIndentAt()).toBe(720);
+    expect(bullet.GetIncludeUpperLevels()).toBe(1);
     expect(bullet.GetLabelFollowedBy()).toBe("listtab");
     expect(bullet.GetListtabPos()).toBe(720);
+    expect(bullet.GetNumberingType()).toBe("char-special");
+    expect(bullet.GetPositionAndSpaceMode()).toBe("label-alignment");
     expect(bullet.GetPrefix()).toBe("");
     expect(bullet.GetStart()).toBe(1);
     expect(bullet.GetSuffix()).toBe("");
@@ -139,6 +142,30 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
       ),
     ]);
     expect(dots.clone().GetNumFormat(0).GetBulletChar()).toBe("●");
+    expect(dots.MakeNumString([], 0)).toBe("●");
+    const multilevel = new SwNumRule(
+      "multilevel",
+      Array.from(
+        { length: 10 },
+        /** Creates one numbered level with its complete ancestor range. @param _unused - Array placeholder. @param level - Zero-based level. @returns Number format. */
+        (_unused, level) =>
+          new SwNumFormat("numbered", "", {
+            includeUpperLevels: level + 1,
+            prefix: "(",
+            suffix: ")",
+          }),
+      ),
+    );
+    expect(multilevel.GetNumFormat(1).GetNumberingType()).toBe("arabic");
+    expect(multilevel.MakeNumString([2, 3], 1)).toBe("(2.3)");
+    expect(
+      /** Formats a missing level. @returns Invalid marker. */ () =>
+        multilevel.MakeNumString([2], 1),
+    ).toThrow("does not contain");
+    expect(
+      /** Rejects an impossible upper-level count. @returns Invalid format. */ () =>
+        new SwNumFormat("numbered", "", { includeUpperLevels: 11 }),
+    ).toThrow("upper-level count");
   });
 
   it("uses the document-owned SwList counter tree for canonical text nodes", /** Verifies automatic-rule continuation and counter validation. @returns Nothing. */ () => {
@@ -170,6 +197,19 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
       getWriterParagraphListMarker(document.paragraphs, first as WriterNumberingParagraph),
     ).toBe("1.");
     expect(getWriterParagraphListMarker(document.paragraphs, nested)).toBe("1.");
+    expect(first?.GetListLabel()).toBe("1.");
+    expect(nested.GetListLabel()).toBe("1.");
+    expect(manager.GetListForListStyle(ruleName).GetListItemNumberVector(nested)).toEqual([1, 1]);
+    const plain = document.nodes.MakeTextNode();
+    expect(plain.GetListLabel()).toBeUndefined();
+    plain.SetParagraphList({ kind: "bullet", level: 0 });
+    expect(plain.GetListLabel()).toBe("•");
+    const unregistered = document.nodes.MakeTextNode();
+    unregistered.SetNumRule(ruleName);
+    unregistered.SetListId(first?.GetListId() as string);
+    expect(unregistered.GetListLabel()).toBeUndefined();
+    unregistered.SetListId("missing-list");
+    expect(unregistered.GetListLabel()).toBeUndefined();
     expect(getWriterParagraphListMarker(document.paragraphs, second)).toBe("2.");
     expect(nested.GetActualListStartValue()).toBe(1);
     nested.SetParagraphList({ kind: "numbered", level: 0 });

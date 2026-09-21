@@ -701,6 +701,41 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(first.text).toBe("ad");
     manager.DeleteRange(new SwPaM(new SwPosition(first, 1)));
     expect(first.text).toBe("ad");
+    expect(
+      manager.CopyRange(
+        new SwPaM(new SwPosition(first, 1), new SwPosition(first, 0)),
+        new SwPosition(second, 0),
+      ),
+    ).toBe(1);
+    expect(second.text).toBe("a");
+    expect(
+      manager
+        .MoveRange(
+          new SwPaM(new SwPosition(first, 2), new SwPosition(first, 1)),
+          new SwPosition(second, 1),
+        )
+        .GetContentIndex(),
+    ).toBe(2);
+    expect(first.text).toBe("a");
+    expect(second.text).toBe("ad");
+    const trailing = manager.SplitNode(new SwPosition(first, 0));
+    expect(
+      writer.paragraphs
+        .slice(0, 3)
+        .map(
+          /** Selects text from one canonical paragraph. @param paragraph - Text node. @returns Plain text. */ (
+            paragraph,
+          ) => paragraph.text,
+        ),
+    ).toEqual(["", "a", "ad"]);
+    expect(manager.JoinTextNodes(first, trailing)).toBe(0);
+    expect(
+      writer.paragraphs.map(
+        /** Selects text from one joined paragraph. @param paragraph - Text node. @returns Plain text. */ (
+          paragraph,
+        ) => paragraph.text,
+      ),
+    ).toEqual(["a", "ad"]);
     const crossNode = new SwPaM(new SwPosition(second), new SwPosition(first));
     expect(
       throwing(
@@ -717,7 +752,85 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
           manager.InsertString(new SwPosition(new TestContentNode(writer)), "x"),
       ),
     ).toThrow("requires a SwTextNode");
-    expect(first.text).toBe("ad");
+    expect(first.text).toBe("a");
+  });
+
+  it("rejects unsupported content-operation ranges before mutation" /** Covers the manager's same-document, adjacency, connectivity, and move-overlap guards. @returns Nothing; assertions inspect deterministic failures. */, function rejectsUnsupportedContentOperations(): void {
+    const writer = appendFixtureParagraph(
+      appendFixtureParagraph(createModelFixture(), "p-2"),
+      "p-3",
+    );
+    const other = createModelFixture("model-b");
+    const first = writer.paragraphs[0] as SwTextNode;
+    const second = writer.paragraphs[1] as SwTextNode;
+    const third = writer.paragraphs[2] as SwTextNode;
+    const foreign = other.paragraphs[0] as SwTextNode;
+    const manager = new DocumentContentOperationsManager();
+    manager.InsertString(new SwPaM(new SwPosition(first)), "abcd");
+    expect(
+      manager.ReplaceRange(
+        new SwPaM(new SwPosition(first, 2), new SwPosition(first, 1)),
+        first.CaptureTextFragment(1, 2),
+      ),
+    ).toBe(false);
+    expect(
+      throwing(
+        /** Joins non-adjacent nodes. @returns Nothing. */ () =>
+          manager.JoinTextNodes(first, third),
+      ),
+    ).toThrow("adjacent SwTextNodes");
+    expect(
+      throwing(
+        /** Joins nodes from different documents. @returns Nothing. */ () =>
+          manager.JoinTextNodes(first, foreign),
+      ),
+    ).toThrow("adjacent SwTextNodes");
+    const detached = new SwTextNode(
+      writer.nodes,
+      writer.nodes.GetEndOfContent().StartOfSectionNode(),
+    );
+    expect(
+      throwing(
+        /** Inserts into a detached text node. @returns Nothing. */ () =>
+          manager.InsertString(new SwPosition(detached), "x"),
+      ),
+    ).toThrow("connected SwTextNode");
+    for (const offset of [0.5, -1, first.Len() + 1])
+      expect(
+        throwing(
+          /** Restores an invalid join offset. @returns Nothing. */ () =>
+            manager.RestoreJoinedTextNode(first, offset, detached),
+        ),
+      ).toThrow("outside its SwTextNode");
+    const source = new SwPaM(new SwPosition(first, 3), new SwPosition(first, 1));
+    expect(
+      throwing(
+        /** Copies across documents. @returns Nothing. */ () =>
+          manager.CopyRange(source, new SwPosition(foreign)),
+      ),
+    ).toThrow("different documents");
+    expect(
+      throwing(
+        /** Moves across documents. @returns Nothing. */ () =>
+          manager.MoveRange(source, new SwPosition(foreign)),
+      ),
+    ).toThrow("different documents");
+    expect(
+      throwing(
+        /** Moves a range into itself. @returns Nothing. */ () =>
+          manager.MoveRange(source, new SwPosition(first, 2)),
+      ),
+    ).toThrow("into itself");
+    const movedAfter = manager.MoveRange(source, new SwPosition(first, 4));
+    expect(movedAfter.GetContentIndex()).toBe(4);
+    expect(first.text).toBe("adbc");
+    const movedBefore = manager.MoveRange(
+      new SwPaM(new SwPosition(first, 4), new SwPosition(first, 2)),
+      new SwPosition(first),
+    );
+    expect(movedBefore.GetContentIndex()).toBe(2);
+    expect(first.text).toBe("bcad");
+    expect(second.text).toBe("");
   });
 
   it("round-trips the current SwDoc schema and rejects obsolete roots" /** Verifies current snapshot restoration and rejects non-canonical schemas. @returns Nothing; assertions inspect serialization. */, function restoresDocuments(): void {

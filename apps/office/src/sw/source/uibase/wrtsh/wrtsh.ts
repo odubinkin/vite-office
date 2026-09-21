@@ -1,6 +1,6 @@
 /** @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
 
-import { createCommandShell, type SfxShell } from "../../../../sfx2/source/control/dispatch";
+import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
 import type { SfxUndoAction, SfxUndoManager } from "../../../../svl/source/undo/undo";
 import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
@@ -25,7 +25,7 @@ import {
 } from "../../core/txtnode/ndtxt";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
-import { createWriterTextCommandRegistry } from "../shells/writercommands";
+import { SwTextShell } from "../shells/textsh";
 import type { SwDocShell } from "../app/docsh";
 import { SwUndoInsert } from "../../core/undo/unins";
 import {
@@ -65,7 +65,7 @@ import { WriterDialogController } from "../dialog/writer-dialog-controller";
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwModify {
   private activeParagraph: WriterParagraph;
-  private readonly commandShell: SfxShell;
+  private readonly textShell: SwTextShell;
   private composition: WriterCompositionState | undefined;
   private readonly cursor: SwPaM;
   private readonly docShellSubscription: () => void;
@@ -92,10 +92,7 @@ export class SwWrtShell extends SwModify {
           state,
         ) => this.RestoreCursorState(state),
     };
-    this.commandShell = createCommandShell(
-      this,
-      createWriterTextCommandRegistry(this, dialogController),
-    );
+    this.textShell = new SwTextShell(this, dialogController);
     this.listShell = new SwListShell(this);
     this.docShellSubscription = docShell.Subscribe(
       /** Relays one document-shell hint into the editing shell. @param hint - Typed shell hint. @returns Nothing. */ (
@@ -122,7 +119,7 @@ export class SwWrtShell extends SwModify {
   }
   /** Returns the Writer editing command shell for top-priority frame registration. @returns SfxShell adapter. */
   public GetCommandShell(): SfxShell {
-    return this.commandShell;
+    return this.textShell.GetShell();
   }
   /** Returns the context shell that owns list toolbar execution and state. @returns Active list shell. */
   public GetListShell(): SwListShell {

@@ -11,7 +11,7 @@ import {
 } from "../../../../sfx2/source/doc/docfile";
 import type { OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SwDoc } from "../../core/doc/doc";
-import { decodeWriterDocument, encodeWriterDocument } from "./writer-document-codec";
+import { decodeWriterStorageDocument, encodeWriterStorageDocument } from "./writer-storage-codec";
 
 /** Stable identifier for the browser persistence codec, distinct from the Writer model version. */
 export const WRITER_STORAGE_CODEC = "vite-office.writer-browser-storage";
@@ -29,9 +29,9 @@ export type WriterSnapshotState = {
   readonly baselineTag: typeof WRITER_STORAGE_BASELINE_TAG;
   readonly codec: typeof WRITER_STORAGE_CODEC;
   readonly documentState: SerializableValue;
-  readonly modelVersion: 10;
-  readonly schemaVersion: 8;
-  readonly writerModel: SerializableValue;
+  readonly modelVersion: 12;
+  readonly schemaVersion: 10;
+  readonly storageModel: SerializableValue;
 };
 
 /** Validated stored state split into shell and model ownership. */
@@ -50,9 +50,9 @@ export function createWriterSnapshot(
     baselineTag: WRITER_STORAGE_BASELINE_TAG,
     codec: WRITER_STORAGE_CODEC,
     documentState: { ...documentState } as unknown as SerializableValue,
-    modelVersion: 10,
-    schemaVersion: 8,
-    writerModel: encodeWriterDocument(document) as unknown as SerializableValue,
+    modelVersion: 12,
+    schemaVersion: 10,
+    storageModel: encodeWriterStorageDocument(document) as unknown as SerializableValue,
   };
   return Object.freeze({
     id: documentState.id,
@@ -67,16 +67,16 @@ export function restoreWriterSnapshot(
   purpose: "primary" | "recovery",
 ): RestoredWriterSnapshot {
   if (
-    snapshot.state.schemaVersion !== 8 ||
+    snapshot.state.schemaVersion !== 10 ||
     snapshot.state.codec !== WRITER_STORAGE_CODEC ||
-    snapshot.state.modelVersion !== 10 ||
+    snapshot.state.modelVersion !== 12 ||
     snapshot.state.baselineTag !== WRITER_STORAGE_BASELINE_TAG ||
     snapshot.state.baselineCommit !== WRITER_STORAGE_BASELINE_COMMIT
   )
     throw new Error(
       "Stored Writer snapshot schema is unsupported; open an ODT file or discard the browser copy.",
     );
-  const document = decodeWriterDocument(snapshot.state.writerModel);
+  const document = decodeWriterStorageDocument(snapshot.state.storageModel);
   const rawState = snapshot.state.documentState;
   if (!isOfficeDocument(rawState)) throw new Error("Stored Writer lifecycle state is invalid.");
   const restoredState = rawState as unknown as OfficeDocument;

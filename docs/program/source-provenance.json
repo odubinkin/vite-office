@@ -36,8 +36,16 @@
       "rationale": "The focused Writer dialog facade separates typed request ownership from the broader SwTextShell::Execute implementation in upstream textsh1.cxx."
     },
     {
+      "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts",
+      "rationale": "The focused TypeScript text-shell owner maps the supported execute/state subset from upstream textsh1.cxx without reproducing unrelated native shell branches."
+    },
+    {
+      "localPath": "apps/office/src/sw/source/uibase/shells/viewsh.ts",
+      "rationale": "The focused TypeScript view command shell separates slot registration from the broader SwView implementation in upstream view.cxx."
+    },
+    {
       "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
-      "rationale": "The local writercommands.ts module preserves the reviewed CreateSWDrawView responsibility while TypeScript decomposition or public naming requires a different filename from swriter.sdi."
+      "rationale": "The local writercommands.ts module assembles generated SDI slot metadata for the dedicated text and view shell owners; it is intentionally narrower than swriter.sdi."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
@@ -1679,6 +1687,28 @@
       "evidence": {
         "local": [
           {
+            "marker": "openWriterOdtFromPort",
+            "path": "apps/office/src/sw/browser/workflows/writer-document-io.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/workflows/writer-document-io.ts",
+      "rationale": "Terminates browser file-picker, download, and IndexedDB ports and adapts them to explicit SfxMedium and SwDocShell operations.",
+      "responsibilities": [
+        "Adapts browser file selection and downloads to Writer filter operations.",
+        "Adapts durable browser storage ports to confirmed SfxMedium save and open transitions."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser file and IndexedDB APIs replace native file dialogs and storage implementations."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterFileWorkflowController",
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts"
           }
@@ -2138,7 +2168,7 @@
         ],
         "upstream": [
           {
-            "marker": "IDocumentMarkAccess::GetType",
+            "marker": "DocumentContentOperationsManager::InsertString",
             "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx"
           }
         ]
@@ -2147,19 +2177,21 @@
       "localSymbols": [
         "DocumentContentOperationsManager"
       ],
-      "omittedResponsibilities": [
-        "Upstream obligations outside IDocumentMarkAccess::GetType, std::lower_bound, sw::CalcBreaks, o3tl::make_unsigned and the bounded DocumentContentOperationsManager contract remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Implements bounded SwPaM content operations at the pinned LibreOffice `sw/source/core/doc/DocumentContentOperationsManager.cxx` boundary."
-      ],
+    "omittedResponsibilities": [
+      "Tables, redlines, fly frames, sections, non-text nodes, and cross-node copy/move algorithms remain outside the supported Writer slice."
+    ],
+    "preservedResponsibilities": [
+      "Owns supported insert, delete, replace, split, join, copy, and move mutations through SwPosition and SwPaM."
+    ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
       "upstreamSymbols": [
-        "IDocumentMarkAccess::GetType",
-        "std::lower_bound",
-        "sw::CalcBreaks",
-        "o3tl::make_unsigned"
+      "DocumentContentOperationsManager::CopyRange",
+      "DocumentContentOperationsManager::DeleteAndJoin",
+      "DocumentContentOperationsManager::InsertString",
+      "DocumentContentOperationsManager::MoveRange",
+      "DocumentContentOperationsManager::ReplaceRange",
+      "DocumentContentOperationsManager::SplitNode"
       ]
     },
     {
@@ -2376,7 +2408,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "SwNumFormat",
+            "marker": "MakeNumString(numbers",
             "path": "apps/office/src/sw/source/core/doc/number.ts"
           }
         ],
@@ -2393,18 +2425,17 @@
         "SwNumRule"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwNumFormat, SwNumRule, o3tl::toTwips, SwNumRule::GetOutlineRuleName and the bounded numbering contract remain intentionally omitted."
+      "Non-Arabic numbering, bitmap bullets, character styles, outline rules, list-format patterns, and native layout integration remain unsupported and unclaimed."
       ],
       "preservedResponsibilities": [
-        "Calculates browser-visible Writer list markers at the `sw/source/core/doc/number.cxx` ownership boundary without changing editable paragraph text."
+      "Owns the ten-level bullet and Arabic numbering subset, including upstream spacing, upper-level, prefix/suffix, restart, and label construction fields."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/number.cxx",
       "upstreamSymbols": [
-        "SwNumFormat",
-        "SwNumRule",
-        "o3tl::toTwips",
-        "SwNumRule::GetOutlineRuleName"
+      "SwNumFormat::SwNumFormat",
+      "SwNumRule::MakeNumString",
+      "SwNumRule::SwNumRule"
       ]
     },
     {
@@ -3081,6 +3112,27 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterStorageDocumentRecord",
+            "path": "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts",
+      "rationale": "Defines the current durable browser-storage model envelope independently from worker and filter transfer contracts.",
+      "responsibilities": [
+        "Versions and validates the durable Writer model payload without compatibility migration."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "Browser snapshot persistence has no native LibreOffice JSON model contract."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterSnapshotState",
             "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts"
           }
@@ -3171,6 +3223,27 @@
       "stackDivergence": {
         "kind": "local-infrastructure",
         "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "OdtWriterTransferRecord",
+            "path": "apps/office/src/sw/source/filter/xml/odt-transfer.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/odt-transfer.ts",
+      "rationale": "Defines the current ODT worker structured-clone graph independently from durable browser storage.",
+      "responsibilities": [
+        "Versions and validates the graph transferred across the browser Worker boundary."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "Dedicated Worker structured-clone transport is a browser-only filter execution boundary."
       },
       "status": "local-only"
     },
@@ -3380,10 +3453,10 @@
         "SwDocShell"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwDocShell, SwDocShell::InitInterface_Impl, SwDocShell::InsertGeneratedStream, sw::XTextRangeToSwPaM and the bounded SwDocShell contract remain intentionally omitted."
+      "Native storage implementations, file dialogs, printing, and unsupported Writer filter families remain outside the browser Writer slice."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded Writer document-shell load/save boundary from pinned `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`."
+      "Owns Writer model replacement, filter invocation, history, recovery hooks, and SfxMedium lifecycle while browser port orchestration terminates under sw/browser/workflows."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/app/docsh.cxx",
@@ -3497,6 +3570,71 @@
         "SwListShell::Execute",
         "SwListShell::GetState",
         "SwListShell::SwListShell"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwTextShell",
+            "path": "apps/office/src/sw/source/uibase/shells/textsh.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwTextShell::Execute",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts",
+      "localSymbols": [
+        "SwTextShell"
+      ],
+      "omittedResponsibilities": [
+        "Native-only text-shell slots and unsupported Writer feature families remain omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns registration of the supported text execute/state slots over the active SwWrtShell target."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
+      "upstreamSymbols": [
+        "SwTextShell::Execute",
+        "SwTextShell::GetState"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwViewCommandShell",
+            "path": "apps/office/src/sw/source/uibase/shells/viewsh.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwView::SwView",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/shells/viewsh.ts",
+      "localSymbols": [
+        "SwViewCommandShell"
+      ],
+      "omittedResponsibilities": [
+        "Native VCL view construction and unsupported view slots remain omitted."
+      ],
+      "preservedResponsibilities": [
+        "Separates supported view slot registration from SwView frame and lifecycle coordination."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/uiview/view.cxx",
+      "upstreamSymbols": [
+        "SwView::SwView"
       ]
     },
     {

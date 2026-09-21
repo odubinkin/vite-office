@@ -3,22 +3,15 @@
  * `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
  */
 
-import {
-  createDocument,
-  SfxObjectShell,
-  type OfficeDocument,
-} from "../../../../sfx2/source/doc/objsh";
+import { SfxObjectShell, type OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import {
   acquireSfxMedium,
   type DocumentSnapshot,
-  type PrimarySavePort,
   type SfxMedium,
   type SfxMediumInput,
   type SfxMediumInputOrInstance,
   type SfxMediumOperation,
-  type StoredDocumentOpenPort,
 } from "../../../../sfx2/source/doc/docfile";
-import type { DocumentExportPort, DocumentOpenPort } from "../../../../svl/source/misc/storage";
 import { type SfxUndoAction, type SfxUndoSavePosition } from "../../../../svl/source/undo/undo";
 import { ODT_MIMETYPE } from "../../../../package/source/manifest/ManifestExport";
 import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
@@ -26,9 +19,7 @@ import type { SwModelHint } from "../../../inc/hints";
 import { SwDoc } from "../../core/doc/doc";
 import {
   createWriterSnapshot,
-  loadWriterDocument,
   restoreWriterSnapshot,
-  saveWriterDocument,
   type WriterSnapshotState,
 } from "../../filter/basflt/writer-storage";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
@@ -234,139 +225,6 @@ export class SwDocShell extends SfxObjectShell {
     medium?: SfxMediumInput,
   ): Promise<SwDoc> {
     return medium === undefined ? this.Open(bytes, metadata) : this.Open(bytes, metadata, medium);
-  }
-
-  /** Coordinates browser file selection and atomic Writer load at the document-shell boundary. @param port - Browser open port. @returns Open or cancellation result. */
-  public async OpenFromPort(
-    port: DocumentOpenPort,
-  ): Promise<Readonly<{ name?: string; status: "cancelled" | "opened" }>> {
-    const generation = this.documentState.contentGeneration;
-    this.SetOperation("open", "pending", generation);
-    try {
-      const opened = await port.open(`${SwDocShell.ODT_MEDIA_TYPE},.odt`);
-      if (opened === undefined) {
-        this.SetOperation("none", "idle");
-        return { status: "cancelled" };
-      }
-      const title = opened.name.replace(/\.odt$/i, "") || "Imported Writer Document";
-      await this.Load(
-        opened.bytes,
-        createDocument({ id: `writer-odt:${opened.name}`, suiteId: "writer", title }),
-        {
-          filterId: "writer8",
-          kind: "odt-source",
-          mediaType: SwDocShell.ODT_MEDIA_TYPE,
-          name: opened.name,
-          source: { kind: "file", reference: opened.reference },
-        },
-      );
-      return { name: opened.name, status: "opened" };
-    } catch (error) {
-      this.SetOperation("open", "failed", generation, getErrorMessage(error));
-      throw error;
-    }
-  }
-
-  /** Serializes and starts an ODT download without treating browser download as confirmed save. @param port - Browser export port. @param filename - Download name. @returns Completion after serialization. */
-  public async SaveOdtToPort(port: DocumentExportPort, filename: string): Promise<void> {
-    const bytes = await this.SerializeOdt();
-    this.Download(
-      {
-        downloadTarget: filename,
-        filterId: "writer8",
-        kind: "download",
-        mediaType: SwDocShell.ODT_MEDIA_TYPE,
-        name: filename,
-      },
-      /** Starts the browser download. @returns Nothing. */ () =>
-        port.export({ data: bytes, mediaType: SwDocShell.ODT_MEDIA_TYPE, name: filename }),
-    );
-  }
-
-  /** Starts a plain-text export from the canonical Writer graph. @param port - Browser export port. @param filename - Download name. @returns Completion after the port settles. */
-  public ExportTextToPort(port: DocumentExportPort, filename: string): Promise<void> {
-    return this.Export(
-      {
-        downloadTarget: filename,
-        filterId: "Text",
-        kind: "download",
-        mediaType: "text/plain;charset=utf-8",
-        name: filename,
-      },
-      /** Exports canonical paragraph text. @param document - Active Writer model. @returns Port completion. */ (
-        document,
-      ) =>
-        port.export({
-          data: document.paragraphs
-            .map(
-              /** Projects one paragraph to plain text. @param paragraph - Writer paragraph. @returns Text content. */ (
-                paragraph,
-              ) => paragraph.text,
-            )
-            .join("\n"),
-          mediaType: "text/plain;charset=utf-8",
-          name: filename,
-        }),
-    );
-  }
-
-  /** Saves through the current or newly adopted browser-local primary medium. @param port - Primary save port. @returns Completion after acknowledgement. */
-  public async SaveToPrimaryPort(port: PrimarySavePort<WriterSnapshotState>): Promise<void> {
-    const persist =
-      /** Saves one captured Writer model. @param document - Captured model. @returns Confirmed generation. */ async (
-        document: SwDoc,
-      ): Promise<SwPrimarySaveEvidence> => {
-        const saved = await saveWriterDocument(port, document, this.GetDocumentState());
-        return { generation: saved.snapshot.version };
-      };
-    const state = this.GetDocumentState();
-    const medium = this.GetMedium();
-    if (
-      medium.kind === "browser-local" &&
-      medium.destination.kind === "indexeddb" &&
-      medium.destination.key === state.id
-    )
-      await this.Save(persist);
-    else
-      await this.SaveAs(
-        {
-          indexedDbKey: state.id,
-          kind: "browser-local",
-          name: state.title,
-          source: medium.source,
-        },
-        persist,
-      );
-  }
-
-  /** Loads the current identity from the primary browser store and atomically adopts its medium. @param port - Stored-document open port. @returns Loaded or missing state. */
-  public async LoadFromPrimaryPort(
-    port: StoredDocumentOpenPort<WriterSnapshotState>,
-  ): Promise<"loaded" | "missing"> {
-    const generation = this.documentState.contentGeneration;
-    this.SetOperation("open", "pending", generation);
-    try {
-      const result = await loadWriterDocument(port, this.GetDocumentState().id);
-      if (result.status === "missing") {
-        this.SetOperation("none", "idle");
-        return "missing";
-      }
-      this.ReplaceDocument(result.document, result.documentState, {
-        filterId: "writer-browser-snapshot",
-        indexedDbKey: result.documentState.id,
-        kind: "browser-local",
-        lastOperation: {
-          generation: result.documentState.contentGeneration,
-          operation: "open",
-          state: "succeeded",
-        },
-        name: result.documentState.title,
-      });
-      return "loaded";
-    } catch (error) {
-      this.SetOperation("open", "failed", generation, getErrorMessage(error));
-      throw error;
-    }
   }
 
   /** Serializes a captured active model/state snapshot without changing medium state. @param options - Filter controls. @returns ODT bytes. */
@@ -581,7 +439,7 @@ export class SwDocShell extends SfxObjectShell {
   }
 
   /** Updates medium operation feedback and publishes typed invalidation. @param operation - Operation kind. @param state - Operation state. @param generation - Captured generation. @param message - Optional failure. @returns Nothing. */
-  private SetOperation(
+  public SetMediumOperation(
     operation: SfxMediumOperation,
     state: SfxMedium["lastOperation"]["state"],
     generation?: number,

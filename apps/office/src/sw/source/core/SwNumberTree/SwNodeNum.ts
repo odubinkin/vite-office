@@ -50,4 +50,19 @@ export class SwNodeNum {
   public GetNumber(): number {
     return this.value;
   }
+
+  /** Returns the root-to-current counter vector used by SwNumRule::MakeNumString. @returns Ordered level counters. */
+  public GetNumberVector(): readonly number[] {
+    const numbers = Array.from(
+      { length: this.level + 1 },
+      /** Initializes one missing level counter. @returns Zero. */ () => 0,
+    );
+    numbers[this.level] = this.GetNumber();
+    let current = this.GetParent();
+    while (current !== undefined) {
+      numbers[current.level] = current.GetNumber();
+      current = current.GetParent();
+    }
+    return numbers;
+  }
 }

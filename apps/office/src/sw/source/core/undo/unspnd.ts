@@ -1,6 +1,7 @@
 /** @fileoverview Implements the bounded SwUndoSplitNode action from pinned LibreOffice unspnd.cxx. */
 
 import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwPosition } from "../crsr/pam";
 import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
 
 /** Reversible paragraph split retaining node references and one content offset. */
@@ -27,16 +28,16 @@ export class SwUndoSplitNode extends SwUndo {
     const trailing = this.trailingParagraph;
     if (trailing === undefined)
       throw new Error("SwUndoSplitNode has not created its trailing node.");
-    source.AppendTextNode(trailing);
-    document.nodes.removeTextNode(trailing);
+    document.GetDocumentContentOperationsManager().JoinTextNodes(source, trailing);
   }
 
   /** Splits the leading node at the retained content offset. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
     const document = context.GetDoc();
     const source = GetUndoTextNode(document, this.sourceParagraph);
-    const provisional = source.SplitContent(this.offset);
-    document.nodes.insertTextNodeAfter(source, provisional);
+    const splitPosition = new SwPosition(source, this.offset, "redline");
+    const provisional = document.GetDocumentContentOperationsManager().SplitNode(splitPosition);
+    splitPosition.Dispose();
     if (this.trailingParagraph === undefined) this.trailingParagraph = provisional;
     else document.nodes.replaceTextNode(provisional, this.trailingParagraph);
     const trailing = this.trailingParagraph;

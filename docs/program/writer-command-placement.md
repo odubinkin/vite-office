@@ -9,7 +9,8 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 
 - `sw/uiconfig/swriter/menubar/menubar.xml` places New, Open, Save, and Save As
   in **File**. The browser exposes **New**, **Open ODT…**, and **Save as ODT…**
-  through `SwDocShell`; browser-local IndexedDB persistence and plain-text
+  through the view shell and browser workflow adapters into `SwDocShell`;
+  browser-local IndexedDB persistence and plain-text
   download remain explicitly labelled secondary commands in the same menu.
 - The same file places Undo and Redo in **Edit**.
 - It places `.uno:Cut`, `.uno:Copy`, and `.uno:Paste` in **Edit** and the
@@ -48,6 +49,11 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
   **Ctrl/Cmd+I**, and **Ctrl/Cmd+U** invoke the same command shell.
 - `WriterCommands.xcu` declares Default Paragraph and Heading 1 style commands;
   the bounded browser style choices are available in **Styles**.
+
+Slot descriptors remain declarative in `writercommands.ts`. Registration and
+dispatcher priority are owned by the dedicated `SwTextShell`, `SwListShell`, and
+`SwViewCommandShell` modules; `SwWrtShell` supplies cursor/edit operations and
+`SwView` supplies frame/lifecycle coordination without constructing registries.
 
 `sw/uiconfig/swriter/toolbar/standardbar.xml` supplies Open, Save, Cut, Copy,
 Paste, Undo, and Redo, but no generic plain-text download command. Accordingly,

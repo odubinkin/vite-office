@@ -1787,6 +1787,34 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/workflows/writer-document-io.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-workflows",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0114",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/workflows/writer-document-io.ts#openWriterOdtFromPort",
+          "apps/office/src/sw/browser/workflows/writer-document-io.ts#saveWriterToPrimaryPort"
+        ],
+        "justification": "Terminates browser file-picker, download, and IndexedDB ports and adapts them to explicit SfxMedium and SwDocShell lifecycle operations without moving browser contracts into uibase.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1808,7 +1836,7 @@
         "evidence": [
           "apps/office/src/sw/browser/workflows/writer-workflows.ts#WriterFileWorkflowController"
         ],
-        "justification": "Adapts browser file, clipboard, download, and IndexedDB ports while document operations remain owned by SwDocShell and transfer creation remains owned by SwTransferable/SwWrtShell.",
+        "justification": "Coordinates browser-facing Writer commands while file and durable-storage ports terminate in writer-document-io and transfer creation remains owned by SwTransferable/SwWrtShell.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -2206,20 +2234,24 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts#DocumentContentOperationsManager",
-          "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx#IDocumentMarkAccess::GetType"
+          "apps/office/src/sw/source/core/doc/writer-model.test.ts#appliesContentOperations",
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx#DocumentContentOperationsManager::InsertString",
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentContentOperationsManager.cxx#DocumentContentOperationsManager::SplitNode"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/DocumentContentOperationsManager.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Owns the supported same-text-node insert, delete, replace, split, join, copy, and move mutations through SwPosition and SwPaM. Tables, redlines, fly frames, sections, and cross-node range algorithms remain unimplemented and unclaimed.",
         "knownViolations": [],
         "localSymbols": [
           "DocumentContentOperationsManager"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
         "upstreamSymbols": [
-          "IDocumentMarkAccess::GetType",
-          "std::lower_bound",
-          "sw::CalcBreaks",
-          "o3tl::make_unsigned"
+          "DocumentContentOperationsManager::CopyRange",
+          "DocumentContentOperationsManager::DeleteAndJoin",
+          "DocumentContentOperationsManager::InsertString",
+          "DocumentContentOperationsManager::MoveRange",
+          "DocumentContentOperationsManager::ReplaceRange",
+          "DocumentContentOperationsManager::SplitNode"
         ]
       }
     },
@@ -2508,21 +2540,21 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/doc/number.ts#SwNumFormat",
-          "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumFormat"
+          "apps/office/src/sw/source/core/doc/number.test.ts#validatesRules",
+          "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule::MakeNumString"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/number.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Models the exact current bullet and Arabic-numbering subset with ten levels, label-alignment spacing, include-upper-levels, prefix/suffix, restart values, bullet fonts, and model-owned label construction. Other numbering types are rejected before mutation and remain unclaimed.",
         "knownViolations": [],
         "localSymbols": [
           "SwNumFormat",
           "SwNumRule"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/core/doc/number.cxx",
         "upstreamSymbols": [
-          "SwNumFormat",
-          "SwNumRule",
-          "o3tl::toTwips",
-          "SwNumRule::GetOutlineRuleName"
+          "SwNumFormat::SwNumFormat",
+          "SwNumRule::MakeNumString",
+          "SwNumRule::SwNumRule"
         ]
       }
     },
@@ -3145,6 +3177,33 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0114",
+        "CAP-0131",
+        "CAP-0132"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts#WriterStorageDocumentRecord"
+        ],
+        "justification": "Defines the current durable browser-storage model envelope separately from worker and live filter contracts and intentionally rejects every retired schema.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
       "classification": "local-infrastructure",
       "state": "active",
@@ -3254,6 +3313,32 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/filter/xml/odt-transfer.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0130"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/odt-transfer.ts#OdtWriterTransferRecord"
+        ],
+        "justification": "Defines the versioned structured-clone graph used only by the ODT worker and keeps it distinct from durable browser storage and the live Writer document.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/filter/xml/swxml.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -3270,9 +3355,10 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/filter/xml/swxml.ts#ODT_XML_STREAM_BYTE_LIMIT",
+          "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts#rejectsMalformedPackages",
           "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx#XMLReader::XMLReader"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/swxml.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Owns ODT package-stream import ordering for mimetype, manifest, styles.xml, content.xml, and optional meta.xml with ZIP/XML resource ceilings. Encryption, ZIP64, signatures, and absent or malformed mandatory streams are rejected before document replacement.",
         "knownViolations": [],
         "localSymbols": [
           "ODT_XML_STREAM_BYTE_LIMIT",
@@ -3281,7 +3367,7 @@
           "SwXMLReader",
           "readOdtDocument"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/filter/xml/swxml.cxx",
         "upstreamSymbols": [
           "XMLReader::XMLReader",
@@ -3308,9 +3394,10 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/filter/xml/wrtxml.ts#ODT_EXPORT_BYTE_LIMIT",
+          "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts#roundTripsWriterOdt",
           "vendor/libreoffice-reference/sw/source/filter/xml/wrtxml.cxx#SwXMLWriter"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/wrtxml.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Owns deterministic STORE-only export of mimetype, manifest, styles.xml, content.xml, and meta.xml with a complete-output ceiling. Compression choice is a browser adaptation; unsupported Writer state is rejected before package emission.",
         "knownViolations": [],
         "localSymbols": [
           "ODT_EXPORT_BYTE_LIMIT",
@@ -3319,7 +3406,7 @@
           "SwXMLWriter",
           "writeOdtDocument"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/filter/xml/wrtxml.cxx",
         "upstreamSymbols": [
           "SwXMLWriter",
@@ -3346,16 +3433,17 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/filter/xml/xmlexp.ts#exportStylesXml",
+          "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts#rejectsUnsupportedCanonicalWriterState",
           "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx#SwXMLExport::SwXMLExport"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/xmlexp.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Exports the supported paragraph/style/list/font/hyperlink subset and exact implemented pooled-item properties. Tables, images, fields, sections, tracked changes, annotations, embedded objects, and unknown item IDs are rejected rather than covered by a generic round-trip claim.",
         "knownViolations": [],
         "localSymbols": [
           "exportStylesXml",
           "exportContentXml",
           "exportMetaXml"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/filter/xml/xmlexp.cxx",
         "upstreamSymbols": [
           "SwXMLExport::SwXMLExport",
@@ -3415,15 +3503,16 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/filter/xml/xmlimp.ts#importWriterXml",
+          "apps/office/src/xmloff/source/text/txtpara.test.ts#rejectsUnsupportedContextStructures",
           "vendor/libreoffice-reference/sw/source/filter/xml/xmlimp.cxx#SwXMLBodyContext_Impl::SwXMLBodyContext_Impl"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/filter/xml/xmlimp.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Imports supported Writer paragraph, style, list, font, hyperlink, whitespace, alignment, and character-property elements through canonical SwDoc operations. Known unsupported content structures are rejected; unrelated style families remain explicitly ignored and unclaimed.",
         "knownViolations": [],
         "localSymbols": [
           "importWriterXml",
           "parseOdfXml"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/filter/xml/xmlimp.cxx",
         "upstreamSymbols": [
           "SwXMLBodyContext_Impl::SwXMLBodyContext_Impl",
@@ -3456,12 +3545,12 @@
           "apps/office/src/sw/source/uibase/app/docsh.ts#SwDocShell",
           "vendor/libreoffice-reference/sw/source/uibase/app/docsh.cxx#SwDocShell"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/app/docsh.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Owns Writer model replacement, filter invocation, history, lifecycle hooks, recovery snapshot hooks, and SfxMedium transitions. Browser file-picker, download, and IndexedDB port orchestration is confined to sw/browser/workflows/writer-document-io.ts.",
         "knownViolations": [],
         "localSymbols": [
           "SwDocShell"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/uibase/app/docsh.cxx",
         "upstreamSymbols": [
           "SwDocShell",
@@ -3577,6 +3666,79 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/uibase/shells/textsh.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "command-shell",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0112",
+        "CAP-0135"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/shells/textsh.ts#SwTextShell",
+          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SwTextShell::Execute"
+        ],
+        "justification": "Owns registration of the supported text, character, paragraph, history, and hyperlink slots as a dedicated text context shell while SwWrtShell supplies cursor operations.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwTextShell"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/uibase/shells/textsh1.cxx",
+        "upstreamSymbols": [
+          "SwTextShell::Execute",
+          "SwTextShell::GetState",
+          "SwTextShell::SwTextShell"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/shells/viewsh.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "command-shell",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0103",
+        "CAP-0104",
+        "CAP-0106",
+        "CAP-0110",
+        "CAP-0113",
+        "CAP-0114"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/shells/viewsh.ts#SwViewCommandShell",
+          "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx#SwView"
+        ],
+        "justification": "Owns registration of lifecycle, clipboard, and chrome slots outside SwView so the view retains frame and document coordination rather than command descriptor construction.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwViewCommandShell"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/uibase/uiview/view.cxx",
+        "upstreamSymbols": [
+          "SwView"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -3602,12 +3764,12 @@
         "behaviorStatus": "unverified",
         "contractStatus": "unverified",
         "defaultStatus": "unverified",
-        "divergenceClass": "none",
+        "divergenceClass": "X",
         "evidence": [
-          "apps/office/src/sw/source/uibase/shells/writercommands.ts#WriterCharacterCommandArguments",
-          "vendor/libreoffice-reference/sw/sdi/swriter.sdi#CreateSWDrawView"
+          "apps/office/src/sw/source/uibase/shells/writercommands.ts#createWriterCommandRegistry",
+          "vendor/libreoffice-reference/sw/sdi/swriter.sdi#interface Text"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/sdi/swriter.sdi; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Provides TypeScript descriptor assembly shared by the dedicated text and view command shells; no single upstream source owns this browser/Sfx adapter and no semantic parity is claimed for the module itself.",
         "knownViolations": [],
         "localSymbols": [
           "WriterCharacterCommandArguments",
@@ -3616,13 +3778,10 @@
           "createWriterTextCommandRegistry",
           "createWriterViewCommandRegistry"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "divergent",
         "upstreamFile": "sw/sdi/swriter.sdi",
         "upstreamSymbols": [
-          "CreateSWDrawView",
-          "AcceptTrackedChanges",
-          "TrackChanges",
-          "TrackChangesBar"
+          "interface Text"
         ]
       }
     },

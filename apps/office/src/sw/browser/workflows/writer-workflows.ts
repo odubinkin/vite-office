@@ -15,6 +15,13 @@ import { SwDocShell } from "../../source/uibase/app/docsh";
 import type { WriterViewControllerFactory } from "../../source/uibase/uiview/view";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
 import { SwViewOption } from "../../inc/viewopt";
+import {
+  exportWriterTextToPort,
+  loadWriterFromPrimaryPort,
+  openWriterOdtFromPort,
+  saveWriterOdtToPort,
+  saveWriterToPrimaryPort,
+} from "./writer-document-io";
 
 /** Browser Cut request after native clipboard-event adaptation. */
 export interface WriterCutCommandArguments {
@@ -69,7 +76,7 @@ export class WriterFileWorkflowController {
 
   /** Selects and atomically opens one ODT. @returns Completion after browser feedback state. */
   public async OpenOdt(): Promise<void> {
-    await this.docShell.OpenFromPort(this.ports.documentOpen);
+    await openWriterOdtFromPort(this.docShell, this.ports.documentOpen);
   }
 
   /** Downloads the active document through Writer's ODT filter. @returns Completion after export. */
@@ -78,13 +85,13 @@ export class WriterFileWorkflowController {
       this.docShell.GetDocumentState().title,
       ".odt",
     );
-    await this.docShell.SaveOdtToPort(this.ports.documentExport, filename);
+    await saveWriterOdtToPort(this.docShell, this.ports.documentExport, filename);
   }
 
   /** Starts a plain-text export through the injected download adapter. @returns Completion after the browser port settles. */
   public ExportText(): Promise<void> {
     const filename = `${this.docShell.GetDocumentState().title}.txt`;
-    return this.docShell.ExportTextToPort(this.ports.documentExport, filename);
+    return exportWriterTextToPort(this.docShell, this.ports.documentExport, filename);
   }
 }
 
@@ -107,7 +114,7 @@ export class WriterLocalStorageController {
     if (this.ports.primarySave === undefined) {
       throw new WriterPlatformError("storage-unavailable", "Browser storage is unavailable.");
     }
-    await this.docShell.SaveToPrimaryPort(this.ports.primarySave);
+    await saveWriterToPrimaryPort(this.docShell, this.ports.primarySave);
   }
 
   /** Loads the active identity from browser-local storage. @returns Completion after replacement. */
@@ -115,7 +122,7 @@ export class WriterLocalStorageController {
     if (this.ports.storedDocumentOpen === undefined) {
       throw new WriterPlatformError("storage-unavailable", "Browser storage is unavailable.");
     }
-    await this.docShell.LoadFromPrimaryPort(this.ports.storedDocumentOpen);
+    await loadWriterFromPrimaryPort(this.docShell, this.ports.storedDocumentOpen);
   }
 }
 

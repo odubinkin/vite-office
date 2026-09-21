@@ -153,8 +153,7 @@ export class WriterViewProjection {
           node.list.kind === "bullet"
             ? node.GetNumRule()?.GetNumFormat(node.list.level).GetBulletChar()
             : undefined;
-        const number = node.list.kind === "numbered" ? node.GetListItemNumber() : undefined;
-        const listMarker = bulletChar ?? (number === undefined ? undefined : `${number}.`);
+        const listMarker = node.GetListLabel();
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         return Object.freeze({
           alignment: node.alignment,

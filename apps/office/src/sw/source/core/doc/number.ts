@@ -10,8 +10,10 @@ export class SwNumFormat {
   private readonly bulletFont: string;
   private readonly firstLineIndent: number;
   private readonly indentAt: number;
+  private readonly includeUpperLevels: number;
   private readonly labelFollowedBy: "listtab" | "nothing" | "space";
   private readonly listTabPosition: number;
+  private readonly positionAndSpaceMode: "label-alignment";
   private readonly prefix: string;
   private readonly start: number;
   private readonly suffix: string;
@@ -23,8 +25,10 @@ export class SwNumFormat {
       bulletFont?: string;
       firstLineIndent?: number;
       indentAt?: number;
+      includeUpperLevels?: number;
       labelFollowedBy?: "listtab" | "nothing" | "space";
       listTabPosition?: number;
+      positionAndSpaceMode?: "label-alignment";
       prefix?: string;
       start?: number;
       suffix?: string;
@@ -37,13 +41,21 @@ export class SwNumFormat {
     this.bulletFont = options.bulletFont ?? (kind === "bullet" ? "OpenSymbol" : "");
     this.firstLineIndent = options.firstLineIndent ?? -360;
     this.indentAt = options.indentAt ?? 720;
+    this.includeUpperLevels = options.includeUpperLevels ?? 1;
     this.labelFollowedBy = options.labelFollowedBy ?? "listtab";
     this.listTabPosition = options.listTabPosition ?? this.indentAt;
+    this.positionAndSpaceMode = options.positionAndSpaceMode ?? "label-alignment";
     this.prefix = options.prefix ?? "";
     this.start = options.start ?? 1;
     this.suffix = options.suffix ?? (kind === "numbered" ? "." : "");
     if (!Number.isInteger(this.start) || this.start < 0)
       throw new Error("SwNumFormat start value is invalid.");
+    if (
+      !Number.isInteger(this.includeUpperLevels) ||
+      this.includeUpperLevels < 1 ||
+      this.includeUpperLevels > WRITER_MAX_LIST_LEVEL + 1
+    )
+      throw new Error("SwNumFormat included upper-level count is invalid.");
   }
 
   /** Returns the marker family for this list level. @returns Bullet or numbered kind. */
@@ -68,6 +80,10 @@ export class SwNumFormat {
   public GetIndentAt(): number {
     return this.indentAt;
   }
+  /** Returns how many trailing list levels contribute to a numeric label. @returns Included level count. */
+  public GetIncludeUpperLevels(): number {
+    return this.includeUpperLevels;
+  }
   /** Returns the label-follow separator mode. @returns Separator mode. */
   public GetLabelFollowedBy(): "listtab" | "nothing" | "space" {
     return this.labelFollowedBy;
@@ -75,6 +91,14 @@ export class SwNumFormat {
   /** Returns the list-tab position in twips. @returns Tab position. */
   public GetListtabPos(): number {
     return this.listTabPosition;
+  }
+  /** Returns the supported upstream spacing mode. @returns Label-alignment mode. */
+  public GetPositionAndSpaceMode(): "label-alignment" {
+    return this.positionAndSpaceMode;
+  }
+  /** Returns the upstream numbering type represented by this bounded format. @returns Arabic or character-special. */
+  public GetNumberingType(): "arabic" | "char-special" {
+    return this.kind === "bullet" ? "char-special" : "arabic";
   }
   /** Returns the label prefix. @returns Prefix. */
   public GetPrefix(): string {
@@ -95,8 +119,10 @@ export class SwNumFormat {
       bulletFont: this.bulletFont,
       firstLineIndent: this.firstLineIndent,
       indentAt: this.indentAt,
+      includeUpperLevels: this.includeUpperLevels,
       labelFollowedBy: this.labelFollowedBy,
       listTabPosition: this.listTabPosition,
+      positionAndSpaceMode: this.positionAndSpaceMode,
       prefix: this.prefix,
       start: this.start,
       suffix: this.suffix,
@@ -157,6 +183,16 @@ export class SwNumRule {
     return this.automatic;
   }
 
+  /** Formats one validated Writer number vector using the current level's prefix, suffix, and upper-level count. @param numbers - Root-to-current counters. @param level - Current zero-based level. @returns Visible label. */
+  public MakeNumString(numbers: readonly number[], level: number): string {
+    const format = this.GetNumFormat(level);
+    if (format.GetNumberingType() === "char-special") return format.GetBulletChar();
+    if (numbers.length <= level || numbers[level] === undefined)
+      throw new Error("SwNumRule number vector does not contain the requested level.");
+    const first = Math.max(0, level + 1 - format.GetIncludeUpperLevels());
+    return `${format.GetPrefix()}${numbers.slice(first, level + 1).join(".")}${format.GetSuffix()}`;
+  }
+
   /** Creates an independent numbering rule. @returns Cloned rule. */
   public clone(): SwNumRule {
     return new SwNumRule(this.name, this.formats, this.defaultListId, this.automatic);
@@ -177,8 +213,10 @@ function createUniformFormats(
         bulletFont: kind === "bullet" ? "OpenSymbol" : "",
         firstLineIndent: -360,
         indentAt,
+        includeUpperLevels: 1,
         labelFollowedBy: "listtab",
         listTabPosition: indentAt,
+        positionAndSpaceMode: "label-alignment",
         prefix: "",
         start: 1,
         suffix: kind === "numbered" ? "." : "",

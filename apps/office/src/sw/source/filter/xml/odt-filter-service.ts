@@ -5,12 +5,12 @@
 
 import type { WorkerErrorCategory } from "../../../../framework/source/services/worker-protocol";
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
-import {
-  decodeWriterDocument,
-  encodeWriterDocument,
-  type WriterDocumentRecord,
-} from "../basflt/writer-document-codec";
 import type { SwDoc } from "../../core/doc/doc";
+import {
+  createOdtWriterTransfer,
+  restoreOdtWriterTransfer,
+  type OdtWriterTransferRecord,
+} from "./odt-transfer";
 import { readOdtDocument, type OdtImportProgressStage } from "./swxml";
 import { writeOdtDocument, type OdtExportProgressStage } from "./wrtxml";
 
@@ -41,13 +41,13 @@ export interface OdtFilterOperationOptions {
 
 /** Structured-clone boundary used only to cross the browser Worker port. */
 export interface OdtFilterDocument {
-  readonly document: WriterDocumentRecord;
+  readonly document: OdtWriterTransferRecord;
   readonly metadata: Readonly<{ title: string }>;
 }
 
 /** Captures the canonical graph for the Worker adaptation without shell lifecycle state. @param document - Canonical Writer graph. @param title - Shell-owned title copied as filter metadata. @returns Cloneable filter input. */
 export function createOdtFilterDocument(document: SwDoc, title: string): OdtFilterDocument {
-  return { document: encodeWriterDocument(document), metadata: { title } };
+  return { document: createOdtWriterTransfer(document), metadata: { title } };
 }
 
 /** Restores a Worker transfer into a canonical graph and filter metadata. @param input - Cloneable filter value. @returns Decoded graph and title. */
@@ -57,7 +57,7 @@ export function restoreOdtFilterDocument(input: OdtFilterDocument): {
 } {
   if (!isRecord(input) || !isRecord(input.metadata) || typeof input.metadata.title !== "string")
     throw new Error("ODT filter document metadata is invalid.");
-  return { document: decodeWriterDocument(input.document), title: input.metadata.title };
+  return { document: restoreOdtWriterTransfer(input.document), title: input.metadata.title };
 }
 
 /** Asynchronous filter contract returning structured-clone values only. */

@@ -12,6 +12,7 @@ import {
   normalizeOdtFilterError,
   OdtFilterError,
 } from "./odt-filter-service";
+import { restoreOdtWriterTransfer } from "./odt-transfer";
 
 /** Creates deterministic Writer metadata. @returns New metadata. */
 function metadata() {
@@ -59,7 +60,8 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       "import:mapping",
     ]);
     expect(imported.document).toMatchObject({
-      textNodes: [{ hints: [], text: "worker body" }],
+      document: { textNodes: [{ hints: [], text: "worker body" }] },
+      transferVersion: 2,
     });
   });
 
@@ -112,5 +114,13 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       category: "format",
       message: "plain failure",
     });
+  });
+
+  it("rejects malformed ODT worker transfers without migration" /** Verifies the worker boundary accepts only its current envelope. @returns Nothing. */, () => {
+    for (const transfer of [null, [], {}, { transferVersion: 1 }, { transferVersion: 2 }])
+      expect(
+        /** Restores one malformed worker transfer. @returns Invalid result. */ () =>
+          restoreOdtWriterTransfer(transfer),
+      ).toThrow("schema is unsupported");
   });
 });

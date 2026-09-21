@@ -18,6 +18,7 @@ import {
   saveWriterDocument,
   type WriterSnapshotState,
 } from "../../filter/basflt/writer-storage";
+import { decodeWriterStorageDocument } from "../../filter/basflt/writer-storage-codec";
 
 /** Live target-schema storage fixture. */
 interface WriterFixture {
@@ -64,9 +65,9 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
         baselineTag: "libreoffice-26.8.0.2",
         codec: "vite-office.writer-browser-storage",
         documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
-        modelVersion: 10,
-        schemaVersion: 8,
-        writerModel: { swModelVersion: 11 },
+        modelVersion: 12,
+        schemaVersion: 10,
+        storageModel: { document: { swModelVersion: 12 }, storageModelVersion: 1 },
       },
       version: 1,
     });
@@ -133,7 +134,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     ).toThrow("schema is unsupported");
     const wrongSchema = {
       ...current,
-      state: { ...current.state, schemaVersion: 7 as 8 },
+      state: { ...current.state, schemaVersion: 9 as 10 },
     };
     expect(
       /** Restores an unknown schema version. @returns Invalid result. */ () =>
@@ -149,6 +150,17 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
       expect(
         /** Rejects one non-current storage identity without migration. @returns Invalid result. */ () =>
           restoreWriterSnapshot({ ...current, state: state as WriterSnapshotState }, "primary"),
+      ).toThrow("schema is unsupported");
+    for (const storageModel of [
+      null,
+      [],
+      {},
+      { storageModelVersion: 0 },
+      { storageModelVersion: 1 },
+    ])
+      expect(
+        /** Rejects one malformed durable model envelope. @returns Invalid result. */ () =>
+          decodeWriterStorageDocument(storageModel),
       ).toThrow("schema is unsupported");
   });
 

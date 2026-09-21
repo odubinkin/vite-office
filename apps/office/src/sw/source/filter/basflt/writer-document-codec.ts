@@ -1,4 +1,4 @@
-/** @fileoverview Structured Writer graph transport shared by filter and browser persistence boundaries. */
+/** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
 
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -17,21 +17,23 @@ import { SwFormatINetFormat } from "../../core/txtnode/fmtinfmt";
 import { SwFormatAutoFormat, SwTextAttr } from "../../core/txtnode/txatbase";
 import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 
-/** Primitive persistence record for one numbering level. */
+/** Primitive graph record for one numbering level. */
 interface WriterNumberFormatRecord {
   readonly bulletFont: string;
   readonly bulletChar?: string;
   readonly firstLineIndent: number;
   readonly indentAt: number;
+  readonly includeUpperLevels: number;
   readonly kind: Exclude<WriterParagraphListKind, "none">;
   readonly labelFollowedBy: "listtab" | "nothing" | "space";
   readonly listTabPosition: number;
+  readonly positionAndSpaceMode: "label-alignment";
   readonly prefix: string;
   readonly start: number;
   readonly suffix: string;
 }
 
-/** Primitive persistence record for one document numbering rule. */
+/** Primitive graph record for one document numbering rule. */
 interface WriterNumberRuleRecord {
   readonly automatic: boolean;
   readonly formats: readonly WriterNumberFormatRecord[];
@@ -39,7 +41,7 @@ interface WriterNumberRuleRecord {
   readonly name: string;
 }
 
-/** Primitive persistence record for one paragraph-style collection. */
+/** Primitive graph record for one paragraph-style collection. */
 interface WriterStyleRecord {
   readonly followId: WriterParagraphStyle;
   readonly group: WriterParagraphStyleGroup;
@@ -50,7 +52,7 @@ interface WriterStyleRecord {
   readonly poolId: number;
 }
 
-/** Primitive persistence record for one ordered text node. */
+/** Primitive graph record for one ordered text node. */
 interface WriterTextNodeRecord {
   readonly autoAttributes: readonly SfxPoolItemSnapshot[];
   readonly formatCollId: WriterParagraphStyle;
@@ -58,7 +60,7 @@ interface WriterTextNodeRecord {
   readonly text: string;
 }
 
-/** Canonical ranged Writer attribute record; browser run projections are never persisted. */
+/** Canonical ranged Writer attribute record; browser run projections never cross a boundary. */
 type WriterTextHintRecord =
   | Readonly<{
       end: number;
@@ -73,10 +75,10 @@ type WriterTextHintRecord =
       start: number;
     }>;
 
-/** Current graph transport. Paragraph identity is array order, never a stored UI key. */
+/** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly numRules: readonly WriterNumberRuleRecord[];
-  readonly swModelVersion: 11;
+  readonly swModelVersion: 12;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -101,9 +103,11 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
               ...(format.GetKind() === "bullet" ? { bulletChar: format.GetBulletChar() } : {}),
               firstLineIndent: format.GetFirstLineIndent(),
               indentAt: format.GetIndentAt(),
+              includeUpperLevels: format.GetIncludeUpperLevels(),
               kind: format.GetKind(),
               labelFollowedBy: format.GetLabelFollowedBy(),
               listTabPosition: format.GetListtabPos(),
+              positionAndSpaceMode: format.GetPositionAndSpaceMode(),
               prefix: format.GetPrefix(),
               start: format.GetStart(),
               suffix: format.GetSuffix(),
@@ -114,7 +118,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         name: rule.GetName(),
       }),
     ),
-    swModelVersion: 11,
+    swModelVersion: 12,
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -172,7 +176,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
 export function decodeWriterDocument(candidate: unknown): SwDoc {
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 11 ||
+    candidate.swModelVersion !== 12 ||
     !Array.isArray(candidate.numRules) ||
     !Array.isArray(candidate.textFormatCollections) ||
     !Array.isArray(candidate.textNodes)
@@ -206,8 +210,10 @@ export function decodeWriterDocument(candidate: unknown): SwDoc {
               bulletFont: format.bulletFont,
               firstLineIndent: format.firstLineIndent,
               indentAt: format.indentAt,
+              includeUpperLevels: format.includeUpperLevels,
               labelFollowedBy: format.labelFollowedBy,
               listTabPosition: format.listTabPosition,
+              positionAndSpaceMode: format.positionAndSpaceMode,
               prefix: format.prefix,
               start: format.start,
               suffix: format.suffix,

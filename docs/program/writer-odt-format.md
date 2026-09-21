@@ -83,7 +83,12 @@ bytes or starts a sandboxed byte download; it does not parse or own the document
 Production import and export cross a version-one Dedicated Worker protocol using
 monotonic request IDs and transferable `ArrayBuffer` payloads. The worker performs
 ZIP, manifest, SAX/xmloff, Writer XML mapping, and package serialization, returning
-only a neutral Writer snapshot or complete ODT bytes.
+only a versioned ODT filter transfer or complete ODT bytes. The filter transfer is
+not the durable browser snapshot schema: `odt-transfer.ts` owns the worker-only
+structured-clone envelope, while `writer-storage-codec.ts` owns the current durable
+model envelope and `writer-storage.ts` combines it with Sfx lifecycle metadata.
+Neither boundary is treated as the live Writer model, and retired storage or worker
+transfer versions are rejected without migration.
 
 The LibreOffice-shaped `SwDocShell` remains the active `SwDoc` owner. It validates
 the returned snapshot on the main thread and replaces the current graph only after

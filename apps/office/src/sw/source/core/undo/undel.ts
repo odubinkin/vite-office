@@ -4,6 +4,7 @@ import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import {
   CopyUndoFragment,
+  DeleteUndoRange,
   GetFragmentPayloadSize,
   GetUndoFragmentLength,
   GetUndoTextNode,
@@ -80,9 +81,11 @@ export class SwUndoDelete extends SwUndo {
 
   /** Deletes the retained range again. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    GetUndoTextNode(context.GetDoc(), this.paragraph).EraseText(
+    DeleteUndoRange(
+      context.GetDoc(),
+      this.paragraph,
       this.start,
-      GetUndoFragmentLength(this.deletedFragment),
+      this.start + GetUndoFragmentLength(this.deletedFragment),
     );
   }
 }
@@ -167,15 +170,15 @@ export class SwUndoJoinParagraphs extends SwUndo {
   protected override UndoImpl(context: SwUndoRedoContext): void {
     const document = context.GetDoc();
     const preceding = GetUndoTextNode(document, this.precedingParagraph);
-    preceding.EraseText(this.joinOffset);
-    document.nodes.insertTextNodeAfter(preceding, this.removedParagraph);
+    document
+      .GetDocumentContentOperationsManager()
+      .RestoreJoinedTextNode(preceding, this.joinOffset, this.removedParagraph);
   }
 
   /** Joins the trailing node into its predecessor again. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
     const document = context.GetDoc();
     const preceding = GetUndoTextNode(document, this.precedingParagraph);
-    preceding.AppendTextNode(this.removedParagraph);
-    document.nodes.removeTextNode(this.removedParagraph);
+    document.GetDocumentContentOperationsManager().JoinTextNodes(preceding, this.removedParagraph);
   }
 }

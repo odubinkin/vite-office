@@ -14,6 +14,7 @@ import {
 } from "../../filter/xml/odt-filter-service";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 import { SwDocShell } from "./docsh";
+import { loadWriterFromPrimaryPort } from "../../../browser/workflows/writer-document-io";
 
 /** Creates deterministic shell-owned document metadata. @param title - Visible title. @param id - Stable identity. @returns Lifecycle state. */
 function metadata(title = "Shell document", id = "shell-document") {
@@ -113,12 +114,23 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
   it("records a failed primary-store load before rethrowing", /** Verifies failed local loads update medium state. @returns Completion after rejection. */ async () => {
     const active = fixture();
     await expect(
-      active.shell.LoadFromPrimaryPort({
+      loadWriterFromPrimaryPort(active.shell, {
         load: /** Simulates primary storage failure. @returns Rejected load. */ async () =>
           Promise.reject(new Error("storage failed")),
       }),
     ).rejects.toThrow("storage failed");
     expect(active.shell.GetMedium().lastOperation).toMatchObject({
+      operation: "open",
+      state: "failed",
+    });
+    await expect(
+      loadWriterFromPrimaryPort(active.shell, {
+        load: /** Simulates a non-Error browser adapter rejection. @returns Rejected load. */ async () =>
+          Promise.reject("storage unavailable"),
+      }),
+    ).rejects.toBe("storage unavailable");
+    expect(active.shell.GetMedium().lastOperation).toMatchObject({
+      message: "storage unavailable",
       operation: "open",
       state: "failed",
     });

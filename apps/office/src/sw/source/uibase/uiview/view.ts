@@ -4,7 +4,6 @@
  */
 
 import {
-  createCommandShell,
   type CommandDefinition,
   type CommandDispatchResult,
   type CommandState,
@@ -16,7 +15,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
-import { createWriterViewCommandRegistry } from "../shells/writercommands";
+import { SwViewCommandShell } from "../shells/viewsh";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 
 /** Browser workflow controllers injected into SwView as neutral command/state surfaces. */
@@ -62,7 +61,7 @@ export class SwView {
   private readonly fileWorkflow: WriterViewControllers["fileWorkflow"];
   private frame: SfxViewFrame<SwView> | undefined;
   private readonly localStorageWorkflow: WriterViewControllers["localStorageWorkflow"];
-  private readonly viewCommandShell: SfxShell;
+  private readonly viewCommandShell: SwViewCommandShell;
   private readonly wrtShell: SwWrtShell;
   private readonly wrtShellSubscription: () => void;
 
@@ -82,7 +81,7 @@ export class SwView {
     this.fileWorkflow = controllers.fileWorkflow;
     this.localStorageWorkflow = controllers.localStorageWorkflow;
     this.clipboardWorkflow = controllers.clipboardWorkflow;
-    this.viewCommandShell = createCommandShell(this, createWriterViewCommandRegistry(this));
+    this.viewCommandShell = new SwViewCommandShell(this);
     this.wrtShellSubscription = this.wrtShell.Subscribe(
       /** Converts typed Writer hints into dispatcher dependency invalidation. @param hint - Typed Writer hint. @returns Nothing. */ (
         hint,
@@ -113,7 +112,7 @@ export class SwView {
 
   /** Returns the SwView command shell for bottom-to-top frame registration. @returns View command shell. */
   public GetCommandShell(): SfxShell {
-    return this.viewCommandShell;
+    return this.viewCommandShell.GetShell();
   }
 
   /** Returns the active office frame for browser shortcut adaptation. @returns Attached frame. */

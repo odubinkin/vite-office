@@ -481,6 +481,20 @@ export class SwTextNode extends SwContentNode {
     return list.GetListItemNumber(this);
   }
 
+  /** Returns the model-owned visible list label after validating the number tree. @returns Bullet or formatted numeric label. */
+  public GetListLabel(): string | undefined {
+    const rule = this.GetNumRule();
+    if (rule === undefined) return undefined;
+    const level = this.GetAttrListLevel();
+    const format = rule.GetNumFormat(level);
+    if (format.GetNumberingType() === "char-special") return format.GetBulletChar();
+    const list = this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId());
+    if (list === undefined) return undefined;
+    list.ValidateListTree(this.GetDoc().paragraphs);
+    const numbers = list.GetListItemNumberVector(this);
+    return numbers === undefined ? undefined : rule.MakeNumString(numbers, level);
+  }
+
   /** Inserts text and adjusts direct-format hints using effective caret attributes. @param text - Inserted text. @param offset - UTF-16 insertion offset. @param attributes - Direct attributes for inserted text. @param hyperlink - Optional inherited hyperlink. @returns Inserted text. */
   public InsertText(
     text: string,

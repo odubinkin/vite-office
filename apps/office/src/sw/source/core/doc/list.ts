@@ -82,6 +82,10 @@ export class SwList {
   public GetListItemNumber(node: SwTextNode): number | undefined {
     return this.nodes.get(node)?.GetNumber();
   }
+  /** Returns the validated root-to-item number vector. @param node - Canonical text node. @returns Number vector when registered. */
+  public GetListItemNumberVector(node: SwTextNode): readonly number[] | undefined {
+    return this.nodes.get(node)?.GetNumberVector();
+  }
   /** Returns the validated number-tree node. @param node - Canonical text node. @returns Tree record. */
   public GetListItem(node: SwTextNode): SwNodeNum | undefined {
     return this.nodes.get(node);

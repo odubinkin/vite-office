@@ -40,3 +40,11 @@ capabilities, and the last medium operation. It does not duplicate document
 identity or save/recovery generations. `GetMedium()` returns the stable current
 descriptor, matching upstream `SfxMedium` identity semantics instead of
 reconstructing a defensive snapshot on every read.
+
+`SwDocShell` owns Writer-specific model replacement, filter invocation, history,
+recovery hooks, and the `SfxMedium` state transitions used by those operations.
+It does not accept browser file-picker, download, or IndexedDB ports. Those ports
+terminate in `sw/browser/workflows/writer-document-io.ts`, which adapts them to
+the shell's `Open`, `Load`, `Save`, `SaveAs`, `Export`, and `Download` primitives.
+Durable model serialization is versioned separately in
+`writer-storage-codec.ts`; old schemas are rejected rather than migrated.
