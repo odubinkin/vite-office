@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609211546-N289BQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T16:08:27.986Z",
+  "verdict": "pass",
+  "summary": "P1 remediation is scoped, behavior-preserving, and fully verified.",
+  "evaluated_sha": "23c7ea187f7e88efcaea05781feade1b44733f02",
+  "blueprint_digest": "4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe",
+  "findings": [
+    "ODT umbrella parity is no longer overstated; Writer command and run-projection ownership matches the documented target responsibilities."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609211546-N289BQ/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

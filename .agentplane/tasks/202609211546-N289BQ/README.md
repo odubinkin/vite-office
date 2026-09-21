@@ -4,7 +4,7 @@ title: "Complete Writer P1 parity remediation"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-21T16:08:38.071Z"
+  updated_by: "CODER"
+  note: "verified-202609211546-N289BQ"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-21T16:08:27.986Z"
+  updated_by: "EVALUATOR"
+  note: "P1 remediation is scoped, behavior-preserving, and fully verified."
+  evaluated_sha: "23c7ea187f7e88efcaea05781feade1b44733f02"
+  blueprint_digest: "4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe"
+  evidence_refs:
+    - ".agentplane/tasks/202609211546-N289BQ/README.md"
+    - ".agentplane/tasks/202609211546-N289BQ/quality/20260921-160827986-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609211546-N289BQ/quality/20260921-160827986-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609211546-N289BQ/quality/20260921-160827986-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609211546-N289BQ/blueprint/resolved-snapshot.json"
+    - "npm run verify"
+  findings:
+    - "ODT umbrella parity is no longer overstated; Writer command and run-projection ownership matches the documented target responsibilities."
 commit: null
 comments:
   -
@@ -35,8 +51,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: correct the remaining Writer P1 shell responsibility and ODT parity-evidence gaps under the approved bounded scope."
+  -
+    type: "verify"
+    at: "2026-09-21T16:08:22.007Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified Writer P1 remediation: targeted Writer/ODT and parity tests pass; npm run verify passes with 100% unit and inventory coverage plus 11/11 e2e; routing, provenance, inventory, and doctor checks pass."
+  -
+    type: "verify"
+    at: "2026-09-21T16:08:38.071Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211546-N289BQ"
 doc_version: 3
-doc_updated_at: "2026-09-21T16:07:45.760Z"
+doc_updated_at: "2026-09-21T16:08:38.151Z"
 doc_updated_by: "CODER"
 description: "Fix the remaining P1-2 responsibility decomposition and P1-6 ODT parity-evidence overclaim identified by review."
 sections:
@@ -46,6 +74,66 @@ sections:
   Verify Steps: "1. Run targeted Vitest suites covering Writer shell dispatch, model editing, run projection, ODT round trips, and parity mappings. 2. Run npm run inventory:parity and confirm LO-WRITER-0130 is not counted as verified while atomic ODT gaps remain explicit. 3. Run npm run verify. 4. Run node .agentplane/policy/check-routing.mjs. 5. Run ap doctor. 6. Confirm git status --short --untracked-files=all contains only intentional task artifacts and implementation changes."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-21T16:08:22.007Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified Writer P1 remediation: targeted Writer/ODT and parity tests pass; npm run verify passes with 100% unit and inventory coverage plus 11/11 e2e; routing, provenance, inventory, and doctor checks pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T16:07:45.760Z, excerpt_hash=sha256:0ecaa2a153157811ce4aa3df3aa4592f7e4997cc7355a6503e722ebd01554242
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211546-N289BQ/blueprint/resolved-snapshot.json
+    - old_digest: 4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe
+    - current_digest: 4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211546-N289BQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609211546-N289BQ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-21T16:08:38.071Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211546-N289BQ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T16:08:22.087Z, excerpt_hash=sha256:0ecaa2a153157811ce4aa3df3aa4592f7e4997cc7355a6503e722ebd01554242
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211546-N289BQ/blueprint/resolved-snapshot.json
+    - old_digest: 4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe
+    - current_digest: 4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211546-N289BQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211546-N289BQ --result verified-202609211546-N289BQ --commit 23c7ea187f7e88efcaea05781feade1b44733f02
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only commits attributed to task 202609211546-N289BQ to restore the previous shell ownership and parity records together."
   Findings: |-
@@ -75,6 +163,66 @@ Correct P1-6 parity evidence, complete P1-2 responsibility decomposition, preser
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-21T16:08:22.007Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified Writer P1 remediation: targeted Writer/ODT and parity tests pass; npm run verify passes with 100% unit and inventory coverage plus 11/11 e2e; routing, provenance, inventory, and doctor checks pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T16:07:45.760Z, excerpt_hash=sha256:0ecaa2a153157811ce4aa3df3aa4592f7e4997cc7355a6503e722ebd01554242
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211546-N289BQ/blueprint/resolved-snapshot.json
+- old_digest: 4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe
+- current_digest: 4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211546-N289BQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609211546-N289BQ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T16:08:38.071Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211546-N289BQ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T16:08:22.087Z, excerpt_hash=sha256:0ecaa2a153157811ce4aa3df3aa4592f7e4997cc7355a6503e722ebd01554242
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211546-N289BQ/blueprint/resolved-snapshot.json
+- old_digest: 4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe
+- current_digest: 4855d3a76d527dc733a2dde8ed325de36ab58e00bb0cfd249074a1f586c74dfe
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211546-N289BQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211546-N289BQ --result verified-202609211546-N289BQ --commit 23c7ea187f7e88efcaea05781feade1b44733f02
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
