@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202609211752-HPT0S8",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T18:03:04.174Z",
+  "verdict": "pass",
+  "summary": "P2 ownership enforcement gaps are closed with generalized browser/Sfx boundaries and structured provenance schema v3; all declared checks pass.",
+  "evaluated_sha": "4cf8d39c115dfa6b5439193d42b1285762d3fb03",
+  "blueprint_digest": "0840e957630f72489d83e4ef8821ab53fb73f691be577610db67901cc8e22f47",
+  "findings": [
+    "Cross-module browser imports and browser presentation packages are rejected from Writer, Sfx, and upstream source layers, while every filename divergence now carries a validated stackNecessity category."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609211752-HPT0S8/README.md",
+    "scripts/check-module-boundaries.test.ts",
+    "scripts/check-source-provenance.test.ts",
+    "npm run verify",
+    "node .agentplane/policy/check-routing.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser package roots remain an explicit allowlist and must be extended when new presentation dependencies are introduced."
+  ]
+}
