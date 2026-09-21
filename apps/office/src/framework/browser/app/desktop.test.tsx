@@ -225,7 +225,7 @@ describe("App" /**
     expect(editor.querySelector("strong em span")).toBeInTheDocument();
   });
 
-  it("selects local-compatible fonts and exposes the complete paragraph-style hierarchy", /** Verifies the two Writer selectors and visible style classes. @returns Nothing. */ function selectsWriterFontsAndStyles(): void {
+  it("selects local-compatible fonts and exposes source-backed paragraph styles", /** Verifies the two Writer selectors and visible style classes. @returns Nothing. */ function selectsWriterFontsAndStyles(): void {
     render(<App />);
     const editor = screen.getByRole("textbox", { name: "Writer document text" });
     enterWriterParagraphText(editor, "Styled");
