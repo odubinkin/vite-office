@@ -4,6 +4,7 @@
  */
 
 import type { PrimarySavePort, StoredDocumentOpenPort } from "../../../sfx2/source/doc/docfile";
+import { createCommandShell, type SfxShell } from "../../../sfx2/source/control/dispatch";
 import type { AutoRecoveryEnvironment } from "../../../framework/source/services/autorecovery";
 import type { RecoverySavePort } from "../../../svl/source/misc/recovery";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../svl/source/misc/storage";
@@ -12,9 +13,12 @@ import type { WriterSnapshotState } from "../../source/filter/basflt/writer-stor
 import { parseWriterClipboardPaste, type WriterClipboardPaste } from "../filter/html/swhtml";
 import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
 import { SwDocShell } from "../../source/uibase/app/docsh";
-import type { WriterViewControllerFactory } from "../../source/uibase/uiview/view";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
-import { SwViewOption } from "../../inc/viewopt";
+import {
+  createWriterCommandRegistry,
+  getWriterCommandArguments,
+} from "../../source/uibase/shells/writercommands";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import {
   exportWriterTextToPort,
   loadWriterFromPrimaryPort,
@@ -184,20 +188,82 @@ export class WriterClipboardWorkflowController {
   }
 }
 
-/** Binds narrow browser workflow controllers to one newly constructed Writer view shell. @param ports - Injected browser capabilities. @returns Neutral controller factory. */
-export function createWriterViewControllerFactory(
-  ports: WriterSessionServices,
-): WriterViewControllerFactory {
-  return {
-    Create:
-      /** Creates controllers for one document/view-shell pair. @param docShell - Active document shell. @param wrtShell - Active editing shell. @param invalidateLifecycle - Lifecycle invalidator. @param invalidateView - Chrome invalidator. @returns Bound controllers. */
-      (docShell, wrtShell, invalidateView) => {
-        return {
-          chromePreferences: new SwViewOption(invalidateView),
-          clipboardWorkflow: new WriterClipboardWorkflowController(wrtShell, ports),
-          fileWorkflow: new WriterFileWorkflowController(docShell, ports),
-          localStorageWorkflow: new WriterLocalStorageController(docShell, ports),
-        };
-      },
-  };
+/** Browser-owned Sfx shell that terminates file, storage, and clipboard commands at adapters. */
+export class WriterWorkflowCommandShell {
+  private readonly shell: SfxShell;
+
+  /** Creates browser workflow controllers and their command shell. @param docShell - Active Writer document shell. @param wrtShell - Active editing shell. @param ports - Browser capabilities. @returns Nothing. */
+  public constructor(docShell: SwDocShell, wrtShell: SwWrtShell, ports: WriterSessionServices) {
+    const clipboard = new WriterClipboardWorkflowController(wrtShell, ports);
+    const file = new WriterFileWorkflowController(docShell, ports);
+    const localStorage = new WriterLocalStorageController(docShell, ports);
+    const lifecycleEnabled =
+      /** Reads lifecycle command availability. @returns True outside a pending medium operation. */ (): boolean =>
+        docShell.GetMedium().lastOperation.state !== "pending";
+    this.shell = createCommandShell(
+      { clipboard, docShell, file, localStorage },
+      createWriterCommandRegistry([
+        {
+          capabilityId: "CAP-0113",
+          /** Opens an ODT through the browser file workflow. @returns Completion after import. */
+          execute: (): Promise<void> => file.OpenOdt(),
+          id: WRITER_COMMAND_IDS.openOdt,
+          isEnabled: lifecycleEnabled,
+        },
+        {
+          capabilityId: "CAP-0113",
+          /** Exports the active document through the browser download workflow. @returns Completion after export. */
+          execute: (): Promise<void> => file.SaveOdt(),
+          id: WRITER_COMMAND_IDS.saveOdt,
+          isEnabled: lifecycleEnabled,
+        },
+        {
+          capabilityId: "CAP-0114",
+          /** Loads the active identity from browser-local storage. @returns Completion after replacement. */
+          execute: (): Promise<void> => localStorage.Load(),
+          id: WRITER_COMMAND_IDS.openLocal,
+          isEnabled: lifecycleEnabled,
+        },
+        {
+          capabilityId: "CAP-0114",
+          /** Saves the active identity to browser-local storage. @returns Completion after acknowledgement. */
+          execute: (): Promise<void> => localStorage.Save(),
+          id: WRITER_COMMAND_IDS.saveLocal,
+          isEnabled: lifecycleEnabled,
+        },
+        {
+          capabilityId: "CAP-0101",
+          /** Exports the active document as plain text. @returns Completion after download. */
+          execute: (): Promise<void> => file.ExportText(),
+          id: WRITER_COMMAND_IDS.exportText,
+        },
+        {
+          capabilityId: "CAP-0106",
+          /** Copies the canonical Writer selection through the browser clipboard adapter. @param _context - Bound workflow context. @param arguments_ - Sfx request items. @returns Completion after clipboard write. */
+          execute: (_context, arguments_): Promise<void> =>
+            clipboard.Copy(getWriterCommandArguments<unknown>(arguments_)),
+          id: WRITER_COMMAND_IDS.copy,
+        },
+        {
+          capabilityId: "CAP-0110",
+          /** Cuts the canonical Writer selection through the browser clipboard adapter. @param _context - Bound workflow context. @param arguments_ - Sfx request items. @returns Completion after deletion. */
+          execute: (_context, arguments_): Promise<void> =>
+            clipboard.Cut(getWriterCommandArguments<unknown>(arguments_)),
+          id: WRITER_COMMAND_IDS.cut,
+        },
+        {
+          capabilityId: "CAP-0110",
+          /** Pastes browser clipboard content through Writer operations. @param _context - Bound workflow context. @param arguments_ - Sfx request items. @returns Completion after insertion. */
+          execute: (_context, arguments_): Promise<void> =>
+            clipboard.Paste(getWriterCommandArguments<unknown>(arguments_)),
+          id: WRITER_COMMAND_IDS.paste,
+        },
+      ]),
+    );
+  }
+
+  /** Returns the dispatcher-facing browser workflow shell. @returns Registered Sfx shell. */
+  public GetShell(): SfxShell {
+    return this.shell;
+  }
 }

@@ -59,22 +59,14 @@ export interface WriterHyperlinkCommandArguments {
   readonly text?: string;
 }
 
-/** View-shell surface used by lifecycle, clipboard, and chrome handlers. */
+/** View-shell surface used by Writer view and chrome handlers. */
 export interface WriterViewCommandTarget {
-  readonly Copy: (arguments_?: unknown) => Promise<void>;
-  readonly Cut: (arguments_?: unknown) => Promise<void>;
-  readonly ExportText: () => Promise<void>;
   readonly IsHorizontalRulerVisible: () => boolean;
   readonly IsSidebarVisible: () => boolean;
   readonly IsStatusBarVisible: () => boolean;
   readonly IsStoragePending: () => boolean;
-  readonly LoadLocal: () => Promise<void>;
   readonly NewDocument: () => void;
-  readonly OpenOdt: () => Promise<void>;
-  readonly Paste: (arguments_?: unknown) => Promise<void>;
   readonly RequestSelectAll: () => void;
-  readonly SaveLocal: () => Promise<void>;
-  readonly SaveOdt: () => Promise<void>;
   readonly ToggleHorizontalRuler: () => void;
   readonly ToggleSidebar: () => void;
   readonly ToggleStatusBar: () => void;

@@ -5,83 +5,83 @@
   "filenameDivergences": [
     {
       "localPath": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts",
-      "rationale": "The focused TypeScript controller uses a descriptive filename while preserving the bounded SfxDialogController lifecycle implemented by upstream basedlgs.cxx."
+      "rationale": "Stack constraint: one exported ECMAScript controller module needs an unambiguous stable import name while preserving the bounded SfxDialogController lifecycle implemented by upstream basedlgs.cxx."
     },
     {
       "localPath": "apps/office/src/svl/source/notify/broadcast.ts",
-      "rationale": "The local lowercase broadcast.ts filename follows the repository module convention while preserving the reviewed SfxBroadcaster responsibility implemented by upstream SfxBroadcaster.cxx."
+      "rationale": "Stack constraint: case-stable ECMAScript imports use the lowercase broadcast.ts path while preserving the reviewed SfxBroadcaster responsibility implemented by upstream SfxBroadcaster.cxx."
     },
     {
       "localPath": "apps/office/src/svl/source/notify/listener.ts",
-      "rationale": "The local listener.ts filename uses the unabbreviated public type name while preserving the reviewed SfxListener responsibility implemented by upstream lstner.cxx."
+      "rationale": "Stack constraint: the ECMAScript module path avoids the upstream C++ abbreviation while preserving the reviewed SfxListener responsibility implemented by upstream lstner.cxx."
     },
     {
       "localPath": "apps/office/src/sw/source/core/bastyp/contentindex.ts",
-      "rationale": "The local contentindex.ts module follows the SwContentIndex public type name while preserving the reviewed registry/update responsibility implemented by upstream index.cxx."
+      "rationale": "Stack constraint: the ECMAScript module path disambiguates Writer content indexes from other index modules while preserving the reviewed registry/update responsibility implemented by upstream index.cxx."
     },
     {
       "localPath": "apps/office/src/sw/source/core/doc/default-font.ts",
-      "rationale": "The focused TypeScript module extracts Writer's lcl_SetDfltFont policy from DocumentStylePoolManager.cxx while keeping the browser device adapter outside domain core."
+      "rationale": "Stack constraint: the browser device adapter must remain outside domain core, so this module isolates Writer's lcl_SetDfltFont policy from DocumentStylePoolManager.cxx."
     },
     {
       "localPath": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
-      "rationale": "The focused table module keeps source-derived built-in style item defaults beside DocumentStylePoolManager while preserving its upstream switch responsibility."
+      "rationale": "Stack constraint: source-derived defaults are generated as a separately auditable ECMAScript data module beside DocumentStylePoolManager while preserving its upstream switch responsibility."
     },
     {
       "localPath": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
-      "rationale": "The local fmtinfmt.ts filename follows the upstream public fmtinfmt.hxx identity while implementing the reviewed SwFormatINetFormat behavior from fmtatr2.cxx."
+      "rationale": "Stack constraint: the ECMAScript module exposes the upstream fmtinfmt.hxx contract directly while implementing the reviewed SwFormatINetFormat behavior from fmtatr2.cxx."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
-      "rationale": "The focused Writer dialog facade separates typed request ownership from the broader SwTextShell::Execute implementation in upstream textsh1.cxx."
+      "rationale": "Stack constraint: asynchronous browser dialogs require a typed request boundary separated from the broader SwTextShell::Execute implementation in upstream textsh1.cxx."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts",
-      "rationale": "The focused TypeScript text-shell owner maps the supported execute/state subset from upstream textsh1.cxx without reproducing unrelated native shell branches."
+      "rationale": "Stack constraint: the supported ECMAScript shell excludes unavailable native branches while mapping the bounded execute/state subset from upstream textsh1.cxx."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/shells/viewsh.ts",
-      "rationale": "The focused TypeScript view command shell separates slot registration from the broader SwView implementation in upstream view.cxx."
+      "rationale": "Stack constraint: dispatcher registration is an explicit ECMAScript module boundary, separated from the broader SwView implementation in upstream view.cxx."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
-      "rationale": "The local writercommands.ts module assembles generated SDI slot metadata for the dedicated text and view shell owners; it is intentionally narrower than swriter.sdi."
+      "rationale": "Stack constraint: generated SDI metadata requires a shared typed ECMAScript assembly module for dedicated text and view shell owners; it remains narrower than swriter.sdi."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
-      "rationale": "The local helper keeps selection-aware hyperlink edit actions beside SwWrtShell while preserving the bounded InsertURL responsibility implemented by upstream editsh.cxx."
+      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition keeps selection-aware hyperlink actions beside SwWrtShell while preserving upstream editsh.cxx InsertURL responsibility."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
-      "rationale": "The focused Writer indent helper preserves the reviewed SID_INC_INDENT text-shell branch while separating bounded command transitions from the broader textsh1.cxx source unit."
+      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates command transitions while preserving the reviewed SID_INC_INDENT branch from the broader textsh1.cxx unit."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
-      "rationale": "The focused paste coordinator separates transfer-specific paragraph orchestration from SwWrtShell while preserving the bounded SwTransferable::Paste responsibility implemented by upstream swdtflvr.cxx."
+      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates transfer orchestration from SwWrtShell while preserving upstream swdtflvr.cxx SwTransferable::Paste responsibility."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
-      "rationale": "The local wrtsh-selection.ts module preserves the reviewed SwWrtShell selection responsibility while the retired select.ts source-tree path remains reserved by the repository migration guard."
+      "rationale": "Stack constraint: the explicit ECMAScript module name prevents collision with the retired select.ts path while preserving the reviewed SwWrtShell selection responsibility."
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
-      "rationale": "The local wrtsh.ts module preserves the reviewed SwWrtShell responsibility while TypeScript decomposition or public naming requires a different filename from wrtsh1.cxx."
+      "rationale": "Stack constraint: the primary ECMAScript SwWrtShell module is the stable import root for bounded companion modules while preserving the reviewed wrtsh1.cxx responsibility."
     },
     {
       "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-      "rationale": "The local menubar-commands.ts module preserves the reviewed .uno:PickList responsibility while TypeScript decomposition or public naming requires a different filename from menubar.xml."
+      "rationale": "Stack constraint: generated menu XML is consumed through a typed ECMAScript command-identity module while preserving the reviewed .uno:PickList responsibility from menubar.xml."
     },
     {
       "localPath": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
-      "rationale": "The generated-resource loader combines the supported command metadata projected from pinned Writer menu, toolbar, accelerator, and XCU catalogs rather than claiming one native XML filename."
+      "rationale": "Stack constraint: the browser bundle requires one generated ECMAScript resource loader combining supported metadata from pinned Writer menu, toolbar, accelerator, and XCU catalogs."
     },
     {
       "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
-      "rationale": "The browser-facing xml-parser.ts name describes the saxes adapter while preserving the reviewed context-stack responsibility implemented by upstream fastparser.cxx."
+      "rationale": "Stack constraint: the browser SAX dependency is exposed through an explicit ECMAScript parser adapter while preserving the reviewed context-stack responsibility from upstream fastparser.cxx."
     },
     {
       "localPath": "apps/office/src/xmloff/source/style/xmlstylei.ts",
-      "rationale": "The xmlstylei.ts suffix distinguishes streaming import contexts from future export support while preserving the reviewed SvXMLStylesContext responsibility in upstream xmlstyle.cxx."
+      "rationale": "Stack constraint: separate ECMAScript import and export modules require an import-specific suffix while preserving the reviewed SvXMLStylesContext responsibility in upstream xmlstyle.cxx."
     }
   ],
   "entries": [
@@ -1747,7 +1747,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterFileWorkflowController",
+            "marker": "WriterWorkflowCommandShell",
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts"
           }
         ]
@@ -1756,6 +1756,7 @@
       "rationale": "Adapts browser file, clipboard, download, and IndexedDB ports while document operations remain owned by SwDocShell and transfer creation remains owned by SwTransferable/SwWrtShell.",
       "responsibilities": [
         "Binds browser ports to shell-owned file/storage operations.",
+        "Owns the Sfx command shell that terminates browser-only file, storage, and clipboard commands outside SwView.",
         "Surfaces platform failures through Sfx asynchronous command completion instead of a parallel workflow status model."
       ],
       "stackDivergence": {
@@ -3169,6 +3170,27 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterTransferParagraph",
+            "path": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
+      "rationale": "Defines the neutral paragraph record passed inward from Writer transfer preparation to the bounded ASCII and HTML filter writers without making filters depend on uibase implementation modules.",
+      "responsibilities": [
+        "Defines the browser-independent Writer transfer paragraph consumed by bounded text and HTML filter serializers."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The TypeScript module graph requires a neutral structural record at the filter boundary instead of a native C++ header dependency."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterStorageDocumentRecord",
             "path": "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts"
           }
@@ -3575,7 +3597,6 @@
       "localPath": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
       "localSymbols": [
         "WriterClipboardSelection",
-        "WriterClipboardParagraph",
         "SwTransferable"
       ],
       "omittedResponsibilities": [
@@ -3753,12 +3774,10 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/uiview/view.ts",
       "localSymbols": [
-        "WriterViewControllers",
-        "WriterViewControllerFactory",
         "SwView"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwView, SwView::GetDispatcher, SwView::ImpSetVerb, and SwView::GotFocus remain intentionally omitted; browser projection and clipboard request contracts are mapped separately as browser adaptations."
+        "Upstream obligations outside SwView, SwView::GetDispatcher, SwView::ImpSetVerb, and SwView::GotFocus remain intentionally omitted; browser workflows, projections, subscriptions, and clipboard/file/storage adapters are owned under sw/browser."
       ],
       "preservedResponsibilities": [
         "Implements the active SwView shell/frame relationship, view command routing, SwViewOption state, and Sfx bindings invalidation without browser presentation ownership."

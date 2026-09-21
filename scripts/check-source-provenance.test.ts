@@ -21,7 +21,7 @@ function createManifestSource(overrides: Readonly<Record<string, unknown>> = {})
       {
         localPath: writerPath,
         rationale:
-          "The local Writer aggregate exposes a bounded construction helper while the upstream constructor remains owned by docnew.cxx, so the distinct filename is intentional and reviewable.",
+          "Stack constraint: the ECMAScript module exports a bounded Writer construction helper while the upstream constructor remains owned by docnew.cxx, so the distinct filename is explicit and reviewable.",
       },
     ],
     schemaVersion: 2,
@@ -119,6 +119,28 @@ describe("source provenance" /** Defines strict provenance test cases. @returns 
     expectInvalid(createManifestSource({ schemaVersion: 1 }));
     expectInvalid(createManifestSource({ entries: [] }));
     expectInvalid(createManifestSource({ filenameDivergences: undefined }));
+    expectInvalid(
+      createManifestSource({
+        filenameDivergences: [
+          {
+            localPath: writerPath,
+            rationale:
+              "The local filename is intentionally different but does not identify any required stack constraint.",
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        filenameDivergences: [
+          {
+            localPath: writerPath,
+            rationale:
+              "Stack constraint: TypeScript convenience and public naming make this different filename easier for local authors to use.",
+          },
+        ],
+      }),
+    );
     expectInvalid(createManifestSource({ entries: [mappedEntry({ localSymbols: [] })] }));
     expectInvalid(createManifestSource({ entries: [mappedEntry({ upstreamSymbols: [] })] }));
     expectInvalid(

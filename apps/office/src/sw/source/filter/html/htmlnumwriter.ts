@@ -2,7 +2,7 @@
  * @fileoverview Serializes prepared Writer list paragraphs as portable HTML, following LibreOffice Writer's `sw/source/filter/html/htmlnumwriter.cxx` format-writer ownership.
  */
 
-import type { WriterClipboardParagraph } from "../../uibase/dochdl/swdtflvr";
+import type { WriterTransferParagraph } from "../basflt/writer-transfer";
 
 /**
  * Serializes a prepared Writer transfer document to HTML, grouping adjacent complete list items into balanced semantic nested lists.
@@ -11,23 +11,23 @@ import type { WriterClipboardParagraph } from "../../uibase/dochdl/swdtflvr";
  * @returns Portable rich HTML that preserves ordinary paragraph and semantic list boundaries.
  */
 export function serializeWriterClipboardHtml(
-  paragraphs: readonly WriterClipboardParagraph[],
+  paragraphs: readonly WriterTransferParagraph[],
 ): string {
   let html = "";
   let index = 0;
   while (index < paragraphs.length) {
-    const paragraph = paragraphs[index] as WriterClipboardParagraph;
+    const paragraph = paragraphs[index] as WriterTransferParagraph;
     if (paragraph.listKind === "none") {
       html += serializeParagraphHtml(paragraph);
       index += 1;
       continue;
     }
-    const listItems: WriterClipboardParagraph[] = [];
+    const listItems: WriterTransferParagraph[] = [];
     while (
       paragraphs[index] !== undefined &&
-      (paragraphs[index] as WriterClipboardParagraph).listKind !== "none"
+      (paragraphs[index] as WriterTransferParagraph).listKind !== "none"
     ) {
-      listItems.push(paragraphs[index] as WriterClipboardParagraph);
+      listItems.push(paragraphs[index] as WriterTransferParagraph);
       index += 1;
     }
     html += serializeListHtml(listItems);
@@ -41,7 +41,7 @@ export function serializeWriterClipboardHtml(
  * @param paragraph - Prepared paragraph outside a semantic list group.
  * @returns Escaped inline-styled paragraph HTML.
  */
-function serializeParagraphHtml(paragraph: WriterClipboardParagraph): string {
+function serializeParagraphHtml(paragraph: WriterTransferParagraph): string {
   return `<p style="${paragraph.style}">${paragraph.html ?? escapeHtml(paragraph.text)}</p>`;
 }
 
@@ -51,8 +51,8 @@ function serializeParagraphHtml(paragraph: WriterClipboardParagraph): string {
  * @param paragraphs - Ordered complete list items in the group.
  * @returns Semantic unordered or ordered list HTML.
  */
-function serializeListHtml(paragraphs: readonly WriterClipboardParagraph[]): string {
-  const firstParagraph = paragraphs[0] as WriterClipboardParagraph;
+function serializeListHtml(paragraphs: readonly WriterTransferParagraph[]): string {
+  const firstParagraph = paragraphs[0] as WriterTransferParagraph;
   const baseLevel = firstParagraph.listLevel;
   const listFrames: WriterListFrame[] = [];
   let html = "";
@@ -105,7 +105,7 @@ interface WriterListFrame {
  * @param paragraph - First direct item written into the newly opened list frame.
  * @returns Immutable list frame with a valid semantic opening tag.
  */
-function createListFrame(paragraph: WriterClipboardParagraph): WriterListFrame {
+function createListFrame(paragraph: WriterTransferParagraph): WriterListFrame {
   if (paragraph.listKind === "bullet") return { kind: "bullet", openingTag: "<ul>" };
   const start = getOrderedListStart(paragraph.marker);
   return { kind: "numbered", openingTag: start === 1 ? "<ol>" : `<ol start="${start}">` };
@@ -150,7 +150,7 @@ function getRelativeListLevel(
  * @param paragraph - Selected Writer list item with bounded inline presentation.
  * @returns Escaped opening semantic list-item HTML.
  */
-function openListItemHtml(paragraph: WriterClipboardParagraph): string {
+function openListItemHtml(paragraph: WriterTransferParagraph): string {
   return `<li style="${paragraph.style}">${paragraph.html ?? escapeHtml(paragraph.text)}`;
 }
 

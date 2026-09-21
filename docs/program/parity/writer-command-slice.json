@@ -518,7 +518,7 @@
             "marker": "copyRichText"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async Copy"
           },
           {
@@ -2372,7 +2372,7 @@
             "marker": "parseWriterClipboardPaste"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async Paste"
           },
           {
@@ -3328,7 +3328,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async OpenOdt"
           },
           {
@@ -4190,7 +4190,7 @@
             "marker": "copyRichText"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async Copy"
           },
           {
@@ -4432,7 +4432,7 @@
             "marker": "copyRichText"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async Copy"
           },
           {
@@ -4972,7 +4972,7 @@
             "marker": "parseWriterClipboardPaste"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async Paste"
           },
           {
@@ -5354,7 +5354,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async OpenOdt"
           },
           {
@@ -7382,7 +7382,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async OpenOdt"
           },
           {
@@ -7676,7 +7676,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async OpenOdt"
           },
           {
@@ -7962,7 +7962,7 @@
             "marker": "downloadBytes"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
+            "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
             "marker": "public async OpenOdt"
           },
           {

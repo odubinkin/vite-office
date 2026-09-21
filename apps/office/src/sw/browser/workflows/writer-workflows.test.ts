@@ -44,4 +44,22 @@ describe("WriterPlatformError", /** Registers platform-error tests. @returns Not
     );
     await expect(controller.Copy()).rejects.toMatchObject({ code: "selection-required" });
   });
+
+  it("rejects empty browser clipboard payloads before Writer mutation", /** Verifies browser paste adaptation fails before calling the shell. @returns Completion after rejection. */ async function rejectsEmptyPaste(): Promise<void> {
+    const shell = { PasteAtCursor: vi.fn() } as unknown as SwWrtShell;
+    const controller = new WriterClipboardWorkflowController(shell, {
+      copyRichText: vi.fn(),
+      readRichClipboard: vi.fn(
+        /** Returns an empty clipboard payload. @returns Empty rich/plain values. */ async () => ({
+          html: "",
+          plainText: "",
+        }),
+      ),
+    });
+    await expect(controller.Paste()).rejects.toMatchObject({ code: "clipboard-empty" });
+    await expect(controller.Paste({ clipboardHandled: true })).rejects.toMatchObject({
+      code: "clipboard-empty",
+    });
+    expect(shell.PasteAtCursor).not.toHaveBeenCalled();
+  });
 });

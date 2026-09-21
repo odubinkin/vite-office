@@ -21,6 +21,33 @@ const allowedEdges = new Map([
   ["xmloff", new Set()],
 ]);
 const suiteModules = new Set(["sw"]);
+const writerSourceLayers = new Set(["core", "filter", "uibase"]);
+
+/** Returns the responsibility layer for one source-relative Writer path. @param relativePath - Path below apps/office/src. @returns Writer layer or undefined. */
+export function getWriterLayer(relativePath) {
+  const portablePath = relativePath.split(path.sep).join("/");
+  if (portablePath.startsWith("sw/browser/")) return "browser";
+  if (portablePath.startsWith("sw/source/core/")) return "core";
+  if (portablePath.startsWith("sw/source/filter/")) return "filter";
+  if (portablePath.startsWith("sw/source/uibase/")) return "uibase";
+  return undefined;
+}
+
+/** Reports a forbidden reverse dependency between Writer responsibility layers. @param sourcePath - Importing source-relative path. @param targetPath - Imported source-relative path. @param importName - Authored import specifier. @returns Diagnostic or undefined. */
+export function getWriterOwnershipViolation(sourcePath, targetPath, importName) {
+  const sourceLayer = getWriterLayer(sourcePath);
+  if (!writerSourceLayers.has(sourceLayer)) return undefined;
+  if (importName === "react" || importName.startsWith("react/"))
+    return `Writer ${sourceLayer} must not import React`;
+  const targetLayer = getWriterLayer(targetPath);
+  if (targetLayer === "browser")
+    return `Writer ${sourceLayer} must receive browser adapters through an injected contract`;
+  if (sourceLayer === "core" && (targetLayer === "filter" || targetLayer === "uibase"))
+    return `Writer core must not depend on ${targetLayer}`;
+  if (sourceLayer === "filter" && targetLayer === "uibase")
+    return "Writer filter must not depend on uibase";
+  return undefined;
+}
 
 /** Recursively collects runtime TypeScript sources in deterministic path order. @param directory - Directory to scan. @returns Ordered absolute source paths. */
 function collectRuntimeSources(directory) {
@@ -128,7 +155,12 @@ for (const sourceFile of runtimeSources) {
   }
   const imports = ts.preProcessFile(sourceText, true, true).importedFiles;
   for (const imported of imports) {
-    if (!imported.fileName.startsWith(".")) continue;
+    if (!imported.fileName.startsWith(".")) {
+      const ownershipViolation = getWriterOwnershipViolation(relativeSource, "", imported.fileName);
+      if (ownershipViolation !== undefined)
+        failures.push(`${displayPath(sourceFile)}: ${ownershipViolation}`);
+      continue;
+    }
     checkedImports += 1;
     const targetPath = path.resolve(path.dirname(sourceFile), imported.fileName);
     const relativeTarget = path.relative(sourceRoot, targetPath);
@@ -139,13 +171,13 @@ for (const sourceFile of runtimeSources) {
       continue;
     }
     const targetModule = getModule(relativeTarget);
-    if (
-      relativeSource.startsWith(`sw${path.sep}source${path.sep}`) &&
-      relativeTarget.startsWith(`sw${path.sep}browser${path.sep}`)
-    ) {
-      failures.push(
-        `${displayPath(sourceFile)}: Writer source layers must receive browser adapters through an injected contract`,
-      );
+    const ownershipViolation = getWriterOwnershipViolation(
+      relativeSource,
+      relativeTarget,
+      imported.fileName,
+    );
+    if (ownershipViolation !== undefined) {
+      failures.push(`${displayPath(sourceFile)}: ${ownershipViolation}`);
       continue;
     }
     if (sourceModule === undefined || targetModule === undefined || sourceModule === targetModule)

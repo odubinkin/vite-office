@@ -1834,9 +1834,10 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/workflows/writer-workflows.ts#WriterFileWorkflowController"
+          "apps/office/src/sw/browser/workflows/writer-workflows.ts#WriterWorkflowCommandShell",
+          "apps/office/src/sw/browser/workflows/writer-workflows.test.ts#rejectsEmptyPaste"
         ],
-        "justification": "Coordinates browser-facing Writer commands while file and durable-storage ports terminate in writer-document-io and transfer creation remains owned by SwTransferable/SwWrtShell.",
+        "justification": "Owns the browser-only Sfx shell for file, clipboard, download, and IndexedDB commands while file and durable-storage ports terminate in writer-document-io and transfer creation remains owned by SwTransferable/SwWrtShell.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -3253,6 +3254,32 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "clipboard-transfer",
+      "capabilityIds": [
+        "CAP-0106",
+        "CAP-0110"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/filter/basflt/writer-transfer.ts#WriterTransferParagraph"
+        ],
+        "justification": "Defines the neutral browser-independent transfer paragraph shared by Writer transfer preparation and bounded filter serializers so filter modules do not depend on uibase implementation details.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/filter/html/html-filter-types.ts",
       "classification": "local-infrastructure",
       "state": "active",
@@ -3660,7 +3687,6 @@
         "knownViolations": [],
         "localSymbols": [
           "WriterClipboardSelection",
-          "WriterClipboardParagraph",
           "SwTransferable"
         ],
         "sourceResponsibility": "aligned",
@@ -3756,11 +3782,7 @@
       "capabilityIds": [
         "CAP-0101",
         "CAP-0103",
-        "CAP-0104",
-        "CAP-0106",
-        "CAP-0110",
-        "CAP-0113",
-        "CAP-0114"
+        "CAP-0104"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -3771,7 +3793,7 @@
           "apps/office/src/sw/source/uibase/shells/viewsh.ts#SwViewCommandShell",
           "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx#SwView"
         ],
-        "justification": "Owns registration of lifecycle, clipboard, and chrome slots outside SwView so the view retains frame and document coordination rather than command descriptor construction.",
+        "justification": "Owns registration of the supported new-document, select-all, and view-option slots outside SwView; browser file, storage, and clipboard commands are registered by the browser workflow shell.",
         "knownViolations": [],
         "localSymbols": [
           "SwViewCommandShell",
@@ -3868,11 +3890,9 @@
         "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/uiview/view.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
         "knownViolations": [],
         "localSymbols": [
-          "WriterViewControllers",
-          "WriterViewControllerFactory",
           "SwView"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/uibase/uiview/view.cxx",
         "upstreamSymbols": [
           "SwView",

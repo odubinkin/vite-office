@@ -94,6 +94,7 @@ const requiredFiles = [
   "apps/office/src/sfx2/source/control/bindings.ts",
   "apps/office/src/sfx2/source/control/request.ts",
   "apps/office/src/sw/source/filter/basflt/item-codec.ts",
+  "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
   "apps/office/src/sw/source/filter/basflt/writer-document-codec.ts",
   "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts",
   "apps/office/src/sw/source/filter/basflt/writer-storage.ts",

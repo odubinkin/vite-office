@@ -2,7 +2,7 @@
  * @fileoverview Serializes prepared Writer selections to readable plain text, following LibreOffice Writer's `sw/source/filter/ascii/ascatr.cxx` ownership boundary.
  */
 
-import type { WriterClipboardParagraph } from "../../uibase/dochdl/swdtflvr";
+import type { WriterTransferParagraph } from "../basflt/writer-transfer";
 
 /**
  * Serializes a prepared Writer transfer document to plain text with LibreOffice-like list labels for multiple complete list items.
@@ -11,7 +11,7 @@ import type { WriterClipboardParagraph } from "../../uibase/dochdl/swdtflvr";
  * @returns Newline-separated visible plain text without accessibility-only descriptions.
  */
 export function serializeWriterClipboardPlainText(
-  paragraphs: readonly WriterClipboardParagraph[],
+  paragraphs: readonly WriterTransferParagraph[],
 ): string {
   const completeListItemCount = paragraphs.filter(isCompleteListItem).length;
   return paragraphs
@@ -36,7 +36,7 @@ export function serializeWriterClipboardPlainText(
  * @param paragraph - Prepared Writer paragraph inspected without mutation.
  * @returns True for complete bullet and numbered list items.
  */
-function isCompleteListItem(paragraph: WriterClipboardParagraph): boolean {
+function isCompleteListItem(paragraph: WriterTransferParagraph): boolean {
   return paragraph.listKind !== "none";
 }
 
@@ -46,6 +46,6 @@ function isCompleteListItem(paragraph: WriterClipboardParagraph): boolean {
  * @param paragraph - Selected list paragraph missing its rendered marker metadata.
  * @returns Bullet or first ordered-list marker appropriate to the bounded list kind.
  */
-function getFallbackListMarker(paragraph: WriterClipboardParagraph): string {
+function getFallbackListMarker(paragraph: WriterTransferParagraph): string {
   return paragraph.listKind === "bullet" ? "•" : "1.";
 }

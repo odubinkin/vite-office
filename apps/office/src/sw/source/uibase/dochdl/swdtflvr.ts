@@ -5,6 +5,7 @@
 
 import { serializeWriterClipboardPlainText } from "../../filter/ascii/ascatr";
 import { serializeWriterClipboardHtml } from "../../filter/html/htmlnumwriter";
+import type { WriterTransferParagraph } from "../../filter/basflt/writer-transfer";
 import type { SwPaM, SwPosition } from "../../core/crsr/pam";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -18,16 +19,6 @@ import {
 export interface WriterClipboardSelection {
   readonly html: string;
   readonly plainText: string;
-}
-
-/** Describes one selected Writer paragraph before a format writer serializes it. */
-export interface WriterClipboardParagraph {
-  readonly html?: string;
-  readonly listKind: "bullet" | "none" | "numbered";
-  readonly listLevel: number;
-  readonly marker: string | undefined;
-  readonly style: string;
-  readonly text: string;
 }
 
 /** Model-owned transferable created from the shell SwPaM, independent of rendered DOM. */
@@ -49,7 +40,7 @@ export class SwTransferable {
       /** Prepares one selected model paragraph. @param paragraph - Selected text node. @param relativeIndex - Index within the selected slice. @returns Format-writer paragraph input. */ (
         paragraph,
         relativeIndex,
-      ): WriterClipboardParagraph => {
+      ): WriterTransferParagraph => {
         const index = startIndex + relativeIndex;
         const start = index === startIndex ? ordered.start.GetContentIndex() : 0;
         const end = index === endIndex ? ordered.end.GetContentIndex() : paragraph.Len();

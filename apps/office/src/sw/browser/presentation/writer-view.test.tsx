@@ -12,10 +12,7 @@ import type {
 } from "../../../sfx2/source/doc/docfile";
 import type { RecoverySavePort } from "../../../svl/source/misc/recovery";
 import { createDownloadFilename } from "../../../vcl/browser/browser-download";
-import {
-  createWriterViewControllerFactory,
-  type WriterSessionServices,
-} from "../workflows/writer-workflows";
+import type { WriterSessionServices } from "../workflows/writer-workflows";
 import { SwDoc } from "../../source/core/doc/doc";
 import { projectWriterTextRuns } from "../../source/core/txtnode/text-run-projection";
 import type { WriterSnapshotState } from "../../source/filter/basflt/writer-storage";
@@ -324,10 +321,6 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(0);
     expect(wrtShell.Undo()).toBe(false);
     expect(wrtShell.Redo()).toBe(false);
-    await expect(view.Paste()).rejects.toThrow("Clipboard has no text to paste.");
-    await expect(view.Paste({ clipboardHandled: true })).rejects.toThrow(
-      "Clipboard has no text to paste.",
-    );
     unsubscribe();
     session.Close();
     expect(frame.GetActiveView()).toBeUndefined();
@@ -546,8 +539,12 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     });
     const { docShell, frame, view } = session;
     const wrtShell = view.GetWrtShell();
-    await view.OpenOdt();
-    await view.SaveOdt();
+    const open = view.Execute(WRITER_COMMAND_IDS.openOdt);
+    if (open.status !== "executed") throw new Error("Open command did not execute.");
+    await open.value;
+    const save = view.Execute(WRITER_COMMAND_IDS.saveOdt);
+    if (save.status !== "executed") throw new Error("Save command did not execute.");
+    await save.value;
     expect(session).toMatchObject({ docShell, frame, view });
     expect(view.GetWrtShell()).toBe(wrtShell);
     expect(services.documentExport.export).toHaveBeenCalledWith({
@@ -584,7 +581,9 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     session.view.GetWrtShell().Insert("dirty");
     const dirtyGeneration = session.docShell.GetDocumentState().contentGeneration;
 
-    await session.view.SaveOdt();
+    const saveOdt = session.view.Execute(WRITER_COMMAND_IDS.saveOdt);
+    if (saveOdt.status !== "executed") throw new Error("Save ODT command did not execute.");
+    await saveOdt.value;
     expect(session.docShell.GetDocumentState()).toMatchObject({
       isModified: true,
       savedGeneration: null,
@@ -594,7 +593,9 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       lastOperation: { operation: "none", state: "idle" },
     });
 
-    await session.view.SaveLocal();
+    const firstLocalSave = session.view.Execute(WRITER_COMMAND_IDS.saveLocal);
+    if (firstLocalSave.status !== "executed") throw new Error("Local save did not execute.");
+    await firstLocalSave.value;
     expect(stored?.version).toBe(dirtyGeneration);
     expect(session.docShell.GetDocumentState()).toMatchObject({
       isModified: false,
@@ -609,12 +610,14 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     setTestCursor(session.view.GetWrtShell(), paragraphId, 5);
     handleTestInput(session.view.GetWrtShell(), "insertText", "!");
     const nextGeneration = session.docShell.GetDocumentState().contentGeneration;
-    session.view.ExportText();
+    session.view.Execute(WRITER_COMMAND_IDS.exportText);
     expect(session.docShell.GetDocumentState()).toMatchObject({
       isModified: true,
       savedGeneration: dirtyGeneration,
     });
-    await session.view.SaveLocal();
+    const secondLocalSave = session.view.Execute(WRITER_COMMAND_IDS.saveLocal);
+    if (secondLocalSave.status !== "executed") throw new Error("Local save did not execute.");
+    await secondLocalSave.value;
     expect(stored?.version).toBe(nextGeneration);
     expect(session.docShell.GetMedium().lastOperation).toMatchObject({
       operation: "save",
@@ -700,7 +703,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
   it("retains explicit construction order before frame attachment" /** Verifies pre-frame invalidation remains local and dispatch requires an attached frame. @returns Nothing. */, function enforcesFrameConstructionOrder(): void {
     const state = createDocument({ id: "isolated", suiteId: "writer", title: "Isolated Writer" });
     const docShell = new SwDocShell(new SwDoc(), state);
-    const view = new SwView(docShell, createWriterViewControllerFactory(createServices()));
+    const view = new SwView(docShell);
     expect(
       /** Dispatches before frame attachment. @returns Nothing before the expected exception. */
       () => view.Execute(WRITER_COMMAND_IDS.undo),

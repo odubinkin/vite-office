@@ -1,6 +1,6 @@
 /**
- * @fileoverview Implements the persistent SwView shell/frame relationship, command routing,
- * while receiving browser workflows through an injected factory.
+ * @fileoverview Implements the persistent SwView shell/frame relationship and Writer command
+ * coordination without owning browser workflows or presentation projections.
  */
 
 import {
@@ -13,74 +13,27 @@ import {
 import type { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SwModelHint } from "../../../inc/hints";
+import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwViewCommandShell } from "../shells/viewsh";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 
-/** Browser workflow controllers injected into SwView as neutral command/state surfaces. */
-export interface WriterViewControllers {
-  readonly chromePreferences: {
-    readonly IsHorizontalRulerVisible: () => boolean;
-    readonly IsSidebarVisible: () => boolean;
-    readonly IsStatusBarVisible: () => boolean;
-    readonly ToggleHorizontalRuler: () => void;
-    readonly ToggleSidebar: () => void;
-    readonly ToggleStatusBar: () => void;
-  };
-  readonly clipboardWorkflow: {
-    readonly Copy: (arguments_?: unknown) => Promise<void>;
-    readonly Cut: (arguments_?: unknown) => Promise<void>;
-    readonly Paste: (arguments_?: unknown) => Promise<void>;
-  };
-  readonly fileWorkflow: {
-    readonly ExportText: () => Promise<void>;
-    readonly OpenOdt: () => Promise<void>;
-    readonly SaveOdt: () => Promise<void>;
-  };
-  readonly localStorageWorkflow: {
-    readonly Load: () => Promise<void>;
-    readonly Save: () => Promise<void>;
-  };
-}
-
-/** Composition-root factory that binds browser ports after SwView creates its editing shell. */
-export interface WriterViewControllerFactory {
-  readonly Create: (
-    docShell: SwDocShell,
-    wrtShell: SwWrtShell,
-    invalidateView: () => void,
-  ) => WriterViewControllers;
-}
-
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
-  private readonly chromePreferences: WriterViewControllers["chromePreferences"];
-  private readonly clipboardWorkflow: WriterViewControllers["clipboardWorkflow"];
   private readonly dialogController = new WriterDialogController();
-  private readonly fileWorkflow: WriterViewControllers["fileWorkflow"];
   private frame: SfxViewFrame<SwView> | undefined;
-  private readonly localStorageWorkflow: WriterViewControllers["localStorageWorkflow"];
   private readonly viewCommandShell: SwViewCommandShell;
+  private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
   private readonly wrtShellSubscription: () => void;
 
-  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @param controllerFactory - Injected neutral workflow-controller factory. @returns Nothing. */
-  public constructor(
-    private readonly docShell: SwDocShell,
-    controllerFactory: WriterViewControllerFactory,
-  ) {
+  /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @returns Nothing. */
+  public constructor(private readonly docShell: SwDocShell) {
     this.wrtShell = new SwWrtShell(docShell, this.dialogController);
-    const controllers = controllerFactory.Create(
-      docShell,
-      this.wrtShell,
-      /** Invalidates view-only presentation state. @returns Nothing. */ () =>
-        this.Invalidate("view"),
+    this.viewOptions = new SwViewOption(
+      /** Invalidates view-option slot state. @returns Nothing. */ () => this.Invalidate("view"),
     );
-    this.chromePreferences = controllers.chromePreferences;
-    this.fileWorkflow = controllers.fileWorkflow;
-    this.localStorageWorkflow = controllers.localStorageWorkflow;
-    this.clipboardWorkflow = controllers.clipboardWorkflow;
     this.viewCommandShell = new SwViewCommandShell(this);
     this.wrtShellSubscription = this.wrtShell.Subscribe(
       /** Converts typed Writer hints into dispatcher dependency invalidation. @param hint - Typed Writer hint. @returns Nothing. */ (
@@ -147,46 +100,6 @@ export class SwView {
     );
   }
 
-  /** Selects and atomically opens one ODT through the persistent document shell. @returns Completion after browser feedback. */
-  public async OpenOdt(): Promise<void> {
-    await this.fileWorkflow.OpenOdt();
-  }
-
-  /** Downloads the active document through Writer's ODT filter. @returns Completion after worker export and download start. */
-  public async SaveOdt(): Promise<void> {
-    await this.fileWorkflow.SaveOdt();
-  }
-
-  /** Saves the active identity to its browser-local medium. @returns Completion after acknowledgement. */
-  public async SaveLocal(): Promise<void> {
-    await this.localStorageWorkflow.Save();
-  }
-
-  /** Loads the current document identity from browser-local storage. @returns Completion after optional replacement. */
-  public async LoadLocal(): Promise<void> {
-    await this.localStorageWorkflow.Load();
-  }
-
-  /** Starts the existing plain-text export through the injected browser adapter. @returns Completion after the browser port settles. */
-  public ExportText(): Promise<void> {
-    return this.fileWorkflow.ExportText();
-  }
-
-  /** Copies the current Writer selection through the injected workflow. @param arguments_ - Optional adapter payload. @returns Completion after feedback. */
-  public async Copy(arguments_?: unknown): Promise<void> {
-    await this.clipboardWorkflow.Copy(arguments_);
-  }
-
-  /** Copies then deletes a canonical Writer selection through one Cut command. @param arguments_ - Optional adapter payload. @returns Completion after feedback. */
-  public async Cut(arguments_?: unknown): Promise<void> {
-    await this.clipboardWorkflow.Cut(arguments_);
-  }
-
-  /** Inserts clipboard content through the injected workflow. @param arguments_ - Optional adapter payload. @returns Completion after feedback. */
-  public async Paste(arguments_?: unknown): Promise<void> {
-    await this.clipboardWorkflow.Paste(arguments_);
-  }
-
   /** Selects the complete Writer body through the persistent SwPaM. @returns Nothing. */
   public RequestSelectAll(): void {
     this.wrtShell.SelectAll();
@@ -194,17 +107,17 @@ export class SwView {
 
   /** Returns horizontal-ruler command state. @returns Visibility. */
   public IsHorizontalRulerVisible(): boolean {
-    return this.chromePreferences.IsHorizontalRulerVisible();
+    return this.viewOptions.IsHorizontalRulerVisible();
   }
 
   /** Returns sidebar command state. @returns Visibility. */
   public IsSidebarVisible(): boolean {
-    return this.chromePreferences.IsSidebarVisible();
+    return this.viewOptions.IsSidebarVisible();
   }
 
   /** Returns status-bar command state. @returns Visibility. */
   public IsStatusBarVisible(): boolean {
-    return this.chromePreferences.IsStatusBarVisible();
+    return this.viewOptions.IsStatusBarVisible();
   }
 
   /** Returns whether a medium operation gates lifecycle commands. @returns Pending state. */
@@ -214,17 +127,17 @@ export class SwView {
 
   /** Toggles horizontal-ruler visibility. @returns Nothing. */
   public ToggleHorizontalRuler(): void {
-    this.chromePreferences.ToggleHorizontalRuler();
+    this.viewOptions.ToggleHorizontalRuler();
   }
 
   /** Toggles sidebar visibility. @returns Nothing. */
   public ToggleSidebar(): void {
-    this.chromePreferences.ToggleSidebar();
+    this.viewOptions.ToggleSidebar();
   }
 
   /** Toggles status-bar visibility. @returns Nothing. */
   public ToggleStatusBar(): void {
-    this.chromePreferences.ToggleStatusBar();
+    this.viewOptions.ToggleStatusBar();
   }
 
   /** Releases view, dispatcher, and document-shell subscriptions at explicit session close. @returns Nothing. */

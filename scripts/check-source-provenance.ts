@@ -364,6 +364,14 @@ function parseFilenameDivergences(candidate: unknown): readonly FilenameDivergen
         throw new Error(
           `Source provenance filename divergence rationale for ${localPath} is too short.`,
         );
+      if (!rationale.includes("Stack constraint:"))
+        throw new Error(
+          `Source provenance filename divergence for ${localPath} must state its stack constraint.`,
+        );
+      if (/\b(?:convenience|public naming)\b/iu.test(rationale))
+        throw new Error(
+          `Source provenance filename divergence for ${localPath} cites a TypeScript convenience instead of a stack necessity.`,
+        );
       return { localPath, rationale };
     },
   );

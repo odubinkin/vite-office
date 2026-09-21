@@ -37,7 +37,7 @@ import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterViewStore } from "../presentation/writer-view-projection";
 import { WriterRecoveryPrompt } from "../presentation/WriterRecoveryPrompt";
 import {
-  createWriterViewControllerFactory,
+  WriterWorkflowCommandShell,
   type WriterSessionServices,
 } from "../workflows/writer-workflows";
 import { SwView } from "../../source/uibase/uiview/view";
@@ -112,7 +112,12 @@ export function createWriterDocumentSession(
     { kind: "untitled", name: "Untitled Writer Document" },
     odtFilter,
   );
-  const view = new SwView(docShell, createWriterViewControllerFactory(services));
+  const view = new SwView(docShell);
+  const workflowCommandShell = new WriterWorkflowCommandShell(
+    docShell,
+    view.GetWrtShell(),
+    services,
+  );
   const frame = new SfxViewFrame<SwView>();
   const autoRecovery =
     services.recoverySave === undefined
@@ -127,6 +132,7 @@ export function createWriterDocumentSession(
   view.AttachFrame(frame);
   frame.SetActiveView(view, [
     view.GetCommandShell(),
+    workflowCommandShell.GetShell(),
     view.GetWrtShell().GetCommandShell(),
     view.GetWrtShell().GetListShell().GetCommandShell(),
   ]);
