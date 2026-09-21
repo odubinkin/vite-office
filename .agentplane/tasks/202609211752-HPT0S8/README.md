@@ -1,10 +1,11 @@
 ---
 id: "202609211752-HPT0S8"
 title: "Fix P2 ownership enforcement gaps"
-status: "DOING"
+result_summary: "verified-202609211752-HPT0S8"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T18:03:17.734Z"
+  updated_at: "2026-09-21T18:03:44.642Z"
   updated_by: "CODER"
   note: "verified-202609211752-HPT0S8"
   attempts: 0
@@ -41,11 +42,16 @@ quality_review:
     - "node .agentplane/policy/check-routing.mjs"
   findings:
     - "Cross-module browser imports and browser presentation packages are rejected from Writer, Sfx, and upstream source layers, while every filename divergence now carries a validated stackNecessity category."
-commit: null
+commit:
+  hash: "290d6636ba1a3dad4486cee2621855b647d92448"
+  message: "🧪 HPT0S8 task: record verification and quality review"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609211752-HPT0S8. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -72,8 +78,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609211752-HPT0S8"
+  -
+    type: "verify"
+    at: "2026-09-21T18:03:44.642Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211752-HPT0S8"
+  -
+    type: "status"
+    at: "2026-09-21T18:03:44.772Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609211752-HPT0S8. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-21T18:03:17.786Z"
+doc_updated_at: "2026-09-21T18:03:44.772Z"
 doc_updated_by: "CODER"
 description: "Follow up P2 by enforcing browser and Sfx ownership across runtime modules, strengthening filename-divergence stack-necessity evidence, and adding negative tests."
 sections:
@@ -173,6 +192,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-21T18:03:44.642Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211752-HPT0S8
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T18:03:17.786Z, excerpt_hash=sha256:588f5e3012f5ab9ae49d14bfae002938241e8739e194719af7c565ecde89922b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211752-HPT0S8/blueprint/resolved-snapshot.json
+    - old_digest: 0840e957630f72489d83e4ef8821ab53fb73f691be577610db67901cc8e22f47
+    - current_digest: 0840e957630f72489d83e4ef8821ab53fb73f691be577610db67901cc8e22f47
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211752-HPT0S8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211752-HPT0S8 --result verified-202609211752-HPT0S8 --commit 290d6636ba1a3dad4486cee2621855b647d92448
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation commit and task close commit; this restores the prior ownership/provenance validators and schema without touching Writer runtime behavior."
   Findings: |-
@@ -185,6 +234,10 @@ sections:
     - Observation: Ownership enforcement now rejects browser directories and presentation packages from Writer, Sfx, and general upstream source layers; provenance schema v3 requires a typed stackNecessity for every filename divergence.
       Impact: The two P2-2 review gaps are closed without changing Writer runtime behavior or parity inventory semantics.
       Resolution: Added generalized layer classification, cross-module negative tests, structured divergence categories, and migrated all existing divergence records.
+extensions:
+  implementation_commit:
+    hash: "4cf8d39c115dfa6b5439193d42b1285762d3fb03"
+    message: "🔒 HPT0S8 task: enforce P2 ownership boundaries"
 id_source: "generated"
 ---
 ## Summary
@@ -289,6 +342,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609211752-HPT0S8 --result verified-202609211752-HPT0S8 --commit 4cf8d39c115dfa6b5439193d42b1285762d3fb03
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T18:03:44.642Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211752-HPT0S8
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T18:03:17.786Z, excerpt_hash=sha256:588f5e3012f5ab9ae49d14bfae002938241e8739e194719af7c565ecde89922b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211752-HPT0S8/blueprint/resolved-snapshot.json
+- old_digest: 0840e957630f72489d83e4ef8821ab53fb73f691be577610db67901cc8e22f47
+- current_digest: 0840e957630f72489d83e4ef8821ab53fb73f691be577610db67901cc8e22f47
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211752-HPT0S8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211752-HPT0S8 --result verified-202609211752-HPT0S8 --commit 290d6636ba1a3dad4486cee2621855b647d92448
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
