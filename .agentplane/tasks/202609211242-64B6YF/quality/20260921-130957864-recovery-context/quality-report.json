@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609211242-64B6YF",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T13:09:57.864Z",
+  "verdict": "pass",
+  "summary": "P0-3 through P0-5 remediation matches the approved scope and passes the complete repository quality gate.",
+  "evaluated_sha": "279797e577df6c9192127b8e1307b16ab5225ad8",
+  "blueprint_digest": "c4dee43202b5f10ca35a8de2235a5ebf7c0a938581898d2b897cc36a40df9c41",
+  "findings": [
+    "Browser identity translation is confined to projection adapters; canonical text mutations and undo use native hints; exposed paragraph styles have supported defaults."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609211242-64B6YF/README.md",
+    "npm run verify",
+    "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+    "apps/office/src/sw/inc/poolfmt.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
