@@ -5,40 +5,263 @@ import {
   type CommandRegistry,
   type SfxShell,
 } from "../../../../sfx2/source/control/dispatch";
-import type { WriterCharacterFormat } from "../../core/txtnode/ndtxt";
+import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import { SwPosition } from "../../core/crsr/pam";
+import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
+import type {
+  SwTextNode,
+  WriterCharacterAttributes,
+  WriterCharacterFormat,
+  WriterParagraphAlignment,
+} from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
+import { CreateWriterFontUndo, SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
+import { SwUndoFormatColl } from "../../core/undo/unfmco";
+import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
+import { canChangeWriterParagraphIndent, changeWriterParagraphIndent } from "../wrtsh/wrtsh-indent";
+import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../wrtsh/wrtsh-hyperlink";
+import { getWriterSelectedTextRange, type WriterTextRange } from "../wrtsh/wrtsh-selection";
 import {
   createWriterCommandRegistry,
   getWriterCommandArguments,
   type WriterCharacterCommandArguments,
   type WriterHyperlinkCommandArguments,
-  type WriterTextCommandTarget,
 } from "./writercommands";
+
+/** Cursor/model primitives consumed by the text shell without importing SwWrtShell. */
+export interface SwTextShellTarget {
+  readonly ApplyAction: (action: SfxUndoAction<SwUndoRedoContext>) => boolean;
+  readonly CaptureCursorState: () => SwUndoCursorState;
+  readonly GetActiveParagraph: () => SwTextNode;
+  readonly GetCursor: () => import("../../core/crsr/pam").SwPaM;
+  readonly GetDefaultFontFamily: () => string;
+  readonly GetDoc: () => import("../../core/doc/doc").SwDoc;
+  readonly GetDocShell: () => Readonly<{
+    GetUndoManager(): Readonly<{
+      BreakUndoGrouping(): void;
+      GetRedoActionCount(): number;
+      GetUndoActionCount(): number;
+    }>;
+  }>;
+  readonly GetPendingCharacterAttributes: () => WriterCharacterAttributes;
+  readonly NotifySelectionChanged: () => void;
+  readonly Redo: () => boolean;
+  readonly SetPaM: (point: SwPosition, mark?: SwPosition) => boolean;
+  readonly SetPendingCharacterAttributes: (attributes: WriterCharacterAttributes) => void;
+  readonly Undo: () => boolean;
+}
 
 /** Dedicated text context shell owning its execute/state registration. */
 export class SwTextShell {
   private readonly shell: SfxShell;
   /** Creates the text-shell slot owner. @param target - Active Writer editing shell. @param dialogs - Writer dialog controller. @returns Nothing. */
-  public constructor(target: WriterTextCommandTarget, dialogs: WriterDialogController) {
-    this.shell = createCommandShell(target, createWriterTextCommandRegistry(target, dialogs));
+  public constructor(
+    private readonly target: SwTextShellTarget,
+    dialogs: WriterDialogController,
+  ) {
+    this.shell = createCommandShell(this, createWriterTextCommandRegistry(this, dialogs));
   }
   /** Returns the dispatcher-facing shell. @returns Registered Sfx shell. */
   public GetShell(): SfxShell {
     return this.shell;
   }
+
+  /** Returns on/off/mixed state for one direct character format. @param format - Writer format. @returns Selection-aware state. */
+  public GetCharacterFormatState(format: WriterCharacterFormat): "mixed" | "off" | "on" {
+    const range = getWriterSelectedTextRange(this.target.GetCursor());
+    if (range === undefined)
+      return this.target.GetCursor().HasMark()
+        ? "mixed"
+        : this.target.GetPendingCharacterAttributes()[format]
+          ? "on"
+          : "off";
+    return range.node.GetTextRangeFormatState(range.start, range.end, format);
+  }
+
+  /** Applies direct character formatting through the text-shell responsibility. @param format - Writer format. @param range - Optional resolved range. @returns Whether content changed. */
+  public ToggleCharacterFormat(format: WriterCharacterFormat, range?: WriterTextRange): boolean {
+    if (range !== undefined) {
+      const paragraph = range.node;
+      if (paragraph.GetDoc() !== this.target.GetDoc())
+        throw new Error("Writer text range is foreign.");
+      if (
+        !Number.isInteger(range.start) ||
+        !Number.isInteger(range.end) ||
+        range.start < 0 ||
+        range.end < range.start ||
+        range.end > paragraph.Len()
+      )
+        throw new Error("Writer text range is outside the paragraph.");
+      const current = getWriterSelectedTextRange(this.target.GetCursor());
+      if (
+        current?.node !== range.node ||
+        current.start !== range.start ||
+        current.end !== range.end
+      )
+        this.target.SetPaM(
+          new SwPosition(range.node, range.end),
+          new SwPosition(range.node, range.start),
+        );
+    }
+    const before = this.target.CaptureCursorState();
+    const selected = getWriterSelectedTextRange(this.target.GetCursor());
+    this.target.SetPendingCharacterAttributes({
+      ...this.target.GetPendingCharacterAttributes(),
+      [format]: this.GetCharacterFormatState(format) !== "on",
+    });
+    if (selected === undefined) {
+      if (this.target.GetCursor().HasMark()) {
+        this.target.NotifySelectionChanged();
+        return false;
+      }
+      this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
+      this.target.NotifySelectionChanged();
+      return false;
+    }
+    return this.target.ApplyAction(
+      new SwUndoAttr(
+        selected.node,
+        selected.start,
+        selected.node.CaptureTextFragment(selected.start, selected.end),
+        selected.node.CreateToggledTextFragment(selected.start, selected.end, format),
+        before,
+        before,
+      ),
+    );
+  }
+
+  /** Returns the uniform hyperlink at the active selection or caret. @returns Hyperlink or undefined. */
+  public GetHyperlinkAtCursor(): WriterHyperlink | undefined {
+    return getWriterHyperlinkAtCursor(this.target.GetDoc(), this.target.GetCursor());
+  }
+
+  /** Applies or removes a hyperlink through the text shell. @param hyperlink - Link metadata. @param text - Optional inserted text. @param range - Optional resolved range. @returns Whether changed. */
+  public SetHyperlink(
+    hyperlink: WriterHyperlink | undefined,
+    text?: string,
+    range?: WriterTextRange,
+  ): boolean {
+    if (range !== undefined)
+      this.target.SetPaM(
+        new SwPosition(range.node, range.end),
+        new SwPosition(range.node, range.start),
+      );
+    const action = createWriterHyperlinkAction(
+      this.target.GetDoc(),
+      this.target.GetCursor(),
+      this.target.GetPendingCharacterAttributes(),
+      this.target.CaptureCursorState(),
+      hyperlink,
+      text,
+    );
+    return action === undefined ? false : this.target.ApplyAction(action);
+  }
+
+  /** Applies a font family through one text-shell history action. @param fontFamily - Requested family. @returns Whether changed. */
+  public SetFontFamily(fontFamily: string): boolean {
+    const family = fontFamily.trim();
+    if (family.length === 0) throw new Error("Writer font family must not be blank.");
+    const before = this.target.CaptureCursorState();
+    const selected = getWriterSelectedTextRange(this.target.GetCursor());
+    this.target.SetPendingCharacterAttributes({
+      ...this.target.GetPendingCharacterAttributes(),
+      fontFamily: family,
+    });
+    if (selected === undefined) {
+      this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
+      this.target.NotifySelectionChanged();
+      return false;
+    }
+    const action = CreateWriterFontUndo(
+      selected.node,
+      selected.start,
+      selected.end,
+      family,
+      before,
+      this.target.CaptureCursorState(),
+    );
+    return action === undefined ? false : this.target.ApplyAction(action);
+  }
+
+  /** Applies paragraph alignment through the text shell. @param alignment - Next alignment. @returns Whether changed. */
+  public SetParagraphAlignment(alignment: WriterParagraphAlignment): boolean {
+    const paragraph = this.target.GetActiveParagraph();
+    if (paragraph.alignment === alignment) return false;
+    const cursor = this.target.CaptureCursorState();
+    return this.target.ApplyAction(
+      new SwUndoParagraphFormat(paragraph, paragraph.alignment, alignment, cursor, cursor),
+    );
+  }
+
+  /** Applies a paragraph style through the text shell. @param style - Style identity. @returns Whether changed. */
+  public SetParagraphStyle(style: WriterParagraphStyle): boolean {
+    if (!isWriterParagraphStyle(style))
+      throw new Error(`Unsupported Writer paragraph style: ${style}`);
+    const paragraph = this.target.GetActiveParagraph();
+    if (paragraph.style === style) return false;
+    const cursor = this.target.CaptureCursorState();
+    return this.target.ApplyAction(
+      new SwUndoFormatColl(paragraph, paragraph.style, style, cursor, cursor),
+    );
+  }
+
+  /** Executes Writer's context-sensitive text indent command. @param increase - Direction. @returns Whether changed. */
+  public ChangeParagraphIndent(increase: boolean): boolean {
+    return changeWriterParagraphIndent(this.target, increase);
+  }
+
+  /** Reports whether the text indent command has an available transition. @param increase - Direction. @returns Whether enabled. */
+  public CanChangeParagraphIndent(increase: boolean): boolean {
+    return canChangeWriterParagraphIndent(this.target.GetActiveParagraph(), increase);
+  }
+
+  /** Returns the active paragraph for command state. @returns Active text node. */
+  public GetActiveParagraph(): SwTextNode {
+    return this.target.GetActiveParagraph();
+  }
+
+  /** Returns pending character attributes for command state. @returns Attribute copy. */
+  public GetPendingCharacterAttributes(): WriterCharacterAttributes {
+    return this.target.GetPendingCharacterAttributes();
+  }
+
+  /** Returns the device-resolved default font. @returns Font family. */
+  public GetDefaultFontFamily(): string {
+    return this.target.GetDefaultFontFamily();
+  }
+
+  /** Returns whether undo is available. @returns Availability. */
+  public CanUndo(): boolean {
+    return this.target.GetDocShell().GetUndoManager().GetUndoActionCount() > 0;
+  }
+
+  /** Returns whether redo is available. @returns Availability. */
+  public CanRedo(): boolean {
+    return this.target.GetDocShell().GetUndoManager().GetRedoActionCount() > 0;
+  }
+
+  /** Restores the previous Writer history state through cursor-owning SwWrtShell. @returns Whether navigation occurred. */
+  public Undo(): boolean {
+    return this.target.Undo();
+  }
+
+  /** Restores the following Writer history state through cursor-owning SwWrtShell. @returns Whether navigation occurred. */
+  public Redo(): boolean {
+    return this.target.Redo();
+  }
 }
 
 /** Creates the active SwWrtShell command registry. @param target - Persistent Writer editing shell. @param dialogController - Writer-owned dialog lifecycle. @returns Validated immutable descriptors. */
 export function createWriterTextCommandRegistry(
-  target: WriterTextCommandTarget,
+  target: SwTextShell,
   dialogController: WriterDialogController,
-): CommandRegistry<WriterTextCommandTarget> {
+): CommandRegistry<SwTextShell> {
   const active =
     /** Reads the currently targeted paragraph. @returns Active paragraph projection. */ (): ReturnType<
-      WriterTextCommandTarget["GetActiveParagraph"]
+      SwTextShell["GetActiveParagraph"]
     > => target.GetActiveParagraph();
   const characterCommand =
     /** Creates one direct-character command descriptor. @param id - Stable ID. @param format - Character attribute. @returns Command descriptor. */
@@ -178,23 +401,5 @@ export function createWriterTextCommandRegistry(
       getStateValue: (): string => active().style,
       id: WRITER_COMMAND_IDS.styleApply,
     },
-    ...(["bullet", "numbered", "none"] as const).map(
-      /** Creates one paragraph-list descriptor. @param kind - Supported list kind. @returns Command descriptor. */
-      (kind) => ({
-        capabilityId: "CAP-0105" as const,
-        /** Applies the captured list kind. @returns Whether content changed. */
-        execute: (): boolean =>
-          target.SetParagraphListKind(
-            kind !== "none" && active().list.kind === kind ? "none" : kind,
-          ),
-        id: {
-          bullet: WRITER_COMMAND_IDS.unorderedList,
-          none: WRITER_COMMAND_IDS.removeBullets,
-          numbered: WRITER_COMMAND_IDS.orderedList,
-        }[kind],
-        /** Compares the active list kind with this command. @returns Checked state. */
-        isChecked: (): boolean => active().list.kind === kind,
-      }),
-    ),
   ]);
 }

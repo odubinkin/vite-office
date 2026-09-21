@@ -6,20 +6,27 @@ import {
   type CommandRegistry,
   type SfxShell,
 } from "../../../../sfx2/source/control/dispatch";
-import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
+import {
+  isWriterParagraphListKind,
+  WRITER_MAX_LIST_LEVEL,
+  type WriterParagraphListKind,
+} from "../../core/doc/list";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { SwUndoInsNum } from "../../core/undo/unnum";
+import type { SwUndoCursorState } from "../../core/undo/undobj";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterSlotId } from "../../../sdi/swriter";
 import { getWriterCommandResource } from "../../../uiconfig/swriter/writer-command-resources";
+import { changeWriterParagraphListLevel } from "../wrtsh/wrtsh-indent";
 
 /** Identifies the two executable Writer list-level commands. */
 export type WriterListLevelCommand = "demote" | "promote";
 
 /** Minimal SwWrtShell surface consumed by the active list context. */
 export interface SwListShellTarget {
-  readonly ChangeParagraphListLevel: (command: WriterListLevelCommand) => boolean;
-  readonly GetActiveParagraph: () => Readonly<{
-    list: Readonly<{ kind: "bullet" | "none" | "numbered"; level: number }>;
-  }>;
+  readonly ApplyAction: (action: SwUndoInsNum) => boolean;
+  readonly CaptureCursorState: () => SwUndoCursorState;
+  readonly GetActiveParagraph: () => SwTextNode;
 }
 
 /** Context-sensitive shell that owns list execution and state. */
@@ -38,12 +45,30 @@ export class SwListShell {
 
   /** Executes a list-level operation. @param command - Promote or demote. @returns Whether changed. */
   public Execute(command: WriterListLevelCommand): boolean {
-    return this.wrtShell.ChangeParagraphListLevel(command);
+    return changeWriterParagraphListLevel(this.wrtShell, command);
+  }
+
+  /** Applies or removes the active paragraph's bounded list rule. @param kind - Next list kind. @returns Whether changed. */
+  public SetParagraphListKind(kind: WriterParagraphListKind): boolean {
+    if (!isWriterParagraphListKind(kind))
+      throw new Error(`Unsupported Writer paragraph list kind: ${kind}`);
+    const paragraph = this.wrtShell.GetActiveParagraph();
+    if (paragraph.list.kind === kind) return false;
+    const cursor = this.wrtShell.CaptureCursorState();
+    const before = paragraph.CaptureParagraphListState();
+    return this.wrtShell.ApplyAction(
+      new SwUndoInsNum(paragraph, before, { ...paragraph.list, kind }, cursor, cursor),
+    );
   }
 
   /** Returns the active list level. @returns Zero-based level. */
   public GetLevel(): number {
     return this.wrtShell.GetActiveParagraph().list.level;
+  }
+
+  /** Returns the active paragraph list family. @returns Current list kind. */
+  public GetKind(): WriterParagraphListKind {
+    return this.wrtShell.GetActiveParagraph().list.kind;
   }
 
   /** Reports whether the active paragraph belongs to a list. @returns Whether in a list. */
@@ -54,8 +79,33 @@ export class SwListShell {
 
 /** Builds the bounded list toolbar registry using generated slot/resource identity. @param target - Active list shell. @returns Command registry. */
 function createListCommandRegistry(target: SwListShell): CommandRegistry<SwListShell> {
-  return createCommandRegistry(
-    (["promote", "demote"] as const).map(
+  return createCommandRegistry([
+    ...(["bullet", "numbered", "none"] as const).map(
+      /** Creates one list-kind command owned by listsh. @param kind - Requested list kind. @returns Descriptor. */ (
+        kind,
+      ) => {
+        const id = {
+          bullet: WRITER_COMMAND_IDS.unorderedList,
+          none: WRITER_COMMAND_IDS.removeBullets,
+          numbered: WRITER_COMMAND_IDS.orderedList,
+        }[kind];
+        const resource = getWriterCommandResource(id);
+        return {
+          capabilityId: "CAP-0105" as const,
+          execute:
+            /** Applies or toggles the captured list kind. @returns Whether changed. */ (): boolean =>
+              target.SetParagraphListKind(
+                kind !== "none" && target.GetKind() === kind ? "none" : kind,
+              ),
+          id,
+          isChecked: /** Reads active list kind. @returns Checked state. */ (): boolean =>
+            target.GetKind() === kind,
+          label: resource.label,
+          slotId: getWriterSlotId(id),
+        };
+      },
+    ),
+    ...(["promote", "demote"] as const).map(
       /** Creates one list command descriptor. @param command - List-level operation. @returns Command descriptor. */ (
         command,
       ) => {
@@ -77,5 +127,5 @@ function createListCommandRegistry(target: SwListShell): CommandRegistry<SwListS
         };
       },
     ),
-  );
+  ]);
 }

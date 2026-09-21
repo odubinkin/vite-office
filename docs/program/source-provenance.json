@@ -2712,15 +2712,13 @@
         "WriterCharacterAttributes",
         "WRITER_CHARACTER_FORMATS",
         "WriterCharacterFormat",
-        "WriterTextRun",
-        "DEFAULT_WRITER_CHARACTER_ATTRIBUTES",
         "WRITER_PARAGRAPH_ALIGNMENTS"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwTextNode, SwNodes::MakeTextNode, SwTextNode::SwTextNode, sw::TextNodeNotificationSuppressor and the bounded WriterCharacterAttributes, WRITER_CHARACTER_FORMATS, WriterCharacterFormat contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements Writer text nodes plus derived browser text runs at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary."
+        "Implements Writer text nodes, canonical text, paragraph items, and range hints at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
@@ -2730,6 +2728,27 @@
         "SwTextNode::SwTextNode",
         "sw::TextNodeNotificationSuppressor"
       ]
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "projectWriterTextRuns",
+            "path": "apps/office/src/sw/source/core/txtnode/text-run-projection.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/txtnode/text-run-projection.ts",
+      "rationale": "Keeps immutable browser and transfer run projection separate from canonical SwTextNode state without claiming a native LibreOffice implementation owner.",
+      "responsibilities": [
+        "Projects canonical Writer text and hints into immutable boundary runs and normalizes incoming run DTOs."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The browser product requires a derived run DTO that has no canonical Writer model counterpart."
+      },
+      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",
@@ -3561,7 +3580,7 @@
         "Upstream obligations outside SwListShell::InitInterface_Impl, SwListShell::Execute, SwListShell::GetState, SwListShell::SwListShell and the bounded WriterListLevelCommand identity remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements bounded SwListShell execution and state for promote/demote commands through generated Sfx slots and the active SwWrtShell."
+        "Implements bounded SwListShell execution and state for list-kind and promote/demote commands through generated Sfx slots and canonical Writer undo actions."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/shells/listsh.cxx",
@@ -3597,7 +3616,7 @@
         "Native-only text-shell slots and unsupported Writer feature families remain omitted."
       ],
       "preservedResponsibilities": [
-        "Owns registration of the supported text execute/state slots over the active SwWrtShell target."
+        "Owns supported character, paragraph, hyperlink, indent, and history execute/state semantics while SwWrtShell supplies cursor and action primitives."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
@@ -3659,16 +3678,15 @@
       "localSymbols": [
         "WriterCharacterCommandArguments",
         "WriterHyperlinkCommandArguments",
-        "WriterTextCommandTarget",
         "WriterViewCommandTarget",
         "createWriterCommandRegistry",
         "getWriterCommandArguments"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside CreateSWDrawView, AcceptTrackedChanges, TrackChanges, TrackChangesBar and the bounded WriterCharacterCommandArguments, WriterTextCommandTarget, WriterViewCommandTarget contract remain intentionally omitted."
+        "Upstream obligations outside CreateSWDrawView, AcceptTrackedChanges, TrackChanges, TrackChangesBar and the bounded WriterCharacterCommandArguments and WriterViewCommandTarget contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Declares Writer slot-like command descriptors and state handlers following the pinned SfxShell/SfxDispatcher execution boundary."
+        "Attaches generated slot and presentation metadata to handlers owned by concrete Writer shells."
       ],
       "status": "mapped",
       "upstreamPath": "sw/sdi/swriter.sdi",

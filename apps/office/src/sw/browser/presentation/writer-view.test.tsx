@@ -376,7 +376,6 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const services = createServices();
     const session = createWriterDocumentSession(services);
     const execute = vi.spyOn(session.frame.GetDispatcher(), "Execute");
-    const boldHandler = vi.spyOn(session.view.GetWrtShell(), "ToggleCharacterFormat");
     const firstMount = render(<WriterWorkbench isActive view={session.view} />);
     const formattingToolbar = screen.getByRole("toolbar", { name: "Writer formatting toolbar" });
     fireEvent.click(
@@ -398,7 +397,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
           ([commandId]) => commandId,
         ),
     ).toEqual([WRITER_COMMAND_IDS.bold, WRITER_COMMAND_IDS.bold, WRITER_COMMAND_IDS.bold]);
-    expect(boldHandler).toHaveBeenCalledTimes(3);
+    expect(session.view.QueryState(WRITER_COMMAND_IDS.bold)).toMatchObject({ checked: true });
 
     fireEvent.click(screen.getByRole("button", { name: "Ordered List" }));
     expect(within(formattingToolbar).getByRole("button", { name: "Bold" })).toBeVisible();
@@ -436,10 +435,10 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
 
   it("keeps inactive browser shortcuts inert" /** Verifies the frame visibility gate prevents accelerator dispatch. @returns Nothing. */, function ignoresInactiveShortcut(): void {
     const session = createWriterDocumentSession(createServices());
-    const boldHandler = vi.spyOn(session.view.GetWrtShell(), "ToggleCharacterFormat");
+    const execute = vi.spyOn(session.frame.GetDispatcher(), "Execute");
     const mount = render(<WriterWorkbench isActive={false} view={session.view} />);
     fireEvent.keyDown(window, { ctrlKey: true, key: "b" });
-    expect(boldHandler).not.toHaveBeenCalled();
+    expect(execute).not.toHaveBeenCalled();
     mount.unmount();
     session.Close();
   });

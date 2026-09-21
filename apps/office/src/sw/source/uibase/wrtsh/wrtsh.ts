@@ -6,7 +6,7 @@ import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
-import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
+import type { WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import type {
   SwTextNode as WriterParagraph,
@@ -23,7 +23,7 @@ import {
   getWriterTextFromRuns,
   normalizeWriterTextRuns,
 } from "../../core/txtnode/ndtxt";
-import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
+import type { WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
 import { SwTextShell } from "../shells/textsh";
 import type { SwDocShell } from "../app/docsh";
@@ -35,8 +35,6 @@ import {
   type SwUndoDeleteDirection,
 } from "../../core/undo/undel";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
-import { CreateWriterFontUndo, SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
-import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwTransferable } from "../dochdl/swdtflvr";
 import type {
@@ -48,16 +46,9 @@ import { getWriterTypingCharacterClass } from "./delete";
 import {
   createWriterCollapsedCursorState,
   createWriterUndoCursorState,
-  getWriterSelectedTextRange,
   type WriterCompositionState,
   type WriterTextRange,
 } from "./wrtsh-selection";
-import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
-import {
-  canChangeWriterParagraphIndent,
-  changeWriterParagraphIndent,
-  changeWriterParagraphListLevel,
-} from "./wrtsh-indent";
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
@@ -133,21 +124,19 @@ export class SwWrtShell extends SwModify {
   public GetPendingCharacterAttributes(): WriterCharacterAttributes {
     return { ...this.pendingCharacterAttributes };
   }
+  /** Replaces pending direct attributes on behalf of the active text shell. @param attributes - Next caret attributes. @returns Nothing. */
+  public SetPendingCharacterAttributes(attributes: WriterCharacterAttributes): void {
+    this.pendingCharacterAttributes = { ...attributes };
+  }
+  /** Publishes a cursor/attribute state change owned by a child context shell. @returns Nothing. */
+  public NotifySelectionChanged(): void {
+    this.NotifySelection();
+  }
   /** Returns the locale/device-resolved Western text default. @returns Font family. */
   public GetDefaultFontFamily(): string {
     return (
       this.GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_FONT) as SvxFontItem
     ).GetFamilyName();
-  }
-  /** Returns whether the shell-owned history can move backward. @returns True when Undo is enabled. */
-  public CanUndo(): boolean {
-    this.docShell.EnsureOpen();
-    return this.docShell.GetUndoManager().GetUndoActionCount() > 0;
-  }
-  /** Returns whether the shell-owned history can move forward. @returns True when Redo is enabled. */
-  public CanRedo(): boolean {
-    this.docShell.EnsureOpen();
-    return this.docShell.GetUndoManager().GetRedoActionCount() > 0;
   }
   /** Subscribes to cursor and pending-attribute changes. @param listener - View invalidation callback. @returns Cleanup removing it. */
   public Subscribe(listener: (hint: SwModelHint) => void): () => void {
@@ -572,70 +561,14 @@ export class SwWrtShell extends SwModify {
     return this.MergeParagraphWithPrevious(document.paragraphs[index + 1] as WriterParagraph);
   }
 
-  /** Returns on/off/mixed state for one direct character format at the persistent cursor. @param format - Writer direct character format. @returns Selection-aware slot state. */
-  public GetCharacterFormatState(format: WriterCharacterFormat): "mixed" | "off" | "on" {
-    const range = getWriterSelectedTextRange(this.cursor);
-    if (range === undefined)
-      return this.cursor.HasMark()
-        ? "mixed"
-        : this.pendingCharacterAttributes[format]
-          ? "on"
-          : "off";
-    return range.node.GetTextRangeFormatState(range.start, range.end, format);
-  }
-
   /** Toggles direct character formatting over a range or pending caret state. @param format - Writer character format. @param range - Optional same-paragraph selection. @returns Whether document content changed. */
   public ToggleCharacterFormat(format: WriterCharacterFormat, range?: WriterTextRange): boolean {
-    if (range !== undefined) {
-      const paragraph = range.node;
-      if (paragraph.GetDoc() !== this.GetDoc()) throw new Error("Writer text range is foreign.");
-      if (
-        !Number.isInteger(range.start) ||
-        !Number.isInteger(range.end) ||
-        range.start < 0 ||
-        range.end < range.start ||
-        range.end > paragraph.Len()
-      )
-        throw new Error("Writer text range is outside the paragraph.");
-      const currentRange = getWriterSelectedTextRange(this.cursor);
-      if (
-        currentRange?.node !== range.node ||
-        currentRange.start !== range.start ||
-        currentRange.end !== range.end
-      )
-        this.SetPaM(new SwPosition(range.node, range.end), new SwPosition(range.node, range.start));
-    }
-    const before = this.CaptureCursorState();
-    const selectedRange = getWriterSelectedTextRange(this.cursor);
-    this.pendingCharacterAttributes = {
-      ...this.pendingCharacterAttributes,
-      [format]: this.GetCharacterFormatState(format) !== "on",
-    };
-    if (selectedRange === undefined) {
-      if (this.cursor.HasMark()) {
-        this.NotifySelection();
-        return false;
-      }
-      this.docShell.GetUndoManager().BreakUndoGrouping();
-      this.NotifySelection();
-      return false;
-    }
-    const paragraph = selectedRange.node;
-    return this.ApplyAction(
-      new SwUndoAttr(
-        paragraph,
-        selectedRange.start,
-        paragraph.CaptureTextFragment(selectedRange.start, selectedRange.end),
-        paragraph.CreateToggledTextFragment(selectedRange.start, selectedRange.end, format),
-        before,
-        before,
-      ),
-    );
+    return this.textShell.ToggleCharacterFormat(format, range);
   }
 
   /** Reads one uniform selected or caret hyperlink for dialog editing. @returns Hyperlink metadata or undefined. */
   public GetHyperlinkAtCursor(): WriterHyperlink | undefined {
-    return getWriterHyperlinkAtCursor(this.GetDoc(), this.cursor);
+    return this.textShell.GetHyperlinkAtCursor();
   }
 
   /** Applies or removes a hyperlink using the persistent Writer selection. @param hyperlink - Replacement metadata or undefined. @param text - Text inserted for a collapsed caret. @param range - Optional DOM-resolved range. @returns Whether the document changed. */
@@ -644,91 +577,42 @@ export class SwWrtShell extends SwModify {
     text?: string,
     range?: WriterTextRange,
   ): boolean {
-    if (range !== undefined)
-      this.SetPaM(new SwPosition(range.node, range.end), new SwPosition(range.node, range.start));
-    const action = createWriterHyperlinkAction(
-      this.GetDoc(),
-      this.cursor,
-      this.pendingCharacterAttributes,
-      this.CaptureCursorState(),
-      hyperlink,
-      text,
-    );
-    return action === undefined ? false : this.ApplyAction(action);
+    return this.textShell.SetHyperlink(hyperlink, text, range);
   }
 
   /** Applies a font family. @param fontFamily - Selected family. @returns Whether document content changed. */
   public SetFontFamily(fontFamily: string): boolean {
-    const family = fontFamily.trim();
-    if (family.length === 0) throw new Error("Writer font family must not be blank.");
-    const before = this.CaptureCursorState();
-    const selectedRange = getWriterSelectedTextRange(this.cursor);
-    this.pendingCharacterAttributes = { ...this.pendingCharacterAttributes, fontFamily: family };
-    if (selectedRange === undefined) {
-      this.docShell.GetUndoManager().BreakUndoGrouping();
-      this.NotifySelection();
-      return false;
-    }
-    const paragraph = selectedRange.node;
-    const action = CreateWriterFontUndo(
-      paragraph,
-      selectedRange.start,
-      selectedRange.end,
-      family,
-      before,
-      this.CaptureCursorState(),
-    );
-    return action === undefined ? false : this.ApplyAction(action);
+    return this.textShell.SetFontFamily(fontFamily);
   }
 
   /** Applies paragraph alignment through one shell-owned history transition. @param alignment - Next alignment. @returns Whether content changed. */
   public SetParagraphAlignment(alignment: WriterParagraphAlignment): boolean {
-    const paragraph = this.GetActiveParagraph();
-    if (paragraph.alignment === alignment) return false;
-    const cursor = this.CaptureCursorState();
-    return this.ApplyAction(
-      new SwUndoParagraphFormat(paragraph, paragraph.alignment, alignment, cursor, cursor),
-    );
+    return this.textShell.SetParagraphAlignment(alignment);
   }
 
   /** Applies a paragraph style through one shell-owned history transition. @param style - Next style. @returns Whether content changed. */
   public SetParagraphStyle(style: WriterParagraphStyle): boolean {
-    if (!isWriterParagraphStyle(style))
-      throw new Error(`Unsupported Writer paragraph style: ${style}`);
-    const paragraph = this.GetActiveParagraph();
-    if (paragraph.style === style) return false;
-    const cursor = this.CaptureCursorState();
-    return this.ApplyAction(
-      new SwUndoFormatColl(paragraph, paragraph.style, style, cursor, cursor),
-    );
+    return this.textShell.SetParagraphStyle(style);
   }
 
   /** Applies or removes the active paragraph's default list. @param kind - Next list kind. @returns Whether content changed. */
   public SetParagraphListKind(kind: WriterParagraphListKind): boolean {
-    if (!isWriterParagraphListKind(kind))
-      throw new Error(`Unsupported Writer paragraph list kind: ${kind}`);
-    const paragraph = this.GetActiveParagraph();
-    if (paragraph.list.kind === kind) return false;
-    const cursor = this.CaptureCursorState();
-    const before = paragraph.CaptureParagraphListState();
-    return this.ApplyAction(
-      new SwUndoInsNum(paragraph, before, { ...paragraph.list, kind }, cursor, cursor),
-    );
+    return this.listShell.SetParagraphListKind(kind);
   }
 
   /** Promotes or demotes the active list paragraph. @param command - Level transition. @returns Whether content changed. */
   public ChangeParagraphListLevel(command: WriterListLevelCommand): boolean {
-    return changeWriterParagraphListLevel(this, command);
+    return this.listShell.Execute(command);
   }
 
   /** Executes the text-shell indent command: list levels for list items and a direct left margin otherwise. @param increase - Whether to increase indentation. @returns Whether content changed. */
   public ChangeParagraphIndent(increase: boolean): boolean {
-    return changeWriterParagraphIndent(this, increase);
+    return this.textShell.ChangeParagraphIndent(increase);
   }
 
   /** Reports whether the text-shell indent command has an available transition. @param increase - Whether to increase indentation. @returns Whether enabled. */
   public CanChangeParagraphIndent(increase: boolean): boolean {
-    return canChangeWriterParagraphIndent(this.GetActiveParagraph(), increase);
+    return this.textShell.CanChangeParagraphIndent(increase);
   }
 
   /** Applies one clipboard paragraph's complete bounded list tuple through Writer numbering undo. @param paragraph - Parsed clipboard paragraph. @returns Whether list metadata changed. */

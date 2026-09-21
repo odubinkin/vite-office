@@ -91,15 +91,15 @@ describe("parity mapping CLI" /**
     );
     expect(JSON.parse(output)).toMatchObject({
       baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
-      behaviorParityCount: 32,
-      classifiedDivergenceCount: 83,
-      contractParityCount: 32,
-      defaultParityCount: 32,
-      differentialParityCount: 32,
+      behaviorParityCount: 31,
+      classifiedDivergenceCount: 80,
+      contractParityCount: 31,
+      defaultParityCount: 31,
+      differentialParityCount: 31,
       exceptionCount: 0,
-      gapCount: 12,
+      gapCount: 13,
       implementedCount: 44,
-      ownershipParityCount: 32,
+      ownershipParityCount: 31,
       parityReady: false,
       recordCount: 44,
       runtime: {
@@ -110,12 +110,36 @@ describe("parity mapping CLI" /**
       },
       schemaVersion: 6,
       scopeLimitationCount: 78,
-      serializationParityCount: 32,
+      serializationParityCount: 31,
       unclassifiedDivergenceCount: 0,
-      unresolvedParityCount: 12,
-      verifiedCount: 32,
+      unresolvedParityCount: 13,
+      verifiedCount: 31,
     });
   }, 30_000);
+
+  it("keeps the umbrella ODT compatibility record open until atomic evidence closes" /**
+   * Prevents a package checksum assertion from promoting the complete bounded ODT round trip.
+   * @returns A promise resolving after the production manifest is inspected.
+   */, async function rejectsUmbrellaOdtVerification(): Promise<void> {
+    const manifest = JSON.parse(
+      await readUtf8File("docs/program/parity/writer-command-slice.json"),
+    ) as Readonly<{ records: readonly Record<string, unknown>[] }>;
+    const umbrella = manifest.records.find(
+      /** Finds the compatibility umbrella. @param record - Candidate manifest record. @returns Whether this is CAP-0130. */ (
+        record,
+      ) => record.id === "LO-WRITER-0130",
+    );
+    expect(umbrella).toMatchObject({
+      behaviorParity: false,
+      contractParity: false,
+      defaultParity: false,
+      maturity: "implemented",
+      verified: false,
+    });
+    expect(umbrella).not.toHaveProperty("assertionEvidence");
+    expect(umbrella).not.toHaveProperty("closure");
+    expect(umbrella).not.toHaveProperty("verification");
+  });
 });
 
 /**

@@ -5,7 +5,6 @@ import {
   type CommandDefinition,
   type CommandRegistry,
 } from "../../../../sfx2/source/control/dispatch";
-import type { WriterCharacterFormat } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import { getWriterSlotId } from "../../../sdi/swriter";
 import { getWriterCommandResource } from "../../../uiconfig/swriter/writer-command-resources";
@@ -58,37 +57,6 @@ export interface WriterCharacterCommandArguments {
 export interface WriterHyperlinkCommandArguments {
   readonly hyperlink?: WriterHyperlink;
   readonly text?: string;
-}
-
-/** Persistent Writer editing-shell surface used by text-shell handlers. */
-export interface WriterTextCommandTarget {
-  readonly CanRedo: () => boolean;
-  readonly CanUndo: () => boolean;
-  readonly CanChangeParagraphIndent: (increase: boolean) => boolean;
-  readonly ChangeParagraphIndent: (increase: boolean) => boolean;
-  readonly ChangeParagraphListLevel: (command: "demote" | "promote") => boolean;
-  readonly GetActiveParagraph: () => Readonly<{
-    alignment: "center" | "justify" | "left" | "right";
-    list: Readonly<{ kind: "bullet" | "none" | "numbered"; level: number }>;
-    style: string;
-  }>;
-  readonly GetCharacterFormatState: (format: WriterCharacterFormat) => "mixed" | "off" | "on";
-  readonly GetDefaultFontFamily: () => string;
-  readonly GetHyperlinkAtCursor: () => WriterHyperlink | undefined;
-  readonly GetPendingCharacterAttributes: () => Readonly<{
-    bold: boolean;
-    fontFamily?: string;
-    italic: boolean;
-    underline: boolean;
-  }>;
-  readonly Redo: () => boolean;
-  readonly SetParagraphAlignment: (alignment: "center" | "justify" | "left" | "right") => boolean;
-  readonly SetParagraphListKind: (kind: "bullet" | "none" | "numbered") => boolean;
-  readonly SetParagraphStyle: (style: string) => boolean;
-  readonly SetFontFamily: (fontFamily: string) => boolean;
-  readonly SetHyperlink: (hyperlink: WriterHyperlink | undefined, text?: string) => boolean;
-  readonly ToggleCharacterFormat: (format: WriterCharacterFormat) => boolean;
-  readonly Undo: () => boolean;
 }
 
 /** View-shell surface used by lifecycle, clipboard, and chrome handlers. */

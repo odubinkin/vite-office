@@ -2795,8 +2795,6 @@
         "localSymbols": [
           "WRITER_CHARACTER_FORMATS",
           "WriterCharacterFormat",
-          "WriterTextRun",
-          "DEFAULT_WRITER_CHARACTER_ATTRIBUTES",
           "WRITER_PARAGRAPH_ALIGNMENTS"
         ],
         "sourceResponsibility": "unverified",
@@ -2807,6 +2805,30 @@
           "SwTextNode::SwTextNode",
           "sw::TextNodeNotificationSuppressor"
         ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/text-run-projection.ts",
+      "classification": "local-infrastructure",
+      "state": "internal",
+      "suite": "writer",
+      "subsystem": "presentation-projection",
+      "capabilityIds": [],
+      "infrastructureExemption": "Derived immutable run DTOs keep browser and transfer projections outside canonical SwTextNode state.",
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/sw/source/core/txtnode/text-run-projection.ts#projectWriterTextRuns"
+        ],
+        "justification": "Projects canonical text and hints into a stack-specific immutable DTO without claiming an upstream model responsibility.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
       }
     },
     {
@@ -3656,6 +3678,7 @@
       "suite": "writer",
       "subsystem": "numbering",
       "capabilityIds": [
+        "CAP-0105",
         "CAP-0107",
         "CAP-0127"
       ],
@@ -3669,7 +3692,7 @@
           "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx#SwListShell::Execute",
           "vendor/libreoffice-reference/sw/source/uibase/shells/listsh.cxx#SwListShell::GetState"
         ],
-        "justification": "The supported list-level commands execute and query enablement through a dedicated top-priority SwListShell using the generated upstream slots.",
+        "justification": "The supported list-kind and list-level commands execute and query state through a dedicated top-priority SwListShell using generated upstream slots and canonical Writer undo actions.",
         "knownViolations": [],
         "localSymbols": [
           "SwListShell",
@@ -3693,7 +3716,6 @@
       "subsystem": "command-shell",
       "capabilityIds": [
         "CAP-0102",
-        "CAP-0105",
         "CAP-0107",
         "CAP-0109",
         "CAP-0112",
@@ -3708,7 +3730,7 @@
           "apps/office/src/sw/source/uibase/shells/textsh.ts#SwTextShell",
           "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SwTextShell::Execute"
         ],
-        "justification": "Owns registration of the supported text, character, paragraph, history, and hyperlink slots as a dedicated text context shell while SwWrtShell supplies cursor operations.",
+        "justification": "Owns supported text, character, paragraph, history, indent, and hyperlink execute/state semantics as a dedicated text context shell while SwWrtShell supplies cursor and action primitives.",
         "knownViolations": [],
         "localSymbols": [
           "SwTextShell",
@@ -3796,7 +3818,6 @@
         "localSymbols": [
           "WriterCharacterCommandArguments",
           "WriterHyperlinkCommandArguments",
-          "WriterTextCommandTarget",
           "WriterViewCommandTarget",
           "createWriterCommandRegistry",
           "getWriterCommandArguments"
@@ -4731,11 +4752,11 @@
     },
     {
       "id": "writer.internal.split-writer-text-runs",
-      "modulePath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "modulePath": "apps/office/src/sw/source/core/txtnode/text-run-projection.ts",
       "symbol": "splitWriterTextRuns",
-      "classification": "upstream-mechanism",
+      "classification": "local-infrastructure",
       "capabilityId": "CAP-0124",
-      "description": "Exported non-command mutation helper splitWriterTextRuns owned by apps/office/src/sw/source/core/txtnode/ndtxt.ts."
+      "description": "Derived boundary helper splitWriterTextRuns owned outside canonical SwTextNode state."
     }
   ],
   "uiBehaviors": [

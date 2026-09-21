@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements Writer text nodes plus derived browser text runs at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
+ * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
 
 import {
@@ -28,7 +28,7 @@ import { type SwNumRule } from "../doc/number";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
 import { SwContentIndexUpdateMode } from "../bastyp/contentindex";
-import { equalWriterHyperlinks, normalizeWriterHyperlink, type WriterHyperlink } from "./fmtinfmt";
+import type { WriterHyperlink } from "./fmtinfmt";
 
 /** Finds the grapheme start immediately before a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
 export function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {
@@ -65,7 +65,23 @@ function getWriterGraphemeBoundaries(text: string): readonly number[] {
   return boundaries;
 }
 import { SwNumRuleItem } from "../para/paratr";
-import { SwpHints, type WriterTextRunLike } from "./ndhints";
+import { SwpHints } from "./ndhints";
+import {
+  getWriterTextFromRuns,
+  normalizeWriterTextRuns,
+  projectWriterTextRuns,
+  type WriterTextRun,
+} from "./text-run-projection";
+export {
+  copyWriterTextRangeRuns,
+  createWriterTextRuns,
+  DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
+  getWriterTextFromRuns,
+  normalizeWriterCharacterAttributes,
+  normalizeWriterTextRuns,
+  splitWriterTextRuns,
+  type WriterTextRun,
+} from "./text-run-projection";
 import type { WriterCharacterAttributes } from "./txatbase";
 export type { WriterCharacterAttributes } from "./txatbase";
 
@@ -75,21 +91,11 @@ export const WRITER_CHARACTER_FORMATS = ["bold", "italic", "underline"] as const
 /** Identifies one supported direct Writer character attribute. */
 export type WriterCharacterFormat = (typeof WRITER_CHARACTER_FORMATS)[number];
 
-/** Derived immutable projection; canonical state remains text plus SwpHints. */
-export type WriterTextRun = WriterTextRunLike;
-
 /** Native Writer text payload retained by model mutations and undo. */
 export interface SwTextFragment {
   readonly text: string;
   readonly hints: SwpHints;
 }
-
-/** Stores the empty direct-formatting state used for new Writer text. */
-export const DEFAULT_WRITER_CHARACTER_ATTRIBUTES: WriterCharacterAttributes = {
-  bold: false,
-  italic: false,
-  underline: false,
-};
 
 /** Enumerates the bounded paragraph alignments represented by RES_PARATR_ADJUST. */
 export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"] as const;
@@ -97,122 +103,10 @@ export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"
 /** Identifies one supported horizontal paragraph alignment. */
 export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[number];
 
-/** Creates one unformatted text-run sequence from plain text. @param text - Complete Writer paragraph text to represent as runs. @returns No runs for empty text, otherwise one default-attribute text run. */
-export function createWriterTextRuns(text: string): readonly WriterTextRun[] {
-  return text.length === 0 ? [] : [{ attributes: DEFAULT_WRITER_CHARACTER_ATTRIBUTES, text }];
-}
-
-/** Converts a normalized or legacy run collection to its exact visible plain text. @param runs - Text runs read from a Writer paragraph or browser boundary. @returns Concatenated visible UTF-16 text with invalid fragments omitted. */
-export function getWriterTextFromRuns(runs: unknown): string {
-  return normalizeWriterTextRuns(runs)
-    .map(
-      /** Extracts a normalized run body. @param run - Valid normalized text run. @returns Its visible text. */
-      function selectRunText(run): string {
-        return run.text;
-      },
-    )
-    .join("");
-}
-
-/** Copies a browser-boundary run projection for one native node range. @param node - Source text node. @param start - Inclusive offset. @param end - Exclusive offset. @returns Immutable projected runs. */
-export function copyWriterTextRangeRuns(
-  node: SwTextNode,
-  start: number,
-  end: number,
-): readonly WriterTextRun[] {
-  const fragment = node.CaptureTextFragment(start, end);
-  return fragment.hints.toTextRuns(fragment.text, node.GetSwAttrSet());
-}
-
-/** Normalizes untrusted Writer run data, removing empty fragments and merging adjacent equal attributes. @param candidate - Unknown persisted or caller-supplied run collection. @returns Immutable normalized direct-format text runs. */
-export function normalizeWriterTextRuns(candidate: unknown): readonly WriterTextRun[] {
-  if (!Array.isArray(candidate)) return [];
-  const runs: WriterTextRun[] = [];
-  candidate.forEach(
-    /** Parses and appends one valid non-empty persisted run. @param item - Unknown persisted run. @returns Nothing; valid normalized output is accumulated. */
-    function appendNormalizedRun(item): void {
-      if (!isRecord(item) || typeof item.text !== "string" || item.text.length === 0) return;
-      const attributes = normalizeWriterCharacterAttributes(item.attributes);
-      const hyperlink = normalizeWriterHyperlink(item.hyperlink);
-      const previous = runs[runs.length - 1];
-      if (
-        previous !== undefined &&
-        areWriterCharacterAttributesEqual(previous.attributes, attributes) &&
-        equalWriterHyperlinks(previous.hyperlink, hyperlink)
-      ) {
-        runs[runs.length - 1] = { ...previous, text: `${previous.text}${item.text}` };
-      } else {
-        runs.push({
-          attributes,
-          ...(hyperlink === undefined ? {} : { hyperlink }),
-          text: item.text,
-        });
-      }
-    },
-  );
-  return runs;
-}
-
-/** Normalizes unknown direct character attributes to the bounded Writer subset. @param candidate - Unknown attributes read from storage or a command boundary. @returns Immutable attributes with unsupported or absent values treated as false. */
-export function normalizeWriterCharacterAttributes(candidate: unknown): WriterCharacterAttributes {
-  const attributes = isRecord(candidate) ? candidate : {};
-  return {
-    ...(typeof attributes.fontFamily === "string" && attributes.fontFamily.trim().length > 0
-      ? { fontFamily: attributes.fontFamily }
-      : {}),
-    bold: attributes.bold === true,
-    italic: attributes.italic === true,
-    underline: attributes.underline === true,
-  };
-}
-
-/**
- * Splits runs at one valid UTF-16 paragraph offset.
- *
- * @param runs - Existing normalized Writer text runs.
- * @param offset - UTF-16 split offset from zero through visible text length.
- * @returns Immutable prefix and suffix run collections preserving direct attributes.
- * @throws {Error} When offset is outside visible text bounds.
- */
-export function splitWriterTextRuns(
-  runs: readonly WriterTextRun[],
-  offset: number,
-): Readonly<{ prefix: readonly WriterTextRun[]; suffix: readonly WriterTextRun[] }> {
-  const normalized = normalizeWriterTextRuns(runs);
-  const textLength = getWriterTextFromRuns(normalized).length;
-  if (!Number.isInteger(offset) || offset < 0 || offset > textLength)
-    throw new Error("Writer text split offset is outside the paragraph.");
-  let consumed = 0;
-  const prefix: WriterTextRun[] = [];
-  const suffix: WriterTextRun[] = [];
-  normalized.forEach(
-    /** Splits one run only when it crosses offset. @param run - Normalized source run. @returns Nothing; prefix and suffix collections are accumulated. */
-    function splitRun(run): void {
-      const runStart = consumed;
-      const runEnd = runStart + run.text.length;
-      consumed = runEnd;
-      if (runEnd <= offset) prefix.push(run);
-      else if (runStart >= offset) suffix.push(run);
-      else {
-        const localOffset = offset - runStart;
-        prefix.push({
-          ...run,
-          text: run.text.slice(0, localOffset),
-        });
-        suffix.push({
-          ...run,
-          text: run.text.slice(localOffset),
-        });
-      }
-    },
-  );
-  return { prefix: normalizeWriterTextRuns(prefix), suffix: normalizeWriterTextRuns(suffix) };
-}
-
 /**
  * Owns one Writer paragraph's canonical text, paragraph items, format collection, and range hints.
  *
- * The `runs` property is intentionally a derived rendering/clipboard projection and is never stored.
+ * The compatibility `runs` accessor delegates to the separate immutable projection boundary.
  */
 export class SwTextNode extends SwContentNode {
   private mText: string;
@@ -391,9 +285,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Derives complete rendering runs from canonical text and range hints. @returns Complete rendering projection. */
   public get runs(): readonly WriterTextRun[] {
-    return this.pSwpHints === undefined
-      ? new SwpHints(this.GetDoc().GetAttrPool()).toTextRuns(this.mText, this.GetSwAttrSet())
-      : this.pSwpHints.toTextRuns(this.mText, this.GetSwAttrSet());
+    return projectWriterTextRuns(this);
   }
 
   /** Sets the paragraph adjustment item. @param alignment - New paragraph alignment. @returns Nothing. */
@@ -848,22 +740,4 @@ function getWriterParagraphAlignment(adjust: SvxAdjust): WriterParagraphAlignmen
     default:
       return "left";
   }
-}
-
-/** Checks equality of two bounded Writer character attribute records. @param left - First attributes. @param right - Second attributes. @returns True only when every direct attribute matches. */
-function areWriterCharacterAttributesEqual(
-  left: WriterCharacterAttributes,
-  right: WriterCharacterAttributes,
-): boolean {
-  return (
-    left.bold === right.bold &&
-    left.fontFamily === right.fontFamily &&
-    left.italic === right.italic &&
-    left.underline === right.underline
-  );
-}
-
-/** Checks whether an unknown value is a non-null record. @param value - Unknown runtime candidate. @returns True only for object records. */
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
 }

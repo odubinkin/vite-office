@@ -4,7 +4,7 @@ title: "Complete Writer P1 parity remediation"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: correct the remaining Writer P1 shell responsibility and ODT parity-evidence gaps under the approved bounded scope."
 doc_version: 3
-doc_updated_at: "2026-09-21T15:47:00.270Z"
+doc_updated_at: "2026-09-21T16:07:45.760Z"
 doc_updated_by: "CODER"
 description: "Fix the remaining P1-2 responsibility decomposition and P1-6 ODT parity-evidence overclaim identified by review."
 sections:
@@ -48,7 +48,12 @@ sections:
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only commits attributed to task 202609211546-N289BQ to restore the previous shell ownership and parity records together."
-  Findings: "No findings recorded yet."
+  Findings: |-
+    - LO-WRITER-0130 was incorrectly marked verified by package-level CRC32 evidence. It now remains implemented-only with contract, ownership, behavior, default, differential, and serialization parity open until the atomic ODT records close.
+    - Writer formatting and paragraph command semantics now belong to SwTextShell; list-kind and list-level semantics belong to SwListShell. SwWrtShell retains cursor coordination and compatibility forwarding only, while writercommands.ts is limited to argument/registry metadata.
+    - Derived WriterTextRun projection, normalization, range copying, and splitting moved from the canonical SwTextNode implementation into text-run-projection.ts, with compatibility exports retained.
+    - Verification evidence: targeted Writer/ODT suites passed (7 files, 63 tests); inventory suites passed (3 files, 16 tests); npm run verify passed with 74 office test files / 353 tests at 100% coverage, 34 inventory test files / 96 tests at 100% coverage, and 11/11 Playwright tests. Source provenance passed for 147 modules. Parity reports 44 implemented, 31 verified, 13 gaps, and parityReady=false.
+    - Process note: the first full verification exposed an obsolete test spy on SwWrtShell and unused compatibility wrappers. The test now asserts dispatcher behavior/state, and the dead wrappers were removed; the subsequent complete verification passed.
 id_source: "generated"
 ---
 ## Summary
@@ -78,4 +83,8 @@ Revert only commits attributed to task 202609211546-N289BQ to restore the previo
 
 ## Findings
 
-No findings recorded yet.
+- LO-WRITER-0130 was incorrectly marked verified by package-level CRC32 evidence. It now remains implemented-only with contract, ownership, behavior, default, differential, and serialization parity open until the atomic ODT records close.
+- Writer formatting and paragraph command semantics now belong to SwTextShell; list-kind and list-level semantics belong to SwListShell. SwWrtShell retains cursor coordination and compatibility forwarding only, while writercommands.ts is limited to argument/registry metadata.
+- Derived WriterTextRun projection, normalization, range copying, and splitting moved from the canonical SwTextNode implementation into text-run-projection.ts, with compatibility exports retained.
+- Verification evidence: targeted Writer/ODT suites passed (7 files, 63 tests); inventory suites passed (3 files, 16 tests); npm run verify passed with 74 office test files / 353 tests at 100% coverage, 34 inventory test files / 96 tests at 100% coverage, and 11/11 Playwright tests. Source provenance passed for 147 modules. Parity reports 44 implemented, 31 verified, 13 gaps, and parityReady=false.
+- Process note: the first full verification exposed an obsolete test spy on SwWrtShell and unused compatibility wrappers. The test now asserts dispatcher behavior/state, and the dead wrappers were removed; the subsequent complete verification passed.
