@@ -1,10 +1,11 @@
 ---
 id: "202609211327-2J9NYP"
 title: "Close remaining Writer P0 parity gaps"
-status: "DOING"
+result_summary: "verified-202609211327-2J9NYP"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T13:57:36.295Z"
-  updated_by: "REVIEWER"
-  note: "Verified full Writer P0 correction scope: numeric SfxRequest slot dispatch, browser/source ownership boundary, source-backed paragraph style materialization, parity evidence, and complete repository checks."
+  updated_at: "2026-09-21T13:58:02.430Z"
+  updated_by: "CODER"
+  note: "verified-202609211327-2J9NYP"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,16 @@ quality_review:
     - "Sfx shells resolve numeric slots and receive complete SfxRequest objects; parameterized StyleApply is decoded into request arguments."
     - "Browser projection/store and clipboard request types no longer live in sw/source; static boundary enforcement prevents regression."
     - "Only 26 source-backed paragraph styles with complete ancestry can be materialized; 126-entry inventory metadata remains intact."
-commit: null
+commit:
+  hash: "4c3c076cad751686cdb34766030120ca62a4290b"
+  message: "🧩 2J9NYP task: persist verification artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Writer P0-2, P0-3, and P0-5 remediation with focused and full verification."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609211327-2J9NYP. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -60,8 +66,21 @@ events:
     author: "REVIEWER"
     state: "ok"
     note: "Verified full Writer P0 correction scope: numeric SfxRequest slot dispatch, browser/source ownership boundary, source-backed paragraph style materialization, parity evidence, and complete repository checks."
+  -
+    type: "verify"
+    at: "2026-09-21T13:58:02.430Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211327-2J9NYP"
+  -
+    type: "status"
+    at: "2026-09-21T13:58:02.622Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609211327-2J9NYP. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-21T13:57:36.373Z"
+doc_updated_at: "2026-09-21T13:58:02.623Z"
 doc_updated_by: "CODER"
 description: "Fix audited P0-2, P0-3, and P0-5 discrepancies while keeping the P0-1 inventory model unchanged: make Sfx execution slot/request-driven, isolate browser projection and event DTOs from sw/source, and expose only paragraph styles with complete supported upstream defaults."
 sections:
@@ -110,6 +129,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-21T13:58:02.430Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211327-2J9NYP
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T13:57:36.373Z, excerpt_hash=sha256:dd354b57ab776826ba1dd16ee1609e9ade1c9014c5d258123312975bf9f67565
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211327-2J9NYP/blueprint/resolved-snapshot.json
+    - old_digest: a39b17f28d79b12bb0c169c8ea6357825200c572e87fd2ea1d78ba54255b5a62
+    - current_digest: a39b17f28d79b12bb0c169c8ea6357825200c572e87fd2ea1d78ba54255b5a62
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211327-2J9NYP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211327-2J9NYP --result verified-202609211327-2J9NYP --commit 4c3c076cad751686cdb34766030120ca62a4290b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation commit and deterministic Agentplane close commit; no external state or persisted-schema migration is involved."
   Findings: |-
@@ -118,6 +167,10 @@ sections:
     - Observation: P0-2, P0-3, and P0-5 gaps are closed; P0-1 inventory model remains structurally unchanged.
       Impact: Writer command execution and source ownership now match the approved bounded upstream shape, while unsupported styles fail before mutation.
       Resolution: npm run verify passed, including 349 runtime tests, 95 inventory tests, 11 Playwright tests, 100% coverage, static build, provenance, invariants, and parity gapCount=0.
+extensions:
+  implementation_commit:
+    hash: "268fe95fad25592a9f4d082a648df1fbad612e77"
+    message: "🚧 2J9NYP task: close Writer P0 parity gaps"
 id_source: "generated"
 ---
 ## Summary
@@ -170,6 +223,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609211327-2J9NYP
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T13:58:02.430Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211327-2J9NYP
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T13:57:36.373Z, excerpt_hash=sha256:dd354b57ab776826ba1dd16ee1609e9ade1c9014c5d258123312975bf9f67565
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211327-2J9NYP/blueprint/resolved-snapshot.json
+- old_digest: a39b17f28d79b12bb0c169c8ea6357825200c572e87fd2ea1d78ba54255b5a62
+- current_digest: a39b17f28d79b12bb0c169c8ea6357825200c572e87fd2ea1d78ba54255b5a62
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211327-2J9NYP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211327-2J9NYP --result verified-202609211327-2J9NYP --commit 4c3c076cad751686cdb34766030120ca62a4290b
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
