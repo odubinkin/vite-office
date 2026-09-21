@@ -1,13 +1,6 @@
 /** @fileoverview Implements direct character and paragraph attribute undo from pinned LibreOffice unattr.cxx. */
 
-import {
-  applyWriterTextRangeFont,
-  copyWriterTextRangeRuns,
-  getWriterTextFromRuns,
-  type SwTextFragment,
-  type SwTextNode,
-  type WriterParagraphAlignment,
-} from "../txtnode/ndtxt";
+import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../txtnode/ndtxt";
 import {
   CopyTextFragment,
   CopyUndoFragment,
@@ -77,15 +70,8 @@ export function CreateWriterFontUndo(
   after: SwUndoCursorState,
 ): SwUndoAttr | undefined {
   const beforeFragment = CopyTextFragment(paragraph, start, end);
-  const beforeRuns = copyWriterTextRangeRuns(paragraph, start, end);
-  const afterRuns = applyWriterTextRangeFont(
-    beforeRuns,
-    0,
-    getWriterTextFromRuns(beforeRuns).length,
-    family,
-  );
-  const afterFragment = paragraph.CreateTextFragment(afterRuns);
-  return JSON.stringify(beforeRuns) === JSON.stringify(afterRuns)
+  const afterFragment = paragraph.CreateFontTextFragment(start, end, family);
+  return beforeFragment.hints.equals(afterFragment.hints)
     ? undefined
     : new SwUndoAttr(paragraph, start, beforeFragment, afterFragment, before, after);
 }

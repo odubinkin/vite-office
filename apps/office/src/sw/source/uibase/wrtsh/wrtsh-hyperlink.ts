@@ -5,7 +5,6 @@ import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type {
   SwTextNode as WriterParagraph,
   WriterCharacterAttributes,
-  WriterTextRun,
 } from "../../core/txtnode/ndtxt";
 import { copyWriterTextRangeRuns } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
@@ -57,21 +56,18 @@ export function createWriterHyperlinkAction(
   if (selectedRange !== undefined) {
     const paragraph = selectedRange.node;
     if (paragraph.GetDoc() !== document) throw new Error("Writer hyperlink range is foreign.");
-    const beforeRuns = copyWriterTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
-    const afterRuns = beforeRuns.map(
-      /** Replaces only hyperlink metadata. @param run - Existing selected run. @returns Updated run. */
-      (run): WriterTextRun => ({
-        attributes: run.attributes,
-        ...(hyperlink === undefined ? {} : { hyperlink }),
-        text: run.text,
-      }),
+    const beforeFragment = paragraph.CaptureTextFragment(selectedRange.start, selectedRange.end);
+    const afterFragment = paragraph.CreateHyperlinkTextFragment(
+      selectedRange.start,
+      selectedRange.end,
+      hyperlink,
     );
-    if (JSON.stringify(beforeRuns) === JSON.stringify(afterRuns)) return undefined;
+    if (beforeFragment.hints.equals(afterFragment.hints)) return undefined;
     return new SwUndoAttr(
       paragraph,
       selectedRange.start,
-      paragraph.CaptureTextFragment(selectedRange.start, selectedRange.end),
-      paragraph.CreateTextFragment(afterRuns),
+      beforeFragment,
+      afterFragment,
       before,
       before,
     );
@@ -85,9 +81,7 @@ export function createWriterHyperlinkAction(
   return new SwUndoInsert(
     paragraph,
     offset,
-    paragraph.CreateTextFragment([
-      { attributes: { ...pendingAttributes }, hyperlink, text: value },
-    ]),
+    paragraph.CreateTextFragmentFromText(value, pendingAttributes, hyperlink),
     undefined,
     before,
     {

@@ -7,7 +7,6 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
 import { SwTransferable } from "../dochdl/swdtflvr";
 import { SwWrtShell } from "./wrtsh";
-import { applyWriterTextRangeFont } from "../../core/txtnode/ndtxt";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { isWriterCursorOffset } from "./wrtsh-selection";
@@ -705,38 +704,6 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.Redo()).toBe(true);
     expect(shell.GetActiveParagraph().runs[1]?.attributes.fontFamily).toBe("Noto Serif");
     expect(shell.SetFontFamily("Noto Serif")).toBe(false);
-    expect(
-      /** Rejects a range outside the source runs. @returns Invalid formatting. */ () =>
-        applyWriterTextRangeFont(shell.GetActiveParagraph().runs, 0, 99, "Noto Serif"),
-    ).toThrow("outside");
-    const plainRuns = [
-      { attributes: { bold: false, italic: false, underline: false }, text: "abcd" },
-    ] as const;
-    expect(applyWriterTextRangeFont(plainRuns, 1, 3, "Noto Sans")).toEqual([
-      { attributes: { bold: false, italic: false, underline: false }, text: "a" },
-      {
-        attributes: { bold: false, fontFamily: "Noto Sans", italic: false, underline: false },
-        text: "bc",
-      },
-      { attributes: { bold: false, italic: false, underline: false }, text: "d" },
-    ]);
-    expect(applyWriterTextRangeFont(plainRuns, 1, 1, "Noto Sans")).toEqual(plainRuns);
-    expect(
-      applyWriterTextRangeFont(
-        [
-          { attributes: { bold: true, italic: false, underline: false }, text: "a" },
-          { attributes: { bold: false, italic: false, underline: false }, text: "bc" },
-          { attributes: { bold: false, italic: true, underline: false }, text: "d" },
-        ],
-        1,
-        3,
-        "Noto Sans",
-      ),
-    ).toHaveLength(3);
-    expect(
-      /** Rejects an empty family at the range helper boundary. @returns Invalid formatting. */ () =>
-        applyWriterTextRangeFont(plainRuns, 0, 1, " "),
-    ).toThrow("blank");
   });
 
   it("creates clipboard transfer data from the shell SwPaM without rendered DOM", /** Verifies model-owned transfer serialization. @returns Nothing. */ function createsModelTransfer(): void {

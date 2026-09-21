@@ -434,6 +434,8 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     expect(hints.getCharacterAttributes("abcdef", 6, inherited)).toEqual(plain);
     const clone = hints.clone();
     expect(clone).not.toBe(hints);
+    expect(clone.equals(hints)).toBe(true);
+    expect(new SwpHints(pool).equals(hints)).toBe(false);
     expect(clone.toTextRuns("abcdef", inherited)).toEqual(hints.toTextRuns("abcdef", inherited));
     for (const [start, end] of [
       [0.5, 1],
@@ -537,6 +539,47 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
       ),
     ).toThrow("Overlapping Writer");
   });
+
+  it("mutates native hint fragments across clipped and empty ranges", /** Covers native hint construction, clipping, internal boundaries, and validation without run mutations. @returns Nothing. */ function mutatesNativeHints(): void {
+    const writer = createModelFixture();
+    const pool = writer.GetAttrPool();
+    const inherited = writer.GetDfltTextFormatColl().GetAttrSet();
+    const empty = new SwpHints(pool);
+    expect(empty.createTextHints(0, plain, inherited).Count()).toBe(0);
+    expect(
+      throwing(
+        /** Creates a negative-length hint fragment. @returns Invalid fragment. */ () =>
+          empty.createTextHints(-1, plain, inherited),
+      ),
+    ).toThrow("length is invalid");
+
+    const formatted = new SwpHints(pool, [
+      new SwTextAttr(createSwFormatAutoFormat(pool, bold), 1, 3),
+    ]);
+    expect(formatted.getCharacterFormatState(4, 2, 2, "bold", inherited)).toBe("off");
+    expect(
+      formatted.toggleCharacterFormat(4, 0, 4, "italic", inherited).toTextRuns("abcd", inherited),
+    ).toEqual([
+      { attributes: { ...plain, italic: true }, text: "a" },
+      { attributes: { ...bold, italic: true }, text: "bc" },
+      { attributes: { ...plain, italic: true }, text: "d" },
+    ]);
+
+    const linked = new SwpHints(pool, [
+      new SwTextAttr(new SwFormatINetFormat({ url: "original" }), 0, 4),
+    ]).setHyperlink(4, 1, 3, { url: "replacement" });
+    expect(linked.toTextRuns("abcd", inherited)).toEqual([
+      { attributes: plain, hyperlink: { url: "original" }, text: "a" },
+      { attributes: plain, hyperlink: { url: "replacement" }, text: "bc" },
+      { attributes: plain, hyperlink: { url: "original" }, text: "d" },
+    ]);
+    expect(
+      throwing(
+        /** Mutates outside the canonical text length. @returns Invalid range. */ () =>
+          linked.setHyperlink(4, 0, 5, undefined),
+      ),
+    ).toThrow("outside the text node");
+  });
 });
 
 describe("Writer SwTextNode and content manager" /** Groups canonical text mutation and SwPaM operation tests. @returns Nothing; Vitest registers cases. */, function defineContentOperationTests(): void {
@@ -586,6 +629,10 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     node.ToggleTextRangeFormat(1, 3, "underline");
     expect(node.runs[1]?.attributes).toMatchObject({ italic: true, underline: true });
     expect(node.getCharacterAttributesAt(2)).toMatchObject({ italic: true, underline: true });
+    const direct = createModelFixture().paragraphs[0] as SwTextNode;
+    direct.InsertText("bold", 0, bold);
+    direct.ToggleTextRangeFormat(0, 4, "bold");
+    expect(direct.GetpSwpHints()).toBeUndefined();
     const trailing = node.SplitContent(2);
     writer.nodes.insertTextNodeAfter(node, trailing);
     expect(node.text).toBe("aY");

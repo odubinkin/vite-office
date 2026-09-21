@@ -123,6 +123,15 @@ for (const sourceFile of runtimeSources) {
       continue;
     }
     const targetModule = getModule(relativeTarget);
+    if (
+      relativeSource.startsWith(`sw${path.sep}source${path.sep}`) &&
+      relativeTarget.startsWith(`sw${path.sep}browser${path.sep}`)
+    ) {
+      failures.push(
+        `${displayPath(sourceFile)}: Writer source layers must receive browser adapters through an injected contract`,
+      );
+      continue;
+    }
     if (sourceModule === undefined || targetModule === undefined || sourceModule === targetModule)
       continue;
     addGraphEdge(graph, sourceModule, targetModule);

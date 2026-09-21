@@ -4,7 +4,7 @@ title: "Fix remaining Writer P0 parity gaps"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -37,7 +37,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-09-21T12:42:59.205Z"
+doc_updated_at: "2026-09-21T13:08:48.486Z"
 doc_updated_by: "CODER"
 description: "Complete P0-3 through P0-5 remediation found by audit: keep browser projection identities outside sw/source, remove WriterTextRun from canonical mutation paths, and make every exposed paragraph style match supported pinned defaults or remain unavailable. P0-1 stays unchanged."
 sections:
@@ -52,11 +52,9 @@ sections:
     5. Run npm run test:coverage, npm run test:inventory:coverage, npm run test:e2e, and npm run verify.
     6. Run ap doctor and node .agentplane/policy/check-routing.mjs.
     7. Inspect git diff and git status --short --untracked-files=all; only intentional P0-3 through P0-5 files and task artifacts may change, with P0-1 mechanics untouched.
-  Verification: |-
-    <!-- BEGIN VERIFICATION RESULTS -->
-    <!-- END VERIFICATION RESULTS -->
+  Verification: "PASS: npm run verify (349 application tests with 100% coverage; 95 inventory tests with 100% coverage; 11 Playwright e2e tests; build/static/JSDoc/file-size/source-tree/source-provenance/invariants/parity all passed). PASS: focused Writer suite (53 tests before final additions), check:dependencies (140 runtime sources, 476 imports, 12 allowed cross-module edges), ap doctor, policy routing, git diff --check, and architecture rg checks."
   Rollback Plan: "Revert the implementation commit and deterministic AgentPlane close commit; no storage migration or external state is involved."
-  Findings: ""
+  Findings: "P0-3: browser paragraph-id resolution now lives in the browser projection adapter and sw/source is protected from sw/browser imports. P0-4: insertion, formatting, font, hyperlink, and undo paths now use native SwpHints/SwTextAttr/SfxItemSet fragments; obsolete run-based mutation helpers were removed while boundary projections remain. P0-5: HTML list-heading is unavailable until defaults exist, comment defaults match the pinned source-derived values, and the complete exposed style set is tested. P0-1 inventory mechanics remain unchanged; only stale runtime-inventory entries for removed exports were deleted."
 id_source: "generated"
 ---
 ## Summary
@@ -83,11 +81,12 @@ Implement the approved five-step P0-3 through P0-5 remediation and verification 
 
 ## Verification
 
-<!-- BEGIN VERIFICATION RESULTS -->
-<!-- END VERIFICATION RESULTS -->
+PASS: npm run verify (349 application tests with 100% coverage; 95 inventory tests with 100% coverage; 11 Playwright e2e tests; build/static/JSDoc/file-size/source-tree/source-provenance/invariants/parity all passed). PASS: focused Writer suite (53 tests before final additions), check:dependencies (140 runtime sources, 476 imports, 12 allowed cross-module edges), ap doctor, policy routing, git diff --check, and architecture rg checks.
 
 ## Rollback Plan
 
 Revert the implementation commit and deterministic AgentPlane close commit; no storage migration or external state is involved.
 
 ## Findings
+
+P0-3: browser paragraph-id resolution now lives in the browser projection adapter and sw/source is protected from sw/browser imports. P0-4: insertion, formatting, font, hyperlink, and undo paths now use native SwpHints/SwTextAttr/SfxItemSet fragments; obsolete run-based mutation helpers were removed while boundary projections remain. P0-5: HTML list-heading is unavailable until defaults exist, comment defaults match the pinned source-derived values, and the complete exposed style set is tested. P0-1 inventory mechanics remain unchanged; only stale runtime-inventory entries for removed exports were deleted.

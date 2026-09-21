@@ -254,7 +254,7 @@ export const WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL: readonly WriterParagraphStyl
     (definition) =>
       implementedStyleIds.has(definition.id) ||
       /^heading-(10|[1-9])$/.test(definition.id) ||
-      definition.id.endsWith("-heading"),
+      (definition.group === "index" && definition.id.endsWith("-heading")),
   );
 
 /** Looks up immutable built-in metadata by programmatic identity. @param id - Stable ID. @returns Definition. */

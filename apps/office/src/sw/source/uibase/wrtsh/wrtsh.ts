@@ -20,10 +20,8 @@ import {
   copyWriterTextRangeRuns,
   getWriterNextGraphemeBoundary,
   getWriterPreviousGraphemeBoundary,
-  getWriterTextAttributesAtOffset,
   getWriterTextFromRuns,
   normalizeWriterTextRuns,
-  toggleWriterTextRangeFormat,
 } from "../../core/txtnode/ndtxt";
 import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
@@ -85,10 +83,7 @@ export class SwWrtShell extends SwModify {
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
     this.activeParagraph = paragraph;
     this.cursor = new SwPaM(new SwPosition(paragraph, paragraph.text.length));
-    this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(
-      paragraph.runs,
-      paragraph.text.length,
-    );
+    this.pendingCharacterAttributes = paragraph.getCharacterAttributesAt(paragraph.text.length);
     this.undoContext = {
       GetDoc: /** Returns the shell's current SwDoc. @returns Active document. */ () =>
         this.docShell.GetDoc(),
@@ -192,10 +187,7 @@ export class SwWrtShell extends SwModify {
     const paragraph = this.GetDoc().paragraphs[0] as WriterParagraph;
     this.activeParagraph = paragraph;
     this.composition = undefined;
-    this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(
-      paragraph.runs,
-      paragraph.text.length,
-    );
+    this.pendingCharacterAttributes = paragraph.getCharacterAttributesAt(paragraph.text.length);
     this.AssignCursor(paragraph, paragraph.text.length);
     this.NotifySelection();
   }
@@ -228,10 +220,7 @@ export class SwWrtShell extends SwModify {
     )
       return false;
     this.activeParagraph = pointNode;
-    this.pendingCharacterAttributes = getWriterTextAttributesAtOffset(
-      pointNode.runs,
-      point.GetContentIndex(),
-    );
+    this.pendingCharacterAttributes = pointNode.getCharacterAttributesAt(point.GetContentIndex());
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.cursor.Assign(point, mark);
     this.NotifySelection();
@@ -336,9 +325,7 @@ export class SwWrtShell extends SwModify {
           paragraph,
           start,
           paragraph.CaptureTextFragment(start, end),
-          paragraph.CreateTextFragment([
-            { attributes: { ...this.pendingCharacterAttributes }, text },
-          ]),
+          paragraph.CreateTextFragmentFromText(text, this.pendingCharacterAttributes),
           "Replace",
           before,
           this.CreateCollapsedCursorState(paragraph, start + text.length),
@@ -351,9 +338,7 @@ export class SwWrtShell extends SwModify {
       new SwUndoInsert(
         paragraph,
         offset,
-        paragraph.CreateTextFragment([
-          { attributes: { ...this.pendingCharacterAttributes }, text },
-        ]),
+        paragraph.CreateTextFragmentFromText(text, this.pendingCharacterAttributes),
         group,
         before,
         this.CreateCollapsedCursorState(paragraph, offset + text.length),
@@ -599,14 +584,7 @@ export class SwWrtShell extends SwModify {
         : this.pendingCharacterAttributes[format]
           ? "on"
           : "off";
-    const values = new Set(
-      copyWriterTextRangeRuns(range.node, range.start, range.end).map(
-        /** Reads the selected fragment's format value. @param run - Selected Writer text run. @returns Applied flag. */ (
-          run,
-        ) => run.attributes[format],
-      ),
-    );
-    return values.size > 1 ? "mixed" : values.has(true) ? "on" : "off";
+    return range.node.GetTextRangeFormatState(range.start, range.end, format);
   }
 
   /** Toggles direct character formatting over a range or pending caret state. @param format - Writer character format. @param range - Optional same-paragraph selection. @returns Whether document content changed. */
@@ -646,24 +624,12 @@ export class SwWrtShell extends SwModify {
       return false;
     }
     const paragraph = selectedRange.node;
-    const beforeRuns = copyWriterTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
-    /* v8 ignore next 3 -- A validated non-empty text range always copies at least one run. */
-    if (beforeRuns.length === 0) {
-      this.NotifySelection();
-      return false;
-    }
-    const afterRuns = toggleWriterTextRangeFormat(
-      beforeRuns,
-      0,
-      getWriterTextFromRuns(beforeRuns).length,
-      format,
-    );
     return this.ApplyAction(
       new SwUndoAttr(
         paragraph,
         selectedRange.start,
         paragraph.CaptureTextFragment(selectedRange.start, selectedRange.end),
-        paragraph.CreateTextFragment(afterRuns),
+        paragraph.CreateToggledTextFragment(selectedRange.start, selectedRange.end, format),
         before,
         before,
       ),

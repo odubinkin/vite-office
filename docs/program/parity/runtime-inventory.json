@@ -4533,28 +4533,12 @@
       "description": "Exported non-command mutation helper changeWriterParagraphListLevel owned by apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts."
     },
     {
-      "id": "writer.internal.insert-writer-text-run",
-      "modulePath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
-      "symbol": "insertWriterTextRun",
-      "classification": "upstream-mechanism",
-      "capabilityId": "CAP-0124",
-      "description": "Exported non-command mutation helper insertWriterTextRun owned by apps/office/src/sw/source/core/txtnode/ndtxt.ts."
-    },
-    {
       "id": "writer.internal.split-writer-text-runs",
       "modulePath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
       "symbol": "splitWriterTextRuns",
       "classification": "upstream-mechanism",
       "capabilityId": "CAP-0124",
       "description": "Exported non-command mutation helper splitWriterTextRuns owned by apps/office/src/sw/source/core/txtnode/ndtxt.ts."
-    },
-    {
-      "id": "writer.internal.toggle-writer-text-range-format",
-      "modulePath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
-      "symbol": "toggleWriterTextRangeFormat",
-      "classification": "upstream-mechanism",
-      "capabilityId": "CAP-0111",
-      "description": "Exported non-command mutation helper toggleWriterTextRangeFormat owned by apps/office/src/sw/source/core/txtnode/ndtxt.ts."
     }
   ],
   "uiBehaviors": [

@@ -22,6 +22,7 @@ import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import type { BrowserWriterEditPort } from "../editor/writer-edit-controller";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
 import type { SwView, WriterPasteCommandArguments } from "../../source/uibase/uiview/view";
+import { WriterViewProjection } from "./writer-view-projection";
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
@@ -46,6 +47,7 @@ export function WriterWorkbench({
     dialogController.GetSnapshot,
   );
   const wrtShell = view.GetWrtShell();
+  const viewProjection = view.GetPresentationProjector() as WriterViewProjection;
   const editPort = useMemo<Omit<BrowserWriterEditPort, "synchronizeSelection">>(
     /** Binds browser intent translation to Writer-native shell operations. @returns Stable edit port. */ () => ({
       deleteForward: /** Deletes after the Writer cursor. @returns Whether changed. */ () =>
@@ -97,13 +99,15 @@ export function WriterWorkbench({
   );
   const handleParagraphFocus = useCallback(
     /** Moves the shell cursor to a focused projection. @param paragraphId - Stable Writer paragraph ID. @returns Nothing. */
-    (paragraphId: string): void => void view.FocusProjectedParagraph(paragraphId),
-    [view],
+    (paragraphId: string): void =>
+      void viewProjection.FocusParagraph(view.GetDocShell().GetDoc(), wrtShell, paragraphId),
+    [view, viewProjection, wrtShell],
   );
   const handleSelectionChange = useCallback(
     /** Stores native selection endpoints as the shell PaM. @param selection - Canonical Writer endpoints. @returns Whether the selection changed. */
-    (selection: WriterCursorSelection): boolean => view.SetProjectedSelection(selection),
-    [view],
+    (selection: WriterCursorSelection): boolean =>
+      viewProjection.SetSelection(view.GetDocShell().GetDoc(), wrtShell, selection),
+    [view, viewProjection, wrtShell],
   );
   const handleSelectAll = useCallback(
     /** Dispatches the canonical Select All command. @returns Nothing. */ () => {

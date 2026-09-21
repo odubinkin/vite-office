@@ -21,12 +21,16 @@ import type { WriterParagraphList } from "../../core/doc/list";
 import type { WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type { WriterParagraphAlignment, WriterTextRun, SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwPaM } from "../../core/crsr/pam";
-import { SwPosition } from "../../core/crsr/pam";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
 import { SwWrtShell } from "../wrtsh/wrtsh";
-import type { WriterCursorSelection } from "../../../browser/editor/writer-selection-types";
+
+/** Direction-preserving primitive cursor projection supplied by the injected presenter. */
+export interface WriterCursorProjection {
+  readonly mark?: Readonly<{ readonly offset: number; readonly paragraphId: string }>;
+  readonly point: Readonly<{ readonly offset: number; readonly paragraphId: string }>;
+}
 
 /** Primitive/resource-ID projection of one text node. */
 export interface WriterParagraphProjection {
@@ -64,7 +68,7 @@ export interface WriterParagraphComputedStyle {
 export interface WriterPresentationProjection {
   readonly activeParagraph: WriterParagraphProjection;
   readonly activeParagraphIndex: number;
-  readonly cursorSelection: WriterCursorSelection;
+  readonly cursorSelection: WriterCursorProjection;
   readonly documentState: OfficeDocument;
   readonly modelRevision: number;
   readonly paragraphs: readonly WriterParagraphProjection[];
@@ -78,7 +82,6 @@ export interface WriterPresentationProjector {
     cursor: SwPaM,
     documentState: OfficeDocument,
   ) => WriterPresentationProjection;
-  readonly ResolveNode: (document: SwDoc, projectionId: string) => SwTextNode | undefined;
 }
 
 /** DOM-adapted Cut arguments accepted by the unified command. */
@@ -215,6 +218,11 @@ export class SwView {
     return this.dialogController;
   }
 
+  /** Returns the injected read-only presentation projector for its owning browser adapter. @returns Presentation projector. */
+  public GetPresentationProjector(): WriterPresentationProjector {
+    return this.viewProjection;
+  }
+
   /** Returns the SwView command shell for bottom-to-top frame registration. @returns View command shell. */
   public GetCommandShell(): SfxShell {
     return this.viewCommandShell;
@@ -263,32 +271,6 @@ export class SwView {
   /** Dispatches a stable Writer command through the active frame shell stack. @param commandId - Stable command identity. @param arguments_ - Typed UI-adapter arguments. @returns Explicit dispatch result. */
   public Execute(commandId: string, arguments_?: unknown): CommandDispatchResult<unknown> {
     return this.GetDispatcher().Execute(commandId, arguments_);
-  }
-
-  /** Resolves a browser projection key and focuses the canonical node. @param projectionId - View-only node key. @returns Whether it resolved. */
-  public FocusProjectedParagraph(projectionId: string): boolean {
-    const node = this.viewProjection.ResolveNode(this.docShell.GetDoc(), projectionId);
-    if (node === undefined) return false;
-    this.wrtShell.FocusNode(node);
-    return true;
-  }
-
-  /** Converts browser projection endpoints to canonical SwPositions before entering SwWrtShell. @param selection - View-only selection. @returns Whether the PaM changed. */
-  public SetProjectedSelection(selection: WriterCursorSelection): boolean {
-    const document = this.docShell.GetDoc();
-    const pointNode = this.viewProjection.ResolveNode(document, selection.point.paragraphId);
-    const markNode =
-      selection.mark === undefined
-        ? undefined
-        : this.viewProjection.ResolveNode(document, selection.mark.paragraphId);
-    if (pointNode === undefined || (selection.mark !== undefined && markNode === undefined))
-      return false;
-    return this.wrtShell.SetPaM(
-      new SwPosition(pointNode, selection.point.offset),
-      selection.mark === undefined || markNode === undefined
-        ? undefined
-        : new SwPosition(markNode, selection.mark.offset),
-    );
   }
 
   /** Queries enabled/checked/value state from the same resolving shell used for execution. @param commandId - Stable command identity. @returns Current command state. */

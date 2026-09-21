@@ -222,13 +222,18 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const cursor = wrtShell.GetCursor();
     const initialDocument = docShell.GetDoc();
     const initialSnapshot = view.GetSnapshot();
+    const projection = view.GetPresentationProjector() as WriterViewProjection;
     expect(
-      view.SetProjectedSelection({ point: { offset: 0, paragraphId: "missing-projection" } }),
+      projection.SetSelection(initialDocument, wrtShell, {
+        point: { offset: 0, paragraphId: "missing-projection" },
+      }),
     ).toBe(false);
-    expect(view.FocusProjectedParagraph("missing-projection")).toBe(false);
-    expect(view.FocusProjectedParagraph(initialSnapshot.activeParagraph.id)).toBe(true);
+    expect(projection.FocusParagraph(initialDocument, wrtShell, "missing-projection")).toBe(false);
     expect(
-      view.SetProjectedSelection({
+      projection.FocusParagraph(initialDocument, wrtShell, initialSnapshot.activeParagraph.id),
+    ).toBe(true);
+    expect(
+      projection.SetSelection(initialDocument, wrtShell, {
         mark: { offset: 0, paragraphId: "missing-mark" },
         point: initialSnapshot.cursorSelection.point,
       }),

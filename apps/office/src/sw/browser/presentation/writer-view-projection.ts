@@ -5,6 +5,8 @@ import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
 import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import type { SwPaM } from "../../source/core/crsr/pam";
+import { SwPosition } from "../../source/core/crsr/pam";
+import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
 import {
   SvxFirstLineIndentItem,
   SvxLineSpacingItem,
@@ -58,6 +60,35 @@ export class WriterViewProjection implements WriterPresentationProjector {
   public ResolveNode(document: SwDoc, projectionId: string): SwTextNode | undefined {
     const node = this.projectedNodes.get(projectionId);
     return node?.GetDoc() === document && document.paragraphs.includes(node) ? node : undefined;
+  }
+
+  /** Resolves one browser projection key before focusing the Writer shell. @param document - Expected document. @param shell - Writer-native edit shell. @param projectionId - View-only paragraph key. @returns Whether the key resolved. */
+  public FocusParagraph(document: SwDoc, shell: SwWrtShell, projectionId: string): boolean {
+    const node = this.ResolveNode(document, projectionId);
+    if (node === undefined) return false;
+    shell.FocusNode(node);
+    return true;
+  }
+
+  /** Converts browser projection endpoints to Writer-native positions before invoking the shell. @param document - Expected document. @param shell - Writer-native edit shell. @param selection - Browser cursor projection. @returns Whether the PaM changed. */
+  public SetSelection(
+    document: SwDoc,
+    shell: SwWrtShell,
+    selection: WriterCursorSelection,
+  ): boolean {
+    const pointNode = this.ResolveNode(document, selection.point.paragraphId);
+    const markNode =
+      selection.mark === undefined
+        ? undefined
+        : this.ResolveNode(document, selection.mark.paragraphId);
+    if (pointNode === undefined || (selection.mark !== undefined && markNode === undefined))
+      return false;
+    return shell.SetPaM(
+      new SwPosition(pointNode, selection.point.offset),
+      selection.mark === undefined || markNode === undefined
+        ? undefined
+        : new SwPosition(markNode, selection.mark.offset),
+    );
   }
 
   /** Projects the current model revision without retaining mutable nodes. @param document - Canonical graph. @param activeParagraph - Shell target. @param cursorSelection - Browser cursor DTO. @param documentState - Shell state. @returns Immutable value graph. */

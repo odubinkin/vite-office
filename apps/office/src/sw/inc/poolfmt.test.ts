@@ -4,6 +4,7 @@ import {
   encodeWriterOdfStyleName,
   getWriterOdfStyleName,
   getWriterStyleIdFromOdfName,
+  WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
   WRITER_PARAGRAPH_STYLE_POOL,
 } from "./poolfmt";
 import { createWriterDocument } from "../source/core/doc/doc";
@@ -104,6 +105,60 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect(getWriterOdfStyleName("custom-style")).toBe("custom-style");
   });
 
+  it("exposes only styles backed by source-derived defaults", /** Verifies the complete available style surface. @returns Nothing. */ () => {
+    expect(
+      WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
+        /** Projects one available identity. @param style - Available style. @returns ID. */ (
+          style,
+        ) => style.id,
+      ),
+    ).toEqual([
+      "default",
+      "text-body",
+      "first-line-indent",
+      "hanging-indent",
+      "text-body-indent",
+      "marginalia",
+      "header-right",
+      "footer-right",
+      "table-heading",
+      "caption",
+      "footnote",
+      "endnote",
+      "comment",
+      "index-heading",
+      "contents-heading",
+      "user-index-heading",
+      "figure-index-heading",
+      "object-index-heading",
+      "table-index-heading",
+      "bibliography-heading",
+      "title",
+      "subtitle",
+      "appendix",
+      "heading",
+      "heading-1",
+      "heading-2",
+      "heading-3",
+      "heading-4",
+      "heading-5",
+      "heading-6",
+      "heading-7",
+      "heading-8",
+      "heading-9",
+      "heading-10",
+      "quotations",
+      "preformatted-text",
+    ]);
+    expect(
+      WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.some(
+        /** Detects the unavailable HTML list heading. @param style - Available style. @returns Whether it is the list heading. */ (
+          style,
+        ) => style.id === "list-heading",
+      ),
+    ).toBe(false);
+  });
+
   it("materializes source-derived item defaults and script slots", /** Verifies representative upstream style switch branches. @returns Nothing. */ () => {
     const document = createWriterDocument();
     const textBody = document.GetTextFormatColl("text-body").GetAttrSet();
@@ -134,6 +189,15 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect((caption.Get(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture()).toBe(
       FontItalic.NORMAL,
     );
+
+    const comment = document.GetTextFormatColl("comment").GetAttrSet();
+    expect((comment.Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(10 * 20);
+    expect(
+      (comment.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
+    ).toBe(0);
+    expect((comment.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(57);
+    expect((comment.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight()).toBe(57);
+    expect((comment.Get(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([57, 0]);
 
     const hanging = document.GetTextFormatColl("hanging-indent").GetAttrSet();
     expect(

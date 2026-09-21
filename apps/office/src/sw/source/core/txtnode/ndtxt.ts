@@ -166,189 +166,6 @@ export function normalizeWriterCharacterAttributes(candidate: unknown): WriterCh
   };
 }
 
-/** Applies a font family. @param runs - Source runs. @param start - Range start. @param end - Range end. @param fontFamily - Family. @returns Formatted runs. */
-export function applyWriterTextRangeFont(
-  runs: readonly WriterTextRun[],
-  start: number,
-  end: number,
-  fontFamily: string,
-): readonly WriterTextRun[] {
-  if (fontFamily.trim().length === 0) throw new Error("Writer font family must not be blank.");
-  const normalized = normalizeWriterTextRuns(runs);
-  const textLength = getWriterTextFromRuns(normalized).length;
-  if (
-    !Number.isInteger(start) ||
-    !Number.isInteger(end) ||
-    start < 0 ||
-    end > textLength ||
-    start > end
-  )
-    throw new Error("Writer font range is outside the paragraph.");
-  if (start === end) return normalized;
-  let offset = 0;
-  return normalizeWriterTextRuns(
-    normalized.flatMap(
-      /** Formats one intersecting run. @param run - Source run. @returns Replacement fragments. */ (
-        run,
-      ) => {
-        const runStart = offset;
-        const runEnd = runStart + run.text.length;
-        offset = runEnd;
-        if (runStart >= end || runEnd <= start) return [run];
-        const beforeLength = Math.max(0, start - runStart);
-        const afterStart = Math.min(run.text.length, end - runStart);
-        return [
-          ...(beforeLength === 0
-            ? []
-            : [
-                {
-                  ...run,
-                  text: run.text.slice(0, beforeLength),
-                },
-              ]),
-          {
-            ...run,
-            attributes: { ...run.attributes, fontFamily },
-            text: run.text.slice(beforeLength, afterStart),
-          },
-          ...(afterStart === run.text.length
-            ? []
-            : [
-                {
-                  ...run,
-                  text: run.text.slice(afterStart),
-                },
-              ]),
-        ];
-      },
-    ),
-  );
-}
-
-/** Applies one direct format to a non-empty same-paragraph text range, toggling it off only when every selected character already has it. @param runs - Existing normalized Writer text runs. @param start - Inclusive UTF-16 paragraph offset where the selection begins. @param end - Exclusive UTF-16 paragraph offset where the selection ends. @param format - Direct character format selected by the Writer command. @returns Original normalized runs for an empty range, otherwise a normalized formatted replacement. @throws {Error} When range offsets are not integer bounds of the visible run text. */
-export function toggleWriterTextRangeFormat(
-  runs: readonly WriterTextRun[],
-  start: number,
-  end: number,
-  format: WriterCharacterFormat,
-): readonly WriterTextRun[] {
-  const normalized = normalizeWriterTextRuns(runs);
-  const textLength = getWriterTextFromRuns(normalized).length;
-  if (
-    !Number.isInteger(start) ||
-    !Number.isInteger(end) ||
-    start < 0 ||
-    end > textLength ||
-    start > end
-  )
-    throw new Error("Writer character-format range is outside the paragraph.");
-  if (start === end) return normalized;
-  let offset = 0;
-  const selectedAlreadyFormatted = normalized
-    .filter(
-      /** Retains text runs intersected by the requested non-empty range. @param run - Normalized text run. @returns True only for range-intersecting runs. */
-      function intersectsRange(run): boolean {
-        const runEnd = offset + run.text.length;
-        const intersects = offset < end && runEnd > start;
-        offset = runEnd;
-        return intersects;
-      },
-    )
-    .every(
-      /** Checks whether one intersected run already owns the requested format. @param run - Intersected normalized run. @returns True only when the requested format is enabled. */
-      function hasFormat(run): boolean {
-        return run.attributes[format];
-      },
-    );
-  offset = 0;
-  return normalizeWriterTextRuns(
-    normalized.flatMap(
-      /** Splits one intersected run at range boundaries and updates only its selected fragment. @param run - Normalized source text run. @returns One to three immutable replacement runs. */
-      function formatIntersectedRun(run): readonly WriterTextRun[] {
-        const runStart = offset;
-        const runEnd = runStart + run.text.length;
-        offset = runEnd;
-        if (runStart >= end || runEnd <= start) return [run];
-        const beforeLength = Math.max(0, start - runStart);
-        const afterStart = Math.min(run.text.length, end - runStart);
-        const before = run.text.slice(0, beforeLength);
-        const selected = run.text.slice(beforeLength, afterStart);
-        const after = run.text.slice(afterStart);
-        const attributes = { ...run.attributes, [format]: !selectedAlreadyFormatted };
-        return [
-          ...(before.length === 0 ? [] : [{ ...run, text: before }]),
-          { ...run, attributes, text: selected },
-          ...(after.length === 0 ? [] : [{ ...run, text: after }]),
-        ];
-      },
-    ),
-  );
-}
-
-/**
- * Inserts text at one UTF-16 offset with the supplied direct attributes.
- *
- * @param runs - Existing normalized Writer text runs.
- * @param offset - UTF-16 insertion offset from zero through visible text length.
- * @param text - Text to insert unchanged.
- * @param attributes - Direct attributes inherited by the inserted text.
- * @param hyperlink - Optional hyperlink inherited by the inserted text.
- * @returns Normalized runs containing the inserted text, or the original normalized runs for empty text.
- * @throws {Error} When offset is outside visible text bounds.
- */
-export function insertWriterTextRun(
-  runs: readonly WriterTextRun[],
-  offset: number,
-  text: string,
-  attributes: WriterCharacterAttributes,
-  hyperlink?: WriterHyperlink,
-): readonly WriterTextRun[] {
-  const normalized = normalizeWriterTextRuns(runs);
-  const textLength = getWriterTextFromRuns(normalized).length;
-  if (!Number.isInteger(offset) || offset < 0 || offset > textLength)
-    throw new Error("Writer text insertion offset is outside the paragraph.");
-  if (text.length === 0) return normalized;
-  const normalizedHyperlink = normalizeWriterHyperlink(hyperlink);
-  const inserted = {
-    attributes: normalizeWriterCharacterAttributes(attributes),
-    ...(normalizedHyperlink === undefined ? {} : { hyperlink: normalizedHyperlink }),
-    text,
-  };
-  let consumed = 0;
-  let insertedRun = false;
-  const nextRuns = normalized.flatMap(
-    /** Inserts the run before, inside, or after exactly one source fragment. @param run - Normalized source run. @returns One or more replacement runs. */
-    function insertIntoRun(run): readonly WriterTextRun[] {
-      const runStart = consumed;
-      const runEnd = runStart + run.text.length;
-      consumed = runEnd;
-      if (insertedRun || offset < runStart || offset > runEnd) return [run];
-      insertedRun = true;
-      const localOffset = offset - runStart;
-      return [
-        ...(localOffset === 0
-          ? []
-          : [
-              {
-                ...run,
-                text: run.text.slice(0, localOffset),
-              },
-            ]),
-        inserted,
-        ...(localOffset === run.text.length
-          ? []
-          : [
-              {
-                ...run,
-                text: run.text.slice(localOffset),
-              },
-            ]),
-      ];
-    },
-  );
-  return normalizeWriterTextRuns(insertedRun ? nextRuns : [...nextRuns, inserted]);
-}
-
 /**
  * Splits runs at one valid UTF-16 paragraph offset.
  *
@@ -390,34 +207,6 @@ export function splitWriterTextRuns(
     },
   );
   return { prefix: normalizeWriterTextRuns(prefix), suffix: normalizeWriterTextRuns(suffix) };
-}
-
-/**
- * Reads direct attributes inherited by a collapsed Writer caret.
- *
- * @param runs - Existing normalized Writer text runs.
- * @param offset - UTF-16 caret offset from zero through visible text length.
- * @returns Attributes of the preceding character when present, otherwise following character, otherwise defaults.
- * @throws {Error} When offset is outside visible text bounds.
- */
-export function getWriterTextAttributesAtOffset(
-  runs: readonly WriterTextRun[],
-  offset: number,
-): WriterCharacterAttributes {
-  const normalized = normalizeWriterTextRuns(runs);
-  const textLength = getWriterTextFromRuns(normalized).length;
-  if (!Number.isInteger(offset) || offset < 0 || offset > textLength)
-    throw new Error("Writer character-format caret is outside the paragraph.");
-  let consumed = 0;
-  const run = normalized.find(
-    /** Finds the run containing the character before the caret, or the following run at a paragraph start. @param candidate - Normalized source run. @returns True only for the inherited caret format run. */
-    function containsCaret(candidate): boolean {
-      const runStart = consumed;
-      consumed += candidate.text.length;
-      return (offset > runStart && offset <= consumed) || (offset === 0 && runStart === 0);
-    },
-  );
-  return run?.attributes ?? DEFAULT_WRITER_CHARACTER_ATTRIBUTES;
 }
 
 /**
@@ -700,9 +489,17 @@ export class SwTextNode extends SwContentNode {
     hyperlink = this.getHyperlinkAt(offset),
   ): string {
     if (text.length === 0) return text;
-    const runs = insertWriterTextRun(this.runs, offset, text, attributes, hyperlink);
+    this.assertRange(offset, offset);
+    const hints = this.GetTextHints().insertText(
+      this.mText.length,
+      offset,
+      text.length,
+      attributes,
+      this.GetSwAttrSet(),
+      hyperlink,
+    );
     this.mText = `${this.mText.slice(0, offset)}${text}${this.mText.slice(offset)}`;
-    this.setHintsFromRuns(runs);
+    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
     this.UpdateContentIndices(offset, text.length);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
@@ -794,7 +591,14 @@ export class SwTextNode extends SwContentNode {
   /** Applies or removes one direct format over a non-empty range. @param start - Inclusive format start. @param end - Exclusive format end. @param format - Toggled direct property. @returns Nothing. */
   public ToggleTextRangeFormat(start: number, end: number, format: WriterCharacterFormat): void {
     this.assertRange(start, end);
-    this.setTextRuns(toggleWriterTextRangeFormat(this.runs, start, end, format));
+    const hints = this.GetTextHints().toggleCharacterFormat(
+      this.mText.length,
+      start,
+      end,
+      format,
+      this.GetSwAttrSet(),
+    );
+    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
@@ -812,6 +616,22 @@ export class SwTextNode extends SwContentNode {
       : this.pSwpHints.getCharacterAttributes(this.mText, offset, this.GetSwAttrSet());
   }
 
+  /** Queries one direct character item over a native text range. @param start - Inclusive range start. @param end - Exclusive range end. @param format - Queried item group. @returns Uniform or mixed state. */
+  public GetTextRangeFormatState(
+    start: number,
+    end: number,
+    format: WriterCharacterFormat,
+  ): "mixed" | "off" | "on" {
+    this.assertRange(start, end);
+    return this.GetTextHints().getCharacterFormatState(
+      this.mText.length,
+      start,
+      end,
+      format,
+      this.GetSwAttrSet(),
+    );
+  }
+
   /** Reads the hyperlink inherited by a caret. @param offset - UTF-16 caret offset. @returns Hyperlink metadata or undefined. */
   public getHyperlinkAt(offset: number): WriterHyperlink | undefined {
     return this.pSwpHints?.getHyperlink(this.mText, offset);
@@ -821,17 +641,8 @@ export class SwTextNode extends SwContentNode {
   public SetHyperlink(start: number, end: number, hyperlink: WriterHyperlink | undefined): void {
     this.assertRange(start, end);
     if (start === end) return;
-    const before = splitWriterTextRuns(this.runs, start);
-    const selected = splitWriterTextRuns(before.suffix, end - start);
-    const replacement = selected.prefix.map(
-      /** Replaces hyperlink metadata without altering direct character formatting. @param run - Selected run. @returns Updated run. */
-      (run): WriterTextRun => ({
-        attributes: run.attributes,
-        ...(hyperlink === undefined ? {} : { hyperlink }),
-        text: run.text,
-      }),
-    );
-    this.setTextRuns([...before.prefix, ...replacement, ...selected.suffix]);
+    const hints = this.GetTextHints().setHyperlink(this.mText.length, start, end, hyperlink);
+    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
@@ -901,6 +712,68 @@ export class SwTextNode extends SwContentNode {
     return { text: this.mText.slice(start, end), hints: this.GetTextHints().slice(start, end) };
   }
 
+  /** Creates a native insertion fragment from text and effective character items. @param text - Inserted text. @param attributes - Effective direct character state. @param hyperlink - Optional inserted hyperlink. @returns Native text/hint fragment. */
+  public CreateTextFragmentFromText(
+    text: string,
+    attributes: WriterCharacterAttributes,
+    hyperlink?: WriterHyperlink,
+  ): SwTextFragment {
+    const hints = new SwpHints(this.GetDoc().GetAttrPool()).createTextHints(
+      text.length,
+      attributes,
+      this.GetSwAttrSet(),
+      hyperlink,
+    );
+    return { text, hints };
+  }
+
+  /** Creates a native fragment with one toggled character item. @param start - Inclusive source offset. @param end - Exclusive source offset. @param format - Toggled item group. @returns Native formatted fragment. */
+  public CreateToggledTextFragment(
+    start: number,
+    end: number,
+    format: WriterCharacterFormat,
+  ): SwTextFragment {
+    const fragment = this.CaptureTextFragment(start, end);
+    return {
+      text: fragment.text,
+      hints: fragment.hints.toggleCharacterFormat(
+        fragment.text.length,
+        0,
+        fragment.text.length,
+        format,
+        this.GetSwAttrSet(),
+      ),
+    };
+  }
+
+  /** Creates a native fragment with a requested font family. @param start - Inclusive source offset. @param end - Exclusive source offset. @param family - Requested serialized family. @returns Native formatted fragment. */
+  public CreateFontTextFragment(start: number, end: number, family: string): SwTextFragment {
+    const fragment = this.CaptureTextFragment(start, end);
+    return {
+      text: fragment.text,
+      hints: fragment.hints.setFontFamily(
+        fragment.text.length,
+        0,
+        fragment.text.length,
+        family,
+        this.GetSwAttrSet(),
+      ),
+    };
+  }
+
+  /** Creates a native fragment with replacement hyperlink metadata. @param start - Inclusive source offset. @param end - Exclusive source offset. @param hyperlink - Replacement hyperlink or undefined. @returns Native formatted fragment. */
+  public CreateHyperlinkTextFragment(
+    start: number,
+    end: number,
+    hyperlink: WriterHyperlink | undefined,
+  ): SwTextFragment {
+    const fragment = this.CaptureTextFragment(start, end);
+    return {
+      text: fragment.text,
+      hints: fragment.hints.setHyperlink(fragment.text.length, 0, fragment.text.length, hyperlink),
+    };
+  }
+
   /** Converts a browser-boundary run payload once into native Writer text and hints. @param runs - Boundary run payload. @returns Native fragment. */
   public CreateTextFragment(runs: unknown): SwTextFragment {
     const normalized = normalizeWriterTextRuns(runs);
@@ -912,20 +785,6 @@ export class SwTextNode extends SwContentNode {
   /** Returns an independent native hint container, including the empty case. @returns Independent hints. */
   private GetTextHints(): SwpHints {
     return this.pSwpHints?.clone() ?? new SwpHints(this.GetDoc().GetAttrPool());
-  }
-
-  /** Replaces canonical text and derives hints from complete boundary runs. @param runs - Complete text runs. @returns Nothing. */
-  private setTextRuns(runs: readonly WriterTextRun[]): void {
-    const normalized = normalizeWriterTextRuns(runs);
-    this.mText = getWriterTextFromRuns(normalized);
-    this.setHintsFromRuns(normalized);
-  }
-
-  /** Stores only non-default range hints for complete text runs. @param runs - Complete text runs. @returns Nothing. */
-  private setHintsFromRuns(runs: readonly WriterTextRun[]): void {
-    const hints = new SwpHints(this.GetDoc().GetAttrPool());
-    hints.setTextRuns(runs, this.GetSwAttrSet());
-    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
   }
 
   /** Validates a same-node UTF-16 range. @param start - Inclusive offset. @param end - Exclusive offset. @returns Nothing. */

@@ -116,7 +116,14 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
     case "endnote":
       return { firstLineTwips: -340, fontSizeTwips: 10 * 20, textLeftTwips: 340 };
     case "comment":
-      return { fontSizeTwips: 10 * 20 };
+      return {
+        firstLineTwips: 0,
+        fontSizeTwips: 10 * 20,
+        lowerTwips: 0,
+        rightTwips: 57,
+        textLeftTwips: 57,
+        upperTwips: 57,
+      };
     case "header-right":
     case "footer-right":
       return { adjust: SvxAdjust.Right };

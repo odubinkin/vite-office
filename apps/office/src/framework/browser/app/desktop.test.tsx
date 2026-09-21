@@ -236,7 +236,10 @@ describe("App" /**
     expect(editor.querySelector("span")).toHaveStyle({ fontFamily: "Noto Serif" });
 
     const styleSelect = screen.getByLabelText("Paragraph style");
-    expect(within(styleSelect).getAllByRole("option")).toHaveLength(37);
+    expect(within(styleSelect).getAllByRole("option")).toHaveLength(36);
+    expect(
+      within(styleSelect).queryByRole("option", { name: "List Heading" }),
+    ).not.toBeInTheDocument();
     for (const [style, fontSize] of [
       ["title", "28pt"],
       ["subtitle", "18pt"],
