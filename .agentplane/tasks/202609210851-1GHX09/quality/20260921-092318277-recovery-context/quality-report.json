@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202609210851-1GHX09",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T09:23:18.277Z",
+  "verdict": "pass",
+  "summary": "Parity inventory closure is complete and independently machine-checked.",
+  "evaluated_sha": "120828c1bbf7d0fa27b56baa305c92e5757dde5f",
+  "blueprint_digest": "34f7cb5ebd4a4340176e157300a1ef96f0644ecec3bb350d7d40c7d5bb8541c9",
+  "findings": [
+    "Schema-six inventory requires complete closure evidence for all verified capabilities and reports zero unresolved or unclassified differences."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609210851-1GHX09/README.md",
+    "npm run inventory:parity",
+    "npm test",
+    "npm run test:e2e",
+    "node .agentplane/policy/check-routing.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
