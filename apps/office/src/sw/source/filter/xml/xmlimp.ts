@@ -265,6 +265,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
       node.SetNumRule(list.ruleName);
       node.SetListId(list.listId);
       node.SetAttrListLevel(list.level);
+      node.SetListRestart(list.restart === true, list.startValue);
       this.document.GetDocumentListsManager().RegisterListItem(node);
     }
     if (properties !== undefined)

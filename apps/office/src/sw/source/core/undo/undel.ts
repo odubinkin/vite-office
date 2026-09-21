@@ -163,7 +163,7 @@ export class SwUndoJoinParagraphs extends SwUndo {
 
   /** Reports one removed paragraph payload. @returns Approximate serialized units. */
   public override GetPayloadSize(): number {
-    return this.removedParagraph.Len() + this.removedParagraph.runs.length;
+    return this.removedParagraph.Len() + (this.removedParagraph.GetpSwpHints()?.Count() ?? 0);
   }
 
   /** Splits the leading node and restores the exact removed node items and hints. @param context - Active Writer context. @returns Nothing. */

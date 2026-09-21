@@ -3384,7 +3384,7 @@
           "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts#rejectsMalformedPackages",
           "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx#XMLReader::XMLReader"
         ],
-        "justification": "Owns ODT package-stream import ordering for mimetype, manifest, styles.xml, content.xml, and optional meta.xml with ZIP/XML resource ceilings. Encryption, ZIP64, signatures, and absent or malformed mandatory streams are rejected before document replacement.",
+        "justification": "Owns ODT package-stream import ordering for the required mimetype, manifest, styles.xml, content.xml, and meta.xml streams with ZIP/XML resource ceilings. Encryption, ZIP64, signatures, and absent or malformed mandatory streams are rejected before document replacement.",
         "knownViolations": [],
         "localSymbols": [
           "ODT_XML_STREAM_BYTE_LIMIT",
@@ -3459,7 +3459,8 @@
         "CAP-0141",
         "CAP-0142",
         "CAP-0143",
-        "CAP-0144"
+        "CAP-0144",
+        "CAP-0145"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -3536,7 +3537,8 @@
         "CAP-0141",
         "CAP-0142",
         "CAP-0143",
-        "CAP-0144"
+        "CAP-0144",
+        "CAP-0145"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -4015,6 +4017,39 @@
           "SID_INC_INDENT",
           "NumUpDown",
           "MoveLeftMargin"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-shell",
+      "capabilityIds": [
+        "CAP-0123",
+        "CAP-0124"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts#pasteWriterTransfer",
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::Paste"
+        ],
+        "justification": "Coordinates sanitized clipboard paragraphs through shell-owned cursor, undo, text replacement, split, and list operations without moving canonical mutations into the transfer DTO.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterPasteOperations",
+          "pasteWriterTransfer"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/uibase/dochdl/swdtflvr.cxx",
+        "upstreamSymbols": [
+          "SwTransferable::Paste",
+          "SwPasteContext"
         ]
       }
     },
@@ -4660,7 +4695,9 @@
         "CAP-0139",
         "CAP-0140",
         "CAP-0141",
-        "CAP-0144"
+        "CAP-0143",
+        "CAP-0144",
+        "CAP-0145"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -4703,7 +4740,9 @@
         "CAP-0139",
         "CAP-0140",
         "CAP-0141",
-        "CAP-0144"
+        "CAP-0143",
+        "CAP-0144",
+        "CAP-0145"
       ],
       "semantic": {
         "behaviorStatus": "unverified",

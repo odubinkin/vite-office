@@ -9895,7 +9895,7 @@
       "type": "filter",
       "maturity": "implemented",
       "assertions": [
-        "Local tests exercise the bounded operation: Map decimal and bullet list levels, identities, continuation, and restart fields."
+        "Local tests exercise the bounded operation: Map decimal and bullet list levels, identities, and continuation."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -9946,7 +9946,7 @@
         ]
       },
       "aspect": "persistence-filter",
-      "atomicOperation": "Map decimal and bullet list levels, identities, continuation, and restart fields",
+      "atomicOperation": "Map decimal and bullet list levels, identities, and continuation",
       "scopeLimitations": [
         "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
       ],
@@ -10018,6 +10018,83 @@
       "atomicOperation": "Map text:a and xlink attributes to SwFormatINetFormat hints and back",
       "scopeLimitations": [
         "Only the named package stream, XML element, or property is covered; unrelated ODF content remains outside this record."
+      ],
+      "implemented": true,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false
+    },
+    {
+      "id": "LO-WRITER-0145",
+      "capabilityId": "CAP-0145",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "type": "filter",
+      "maturity": "implemented",
+      "assertions": [
+        "Local tests exercise the bounded operation: Import text:start-value into Writer restart items, export it on text:list-item, and preserve it through ODT round-trip."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser bytes and worker scheduling adapt native stream execution without changing the declared XML/package subset."
+      },
+      "capability": "Import and export ODF list-item restart values",
+      "gaps": [
+        "Exact contract, behavior, and default parity remain unpromoted until assertion-level evidence is paired with the pinned upstream branch."
+      ],
+      "upstream": {
+        "implementation": [
+          {
+            "path": "xmloff/source/text/txtparai.cxx",
+            "marker": "nStartValue = sal::static_int_cast"
+          },
+          {
+            "path": "xmloff/source/text/txtparae.cxx",
+            "marker": "rNextInfo.HasStartValue()"
+          }
+        ],
+        "tests": [
+          {
+            "path": "sw/qa/extras/odfimport/odffeatures.cxx",
+            "marker": "testFeatureText"
+          }
+        ],
+        "docs": [
+          {
+            "path": "helpcontent2/source/text/shared/00/00000021.xhp",
+            "marker": "ODF Text"
+          }
+        ]
+      },
+      "local": {
+        "implementation": [
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+            "marker": "TEXT_START_VALUE"
+          },
+          {
+            "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+            "marker": "text:start-value"
+          }
+        ],
+        "tests": [
+          {
+            "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+            "marker": "text:start-value"
+          }
+        ],
+        "docs": [
+          {
+            "path": "docs/program/writer-odt-format.md",
+            "marker": "text:start-value"
+          }
+        ]
+      },
+      "aspect": "persistence-filter",
+      "atomicOperation": "Round-trip text:start-value on text:list-item through Writer restart state",
+      "scopeLimitations": [
+        "Only explicit integer restart values from 0 through 32767 are covered; unrelated numbering properties remain outside this record."
       ],
       "implemented": true,
       "contractParity": false,

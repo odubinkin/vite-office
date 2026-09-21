@@ -177,7 +177,11 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
       source([
         { list: list(0), runs: [{ properties: plain, text: "root" }], style: "default" },
         { list: list(1), runs: [{ properties: plain, text: "nested" }], style: "default" },
-        { list: list(0), runs: [{ properties: plain, text: "tail" }], style: "default" },
+        {
+          list: { ...list(0), startValue: 3 },
+          runs: [{ properties: plain, text: "tail" }],
+          style: "default",
+        },
         { runs: [{ properties: plain, text: "break" }], style: "default" },
         { list: list(0), runs: [{ properties: plain, text: "continued" }], style: "default" },
       ]),
@@ -187,6 +191,7 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
     expect(output.automaticStyles).toContain('<text:list-level-style-number text:level="2"');
     expect(output.body).toContain('xml:id="list-a"');
     expect(output.body).toContain('text:continue-list="list-a"');
+    expect(output.body).toContain('<text:list-item text:start-value="3">');
   });
 
   it("rejects invalid live model state and observes cancellation in both passes", /** Verifies guards and cancellation. @returns Nothing. */ () => {
@@ -216,6 +221,29 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
           ]),
         ),
     ).toThrow("define ten Writer levels");
+    expect(
+      /** Exports a restart outside Writer's bounded integer range. @returns Nothing. */ () =>
+        exportTextParagraphs(
+          source([
+            {
+              list: {
+                level: 0,
+                listId: "id",
+                rule: {
+                  formats: Array.from(
+                    { length: 10 },
+                    /** Creates one numbered level. @returns Numbered kind. */ () => "numbered",
+                  ),
+                  name: "numbered",
+                },
+                startValue: 40_000,
+              },
+              runs: [],
+              style: "default",
+            },
+          ]),
+        ),
+    ).toThrow("start value");
     expect(
       /** Exports an incomplete bullet-character table. @returns Nothing. */ () =>
         exportTextParagraphs(
@@ -526,6 +554,22 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
           new Map([["L1", { formats: ["bullet"], name: "Short" }]]),
         ),
     ).toThrow("Unsupported ODF list level");
+    expect(
+      /** Imports a restart outside Writer's bounded integer range. @returns Nothing. */ () =>
+        importBody(
+          '<text:list text:style-name="L1"><text:list-item text:start-value="40000"><text:p/></text:list-item></text:list>',
+          styles,
+          new Map([["L1", bullet]]),
+        ),
+    ).toThrow("list start value");
+    expect(
+      /** Imports a non-integer restart value. @returns Nothing. */ () =>
+        importBody(
+          '<text:list text:style-name="L1"><text:list-item text:start-value="nope"><text:p/></text:list-item></text:list>',
+          styles,
+          new Map([["L1", bullet]]),
+        ),
+    ).toThrow("list start value");
     expect(
       importBody(
         '<text:list text:style-name="L1" text:continue-list="external"><text:list-item><text:p/></text:list-item></text:list>',

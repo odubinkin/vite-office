@@ -13,16 +13,19 @@ import type {
   WriterCharacterAttributes,
   WriterCharacterFormat,
   WriterParagraphAlignment,
-  WriterTextRun,
+} from "../../core/txtnode/ndtxt";
+import {
+  getWriterNextGraphemeBoundary,
+  getWriterPreviousGraphemeBoundary,
 } from "../../core/txtnode/ndtxt";
 import {
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
   copyWriterTextRangeRuns,
-  getWriterNextGraphemeBoundary,
-  getWriterPreviousGraphemeBoundary,
+  createWriterTextFragment,
   getWriterTextFromRuns,
   normalizeWriterTextRuns,
-} from "../../core/txtnode/ndtxt";
+  type WriterTextRun,
+} from "../../core/txtnode/text-run-projection";
 import type { WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
 import { SwTextShell } from "../shells/textsh";
@@ -52,6 +55,7 @@ import {
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
+import { pasteWriterTransfer } from "./wrtsh-paste";
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwModify {
@@ -469,7 +473,7 @@ export class SwWrtShell extends SwModify {
         paragraph,
         range.start,
         paragraph.CaptureTextFragment(range.start, range.end),
-        paragraph.CreateTextFragment(insertedRuns),
+        createWriterTextFragment(paragraph, insertedRuns),
         insertedRuns.length === 0 ? "Delete" : "Paste",
         this.CaptureCursorState(),
         this.CreateCollapsedCursorState(paragraph, nextOffset),
@@ -479,40 +483,29 @@ export class SwWrtShell extends SwModify {
 
   /** Pastes one safe transfer document at the persistent SwPaM as a single Writer undo transaction. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */
   public Paste(paste: WriterClipboardPaste): boolean {
-    const first = paste.paragraphs[0];
-    if (first === undefined) return false;
     const manager = this.docShell.GetUndoManager();
-    let changed = false;
-    manager.EnterListAction("Paste");
-    try {
-      if (this.cursor.HasMark()) {
+    return pasteWriterTransfer(paste, {
+      /** Applies imported list metadata. @param paragraph - Parsed paragraph. @returns Whether list state changed. */
+      applyParagraphList: (paragraph) => this.ApplyPastedParagraphList(paragraph),
+      /** Opens the compound undo action. @returns Nothing. */
+      beginUndoGroup: () => manager.EnterListAction("Paste"),
+      /** Removes the current selection. @returns Nothing. */
+      deleteSelection: () => {
         this.DeleteAtCursor("delete");
-        changed = true;
-      }
-      const insertionPoint = this.cursor.GetPoint();
-      const range: WriterTextRange = {
-        end: insertionPoint.GetContentIndex(),
-        node: insertionPoint.GetNode() as WriterParagraph,
-        start: insertionPoint.GetContentIndex(),
-      };
-      changed = this.ReplaceRange(range, first.runs) || changed;
-      let paragraph = range.node;
-      let offset = range.start + getWriterTextFromRuns(first.runs).length;
-      this.SetCursor(new SwPosition(paragraph, offset));
-      if (paste.isBlock) changed = this.ApplyPastedParagraphList(first) || changed;
-      for (const pastedParagraph of paste.paragraphs.slice(1)) {
-        paragraph = this.SplitParagraph(new SwPosition(paragraph, offset));
-        changed = true;
-        changed =
-          this.ReplaceRange({ end: 0, node: paragraph, start: 0 }, pastedParagraph.runs) || changed;
-        offset = getWriterTextFromRuns(pastedParagraph.runs).length;
-        this.SetCursor(new SwPosition(paragraph, offset));
-        changed = this.ApplyPastedParagraphList(pastedParagraph) || changed;
-      }
-    } finally {
-      manager.LeaveListAction();
-    }
-    return changed;
+      },
+      /** Closes the compound undo action. @returns Nothing. */
+      endUndoGroup: () => manager.LeaveListAction(),
+      /** Reads the current insertion point. @returns Canonical point. */
+      getInsertionPoint: () => this.cursor.GetPoint(),
+      /** Reports current mark state. @returns Whether selected. */
+      hasSelection: () => this.cursor.HasMark(),
+      /** Replaces one paragraph range. @param range - Target range. @param runs - Sanitized runs. @returns Whether changed. */
+      replaceRange: (range, runs) => this.ReplaceRange(range, runs),
+      /** Moves the persistent cursor. @param position - Canonical position. @returns Nothing. */
+      setCursor: (position) => this.SetCursor(position),
+      /** Splits one paragraph. @param position - Split point. @returns Trailing paragraph. */
+      splitParagraph: (position) => this.SplitParagraph(position),
+    });
   }
 
   /** Splits one paragraph at a canonical Writer position. @param position - Source node and content offset. @returns New trailing paragraph. */

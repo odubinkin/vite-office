@@ -4,7 +4,8 @@ import { BrowserWriterEditController } from "../sw/browser/editor/writer-edit-co
 import type { WriterCursorSelection } from "../sw/browser/editor/writer-selection-types";
 import { SwPosition } from "../sw/source/core/crsr/pam";
 import type { WriterHyperlink } from "../sw/source/core/txtnode/fmtinfmt";
-import type { WriterCharacterFormat, WriterTextRun } from "../sw/source/core/txtnode/ndtxt";
+import type { WriterCharacterFormat } from "../sw/source/core/txtnode/ndtxt";
+import type { WriterTextRun } from "../sw/source/core/txtnode/text-run-projection";
 import type { SwTextNode } from "../sw/source/core/txtnode/ndtxt";
 import type { WriterClipboardPaste } from "../sw/source/filter/html/html-filter-types";
 import type { SwWrtShell } from "../sw/source/uibase/wrtsh/wrtsh";

@@ -66,22 +66,6 @@ function getWriterGraphemeBoundaries(text: string): readonly number[] {
 }
 import { SwNumRuleItem } from "../para/paratr";
 import { SwpHints } from "./ndhints";
-import {
-  getWriterTextFromRuns,
-  normalizeWriterTextRuns,
-  projectWriterTextRuns,
-  type WriterTextRun,
-} from "./text-run-projection";
-export {
-  copyWriterTextRangeRuns,
-  createWriterTextRuns,
-  DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
-  getWriterTextFromRuns,
-  normalizeWriterCharacterAttributes,
-  normalizeWriterTextRuns,
-  splitWriterTextRuns,
-  type WriterTextRun,
-} from "./text-run-projection";
 import type { WriterCharacterAttributes } from "./txatbase";
 export type { WriterCharacterAttributes } from "./txatbase";
 
@@ -281,11 +265,6 @@ export class SwTextNode extends SwContentNode {
   /** Returns the paragraph's text format collection identity. @returns Paragraph style identity. */
   public get style(): WriterParagraphStyle {
     return this.GetTextFormatColl().id;
-  }
-
-  /** Derives complete rendering runs from canonical text and range hints. @returns Complete rendering projection. */
-  public get runs(): readonly WriterTextRun[] {
-    return projectWriterTextRuns(this);
   }
 
   /** Sets the paragraph adjustment item. @param alignment - New paragraph alignment. @returns Nothing. */
@@ -678,14 +657,6 @@ export class SwTextNode extends SwContentNode {
       text: fragment.text,
       hints: fragment.hints.setHyperlink(fragment.text.length, 0, fragment.text.length, hyperlink),
     };
-  }
-
-  /** Converts a browser-boundary run payload once into native Writer text and hints. @param runs - Boundary run payload. @returns Native fragment. */
-  public CreateTextFragment(runs: unknown): SwTextFragment {
-    const normalized = normalizeWriterTextRuns(runs);
-    const hints = new SwpHints(this.GetDoc().GetAttrPool());
-    hints.setTextRuns(normalized, this.GetSwAttrSet());
-    return { text: getWriterTextFromRuns(normalized), hints };
   }
 
   /** Returns an independent native hint container, including the empty case. @returns Independent hints. */

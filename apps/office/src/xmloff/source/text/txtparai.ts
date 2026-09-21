@@ -33,7 +33,9 @@ export interface XMLTextListRule {
 export interface XMLParagraphListState {
   readonly level: number;
   readonly listId: string;
+  readonly restart?: boolean;
   readonly ruleName: string;
+  readonly startValue?: number;
 }
 
 /** Canonical paragraph operation surface used by SAX callbacks. */
@@ -378,6 +380,7 @@ class XMLListContext extends SvXMLImportContext {
 /** Enforces the bounded list-item structure while children mutate Writer directly. */
 class XMLListItemContext extends SvXMLImportContext {
   private paragraphCount = 0;
+  private readonly startValue: number | undefined;
 
   /** Creates a list-item context. @param target - Writer target. @param attributes - Item attributes. @param state - Stream list state. @param active - Active list. @returns Context. */
   public constructor(
@@ -387,7 +390,15 @@ class XMLListItemContext extends SvXMLImportContext {
     private readonly active: ActiveList,
   ) {
     super();
-    attributes.assertOnly([], "list");
+    attributes.assertOnly([XMLToken.TEXT_START_VALUE], "list item");
+    const rawStartValue = attributes.get(XMLToken.TEXT_START_VALUE);
+    if (rawStartValue !== null) {
+      if (!/^\d+$/.test(rawStartValue)) throw new Error("Unsupported ODF list start value.");
+      const startValue = Number(rawStartValue);
+      if (!Number.isSafeInteger(startValue) || startValue < 0 || startValue > 32_767)
+        throw new Error("Unsupported ODF list start value.");
+      this.startValue = startValue;
+    }
   }
 
   /** Creates paragraph or nested-list children. @param element - Child token. @param attributes - Attributes. @returns Child context or null. */
@@ -401,6 +412,7 @@ class XMLListItemContext extends SvXMLImportContext {
       return new XMLParaContext(this.target, element, attributes, {
         level: this.active.level,
         listId: this.active.listId,
+        ...(this.startValue === undefined ? {} : { restart: true, startValue: this.startValue }),
         ruleName: this.active.rule.name,
       });
     }

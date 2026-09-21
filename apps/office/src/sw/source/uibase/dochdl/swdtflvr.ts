@@ -7,7 +7,12 @@ import { serializeWriterClipboardPlainText } from "../../filter/ascii/ascatr";
 import { serializeWriterClipboardHtml } from "../../filter/html/htmlnumwriter";
 import type { SwPaM, SwPosition } from "../../core/crsr/pam";
 import type { SwDoc } from "../../core/doc/doc";
-import { splitWriterTextRuns, type SwTextNode, type WriterTextRun } from "../../core/txtnode/ndtxt";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import {
+  projectWriterTextRuns,
+  splitWriterTextRuns,
+  type WriterTextRun,
+} from "../../core/txtnode/text-run-projection";
 
 /** Describes the two clipboard representations emitted for a visible Writer selection. */
 export interface WriterClipboardSelection {
@@ -109,7 +114,7 @@ function getSelectedRuns(
   start: number,
   end: number,
 ): readonly WriterTextRun[] {
-  const fromStart = splitWriterTextRuns(paragraph.runs, start).suffix;
+  const fromStart = splitWriterTextRuns(projectWriterTextRuns(paragraph), start).suffix;
   return splitWriterTextRuns(fromStart, end - start).prefix;
 }
 

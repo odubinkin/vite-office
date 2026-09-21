@@ -11,6 +11,7 @@ import { describe, expect, it, vi } from "vitest";
 import { createDocument } from "../../apps/office/src/sfx2/source/doc/objsh";
 import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
 import type { SwDoc } from "../../apps/office/src/sw/source/core/doc/doc";
+import { projectWriterTextRuns } from "../../apps/office/src/sw/source/core/txtnode/text-run-projection";
 import { readOdtDocument } from "../../apps/office/src/sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrtxml";
 
@@ -31,7 +32,7 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
       return {
         alignment: paragraph.alignment,
         list: paragraph.list,
-        runs: paragraph.runs,
+        runs: projectWriterTextRuns(paragraph),
         style: paragraph.style,
         text: paragraph.text,
       };
@@ -50,19 +51,17 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
       });
       const imported = await readOdtDocument(bytes, metadata);
       expect(imported.document.paragraphs).toHaveLength(1);
-      expect(imported.document.paragraphs[0]).toMatchObject({
-        runs: [
-          {
-            attributes: {
-              bold: fixture.bold,
-              italic: fixture.italic,
-              underline: false,
-            },
-            text: "Hello World!",
+      expect(imported.document.paragraphs[0]?.text).toBe("Hello World!");
+      expect(projectWriterTextRuns(imported.document.paragraphs[0])).toEqual([
+        {
+          attributes: {
+            bold: fixture.bold,
+            italic: fixture.italic,
+            underline: false,
           },
-        ],
-        text: "Hello World!",
-      });
+          text: "Hello World!",
+        },
+      ]);
       const roundTripped = await readOdtDocument(
         writeOdtDocument(imported.document, { title: imported.title }),
         metadata,
@@ -106,7 +105,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
     {
       /** Verifies supported upstream hyperlink metadata. @param document - Imported graph. @returns Nothing. */
       assert(document: SwDoc): void {
-        expect(document.paragraphs[0]?.runs).toEqual(
+        expect(projectWriterTextRuns(document.paragraphs[0])).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
               hyperlink: expect.objectContaining({ url: "http://example.com/" }),

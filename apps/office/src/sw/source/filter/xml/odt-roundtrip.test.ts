@@ -34,6 +34,7 @@ import {
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { createWriterDocument } from "../../core/doc/doc";
+import { createWriterTextFragment } from "../../core/txtnode/text-run-projection";
 import { encodeWriterDocument } from "../basflt/writer-document-codec";
 import { readOdtDocument, SwXMLReader } from "./swxml";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
@@ -171,7 +172,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     first?.ReplaceRange(
       0,
       0,
-      first.CreateTextFragment([
+      createWriterTextFragment(first, [
         {
           attributes: { bold: true, fontFamily: "Noto Sans", italic: false, underline: false },
           text: "Bold  text",
@@ -343,24 +344,20 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       ),
     );
     expect(roundTripped.document.FindNumRulePtr("L2")?.GetNumFormat(1).GetBulletChar()).toBe("●");
-    const warn = vi
-      .spyOn(console, "warn")
-      .mockImplementation(
-        /** Suppresses expected diagnostics. @returns Nothing. */ () => undefined,
-      );
+    const restarted = importWriterXml(
+      styles,
+      content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
+      metadata(),
+    );
+    expect(restarted.document.paragraphs[0]?.list).toMatchObject({
+      restart: true,
+      startValue: 3,
+    });
+    const restartedContent = exportContentXml(restarted.document);
+    expect(restartedContent).toContain('<text:list-item text:start-value="3">');
     expect(
-      importWriterXml(
-        styles,
-        content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
-        metadata(),
-      ).document.paragraphs.map(
-        /** Reads imported text after ignoring an unsupported list attribute. @param node - Writer node. @returns Text. */ (
-          node,
-        ) => node.text,
-      ),
-    ).toContain("alpha");
-    expect(warn).toHaveBeenCalledWith("Unknown ODF attribute ignored: text:start-value");
-    warn.mockRestore();
+      importWriterXml(styles, restartedContent, metadata()).document.paragraphs[0]?.list,
+    ).toMatchObject({ restart: true, startValue: 3 });
     expect(
       /** Imports an unsupported numbering suffix. @returns Invalid document. */ () =>
         importWriterXml(

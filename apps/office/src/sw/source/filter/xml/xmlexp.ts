@@ -39,13 +39,16 @@ import {
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
   RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_LEVEL,
+  RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
 import { getWriterOdfStyleName } from "../../../inc/poolfmt";
 import { createWriterFontAutoStylePool } from "./xmlfonte";
 
@@ -147,6 +150,7 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
           list: {
             listId,
             level,
+            ...(node.IsListRestart() ? { startValue: node.GetActualListStartValue() } : {}),
             rule: {
               bulletChars: Array.from(
                 { length: WRITER_MAX_LIST_LEVEL + 1 },
@@ -166,7 +170,7 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
           },
         }),
     ...(directCharacterProperties === undefined ? {} : { properties: directCharacterProperties }),
-    runs: node.runs.map(
+    runs: projectWriterTextRuns(node).map(
       /** Projects one canonical direct-format run. @param run - Writer run. @returns Neutral run. */
       (run) => ({
         ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
@@ -207,7 +211,13 @@ function assertSupportedItems(
     RES_UL_SPACE,
   ]);
   if (allowListItems)
-    for (const which of [RES_PARATR_LIST_ID, RES_PARATR_LIST_LEVEL, RES_PARATR_NUMRULE])
+    for (const which of [
+      RES_PARATR_LIST_ID,
+      RES_PARATR_LIST_ISRESTART,
+      RES_PARATR_LIST_LEVEL,
+      RES_PARATR_LIST_RESTARTVALUE,
+      RES_PARATR_NUMRULE,
+    ])
       supported.add(which);
   const unsupported = items.find(
     /** Finds a non-alignment item. @param item - Direct pool item. @returns Whether unsupported. */

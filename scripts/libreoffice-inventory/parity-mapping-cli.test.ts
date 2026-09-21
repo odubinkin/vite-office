@@ -97,11 +97,11 @@ describe("parity mapping CLI" /**
       defaultParityCount: 31,
       differentialParityCount: 31,
       exceptionCount: 0,
-      gapCount: 13,
-      implementedCount: 44,
+      gapCount: 14,
+      implementedCount: 45,
       ownershipParityCount: 31,
       parityReady: false,
-      recordCount: 44,
+      recordCount: 45,
       runtime: {
         commandCount: 34,
         placeholderSuiteCount: 6,
@@ -109,10 +109,10 @@ describe("parity mapping CLI" /**
         semanticViolationCount: 0,
       },
       schemaVersion: 6,
-      scopeLimitationCount: 78,
+      scopeLimitationCount: 79,
       serializationParityCount: 31,
       unclassifiedDivergenceCount: 0,
-      unresolvedParityCount: 13,
+      unresolvedParityCount: 14,
       verifiedCount: 31,
     });
   }, 30_000);

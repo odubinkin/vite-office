@@ -11,8 +11,9 @@ import {
   getWriterTextFromRuns,
   normalizeWriterCharacterAttributes,
   normalizeWriterTextRuns,
+  projectWriterTextRuns,
   splitWriterTextRuns,
-} from "./ndtxt";
+} from "./text-run-projection";
 
 /** Creates a compact default direct-format text run. @param text - Non-empty visible text run body. @returns Default-attribute Writer text run. */
 function defaultRun(text: string) {
@@ -21,6 +22,7 @@ function defaultRun(text: string) {
 
 describe("Writer text nodes" /** Groups immutable direct character-format run behavior. @returns Nothing; Vitest registers the enclosed cases. */, function defineWriterTextNodeTests(): void {
   it("creates and normalizes visible text runs without retaining malformed fragments" /** Verifies text compatibility projection, defaults, attribute normalization, empty removal, and adjacent merge behavior. @returns Nothing; assertions protect the text-node persistence contract. */, function normalizesRuns(): void {
+    expect(projectWriterTextRuns(undefined)).toEqual([]);
     expect(createWriterTextRuns("")).toEqual([]);
     expect(createWriterTextRuns("Body")).toEqual([defaultRun("Body")]);
     expect(normalizeWriterCharacterAttributes(undefined)).toEqual(
@@ -88,12 +90,12 @@ describe("Writer text nodes" /** Groups immutable direct character-format run be
     if (paragraph === undefined) throw new Error("Writer fixture paragraph is missing.");
     paragraph.InsertText("ABCD", 0);
     paragraph.ToggleTextRangeFormat(1, 3, "italic");
-    expect(paragraph.runs).toEqual([
+    expect(projectWriterTextRuns(paragraph)).toEqual([
       defaultRun("A"),
       { attributes: { ...DEFAULT_WRITER_CHARACTER_ATTRIBUTES, italic: true }, text: "BC" },
       defaultRun("D"),
     ]);
     paragraph.ToggleTextRangeFormat(1, 3, "italic");
-    expect(paragraph.runs).toEqual([defaultRun("ABCD")]);
+    expect(projectWriterTextRuns(paragraph)).toEqual([defaultRun("ABCD")]);
   });
 });

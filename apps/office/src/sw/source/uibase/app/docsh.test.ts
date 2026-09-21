@@ -88,6 +88,49 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     expect(active.shell.GetDoc()).toBe(active.document);
   });
 
+  it("validates replacement state before retiring the active document", /** Verifies failed lifecycle and medium preparation leave the current graph fully usable. @returns Nothing. */ () => {
+    const active = fixture("kept");
+    const state = active.shell.GetDocumentState();
+    const medium = active.shell.GetMedium();
+    expect(
+      /** Attempts replacement with invalid lifecycle metadata. @returns Invalid replacement; throws. */ () =>
+        active.shell.ReplaceDocument(
+          createWriterDocument(),
+          { ...metadata("Invalid"), contentGeneration: -1 },
+          {
+            kind: "untitled",
+            name: "Invalid",
+          },
+        ),
+    ).toThrow("Content generation");
+    expect(active.shell.GetDoc()).toBe(active.document);
+    expect(active.shell.GetDocumentState()).toBe(state);
+    expect(active.shell.GetMedium()).toBe(medium);
+    expect(medium.IsOpen()).toBe(true);
+    expect(active.writerShell.Insert(" session")).toBe(true);
+    expect(active.document.paragraphs[0]?.text).toBe("kept session");
+
+    expect(
+      /** Attempts replacement with invalid medium input. @returns Invalid replacement; throws. */ () =>
+        active.shell.ReplaceDocument(createWriterDocument(), metadata("Invalid medium"), {
+          kind: "untitled",
+          name: " ",
+        }),
+    ).toThrow("Medium name");
+    expect(active.shell.GetDoc()).toBe(active.document);
+    expect(active.shell.GetMedium()).toBe(medium);
+    expect(medium.IsOpen()).toBe(true);
+
+    expect(
+      /** Rejects accidental self-replacement before retiring the graph. @returns Invalid replacement; throws. */ () =>
+        active.shell.ReplaceDocument(active.document, metadata("Same graph"), {
+          kind: "untitled",
+          name: "Same graph",
+        }),
+    ).toThrow("new Writer graph");
+    expect(active.shell.GetDoc()).toBe(active.document);
+  });
+
   it("rejects an import superseded by document replacement", /** Verifies stale request rejection. @returns Completion after assertions. */ async () => {
     let resolveImport: ((document: OdtFilterDocument) => void) | undefined;
     const filter: OdtFilterService = {

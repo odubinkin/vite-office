@@ -55,6 +55,8 @@ export interface XMLTextListSource {
   readonly level: number;
   /** Document numbering rule. */
   readonly rule: XMLTextListRuleSource;
+  /** Explicit value for a list item that restarts numbering. */
+  readonly startValue?: number;
 }
 
 /** Narrow live view of one canonical Writer paragraph. */
@@ -243,8 +245,12 @@ function exportParagraphBody(
     activeListId = undefined;
   }
 
-  /** Opens one list level and its first item. @param paragraphList - Source list metadata. @param root - Whether this is a root list block. @returns Nothing. */
-  function openListLevel(paragraphList: XMLTextListSource, root: boolean): void {
+  /** Opens one list level and its first item. @param paragraphList - Source list metadata. @param root - Whether this is a root list block. @param includeStartValue - Whether the item represents the current restarting paragraph. @returns Nothing. */
+  function openListLevel(
+    paragraphList: XMLTextListSource,
+    root: boolean,
+    includeStartValue: boolean,
+  ): void {
     const styleName = listStyleNames.get(paragraphList.rule.name) as string;
     let identityAttributes = "";
     if (root) {
@@ -259,7 +265,11 @@ function exportParagraphBody(
         identityAttributes = ` xml:id="${segmentId}" text:continue-list="${prior.rootId}"`;
       }
     }
-    body += `<text:list text:style-name="${styleName}"${identityAttributes}><text:list-item>`;
+    const startValue =
+      includeStartValue && paragraphList.startValue !== undefined
+        ? ` text:start-value="${paragraphList.startValue}"`
+        : "";
+    body += `<text:list text:style-name="${styleName}"${identityAttributes}><text:list-item${startValue}>`;
     openRules.push(paragraphList.rule.name);
   }
 
@@ -285,15 +295,17 @@ function exportParagraphBody(
       closeAllLists();
     if (openRules.length === 0) {
       activeListId = list.listId;
-      for (let level = 0; level <= list.level; level += 1) openListLevel(list, level === 0);
+      for (let level = 0; level <= list.level; level += 1)
+        openListLevel(list, level === 0, level === list.level);
     } else if (list.level >= openRules.length) {
-      while (openRules.length <= list.level) openListLevel(list, false);
+      while (openRules.length <= list.level)
+        openListLevel(list, false, openRules.length === list.level);
     } else {
       while (openRules.length - 1 > list.level) {
         body += "</text:list-item></text:list>";
         openRules.pop();
       }
-      body += "</text:list-item><text:list-item>";
+      body += `</text:list-item><text:list-item${list.startValue === undefined ? "" : ` text:start-value="${list.startValue}"`}>`;
     }
     body += paragraphXml;
   }
@@ -355,6 +367,11 @@ function assertList(list: XMLTextListSource): void {
     throw new Error("ODF list level is outside its numbering rule.");
   if (list.listId.length === 0 || list.rule.name.length === 0)
     throw new Error("ODF list identity and rule name must not be blank.");
+  if (
+    list.startValue !== undefined &&
+    (!Number.isInteger(list.startValue) || list.startValue < 0 || list.startValue > 32_767)
+  )
+    throw new Error("ODF list start value is outside the supported range.");
   if (list.rule.formats.length !== 10)
     throw new Error("ODF list rule must define ten Writer levels.");
   if (list.rule.bulletChars !== undefined && list.rule.bulletChars.length !== 10)

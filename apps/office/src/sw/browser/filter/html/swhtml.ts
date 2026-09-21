@@ -7,9 +7,9 @@ import { WRITER_MAX_LIST_LEVEL } from "../../../source/core/doc/list";
 import {
   createWriterTextRuns,
   normalizeWriterTextRuns,
-  type WriterCharacterAttributes,
   type WriterTextRun,
-} from "../../../source/core/txtnode/ndtxt";
+} from "../../../source/core/txtnode/text-run-projection";
+import type { WriterCharacterAttributes } from "../../../source/core/txtnode/ndtxt";
 import type {
   WriterClipboardPaste,
   WriterClipboardPasteParagraph,

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
+import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
 import { SwDocShell } from "../app/docsh";
 import { SwTransferable } from "../dochdl/swdtflvr";
 import { SwWrtShell } from "./wrtsh";
@@ -102,7 +103,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.GetHyperlinkAtCursor()).toEqual({ url: "https://example.test/first" });
     expect(shell.SetHyperlink({ url: "https://example.test/second" })).toBe(true);
     expect(
-      shell.GetActiveParagraph().runs.every(
+      projectWriterTextRuns(shell.GetActiveParagraph()).every(
         /** Checks that formatting splits retain the edited hyperlink. @param run - Projected text run. @returns Whether the URL matches. */
         (run) => run.hyperlink?.url === "https://example.test/second",
       ),
@@ -319,14 +320,14 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.Insert("a")).toBe(true);
     expect(shell.Insert("b")).toBe(true);
     expect(shell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(1);
-    expect(shell.GetActiveParagraph().runs).toEqual([
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())).toEqual([
       { attributes: { bold: true, italic: false, underline: false }, text: "ab" },
     ]);
 
     expect(shell.Undo()).toBe(true);
     expect(shell.GetActiveParagraph().text).toBe("");
     expect(shell.Redo()).toBe(true);
-    expect(shell.GetActiveParagraph().runs).toEqual([
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())).toEqual([
       { attributes: { bold: true, italic: false, underline: false }, text: "ab" },
     ]);
   });
@@ -339,7 +340,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     });
     expect(handleTestInput(shell, "formatItalic", null)).toBe(true);
     expect(handleTestInput(shell, "formatUnderline", null)).toBe(true);
-    expect(shell.GetActiveParagraph().runs).toMatchObject([
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())).toMatchObject([
       { attributes: { italic: true, underline: true }, text: "selected" },
     ]);
     expect(handleTestInput(shell, "insertOrderedList", null)).toBe(true);
@@ -551,13 +552,15 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       ),
     ).toBe(true);
     expect(
-      shell
-        .GetDoc()
-        .paragraphs.map(
-          /** Projects pasted text and list metadata. @param paragraph - Canonical Writer paragraph. @returns Observable paragraph state. */ (
-            paragraph,
-          ) => ({ list: paragraph.list, text: paragraph.text, runs: paragraph.runs }),
-        ),
+      shell.GetDoc().paragraphs.map(
+        /** Projects pasted text and list metadata. @param paragraph - Canonical Writer paragraph. @returns Observable paragraph state. */ (
+          paragraph,
+        ) => ({
+          list: paragraph.list,
+          runs: projectWriterTextRuns(paragraph),
+          text: paragraph.text,
+        }),
+      ),
     ).toEqual([
       {
         list: { kind: "numbered", level: 0 },
@@ -682,7 +685,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       list: { kind: "numbered", level: 1 },
       style: "heading-1",
     });
-    expect(document.paragraphs[0]?.runs[0]).toMatchObject({
+    expect(projectWriterTextRuns(document.paragraphs[0]).at(0)).toMatchObject({
       attributes: { bold: true },
       text: "Body",
     });
@@ -712,7 +715,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       point: { offset: 3, paragraphId: "p-1" },
     });
     expect(shell.SetFontFamily("Noto Serif")).toBe(true);
-    expect(shell.GetActiveParagraph().runs).toEqual([
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())).toEqual([
       { attributes: { bold: false, italic: false, underline: false }, text: "a" },
       {
         attributes: { bold: false, fontFamily: "Noto Serif", italic: false, underline: false },
@@ -721,11 +724,13 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       { attributes: { bold: false, italic: false, underline: false }, text: "d" },
     ]);
     expect(shell.Undo()).toBe(true);
-    expect(shell.GetActiveParagraph().runs).toEqual([
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())).toEqual([
       { attributes: { bold: false, italic: false, underline: false }, text: "abcd" },
     ]);
     expect(shell.Redo()).toBe(true);
-    expect(shell.GetActiveParagraph().runs[1]?.attributes.fontFamily).toBe("Noto Serif");
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())[1]?.attributes.fontFamily).toBe(
+      "Noto Serif",
+    );
     expect(shell.SetFontFamily("Noto Serif")).toBe(false);
   });
 

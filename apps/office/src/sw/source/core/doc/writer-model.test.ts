@@ -23,6 +23,7 @@ import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc
 import { SwContentNode, SwEndNode, SwNode, SwStartNode } from "../docnode/node";
 import { SwNodeIndex, SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
+import { createWriterTextFragment, projectWriterTextRuns } from "../txtnode/text-run-projection";
 import { SwpHints } from "../txtnode/ndhints";
 import {
   createSwFormatAutoFormat,
@@ -588,13 +589,13 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     node.InsertText("abcd", 0);
     node.SetHyperlink(0, 0, { url: "ignored" });
     node.SetHyperlink(1, 3, { url: "https://example.test/" });
-    expect(node.runs).toEqual([
+    expect(projectWriterTextRuns(node)).toEqual([
       { attributes: plain, text: "a" },
       { attributes: plain, hyperlink: { url: "https://example.test/" }, text: "bc" },
       { attributes: plain, text: "d" },
     ]);
     node.SetHyperlink(1, 3, undefined);
-    expect(node.runs).toEqual([{ attributes: plain, text: "abcd" }]);
+    expect(projectWriterTextRuns(node)).toEqual([{ attributes: plain, text: "abcd" }]);
   });
 
   it("keeps text and auto-format hints coherent through insert, erase, replace, split, and join" /** Verifies the bounded SwTextNode algorithms used by browser editing. @returns Nothing; assertions inspect canonical text and derived runs. */, function editsTextNodes(): void {
@@ -621,13 +622,16 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     node.InsertText("abcd", 0, bold);
     node.InsertText("X", 2);
     expect(node.GetText()).toBe("abXcd");
-    expect(node.runs).toMatchObject([{ attributes: bold, text: "abXcd" }]);
+    expect(projectWriterTextRuns(node)).toMatchObject([{ attributes: bold, text: "abXcd" }]);
     node.EraseText(1, 2);
     expect(node.text).toBe("acd");
-    node.ReplaceRange(1, 2, node.CreateTextFragment([{ attributes: italic, text: "YZ" }]));
+    node.ReplaceRange(1, 2, createWriterTextFragment(node, [{ attributes: italic, text: "YZ" }]));
     expect(node.text).toBe("aYZd");
     node.ToggleTextRangeFormat(1, 3, "underline");
-    expect(node.runs[1]?.attributes).toMatchObject({ italic: true, underline: true });
+    expect(projectWriterTextRuns(node)[1]?.attributes).toMatchObject({
+      italic: true,
+      underline: true,
+    });
     expect(node.getCharacterAttributesAt(2)).toMatchObject({ italic: true, underline: true });
     const direct = createModelFixture().paragraphs[0] as SwTextNode;
     direct.InsertText("bold", 0, bold);
@@ -659,7 +663,9 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(restored.text).toBe("aYZd");
     expect(createWriterDocument().paragraphs[0]?.CloneTo(cloneDocument.nodes).text).toBe("");
     node.SetText("plain");
-    expect(node.runs).toMatchObject([{ attributes: { bold: true }, text: "plain" }]);
+    expect(projectWriterTextRuns(node)).toMatchObject([
+      { attributes: { bold: true }, text: "plain" },
+    ]);
     node.SetText("pl");
     node.SetText("pl");
     node.SetText("xy");
@@ -671,7 +677,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(
       throwing(
         /** Replaces after text. @returns Nothing. */ () =>
-          node.ReplaceRange(0, 9, node.CreateTextFragment([])),
+          node.ReplaceRange(0, 9, createWriterTextFragment(node, [])),
       ),
     ).toThrow("outside the text node");
     expect(node.SplitContent(0).text).toBe("xy");
@@ -695,7 +701,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     manager.InsertString(new SwPosition(first, 4), "");
     manager.ReplaceRange(
       new SwPaM(new SwPosition(first, 3), new SwPosition(first, 1)),
-      first.CreateTextFragment([{ attributes: italic, text: "X" }]),
+      createWriterTextFragment(first, [{ attributes: italic, text: "X" }]),
     );
     expect(first.text).toBe("aXd");
     manager.DeleteRange(new SwPaM(new SwPosition(first, 2), new SwPosition(first, 1)));
@@ -741,7 +747,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(
       throwing(
         /** Replaces across nodes. @returns Nothing. */ () =>
-          manager.ReplaceRange(crossNode, first.CreateTextFragment([])),
+          manager.ReplaceRange(crossNode, createWriterTextFragment(first, [])),
       ),
     ).toThrow("SwTextNode");
     expect(

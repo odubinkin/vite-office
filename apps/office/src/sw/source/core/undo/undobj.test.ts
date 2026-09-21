@@ -5,7 +5,13 @@ import { encodeWriterDocument } from "../../filter/basflt/writer-document-codec"
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../doc/doc";
 import { SwPosition } from "../crsr/pam";
-import { copyWriterTextRangeRuns, type SwTextNode, type WriterTextRun } from "../txtnode/ndtxt";
+import type { SwTextNode } from "../txtnode/ndtxt";
+import {
+  copyWriterTextRangeRuns,
+  createWriterTextFragment,
+  projectWriterTextRuns,
+  type WriterTextRun,
+} from "../txtnode/text-run-projection";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { SwUndoDelete, SwUndoJoinParagraphs, SwUndoReplace } from "./undel";
@@ -49,7 +55,7 @@ function run(text: string, bold = false, italic = false, underline = false): Wri
 
 /** Converts boundary runs into the native text/hint payload retained by undo. @param node - Owning text node. @param runs - Boundary runs. @returns Native fragment. */
 function fragment(node: SwTextNode, runs: readonly WriterTextRun[]) {
-  return node.CreateTextFragment(runs);
+  return createWriterTextFragment(node, runs);
 }
 
 /** Creates a collapsed action cursor state. @param paragraphId - Stable node identity. @param offset - Content offset. @returns Complete Writer cursor state. */
@@ -97,7 +103,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(backward.docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     expect(backward.docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoDelete);
     backward.shell.Undo();
-    expect(backward.document.paragraphs[0]?.runs).toEqual([
+    expect(projectWriterTextRuns(backward.document.paragraphs[0])).toEqual([
       run("ab", true),
       run("cd", false, true),
     ]);
@@ -132,14 +138,22 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const { docShell, document, shell } = createSession("hello");
     fixtureReplaceRange(shell, { paragraphId: "p-1", start: 1, end: 4 }, [run("EY", true)]);
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoReplace);
-    expect(document.paragraphs[0]?.runs).toEqual([run("h"), run("EY", true), run("o")]);
+    expect(projectWriterTextRuns(document.paragraphs[0])).toEqual([
+      run("h"),
+      run("EY", true),
+      run("o"),
+    ]);
     shell.Undo();
-    expect(document.paragraphs[0]?.runs).toEqual([run("hello")]);
+    expect(projectWriterTextRuns(document.paragraphs[0])).toEqual([run("hello")]);
     shell.Redo();
     fixtureReplaceRange(shell, { paragraphId: "p-1", start: 1, end: 3 }, []);
     expect(document.paragraphs[0]?.text).toBe("ho");
     shell.Undo();
-    expect(document.paragraphs[0]?.runs).toEqual([run("h"), run("EY", true), run("o")]);
+    expect(projectWriterTextRuns(document.paragraphs[0])).toEqual([
+      run("h"),
+      run("EY", true),
+      run("o"),
+    ]);
     expect(
       fixtureReplaceRange(shell, { paragraphId: "p-1", start: 1, end: 3 }, [run("EY", true)]),
     ).toBe(false);
@@ -191,9 +205,9 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     shell.GetCursor().Assign(new SwPosition(paragraph, 1), new SwPosition(paragraph, 3));
     toggleTestFormat(shell, "bold", { paragraphId: "p-1", start: 1, end: 3 });
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoAttr);
-    expect(paragraph.runs).toEqual([run("a"), run("bc", true), run("d")]);
+    expect(projectWriterTextRuns(paragraph)).toEqual([run("a"), run("bc", true), run("d")]);
     shell.Undo();
-    expect(paragraph.runs).toEqual([run("abcd")]);
+    expect(projectWriterTextRuns(paragraph)).toEqual([run("abcd")]);
     expect(shell.GetCursor().HasMark()).toBe(true);
     expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(1);
     expect(shell.GetCursor().GetMark().GetContentIndex()).toBe(3);

@@ -2,7 +2,7 @@
 
 import { Fragment, useRef } from "react";
 
-import type { WriterTextRun } from "../../source/core/txtnode/ndtxt";
+import type { WriterTextRun } from "../../source/core/txtnode/text-run-projection";
 import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
 
 /** Immutable projection properties for one Writer text node. */

@@ -9,6 +9,10 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, RES_CHRATR_FONT } from "../../../inc/hintids";
 import { getWriterOdfStyleName, WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { createWriterDocument } from "../../core/doc/doc";
+import {
+  createWriterTextFragment,
+  projectWriterTextRuns,
+} from "../../core/txtnode/text-run-projection";
 import { encodeWriterDocument } from "../basflt/writer-document-codec";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
@@ -172,7 +176,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     paragraph?.ReplaceRange(
       0,
       0,
-      paragraph.CreateTextFragment([
+      createWriterTextFragment(paragraph, [
         {
           attributes: {
             bold: false,
@@ -225,7 +229,9 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
       ).GetFamilyName(),
     ).toBe("Source Serif 4");
     expect(opened.document.paragraphs[0]?.style).toBe("heading-1");
-    expect(opened.document.paragraphs[0]?.runs[0]?.attributes.fontFamily).toBe("Noto Sans");
+    expect(projectWriterTextRuns(opened.document.paragraphs[0]).at(0)?.attributes.fontFamily).toBe(
+      "Noto Sans",
+    );
 
     const reopened = await readOdtDocument(
       writeOdtDocument(opened.document, { title: opened.title }),
@@ -249,6 +255,8 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
       projectStyles(encodeWriterDocument(opened.document)),
     );
     expect(reopened.document.paragraphs[0]?.style).toBe("heading-1");
-    expect(reopened.document.paragraphs[0]?.runs[0]?.attributes.fontFamily).toBe("Noto Sans");
+    expect(
+      projectWriterTextRuns(reopened.document.paragraphs[0]).at(0)?.attributes.fontFamily,
+    ).toBe("Noto Sans");
   });
 });

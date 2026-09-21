@@ -4,11 +4,11 @@ import type { SwDoc } from "../../source/core/doc/doc";
 import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
 import type { SfxMediumOperationStatus } from "../../../sfx2/source/doc/docfile";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
-import type {
-  SwTextNode,
-  WriterParagraphAlignment,
-  WriterTextRun,
-} from "../../source/core/txtnode/ndtxt";
+import type { SwTextNode, WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
+import {
+  projectWriterTextRuns,
+  type WriterTextRun,
+} from "../../source/core/txtnode/text-run-projection";
 import type { WriterParagraphList } from "../../source/core/doc/list";
 import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
@@ -184,7 +184,7 @@ export class WriterViewProjection {
           ...(listMarker === undefined ? {} : { listMarker }),
           numRuleName: node.GetNumRuleName(),
           runs: Object.freeze(
-            node.runs.map(
+            projectWriterTextRuns(node).map(
               /** Freezes one primitive text run. @param run - Live run value. @returns Frozen run. */ (
                 run,
               ) => Object.freeze({ ...run, attributes: Object.freeze({ ...run.attributes }) }),

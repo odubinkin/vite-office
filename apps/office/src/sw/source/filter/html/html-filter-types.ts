@@ -1,6 +1,6 @@
 /** @fileoverview Neutral Writer HTML-transfer records shared by the filter and browser DOM adapter. */
 
-import type { WriterTextRun } from "../../core/txtnode/ndtxt";
+import type { WriterTextRun } from "../../core/txtnode/text-run-projection";
 
 /** One safe paragraph imported from a transfer document. */
 export interface WriterClipboardPasteParagraph {

@@ -2,7 +2,7 @@
 
 import { equalWriterHyperlinks, normalizeWriterHyperlink } from "./fmtinfmt";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
-import type { SwTextNode } from "./ndtxt";
+import type { SwTextFragment, SwTextNode } from "./ndtxt";
 import type { WriterCharacterAttributes } from "./txatbase";
 
 /** Derived immutable projection; canonical state remains text plus SwpHints. */
@@ -42,11 +42,20 @@ export function copyWriterTextRangeRuns(
 }
 
 /** Projects a complete node without storing run state in SwTextNode. @param node - Canonical node. @returns Derived runs. */
-export function projectWriterTextRuns(node: SwTextNode): readonly WriterTextRun[] {
+export function projectWriterTextRuns(node: SwTextNode | undefined): readonly WriterTextRun[] {
+  if (node === undefined) return [];
   return (node.GetpSwpHints() ?? new SwpHints(node.GetDoc().GetAttrPool())).toTextRuns(
     node.GetText(),
     node.GetSwAttrSet(),
   );
+}
+
+/** Converts one boundary run payload into a native text-plus-hints fragment. @param node - Node supplying the document pool and inherited attributes. @param runs - Boundary run payload. @returns Native fragment accepted by Writer operations. */
+export function createWriterTextFragment(node: SwTextNode, runs: unknown): SwTextFragment {
+  const normalized = normalizeWriterTextRuns(runs);
+  const hints = new SwpHints(node.GetDoc().GetAttrPool());
+  hints.setTextRuns(normalized, node.GetSwAttrSet());
+  return { text: getWriterTextFromRuns(normalized), hints };
 }
 
 /** Normalizes untrusted run data and merges adjacent equivalent runs. @param candidate - Boundary value. @returns Normalized runs. */

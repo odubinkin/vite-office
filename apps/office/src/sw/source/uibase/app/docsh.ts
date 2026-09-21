@@ -154,13 +154,16 @@ export class SwDocShell extends SfxObjectShell {
     medium: SfxMediumInputOrInstance,
   ): SwDoc {
     this.EnsureOpen();
+    if (document === this.document)
+      throw new Error("Replacement document must be a new Writer graph.");
+    const replacementState = this.PrepareObjectStateReplacement(documentState, medium);
     this.odtRequestGeneration += 1;
     this.odtFilter.Cancel();
     const previous = this.document;
     this.modelClient.Dispose();
     previous.Dispose();
     this.document = document;
-    this.ReplaceObjectState(documentState, medium);
+    this.CommitObjectStateReplacement(replacementState);
     if (documentState.isModified) this.document.GetUndoManager().ClearSavePosition();
     this.modelClient.RegisterToModify(document.GetDocumentStateManager());
     this.notifications.CallSwClientNotify({ kind: "document-replaced" });

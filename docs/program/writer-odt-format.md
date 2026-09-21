@@ -45,7 +45,8 @@ and level in `RES_PARATR_NUMRULE`, `RES_PARATR_LIST_ID`, and
 retain list identity across intervening ordinary paragraphs. Import performs
 the inverse traversal, including LibreOffice output that declares only the
 levels used by a list style; missing internal formats are completed when the
-ten-level `SwNumRule` is built.
+ten-level `SwNumRule` is built. Explicit `text:start-value` values on
+`text:list-item` map to Writer restart items and are emitted again on export.
 
 Spaces are emitted as `text:s`, including `text:c` for runs, while tabs and
 in-paragraph line breaks use `text:tab` and `text:line-break`. This retains exact

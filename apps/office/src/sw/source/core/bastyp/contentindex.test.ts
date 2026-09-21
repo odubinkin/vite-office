@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import { createWriterTextFragment } from "../txtnode/text-run-projection";
 import { SwContentIndex, SwContentIndexUpdateMode } from "./contentindex";
 
 /** Creates a three-paragraph Writer model with deterministic text. @returns Writer fixture. */
@@ -115,12 +116,12 @@ describe("SwContentIndex" /** Groups registered-position correction tests. @retu
     const boundary = new SwPosition(node, 4, "cursor");
     const after = new SwPosition(node, 5, "redline");
 
-    node.ReplaceRange(1, 4, node.CreateTextFragment([{ attributes: {}, text: "XY" }]));
+    node.ReplaceRange(1, 4, createWriterTextFragment(node, [{ attributes: {}, text: "XY" }]));
     expect(inside.GetContentIndex()).toBe(2);
     expect(boundary.GetContentIndex()).toBe(3);
     expect(after.GetContentIndex()).toBe(4);
 
-    node.ReplaceRange(1, 2, node.CreateTextFragment([{ attributes: {}, text: "123" }]));
+    node.ReplaceRange(1, 2, createWriterTextFragment(node, [{ attributes: {}, text: "123" }]));
     expect(inside.GetContentIndex()).toBe(4);
     expect(boundary.GetContentIndex()).toBe(5);
     expect(after.GetContentIndex()).toBe(6);

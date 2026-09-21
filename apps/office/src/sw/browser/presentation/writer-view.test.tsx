@@ -17,6 +17,7 @@ import {
   type WriterSessionServices,
 } from "../workflows/writer-workflows";
 import { SwDoc } from "../../source/core/doc/doc";
+import { projectWriterTextRuns } from "../../source/core/txtnode/text-run-projection";
 import type { WriterSnapshotState } from "../../source/filter/basflt/writer-storage";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../../source/uibase/app/docsh";
@@ -467,7 +468,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
           "https://example.test/first",
         ),
     );
-    expect(shell.GetActiveParagraph().runs[0]?.hyperlink).toMatchObject({
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.hyperlink).toMatchObject({
       targetFrame: "_blank",
       url: "https://example.test/first",
     });
@@ -487,7 +488,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     fireEvent.click(screen.getByRole("button", { name: "Apply" }));
     await waitFor(
       /** Waits for the edited hyperlink to be committed by dispatch completion. @returns Assertion result. */ () =>
-        expect(shell.GetActiveParagraph().runs[0]?.hyperlink?.url).toBe(
+        expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.hyperlink?.url).toBe(
           "https://example.test/updated",
         ),
     );
@@ -497,9 +498,11 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       /** Waits for bindings invalidation to reproject the hyperlink-free model. @returns Assertion result. */ () =>
         expect(screen.queryByRole("link", { name: "Link" })).not.toBeInTheDocument(),
     );
-    expect(shell.GetActiveParagraph().runs[0]?.hyperlink).toBeUndefined();
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.hyperlink).toBeUndefined();
     expect(shell.Undo()).toBe(true);
-    expect(shell.GetActiveParagraph().runs[0]?.hyperlink?.url).toBe("https://example.test/updated");
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.hyperlink?.url).toBe(
+      "https://example.test/updated",
+    );
     mount.unmount();
     session.Close();
   });

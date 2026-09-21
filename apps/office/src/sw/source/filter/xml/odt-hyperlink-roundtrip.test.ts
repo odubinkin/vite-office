@@ -9,6 +9,7 @@ import { describe, expect, it } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
+import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
@@ -66,7 +67,7 @@ describe("Writer upstream hyperlink ODT fixtures", /** Runs exact LibreOffice pa
       const metadata = createDocument({ id: "odt-link", suiteId: "writer", title: "Imported" });
       const imported = await readOdtDocument(upstreamOdt(fixture.path), metadata);
       expect(imported.document.paragraphs[0]?.text).toBe(fixture.text);
-      const linked = imported.document.paragraphs[0]?.runs.find(
+      const linked = projectWriterTextRuns(imported.document.paragraphs[0]).find(
         /** Finds the imported hyperlink portion. @param run - Writer run. @returns Whether linked. */
         (run) => run.hyperlink !== undefined,
       );
@@ -80,7 +81,9 @@ describe("Writer upstream hyperlink ODT fixtures", /** Runs exact LibreOffice pa
         `xlink:href="${fixture.href}"`,
       );
       const restored = await readOdtDocument(exported, metadata);
-      expect(restored.document.paragraphs[0]?.runs).toEqual(imported.document.paragraphs[0]?.runs);
+      expect(projectWriterTextRuns(restored.document.paragraphs[0])).toEqual(
+        projectWriterTextRuns(imported.document.paragraphs[0]),
+      );
     }
   });
 });

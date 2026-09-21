@@ -8,6 +8,7 @@ import {
   encodeWriterDocument,
   encodeWriterDocument as serializeWriterDocument,
 } from "../../filter/basflt/writer-document-codec";
+import { createWriterTextFragment, projectWriterTextRuns } from "../txtnode/text-run-projection";
 
 import {
   SvxAdjust,
@@ -267,18 +268,18 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(style.GetAttrSet().GetPosture().GetBoolValue()).toBe(true);
     expect(style.GetAttrSet().GetUnderline().GetBoolValue()).toBe(true);
     node.InsertText("ab", 0);
-    expect(node.runs).toEqual([
+    expect(projectWriterTextRuns(node)).toEqual([
       { attributes: { bold: true, italic: true, underline: true }, text: "ab" },
     ]);
     expect(node.GetpSwpHints()).toBeUndefined();
     node.ReplaceRange(
       0,
       1,
-      node.CreateTextFragment([
+      createWriterTextFragment(node, [
         { attributes: { bold: false, italic: false, underline: false }, text: "a" },
       ]),
     );
-    expect(node.runs).toEqual([
+    expect(projectWriterTextRuns(node)).toEqual([
       { attributes: { bold: false, italic: false, underline: false }, text: "a" },
       { attributes: { bold: true, italic: true, underline: true }, text: "b" },
     ]);
@@ -290,7 +291,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(handle?.Get(RES_CHRATR_UNDERLINE)).toBeInstanceOf(SvxUnderlineItem);
     node.SetHyperlink(0, 1, { url: "https://example.test" });
     const restored = decodeWriterDocument(encodeWriterDocument(writer));
-    expect(restored.paragraphs[0]?.runs).toEqual(node.runs);
+    expect(projectWriterTextRuns(restored.paragraphs[0])).toEqual(projectWriterTextRuns(node));
     expect(restored.paragraphs[0]?.GetpSwpHints()?.Get(0).format).not.toBe(
       node.GetpSwpHints()?.Get(0).format,
     );
@@ -432,7 +433,9 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(restored.paragraphs[0]?.list).toEqual({ kind: "bullet", level: 1, styleId: "Bullets" });
     const copied = new SwDoc();
     copied.nodes.copyContentFrom(restored.nodes);
-    expect(copied.paragraphs[1]?.runs).toEqual(restored.paragraphs[0]?.runs);
+    expect(projectWriterTextRuns(copied.paragraphs[1])).toEqual(
+      projectWriterTextRuns(restored.paragraphs[0]),
+    );
     const copiedWithRule = new SwDoc();
     copiedWithRule.AddNumRule(restored.GetNumRuleTable()[0] as SwNumRule);
     copiedWithRule.nodes.copyContentFrom(restored.nodes);

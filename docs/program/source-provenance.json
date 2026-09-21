@@ -56,6 +56,10 @@
       "rationale": "The focused Writer indent helper preserves the reviewed SID_INC_INDENT text-shell branch while separating bounded command transitions from the broader textsh1.cxx source unit."
     },
     {
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
+      "rationale": "The focused paste coordinator separates transfer-specific paragraph orchestration from SwWrtShell while preserving the bounded SwTransferable::Paste responsibility implemented by upstream swdtflvr.cxx."
+    },
+    {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
       "rationale": "The local wrtsh-selection.ts module preserves the reviewed SwWrtShell selection responsibility while the retired select.ts source-tree path remains reserved by the repository migration guard."
     },
@@ -81,6 +85,40 @@
     }
   ],
   "entries": [
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "pasteWriterTransfer",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwTransferable::Paste",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
+      "localSymbols": [
+        "WriterPasteOperations",
+        "pasteWriterTransfer"
+      ],
+      "omittedResponsibilities": [
+        "Native clipboard formats, table/object insertion, comments, anchors, and paste listeners outside the bounded sanitized paragraph transfer remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Coordinates selection deletion, grouped undo, paragraph splitting, range insertion, cursor movement, and list metadata for the supported Writer paste operation."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx",
+      "upstreamSymbols": [
+        "SwTransferable::Paste",
+        "SwPasteContext"
+      ]
+    },
     {
       "classification": "upstream-mechanism",
       "evidence": {

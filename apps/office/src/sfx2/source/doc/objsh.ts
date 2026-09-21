@@ -69,13 +69,31 @@ export class SfxObjectShell {
       throw new Error("Closed document shells cannot execute commands or persistence.");
   }
 
+  /** Validates and acquires replacement state before an owning shell mutates its active model. @param document - New lifecycle. @param medium - New medium. @returns Prepared immutable replacement. */
+  protected PrepareObjectStateReplacement(
+    document: OfficeDocument,
+    medium: SfxMediumInputOrInstance,
+  ): Readonly<{ document: OfficeDocument; medium: SfxMedium }> {
+    assertDocumentState(document);
+    return Object.freeze({
+      document: Object.freeze({ ...document }),
+      medium: acquireSfxMedium(medium),
+    });
+  }
+
+  /** Commits previously prepared shell state without further validation. @param replacement - Prepared lifecycle and medium. @returns Nothing. */
+  protected CommitObjectStateReplacement(
+    replacement: Readonly<{ document: OfficeDocument; medium: SfxMedium }>,
+  ): void {
+    const previousMedium = this.medium;
+    this.documentState = replacement.document;
+    this.medium = replacement.medium;
+    if (previousMedium !== this.medium) previousMedium.Close();
+  }
+
   /** Replaces shell-owned lifecycle and medium atomically. @param document - New lifecycle. @param medium - New medium. @returns Nothing. */
   protected ReplaceObjectState(document: OfficeDocument, medium: SfxMediumInputOrInstance): void {
-    assertDocumentState(document);
-    const previousMedium = this.medium;
-    this.documentState = Object.freeze({ ...document });
-    this.medium = acquireSfxMedium(medium);
-    if (previousMedium !== this.medium) previousMedium.Close();
+    this.CommitObjectStateReplacement(this.PrepareObjectStateReplacement(document, medium));
   }
 
   /** Stores a lifecycle transition owned by this framework shell. @param document - New state. @returns Whether state identity changed. */

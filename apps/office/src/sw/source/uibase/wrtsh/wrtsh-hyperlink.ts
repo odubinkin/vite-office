@@ -6,7 +6,10 @@ import type {
   SwTextNode as WriterParagraph,
   WriterCharacterAttributes,
 } from "../../core/txtnode/ndtxt";
-import { copyWriterTextRangeRuns } from "../../core/txtnode/ndtxt";
+import {
+  copyWriterTextRangeRuns,
+  projectWriterTextRuns,
+} from "../../core/txtnode/text-run-projection";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import type { SwPaM } from "../../core/crsr/pam";
 import { equalWriterHyperlinks } from "../../core/txtnode/fmtinfmt";
@@ -109,12 +112,9 @@ function getHyperlinkRangeAtCursor(cursor: SwPaM): WriterTextRange | undefined {
   if (containingIndex < 0) return undefined;
   let first = containingIndex;
   let last = containingIndex;
-  while (first > 0 && equalWriterHyperlinks(paragraph.runs[first - 1]?.hyperlink, hyperlink))
-    first -= 1;
-  while (
-    last + 1 < paragraph.runs.length &&
-    equalWriterHyperlinks(paragraph.runs[last + 1]?.hyperlink, hyperlink)
-  )
+  const runs = projectWriterTextRuns(paragraph);
+  while (first > 0 && equalWriterHyperlinks(runs[first - 1]?.hyperlink, hyperlink)) first -= 1;
+  while (last + 1 < runs.length && equalWriterHyperlinks(runs[last + 1]?.hyperlink, hyperlink))
     last += 1;
   return {
     end: (ranges[last] as { readonly end: number }).end,
@@ -129,7 +129,7 @@ function getRunRanges(
 ): readonly { readonly end: number; readonly start: number }[] {
   const ranges: { readonly end: number; readonly start: number }[] = [];
   let consumed = 0;
-  for (const run of paragraph.runs) {
+  for (const run of projectWriterTextRuns(paragraph)) {
     const start = consumed;
     consumed += run.text.length;
     ranges.push({ end: consumed, start });
