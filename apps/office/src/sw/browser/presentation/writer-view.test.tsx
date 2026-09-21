@@ -130,6 +130,44 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     session.Close();
   });
 
+  it("preserves actionable clipboard and local-storage errors in the status bar", /** Verifies exact platform errors and localized fallbacks. @returns Completion after asynchronous commands settle. */ async () => {
+    const services: WriterSessionServices = {
+      ...createServices(),
+      primarySave: {
+        save: vi
+          .fn()
+          .mockRejectedValueOnce(new Error("Browser storage is unavailable."))
+          .mockRejectedValueOnce(new Error("quota failed")),
+      },
+    };
+    const session = createWriterDocumentSession(services);
+    const mount = render(<WriterWorkbench isActive view={session.view} />);
+    session.view.Execute(WRITER_COMMAND_IDS.copy);
+    await waitFor(
+      /** Waits for the selection-required feedback. @returns Nothing. */ () =>
+        expect(screen.getByRole("status", { name: "Writer status bar" })).toHaveTextContent(
+          "Select text to copy.",
+        ),
+    );
+    session.view.GetWrtShell().Insert("dirty");
+    session.view.Execute(WRITER_COMMAND_IDS.saveLocal);
+    await waitFor(
+      /** Waits for the storage-unavailable feedback. @returns Nothing. */ () =>
+        expect(screen.getByRole("status", { name: "Writer status bar" })).toHaveTextContent(
+          "Browser storage is unavailable.",
+        ),
+    );
+    session.view.Execute(WRITER_COMMAND_IDS.saveLocal);
+    await waitFor(
+      /** Waits for the generic local-save fallback. @returns Nothing. */ () =>
+        expect(screen.getByRole("status", { name: "Writer status bar" })).toHaveTextContent(
+          "Could not save locally.",
+        ),
+    );
+    mount.unmount();
+    session.Close();
+  });
+
   it("edits the document title from the workspace header", /** Verifies click-to-edit commits on Enter and blur. @returns Nothing. */ function editsDocumentTitle(): void {
     const session = createWriterDocumentSession(createServices());
     const mount = render(<WriterWorkbench isActive view={session.view} />);

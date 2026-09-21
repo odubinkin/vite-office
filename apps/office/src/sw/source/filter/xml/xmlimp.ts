@@ -244,7 +244,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     this.titleSeen = true;
   }
 
-  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param properties - Direct character properties. @param list - Optional list state. @returns Paragraph target. */
+  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param properties - Direct character properties. @param list - Optional list state. @returns Paragraph target. */
   public createParagraph(
     style: XMLParagraphStyle,
     alignment: OdfParagraphAlignment | undefined,

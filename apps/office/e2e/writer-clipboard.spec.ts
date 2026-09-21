@@ -15,7 +15,7 @@ test("copies visible formatted Writer content through the native browser copy ev
   await page.getByRole("button", { name: "Styles" }).click();
   await page.getByRole("menuitemradio", { exact: true, name: "Heading 1" }).click();
   await page.getByRole("button", { name: "Center" }).click();
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await writerEditor.evaluate(
     /**
@@ -80,7 +80,7 @@ test("Writer list clipboard" /**
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
   await page.getByRole("menuitem", { exact: true, name: "Demote Outline Level" }).click();
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await firstParagraph.evaluate(
     /** Dispatches a native copy event and checks that a detached rich target parses nested ordered lists. @param element - Rendered Writer paragraph beneath the copy-event owner. @returns MIME data plus detached target counts for outer and nested list items. */

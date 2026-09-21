@@ -2,7 +2,7 @@
 
 import { expect, test } from "@playwright/test";
 
-test("Writer bullets and numbering" /** Verifies Format submenu and context-sensitive numbering toolbar controls retain editable text while rendering Writer markers. @param root0 - Playwright fixture object. @param root0.page - Chromium page exercising the built browser application. @returns A promise resolved after list commands, inheritance, and removal are asserted. */, async function verifiesWriterLists({
+test("Writer bullets and numbering" /** Verifies Format submenu and persistent formatting/list toolbar controls retain editable text while rendering Writer markers. @param root0 - Playwright fixture object. @param root0.page - Chromium page exercising the built browser application. @returns A promise resolved after list commands, inheritance, and removal are asserted. */, async function verifiesWriterLists({
   page,
 }): Promise<void> {
   await page.goto("/writer");
@@ -36,9 +36,9 @@ test("Writer bullets and numbering" /** Verifies Format submenu and context-sens
   const secondMarker = page.locator(`[data-writer-list-marker="${secondProjectionId}"]`);
   await expect(secondMarker).toHaveText("2.");
   const formattingToolbar = page.getByRole("toolbar", { name: "Writer formatting toolbar" });
-  await expect(formattingToolbar.getByRole("button", { name: "Bold" })).toHaveCount(0);
+  await expect(formattingToolbar.getByRole("button", { name: "Bold" })).toBeVisible();
   await expect(
-    formattingToolbar.getByRole("button", { name: "Promote Outline Level" }),
+    formattingToolbar.getByRole("button", { exact: true, name: "Decrease" }),
   ).toBeDisabled();
   await page.getByRole("button", { name: "Format" }).click();
   await page.getByRole("menuitem", { name: "Lists" }).click();
@@ -60,7 +60,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and context-sens
   ).toBe("2rem");
   await page
     .getByRole("toolbar", { name: "Writer formatting toolbar" })
-    .getByRole("button", { name: "Promote Outline Level" })
+    .getByRole("button", { exact: true, name: "Decrease" })
     .click();
   await expect(secondParagraph).toHaveAttribute("data-list-level", "0");
   await page.getByRole("button", { name: "Format" }).click();

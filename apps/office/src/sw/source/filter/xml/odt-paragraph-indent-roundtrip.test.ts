@@ -26,8 +26,8 @@ async function replaceEntry(bytes: Uint8Array, name: string, content: string): P
   return output.finish();
 }
 
-describe("Writer ODT paragraph margins", () => {
-  it("imports and exports direct paragraph left margins", async () => {
+describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-trip tests. @returns Nothing. */ () => {
+  it("imports and exports direct paragraph left margins", /** Verifies direct margins survive ODT serialization and import. @returns Completion after package reads. */ async () => {
     const writer = createWriterDocument("margin-1");
     const paragraph = writer.paragraphs[0];
     if (paragraph === undefined) throw new Error("Writer margin paragraph is missing.");
@@ -38,10 +38,23 @@ describe("Writer ODT paragraph margins", () => {
     expect((await readOdtDocument(bytes, metadata())).document.paragraphs[0]?.textLeftMargin).toBe(
       1134,
     );
-    const imported = await readOdtDocument(
-      await replaceEntry(bytes, "content.xml", content.replace("2.0003cm", "1cm")),
-      metadata(),
-    );
-    expect(imported.document.paragraphs[0]?.textLeftMargin).toBe(567);
+    for (const [value, expected] of [
+      ["1cm", 567],
+      ["1in", 1440],
+      ["1mm", 57],
+      ["1pt", 20],
+    ] as const) {
+      const imported = await readOdtDocument(
+        await replaceEntry(bytes, "content.xml", content.replace("2.0003cm", value)),
+        metadata(),
+      );
+      expect(imported.document.paragraphs[0]?.textLeftMargin).toBe(expected);
+    }
+    await expect(
+      readOdtDocument(
+        await replaceEntry(bytes, "content.xml", content.replace("2.0003cm", "-1cm")),
+        metadata(),
+      ),
+    ).rejects.toThrow("Unsupported ODF paragraph left margin");
   });
 });

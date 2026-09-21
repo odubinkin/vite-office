@@ -9,7 +9,11 @@ import {
   encodeWriterDocument as serializeWriterDocument,
 } from "../../filter/basflt/writer-document-codec";
 
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  SvxAdjust,
+  SvxAdjustItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/source/items/paraitem";
 import {
   FontItalic,
   FontLineStyle,
@@ -23,6 +27,7 @@ import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_PARATR_ADJUST,
+  RES_MARGIN_TEXTLEFT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
@@ -207,6 +212,9 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(set.GetAdjust(false).GetAdjust()).toBe(SvxAdjust.ParaStart);
     expect(set.GetNumRule().GetValue()).toBe("");
     expect(set.GetNumRule(false).GetValue()).toBe("");
+    expect(pool.CreateItem({ value: 1134, which: RES_MARGIN_TEXTLEFT })).toEqual(
+      new SvxTextLeftMarginItem(1134, RES_MARGIN_TEXTLEFT),
+    );
     set.Put(new SwNumRuleItem("Rule"));
     const populated = set.CloneAsValue();
     const empty = set.CloneAsValue(false);

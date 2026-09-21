@@ -40,6 +40,10 @@
       "rationale": "The local helper keeps selection-aware hyperlink edit actions beside SwWrtShell while preserving the bounded InsertURL responsibility implemented by upstream editsh.cxx."
     },
     {
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
+      "rationale": "The focused Writer indent helper preserves the reviewed SID_INC_INDENT text-shell branch while separating bounded command transitions from the broader textsh1.cxx source unit."
+    },
+    {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
       "rationale": "The local wrtsh-selection.ts module preserves the reviewed SwWrtShell selection responsibility while the retired select.ts source-tree path remains reserved by the repository migration guard."
     },
@@ -3524,6 +3528,45 @@
       "upstreamPath": "sw/source/core/edit/editsh.cxx",
       "upstreamSymbols": [
         "SwEditShell::InsertURL"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "changeWriterParagraphIndent",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SID_INC_INDENT",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
+      "localSymbols": [
+        "WRITER_PARAGRAPH_INDENT_STEP",
+        "WriterIndentTarget",
+        "changeWriterParagraphListLevel",
+        "changeWriterParagraphIndent",
+        "canChangeWriterParagraphIndent"
+      ],
+      "omittedResponsibilities": [
+        "Native keyboard modifiers, table selections, layout-frame checks, and multi-selection indent behavior outside the bounded browser Writer command slice remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Preserves the text-shell decision between list-level movement and paragraph left-margin movement for the supported indent commands."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
+      "upstreamSymbols": [
+        "SwTextShell::Execute",
+        "SID_INC_INDENT",
+        "NumUpDown",
+        "MoveLeftMargin"
       ]
     },
     {

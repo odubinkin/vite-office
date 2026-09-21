@@ -346,13 +346,16 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     const restorePort = createRecoveryPort();
     const restored = render(
       createElement(WriterRecoveryPrompt, {
-        children: (notice: string | undefined) =>
-          createElement(
-            "div",
-            undefined,
-            createElement("output", { "aria-label": "Recovery status" }, notice),
-            "Writer workspace",
-          ),
+        children:
+          /** Renders restored recovery feedback. @param notice - Recovery notice. @returns Test workspace. */ (
+            notice: string | undefined,
+          ) =>
+            createElement(
+              "div",
+              undefined,
+              createElement("output", { "aria-label": "Recovery status" }, notice),
+              "Writer workspace",
+            ),
         recovery: restorePort,
       }),
     );
@@ -367,13 +370,16 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     const discardPort = createRecoveryPort();
     const discarded = render(
       createElement(WriterRecoveryPrompt, {
-        children: (notice: string | undefined) =>
-          createElement(
-            "div",
-            undefined,
-            createElement("output", { "aria-label": "Recovery status" }, notice),
-            "Discarded workspace",
-          ),
+        children:
+          /** Renders discarded recovery feedback. @param notice - Recovery notice. @returns Test workspace. */ (
+            notice: string | undefined,
+          ) =>
+            createElement(
+              "div",
+              undefined,
+              createElement("output", { "aria-label": "Recovery status" }, notice),
+              "Discarded workspace",
+            ),
         recovery: discardPort,
       }),
     );
@@ -386,13 +392,16 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     const continuePort = createRecoveryPort();
     render(
       createElement(WriterRecoveryPrompt, {
-        children: (notice: string | undefined) =>
-          createElement(
-            "div",
-            undefined,
-            createElement("output", { "aria-label": "Recovery status" }, notice),
-            "Continued workspace",
-          ),
+        children:
+          /** Renders clean-continue feedback. @param notice - Recovery notice. @returns Test workspace. */ (
+            notice: string | undefined,
+          ) =>
+            createElement(
+              "div",
+              undefined,
+              createElement("output", { "aria-label": "Recovery status" }, notice),
+              "Continued workspace",
+            ),
         recovery: continuePort,
       }),
     );

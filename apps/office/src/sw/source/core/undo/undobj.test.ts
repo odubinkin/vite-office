@@ -11,7 +11,7 @@ import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { SwUndoDelete, SwUndoJoinParagraphs, SwUndoReplace } from "./undel";
 import { SwUndoFormatColl } from "./unfmco";
 import { SwUndoInsert } from "./unins";
-import { SwUndoAttr, SwUndoParagraphFormat } from "./unattr";
+import { SwUndoAttr, SwUndoMoveLeftMargin, SwUndoParagraphFormat } from "./unattr";
 import { SwUndoInsNum, SwUndoNumLevel } from "./unnum";
 import { SwUndoSplitNode } from "./unspnd";
 import {
@@ -356,6 +356,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     );
     const attr = new SwUndoAttr(target, 0, [run("a")], [run("a", true)], state, state);
     const paragraph = new SwUndoParagraphFormat(target, "left", "center", state, state);
+    const margin = new SwUndoMoveLeftMargin(target, 0, 1134, state, state);
     const style = new SwUndoFormatColl(target, "default", "heading-1", state, state);
     const numbering = new SwUndoInsNum(
       target,
@@ -384,11 +385,12 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       replacement.GetPayloadSize(),
       attr.GetPayloadSize(),
       paragraph.GetPayloadSize(),
+      margin.GetPayloadSize(),
       style.GetPayloadSize(),
       numbering.GetPayloadSize(),
       split.GetPayloadSize(),
       joined.GetPayloadSize(),
-    ]).toEqual([4, 4, 8, 8, 2, 2, 6, 1, expect.any(Number)]);
+    ]).toEqual([4, 4, 8, 8, 2, 2, 2, 6, 1, expect.any(Number)]);
     expect(insert.Merge(deletion)).toBe(false);
     expect(
       deletion.Merge(new SwUndoDelete(target, 2, [run("b")], "delete", "word", state, state)),

@@ -33,17 +33,19 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   const fileMenuButton = page.getByRole("button", { name: "File" });
   await fileMenuButton.focus();
   await fileMenuButton.press("ArrowRight");
-  await expect(page.getByRole("button", { name: "Edit" })).toBeFocused();
-  await page.getByRole("button", { name: "Edit" }).press("ArrowDown");
+  await expect(page.getByRole("button", { exact: true, name: "Edit" })).toBeFocused();
+  await page.getByRole("button", { exact: true, name: "Edit" }).press("ArrowDown");
   await expect(page.getByRole("menuitem", { name: "Cut" })).toBeFocused();
   await page.getByRole("menuitem", { name: "Cut" }).press("End");
   await expect(page.getByRole("menuitem", { name: "Select All" })).toBeFocused();
   await page.getByRole("menuitem", { name: "Select All" }).press("Escape");
-  await expect(page.getByRole("button", { name: "Edit" })).toBeFocused();
+  await expect(page.getByRole("button", { exact: true, name: "Edit" })).toBeFocused();
   await page.getByRole("button", { name: "File" }).click();
   await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
+  await page.getByRole("button", { name: "File" }).press("Escape");
   await page.getByRole("button", { name: "Insert" }).click();
-  await expect(page.getByRole("menuitem", { name: "Hyperlink…" })).toBeVisible();
+  await expect(page.getByRole("menuitem", { exact: true, name: "Hyperlink…" })).toBeVisible();
+  await page.getByRole("button", { name: "Insert" }).press("Escape");
   await expect(writerMenuBar.getByRole("button")).toHaveText([
     "File",
     "Edit",
@@ -102,7 +104,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(writerEditor).not.toHaveAttribute("contenteditable");
   await writerEditor.fill("A browser-authored paragraph.");
   await expect(page.getByRole("button", { name: "Undo" })).toBeEnabled();
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   await expect(
     writerEditor.evaluate(
@@ -121,7 +123,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
       .getByRole("toolbar", { name: "Writer standard toolbar" })
       .getByRole("button", { name: "Copy" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Copy" }).click();
   await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
     "Document has unsaved changes.",
@@ -169,7 +171,7 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await trailingWriterParagraph.press("Backspace");
   await expect(trailingWriterParagraph).toHaveCount(0);
   await expect(writerEditor).toHaveText("A browser-authored paragraph.");
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(trailingWriterParagraph).toBeVisible();
   await writerEditor.evaluate(
@@ -193,13 +195,13 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await writerEditor.press("Delete");
   await expect(trailingWriterParagraph).toHaveCount(0);
   await expect(writerEditor).toHaveText("A browser-authored paragraph.");
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(trailingWriterParagraph).toBeVisible();
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(trailingWriterParagraph).toHaveCount(0);
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Undo" }).click();
   await expect(writerEditor).toHaveCSS("text-align", "left");
 

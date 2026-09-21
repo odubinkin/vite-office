@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { encodeSfxPoolItem } from "../../../sw/source/filter/basflt/item-codec";
 
 import { SfxInt16Item } from "../../../svl/source/items/poolitem";
+import { SvxTextLeftMarginItem } from "./paraitem";
 import {
   FontItalic,
   FontLineStyle,
@@ -118,5 +119,20 @@ describe("EditEngine character items" /** Groups pooled character item contracts
           () => new SvxUnderlineItem(value as FontLineStyle, underlineWhich),
         ),
       ).toThrow("SvxUnderlineItem value is invalid");
+  });
+
+  it("preserves non-negative text-left margins and persistence values", /** Verifies SvxTextLeftMarginItem validation, cloning, equality, and persistence. @returns Nothing. */ () => {
+    const margin = new SvxTextLeftMarginItem(1134, alternateWhich);
+    expect(margin.ResolveTextLeft()).toBe(1134);
+    expect(margin.QueryValue()).toBe(1134);
+    expect(margin.Clone()).not.toBe(margin);
+    expect(margin.Clone().equals(margin)).toBe(true);
+    expect(margin.equals(new SvxTextLeftMarginItem(1135, alternateWhich))).toBe(false);
+    expect(
+      throwing(
+        /** Creates an invalid negative margin item. @returns Invalid item. */ () =>
+          new SvxTextLeftMarginItem(-1, alternateWhich),
+      ),
+    ).toThrow("SvxTextLeftMarginItem value is invalid");
   });
 });

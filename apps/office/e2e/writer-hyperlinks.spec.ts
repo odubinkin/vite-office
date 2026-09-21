@@ -41,7 +41,7 @@ test("Writer creates, edits, and round-trips hyperlinks", /** Verifies upstream-
     "https://example.test/first",
   );
 
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Hyperlink…" }).click();
   await page.getByLabel("URL").fill("https://example.test/updated");
   await page.getByRole("button", { name: "Apply" }).click();

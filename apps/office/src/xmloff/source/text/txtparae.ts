@@ -388,7 +388,7 @@ function createXmlId(value: string, used: Set<string>): string {
   return candidate;
 }
 
-/** Creates an automatic paragraph style deduplication key. @param style - Parent style. @param alignment - Direct alignment. @param properties - Direct character properties. @returns Key. */
+/** Creates an automatic paragraph style deduplication key. @param style - Parent style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param properties - Direct character properties. @returns Key. */
 function paragraphStyleKey(
   style: XMLParagraphStyle,
   alignment?: OdfParagraphAlignment,

@@ -13,8 +13,20 @@ test("supports document-wide selection through Ctrl/Cmd+A and pointer dragging" 
   const firstProjectionId = await firstParagraph.getAttribute("data-writer-paragraph-id");
   const secondProjectionId = await secondParagraph.getAttribute("data-writer-paragraph-id");
   await secondParagraph.fill("Second Writer paragraph");
-  await secondParagraph.click();
-  await page.keyboard.press("Home");
+  await secondParagraph.evaluate(
+    /** Places the caret at the exact paragraph start before testing a cross-paragraph Shift+ArrowLeft transition. @param paragraph - Second Writer paragraph. @returns Nothing. */
+    function placeCaretAtStart(paragraph: HTMLElement): void {
+      const selection = window.getSelection();
+      if (selection === null)
+        throw new Error("Writer selection E2E requires browser selection support.");
+      const range = document.createRange();
+      range.selectNodeContents(paragraph);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      paragraph.focus();
+    },
+  );
   await page.keyboard.down("Shift");
   await page.keyboard.press("ArrowLeft");
   await page.keyboard.up("Shift");
@@ -148,7 +160,7 @@ test("places the caret at the first clicked position in a different paragraph" /
   await page.mouse.click(clickPoint.x, clickPoint.y);
 
   const caretOffset = await firstParagraph.evaluate(
-    /** Reads the collapsed selection offset after the first click. @returns UTF-16 caret offset relative to the clicked paragraph. */
+    /** Reads the collapsed selection offset after the first click. @param paragraph - Clicked editable paragraph. @returns UTF-16 caret offset relative to the clicked paragraph. */
     function readCaretOffset(paragraph): number {
       const selection = window.getSelection();
       if (selection === null || !selection.isCollapsed) return -1;

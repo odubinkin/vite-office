@@ -3627,6 +3627,44 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-shell",
+      "capabilityIds": [
+        "CAP-0107",
+        "CAP-0125"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts#changeWriterParagraphIndent",
+          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SID_INC_INDENT"
+        ],
+        "justification": "Mapped provenance remains semantically unverified against the SID_INC_INDENT branch in sw/source/uibase/shells/textsh1.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WRITER_PARAGRAPH_INDENT_STEP",
+          "WriterIndentTarget",
+          "changeWriterParagraphListLevel",
+          "changeWriterParagraphIndent",
+          "canChangeWriterParagraphIndent"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/shells/textsh1.cxx",
+        "upstreamSymbols": [
+          "SwTextShell::Execute",
+          "SID_INC_INDENT",
+          "NumUpDown",
+          "MoveLeftMargin"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -4309,6 +4347,22 @@
     }
   ],
   "internalOperations": [
+    {
+      "id": "writer.internal.change-writer-paragraph-indent",
+      "modulePath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
+      "symbol": "changeWriterParagraphIndent",
+      "classification": "upstream-mechanism",
+      "capabilityId": "CAP-0125",
+      "description": "Exported non-command mutation helper changeWriterParagraphIndent owned by apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts."
+    },
+    {
+      "id": "writer.internal.change-writer-paragraph-list-level",
+      "modulePath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
+      "symbol": "changeWriterParagraphListLevel",
+      "classification": "upstream-mechanism",
+      "capabilityId": "CAP-0107",
+      "description": "Exported non-command mutation helper changeWriterParagraphListLevel owned by apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts."
+    },
     {
       "id": "writer.internal.insert-writer-text-run",
       "modulePath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",

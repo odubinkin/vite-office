@@ -176,4 +176,26 @@ describe("createWriterModuleFactory", /** Registers lazy module tests. @returns 
       vi.unstubAllGlobals();
     }
   });
+
+  it("passes recovery inspection notices into the mounted workspace", /** Verifies the lazy session host forwards recovery failures to Writer status. @returns Completion after the recovery gate opens. */ async () => {
+    const base = createTestSession();
+    const session: WriterDocumentSession = {
+      ...base,
+      GetRecoveryCandidate:
+        /** Simulates failed recovery inspection. @returns Rejected inspection. */ async () =>
+          Promise.reject(new Error("storage failed")),
+    };
+    const factory = createWriterModuleFactory({
+      createSession: /** Returns the failure-injected session. @returns Writer session. */ () =>
+        session,
+    });
+    const workspace = render(factory.createWorkspace());
+    await waitFor(
+      /** Waits for the recovery notice to reach the status bar. @returns Nothing. */ () =>
+        expect(workspace.getByRole("status", { name: "Writer status bar" })).toHaveTextContent(
+          "Recovery data could not be inspected",
+        ),
+    );
+    workspace.unmount();
+  });
 });

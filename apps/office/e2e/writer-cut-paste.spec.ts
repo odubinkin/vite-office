@@ -42,10 +42,10 @@ test("Writer Cut and Paste" /** Verifies native clipboard shortcuts retain Write
     },
   );
   await expect(writerEditor.locator("strong")).toHaveText("Pasted");
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await expect(page.getByRole("menuitem", { name: "Cut" })).toBeVisible();
   await expect(page.getByRole("menuitem", { name: "Paste" })).toBeVisible();
-  await page.getByRole("button", { name: "Edit" }).click();
+  await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("button", { name: "Undo" }).click();
   await expect(writerEditor).toHaveText("");
   await page.getByRole("button", { name: "Redo" }).click();

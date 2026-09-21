@@ -334,7 +334,7 @@ describe("ODF text paragraph export contexts", /** Groups export context tests. 
 
 describe("ODF streaming text import contexts", /** Groups direct model import tests. @returns Nothing. */ () => {
   const styles = new Map<string, OdfStyleDefinition>([
-    ["Standard", { family: "paragraph", properties: { bold: true } }],
+    ["Standard", { family: "paragraph", leftMargin: 720, properties: { bold: true } }],
     [
       "Heading_20_1",
       { family: "paragraph", parentStyleName: "Standard", properties: { italic: true } },
@@ -355,11 +355,12 @@ describe("ODF streaming text import contexts", /** Groups direct model import te
 
   it("applies paragraphs, headings, inherited spans, whitespace, and controls directly", /** Verifies context dispatch and style inheritance. @returns Nothing. */ () => {
     const paragraphs = importBody(
-      '<text:sequence-decls/><text:p>plain</text:p><text:h/><text:h text:style-name="P1"><text:span text:style-name="T1">b<text:span text:style-name="T2">i<text:s/><text:tab/><text:line-break/></text:span></text:span></text:h>',
+      '<text:sequence-decls/><text:p text:style-name="Standard">plain</text:p><text:h/><text:h text:style-name="P1"><text:span text:style-name="T1">b<text:span text:style-name="T2">i<text:s/><text:tab/><text:line-break/></text:span></text:span></text:h>',
       styles,
     );
     expect(paragraphs).toHaveLength(3);
     expect(paragraphs[0]).toMatchObject({ style: "default", runs: [{ text: "plain" }] });
+    expect(paragraphs[0]?.leftMargin).toBe(720);
     expect(paragraphs[1]).toMatchObject({ style: "heading-1", runs: [] });
     expect(paragraphs[2]).toMatchObject({
       alignment: "right",

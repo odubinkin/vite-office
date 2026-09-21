@@ -493,7 +493,7 @@ export class SwTextNode extends SwContentNode {
     return getWriterParagraphAlignment(adjust);
   }
 
-  /** Returns the effective direct text-left margin in twips. */
+  /** Returns the effective direct text-left margin in twips. @returns Text-left margin. */
   public get textLeftMargin(): number {
     return (this.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft();
   }

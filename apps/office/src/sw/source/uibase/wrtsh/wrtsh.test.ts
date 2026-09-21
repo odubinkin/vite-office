@@ -35,6 +35,10 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(paragraph.textLeftMargin).toBe(0);
     expect(shell.Redo()).toBe(true);
     expect(paragraph.textLeftMargin).toBe(1134);
+    expect(shell.ChangeParagraphIndent(false)).toBe(true);
+    expect(paragraph.textLeftMargin).toBe(0);
+    expect(shell.ChangeParagraphIndent(false)).toBe(false);
+    expect(shell.ChangeParagraphIndent(true)).toBe(true);
     expect(shell.SetParagraphListKind("numbered")).toBe(true);
     expect(shell.ChangeParagraphIndent(true)).toBe(true);
     expect(paragraph.list).toMatchObject({ kind: "numbered", level: 1 });

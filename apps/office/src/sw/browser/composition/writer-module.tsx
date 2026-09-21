@@ -218,13 +218,17 @@ function WriterWorkspaceSession({
   );
   return (
     <WriterRecoveryPrompt recovery={session}>
-      {(recoveryNotice) => (
-        <WriterWorkbench
-          isActive
-          {...(recoveryNotice === undefined ? {} : { recoveryNotice })}
-          view={session.view}
-        />
-      )}
+      {
+        /** Renders the active workspace with optional recovery feedback. @param recoveryNotice - Recovery result text. @returns Writer workbench. */ (
+          recoveryNotice,
+        ) => (
+          <WriterWorkbench
+            isActive
+            {...(recoveryNotice === undefined ? {} : { recoveryNotice })}
+            view={session.view}
+          />
+        )
+      }
     </WriterRecoveryPrompt>
   );
 }

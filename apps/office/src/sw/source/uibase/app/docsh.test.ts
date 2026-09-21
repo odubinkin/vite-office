@@ -56,7 +56,11 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
   it("renames the document through shell state", /** Verifies title metadata is validated, published, and marked dirty. @returns Nothing. */ () => {
     const active = fixture();
     const hints: SwModelHint[] = [];
-    const unsubscribe = active.shell.Subscribe((hint) => hints.push(hint));
+    const unsubscribe = active.shell.Subscribe(
+      /** Captures one document-shell notification. @param hint - Published hint. @returns New list length. */ (
+        hint,
+      ) => hints.push(hint),
+    );
 
     expect(active.shell.RenameDocument("  Renamed document  ")).toBe(true);
     expect(active.shell.GetDocumentState()).toMatchObject({
@@ -106,6 +110,20 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     );
     await expect(opening).rejects.toMatchObject({ category: "stale" });
     expect(shell.GetDoc()).toBe(replacement);
+  });
+
+  it("records a failed primary-store load before rethrowing", /** Verifies failed local loads update medium state. @returns Completion after rejection. */ async () => {
+    const active = fixture();
+    await expect(
+      active.shell.LoadFromPrimaryPort({
+        load: /** Simulates primary storage failure. @returns Rejected load. */ async () =>
+          Promise.reject(new Error("storage failed")),
+      }),
+    ).rejects.toThrow("storage failed");
+    expect(active.shell.GetMedium().lastOperation).toMatchObject({
+      operation: "open",
+      state: "failed",
+    });
   });
 
   it("separates primary save, export, download, and recovery state", /** Verifies independent persistence channels. @returns Completion after assertions. */ async () => {

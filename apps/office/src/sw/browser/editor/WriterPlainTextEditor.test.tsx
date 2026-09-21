@@ -86,6 +86,13 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     },
   );
 
+  it("projects direct paragraph indentation from the persistent toolbar", /** Verifies the toolbar-driven margin reaches the editable paragraph style. @returns Nothing. */ function projectsParagraphIndent(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    fireEvent.click(screen.getByRole("button", { name: /^Increase$/u }));
+    expect(paragraph).toHaveStyle({ marginInlineStart: "56.7pt" });
+  });
+
   it("routes a native same-paragraph Paste event through the immutable Writer document body" /** Verifies React's document-body clipboard listener replaces selected text with safe direct-format runs instead of allowing editable-host HTML mutation. @returns Nothing; browser-visible pasted markup is asserted. */, function routesNativePasteThroughDocumentBody(): void {
     render(<App />);
     const paragraph = screen.getByRole("textbox", { name: "Writer document text" });

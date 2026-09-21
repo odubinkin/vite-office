@@ -28,4 +28,20 @@ describe("WriterPlatformError", /** Registers platform-error tests. @returns Not
       code: "selection-required",
     });
   });
+
+  it("rejects Copy when the canonical SwPaM is collapsed", /** Verifies Copy requires a persistent Writer selection. @returns Completion after rejection. */ async function rejectsCollapsedCopy(): Promise<void> {
+    const controller = new WriterClipboardWorkflowController(
+      {
+        CreateTransferable: vi.fn(
+          /** Creates an empty transferable. @returns Transferable without a selection. */ () => ({
+            CreateSelection:
+              /** Reports the collapsed selection. @returns No transferable selection. */ () =>
+                undefined,
+          }),
+        ),
+      } as unknown as SwWrtShell,
+      { copyRichText: vi.fn(), readRichClipboard: vi.fn() },
+    );
+    await expect(controller.Copy()).rejects.toMatchObject({ code: "selection-required" });
+  });
 });

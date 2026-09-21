@@ -62,12 +62,13 @@ export function WriterWorkspaceChrome({
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [draftTitle, setDraftTitle] = useState(documentTitle);
 
-  const commitTitle = (): void => {
+  /** Commits the normalized title draft and closes the inline editor. @returns Nothing. */
+  function commitTitle(): void {
     const nextTitle = draftTitle.trim();
     if (nextTitle.length > 0 && nextTitle !== documentTitle) onDocumentTitleChange(nextTitle);
     setDraftTitle(nextTitle.length > 0 ? nextTitle : documentTitle);
     setIsEditingTitle(false);
-  };
+  }
 
   return (
     <section
@@ -83,13 +84,21 @@ export function WriterWorkspaceChrome({
                 autoFocus
                 className="w-full min-w-48 rounded border border-indigo-300 px-1 text-sm font-bold text-slate-950 outline-none ring-indigo-200 focus:ring-2"
                 onBlur={commitTitle}
-                onChange={(event) => setDraftTitle(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault();
-                    event.currentTarget.blur();
+                onChange={
+                  /** Retains the current title draft. @param event - Input change. @returns Nothing. */ (
+                    event,
+                  ) => setDraftTitle(event.target.value)
+                }
+                onKeyDown={
+                  /** Commits the title when Enter blurs the editor. @param event - Keyboard input. @returns Nothing. */ (
+                    event,
+                  ) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
+                      event.currentTarget.blur();
+                    }
                   }
-                }}
+                }
                 type="text"
                 value={draftTitle}
               />
@@ -100,10 +109,12 @@ export function WriterWorkspaceChrome({
                   "Edit document title",
                 )}
                 className="block max-w-full truncate text-left text-sm font-bold text-slate-950 hover:text-indigo-700"
-                onClick={() => {
-                  setDraftTitle(documentTitle);
-                  setIsEditingTitle(true);
-                }}
+                onClick={
+                  /** Opens title editing with the current document title. @returns Nothing. */ () => {
+                    setDraftTitle(documentTitle);
+                    setIsEditingTitle(true);
+                  }
+                }
                 type="button"
               >
                 {documentTitle}
