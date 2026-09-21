@@ -1,10 +1,11 @@
 ---
 id: "202609210851-1GHX09"
 title: "Implement Phase 8 differential parity verification"
-status: "DOING"
+result_summary: "Writer parity inventory closes all 35 bounded capabilities"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T09:23:11.572Z"
+  updated_at: "2026-09-21T09:23:34.463Z"
   updated_by: "CODER"
-  note: "All declared checks pass: parity inventory 35/35 verified with zero gaps and unclassified divergences; 341 office and 95 inventory tests at 100% coverage; typecheck, lint, 11 Playwright scenarios, formatting, docs, file-size, source-tree, provenance, invariants, routing, doctor, and diff hygiene pass."
+  note: "verified-202609210851-1GHX09"
   attempts: 0
 quality_review:
   state: "pass"
@@ -41,11 +42,19 @@ quality_review:
     - "node .agentplane/policy/check-routing.mjs"
   findings:
     - "Schema-six inventory requires complete closure evidence for all verified capabilities and reports zero unresolved or unclassified differences."
-commit: null
+commit:
+  hash: "120828c1bbf7d0fa27b56baa305c92e5757dde5f"
+  message: "🧩 1GHX09 code: bind parity evidence commit"
 comments:
   -
     author: "CODER"
     body: "Start: implement Phase 8 parity evidence, differential checks, capability closure, and declared verification gates."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609210851-1GHX09. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: Writer parity inventory now closes all 35 bounded capabilities with complete machine-checked evidence and zero unclassified divergence."
 events:
   -
     type: "status"
@@ -60,8 +69,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared checks pass: parity inventory 35/35 verified with zero gaps and unclassified divergences; 341 office and 95 inventory tests at 100% coverage; typecheck, lint, 11 Playwright scenarios, formatting, docs, file-size, source-tree, provenance, invariants, routing, doctor, and diff hygiene pass."
+  -
+    type: "verify"
+    at: "2026-09-21T09:23:34.463Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609210851-1GHX09"
+  -
+    type: "status"
+    at: "2026-09-21T09:23:34.599Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609210851-1GHX09. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-09-21T09:24:25.942Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: Writer parity inventory now closes all 35 bounded capabilities with complete machine-checked evidence and zero unclassified divergence."
 doc_version: 3
-doc_updated_at: "2026-09-21T09:23:11.658Z"
+doc_updated_at: "2026-09-21T09:24:25.944Z"
 doc_updated_by: "CODER"
 description: "Close Phase 8 for CAP-0101 through CAP-0135 with executable contract, behavior, default, serialization, differential, and divergence evidence against the pinned LibreOffice baseline."
 sections:
@@ -105,6 +134,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task verify-show 202609210851-1GHX09
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-21T09:23:34.463Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609210851-1GHX09
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T09:23:11.658Z, excerpt_hash=sha256:67d66a7f6e85ed1c334db7e93329085fceece108e3b01a2f34343f5ed98f3260
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609210851-1GHX09/blueprint/resolved-snapshot.json
+    - old_digest: 34f7cb5ebd4a4340176e157300a1ef96f0644ecec3bb350d7d40c7d5bb8541c9
+    - current_digest: 34f7cb5ebd4a4340176e157300a1ef96f0644ecec3bb350d7d40c7d5bb8541c9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609210851-1GHX09
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609210851-1GHX09 --result verified-202609210851-1GHX09 --commit 646639536a5cd40f344f25ff9b5ff95d07bb5a93
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -174,6 +233,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609210851-1GHX09
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T09:23:34.463Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609210851-1GHX09
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T09:23:11.658Z, excerpt_hash=sha256:67d66a7f6e85ed1c334db7e93329085fceece108e3b01a2f34343f5ed98f3260
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609210851-1GHX09/blueprint/resolved-snapshot.json
+- old_digest: 34f7cb5ebd4a4340176e157300a1ef96f0644ecec3bb350d7d40c7d5bb8541c9
+- current_digest: 34f7cb5ebd4a4340176e157300a1ef96f0644ecec3bb350d7d40c7d5bb8541c9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609210851-1GHX09
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609210851-1GHX09 --result verified-202609210851-1GHX09 --commit 646639536a5cd40f344f25ff9b5ff95d07bb5a93
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
