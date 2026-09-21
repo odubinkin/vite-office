@@ -2,53 +2,94 @@
 
 import { describe, expect, it } from "vitest";
 
-import { getWriterLayer, getWriterOwnershipViolation } from "./check-module-boundaries.mjs";
+import {
+  getRuntimeOwnershipLayer,
+  getRuntimeOwnershipViolation,
+} from "./check-module-boundaries.mjs";
 
-describe("Writer inner module boundaries", /** Registers Writer ownership boundary cases. @returns Nothing. */ function defineWriterBoundaryTests(): void {
+describe("runtime ownership boundaries", /** Registers runtime ownership boundary cases. @returns Nothing. */ function defineRuntimeBoundaryTests(): void {
   it("classifies the enforced Writer layers", /** Verifies stable path-to-layer routing. @returns Nothing. */ function classifiesWriterLayers(): void {
-    expect(getWriterLayer("sw/source/core/doc/doc.ts")).toBe("core");
-    expect(getWriterLayer("sw/source/filter/xml/swxml.ts")).toBe("filter");
-    expect(getWriterLayer("sw/source/uibase/uiview/view.ts")).toBe("uibase");
-    expect(getWriterLayer("sw/browser/presentation/writer-view.tsx")).toBe("browser");
+    expect(getRuntimeOwnershipLayer("sw/source/core/doc/doc.ts")).toBe("writer-core");
+    expect(getRuntimeOwnershipLayer("sw/source/filter/xml/swxml.ts")).toBe("writer-filter");
+    expect(getRuntimeOwnershipLayer("sw/source/uibase/uiview/view.ts")).toBe("writer-uibase");
+    expect(getRuntimeOwnershipLayer("sw/browser/presentation/writer-view.tsx")).toBe("browser");
+    expect(getRuntimeOwnershipLayer("framework/browser/app/desktop.tsx")).toBe("browser");
+    expect(getRuntimeOwnershipLayer("vcl/browser/browser-file.ts")).toBe("browser");
+    expect(getRuntimeOwnershipLayer("sfx2/source/control/dispatch.ts")).toBe("sfx");
+    expect(getRuntimeOwnershipLayer("svl/source/undo/undo.ts")).toBe("upstream-mechanism");
   });
 
   it("rejects reverse browser and inner-layer dependencies", /** Verifies forbidden dependency directions. @returns Nothing. */ function rejectsReverseEdges(): void {
     expect(
-      getWriterOwnershipViolation(
+      getRuntimeOwnershipViolation(
         "sw/source/uibase/uiview/view.ts",
         "sw/browser/workflows/writer-workflows",
         "../../../browser/workflows/writer-workflows",
       ),
     ).toMatch(/browser adapters/u);
     expect(
-      getWriterOwnershipViolation(
+      getRuntimeOwnershipViolation(
         "sw/source/core/doc/doc.ts",
         "sw/source/uibase/uiview/view",
         "../../uibase/uiview/view",
       ),
     ).toMatch(/core must not depend on uibase/u);
     expect(
-      getWriterOwnershipViolation(
+      getRuntimeOwnershipViolation(
         "sw/source/filter/xml/swxml.ts",
         "sw/source/uibase/app/docsh",
         "../../uibase/app/docsh",
       ),
     ).toMatch(/filter must not depend on uibase/u);
-    expect(getWriterOwnershipViolation("sw/source/core/doc/doc.ts", "", "react")).toMatch(
-      /must not import React/u,
+    expect(getRuntimeOwnershipViolation("sw/source/core/doc/doc.ts", "", "react")).toMatch(
+      /browser presentation package/u,
     );
+    expect(
+      getRuntimeOwnershipViolation("sfx2/source/view/viewfrm.ts", "", "react-dom/client"),
+    ).toMatch(/browser presentation package/u);
+    expect(getRuntimeOwnershipViolation("svl/source/undo/undo.ts", "", "lucide-react")).toMatch(
+      /browser presentation package/u,
+    );
+    expect(
+      getRuntimeOwnershipViolation(
+        "sw/source/core/doc/doc.ts",
+        "framework/browser/app/desktop",
+        "../../../../framework/browser/app/desktop",
+      ),
+    ).toMatch(/browser adapters/u);
+    expect(
+      getRuntimeOwnershipViolation(
+        "sw/source/uibase/uiview/view.ts",
+        "vcl/browser/browser-clipboard",
+        "../../../../vcl/browser/browser-clipboard",
+      ),
+    ).toMatch(/browser adapters/u);
+    expect(
+      getRuntimeOwnershipViolation(
+        "sfx2/source/doc/objsh.ts",
+        "sw/browser/workflows/writer-workflows",
+        "../../../sw/browser/workflows/writer-workflows",
+      ),
+    ).toMatch(/browser adapters/u);
+    expect(
+      getRuntimeOwnershipViolation(
+        "svl/source/undo/undo.ts",
+        "framework/browser/app/desktop",
+        "../../../framework/browser/app/desktop",
+      ),
+    ).toMatch(/browser adapters/u);
   });
 
   it("allows inward and browser-adapter dependencies", /** Verifies supported dependency directions. @returns Nothing. */ function allowsInwardEdges(): void {
     expect(
-      getWriterOwnershipViolation(
+      getRuntimeOwnershipViolation(
         "sw/source/uibase/uiview/view.ts",
         "sw/source/core/doc/doc",
         "../../core/doc/doc",
       ),
     ).toBeUndefined();
     expect(
-      getWriterOwnershipViolation(
+      getRuntimeOwnershipViolation(
         "sw/browser/presentation/writer-view.tsx",
         "sw/source/uibase/uiview/view",
         "../../source/uibase/uiview/view",

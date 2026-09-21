@@ -7,7 +7,7 @@ import { basename, dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 /** Strict source-provenance JSON schema version. */
-export const SOURCE_PROVENANCE_SCHEMA_VERSION = 2;
+export const SOURCE_PROVENANCE_SCHEMA_VERSION = 3;
 
 /** Runtime ownership classifications shared with the exhaustive runtime inventory. */
 export type SourceProvenanceClassification =
@@ -60,6 +60,11 @@ export type SourceProvenanceEntry = MappedSourceProvenanceEntry | LocalSourcePro
 export interface FilenameDivergence {
   readonly localPath: string;
   readonly rationale: string;
+  readonly stackNecessity:
+    | "browser-boundary"
+    | "generated-resource-boundary"
+    | "module-resolution"
+    | "responsibility-split";
 }
 
 /** Defines the pinned baseline identity and exhaustive runtime provenance set. */
@@ -360,19 +365,25 @@ function parseFilenameDivergences(candidate: unknown): readonly FilenameDivergen
         throw new Error(`Source provenance filenameDivergences[${index}] must be an object.`);
       const localPath = requireRuntimeModulePath(divergence, "localPath");
       const rationale = requireString(divergence, "rationale");
+      const stackNecessity = divergence.stackNecessity;
       if (rationale.length < 80)
         throw new Error(
           `Source provenance filename divergence rationale for ${localPath} is too short.`,
         );
-      if (!rationale.includes("Stack constraint:"))
+      if (
+        stackNecessity !== "browser-boundary" &&
+        stackNecessity !== "generated-resource-boundary" &&
+        stackNecessity !== "module-resolution" &&
+        stackNecessity !== "responsibility-split"
+      )
         throw new Error(
-          `Source provenance filename divergence for ${localPath} must state its stack constraint.`,
+          `Source provenance filename divergence for ${localPath} must classify its stack necessity.`,
         );
-      if (/\b(?:convenience|public naming)\b/iu.test(rationale))
+      if (/\b(?:convenience|easier|ergonomic|preference|public naming)\b/iu.test(rationale))
         throw new Error(
           `Source provenance filename divergence for ${localPath} cites a TypeScript convenience instead of a stack necessity.`,
         );
-      return { localPath, rationale };
+      return { localPath, rationale, stackNecessity };
     },
   );
 }

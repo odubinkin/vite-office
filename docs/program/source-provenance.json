@@ -1,87 +1,107 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
   "baselineTag": "libreoffice-26.8.0.2",
   "filenameDivergences": [
     {
       "localPath": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts",
-      "rationale": "Stack constraint: one exported ECMAScript controller module needs an unambiguous stable import name while preserving the bounded SfxDialogController lifecycle implemented by upstream basedlgs.cxx."
+      "rationale": "Stack constraint: one exported ECMAScript controller module needs an unambiguous stable import name while preserving the bounded SfxDialogController lifecycle implemented by upstream basedlgs.cxx.",
+      "stackNecessity": "responsibility-split"
     },
     {
       "localPath": "apps/office/src/svl/source/notify/broadcast.ts",
-      "rationale": "Stack constraint: case-stable ECMAScript imports use the lowercase broadcast.ts path while preserving the reviewed SfxBroadcaster responsibility implemented by upstream SfxBroadcaster.cxx."
+      "rationale": "Stack constraint: case-stable ECMAScript imports use the lowercase broadcast.ts path while preserving the reviewed SfxBroadcaster responsibility implemented by upstream SfxBroadcaster.cxx.",
+      "stackNecessity": "module-resolution"
     },
     {
       "localPath": "apps/office/src/svl/source/notify/listener.ts",
-      "rationale": "Stack constraint: the ECMAScript module path avoids the upstream C++ abbreviation while preserving the reviewed SfxListener responsibility implemented by upstream lstner.cxx."
+      "rationale": "Stack constraint: the ECMAScript module path avoids the upstream C++ abbreviation while preserving the reviewed SfxListener responsibility implemented by upstream lstner.cxx.",
+      "stackNecessity": "module-resolution"
     },
     {
       "localPath": "apps/office/src/sw/source/core/bastyp/contentindex.ts",
-      "rationale": "Stack constraint: the ECMAScript module path disambiguates Writer content indexes from other index modules while preserving the reviewed registry/update responsibility implemented by upstream index.cxx."
+      "rationale": "Stack constraint: the ECMAScript module path disambiguates Writer content indexes from other index modules while preserving the reviewed registry/update responsibility implemented by upstream index.cxx.",
+      "stackNecessity": "module-resolution"
     },
     {
       "localPath": "apps/office/src/sw/source/core/doc/default-font.ts",
-      "rationale": "Stack constraint: the browser device adapter must remain outside domain core, so this module isolates Writer's lcl_SetDfltFont policy from DocumentStylePoolManager.cxx."
+      "rationale": "Stack constraint: the browser device adapter must remain outside domain core, so this module isolates Writer's lcl_SetDfltFont policy from DocumentStylePoolManager.cxx.",
+      "stackNecessity": "browser-boundary"
     },
     {
       "localPath": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
-      "rationale": "Stack constraint: source-derived defaults are generated as a separately auditable ECMAScript data module beside DocumentStylePoolManager while preserving its upstream switch responsibility."
+      "rationale": "Stack constraint: source-derived defaults are generated as a separately auditable ECMAScript data module beside DocumentStylePoolManager while preserving its upstream switch responsibility.",
+      "stackNecessity": "generated-resource-boundary"
     },
     {
       "localPath": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
-      "rationale": "Stack constraint: the ECMAScript module exposes the upstream fmtinfmt.hxx contract directly while implementing the reviewed SwFormatINetFormat behavior from fmtatr2.cxx."
+      "rationale": "Stack constraint: the ECMAScript module exposes the upstream fmtinfmt.hxx contract directly while implementing the reviewed SwFormatINetFormat behavior from fmtatr2.cxx.",
+      "stackNecessity": "module-resolution"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
-      "rationale": "Stack constraint: asynchronous browser dialogs require a typed request boundary separated from the broader SwTextShell::Execute implementation in upstream textsh1.cxx."
+      "rationale": "Stack constraint: asynchronous browser dialogs require a typed request boundary separated from the broader SwTextShell::Execute implementation in upstream textsh1.cxx.",
+      "stackNecessity": "browser-boundary"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts",
-      "rationale": "Stack constraint: the supported ECMAScript shell excludes unavailable native branches while mapping the bounded execute/state subset from upstream textsh1.cxx."
+      "rationale": "Stack constraint: the supported ECMAScript shell excludes unavailable native branches while mapping the bounded execute/state subset from upstream textsh1.cxx.",
+      "stackNecessity": "responsibility-split"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/shells/viewsh.ts",
-      "rationale": "Stack constraint: dispatcher registration is an explicit ECMAScript module boundary, separated from the broader SwView implementation in upstream view.cxx."
+      "rationale": "Stack constraint: dispatcher registration is an explicit ECMAScript module boundary, separated from the broader SwView implementation in upstream view.cxx.",
+      "stackNecessity": "responsibility-split"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
-      "rationale": "Stack constraint: generated SDI metadata requires a shared typed ECMAScript assembly module for dedicated text and view shell owners; it remains narrower than swriter.sdi."
+      "rationale": "Stack constraint: generated SDI metadata requires a shared typed ECMAScript assembly module for dedicated text and view shell owners; it remains narrower than swriter.sdi.",
+      "stackNecessity": "generated-resource-boundary"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
-      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition keeps selection-aware hyperlink actions beside SwWrtShell while preserving upstream editsh.cxx InsertURL responsibility."
+      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition keeps selection-aware hyperlink actions beside SwWrtShell while preserving upstream editsh.cxx InsertURL responsibility.",
+      "stackNecessity": "responsibility-split"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
-      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates command transitions while preserving the reviewed SID_INC_INDENT branch from the broader textsh1.cxx unit."
+      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates command transitions while preserving the reviewed SID_INC_INDENT branch from the broader textsh1.cxx unit.",
+      "stackNecessity": "responsibility-split"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
-      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates transfer orchestration from SwWrtShell while preserving upstream swdtflvr.cxx SwTransferable::Paste responsibility."
+      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates transfer orchestration from SwWrtShell while preserving upstream swdtflvr.cxx SwTransferable::Paste responsibility.",
+      "stackNecessity": "responsibility-split"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
-      "rationale": "Stack constraint: the explicit ECMAScript module name prevents collision with the retired select.ts path while preserving the reviewed SwWrtShell selection responsibility."
+      "rationale": "Stack constraint: the explicit ECMAScript module name prevents collision with the retired select.ts path while preserving the reviewed SwWrtShell selection responsibility.",
+      "stackNecessity": "module-resolution"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
-      "rationale": "Stack constraint: the primary ECMAScript SwWrtShell module is the stable import root for bounded companion modules while preserving the reviewed wrtsh1.cxx responsibility."
+      "rationale": "Stack constraint: the primary ECMAScript SwWrtShell module is the stable import root for bounded companion modules while preserving the reviewed wrtsh1.cxx responsibility.",
+      "stackNecessity": "module-resolution"
     },
     {
       "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-      "rationale": "Stack constraint: generated menu XML is consumed through a typed ECMAScript command-identity module while preserving the reviewed .uno:PickList responsibility from menubar.xml."
+      "rationale": "Stack constraint: generated menu XML is consumed through a typed ECMAScript command-identity module while preserving the reviewed .uno:PickList responsibility from menubar.xml.",
+      "stackNecessity": "generated-resource-boundary"
     },
     {
       "localPath": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
-      "rationale": "Stack constraint: the browser bundle requires one generated ECMAScript resource loader combining supported metadata from pinned Writer menu, toolbar, accelerator, and XCU catalogs."
+      "rationale": "Stack constraint: the browser bundle requires one generated ECMAScript resource loader combining supported metadata from pinned Writer menu, toolbar, accelerator, and XCU catalogs.",
+      "stackNecessity": "generated-resource-boundary"
     },
     {
       "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
-      "rationale": "Stack constraint: the browser SAX dependency is exposed through an explicit ECMAScript parser adapter while preserving the reviewed context-stack responsibility from upstream fastparser.cxx."
+      "rationale": "Stack constraint: the browser SAX dependency is exposed through an explicit ECMAScript parser adapter while preserving the reviewed context-stack responsibility from upstream fastparser.cxx.",
+      "stackNecessity": "browser-boundary"
     },
     {
       "localPath": "apps/office/src/xmloff/source/style/xmlstylei.ts",
-      "rationale": "Stack constraint: separate ECMAScript import and export modules require an import-specific suffix while preserving the reviewed SvXMLStylesContext responsibility in upstream xmlstyle.cxx."
+      "rationale": "Stack constraint: separate ECMAScript import and export modules require an import-specific suffix while preserving the reviewed SvXMLStylesContext responsibility in upstream xmlstyle.cxx.",
+      "stackNecessity": "responsibility-split"
     }
   ],
   "entries": [

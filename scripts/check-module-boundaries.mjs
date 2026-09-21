@@ -21,30 +21,48 @@ const allowedEdges = new Map([
   ["xmloff", new Set()],
 ]);
 const suiteModules = new Set(["sw"]);
-const writerSourceLayers = new Set(["core", "filter", "uibase"]);
+const browserPackageImports = ["lucide-react", "react", "react-dom"];
+const upstreamMechanismLayers = new Set([
+  "sfx",
+  "upstream-mechanism",
+  "writer-core",
+  "writer-filter",
+  "writer-uibase",
+]);
 
-/** Returns the responsibility layer for one source-relative Writer path. @param relativePath - Path below apps/office/src. @returns Writer layer or undefined. */
-export function getWriterLayer(relativePath) {
+/** Returns the responsibility layer for one source-relative runtime path. @param relativePath - Path below apps/office/src. @returns Ownership layer or undefined. */
+export function getRuntimeOwnershipLayer(relativePath) {
   const portablePath = relativePath.split(path.sep).join("/");
-  if (portablePath.startsWith("sw/browser/")) return "browser";
-  if (portablePath.startsWith("sw/source/core/")) return "core";
-  if (portablePath.startsWith("sw/source/filter/")) return "filter";
-  if (portablePath.startsWith("sw/source/uibase/")) return "uibase";
+  if (/(?:^|\/)browser\//u.test(portablePath)) return "browser";
+  if (portablePath.startsWith("sw/source/core/")) return "writer-core";
+  if (portablePath.startsWith("sw/source/filter/")) return "writer-filter";
+  if (portablePath.startsWith("sw/source/uibase/")) return "writer-uibase";
+  if (portablePath.startsWith("sfx2/source/")) return "sfx";
+  if (/^[^/]+\/source\//u.test(portablePath)) return "upstream-mechanism";
   return undefined;
 }
 
-/** Reports a forbidden reverse dependency between Writer responsibility layers. @param sourcePath - Importing source-relative path. @param targetPath - Imported source-relative path. @param importName - Authored import specifier. @returns Diagnostic or undefined. */
-export function getWriterOwnershipViolation(sourcePath, targetPath, importName) {
-  const sourceLayer = getWriterLayer(sourcePath);
-  if (!writerSourceLayers.has(sourceLayer)) return undefined;
-  if (importName === "react" || importName.startsWith("react/"))
-    return `Writer ${sourceLayer} must not import React`;
-  const targetLayer = getWriterLayer(targetPath);
+/** Reports a forbidden reverse dependency between runtime responsibility layers. @param sourcePath - Importing source-relative path. @param targetPath - Imported source-relative path. @param importName - Authored import specifier. @returns Diagnostic or undefined. */
+export function getRuntimeOwnershipViolation(sourcePath, targetPath, importName) {
+  const sourceLayer = getRuntimeOwnershipLayer(sourcePath);
+  if (!upstreamMechanismLayers.has(sourceLayer)) return undefined;
+  if (
+    browserPackageImports.some(
+      /** Matches one browser-presentation package or its subpath. @param packageName - Package root. @returns Whether the import is browser-owned. */ (
+        packageName,
+      ) => importName === packageName || importName.startsWith(`${packageName}/`),
+    )
+  )
+    return `${sourceLayer} must not import browser presentation package ${importName}`;
+  const targetLayer = getRuntimeOwnershipLayer(targetPath);
   if (targetLayer === "browser")
-    return `Writer ${sourceLayer} must receive browser adapters through an injected contract`;
-  if (sourceLayer === "core" && (targetLayer === "filter" || targetLayer === "uibase"))
-    return `Writer core must not depend on ${targetLayer}`;
-  if (sourceLayer === "filter" && targetLayer === "uibase")
+    return `${sourceLayer} must receive browser adapters through an injected contract`;
+  if (
+    sourceLayer === "writer-core" &&
+    (targetLayer === "writer-filter" || targetLayer === "writer-uibase")
+  )
+    return `Writer core must not depend on ${targetLayer.replace("writer-", "")}`;
+  if (sourceLayer === "writer-filter" && targetLayer === "writer-uibase")
     return "Writer filter must not depend on uibase";
   return undefined;
 }
@@ -138,7 +156,7 @@ for (const sourceFile of runtimeSources) {
     continue;
   }
   const sourceText = fs.readFileSync(sourceFile, "utf8");
-  if (relativeSource.startsWith(`sw${path.sep}source${path.sep}`)) {
+  if (upstreamMechanismLayers.has(getRuntimeOwnershipLayer(relativeSource))) {
     for (const browserProjectionSymbol of [
       "ClipboardEvent",
       "InputEvent",
@@ -156,7 +174,11 @@ for (const sourceFile of runtimeSources) {
   const imports = ts.preProcessFile(sourceText, true, true).importedFiles;
   for (const imported of imports) {
     if (!imported.fileName.startsWith(".")) {
-      const ownershipViolation = getWriterOwnershipViolation(relativeSource, "", imported.fileName);
+      const ownershipViolation = getRuntimeOwnershipViolation(
+        relativeSource,
+        "",
+        imported.fileName,
+      );
       if (ownershipViolation !== undefined)
         failures.push(`${displayPath(sourceFile)}: ${ownershipViolation}`);
       continue;
@@ -171,7 +193,7 @@ for (const sourceFile of runtimeSources) {
       continue;
     }
     const targetModule = getModule(relativeTarget);
-    const ownershipViolation = getWriterOwnershipViolation(
+    const ownershipViolation = getRuntimeOwnershipViolation(
       relativeSource,
       relativeTarget,
       imported.fileName,

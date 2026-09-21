@@ -21,10 +21,11 @@ function createManifestSource(overrides: Readonly<Record<string, unknown>> = {})
       {
         localPath: writerPath,
         rationale:
-          "Stack constraint: the ECMAScript module exports a bounded Writer construction helper while the upstream constructor remains owned by docnew.cxx, so the distinct filename is explicit and reviewable.",
+          "The ECMAScript module exports a bounded Writer construction helper while the upstream constructor remains owned by docnew.cxx, so the distinct filename is explicit and reviewable.",
+        stackNecessity: "responsibility-split",
       },
     ],
-    schemaVersion: 2,
+    schemaVersion: 3,
     ...overrides,
   });
 }
@@ -116,7 +117,7 @@ describe("source provenance" /** Defines strict provenance test cases. @returns 
   it("rejects malformed contracts before filesystem validation" /** Rejects malformed schema shapes. @returns Nothing. */, function rejectsMalformed(): void {
     expectInvalid("{");
     expectInvalid(createManifestSource({ baselineCommit: "other" }));
-    expectInvalid(createManifestSource({ schemaVersion: 1 }));
+    expectInvalid(createManifestSource({ schemaVersion: 2 }));
     expectInvalid(createManifestSource({ entries: [] }));
     expectInvalid(createManifestSource({ filenameDivergences: undefined }));
     expectInvalid(
@@ -137,6 +138,19 @@ describe("source provenance" /** Defines strict provenance test cases. @returns 
             localPath: writerPath,
             rationale:
               "Stack constraint: TypeScript convenience and public naming make this different filename easier for local authors to use.",
+            stackNecessity: "module-resolution",
+          },
+        ],
+      }),
+    );
+    expectInvalid(
+      createManifestSource({
+        filenameDivergences: [
+          {
+            localPath: writerPath,
+            rationale:
+              "The runtime requires a distinct module boundary for an otherwise ambiguous implementation responsibility in the translated stack.",
+            stackNecessity: "typescript-is-different",
           },
         ],
       }),
