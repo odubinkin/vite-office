@@ -27,7 +27,7 @@ interface WriterFixture {
 
 /** Creates one dirty model through the public shell/undo path. @returns Live fixture. */
 function createWriterFixture(): WriterFixture {
-  const document = createWriterDocument("p-1");
+  const document = createWriterDocument();
   const state = createDocument({ id: "writer-store", suiteId: "writer", title: "Writer" });
   const shell = new SwDocShell(document, state);
   new SwWrtShell(shell).Insert("Saved text");

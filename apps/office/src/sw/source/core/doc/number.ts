@@ -189,8 +189,6 @@ function createUniformFormats(
 
 /** Describes the list subset of a Writer paragraph needed for deterministic marker calculation. */
 export interface WriterNumberingParagraph {
-  /** Stable paragraph identity used to locate a marker request. */
-  readonly id: string;
   /** Serializable list state applied to the paragraph. */
   readonly list: WriterParagraphList;
   /** Optional canonical SwTextNode list identity used to separate adjacent lists. */
@@ -215,21 +213,14 @@ export interface WriterNumberingParagraph {
  * Produces the visible marker for one current Writer paragraph without changing its plain editable text.
  *
  * @param paragraphs - Ordered list-capable Writer paragraphs rendered in the browser document body.
- * @param paragraphId - Stable identity of the paragraph whose marker is requested.
+ * @param paragraph - Paragraph whose marker is requested.
  * @returns A bullet, one-based numbering marker, or undefined when the paragraph is not a list item.
  */
 export function getWriterParagraphListMarker(
   paragraphs: readonly WriterNumberingParagraph[],
-  paragraphId: string,
+  paragraph: WriterNumberingParagraph,
 ): string | undefined {
-  const paragraphIndex = paragraphs.findIndex(
-    /** Finds the numbered paragraph owning paragraphId. @param paragraph - Current list-capable paragraph. @returns True only for the requested identity. */
-    function hasParagraphId(paragraph): boolean {
-      return paragraph.id === paragraphId;
-    },
-  );
-  const paragraph = paragraphs[paragraphIndex];
-  if (paragraph === undefined || paragraph.list.kind === "none") return undefined;
+  if (!paragraphs.includes(paragraph) || paragraph.list.kind === "none") return undefined;
   if (paragraph.listMarker !== undefined) return paragraph.listMarker;
   if (paragraph.list.kind === "bullet")
     return (

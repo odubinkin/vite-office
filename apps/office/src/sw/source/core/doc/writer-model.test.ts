@@ -45,12 +45,13 @@ const plain: WriterCharacterAttributes = { bold: false, italic: false, underline
 /** Creates one canonical Writer graph for low-level model tests. @param id - Browser document identity. @returns Canonical Writer fixture. */
 function createModelFixture(id = "model-a"): WriterDocument {
   void id;
-  return createWriterDocument("p-1");
+  return createWriterDocument();
 }
 
 /** Appends a text node only while constructing a low-level model fixture. @param writer - Fixture graph. @param id - Test node identity. @returns The same graph. */
 function appendFixtureParagraph(writer: WriterDocument, id: string): WriterDocument {
-  writer.nodes.MakeTextNode(id);
+  void id;
+  writer.nodes.MakeTextNode();
   return writer;
 }
 
@@ -63,7 +64,7 @@ function throwing(operation: () => unknown): () => unknown {
 class TestContentNode extends SwContentNode {
   /** Creates a test-only content node owned by the supplied section. @param document - Owning document. @returns Nothing. */
   public constructor(document: WriterDocument) {
-    super(document.nodes, "test-content", document.nodes.GetEndOfContent().StartOfSectionNode());
+    super(document.nodes, document.nodes.GetEndOfContent().StartOfSectionNode());
   }
 
   /** Returns the test content length. @returns Zero. */
@@ -76,7 +77,7 @@ class TestContentNode extends SwContentNode {
 class DetachedNode extends SwNode {
   /** Creates a node with no section link and without inserting it into SwNodes. @param document - Document whose array owns the detached identity. @returns Nothing. */
   public constructor(document: WriterDocument) {
-    super(document.nodes, "detached", "text");
+    super(document.nodes, "text");
   }
 }
 
@@ -107,11 +108,11 @@ describe("Writer SwNodes graph" /** Groups node ownership and fixed-section test
     expect(contentStart.StartOfSectionNode()).toBe(nodes.at(0));
     expect(nodes.entries()).toHaveLength(12);
     const tracked = new SwNodeIndex(nodes, 10);
-    expect(tracked.GetNode().id).toBe("p-2");
+    expect(tracked.GetNode()).toBe(writer.paragraphs[1]);
     nodes.moveTextNode(writer.paragraphs[1] as SwTextNode, -1);
     expect(tracked.GetIndex()).toBe(9);
     tracked.Assign(writer.paragraphs[1] as SwTextNode);
-    expect(tracked.GetNode().id).toBe("p-1");
+    expect(tracked.GetNode()).toBe(writer.paragraphs[1]);
     expect(
       throwing(/** Reads an absent node. @returns Missing node. */ () => nodes.at(99)),
     ).toThrow("Unknown SwNode index");
@@ -128,7 +129,7 @@ describe("Writer SwNodes graph" /** Groups node ownership and fixed-section test
     expect(
       throwing(
         /** Reads an unlinked section end. @returns Missing end sentinel. */ () =>
-          new SwStartNode(nodes, "orphan").EndOfSectionNode(),
+          new SwStartNode(nodes).EndOfSectionNode(),
       ),
     ).toThrow("no end sentinel");
   });
@@ -140,39 +141,20 @@ describe("Writer SwNodes graph" /** Groups node ownership and fixed-section test
     const foreign = other.paragraphs[0] as SwTextNode;
     const prepared = new SwTextNode(
       writer.nodes,
-      "p-2",
       writer.nodes.GetEndOfContent().StartOfSectionNode(),
     );
     writer.nodes.insertTextNodeAfter(node, prepared);
-    expect(writer.nodes.findTextNode("p-2")).toBe(prepared);
-    expect(writer.nodes.findTextNode("missing")).toBeUndefined();
-    expect(
-      throwing(
-        /** Creates a blank-id node. @returns Invalid node. */ () => writer.nodes.MakeTextNode(" "),
-      ),
-    ).toThrow("must not be blank");
-    expect(
-      throwing(
-        /** Creates a duplicate node. @returns Invalid node. */ () =>
-          writer.nodes.MakeTextNode("p-2"),
-      ),
-    ).toThrow("Duplicate paragraph");
+    expect(writer.paragraphs[1]).toBe(prepared);
     const duplicate = new SwTextNode(
       writer.nodes,
-      "p-2",
       writer.nodes.GetEndOfContent().StartOfSectionNode(),
     );
     const uninserted = new SwTextNode(
       writer.nodes,
-      "uninserted",
       writer.nodes.GetEndOfContent().StartOfSectionNode(),
     );
-    expect(
-      throwing(
-        /** Inserts a duplicate prepared node. @returns Nothing. */ () =>
-          writer.nodes.insertTextNodeAfter(node, duplicate),
-      ),
-    ).toThrow("Duplicate paragraph");
+    writer.nodes.insertTextNodeAfter(node, duplicate);
+    expect(writer.paragraphs[1]).toBe(duplicate);
     expect(
       throwing(
         /** Inserts after a foreign node. @returns Nothing. */ () =>
@@ -198,16 +180,17 @@ describe("Writer SwNodes graph" /** Groups node ownership and fixed-section test
     ).toThrow("another SwNodes");
     expect(
       throwing(
-        /** Replaces a node with an identity already in the body. @returns Nothing. */ () =>
+        /** Replaces a node with a candidate already in the body. @returns Nothing. */ () =>
           writer.nodes.replaceTextNode(node, duplicate),
       ),
-    ).toThrow("Duplicate paragraph");
+    ).toThrow("already belongs to body content");
     expect(
       throwing(
         /** Moves a foreign node. @returns Nothing. */ () => writer.nodes.moveTextNode(foreign, 1),
       ),
     ).toThrow("another SwNodes");
     writer.nodes.removeTextNode(prepared);
+    writer.nodes.removeTextNode(duplicate);
     expect(
       throwing(
         /** Removes the final body node. @returns Nothing. */ () =>
@@ -452,6 +435,18 @@ describe("Writer SwTextAttr and SwpHints" /** Groups direct-format range storage
     const clone = hints.clone();
     expect(clone).not.toBe(hints);
     expect(clone.toTextRuns("abcdef", inherited)).toEqual(hints.toTextRuns("abcdef", inherited));
+    for (const [start, end] of [
+      [0.5, 1],
+      [0, 1.5],
+      [-1, 1],
+      [2, 1],
+    ] as const)
+      expect(
+        throwing(
+          /** Slices one invalid native hint range. @returns Invalid fragment. */ () =>
+            hints.slice(start, end),
+        ),
+      ).toThrow("hint slice is invalid");
     const clonedHint = first.clone(2);
     expect(clonedHint).toMatchObject({ start: 3, end: 5 });
     expect(clonedHint.dontExpand).toBe(true);
@@ -586,12 +581,12 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(node.runs).toMatchObject([{ attributes: bold, text: "abXcd" }]);
     node.EraseText(1, 2);
     expect(node.text).toBe("acd");
-    node.ReplaceRange(1, 2, [{ attributes: italic, text: "YZ" }]);
+    node.ReplaceRange(1, 2, node.CreateTextFragment([{ attributes: italic, text: "YZ" }]));
     expect(node.text).toBe("aYZd");
     node.ToggleTextRangeFormat(1, 3, "underline");
     expect(node.runs[1]?.attributes).toMatchObject({ italic: true, underline: true });
     expect(node.getCharacterAttributesAt(2)).toMatchObject({ italic: true, underline: true });
-    const trailing = node.SplitContent(2, "p-2");
+    const trailing = node.SplitContent(2);
     writer.nodes.insertTextNodeAfter(node, trailing);
     expect(node.text).toBe("aY");
     expect(trailing.text).toBe("Zd");
@@ -626,13 +621,12 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
       throwing(/** Erases before text. @returns Nothing. */ () => node.EraseText(-1, 1)),
     ).toThrow("outside the text node");
     expect(
-      throwing(/** Replaces after text. @returns Nothing. */ () => node.ReplaceRange(0, 9, [])),
-    ).toThrow("outside the text node");
-    expect(
       throwing(
-        /** Splits with a blank identity. @returns Invalid node. */ () => node.SplitContent(0, " "),
+        /** Replaces after text. @returns Nothing. */ () =>
+          node.ReplaceRange(0, 9, node.CreateTextFragment([])),
       ),
-    ).toThrow("must not be blank");
+    ).toThrow("outside the text node");
+    expect(node.SplitContent(0).text).toBe("xy");
   });
 
   it("applies insert, delete, and replacement operations through SwPosition and SwPaM" /** Verifies DocumentContentOperationsManager owns canonical content changes and guards cross-node ranges. @returns Nothing; assertions inspect document state. */, function appliesContentOperations(): void {
@@ -651,9 +645,10 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(settings.get("HTML_MODE")).toBe(true);
     manager.InsertString(new SwPosition(first), "abcd");
     manager.InsertString(new SwPosition(first, 4), "");
-    manager.ReplaceRange(new SwPaM(new SwPosition(first, 3), new SwPosition(first, 1)), [
-      { attributes: italic, text: "X" },
-    ]);
+    manager.ReplaceRange(
+      new SwPaM(new SwPosition(first, 3), new SwPosition(first, 1)),
+      first.CreateTextFragment([{ attributes: italic, text: "X" }]),
+    );
     expect(first.text).toBe("aXd");
     manager.DeleteRange(new SwPaM(new SwPosition(first, 2), new SwPosition(first, 1)));
     expect(first.text).toBe("ad");
@@ -662,7 +657,8 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     const crossNode = new SwPaM(new SwPosition(second), new SwPosition(first));
     expect(
       throwing(
-        /** Replaces across nodes. @returns Nothing. */ () => manager.ReplaceRange(crossNode, []),
+        /** Replaces across nodes. @returns Nothing. */ () =>
+          manager.ReplaceRange(crossNode, first.CreateTextFragment([])),
       ),
     ).toThrow("SwTextNode");
     expect(
@@ -685,8 +681,8 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(current).not.toBe(writer);
     expect(serializeWriterDocument(current)).toEqual(serializeWriterDocument(writer));
     expect(
-      normalizeWriterParagraphFormatting(serializeWriterDocument(writer)).paragraphs[0]?.id,
-    ).toBe("writer-paragraph-1");
+      normalizeWriterParagraphFormatting(serializeWriterDocument(writer)).paragraphs,
+    ).toHaveLength(1);
     const encoded = serializeWriterDocument(writer);
     expect(
       throwing(

@@ -7,16 +7,13 @@ import type {
   WriterCharacterAttributes,
   WriterTextRun,
 } from "../../core/txtnode/ndtxt";
+import { copyWriterTextRangeRuns } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import type { SwPaM } from "../../core/crsr/pam";
 import { equalWriterHyperlinks } from "../../core/txtnode/fmtinfmt";
 import { SwUndoAttr } from "../../core/undo/unattr";
 import { SwUndoInsert } from "../../core/undo/unins";
-import {
-  CopyTextRangeRuns,
-  type SwUndoCursorState,
-  type SwUndoRedoContext,
-} from "../../core/undo/undobj";
+import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
 import { getWriterSelectedTextRange, type WriterTextRange } from "./wrtsh-selection";
 
 /** Reads one uniform selected or caret hyperlink. @param document - Active Writer document. @param selection - Persistent cursor selection. @returns Hyperlink metadata or undefined. */
@@ -34,7 +31,7 @@ export function getWriterHyperlinkAtCursor(
   }
   const paragraph = range.node;
   if (paragraph.GetDoc() !== document) return undefined;
-  const runs = CopyTextRangeRuns(paragraph, range.start, range.end);
+  const runs = copyWriterTextRangeRuns(paragraph, range.start, range.end);
   const hyperlink = runs[0]?.hyperlink;
   return runs.length > 0 &&
     runs.every(
@@ -60,7 +57,7 @@ export function createWriterHyperlinkAction(
   if (selectedRange !== undefined) {
     const paragraph = selectedRange.node;
     if (paragraph.GetDoc() !== document) throw new Error("Writer hyperlink range is foreign.");
-    const beforeRuns = CopyTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
+    const beforeRuns = copyWriterTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
     const afterRuns = beforeRuns.map(
       /** Replaces only hyperlink metadata. @param run - Existing selected run. @returns Updated run. */
       (run): WriterTextRun => ({
@@ -70,7 +67,14 @@ export function createWriterHyperlinkAction(
       }),
     );
     if (JSON.stringify(beforeRuns) === JSON.stringify(afterRuns)) return undefined;
-    return new SwUndoAttr(paragraph, selectedRange.start, beforeRuns, afterRuns, before, before);
+    return new SwUndoAttr(
+      paragraph,
+      selectedRange.start,
+      paragraph.CaptureTextFragment(selectedRange.start, selectedRange.end),
+      paragraph.CreateTextFragment(afterRuns),
+      before,
+      before,
+    );
   }
   if (hyperlink === undefined) return undefined;
   const value = text === undefined || text.length === 0 ? hyperlink.url : text;
@@ -81,7 +85,9 @@ export function createWriterHyperlinkAction(
   return new SwUndoInsert(
     paragraph,
     offset,
-    [{ attributes: { ...pendingAttributes }, hyperlink, text: value }],
+    paragraph.CreateTextFragment([
+      { attributes: { ...pendingAttributes }, hyperlink, text: value },
+    ]),
     undefined,
     before,
     {

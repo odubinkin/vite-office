@@ -5,12 +5,14 @@ import type { WriterCursorSelection } from "../sw/browser/editor/writer-selectio
 import { SwPosition } from "../sw/source/core/crsr/pam";
 import type { WriterHyperlink } from "../sw/source/core/txtnode/fmtinfmt";
 import type { WriterCharacterFormat, WriterTextRun } from "../sw/source/core/txtnode/ndtxt";
+import type { SwTextNode } from "../sw/source/core/txtnode/ndtxt";
 import type { WriterClipboardPaste } from "../sw/source/filter/html/html-filter-types";
 import type { SwWrtShell } from "../sw/source/uibase/wrtsh/wrtsh";
 
 /** Resolves one fixture ID to a document-owned text node. @param shell - Test shell. @param id - Fixture node ID. @returns Text node. */
 export function getTestParagraph(shell: SwWrtShell, id: string) {
-  const node = shell.GetDoc().nodes.findTextNode(id);
+  const ordinal = Number(/(\d+)$/.exec(id)?.[1]);
+  const node = Number.isInteger(ordinal) ? shell.GetDoc().paragraphs[ordinal - 1] : undefined;
   if (node === undefined) throw new Error(`Unknown test paragraph: ${id}`);
   return node;
 }
@@ -44,12 +46,12 @@ export function getTestSelection(shell: SwWrtShell): WriterCursorSelection {
       : {
           mark: {
             offset: mark.GetContentIndex(),
-            paragraphId: getNodeId(mark.GetNode()),
+            paragraphId: getNodeId(shell, mark.GetNode() as SwTextNode),
           },
         }),
     point: {
       offset: point.GetContentIndex(),
-      paragraphId: getNodeId(point.GetNode()),
+      paragraphId: getNodeId(shell, point.GetNode() as SwTextNode),
     },
   };
 }
@@ -128,7 +130,10 @@ export function setTestHyperlink(
 
 /** Splits one fixture paragraph. @param shell - Test shell. @param id - Fixture ID. @param offset - Split offset. @returns New fixture ID. */
 export function fixtureSplitParagraph(shell: SwWrtShell, id: string, offset: number): string {
-  return shell.SplitParagraph(new SwPosition(getTestParagraph(shell, id), offset)).id;
+  return getNodeId(
+    shell,
+    shell.SplitParagraph(new SwPosition(getTestParagraph(shell, id), offset)),
+  );
 }
 
 /** Joins a fixture paragraph into its predecessor. @param shell - Test shell. @param id - Fixture ID. @returns Whether changed. */
@@ -161,9 +166,9 @@ export function pasteTestSelection(
   return shell.Paste(paste);
 }
 
-/** Reads a fixture text-node ID from a canonical node. @param node - Writer node. @returns Test ID. */
-function getNodeId(node: unknown): string {
-  if (typeof node !== "object" || node === null || !("id" in node))
-    throw new Error("Expected test text node.");
-  return String(node.id);
+/** Reads an ordinal fixture ID from a canonical node without adding identity to Writer core. @param shell - Owning shell. @param node - Writer node. @returns Test ID. */
+export function getNodeId(shell: SwWrtShell, node: SwTextNode): string {
+  const index = shell.GetDoc().paragraphs.indexOf(node);
+  if (index < 0) throw new Error("Expected connected test text node.");
+  return `p-${index + 1}`;
 }

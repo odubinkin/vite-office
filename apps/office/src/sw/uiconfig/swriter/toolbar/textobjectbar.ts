@@ -1,6 +1,6 @@
 /** @fileoverview Adapts the generated pinned Writer text toolbar resource. */
 
-import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { getWriterParagraphStyleCommandId } from "../menubar/menubar-commands";
 import { normalizeWriterToolbarItems, type WriterToolbarItemPlacement } from "../ui-resource";
 import { getWriterCommandResource } from "../writer-command-resources";
@@ -28,7 +28,7 @@ export const writerTextObjectBarItems: readonly WriterToolbarItemPlacement[] =
             {
               kind: "command-select",
               label: getWriterCommandResource(item.commandUrl).controlLabel,
-              options: WRITER_PARAGRAPH_STYLE_POOL.map(
+              options: WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
                 /** Projects one style command. @param style - Pool style. @returns Command URL. */ (
                   style,
                 ) => getWriterParagraphStyleCommandId(style.id),

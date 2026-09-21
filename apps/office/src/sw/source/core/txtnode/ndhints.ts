@@ -48,6 +48,64 @@ export class SwpHints {
     return this.hintsByStart;
   }
 
+  /** Copies hints intersecting a text range, clipping and rebasing them to zero. @param start - Inclusive text offset. @param end - Exclusive text offset. @returns Independent rebased hints. */
+  public slice(start: number, end: number): SwpHints {
+    if (!Number.isInteger(start) || !Number.isInteger(end) || start < 0 || end < start)
+      throw new Error("Writer hint slice is invalid.");
+    return new SwpHints(
+      this.pool,
+      this.hintsByStart.flatMap(
+        /** Clips one source hint. @param hint - Source hint. @returns Zero or one clipped hint. */ (
+          hint,
+        ) => {
+          const clippedStart = Math.max(start, hint.start);
+          const clippedEnd = Math.min(end, hint.end);
+          if (clippedEnd <= clippedStart) return [];
+          const copy = hint.clone();
+          copy.start = clippedStart - start;
+          copy.SetEnd(clippedEnd - start);
+          return [copy];
+        },
+      ),
+    );
+  }
+
+  /** Returns an independent copy with every range shifted by the supplied offset. @param offset - Signed range delta. @returns Shifted hints. */
+  public shifted(offset: number): SwpHints {
+    return new SwpHints(
+      this.pool,
+      this.hintsByStart.map(
+        /** Shifts one hint. @param hint - Source hint. @returns Shifted clone. */ (hint) => {
+          const copy = hint.clone();
+          copy.start += offset;
+          copy.SetEnd(copy.end + offset);
+          return copy;
+        },
+      ),
+    );
+  }
+
+  /** Concatenates another fragment's hints after a leading text length. @param other - Trailing hints. @param leadingLength - Leading text length. @returns Concatenated hints. */
+  public concat(other: SwpHints, leadingLength: number): SwpHints {
+    return new SwpHints(this.pool, [...this.entries(), ...other.shifted(leadingLength).entries()]);
+  }
+
+  /** Replaces a text range's hints with a native hint fragment. @param textLength - Original text length. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacement - Replacement hints. @param replacementLength - Replacement text length. @returns Rebased combined hints. */
+  public replaceRange(
+    textLength: number,
+    start: number,
+    end: number,
+    replacement: SwpHints,
+    replacementLength: number,
+  ): SwpHints {
+    const trailing = this.slice(end, textLength).shifted(start + replacementLength);
+    return new SwpHints(this.pool, [
+      ...this.slice(0, start).entries(),
+      ...replacement.shifted(start).entries(),
+      ...trailing.entries(),
+    ]);
+  }
+
   /** Replaces all hints, removing empty item sets and merging adjacent equal auto formats. @param hints - Replacement hints. @returns Nothing. */
   public replace(hints: readonly SwTextAttr<SwFormatAutoFormat | SwFormatINetFormat>[]): void {
     const sorted = hints

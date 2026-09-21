@@ -5,7 +5,7 @@ import { encodeWriterDocument } from "../../filter/basflt/writer-document-codec"
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../doc/doc";
 import { SwPosition } from "../crsr/pam";
-import type { SwTextNode, WriterTextRun } from "../txtnode/ndtxt";
+import { copyWriterTextRangeRuns, type SwTextNode, type WriterTextRun } from "../txtnode/ndtxt";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { SwUndoDelete, SwUndoJoinParagraphs, SwUndoReplace } from "./undel";
@@ -14,12 +14,7 @@ import { SwUndoInsert } from "./unins";
 import { SwUndoAttr, SwUndoMoveLeftMargin, SwUndoParagraphFormat } from "./unattr";
 import { SwUndoInsNum, SwUndoNumLevel } from "./unnum";
 import { SwUndoSplitNode } from "./unspnd";
-import {
-  CopyTextRangeRuns,
-  GetUndoTextNode,
-  type SwUndoCursorState,
-  type SwUndoRedoContext,
-} from "./undobj";
+import { GetUndoTextNode, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
 import {
   handleTestInput,
   fixtureMergeParagraphWithNext,
@@ -32,7 +27,7 @@ import {
 
 /** Creates a clean document/session fixture with optional plain text. @param text - Initial first-paragraph text. @returns Document, document shell, and Writer shell. */
 function createSession(text = "") {
-  const document = createWriterDocument("p-1");
+  const document = createWriterDocument();
   const documentState = createDocument({
     id: "undo-document",
     suiteId: "writer",
@@ -50,6 +45,11 @@ function createSession(text = "") {
 /** Creates one formatted text fragment. @param text - Visible text. @param bold - Bold state. @param italic - Italic state. @param underline - Underline state. @returns Writer run. */
 function run(text: string, bold = false, italic = false, underline = false): WriterTextRun {
   return { attributes: { bold, italic, underline }, text };
+}
+
+/** Converts boundary runs into the native text/hint payload retained by undo. @param node - Owning text node. @param runs - Boundary runs. @returns Native fragment. */
+function fragment(node: SwTextNode, runs: readonly WriterTextRun[]) {
+  return node.CreateTextFragment(runs);
 }
 
 /** Creates a collapsed action cursor state. @param paragraphId - Stable node identity. @param offset - Content offset. @returns Complete Writer cursor state. */
@@ -271,7 +271,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const small = createSession("x");
     const large = createSession("x".repeat(20_000));
     for (let index = 2; index <= 200; index += 1)
-      large.document.nodes.MakeTextNode(`p-${index}`, "y".repeat(200));
+      large.document.nodes.MakeTextNode("y".repeat(200));
     const smallStart = performance.now();
     small.shell.Insert("a");
     const smallLatency = performance.now() - smallStart;
@@ -340,15 +340,22 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
   });
 
   it("reports bounded action payloads and rejects empty or incompatible grouped actions" /** Covers retained-payload contracts and SwUndo grouping guards directly. @returns Nothing. */, function validatesActionPayloads(): void {
-    const document = createWriterDocument("p-1");
+    const document = createWriterDocument();
     const target = document.paragraphs[0] as SwTextNode;
-    const trailing = document.nodes.MakeTextNode("p-2", "b");
+    const trailing = document.nodes.MakeTextNode();
     const state = cursorState(target);
-    const insert = new SwUndoInsert(target, 0, [run("a")], "word", state, cursorState(target, 1));
+    const insert = new SwUndoInsert(
+      target,
+      0,
+      fragment(target, [run("a")]),
+      "word",
+      state,
+      cursorState(target, 1),
+    );
     const deletion = new SwUndoDelete(
       target,
       0,
-      [run("a")],
+      fragment(target, [run("a")]),
       "delete",
       "word",
       cursorState(target, 1),
@@ -357,13 +364,20 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const replacement = new SwUndoReplace(
       target,
       0,
-      [run("a")],
-      [run("B", true)],
+      fragment(target, [run("a")]),
+      fragment(target, [run("B", true)]),
       "Replace",
       state,
       cursorState(target, 1),
     );
-    const attr = new SwUndoAttr(target, 0, [run("a")], [run("a", true)], state, state);
+    const attr = new SwUndoAttr(
+      target,
+      0,
+      fragment(target, [run("a")]),
+      fragment(target, [run("a", true)]),
+      state,
+      state,
+    );
     const paragraph = new SwUndoParagraphFormat(target, "left", "center", state, state);
     const margin = new SwUndoMoveLeftMargin(target, 0, 1134, state, state);
     const style = new SwUndoFormatColl(target, "default", "heading-1", state, state);
@@ -399,23 +413,33 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       numbering.GetPayloadSize(),
       split.GetPayloadSize(),
       joined.GetPayloadSize(),
-    ]).toEqual([4, 4, 8, 8, 2, 2, 2, 6, 1, expect.any(Number)]);
+    ]).toEqual([1, 1, 6, 6, 2, 2, 2, 6, 1, expect.any(Number)]);
     expect(insert.Merge(deletion)).toBe(false);
     expect(
-      deletion.Merge(new SwUndoDelete(target, 2, [run("b")], "delete", "word", state, state)),
+      deletion.Merge(
+        new SwUndoDelete(target, 2, fragment(target, [run("b")]), "delete", "word", state, state),
+      ),
     ).toBe(false);
     expect(
       deletion.Merge(
-        new SwUndoDelete(target, 0, [run(" ")], "backspace", "delimiter", state, state),
+        new SwUndoDelete(
+          target,
+          0,
+          fragment(target, [run(" ")]),
+          "backspace",
+          "delimiter",
+          state,
+          state,
+        ),
       ),
     ).toBe(false);
     expect(
       /** Constructs an insertion without domain payload. @returns Invalid construction that never returns. */
-      () => new SwUndoInsert(target, 0, [], undefined, state, state),
+      () => new SwUndoInsert(target, 0, fragment(target, []), undefined, state, state),
     ).toThrow("non-empty text");
     expect(
       /** Constructs a deletion without domain payload. @returns Invalid construction that never returns. */
-      () => new SwUndoDelete(target, 0, [], "delete", undefined, state, state),
+      () => new SwUndoDelete(target, 0, fragment(target, []), "delete", undefined, state, state),
     ).toThrow("non-empty text");
   });
 
@@ -423,14 +447,14 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const { docShell, document, shell } = createSession("abc");
     expect(
       /** Resolves an absent action target. @returns Invalid lookup that never returns. */
-      () => GetUndoTextNode(document, createWriterDocument("foreign").paragraphs[0] as never),
+      () => GetUndoTextNode(document, createWriterDocument().paragraphs[0] as never),
     ).toThrow("another document");
     const paragraph = document.paragraphs[0];
     if (paragraph === undefined) throw new Error("Expected the initial Writer paragraph.");
     expect(
       /** Copies an invalid action range. @returns Invalid range operation that never returns. */
-      () => CopyTextRangeRuns(paragraph, -1, 0),
-    ).toThrow("outside the paragraph");
+      () => copyWriterTextRangeRuns(paragraph, -1, 0),
+    ).toThrow("outside the text node");
     expect(
       /** Formats an absent paragraph. @returns Invalid lookup that never returns. */
       () => toggleTestFormat(shell, "bold", { paragraphId: "missing", start: 0, end: 0 }),
@@ -454,7 +478,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(document.paragraphs[0]?.list.level).toBe(9);
 
     const context = (shell as unknown as { undoContext: SwUndoRedoContext }).undoContext;
-    const foreign = createWriterDocument("foreign").paragraphs[0] as SwTextNode;
+    const foreign = createWriterDocument().paragraphs[0] as SwTextNode;
     expect(
       /** Resolves a missing private action endpoint. @returns Invalid state. */ () =>
         (

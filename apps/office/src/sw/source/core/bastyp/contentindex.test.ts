@@ -9,10 +9,10 @@ import { SwContentIndex, SwContentIndexUpdateMode } from "./contentindex";
 
 /** Creates a three-paragraph Writer model with deterministic text. @returns Writer fixture. */
 function createIndexFixture(): SwDoc {
-  const document = new SwDoc("p-1");
+  const document = new SwDoc();
   (document.paragraphs[0] as SwTextNode).InsertText("abcdef", 0);
-  document.nodes.MakeTextNode("p-2", "middle");
-  document.nodes.MakeTextNode("p-3", "last");
+  document.nodes.MakeTextNode("middle");
+  document.nodes.MakeTextNode("last");
   return document;
 }
 
@@ -115,12 +115,12 @@ describe("SwContentIndex" /** Groups registered-position correction tests. @retu
     const boundary = new SwPosition(node, 4, "cursor");
     const after = new SwPosition(node, 5, "redline");
 
-    node.ReplaceRange(1, 4, [{ attributes: {}, text: "XY" }]);
+    node.ReplaceRange(1, 4, node.CreateTextFragment([{ attributes: {}, text: "XY" }]));
     expect(inside.GetContentIndex()).toBe(2);
     expect(boundary.GetContentIndex()).toBe(3);
     expect(after.GetContentIndex()).toBe(4);
 
-    node.ReplaceRange(1, 2, [{ attributes: {}, text: "123" }]);
+    node.ReplaceRange(1, 2, node.CreateTextFragment([{ attributes: {}, text: "123" }]));
     expect(inside.GetContentIndex()).toBe(4);
     expect(boundary.GetContentIndex()).toBe(5);
     expect(after.GetContentIndex()).toBe(6);
@@ -132,7 +132,7 @@ describe("SwContentIndex" /** Groups registered-position correction tests. @retu
     const splitBefore = new SwPosition(first, 3, "anchor", "before");
     const splitAfter = new SwPosition(first, 3, "cursor", "after");
     const suffix = new SwPosition(first, 5, "redline");
-    const trailing = first.SplitContent(3, "p-split");
+    const trailing = first.SplitContent(3);
     document.nodes.insertTextNodeAfter(first, trailing);
 
     expect(splitBefore.GetNode()).toBe(first);
@@ -148,13 +148,13 @@ describe("SwContentIndex" /** Groups registered-position correction tests. @retu
     expect(splitAfter.GetContentIndex()).toBe(3);
     expect(suffix.GetContentIndex()).toBe(5);
 
-    const middle = document.nodes.findTextNode("p-2") as SwTextNode;
+    const middle = document.paragraphs[1] as SwTextNode;
     const middlePosition = new SwPosition(middle, 4, "mark");
     document.nodes.removeTextNode(middle);
-    expect(middlePosition.GetNode()).toBe(document.nodes.findTextNode("p-3"));
+    expect(middlePosition.GetNode()).toBe(document.paragraphs[1]);
     expect(middlePosition.GetContentIndex()).toBe(0);
 
-    const last = document.nodes.findTextNode("p-3") as SwTextNode;
+    const last = document.paragraphs[1] as SwTextNode;
     const lastPosition = new SwPosition(last, 2, "anchor");
     document.nodes.removeTextNode(last);
     expect(lastPosition.GetNode()).toBe(first);

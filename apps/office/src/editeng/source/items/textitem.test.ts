@@ -15,6 +15,7 @@ import {
   FontItalic,
   FontLineStyle,
   FontWeight,
+  SvxFontItem,
   SvxPostureItem,
   SvxFontHeightItem,
   SvxUnderlineItem,
@@ -36,6 +37,20 @@ function throwing(operation: () => unknown): () => unknown {
 }
 
 describe("EditEngine character items" /** Groups pooled character item contracts. @returns Nothing. */, () => {
+  it("separates serialized and device-resolved font families", /** Verifies runtime resolution does not alter the document value. @returns Nothing. */ () => {
+    const font = new SvxFontItem("Liberation Serif", weightWhich, "Noto Serif");
+    expect(font.GetFamilyName()).toBe("Liberation Serif");
+    expect(font.GetResolvedFamilyName()).toBe("Noto Serif");
+    expect(font.QueryValue()).toBe("Liberation Serif");
+    expect(font.Clone().GetResolvedFamilyName()).toBe("Noto Serif");
+    expect(
+      throwing(
+        /** Creates an item with an invalid runtime family. @returns Invalid item. */ () =>
+          new SvxFontItem("Liberation Serif", weightWhich, " "),
+      ),
+    ).toThrow("resolved family name is invalid");
+  });
+
   it("preserves FontWeight ordering, boolean threshold, identity, and snapshots" /** Verifies SvxWeightItem. @returns Nothing. */, () => {
     expect(FontWeight.DONTKNOW).toBe(0);
     expect(FontWeight.NORMAL).toBe(5);

@@ -66,7 +66,6 @@ function createListCommandRegistry(target: SwListShell): CommandRegistry<SwListS
           execute: /** Executes the bound list command. @returns Whether changed. */ (): boolean =>
             target.Execute(command),
           id,
-          invalidates: ["document", "history", "selection"],
           isEnabled:
             /** Computes context-sensitive list enablement. @returns Whether enabled. */ (): boolean =>
               target.IsInList() &&
@@ -75,8 +74,6 @@ function createListCommandRegistry(target: SwListShell): CommandRegistry<SwListS
                 : target.GetLevel() < WRITER_MAX_LIST_LEVEL),
           label: resource.label,
           slotId: getWriterSlotId(id),
-          target: "shell" as const,
-          undoPolicy: "record" as const,
         };
       },
     ),

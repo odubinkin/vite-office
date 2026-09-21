@@ -24,6 +24,28 @@ const fallbackFamilies: Readonly<
   text: { cjk: "Noto Sans CJK", ctl: "Noto Naskh Arabic", western: "Liberation Serif" },
 };
 
+/** Separates the document value from the output-device substitution. */
+export interface WriterDefaultFontSelection {
+  readonly requestedFamily: string;
+  readonly resolvedFamily: string;
+}
+
+/** Selects the serialized Writer default and its current device resolution independently. @param device - Optional output-device resolver. @param type - Requested font role. @param language - IETF language tag. @param script - Writer script slot. @returns Requested and resolved families. */
+export function getDefaultFontSelection(
+  device: DefaultFontDevice | undefined,
+  type: WriterDefaultFontType,
+  language: string,
+  script: WriterFontScript,
+): WriterDefaultFontSelection {
+  const requestedFamily = fallbackFamilies[type][script];
+  const deviceFamily = device?.getDefaultFont(type, language, script)?.trim();
+  return {
+    requestedFamily,
+    resolvedFamily:
+      deviceFamily === undefined || deviceFamily.length === 0 ? requestedFamily : deviceFamily,
+  };
+}
+
 /** Selects one document default, mirroring OutputDevice::GetDefaultFont(..., OnlyOne). @param device - Optional output-device resolver. @param type - Requested font role. @param language - IETF language tag. @param script - Writer script slot. @returns Resolved family. */
 export function getDefaultFont(
   device: DefaultFontDevice | undefined,
@@ -31,10 +53,7 @@ export function getDefaultFont(
   language: string,
   script: WriterFontScript,
 ): string {
-  const resolved = device?.getDefaultFont(type, language, script)?.trim();
-  return resolved === undefined || resolved.length === 0
-    ? fallbackFamilies[type][script]
-    : resolved;
+  return getDefaultFontSelection(device, type, language, script).requestedFamily;
 }
 
 /** Maps an IETF language tag to Writer's three script default slots. @param language - IETF language tag. @returns Writer script slot. */

@@ -69,7 +69,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
   it("imports into a neutral filter document with ordered progress" /** Verifies worker-side ZIP/XML work. @returns Completion after result. */, async () => {
     const scope = new CapturingScope();
     const runtime = new OdtWorkerRuntime(scope);
-    const document = createWriterDocument("p-1");
+    const document = createWriterDocument();
     const shell = new SwDocShell(document, metadata());
     new SwWrtShell(shell).Insert("runtime body");
     runtime.HandleMessage(
@@ -116,7 +116,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     runtime.HandleMessage(
       request({
         operation: "export",
-        document: createOdtFilterDocument(createWriterDocument("p-1"), metadata().title),
+        document: createOdtFilterDocument(createWriterDocument(), metadata().title),
       }),
     );
     const result = await terminal(scope);
@@ -171,7 +171,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
         if ((message as { stage?: string }).stage === "import:styles")
           cancelRuntime.HandleMessage({ id: 1, protocol: 1, type: "cancel" });
       };
-    const document = createWriterDocument("p-1");
+    const document = createWriterDocument();
     cancelRuntime.HandleMessage(
       request({
         bytes: writeOdtDocument(document, metadata()).buffer as ArrayBuffer,

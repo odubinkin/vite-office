@@ -309,7 +309,6 @@ export class SwView {
         suiteId: "writer",
         title: "Untitled Writer Document",
       }),
-      "writer-paragraph-1",
     );
   }
 

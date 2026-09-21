@@ -1,11 +1,11 @@
 /** @fileoverview Implements bounded Writer delete, replace, and join undo payloads from pinned undel.cxx. */
 
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
-import { SwTextNode, type WriterTextRun } from "../txtnode/ndtxt";
+import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 import {
-  CopyUndoRuns,
-  GetRunsPayloadSize,
-  GetUndoRunsLength,
+  CopyUndoFragment,
+  GetFragmentPayloadSize,
+  GetUndoFragmentLength,
   GetUndoTextNode,
   ReplaceUndoRange,
   SwUndo,
@@ -21,21 +21,21 @@ export type SwUndoDeleteGroup = "delimiter" | "word";
 
 /** Reversible same-node deletion retaining only removed formatted fragments. */
 export class SwUndoDelete extends SwUndo {
-  private deletedRuns: readonly WriterTextRun[];
+  private deletedFragment: SwTextFragment;
 
   /** Creates one delete action. @param paragraphId - Target node. @param start - Deleted range start. @param deletedRuns - Removed formatted fragments. @param direction - Backspace or forward delete. @param group - Optional character grouping class. @param before - Cursor before deletion. @param after - Cursor after deletion. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private start: number,
-    deletedRuns: readonly WriterTextRun[],
+    deletedFragment: SwTextFragment,
     private readonly direction: SwUndoDeleteDirection,
     private readonly group: SwUndoDeleteGroup | undefined,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
     super("Delete", before, after);
-    this.deletedRuns = CopyUndoRuns(deletedRuns);
-    if (GetUndoRunsLength(this.deletedRuns) === 0)
+    this.deletedFragment = CopyUndoFragment(deletedFragment);
+    if (GetUndoFragmentLength(this.deletedFragment) === 0)
       throw new Error("SwUndoDelete requires non-empty text.");
   }
 
@@ -51,12 +51,12 @@ export class SwUndoDelete extends SwUndo {
       return false;
     if (
       this.direction === "backspace" &&
-      nextAction.start + GetUndoRunsLength(nextAction.deletedRuns) === this.start
+      nextAction.start + GetUndoFragmentLength(nextAction.deletedFragment) === this.start
     ) {
       this.start = nextAction.start;
-      this.deletedRuns = CopyUndoRuns([...nextAction.deletedRuns, ...this.deletedRuns]);
+      this.deletedFragment = joinFragments(nextAction.deletedFragment, this.deletedFragment);
     } else if (this.direction === "delete" && nextAction.start === this.start) {
-      this.deletedRuns = CopyUndoRuns([...this.deletedRuns, ...nextAction.deletedRuns]);
+      this.deletedFragment = joinFragments(this.deletedFragment, nextAction.deletedFragment);
     } else return false;
     this.SetAfterCursor(nextAction.GetAfterCursorState());
     return true;
@@ -64,46 +64,54 @@ export class SwUndoDelete extends SwUndo {
 
   /** Reports retained deleted runs rather than document size. @returns Approximate payload units. */
   public override GetPayloadSize(): number {
-    return GetRunsPayloadSize(this.deletedRuns);
+    return GetFragmentPayloadSize(this.deletedFragment);
   }
 
   /** Restores removed text and hints. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    ReplaceUndoRange(context.GetDoc(), this.paragraph, this.start, this.start, this.deletedRuns);
+    ReplaceUndoRange(
+      context.GetDoc(),
+      this.paragraph,
+      this.start,
+      this.start,
+      this.deletedFragment,
+    );
   }
 
   /** Deletes the retained range again. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
     GetUndoTextNode(context.GetDoc(), this.paragraph).EraseText(
       this.start,
-      GetUndoRunsLength(this.deletedRuns),
+      GetUndoFragmentLength(this.deletedFragment),
     );
   }
 }
 
 /** Atomic replacement used by paste and fallback editing without a full-document snapshot. */
 export class SwUndoReplace extends SwUndo {
-  private readonly insertedRuns: readonly WriterTextRun[];
-  private readonly removedRuns: readonly WriterTextRun[];
+  private readonly insertedFragment: SwTextFragment;
+  private readonly removedFragment: SwTextFragment;
 
   /** Creates one range replacement. @param paragraphId - Target node. @param start - Replacement start. @param removedRuns - Original range content. @param insertedRuns - Replacement content. @param comment - Command label. @param before - Cursor before replacement. @param after - Cursor after replacement. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private readonly start: number,
-    removedRuns: readonly WriterTextRun[],
-    insertedRuns: readonly WriterTextRun[],
+    removedFragment: SwTextFragment,
+    insertedFragment: SwTextFragment,
     comment: string,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
     super(comment, before, after);
-    this.removedRuns = CopyUndoRuns(removedRuns);
-    this.insertedRuns = CopyUndoRuns(insertedRuns);
+    this.removedFragment = CopyUndoFragment(removedFragment);
+    this.insertedFragment = CopyUndoFragment(insertedFragment);
   }
 
   /** Reports the two changed range payloads. @returns Approximate payload units. */
   public override GetPayloadSize(): number {
-    return GetRunsPayloadSize(this.removedRuns) + GetRunsPayloadSize(this.insertedRuns);
+    return (
+      GetFragmentPayloadSize(this.removedFragment) + GetFragmentPayloadSize(this.insertedFragment)
+    );
   }
 
   /** Restores original range content. @param context - Active Writer context. @returns Nothing. */
@@ -112,8 +120,8 @@ export class SwUndoReplace extends SwUndo {
       context.GetDoc(),
       this.paragraph,
       this.start,
-      this.start + GetUndoRunsLength(this.insertedRuns),
-      this.removedRuns,
+      this.start + GetUndoFragmentLength(this.insertedFragment),
+      this.removedFragment,
     );
   }
 
@@ -123,10 +131,18 @@ export class SwUndoReplace extends SwUndo {
       context.GetDoc(),
       this.paragraph,
       this.start,
-      this.start + GetUndoRunsLength(this.removedRuns),
-      this.insertedRuns,
+      this.start + GetUndoFragmentLength(this.removedFragment),
+      this.insertedFragment,
     );
   }
+}
+
+/** Concatenates native text and rebased hints for grouped delete payloads. @param left - Leading fragment. @param right - Trailing fragment. @returns Combined fragment. */
+function joinFragments(left: SwTextFragment, right: SwTextFragment): SwTextFragment {
+  return {
+    text: left.text + right.text,
+    hints: left.hints.concat(right.hints, left.text.length),
+  };
 }
 
 /** Reversible paragraph join retaining only the removed trailing node snapshot. */

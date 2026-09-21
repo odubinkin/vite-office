@@ -8,20 +8,14 @@ export function createWriterWorkbenchDocument(options: SwDocOptions = {}): Write
   return new WriterDocument(options);
 }
 
-/** Derives the first available numeric paragraph identity. @param writerDocument - Current Writer graph. @returns Stable non-colliding identity. */
-export function getNextWriterParagraphId(writerDocument: WriterDocument): string {
-  return writerDocument.nodes.GetUniqueTextNodeLabel();
-}
-
-/** Resolves the focused paragraph or the non-empty body's first node. @param writerDocument - Current Writer graph. @param preferredParagraphId - Preferred node identity. @returns Existing preferred or first paragraph. */
+/** Resolves a connected focused paragraph or the non-empty body's first node. @param writerDocument - Current Writer graph. @param preferredParagraph - Preferred node reference. @returns Existing preferred or first paragraph. */
 export function getActiveWriterParagraph(
   writerDocument: WriterDocument,
-  preferredParagraphId: string,
+  preferredParagraph: WriterParagraph | undefined,
 ): WriterParagraph {
   return (
-    writerDocument.paragraphs.find(
-      /** Matches the preferred identity. @param paragraph - Candidate node. @returns Whether IDs match. */
-      (paragraph) => paragraph.id === preferredParagraphId,
-    ) ?? (writerDocument.paragraphs[0] as WriterParagraph)
+    (preferredParagraph !== undefined && writerDocument.paragraphs.includes(preferredParagraph)
+      ? preferredParagraph
+      : undefined) ?? (writerDocument.paragraphs[0] as WriterParagraph)
   );
 }

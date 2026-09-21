@@ -44,10 +44,10 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
 
   it("owns, invalidates, validates, and removes bounded SwNodeNum items", /** Verifies the supported SwList lifecycle. @returns Nothing. */ () => {
     const list = new SwList("list-a", "Numbering 1");
-    const document = createWriterDocument("first");
+    const document = createWriterDocument();
     const first = document.paragraphs[0] as import("../txtnode/ndtxt").SwTextNode;
-    const nested = document.nodes.MakeTextNode("nested");
-    const missing = document.nodes.MakeTextNode("missing");
+    const nested = document.nodes.MakeTextNode();
+    const missing = document.nodes.MakeTextNode();
     expect(list.GetListId()).toBe("list-a");
     expect(list.GetDefaultListStyleName()).toBe("Numbering 1");
     expect(list.HasNodes()).toBe(false);

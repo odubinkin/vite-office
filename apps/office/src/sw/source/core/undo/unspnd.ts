@@ -3,7 +3,7 @@
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
 
-/** Reversible paragraph split retaining stable node identities and one content offset. */
+/** Reversible paragraph split retaining node references and one content offset. */
 export class SwUndoSplitNode extends SwUndo {
   /** Creates one split action. @param sourceParagraph - Original leading node. @param offset - Split offset. @param before - Cursor before split. @param after - Cursor after split. @returns Nothing. */
   public constructor(
@@ -35,10 +35,7 @@ export class SwUndoSplitNode extends SwUndo {
   protected override RedoImpl(context: SwUndoRedoContext): void {
     const document = context.GetDoc();
     const source = GetUndoTextNode(document, this.sourceParagraph);
-    const provisional = source.SplitContent(
-      this.offset,
-      this.trailingParagraph?.id ?? document.nodes.GetUniqueTextNodeLabel(),
-    );
+    const provisional = source.SplitContent(this.offset);
     document.nodes.insertTextNodeAfter(source, provisional);
     if (this.trailingParagraph === undefined) this.trailingParagraph = provisional;
     else document.nodes.replaceTextNode(provisional, this.trailingParagraph);

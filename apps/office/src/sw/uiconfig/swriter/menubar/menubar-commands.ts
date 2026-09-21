@@ -1,6 +1,6 @@
 /** @fileoverview Adapts the generated pinned Writer menubar graph to presentation types. */
 
-import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import type { WriterMenuItemPlacement, WriterMenuPlacement } from "../ui-resource";
 import { getWriterCommandResource } from "../writer-command-resources";
 import generated from "../writer-ui.generated.json" with { type: "json" };
@@ -10,7 +10,7 @@ export const WRITER_COMMAND_IDS = generated.commandAliases;
 
 /** Creates a stable parameterized StyleApply URL. @param styleId - Model style ID. @returns Command URL. */
 export function getWriterParagraphStyleCommandId(styleId: string): string {
-  const style = WRITER_PARAGRAPH_STYLE_POOL.find(
+  const style = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
     /** Matches a Writer style identity. @param candidate - Pool style. @returns Whether IDs match. */ (
       candidate,
     ) => candidate.id === styleId,
@@ -62,7 +62,7 @@ function adaptItems(nodes: readonly GeneratedMenuNode[]): readonly WriterMenuIte
       if (node.kind === "command") {
         const commandUrl = node.commandUrl;
         if (commandUrl === WRITER_COMMAND_IDS.styleApply)
-          return WRITER_PARAGRAPH_STYLE_POOL.map(
+          return WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
             /** Expands one style. @param style - Pool style. @returns Parameterized placement. */ (
               style,
             ) => ({

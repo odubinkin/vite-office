@@ -21,7 +21,7 @@ function metadata() {
 describe("ODT filter service" /** Groups asynchronous inline filter behavior. @returns Nothing. */, () => {
   it("round-trips a neutral filter document and reports import/export stages" /** Verifies the same service contract used by the worker runtime. @returns Completion after assertions. */, async () => {
     const service = createInlineOdtFilterService();
-    const document = createWriterDocument("p-1");
+    const document = createWriterDocument();
     const shell = new SwDocShell(document, metadata());
     new SwWrtShell(shell).Insert("worker body");
     const progress: string[] = [];
@@ -65,7 +65,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
 
   it("cooperatively cancels, honors AbortSignal, and rejects closed services" /** Covers all inline lifecycle stops. @returns Completion after assertions. */, async () => {
     const service = createInlineOdtFilterService();
-    const document = createWriterDocument("p-1");
+    const document = createWriterDocument();
     const state = metadata();
     const bytes = await service.Export(createOdtFilterDocument(document, state.title));
     await expect(

@@ -20,7 +20,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
     suiteId: "writer",
     title: "Browser ODT Fixture",
   });
-  const source = createWriterDocument("fixture-paragraph");
+  const source = createWriterDocument();
   const docShell = new SwDocShell(source, metadata);
   const shell = new SwWrtShell(docShell);
   shell.Insert("BrowserODTContent");

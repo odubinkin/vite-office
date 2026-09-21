@@ -3,6 +3,7 @@
 import { describe, expect, it } from "vitest";
 import {
   getDefaultFont,
+  getDefaultFontSelection,
   getWriterDefaultFontLanguage,
   getWriterFontScript,
   type DefaultFontDevice,
@@ -39,7 +40,10 @@ describe("Writer default-font policy", /** Registers default-font tests. @return
       /** Supplies one usable family. @returns Selected family. */ getDefaultFont: () =>
         "Source Han Sans",
     };
-    expect(getDefaultFont(device, "heading", "zh-CN", "cjk")).toBe("Source Han Sans");
+    expect(getDefaultFontSelection(device, "heading", "zh-CN", "cjk")).toEqual({
+      requestedFamily: "Noto Sans CJK",
+      resolvedFamily: "Source Han Sans",
+    });
     const document = new SwDoc({ defaultFontDevice: device, locale: "ja-JP" });
     expect(document.GetLocale()).toBe("ja-JP");
     expect(document.GetDefaultFontDevice()).toBe(device);
@@ -47,6 +51,11 @@ describe("Writer default-font policy", /** Registers default-font tests. @return
       (
         document.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
       ).GetFamilyName(),
+    ).toBe("Noto Sans CJK");
+    expect(
+      (
+        document.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
+      ).GetResolvedFamilyName(),
     ).toBe("Source Han Sans");
   });
 });

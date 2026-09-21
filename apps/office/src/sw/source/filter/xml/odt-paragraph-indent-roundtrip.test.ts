@@ -28,7 +28,7 @@ async function replaceEntry(bytes: Uint8Array, name: string, content: string): P
 
 describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-trip tests. @returns Nothing. */ () => {
   it("imports and exports direct paragraph left margins", /** Verifies direct margins survive ODT serialization and import. @returns Completion after package reads. */ async () => {
-    const writer = createWriterDocument("margin-1");
+    const writer = createWriterDocument();
     const paragraph = writer.paragraphs[0];
     if (paragraph === undefined) throw new Error("Writer margin paragraph is missing.");
     paragraph.SetParagraphTextLeftMargin(1134);

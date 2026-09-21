@@ -17,9 +17,11 @@ import type {
 } from "../../core/txtnode/ndtxt";
 import {
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
+  copyWriterTextRangeRuns,
   getWriterNextGraphemeBoundary,
   getWriterPreviousGraphemeBoundary,
   getWriterTextAttributesAtOffset,
+  getWriterTextFromRuns,
   normalizeWriterTextRuns,
   toggleWriterTextRangeFormat,
 } from "../../core/txtnode/ndtxt";
@@ -43,13 +45,7 @@ import type {
   WriterClipboardPaste,
   WriterClipboardPasteParagraph,
 } from "../../filter/html/html-filter-types";
-import {
-  CopyTextRangeRuns,
-  CopyUndoRuns,
-  GetUndoRunsLength,
-  type SwUndoCursorState,
-  type SwUndoRedoContext,
-} from "../../core/undo/undobj";
+import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
 import { getWriterTypingCharacterClass } from "./delete";
 import {
   createWriterCollapsedCursorState,
@@ -339,8 +335,10 @@ export class SwWrtShell extends SwModify {
         new SwUndoReplace(
           paragraph,
           start,
-          CopyTextRangeRuns(paragraph, start, end),
-          [{ attributes: { ...this.pendingCharacterAttributes }, text }],
+          paragraph.CaptureTextFragment(start, end),
+          paragraph.CreateTextFragment([
+            { attributes: { ...this.pendingCharacterAttributes }, text },
+          ]),
           "Replace",
           before,
           this.CreateCollapsedCursorState(paragraph, start + text.length),
@@ -353,7 +351,9 @@ export class SwWrtShell extends SwModify {
       new SwUndoInsert(
         paragraph,
         offset,
-        [{ attributes: { ...this.pendingCharacterAttributes }, text }],
+        paragraph.CreateTextFragment([
+          { attributes: { ...this.pendingCharacterAttributes }, text },
+        ]),
         group,
         before,
         this.CreateCollapsedCursorState(paragraph, offset + text.length),
@@ -377,7 +377,7 @@ export class SwWrtShell extends SwModify {
         new SwUndoDelete(
           paragraph,
           start,
-          CopyTextRangeRuns(paragraph, start, end),
+          paragraph.CaptureTextFragment(start, end),
           direction,
           undefined,
           before,
@@ -409,7 +409,7 @@ export class SwWrtShell extends SwModify {
       new SwUndoDelete(
         paragraph,
         start,
-        CopyTextRangeRuns(paragraph, start, end),
+        paragraph.CaptureTextFragment(start, end),
         direction,
         group,
         before,
@@ -488,17 +488,17 @@ export class SwWrtShell extends SwModify {
       range.end > paragraph.Len()
     )
       throw new Error("Writer text range is outside the paragraph.");
-    const removedRuns = CopyTextRangeRuns(paragraph, range.start, range.end);
-    const insertedRuns = CopyUndoRuns(normalizeWriterTextRuns(runs));
+    const removedRuns = copyWriterTextRangeRuns(paragraph, range.start, range.end);
+    const insertedRuns = normalizeWriterTextRuns(runs);
     if (JSON.stringify(removedRuns) === JSON.stringify(insertedRuns)) return false;
-    const insertionLength = GetUndoRunsLength(insertedRuns);
+    const insertionLength = getWriterTextFromRuns(insertedRuns).length;
     const nextOffset = range.start + insertionLength;
     return this.ApplyAction(
       new SwUndoReplace(
         paragraph,
         range.start,
-        removedRuns,
-        insertedRuns,
+        paragraph.CaptureTextFragment(range.start, range.end),
+        paragraph.CreateTextFragment(insertedRuns),
         insertedRuns.length === 0 ? "Delete" : "Paste",
         this.CaptureCursorState(),
         this.CreateCollapsedCursorState(paragraph, nextOffset),
@@ -526,7 +526,7 @@ export class SwWrtShell extends SwModify {
       };
       changed = this.ReplaceRange(range, first.runs) || changed;
       let paragraph = range.node;
-      let offset = range.start + GetUndoRunsLength(first.runs);
+      let offset = range.start + getWriterTextFromRuns(first.runs).length;
       this.SetCursor(new SwPosition(paragraph, offset));
       if (paste.isBlock) changed = this.ApplyPastedParagraphList(first) || changed;
       for (const pastedParagraph of paste.paragraphs.slice(1)) {
@@ -534,7 +534,7 @@ export class SwWrtShell extends SwModify {
         changed = true;
         changed =
           this.ReplaceRange({ end: 0, node: paragraph, start: 0 }, pastedParagraph.runs) || changed;
-        offset = GetUndoRunsLength(pastedParagraph.runs);
+        offset = getWriterTextFromRuns(pastedParagraph.runs).length;
         this.SetCursor(new SwPosition(paragraph, offset));
         changed = this.ApplyPastedParagraphList(pastedParagraph) || changed;
       }
@@ -600,7 +600,7 @@ export class SwWrtShell extends SwModify {
           ? "on"
           : "off";
     const values = new Set(
-      CopyTextRangeRuns(range.node, range.start, range.end).map(
+      copyWriterTextRangeRuns(range.node, range.start, range.end).map(
         /** Reads the selected fragment's format value. @param run - Selected Writer text run. @returns Applied flag. */ (
           run,
         ) => run.attributes[format],
@@ -646,7 +646,7 @@ export class SwWrtShell extends SwModify {
       return false;
     }
     const paragraph = selectedRange.node;
-    const beforeRuns = CopyTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
+    const beforeRuns = copyWriterTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
     /* v8 ignore next 3 -- A validated non-empty text range always copies at least one run. */
     if (beforeRuns.length === 0) {
       this.NotifySelection();
@@ -655,11 +655,18 @@ export class SwWrtShell extends SwModify {
     const afterRuns = toggleWriterTextRangeFormat(
       beforeRuns,
       0,
-      GetUndoRunsLength(beforeRuns),
+      getWriterTextFromRuns(beforeRuns).length,
       format,
     );
     return this.ApplyAction(
-      new SwUndoAttr(paragraph, selectedRange.start, beforeRuns, afterRuns, before, before),
+      new SwUndoAttr(
+        paragraph,
+        selectedRange.start,
+        paragraph.CaptureTextFragment(selectedRange.start, selectedRange.end),
+        paragraph.CreateTextFragment(afterRuns),
+        before,
+        before,
+      ),
     );
   }
 

@@ -19,11 +19,12 @@ import {
   setTestCursor,
   setTestSelection,
   fixtureSplitParagraph,
+  getNodeId,
 } from "../../../../test/wrtsh-test-helpers";
 
 /** Creates a Writer shell with one stable paragraph. @param text - Optional initial paragraph text. @returns Shell fixture. */
 function createShell(text = ""): SwWrtShell {
-  const document = createWriterDocument("p-1");
+  const document = createWriterDocument();
   const documentState = createDocument({
     id: "input-document",
     suiteId: "writer",
@@ -66,7 +67,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
 
   it("rejects canonical edit positions owned by another document", /** Verifies shell ownership at every public range boundary. @returns Nothing. */ function rejectsForeignEditPositions(): void {
     const shell = createShell("ab");
-    const foreignParagraph = createWriterDocument("foreign").paragraphs[0] as NonNullable<
+    const foreignParagraph = createWriterDocument().paragraphs[0] as NonNullable<
       ReturnType<typeof createWriterDocument>["paragraphs"][number]
     >;
     foreignParagraph.SetText("xy");
@@ -155,7 +156,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     });
     expect(shell.GetHyperlinkAtCursor()).toBeUndefined();
     const document = shell.GetDoc();
-    const foreignDocument = createWriterDocument("foreign");
+    const foreignDocument = createWriterDocument();
     const foreignParagraph = foreignDocument.paragraphs[0] as NonNullable<
       (typeof foreignDocument.paragraphs)[number]
     >;
@@ -273,7 +274,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 2, paragraphId: "p-1" },
     });
-    const second = shell.GetDoc().nodes.MakeTextNode("p-2", "next");
+    const second = shell.GetDoc().nodes.MakeTextNode();
     shell.FocusNode(second);
     expect(shell.GetActiveParagraph()).toBe(second);
   });
@@ -362,7 +363,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       point: { offset: 1, paragraphId: "p-1" },
     });
     handleTestInput(shell, "insertParagraph", null);
-    const secondId = shell.GetActiveParagraph().id;
+    const secondId = getNodeId(shell, shell.GetActiveParagraph());
     expect(
       shell
         .GetDoc()
@@ -372,14 +373,14 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
           ) => paragraph.text,
         ),
     ).toEqual(["", "d"]);
-    expect(secondId).toBe(shell.GetActiveParagraph().id);
+    expect(secondId).toBe(getNodeId(shell, shell.GetActiveParagraph()));
 
     const crossShell = createShell("ab");
     setTestCursor(crossShell, "p-1", 2);
     handleTestInput(crossShell, "insertParagraph", null);
     handleTestInput(crossShell, "insertText", "cd");
     handleTestInput(crossShell, "insertParagraph", null);
-    const crossThirdId = crossShell.GetActiveParagraph().id;
+    const crossThirdId = getNodeId(crossShell, crossShell.GetActiveParagraph());
     handleTestInput(crossShell, "insertText", "ef");
     setTestSelection(crossShell, {
       mark: { offset: 1, paragraphId: "p-1" },
@@ -452,7 +453,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.EndComposition()).toBe(false);
     setTestCursor(shell, "p-1", 1);
     handleTestInput(shell, "insertParagraph", null);
-    const secondId = shell.GetActiveParagraph().id;
+    const secondId = getNodeId(shell, shell.GetActiveParagraph());
     setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 0, paragraphId: secondId },

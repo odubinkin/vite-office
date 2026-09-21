@@ -78,6 +78,12 @@ export type WriterCharacterFormat = (typeof WRITER_CHARACTER_FORMATS)[number];
 /** Derived immutable projection; canonical state remains text plus SwpHints. */
 export type WriterTextRun = WriterTextRunLike;
 
+/** Native Writer text payload retained by model mutations and undo. */
+export interface SwTextFragment {
+  readonly text: string;
+  readonly hints: SwpHints;
+}
+
 /** Stores the empty direct-formatting state used for new Writer text. */
 export const DEFAULT_WRITER_CHARACTER_ATTRIBUTES: WriterCharacterAttributes = {
   bold: false,
@@ -91,22 +97,12 @@ export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"
 /** Identifies one supported horizontal paragraph alignment. */
 export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[number];
 
-/**
- * Creates one unformatted text-run sequence from plain text.
- *
- * @param text - Complete Writer paragraph text to represent as runs.
- * @returns No runs for empty text, otherwise one default-attribute text run.
- */
+/** Creates one unformatted text-run sequence from plain text. @param text - Complete Writer paragraph text to represent as runs. @returns No runs for empty text, otherwise one default-attribute text run. */
 export function createWriterTextRuns(text: string): readonly WriterTextRun[] {
   return text.length === 0 ? [] : [{ attributes: DEFAULT_WRITER_CHARACTER_ATTRIBUTES, text }];
 }
 
-/**
- * Converts a normalized or legacy run collection to its exact visible plain text.
- *
- * @param runs - Text runs read from a Writer paragraph or browser boundary.
- * @returns Concatenated visible UTF-16 text with invalid fragments omitted.
- */
+/** Converts a normalized or legacy run collection to its exact visible plain text. @param runs - Text runs read from a Writer paragraph or browser boundary. @returns Concatenated visible UTF-16 text with invalid fragments omitted. */
 export function getWriterTextFromRuns(runs: unknown): string {
   return normalizeWriterTextRuns(runs)
     .map(
@@ -118,12 +114,17 @@ export function getWriterTextFromRuns(runs: unknown): string {
     .join("");
 }
 
-/**
- * Normalizes untrusted Writer run data, removing empty fragments and merging adjacent equal attributes.
- *
- * @param candidate - Unknown persisted or caller-supplied run collection.
- * @returns Immutable normalized direct-format text runs.
- */
+/** Copies a browser-boundary run projection for one native node range. @param node - Source text node. @param start - Inclusive offset. @param end - Exclusive offset. @returns Immutable projected runs. */
+export function copyWriterTextRangeRuns(
+  node: SwTextNode,
+  start: number,
+  end: number,
+): readonly WriterTextRun[] {
+  const fragment = node.CaptureTextFragment(start, end);
+  return fragment.hints.toTextRuns(fragment.text, node.GetSwAttrSet());
+}
+
+/** Normalizes untrusted Writer run data, removing empty fragments and merging adjacent equal attributes. @param candidate - Unknown persisted or caller-supplied run collection. @returns Immutable normalized direct-format text runs. */
 export function normalizeWriterTextRuns(candidate: unknown): readonly WriterTextRun[] {
   if (!Array.isArray(candidate)) return [];
   const runs: WriterTextRun[] = [];
@@ -152,12 +153,7 @@ export function normalizeWriterTextRuns(candidate: unknown): readonly WriterText
   return runs;
 }
 
-/**
- * Normalizes unknown direct character attributes to the bounded Writer subset.
- *
- * @param candidate - Unknown attributes read from storage or a command boundary.
- * @returns Immutable attributes with unsupported or absent values treated as false.
- */
+/** Normalizes unknown direct character attributes to the bounded Writer subset. @param candidate - Unknown attributes read from storage or a command boundary. @returns Immutable attributes with unsupported or absent values treated as false. */
 export function normalizeWriterCharacterAttributes(candidate: unknown): WriterCharacterAttributes {
   const attributes = isRecord(candidate) ? candidate : {};
   return {
@@ -229,16 +225,7 @@ export function applyWriterTextRangeFont(
   );
 }
 
-/**
- * Applies one direct format to a non-empty same-paragraph text range, toggling it off only when every selected character already has it.
- *
- * @param runs - Existing normalized Writer text runs.
- * @param start - Inclusive UTF-16 paragraph offset where the selection begins.
- * @param end - Exclusive UTF-16 paragraph offset where the selection ends.
- * @param format - Direct character format selected by the Writer command.
- * @returns Original normalized runs for an empty range, otherwise a normalized formatted replacement.
- * @throws {Error} When range offsets are not integer bounds of the visible run text.
- */
+/** Applies one direct format to a non-empty same-paragraph text range, toggling it off only when every selected character already has it. @param runs - Existing normalized Writer text runs. @param start - Inclusive UTF-16 paragraph offset where the selection begins. @param end - Exclusive UTF-16 paragraph offset where the selection ends. @param format - Direct character format selected by the Writer command. @returns Original normalized runs for an empty range, otherwise a normalized formatted replacement. @throws {Error} When range offsets are not integer bounds of the visible run text. */
 export function toggleWriterTextRangeFormat(
   runs: readonly WriterTextRun[],
   start: number,
@@ -442,15 +429,14 @@ export class SwTextNode extends SwContentNode {
   private mText: string;
   private pSwpHints: SwpHints | undefined;
 
-  /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param id - Stable node identity. @param startOfSection - Containing section. @param formatColl - Registered paragraph style. @param text - Initial canonical text. @returns Nothing. */
+  /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered paragraph style. @param text - Initial canonical text. @returns Nothing. */
   public constructor(
     nodes: SwNodes,
-    id: string,
     startOfSection: SwStartNode,
     formatColl: SwTextFormatColl = nodes.GetDoc().GetDfltTextFormatColl(),
     text = "",
   ) {
-    super(nodes, id, startOfSection, formatColl);
+    super(nodes, startOfSection, formatColl);
     this.mText = text;
   }
 
@@ -731,10 +717,15 @@ export class SwTextNode extends SwContentNode {
     this.assertRange(start, end);
     const removedLength = end - start;
     if (removedLength === 0) return;
-    const prefix = splitWriterTextRuns(this.runs, start).prefix;
-    const suffix = splitWriterTextRuns(this.runs, end).suffix;
+    const hints = this.GetTextHints().replaceRange(
+      this.mText.length,
+      start,
+      end,
+      new SwpHints(this.GetDoc().GetAttrPool()),
+      0,
+    );
     this.mText = `${this.mText.slice(0, start)}${this.mText.slice(end)}`;
-    this.setHintsFromRuns([...prefix, ...suffix]);
+    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
     this.UpdateContentIndices(start, removedLength, SwContentIndexUpdateMode.Negative);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
@@ -743,15 +734,19 @@ export class SwTextNode extends SwContentNode {
   }
 
   /** Replaces one text range with caller-normalized direct-format runs. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacementRuns - Replacement content. @returns Nothing. */
-  public ReplaceRange(start: number, end: number, replacementRuns: unknown): void {
+  public ReplaceRange(start: number, end: number, replacement: SwTextFragment): void {
     this.assertRange(start, end);
-    const prefix = splitWriterTextRuns(this.runs, start).prefix;
-    const suffix = splitWriterTextRuns(this.runs, end).suffix;
-    const replacement = normalizeWriterTextRuns(replacementRuns);
-    const replacementText = getWriterTextFromRuns(replacement);
+    const replacementText = replacement.text;
     const removedLength = end - start;
+    const hints = this.GetTextHints().replaceRange(
+      this.mText.length,
+      start,
+      end,
+      replacement.hints,
+      replacementText.length,
+    );
     this.mText = `${this.mText.slice(0, start)}${replacementText}${this.mText.slice(end)}`;
-    this.setHintsFromRuns([...prefix, ...replacement, ...suffix]);
+    this.pSwpHints = hints.Count() === 0 ? undefined : hints;
     if (removedLength > replacementText.length) {
       this.UpdateContentIndices(
         start + replacementText.length,
@@ -843,23 +838,22 @@ export class SwTextNode extends SwContentNode {
     });
   }
 
-  /** Splits this node at one content offset and returns an uninserted trailing sibling. @param offset - UTF-16 split offset. @param nextId - Trailing node identity. @returns Prepared trailing text node. */
-  public SplitContent(offset: number, nextId: string): SwTextNode {
-    if (nextId.trim().length === 0) throw new Error("Paragraph id must not be blank.");
+  /** Splits this node at one content offset and returns an uninserted trailing sibling. @param offset - UTF-16 split offset. @returns Prepared trailing text node. */
+  public SplitContent(offset: number): SwTextNode {
     this.assertRange(offset, offset);
-    const split = splitWriterTextRuns(this.runs, offset);
+    const prefix = this.CaptureTextFragment(0, offset);
+    const suffix = this.CaptureTextFragment(offset, this.Len());
     const trailing = new SwTextNode(
       this.GetNodes(),
-      nextId,
       this.StartOfSectionNode(),
       this.GetTextFormatColl().GetNextTextFormatColl(),
-      getWriterTextFromRuns(split.suffix),
+      suffix.text,
     );
     const directAttributes = this.GetpSwAttrSet();
     if (directAttributes !== undefined) trailing.SetAttr(directAttributes);
-    trailing.setHintsFromRuns(split.suffix);
-    this.mText = getWriterTextFromRuns(split.prefix);
-    this.setHintsFromRuns(split.prefix);
+    trailing.pSwpHints = suffix.hints.Count() === 0 ? undefined : suffix.hints;
+    this.mText = prefix.text;
+    this.pSwpHints = prefix.hints.Count() === 0 ? undefined : prefix.hints;
     this.MoveContentIndicesFrom(trailing, offset);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
@@ -874,7 +868,12 @@ export class SwTextNode extends SwContentNode {
     if (source.GetNodes() !== this.GetNodes())
       throw new Error("Joined SwTextNodes belong to different documents.");
     const offset = this.Len();
-    this.setTextRuns([...this.runs, ...source.runs]);
+    const joinedHints = new SwpHints(this.GetDoc().GetAttrPool(), [
+      ...this.GetTextHints().entries(),
+      ...source.GetTextHints().shifted(offset).entries(),
+    ]);
+    this.mText += source.mText;
+    this.pSwpHints = joinedHints.Count() === 0 ? undefined : joinedHints;
     source.MoveAllContentIndicesTo(this, offset);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
@@ -886,7 +885,6 @@ export class SwTextNode extends SwContentNode {
   public CloneTo(nodes: SwNodes): SwTextNode {
     const clone = new SwTextNode(
       nodes,
-      this.id,
       nodes.GetEndOfContent().StartOfSectionNode(),
       nodes.GetDoc().GetTextFormatColl(this.style),
     );
@@ -895,6 +893,25 @@ export class SwTextNode extends SwContentNode {
     clone.SetText(this.mText);
     if (this.pSwpHints !== undefined) clone.SetTextHints(this.pSwpHints);
     return clone;
+  }
+
+  /** Captures text and direct hints without projecting through browser runs. @param start - Inclusive offset. @param end - Exclusive offset. @returns Native fragment. */
+  public CaptureTextFragment(start: number, end: number): SwTextFragment {
+    this.assertRange(start, end);
+    return { text: this.mText.slice(start, end), hints: this.GetTextHints().slice(start, end) };
+  }
+
+  /** Converts a browser-boundary run payload once into native Writer text and hints. @param runs - Boundary run payload. @returns Native fragment. */
+  public CreateTextFragment(runs: unknown): SwTextFragment {
+    const normalized = normalizeWriterTextRuns(runs);
+    const hints = new SwpHints(this.GetDoc().GetAttrPool());
+    hints.setTextRuns(normalized, this.GetSwAttrSet());
+    return { text: getWriterTextFromRuns(normalized), hints };
+  }
+
+  /** Returns an independent native hint container, including the empty case. @returns Independent hints. */
+  private GetTextHints(): SwpHints {
+    return this.pSwpHints?.clone() ?? new SwpHints(this.GetDoc().GetAttrPool());
   }
 
   /** Replaces canonical text and derives hints from complete boundary runs. @param runs - Complete text runs. @returns Nothing. */

@@ -217,10 +217,10 @@ export function decodeWriterDocument(candidate: unknown): SwDoc {
         rule.automatic,
       ),
     );
-  for (const [index, nodeRecord] of record.textNodes.entries()) {
+  for (const nodeRecord of record.textNodes) {
     if (!isWriterParagraphStyle(nodeRecord.formatCollId))
       throw new Error("Stored Writer paragraph style is invalid.");
-    const node = document.nodes.MakeTextNode(`writer-paragraph-${index + 1}`);
+    const node = document.nodes.MakeTextNode();
     node.ChgFormatColl(document.GetTextFormatColl(nodeRecord.formatCollId));
     for (const item of nodeRecord.autoAttributes)
       node.SetAttr(document.GetAttrPool().CreateItem(item));

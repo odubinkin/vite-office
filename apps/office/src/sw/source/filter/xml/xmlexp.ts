@@ -117,15 +117,17 @@ export function exportMetaXml(title: string): string {
 /** Projects one canonical text node without leaking Writer ownership into xmloff. @param node - Source text node. @returns Neutral paragraph. */
 function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
   const directItems = node.GetpSwAttrSet()?.entries() ?? [];
-  assertSupportedItems(directItems, `paragraph ${node.id}`, true);
+  assertSupportedItems(directItems, `paragraph at node ${node.GetIndex()}`, true);
   const ruleName = node.GetNumRuleName();
   const rule = node.GetNumRule();
   if (ruleName.length > 0 && rule === undefined)
-    throw new Error(`ODT export cannot resolve SwNumRule ${ruleName} on paragraph ${node.id}.`);
+    throw new Error(`ODT export cannot resolve SwNumRule ${ruleName} on node ${node.GetIndex()}.`);
   const listId = node.GetListId();
   const level = node.GetAttrListLevel();
   if (rule === undefined && (listId.length > 0 || level !== 0))
-    throw new Error(`ODT export found list id or level without SwNumRule on paragraph ${node.id}.`);
+    throw new Error(
+      `ODT export found list id or level without SwNumRule on node ${node.GetIndex()}.`,
+    );
   const alignment = getDirectAlignment(
     node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_ADJUST, false),
   );

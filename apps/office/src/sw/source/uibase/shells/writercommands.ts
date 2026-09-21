@@ -10,7 +10,7 @@ import {
 } from "../../../../sfx2/source/control/dispatch";
 import type { WriterCharacterFormat } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
-import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import {
   WRITER_COMMAND_IDS,
   getWriterParagraphStyleCommandId,
@@ -139,13 +139,10 @@ export function createWriterTextCommandRegistry(
       /** Toggles direct formatting through the editing shell. @returns Whether content changed. */
       execute: (): boolean => target.ToggleCharacterFormat(format),
       id,
-      invalidates: ["document", "history", "selection"],
       /** Reads the selection-aware toggle value. @returns Current checked state. */
       isChecked: (): boolean => target.GetCharacterFormatState(format) === "on",
       /** Reports a mixed direct-format selection. @returns True when selected text has both values. */
       isMixed: (): boolean => target.GetCharacterFormatState(format) === "mixed",
-      target: "shell" as const,
-      undoPolicy: "record" as const,
     });
   return createWriterCommandRegistry([
     {
@@ -153,22 +150,16 @@ export function createWriterTextCommandRegistry(
       /** Restores the previous history state. @returns Whether navigation occurred. */
       execute: (): boolean => target.Undo(),
       id: WRITER_COMMAND_IDS.undo,
-      invalidates: ["document", "history", "selection"],
       /** Reads Undo availability. @returns Whether Undo is enabled. */
       isEnabled: (): boolean => target.CanUndo(),
-      target: "shell",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0102",
       /** Restores the following history state. @returns Whether navigation occurred. */
       execute: (): boolean => target.Redo(),
       id: WRITER_COMMAND_IDS.redo,
-      invalidates: ["document", "history", "selection"],
       /** Reads Redo availability. @returns Whether Redo is enabled. */
       isEnabled: (): boolean => target.CanRedo(),
-      target: "shell",
-      undoPolicy: "none",
     },
     characterCommand(WRITER_COMMAND_IDS.bold, "bold"),
     characterCommand(WRITER_COMMAND_IDS.italic, "italic"),
@@ -191,9 +182,6 @@ export function createWriterTextCommandRegistry(
       /** Exposes current hyperlink metadata to the dialog presenter. @returns Hyperlink or undefined. */
       getStateValue: (): WriterHyperlink | undefined => target.GetHyperlinkAtCursor(),
       id: WRITER_COMMAND_IDS.hyperlinkDialog,
-      invalidates: ["document", "history", "selection"],
-      target: "shell",
-      undoPolicy: "record",
     },
     {
       capabilityId: "CAP-0135",
@@ -212,22 +200,16 @@ export function createWriterTextCommandRegistry(
       /** Reads current hyperlink metadata for dialog initialization. @returns Hyperlink or undefined. */
       getStateValue: (): WriterHyperlink | undefined => target.GetHyperlinkAtCursor(),
       id: WRITER_COMMAND_IDS.editHyperlink,
-      invalidates: ["document", "history", "selection"],
       /** Enables editing only for a uniform selected or caret link. @returns Whether enabled. */
       isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
-      target: "shell",
-      undoPolicy: "record",
     },
     {
       capabilityId: "CAP-0135",
       /** Removes hyperlink metadata from the current selected link. @returns Whether changed. */
       execute: (): boolean => target.SetHyperlink(undefined),
       id: WRITER_COMMAND_IDS.removeHyperlink,
-      invalidates: ["document", "history", "selection"],
       /** Enables removal only for a uniform selected or caret link. @returns Whether enabled. */
       isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
-      target: "shell",
-      undoPolicy: "record",
     },
     {
       capabilityId: "CAP-0109",
@@ -240,9 +222,6 @@ export function createWriterTextCommandRegistry(
       getStateValue: (): string =>
         target.GetPendingCharacterAttributes().fontFamily ?? target.GetDefaultFontFamily(),
       id: WRITER_COMMAND_IDS.fontName,
-      invalidates: ["document", "history", "selection"],
-      target: "shell",
-      undoPolicy: "record",
     },
     ...(["left", "center", "right", "justify"] as const).map(
       /** Creates one paragraph-alignment descriptor. @param alignment - Supported alignment. @returns Command descriptor. */
@@ -256,11 +235,8 @@ export function createWriterTextCommandRegistry(
           left: WRITER_COMMAND_IDS.alignLeft,
           right: WRITER_COMMAND_IDS.alignRight,
         }[alignment],
-        invalidates: ["document", "history", "selection"],
         /** Compares the active alignment with this command. @returns Checked state. */
         isChecked: (): boolean => active().alignment === alignment,
-        target: "shell" as const,
-        undoPolicy: "record" as const,
       }),
     ),
     ...([true, false] as const).map(
@@ -271,14 +247,11 @@ export function createWriterTextCommandRegistry(
         /** Routes list paragraphs to NumUpDown and ordinary paragraphs to MoveLeftMargin semantics. @returns Whether content changed. */
         execute: (): boolean => target.ChangeParagraphIndent(increase),
         id: increase ? WRITER_COMMAND_IDS.increaseIndent : WRITER_COMMAND_IDS.decreaseIndent,
-        invalidates: ["document", "history", "selection"],
         /** Mirrors the upstream text-shell availability query for the active paragraph context. @returns Whether enabled. */
         isEnabled: (): boolean => target.CanChangeParagraphIndent(increase),
-        target: "shell" as const,
-        undoPolicy: "record" as const,
       }),
     ),
-    ...WRITER_PARAGRAPH_STYLE_POOL.map(
+    ...WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
       /** Creates one paragraph-style descriptor. @param style - Supported style. @returns Command descriptor. */
       (style) => ({
         capabilityId: "CAP-0112" as const,
@@ -287,11 +260,8 @@ export function createWriterTextCommandRegistry(
         /** Reads the active paragraph style value. @returns Stable style ID. */
         getStateValue: (): string => active().style,
         id: getWriterParagraphStyleCommandId(style.id),
-        invalidates: ["document", "history", "selection"],
         /** Compares the active style with this command. @returns Checked state. */
         isChecked: (): boolean => active().style === style.id,
-        target: "shell" as const,
-        undoPolicy: "record" as const,
       }),
     ),
     ...(["bullet", "numbered", "none"] as const).map(
@@ -308,11 +278,8 @@ export function createWriterTextCommandRegistry(
           none: WRITER_COMMAND_IDS.removeBullets,
           numbered: WRITER_COMMAND_IDS.orderedList,
         }[kind],
-        invalidates: ["document", "history", "selection"],
         /** Compares the active list kind with this command. @returns Checked state. */
         isChecked: (): boolean => active().list.kind === kind,
-        target: "shell" as const,
-        undoPolicy: "record" as const,
       }),
     ),
   ]);
@@ -331,59 +298,41 @@ export function createWriterViewCommandRegistry(
       /** Creates a new document in the persistent shell. @returns Nothing. */
       execute: (): void => target.NewDocument(),
       id: WRITER_COMMAND_IDS.newDocument,
-      invalidates: ["document", "history", "lifecycle", "selection"],
       isEnabled: lifecycleEnabled,
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0113",
       /** Opens an ODT through the view medium adapter. @returns Completion after selection and import. */
       execute: (): Promise<void> => target.OpenOdt(),
       id: WRITER_COMMAND_IDS.openOdt,
-      invalidates: ["document", "history", "lifecycle", "selection"],
       isEnabled: lifecycleEnabled,
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0113",
       /** Starts an ODT Save As operation. @returns Completion after worker export. */
       execute: (): Promise<void> => target.SaveOdt(),
       id: WRITER_COMMAND_IDS.saveOdt,
-      invalidates: ["lifecycle"],
       isEnabled: lifecycleEnabled,
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0114",
       /** Opens the browser-local primary medium. @returns Completion after lookup. */
       execute: (): Promise<void> => target.LoadLocal(),
       id: WRITER_COMMAND_IDS.openLocal,
-      invalidates: ["document", "history", "lifecycle", "selection"],
       isEnabled: lifecycleEnabled,
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0114",
       /** Saves to the browser-local primary medium. @returns Completion after acknowledgement. */
       execute: (): Promise<void> => target.SaveLocal(),
       id: WRITER_COMMAND_IDS.saveLocal,
-      invalidates: ["document", "lifecycle"],
       isEnabled: lifecycleEnabled,
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0101",
       /** Starts plain-text export. @returns Nothing. */
       execute: (): Promise<void> => target.ExportText(),
       id: WRITER_COMMAND_IDS.exportText,
-      invalidates: ["lifecycle"],
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0106",
@@ -391,9 +340,6 @@ export function createWriterViewCommandRegistry(
       execute: (_context, arguments_): Promise<void> =>
         target.Copy(getWriterCommandArguments<unknown>(arguments_)),
       id: WRITER_COMMAND_IDS.copy,
-      invalidates: ["lifecycle"],
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0110",
@@ -401,9 +347,6 @@ export function createWriterViewCommandRegistry(
       execute: (_context, arguments_): Promise<void> =>
         target.Cut(getWriterCommandArguments<unknown>(arguments_)),
       id: WRITER_COMMAND_IDS.cut,
-      invalidates: ["document", "history", "selection", "lifecycle"],
-      target: "view",
-      undoPolicy: "record",
     },
     {
       capabilityId: "CAP-0110",
@@ -411,51 +354,36 @@ export function createWriterViewCommandRegistry(
       execute: (_context, arguments_): Promise<void> =>
         target.Paste(getWriterCommandArguments<unknown>(arguments_)),
       id: WRITER_COMMAND_IDS.paste,
-      invalidates: ["document", "history", "selection", "lifecycle"],
-      target: "view",
-      undoPolicy: "record",
     },
     {
       capabilityId: "CAP-0103",
       /** Requests browser Select All projection. @returns Nothing. */
       execute: (): void => target.RequestSelectAll(),
       id: WRITER_COMMAND_IDS.selectAll,
-      invalidates: ["selection"],
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0104",
       /** Toggles status-bar visibility. @returns Nothing. */
       execute: (): void => target.ToggleStatusBar(),
       id: WRITER_COMMAND_IDS.toggleStatusBar,
-      invalidates: ["view"],
       /** Reads status-bar visibility. @returns Checked state. */
       isChecked: (): boolean => target.IsStatusBarVisible(),
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0104",
       /** Toggles horizontal-ruler visibility. @returns Nothing. */
       execute: (): void => target.ToggleHorizontalRuler(),
       id: WRITER_COMMAND_IDS.toggleHorizontalRuler,
-      invalidates: ["view"],
       /** Reads horizontal-ruler visibility. @returns Checked state. */
       isChecked: (): boolean => target.IsHorizontalRulerVisible(),
-      target: "view",
-      undoPolicy: "none",
     },
     {
       capabilityId: "CAP-0104",
       /** Toggles sidebar visibility. @returns Nothing. */
       execute: (): void => target.ToggleSidebar(),
       id: WRITER_COMMAND_IDS.toggleSidebar,
-      invalidates: ["view"],
       /** Reads sidebar visibility. @returns Checked state. */
       isChecked: (): boolean => target.IsSidebarVisible(),
-      target: "view",
-      undoPolicy: "none",
     },
   ]);
 }

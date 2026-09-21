@@ -40,7 +40,7 @@ import {
   RES_PARATR_LINESPACING,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
-import { getDefaultFont, getWriterDefaultFontLanguage } from "./default-font";
+import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "./default-font";
 import type { SwTextFormatColl } from "./fmtcol";
 
 /** Direct item values created by one upstream pool-style switch branch. */
@@ -188,16 +188,15 @@ function applyScriptFonts(collection: SwTextFormatColl, role: "fixed" | "heading
     [RES_CHRATR_CJK_FONT, "cjk"],
     [RES_CHRATR_CTL_FONT, "ctl"],
   ] as const;
-  for (const [which, script] of requests)
-    collection.SetFormatAttr(
-      new SvxFontItem(
-        getDefaultFont(
-          document.GetDefaultFontDevice(),
-          role,
-          getWriterDefaultFontLanguage(document.GetLocale(), script),
-          script,
-        ),
-        which,
-      ),
+  for (const [which, script] of requests) {
+    const selection = getDefaultFontSelection(
+      document.GetDefaultFontDevice(),
+      role,
+      getWriterDefaultFontLanguage(document.GetLocale(), script),
+      script,
     );
+    collection.SetFormatAttr(
+      new SvxFontItem(selection.requestedFamily, which, selection.resolvedFamily),
+    );
+  }
 }

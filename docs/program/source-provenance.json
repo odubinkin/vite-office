@@ -2837,7 +2837,10 @@
         "SwUndoRedoContext",
         "SwUndo",
         "GetUndoTextNode",
-        "CopyTextRangeRuns"
+        "CopyTextFragment",
+        "CopyUndoFragment",
+        "GetUndoFragmentLength",
+        "ReplaceUndoRange"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwUndo, SwUndRng::SwUndRng, SwUndRng::SetValues, SwUndRng::SetPaM and the bounded SwUndoCursorPosition, SwUndoCursorState, SwUndoRedoContext contract remain intentionally omitted."
@@ -3595,11 +3598,10 @@
       "localPath": "apps/office/src/sw/source/uibase/uiview/viewfunc.ts",
       "localSymbols": [
         "createWriterWorkbenchDocument",
-        "getNextWriterParagraphId",
         "getActiveWriterParagraph"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside Point, SfxPrinter, Size, SvxRuler and the bounded createWriterWorkbenchDocument, getNextWriterParagraphId, getActiveWriterParagraph contract remain intentionally omitted."
+        "Upstream obligations outside Point, SfxPrinter, Size, SvxRuler and the bounded createWriterWorkbenchDocument, getActiveWriterParagraph contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
         "Provides pure Writer workbench document and paragraph identity helpers."

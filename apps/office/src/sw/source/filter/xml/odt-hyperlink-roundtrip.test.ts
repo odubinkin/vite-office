@@ -23,7 +23,7 @@ function upstreamOdt(relativePath: string): Uint8Array {
 
 describe("Writer upstream hyperlink ODT fixtures", /** Runs exact LibreOffice package compatibility cases. @returns Nothing. */ () => {
   it("exports link transitions and all supported ODF hyperlink attributes", /** Covers adjacent links, link closure before plain text, and target-frame show mapping. @returns Nothing. */ async () => {
-    const document = createWriterDocument("link-export");
+    const document = createWriterDocument();
     const paragraph = document.paragraphs[0];
     if (paragraph === undefined) throw new Error("Writer hyperlink export paragraph is missing.");
     paragraph.InsertText("one two plain", 0);

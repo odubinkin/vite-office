@@ -53,7 +53,7 @@ import {
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem } from "../para/paratr";
-import { getDefaultFont, getWriterDefaultFontLanguage } from "../doc/default-font";
+import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "../doc/default-font";
 
 /** Writer-owned item pool with defaults for the currently implemented paragraph WhichIds. */
 export class SwAttrPool extends SfxItemPool {
@@ -65,20 +65,29 @@ export class SwAttrPool extends SfxItemPool {
     const defaults = new Map([
       [
         RES_CHRATR_FONT,
-        getDefaultFont(device, "text", getWriterDefaultFontLanguage(locale, "western"), "western"),
+        getDefaultFontSelection(
+          device,
+          "text",
+          getWriterDefaultFontLanguage(locale, "western"),
+          "western",
+        ),
       ],
       [
         RES_CHRATR_CJK_FONT,
-        getDefaultFont(device, "text", getWriterDefaultFontLanguage(locale, "cjk"), "cjk"),
+        getDefaultFontSelection(device, "text", getWriterDefaultFontLanguage(locale, "cjk"), "cjk"),
       ],
       [
         RES_CHRATR_CTL_FONT,
-        getDefaultFont(device, "text", getWriterDefaultFontLanguage(locale, "ctl"), "ctl"),
+        getDefaultFontSelection(device, "text", getWriterDefaultFontLanguage(locale, "ctl"), "ctl"),
       ],
     ]);
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       this.RegisterDefaultItem(
-        new SvxFontItem(defaults.get(which) as string, which),
+        new SvxFontItem(
+          defaults.get(which)?.requestedFamily as string,
+          which,
+          defaults.get(which)?.resolvedFamily as string,
+        ),
         /** Restores a font item. @param value - Persisted family. @returns Font item. */ (value) =>
           new SvxFontItem(String(value), which),
       );

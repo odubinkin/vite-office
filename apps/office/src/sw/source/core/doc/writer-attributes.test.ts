@@ -54,7 +54,8 @@ import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc
 
 /** Creates one canonical Writer fixture. @param id - Document identity. @returns Writer graph. */
 function createFixture(id = "writer-attrs"): WriterDocument {
-  return createWriterDocument(`${id}-p-1`);
+  void id;
+  return createWriterDocument();
 }
 
 /** Returns a deferred operation for rejection assertions. @param operation - Operation under test. @returns Same operation. */
@@ -66,7 +67,7 @@ function throwing(operation: () => unknown): () => unknown {
 class GenericContentNode extends SwContentNode {
   /** Creates a generic content node. @param nodes - Owning node array. @param section - Content section. @param format - Generic format collection. @returns Nothing. */
   public constructor(nodes: SwNodes, section: SwStartNode, format: SwFormatColl) {
-    super(nodes, "generic", section, format);
+    super(nodes, section, format);
   }
 
   /** Returns its empty test content length. @returns Zero. */
@@ -270,9 +271,13 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
       { attributes: { bold: true, italic: true, underline: true }, text: "ab" },
     ]);
     expect(node.GetpSwpHints()).toBeUndefined();
-    node.ReplaceRange(0, 1, [
-      { attributes: { bold: false, italic: false, underline: false }, text: "a" },
-    ]);
+    node.ReplaceRange(
+      0,
+      1,
+      node.CreateTextFragment([
+        { attributes: { bold: false, italic: false, underline: false }, text: "a" },
+      ]),
+    );
     expect(node.runs).toEqual([
       { attributes: { bold: false, italic: false, underline: false }, text: "a" },
       { attributes: { bold: true, italic: true, underline: true }, text: "b" },

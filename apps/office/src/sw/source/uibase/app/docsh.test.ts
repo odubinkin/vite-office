@@ -22,7 +22,7 @@ function metadata(title = "Shell document", id = "shell-document") {
 
 /** Creates one model/object-shell pair and optionally edits it through SwWrtShell. @param text - Optional body text. @param title - Visible title. @param id - Stable identity. @returns Live shell fixture. */
 function fixture(text = "", title = "Shell document", id = "shell-document") {
-  const document = createWriterDocument("p-1");
+  const document = createWriterDocument();
   const shell = new SwDocShell(document, metadata(title, id));
   const writerShell = new SwWrtShell(shell);
   if (text.length > 0) writerShell.Insert(text);
@@ -41,8 +41,8 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     const bytes = await active.shell.SerializeOdt();
     expect(new ZipFile(bytes).getEntryNames()).toContain("content.xml");
 
-    const fresh = active.shell.InitNew(metadata("New document", "new-document"), "new-p-1");
-    expect(fresh.paragraphs).toMatchObject([{ id: "new-p-1", text: "" }]);
+    const fresh = active.shell.InitNew(metadata("New document", "new-document"));
+    expect(fresh.paragraphs).toMatchObject([{ text: "" }]);
     const loaded = await active.shell.Load(bytes, metadata("Fallback", "opened-document"));
     expect(active.shell.GetDoc()).toBe(loaded);
     expect(active.shell.GetDocumentState()).toMatchObject({
@@ -100,14 +100,12 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
           ) => (resolveImport = resolve),
         ),
     };
-    const document = createWriterDocument("p-1");
+    const document = createWriterDocument();
     const shell = new SwDocShell(document, metadata(), undefined, filter);
     const opening = shell.Open(new Uint8Array([1]), metadata("Incoming"));
-    const replacement = shell.InitNew(metadata("Replacement"), "replacement-p-1");
+    const replacement = shell.InitNew(metadata("Replacement"));
     const candidateState = metadata("Candidate", "candidate");
-    resolveImport?.(
-      createOdtFilterDocument(createWriterDocument("candidate-p-1"), candidateState.title),
-    );
+    resolveImport?.(createOdtFilterDocument(createWriterDocument(), candidateState.title));
     await expect(opening).rejects.toMatchObject({ category: "stale" });
     expect(shell.GetDoc()).toBe(replacement);
   });
@@ -220,7 +218,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       isModified: true,
       lifecycle: "dirty" as const,
     };
-    const initiallyDirty = new SwDocShell(createWriterDocument("dirty-p-1"), dirtyState);
+    const initiallyDirty = new SwDocShell(createWriterDocument(), dirtyState);
     expect(initiallyDirty.GetUndoManager().IsAtSavePosition()).toBe(false);
 
     const active = fixture("dirty");
@@ -283,7 +281,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     expect(active.shell.GetDocumentState()).toBe(stateBeforePrimaryFailure);
     expect(active.shell.GetMedium()).toBe(mediumBeforePrimaryFailure);
 
-    const writable = new SwDocShell(createWriterDocument("writable-p-1"), dirtyState, {
+    const writable = new SwDocShell(createWriterDocument(), dirtyState, {
       indexedDbKey: dirtyState.id,
       kind: "browser-local",
       name: dirtyState.title,
@@ -324,7 +322,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
         return { generation: 1 };
       },
     );
-    racing.shell.InitNew(metadata("Replacement", "replacement"), "replacement-p-1");
+    racing.shell.InitNew(metadata("Replacement", "replacement"));
     const replacementMedium = racing.shell.GetMedium();
     completeWrite?.();
     await expect(saving).rejects.toThrow("no longer active");
@@ -356,7 +354,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     ).toThrow("Closed document shells");
     expect(
       /** Replaces after close. @returns Invalid result. */ () =>
-        active.shell.InitNew(metadata("Other", "other"), "other-p-1"),
+        active.shell.InitNew(metadata("Other", "other")),
     ).toThrow("Closed document shells");
     expect(
       /** Executes a command after close. @returns Invalid result. */ () =>

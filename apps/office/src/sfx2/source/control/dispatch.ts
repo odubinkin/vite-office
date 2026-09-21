@@ -11,12 +11,6 @@ import {
   SfxPoolItem,
 } from "../../../svl/source/items/poolitem";
 
-/** Identifies the shell layer that owns one command handler. */
-export type CommandTarget = "application" | "frame" | "shell" | "view";
-
-/** Declares whether a command participates in document undo recording. */
-export type CommandUndoPolicy = "none" | "record";
-
 /** Represents the UI state returned by the shell that currently resolves a command. */
 export interface CommandState<Value = unknown> {
   /** Whether dispatch may execute the command in the current shell context. */
@@ -59,8 +53,6 @@ export interface CommandDefinition<Context, Result = unknown, Arguments = unknow
   readonly id: string;
   /** Numeric slot identity generated from the pinned HRC/SDI declaration. */
   readonly slotId?: number;
-  /** State dependencies invalidated after relevant document or view changes. */
-  readonly invalidates?: readonly string[];
   /** Non-blank human-readable label for future accessible command surfaces. */
   readonly label: string;
   /** Shared presentation contract; legacy non-UI registries may omit it. */
@@ -69,10 +61,6 @@ export interface CommandDefinition<Context, Result = unknown, Arguments = unknow
   readonly shortcut?: string;
   /** Optional additional shortcuts that resolve to this same command identity. */
   readonly shortcuts?: readonly string[];
-  /** Shell layer that owns command execution and state. */
-  readonly target?: CommandTarget;
-  /** Undo recording contract for the command. */
-  readonly undoPolicy?: CommandUndoPolicy;
   /** Optional predicate evaluated at dispatch time without mutating context. */
   readonly isEnabled?: (context: Context) => boolean;
   /** Optional checked-state predicate evaluated through the resolving shell. */

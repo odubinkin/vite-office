@@ -236,7 +236,7 @@ describe("App" /**
     expect(editor.querySelector("span")).toHaveStyle({ fontFamily: "Noto Serif" });
 
     const styleSelect = screen.getByLabelText("Paragraph style");
-    expect(within(styleSelect).getAllByRole("option")).toHaveLength(126);
+    expect(within(styleSelect).getAllByRole("option")).toHaveLength(37);
     for (const [style, fontSize] of [
       ["title", "28pt"],
       ["subtitle", "18pt"],
@@ -363,7 +363,7 @@ describe("App" /**
 
   it("opens a supported ODT atomically and starts a parseable ODT download" /** Verifies the product File boundary uses the existing Writer package filters. @returns A fulfilled assertion promise. */, async () => {
     const importedState = createDocument({ id: "fixture", suiteId: "writer", title: "Opened ODT" });
-    const imported = createWriterDocument("fixture-p-1");
+    const imported = createWriterDocument();
     new SwWrtShell(new SwDocShell(imported, importedState)).Insert("Imported package body");
     const inputClick = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(
       /** Supplies the generated ODT to the transient browser chooser. @param this - Transient file input. @returns Nothing. */
@@ -543,9 +543,9 @@ describe("App" /**
         suiteId: "writer",
         title: "Untitled Writer Document",
       });
-      const irregular = createWriterDocument("writer-paragraph-1");
+      const irregular = createWriterDocument();
       irregular.paragraphs[0]?.SetText("First stored paragraph");
-      irregular.nodes.MakeTextNode("writer-paragraph-3", "Third stored paragraph");
+      irregular.nodes.MakeTextNode("Third stored paragraph");
       await saveWriterDocument(adapter, irregular, irregularState);
       render(<App />);
       await invokeWriterFileCommand("Open Local Copy…");

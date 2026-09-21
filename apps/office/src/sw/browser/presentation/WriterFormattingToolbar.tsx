@@ -18,7 +18,7 @@ import {
 import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
 import type { BrowserLocalizationService } from "../../../framework/browser/localization/browser-localization";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-import { WRITER_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
+import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import { getWriterParagraphStyleCommandId } from "../../uiconfig/swriter/menubar/menubar-commands";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
@@ -165,7 +165,7 @@ function renderParagraphStyleOptions(
       label,
     ]) => (
       <optgroup key={group} label={localization.GetText(`writer.style-group.${group}`, label)}>
-        {WRITER_PARAGRAPH_STYLE_POOL.filter(
+        {WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.filter(
           /** Selects group styles. @param style - Candidate. @returns Whether included. */ (
             style,
           ) => style.group === group,
@@ -175,7 +175,7 @@ function renderParagraphStyleOptions(
             let parentId = style.parentId;
             while (parentId !== undefined && depth < 8) {
               depth += 1;
-              parentId = WRITER_PARAGRAPH_STYLE_POOL.find(
+              parentId = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
                 /** Finds the current parent. @param candidate - Candidate. @returns Whether matching. */ (
                   candidate,
                 ) => candidate.id === parentId,

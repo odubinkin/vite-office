@@ -55,7 +55,7 @@ function metadata() {
 
 /** Creates one filter-only document transfer for transport tests. @returns Current Writer transfer. */
 function snapshot() {
-  return createOdtFilterDocument(createWriterDocument("p-1"), metadata().title);
+  return createOdtFilterDocument(createWriterDocument(), metadata().title);
 }
 
 /** Reads the last posted request identity. @param worker - Fake transport. @returns Request ID. */

@@ -79,7 +79,7 @@ async function rewritePackage(
 
 /** Creates the smallest valid Writer ODT fixture. @returns ODT bytes. */
 function basicOdt(): Uint8Array {
-  return writeTargetOdt(createWriterDocument("p1"));
+  return writeTargetOdt(createWriterDocument());
 }
 
 /** Finds a ZIP signature from the end. @param bytes - Archive. @param signature - Little-endian signature. @returns Offset. */
@@ -132,7 +132,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("writes deterministic ODF 1.3 packages and restores canonical formatting" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
-    const writer = createWriterDocument("source-1");
+    const writer = createWriterDocument();
     writer.GetDfltTextFormatColl().SetFormatName("Body < text");
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       writer.GetDfltTextFormatColl().SetFormatAttr(new SvxFontItem("Noto Serif", which));
@@ -168,24 +168,28 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     const first = writer.paragraphs[0];
     first?.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     first?.SetParagraphAlignment("right");
-    first?.ReplaceRange(0, 0, [
-      {
-        attributes: { bold: true, fontFamily: "Noto Sans", italic: false, underline: false },
-        text: "Bold  text",
-      },
-      {
-        attributes: { bold: false, italic: true, underline: true },
-        text: "\titalic\n<&>",
-      },
-    ]);
-    const second = writer.nodes.MakeTextNode("source-2", "plain");
+    first?.ReplaceRange(
+      0,
+      0,
+      first.CreateTextFragment([
+        {
+          attributes: { bold: true, fontFamily: "Noto Sans", italic: false, underline: false },
+          text: "Bold  text",
+        },
+        {
+          attributes: { bold: false, italic: true, underline: true },
+          text: "\titalic\n<&>",
+        },
+      ]),
+    );
+    const second = writer.nodes.MakeTextNode();
     second.SetParagraphAlignment("justify");
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       second.SetAttr(new SvxWeightItem(FontWeight.NORMAL, which));
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       second.SetAttr(new SvxPostureItem(FontItalic.NONE, which));
     second.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
-    const third = writer.nodes.MakeTextNode("source-3", "not underlined");
+    const third = writer.nodes.MakeTextNode();
     third.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
     first?.SetParagraphList({ kind: "numbered", level: 0 });
     second.SetParagraphList({ kind: "numbered", level: 1 });
@@ -259,7 +263,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("imports LibreOffice-shaped nested and continued list blocks" /** Verifies one-level automatic styles become ten-level SwNumRule records and list identity survives continuation segments. @returns Nothing. */, async () => {
-    const empty = createWriterDocument("p1");
+    const empty = createWriterDocument();
     const styles = exportStylesXml(empty);
     const listStyles = [
       '<text:list-style style:name="L1" style:display-name="Numbering 1"><text:list-level-style-number text:level="1" style:num-suffix="." style:num-format="1"><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"/></text:list-level-style-number></text:list-style>',
@@ -443,20 +447,20 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       (writer: ReturnType<typeof createWriterDocument>) =>
         writer.paragraphs[0]?.SetParagraphList({ kind: "none", level: 0, styleId: "List" }),
     ]) {
-      const writer = createWriterDocument("p1");
+      const writer = createWriterDocument();
       configure(writer);
       expect(
         /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
         () => writeTargetOdt(writer),
       ).toThrow("without SwNumRule");
     }
-    const unknownRule = createWriterDocument("p1");
+    const unknownRule = createWriterDocument();
     unknownRule.paragraphs[0]?.SetAttr(new SwNumRuleItem("Missing"));
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportContentXml(unknownRule),
     ).toThrow("cannot resolve SwNumRule Missing");
-    const invalidCharacter = createWriterDocument("p1");
+    const invalidCharacter = createWriterDocument();
     const invalidCharacterSet = invalidCharacter
       .GetDfltTextFormatColl()
       .GetAttrSet() as unknown as {
@@ -467,7 +471,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportStylesXml(invalidCharacter),
     ).toThrow("ODT character item is invalid");
-    const scriptSpecificCharacter = createWriterDocument("p1");
+    const scriptSpecificCharacter = createWriterDocument();
     scriptSpecificCharacter
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
@@ -475,7 +479,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportStylesXml(scriptSpecificCharacter),
     ).toThrow("script-specific character formatting");
-    const styleItem = createWriterDocument("p1");
+    const styleItem = createWriterDocument();
     styleItem.GetTextFormatColl("heading-1").SetFormatAttr(new SwNumRuleItem("Rule"));
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
@@ -493,11 +497,11 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       [SvxAdjust.Block, "justify"],
       [SvxAdjust.BlockLine, "justify"],
     ] as const) {
-      const writer = createWriterDocument("p1");
+      const writer = createWriterDocument();
       writer.GetDfltTextFormatColl().SetFormatAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));
       expect(exportStylesXml(writer)).toContain(`fo:text-align="${expected}"`);
     }
-    const invalidItem = createWriterDocument("p1");
+    const invalidItem = createWriterDocument();
     const invalidSet = invalidItem.GetDfltTextFormatColl().GetAttrSet() as unknown as {
       items: Map<number, unknown>;
     };
@@ -509,7 +513,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => exportStylesXml(invalidItem),
     ).toThrow("adjustment item is invalid");
-    const invalidValue = createWriterDocument("p1");
+    const invalidValue = createWriterDocument();
     const item = new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST);
     (item as unknown as { adjust: number }).adjust = SvxAdjust.End;
     const valueSet = invalidValue.GetDfltTextFormatColl().GetAttrSet() as unknown as {
@@ -564,18 +568,18 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     ).rejects.toThrow("XML stream exceeds size limit");
     expect(
       /** Exports with a deliberately strict complete-package limit. @returns ODT bytes. */ () =>
-        new SwXMLWriter().Write(createWriterDocument("p1"), metadata(), { maxOutputBytes: 1 }),
+        new SwXMLWriter().Write(createWriterDocument(), metadata(), { maxOutputBytes: 1 }),
     ).toThrow("export exceeds size limit");
     expect(
       /** Cancels before Writer serialization proceeds. @returns ODT bytes. */ () =>
-        writeTargetOdt(createWriterDocument("p1"), metadata(), {
+        writeTargetOdt(createWriterDocument(), metadata(), {
           isCancelled: /** Reports deterministic cancellation. @returns True. */ () => true,
         }),
     ).toThrow("cancelled");
   });
 
   it("validates XML roots, declarations, required Writer styles, and body structure" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
-    const writer = createWriterDocument("p1");
+    const writer = createWriterDocument();
     writer.GetTextFormatColl("heading-1");
     const styles = exportStylesXml(writer);
     const content = exportContentXml(writer);
@@ -771,7 +775,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("logs and ignores LibreOffice and unknown style attributes", /** Verifies tolerant upstream-shaped attribute import. @returns Nothing. */ () => {
-    const writer = createWriterDocument("p1");
+    const writer = createWriterDocument();
     const styles = exportStylesXml(writer).replace(
       'style:family="paragraph"',
       'style:family="paragraph" style:default-outline-level="0" fo:color="#000000"',
@@ -794,7 +798,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("rejects malformed style records and unsupported semantic properties" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
-    const writer = createWriterDocument("p1");
+    const writer = createWriterDocument();
     const styles = exportStylesXml(writer);
     const content = exportContentXml(writer);
     const meta = exportMetaXml(metadata().title);
@@ -912,7 +916,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("imports normal character values and every ODF alignment spelling" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
-    const writer = createWriterDocument("p1");
+    const writer = createWriterDocument();
     const styles = exportStylesXml(writer);
     const baseContent = exportContentXml(writer);
     const meta = exportMetaXml(metadata().title);
@@ -950,7 +954,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       [SvxAdjust.Center, "center"],
       [SvxAdjust.Block, "justify"],
     ] as const) {
-      const styledWriter = createWriterDocument("p1");
+      const styledWriter = createWriterDocument();
       styledWriter
         .GetDfltTextFormatColl()
         .SetFormatAttr(new SvxAdjustItem(adjust, RES_PARATR_ADJUST));
@@ -969,7 +973,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
               : SvxAdjust.Block,
       );
     }
-    const headingWriter = createWriterDocument("p1");
+    const headingWriter = createWriterDocument();
     headingWriter
       .GetTextFormatColl("heading-1")
       .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST));

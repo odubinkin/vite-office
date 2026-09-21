@@ -176,9 +176,9 @@ export class SwDocShell extends SfxObjectShell {
     return document;
   }
 
-  /** Replaces the shell contents with a new empty Writer graph. @param metadata - New lifecycle metadata. @param initialTextNodeId - Initial paragraph identity. @returns New model. */
-  public InitNew(metadata: OfficeDocument, initialTextNodeId: string): SwDoc {
-    return this.ReplaceDocument(new SwDoc(initialTextNodeId), metadata, {
+  /** Replaces the shell contents with a new empty Writer graph. @param metadata - New lifecycle metadata. @returns New model. */
+  public InitNew(metadata: OfficeDocument): SwDoc {
+    return this.ReplaceDocument(new SwDoc(), metadata, {
       kind: "untitled",
       name: metadata.title,
     });

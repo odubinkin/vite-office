@@ -17,12 +17,12 @@ export class SwNodes {
 
   /** Creates LibreOffice's five fixed node sections in their canonical order. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
-    const root = this.appendStartNode("postits");
-    this.endOfPostIts = this.appendEndNode("postits-end", root);
-    this.endOfInserts = this.createFixedSection("inserts", undefined);
-    this.endOfAutotext = this.createFixedSection("autotext", root);
-    this.endOfRedlines = this.createFixedSection("redlines", root);
-    this.endOfContent = this.createFixedSection("content", root);
+    const root = this.appendStartNode();
+    this.endOfPostIts = this.appendEndNode(root);
+    this.endOfInserts = this.createFixedSection(undefined);
+    this.endOfAutotext = this.createFixedSection(root);
+    this.endOfRedlines = this.createFixedSection(root);
+    this.endOfContent = this.createFixedSection(root);
   }
 
   /** Returns the document that owns this node array. @returns Owning document. */
@@ -89,34 +89,10 @@ export class SwNodes {
     );
   }
 
-  /** Finds a body text node by its stable browser identity. @param id - Stable text-node identity. @returns Matching node, when present. */
-  public findTextNode(id: string): SwTextNode | undefined {
-    return this.getTextNodes().find(
-      /** Matches one Writer text-node identity. @param node - Body text node. @returns True when node owns id. */
-      function hasId(node): boolean {
-        return node.id === id;
-      },
-    );
-  }
-
-  /** Allocates a non-colliding external projection label without storing it in document persistence. @returns Available label. */
-  public GetUniqueTextNodeLabel(): string {
-    let ordinal = this.getTextNodes().length + 1;
-    let candidate = `writer-paragraph-${ordinal}`;
-    while (this.findTextNode(candidate) !== undefined) {
-      ordinal += 1;
-      candidate = `writer-paragraph-${ordinal}`;
-    }
-    return candidate;
-  }
-
-  /** Inserts a new text node immediately before the content end sentinel. @param id - Stable node identity. @param text - Initial text. @returns Inserted text node. */
-  public MakeTextNode(id: string, text = ""): SwTextNode {
-    if (id.trim().length === 0) throw new Error("Text node id must not be blank.");
-    if (this.findTextNode(id) !== undefined) throw new Error(`Duplicate paragraph: ${id}`);
+  /** Inserts a new text node immediately before the content end sentinel. @param text - Initial text. @returns Inserted text node. */
+  public MakeTextNode(text = ""): SwTextNode {
     const node = new SwTextNode(
       this,
-      id,
       this.endOfContent.StartOfSectionNode(),
       this.document.GetDfltTextFormatColl(),
       text,
@@ -130,8 +106,6 @@ export class SwNodes {
   public insertTextNodeAfter(source: SwTextNode, node: SwTextNode): void {
     if (source.GetNodes() !== this || node.GetNodes() !== this)
       throw new Error("SwTextNode belongs to another SwNodes array.");
-    if (this.findTextNode(node.id) !== undefined)
-      throw new Error(`Duplicate paragraph: ${node.id}`);
     this.nodeArray.splice(source.GetIndex() + 1, 0, node);
     this.document.GetDocumentListsManager().RegisterListItem(node);
     this.document.NotifyModelChange({
@@ -161,10 +135,9 @@ export class SwNodes {
   public replaceTextNode(node: SwTextNode, replacement: SwTextNode): void {
     if (node.GetNodes() !== this || replacement.GetNodes() !== this)
       throw new Error("SwTextNode belongs to another SwNodes array.");
+    if (this.indexOfOrUndefined(replacement) !== undefined)
+      throw new Error("Replacement SwTextNode already belongs to body content.");
     const index = node.GetIndex();
-    const duplicate = this.findTextNode(replacement.id);
-    if (duplicate !== undefined && duplicate !== node)
-      throw new Error(`Duplicate paragraph: ${replacement.id}`);
     node.MoveAllContentIndicesTo(replacement);
     this.document.GetDocumentListsManager().UnregisterListItem(node, node.GetListId());
     this.nodeArray[index] = replacement;
@@ -222,22 +195,22 @@ export class SwNodes {
     return index < 0 ? undefined : index;
   }
 
-  /** Creates one fixed start/end section pair and returns its end sentinel. @param name - Section identity component. @param parent - Optional parent section. @returns Created end sentinel. */
-  private createFixedSection(name: string, parent: SwStartNode | undefined): SwEndNode {
-    const start = this.appendStartNode(name, parent);
-    return this.appendEndNode(`${name}-end`, start);
+  /** Creates one fixed start/end section pair and returns its end sentinel. @param parent - Optional parent section. @returns Created end sentinel. */
+  private createFixedSection(parent: SwStartNode | undefined): SwEndNode {
+    const start = this.appendStartNode(parent);
+    return this.appendEndNode(start);
   }
 
-  /** Appends a start sentinel. @param name - Sentinel identity component. @param parent - Optional parent section. @returns Created start sentinel. */
-  private appendStartNode(name: string, parent?: SwStartNode): SwStartNode {
-    const node = new SwStartNode(this, `__sw_${name}`, parent);
+  /** Appends a start sentinel. @param parent - Optional parent section. @returns Created start sentinel. */
+  private appendStartNode(parent?: SwStartNode): SwStartNode {
+    const node = new SwStartNode(this, parent);
     this.nodeArray.push(node);
     return node;
   }
 
-  /** Appends an end sentinel and links it to its start sentinel. @param name - Sentinel identity component. @param start - Matching section start. @returns Created end sentinel. */
-  private appendEndNode(name: string, start: SwStartNode): SwEndNode {
-    const node = new SwEndNode(this, `__sw_${name}`, start);
+  /** Appends an end sentinel and links it to its start sentinel. @param start - Matching section start. @returns Created end sentinel. */
+  private appendEndNode(start: SwStartNode): SwEndNode {
+    const node = new SwEndNode(this, start);
     this.nodeArray.push(node);
     start.setEndOfSection(node);
     return node;

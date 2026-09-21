@@ -87,7 +87,7 @@ export class WriterViewProjection implements WriterPresentationProjector {
               (
                 node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
               ).ResolveTextFirstLineOffset() / 20,
-            fontFamily: (node.GetAttr(RES_CHRATR_FONT) as SvxFontItem).GetFamilyName(),
+            fontFamily: (node.GetAttr(RES_CHRATR_FONT) as SvxFontItem).GetResolvedFamilyName(),
             fontStyle: (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue()
               ? "italic"
               : "normal",

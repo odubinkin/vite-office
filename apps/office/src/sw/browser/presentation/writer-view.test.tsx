@@ -28,6 +28,7 @@ import { WriterWorkbench } from "./writer-view";
 import { WriterViewProjection } from "./writer-view-projection";
 import {
   getTestSelection,
+  getNodeId,
   handleTestInput,
   setTestCursor,
   setTestSelection,
@@ -240,8 +241,6 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       frame.GetDispatcher().QueryDispatch(WRITER_COMMAND_IDS.alignCenter)?.command,
     ).toMatchObject({
       capabilityId: "CAP-0112",
-      target: "shell",
-      undoPolicy: "record",
     });
     expect(view.QueryCommand(WRITER_COMMAND_IDS.alignCenter)?.id).toBe(
       WRITER_COMMAND_IDS.alignCenter,
@@ -322,7 +321,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
   it("publishes mixed formatting from the persistent directional SwPaM" /** Verifies selection state is owned by SwWrtShell, command query exposes mixed state, formatting retains direction, and Undo restores it. @returns Nothing; shell and dispatch state are asserted without DOM input. */, function publishesCanonicalSelectionState(): void {
     const session = createWriterDocumentSession(createServices());
     const shell = session.view.GetWrtShell();
-    const paragraphId = shell.GetActiveParagraph().id;
+    const paragraphId = getNodeId(shell, shell.GetActiveParagraph());
     expect(handleTestInput(shell, "insertText", "ab")).toBe(true);
     setTestSelection(shell, {
       mark: { offset: 0, paragraphId },
@@ -557,7 +556,10 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       storedDocumentOpen,
     };
     const session = createWriterDocumentSession(services);
-    const paragraphId = session.view.GetWrtShell().GetActiveParagraph().id;
+    const paragraphId = getNodeId(
+      session.view.GetWrtShell(),
+      session.view.GetWrtShell().GetActiveParagraph(),
+    );
     setTestCursor(session.view.GetWrtShell(), paragraphId, 0);
     session.view.GetWrtShell().Insert("dirty");
     const dirtyGeneration = session.docShell.GetDocumentState().contentGeneration;
@@ -607,7 +609,10 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       ...createServices(),
       recoverySave: recoveryStorage,
     });
-    const paragraphId = first.view.GetWrtShell().GetActiveParagraph().id;
+    const paragraphId = getNodeId(
+      first.view.GetWrtShell(),
+      first.view.GetWrtShell().GetActiveParagraph(),
+    );
     setTestCursor(first.view.GetWrtShell(), paragraphId, 0);
     first.view.GetWrtShell().Insert("Recovered text");
     await expect(first.autoRecovery?.SaveDocument("writer-workbench")).resolves.toMatchObject({
@@ -674,7 +679,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
 
   it("retains explicit construction order before frame attachment" /** Verifies pre-frame invalidation remains local and dispatch requires an attached frame. @returns Nothing. */, function enforcesFrameConstructionOrder(): void {
     const state = createDocument({ id: "isolated", suiteId: "writer", title: "Isolated Writer" });
-    const docShell = new SwDocShell(new SwDoc("isolated-paragraph-1"), state);
+    const docShell = new SwDocShell(new SwDoc(), state);
     const view = new SwView(docShell, createWriterViewControllerFactory(createServices()));
     expect(
       /** Dispatches before frame attachment. @returns Nothing before the expected exception. */
@@ -694,8 +699,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
   });
 
   it("keeps projection keys scoped to their live canonical document", /** Verifies browser keys cannot resolve into another document graph. @returns Nothing. */ function scopesProjectionKeys(): void {
-    const first = new SwDoc("first");
-    const second = new SwDoc("second");
+    const first = new SwDoc();
+    const second = new SwDoc();
     const projection = new WriterViewProjection();
     const firstNode = first.paragraphs[0];
     if (firstNode === undefined) throw new Error("First Writer document has no paragraph.");

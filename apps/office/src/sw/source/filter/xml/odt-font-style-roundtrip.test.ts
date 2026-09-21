@@ -32,7 +32,7 @@ async function rewriteStylesXml(
 
 describe("Writer ODT font and style compatibility", /** Groups file compatibility tests. @returns Nothing. */ () => {
   it("preserves LibreOffice-declared Title parents across export and import", /** Verifies named-style parent linkage follows the ODF declaration instead of the built-in pool default. @returns Nothing. */ async () => {
-    const writer = createWriterDocument("title-parent");
+    const writer = createWriterDocument();
     writer.GetTextFormatColl("title");
     writer.GetTextFormatColl("subtitle");
     const state = createDocument({ id: "title-parent", suiteId: "writer", title: "Title parent" });
@@ -104,7 +104,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
   });
 
   it("preserves LibreOffice-declared Title follow styles across export and import", /** Verifies named-style follow linkage is resolved after style creation with upstream fallback semantics. @returns Nothing. */ async () => {
-    const writer = createWriterDocument("title-follow");
+    const writer = createWriterDocument();
     writer.GetTextFormatColl("title");
     writer.GetTextFormatColl("subtitle");
     const state = createDocument({ id: "title-follow", suiteId: "writer", title: "Title follow" });
@@ -160,7 +160,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
   });
 
   it("round-trips the complete LibreOffice paragraph-style hierarchy and font-face references", /** Verifies open-save-reopen semantics. @returns Nothing. */ async () => {
-    const writer = createWriterDocument("all-styles");
+    const writer = createWriterDocument();
     for (const style of WRITER_PARAGRAPH_STYLE_POOL) writer.GetTextFormatColl(style.id);
     const textBody = writer.GetTextFormatColl("text-body");
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
@@ -169,17 +169,21 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     paragraph?.ChgFormatColl(writer.GetTextFormatColl("numbering-1-cont"));
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       paragraph?.SetAttr(new SvxFontItem("Paragraph Serif", which));
-    paragraph?.ReplaceRange(0, 0, [
-      {
-        attributes: {
-          bold: false,
-          fontFamily: "Noto Sans",
-          italic: false,
-          underline: false,
+    paragraph?.ReplaceRange(
+      0,
+      0,
+      paragraph.CreateTextFragment([
+        {
+          attributes: {
+            bold: false,
+            fontFamily: "Noto Sans",
+            italic: false,
+            underline: false,
+          },
+          text: "font round trip",
         },
-        text: "font round trip",
-      },
-    ]);
+      ]),
+    );
 
     const state = createDocument({ id: "odt-all", suiteId: "writer", title: "All styles" });
     const firstBytes = writeOdtDocument(writer, state);

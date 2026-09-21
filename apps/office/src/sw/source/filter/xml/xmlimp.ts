@@ -252,7 +252,8 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
   ): XMLParagraphImportTarget {
-    const node = this.document.nodes.MakeTextNode(`paragraph-${++this.paragraphCount}`);
+    this.paragraphCount += 1;
+    const node = this.document.nodes.MakeTextNode();
     node.ChgFormatColl(this.document.GetTextFormatColl(style));
     if (alignment !== undefined) node.SetParagraphAlignment(alignment);
     if (leftMargin !== undefined) node.SetParagraphTextLeftMargin(leftMargin);

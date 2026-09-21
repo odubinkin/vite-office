@@ -57,7 +57,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     ).toBe(126);
     expect(WRITER_PARAGRAPH_STYLE_POOL[0]).toMatchObject({ id: "default", poolId: 2048 });
     expect(WRITER_PARAGRAPH_STYLE_POOL.at(-1)).toMatchObject({ id: "list-heading", poolId: 12292 });
-    const document = createWriterDocument("p-1");
+    const document = createWriterDocument();
     expect(document.GetTextFormatColls()).toHaveLength(1);
     for (const style of WRITER_PARAGRAPH_STYLE_POOL) {
       const collection = document.GetTextFormatColl(style.id);
@@ -105,7 +105,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
   });
 
   it("materializes source-derived item defaults and script slots", /** Verifies representative upstream style switch branches. @returns Nothing. */ () => {
-    const document = createWriterDocument("p-1");
+    const document = createWriterDocument();
     const textBody = document.GetTextFormatColl("text-body").GetAttrSet();
     expect((textBody.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace()).toBe(
       115,

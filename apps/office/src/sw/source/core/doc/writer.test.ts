@@ -11,20 +11,17 @@ import { createWriterDocument, SwDoc } from "./doc";
 
 describe("Writer document boundaries", /** Registers construction and persistence-boundary tests. @returns Nothing. */ function defineWriterBoundaryTests(): void {
   it("constructs one canonical SwDoc without defining a second mutation API" /** Verifies the facade owns only construction while model mutation retains object identity. @returns Nothing. */, function constructsCanonicalDocument(): void {
-    const writer = createWriterDocument("p-1");
+    const writer = createWriterDocument();
 
     expect(writer).toBeInstanceOf(SwDoc);
-    expect(writer.paragraphs).toMatchObject([{ id: "p-1", text: "" }]);
+    expect(writer.paragraphs).toHaveLength(1);
+    expect(writer.paragraphs[0]?.text).toBe("");
     expect(isWriterParagraphAlignment("center")).toBe(true);
     expect(isWriterParagraphAlignment("diagonal")).toBe(false);
-    expect(
-      /** Rejects a blank initial text-node identity. @returns Invalid document. */ () =>
-        createWriterDocument(" "),
-    ).toThrow("must not be blank");
   });
 
   it("round-trips the current snapshot schema and rejects obsolete roots" /** Verifies persistence restoration remains the only document-copy boundary exposed by the facade. @returns Nothing. */, function restoresSnapshots(): void {
-    const writer = createWriterDocument("p-1");
+    const writer = createWriterDocument();
     writer.paragraphs[0]?.InsertText("Body", 0);
     const snapshot = encodeWriterDocument(writer);
     const restored = decodeWriterDocument(snapshot);

@@ -303,7 +303,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
             isActive={paragraph.id === props.activeParagraphId}
             isLast={index === props.paragraphs.length - 1}
             key={paragraph.id}
-            listMarker={getWriterParagraphListMarker(props.paragraphs, paragraph.id)}
+            listMarker={getWriterParagraphListMarker(props.paragraphs, paragraph)}
             paragraph={paragraph}
             projectionVersion={props.projectionVersion}
             retainElement={

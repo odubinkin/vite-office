@@ -2,15 +2,17 @@
 
 import {
   applyWriterTextRangeFont,
+  copyWriterTextRangeRuns,
+  getWriterTextFromRuns,
+  type SwTextFragment,
   type SwTextNode,
   type WriterParagraphAlignment,
-  type WriterTextRun,
 } from "../txtnode/ndtxt";
 import {
-  CopyTextRangeRuns,
-  CopyUndoRuns,
-  GetRunsPayloadSize,
-  GetUndoRunsLength,
+  CopyTextFragment,
+  CopyUndoFragment,
+  GetFragmentPayloadSize,
+  GetUndoFragmentLength,
   GetUndoTextNode,
   ReplaceUndoRange,
   SwUndo,
@@ -20,26 +22,26 @@ import {
 
 /** Reversible direct character formatting over one same-node range. */
 export class SwUndoAttr extends SwUndo {
-  private readonly afterRuns: readonly WriterTextRun[];
-  private readonly beforeRuns: readonly WriterTextRun[];
+  private readonly afterFragment: SwTextFragment;
+  private readonly beforeFragment: SwTextFragment;
 
   /** Creates a direct-format action. @param paragraphId - Target node. @param start - Formatted range start. @param beforeRuns - Original hints projected as runs. @param afterRuns - Resulting hints projected as runs. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private readonly start: number,
-    beforeRuns: readonly WriterTextRun[],
-    afterRuns: readonly WriterTextRun[],
+    beforeFragment: SwTextFragment,
+    afterFragment: SwTextFragment,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
   ) {
     super("Character Formatting", before, after);
-    this.beforeRuns = CopyUndoRuns(beforeRuns);
-    this.afterRuns = CopyUndoRuns(afterRuns);
+    this.beforeFragment = CopyUndoFragment(beforeFragment);
+    this.afterFragment = CopyUndoFragment(afterFragment);
   }
 
   /** Reports changed range hints only. @returns Approximate payload units. */
   public override GetPayloadSize(): number {
-    return GetRunsPayloadSize(this.beforeRuns) + GetRunsPayloadSize(this.afterRuns);
+    return GetFragmentPayloadSize(this.beforeFragment) + GetFragmentPayloadSize(this.afterFragment);
   }
 
   /** Restores original formatted fragments. @param context - Active Writer context. @returns Nothing. */
@@ -48,8 +50,8 @@ export class SwUndoAttr extends SwUndo {
       context.GetDoc(),
       this.paragraph,
       this.start,
-      this.start + GetUndoRunsLength(this.afterRuns),
-      this.beforeRuns,
+      this.start + GetUndoFragmentLength(this.afterFragment),
+      this.beforeFragment,
     );
   }
 
@@ -59,8 +61,8 @@ export class SwUndoAttr extends SwUndo {
       context.GetDoc(),
       this.paragraph,
       this.start,
-      this.start + GetUndoRunsLength(this.beforeRuns),
-      this.afterRuns,
+      this.start + GetUndoFragmentLength(this.beforeFragment),
+      this.afterFragment,
     );
   }
 }
@@ -74,11 +76,18 @@ export function CreateWriterFontUndo(
   before: SwUndoCursorState,
   after: SwUndoCursorState,
 ): SwUndoAttr | undefined {
-  const beforeRuns = CopyTextRangeRuns(paragraph, start, end);
-  const afterRuns = applyWriterTextRangeFont(beforeRuns, 0, GetUndoRunsLength(beforeRuns), family);
+  const beforeFragment = CopyTextFragment(paragraph, start, end);
+  const beforeRuns = copyWriterTextRangeRuns(paragraph, start, end);
+  const afterRuns = applyWriterTextRangeFont(
+    beforeRuns,
+    0,
+    getWriterTextFromRuns(beforeRuns).length,
+    family,
+  );
+  const afterFragment = paragraph.CreateTextFragment(afterRuns);
   return JSON.stringify(beforeRuns) === JSON.stringify(afterRuns)
     ? undefined
-    : new SwUndoAttr(paragraph, start, beforeRuns, afterRuns, before, after);
+    : new SwUndoAttr(paragraph, start, beforeFragment, afterFragment, before, after);
 }
 
 /** Reversible RES_PARATR_ADJUST change for one paragraph. */

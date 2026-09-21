@@ -10,6 +10,9 @@ import {
 } from "./number";
 import { createWriterDocument } from "./doc";
 
+/** Numbering fixture with a label that remains outside the production model. */
+type NumberingFixture = WriterNumberingParagraph & { testId: string };
+
 /** Provides a compact immutable list paragraph fixture for marker calculations. @param id - Stable paragraph identity. @param kind - List presentation. @param level - Zero-based list level. @param listId - Optional canonical list identity. @param listMarker - Precalculated projection marker. @returns Serializable numbering paragraph. */
 function createParagraph(
   id: string,
@@ -17,7 +20,7 @@ function createParagraph(
   level = 0,
   listId?: string,
   listMarker?: string,
-): WriterNumberingParagraph {
+): NumberingFixture {
   return {
     ...(listId === undefined
       ? {}
@@ -25,10 +28,19 @@ function createParagraph(
           /** Returns the canonical list identity. @returns List identity. */
           GetListId: () => listId,
         }),
-    id,
+    testId: id,
     list: { kind, level },
     ...(listMarker === undefined ? {} : { listMarker }),
   };
+}
+
+/** Resolves a test fixture by its local label before invoking the object-identity API. @param paragraphs - Fixture sequence. @param id - Test-only label. @returns Projected marker. */
+function getFixtureMarker(paragraphs: readonly NumberingFixture[], id: string): string | undefined {
+  const paragraph = paragraphs.find(
+    /** Matches a fixture label. @param candidate - Candidate paragraph. @returns Whether it matches. */
+    (candidate) => candidate.testId === id,
+  );
+  return paragraph === undefined ? undefined : getWriterParagraphListMarker(paragraphs, paragraph);
 }
 
 describe("Writer numbering markers" /** Groups deterministic list marker calculations. @returns Nothing; Vitest registers enclosed cases. */, function defineWriterNumberTests(): void {
@@ -41,37 +53,29 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
       createParagraph("nested", "numbered", 1, undefined, "1."),
       createParagraph("restart", "numbered", 0, "separate-list", "1."),
     ];
-    expect(getWriterParagraphListMarker(paragraphs, "missing")).toBeUndefined();
-    expect(getWriterParagraphListMarker(paragraphs, "none")).toBeUndefined();
-    expect(getWriterParagraphListMarker(paragraphs, "bullet")).toBe("•");
-    expect(
-      getWriterParagraphListMarker(
-        [
-          {
-            /** Returns the circle-bullet numbering rule. @returns Canonical rule. */
-            GetNumRule: () =>
-              new SwNumRule(
-                "circle",
-                Array.from(
-                  { length: 10 },
-                  /** Creates one circle-bullet level. @returns Bullet format. */ () =>
-                    new SwNumFormat("bullet", "●"),
-                ),
-              ),
-            id: "circle",
-            list: { kind: "bullet", level: 0 },
-          },
-        ],
-        "circle",
-      ),
-    ).toBe("●");
-    expect(getWriterParagraphListMarker(paragraphs, "first")).toBe("1.");
-    expect(getWriterParagraphListMarker(paragraphs, "second")).toBe("2.");
-    expect(getWriterParagraphListMarker(paragraphs, "nested")).toBe("1.");
-    expect(getWriterParagraphListMarker(paragraphs, "restart")).toBe("1.");
-    expect(
-      getWriterParagraphListMarker([createParagraph("pending", "numbered")], "pending"),
-    ).toBeUndefined();
+    expect(getFixtureMarker(paragraphs, "missing")).toBeUndefined();
+    expect(getFixtureMarker(paragraphs, "none")).toBeUndefined();
+    expect(getFixtureMarker(paragraphs, "bullet")).toBe("•");
+    const circle = {
+      /** Returns the circle-bullet numbering rule. @returns Canonical rule. */
+      GetNumRule: () =>
+        new SwNumRule(
+          "circle",
+          Array.from(
+            { length: 10 },
+            /** Creates one circle-bullet level. @returns Bullet format. */ () =>
+              new SwNumFormat("bullet", "●"),
+          ),
+        ),
+      testId: "circle",
+      list: { kind: "bullet", level: 0 } as const,
+    } satisfies NumberingFixture;
+    expect(getWriterParagraphListMarker([circle], circle)).toBe("●");
+    expect(getFixtureMarker(paragraphs, "first")).toBe("1.");
+    expect(getFixtureMarker(paragraphs, "second")).toBe("2.");
+    expect(getFixtureMarker(paragraphs, "nested")).toBe("1.");
+    expect(getFixtureMarker(paragraphs, "restart")).toBe("1.");
+    expect(getFixtureMarker([createParagraph("pending", "numbered")], "pending")).toBeUndefined();
   });
 
   it("continues a root number across nested items within the same canonical list" /** Verifies Writer list identity and level traversal. @returns Nothing. */, function continuesAcrossNestedItems(): void {
@@ -82,15 +86,15 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
       createParagraph("root-2", "numbered", 0, "list-a", "2."),
       createParagraph("other-root", "numbered", 0, "list-b", "1."),
     ];
-    expect(getWriterParagraphListMarker(paragraphs, "nested-number")).toBe("1.");
-    expect(getWriterParagraphListMarker(paragraphs, "root-2")).toBe("2.");
-    expect(getWriterParagraphListMarker(paragraphs, "other-root")).toBe("1.");
+    expect(getFixtureMarker(paragraphs, "nested-number")).toBe("1.");
+    expect(getFixtureMarker(paragraphs, "root-2")).toBe("2.");
+    expect(getFixtureMarker(paragraphs, "other-root")).toBe("1.");
     const interrupted = [
       createParagraph("before", "numbered", 0, "same", "1."),
       createParagraph("ordinary", "none"),
       createParagraph("after", "numbered", 0, "same", "1."),
     ];
-    expect(getWriterParagraphListMarker(interrupted, "after")).toBe("1.");
+    expect(getFixtureMarker(interrupted, "after")).toBe("1.");
   });
 
   it("validates complete per-level rule snapshots" /** Covers current-schema invariants without compatibility fallbacks. @returns Nothing. */, function validatesRules(): void {
@@ -138,10 +142,10 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
   });
 
   it("uses the document-owned SwList counter tree for canonical text nodes", /** Verifies automatic-rule continuation and counter validation. @returns Nothing. */ () => {
-    const document = createWriterDocument("first");
+    const document = createWriterDocument();
     const first = document.paragraphs[0];
-    const nested = document.nodes.MakeTextNode("nested");
-    const second = document.nodes.MakeTextNode("second");
+    const nested = document.nodes.MakeTextNode();
+    const second = document.nodes.MakeTextNode();
     first?.SetParagraphList({ kind: "numbered", level: 0 });
     nested.SetParagraphList({ kind: "numbered", level: 1 });
     second.SetParagraphList({ kind: "numbered", level: 0 });
@@ -162,12 +166,14 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
       /** Resolves a style list without a rule. @returns Nothing. */ () =>
         manager.GetListForListStyle("missing"),
     ).toThrow("Unknown SwNumRule");
-    expect(getWriterParagraphListMarker(document.paragraphs, "first")).toBe("1.");
-    expect(getWriterParagraphListMarker(document.paragraphs, "nested")).toBe("1.");
-    expect(getWriterParagraphListMarker(document.paragraphs, "second")).toBe("2.");
+    expect(
+      getWriterParagraphListMarker(document.paragraphs, first as WriterNumberingParagraph),
+    ).toBe("1.");
+    expect(getWriterParagraphListMarker(document.paragraphs, nested)).toBe("1.");
+    expect(getWriterParagraphListMarker(document.paragraphs, second)).toBe("2.");
     expect(nested.GetActualListStartValue()).toBe(1);
     nested.SetParagraphList({ kind: "numbered", level: 0 });
-    expect(getWriterParagraphListMarker(document.paragraphs, "second")).toBe("3.");
+    expect(getWriterParagraphListMarker(document.paragraphs, second)).toBe("3.");
     second.SetParagraphList({ kind: "numbered", level: 0, restart: true, startValue: 5 });
     expect(second.IsListRestart()).toBe(true);
     expect(second.HasAttrListRestartValue()).toBe(true);

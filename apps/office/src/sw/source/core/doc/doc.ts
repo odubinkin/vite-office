@@ -36,7 +36,7 @@ export class SwDoc {
   public readonly nodes: SwNodes;
 
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
-  public constructor(createInitialTextNode: boolean | string | SwDocOptions = true) {
+  public constructor(createInitialTextNode: boolean | SwDocOptions = true) {
     const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
     this.defaultFontDevice = options?.defaultFontDevice;
     this.locale = options?.locale ?? "en-US";
@@ -46,9 +46,7 @@ export class SwDoc {
     this.nodes = new SwNodes(this);
     this.contentOperationsManager = new DocumentContentOperationsManager();
     if (options?.createInitialTextNode !== false && createInitialTextNode !== false)
-      this.nodes.MakeTextNode(
-        typeof createInitialTextNode === "string" ? createInitialTextNode : "writer-paragraph-1",
-      );
+      this.nodes.MakeTextNode();
   }
 
   /** Returns the document locale used for script-specific defaults. @returns BCP 47 locale. */
@@ -143,9 +141,7 @@ export class SwDoc {
   }
 }
 
-/** Creates a Writer document; the optional label is accepted only by browser fixtures and is not stored in the model. @param projectionLabel - Optional non-blank external label. @returns New document. */
-export function createWriterDocument(projectionLabel?: string): SwDoc {
-  if (projectionLabel !== undefined && projectionLabel.trim().length === 0)
-    throw new Error("Paragraph label must not be blank.");
-  return new SwDoc(projectionLabel ?? true);
+/** Creates a Writer document with one canonical body text node. @returns New document. */
+export function createWriterDocument(): SwDoc {
+  return new SwDoc();
 }

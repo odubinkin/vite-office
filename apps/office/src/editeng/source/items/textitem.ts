@@ -6,22 +6,29 @@ import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
 /** Pooled font-family item following LibreOffice's SvxFontItem value boundary. */
 export class SvxFontItem extends SfxPoolItem {
-  /** Creates a font-family item. @param familyName - CSS/LibreOffice family name. @param which - Script-specific WhichId. @returns Nothing. */
+  /** Creates a font-family item. @param familyName - Serialized CSS/LibreOffice family name. @param which - Script-specific WhichId. @param resolvedFamilyName - Device-resolved presentation family. @returns Nothing. */
   public constructor(
     private readonly familyName: string,
     which: number,
+    private readonly resolvedFamilyName = familyName,
   ) {
     super(which);
     if (familyName.trim().length === 0) throw new Error("SvxFontItem family name is invalid.");
+    if (resolvedFamilyName.trim().length === 0)
+      throw new Error("SvxFontItem resolved family name is invalid.");
   }
 
   /** Returns the family name. @returns Font family. */
   public GetFamilyName(): string {
     return this.familyName;
   }
+  /** Returns the device-resolved family used only for presentation. @returns Resolved family name. */
+  public GetResolvedFamilyName(): string {
+    return this.resolvedFamilyName;
+  }
   /** Creates an independent item. @returns Cloned item. */
   public Clone(): SvxFontItem {
-    return new SvxFontItem(this.familyName, this.Which());
+    return new SvxFontItem(this.familyName, this.Which(), this.resolvedFamilyName);
   }
   /** Compares item identity and value. @param other - Candidate item. @returns Whether equal. */
   public equals(other: SfxPoolItem): boolean {

@@ -10,7 +10,7 @@ import { setTestSelection } from "../../../../test/wrtsh-test-helpers";
 
 describe("SwTransferable", /** Groups model-owned transfer tests. @returns Nothing. */ function defineWriterTransferableTests(): void {
   it("serializes only SwPaM model data even when rendered DOM disagrees", /** Verifies rendered descendants cannot forge clipboard output. @returns Nothing. */ function ignoresRenderedDom(): void {
-    const model = createWriterDocument("p-1");
+    const model = createWriterDocument();
     model.paragraphs[0]?.InsertText("model text", 0);
     const shell = new SwWrtShell(
       new SwDocShell(

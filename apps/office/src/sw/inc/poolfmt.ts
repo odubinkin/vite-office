@@ -225,6 +225,38 @@ export const WRITER_PARAGRAPH_STYLE_POOL: readonly WriterParagraphStyleDefinitio
       ),
   );
 
+const implementedStyleIds = new Set([
+  "default",
+  "text-body",
+  "first-line-indent",
+  "hanging-indent",
+  "text-body-indent",
+  "marginalia",
+  "heading",
+  "caption",
+  "footnote",
+  "endnote",
+  "comment",
+  "header-right",
+  "footer-right",
+  "title",
+  "subtitle",
+  "appendix",
+  "quotations",
+  "preformatted-text",
+  "table-heading",
+]);
+
+/** Styles whose current item-set construction has source-derived semantics rather than name-only metadata. */
+export const WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL: readonly WriterParagraphStyleDefinition[] =
+  WRITER_PARAGRAPH_STYLE_POOL.filter(
+    /** Keeps only styles backed by implemented source-derived defaults. @param definition - Pool definition. @returns Whether the style is available. */
+    (definition) =>
+      implementedStyleIds.has(definition.id) ||
+      /^heading-(10|[1-9])$/.test(definition.id) ||
+      definition.id.endsWith("-heading"),
+  );
+
 /** Looks up immutable built-in metadata by programmatic identity. @param id - Stable ID. @returns Definition. */
 export function getWriterParagraphStyleDefinition(
   id: string,

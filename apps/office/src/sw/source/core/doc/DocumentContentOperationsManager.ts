@@ -3,18 +3,18 @@
  */
 
 import { SwPaM, SwPosition } from "../crsr/pam";
-import { SwTextNode } from "../txtnode/ndtxt";
+import { SwTextNode, type SwTextFragment } from "../txtnode/ndtxt";
 
 /** Applies Writer content mutations through SwPosition and SwPaM rather than view identities. */
 export class DocumentContentOperationsManager {
   /** Replaces a same-node point-and-mark range with normalized text portions. @param range - Model range to replace. @param replacementRuns - Replacement content. @returns Nothing. */
-  public ReplaceRange(range: SwPaM, replacementRuns: unknown): void {
+  public ReplaceRange(range: SwPaM, replacement: SwTextFragment): void {
     const start = range.Start();
     const end = range.End();
     const node = start.GetNode();
     if (!(node instanceof SwTextNode) || end.GetNode() !== node)
       throw new Error("Writer replacement range must stay inside one SwTextNode.");
-    node.ReplaceRange(start.GetContentIndex(), end.GetContentIndex(), replacementRuns);
+    node.ReplaceRange(start.GetContentIndex(), end.GetContentIndex(), replacement);
   }
 
   /** Inserts plain text at one SwPosition using the node's inherited auto-format items. @param position - Model insertion position. @param text - Inserted plain text. @returns Nothing. */

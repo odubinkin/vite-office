@@ -4,8 +4,8 @@
  */
 
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
-import type { WriterCharacterAttributes, WriterTextRun } from "../txtnode/ndtxt";
-import { normalizeWriterTextRuns, SwTextNode } from "../txtnode/ndtxt";
+import type { SwTextFragment, WriterCharacterAttributes } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
 
 /** Identifies one stable text-node content position without retaining a node graph. */
@@ -97,65 +97,19 @@ export function GetUndoTextNode(document: SwDoc, node: SwTextNode): SwTextNode {
   return node;
 }
 
-/** Extracts exact formatted runs from one bounded node range. @param node - Source text node. @param start - Inclusive offset. @param end - Exclusive offset. @returns Copied normalized runs. */
-export function CopyTextRangeRuns(
-  node: SwTextNode,
-  start: number,
-  end: number,
-): readonly WriterTextRun[] {
-  if (
-    !Number.isInteger(start) ||
-    !Number.isInteger(end) ||
-    start < 0 ||
-    end < start ||
-    end > node.Len()
-  )
-    throw new Error("Writer undo range is outside the paragraph.");
-  let offset = 0;
-  return normalizeWriterTextRuns(
-    node.runs.flatMap(
-      /** Clips one source run to the requested range. @param run - Complete node run. @returns Zero or one copied fragment. */
-      (run): readonly WriterTextRun[] => {
-        const runStart = offset;
-        const runEnd = runStart + run.text.length;
-        offset = runEnd;
-        const clippedStart = Math.max(start, runStart);
-        const clippedEnd = Math.min(end, runEnd);
-        return clippedEnd <= clippedStart
-          ? []
-          : [
-              {
-                attributes: { ...run.attributes },
-                ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
-                text: run.text.slice(clippedStart - runStart, clippedEnd - runStart),
-              },
-            ];
-      },
-    ),
-  );
+/** Captures a native Writer text/hint fragment for undo. @param node - Source node. @param start - Inclusive offset. @param end - Exclusive offset. @returns Independent fragment. */
+export function CopyTextFragment(node: SwTextNode, start: number, end: number): SwTextFragment {
+  return CopyUndoFragment(node.CaptureTextFragment(start, end));
 }
 
-/** Copies normalized runs so action payloads never retain caller-owned arrays. @param runs - Source fragments. @returns Independent normalized runs. */
-export function CopyUndoRuns(runs: readonly WriterTextRun[]): readonly WriterTextRun[] {
-  return normalizeWriterTextRuns(
-    runs.map(
-      /** Copies one formatted fragment. @param run - Source run. @returns Independent fragment. */
-      (run): WriterTextRun => ({
-        attributes: { ...run.attributes },
-        ...(run.hyperlink === undefined ? {} : { hyperlink: { ...run.hyperlink } }),
-        text: run.text,
-      }),
-    ),
-  );
+/** Deep-copies a native Writer fragment without browser projection. @param fragment - Source fragment. @returns Independent fragment. */
+export function CopyUndoFragment(fragment: SwTextFragment): SwTextFragment {
+  return { text: fragment.text, hints: fragment.hints.clone() };
 }
 
-/** Returns visible UTF-16 length retained by formatted runs. @param runs - Action payload fragments. @returns Text length. */
-export function GetUndoRunsLength(runs: readonly WriterTextRun[]): number {
-  return runs.reduce(
-    /** Sums one run. @param total - Prior length. @param run - Current run. @returns Updated length. */
-    (total, run) => total + run.text.length,
-    0,
-  );
+/** Returns a native undo fragment's UTF-16 text length. @param fragment - Native fragment. @returns UTF-16 length. */
+export function GetUndoFragmentLength(fragment: SwTextFragment): number {
+  return fragment.text.length;
 }
 
 /** Replaces one node range without cloning its SwDoc. @param document - Mutated graph. @param paragraphId - Target node. @param start - Inclusive offset. @param end - Exclusive offset. @param runs - Replacement fragments. @returns Nothing. */
@@ -164,18 +118,14 @@ export function ReplaceUndoRange(
   node: SwTextNode,
   start: number,
   end: number,
-  runs: readonly WriterTextRun[],
+  fragment: SwTextFragment,
 ): void {
-  GetUndoTextNode(document, node).ReplaceRange(start, end, runs);
+  GetUndoTextNode(document, node).ReplaceRange(start, end, fragment);
 }
 
-/** Estimates retained formatted-text payload in UTF-16 and attribute booleans. @param runs - Retained fragments. @returns Approximate scalar units. */
-export function GetRunsPayloadSize(runs: readonly WriterTextRun[]): number {
-  return runs.reduce(
-    /** Counts one run's text plus its bounded attribute tuple. @param total - Prior units. @param run - Current run. @returns Updated units. */
-    (total, run) => total + run.text.length + 3 + (run.hyperlink?.url.length ?? 0),
-    0,
-  );
+/** Estimates retained native text and hint payload. @param fragment - Native fragment. @returns Approximate scalar units. */
+export function GetFragmentPayloadSize(fragment: SwTextFragment): number {
+  return fragment.text.length + fragment.hints.Count() * 4;
 }
 
 /** Clones one complete action cursor boundary. @param state - Stored state. @returns Independent state. */

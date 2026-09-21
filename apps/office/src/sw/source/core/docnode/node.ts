@@ -13,39 +13,21 @@ import type { SwNodes } from "./nodes";
 /** Identifies the node categories implemented by the current Writer model slice. */
 export type SwNodeType = "end" | "start" | "text";
 
-/**
- * Keeps diagnostic/projection labels outside the canonical node objects.
- * Writer positions use node references and indexes; browser-facing labels are
- * retained only in this weak side table for the current transitional UI.
- */
-const nodeProjectionLabels = new WeakMap<SwNode, string>();
-
 /** Base class of every Writer document model element. */
 export abstract class SwNode extends SwContentIndexRegistry {
   /**
    * Creates a node owned by one SwNodes array.
    * @param nodes - Owning node array.
-   * @param id - Stable node identity.
    * @param nodeType - Implemented node category.
    * @param startOfSection - Optional containing section start.
    * @returns Nothing; initializes this node.
    */
   protected constructor(
     private readonly nodes: SwNodes,
-    id: string,
     private readonly nodeType: SwNodeType,
     private readonly startOfSection?: SwStartNode,
   ) {
     super();
-    nodeProjectionLabels.set(this, id);
-  }
-
-  /** Returns the external diagnostic/projection label without storing it on the node. @returns Current label. */
-  public get id(): string {
-    const id = nodeProjectionLabels.get(this);
-    /* v8 ignore next -- every SwNode constructor installs its weak projection label. */
-    if (id === undefined) throw new Error("SwNode projection label is unavailable.");
-    return id;
   }
 
   /** Returns the owning node array. @returns Owning SwNodes. */
@@ -95,9 +77,9 @@ export abstract class SwNode extends SwContentIndexRegistry {
 export class SwStartNode extends SwNode {
   private endOfSection?: SwEndNode;
 
-  /** Creates a section start sentinel. @param nodes - Owning node array. @param id - Sentinel identity. @param parent - Optional parent section. @returns Nothing. */
-  public constructor(nodes: SwNodes, id: string, parent?: SwStartNode) {
-    super(nodes, id, "start", parent);
+  /** Creates a section start sentinel. @param nodes - Owning node array. @param parent - Optional parent section. @returns Nothing. */
+  public constructor(nodes: SwNodes, parent?: SwStartNode) {
+    super(nodes, "start", parent);
   }
 
   /** Links the matching end sentinel during SwNodes construction. @param end - Matching end sentinel. @returns Nothing. */
@@ -114,9 +96,9 @@ export class SwStartNode extends SwNode {
 
 /** Ends one ordered section in the Writer node array. */
 export class SwEndNode extends SwNode {
-  /** Creates an end sentinel linked to its start sentinel. @param nodes - Owning node array. @param id - Sentinel identity. @param start - Matching start sentinel. @returns Nothing. */
-  public constructor(nodes: SwNodes, id: string, start: SwStartNode) {
-    super(nodes, id, "end", start);
+  /** Creates an end sentinel linked to its start sentinel. @param nodes - Owning node array. @param start - Matching start sentinel. @returns Nothing. */
+  public constructor(nodes: SwNodes, start: SwStartNode) {
+    super(nodes, "end", start);
   }
 }
 
@@ -124,14 +106,13 @@ export class SwEndNode extends SwNode {
 export abstract class SwContentNode extends SwNode {
   private attributeSet: SwAttrSet | undefined;
 
-  /** Creates a content node in one Writer section. @param nodes - Owning node array. @param id - Node identity. @param startOfSection - Containing section. @param formatColl - Registered format collection. @returns Nothing. */
+  /** Creates a content node in one Writer section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered format collection. @returns Nothing. */
   protected constructor(
     nodes: SwNodes,
-    id: string,
     startOfSection: SwStartNode,
     private formatColl: SwFormatColl = nodes.GetDoc().GetDfltTextFormatColl(),
   ) {
-    super(nodes, id, "text", startOfSection);
+    super(nodes, "text", startOfSection);
     if (formatColl.GetAttrSet().GetPool() !== nodes.GetDoc().GetAttrPool())
       throw new Error("SwContentNode format collection belongs to another document.");
   }
