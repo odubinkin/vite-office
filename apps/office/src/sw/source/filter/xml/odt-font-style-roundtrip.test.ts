@@ -7,7 +7,7 @@ import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, RES_CHRATR_FONT } from "../../../inc/hintids";
-import { getWriterOdfStyleName, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { getWriterOdfStyleName, WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { createWriterDocument } from "../../core/doc/doc";
 import { encodeWriterDocument } from "../basflt/writer-document-codec";
 import { readOdtDocument } from "./swxml";
@@ -159,14 +159,14 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     }
   });
 
-  it("round-trips the complete LibreOffice paragraph-style hierarchy and font-face references", /** Verifies open-save-reopen semantics. @returns Nothing. */ async () => {
+  it("round-trips the supported LibreOffice paragraph-style hierarchy and font-face references", /** Verifies open-save-reopen semantics. @returns Nothing. */ async () => {
     const writer = createWriterDocument();
-    for (const style of WRITER_PARAGRAPH_STYLE_POOL) writer.GetTextFormatColl(style.id);
+    for (const style of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) writer.GetTextFormatColl(style.id);
     const textBody = writer.GetTextFormatColl("text-body");
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       textBody.SetFormatAttr(new SvxFontItem("Source Serif 4", which));
     const paragraph = writer.paragraphs[0];
-    paragraph?.ChgFormatColl(writer.GetTextFormatColl("numbering-1-cont"));
+    paragraph?.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       paragraph?.SetAttr(new SvxFontItem("Paragraph Serif", which));
     paragraph?.ReplaceRange(
@@ -196,8 +196,8 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(contentXml).toContain(
       '<style:font-face style:name="Noto Sans" svg:font-family="&apos;Noto Sans&apos;"/>',
     );
-    expect(contentXml).toContain('style:parent-style-name="Numbering_20_1_20_Cont."');
-    for (const style of WRITER_PARAGRAPH_STYLE_POOL) {
+    expect(contentXml).toContain('style:parent-style-name="Heading_20_1"');
+    for (const style of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) {
       const name = getWriterOdfStyleName(style.id);
       const start = stylesXml.indexOf(`<style:style style:name="${name}"`);
       expect(start, name).toBeGreaterThanOrEqual(0);
@@ -215,7 +215,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     }
 
     const opened = await readOdtDocument(firstBytes, state);
-    expect(opened.document.GetTextFormatColls()).toHaveLength(126);
+    expect(opened.document.GetTextFormatColls()).toHaveLength(26);
     expect(
       (
         opened.document
@@ -224,7 +224,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
           .GetItemIfSet(RES_CHRATR_FONT, false) as SvxFontItem
       ).GetFamilyName(),
     ).toBe("Source Serif 4");
-    expect(opened.document.paragraphs[0]?.style).toBe("numbering-1-cont");
+    expect(opened.document.paragraphs[0]?.style).toBe("heading-1");
     expect(opened.document.paragraphs[0]?.runs[0]?.attributes.fontFamily).toBe("Noto Sans");
 
     const reopened = await readOdtDocument(
@@ -248,7 +248,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(projectStyles(encodeWriterDocument(reopened.document))).toEqual(
       projectStyles(encodeWriterDocument(opened.document)),
     );
-    expect(reopened.document.paragraphs[0]?.style).toBe("numbering-1-cont");
+    expect(reopened.document.paragraphs[0]?.style).toBe("heading-1");
     expect(reopened.document.paragraphs[0]?.runs[0]?.attributes.fontFamily).toBe("Noto Sans");
   });
 });

@@ -81,18 +81,18 @@ export interface CommandRegistry<Context> {
 
 /** Binds typed registry context behind the non-generic shell-stack contract. */
 export interface SfxShell {
-  /** Stable registered command identities in descriptor order. */
-  readonly commandIds: readonly string[];
-  /** Resolves a command against this shell, or returns undefined so lower shells may answer. */
-  readonly ResolveCommand: (commandId: string) => ResolvedShellCommand | undefined;
+  /** Numeric registered slot identities in descriptor order. */
+  readonly slotIds: readonly number[];
+  /** Resolves a numeric slot against this shell, or returns undefined so lower shells may answer. */
+  readonly ResolveSlot: (slotId: number) => ResolvedShellCommand | undefined;
 }
 
 /** Represents one command already bound to the shell context that owns it. */
 export interface ResolvedShellCommand {
   /** Immutable registered descriptor used for diagnostics and shortcut lookup. */
   readonly command: CommandDefinition<unknown, unknown, unknown>;
-  /** Executes through the owning shell context. */
-  readonly execute: (arguments_?: unknown) => CommandDispatchResult<unknown>;
+  /** Executes the complete request through the owning shell context. */
+  readonly execute: (request: SfxRequest) => CommandDispatchResult<unknown>;
   /** Queries enabled, checked, and value state through the owning shell context. */
   readonly getState: () => CommandState;
 }
@@ -153,6 +153,7 @@ export function createCommandRegistry<Context>(
   commands: readonly CommandDefinition<Context>[],
 ): CommandRegistry<Context> {
   const ids = new Set<string>();
+  const slotIds = new Set<number>();
   const shortcuts = new Set<string>();
   return {
     commands: commands.map(
@@ -202,8 +203,12 @@ export function createCommandRegistry<Context>(
           shortcuts.add(shortcut);
         }
         const [shortcut, ...additionalShortcuts] = normalizedShortcuts;
+        const slotId = command.slotId ?? createSyntheticSlotId(command.id);
+        if (slotIds.has(slotId)) throw new Error(`Duplicate command slot id: ${slotId}`);
+        slotIds.add(slotId);
         return {
           ...command,
+          slotId,
           ...(shortcut === undefined ? {} : { shortcut }),
           ...(additionalShortcuts.length === 0 ? {} : { shortcuts: additionalShortcuts }),
         };
@@ -297,21 +302,33 @@ export function createCommandShell<Context>(
   registry: CommandRegistry<Context>,
 ): SfxShell {
   return {
-    commandIds: registry.commands.map(
-      /** Projects one stable command identity for shell-stack enumeration. @param command - Registered command. @returns Command ID. */
-      function getCommandId(command): string {
-        return command.id;
+    slotIds: registry.commands.map(
+      /** Projects one numeric slot identity for shell-stack enumeration. @param command - Registered command. @returns Slot ID. */
+      function getSlotId(command): number {
+        return command.slotId as number;
       },
     ),
-    /** Resolves one registry command against the retained context. @param commandId - Stable command ID. @returns Bound command or undefined. */
-    ResolveCommand: function resolveCommand(commandId): ResolvedShellCommand | undefined {
-      const command = findCommandById(registry, commandId);
+    /** Resolves one registry slot against the retained context. @param slotId - Numeric slot ID. @returns Bound command or undefined. */
+    ResolveSlot: function resolveSlot(slotId): ResolvedShellCommand | undefined {
+      const command = registry.commands.find(
+        /** Matches one generated slot. @param candidate - Registered command. @returns Whether matching. */ (
+          candidate,
+        ) => candidate.slotId === slotId,
+      );
       if (command === undefined) return undefined;
       return {
         command: command as CommandDefinition<unknown, unknown, unknown>,
-        /** Executes with retained shell context. @param arguments_ - Caller command arguments. @returns Dispatch result. */
-        execute: function executeResolvedCommand(arguments_): CommandDispatchResult<unknown> {
-          return dispatchCommand(registry, commandId, context, arguments_);
+        /** Executes with retained shell context. @param request - Complete Sfx slot request. @returns Dispatch result. */
+        execute: function executeResolvedCommand(request): CommandDispatchResult<unknown> {
+          if (request.GetSlot() !== slotId)
+            throw new Error(`SfxRequest slot does not match command: ${command.id}`);
+          if (command.isEnabled !== undefined && !command.isEnabled(context))
+            return { commandId: command.id, status: "disabled" };
+          return {
+            commandId: command.id,
+            status: "executed",
+            value: command.execute(context, request.GetArgs()),
+          };
         },
         /** Queries state with retained shell context. @returns Current command state. */
         getState: function getResolvedCommandState(): CommandState {
@@ -364,8 +381,19 @@ export class SfxDispatcher {
 
   /** Finds the highest-priority shell command for one stable ID. @param commandId - Command identity to resolve. @returns Bound command or undefined. */
   public QueryDispatch(commandId: string): ResolvedShellCommand | undefined {
+    const baseCommandId = commandId.split("?", 1)[0] as string;
+    const command = this.GetCommands().find(
+      /** Matches one presentation URL. @param candidate - Active slot descriptor. @returns Whether matching. */ (
+        candidate,
+      ) => candidate.id === commandId || candidate.id === baseCommandId,
+    );
+    return command?.slotId === undefined ? undefined : this.QuerySlot(command.slotId);
+  }
+
+  /** Finds the highest-priority shell command for one numeric slot. @param slotId - Numeric slot identity to resolve. @returns Bound command or undefined. */
+  public QuerySlot(slotId: number): ResolvedShellCommand | undefined {
     for (let index = 0; index < this.shells.length; index += 1) {
-      const command = this.GetShell(index)?.ResolveCommand(commandId);
+      const command = this.GetShell(index)?.ResolveSlot(slotId);
       if (command !== undefined) return command;
     }
     return undefined;
@@ -375,19 +403,20 @@ export class SfxDispatcher {
   public Execute(commandId: string, arguments_?: unknown): CommandDispatchResult<unknown> {
     const command = this.QueryDispatch(commandId);
     if (command === undefined) return { commandId, status: "missing" };
-    const slot = command.command.slotId ?? 1;
-    const request = new SfxRequest(slot, createRequestArguments(slot, arguments_));
-    return this.ExecuteRequest(commandId, request);
+    const slot = command.command.slotId as number;
+    const requestArguments =
+      arguments_ === undefined ? parseCommandUrlArguments(commandId) : arguments_;
+    const request = new SfxRequest(slot, createRequestArguments(slot, requestArguments));
+    return this.ExecuteRequest(request);
   }
 
-  /** Executes a caller-owned SfxRequest and records its return item. @param commandId - Canonical command URL. @param request - Slot request and item arguments. @returns Explicit dispatch outcome. */
-  public ExecuteRequest(commandId: string, request: SfxRequest): CommandDispatchResult<unknown> {
-    const command = this.QueryDispatch(commandId);
-    if (command === undefined) return { commandId, status: "missing" };
-    if (command.command.slotId !== undefined && request.GetSlot() !== command.command.slotId)
-      throw new Error(`SfxRequest slot does not match command: ${commandId}`);
+  /** Executes a caller-owned SfxRequest selected exclusively by its numeric slot and records its return item. @param request - Slot request and item arguments. @returns Explicit dispatch outcome. */
+  public ExecuteRequest(request: SfxRequest): CommandDispatchResult<unknown> {
+    const command = this.QuerySlot(request.GetSlot());
+    if (command === undefined) return { commandId: `slot:${request.GetSlot()}`, status: "missing" };
+    const commandId = command.command.id;
     this.lastCommandError = undefined;
-    const result = command.execute(request.GetArgs());
+    const result = command.execute(request);
     if (result.status === "executed" && !isPromiseLike(result.value))
       request.Done(createRequestReturnItem(request.GetSlot(), result.value));
     if (result.status !== "executed" || !isPromiseLike(result.value)) return result;
@@ -423,13 +452,22 @@ export class SfxDispatcher {
   public QueryState(commandId: string): CommandState {
     const state = this.QueryDispatch(commandId)?.getState();
     if (state === undefined) return { enabled: false };
-    const asyncState = this.asyncStates.get(commandId);
+    const baseCommandId = commandId.split("?", 1)[0] as string;
+    const asyncState = this.asyncStates.get(baseCommandId);
+    const parameterState = deriveParameterizedState(commandId, state);
     return {
       ...state,
+      ...parameterState,
       enabled: state.enabled,
       ...(asyncState?.error === undefined ? {} : { error: asyncState.error }),
       ...(asyncState?.pending === true ? { pending: true } : {}),
     };
+  }
+
+  /** Queries the active shell state for one numeric slot. @param slotId - Numeric slot identity. @returns Disabled state when no shell provides the slot. */
+  public QuerySlotState(slotId: number): CommandState {
+    const command = this.QuerySlot(slotId);
+    return command === undefined ? { enabled: false } : this.QueryState(command.command.id);
   }
 
   /** Returns every active command once, honoring top-shell shadowing. @returns Commands in shell-priority and registration order. */
@@ -438,11 +476,11 @@ export class SfxDispatcher {
     const ids = new Set<string>();
     for (let shellIndex = 0; shellIndex < this.shells.length; shellIndex += 1) {
       const shell = this.GetShell(shellIndex) as SfxShell;
-      for (const commandId of shell.commandIds) {
-        if (ids.has(commandId)) continue;
-        const command = shell.ResolveCommand(commandId)?.command;
+      for (const slotId of shell.slotIds) {
+        const command = shell.ResolveSlot(slotId)?.command;
         if (command !== undefined) {
-          ids.add(commandId);
+          if (ids.has(command.id)) continue;
+          ids.add(command.id);
           commands.push(command);
         }
       }
@@ -478,6 +516,41 @@ export class SfxDispatcher {
     return /** Removes the registered invalidation listener. @returns Whether the listener was present. */ () =>
       this.listeners.delete(listener);
   }
+}
+
+/** Creates a deterministic positive slot for framework-only registries that do not originate in SDI/HRC data. @param commandId - Stable command identity. @returns Synthetic numeric slot. */
+function createSyntheticSlotId(commandId: string): number {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < commandId.length; index += 1) {
+    hash ^= commandId.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return 0x40000000 + (hash >>> 1);
+}
+
+/** Converts typed UNO URL parameters into the structured Any payload consumed by slot handlers. @param commandId - Command URL. @returns Parsed arguments or undefined. */
+function parseCommandUrlArguments(commandId: string): Readonly<Record<string, string>> | undefined {
+  const query = commandId.indexOf("?");
+  if (query < 0) return undefined;
+  const arguments_: Record<string, string> = {};
+  for (const field of commandId.slice(query + 1).split("&")) {
+    const separator = field.indexOf("=");
+    if (separator < 0) continue;
+    const key = field.slice(0, separator).split(":", 1)[0] as string;
+    arguments_[key] = decodeURIComponent(field.slice(separator + 1));
+  }
+  return arguments_;
+}
+
+/** Derives radio state for a parameterized StyleApply URL from the base slot value. @param commandId - Requested command URL. @param state - Base slot state. @returns Parameter-specific state fields. */
+function deriveParameterizedState(
+  commandId: string,
+  state: CommandState,
+): Readonly<{ checked?: boolean }> {
+  const arguments_ = parseCommandUrlArguments(commandId);
+  if (arguments_?.Style === undefined || typeof state.value !== "string") return {};
+  const style = arguments_.Style === "Default Paragraph Style" ? "default" : arguments_.Style;
+  return { checked: state.value === style.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-") };
 }
 
 /** Detects asynchronous command results without requiring a native Promise instance. @param value - Candidate command result. @returns Whether the value implements PromiseLike. */

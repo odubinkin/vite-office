@@ -23,7 +23,7 @@ export type SwUndoDeleteGroup = "delimiter" | "word";
 export class SwUndoDelete extends SwUndo {
   private deletedFragment: SwTextFragment;
 
-  /** Creates one delete action. @param paragraphId - Target node. @param start - Deleted range start. @param deletedRuns - Removed formatted fragments. @param direction - Backspace or forward delete. @param group - Optional character grouping class. @param before - Cursor before deletion. @param after - Cursor after deletion. @returns Nothing. */
+  /** Creates one delete action. @param paragraph - Target node. @param start - Deleted range start. @param deletedFragment - Removed native fragment. @param direction - Backspace or forward delete. @param group - Optional character grouping class. @param before - Cursor before deletion. @param after - Cursor after deletion. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private start: number,
@@ -92,7 +92,7 @@ export class SwUndoReplace extends SwUndo {
   private readonly insertedFragment: SwTextFragment;
   private readonly removedFragment: SwTextFragment;
 
-  /** Creates one range replacement. @param paragraphId - Target node. @param start - Replacement start. @param removedRuns - Original range content. @param insertedRuns - Replacement content. @param comment - Command label. @param before - Cursor before replacement. @param after - Cursor after replacement. @returns Nothing. */
+  /** Creates one range replacement. @param paragraph - Target node. @param start - Replacement start. @param removedFragment - Original native fragment. @param insertedFragment - Replacement native fragment. @param comment - Command label. @param before - Cursor before replacement. @param after - Cursor after replacement. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private readonly start: number,

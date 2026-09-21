@@ -47,7 +47,7 @@ import {
 } from "./hintids";
 
 describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothing. */ () => {
-  it("preserves all pool ranges, identities, parents, and follow links", /** Verifies the complete graph. @returns Nothing. */ () => {
+  it("preserves complete pool metadata while materializing only supported styles", /** Verifies inventory and the executable style graph. @returns Nothing. */ () => {
     expect(WRITER_PARAGRAPH_STYLE_POOL).toHaveLength(126);
     expect(
       new Set(
@@ -60,7 +60,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect(WRITER_PARAGRAPH_STYLE_POOL.at(-1)).toMatchObject({ id: "list-heading", poolId: 12292 });
     const document = createWriterDocument();
     expect(document.GetTextFormatColls()).toHaveLength(1);
-    for (const style of WRITER_PARAGRAPH_STYLE_POOL) {
+    for (const style of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) {
       const collection = document.GetTextFormatColl(style.id);
       expect(collection.poolId).toBe(style.poolId);
       expect(
@@ -74,13 +74,17 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       );
       expect(collection.GetNextTextFormatColl().id).toBe(style.followId);
     }
-    expect(document.GetTextFormatColls()).toHaveLength(126);
+    expect(document.GetTextFormatColls()).toHaveLength(26);
     expect(document.GetTextFormatColl("heading-1").GetAssignedOutlineStyleLevel()).toBe(0);
     expect(document.GetTextFormatColl("heading-10").GetAssignedOutlineStyleLevel()).toBe(9);
     expect(
       /** Assigns an invalid outline level. @returns Nothing. */ () =>
         document.GetTextFormatColl("heading-1").AssignToListLevelOfOutlineStyle(10),
     ).toThrow("outside 0-9");
+    expect(
+      /** Requests metadata-only style. @returns Nothing before the expected exception. */ () =>
+        document.GetTextFormatColl("numbering-1"),
+    ).toThrow("Unsupported SwTextFormatColl");
   });
 
   it("uses LibreOffice XML style-name encoding for the complete pool", /** Verifies SvXMLUnitConverter-compatible names and reverse lookup. @returns Nothing. */ () => {
@@ -119,20 +123,10 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       "hanging-indent",
       "text-body-indent",
       "marginalia",
-      "header-right",
-      "footer-right",
-      "table-heading",
       "caption",
       "footnote",
       "endnote",
       "comment",
-      "index-heading",
-      "contents-heading",
-      "user-index-heading",
-      "figure-index-heading",
-      "object-index-heading",
-      "table-index-heading",
-      "bibliography-heading",
       "title",
       "subtitle",
       "appendix",
@@ -206,14 +200,6 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect((hanging.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(567);
     const quotations = document.GetTextFormatColl("quotations").GetAttrSet();
     expect((quotations.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight()).toBe(567);
-    expect(
-      (
-        document
-          .GetTextFormatColl("table-heading")
-          .GetAttrSet()
-          .Get(RES_PARATR_ADJUST) as SvxAdjustItem
-      ).GetAdjust(),
-    ).toBe(SvxAdjust.Center);
     expect(
       document.GetAttrPool().CreateItem({ which: RES_MARGIN_FIRSTLINE, value: -10 }),
     ).toBeInstanceOf(SvxFirstLineIndentItem);

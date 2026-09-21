@@ -221,8 +221,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const wrtShell = view.GetWrtShell();
     const cursor = wrtShell.GetCursor();
     const initialDocument = docShell.GetDoc();
-    const initialSnapshot = view.GetSnapshot();
-    const projection = view.GetPresentationProjector() as WriterViewProjection;
+    const initialSnapshot = session.viewStore.GetSnapshot();
+    const projection = session.viewStore.projection;
     expect(
       projection.SetSelection(initialDocument, wrtShell, {
         point: { offset: 0, paragraphId: "missing-projection" },
@@ -238,7 +238,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
         point: initialSnapshot.cursorSelection.point,
       }),
     ).toBe(false);
-    expect(view.GetSnapshot()).toBe(initialSnapshot);
+    expect(session.viewStore.GetSnapshot()).toBe(initialSnapshot);
     expect(frame.GetActiveView()).toBe(view);
     expect(wrtShell.GetDocShell()).toBe(docShell);
     expect(frame.GetDispatcher().GetShell(0)).toBe(wrtShell.GetListShell().GetCommandShell());
@@ -275,7 +275,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     ).toBe("executed");
     expect(wrtShell.GetHyperlinkAtCursor()?.url).toBe("https://example.test/edited");
     const listener = vi.fn();
-    const unsubscribe = view.Subscribe(listener);
+    const unsubscribe = session.viewStore.Subscribe(listener);
     expect(view.Execute(WRITER_COMMAND_IDS.alignCenter).status).toBe("executed");
     expect(view.Execute(WRITER_COMMAND_IDS.fontName).status).toBe("executed");
     expect(docShell.GetDoc()).toBe(initialDocument);
@@ -290,6 +290,19 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       checked: true,
       value: "default",
     });
+    expect(
+      view.QueryState(`${WRITER_COMMAND_IDS.styleApply}?FamilyName:string=ParagraphStyles`),
+    ).toEqual({ enabled: true, value: "default" });
+    expect(
+      /** Applies an unsupported parameter through the numeric StyleApply slot. @returns Nothing before the expected exception. */ () =>
+        view.Execute(
+          `${WRITER_COMMAND_IDS.styleApply}?Style:string=Missing&FamilyName:string=ParagraphStyles`,
+        ),
+    ).toThrow("Unsupported Writer paragraph style");
+    expect(
+      /** Executes StyleApply without its required request argument. @returns Nothing before the expected exception. */ () =>
+        view.Execute(WRITER_COMMAND_IDS.styleApply),
+    ).toThrow("Unsupported Writer paragraph style");
     expect(view.QueryState(WRITER_COMMAND_IDS.unorderedList).checked).toBe(false);
     expect(view.QueryState(WRITER_COMMAND_IDS.toggleHorizontalRuler).checked).toBe(true);
     expect(view.Execute(WRITER_COMMAND_IDS.toggleHorizontalRuler).status).toBe("executed");
@@ -297,7 +310,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(view.Execute(WRITER_COMMAND_IDS.toggleHorizontalRuler).status).toBe("executed");
     expect(view.QueryState(WRITER_COMMAND_IDS.toggleSidebar).checked).toBe(true);
     expect(view.QueryState(WRITER_COMMAND_IDS.toggleStatusBar).checked).toBe(true);
-    expect(view.GetSnapshot()).not.toBe(initialSnapshot);
+    expect(session.viewStore.GetSnapshot()).not.toBe(initialSnapshot);
     expect(wrtShell.GetCursor()).toBe(cursor);
     expect(listener).toHaveBeenCalled();
     expect(view.Execute(WRITER_COMMAND_IDS.undo).status).toBe("executed");

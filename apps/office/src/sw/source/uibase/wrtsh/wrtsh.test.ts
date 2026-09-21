@@ -651,6 +651,10 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.ToggleCharacterFormat("bold")).toBe(true);
     expect(shell.SetParagraphAlignment("center")).toBe(true);
     expect(shell.SetParagraphStyle("heading-1")).toBe(true);
+    expect(
+      /** Attempts to apply metadata-only style. @returns Nothing before the expected exception. */ () =>
+        shell.SetParagraphStyle("numbering-1"),
+    ).toThrow("Unsupported Writer paragraph style");
     expect(shell.SetParagraphListKind("numbered")).toBe(true);
     expect(shell.ChangeParagraphListLevel("demote")).toBe(true);
     expect(shell.GetDoc()).toBe(document);

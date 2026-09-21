@@ -6,13 +6,13 @@ import { WRITER_TEXT_FORMAT_COLL_WHICH_RANGES } from "../../../inc/hintids";
 import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
 import {
-  WRITER_PARAGRAPH_STYLE_POOL,
+  WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
   type WriterParagraphStyleDefinition,
   type WriterParagraphStyleGroup,
 } from "../../../inc/poolfmt";
 
 /** Programmatic paragraph-style identities currently exposed by the browser UI. */
-export const WRITER_PARAGRAPH_STYLES: readonly string[] = WRITER_PARAGRAPH_STYLE_POOL.map(
+export const WRITER_PARAGRAPH_STYLES: readonly string[] = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
   /** Projects a stable identity. @param definition - Pool metadata. @returns ID. */ (definition) =>
     definition.id,
 );

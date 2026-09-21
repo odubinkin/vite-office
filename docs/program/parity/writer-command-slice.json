@@ -765,7 +765,7 @@
         "implementation": [
           {
             "path": "apps/office/src/sw/source/uibase/uiview/view.ts",
-            "marker": "isPropertiesSidebarVisible"
+            "marker": "IsSidebarVisible"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -826,7 +826,7 @@
       "closure": {
         "contract": {
           "local": {
-            "marker": "isPropertiesSidebarVisible",
+            "marker": "IsSidebarVisible",
             "path": "apps/office/src/sw/source/uibase/uiview/view.ts"
           },
           "method": "api-invariant",
@@ -839,7 +839,7 @@
         },
         "ownership": {
           "local": {
-            "marker": "isPropertiesSidebarVisible",
+            "marker": "IsSidebarVisible",
             "path": "apps/office/src/sw/source/uibase/uiview/view.ts"
           },
           "method": "api-invariant",

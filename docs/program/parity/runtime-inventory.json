@@ -1730,11 +1730,18 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "A",
         "evidence": [
-          "apps/office/src/sw/browser/presentation/writer-view-projection.ts#WriterViewProjection"
+          "apps/office/src/sw/browser/presentation/writer-view-projection.ts#WriterViewStore"
         ],
         "justification": "Browser-only projection or persistence adaptation kept outside the canonical Writer model.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "WriterParagraphProjection",
+          "WriterParagraphComputedStyle",
+          "WriterPresentationProjection",
+          "WriterViewSnapshot",
+          "WriterViewProjection",
+          "WriterViewStore"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -3650,18 +3657,14 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/uiview/view.ts#WriterPresentationProjector",
+          "apps/office/src/sw/source/uibase/uiview/view.ts#SwView",
           "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx#SwView"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/uiview/view.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
         "knownViolations": [],
         "localSymbols": [
-          "WriterPresentationProjector",
-          "WriterCutCommandArguments",
-          "WriterPasteCommandArguments",
           "WriterViewControllers",
           "WriterViewControllerFactory",
-          "WriterViewSnapshot",
           "SwView"
         ],
         "sourceResponsibility": "unverified",

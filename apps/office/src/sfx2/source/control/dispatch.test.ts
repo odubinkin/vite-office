@@ -15,6 +15,7 @@ import {
   findCommandByShortcut,
   normalizeCommandShortcut,
   type CommandDefinition,
+  type SfxShell,
 } from "./dispatch";
 import { SfxViewFrame } from "../view/viewfrm";
 
@@ -235,7 +236,14 @@ describe("command registry" /**
     dispatcher.Push(shell);
     const argument = new SfxStringItem(201, "argument");
     const boolRequest = new SfxRequest(101, [argument]);
-    expect(dispatcher.ExecuteRequest(".uno:BooleanResult", boolRequest).status).toBe("executed");
+    expect(dispatcher.ExecuteRequest(boolRequest).status).toBe("executed");
+    expect(dispatcher.QuerySlot(101)?.command.id).toBe(".uno:BooleanResult");
+    expect(dispatcher.QuerySlotState(101)).toEqual({ enabled: true });
+    expect(dispatcher.QuerySlotState(999)).toEqual({ enabled: false });
+    expect(
+      /** Sends a mismatched request directly to one resolved shell slot. @returns Nothing before the expected exception. */ () =>
+        dispatcher.QuerySlot(101)?.execute(new SfxRequest(102)),
+    ).toThrow("SfxRequest slot does not match command");
     expect(requestArguments).toEqual([[argument]]);
     expect(boolRequest.GetReturnValue()).toEqual(new SfxBoolItem(101, true));
     dispatcher.Execute(".uno:BooleanResult", [argument]);
@@ -253,24 +261,24 @@ describe("command registry" /**
         ),
     ).toEqual(["argument", true, "argument", 7, { Name: "Argument" }]);
     const stringRequest = new SfxRequest(102);
-    dispatcher.ExecuteRequest(".uno:StringResult", stringRequest);
+    dispatcher.ExecuteRequest(stringRequest);
     expect(stringRequest.GetReturnValue()).toEqual(new SfxStringItem(102, "done"));
     const numberRequest = new SfxRequest(103);
-    dispatcher.ExecuteRequest(".uno:NumberResult", numberRequest);
+    dispatcher.ExecuteRequest(numberRequest);
     expect(numberRequest.GetReturnValue()).toEqual(new SfxInt16Item(103, 12));
     const complexRequest = new SfxRequest(104);
-    dispatcher.ExecuteRequest(".uno:ComplexResult", complexRequest);
+    dispatcher.ExecuteRequest(complexRequest);
     expect(complexRequest.IsDone()).toBe(true);
     expect(complexRequest.GetReturnValue()).toBeUndefined();
     const asyncRequest = new SfxRequest(105);
-    const asyncResult = dispatcher.ExecuteRequest(".uno:AsyncResult", asyncRequest);
+    const asyncResult = dispatcher.ExecuteRequest(asyncRequest);
     expect(asyncRequest.IsDone()).toBe(false);
     await expect(
       asyncResult.status === "executed" ? asyncResult.value : Promise.reject(new Error("missing")),
     ).resolves.toBe(true);
     expect(asyncRequest.GetReturnValue()).toEqual(new SfxBoolItem(105, true));
     const rejectedRequest = new SfxRequest(106);
-    const rejectedResult = dispatcher.ExecuteRequest(".uno:RejectedResult", rejectedRequest);
+    const rejectedResult = dispatcher.ExecuteRequest(rejectedRequest);
     await expect(
       rejectedResult.status === "executed"
         ? rejectedResult.value
@@ -282,16 +290,22 @@ describe("command registry" /**
       commandId: ".uno:RejectedResult",
       error: "request failed",
     });
-    dispatcher.ExecuteRequest(".uno:BooleanResult", new SfxRequest(101));
+    dispatcher.ExecuteRequest(new SfxRequest(101));
     expect(dispatcher.GetLastCommandError()).toBeUndefined();
-    expect(
-      /** Executes a mismatched request. @returns Invalid dispatch result. */ () =>
-        dispatcher.ExecuteRequest(".uno:BooleanResult", new SfxRequest(999)),
-    ).toThrow("SfxRequest slot does not match command");
-    expect(dispatcher.ExecuteRequest(".uno:Missing", new SfxRequest(999))).toEqual({
-      commandId: ".uno:Missing",
+    expect(dispatcher.ExecuteRequest(new SfxRequest(999))).toEqual({
+      commandId: "slot:999",
       status: "missing",
     });
+    expect(dispatcher.Execute(".uno:BooleanResult?ignored").status).toBe("executed");
+    const sparseShell: SfxShell = {
+      /** Deliberately exposes an unresolved slot to verify defensive enumeration. */
+      slotIds: [999],
+      /** Resolves no command. @returns Undefined. */
+      ResolveSlot: () => undefined,
+    };
+    dispatcher.Push(sparseShell);
+    expect(dispatcher.GetCommands()).toHaveLength(6);
+    dispatcher.Pop(sparseShell);
   });
 
   it("returns explicit dispatch outcomes and rejects invalid registry input" /**
@@ -358,6 +372,36 @@ describe("command registry" /**
           },
         ]),
     ).toThrow("Command slot id is invalid");
+    expect(
+      /** Registers a browser command without a numeric slot. @returns Invalid registry. */ () =>
+        createCommandRegistry([
+          {
+            /** Returns nothing for the invalid fixture. @returns Nothing. */
+            execute: (): void => undefined,
+            id: "vnd.vite-office.browser:MissingSlot",
+            label: "Missing browser slot",
+          },
+        ]),
+    ).toThrow("Command slot id is invalid");
+    expect(
+      /** Registers two command URLs for one slot instead of one request-driven handler. @returns Invalid registry. */ () =>
+        createCommandRegistry([
+          {
+            /** Returns nothing for the first duplicate-slot fixture. @returns Nothing. */
+            execute: (): void => undefined,
+            id: ".uno:First",
+            label: "First",
+            slotId: 500,
+          },
+          {
+            /** Returns nothing for the second duplicate-slot fixture. @returns Nothing. */
+            execute: (): void => undefined,
+            id: ".uno:Second",
+            label: "Second",
+            slotId: 500,
+          },
+        ]),
+    ).toThrow("Duplicate command slot id");
     expect(
       /** Registers malformed command arguments. @returns Invalid registry. */ () =>
         createCommandRegistry([

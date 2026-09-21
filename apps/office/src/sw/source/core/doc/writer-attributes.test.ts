@@ -117,7 +117,7 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
         /** Reads a missing style. @returns Missing style. */ () =>
           writer.GetTextFormatColl("missing" as "default"),
       ),
-    ).toThrow("Unknown SwTextFormatColl");
+    ).toThrow("Unsupported SwTextFormatColl");
     expect(heading.DerivedFrom()).toBe(headingBase);
     expect(defaultStyle.IsAuto()).toBe(false);
     expect(node.GetFormatColl()).toBe(defaultStyle);

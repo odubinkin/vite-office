@@ -20,7 +20,7 @@ export type SwUndoInsertGroup = "delimiter" | "word";
 export class SwUndoInsert extends SwUndo {
   private insertedFragment: SwTextFragment;
 
-  /** Creates one insert action before it is first redone. @param paragraphId - Target node. @param offset - Insertion start. @param insertedRuns - Inserted formatted fragments. @param group - Optional grouping class. @param before - Cursor before insertion. @param after - Cursor after insertion. @returns Nothing. */
+  /** Creates one insert action before it is first redone. @param paragraph - Target node. @param offset - Insertion start. @param insertedFragment - Inserted native fragment. @param group - Optional grouping class. @param before - Cursor before insertion. @param after - Cursor after insertion. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private readonly offset: number,

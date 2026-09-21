@@ -6,7 +6,7 @@ import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext
 
 /** Reversible SwTextFormatColl assignment for one paragraph. */
 export class SwUndoFormatColl extends SwUndo {
-  /** Creates one paragraph-style action. @param paragraphId - Target node. @param beforeStyle - Original collection. @param afterStyle - New collection. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
+  /** Creates one paragraph-style action. @param paragraph - Target node. @param beforeStyle - Original collection. @param afterStyle - New collection. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private readonly beforeStyle: WriterParagraphStyle,

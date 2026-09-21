@@ -91,7 +91,7 @@ export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
   protected abstract RedoImpl(context: SwUndoRedoContext): void;
 }
 
-/** Finds one action-target text node. @param document - Current SwDoc. @param paragraphId - Stable node identity. @returns Matching SwTextNode. */
+/** Validates one action-target text node. @param document - Current SwDoc. @param node - Retained node reference. @returns Matching SwTextNode. */
 export function GetUndoTextNode(document: SwDoc, node: SwTextNode): SwTextNode {
   if (node.GetDoc() !== document) throw new Error("Writer undo node belongs to another document.");
   return node;
@@ -112,7 +112,7 @@ export function GetUndoFragmentLength(fragment: SwTextFragment): number {
   return fragment.text.length;
 }
 
-/** Replaces one node range without cloning its SwDoc. @param document - Mutated graph. @param paragraphId - Target node. @param start - Inclusive offset. @param end - Exclusive offset. @param runs - Replacement fragments. @returns Nothing. */
+/** Replaces one node range without cloning its SwDoc. @param document - Mutated graph. @param node - Target node. @param start - Inclusive offset. @param end - Exclusive offset. @param fragment - Replacement native fragment. @returns Nothing. */
 export function ReplaceUndoRange(
   document: SwDoc,
   node: SwTextNode,

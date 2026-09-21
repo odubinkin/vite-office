@@ -12,14 +12,20 @@ import type { WriterSnapshotState } from "../../source/filter/basflt/writer-stor
 import { parseWriterClipboardPaste, type WriterClipboardPaste } from "../filter/html/swhtml";
 import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
 import { SwDocShell } from "../../source/uibase/app/docsh";
-import type {
-  WriterCutCommandArguments,
-  WriterPasteCommandArguments,
-  WriterViewControllerFactory,
-} from "../../source/uibase/uiview/view";
+import type { WriterViewControllerFactory } from "../../source/uibase/uiview/view";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
 import { SwViewOption } from "../../inc/viewopt";
-import { WriterViewProjection } from "../presentation/writer-view-projection";
+
+/** Browser Cut request after native clipboard-event adaptation. */
+export interface WriterCutCommandArguments {
+  readonly clipboardHandled?: boolean;
+}
+
+/** Browser Paste request after native clipboard-event adaptation. */
+export interface WriterPasteCommandArguments {
+  readonly clipboardHandled?: boolean;
+  readonly paste?: WriterClipboardPaste;
+}
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
@@ -184,7 +190,6 @@ export function createWriterViewControllerFactory(
           clipboardWorkflow: new WriterClipboardWorkflowController(wrtShell, ports),
           fileWorkflow: new WriterFileWorkflowController(docShell, ports),
           localStorageWorkflow: new WriterLocalStorageController(docShell, ports),
-          presentationProjector: new WriterViewProjection(),
         };
       },
   };

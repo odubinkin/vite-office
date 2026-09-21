@@ -63,7 +63,7 @@ export function createWriterUndoCursorState(
   };
 }
 
-/** Creates a collapsed undo cursor endpoint. @param paragraphId - Target node identity. @param offset - UTF-16 content offset. @param pendingCharacterAttributes - Pending caret attributes. @returns Complete undo cursor state. */
+/** Creates a collapsed undo cursor endpoint. @param paragraph - Target node. @param offset - UTF-16 content offset. @param pendingCharacterAttributes - Pending caret attributes. @returns Complete undo cursor state. */
 export function createWriterCollapsedCursorState(
   paragraph: WriterParagraph,
   offset: number,

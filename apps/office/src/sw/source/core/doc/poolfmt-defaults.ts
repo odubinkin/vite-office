@@ -89,9 +89,6 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
       upperTwips: spacing[0] * 20,
     };
   }
-  if (id === "table-heading") return { adjust: SvxAdjust.Center, bold: true };
-  if (id.endsWith("-heading") || id === "index-heading")
-    return { bold: true, fontSizeTwips: 16 * 20 };
   switch (id) {
     case "text-body":
       return { lineHeightPercent: 115, lowerTwips: 7 * 20 };
@@ -100,9 +97,9 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
     case "hanging-indent":
       return { firstLineTwips: -283, textLeftTwips: 567 };
     case "text-body-indent":
-      return { textLeftTwips: 283 };
+      return { firstLineTwips: 0, textLeftTwips: 283 };
     case "marginalia":
-      return { textLeftTwips: 2268 };
+      return { firstLineTwips: 0, textLeftTwips: 2268 };
     case "heading":
       return {
         fontRole: "heading",
@@ -124,9 +121,6 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
         textLeftTwips: 57,
         upperTwips: 57,
       };
-    case "header-right":
-    case "footer-right":
-      return { adjust: SvxAdjust.Right };
     case "title":
       return { adjust: SvxAdjust.Center, bold: true, fontSizeTwips: 28 * 20 };
     case "subtitle":
@@ -139,9 +133,9 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
     case "appendix":
       return { adjust: SvxAdjust.Center, bold: true, fontSizeTwips: 16 * 20 };
     case "quotations":
-      return { lowerTwips: 283, rightTwips: 567, textLeftTwips: 567 };
+      return { firstLineTwips: 0, lowerTwips: 283, rightTwips: 567, textLeftTwips: 567 };
     case "preformatted-text":
-      return { fontRole: "fixed", fontSizeTwips: 10 * 20 };
+      return { fontRole: "fixed", fontSizeTwips: 10 * 20, lowerTwips: 0 };
     default:
       return {};
   }

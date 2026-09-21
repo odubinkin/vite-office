@@ -56,7 +56,7 @@ describe("createWriterModuleFactory", /** Registers lazy module tests. @returns 
     if (session === undefined) throw new Error("Writer session was not created during mount.");
     workspace.rerender(factory.createWorkspace());
     expect(createSession).toHaveBeenCalledTimes(1);
-    expect(session.view.GetSnapshot().documentState.lifecycle).toBe("new");
+    expect(session.viewStore.GetSnapshot().documentState.lifecycle).toBe("new");
 
     workspace.unmount();
     expect(session.docShell.GetDocumentState().lifecycle).toBe("closed");

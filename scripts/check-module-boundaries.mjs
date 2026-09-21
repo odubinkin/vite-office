@@ -110,7 +110,23 @@ for (const sourceFile of runtimeSources) {
     failures.push(`${displayPath(sourceFile)}: unclassified runtime module`);
     continue;
   }
-  const imports = ts.preProcessFile(fs.readFileSync(sourceFile, "utf8"), true, true).importedFiles;
+  const sourceText = fs.readFileSync(sourceFile, "utf8");
+  if (relativeSource.startsWith(`sw${path.sep}source${path.sep}`)) {
+    for (const browserProjectionSymbol of [
+      "ClipboardEvent",
+      "InputEvent",
+      "WriterPresentationProjection",
+      "WriterViewSnapshot",
+      "clipboardHandled",
+      "paragraphId",
+      "useSyncExternalStore",
+    ])
+      if (sourceText.includes(browserProjectionSymbol))
+        failures.push(
+          `${displayPath(sourceFile)}: Writer source layers must not declare browser projection symbol ${browserProjectionSymbol}`,
+        );
+  }
+  const imports = ts.preProcessFile(sourceText, true, true).importedFiles;
   for (const imported of imports) {
     if (!imported.fileName.startsWith(".")) continue;
     checkedImports += 1;

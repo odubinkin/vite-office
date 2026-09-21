@@ -237,14 +237,11 @@ const implementedStyleIds = new Set([
   "footnote",
   "endnote",
   "comment",
-  "header-right",
-  "footer-right",
   "title",
   "subtitle",
   "appendix",
   "quotations",
   "preformatted-text",
-  "table-heading",
 ]);
 
 /** Styles whose current item-set construction has source-derived semantics rather than name-only metadata. */
@@ -252,9 +249,7 @@ export const WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL: readonly WriterParagraphStyl
   WRITER_PARAGRAPH_STYLE_POOL.filter(
     /** Keeps only styles backed by implemented source-derived defaults. @param definition - Pool definition. @returns Whether the style is available. */
     (definition) =>
-      implementedStyleIds.has(definition.id) ||
-      /^heading-(10|[1-9])$/.test(definition.id) ||
-      (definition.group === "index" && definition.id.endsWith("-heading")),
+      implementedStyleIds.has(definition.id) || /^heading-(10|[1-9])$/.test(definition.id),
   );
 
 /** Looks up immutable built-in metadata by programmatic identity. @param id - Stable ID. @returns Definition. */
@@ -264,6 +259,17 @@ export function getWriterParagraphStyleDefinition(
   return WRITER_PARAGRAPH_STYLE_POOL.find(
     /** Matches one ID. @param definition - Candidate. @returns Whether matching. */ (definition) =>
       definition.id === id,
+  );
+}
+
+/** Looks up a built-in style whose defaults and complete ancestry are implemented. @param id - Stable ID. @returns Available definition. */
+export function getWriterAvailableParagraphStyleDefinition(
+  id: string,
+): WriterParagraphStyleDefinition | undefined {
+  return WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
+    /** Matches one available ID. @param definition - Candidate. @returns Whether matching. */ (
+      definition,
+    ) => definition.id === id,
   );
 }
 

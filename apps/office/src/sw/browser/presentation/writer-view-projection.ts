@@ -2,11 +2,19 @@
 
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
+import type { SfxMediumOperationStatus } from "../../../sfx2/source/doc/docfile";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
-import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
+import type {
+  SwTextNode,
+  WriterParagraphAlignment,
+  WriterTextRun,
+} from "../../source/core/txtnode/ndtxt";
+import type { WriterParagraphList } from "../../source/core/doc/list";
+import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
 import { SwPosition } from "../../source/core/crsr/pam";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
+import type { SwView } from "../../source/uibase/uiview/view";
 import {
   SvxFirstLineIndentItem,
   SvxLineSpacingItem,
@@ -29,19 +37,58 @@ import {
   RES_PARATR_LINESPACING,
   RES_UL_SPACE,
 } from "../../inc/hintids";
-import type {
-  WriterParagraphProjection,
-  WriterPresentationProjection,
-  WriterPresentationProjector,
-} from "../../source/uibase/uiview/view";
+/** Primitive/resource-ID projection of one text node, owned only by the browser presenter. */
+export interface WriterParagraphProjection {
+  readonly alignment: WriterParagraphAlignment;
+  readonly bulletChar?: string;
+  readonly computedStyle: WriterParagraphComputedStyle;
+  readonly id: string;
+  readonly list: WriterParagraphList;
+  readonly listId: string;
+  readonly listMarker?: string;
+  readonly textLeftMargin: number;
+  readonly numRuleName: string;
+  readonly runs: readonly WriterTextRun[];
+  readonly style: WriterParagraphStyle;
+  readonly styleDisplayName: string;
+  readonly text: string;
+}
 
-export type {
-  WriterParagraphProjection,
-  WriterPresentationProjection,
-} from "../../source/uibase/uiview/view";
+/** Browser-ready values projected from effective Writer paragraph items. */
+export interface WriterParagraphComputedStyle {
+  readonly firstLineIndentPt: number;
+  readonly fontFamily?: string;
+  readonly fontStyle: "italic" | "normal";
+  readonly fontSizePt: number;
+  readonly fontWeight: 400 | 700;
+  readonly lineHeight: number;
+  readonly lowerSpacingPt: number;
+  readonly rightMarginPt: number;
+  readonly upperSpacingPt: number;
+}
+
+/** Immutable browser presentation value with no mutable model references. */
+export interface WriterPresentationProjection {
+  readonly activeParagraph: WriterParagraphProjection;
+  readonly activeParagraphIndex: number;
+  readonly cursorSelection: WriterCursorSelection;
+  readonly documentState: OfficeDocument;
+  readonly modelRevision: number;
+  readonly paragraphs: readonly WriterParagraphProjection[];
+}
+
+/** Complete browser external-store snapshot. */
+export interface WriterViewSnapshot extends WriterPresentationProjection {
+  readonly isHorizontalRulerVisible: boolean;
+  readonly isPropertiesSidebarVisible: boolean;
+  readonly isStoragePending: boolean;
+  readonly isStatusBarVisible: boolean;
+  readonly mediumOperation: Readonly<SfxMediumOperationStatus>;
+  readonly viewVersion: number;
+}
 
 /** Keeps React keys outside SwTextNode and projects one live revision at a time. */
-export class WriterViewProjection implements WriterPresentationProjector {
+export class WriterViewProjection {
   private nextNodeId = 1;
   private readonly nodeIds = new WeakMap<SwTextNode, string>();
   private readonly projectedNodes = new Map<string, SwTextNode>();
@@ -176,5 +223,66 @@ export class WriterViewProjection implements WriterPresentationProjector {
       modelRevision: document.GetDocumentStateManager().GetModelRevision(),
       paragraphs: Object.freeze(paragraphs),
     });
+  }
+}
+
+/** Owns browser projection caching and external-store subscriptions outside SwView. */
+export class WriterViewStore {
+  private cachedSnapshot: WriterViewSnapshot | undefined;
+  private readonly listeners = new Set<() => void>();
+  private readonly unsubscribe: () => void;
+
+  /** Creates a browser store over one attached Writer view. @param view - Active Writer view. @param projection - Browser identity/projector. @returns Nothing. */
+  public constructor(
+    private readonly view: SwView,
+    public readonly projection = new WriterViewProjection(),
+  ) {
+    this.unsubscribe = view
+      .GetViewFrame()
+      .GetBindings()
+      .Subscribe(
+        /** Invalidates and publishes the browser snapshot. @returns Nothing. */ () => {
+          this.cachedSnapshot = undefined;
+          for (const listener of this.listeners) listener();
+        },
+      );
+  }
+
+  public readonly GetSnapshot =
+    /** Returns the immutable snapshot, retaining identity until Sfx invalidation. @returns Browser view snapshot. */
+    (): WriterViewSnapshot => {
+      if (this.cachedSnapshot !== undefined) return this.cachedSnapshot;
+      const document = this.view.GetDocShell().GetDoc();
+      const wrtShell = this.view.GetWrtShell();
+      const projected = this.projection.Project(
+        document,
+        wrtShell.GetActiveParagraph(),
+        wrtShell.GetCursor(),
+        this.view.GetDocShell().GetDocumentState(),
+      );
+      this.cachedSnapshot = Object.freeze({
+        ...projected,
+        isHorizontalRulerVisible: this.view.IsHorizontalRulerVisible(),
+        isPropertiesSidebarVisible: this.view.IsSidebarVisible(),
+        isStatusBarVisible: this.view.IsStatusBarVisible(),
+        isStoragePending: this.view.IsStoragePending(),
+        mediumOperation: this.view.GetDocShell().GetMedium().GetLastOperation(),
+        viewVersion: this.view.GetViewFrame().GetBindings().GetVersion(),
+      });
+      return this.cachedSnapshot;
+    };
+
+  public readonly Subscribe =
+    /** Subscribes one browser presentation consumer. @param listener - Store callback. @returns Cleanup. */
+    (listener: () => void): (() => void) => {
+      this.listeners.add(listener);
+      return /** Removes one listener. @returns Whether it existed. */ () =>
+        this.listeners.delete(listener);
+    };
+
+  /** Releases the Sfx subscription and browser listeners. @returns Nothing. */
+  public Close(): void {
+    this.unsubscribe();
+    this.listeners.clear();
   }
 }

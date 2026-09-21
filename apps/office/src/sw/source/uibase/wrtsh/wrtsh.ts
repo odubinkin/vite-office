@@ -6,7 +6,7 @@ import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
-import type { WriterParagraphStyle } from "../../core/doc/fmtcol";
+import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import type {
   SwTextNode as WriterParagraph,
@@ -696,6 +696,8 @@ export class SwWrtShell extends SwModify {
 
   /** Applies a paragraph style through one shell-owned history transition. @param style - Next style. @returns Whether content changed. */
   public SetParagraphStyle(style: WriterParagraphStyle): boolean {
+    if (!isWriterParagraphStyle(style))
+      throw new Error(`Unsupported Writer paragraph style: ${style}`);
     const paragraph = this.GetActiveParagraph();
     if (paragraph.style === style) return false;
     const cursor = this.CaptureCursorState();

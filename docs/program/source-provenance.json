@@ -3543,7 +3543,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterPresentationProjector",
+            "marker": "SwView",
             "path": "apps/office/src/sw/source/uibase/uiview/view.ts"
           }
         ],
@@ -3556,19 +3556,15 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/uiview/view.ts",
       "localSymbols": [
-        "WriterPresentationProjector",
-        "WriterCutCommandArguments",
-        "WriterPasteCommandArguments",
         "WriterViewControllers",
         "WriterViewControllerFactory",
-        "WriterViewSnapshot",
         "SwView"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwView, SwView::GetDispatcher, SwView::ImpSetVerb, SwView::GotFocus and the bounded WriterPresentationProjector, WriterCutCommandArguments, WriterPasteCommandArguments contract remain intentionally omitted."
+        "Upstream obligations outside SwView, SwView::GetDispatcher, SwView::ImpSetVerb, and SwView::GotFocus remain intentionally omitted; browser projection and clipboard request contracts are mapped separately as browser adaptations."
       ],
       "preservedResponsibilities": [
-        "Implements the active SwView shell/frame relationship, view command routing, SwViewOption state, Sfx bindings invalidation, and an immutable browser presentation projection."
+        "Implements the active SwView shell/frame relationship, view command routing, SwViewOption state, and Sfx bindings invalidation without browser presentation ownership."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/uiview/view.cxx",

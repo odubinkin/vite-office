@@ -1,6 +1,6 @@
 /** @fileoverview Implements the bounded style-pool manager from pinned LibreOffice `sw/source/core/doc/DocumentStylePoolManager.cxx`. */
 
-import { getWriterParagraphStyleDefinition } from "../../../inc/poolfmt";
+import { getWriterAvailableParagraphStyleDefinition } from "../../../inc/poolfmt";
 import type { SwAttrPool } from "../attr/swatrset";
 import { createWriterTextFormatColl, SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
 import { applyWriterParagraphStyleDefaults } from "./poolfmt-defaults";
@@ -34,8 +34,8 @@ export class DocumentStylePoolManager {
   public GetTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl {
     const existing = this.FindTextFormatColl(id);
     if (existing !== undefined) return existing;
-    const definition = getWriterParagraphStyleDefinition(id);
-    if (definition === undefined) throw new Error(`Unknown SwTextFormatColl: ${id}`);
+    const definition = getWriterAvailableParagraphStyleDefinition(id);
+    if (definition === undefined) throw new Error(`Unsupported SwTextFormatColl: ${id}`);
     const parent =
       definition.parentId === undefined ? undefined : this.GetTextFormatColl(definition.parentId);
     const collection = createWriterTextFormatColl(this.attrPool, definition, parent);

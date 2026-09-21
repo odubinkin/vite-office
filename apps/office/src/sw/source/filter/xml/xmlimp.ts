@@ -59,7 +59,7 @@ import {
 import {
   getWriterOdfStyleName,
   getWriterStyleIdFromOdfName,
-  WRITER_PARAGRAPH_STYLE_POOL,
+  WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
 } from "../../../inc/poolfmt";
 
 const ignoredDocumentChildren = new Set([
@@ -420,7 +420,7 @@ function applyNamedParagraphStyles(
   const standard = styles.get("Standard");
   if (standard?.family !== "paragraph")
     throw new Error("ODF Writer Standard paragraph style is missing.");
-  for (const poolStyle of WRITER_PARAGRAPH_STYLE_POOL) {
+  for (const poolStyle of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) {
     const definition = styles.get(getWriterOdfStyleName(poolStyle.id));
     if (definition === undefined) continue;
     if (definition.family !== "paragraph")
@@ -439,7 +439,7 @@ function applyNamedParagraphStyles(
           collection.SetFormatAttr(item),
       );
   }
-  for (const poolStyle of WRITER_PARAGRAPH_STYLE_POOL) {
+  for (const poolStyle of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) {
     const definition = styles.get(getWriterOdfStyleName(poolStyle.id));
     if (definition?.family !== "paragraph") continue;
     const collection = document.GetTextFormatColl(poolStyle.id);

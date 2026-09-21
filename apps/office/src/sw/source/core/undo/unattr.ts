@@ -18,7 +18,7 @@ export class SwUndoAttr extends SwUndo {
   private readonly afterFragment: SwTextFragment;
   private readonly beforeFragment: SwTextFragment;
 
-  /** Creates a direct-format action. @param paragraphId - Target node. @param start - Formatted range start. @param beforeRuns - Original hints projected as runs. @param afterRuns - Resulting hints projected as runs. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
+  /** Creates a direct-format action. @param paragraph - Target node. @param start - Formatted range start. @param beforeFragment - Original native fragment. @param afterFragment - Resulting native fragment. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private readonly start: number,
@@ -78,7 +78,7 @@ export function CreateWriterFontUndo(
 
 /** Reversible RES_PARATR_ADJUST change for one paragraph. */
 export class SwUndoParagraphFormat extends SwUndo {
-  /** Creates one alignment action. @param paragraphId - Target node. @param beforeAlignment - Original adjustment. @param afterAlignment - New adjustment. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
+  /** Creates one alignment action. @param paragraph - Target node. @param beforeAlignment - Original adjustment. @param afterAlignment - New adjustment. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */
   public constructor(
     private readonly paragraph: SwTextNode,
     private readonly beforeAlignment: WriterParagraphAlignment,

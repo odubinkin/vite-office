@@ -1,5 +1,5 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
-import { useCallback, useMemo, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
@@ -21,8 +21,9 @@ import { readBrowserWriterClipboardPaste } from "../editor/writer-clipboard-even
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import type { BrowserWriterEditPort } from "../editor/writer-edit-controller";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
-import type { SwView, WriterPasteCommandArguments } from "../../source/uibase/uiview/view";
-import { WriterViewProjection } from "./writer-view-projection";
+import type { SwView } from "../../source/uibase/uiview/view";
+import type { WriterPasteCommandArguments } from "../workflows/writer-workflows";
+import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
@@ -30,6 +31,7 @@ export interface WriterWorkbenchProps {
   /** Recovery result shown through the existing Writer footer status surface. */
   readonly recoveryNotice?: string;
   readonly view: SwView;
+  readonly viewStore?: WriterViewStore;
 }
 
 /** Projects one Writer view through browser presenters. @param props - Active view selection. @returns Writer workspace. */
@@ -37,9 +39,25 @@ export function WriterWorkbench({
   isActive,
   recoveryNotice,
   view,
+  viewStore,
 }: WriterWorkbenchProps): React.JSX.Element {
   const localization = useBrowserLocalization();
-  const snapshot = useSyncExternalStore(view.Subscribe, view.GetSnapshot, view.GetSnapshot);
+  const [presentationStore] = useState(
+    /** Reuses the session store or owns one browser-local store for an injected view. @returns Presentation store. */ () =>
+      viewStore ?? new WriterViewStore(view),
+  );
+  useEffect(
+    /** Releases only a store created by this component. @returns Optional cleanup. */ () =>
+      viewStore === undefined
+        ? /** Closes the component-owned store. @returns Nothing. */ () => presentationStore.Close()
+        : undefined,
+    [presentationStore, viewStore],
+  );
+  const snapshot = useSyncExternalStore(
+    presentationStore.Subscribe,
+    presentationStore.GetSnapshot,
+    presentationStore.GetSnapshot,
+  );
   const dialogController = view.GetDialogController();
   const dialogRequest = useSyncExternalStore(
     dialogController.Subscribe,
@@ -47,7 +65,7 @@ export function WriterWorkbench({
     dialogController.GetSnapshot,
   );
   const wrtShell = view.GetWrtShell();
-  const viewProjection = view.GetPresentationProjector() as WriterViewProjection;
+  const viewProjection = presentationStore.projection;
   const editPort = useMemo<Omit<BrowserWriterEditPort, "synchronizeSelection">>(
     /** Binds browser intent translation to Writer-native shell operations. @returns Stable edit port. */ () => ({
       deleteForward: /** Deletes after the Writer cursor. @returns Whether changed. */ () =>
@@ -281,7 +299,7 @@ export function WriterWorkbench({
 /** Formats command completion and shell/medium state at the browser presentation boundary. @param view - Active Writer view. @param snapshot - Current projection. @param getText - Localization lookup. @returns Status text. */
 function presentWriterStatus(
   view: SwView,
-  snapshot: ReturnType<SwView["GetSnapshot"]>,
+  snapshot: WriterViewSnapshot,
   getText: (messageId: string, fallback: string) => string,
 ): string {
   const commandError = presentWriterCommandError(view, getText);

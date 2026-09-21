@@ -34,6 +34,7 @@ import {
 } from "../../source/filter/xml/odt-filter-service";
 import { createBrowserOdtFilterService } from "../filter/xml/odt-worker-client";
 import { WriterWorkbench } from "../presentation/writer-view";
+import { WriterViewStore } from "../presentation/writer-view-projection";
 import { WriterRecoveryPrompt } from "../presentation/WriterRecoveryPrompt";
 import {
   createWriterViewControllerFactory,
@@ -63,6 +64,8 @@ export interface WriterDocumentSession {
   readonly docShell: SwDocShell;
   /** Persistent Writer view exposed to React as an external store. */
   readonly view: SwView;
+  /** Browser-owned projection and external-store cache. */
+  readonly viewStore: WriterViewStore;
 }
 
 /** Creates the production browser adapters without leaking them into document or Writer shell code. @returns Injected session services. */
@@ -127,6 +130,7 @@ export function createWriterDocumentSession(
     view.GetWrtShell().GetCommandShell(),
     view.GetWrtShell().GetListShell().GetCommandShell(),
   ]);
+  const viewStore = new WriterViewStore(view);
   let closed = false;
   return {
     autoRecovery,
@@ -141,6 +145,7 @@ export function createWriterDocumentSession(
       closed = true;
       autoRecovery?.Stop();
       unregisterRecovery?.();
+      viewStore.Close();
       view.Close();
     },
     DiscardRecovery:
@@ -162,6 +167,7 @@ export function createWriterDocumentSession(
     docShell,
     frame,
     view,
+    viewStore,
   };
 }
 
@@ -226,6 +232,7 @@ function WriterWorkspaceSession({
             isActive
             {...(recoveryNotice === undefined ? {} : { recoveryNotice })}
             view={session.view}
+            viewStore={session.viewStore}
           />
         )
       }

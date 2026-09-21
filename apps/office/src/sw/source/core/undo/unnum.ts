@@ -9,7 +9,7 @@ abstract class SwUndoParagraphList extends SwUndo {
   private afterList: WriterParagraphList;
   private readonly beforeList: WriterParagraphList;
 
-  /** Creates one list transition. @param comment - Command label. @param paragraphId - Target node. @param beforeList - Original list items. @param afterList - New list items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
+  /** Creates one list transition. @param comment - Command label. @param paragraph - Target node. @param beforeList - Original list items. @param afterList - New list items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
   protected constructor(
     comment: string,
     private readonly paragraph: SwTextNode,
@@ -43,7 +43,7 @@ abstract class SwUndoParagraphList extends SwUndo {
 
 /** Reversible bullet, numbering, or remove-numbering command. */
 export class SwUndoInsNum extends SwUndoParagraphList {
-  /** Creates one list-kind action. @param paragraphId - Target node. @param beforeList - Original items. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
+  /** Creates one list-kind action. @param paragraph - Target node. @param beforeList - Original items. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
   public constructor(
     paragraph: SwTextNode,
     beforeList: WriterParagraphList,
@@ -57,7 +57,7 @@ export class SwUndoInsNum extends SwUndoParagraphList {
 
 /** Reversible promote or demote command retaining only old and new list items. */
 export class SwUndoNumLevel extends SwUndoParagraphList {
-  /** Creates one list-level action. @param paragraphId - Target node. @param beforeList - Original items. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
+  /** Creates one list-level action. @param paragraph - Target node. @param beforeList - Original items. @param afterList - New items. @param before - Cursor before command. @param after - Cursor after command. @returns Nothing. */
   public constructor(
     paragraph: SwTextNode,
     beforeList: WriterParagraphList,
