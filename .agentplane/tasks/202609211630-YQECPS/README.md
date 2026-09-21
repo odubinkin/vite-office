@@ -1,10 +1,11 @@
 ---
 id: "202609211630-YQECPS"
 title: "Fix reviewed Writer P1 parity gaps"
-status: "DOING"
+result_summary: "verified-202609211630-YQECPS"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T17:09:37.911Z"
+  updated_at: "2026-09-21T17:10:12.389Z"
   updated_by: "CODER"
   note: "verified-202609211630-YQECPS"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "Replacement validation precedes active graph disposal; text:start-value round-trips through Writer restart items; SwTextNode no longer exposes run DTO conversion/projection APIs; paste orchestration is separated; capability and provenance manifests are consistent."
-commit: null
+commit:
+  hash: "cd807227b01d18e72ee47404b6d2b8f25c320bfe"
+  message: "🧪 YQECPS task: record implementation evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved Writer P1 corrections with atomic lifecycle replacement, ODF restart round trips, ownership decomposition, and truthful parity evidence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609211630-YQECPS. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609211630-YQECPS"
+  -
+    type: "verify"
+    at: "2026-09-21T17:10:12.389Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211630-YQECPS"
+  -
+    type: "status"
+    at: "2026-09-21T17:10:12.584Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609211630-YQECPS. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-21T17:09:37.992Z"
+doc_updated_at: "2026-09-21T17:10:12.585Z"
 doc_updated_by: "CODER"
 description: "Fix the four reviewed P1 discrepancies: atomic document replacement rollback, implemented ODF list restart import/export, completion of Writer shell/text-run responsibility separation, and truthful atomic ODT inventory metadata."
 sections:
@@ -170,9 +189,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-21T17:10:12.389Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211630-YQECPS
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T17:09:37.992Z, excerpt_hash=sha256:9dbc63be955454c556ad284a15c0a2d394745c6832fdeef457d8abbf806a4031
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211630-YQECPS/blueprint/resolved-snapshot.json
+    - old_digest: c7b870ecb06de390a15f2f604f3625dfeb3fdd4434a5bdd191792b0848994830
+    - current_digest: c7b870ecb06de390a15f2f604f3625dfeb3fdd4434a5bdd191792b0848994830
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211630-YQECPS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211630-YQECPS --result verified-202609211630-YQECPS --commit cd807227b01d18e72ee47404b6d2b8f25c320bfe
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only commits attributed to task 202609211630-YQECPS; storage/worker schema versions are unchanged unless implementation proves a version bump is required."
   Findings: "Initial review identified four repo-fixable gaps: non-atomic replacement, missing ODF restart serialization, incomplete shell/text-run responsibility separation, and contradictory ODT inventory claims."
+extensions:
+  implementation_commit:
+    hash: "3e17c83be147a57398eb8415890a3bf2583f7107"
+    message: "🧩 YQECPS task: implement Writer P1 parity corrections"
 id_source: "generated"
 ---
 ## Summary
@@ -282,6 +335,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609211630-YQECPS --result verified-202609211630-YQECPS --commit 3e17c83be147a57398eb8415890a3bf2583f7107
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T17:10:12.389Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211630-YQECPS
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T17:09:37.992Z, excerpt_hash=sha256:9dbc63be955454c556ad284a15c0a2d394745c6832fdeef457d8abbf806a4031
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211630-YQECPS/blueprint/resolved-snapshot.json
+- old_digest: c7b870ecb06de390a15f2f604f3625dfeb3fdd4434a5bdd191792b0848994830
+- current_digest: c7b870ecb06de390a15f2f604f3625dfeb3fdd4434a5bdd191792b0848994830
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211630-YQECPS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211630-YQECPS --result verified-202609211630-YQECPS --commit cd807227b01d18e72ee47404b6d2b8f25c320bfe
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
