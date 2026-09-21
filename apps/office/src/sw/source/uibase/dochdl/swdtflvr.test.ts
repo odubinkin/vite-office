@@ -6,6 +6,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "../wrtsh/wrtsh";
+import { setTestSelection } from "../../../../test/wrtsh-test-helpers";
 
 describe("SwTransferable", /** Groups model-owned transfer tests. @returns Nothing. */ function defineWriterTransferableTests(): void {
   it("serializes only SwPaM model data even when rendered DOM disagrees", /** Verifies rendered descendants cannot forge clipboard output. @returns Nothing. */ function ignoresRenderedDom(): void {
@@ -17,7 +18,7 @@ describe("SwTransferable", /** Groups model-owned transfer tests. @returns Nothi
         createDocument({ id: "transfer", suiteId: "writer", title: "Transfer" }),
       ),
     );
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 5, paragraphId: "p-1" },
     });

@@ -48,7 +48,8 @@ import type { SwNodes } from "../docnode/nodes";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwFormatColl } from "./fmtcol";
 import { SwNumFormat, SwNumRule } from "./number";
-import { SwFormatAutoFormat } from "../txtnode/txatbase";
+import { createSwFormatAutoFormat, SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
+import { SwpHints } from "../txtnode/ndhints";
 import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc";
 
 /** Creates one canonical Writer fixture. @param id - Document identity. @returns Writer graph. */
@@ -282,11 +283,28 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(handle?.Get(RES_CHRATR_WEIGHT)).toBeInstanceOf(SvxWeightItem);
     expect(handle?.Get(RES_CHRATR_POSTURE)).toBeInstanceOf(SvxPostureItem);
     expect(handle?.Get(RES_CHRATR_UNDERLINE)).toBeInstanceOf(SvxUnderlineItem);
+    node.SetHyperlink(0, 1, { url: "https://example.test" });
     const restored = decodeWriterDocument(encodeWriterDocument(writer));
     expect(restored.paragraphs[0]?.runs).toEqual(node.runs);
     expect(restored.paragraphs[0]?.GetpSwpHints()?.Get(0).format).not.toBe(
       node.GetpSwpHints()?.Get(0).format,
     );
+    expect(
+      /** Installs a hint beyond canonical text. @returns Invalid operation. */ () =>
+        node.SetTextHints(
+          new SwpHints(writer.GetAttrPool(), [
+            new SwTextAttr(
+              createSwFormatAutoFormat(writer.GetAttrPool(), {
+                bold: true,
+                italic: false,
+                underline: false,
+              }),
+              0,
+              node.Len() + 1,
+            ),
+          ]),
+        ),
+    ).toThrow("outside the text node");
   });
 });
 
@@ -393,8 +411,12 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 10 });
-    expect(snapshot.textNodes[0]).toMatchObject({ formatCollId: "heading-1", runs: [] });
+    expect(snapshot).toMatchObject({ swModelVersion: 11 });
+    expect(snapshot.textNodes[0]).toMatchObject({
+      formatCollId: "heading-1",
+      hints: [],
+      text: "",
+    });
     expect(snapshot.textNodes[0]).not.toHaveProperty("alignment");
     const restored = normalizeWriterParagraphFormatting(snapshot);
     expect(restored).not.toBe(writer);

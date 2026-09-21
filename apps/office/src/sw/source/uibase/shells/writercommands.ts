@@ -7,10 +7,9 @@ import {
   createCommandRegistry,
   type CommandDefinition,
   type CommandRegistry,
-} from "../../../../framework/source/dispatch/dispatchprovider";
+} from "../../../../sfx2/source/control/dispatch";
 import type { WriterCharacterFormat } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
-import type { WriterParagraphTextRange } from "../wrtsh/wrtsh";
 import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import {
   WRITER_COMMAND_IDS,
@@ -63,15 +62,12 @@ function createWriterCommandRegistry<Context>(
 
 /** Arguments supplied by the DOM selection adapter to a character-format command. */
 export interface WriterCharacterCommandArguments {
-  /** Same-paragraph model range, omitted for pending collapsed-caret formatting. */
-  readonly range?: WriterParagraphTextRange;
   readonly fontFamily?: string;
 }
 
 /** Arguments submitted by the browser hyperlink dialog. */
 export interface WriterHyperlinkCommandArguments {
   readonly hyperlink?: WriterHyperlink;
-  readonly range?: WriterParagraphTextRange;
   readonly text?: string;
 }
 
@@ -101,15 +97,8 @@ export interface WriterTextCommandTarget {
   readonly SetParagraphListKind: (kind: "bullet" | "none" | "numbered") => boolean;
   readonly SetParagraphStyle: (style: string) => boolean;
   readonly SetFontFamily: (fontFamily: string) => boolean;
-  readonly SetHyperlink: (
-    hyperlink: WriterHyperlink | undefined,
-    text?: string,
-    range?: WriterParagraphTextRange,
-  ) => boolean;
-  readonly ToggleCharacterFormat: (
-    format: WriterCharacterFormat,
-    range?: WriterParagraphTextRange,
-  ) => boolean;
+  readonly SetHyperlink: (hyperlink: WriterHyperlink | undefined, text?: string) => boolean;
+  readonly ToggleCharacterFormat: (format: WriterCharacterFormat) => boolean;
   readonly Undo: () => boolean;
 }
 
@@ -147,12 +136,8 @@ export function createWriterTextCommandRegistry(
     /** Creates one direct-character command descriptor. @param id - Stable ID. @param format - Character attribute. @returns Command descriptor. */
     (id: string, format: WriterCharacterFormat) => ({
       capabilityId: "CAP-0109" as const,
-      /** Toggles direct formatting through the editing shell. @param _context - Bound shell context. @param arguments_ - Optional selection range. @returns Whether content changed. */
-      execute: (_context: WriterTextCommandTarget, arguments_: unknown): boolean =>
-        target.ToggleCharacterFormat(
-          format,
-          getWriterCommandArguments<WriterCharacterCommandArguments>(arguments_)?.range,
-        ),
+      /** Toggles direct formatting through the editing shell. @returns Whether content changed. */
+      execute: (): boolean => target.ToggleCharacterFormat(format),
       id,
       invalidates: ["document", "history", "selection"],
       /** Reads the selection-aware toggle value. @returns Current checked state. */
@@ -193,8 +178,7 @@ export function createWriterTextCommandRegistry(
       /** Applies dialog hyperlink data to the current selection or caret. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether content changed. */
       execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
         const args = getWriterCommandArguments<WriterHyperlinkCommandArguments>(arguments_);
-        if (args?.hyperlink !== undefined)
-          return target.SetHyperlink(args.hyperlink, args.text, args.range);
+        if (args?.hyperlink !== undefined) return target.SetHyperlink(args.hyperlink, args.text);
         return dialogController
           .RequestHyperlinkDialog(WRITER_COMMAND_IDS.hyperlinkDialog, target.GetHyperlinkAtCursor())
           .then(
@@ -216,8 +200,7 @@ export function createWriterTextCommandRegistry(
       /** Replaces the current hyperlink using dialog data. @param _context - Bound shell. @param arguments_ - Dialog payload. @returns Whether changed. */
       execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
         const args = getWriterCommandArguments<WriterHyperlinkCommandArguments>(arguments_);
-        if (args?.hyperlink !== undefined)
-          return target.SetHyperlink(args.hyperlink, undefined, args.range);
+        if (args?.hyperlink !== undefined) return target.SetHyperlink(args.hyperlink);
         return dialogController
           .RequestHyperlinkDialog(WRITER_COMMAND_IDS.editHyperlink, target.GetHyperlinkAtCursor())
           .then(

@@ -3,6 +3,7 @@
 import { getWriterParagraphStyleDefinition } from "../../../inc/poolfmt";
 import type { SwAttrPool } from "../attr/swatrset";
 import { createWriterTextFormatColl, SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
+import { applyWriterParagraphStyleDefaults } from "./poolfmt-defaults";
 
 /** Owns document paragraph-style collections and their parent/follow graph. */
 export class DocumentStylePoolManager {
@@ -38,6 +39,7 @@ export class DocumentStylePoolManager {
     const parent =
       definition.parentId === undefined ? undefined : this.GetTextFormatColl(definition.parentId);
     const collection = createWriterTextFormatColl(this.attrPool, definition, parent);
+    applyWriterParagraphStyleDefaults(collection);
     this.collectionsById.set(id, collection);
     this.collections.push(collection);
     collection.SetNextTextFormatColl(

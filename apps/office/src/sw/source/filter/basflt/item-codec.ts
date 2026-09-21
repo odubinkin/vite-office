@@ -31,7 +31,13 @@ function isSfxPoolItemValue(value: unknown): value is SfxPoolItemSnapshot["value
     typeof value === "boolean" ||
     typeof value === "number" ||
     typeof value === "string" ||
-    (Array.isArray(value) && value.every(isSfxPoolItemSnapshot))
+    (Array.isArray(value) &&
+      (value.every(
+        /** Narrows one numeric tuple member. @param entry - Candidate member. @returns Whether numeric. */ (
+          entry,
+        ) => typeof entry === "number",
+      ) ||
+        value.every(isSfxPoolItemSnapshot)))
   );
 }
 

@@ -65,7 +65,7 @@ function getWriterGraphemeBoundaries(text: string): readonly number[] {
   return boundaries;
 }
 import { SwNumRuleItem } from "../para/paratr";
-import { SwpHints } from "./ndhints";
+import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import type { WriterCharacterAttributes } from "./txatbase";
 export type { WriterCharacterAttributes } from "./txatbase";
 
@@ -75,15 +75,8 @@ export const WRITER_CHARACTER_FORMATS = ["bold", "italic", "underline"] as const
 /** Identifies one supported direct Writer character attribute. */
 export type WriterCharacterFormat = (typeof WRITER_CHARACTER_FORMATS)[number];
 
-/** Describes one non-empty immutable Writer text fragment and its direct attributes. */
-export interface WriterTextRun {
-  /** Direct character attributes applied to every code unit in text. */
-  readonly attributes: WriterCharacterAttributes;
-  /** Optional hyperlink applied to this exact text portion. */
-  readonly hyperlink?: WriterHyperlink;
-  /** Non-empty UTF-16 text fragment. */
-  readonly text: string;
-}
+/** Derived immutable projection; canonical state remains text plus SwpHints. */
+export type WriterTextRun = WriterTextRunLike;
 
 /** Stores the empty direct-formatting state used for new Writer text. */
 export const DEFAULT_WRITER_CHARACTER_ATTRIBUTES: WriterCharacterAttributes = {
@@ -487,6 +480,19 @@ export class SwTextNode extends SwContentNode {
     return this.pSwpHints;
   }
 
+  /** Replaces canonical ranged attributes without accepting a browser run projection. @param hints - Writer text attributes. @returns Nothing. */
+  public SetTextHints(hints: SwpHints): void {
+    for (const hint of hints.entries())
+      if (hint.end > this.mText.length)
+        throw new Error("Writer text hint is outside the text node.");
+    const replacement = hints.clone();
+    this.pSwpHints = replacement.Count() === 0 ? undefined : replacement;
+    this.GetDoc().NotifyModelChange({
+      kind: "attribute-set-changed",
+      nodeIndex: this.GetNodes().indexOfOrUndefined(this),
+    });
+  }
+
   /** Returns the paragraph adjustment item as a view-friendly value. @returns Paragraph alignment. */
   public get alignment(): WriterParagraphAlignment {
     const adjust = (this.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust();
@@ -886,7 +892,8 @@ export class SwTextNode extends SwContentNode {
     );
     const direct = this.GetpSwAttrSet();
     if (direct !== undefined) clone.SetAttr(direct);
-    clone.ReplaceRange(0, 0, this.runs);
+    clone.SetText(this.mText);
+    if (this.pSwpHints !== undefined) clone.SetTextHints(this.pSwpHints);
     return clone;
   }
 

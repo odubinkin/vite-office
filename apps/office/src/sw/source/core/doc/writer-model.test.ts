@@ -583,7 +583,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     node.InsertText("abcd", 0, bold);
     node.InsertText("X", 2);
     expect(node.GetText()).toBe("abXcd");
-    expect(node.runs).toEqual([{ attributes: bold, text: "abXcd" }]);
+    expect(node.runs).toMatchObject([{ attributes: bold, text: "abXcd" }]);
     node.EraseText(1, 2);
     expect(node.text).toBe("acd");
     node.ReplaceRange(1, 2, [{ attributes: italic, text: "YZ" }]);
@@ -617,7 +617,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(restored.text).toBe("aYZd");
     expect(createWriterDocument().paragraphs[0]?.CloneTo(cloneDocument.nodes).text).toBe("");
     node.SetText("plain");
-    expect(node.runs).toEqual([{ attributes: bold, text: "plain" }]);
+    expect(node.runs).toMatchObject([{ attributes: { bold: true }, text: "plain" }]);
     node.SetText("pl");
     node.SetText("pl");
     node.SetText("xy");

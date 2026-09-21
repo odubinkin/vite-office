@@ -3,7 +3,8 @@
  */
 
 /** JSON-compatible persisted value of one pooled item. */
-export type SfxPoolItemValue = boolean | number | string | readonly SfxPoolItemSnapshot[];
+export type SfxPoolItemValue =
+  boolean | number | string | readonly number[] | readonly SfxPoolItemSnapshot[];
 
 /** JSON-compatible persisted form of one pooled item. */
 export interface SfxPoolItemSnapshot {

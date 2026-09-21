@@ -4,8 +4,8 @@ import type {
   CommandDefinition,
   CommandDispatchResult,
   CommandState,
-} from "../../source/dispatch/dispatchprovider";
-import type { OfficeFrame } from "../../source/dispatch/dispatchprovider";
+} from "../../../sfx2/source/control/dispatch";
+import type { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 
 /** Browser presentation view of one active Sfx frame. */
 export interface BrowserCommandSource {
@@ -23,7 +23,7 @@ export interface BrowserCommandSurfaceProps {
 }
 
 /** Adapts one active Sfx frame without adding presentation-owned command semantics. @param frame - Active frame. @returns Stable command source. */
-export function createBrowserCommandSource<View>(frame: OfficeFrame<View>): BrowserCommandSource {
+export function createBrowserCommandSource<View>(frame: SfxViewFrame<View>): BrowserCommandSource {
   const dispatcher = frame.GetDispatcher();
   const bindings = frame.GetBindings();
   return {

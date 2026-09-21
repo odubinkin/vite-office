@@ -1,5 +1,5 @@
 /**
- * @fileoverview Defines browser-neutral SwPaM projections and selection validation from
+ * @fileoverview Defines canonical SwPaM range and cursor-state helpers from
  * pinned LibreOffice `sw/source/uibase/wrtsh/select.cxx`.
  */
 
@@ -7,6 +7,7 @@ import type {
   SwTextNode as WriterParagraph,
   WriterCharacterAttributes,
 } from "../../core/txtnode/ndtxt";
+import type { SwPaM } from "../../core/crsr/pam";
 import type { SwUndoCursorState } from "../../core/undo/undobj";
 
 /** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
@@ -17,28 +18,12 @@ export interface WriterCompositionState {
   text: string;
 }
 
-/** Stable browser-neutral coordinate used to synchronize a Writer SwPaM with a rendered view. */
-export interface WriterCursorPosition {
-  /** Stable Writer text-node identity. */
-  readonly paragraphId: string;
-  /** UTF-16 content offset inside the text node. */
-  readonly offset: number;
-}
-
-/** Direction-preserving projection of the persistent Writer point-and-mark cursor. */
-export interface WriterCursorSelection {
-  /** Optional fixed selection endpoint. */
-  readonly mark?: WriterCursorPosition;
-  /** Moving caret or selection endpoint. */
-  readonly point: WriterCursorPosition;
-}
-
-/** Describes one browser-resolved range after conversion to Writer model coordinates. */
-export interface WriterParagraphTextRange {
+/** Describes one ordered same-node range through its canonical text-node owner. */
+export interface WriterTextRange {
   /** Exclusive UTF-16 range end relative to the text node. */
   readonly end: number;
-  /** Stable identity of the SwTextNode containing both endpoints. */
-  readonly paragraphId: string;
+  /** Document-owned text node containing both endpoints. */
+  readonly node: WriterParagraph;
   /** Inclusive UTF-16 range start relative to the text node. */
   readonly start: number;
 }
@@ -49,14 +34,14 @@ export function isWriterCursorOffset(paragraph: WriterParagraph, offset: number)
 }
 
 /** Returns an ordered non-empty same-node selection. @param selection - Cursor projection. @returns Bounded range or undefined. */
-export function getWriterSelectedTextRange(
-  selection: WriterCursorSelection,
-): WriterParagraphTextRange | undefined {
-  if (selection.mark === undefined || selection.mark.paragraphId !== selection.point.paragraphId)
-    return undefined;
-  const start = Math.min(selection.point.offset, selection.mark.offset);
-  const end = Math.max(selection.point.offset, selection.mark.offset);
-  return start === end ? undefined : { end, paragraphId: selection.point.paragraphId, start };
+export function getWriterSelectedTextRange(cursor: SwPaM): WriterTextRange | undefined {
+  if (!cursor.HasMark()) return undefined;
+  const point = cursor.GetPoint();
+  const mark = cursor.GetMark();
+  if (point.GetNode() !== mark.GetNode()) return undefined;
+  const start = Math.min(point.GetContentIndex(), mark.GetContentIndex());
+  const end = Math.max(point.GetContentIndex(), mark.GetContentIndex());
+  return start === end ? undefined : { end, node: point.GetNode() as WriterParagraph, start };
 }
 
 /** Creates an undo cursor state from canonical node references. @param point - Moving endpoint node. @param pointOffset - Moving endpoint offset. @param mark - Optional fixed endpoint node. @param markOffset - Optional fixed endpoint offset. @param activeParagraph - Active node. @param pendingCharacterAttributes - Pending caret attributes. @returns Complete undo cursor state. */
@@ -88,13 +73,5 @@ export function createWriterCollapsedCursorState(
     activeParagraph: paragraph,
     pendingCharacterAttributes: { ...pendingCharacterAttributes },
     point: { node: paragraph, offset },
-  };
-}
-
-/** Converts an ordered paragraph range to a direction-preserving selection. @param range - Same-node text range. @returns Point-and-mark selection. */
-export function createWriterRangeSelection(range: WriterParagraphTextRange): WriterCursorSelection {
-  return {
-    mark: { offset: range.start, paragraphId: range.paragraphId },
-    point: { offset: range.end, paragraphId: range.paragraphId },
   };
 }

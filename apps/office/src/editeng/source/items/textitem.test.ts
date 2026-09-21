@@ -4,12 +4,19 @@ import { describe, expect, it } from "vitest";
 import { encodeSfxPoolItem } from "../../../sw/source/filter/basflt/item-codec";
 
 import { SfxInt16Item } from "../../../svl/source/items/poolitem";
-import { SvxTextLeftMarginItem } from "./paraitem";
+import {
+  SvxFirstLineIndentItem,
+  SvxLineSpacingItem,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+  SvxULSpaceItem,
+} from "./paraitem";
 import {
   FontItalic,
   FontLineStyle,
   FontWeight,
   SvxPostureItem,
+  SvxFontHeightItem,
   SvxUnderlineItem,
   SvxWeightItem,
 } from "./textitem";
@@ -134,5 +141,65 @@ describe("EditEngine character items" /** Groups pooled character item contracts
           new SvxTextLeftMarginItem(-1, alternateWhich),
       ),
     ).toThrow("SvxTextLeftMarginItem value is invalid");
+  });
+
+  it("preserves source-derived font-height and paragraph metric items", /** Covers validation, cloning, equality, and persistence for the style-default item subset. @returns Nothing. */ () => {
+    const height = new SvxFontHeightItem(240, weightWhich);
+    expect(height.GetHeight()).toBe(240);
+    expect(height.QueryValue()).toBe(240);
+    expect(height.Clone()).not.toBe(height);
+    expect(height.Clone().equals(height)).toBe(true);
+    expect(height.equals(new SvxFontHeightItem(241, weightWhich))).toBe(false);
+    expect(height.equals(new SvxFontHeightItem(240, alternateWhich))).toBe(false);
+    expect(height.equals(new SfxInt16Item(weightWhich, 240))).toBe(false);
+    expect(
+      /** Creates an invalid font height. @returns Invalid item. */ () =>
+        new SvxFontHeightItem(0, weightWhich),
+    ).toThrow("value is invalid");
+
+    const first = new SvxFirstLineIndentItem(-283, weightWhich);
+    expect(first.ResolveTextFirstLineOffset()).toBe(-283);
+    expect(first.QueryValue()).toBe(-283);
+    expect(first.Clone().equals(first)).toBe(true);
+    expect(first.equals(new SvxFirstLineIndentItem(-282, weightWhich))).toBe(false);
+    expect(first.equals(new SfxInt16Item(weightWhich, -283))).toBe(false);
+    expect(
+      /** Creates a fractional first-line indent. @returns Invalid item. */ () =>
+        new SvxFirstLineIndentItem(1.5, weightWhich),
+    ).toThrow("value is invalid");
+
+    const right = new SvxRightMarginItem(567, weightWhich);
+    expect(right.ResolveRight()).toBe(567);
+    expect(right.QueryValue()).toBe(567);
+    expect(right.Clone().equals(right)).toBe(true);
+    expect(right.equals(new SvxRightMarginItem(568, weightWhich))).toBe(false);
+    expect(right.equals(new SfxInt16Item(weightWhich, 567))).toBe(false);
+    expect(
+      /** Creates a negative right margin. @returns Invalid item. */ () =>
+        new SvxRightMarginItem(-1, weightWhich),
+    ).toThrow("value is invalid");
+
+    const spacing = new SvxULSpaceItem(120, 60, weightWhich);
+    expect(spacing.GetUpper()).toBe(120);
+    expect(spacing.GetLower()).toBe(60);
+    expect(spacing.QueryValue()).toEqual([120, 60]);
+    expect(spacing.Clone().equals(spacing)).toBe(true);
+    expect(spacing.equals(new SvxULSpaceItem(120, 61, weightWhich))).toBe(false);
+    expect(spacing.equals(new SfxInt16Item(weightWhich, 120))).toBe(false);
+    expect(
+      /** Creates negative paragraph spacing. @returns Invalid item. */ () =>
+        new SvxULSpaceItem(-1, 0, weightWhich),
+    ).toThrow("value is invalid");
+
+    const line = new SvxLineSpacingItem(115, weightWhich);
+    expect(line.GetPropLineSpace()).toBe(115);
+    expect(line.QueryValue()).toBe(115);
+    expect(line.Clone().equals(line)).toBe(true);
+    expect(line.equals(new SvxLineSpacingItem(100, weightWhich))).toBe(false);
+    expect(line.equals(new SfxInt16Item(weightWhich, 115))).toBe(false);
+    expect(
+      /** Creates an invalid line-height percentage. @returns Invalid item. */ () =>
+        new SvxLineSpacingItem(0, weightWhich),
+    ).toThrow("value is invalid");
   });
 });

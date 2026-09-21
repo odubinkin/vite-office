@@ -203,6 +203,31 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(formattedParagraph.querySelector("strong")).toHaveTextContent("Bold");
   });
 
+  it("projects direct non-bold and non-italic runs over an inherited heading style", /** Verifies direct character items can disable effective paragraph defaults. @returns Nothing. */ function projectsNegativeCharacterOverrides(): void {
+    render(<App />);
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    enterWriterParagraphText(paragraph, "Plain override");
+    fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "heading-4" } });
+    const styledParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    const range = document.createRange();
+    range.selectNodeContents(styledParagraph);
+    const selection = window.getSelection() as Selection;
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.dispatchEvent(new Event("selectionchange"));
+    fireEvent.click(screen.getByRole("button", { name: "Bold" }));
+    fireEvent.click(screen.getByRole("button", { name: "Italic" }));
+
+    const overriddenParagraph = screen.getByRole("textbox", { name: "Writer document text" });
+    expect(overriddenParagraph).toHaveStyle({ fontStyle: "italic", fontWeight: "700" });
+    expect(overriddenParagraph.querySelector('[style*="font-style: normal"]')).toHaveTextContent(
+      "Plain override",
+    );
+    expect(overriddenParagraph.querySelector('[style*="font-weight: 400"]')).toHaveTextContent(
+      "Plain override",
+    );
+  });
+
   it("executes beforeinput against SwPaM and deletes complete Unicode graphemes" /** Verifies supported typing and deletion are canceled before DOM mutation while emoji and combining sequences follow Writer character boundaries. @returns Nothing; canonical text and undo cursor behavior are asserted. */, function handlesCanonicalBeforeInput(): void {
     render(<App />);
     const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
@@ -327,7 +352,12 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     expect(firstParagraph).toHaveTextContent("Before");
     expect(secondParagraph).toHaveTextContent("after");
     expect(secondParagraph).toHaveFocus();
-    expect(secondParagraph).toHaveClass("text-base", "leading-7");
+    expect(secondParagraph).toHaveStyle({
+      fontSize: "12pt",
+      fontStyle: "normal",
+      fontWeight: "400",
+      lineHeight: "1.15",
+    });
     expect(secondParagraph).toHaveStyle({ textAlign: "center" });
     expect(screen.getByText("Paragraph 2 is active.")).toBeInTheDocument();
     firstParagraph.focus();

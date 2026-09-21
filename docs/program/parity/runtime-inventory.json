@@ -23,7 +23,12 @@
         "knownViolations": [],
         "localSymbols": [
           "SvxAdjust",
-          "SvxAdjustItem"
+          "SvxAdjustItem",
+          "SvxTextLeftMarginItem",
+          "SvxFirstLineIndentItem",
+          "SvxRightMarginItem",
+          "SvxULSpaceItem",
+          "SvxLineSpacingItem"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "editeng/source/items/paraitem.cxx",
@@ -31,7 +36,10 @@
           "SvxAdjust",
           "SvxAdjustItem",
           "SvxLineSpacingItem::CreateDefault",
-          "SvxAdjustItem::CreateDefault"
+          "SvxAdjustItem::CreateDefault",
+          "SvxFirstLineIndentItem",
+          "SvxRightMarginItem",
+          "SvxULSpaceItem"
         ]
       }
     },
@@ -60,6 +68,7 @@
           "FontItalic",
           "FontLineStyle",
           "SvxFontItem",
+          "SvxFontHeightItem",
           "SvxWeightItem",
           "SvxPostureItem",
           "SvxUnderlineItem"
@@ -71,6 +80,7 @@
           "FontItalic",
           "FontLineStyle",
           "SvxFontItem",
+          "SvxFontHeightItem",
           "SvxWeightItem"
         ]
       }
@@ -381,26 +391,30 @@
     },
     {
       "path": "apps/office/src/framework/source/dispatch/dispatchprovider.ts",
-      "classification": "local-infrastructure",
+      "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",
       "subsystem": "dispatch",
-      "capabilityIds": [],
-      "infrastructureExemption": "This composition or bootstrap module exports no document capability and is retained as explicit local infrastructure.",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
       "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
         "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
+        "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/framework/source/dispatch/dispatchprovider.ts#CommandTarget"
+          "apps/office/src/framework/source/dispatch/dispatchprovider.ts#FrameworkDispatchProvider",
+          "vendor/libreoffice-reference/framework/source/dispatch/dispatchprovider.cxx#DispatchProvider"
         ],
-        "justification": "Defines browser-independent typed command registration, shortcut lookup, and explicit dispatch outcomes at the LibreOffice `framework/source/dispatch/dispatchprovider.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "justification": "Keeps framework as the outer dispatch-provider facade and delegates shell-stack resolution to sfx2 without owning dispatcher, frame, bindings, or slot state.",
         "knownViolations": [],
         "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "framework/source/dispatch/dispatchprovider.cxx",
+        "upstreamSymbols": [
+          "DispatchProvider"
+        ]
       }
     },
     {
@@ -687,6 +701,43 @@
       }
     },
     {
+      "path": "apps/office/src/sfx2/source/control/dispatch.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/control/dispatch.ts#SfxDispatcher",
+          "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx#SfxDispatcher"
+        ],
+        "justification": "Owns the bounded Sfx shell stack, slot resolution, request execution, and invalidation contract under the upstream sfx2 responsibility; unsupported UNO and native controller paths remain explicitly outside the slice.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxDispatcher",
+          "SfxShell",
+          "CommandRegistry",
+          "createCommandShell"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sfx2/source/control/dispatch.cxx",
+        "upstreamSymbols": [
+          "SfxDispatcher",
+          "SfxDispatcher::Push",
+          "SfxDispatcher::Pop",
+          "SfxDispatcher::Execute"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sfx2/source/control/request.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -821,6 +872,39 @@
         "upstreamFile": "include/sfx2/objsh.hxx",
         "upstreamSymbols": [
           "SfxObjectShell"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/view/viewfrm.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/view/viewfrm.ts#SfxViewFrame",
+          "vendor/libreoffice-reference/sfx2/source/view/viewfrm.cxx#SfxViewFrame"
+        ],
+        "justification": "Owns the active view, dispatcher, bindings, and shell-stack lifetime at the upstream SfxViewFrame boundary; native window/controller responsibilities are not implemented.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxViewFrame"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sfx2/source/view/viewfrm.cxx",
+        "upstreamSymbols": [
+          "SfxViewFrame",
+          "SfxViewFrame::GetDispatcher",
+          "SfxViewFrame::GetBindings"
         ]
       }
     },
@@ -1275,6 +1359,33 @@
           "apps/office/src/sw/browser/editor/writer-geometry.ts#getBrowserWriterCaretFromPoint"
         ],
         "justification": "Contains the optional browser caretRangeFromPoint geometry fallback behind an injected surface; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/writer-selection-types.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-editor",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0117",
+        "CAP-0118"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/writer-selection-types.ts#WriterCursorSelection"
+        ],
+        "justification": "Defines projection-keyed selection values only for the DOM presentation boundary; canonical Writer code uses SwPosition and SwPaM object identities.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -2405,6 +2516,40 @@
           "SwNumRule",
           "o3tl::toTwips",
           "SwNumRule::GetOutlineRuleName"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "parity",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts#getWriterParagraphStyleDefaults",
+          "apps/office/src/sw/inc/poolfmt.test.ts#materializes source-derived item defaults and script slots",
+          "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx#lcl_SetHeadline"
+        ],
+        "justification": "Ports the implemented non-HTML Writer paragraph-style switch branches, exact twip sizes and spacing, and synchronized Western/CJK/CTL item defaults. Style families requiring unsupported item classes remain name-only and unclaimed.",
+        "knownViolations": [],
+        "localSymbols": [
+          "getWriterParagraphStyleDefaults",
+          "applyWriterParagraphStyleDefaults"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+        "upstreamSymbols": [
+          "DocumentStylePoolManager::GetTextCollFromPool",
+          "lcl_SetHeadline",
+          "lcl_SetDfltFont"
         ]
       }
     },
@@ -3681,19 +3826,16 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts#WriterCursorSelection",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts#WriterTextRange",
           "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx#SwWrtShell::SelAll"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/select.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
         "knownViolations": [],
         "localSymbols": [
-          "WriterCursorPosition",
-          "WriterCursorSelection",
-          "WriterParagraphTextRange",
+          "WriterTextRange",
           "WriterCompositionState",
           "isWriterCursorOffset",
           "getWriterSelectedTextRange",
-          "createWriterRangeSelection",
           "createWriterUndoCursorState",
           "createWriterCollapsedCursorState"
         ],
@@ -3730,7 +3872,7 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts#WriterCursorPosition",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts#SwWrtShell",
           "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx#SwWrtShell"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/wrtsh1.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
@@ -3941,6 +4083,30 @@
           ".uno:AddDirect",
           ".uno:OpenFromWriter"
         ]
+      }
+    },
+    {
+      "path": "apps/office/src/test/wrtsh-test-helpers.ts",
+      "classification": "local-infrastructure",
+      "state": "internal",
+      "suite": "writer",
+      "subsystem": "test-infrastructure",
+      "capabilityIds": [],
+      "infrastructureExemption": "Test-only adapters preserve legacy fixture IDs outside production Writer shell contracts.",
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "A",
+        "evidence": [
+          "apps/office/src/test/wrtsh-test-helpers.ts#setTestSelection"
+        ],
+        "justification": "Resolves fixture identifiers only in tests and converts them immediately to canonical SwPosition, SwPaM, and node-reference operations.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
       }
     },
     {

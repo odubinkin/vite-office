@@ -37,6 +37,43 @@ export class SvxFontItem extends SfxPoolItem {
   }
 }
 
+/** Pooled script-specific font height stored in twips. */
+export class SvxFontHeightItem extends SfxPoolItem {
+  /** Creates a font-height item. @param height - Absolute height in twips. @param which - Script-specific WhichId. @returns Nothing. */
+  public constructor(
+    private readonly height: number,
+    which: number,
+  ) {
+    super(which);
+    if (!Number.isInteger(height) || height <= 0)
+      throw new Error("SvxFontHeightItem value is invalid.");
+  }
+
+  /** Returns the absolute height in twips. @returns Font height. */
+  public GetHeight(): number {
+    return this.height;
+  }
+
+  /** Creates an independent height item. @returns Cloned item. */
+  public Clone(): SvxFontHeightItem {
+    return new SvxFontHeightItem(this.height, this.Which());
+  }
+
+  /** Compares item identity and height. @param other - Candidate item. @returns Whether equal. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxFontHeightItem &&
+      other.Which() === this.Which() &&
+      other.height === this.height
+    );
+  }
+
+  /** Serializes the twip height. @returns Height. */
+  public QueryValue(): number {
+    return this.height;
+  }
+}
+
 /** Matches LibreOffice FontWeight ordering from tools/fontenum.hxx. */
 export enum FontWeight {
   DONTKNOW,

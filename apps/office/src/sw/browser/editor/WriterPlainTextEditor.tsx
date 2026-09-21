@@ -6,18 +6,18 @@ import { getWriterParagraphListMarker } from "../../source/core/doc/number";
 import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { BrowserWriterSelectionMapper } from "./writer-selection";
-import { BrowserWriterEditController } from "./writer-edit-controller";
+import { BrowserWriterEditController, type BrowserWriterEditPort } from "./writer-edit-controller";
 import { BrowserWriterCompositionAdapter } from "./writer-composition";
 import { BrowserWriterClipboardEvents } from "./writer-clipboard-events";
 import { BrowserWriterPointerSelectionController } from "./writer-geometry";
-import type { WriterCursorSelection } from "../../source/uibase/wrtsh/wrtsh";
+import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
 
 /** Defines immutable projection state and model-facing Writer operations. */
 export interface WriterPlainTextEditorProps {
   readonly activeParagraphId: string;
   readonly cursorSelection: WriterCursorSelection;
-  readonly onBeforeInput: (inputType: string, data: string | null) => boolean;
+  readonly editPort: Omit<BrowserWriterEditPort, "synchronizeSelection">;
   readonly onCompositionEnd: () => boolean;
   readonly onCompositionStart: () => void;
   readonly onCompositionUpdate: (text: string) => void;
@@ -34,7 +34,7 @@ export interface WriterPlainTextEditorProps {
 /** Renders one root `contenteditable` while paragraph nodes remain semantic model projections. @param props - Immutable projection state and Writer operations. @returns Logical Writer document editing host. */
 export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.JSX.Element {
   const {
-    onBeforeInput,
+    editPort,
     onCompositionEnd,
     onCompositionStart,
     onCompositionUpdate,
@@ -72,7 +72,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     /** Creates the explicit edit-intent controller. @returns Stable edit controller. */
     () =>
       new BrowserWriterEditController({
-        executeIntent: onBeforeInput,
+        ...editPort,
         synchronizeSelection:
           /** Commits browser endpoints into the shell before editing. @returns Whether a Writer selection was available. */ () => {
             const selection = selectionMapper.Read();
@@ -82,7 +82,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
             return true;
           },
       }),
-    [onBeforeInput, onSelectionChange, selectionMapper],
+    [editPort, onSelectionChange, selectionMapper],
   );
 
   const composition = useMemo(

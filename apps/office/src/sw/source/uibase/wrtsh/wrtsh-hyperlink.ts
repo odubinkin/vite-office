@@ -8,6 +8,7 @@ import type {
   WriterTextRun,
 } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
+import type { SwPaM } from "../../core/crsr/pam";
 import { equalWriterHyperlinks } from "../../core/txtnode/fmtinfmt";
 import { SwUndoAttr } from "../../core/undo/unattr";
 import { SwUndoInsert } from "../../core/undo/unins";
@@ -16,25 +17,23 @@ import {
   type SwUndoCursorState,
   type SwUndoRedoContext,
 } from "../../core/undo/undobj";
-import {
-  getWriterSelectedTextRange,
-  type WriterCursorSelection,
-  type WriterParagraphTextRange,
-} from "./wrtsh-selection";
+import { getWriterSelectedTextRange, type WriterTextRange } from "./wrtsh-selection";
 
 /** Reads one uniform selected or caret hyperlink. @param document - Active Writer document. @param selection - Persistent cursor selection. @returns Hyperlink metadata or undefined. */
 export function getWriterHyperlinkAtCursor(
   document: WriterDocument,
-  selection: WriterCursorSelection,
+  cursor: SwPaM,
 ): WriterHyperlink | undefined {
-  const range =
-    getWriterSelectedTextRange(selection) ?? getHyperlinkRangeAtCursor(document, selection);
+  const range = getWriterSelectedTextRange(cursor) ?? getHyperlinkRangeAtCursor(cursor);
   if (range === undefined) {
-    const paragraph = document.nodes.findTextNode(selection.point.paragraphId);
-    return paragraph?.getHyperlinkAt(selection.point.offset);
+    const point = cursor.GetPoint();
+    const paragraph = point.GetNode() as WriterParagraph;
+    return paragraph.GetDoc() === document
+      ? paragraph.getHyperlinkAt(point.GetContentIndex())
+      : undefined;
   }
-  const paragraph = document.nodes.findTextNode(range.paragraphId);
-  if (paragraph === undefined) return undefined;
+  const paragraph = range.node;
+  if (paragraph.GetDoc() !== document) return undefined;
   const runs = CopyTextRangeRuns(paragraph, range.start, range.end);
   const hyperlink = runs[0]?.hyperlink;
   return runs.length > 0 &&
@@ -49,18 +48,18 @@ export function getWriterHyperlinkAtCursor(
 /** Creates the undo action for applying or removing a hyperlink. @param document - Active document. @param selection - Command selection. @param pendingAttributes - Caret character attributes. @param before - Cursor state before execution. @param hyperlink - Replacement hyperlink or undefined. @param text - Optional inserted link text. @returns Undo action or undefined when unchanged. */
 export function createWriterHyperlinkAction(
   document: WriterDocument,
-  selection: WriterCursorSelection,
+  cursor: SwPaM,
   pendingAttributes: WriterCharacterAttributes,
   before: SwUndoCursorState,
   hyperlink: WriterHyperlink | undefined,
   text?: string,
 ): SfxUndoAction<SwUndoRedoContext> | undefined {
   const selectedRange =
-    getWriterSelectedTextRange(selection) ??
-    (text === undefined ? getHyperlinkRangeAtCursor(document, selection) : undefined);
+    getWriterSelectedTextRange(cursor) ??
+    (text === undefined ? getHyperlinkRangeAtCursor(cursor) : undefined);
   if (selectedRange !== undefined) {
-    const paragraph = document.nodes.findTextNode(selectedRange.paragraphId);
-    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${selectedRange.paragraphId}`);
+    const paragraph = selectedRange.node;
+    if (paragraph.GetDoc() !== document) throw new Error("Writer hyperlink range is foreign.");
     const beforeRuns = CopyTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
     const afterRuns = beforeRuns.map(
       /** Replaces only hyperlink metadata. @param run - Existing selected run. @returns Updated run. */
@@ -75,9 +74,10 @@ export function createWriterHyperlinkAction(
   }
   if (hyperlink === undefined) return undefined;
   const value = text === undefined || text.length === 0 ? hyperlink.url : text;
-  const paragraph = document.nodes.findTextNode(selection.point.paragraphId);
-  if (paragraph === undefined) throw new Error(`Unknown paragraph: ${selection.point.paragraphId}`);
-  const offset = selection.point.offset;
+  const point = cursor.GetPoint();
+  const paragraph = point.GetNode() as WriterParagraph;
+  if (paragraph.GetDoc() !== document) throw new Error("Writer hyperlink cursor is foreign.");
+  const offset = point.GetContentIndex();
   return new SwUndoInsert(
     paragraph,
     offset,
@@ -93,19 +93,17 @@ export function createWriterHyperlinkAction(
 }
 
 /** Resolves the complete contiguous hyperlink containing a caret. @param document - Active document. @param selection - Collapsed cursor selection. @returns Hyperlink range or undefined. */
-function getHyperlinkRangeAtCursor(
-  document: WriterDocument,
-  selection: WriterCursorSelection,
-): WriterParagraphTextRange | undefined {
-  if (selection.mark !== undefined) return undefined;
-  const paragraph = document.nodes.findTextNode(selection.point.paragraphId);
-  if (paragraph === undefined) return undefined;
-  const hyperlink = paragraph.getHyperlinkAt(selection.point.offset);
+function getHyperlinkRangeAtCursor(cursor: SwPaM): WriterTextRange | undefined {
+  if (cursor.HasMark()) return undefined;
+  const point = cursor.GetPoint();
+  const paragraph = point.GetNode() as WriterParagraph;
+  const offset = point.GetContentIndex();
+  const hyperlink = paragraph.getHyperlinkAt(offset);
   if (hyperlink === undefined) return undefined;
   const ranges = getRunRanges(paragraph);
   const containingIndex = ranges.findIndex(
     /** Locates the run whose inherited hyperlink contains the caret. @param range - Run offsets. @returns Whether it contains the caret. */
-    (range) => range.start <= selection.point.offset && selection.point.offset <= range.end,
+    (range) => range.start <= offset && offset <= range.end,
   );
   /* v8 ignore next -- A normalized hyperlink hint always covers one projected run. */
   if (containingIndex < 0) return undefined;
@@ -120,7 +118,7 @@ function getHyperlinkRangeAtCursor(
     last += 1;
   return {
     end: (ranges[last] as { readonly end: number }).end,
-    paragraphId: paragraph.id,
+    node: paragraph,
     start: (ranges[first] as { readonly start: number }).start,
   };
 }

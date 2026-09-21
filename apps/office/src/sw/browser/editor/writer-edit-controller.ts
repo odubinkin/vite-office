@@ -13,10 +13,28 @@ export type BrowserWriterEditDisposition = "handled" | "native-composition" | "u
 
 /** Model-facing operations consumed by the browser controller. */
 export interface BrowserWriterEditPort {
-  /** Executes a supported input operation against the canonical Writer selection. */
-  readonly executeIntent: (inputType: string, data: string | null) => boolean;
+  /** Deletes the current selection or forward grapheme. */
+  readonly deleteForward: () => boolean;
+  /** Deletes the current selection or preceding grapheme. */
+  readonly deleteLeft: () => boolean;
+  /** Deletes only the current Writer selection. */
+  readonly deleteSelection: () => boolean;
+  /** Inserts ordinary text through Writer typing semantics. */
+  readonly insert: (text: string) => boolean;
+  /** Replaces the current selection without typing-group semantics. */
+  readonly replace: (text: string) => boolean;
+  /** Reapplies one Writer undo action. */
+  readonly redo: () => boolean;
+  /** Applies the active paragraph's list kind. */
+  readonly setListKind: (kind: "bullet" | "numbered") => boolean;
+  /** Inserts a paragraph break at the Writer cursor. */
+  readonly splitNode: () => boolean;
   /** Synchronizes the current browser selection into the canonical Writer cursor. */
   readonly synchronizeSelection: () => boolean;
+  /** Toggles one Writer character attribute. */
+  readonly toggleCharacterFormat: (format: "bold" | "italic" | "underline") => boolean;
+  /** Reverts one Writer undo action. */
+  readonly undo: () => boolean;
 }
 
 /**
@@ -37,6 +55,56 @@ export class BrowserWriterEditController {
     )
       return "native-composition";
     if (!this.port.synchronizeSelection()) return "unsupported";
-    return this.port.executeIntent(intent.inputType, intent.data) ? "handled" : "unsupported";
+    const { data, inputType } = intent;
+    switch (inputType) {
+      case "insertText":
+        if (data !== null && data.length > 0) this.port.insert(data);
+        return "handled";
+      case "insertReplacementText":
+        if (data !== null && data.length > 0) this.port.replace(data);
+        return "handled";
+      case "insertLineBreak":
+      case "insertParagraph":
+        this.port.splitNode();
+        return "handled";
+      case "deleteContentBackward":
+        this.port.deleteLeft();
+        return "handled";
+      case "deleteContentForward":
+        this.port.deleteForward();
+        return "handled";
+      case "deleteByCut":
+      case "deleteByDrag":
+      case "deleteContent":
+        this.port.deleteSelection();
+        return "handled";
+      case "formatBold":
+        this.port.toggleCharacterFormat("bold");
+        return "handled";
+      case "formatItalic":
+        this.port.toggleCharacterFormat("italic");
+        return "handled";
+      case "formatUnderline":
+        this.port.toggleCharacterFormat("underline");
+        return "handled";
+      case "insertOrderedList":
+        this.port.setListKind("numbered");
+        return "handled";
+      case "insertUnorderedList":
+        this.port.setListKind("bullet");
+        return "handled";
+      case "insertFromComposition":
+      case "insertFromDrop":
+      case "insertFromPaste":
+        return "handled";
+      case "historyUndo":
+        this.port.undo();
+        return "handled";
+      case "historyRedo":
+        this.port.redo();
+        return "handled";
+      default:
+        return "unsupported";
+    }
   }
 }

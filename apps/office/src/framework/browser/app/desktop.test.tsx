@@ -180,7 +180,7 @@ describe("App" /**
     fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "default" } });
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
     fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "heading-1" } });
-    expect(firstParagraph).toHaveClass("text-2xl", "font-bold");
+    expect(firstParagraph).toHaveStyle({ fontSize: "18pt" });
     expect(firstParagraph).toHaveAccessibleDescription(/Paragraph style: Heading 1/);
     expect(
       within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByText(
@@ -237,19 +237,19 @@ describe("App" /**
 
     const styleSelect = screen.getByLabelText("Paragraph style");
     expect(within(styleSelect).getAllByRole("option")).toHaveLength(126);
-    for (const [style, className] of [
-      ["title", "text-3xl"],
-      ["subtitle", "text-xl"],
-      ["heading-3", "text-xl"],
-      ["heading-5", "text-lg"],
-      ["heading", "text-xl"],
-      ["preformatted-text", "font-mono"],
-      ["quotations", "italic"],
-      ["caption", "text-sm"],
-      ["footnote", "text-sm"],
+    for (const [style, fontSize] of [
+      ["title", "28pt"],
+      ["subtitle", "18pt"],
+      ["heading-3", "14pt"],
+      ["heading-5", "12pt"],
+      ["heading", "14pt"],
+      ["preformatted-text", "10pt"],
+      ["quotations", "12pt"],
+      ["caption", "10pt"],
+      ["footnote", "10pt"],
     ] as const) {
       fireEvent.change(styleSelect, { target: { value: style } });
-      expect(editor).toHaveClass(className);
+      expect(editor).toHaveStyle({ fontSize });
     }
   });
 
@@ -512,7 +512,7 @@ describe("App" /**
         async function verifiesLoadedDocument(): Promise<void> {
           const restoredEditor = screen.getByRole("textbox", { name: "Writer document text" });
           expect(restoredEditor).toHaveTextContent("Stored body");
-          expect(restoredEditor).toHaveClass("text-2xl", "font-bold");
+          expect(restoredEditor).toHaveStyle({ fontSize: "18pt" });
           expect(screen.getByText("Document opened.")).toBeInTheDocument();
         },
       );

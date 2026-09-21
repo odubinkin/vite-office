@@ -5,7 +5,7 @@
 import { useEffect } from "react";
 
 import { getBrowserShortcut } from "../../source/accelerators/keymapping";
-import type { SfxDispatcher } from "../../source/dispatch/dispatchprovider";
+import type { SfxDispatcher } from "../../../sfx2/source/control/dispatch";
 
 /** Options used by the browser accelerator adapter. */
 export interface BrowserShortcutOptions {

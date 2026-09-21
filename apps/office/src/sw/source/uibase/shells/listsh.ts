@@ -5,7 +5,7 @@ import {
   createCommandShell,
   type CommandRegistry,
   type SfxShell,
-} from "../../../../framework/source/dispatch/dispatchprovider";
+} from "../../../../sfx2/source/control/dispatch";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterSlotId } from "../../../sdi/swriter";

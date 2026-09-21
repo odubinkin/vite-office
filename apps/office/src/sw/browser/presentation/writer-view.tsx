@@ -19,7 +19,8 @@ import { writerBrowserMenuPlacements } from "./writer-command-surfaces";
 import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
 import { readBrowserWriterClipboardPaste } from "../editor/writer-clipboard-events";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
-import type { WriterCursorSelection } from "../../source/uibase/wrtsh/wrtsh";
+import type { BrowserWriterEditPort } from "../editor/writer-edit-controller";
+import type { WriterCursorSelection } from "../editor/writer-selection-types";
 import type { SwView, WriterPasteCommandArguments } from "../../source/uibase/uiview/view";
 
 /** Properties selecting a persistent Writer view for projection. */
@@ -45,9 +46,39 @@ export function WriterWorkbench({
     dialogController.GetSnapshot,
   );
   const wrtShell = view.GetWrtShell();
-  const handleBeforeInput = useCallback(
-    /** Dispatches one normalized edit intent. @param inputType - Browser input type. @param data - Optional browser payload. @returns Whether Writer handled the intent. */
-    (inputType: string, data: string | null): boolean => wrtShell.HandleInput(inputType, data),
+  const editPort = useMemo<Omit<BrowserWriterEditPort, "synchronizeSelection">>(
+    /** Binds browser intent translation to Writer-native shell operations. @returns Stable edit port. */ () => ({
+      deleteForward: /** Deletes after the Writer cursor. @returns Whether changed. */ () =>
+        wrtShell.DelRight(),
+      deleteLeft: /** Deletes before the Writer cursor. @returns Whether changed. */ () =>
+        wrtShell.DelLeft(),
+      /* v8 ignore next -- Wiring-only path; BrowserWriterEditController and SwWrtShell own coverage. */
+      deleteSelection: /** Deletes the Writer selection. @returns Whether changed. */ () =>
+        wrtShell.DeleteSelection(),
+      insert:
+        /** Inserts text at the Writer cursor. @param text - Browser text. @returns Whether changed. */ (
+          text,
+        ) => wrtShell.Insert(text),
+      /* v8 ignore next -- Wiring-only path; BrowserWriterEditController and SwWrtShell own coverage. */
+      redo: /** Redoes the last Writer edit. @returns Whether changed. */ () => wrtShell.Redo(),
+      replace:
+        /** Replaces the Writer selection. @param text - Browser text. @returns Whether changed. */ (
+          text,
+        ) => wrtShell.Replace(text),
+      /* v8 ignore next -- Wiring-only path; BrowserWriterEditController and SwWrtShell own coverage. */
+      setListKind:
+        /** Sets the active Writer list kind. @param kind - List kind. @returns Whether changed. */ (
+          kind,
+        ) => wrtShell.SetParagraphListKind(kind),
+      splitNode: /** Splits the active Writer node. @returns Whether changed. */ () =>
+        wrtShell.SplitNode(),
+      toggleCharacterFormat:
+        /** Toggles direct Writer character formatting. @param format - Format. @returns Whether changed. */ (
+          format,
+        ) => wrtShell.ToggleCharacterFormat(format),
+      /* v8 ignore next -- Wiring-only path; BrowserWriterEditController and SwWrtShell own coverage. */
+      undo: /** Undoes the last Writer edit. @returns Whether changed. */ () => wrtShell.Undo(),
+    }),
     [wrtShell],
   );
   const handleCompositionEnd = useCallback(
@@ -204,7 +235,7 @@ export function WriterWorkbench({
         <WriterPlainTextEditor
           activeParagraphId={snapshot.activeParagraph.id}
           cursorSelection={snapshot.cursorSelection}
-          onBeforeInput={handleBeforeInput}
+          editPort={editPort}
           onCompositionEnd={handleCompositionEnd}
           onCompositionStart={handleCompositionStart}
           onCompositionUpdate={handleCompositionUpdate}

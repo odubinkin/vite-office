@@ -2,9 +2,31 @@
 
 import type { SwDoc } from "../../source/core/doc/doc";
 import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
-import type { WriterCursorSelection } from "../../source/uibase/wrtsh/wrtsh-selection";
+import type { WriterCursorSelection } from "../editor/writer-selection-types";
 import type { SwTextNode } from "../../source/core/txtnode/ndtxt";
 import type { SwPaM } from "../../source/core/crsr/pam";
+import {
+  SvxFirstLineIndentItem,
+  SvxLineSpacingItem,
+  SvxRightMarginItem,
+  SvxULSpaceItem,
+} from "../../../editeng/source/items/paraitem";
+import {
+  SvxFontHeightItem,
+  SvxFontItem,
+  SvxPostureItem,
+  SvxWeightItem,
+} from "../../../editeng/source/items/textitem";
+import {
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_WEIGHT,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_PARATR_LINESPACING,
+  RES_UL_SPACE,
+} from "../../inc/hintids";
 import type {
   WriterParagraphProjection,
   WriterPresentationProjection,
@@ -55,10 +77,31 @@ export class WriterViewProjection implements WriterPresentationProjector {
             : undefined;
         const number = node.list.kind === "numbered" ? node.GetListItemNumber() : undefined;
         const listMarker = bulletChar ?? (number === undefined ? undefined : `${number}.`);
+        const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         return Object.freeze({
           alignment: node.alignment,
           ...(bulletChar === undefined ? {} : { bulletChar }),
           id: this.GetNodeId(node),
+          computedStyle: Object.freeze({
+            firstLineIndentPt:
+              (
+                node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+              ).ResolveTextFirstLineOffset() / 20,
+            fontFamily: (node.GetAttr(RES_CHRATR_FONT) as SvxFontItem).GetFamilyName(),
+            fontStyle: (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue()
+              ? "italic"
+              : "normal",
+            fontSizePt: (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,
+            fontWeight: (node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue()
+              ? 700
+              : 400,
+            lineHeight:
+              (node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace() / 100,
+            lowerSpacingPt: spacing.GetLower() / 20,
+            rightMarginPt:
+              (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight() / 20,
+            upperSpacingPt: spacing.GetUpper() / 20,
+          }),
           list: Object.freeze({ ...node.list }),
           listId: node.GetListId(),
           ...(listMarker === undefined ? {} : { listMarker }),

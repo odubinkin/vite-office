@@ -8,10 +8,10 @@ import {
   type CommandDefinition,
   type CommandDispatchResult,
   type CommandState,
-  type OfficeFrame,
   type SfxDispatcher,
   type SfxShell,
-} from "../../../../framework/source/dispatch/dispatchprovider";
+} from "../../../../sfx2/source/control/dispatch";
+import type { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
 import { createDocument, type OfficeDocument } from "../../../../sfx2/source/doc/objsh";
 import type { SfxMediumOperationStatus } from "../../../../sfx2/source/doc/docfile";
 import type { SwModelHint } from "../../../inc/hints";
@@ -26,12 +26,14 @@ import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { createWriterViewCommandRegistry } from "../shells/writercommands";
 import { SwWrtShell } from "../wrtsh/wrtsh";
-import type { WriterCursorSelection } from "../wrtsh/wrtsh-selection";
+import type { WriterCursorSelection } from "../../../browser/editor/writer-selection-types";
 
 /** Primitive/resource-ID projection of one text node. */
 export interface WriterParagraphProjection {
   readonly alignment: WriterParagraphAlignment;
   readonly bulletChar?: string;
+  /** Effective paragraph metrics resolved from the Writer item set. */
+  readonly computedStyle: WriterParagraphComputedStyle;
   readonly id: string;
   readonly list: WriterParagraphList;
   readonly listId: string;
@@ -43,6 +45,19 @@ export interface WriterParagraphProjection {
   readonly style: WriterParagraphStyle;
   readonly styleDisplayName: string;
   readonly text: string;
+}
+
+/** Browser-ready values projected from effective Writer paragraph items. */
+export interface WriterParagraphComputedStyle {
+  readonly firstLineIndentPt: number;
+  readonly fontFamily?: string;
+  readonly fontStyle: "italic" | "normal";
+  readonly fontSizePt: number;
+  readonly fontWeight: 400 | 700;
+  readonly lineHeight: number;
+  readonly lowerSpacingPt: number;
+  readonly rightMarginPt: number;
+  readonly upperSpacingPt: number;
 }
 
 /** Immutable presentation value with no mutable model references. */
@@ -140,7 +155,7 @@ export class SwView {
   private readonly dialogController = new WriterDialogController();
   private dispatcherSubscription: (() => void) | undefined;
   private readonly fileWorkflow: WriterViewControllers["fileWorkflow"];
-  private frame: OfficeFrame<SwView> | undefined;
+  private frame: SfxViewFrame<SwView> | undefined;
   private readonly listeners = new Set<() => void>();
   private readonly localStorageWorkflow: WriterViewControllers["localStorageWorkflow"];
   private readonly viewCommandShell: SfxShell;
@@ -174,8 +189,8 @@ export class SwView {
   }
 
   /** Attaches this view to its active frame once during session construction. @param frame - Persistent active office frame. @returns Nothing. */
-  public AttachFrame(frame: OfficeFrame<SwView>): void {
-    if (this.frame !== undefined) throw new Error("SwView is already attached to an OfficeFrame.");
+  public AttachFrame(frame: SfxViewFrame<SwView>): void {
+    if (this.frame !== undefined) throw new Error("SwView is already attached to an SfxViewFrame.");
     this.frame = frame;
     this.dispatcherSubscription = frame
       .GetBindings()
@@ -206,8 +221,8 @@ export class SwView {
   }
 
   /** Returns the active office frame for browser shortcut adaptation. @returns Attached frame. */
-  public GetViewFrame(): OfficeFrame<SwView> {
-    if (this.frame === undefined) throw new Error("SwView is not attached to an OfficeFrame.");
+  public GetViewFrame(): SfxViewFrame<SwView> {
+    if (this.frame === undefined) throw new Error("SwView is not attached to an SfxViewFrame.");
     return this.frame;
   }
 
@@ -391,7 +406,7 @@ export class SwView {
 
   /** Returns the attached active frame dispatcher or throws for invalid construction order. @returns SfxDispatcher. */
   private GetDispatcher(): SfxDispatcher {
-    if (this.frame === undefined) throw new Error("SwView is not attached to an OfficeFrame.");
+    if (this.frame === undefined) throw new Error("SwView is not attached to an SfxViewFrame.");
     return this.frame.GetDispatcher();
   }
 

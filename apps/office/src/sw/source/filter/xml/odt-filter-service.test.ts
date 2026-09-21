@@ -59,7 +59,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       "import:mapping",
     ]);
     expect(imported.document).toMatchObject({
-      textNodes: [{ runs: [{ text: "worker body" }] }],
+      textNodes: [{ hints: [], text: "worker body" }],
     });
   });
 

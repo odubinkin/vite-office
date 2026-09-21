@@ -7,7 +7,7 @@
 
 import { useEffect, useState } from "react";
 
-import { OfficeFrame } from "../../../framework/source/dispatch/dispatchprovider";
+import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import {
   AutoRecovery,
@@ -58,7 +58,7 @@ export interface WriterDocumentSession {
   /** Restores the newest intact recovery generation selected by the caller. */
   readonly RestoreRecovery: () => Promise<AutoRecoveryRestoreResult | undefined>;
   /** Persistent active frame owning the shell dispatcher. */
-  readonly frame: OfficeFrame<SwView>;
+  readonly frame: SfxViewFrame<SwView>;
   /** Persistent document shell owning the active SwDoc and history. */
   readonly docShell: SwDocShell;
   /** Persistent Writer view exposed to React as an external store. */
@@ -110,7 +110,7 @@ export function createWriterDocumentSession(
     odtFilter,
   );
   const view = new SwView(docShell, createWriterViewControllerFactory(services));
-  const frame = new OfficeFrame<SwView>();
+  const frame = new SfxViewFrame<SwView>();
   const autoRecovery =
     services.recoverySave === undefined
       ? undefined

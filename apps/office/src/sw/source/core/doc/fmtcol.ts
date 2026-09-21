@@ -10,12 +10,6 @@ import {
   type WriterParagraphStyleDefinition,
   type WriterParagraphStyleGroup,
 } from "../../../inc/poolfmt";
-import {
-  RES_CHRATR_CJK_WEIGHT,
-  RES_CHRATR_CTL_WEIGHT,
-  RES_CHRATR_WEIGHT,
-} from "../../../inc/hintids";
-import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 
 /** Programmatic paragraph-style identities currently exposed by the browser UI. */
 export const WRITER_PARAGRAPH_STYLES: readonly string[] = WRITER_PARAGRAPH_STYLE_POOL.map(
@@ -99,8 +93,6 @@ export function createWriterTextFormatColl(
   if (heading !== null) {
     const level = Number(heading[1]) - 1;
     collection.AssignToListLevelOfOutlineStyle(level);
-    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      collection.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, which));
   }
   return collection;
 }

@@ -1,9 +1,6 @@
 /** @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
 
-import {
-  createCommandShell,
-  type SfxShell,
-} from "../../../../framework/source/dispatch/dispatchprovider";
+import { createCommandShell, type SfxShell } from "../../../../sfx2/source/control/dispatch";
 import type { SfxUndoAction, SfxUndoManager } from "../../../../svl/source/undo/undo";
 import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
@@ -30,7 +27,6 @@ import { isWriterParagraphListKind, type WriterParagraphListKind } from "../../c
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
 import { createWriterTextCommandRegistry } from "../shells/writercommands";
 import type { SwDocShell } from "../app/docsh";
-import { getActiveWriterParagraph } from "../uiview/viewfunc";
 import { SwUndoInsert } from "../../core/undo/unins";
 import {
   SwUndoDelete,
@@ -57,13 +53,10 @@ import {
 import { getWriterTypingCharacterClass } from "./delete";
 import {
   createWriterCollapsedCursorState,
-  createWriterRangeSelection,
   createWriterUndoCursorState,
   getWriterSelectedTextRange,
-  isWriterCursorOffset,
   type WriterCompositionState,
-  type WriterCursorSelection,
-  type WriterParagraphTextRange,
+  type WriterTextRange,
 } from "./wrtsh-selection";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
 import {
@@ -74,12 +67,6 @@ import {
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
-
-export type {
-  WriterCursorPosition,
-  WriterCursorSelection,
-  WriterParagraphTextRange,
-} from "./wrtsh-selection";
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwModify {
@@ -141,19 +128,6 @@ export class SwWrtShell extends SwModify {
   /** Creates a model-based transfer object over the current persistent selection. @returns Transfer object. */
   public CreateTransferable(): SwTransferable {
     return new SwTransferable(this.GetDoc(), this.cursor);
-  }
-  /** Projects the persistent SwPaM to stable Writer node coordinates. @returns Copied direction-preserving cursor state. */
-  public GetCursorSelection(): WriterCursorSelection {
-    const point = this.cursor.GetPoint();
-    const pointNode = point.GetNode() as WriterParagraph;
-    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
-    const markNode = mark?.GetNode() as WriterParagraph | undefined;
-    return {
-      ...(mark === undefined || markNode === undefined
-        ? {}
-        : { mark: { offset: mark.GetContentIndex(), paragraphId: markNode.id } }),
-      point: { offset: point.GetContentIndex(), paragraphId: pointNode.id },
-    };
   }
   /** Returns the Writer editing command shell for top-priority frame registration. @returns SfxShell adapter. */
   public GetCommandShell(): SfxShell {
@@ -235,43 +209,9 @@ export class SwWrtShell extends SwModify {
     this.cursor.Dispose();
     this.DisposeModify();
   }
-  /** Selects one paragraph as the command target. @param paragraphId - Existing paragraph identity. @param offset - Optional logical caret offset, defaulting to paragraph end. @returns Nothing. */
-  public SetCursor(paragraphId: string, offset?: number): void {
-    const paragraph = getActiveWriterParagraph(this.GetDoc(), paragraphId);
-    this.SetSelection({
-      point: { offset: offset ?? paragraph.text.length, paragraphId: paragraph.id },
-    });
-  }
-  /** Uses paragraph-end fallback only when focus crosses nodes before the browser publishes selectionchange. @param paragraphId - Focused paragraph identity. @returns Nothing. */
-  public FocusParagraph(paragraphId: string): void {
-    const paragraph = getActiveWriterParagraph(this.GetDoc(), paragraphId);
-    if (this.cursor.GetPoint().GetNode() === paragraph) {
-      this.activeParagraph = paragraph;
-      return;
-    }
-    this.SetCursor(paragraph.id);
-  }
-  /** Synchronizes an externally changed view selection into the persistent SwPaM. @param selection - Stable point-and-mark coordinates from a view adapter. @returns Whether canonical cursor state changed. */
-  public SetSelection(selection: WriterCursorSelection): boolean {
-    const document = this.GetDoc();
-    const pointNode = document.nodes.findTextNode(selection.point.paragraphId);
-    if (pointNode === undefined) return false;
-    const markNode =
-      selection.mark === undefined
-        ? undefined
-        : document.nodes.findTextNode(selection.mark.paragraphId);
-    if (
-      !isWriterCursorOffset(pointNode, selection.point.offset) ||
-      (selection.mark !== undefined &&
-        (markNode === undefined || !isWriterCursorOffset(markNode, selection.mark.offset)))
-    )
-      return false;
-    return this.SetPaM(
-      new SwPosition(pointNode, selection.point.offset),
-      selection.mark === undefined || markNode === undefined
-        ? undefined
-        : new SwPosition(markNode, selection.mark.offset),
-    );
+  /** Collapses the persistent cursor to one canonical Writer position. @param position - Document-owned node/content position. @returns Whether the cursor changed. */
+  public SetCursor(position: SwPosition): boolean {
+    return this.SetPaM(position);
   }
   /** Assigns canonical Writer positions to the persistent PaM. @param point - Moving endpoint. @param mark - Optional fixed endpoint. @returns Whether the cursor changed. */
   public SetPaM(point: SwPosition, mark?: SwPosition): boolean {
@@ -315,71 +255,36 @@ export class SwWrtShell extends SwModify {
     const document = this.GetDoc();
     const first = document.paragraphs[0] as WriterParagraph;
     const last = document.paragraphs[document.paragraphs.length - 1] as WriterParagraph;
-    this.SetSelection({
-      mark: { offset: 0, paragraphId: first.id },
-      point: { offset: last.Len(), paragraphId: last.id },
-    });
+    this.SetPaM(new SwPosition(last, last.Len()), new SwPosition(first, 0));
   }
   /** Pastes at the current canonical PaM without a projected string selection. @param paste - Parsed clipboard content. @returns Whether content changed. */
   public PasteAtCursor(paste: WriterClipboardPaste): boolean {
-    return this.Paste(this.GetCursorSelection(), paste);
+    return this.Paste(paste);
   }
 
   /** Inserts text at the persistent Writer cursor, matching the bounded SwWrtShell insertion boundary. @param text - Text to insert or replace the selection with. @returns Whether the document changed. */
   public Insert(text: string): boolean {
+    return text.length > 0 && this.InsertAtCursor(text, true);
+  }
+
+  /** Replaces the current Writer selection without joining ordinary typing undo groups. @param text - Replacement text. @returns Whether content changed. */
+  public Replace(text: string): boolean {
     return text.length > 0 && this.InsertAtCursor(text, false);
   }
 
-  /** Executes a supported browser edit intent against the persistent SwPaM before native DOM mutation. @param inputType - Native beforeinput operation. @param data - Inserted text supplied by InputEvent. @returns True when the intent belongs to the modeled Writer input subset. */
-  public HandleInput(inputType: string, data: string | null): boolean {
-    switch (inputType) {
-      case "insertText":
-      case "insertReplacementText":
-        if (data !== null && data.length > 0) this.InsertAtCursor(data, inputType === "insertText");
-        return true;
-      case "insertLineBreak":
-      case "insertParagraph":
-        this.SplitAtCursor();
-        return true;
-      case "deleteContentBackward":
-        this.DeleteAtCursor("backspace");
-        return true;
-      case "deleteContentForward":
-        this.DeleteAtCursor("delete");
-        return true;
-      case "deleteByCut":
-      case "deleteByDrag":
-      case "deleteContent":
-        this.DeleteSelection();
-        return true;
-      case "formatBold":
-        this.ToggleCharacterFormat("bold");
-        return true;
-      case "formatItalic":
-        this.ToggleCharacterFormat("italic");
-        return true;
-      case "formatUnderline":
-        this.ToggleCharacterFormat("underline");
-        return true;
-      case "insertOrderedList":
-        this.SetParagraphListKind("numbered");
-        return true;
-      case "insertUnorderedList":
-        this.SetParagraphListKind("bullet");
-        return true;
-      case "insertFromComposition":
-      case "insertFromDrop":
-      case "insertFromPaste":
-        return true;
-      case "historyUndo":
-        this.Undo();
-        return true;
-      case "historyRedo":
-        this.Redo();
-        return true;
-      default:
-        return false;
-    }
+  /** Inserts a paragraph break at the persistent Writer cursor. @returns Whether a break was inserted. */
+  public SplitNode(): boolean {
+    return this.SplitAtCursor();
+  }
+
+  /** Deletes the preceding grapheme or the current selection. @returns Whether content changed. */
+  public DelLeft(): boolean {
+    return this.DeleteAtCursor("backspace");
+  }
+
+  /** Deletes the following grapheme or the current selection. @returns Whether content changed. */
+  public DelRight(): boolean {
+    return this.DeleteAtCursor("delete");
   }
 
   /** Begins browser extended text input while retaining the exact Writer selection it may replace. @returns Nothing. */
@@ -438,7 +343,7 @@ export class SwWrtShell extends SwModify {
           [{ attributes: { ...this.pendingCharacterAttributes }, text }],
           "Replace",
           before,
-          this.CreateCollapsedCursorState(paragraph.id, start + text.length),
+          this.CreateCollapsedCursorState(paragraph, start + text.length),
         ),
       );
     }
@@ -451,7 +356,7 @@ export class SwWrtShell extends SwModify {
         [{ attributes: { ...this.pendingCharacterAttributes }, text }],
         group,
         before,
-        this.CreateCollapsedCursorState(paragraph.id, offset + text.length),
+        this.CreateCollapsedCursorState(paragraph, offset + text.length),
       ),
       group !== undefined,
     );
@@ -476,15 +381,15 @@ export class SwWrtShell extends SwModify {
           direction,
           undefined,
           before,
-          this.CreateCollapsedCursorState(paragraph.id, start),
+          this.CreateCollapsedCursorState(paragraph, start),
         ),
       );
     }
     const offset = point.GetContentIndex();
     if (direction === "backspace" && offset === 0)
-      return this.MergeParagraphWithPrevious(paragraph.id);
+      return this.MergeParagraphWithPrevious(paragraph);
     if (direction === "delete" && offset === paragraph.Len())
-      return this.MergeParagraphWithNext(paragraph.id);
+      return this.MergeParagraphWithNext(paragraph);
     const start =
       direction === "backspace"
         ? getWriterPreviousGraphemeBoundary(paragraph.text, offset)
@@ -508,15 +413,14 @@ export class SwWrtShell extends SwModify {
         direction,
         group,
         before,
-        this.CreateCollapsedCursorState(paragraph.id, start),
+        this.CreateCollapsedCursorState(paragraph, start),
       ),
       group !== undefined,
     );
   }
 
-  /** Deletes a canonical visible selection, including ranges spanning text nodes. @param selection - Optional browser-mapped selection to install first. @returns Whether content changed. */
-  public DeleteSelection(selection?: WriterCursorSelection): boolean {
-    if (selection !== undefined) this.SetSelection(selection);
+  /** Deletes the canonical visible selection, including ranges spanning text nodes. @returns Whether content changed. */
+  public DeleteSelection(): boolean {
     return this.cursor.HasMark() && this.DeleteAtCursor("delete");
   }
 
@@ -536,30 +440,19 @@ export class SwWrtShell extends SwModify {
     const endOffset = startsAtPoint ? mark.GetContentIndex() : point.GetContentIndex();
     const startIndex = Math.min(pointIndex, markIndex);
     const endIndex = Math.max(pointIndex, markIndex);
-    const selectedIds = document.paragraphs
-      .slice(startIndex, endIndex + 1)
-      .map(
-        /** Reads a selected paragraph's stable ID. @param selected - Selected paragraph. @returns Stable paragraph ID. */ (
-          selected,
-        ) => selected.id,
-      );
+    const selectedNodes = document.paragraphs.slice(startIndex, endIndex + 1);
     const manager = this.docShell.GetUndoManager();
     manager.EnterListAction("Delete");
     try {
-      this.ReplaceRange(
-        { end: startNode.Len(), paragraphId: startNode.id, start: startOffset },
-        [],
-      );
-      for (const paragraphId of selectedIds.slice(1, -1)) {
-        const selected = document.nodes.findTextNode(paragraphId) as WriterParagraph;
-        this.ReplaceRange({ end: selected.Len(), paragraphId, start: 0 }, []);
-      }
-      this.ReplaceRange({ end: endOffset, paragraphId: endNode.id, start: 0 }, []);
-      for (const paragraphId of selectedIds.slice(1)) this.MergeParagraphWithPrevious(paragraphId);
+      this.ReplaceRange({ end: startNode.Len(), node: startNode, start: startOffset }, []);
+      for (const selected of selectedNodes.slice(1, -1))
+        this.ReplaceRange({ end: selected.Len(), node: selected, start: 0 }, []);
+      this.ReplaceRange({ end: endOffset, node: endNode, start: 0 }, []);
+      for (const selected of selectedNodes.slice(1)) this.MergeParagraphWithPrevious(selected);
     } finally {
       manager.LeaveListAction();
     }
-    this.SetCursor(startNode.id, startOffset);
+    this.SetCursor(new SwPosition(startNode, startOffset));
     return true;
   }
 
@@ -572,24 +465,21 @@ export class SwWrtShell extends SwModify {
       try {
         this.DeleteAtCursor("delete");
         const nextPoint = this.cursor.GetPoint();
-        this.SplitParagraph(
-          (nextPoint.GetNode() as WriterParagraph).id,
-          nextPoint.GetContentIndex(),
-        );
+        this.SplitParagraph(nextPoint);
       } finally {
         manager.LeaveListAction();
       }
       return true;
     }
     const point = this.cursor.GetPoint();
-    this.SplitParagraph((point.GetNode() as WriterParagraph).id, point.GetContentIndex());
+    this.SplitParagraph(point);
     return true;
   }
 
   /** Replaces one same-paragraph range with Writer text runs. @param range - Target range. @param runs - Inserted safe runs. @returns Whether document content changed. */
-  public ReplaceRange(range: WriterParagraphTextRange, runs: readonly WriterTextRun[]): boolean {
-    const paragraph = this.GetDoc().nodes.findTextNode(range.paragraphId);
-    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${range.paragraphId}`);
+  public ReplaceRange(range: WriterTextRange, runs: readonly WriterTextRun[]): boolean {
+    const paragraph = range.node;
+    if (paragraph.GetDoc() !== this.GetDoc()) throw new Error("Writer text range is foreign.");
     if (
       !Number.isInteger(range.start) ||
       !Number.isInteger(range.end) ||
@@ -611,52 +501,42 @@ export class SwWrtShell extends SwModify {
         insertedRuns,
         insertedRuns.length === 0 ? "Delete" : "Paste",
         this.CaptureCursorState(),
-        this.CreateCollapsedCursorState(paragraph.id, nextOffset),
+        this.CreateCollapsedCursorState(paragraph, nextOffset),
       ),
     );
   }
 
-  /** Pastes one safe transfer document at a canonical caret or selection as a single Writer undo transaction. @param target - Cursor selection or legacy same-paragraph range. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */
-  public Paste(
-    target: WriterCursorSelection | WriterParagraphTextRange,
-    paste: WriterClipboardPaste,
-  ): boolean {
+  /** Pastes one safe transfer document at the persistent SwPaM as a single Writer undo transaction. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */
+  public Paste(paste: WriterClipboardPaste): boolean {
     const first = paste.paragraphs[0];
     if (first === undefined) return false;
     const manager = this.docShell.GetUndoManager();
     let changed = false;
     manager.EnterListAction("Paste");
     try {
-      if ("paragraphId" in target)
-        this.SetSelection({
-          ...(target.start === target.end
-            ? {}
-            : { mark: { offset: target.start, paragraphId: target.paragraphId } }),
-          point: { offset: target.end, paragraphId: target.paragraphId },
-        });
-      else this.SetSelection(target);
       if (this.cursor.HasMark()) {
         this.DeleteAtCursor("delete");
         changed = true;
       }
       const insertionPoint = this.cursor.GetPoint();
-      const range: WriterParagraphTextRange = {
+      const range: WriterTextRange = {
         end: insertionPoint.GetContentIndex(),
-        paragraphId: (insertionPoint.GetNode() as WriterParagraph).id,
+        node: insertionPoint.GetNode() as WriterParagraph,
         start: insertionPoint.GetContentIndex(),
       };
       changed = this.ReplaceRange(range, first.runs) || changed;
-      let paragraphId = range.paragraphId;
+      let paragraph = range.node;
       let offset = range.start + GetUndoRunsLength(first.runs);
-      this.SetCursor(paragraphId, offset);
+      this.SetCursor(new SwPosition(paragraph, offset));
       if (paste.isBlock) changed = this.ApplyPastedParagraphList(first) || changed;
-      for (const paragraph of paste.paragraphs.slice(1)) {
-        paragraphId = this.SplitParagraph(paragraphId, offset);
+      for (const pastedParagraph of paste.paragraphs.slice(1)) {
+        paragraph = this.SplitParagraph(new SwPosition(paragraph, offset));
         changed = true;
-        changed = this.ReplaceRange({ end: 0, paragraphId, start: 0 }, paragraph.runs) || changed;
-        offset = GetUndoRunsLength(paragraph.runs);
-        this.SetCursor(paragraphId, offset);
-        changed = this.ApplyPastedParagraphList(paragraph) || changed;
+        changed =
+          this.ReplaceRange({ end: 0, node: paragraph, start: 0 }, pastedParagraph.runs) || changed;
+        offset = GetUndoRunsLength(pastedParagraph.runs);
+        this.SetCursor(new SwPosition(paragraph, offset));
+        changed = this.ApplyPastedParagraphList(pastedParagraph) || changed;
       }
     } finally {
       manager.LeaveListAction();
@@ -664,11 +544,12 @@ export class SwWrtShell extends SwModify {
     return changed;
   }
 
-  /** Splits one paragraph at the logical caret. @param paragraphId - Source paragraph. @param offset - Split offset. @returns New paragraph identity. */
-  public SplitParagraph(paragraphId: string, offset: number): string {
-    const document = this.GetDoc();
-    const paragraph = document.nodes.findTextNode(paragraphId);
-    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  /** Splits one paragraph at a canonical Writer position. @param position - Source node and content offset. @returns New trailing paragraph. */
+  public SplitParagraph(position: SwPosition): WriterParagraph {
+    const paragraph = position.GetNode() as WriterParagraph;
+    const offset = position.GetContentIndex();
+    if (paragraph.GetDoc() !== this.GetDoc()) throw new Error("Writer split position is foreign.");
+    /* v8 ignore next 2 -- SwPosition validates the same node bounds before this shell method. */
     if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.Len())
       throw new Error("Split offset is outside the paragraph.");
     this.ApplyAction(
@@ -676,19 +557,16 @@ export class SwWrtShell extends SwModify {
         paragraph,
         offset,
         this.CaptureCursorState(),
-        this.CreateCollapsedCursorState(paragraph.id, 0),
+        this.CreateCollapsedCursorState(paragraph, 0),
       ),
     );
-    return this.GetActiveParagraph().id;
+    return this.GetActiveParagraph();
   }
 
-  /** Joins a non-first paragraph into its preceding node. @param paragraphId - Paragraph whose preceding break is removed. @returns Whether a merge occurred. */
-  public MergeParagraphWithPrevious(paragraphId: string): boolean {
+  /** Joins a non-first paragraph into its preceding node. @param paragraph - Paragraph whose preceding break is removed. @returns Whether a merge occurred. */
+  public MergeParagraphWithPrevious(paragraph: WriterParagraph): boolean {
     const document = this.GetDoc();
-    const index = document.paragraphs.findIndex(
-      /** Matches the paragraph selected for joining. @param paragraph - Candidate paragraph. @returns Whether IDs match. */
-      (paragraph) => paragraph.id === paragraphId,
-    );
+    const index = document.paragraphs.indexOf(paragraph);
     if (index <= 0) return false;
     const preceding = document.paragraphs[index - 1] as WriterParagraph;
     const offset = preceding.text.length;
@@ -699,34 +577,30 @@ export class SwWrtShell extends SwModify {
         offset,
         removed,
         this.CaptureCursorState(),
-        this.CreateCollapsedCursorState(preceding.id, offset),
+        this.CreateCollapsedCursorState(preceding, offset),
       ),
     );
   }
 
-  /** Joins the following paragraph into the selected node. @param paragraphId - Paragraph whose following break is removed. @returns Whether a merge occurred. */
-  public MergeParagraphWithNext(paragraphId: string): boolean {
+  /** Joins the following paragraph into the selected node. @param paragraph - Paragraph whose following break is removed. @returns Whether a merge occurred. */
+  public MergeParagraphWithNext(paragraph: WriterParagraph): boolean {
     const document = this.GetDoc();
-    const index = document.paragraphs.findIndex(
-      /** Matches the paragraph selected before the following break. @param paragraph - Candidate paragraph. @returns Whether IDs match. */
-      (paragraph) => paragraph.id === paragraphId,
-    );
+    const index = document.paragraphs.indexOf(paragraph);
     if (index < 0 || index === document.paragraphs.length - 1) return false;
-    return this.MergeParagraphWithPrevious((document.paragraphs[index + 1] as WriterParagraph).id);
+    return this.MergeParagraphWithPrevious(document.paragraphs[index + 1] as WriterParagraph);
   }
 
   /** Returns on/off/mixed state for one direct character format at the persistent cursor. @param format - Writer direct character format. @returns Selection-aware slot state. */
   public GetCharacterFormatState(format: WriterCharacterFormat): "mixed" | "off" | "on" {
-    const range = getWriterSelectedTextRange(this.GetCursorSelection());
+    const range = getWriterSelectedTextRange(this.cursor);
     if (range === undefined)
       return this.cursor.HasMark()
         ? "mixed"
         : this.pendingCharacterAttributes[format]
           ? "on"
           : "off";
-    const paragraph = this.GetDoc().nodes.findTextNode(range.paragraphId) as WriterParagraph;
     const values = new Set(
-      CopyTextRangeRuns(paragraph, range.start, range.end).map(
+      CopyTextRangeRuns(range.node, range.start, range.end).map(
         /** Reads the selected fragment's format value. @param run - Selected Writer text run. @returns Applied flag. */ (
           run,
         ) => run.attributes[format],
@@ -736,13 +610,10 @@ export class SwWrtShell extends SwModify {
   }
 
   /** Toggles direct character formatting over a range or pending caret state. @param format - Writer character format. @param range - Optional same-paragraph selection. @returns Whether document content changed. */
-  public ToggleCharacterFormat(
-    format: WriterCharacterFormat,
-    range?: WriterParagraphTextRange,
-  ): boolean {
+  public ToggleCharacterFormat(format: WriterCharacterFormat, range?: WriterTextRange): boolean {
     if (range !== undefined) {
-      const paragraph = this.GetDoc().nodes.findTextNode(range.paragraphId);
-      if (paragraph === undefined) throw new Error(`Unknown paragraph: ${range.paragraphId}`);
+      const paragraph = range.node;
+      if (paragraph.GetDoc() !== this.GetDoc()) throw new Error("Writer text range is foreign.");
       if (
         !Number.isInteger(range.start) ||
         !Number.isInteger(range.end) ||
@@ -751,19 +622,16 @@ export class SwWrtShell extends SwModify {
         range.end > paragraph.Len()
       )
         throw new Error("Writer text range is outside the paragraph.");
-      const currentRange = getWriterSelectedTextRange(this.GetCursorSelection());
+      const currentRange = getWriterSelectedTextRange(this.cursor);
       if (
-        currentRange?.paragraphId !== range.paragraphId ||
+        currentRange?.node !== range.node ||
         currentRange.start !== range.start ||
         currentRange.end !== range.end
       )
-        this.SetSelection({
-          mark: { offset: range.start, paragraphId: range.paragraphId },
-          point: { offset: range.end, paragraphId: range.paragraphId },
-        });
+        this.SetPaM(new SwPosition(range.node, range.end), new SwPosition(range.node, range.start));
     }
     const before = this.CaptureCursorState();
-    const selectedRange = getWriterSelectedTextRange(this.GetCursorSelection());
+    const selectedRange = getWriterSelectedTextRange(this.cursor);
     this.pendingCharacterAttributes = {
       ...this.pendingCharacterAttributes,
       [format]: this.GetCharacterFormatState(format) !== "on",
@@ -777,9 +645,7 @@ export class SwWrtShell extends SwModify {
       this.NotifySelection();
       return false;
     }
-    const paragraph = this.GetDoc().nodes.findTextNode(selectedRange.paragraphId);
-    /* v8 ignore next -- A canonical same-node selection retains its indexed SwTextNode. */
-    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${selectedRange.paragraphId}`);
+    const paragraph = selectedRange.node;
     const beforeRuns = CopyTextRangeRuns(paragraph, selectedRange.start, selectedRange.end);
     /* v8 ignore next 3 -- A validated non-empty text range always copies at least one run. */
     if (beforeRuns.length === 0) {
@@ -799,19 +665,20 @@ export class SwWrtShell extends SwModify {
 
   /** Reads one uniform selected or caret hyperlink for dialog editing. @returns Hyperlink metadata or undefined. */
   public GetHyperlinkAtCursor(): WriterHyperlink | undefined {
-    return getWriterHyperlinkAtCursor(this.GetDoc(), this.GetCursorSelection());
+    return getWriterHyperlinkAtCursor(this.GetDoc(), this.cursor);
   }
 
   /** Applies or removes a hyperlink using the persistent Writer selection. @param hyperlink - Replacement metadata or undefined. @param text - Text inserted for a collapsed caret. @param range - Optional DOM-resolved range. @returns Whether the document changed. */
   public SetHyperlink(
     hyperlink: WriterHyperlink | undefined,
     text?: string,
-    range?: WriterParagraphTextRange,
+    range?: WriterTextRange,
   ): boolean {
-    if (range !== undefined && !this.SetSelection(createWriterRangeSelection(range))) return false;
+    if (range !== undefined)
+      this.SetPaM(new SwPosition(range.node, range.end), new SwPosition(range.node, range.start));
     const action = createWriterHyperlinkAction(
       this.GetDoc(),
-      this.GetCursorSelection(),
+      this.cursor,
       this.pendingCharacterAttributes,
       this.CaptureCursorState(),
       hyperlink,
@@ -825,16 +692,14 @@ export class SwWrtShell extends SwModify {
     const family = fontFamily.trim();
     if (family.length === 0) throw new Error("Writer font family must not be blank.");
     const before = this.CaptureCursorState();
-    const selectedRange = getWriterSelectedTextRange(this.GetCursorSelection());
+    const selectedRange = getWriterSelectedTextRange(this.cursor);
     this.pendingCharacterAttributes = { ...this.pendingCharacterAttributes, fontFamily: family };
     if (selectedRange === undefined) {
       this.docShell.GetUndoManager().BreakUndoGrouping();
       this.NotifySelection();
       return false;
     }
-    const paragraph = this.GetDoc().nodes.findTextNode(selectedRange.paragraphId);
-    /* v8 ignore next -- SetSelection validates paragraph identity before it becomes active. */
-    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${selectedRange.paragraphId}`);
+    const paragraph = selectedRange.node;
     const action = CreateWriterFontUndo(
       paragraph,
       selectedRange.start,
@@ -957,10 +822,12 @@ export class SwWrtShell extends SwModify {
     );
   }
 
-  /** Creates a collapsed action endpoint while retaining pending direct attributes. @param paragraphId - Target node identity. @param offset - Target content offset. @returns Complete cursor state. */
-  private CreateCollapsedCursorState(paragraphId: string, offset: number): SwUndoCursorState {
-    const paragraph = this.GetDoc().nodes.findTextNode(paragraphId);
-    if (paragraph === undefined) throw new Error(`Unknown paragraph: ${paragraphId}`);
+  /** Creates a collapsed action endpoint while retaining pending direct attributes. @param paragraph - Target node. @param offset - Target content offset. @returns Complete cursor state. */
+  private CreateCollapsedCursorState(
+    paragraph: WriterParagraph,
+    offset: number,
+  ): SwUndoCursorState {
+    if (paragraph.GetDoc() !== this.GetDoc()) throw new Error("Writer cursor node is foreign.");
     return createWriterCollapsedCursorState(paragraph, offset, this.pendingCharacterAttributes);
   }
 

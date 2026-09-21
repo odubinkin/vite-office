@@ -3,7 +3,7 @@
  * ownership of LibreOffice `sw/source/uibase/wrtsh/select.cxx` model selection behavior.
  */
 
-import type { WriterCursorSelection } from "../../source/uibase/wrtsh/wrtsh";
+import type { WriterCursorSelection } from "./writer-selection-types";
 
 /** Resolves a rendered editable paragraph from its stable Writer text-node identity. */
 export type WriterParagraphElementResolver = (

@@ -392,7 +392,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(setData).toHaveBeenNthCalledWith(
       2,
       "text/html",
-      '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><strong>Keyboard copied heading</strong></p>',
+      '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><span style="font-family: Liberation Sans"><strong>Keyboard copied heading</strong></span></p>',
     );
     expect(setData).not.toHaveBeenCalledWith(
       "text/plain",

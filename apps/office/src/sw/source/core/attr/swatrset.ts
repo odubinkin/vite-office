@@ -5,12 +5,17 @@
 import {
   SvxAdjust,
   SvxAdjustItem,
+  SvxFirstLineIndentItem,
+  SvxLineSpacingItem,
+  SvxRightMarginItem,
   SvxTextLeftMarginItem,
+  SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
 import {
   FontItalic,
   FontLineStyle,
   FontWeight,
+  SvxFontHeightItem,
   SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
@@ -21,17 +26,24 @@ import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/it
 import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
+  RES_PARATR_LINESPACING,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
+  RES_UL_SPACE,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_ISCOUNTED,
@@ -70,6 +82,13 @@ export class SwAttrPool extends SfxItemPool {
         /** Restores a font item. @param value - Persisted family. @returns Font item. */ (value) =>
           new SvxFontItem(String(value), which),
       );
+    for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
+      this.RegisterDefaultItem(
+        new SvxFontHeightItem(12 * 20, which),
+        /** Restores a font height. @param value - Persisted twip height. @returns Font-height item. */ (
+          value,
+        ) => new SvxFontHeightItem(Number(value), which),
+      );
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
       this.RegisterDefaultItem(
         new SvxPostureItem(FontItalic.NONE, which),
@@ -99,6 +118,32 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores a direct text-left margin. @param value - Persisted twip margin. @returns Concrete margin item. */ (
         value,
       ) => new SvxTextLeftMarginItem(Number(value), RES_MARGIN_TEXTLEFT),
+    );
+    this.RegisterDefaultItem(
+      new SvxFirstLineIndentItem(0, RES_MARGIN_FIRSTLINE),
+      /** Restores first-line indent. @param value - Persisted twips. @returns Indent item. */ (
+        value,
+      ) => new SvxFirstLineIndentItem(Number(value), RES_MARGIN_FIRSTLINE),
+    );
+    this.RegisterDefaultItem(
+      new SvxRightMarginItem(0, RES_MARGIN_RIGHT),
+      /** Restores right margin. @param value - Persisted twips. @returns Margin item. */ (value) =>
+        new SvxRightMarginItem(Number(value), RES_MARGIN_RIGHT),
+    );
+    this.RegisterDefaultItem(
+      new SvxULSpaceItem(0, 0, RES_UL_SPACE),
+      /** Restores paragraph spacing. @param value - Persisted tuple. @returns Spacing item. */ (
+        value,
+      ) => {
+        const tuple = value as unknown as readonly [number, number];
+        return new SvxULSpaceItem(Number(tuple[0]), Number(tuple[1]), RES_UL_SPACE);
+      },
+    );
+    this.RegisterDefaultItem(
+      new SvxLineSpacingItem(100, RES_PARATR_LINESPACING),
+      /** Restores proportional line spacing. @param value - Persisted percent. @returns Line-spacing item. */ (
+        value,
+      ) => new SvxLineSpacingItem(Number(value), RES_PARATR_LINESPACING),
     );
     this.RegisterDefaultItem(
       new SwNumRuleItem(),

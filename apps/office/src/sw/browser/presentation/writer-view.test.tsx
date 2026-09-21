@@ -26,6 +26,12 @@ import {
 } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 import { WriterViewProjection } from "./writer-view-projection";
+import {
+  getTestSelection,
+  handleTestInput,
+  setTestCursor,
+  setTestSelection,
+} from "../../../test/wrtsh-test-helpers";
 import { SwView } from "../../source/uibase/uiview/view";
 
 /** Creates deterministic injected browser services without requiring real platform APIs. @returns Test session services. */
@@ -317,13 +323,13 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const session = createWriterDocumentSession(createServices());
     const shell = session.view.GetWrtShell();
     const paragraphId = shell.GetActiveParagraph().id;
-    expect(shell.HandleInput("insertText", "ab")).toBe(true);
-    shell.SetSelection({
+    expect(handleTestInput(shell, "insertText", "ab")).toBe(true);
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId },
       point: { offset: 1, paragraphId },
     });
     session.view.Execute(WRITER_COMMAND_IDS.bold);
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 2, paragraphId },
       point: { offset: 0, paragraphId },
     });
@@ -336,13 +342,13 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       checked: true,
       mixed: false,
     });
-    expect(shell.GetCursorSelection()).toEqual({
+    expect(getTestSelection(shell)).toEqual({
       mark: { offset: 2, paragraphId },
       point: { offset: 0, paragraphId },
     });
     session.view.Execute(WRITER_COMMAND_IDS.undo);
     expect(session.view.QueryState(WRITER_COMMAND_IDS.bold).mixed).toBe(true);
-    expect(shell.GetCursorSelection()).toEqual({
+    expect(getTestSelection(shell)).toEqual({
       mark: { offset: 2, paragraphId },
       point: { offset: 0, paragraphId },
     });
@@ -424,8 +430,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
   it("creates, edits, removes, and undoes hyperlinks through upstream-aligned UI commands", /** Verifies generated placements and direct command execution share one ranged Writer attribute. @returns Completion after bindings reproject the model. */ async function editsHyperlinks(): Promise<void> {
     const session = createWriterDocumentSession(createServices());
     const shell = session.view.GetWrtShell();
-    expect(shell.HandleInput("insertText", "Link")).toBe(true);
-    shell.SetSelection({
+    expect(handleTestInput(shell, "insertText", "Link")).toBe(true);
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "writer-paragraph-1" },
       point: { offset: 4, paragraphId: "writer-paragraph-1" },
     });
@@ -552,7 +558,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     };
     const session = createWriterDocumentSession(services);
     const paragraphId = session.view.GetWrtShell().GetActiveParagraph().id;
-    session.view.GetWrtShell().SetCursor(paragraphId, 0);
+    setTestCursor(session.view.GetWrtShell(), paragraphId, 0);
     session.view.GetWrtShell().Insert("dirty");
     const dirtyGeneration = session.docShell.GetDocumentState().contentGeneration;
 
@@ -578,8 +584,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       lastOperation: { operation: "save-as", state: "succeeded" },
     });
 
-    session.view.GetWrtShell().SetCursor(paragraphId, 5);
-    session.view.GetWrtShell().HandleInput("insertText", "!");
+    setTestCursor(session.view.GetWrtShell(), paragraphId, 5);
+    handleTestInput(session.view.GetWrtShell(), "insertText", "!");
     const nextGeneration = session.docShell.GetDocumentState().contentGeneration;
     session.view.ExportText();
     expect(session.docShell.GetDocumentState()).toMatchObject({
@@ -602,7 +608,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       recoverySave: recoveryStorage,
     });
     const paragraphId = first.view.GetWrtShell().GetActiveParagraph().id;
-    first.view.GetWrtShell().SetCursor(paragraphId, 0);
+    setTestCursor(first.view.GetWrtShell(), paragraphId, 0);
     first.view.GetWrtShell().Insert("Recovered text");
     await expect(first.autoRecovery?.SaveDocument("writer-workbench")).resolves.toMatchObject({
       status: "saved",

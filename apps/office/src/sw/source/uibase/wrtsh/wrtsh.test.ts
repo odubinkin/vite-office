@@ -9,7 +9,17 @@ import { SwTransferable } from "../dochdl/swdtflvr";
 import { SwWrtShell } from "./wrtsh";
 import { applyWriterTextRangeFont } from "../../core/txtnode/ndtxt";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
-import { SwPosition } from "../../core/crsr/pam";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import { isWriterCursorOffset } from "./wrtsh-selection";
+import {
+  getTestSelection,
+  handleTestInput,
+  pasteTestSelection,
+  setTestHyperlink,
+  setTestCursor,
+  setTestSelection,
+  fixtureSplitParagraph,
+} from "../../../../test/wrtsh-test-helpers";
 
 /** Creates a Writer shell with one stable paragraph. @param text - Optional initial paragraph text. @returns Shell fixture. */
 function createShell(text = ""): SwWrtShell {
@@ -45,20 +55,50 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(paragraph.textLeftMargin).toBe(1134);
   });
 
+  it("validates canonical cursor offsets against the owning node", /** Covers integer and node-bound offset validation. @returns Nothing. */ () => {
+    const paragraph = createShell("ab").GetActiveParagraph();
+    expect(isWriterCursorOffset(paragraph, 0)).toBe(true);
+    expect(isWriterCursorOffset(paragraph, 2)).toBe(true);
+    expect(isWriterCursorOffset(paragraph, -1)).toBe(false);
+    expect(isWriterCursorOffset(paragraph, 3)).toBe(false);
+    expect(isWriterCursorOffset(paragraph, 1.5)).toBe(false);
+  });
+
+  it("rejects canonical edit positions owned by another document", /** Verifies shell ownership at every public range boundary. @returns Nothing. */ function rejectsForeignEditPositions(): void {
+    const shell = createShell("ab");
+    const foreignParagraph = createWriterDocument("foreign").paragraphs[0] as NonNullable<
+      ReturnType<typeof createWriterDocument>["paragraphs"][number]
+    >;
+    foreignParagraph.SetText("xy");
+
+    expect(
+      /** Replaces through a foreign node. @returns Invalid edit. */ () =>
+        shell.ReplaceRange({ end: 1, node: foreignParagraph, start: 0 }, []),
+    ).toThrow("foreign");
+    expect(
+      /** Splits through a foreign position. @returns Invalid edit. */ () =>
+        shell.SplitParagraph(new SwPosition(foreignParagraph, 1)),
+    ).toThrow("foreign");
+    expect(
+      /** Formats through a foreign node. @returns Invalid edit. */ () =>
+        shell.ToggleCharacterFormat("bold", { end: 1, node: foreignParagraph, start: 0 }),
+    ).toThrow("foreign");
+  });
+
   it("edits complete hyperlink ranges across differently formatted runs", /** Verifies caret lookup, uniform-selection state, replacement, removal, insertion, and undo. @returns Nothing. */ function editsHyperlinks(): void {
     const shell = createShell("abcd");
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 4, paragraphId: "p-1" },
     });
     expect(shell.SetHyperlink({ url: "https://example.test/first" })).toBe(true);
     expect(shell.SetHyperlink({ url: "https://example.test/first" })).toBe(false);
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 1, paragraphId: "p-1" },
       point: { offset: 3, paragraphId: "p-1" },
     });
     expect(shell.ToggleCharacterFormat("bold")).toBe(true);
-    shell.SetCursor("p-1", 2);
+    setTestCursor(shell, "p-1", 2);
     expect(shell.GetHyperlinkAtCursor()).toEqual({ url: "https://example.test/first" });
     expect(shell.SetHyperlink({ url: "https://example.test/second" })).toBe(true);
     expect(
@@ -73,50 +113,60 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.Undo()).toBe(true);
     expect(shell.GetHyperlinkAtCursor()?.url).toBe("https://example.test/second");
 
-    shell.SetCursor("p-1", 4);
+    expect(
+      setTestHyperlink(shell, { url: "https://example.test/range" }, undefined, {
+        end: 1,
+        paragraphId: "p-1",
+        start: 0,
+      }),
+    ).toBe(true);
+
+    setTestCursor(shell, "p-1", 4);
     expect(shell.SetHyperlink({ url: "relative/path" }, "Shown")).toBe(true);
     expect(shell.GetActiveParagraph().text).toBe("abcdShown");
     const emptyShell = createShell();
     expect(emptyShell.SetHyperlink({ url: "fallback-url" })).toBe(true);
     expect(emptyShell.GetActiveParagraph().text).toBe("fallback-url");
     expect(
-      shell.SetHyperlink({ url: "ignored" }, undefined, {
-        end: 1,
-        paragraphId: "missing",
-        start: 0,
-      }),
-    ).toBe(false);
+      /** Resolves a stale fixture ID only at the test boundary. @returns Invalid test operation. */ () =>
+        setTestHyperlink(shell, { url: "ignored" }, undefined, {
+          end: 1,
+          paragraphId: "missing",
+          start: 0,
+        }),
+    ).toThrow("Unknown test paragraph");
   });
 
   it("returns no uniform hyperlink for mixed or cross-node selections", /** Covers non-uniform selection and missing-node hyperlink lookup. @returns Nothing. */ function rejectsMixedHyperlinkSelections(): void {
     const shell = createShell("abcd");
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 2, paragraphId: "p-1" },
     });
     shell.SetHyperlink({ url: "first" });
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 2, paragraphId: "p-1" },
       point: { offset: 4, paragraphId: "p-1" },
     });
     shell.SetHyperlink({ url: "second" });
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 4, paragraphId: "p-1" },
     });
     expect(shell.GetHyperlinkAtCursor()).toBeUndefined();
     const document = shell.GetDoc();
-    expect(
-      getWriterHyperlinkAtCursor(document, {
-        mark: { offset: 0, paragraphId: "missing" },
-        point: { offset: 1, paragraphId: "missing" },
-      }),
-    ).toBeUndefined();
-    expect(
-      getWriterHyperlinkAtCursor(document, {
-        point: { offset: 0, paragraphId: "missing" },
-      }),
-    ).toBeUndefined();
+    const foreignDocument = createWriterDocument("foreign");
+    const foreignParagraph = foreignDocument.paragraphs[0] as NonNullable<
+      (typeof foreignDocument.paragraphs)[number]
+    >;
+    foreignParagraph.SetText("x");
+    const foreignSelection = new SwPaM(
+      new SwPosition(foreignParagraph, 1),
+      new SwPosition(foreignParagraph, 0),
+    );
+    expect(getWriterHyperlinkAtCursor(document, foreignSelection)).toBeUndefined();
+    const foreignCaret = new SwPaM(new SwPosition(foreignParagraph, 0));
+    expect(getWriterHyperlinkAtCursor(document, foreignCaret)).toBeUndefined();
     const paragraph = document.paragraphs[0] as NonNullable<(typeof document.paragraphs)[number]>;
     const before = {
       activeParagraph: paragraph,
@@ -127,26 +177,23 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       /** Creates a range action for a stale paragraph. @returns Invalid action. */ () =>
         createWriterHyperlinkAction(
           document,
-          {
-            mark: { offset: 0, paragraphId: "missing" },
-            point: { offset: 1, paragraphId: "missing" },
-          },
+          foreignSelection,
           before.pendingCharacterAttributes,
           before,
           { url: "link" },
         ),
-    ).toThrow("Unknown paragraph");
+    ).toThrow("foreign");
     expect(
       /** Creates an insert action for a stale paragraph. @returns Invalid action. */ () =>
         createWriterHyperlinkAction(
           document,
-          { point: { offset: 0, paragraphId: "missing" } },
+          foreignCaret,
           before.pendingCharacterAttributes,
           before,
           { url: "link" },
           "text",
         ),
-    ).toThrow("Unknown paragraph");
+    ).toThrow("foreign");
   });
 
   it("publishes each edit and history navigation as one typed transaction" /** Verifies model, lifecycle, and cursor invalidations remain bounded. @returns Nothing. */, function aggregatesNotifications(): void {
@@ -187,22 +234,30 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
   it("validates stable point-and-mark coordinates without replacing the persistent PaM" /** Verifies unknown, invalid, unchanged, focus, and Select All cursor transitions. @returns Nothing. */, function validatesCursorCoordinates(): void {
     const shell = createShell("ab");
     const cursor = shell.GetCursor();
-    expect(shell.SetSelection(shell.GetCursorSelection())).toBe(false);
+    expect(setTestSelection(shell, getTestSelection(shell))).toBe(false);
     expect(shell.DeleteSelection()).toBe(false);
-    expect(shell.SetSelection({ point: { offset: 0, paragraphId: "missing" } })).toBe(false);
-    expect(shell.SetSelection({ point: { offset: -1, paragraphId: "p-1" } })).toBe(false);
     expect(
-      shell.SetSelection({
-        mark: { offset: 0, paragraphId: "missing" },
-        point: { offset: 0, paragraphId: "p-1" },
-      }),
-    ).toBe(false);
+      /** Resolves a missing fixture node. @returns Invalid test operation. */ () =>
+        setTestSelection(shell, { point: { offset: 0, paragraphId: "missing" } }),
+    ).toThrow("Unknown test paragraph");
     expect(
-      shell.SetSelection({
-        mark: { offset: 3, paragraphId: "p-1" },
-        point: { offset: 0, paragraphId: "p-1" },
-      }),
-    ).toBe(false);
+      /** Constructs an invalid canonical content position. @returns Invalid test operation. */ () =>
+        setTestSelection(shell, { point: { offset: -1, paragraphId: "p-1" } }),
+    ).toThrow("outside its node");
+    expect(
+      /** Resolves a missing fixture mark. @returns Invalid test operation. */ () =>
+        setTestSelection(shell, {
+          mark: { offset: 0, paragraphId: "missing" },
+          point: { offset: 0, paragraphId: "p-1" },
+        }),
+    ).toThrow("Unknown test paragraph");
+    expect(
+      /** Constructs an out-of-range canonical mark. @returns Invalid test operation. */ () =>
+        setTestSelection(shell, {
+          mark: { offset: 3, paragraphId: "p-1" },
+          point: { offset: 0, paragraphId: "p-1" },
+        }),
+    ).toThrow("outside its node");
     const ownNode = shell.GetDoc().paragraphs[0];
     const foreignNode = createShell("foreign").GetDoc().paragraphs[0];
     if (ownNode === undefined || foreignNode === undefined)
@@ -211,41 +266,41 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.SetPaM(new SwPosition(ownNode, 0), new SwPosition(foreignNode, 0))).toBe(false);
     shell.FocusNode(foreignNode);
     expect(shell.GetActiveParagraph()).toBe(ownNode);
-    shell.FocusParagraph("p-1");
+    shell.FocusNode(ownNode);
     shell.SelectAll();
     expect(shell.GetCursor()).toBe(cursor);
-    expect(shell.GetCursorSelection()).toEqual({
+    expect(getTestSelection(shell)).toEqual({
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 2, paragraphId: "p-1" },
     });
     const second = shell.GetDoc().nodes.MakeTextNode("p-2", "next");
-    shell.FocusParagraph(second.id);
+    shell.FocusNode(second);
     expect(shell.GetActiveParagraph()).toBe(second);
   });
 
   it("executes the complete supported beforeinput intent set" /** Verifies insertion, forward deletion, paragraph breaks, history, replacement, and unsupported intent handling. @returns Nothing. */, function executesInputIntents(): void {
     const shell = createShell();
-    expect(shell.HandleInput("insertText", null)).toBe(true);
-    expect(shell.HandleInput("insertReplacementText", "")).toBe(true);
-    expect(shell.HandleInput("formatBold", null)).toBe(true);
+    expect(handleTestInput(shell, "insertText", null)).toBe(true);
+    expect(handleTestInput(shell, "insertReplacementText", "")).toBe(true);
+    expect(handleTestInput(shell, "formatBold", null)).toBe(true);
     expect(shell.GetPendingCharacterAttributes().bold).toBe(true);
-    expect(shell.HandleInput("formatBold", null)).toBe(true);
-    expect(shell.HandleInput("insertText", "a b")).toBe(true);
-    shell.SetCursor("p-1", 1);
-    expect(shell.HandleInput("deleteContentForward", null)).toBe(true);
+    expect(handleTestInput(shell, "formatBold", null)).toBe(true);
+    expect(handleTestInput(shell, "insertText", "a b")).toBe(true);
+    setTestCursor(shell, "p-1", 1);
+    expect(handleTestInput(shell, "deleteContentForward", null)).toBe(true);
     expect(shell.GetActiveParagraph().text).toBe("ab");
-    expect(shell.HandleInput("historyUndo", null)).toBe(true);
+    expect(handleTestInput(shell, "historyUndo", null)).toBe(true);
     expect(shell.GetActiveParagraph().text).toBe("a b");
-    expect(shell.HandleInput("historyRedo", null)).toBe(true);
+    expect(handleTestInput(shell, "historyRedo", null)).toBe(true);
     expect(shell.GetActiveParagraph().text).toBe("ab");
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 1, paragraphId: "p-1" },
     });
-    expect(shell.HandleInput("insertReplacementText", "A")).toBe(true);
+    expect(handleTestInput(shell, "insertReplacementText", "A")).toBe(true);
     expect(shell.GetActiveParagraph().text).toBe("Ab");
-    shell.SetCursor("p-1", 1);
-    expect(shell.HandleInput("insertLineBreak", null)).toBe(true);
+    setTestCursor(shell, "p-1", 1);
+    expect(handleTestInput(shell, "insertLineBreak", null)).toBe(true);
     expect(
       shell
         .GetDoc()
@@ -259,55 +314,54 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
 
   it("routes formatting, list, transfer echoes, and selection deletion intents", /** Verifies the extended beforeinput subset. @returns Nothing. */ function routesExtendedBrowserIntents(): void {
     const shell = createShell("selected");
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 8, paragraphId: "p-1" },
     });
-    expect(shell.HandleInput("formatItalic", null)).toBe(true);
-    expect(shell.HandleInput("formatUnderline", null)).toBe(true);
+    expect(handleTestInput(shell, "formatItalic", null)).toBe(true);
+    expect(handleTestInput(shell, "formatUnderline", null)).toBe(true);
     expect(shell.GetActiveParagraph().runs).toMatchObject([
       { attributes: { italic: true, underline: true }, text: "selected" },
     ]);
-    expect(shell.HandleInput("insertOrderedList", null)).toBe(true);
+    expect(handleTestInput(shell, "insertOrderedList", null)).toBe(true);
     expect(shell.GetActiveParagraph().list.kind).toBe("numbered");
-    expect(shell.HandleInput("insertUnorderedList", null)).toBe(true);
+    expect(handleTestInput(shell, "insertUnorderedList", null)).toBe(true);
     expect(shell.GetActiveParagraph().list.kind).toBe("bullet");
-    expect(shell.HandleInput("insertFromPaste", null)).toBe(true);
-    expect(shell.HandleInput("insertFromDrop", null)).toBe(true);
-    expect(shell.HandleInput("insertFromComposition", null)).toBe(true);
-    expect(shell.HandleInput("deleteByCut", null)).toBe(true);
+    expect(handleTestInput(shell, "insertFromPaste", null)).toBe(true);
+    expect(handleTestInput(shell, "insertFromDrop", null)).toBe(true);
+    expect(handleTestInput(shell, "insertFromComposition", null)).toBe(true);
+    expect(handleTestInput(shell, "deleteByCut", null)).toBe(true);
     expect(shell.GetActiveParagraph().text).toBe("");
     shell.Insert("again");
-    expect(
-      shell.DeleteSelection({
-        mark: { offset: 0, paragraphId: "p-1" },
-        point: { offset: 5, paragraphId: "p-1" },
-      }),
-    ).toBe(true);
+    setTestSelection(shell, {
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 5, paragraphId: "p-1" },
+    });
+    expect(shell.DeleteSelection()).toBe(true);
     shell.Insert("dragged");
     shell.SelectAll();
-    expect(shell.HandleInput("deleteByDrag", null)).toBe(true);
+    expect(handleTestInput(shell, "deleteByDrag", null)).toBe(true);
   });
 
   it("applies selection replacement, deletion, and splitting across text nodes" /** Verifies the registered SwPaM remains authoritative for same-node and cross-node editing. @returns Nothing. */, function appliesBoundedSelectionInput(): void {
     const shell = createShell("abcd");
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 1, paragraphId: "p-1" },
       point: { offset: 3, paragraphId: "p-1" },
     });
-    shell.HandleInput("deleteContentBackward", null);
+    handleTestInput(shell, "deleteContentBackward", null);
     expect(shell.GetActiveParagraph().text).toBe("ad");
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 1, paragraphId: "p-1" },
       point: { offset: 1, paragraphId: "p-1" },
     });
-    shell.HandleInput("deleteContentForward", null);
+    handleTestInput(shell, "deleteContentForward", null);
     expect(shell.GetActiveParagraph().text).toBe("ad");
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 1, paragraphId: "p-1" },
     });
-    shell.HandleInput("insertParagraph", null);
+    handleTestInput(shell, "insertParagraph", null);
     const secondId = shell.GetActiveParagraph().id;
     expect(
       shell
@@ -321,17 +375,17 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(secondId).toBe(shell.GetActiveParagraph().id);
 
     const crossShell = createShell("ab");
-    crossShell.SetCursor("p-1", 2);
-    crossShell.HandleInput("insertParagraph", null);
-    crossShell.HandleInput("insertText", "cd");
-    crossShell.HandleInput("insertParagraph", null);
+    setTestCursor(crossShell, "p-1", 2);
+    handleTestInput(crossShell, "insertParagraph", null);
+    handleTestInput(crossShell, "insertText", "cd");
+    handleTestInput(crossShell, "insertParagraph", null);
     const crossThirdId = crossShell.GetActiveParagraph().id;
-    crossShell.HandleInput("insertText", "ef");
-    crossShell.SetSelection({
+    handleTestInput(crossShell, "insertText", "ef");
+    setTestSelection(crossShell, {
       mark: { offset: 1, paragraphId: "p-1" },
       point: { offset: 1, paragraphId: crossThirdId },
     });
-    expect(crossShell.HandleInput("insertText", "X")).toBe(true);
+    expect(handleTestInput(crossShell, "insertText", "X")).toBe(true);
     expect(
       crossShell
         .GetDoc()
@@ -351,11 +405,11 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
           ) => paragraph.text,
         ),
     ).toEqual(["ab", "cd", "ef"]);
-    crossShell.SetSelection({
+    setTestSelection(crossShell, {
       mark: { offset: 1, paragraphId: crossThirdId },
       point: { offset: 1, paragraphId: "p-1" },
     });
-    expect(crossShell.HandleInput("deleteContentBackward", null)).toBe(true);
+    expect(handleTestInput(crossShell, "deleteContentBackward", null)).toBe(true);
     expect(
       crossShell
         .GetDoc()
@@ -366,11 +420,11 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         ),
     ).toEqual(["af"]);
     expect(crossShell.Undo()).toBe(true);
-    crossShell.SetSelection({
+    setTestSelection(crossShell, {
       mark: { offset: 1, paragraphId: "p-1" },
       point: { offset: 1, paragraphId: crossThirdId },
     });
-    expect(crossShell.HandleInput("insertParagraph", null)).toBe(true);
+    expect(handleTestInput(crossShell, "insertParagraph", null)).toBe(true);
     expect(
       crossShell
         .GetDoc()
@@ -385,7 +439,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
   it("retains extended text outside SwDoc until one composition commit" /** Verifies implicit start, duplicate start, cancellation, no-session end, and cross-node replacement. @returns Nothing. */, function commitsExtendedTextInput(): void {
     const shell = createShell("ab");
     expect(shell.EndComposition()).toBe(false);
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 1, paragraphId: "p-1" },
     });
@@ -396,10 +450,10 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.GetActiveParagraph().text).toBe("Xb");
     shell.StartComposition();
     expect(shell.EndComposition()).toBe(false);
-    shell.SetCursor("p-1", 1);
-    shell.HandleInput("insertParagraph", null);
+    setTestCursor(shell, "p-1", 1);
+    handleTestInput(shell, "insertParagraph", null);
     const secondId = shell.GetActiveParagraph().id;
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 0, paragraphId: secondId },
     });
@@ -422,11 +476,11 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     Object.defineProperty(Intl, "Segmenter", { configurable: true, value: undefined });
     try {
       const shell = createShell("😀x");
-      shell.SetCursor("p-1", 0);
-      shell.HandleInput("deleteContentForward", null);
+      setTestCursor(shell, "p-1", 0);
+      handleTestInput(shell, "deleteContentForward", null);
       expect(shell.GetActiveParagraph().text).toBe("x");
-      shell.SetCursor("p-1", 1);
-      shell.HandleInput("deleteContentBackward", null);
+      setTestCursor(shell, "p-1", 1);
+      handleTestInput(shell, "deleteContentBackward", null);
       expect(shell.GetActiveParagraph().text).toBe("");
     } finally {
       if (descriptor !== undefined) Object.defineProperty(Intl, "Segmenter", descriptor);
@@ -436,7 +490,8 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
   it("pastes structured list paragraphs as one reversible Writer action" /** Verifies semantic clipboard blocks split canonical text nodes, retain list levels, preserve the trailing range text, and undo atomically. @returns Nothing. */, function pastesStructuredParagraphs(): void {
     const shell = createShell("prefix  suffix");
     expect(
-      shell.Paste(
+      pasteTestSelection(
+        shell,
         { end: 7, paragraphId: "p-1", start: 7 },
         {
           isBlock: true,
@@ -528,7 +583,8 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         ),
     ).toEqual(["prefix Parent", "Child", "Sibling suffix"]);
     expect(
-      shell.Paste(
+      pasteTestSelection(
+        shell,
         { end: 0, paragraphId: "p-1", start: 0 },
         { isBlock: true, paragraphs: [], source: "html" },
       ),
@@ -536,7 +592,8 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
 
     const emptyBlockShell = createShell();
     expect(
-      emptyBlockShell.Paste(
+      pasteTestSelection(
+        emptyBlockShell,
         { end: 0, paragraphId: "p-1", start: 0 },
         {
           isBlock: false,
@@ -546,7 +603,8 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       ),
     ).toBe(false);
     expect(
-      emptyBlockShell.Paste(
+      pasteTestSelection(
+        emptyBlockShell,
         { end: 0, paragraphId: "p-1", start: 0 },
         {
           isBlock: true,
@@ -563,7 +621,8 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
 
     const replacementShell = createShell("old");
     expect(
-      replacementShell.Paste(
+      pasteTestSelection(
+        replacementShell,
         { end: 2, paragraphId: "p-1", start: 1 },
         {
           isBlock: false,
@@ -584,7 +643,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
   it("routes formatting and list commands through one mutable undo history" /** Verifies the retired clone facades have one identity-preserving shell replacement with reversible action objects. @returns Nothing. */, function routesFormattingCommands(): void {
     const shell = createShell("Body");
     const document = shell.GetDoc();
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 1, paragraphId: "p-1" },
       point: { offset: 3, paragraphId: "p-1" },
     });
@@ -625,7 +684,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(
       /** Rejects a blank font. @returns Invalid mutation. */ () => shell.SetFontFamily(" "),
     ).toThrow("blank");
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 1, paragraphId: "p-1" },
       point: { offset: 3, paragraphId: "p-1" },
     });
@@ -681,7 +740,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
 
   it("creates clipboard transfer data from the shell SwPaM without rendered DOM", /** Verifies model-owned transfer serialization. @returns Nothing. */ function createsModelTransfer(): void {
     const shell = createShell("alpha beta");
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 5, paragraphId: "p-1" },
     });
@@ -696,21 +755,21 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       ),
       plainText: "alpha",
     });
-    shell.SetSelection({
+    setTestSelection(shell, {
       mark: { offset: 5, paragraphId: "p-1" },
       point: { offset: 0, paragraphId: "p-1" },
     });
     expect(shell.CreateTransferable().CreateSelection()?.plainText).toBe("alpha");
-    shell.SetCursor("p-1", 5);
+    setTestCursor(shell, "p-1", 5);
     expect(shell.CreateTransferable().CreateSelection()).toBeUndefined();
 
     const multiParagraph = createShell("firstsecond");
-    const secondId = multiParagraph.SplitParagraph("p-1", 5);
-    multiParagraph.SetCursor("p-1", 0);
+    const secondId = fixtureSplitParagraph(multiParagraph, "p-1", 5);
+    setTestCursor(multiParagraph, "p-1", 0);
     multiParagraph.SetParagraphListKind("bullet");
-    multiParagraph.SetCursor(secondId, 0);
+    setTestCursor(multiParagraph, secondId, 0);
     multiParagraph.SetParagraphListKind("numbered");
-    multiParagraph.SetSelection({
+    setTestSelection(multiParagraph, {
       mark: { offset: 6, paragraphId: secondId },
       point: { offset: 0, paragraphId: "p-1" },
     });
@@ -719,15 +778,15 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     });
 
     const emptyParagraphs = createShell();
-    const emptySecondId = emptyParagraphs.SplitParagraph("p-1", 0);
-    emptyParagraphs.SetSelection({
+    const emptySecondId = fixtureSplitParagraph(emptyParagraphs, "p-1", 0);
+    setTestSelection(emptyParagraphs, {
       mark: { offset: 0, paragraphId: emptySecondId },
       point: { offset: 0, paragraphId: "p-1" },
     });
     expect(emptyParagraphs.CreateTransferable().CreateSelection()).toBeUndefined();
 
     const foreign = createShell("foreign");
-    foreign.SetSelection({
+    setTestSelection(foreign, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 7, paragraphId: "p-1" },
     });

@@ -1,6 +1,7 @@
 /** @fileoverview Structured Writer graph transport shared by filter and browser persistence boundaries. */
 
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../../core/doc/doc";
 import {
   isWriterParagraphStyle,
@@ -10,7 +11,10 @@ import {
 import { SwNumFormat, SwNumRule } from "../../core/doc/number";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
 import type { WriterParagraphListKind } from "../../core/doc/list";
-import type { WriterTextRun } from "../../core/txtnode/ndtxt";
+import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+import { SwpHints } from "../../core/txtnode/ndhints";
+import { SwFormatINetFormat } from "../../core/txtnode/fmtinfmt";
+import { SwFormatAutoFormat, SwTextAttr } from "../../core/txtnode/txatbase";
 import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 
 /** Primitive persistence record for one numbering level. */
@@ -50,13 +54,29 @@ interface WriterStyleRecord {
 interface WriterTextNodeRecord {
   readonly autoAttributes: readonly SfxPoolItemSnapshot[];
   readonly formatCollId: WriterParagraphStyle;
-  readonly runs: readonly WriterTextRun[];
+  readonly hints: readonly WriterTextHintRecord[];
+  readonly text: string;
 }
+
+/** Canonical ranged Writer attribute record; browser run projections are never persisted. */
+type WriterTextHintRecord =
+  | Readonly<{
+      end: number;
+      items: readonly SfxPoolItemSnapshot[];
+      kind: "auto-format";
+      start: number;
+    }>
+  | Readonly<{
+      end: number;
+      hyperlink: ReturnType<SwFormatINetFormat["GetHyperlink"]>;
+      kind: "hyperlink";
+      start: number;
+    }>;
 
 /** Current graph transport. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly numRules: readonly WriterNumberRuleRecord[];
-  readonly swModelVersion: 10;
+  readonly swModelVersion: 11;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -94,7 +114,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         name: rule.GetName(),
       }),
     ),
-    swModelVersion: 10,
+    swModelVersion: 11,
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -119,7 +139,29 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         return {
           autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
           formatCollId: node.GetTextFormatColl().id,
-          runs: node.runs,
+          hints:
+            node
+              .GetpSwpHints()
+              ?.entries()
+              .map(
+                /** Encodes one canonical ranged text attribute. @param hint - Writer hint. @returns Primitive hint record. */ (
+                  hint,
+                ): WriterTextHintRecord =>
+                  hint.format instanceof SwFormatAutoFormat
+                    ? {
+                        end: hint.end,
+                        items: encodeSfxItemSet(hint.format.GetStyleHandle()),
+                        kind: "auto-format",
+                        start: hint.start,
+                      }
+                    : {
+                        end: hint.end,
+                        hyperlink: hint.format.GetHyperlink(),
+                        kind: "hyperlink",
+                        start: hint.start,
+                      },
+              ) ?? [],
+          text: node.GetText(),
         };
       },
     ),
@@ -130,7 +172,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
 export function decodeWriterDocument(candidate: unknown): SwDoc {
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 10 ||
+    candidate.swModelVersion !== 11 ||
     !Array.isArray(candidate.numRules) ||
     !Array.isArray(candidate.textFormatCollections) ||
     !Array.isArray(candidate.textNodes)
@@ -183,7 +225,19 @@ export function decodeWriterDocument(candidate: unknown): SwDoc {
     for (const item of nodeRecord.autoAttributes)
       node.SetAttr(document.GetAttrPool().CreateItem(item));
     document.GetDocumentListsManager().RegisterListItem(node);
-    node.ReplaceRange(0, 0, nodeRecord.runs);
+    node.SetText(nodeRecord.text);
+    const hints = nodeRecord.hints.map(
+      /** Restores one canonical text attribute. @param hint - Primitive hint record. @returns Writer hint. */ (
+        hint,
+      ) => {
+        if (hint.kind === "hyperlink")
+          return new SwTextAttr(new SwFormatINetFormat(hint.hyperlink), hint.start, hint.end);
+        const items = new SfxItemSet(document.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+        decodeSfxItemSet(items, hint.items);
+        return new SwTextAttr(new SwFormatAutoFormat(items), hint.start, hint.end);
+      },
+    );
+    node.SetTextHints(new SwpHints(document.GetAttrPool(), hints));
   }
   if (document.paragraphs.length === 0)
     throw new Error("Stored Writer document has no body text node.");

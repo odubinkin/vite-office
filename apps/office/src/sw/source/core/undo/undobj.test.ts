@@ -20,6 +20,15 @@ import {
   type SwUndoCursorState,
   type SwUndoRedoContext,
 } from "./undobj";
+import {
+  handleTestInput,
+  fixtureMergeParagraphWithNext,
+  fixtureMergeParagraphWithPrevious,
+  fixtureReplaceRange,
+  setTestCursor,
+  fixtureSplitParagraph,
+  toggleTestFormat,
+} from "../../../../test/wrtsh-test-helpers";
 
 /** Creates a clean document/session fixture with optional plain text. @param text - Initial first-paragraph text. @returns Document, document shell, and Writer shell. */
 function createSession(text = "") {
@@ -55,12 +64,12 @@ function cursorState(paragraph: SwTextNode, offset = 0): SwUndoCursorState {
 describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance coverage. @returns Nothing. */, function defineWriterUndoTests(): void {
   it("groups compatible typing, separates delimiter and cursor boundaries, and truncates redo" /** Verifies SwUndoInsert::CanGrouping behavior and branch replacement. @returns Nothing. */, function groupsTyping(): void {
     const { docShell, document, shell } = createSession();
-    shell.HandleInput("insertText", "a");
-    shell.HandleInput("insertText", "b");
+    handleTestInput(shell, "insertText", "a");
+    handleTestInput(shell, "insertText", "b");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoInsert);
     expect(document.paragraphs[0]?.text).toBe("ab");
-    shell.HandleInput("insertText", " ");
+    handleTestInput(shell, "insertText", " ");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(2);
     expect(shell.Undo()).toBe(true);
     expect(document.paragraphs[0]?.text).toBe("ab");
@@ -68,8 +77,8 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(document.paragraphs[0]?.text).toBe("");
     expect(shell.Redo()).toBe(true);
     expect(document.paragraphs[0]?.text).toBe("ab");
-    shell.SetCursor("p-1", 2);
-    shell.HandleInput("insertText", "x");
+    setTestCursor(shell, "p-1", 2);
+    handleTestInput(shell, "insertText", "x");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(2);
     expect(docShell.GetUndoManager().GetRedoActionCount()).toBe(0);
     expect(shell.Redo()).toBe(false);
@@ -77,14 +86,14 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
 
   it("groups backward and forward deletion separately while restoring formatted content" /** Verifies SwUndoDelete grouping direction and retained hints. @returns Nothing. */, function groupsDeletion(): void {
     const backward = createSession();
-    backward.shell.ReplaceRange({ paragraphId: "p-1", start: 0, end: 0 }, [
+    fixtureReplaceRange(backward.shell, { paragraphId: "p-1", start: 0, end: 0 }, [
       run("ab", true),
       run("cd", false, true),
     ]);
     backward.docShell.GetUndoManager().Clear();
-    backward.shell.SetCursor("p-1", 4);
-    backward.shell.HandleInput("deleteContentBackward", null);
-    backward.shell.HandleInput("deleteContentBackward", null);
+    setTestCursor(backward.shell, "p-1", 4);
+    handleTestInput(backward.shell, "deleteContentBackward", null);
+    handleTestInput(backward.shell, "deleteContentBackward", null);
     expect(backward.docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     expect(backward.docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoDelete);
     backward.shell.Undo();
@@ -94,16 +103,16 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     ]);
 
     const forward = createSession("abcd");
-    forward.shell.SetCursor("p-1", 0);
-    forward.shell.HandleInput("deleteContentForward", null);
-    forward.shell.HandleInput("deleteContentForward", null);
+    setTestCursor(forward.shell, "p-1", 0);
+    handleTestInput(forward.shell, "deleteContentForward", null);
+    handleTestInput(forward.shell, "deleteContentForward", null);
     expect(forward.docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     forward.shell.Undo();
     expect(forward.document.paragraphs[0]?.text).toBe("abcd");
 
     const delimiter = createSession("a ");
-    delimiter.shell.SetCursor("p-1", 2);
-    delimiter.shell.HandleInput("deleteContentBackward", null);
+    setTestCursor(delimiter.shell, "p-1", 2);
+    handleTestInput(delimiter.shell, "deleteContentBackward", null);
     expect(delimiter.docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoDelete);
   });
 
@@ -113,7 +122,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     shell.UpdateComposition("あい");
     shell.EndComposition();
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
-    expect(shell.HandleInput("insertTranspose", "AX")).toBe(false);
+    expect(handleTestInput(shell, "insertTranspose", "AX")).toBe(false);
     expect(document.paragraphs[0]?.text).toBe("あい");
     shell.Undo();
     expect(document.paragraphs[0]?.text).toBe("");
@@ -121,24 +130,24 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
 
   it("undoes paste and cut as range actions with exact direct formatting" /** Verifies compound replacement semantics without document snapshots. @returns Nothing. */, function replacesRanges(): void {
     const { docShell, document, shell } = createSession("hello");
-    shell.ReplaceRange({ paragraphId: "p-1", start: 1, end: 4 }, [run("EY", true)]);
+    fixtureReplaceRange(shell, { paragraphId: "p-1", start: 1, end: 4 }, [run("EY", true)]);
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoReplace);
     expect(document.paragraphs[0]?.runs).toEqual([run("h"), run("EY", true), run("o")]);
     shell.Undo();
     expect(document.paragraphs[0]?.runs).toEqual([run("hello")]);
     shell.Redo();
-    shell.ReplaceRange({ paragraphId: "p-1", start: 1, end: 3 }, []);
+    fixtureReplaceRange(shell, { paragraphId: "p-1", start: 1, end: 3 }, []);
     expect(document.paragraphs[0]?.text).toBe("ho");
     shell.Undo();
     expect(document.paragraphs[0]?.runs).toEqual([run("h"), run("EY", true), run("o")]);
-    expect(shell.ReplaceRange({ paragraphId: "p-1", start: 1, end: 3 }, [run("EY", true)])).toBe(
-      false,
-    );
+    expect(
+      fixtureReplaceRange(shell, { paragraphId: "p-1", start: 1, end: 3 }, [run("EY", true)]),
+    ).toBe(false);
   });
 
   it("restores split and join structure, node formatting, and caret" /** Verifies SwUndoSplitNode and SwUndoJoinParagraphs structural payloads. @returns Nothing. */, function restoresParagraphStructure(): void {
     const { docShell, document, shell } = createSession("abcd");
-    const nextId = shell.SplitParagraph("p-1", 2);
+    const nextId = fixtureSplitParagraph(shell, "p-1", 2);
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoSplitNode);
     expect(
       document.paragraphs.map(
@@ -157,12 +166,12 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     ).toEqual(["abcd"]);
     expect(shell.GetCursor().GetPoint().GetNode()).toBe(document.paragraphs[0]);
     shell.Redo();
-    shell.SetCursor(nextId, 2);
+    setTestCursor(shell, nextId, 2);
     shell.SetParagraphStyle("heading-1");
     shell.SetParagraphListKind("numbered");
-    shell.ToggleCharacterFormat("italic", { paragraphId: nextId, start: 0, end: 2 });
+    toggleTestFormat(shell, "italic", { paragraphId: nextId, start: 0, end: 2 });
     const trailingSnapshot = encodeWriterDocument(document).textNodes[1];
-    shell.MergeParagraphWithPrevious(nextId);
+    fixtureMergeParagraphWithPrevious(shell, nextId);
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoJoinParagraphs);
     expect(document.paragraphs).toHaveLength(1);
     shell.Undo();
@@ -180,7 +189,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const { docShell, document, shell } = createSession("abcd");
     const paragraph = document.paragraphs[0] as NonNullable<(typeof document.paragraphs)[number]>;
     shell.GetCursor().Assign(new SwPosition(paragraph, 1), new SwPosition(paragraph, 3));
-    shell.ToggleCharacterFormat("bold", { paragraphId: "p-1", start: 1, end: 3 });
+    toggleTestFormat(shell, "bold", { paragraphId: "p-1", start: 1, end: 3 });
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoAttr);
     expect(paragraph.runs).toEqual([run("a"), run("bc", true), run("d")]);
     shell.Undo();
@@ -217,13 +226,13 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
 
   it("preserves lifecycle generations and the moved save mark across action navigation" /** Verifies document lifecycle ownership after removing historical snapshots. @returns A fulfilled assertion promise. */, async function preservesSaveMark(): Promise<void> {
     const { docShell, shell } = createSession();
-    shell.HandleInput("insertText", "a");
+    handleTestInput(shell, "insertText", "a");
     await docShell.Save(
       /** Confirms the generation accepted by the test primary medium. @returns Matching storage evidence. */ async () => ({
         generation: docShell.GetDocumentState().contentGeneration,
       }),
     );
-    shell.HandleInput("insertText", "b");
+    handleTestInput(shell, "insertText", "b");
     expect(docShell.GetDocumentState()).toMatchObject({
       contentGeneration: 2,
       isModified: true,
@@ -266,7 +275,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const smallStart = performance.now();
     small.shell.Insert("a");
     const smallLatency = performance.now() - smallStart;
-    large.shell.SetCursor("p-1", 20_000);
+    setTestCursor(large.shell, "p-1", 20_000);
     const largeStart = performance.now();
     large.shell.Insert("a");
     const largeLatency = performance.now() - largeStart;
@@ -307,22 +316,22 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const { docShell, shell } = createSession("abc");
     expect(
       /** Replaces content in an absent paragraph. @returns Invalid transition that never returns. */
-      () => shell.ReplaceRange({ paragraphId: "missing", start: 0, end: 0 }, []),
-    ).toThrow("Unknown paragraph");
+      () => fixtureReplaceRange(shell, { paragraphId: "missing", start: 0, end: 0 }, []),
+    ).toThrow("Unknown test paragraph");
     expect(
       /** Replaces content through an invalid range. @returns Invalid transition that never returns. */
-      () => shell.ReplaceRange({ paragraphId: "p-1", start: -1, end: 0 }, []),
+      () => fixtureReplaceRange(shell, { paragraphId: "p-1", start: -1, end: 0 }, []),
     ).toThrow("outside the paragraph");
     expect(
       /** Splits an absent paragraph. @returns Invalid transition that never returns. */
-      () => shell.SplitParagraph("missing", 0),
-    ).toThrow("Unknown paragraph");
+      () => fixtureSplitParagraph(shell, "missing", 0),
+    ).toThrow("Unknown test paragraph");
     expect(
       /** Splits beyond paragraph content. @returns Invalid transition that never returns. */
-      () => shell.SplitParagraph("p-1", 4),
-    ).toThrow("outside the paragraph");
-    expect(shell.MergeParagraphWithPrevious("p-1")).toBe(false);
-    expect(shell.MergeParagraphWithNext("p-1")).toBe(false);
+      () => fixtureSplitParagraph(shell, "p-1", 4),
+    ).toThrow("outside its node");
+    expect(fixtureMergeParagraphWithPrevious(shell, "p-1")).toBe(false);
+    expect(fixtureMergeParagraphWithNext(shell, "p-1")).toBe(false);
     expect(shell.SetParagraphAlignment("left")).toBe(false);
     expect(shell.SetParagraphStyle("default")).toBe(false);
     expect(shell.SetParagraphListKind("none")).toBe(false);
@@ -424,15 +433,13 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     ).toThrow("outside the paragraph");
     expect(
       /** Formats an absent paragraph. @returns Invalid lookup that never returns. */
-      () => shell.ToggleCharacterFormat("bold", { paragraphId: "missing", start: 0, end: 0 }),
-    ).toThrow("Unknown paragraph");
+      () => toggleTestFormat(shell, "bold", { paragraphId: "missing", start: 0, end: 0 }),
+    ).toThrow("Unknown test paragraph");
     expect(
       /** Formats an invalid paragraph range. @returns Invalid range operation that never returns. */
-      () => shell.ToggleCharacterFormat("bold", { paragraphId: "p-1", start: -1, end: 1 }),
+      () => toggleTestFormat(shell, "bold", { paragraphId: "p-1", start: -1, end: 1 }),
     ).toThrow("outside the paragraph");
-    expect(shell.ToggleCharacterFormat("bold", { paragraphId: "p-1", start: 1, end: 1 })).toBe(
-      false,
-    );
+    expect(toggleTestFormat(shell, "bold", { paragraphId: "p-1", start: 1, end: 1 })).toBe(false);
     expect(
       /** Passes a runtime-invalid list kind through the public command boundary. @returns Invalid command that never returns. */
       () => shell.SetParagraphListKind("invalid" as never),
@@ -447,15 +454,18 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(document.paragraphs[0]?.list.level).toBe(9);
 
     const context = (shell as unknown as { undoContext: SwUndoRedoContext }).undoContext;
+    const foreign = createWriterDocument("foreign").paragraphs[0] as SwTextNode;
     expect(
       /** Resolves a missing private action endpoint. @returns Invalid state. */ () =>
         (
           shell as unknown as {
-            CreateCollapsedCursorState: (paragraphId: string, offset: number) => SwUndoCursorState;
+            CreateCollapsedCursorState: (
+              paragraph: SwTextNode,
+              offset: number,
+            ) => SwUndoCursorState;
           }
-        ).CreateCollapsedCursorState("missing", 0),
-    ).toThrow("Unknown paragraph");
-    const foreign = createWriterDocument("foreign").paragraphs[0] as SwTextNode;
+        ).CreateCollapsedCursorState(foreign, 0),
+    ).toThrow("Writer cursor node is foreign");
     docShell.ApplyUndoAction(
       new SwUndoParagraphFormat(
         paragraph,

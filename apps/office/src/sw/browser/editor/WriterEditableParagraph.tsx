@@ -32,7 +32,13 @@ export function WriterEditableParagraph({
   const listIndent = listMarker === undefined ? undefined : `${paragraph.list.level * 2}rem`;
   void projectionVersion;
   return (
-    <div className={isLast ? "" : "mb-4"} data-active={isActive}>
+    <div
+      data-active={isActive}
+      style={{
+        marginBlockEnd: isLast ? undefined : `${paragraph.computedStyle.lowerSpacingPt}pt`,
+        marginBlockStart: `${paragraph.computedStyle.upperSpacingPt}pt`,
+      }}
+    >
       <span className="sr-only" id={styleDescriptionId} contentEditable={false}>
         Paragraph style: {paragraph.styleDisplayName}
         {listMarker === undefined
@@ -58,7 +64,7 @@ export function WriterEditableParagraph({
           aria-describedby={styleDescriptionId}
           aria-label={label}
           aria-multiline="true"
-          className={`min-h-7 whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"} ${getParagraphStyleClass(paragraph.style)}`}
+          className={`min-h-7 whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"}`}
           data-alignment={paragraph.alignment}
           data-list-kind={paragraph.list.kind}
           data-list-level={paragraph.list.level}
@@ -75,12 +81,18 @@ export function WriterEditableParagraph({
           }
           role="textbox"
           style={{
-            fontFamily: paragraph.runs[0]?.attributes.fontFamily,
+            fontFamily: paragraph.computedStyle.fontFamily,
+            fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
+            fontStyle: paragraph.computedStyle.fontStyle,
+            fontWeight: paragraph.computedStyle.fontWeight,
+            lineHeight: paragraph.computedStyle.lineHeight,
             marginInlineStart:
               paragraph.list.kind === "none" && paragraph.textLeftMargin > 0
                 ? `${paragraph.textLeftMargin / 20}pt`
                 : undefined,
+            marginInlineEnd: `${paragraph.computedStyle.rightMarginPt}pt`,
             textAlign: paragraph.alignment,
+            textIndent: `${paragraph.computedStyle.firstLineIndentPt}pt`,
           }}
           tabIndex={-1}
         >
@@ -90,7 +102,11 @@ export function WriterEditableParagraph({
               runIndex,
             ) => (
               <Fragment key={getWriterRunProjectionKey(paragraph.id, paragraph.runs, runIndex)}>
-                <WriterTextRunProjection run={run} />
+                <WriterTextRunProjection
+                  inheritedBold={paragraph.computedStyle.fontWeight === 700}
+                  inheritedItalic={paragraph.computedStyle.fontStyle === "italic"}
+                  run={run}
+                />
               </Fragment>
             ),
           )}
@@ -100,15 +116,25 @@ export function WriterEditableParagraph({
   );
 }
 
-/** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run. @returns React-owned run subtree. */
-function WriterTextRunProjection({ run }: Readonly<{ run: WriterTextRun }>): React.ReactNode {
+/** Projects one immutable Writer run through semantic browser elements. @param props - Canonical run and inherited paragraph flags. @returns React-owned run subtree. */
+function WriterTextRunProjection({
+  inheritedBold,
+  inheritedItalic,
+  run,
+}: Readonly<{
+  inheritedBold: boolean;
+  inheritedItalic: boolean;
+  run: WriterTextRun;
+}>): React.ReactNode {
   let content: React.ReactNode = run.text;
   if (run.attributes.underline)
     content = <span style={{ textDecoration: "underline" }}>{content}</span>;
   if (run.attributes.fontFamily !== undefined)
     content = <span style={{ fontFamily: run.attributes.fontFamily }}>{content}</span>;
   if (run.attributes.italic) content = <em>{content}</em>;
+  else if (inheritedItalic) content = <span style={{ fontStyle: "normal" }}>{content}</span>;
   if (run.attributes.bold) content = <strong>{content}</strong>;
+  else if (inheritedBold) content = <span style={{ fontWeight: 400 }}>{content}</span>;
   if (run.hyperlink !== undefined)
     content = (
       <a
@@ -134,27 +160,4 @@ function getWriterRunProjectionKey(
   const run = runs[index] as WriterTextRun;
   const attributes = run.attributes;
   return `${paragraphId}:${offset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.fontFamily ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
-}
-
-/** Maps visible built-ins. @param style - Style identity. @returns CSS classes. */
-function getParagraphStyleClass(style: string): string {
-  if (style === "title") return "text-3xl font-bold leading-10 text-center";
-  if (style === "subtitle") return "text-xl italic leading-8 text-center";
-  const heading = /^heading-(\d+)$/.exec(style);
-  if (heading !== null) {
-    const level = Number(heading[1]);
-    return level <= 2
-      ? "text-2xl font-bold leading-9"
-      : level <= 4
-        ? "text-xl font-bold leading-8"
-        : "text-lg font-semibold leading-7";
-  }
-  if (style === "heading" || style.endsWith("-heading")) return "text-xl font-bold leading-8";
-  if (style === "preformatted-text") return "font-mono text-sm leading-6";
-  if (style === "quotations") return "italic ms-8 text-base leading-7";
-  if (style === "caption" || ["illustration", "table", "text", "figure", "drawing"].includes(style))
-    return "text-sm italic leading-6";
-  if (style === "footnote" || style === "endnote" || style === "comment")
-    return "text-sm leading-6";
-  return "text-base leading-7";
 }

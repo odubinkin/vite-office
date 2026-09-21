@@ -7,6 +7,43 @@ import {
   WRITER_PARAGRAPH_STYLE_POOL,
 } from "./poolfmt";
 import { createWriterDocument } from "../source/core/doc/doc";
+import {
+  FontItalic,
+  FontWeight,
+  SvxFontHeightItem,
+  SvxFontItem,
+  SvxPostureItem,
+  SvxWeightItem,
+} from "../../editeng/source/items/textitem";
+import {
+  SvxAdjust,
+  SvxAdjustItem,
+  SvxFirstLineIndentItem,
+  SvxLineSpacingItem,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+  SvxULSpaceItem,
+} from "../../editeng/source/items/paraitem";
+import {
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
+  RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_WEIGHT,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_MARGIN_TEXTLEFT,
+  RES_PARATR_ADJUST,
+  RES_PARATR_LINESPACING,
+  RES_UL_SPACE,
+} from "./hintids";
 
 describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothing. */ () => {
   it("preserves all pool ranges, identities, parents, and follow links", /** Verifies the complete graph. @returns Nothing. */ () => {
@@ -65,5 +102,59 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect(new Set(names).size).toBe(WRITER_PARAGRAPH_STYLE_POOL.length);
     expect(getWriterOdfStyleName("header-and-footer")).toBe("Header_20_and_20_Footer");
     expect(getWriterOdfStyleName("custom-style")).toBe("custom-style");
+  });
+
+  it("materializes source-derived item defaults and script slots", /** Verifies representative upstream style switch branches. @returns Nothing. */ () => {
+    const document = createWriterDocument("p-1");
+    const textBody = document.GetTextFormatColl("text-body").GetAttrSet();
+    expect((textBody.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace()).toBe(
+      115,
+    );
+    expect((textBody.Get(RES_UL_SPACE) as SvxULSpaceItem).GetLower()).toBe(7 * 20);
+
+    const heading = document.GetTextFormatColl("heading").GetAttrSet();
+    expect((heading.Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(14 * 20);
+    expect((heading.Get(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([12 * 20, 6 * 20]);
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
+      expect((heading.Get(which) as SvxFontItem).GetFamilyName()).not.toBe("");
+
+    const heading4 = document.GetTextFormatColl("heading-4").GetAttrSet();
+    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+      expect((heading4.Get(which) as SvxWeightItem).GetWeight()).toBe(FontWeight.BOLD);
+    for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
+      expect((heading4.Get(which) as SvxPostureItem).GetPosture()).toBe(FontItalic.NORMAL);
+    for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
+      expect((heading4.Get(which) as SvxFontHeightItem).GetHeight()).toBe(13 * 20);
+
+    const title = document.GetTextFormatColl("title").GetAttrSet();
+    expect((title.Get(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(SvxAdjust.Center);
+    expect((title.Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(28 * 20);
+    const caption = document.GetTextFormatColl("caption").GetAttrSet();
+    expect((caption.Get(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([120, 120]);
+    expect((caption.Get(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture()).toBe(
+      FontItalic.NORMAL,
+    );
+
+    const hanging = document.GetTextFormatColl("hanging-indent").GetAttrSet();
+    expect(
+      (hanging.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
+    ).toBe(-283);
+    expect((hanging.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(567);
+    const quotations = document.GetTextFormatColl("quotations").GetAttrSet();
+    expect((quotations.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight()).toBe(567);
+    expect(
+      (
+        document
+          .GetTextFormatColl("table-heading")
+          .GetAttrSet()
+          .Get(RES_PARATR_ADJUST) as SvxAdjustItem
+      ).GetAdjust(),
+    ).toBe(SvxAdjust.Center);
+    expect(
+      document.GetAttrPool().CreateItem({ which: RES_MARGIN_FIRSTLINE, value: -10 }),
+    ).toBeInstanceOf(SvxFirstLineIndentItem);
+    expect(
+      document.GetAttrPool().CreateItem({ which: RES_MARGIN_RIGHT, value: 10 }),
+    ).toBeInstanceOf(SvxRightMarginItem);
   });
 });

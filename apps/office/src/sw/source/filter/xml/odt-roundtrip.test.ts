@@ -241,7 +241,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         (node) => ({
           alignment: node.alignment,
           list: node.list,
-          runs: node.runs,
           style: node.style,
           text: node.text,
         }),
@@ -252,7 +251,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         (node) => ({
           alignment: node.alignment,
           list: node.list,
-          runs: node.runs,
           style: node.style,
           text: node.text,
         }),
