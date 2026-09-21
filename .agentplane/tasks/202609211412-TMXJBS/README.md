@@ -4,7 +4,7 @@ title: "Fix formatted typing undo grouping"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,23 @@ verification:
   updated_by: "CODER"
   note: "Command: npx vitest run src/sw/source/uibase/wrtsh/wrtsh.test.ts; npm run verify; node .agentplane/policy/check-routing.mjs; ap doctor; git diff --check. Result: pass. Evidence: focused 17/17; full 350 office and 95 inventory tests at 100% coverage, 11 E2E, all build/static/architecture/provenance/invariant/parity checks pass; routing OK; doctor OK with one pre-existing historical-task warning; diff check clean. Scope: SwUndoInsert formatted hint grouping and SwWrtShell undo/redo regression."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-21T14:16:53.832Z"
+  updated_by: "EVALUATOR"
+  note: "Formatted Writer typing now groups native hints without cyclic serialization and retains correct undo/redo behavior."
+  evaluated_sha: "05857819ade66d6a02369a618c680b2aebfe74be"
+  blueprint_digest: "07846ca0c1d2954cbf9f1d0a8bbd673e4f84e718a66e786ed2795ba7eb5e946c"
+  evidence_refs:
+    - ".agentplane/tasks/202609211412-TMXJBS/README.md"
+    - ".agentplane/tasks/202609211412-TMXJBS/quality/20260921-141653832-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609211412-TMXJBS/quality/20260921-141653832-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609211412-TMXJBS/quality/20260921-141653832-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609211412-TMXJBS/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/source/core/undo/unins.ts"
+    - "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+  findings:
+    - "SwUndoInsert uses SwpHints.equals for structural native hint comparison; focused regression and full repository verification pass."
 commit: null
 comments:
   -

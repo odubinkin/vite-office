@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202609211412-TMXJBS",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T14:16:53.832Z",
+  "verdict": "pass",
+  "summary": "Formatted Writer typing now groups native hints without cyclic serialization and retains correct undo/redo behavior.",
+  "evaluated_sha": "05857819ade66d6a02369a618c680b2aebfe74be",
+  "blueprint_digest": "07846ca0c1d2954cbf9f1d0a8bbd673e4f84e718a66e786ed2795ba7eb5e946c",
+  "findings": [
+    "SwUndoInsert uses SwpHints.equals for structural native hint comparison; focused regression and full repository verification pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609211412-TMXJBS/README.md",
+    "apps/office/src/sw/source/core/undo/unins.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
