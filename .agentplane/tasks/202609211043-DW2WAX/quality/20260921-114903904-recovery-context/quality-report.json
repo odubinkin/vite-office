@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609211043-DW2WAX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-21T11:49:03.904Z",
+  "verdict": "pass",
+  "summary": "Writer P0 ownership, canonical model, browser boundary, style defaults, and detailed inventory are implemented and fully verified.",
+  "evaluated_sha": "dbf320d7bfabdbe9c025a42b5801e96320845628",
+  "blueprint_digest": "e959a8060a700225954f7581eb4ada96732a9009a9f1f8a2959c91f84c2f930a",
+  "findings": [
+    "No blocking defects remain; stored document schema intentionally advances to v11 without legacy compatibility."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609211043-DW2WAX/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

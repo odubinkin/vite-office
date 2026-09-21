@@ -1,10 +1,13 @@
 ---
 id: "202609211043-DW2WAX"
 title: "Implement Writer P0 upstream parity"
-status: "DOING"
+result_summary: "Implemented Writer P0 upstream parity with canonical Sfx/Writer ownership, hint-backed storage, source-derived style defaults, and detailed inventory."
+risk_level: "med"
+breaking: true
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -40,25 +43,30 @@ verification:
   attempts: 0
 quality_review:
   state: "pass"
-  updated_at: "2026-09-21T11:48:32.310Z"
+  updated_at: "2026-09-21T11:49:03.904Z"
   updated_by: "EVALUATOR"
   note: "Writer P0 ownership, canonical model, browser boundary, style defaults, and detailed inventory are implemented and fully verified."
-  evaluated_sha: null
+  evaluated_sha: "dbf320d7bfabdbe9c025a42b5801e96320845628"
   blueprint_digest: "e959a8060a700225954f7581eb4ada96732a9009a9f1f8a2959c91f84c2f930a"
   evidence_refs:
     - ".agentplane/tasks/202609211043-DW2WAX/README.md"
-    - ".agentplane/tasks/202609211043-DW2WAX/quality/20260921-114832310-recovery-context/quality-report.json"
-    - ".agentplane/tasks/202609211043-DW2WAX/quality/20260921-114832310-recovery-context/evaluator-prompt.md"
-    - ".agentplane/tasks/202609211043-DW2WAX/quality/20260921-114832310-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609211043-DW2WAX/quality/20260921-114903904-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609211043-DW2WAX/quality/20260921-114903904-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609211043-DW2WAX/quality/20260921-114903904-recovery-context/evaluator-opinion.md"
     - ".agentplane/tasks/202609211043-DW2WAX/blueprint/resolved-snapshot.json"
     - "npm run verify"
   findings:
     - "No blocking defects remain; stored document schema intentionally advances to v11 without legacy compatibility."
-commit: null
+commit:
+  hash: "dbf320d7bfabdbe9c025a42b5801e96320845628"
+  message: "🧪 DW2WAX task: record verification evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Writer P0 parity scope from pinned LibreOffice, preserving the current inventory model and validating all architectural boundaries."
+  -
+    author: "CODER"
+    body: "Verified: implemented P0-2 through P0-5 against the pinned LibreOffice baseline; kept the inventory model unchanged while expanding accurate records; full npm run verify, Agentplane doctor, and routing checks pass."
 events:
   -
     type: "status"
@@ -73,8 +81,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full npm run verify passed: 347 unit tests and 95 inventory tests at 100% coverage, 11 E2E tests, static build, source provenance, inventory invariants/parity, lint, typecheck, and documentation checks."
+  -
+    type: "status"
+    at: "2026-09-21T11:49:39.354Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: implemented P0-2 through P0-5 against the pinned LibreOffice baseline; kept the inventory model unchanged while expanding accurate records; full npm run verify, Agentplane doctor, and routing checks pass."
 doc_version: 3
-doc_updated_at: "2026-09-21T11:48:27.158Z"
+doc_updated_at: "2026-09-21T11:49:39.356Z"
 doc_updated_by: "CODER"
 description: "Implement P0-2 through P0-5 from docs/program/vite-office-upstream-parity-plan.md; retain the existing P0-1 inventory model while making records detailed and correct; preserve pinned LibreOffice ownership, contracts, defaults, and file structure; do not support legacy persisted document schemas."
 sections:
