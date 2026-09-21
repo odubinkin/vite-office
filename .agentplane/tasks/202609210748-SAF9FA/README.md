@@ -1,10 +1,11 @@
 ---
 id: "202609210748-SAF9FA"
 title: "Restore Writer parity verification gates"
-status: "DOING"
+result_summary: "verified-202609210748-SAF9FA"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 15
+revision: 17
 origin:
   system: "manual"
 depends_on: []
@@ -19,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T08:25:44.369Z"
+  updated_at: "2026-09-21T08:26:49.901Z"
   updated_by: "CODER"
-  note: "All declared verification steps passed; retained selection, persistent toolbar, and editable title behavior are covered without runtime semantic changes."
+  note: "verified-202609210748-SAF9FA"
   attempts: 0
 quality_review:
   state: "pass"
@@ -39,11 +40,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "Runtime inventory, full coverage, E2E, documentation, and repository verification all pass."
-commit: null
+commit:
+  hash: "854cb670a6bb4bbf9fac7018f0679a9e10981fe0"
+  message: "🧩 SAF9FA task: record parity quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: restore Writer verification gates while preserving approved selection, toolbar, and title behavior."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609210748-SAF9FA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -58,8 +64,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "All declared verification steps passed; retained selection, persistent toolbar, and editable title behavior are covered without runtime semantic changes."
+  -
+    type: "verify"
+    at: "2026-09-21T08:26:49.901Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609210748-SAF9FA"
+  -
+    type: "status"
+    at: "2026-09-21T08:26:50.094Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609210748-SAF9FA. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-21T08:25:44.439Z"
+doc_updated_at: "2026-09-21T08:26:50.095Z"
 doc_updated_by: "CODER"
 description: "Update Writer indent inventory and coverage plus stale E2E assertions while preserving current upstream-correct selection, persistent formatting toolbar, and editable document title behavior."
 sections:
@@ -101,9 +120,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-21T08:26:49.901Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609210748-SAF9FA
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T08:25:44.439Z, excerpt_hash=sha256:3f5b4c21531e5dd983bbe03b042fbd0d048d42d70759dfd8cbed0fb88c947e6e
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609210748-SAF9FA/blueprint/resolved-snapshot.json
+    - old_digest: 9fef1ecffede5b150b821b62fb5df49d5f6fc631b9ad903652cb1350af527901
+    - current_digest: 9fef1ecffede5b150b821b62fb5df49d5f6fc631b9ad903652cb1350af527901
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609210748-SAF9FA
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609210748-SAF9FA --result verified-202609210748-SAF9FA --commit 854cb670a6bb4bbf9fac7018f0679a9e10981fe0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task inventory, tests, and task artifacts. Re-run npm run verify to confirm the previous state; no persisted document schema or production behavior changes are introduced."
   Findings: "Resolved the review findings without altering the user-confirmed upstream behavior. Registered wrtsh-indent in runtime inventory and source provenance; covered paragraph indentation, persistence, undo, recovery and error branches; made Playwright locators deterministic; aligned list assertions with the persistent formatting toolbar; retained editable title behavior; and completed missing JSDoc required by repository enforcement."
+extensions:
+  implementation_commit:
+    hash: "4eab0108b30a8442bce66ffb224d1f52e5ba63f5"
+    message: "🧩 SAF9FA code: restore Writer parity gates"
 id_source: "generated"
 ---
 ## Summary
@@ -150,6 +203,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609210748-SAF9FA
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T08:26:49.901Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609210748-SAF9FA
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T08:25:44.439Z, excerpt_hash=sha256:3f5b4c21531e5dd983bbe03b042fbd0d048d42d70759dfd8cbed0fb88c947e6e
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609210748-SAF9FA/blueprint/resolved-snapshot.json
+- old_digest: 9fef1ecffede5b150b821b62fb5df49d5f6fc631b9ad903652cb1350af527901
+- current_digest: 9fef1ecffede5b150b821b62fb5df49d5f6fc631b9ad903652cb1350af527901
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609210748-SAF9FA
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609210748-SAF9FA --result verified-202609210748-SAF9FA --commit 854cb670a6bb4bbf9fac7018f0679a9e10981fe0
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
