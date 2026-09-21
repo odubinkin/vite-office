@@ -104,7 +104,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -342,7 +342,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -592,7 +592,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -818,7 +818,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -1104,7 +1104,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -1354,7 +1354,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -1628,7 +1628,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -1870,7 +1870,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -2184,7 +2184,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -2450,7 +2450,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -2720,7 +2720,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -3014,7 +3014,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -3440,7 +3440,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -3710,7 +3710,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -3948,7 +3948,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -4170,7 +4170,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -4412,7 +4412,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -4654,7 +4654,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -4940,7 +4940,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -5198,7 +5198,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -5616,7 +5616,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -5870,7 +5870,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -6132,7 +6132,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -6390,7 +6390,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -6668,7 +6668,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -6946,7 +6946,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -7224,7 +7224,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -7642,7 +7642,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -8084,7 +8084,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -8513,7 +8513,7 @@
         "Browser Open uses a user-selected File and Save As starts a download rather than retaining an in-place filesystem handle; export is deterministic STORE-only, DEFLATE is import-only, paragraph browser IDs are deterministically regenerated, and interoperability coverage is bounded to the three pinned LibreOffice feature_text fixtures plus locally generated semantic round trips."
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -8788,7 +8788,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -9058,7 +9058,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -9320,7 +9320,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -9598,7 +9598,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
@@ -9871,7 +9871,7 @@
         }
       ],
       "verification": {
-        "commit": "5e12df2",
+        "commit": "7632bdc505ec",
         "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
         "scope": "bounded",
         "taskId": "202609210851-1GHX09"
