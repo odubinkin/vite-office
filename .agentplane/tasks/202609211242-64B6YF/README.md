@@ -1,10 +1,11 @@
 ---
 id: "202609211242-64B6YF"
 title: "Fix remaining Writer P0 parity gaps"
-status: "DOING"
+result_summary: "verified-202609211242-64B6YF"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -19,7 +20,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-21T13:09:47.283Z"
+  updated_at: "2026-09-21T13:10:31.409Z"
   updated_by: "CODER"
   note: "verified-202609211242-64B6YF"
   attempts: 0
@@ -41,11 +42,16 @@ quality_review:
     - "apps/office/src/sw/inc/poolfmt.test.ts"
   findings:
     - "Browser identity translation is confined to projection adapters; canonical text mutations and undo use native hints; exposed paragraph styles have supported defaults."
-commit: null
+commit:
+  hash: "279797e577df6c9192127b8e1307b16ab5225ad8"
+  message: "🔧 64B6YF task: close Writer P0 parity gaps"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609211242-64B6YF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609211242-64B6YF"
+  -
+    type: "verify"
+    at: "2026-09-21T13:10:31.409Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609211242-64B6YF"
+  -
+    type: "status"
+    at: "2026-09-21T13:10:31.508Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609211242-64B6YF. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-21T13:09:47.334Z"
+doc_updated_at: "2026-09-21T13:10:31.509Z"
 doc_updated_by: "CODER"
 description: "Complete P0-3 through P0-5 remediation found by audit: keep browser projection identities outside sw/source, remove WriterTextRun from canonical mutation paths, and make every exposed paragraph style match supported pinned defaults or remain unavailable. P0-1 stays unchanged."
 sections:
@@ -139,6 +158,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202609211242-64B6YF --result verified-202609211242-64B6YF --commit 279797e577df6c9192127b8e1307b16ab5225ad8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-21T13:10:31.409Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609211242-64B6YF
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T13:09:47.334Z, excerpt_hash=sha256:4ef00351a93c9839e0033589f0d793128f4fbe1759b948029f19146d364db7d4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211242-64B6YF/blueprint/resolved-snapshot.json
+    - old_digest: c4dee43202b5f10ca35a8de2235a5ebf7c0a938581898d2b897cc36a40df9c41
+    - current_digest: c4dee43202b5f10ca35a8de2235a5ebf7c0a938581898d2b897cc36a40df9c41
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609211242-64B6YF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609211242-64B6YF --result verified-202609211242-64B6YF --commit df3ca2c5706576fcd00f8a7f43bae49d90ac75ae
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -231,6 +280,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609211242-64B6YF --result verified-202609211242-64B6YF --commit 279797e577df6c9192127b8e1307b16ab5225ad8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-21T13:10:31.409Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609211242-64B6YF
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-21T13:09:47.334Z, excerpt_hash=sha256:4ef00351a93c9839e0033589f0d793128f4fbe1759b948029f19146d364db7d4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609211242-64B6YF/blueprint/resolved-snapshot.json
+- old_digest: c4dee43202b5f10ca35a8de2235a5ebf7c0a938581898d2b897cc36a40df9c41
+- current_digest: c4dee43202b5f10ca35a8de2235a5ebf7c0a938581898d2b897cc36a40df9c41
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609211242-64B6YF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609211242-64B6YF --result verified-202609211242-64B6YF --commit df3ca2c5706576fcd00f8a7f43bae49d90ac75ae
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
