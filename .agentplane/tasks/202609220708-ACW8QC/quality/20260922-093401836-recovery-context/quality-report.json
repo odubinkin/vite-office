@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220708-ACW8QC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T09:34:01.836Z",
+  "verdict": "pass",
+  "summary": "Writer edit path and binding-backed UI match the approved P1.8-P1.12 scope.",
+  "evaluated_sha": "31ab502dd07051da9f1e49745be5ac212605fa1e",
+  "blueprint_digest": "04a5f7c5c6401a463a788e5aacb9759161c41265bb2011de5eaad57dc1e3b032",
+  "findings": [
+    "Persistent SwEditWin owns editing semantics; browser controller owns DOM events; generated command resources and SfxControllerItem-backed state drive surfaces without React mutation logic."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220708-ACW8QC/README.md",
+    "apps/office/src/sw/source/uibase/docvw/edtwin.test.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts",
+    "apps/office/e2e/foundation.spec.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
