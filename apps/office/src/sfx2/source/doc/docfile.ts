@@ -16,15 +16,15 @@ import {
 export type { SerializableValue } from "../../../svl/source/misc/storage";
 
 /** Identifies the storage-neutral medium role associated with a document shell. */
-export type SfxMediumKind = "export" | "input" | "primary" | "recovery" | "untitled";
+export type SfxMediumKind = "export" | "input" | "primary" | "untitled";
 
 /** Identifies where document content originated independently of its current destination. */
-export type SfxMediumOrigin = "external" | "new" | "primary" | "recovered";
+export type SfxMediumOrigin = "external" | "new" | "primary";
 
 /** Identifies the immutable source from which a document session was created. */
 export type SfxMediumSource =
   | Readonly<{ kind: "external"; reference: object }>
-  | Readonly<{ key: string; kind: "storage"; store: "primary" | "recovery" }>
+  | Readonly<{ key: string; kind: "storage"; store: "primary" }>
   | Readonly<{ kind: "none" }>;
 
 /** Identifies the current primary destination independently from the open source. */
@@ -32,7 +32,7 @@ export type SfxMediumDestination =
   Readonly<{ key: string; kind: "storage" }> | Readonly<{ kind: "none" }>;
 
 /** Identifies the document operation whose state is retained on the medium. */
-export type SfxMediumOperation = "export" | "none" | "open" | "recovery-save" | "save" | "save-as";
+export type SfxMediumOperation = "export" | "none" | "open" | "save" | "save-as";
 
 /** Identifies whether the last medium operation is conclusive. */
 export type SfxMediumOperationState = "failed" | "idle" | "pending" | "succeeded" | "unconfirmed";
@@ -181,19 +181,9 @@ export interface SfxExportMediumInput extends SfxMediumInputCommon {
   readonly kind: "export";
 }
 
-/** Constructs a read-only document restored from recovery history. */
-export interface SfxRecoveryMediumInput extends SfxMediumInputCommon {
-  readonly kind: "recovery";
-  readonly storageKey: string;
-}
-
 /** Exhaustive construction input accepted at shell boundaries. */
 export type SfxMediumInput =
-  | SfxExportMediumInput
-  | SfxInputMediumInput
-  | SfxPrimaryMediumInput
-  | SfxRecoveryMediumInput
-  | SfxUntitledMediumInput;
+  SfxExportMediumInput | SfxInputMediumInput | SfxPrimaryMediumInput | SfxUntitledMediumInput;
 
 /** Accepts construction data or an already-owned medium at shell boundaries. */
 export type SfxMediumInputOrInstance = SfxMedium | SfxMediumInput;
@@ -215,10 +205,10 @@ function getMediumDefaults(kind: SfxMediumKind): Readonly<{
       origin: "primary",
       readOnly: false,
     };
-  if (kind === "input" || kind === "recovery")
+  if (kind === "input")
     return {
       capabilities: { canConfirmWrite: false, canLock: false, canRead: true, canWrite: false },
-      origin: kind === "recovery" ? "recovered" : "external",
+      origin: "external",
       readOnly: true,
     };
   return {
@@ -233,8 +223,6 @@ function getMediumSource(input: SfxMediumInput): SfxMediumSource {
   if (input.kind === "primary")
     return input.source ?? { key: input.storageKey, kind: "storage", store: "primary" };
   if (input.kind === "input") return input.source;
-  if (input.kind === "recovery")
-    return { key: input.storageKey, kind: "storage", store: "recovery" };
   return { kind: "none" };
 }
 
@@ -245,7 +233,7 @@ function getMediumDestination(input: SfxMediumInput): SfxMediumDestination {
 
 /** Preserves the original session source when a new primary destination is adopted. @param source - Explicit session source. @returns Corresponding origin. */
 function getPrimaryOrigin(source: SfxMediumSource): SfxMediumOrigin {
-  if (source.kind === "storage") return source.store === "recovery" ? "recovered" : "primary";
+  if (source.kind === "storage") return "primary";
   if (source.kind === "external") return "external";
   return "new";
 }
@@ -253,7 +241,7 @@ function getPrimaryOrigin(source: SfxMediumSource): SfxMediumOrigin {
 /** Rejects runtime objects that bypass the discriminated TypeScript construction contract. @param input - Candidate medium input. @returns Nothing for a valid variant. */
 function assertMediumInput(input: SfxMediumInput): void {
   const storageKey = "storageKey" in input ? input.storageKey : undefined;
-  if (input.kind === "primary" || input.kind === "recovery") {
+  if (input.kind === "primary") {
     if (typeof storageKey !== "string") throw new Error("Storage key is required.");
     assertNonBlank(storageKey, "Storage key");
   }

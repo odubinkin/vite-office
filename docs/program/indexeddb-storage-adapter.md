@@ -5,9 +5,8 @@
 `IndexedDbDocumentStorageAdapter` is the concrete browser implementation of the
 independently injectable primary-save and stored-document-open ports. It uses
 the browser's native IndexedDB API and stores complete versioned snapshot values
-locally. `IndexedDbRecoveryStorageAdapter` separately implements recovery saves,
-retained generations, and cross-context leases. Neither has a network or
-backend dependency.
+locally. It intentionally has no recovery history, retained generations, or
+cross-context leases. It has no network or backend dependency.
 
 ## Schema and semantics
 

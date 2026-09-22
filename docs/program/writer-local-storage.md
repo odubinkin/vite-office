@@ -17,11 +17,9 @@ schema 11 under `sw/browser/storage/writer-storage.ts`. It contains an
 object-shell projection and the shared canonical Writer graph record; every
 retired local schema is rejected without runtime migration.
 
-Browser-local storage is the current primary medium. It is distinct from
-recovery snapshots and from explicit text/ODT export or browser download.
-AutoRecovery scheduling, generation retention, startup recovery prompts, and
-the ODT file picker are wired through separate browser adapters. The
-`BrowserWriterRecoveryDocument` cache adapter delegates lifecycle
-acknowledgement to `SwDocShell` without importing browser persistence into
-Writer uibase.
+Browser-local storage is the current primary medium. Browser recovery snapshots,
+scheduling, generation retention, and startup recovery prompts are intentionally
+unsupported and must not be reintroduced. Future loss protection will use
+frequent full autosave through this primary storage path. Explicit text/ODT
+export, browser download, and the ODT file picker remain separate adapters.
 Cross-tab coordination, encryption, and OOXML import/export remain unsupported.

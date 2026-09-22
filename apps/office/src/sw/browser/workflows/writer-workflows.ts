@@ -5,8 +5,6 @@
 
 import type { PrimarySavePort, StoredDocumentOpenPort } from "../../../sfx2/source/doc/docfile";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
-import type { AutoRecoveryEnvironment } from "../../../framework/source/services/autorecovery";
-import type { RecoverySavePort } from "../../../svl/source/misc/recovery";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../vcl/browser/browser-clipboard";
 import type { WriterSnapshotState } from "../storage/writer-storage";
@@ -45,8 +43,6 @@ export interface WriterSessionServices {
   readonly readRichClipboard: () => Promise<RichClipboardPayload>;
   readonly primarySave?: PrimarySavePort<WriterSnapshotState>;
   readonly storedDocumentOpen?: StoredDocumentOpenPort<WriterSnapshotState>;
-  readonly recoverySave?: RecoverySavePort<WriterSnapshotState>;
-  readonly recoveryEnvironment?: AutoRecoveryEnvironment;
 }
 
 /** Explicit platform failure retained by Sfx command completion state. */

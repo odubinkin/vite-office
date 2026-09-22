@@ -4,7 +4,7 @@
     {
       "path": "apps/office/src/editeng/source/items/paraitem.ts",
       "classification": "upstream-mechanism",
-      "state": "active",
+      "state": "foundation",
       "suite": "shared",
       "subsystem": "formatting-model",
       "capabilityIds": [
@@ -459,20 +459,10 @@
         "contractStatus": "unverified",
         "defaultStatus": "unverified",
         "divergenceClass": "none",
-        "evidence": [
-          "apps/office/src/framework/source/services/autorecovery.ts#AutoRecoverySaveReason",
-          "vendor/libreoffice-reference/framework/source/services/autorecovery.cxx#cppu::supportsService"
-        ],
-        "justification": "Mapped provenance remains semantically unverified against framework/source/services/autorecovery.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "evidence": ["docs/program/autosave-recovery.md#Browser-persistence-decision"],
+        "justification": "Intentional browser product decision: recovery is unsupported and must not be reintroduced. Future loss protection will be frequent full autosave through primary storage.",
         "knownViolations": [],
-        "localSymbols": [
-          "AutoRecoverySaveReason",
-          "AutoRecoverySaveResult",
-          "AutoRecoveryRestoreResult",
-          "AutoRecoveryCandidate",
-          "AutoRecoveryEnvironment",
-          "AutoRecoveryOptions"
-        ],
+        "localSymbols": [],
         "sourceResponsibility": "unverified",
         "upstreamFile": "framework/source/services/autorecovery.cxx",
         "upstreamSymbols": [
@@ -1010,13 +1000,12 @@
           "apps/office/src/sfx2/source/doc/objsh.ts#SfxObjectShell",
           "vendor/libreoffice-reference/sfx2/source/doc/objmisc.cxx#void SfxObjectShell::SetModified"
         ],
-        "justification": "SfxObjectShell directly owns identity, title, modified/save-position/close state, and its retained primary medium. Only asynchronous content and recovery lease generations remain browser extensions.",
+        "justification": "SfxObjectShell directly owns identity, title, modified/save-position/close state, and its retained primary medium. Browser recovery is intentionally unsupported.",
         "knownViolations": [],
         "localSymbols": [
           "SfxObjectShell",
           "SetModified",
           "SaveCompleted",
-          "RecoverySaveCompleted",
           "SetHistorySavePosition"
         ],
         "sourceResponsibility": "aligned",
@@ -1197,7 +1186,7 @@
         "evidence": [
           "apps/office/src/svl/source/misc/recovery.ts#RecoverySavePort"
         ],
-        "justification": "Coordinates deterministic browser recovery storage over an injected versioned-storage contract. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "justification": "Intentional browser product decision: recovery is unsupported and must not be reintroduced. This inert provenance marker exports no recovery API; future loss protection is frequent full autosave through primary storage.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "divergent",
@@ -1778,7 +1767,7 @@
     {
       "path": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx",
       "classification": "browser-adaptation",
-      "state": "active",
+      "state": "foundation",
       "suite": "writer",
       "subsystem": "recovery-presentation",
       "capabilityIds": [
@@ -1794,7 +1783,7 @@
         "evidence": [
           "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx#WriterRecoveryPresentationController"
         ],
-        "justification": "Presents browser recovery candidates and requires an explicit restore, discard, or clean-continue choice; no native dialog implementation is claimed.",
+        "justification": "Intentional browser product decision: recovery prompts are unsupported and must not be reintroduced. The retained inert source marker has no UI or restore behavior.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1944,7 +1933,7 @@
         "evidence": [
           "apps/office/src/sw/browser/storage/writer-storage.ts#WriterSnapshotState"
         ],
-        "justification": "Owns the browser cache envelope and AutoRecovery adapter over the canonical Writer graph serializer; schema 11 rejects every retired local cache shape.",
+        "justification": "Owns only the primary browser cache envelope over the canonical Writer graph serializer; it has no recovery adapter or recovery restore path.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -4666,9 +4655,9 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/vcl/browser/indexeddb-storage.ts#DEFAULT_RECOVERY_GENERATION_LIMIT"
+          "apps/office/src/vcl/browser/indexeddb-storage.ts#IndexedDbDocumentStorageAdapter"
         ],
-        "justification": "Implements a browser-native IndexedDB adapter for versioned JSON document snapshots without backend, autosave, or file-picker policy. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "justification": "Implements the primary browser-native IndexedDB adapter for versioned JSON document snapshots. Recovery history, leases, and restore behavior are intentionally unsupported; future protection is full autosave through this primary path.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -5056,7 +5045,7 @@
       "id": "writer.ui.recovery-prompts",
       "capabilityId": "CAP-0122",
       "classification": "browser-adaptation",
-      "description": "Presents and resolves browser recovery candidates at session startup."
+      "description": "Intentionally unsupported: browser recovery prompts must not be reintroduced; frequent full autosave will use primary storage instead."
     }
   ],
   "placeholderSuites": [

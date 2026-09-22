@@ -1072,14 +1072,13 @@
         "SfxObjectShell",
         "SetModified",
         "SaveCompleted",
-        "RecoverySaveCompleted",
         "SetHistorySavePosition"
       ],
       "omittedResponsibilities": [
         "UNO model integration, native storage, signing, macro, printer, and desktop UI obligations remain outside the bounded browser object-shell layer."
       ],
       "preservedResponsibilities": [
-        "Directly owns document identity, title, modified/save-position/close state, and the retained primary SfxMedium; only browser race and recovery lease generations extend the upstream contract."
+        "Directly owns document identity, title, modified/save-position/close state, and the retained primary SfxMedium. Browser recovery is intentionally unsupported."
       ],
       "status": "mapped",
       "upstreamPath": "include/sfx2/objsh.hxx",

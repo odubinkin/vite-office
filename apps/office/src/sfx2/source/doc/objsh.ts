@@ -22,7 +22,6 @@ export interface SfxObjectShellState {
   readonly id: string;
   readonly isModified: boolean;
   readonly lifecycle: DocumentLifecycle;
-  readonly recoveryGeneration: number | null;
   readonly suiteId: DocumentModuleId;
   readonly title: string;
 }
@@ -43,7 +42,6 @@ export class SfxObjectShell {
   private modified: boolean;
   protected medium: SfxMedium;
   private moduleId: DocumentModuleId;
-  private recoveryGeneration: number | null;
   private title: string;
 
   /** Creates an object shell from an initial state projection and medium. @param state - Initial shell state. @param medium - Current medium. @returns Nothing. */
@@ -55,7 +53,6 @@ export class SfxObjectShell {
     this.id = state.id;
     this.modified = state.isModified;
     this.moduleId = state.suiteId;
-    this.recoveryGeneration = state.recoveryGeneration;
     this.title = state.title;
     this.medium = acquireSfxMedium(medium);
   }
@@ -67,7 +64,6 @@ export class SfxObjectShell {
       id: this.id,
       isModified: this.modified,
       lifecycle: this.GetLifecycle(),
-      recoveryGeneration: this.recoveryGeneration,
       suiteId: this.moduleId,
       title: this.title,
     });
@@ -91,11 +87,6 @@ export class SfxObjectShell {
   /** Returns the browser race-prevention generation. @returns Current generation. */
   public GetContentGeneration(): number {
     return this.contentGeneration;
-  }
-
-  /** Returns the current recovery lease generation. @returns Recovery generation. */
-  public GetRecoveryGeneration(): number | null {
-    return this.recoveryGeneration;
   }
 
   /** Returns the stable current medium. @returns Medium descriptor. */
@@ -165,15 +156,6 @@ export class SfxObjectShell {
     return previousModified !== this.modified || previousSavePosition !== this.hasSavePosition;
   }
 
-  /** Acknowledges browser recovery independently of the primary medium. @param generation - Persisted recovery generation. @returns Whether state changed. */
-  protected RecoverySaveCompleted(generation = this.contentGeneration): boolean {
-    this.EnsureOpen();
-    assertAcknowledgedGeneration(this.contentGeneration, generation, "Recovery generation");
-    if (this.recoveryGeneration === generation) return false;
-    this.recoveryGeneration = generation;
-    return true;
-  }
-
   /** Reconciles modified state with the document undo manager save position. @param isSavePosition - Whether history matches the save mark. @returns Whether state changed. */
   protected SetHistorySavePosition(isSavePosition: boolean): boolean {
     if (isSavePosition) this.hasSavePosition = true;
@@ -196,7 +178,6 @@ export class SfxObjectShell {
     this.id = state.id;
     this.modified = state.isModified;
     this.moduleId = state.suiteId;
-    this.recoveryGeneration = state.recoveryGeneration;
     this.title = state.title;
   }
 
@@ -218,7 +199,6 @@ export function createDocument(input: CreateDocumentInput): SfxObjectShellState 
     id: input.id,
     isModified: false,
     lifecycle: "new",
-    recoveryGeneration: null,
     suiteId: input.suiteId,
     title: input.title,
   });
@@ -242,13 +222,6 @@ function assertObjectShellState(state: SfxObjectShellState): void {
   assertNonBlank(state.title, "Document title");
   if (!Number.isInteger(state.contentGeneration) || state.contentGeneration < 0)
     throw new Error("Content generation must be a non-negative integer.");
-  if (
-    state.recoveryGeneration !== null &&
-    (!Number.isInteger(state.recoveryGeneration) ||
-      state.recoveryGeneration < 0 ||
-      state.recoveryGeneration > state.contentGeneration)
-  )
-    throw new Error("Recovery generation must identify existing document content.");
   if (state.lifecycle === "dirty" && !state.isModified)
     throw new Error("Dirty lifecycle requires modified state.");
   if (state.lifecycle !== "dirty" && state.isModified)

@@ -20,13 +20,10 @@ import { writerBrowserMenuPlacements } from "./writer-command-surfaces";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
-import type { WriterRecoveryNotice } from "./WriterRecoveryPrompt";
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
   readonly isActive: boolean;
-  /** Typed recovery result shown through the existing Writer footer status surface. */
-  readonly recoveryNotice?: WriterRecoveryNotice;
   readonly view: SwView;
   readonly viewStore?: WriterViewStore;
 }
@@ -34,7 +31,6 @@ export interface WriterWorkbenchProps {
 /** Projects one Writer view through browser presenters. @param props - Active view selection. @returns Writer workspace. */
 export function WriterWorkbench({
   isActive,
-  recoveryNotice,
   view,
   viewStore,
 }: WriterWorkbenchProps): React.JSX.Element {
@@ -147,14 +143,7 @@ export function WriterWorkbench({
             styleDisplayName={snapshot.activeParagraph.styleDisplayName}
           />
         }
-        status={
-          (recoveryNotice === undefined
-            ? undefined
-            : presentWriterRecoveryNotice(
-                recoveryNotice,
-                localization.GetText.bind(localization),
-              )) ?? presentWriterStatus(view, snapshot, localization.GetText.bind(localization))
-        }
+        status={presentWriterStatus(view, snapshot, localization.GetText.bind(localization))}
         toolbar={
           <WriterCommandToolbar
             commandSource={commandSource}
@@ -301,45 +290,4 @@ function presentWriterCommandError(
   }
   /* v8 ignore next -- an attached SwView dispatcher contains only the exhaustively mapped Writer commands above. */
   return failure.error;
-}
-
-/** Localizes a typed recovery outcome at the presentation boundary. @param notice - Recovery result state. @param getText - Localization lookup. @returns Status text. */
-function presentWriterRecoveryNotice(
-  notice: WriterRecoveryNotice,
-  getText: (messageId: string, fallback: string) => string,
-): string {
-  switch (notice.kind) {
-    case "restored":
-      return getText(
-        "writer.recovery.restored",
-        `Recovered document generation ${notice.generation}.`,
-      ).replace("{generation}", String(notice.generation));
-    case "discarded":
-      return getText("writer.recovery.discarded", "Recovery data was discarded.");
-    case "inspect-failed":
-      return getText(
-        "writer.recovery.inspect-failed",
-        "Recovery data could not be inspected. A clean document was opened.",
-      );
-    case "discard-failed":
-      return getText(
-        "writer.recovery.discard-failed",
-        "Recovery data could not be discarded. A clean document was opened.",
-      );
-    case "restore-damaged":
-      return getText(
-        "writer.recovery.damaged",
-        "Recovery data is damaged. A clean document was opened.",
-      );
-    case "restore-missing":
-      return getText(
-        "writer.recovery.missing",
-        "Recovery data is no longer available. A clean document was opened.",
-      );
-    case "restore-failed":
-      return getText(
-        "writer.recovery.failed",
-        "Recovery data could not be restored. A clean document was opened.",
-      );
-  }
 }

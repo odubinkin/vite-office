@@ -35,7 +35,6 @@ const requiredFiles = [
   "apps/office/src/svl/source/items/poolitem.ts",
   "apps/office/src/svl/source/items/itempool.ts",
   "apps/office/src/svl/source/items/itemset.ts",
-  "apps/office/src/svl/source/misc/recovery.ts",
   "apps/office/src/package/source/manifest/ManifestExport.ts",
   "apps/office/src/package/source/zipapi/CRC32.ts",
   "apps/office/src/package/source/zipapi/ZipFile.ts",

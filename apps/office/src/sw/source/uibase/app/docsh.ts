@@ -137,11 +137,6 @@ export class SwDocShell extends SfxObjectShell {
     );
   }
 
-  /** Acknowledges a committed recovery snapshot without affecting primary save state. @param generation - Persisted recovery generation. @returns Whether lifecycle changed. */
-  public AcknowledgeRecoverySave(generation: number): boolean {
-    return this.RecoverySaveCompleted(generation);
-  }
-
   /** Atomically replaces model, lifecycle, medium, and history for New/Open/Load. @param document - Replacement model. @param documentState - Replacement lifecycle. @param medium - Replacement medium. @returns Installed model. */
   public ReplaceDocument(
     document: SwDoc,
@@ -278,34 +273,6 @@ export class SwDocShell extends SfxObjectShell {
     }
   }
 
-  /** Returns the stable identity used by application AutoRecovery. @returns Document identity. */
-  public GetRecoveryIdentity(): string {
-    return this.GetDocumentId();
-  }
-
-  /** Returns the lifecycle fields used by generation-aware recovery decisions. @returns Current recovery state. */
-  public GetRecoveryState(): Readonly<{
-    contentGeneration: number;
-    isModified: boolean;
-    recoveryGeneration: number | null;
-  }> {
-    const { contentGeneration, isModified, recoveryGeneration } = this.GetDocumentState();
-    return { contentGeneration, isModified, recoveryGeneration };
-  }
-
-  /** Records recovery operation start without changing lifecycle generations. @param generation - Attempted generation. @returns Nothing. */
-  public RecoverySaveStarted(generation: number): void {
-    this.EnsureOpen();
-    assertRecoveryGeneration(this.GetDocumentState(), generation);
-  }
-
-  /** Records recovery failure without acknowledging the attempted generation. @param generation - Attempted generation. @param error - Storage error. @returns Nothing. */
-  public RecoverySaveFailed(generation: number, error: unknown): void {
-    this.EnsureOpen();
-    assertRecoveryGeneration(this.GetDocumentState(), generation);
-    void error;
-  }
-
   /** Closes the shell, model, filter, and broadcaster graph. @returns Nothing. */
   public Close(): void {
     if (this.GetDocumentState().lifecycle === "closed") return;
@@ -334,14 +301,6 @@ export class SwDocShell extends SfxObjectShell {
   protected override SaveCompleted(generation = this.GetContentGeneration()): boolean {
     const previousModified = this.IsModified();
     const changed = super.SaveCompleted(generation);
-    if (changed) this.PublishObjectShellState(previousModified);
-    return changed;
-  }
-
-  /** Publishes recovery acknowledgement without changing primary save state. @param generation - Persisted generation. @returns Whether state changed. */
-  protected override RecoverySaveCompleted(generation = this.GetContentGeneration()): boolean {
-    const previousModified = this.IsModified();
-    const changed = super.RecoverySaveCompleted(generation);
     if (changed) this.PublishObjectShellState(previousModified);
     return changed;
   }
@@ -451,12 +410,6 @@ function isContentMutationHint(hint: SwModelHint): boolean {
     hint.kind === "node-removed" ||
     hint.kind === "numbering-changed"
   );
-}
-
-/** Rejects impossible recovery callbacks without copying recovery state into SfxMedium. @param document - Shell lifecycle state. @param generation - Attempted recovery generation. @returns Nothing for an existing content generation. */
-function assertRecoveryGeneration(document: SfxObjectShellState, generation: number): void {
-  if (!Number.isInteger(generation) || generation < 0 || generation > document.contentGeneration)
-    throw new Error("Recovery generation must identify existing document content.");
 }
 
 /** Returns deterministic error feedback without retaining platform Error objects. @param error - Unknown error. @returns Stable message. */

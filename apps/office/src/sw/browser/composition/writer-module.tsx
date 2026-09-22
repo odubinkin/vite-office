@@ -10,12 +10,6 @@ import { useEffect, useState } from "react";
 import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import {
-  AutoRecovery,
-  type AutoRecoveryCandidate,
-  type AutoRecoveryEnvironment,
-  type AutoRecoveryRestoreResult,
-} from "../../../framework/source/services/autorecovery";
 import type { OfficeModuleFactory } from "../../../framework/browser/app/modulemanager";
 import { copyRichText, readRichClipboard } from "../../../vcl/browser/browser-clipboard";
 import {
@@ -24,11 +18,8 @@ import {
 } from "../../../vcl/browser/browser-download";
 import { createBrowserDocumentOpenPort } from "../../../vcl/browser/browser-file";
 import { createBrowserDefaultFontDevice } from "../../../vcl/browser/default-font-device";
-import {
-  IndexedDbDocumentStorageAdapter,
-  IndexedDbRecoveryStorageAdapter,
-} from "../../../vcl/browser/indexeddb-storage";
-import { BrowserWriterRecoveryDocument, type WriterSnapshotState } from "../storage/writer-storage";
+import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-storage";
+import type { WriterSnapshotState } from "../storage/writer-storage";
 import {
   createInlineOdtFilterService,
   type OdtFilterService,
@@ -36,7 +27,6 @@ import {
 import { createBrowserOdtFilterService } from "../filter/xml/odt-worker-client";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterViewStore } from "../presentation/writer-view-projection";
-import { WriterRecoveryPrompt } from "../presentation/WriterRecoveryPrompt";
 import {
   WriterWorkflowCommandShell,
   type WriterSessionServices,
@@ -47,18 +37,8 @@ import { SwDocShell } from "../../source/uibase/app/docsh";
 
 /** Persistent ownership chain created once per Writer module factory. */
 export interface WriterDocumentSession {
-  /** Application-owned recovery service, when durable recovery is available. */
-  readonly autoRecovery: AutoRecovery<WriterSnapshotState> | undefined;
-  /** Starts recovery timers/listeners only after the recovery presentation gate resolves. */
-  readonly BeginRecoveryScheduling: () => void;
   /** Explicitly releases the active frame, view, and document-shell subscriptions. */
   readonly Close: () => void;
-  /** Deletes recovery history after the caller rejects a recovery candidate. */
-  readonly DiscardRecovery: () => Promise<void>;
-  /** Returns recovery metadata suitable for a recovery-choice UI. */
-  readonly GetRecoveryCandidate: () => Promise<AutoRecoveryCandidate | undefined>;
-  /** Restores the newest intact recovery generation selected by the caller. */
-  readonly RestoreRecovery: () => Promise<AutoRecoveryRestoreResult | undefined>;
   /** Persistent active frame owning the shell dispatcher. */
   readonly frame: SfxViewFrame<SwView>;
   /** Persistent document shell owning the active SwDoc and history. */
@@ -85,10 +65,6 @@ export function createWriterBrowserSessionServices(): WriterSessionServices {
       ? {}
       : {
           primarySave: primaryStorage,
-          recoveryEnvironment: createBrowserAutoRecoveryEnvironment(),
-          recoverySave: new IndexedDbRecoveryStorageAdapter<WriterSnapshotState>(
-            "vite-office-writer-recovery",
-          ),
           storedDocumentOpen: primaryStorage,
         }),
   };
@@ -120,17 +96,6 @@ export function createWriterDocumentSession(
     services,
   );
   const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
-  const autoRecovery =
-    services.recoverySave === undefined
-      ? undefined
-      : new AutoRecovery(services.recoverySave, {
-          ...(services.recoveryEnvironment === undefined
-            ? {}
-            : { environment: services.recoveryEnvironment }),
-          ownerId: createRecoveryOwnerId(),
-        });
-  const recoveryDocument = new BrowserWriterRecoveryDocument(docShell);
-  const unregisterRecovery = autoRecovery?.RegisterDocument(recoveryDocument);
   view.AttachFrame(frame);
   frame.SetActiveView(view, [
     view.GetCommandShell(),
@@ -141,77 +106,18 @@ export function createWriterDocumentSession(
   const viewStore = new WriterViewStore(view);
   let closed = false;
   return {
-    autoRecovery,
-    BeginRecoveryScheduling:
-      /** Starts scheduling idempotently after the recovery decision. @returns Nothing. */
-      function beginRecoveryScheduling(): void {
-        if (!closed) autoRecovery?.Start();
-      },
     /** Closes the persistent Writer session. @returns Nothing. */
     Close: function closeWriterSession(): void {
       if (closed) return;
       closed = true;
-      autoRecovery?.Stop();
-      unregisterRecovery?.();
       viewStore.Close();
       view.Close();
     },
-    DiscardRecovery:
-      /** Deletes recovery history selected for dismissal by the caller. @returns Completion after cleanup. */
-      async function discardRecovery(): Promise<void> {
-        await autoRecovery?.DiscardDocument(docShell.GetRecoveryIdentity());
-      },
-    GetRecoveryCandidate:
-      /** Reads recovery metadata without mutating the active document. @returns Candidate or undefined when recovery is unavailable. */
-      async function getRecoveryCandidate(): Promise<AutoRecoveryCandidate | undefined> {
-        return autoRecovery?.GetCandidate(docShell.GetRecoveryIdentity());
-      },
-    RestoreRecovery:
-      /** Restores a caller-selected recovery candidate and reconciles the persistent Writer shell. @returns Explicit recovery result or undefined when unavailable. */
-      async function restoreRecovery(): Promise<AutoRecoveryRestoreResult | undefined> {
-        const result = await autoRecovery?.RestoreDocument(docShell.GetRecoveryIdentity());
-        return result;
-      },
     docShell,
     frame,
     view,
     viewStore,
   };
-}
-
-/** Creates the browser timer and lifecycle adapter injected into framework AutoRecovery. @returns Browser recovery environment. */
-function createBrowserAutoRecoveryEnvironment(): AutoRecoveryEnvironment {
-  const browserWindow = globalThis.window;
-  const browserDocument = globalThis.document;
-  return {
-    clearInterval:
-      /** Clears one browser timer handle. @param handle - Timer identifier. @returns Nothing. */
-      (handle) => browserWindow.clearInterval(handle as number),
-    isHidden: /** Reports document visibility. @returns Whether the page is hidden. */ () =>
-      browserDocument.visibilityState === "hidden",
-    onPageHide:
-      /** Registers a pagehide listener. @param listener - Recovery trigger. @returns Cleanup. */
-      (listener) => {
-        browserWindow.addEventListener("pagehide", listener);
-        return /** Removes the pagehide listener. @returns Nothing. */ () =>
-          browserWindow.removeEventListener("pagehide", listener);
-      },
-    onVisibilityChange:
-      /** Registers a visibilitychange listener. @param listener - Recovery trigger. @returns Cleanup. */
-      (listener) => {
-        browserDocument.addEventListener("visibilitychange", listener);
-        return /** Removes the visibilitychange listener. @returns Nothing. */ () =>
-          browserDocument.removeEventListener("visibilitychange", listener);
-      },
-    setInterval:
-      /** Starts a browser interval. @param listener - Recovery trigger. @param intervalMs - Interval. @returns Timer identifier. */
-      (listener, intervalMs) => browserWindow.setInterval(listener, intervalMs),
-  };
-}
-
-/** Creates a collision-resistant browser-context identity for recovery leases. @returns Context identity. */
-function createRecoveryOwnerId(): string {
-  return globalThis.crypto?.randomUUID?.() ?? `writer-tab-${Date.now()}-${Math.random()}`;
 }
 
 /** Optional testable construction boundary for the lazy Writer module. */
@@ -220,7 +126,7 @@ export interface WriterModuleFactoryOptions {
   readonly createSession?: () => WriterDocumentSession;
 }
 
-/** Owns exactly one Writer session for the lifetime of one mounted workspace. @param props - Lazy session constructor. @returns Recovery-gated Writer workspace. */
+/** Owns exactly one Writer session for the lifetime of one mounted workspace. @param props - Lazy session constructor. @returns Writer workspace. */
 function WriterWorkspaceSession({
   createSession,
 }: Required<WriterModuleFactoryOptions>): React.JSX.Element {
@@ -230,22 +136,7 @@ function WriterWorkspaceSession({
       session.Close,
     [session],
   );
-  return (
-    <WriterRecoveryPrompt recovery={session}>
-      {
-        /** Renders the active workspace with optional recovery feedback. @param recoveryNotice - Recovery result text. @returns Writer workbench. */ (
-          recoveryNotice,
-        ) => (
-          <WriterWorkbench
-            isActive
-            {...(recoveryNotice === undefined ? {} : { recoveryNotice })}
-            view={session.view}
-            viewStore={session.viewStore}
-          />
-        )
-      }
-    </WriterRecoveryPrompt>
-  );
+  return <WriterWorkbench isActive view={session.view} viewStore={session.viewStore} />;
 }
 
 /** Creates a module factory that remains resource-free until Writer mounts. @param options - Optional injected session factory. @returns Lazy Writer workspace factory. */

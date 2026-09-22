@@ -192,8 +192,8 @@ The following documents form the program control plane:
   IndexedDB snapshots for the bounded in-memory Writer workbench.
 - [Writer plain-text download](writer-plain-text-download.md): browser-only
   UTF-8 Blob export for the current bounded Writer paragraph.
-- [Browser autosave recovery orchestration](autosave-recovery.md): deterministic
-  recovery state and save outcomes without timers or browser UI policy.
+- [Browser persistence decision](autosave-recovery.md): recovery is intentionally
+  unsupported; future loss protection is frequent full autosave through primary storage.
 - [Browser worker request cancellation protocol](worker-cancellation-protocol.md):
   versioned request sequencing and stale/cancelled result classification.
 - [Browser locale message catalog contract](locale-message-catalog.md):
