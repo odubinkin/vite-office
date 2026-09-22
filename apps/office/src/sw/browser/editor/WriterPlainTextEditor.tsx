@@ -2,7 +2,6 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { getWriterParagraphListMarker } from "../../source/core/doc/number";
 import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { BrowserWriterSelectionMapper } from "./writer-selection";
@@ -25,7 +24,6 @@ export interface WriterPlainTextEditorProps {
   readonly onSelectAll: () => void;
   readonly onSelectionChange: (selection: WriterCursorSelection) => boolean;
   readonly paragraphs: readonly WriterParagraph[];
-  readonly projectionVersion: number;
   readonly onCreateTransfer: () => WriterClipboardSelection | undefined;
   readonly onTextCut: () => void;
   readonly onTextPaste: (clipboardData: DataTransfer) => void;
@@ -303,9 +301,8 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
             isActive={paragraph.id === props.activeParagraphId}
             isLast={index === props.paragraphs.length - 1}
             key={paragraph.id}
-            listMarker={getWriterParagraphListMarker(props.paragraphs, paragraph)}
+            listMarker={paragraph.listMarker}
             paragraph={paragraph}
-            projectionVersion={props.projectionVersion}
             retainElement={
               /** Maintains the paragraph registry. @param paragraphId - Stable Writer ID. @param element - Mounted paragraph or null on unmount. @returns Nothing. */ (
                 paragraphId,

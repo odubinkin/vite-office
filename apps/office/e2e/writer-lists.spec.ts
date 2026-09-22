@@ -57,7 +57,7 @@ test("Writer bullets and numbering" /** Verifies Format submenu and persistent f
         return (element.parentElement as HTMLElement).style.marginInlineStart;
       },
     ),
-  ).toBe("2rem");
+  ).toBe("36pt");
   await page
     .getByRole("toolbar", { name: "Writer formatting toolbar" })
     .getByRole("button", { exact: true, name: "Decrease" })

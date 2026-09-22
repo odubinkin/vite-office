@@ -17,12 +17,22 @@ export interface WriterRecoveryPresentationPort {
   readonly RestoreRecovery: () => Promise<AutoRecoveryRestoreResult | undefined>;
 }
 
+/** Typed recovery result rendered only at the browser localization boundary. */
+export type WriterRecoveryNotice =
+  | { readonly kind: "discarded" }
+  | { readonly kind: "discard-failed" }
+  | { readonly kind: "inspect-failed" }
+  | { readonly kind: "restore-damaged" }
+  | { readonly kind: "restore-failed" }
+  | { readonly kind: "restore-missing" }
+  | { readonly generation: number; readonly kind: "restored" };
+
 /** State of the pre-workspace recovery decision. */
 export type WriterRecoveryPresentationState =
   | { readonly kind: "checking" }
   | { readonly candidate: AutoRecoveryCandidate; readonly kind: "choice" }
   | { readonly kind: "opening" }
-  | { readonly kind: "open"; readonly notice?: string };
+  | { readonly kind: "open"; readonly notice?: WriterRecoveryNotice };
 
 /** Coordinates candidate inspection and user-selected recovery actions without owning storage. */
 export class WriterRecoveryPresentationController {
@@ -55,8 +65,7 @@ export class WriterRecoveryPresentationController {
       if (candidate === undefined) this.Open();
       else this.Publish({ candidate, kind: "choice" });
     } catch {
-      if (!this.closed)
-        this.Open("Recovery data could not be inspected. A clean document was opened.");
+      if (!this.closed) this.Open({ kind: "inspect-failed" });
     }
   }
 
@@ -72,10 +81,9 @@ export class WriterRecoveryPresentationController {
     this.Publish({ kind: "opening" });
     try {
       await this.port.DiscardRecovery();
-      if (!this.closed) this.Open("Recovery data was discarded.");
+      if (!this.closed) this.Open({ kind: "discarded" });
     } catch {
-      if (!this.closed)
-        this.Open("Recovery data could not be discarded. A clean document was opened.");
+      if (!this.closed) this.Open({ kind: "discard-failed" });
     }
   }
 
@@ -87,13 +95,11 @@ export class WriterRecoveryPresentationController {
       const result = await this.port.RestoreRecovery();
       if (this.closed) return;
       if (result?.status === "restored")
-        this.Open(`Recovered document generation ${result.generation}.`);
-      else if (result?.status === "damaged")
-        this.Open("Recovery data is damaged. A clean document was opened.");
-      else this.Open("Recovery data is no longer available. A clean document was opened.");
+        this.Open({ generation: result.generation, kind: "restored" });
+      else if (result?.status === "damaged") this.Open({ kind: "restore-damaged" });
+      else this.Open({ kind: "restore-missing" });
     } catch {
-      if (!this.closed)
-        this.Open("Recovery data could not be restored. A clean document was opened.");
+      if (!this.closed) this.Open({ kind: "restore-failed" });
     }
   }
 
@@ -104,7 +110,7 @@ export class WriterRecoveryPresentationController {
   }
 
   /** Starts scheduling and publishes the usable workspace state. @param notice - Optional result notice. @returns Nothing. */
-  private Open(notice?: string): void {
+  private Open(notice?: WriterRecoveryNotice): void {
     this.port.BeginRecoveryScheduling();
     this.Publish({ kind: "open", ...(notice === undefined ? {} : { notice }) });
   }
@@ -120,7 +126,7 @@ export class WriterRecoveryPresentationController {
 /** Props for the recovery gate wrapping a lazily created Writer workspace. */
 interface WriterRecoveryPromptProps {
   /** Renders the workspace with the recovery result available to its status surface. */
-  readonly children?: (notice?: string) => React.ReactNode;
+  readonly children?: (notice?: WriterRecoveryNotice) => React.ReactNode;
   readonly recovery: WriterRecoveryPresentationPort;
 }
 

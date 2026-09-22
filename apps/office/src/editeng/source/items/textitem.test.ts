@@ -212,9 +212,10 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(line.Clone().equals(line)).toBe(true);
     expect(line.equals(new SvxLineSpacingItem(100, weightWhich))).toBe(false);
     expect(line.equals(new SfxInt16Item(weightWhich, 115))).toBe(false);
+    expect(new SvxLineSpacingItem(0, weightWhich).GetPropLineSpace()).toBe(0);
     expect(
       /** Creates an invalid line-height percentage. @returns Invalid item. */ () =>
-        new SvxLineSpacingItem(0, weightWhich),
+        new SvxLineSpacingItem(-1, weightWhich),
     ).toThrow("value is invalid");
   });
 });

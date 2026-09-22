@@ -138,7 +138,8 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Bounded Promote and Demote command identity |
 | `sw/browser/accelerators/writer-shortcuts.ts` | Browser-only | Global keyboard-event adaptation to the shared dispatcher |
 | `sw/browser/presentation/WriterHyperlinkDialog.tsx` | Browser-only | Accessible hyperlink create/edit dialog behind Writer commands |
-| `sw/source/uibase/wrtsh/wrtsh.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Persistent cursor plus action-based text, formatting, list, split, and join mutation path |
+| `sw/source/uibase/wrtsh/wrtsh.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Persistent cursor, undo orchestration, notification transactions, and command-shell facades |
+| `sw/source/uibase/wrtsh/wrtsh-editing.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Action-based text, range, paste, split, and join editing algorithms |
 | `sw/source/uibase/wrtsh/wrtsh-hyperlink.ts` | `sw/source/core/edit/editsh.cxx` | Selection-aware hyperlink insertion, replacement, and removal actions |
 | `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Canonical text-node storage, hint-aware editing, split/append, and derived rendering runs |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |

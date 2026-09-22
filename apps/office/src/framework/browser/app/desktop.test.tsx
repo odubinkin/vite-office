@@ -309,7 +309,7 @@ describe("App" /**
     expect(screen.getByRole("menuitem", { name: "Demote Outline Level" })).toBeEnabled();
     fireEvent.click(screen.getByRole("menuitem", { name: "Demote Outline Level" }));
     expect(paragraph).toHaveAttribute("data-list-level", "1");
-    expect(paragraph.parentElement).toHaveStyle({ marginInlineStart: "2rem" });
+    expect(paragraph.parentElement).toHaveStyle({ marginInlineStart: "36pt" });
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Decrease" }));
     expect(paragraph).toHaveAttribute("data-list-level", "0");
     fireEvent.click(screen.getByRole("button", { name: "Format" }));

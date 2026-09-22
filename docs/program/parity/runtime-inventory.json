@@ -3972,6 +3972,45 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-shell",
+      "capabilityIds": [
+        "CAP-0102",
+        "CAP-0105",
+        "CAP-0107",
+        "CAP-0123",
+        "CAP-0124",
+        "CAP-0132",
+        "CAP-0134"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts#SwWrtShellEditingOperations",
+          "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx#SwWrtShell"
+        ],
+        "justification": "Separates text, range, paste, split, and join algorithms from SwWrtShell cursor identity and undo-notification orchestration while retaining the upstream Writer shell ownership boundary.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwWrtShellEditingPort",
+          "SwWrtShellEditingOperations"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+        "upstreamSymbols": [
+          "SwWrtShell",
+          "SwWrtShell::Insert",
+          "SwWrtShell::SplitNode"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
       "classification": "upstream-mechanism",
       "state": "active",

@@ -27,6 +27,13 @@ export interface CommandState<Value = unknown> {
   readonly value?: Value;
 }
 
+/** Stable structured failure retained after an asynchronous command rejects. */
+export interface CommandFailure {
+  readonly code?: string;
+  readonly commandId: string;
+  readonly error: string;
+}
+
 /** Presentation-neutral metadata shared by menus, toolbars, and accelerators. */
 export interface CommandPresentation {
   /** Optional runtime argument contract used at presentation adapter boundaries. */
@@ -354,7 +361,7 @@ export function createCommandShell<Context>(
  */
 export class SfxDispatcher {
   private readonly asyncStates = new Map<string, Readonly<{ error?: string; pending: boolean }>>();
-  private lastCommandError: Readonly<{ commandId: string; error: string }> | undefined;
+  private lastCommandError: Readonly<CommandFailure> | undefined;
   private readonly listeners = new Set<() => void>();
   private readonly shells: SfxShell[] = [];
   private version = 0;
@@ -434,7 +441,12 @@ export class SfxDispatcher {
       (error: unknown) => {
         const message = getErrorMessage(error);
         this.asyncStates.set(commandId, { error: message, pending: false });
-        this.lastCommandError = { commandId, error: message };
+        const code = getErrorCode(error);
+        this.lastCommandError = {
+          commandId,
+          ...(code === undefined ? {} : { code }),
+          error: message,
+        };
         request.Done();
         this.Invalidate("command-async");
         return undefined;
@@ -444,7 +456,7 @@ export class SfxDispatcher {
   }
 
   /** Returns the most recent asynchronous command failure, independent of Writer presentation. @returns Command identity and normalized error. */
-  public GetLastCommandError(): Readonly<{ commandId: string; error: string }> | undefined {
+  public GetLastCommandError(): Readonly<CommandFailure> | undefined {
     return this.lastCommandError;
   }
 
@@ -566,6 +578,14 @@ function isPromiseLike(value: unknown): value is PromiseLike<unknown> {
 /** Normalizes an asynchronous command failure for presentation state. @param error - Rejected value. @returns Displayable failure message. */
 function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+/** Reads an optional stable code without coupling Sfx to domain-specific error classes. @param error - Rejected value. @returns Non-blank code when supplied. */
+function getErrorCode(error: unknown): string | undefined {
+  if (typeof error !== "object" || error === null || !("code" in error)) return undefined;
+  const code = error.code;
+  /* v8 ignore next -- Domain errors either omit code or provide a validated non-blank string. */
+  return typeof code === "string" && code.trim().length > 0 ? code : undefined;
 }
 
 /** Converts the bounded primitive command result subset to an Sfx return item. @param slot - Executed slot. @param value - Handler result. @returns Matching item or undefined for void/complex results. */

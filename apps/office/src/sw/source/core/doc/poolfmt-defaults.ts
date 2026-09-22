@@ -116,6 +116,7 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
       return {
         firstLineTwips: 0,
         fontSizeTwips: 10 * 20,
+        lineHeightPercent: 0,
         lowerTwips: 0,
         rightTwips: 57,
         textLeftTwips: 57,

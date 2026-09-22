@@ -12,7 +12,7 @@ import type {
 } from "../../../sfx2/source/doc/docfile";
 import type { RecoverySavePort } from "../../../svl/source/misc/recovery";
 import { createDownloadFilename } from "../../../vcl/browser/browser-download";
-import type { WriterSessionServices } from "../workflows/writer-workflows";
+import { WriterPlatformError, type WriterSessionServices } from "../workflows/writer-workflows";
 import { SwDoc } from "../../source/core/doc/doc";
 import { projectWriterTextRuns } from "../../source/core/txtnode/text-run-projection";
 import type { WriterSnapshotState } from "../../source/filter/basflt/writer-storage";
@@ -24,6 +24,7 @@ import {
 } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 import { WriterViewProjection } from "./writer-view-projection";
+import type { WriterRecoveryNotice } from "./WriterRecoveryPrompt";
 import {
   getTestSelection,
   getNodeId,
@@ -121,17 +122,39 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
 
   it("presents recovery results through the existing Writer status bar", /** Verifies recovery feedback uses the footer status surface without an additional notice panel. @returns Nothing. */ function presentsRecoveryStatusInFooter(): void {
     const session = createWriterDocumentSession(createServices());
-    const mount = render(
-      <WriterWorkbench
-        isActive
-        recoveryNotice="Recovered document generation 5."
-        view={session.view}
-      />,
-    );
-    const statusBar = screen.getByRole("status", { name: "Writer status bar" });
-    expect(statusBar).toHaveTextContent("Recovered document generation 5.");
-    expect(screen.getAllByText("Recovered document generation 5.")).toHaveLength(1);
-    mount.unmount();
+    const cases: readonly Readonly<{ notice: WriterRecoveryNotice; text: string }>[] = [
+      { notice: { generation: 5, kind: "restored" }, text: "Recovered document generation 5." },
+      { notice: { kind: "discarded" }, text: "Recovery data was discarded." },
+      {
+        notice: { kind: "inspect-failed" },
+        text: "Recovery data could not be inspected. A clean document was opened.",
+      },
+      {
+        notice: { kind: "discard-failed" },
+        text: "Recovery data could not be discarded. A clean document was opened.",
+      },
+      {
+        notice: { kind: "restore-damaged" },
+        text: "Recovery data is damaged. A clean document was opened.",
+      },
+      {
+        notice: { kind: "restore-missing" },
+        text: "Recovery data is no longer available. A clean document was opened.",
+      },
+      {
+        notice: { kind: "restore-failed" },
+        text: "Recovery data could not be restored. A clean document was opened.",
+      },
+    ];
+    for (const testCase of cases) {
+      const mount = render(
+        <WriterWorkbench isActive recoveryNotice={testCase.notice} view={session.view} />,
+      );
+      const statusBar = screen.getByRole("status", { name: "Writer status bar" });
+      expect(statusBar).toHaveTextContent(testCase.text);
+      expect(screen.getAllByText(testCase.text)).toHaveLength(1);
+      mount.unmount();
+    }
     session.Close();
   });
 
@@ -141,7 +164,9 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       primarySave: {
         save: vi
           .fn()
-          .mockRejectedValueOnce(new Error("Browser storage is unavailable."))
+          .mockRejectedValueOnce(
+            new WriterPlatformError("storage-unavailable", "platform storage unavailable"),
+          )
           .mockRejectedValueOnce(new Error("quota failed")),
       },
     };
@@ -732,5 +757,31 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(projection.ResolveNode(first, projectionId)).toBe(firstNode);
     expect(projection.ResolveNode(second, projectionId)).toBeUndefined();
     expect(projection.ResolveNode(first, "missing-projection")).toBeUndefined();
+  });
+
+  it("projects list geometry from the active numbering format", /** Verifies browser layout consumes model-owned indents instead of deriving geometry from list depth. @returns Nothing. */ function projectsNumberingGeometry(): void {
+    const session = createWriterDocumentSession(createServices());
+    const shell = session.view.GetWrtShell();
+    shell.Insert("item");
+    shell.SetParagraphListKind("numbered");
+    const snapshot = session.viewStore.GetSnapshot();
+    expect(snapshot.activeParagraph.listLayout).toEqual({
+      firstLineIndentPt: -18,
+      indentAtPt: 36,
+      labelFollowedBy: "listtab",
+      listTabPositionPt: 36,
+    });
+    expect(snapshot.activeParagraph.runs[0]?.startOffset).toBe(0);
+    shell.SetParagraphStyle("comment");
+    expect(session.viewStore.GetSnapshot().activeParagraph.computedStyle.lineHeight).toBe(1);
+
+    const mount = render(
+      <WriterWorkbench isActive view={session.view} viewStore={session.viewStore} />,
+    );
+    const marker = screen.getByTestId(`writer-list-marker-${snapshot.activeParagraph.id}`);
+    expect(marker).toHaveStyle({ width: "18pt" });
+    expect(marker.parentElement).toHaveStyle({ marginInlineStart: "18pt" });
+    mount.unmount();
+    session.Close();
   });
 });

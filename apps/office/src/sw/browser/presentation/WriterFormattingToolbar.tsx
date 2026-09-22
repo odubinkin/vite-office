@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { FontList, FALLBACK_FONT_FAMILIES } from "../../../vcl/browser/font-list";
 import {
+  type CommandToolbarPlacement,
   CommandToolbarItems,
   type CommandIcon,
 } from "../../../framework/browser/presentation/CommandToolbar";
@@ -36,6 +37,8 @@ const icons = new Map<string, CommandIcon>([
   [WRITER_COMMAND_IDS.increaseIndent, IndentIncrease],
   [WRITER_COMMAND_IDS.decreaseIndent, Outdent],
 ]);
+
+const writerParagraphStyleOptions = createParagraphStyleOptions();
 
 /** Inputs shared by the complete Writer text formatting toolbar. */
 export type WriterFormattingToolbarProps = BrowserCommandSurfaceProps;
@@ -71,18 +74,30 @@ export function WriterFormattingToolbar({
       renderSpecialItem={
         /** Renders Writer selector placements. @param item - Generic special placement. @returns Writer selector. */ (
           item,
-        ) =>
-          renderSpecialToolbarItem(
-            item as Extract<WriterToolbarItemPlacement, { kind: "command-select" | "font-select" }>,
+        ) => {
+          /* v8 ignore next -- Generated Writer resources call this hook only for the two special placement kinds. */
+          if (!isWriterSpecialToolbarPlacement(item)) return null;
+          return renderSpecialToolbarItem(
+            item,
             commandSource,
             getCommandResource,
             localization,
             resolveArguments,
-          )
+          );
+        }
       }
       resolveArguments={resolveArguments}
     />
   );
+}
+
+/** Narrows a generic special toolbar placement to its generated Writer resource. @param item - Generic placement. @returns Whether Writer metadata is present. */
+function isWriterSpecialToolbarPlacement(
+  item: CommandToolbarPlacement,
+): item is Extract<WriterToolbarItemPlacement, { kind: "command-select" | "font-select" }> {
+  return item.kind === "font-select"
+    ? "commandId" in item && "label" in item
+    : item.kind === "command-select" && "label" in item && "options" in item;
 }
 
 /** Returns compact glyphs for text-format commands without changing command metadata. @param commandUrl - Canonical command URL. @returns Visible glyph or undefined for icon-backed commands. */
@@ -116,8 +131,12 @@ function renderSpecialToolbarItem(
     /** Finds the active radio-style command. @param id - Candidate command identity. @returns Whether the command is checked. */ (
       id,
     ) => commandSource.QueryState(id).checked === true,
-  ) as string;
-  const selected = getCommandResource(selectedCommandId).selectionValue as string;
+  );
+  /* v8 ignore next -- Generated paragraph-style selectors always contain commands. */
+  if (selectedCommandId === undefined) return null;
+  const selected = getCommandResource(selectedCommandId).selectionValue;
+  /* v8 ignore next -- Every generated style command has a selection value. */
+  if (selected === undefined) return null;
   const label = localization.GetText("writer.toolbar.paragraph-style", item.label);
   return (
     <label className="contents" key={item.label}>
@@ -165,33 +184,55 @@ function renderParagraphStyleOptions(
       label,
     ]) => (
       <optgroup key={group} label={localization.GetText(`writer.style-group.${group}`, label)}>
-        {WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.filter(
-          /** Selects group styles. @param style - Candidate. @returns Whether included. */ (
-            style,
-          ) => style.group === group,
-        ).map(
-          /** Renders one style. @param style - Pool style. @returns Option. */ (style) => {
-            let depth = 0;
-            let parentId = style.parentId;
-            while (parentId !== undefined && depth < 8) {
-              depth += 1;
-              parentId = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
-                /** Finds the current parent. @param candidate - Candidate. @returns Whether matching. */ (
-                  candidate,
-                ) => candidate.id === parentId,
-              )?.parentId;
-            }
-            const id = getWriterParagraphStyleCommandId(style.id);
-            const resource = getCommandResource(id);
-            return (
-              <option key={id} value={resource.selectionValue}>
-                {`${"\u00a0\u00a0".repeat(depth)}${resource.label}`}
-              </option>
-            );
-          },
-        )}
+        {writerParagraphStyleOptions
+          .filter(
+            /** Selects precomputed group styles. @param style - Candidate. @returns Whether included. */ (
+              style,
+            ) => style.group === group,
+          )
+          .map(
+            /** Renders one style. @param style - Precomputed pool style. @returns Option. */ (
+              style,
+            ) => {
+              const id = getWriterParagraphStyleCommandId(style.id);
+              const resource = getCommandResource(id);
+              return (
+                <option key={id} value={resource.selectionValue}>
+                  {`${"\u00a0\u00a0".repeat(style.depth)}${resource.label}`}
+                </option>
+              );
+            },
+          )}
       </optgroup>
     ),
+  );
+}
+
+/** Resolves the static style hierarchy once when the generated resource module loads. @returns Flat options with stable depths. */
+function createParagraphStyleOptions(): readonly Readonly<{
+  depth: number;
+  group: (typeof WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL)[number]["group"];
+  id: string;
+}>[] {
+  const parents = new Map(
+    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
+      /** Indexes one generated style. @param style - Pool style. @returns ID/parent pair. */ (
+        style,
+      ) => [style.id, style.parentId],
+    ),
+  );
+  return WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
+    /** Computes one bounded hierarchy depth. @param style - Pool style. @returns Render metadata. */ (
+      style,
+    ) => {
+      let depth = 0;
+      let parentId = style.parentId;
+      while (parentId !== undefined && depth < 8) {
+        depth += 1;
+        parentId = parents.get(parentId);
+      }
+      return Object.freeze({ depth, group: style.group, id: style.id });
+    },
   );
 }
 

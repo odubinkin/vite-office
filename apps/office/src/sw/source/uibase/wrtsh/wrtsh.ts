@@ -15,37 +15,16 @@ import type {
   WriterParagraphAlignment,
 } from "../../core/txtnode/ndtxt";
 import {
-  getWriterNextGraphemeBoundary,
-  getWriterPreviousGraphemeBoundary,
-} from "../../core/txtnode/ndtxt";
-import {
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
-  copyWriterTextRangeRuns,
-  createWriterTextFragment,
-  getWriterTextFromRuns,
-  normalizeWriterTextRuns,
   type WriterTextRun,
 } from "../../core/txtnode/text-run-projection";
 import type { WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
 import { SwTextShell } from "../shells/textsh";
 import type { SwDocShell } from "../app/docsh";
-import { SwUndoInsert } from "../../core/undo/unins";
-import {
-  SwUndoDelete,
-  SwUndoJoinParagraphs,
-  SwUndoReplace,
-  type SwUndoDeleteDirection,
-} from "../../core/undo/undel";
-import { SwUndoSplitNode } from "../../core/undo/unspnd";
-import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwTransferable } from "../dochdl/swdtflvr";
-import type {
-  WriterClipboardPaste,
-  WriterClipboardPasteParagraph,
-} from "../../filter/html/html-filter-types";
+import type { WriterClipboardPaste } from "../../filter/html/html-filter-types";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
-import { getWriterTypingCharacterClass } from "./delete";
 import {
   createWriterCollapsedCursorState,
   createWriterUndoCursorState,
@@ -55,7 +34,7 @@ import {
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
-import { pasteWriterTransfer } from "./wrtsh-paste";
+import { SwWrtShellEditingOperations } from "./wrtsh-editing";
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwModify {
@@ -64,6 +43,7 @@ export class SwWrtShell extends SwModify {
   private composition: WriterCompositionState | undefined;
   private readonly cursor: SwPaM;
   private readonly docShellSubscription: () => void;
+  private readonly editing: SwWrtShellEditingOperations;
   private readonly listShell: SwListShell;
   private pendingCharacterAttributes: WriterCharacterAttributes = {
     ...DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
@@ -87,6 +67,33 @@ export class SwWrtShell extends SwModify {
           state,
         ) => this.RestoreCursorState(state),
     };
+    this.editing = new SwWrtShellEditingOperations({
+      applyAction:
+        /** Applies one editing action through shell notification orchestration. @param action - Undo action. @param tryMerge - Whether history grouping is allowed. @returns Whether applied. */ (
+          action,
+          tryMerge,
+        ) => this.ApplyAction(action, tryMerge),
+      captureCursorState: /** Captures the shell cursor boundary. @returns Cursor state. */ () =>
+        this.CaptureCursorState(),
+      createCollapsedCursorState:
+        /** Creates a collapsed action endpoint. @param target - Target paragraph. @param offset - Content offset. @returns Cursor state. */ (
+          target,
+          offset,
+        ) => this.CreateCollapsedCursorState(target, offset),
+      getActiveParagraph: /** Returns the shell target. @returns Active paragraph. */ () =>
+        this.GetActiveParagraph(),
+      getCursor: /** Returns the persistent PaM. @returns Cursor. */ () => this.GetCursor(),
+      getDoc: /** Returns the active document. @returns Writer document. */ () => this.GetDoc(),
+      getPendingCharacterAttributes:
+        /** Returns caret attributes. @returns Copied attributes. */ () =>
+          this.GetPendingCharacterAttributes(),
+      getUndoManager: /** Returns document history. @returns Undo manager. */ () =>
+        this.docShell.GetUndoManager(),
+      setCursor:
+        /** Moves the persistent cursor. @param position - Canonical position. @returns Whether changed. */ (
+          position,
+        ) => this.SetCursor(position),
+    });
     this.textShell = new SwTextShell(this, dialogController);
     this.listShell = new SwListShell(this);
     this.docShellSubscription = docShell.Subscribe(
@@ -234,32 +241,32 @@ export class SwWrtShell extends SwModify {
   }
   /** Pastes at the current canonical PaM without a projected string selection. @param paste - Parsed clipboard content. @returns Whether content changed. */
   public PasteAtCursor(paste: WriterClipboardPaste): boolean {
-    return this.Paste(paste);
+    return this.editing.Paste(paste);
   }
 
   /** Inserts text at the persistent Writer cursor, matching the bounded SwWrtShell insertion boundary. @param text - Text to insert or replace the selection with. @returns Whether the document changed. */
   public Insert(text: string): boolean {
-    return text.length > 0 && this.InsertAtCursor(text, true);
+    return text.length > 0 && this.editing.InsertAtCursor(text, true);
   }
 
   /** Replaces the current Writer selection without joining ordinary typing undo groups. @param text - Replacement text. @returns Whether content changed. */
   public Replace(text: string): boolean {
-    return text.length > 0 && this.InsertAtCursor(text, false);
+    return text.length > 0 && this.editing.InsertAtCursor(text, false);
   }
 
   /** Inserts a paragraph break at the persistent Writer cursor. @returns Whether a break was inserted. */
   public SplitNode(): boolean {
-    return this.SplitAtCursor();
+    return this.editing.SplitAtCursor();
   }
 
   /** Deletes the preceding grapheme or the current selection. @returns Whether content changed. */
   public DelLeft(): boolean {
-    return this.DeleteAtCursor("backspace");
+    return this.editing.DeleteAtCursor("backspace");
   }
 
   /** Deletes the following grapheme or the current selection. @returns Whether content changed. */
   public DelRight(): boolean {
-    return this.DeleteAtCursor("delete");
+    return this.editing.DeleteAtCursor("delete");
   }
 
   /** Begins browser extended text input while retaining the exact Writer selection it may replace. @returns Nothing. */
@@ -285,273 +292,40 @@ export class SwWrtShell extends SwModify {
       this.NotifySelection();
       return false;
     }
-    const changed = this.InsertAtCursor(composition.text, false);
+    const changed = this.editing.InsertAtCursor(composition.text, false);
     /* v8 ignore next -- non-empty composition at a valid registered cursor always inserts. */
     if (!changed) this.NotifySelection();
     return changed;
   }
 
-  /** Inserts text at the persistent point, replacing a same-node selection like SwWrtShell::Insert. @param text - Non-empty inserted text. @param allowGrouping - Whether ordinary typing may merge with the preceding insert action. @returns Whether the document changed. */
-  private InsertAtCursor(text: string, allowGrouping: boolean): boolean {
-    const before = this.CaptureCursorState();
-    const point = this.cursor.GetPoint();
-    const paragraph = point.GetNode() as WriterParagraph;
-    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
-    if (mark !== undefined) {
-      if (mark.GetNode() !== paragraph) {
-        const manager = this.docShell.GetUndoManager();
-        manager.EnterListAction("Replace");
-        try {
-          this.DeleteCrossParagraphSelection();
-          return this.InsertAtCursor(text, false);
-        } finally {
-          manager.LeaveListAction();
-        }
-      }
-      const start = Math.min(mark.GetContentIndex(), point.GetContentIndex());
-      const end = Math.max(mark.GetContentIndex(), point.GetContentIndex());
-      return this.ApplyAction(
-        new SwUndoReplace(
-          paragraph,
-          start,
-          paragraph.CaptureTextFragment(start, end),
-          paragraph.CreateTextFragmentFromText(text, this.pendingCharacterAttributes),
-          "Replace",
-          before,
-          this.CreateCollapsedCursorState(paragraph, start + text.length),
-        ),
-      );
-    }
-    const offset = point.GetContentIndex();
-    const group = allowGrouping ? getWriterTypingCharacterClass(text) : undefined;
-    return this.ApplyAction(
-      new SwUndoInsert(
-        paragraph,
-        offset,
-        paragraph.CreateTextFragmentFromText(text, this.pendingCharacterAttributes),
-        group,
-        before,
-        this.CreateCollapsedCursorState(paragraph, offset + text.length),
-      ),
-      group !== undefined,
-    );
-  }
-
-  /** Deletes the active same-node selection or one adjacent grapheme through DelLeft/DelRight semantics. @param direction - Logical deletion direction. @returns Whether the document changed. */
-  private DeleteAtCursor(direction: SwUndoDeleteDirection): boolean {
-    const before = this.CaptureCursorState();
-    const point = this.cursor.GetPoint();
-    const paragraph = point.GetNode() as WriterParagraph;
-    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
-    if (mark !== undefined) {
-      if (mark.GetNode() !== paragraph) return this.DeleteCrossParagraphSelection();
-      const start = Math.min(mark.GetContentIndex(), point.GetContentIndex());
-      const end = Math.max(mark.GetContentIndex(), point.GetContentIndex());
-      if (start === end) return false;
-      return this.ApplyAction(
-        new SwUndoDelete(
-          paragraph,
-          start,
-          paragraph.CaptureTextFragment(start, end),
-          direction,
-          undefined,
-          before,
-          this.CreateCollapsedCursorState(paragraph, start),
-        ),
-      );
-    }
-    const offset = point.GetContentIndex();
-    if (direction === "backspace" && offset === 0)
-      return this.MergeParagraphWithPrevious(paragraph);
-    if (direction === "delete" && offset === paragraph.Len())
-      return this.MergeParagraphWithNext(paragraph);
-    const start =
-      direction === "backspace"
-        ? getWriterPreviousGraphemeBoundary(paragraph.text, offset)
-        : offset;
-    const end =
-      direction === "backspace" ? offset : getWriterNextGraphemeBoundary(paragraph.text, offset);
-    /* v8 ignore next -- Valid non-boundary cursor offsets still lie strictly inside one grapheme. */
-    if (start === end) return false;
-    const deletedText = paragraph.text.slice(start, end);
-    const group =
-      deletedText.length === 1
-        ? /[\p{L}\p{N}]/u.test(deletedText)
-          ? "word"
-          : "delimiter"
-        : undefined;
-    return this.ApplyAction(
-      new SwUndoDelete(
-        paragraph,
-        start,
-        paragraph.CaptureTextFragment(start, end),
-        direction,
-        group,
-        before,
-        this.CreateCollapsedCursorState(paragraph, start),
-      ),
-      group !== undefined,
-    );
-  }
-
   /** Deletes the canonical visible selection, including ranges spanning text nodes. @returns Whether content changed. */
   public DeleteSelection(): boolean {
-    return this.cursor.HasMark() && this.DeleteAtCursor("delete");
-  }
-
-  /** Deletes a cross-node SwPaM as one Writer list action and joins the surviving boundary nodes. @returns Whether content changed. */
-  private DeleteCrossParagraphSelection(): boolean {
-    const point = this.cursor.GetPoint();
-    const mark = this.cursor.GetMark();
-    const document = this.GetDoc();
-    const pointNode = point.GetNode() as WriterParagraph;
-    const markNode = mark.GetNode() as WriterParagraph;
-    const pointIndex = document.paragraphs.indexOf(pointNode);
-    const markIndex = document.paragraphs.indexOf(markNode);
-    const startsAtPoint = pointIndex < markIndex;
-    const startNode = startsAtPoint ? pointNode : markNode;
-    const endNode = startsAtPoint ? markNode : pointNode;
-    const startOffset = startsAtPoint ? point.GetContentIndex() : mark.GetContentIndex();
-    const endOffset = startsAtPoint ? mark.GetContentIndex() : point.GetContentIndex();
-    const startIndex = Math.min(pointIndex, markIndex);
-    const endIndex = Math.max(pointIndex, markIndex);
-    const selectedNodes = document.paragraphs.slice(startIndex, endIndex + 1);
-    const manager = this.docShell.GetUndoManager();
-    manager.EnterListAction("Delete");
-    try {
-      this.ReplaceRange({ end: startNode.Len(), node: startNode, start: startOffset }, []);
-      for (const selected of selectedNodes.slice(1, -1))
-        this.ReplaceRange({ end: selected.Len(), node: selected, start: 0 }, []);
-      this.ReplaceRange({ end: endOffset, node: endNode, start: 0 }, []);
-      for (const selected of selectedNodes.slice(1)) this.MergeParagraphWithPrevious(selected);
-    } finally {
-      manager.LeaveListAction();
-    }
-    this.SetCursor(new SwPosition(startNode, startOffset));
-    return true;
-  }
-
-  /** Splits the paragraph at the persistent caret, first replacing a bounded same-node selection when present. @returns Whether a paragraph break was inserted. */
-  private SplitAtCursor(): boolean {
-    const mark = this.cursor.HasMark() ? this.cursor.GetMark() : undefined;
-    if (mark !== undefined) {
-      const manager = this.docShell.GetUndoManager();
-      manager.EnterListAction("Split Paragraph");
-      try {
-        this.DeleteAtCursor("delete");
-        const nextPoint = this.cursor.GetPoint();
-        this.SplitParagraph(nextPoint);
-      } finally {
-        manager.LeaveListAction();
-      }
-      return true;
-    }
-    const point = this.cursor.GetPoint();
-    this.SplitParagraph(point);
-    return true;
+    return this.cursor.HasMark() && this.editing.DeleteAtCursor("delete");
   }
 
   /** Replaces one same-paragraph range with Writer text runs. @param range - Target range. @param runs - Inserted safe runs. @returns Whether document content changed. */
   public ReplaceRange(range: WriterTextRange, runs: readonly WriterTextRun[]): boolean {
-    const paragraph = range.node;
-    if (paragraph.GetDoc() !== this.GetDoc()) throw new Error("Writer text range is foreign.");
-    if (
-      !Number.isInteger(range.start) ||
-      !Number.isInteger(range.end) ||
-      range.start < 0 ||
-      range.end < range.start ||
-      range.end > paragraph.Len()
-    )
-      throw new Error("Writer text range is outside the paragraph.");
-    const removedRuns = copyWriterTextRangeRuns(paragraph, range.start, range.end);
-    const insertedRuns = normalizeWriterTextRuns(runs);
-    if (JSON.stringify(removedRuns) === JSON.stringify(insertedRuns)) return false;
-    const insertionLength = getWriterTextFromRuns(insertedRuns).length;
-    const nextOffset = range.start + insertionLength;
-    return this.ApplyAction(
-      new SwUndoReplace(
-        paragraph,
-        range.start,
-        paragraph.CaptureTextFragment(range.start, range.end),
-        createWriterTextFragment(paragraph, insertedRuns),
-        insertedRuns.length === 0 ? "Delete" : "Paste",
-        this.CaptureCursorState(),
-        this.CreateCollapsedCursorState(paragraph, nextOffset),
-      ),
-    );
+    return this.editing.ReplaceRange(range, runs);
   }
 
   /** Pastes one safe transfer document at the persistent SwPaM as a single Writer undo transaction. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */
   public Paste(paste: WriterClipboardPaste): boolean {
-    const manager = this.docShell.GetUndoManager();
-    return pasteWriterTransfer(paste, {
-      /** Applies imported list metadata. @param paragraph - Parsed paragraph. @returns Whether list state changed. */
-      applyParagraphList: (paragraph) => this.ApplyPastedParagraphList(paragraph),
-      /** Opens the compound undo action. @returns Nothing. */
-      beginUndoGroup: () => manager.EnterListAction("Paste"),
-      /** Removes the current selection. @returns Nothing. */
-      deleteSelection: () => {
-        this.DeleteAtCursor("delete");
-      },
-      /** Closes the compound undo action. @returns Nothing. */
-      endUndoGroup: () => manager.LeaveListAction(),
-      /** Reads the current insertion point. @returns Canonical point. */
-      getInsertionPoint: () => this.cursor.GetPoint(),
-      /** Reports current mark state. @returns Whether selected. */
-      hasSelection: () => this.cursor.HasMark(),
-      /** Replaces one paragraph range. @param range - Target range. @param runs - Sanitized runs. @returns Whether changed. */
-      replaceRange: (range, runs) => this.ReplaceRange(range, runs),
-      /** Moves the persistent cursor. @param position - Canonical position. @returns Nothing. */
-      setCursor: (position) => this.SetCursor(position),
-      /** Splits one paragraph. @param position - Split point. @returns Trailing paragraph. */
-      splitParagraph: (position) => this.SplitParagraph(position),
-    });
+    return this.editing.Paste(paste);
   }
 
   /** Splits one paragraph at a canonical Writer position. @param position - Source node and content offset. @returns New trailing paragraph. */
   public SplitParagraph(position: SwPosition): WriterParagraph {
-    const paragraph = position.GetNode() as WriterParagraph;
-    const offset = position.GetContentIndex();
-    if (paragraph.GetDoc() !== this.GetDoc()) throw new Error("Writer split position is foreign.");
-    /* v8 ignore next 2 -- SwPosition validates the same node bounds before this shell method. */
-    if (!Number.isInteger(offset) || offset < 0 || offset > paragraph.Len())
-      throw new Error("Split offset is outside the paragraph.");
-    this.ApplyAction(
-      new SwUndoSplitNode(
-        paragraph,
-        offset,
-        this.CaptureCursorState(),
-        this.CreateCollapsedCursorState(paragraph, 0),
-      ),
-    );
-    return this.GetActiveParagraph();
+    return this.editing.SplitParagraph(position);
   }
 
   /** Joins a non-first paragraph into its preceding node. @param paragraph - Paragraph whose preceding break is removed. @returns Whether a merge occurred. */
   public MergeParagraphWithPrevious(paragraph: WriterParagraph): boolean {
-    const document = this.GetDoc();
-    const index = document.paragraphs.indexOf(paragraph);
-    if (index <= 0) return false;
-    const preceding = document.paragraphs[index - 1] as WriterParagraph;
-    const offset = preceding.text.length;
-    const removed = document.paragraphs[index] as WriterParagraph;
-    return this.ApplyAction(
-      new SwUndoJoinParagraphs(
-        preceding,
-        offset,
-        removed,
-        this.CaptureCursorState(),
-        this.CreateCollapsedCursorState(preceding, offset),
-      ),
-    );
+    return this.editing.MergeParagraphWithPrevious(paragraph);
   }
 
   /** Joins the following paragraph into the selected node. @param paragraph - Paragraph whose following break is removed. @returns Whether a merge occurred. */
   public MergeParagraphWithNext(paragraph: WriterParagraph): boolean {
-    const document = this.GetDoc();
-    const index = document.paragraphs.indexOf(paragraph);
-    if (index < 0 || index === document.paragraphs.length - 1) return false;
-    return this.MergeParagraphWithPrevious(document.paragraphs[index + 1] as WriterParagraph);
+    return this.editing.MergeParagraphWithNext(paragraph);
   }
 
   /** Toggles direct character formatting over a range or pending caret state. @param format - Writer character format. @param range - Optional same-paragraph selection. @returns Whether document content changed. */
@@ -606,17 +380,6 @@ export class SwWrtShell extends SwModify {
   /** Reports whether the text-shell indent command has an available transition. @param increase - Whether to increase indentation. @returns Whether enabled. */
   public CanChangeParagraphIndent(increase: boolean): boolean {
     return this.textShell.CanChangeParagraphIndent(increase);
-  }
-
-  /** Applies one clipboard paragraph's complete bounded list tuple through Writer numbering undo. @param paragraph - Parsed clipboard paragraph. @returns Whether list metadata changed. */
-  private ApplyPastedParagraphList(paragraph: WriterClipboardPasteParagraph): boolean {
-    const target = this.GetActiveParagraph();
-    const nextList = { kind: paragraph.listKind, level: paragraph.listLevel } as const;
-    if (target.list.kind === nextList.kind && target.list.level === nextList.level) return false;
-    const cursor = this.CaptureCursorState();
-    return this.ApplyAction(
-      new SwUndoInsNum(target, target.CaptureParagraphListState(), nextList, cursor, cursor),
-    );
   }
 
   /** Restores the preceding Writer history state. @returns Whether navigation occurred. */

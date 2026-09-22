@@ -2,8 +2,10 @@
 
 import { Fragment, useRef } from "react";
 
-import type { WriterTextRun } from "../../source/core/txtnode/text-run-projection";
-import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
+import type {
+  WriterParagraphProjection as WriterParagraph,
+  WriterProjectedTextRun,
+} from "../presentation/writer-view-projection";
 
 /** Immutable projection properties for one Writer text node. */
 export interface WriterEditableParagraphProps {
@@ -12,7 +14,6 @@ export interface WriterEditableParagraphProps {
   readonly index: number;
   readonly listMarker: string | undefined;
   readonly paragraph: WriterParagraph;
-  readonly projectionVersion: number;
   readonly retainElement: (paragraphId: string, element: HTMLParagraphElement | null) => void;
 }
 
@@ -23,14 +24,19 @@ export function WriterEditableParagraph({
   isLast,
   listMarker,
   paragraph,
-  projectionVersion,
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
   const styleDescriptionId = `writer-paragraph-style-${index + 1}`;
   const label = index === 0 ? "Writer document text" : `Writer paragraph ${index + 1}`;
-  const listIndent = listMarker === undefined ? undefined : `${paragraph.list.level * 2}rem`;
-  void projectionVersion;
+  const listLayout = paragraph.listLayout;
+  const markerStartPt =
+    listLayout === undefined ? 0 : listLayout.indentAtPt + listLayout.firstLineIndentPt;
+  const contentStartPt =
+    listLayout?.labelFollowedBy === "listtab"
+      ? listLayout.listTabPositionPt
+      : (listLayout?.indentAtPt ?? 0);
+  const markerWidthPt = Math.max(0, contentStartPt - markerStartPt);
   return (
     <div
       data-active={isActive}
@@ -46,16 +52,21 @@ export function WriterEditableParagraph({
           : ` Paragraph list: ${paragraph.list.kind === "bullet" ? "Unordered List" : "Ordered List"}.`}
       </span>
       <div
-        className={listMarker === undefined ? "" : "flex items-start gap-3"}
-        style={{ marginInlineStart: listIndent }}
+        className={listMarker === undefined ? "" : "flex items-start"}
+        style={{ marginInlineStart: listMarker === undefined ? undefined : `${markerStartPt}pt` }}
       >
         {listMarker === undefined ? null : (
           <span
             aria-hidden="true"
-            className="w-5 shrink-0 pt-0.5 text-right text-slate-700"
+            className="shrink-0 pt-0.5 text-right text-slate-700"
             contentEditable={false}
             data-testid={`writer-list-marker-${paragraph.id}`}
             data-writer-list-marker={paragraph.id}
+            style={{
+              /* v8 ignore next -- Space-follow numbering is imported but not exposed by the current command surface. */
+              marginInlineEnd: listLayout?.labelFollowedBy === "space" ? "0.25em" : undefined,
+              width: `${markerWidthPt}pt`,
+            }}
           >
             {listMarker}
           </span>
@@ -97,11 +108,10 @@ export function WriterEditableParagraph({
           tabIndex={-1}
         >
           {paragraph.runs.map(
-            /** Projects one canonical text run with a deterministic view key. @param run - Immutable run. @param runIndex - Run order. @returns Semantic run projection. */ (
+            /** Projects one canonical text run with a deterministic view key. @param run - Immutable run. @returns Semantic run projection. */ (
               run,
-              runIndex,
             ) => (
-              <Fragment key={getWriterRunProjectionKey(paragraph.id, paragraph.runs, runIndex)}>
+              <Fragment key={getWriterRunProjectionKey(paragraph.id, run)}>
                 <WriterTextRunProjection
                   inheritedBold={paragraph.computedStyle.fontWeight === 700}
                   inheritedItalic={paragraph.computedStyle.fontStyle === "italic"}
@@ -124,7 +134,7 @@ function WriterTextRunProjection({
 }: Readonly<{
   inheritedBold: boolean;
   inheritedItalic: boolean;
-  run: WriterTextRun;
+  run: WriterProjectedTextRun;
 }>): React.ReactNode {
   let content: React.ReactNode = run.text;
   if (run.attributes.underline)
@@ -149,15 +159,8 @@ function WriterTextRunProjection({
   return content;
 }
 
-/** Builds a deterministic view-only key from the run boundary and semantic state. @param paragraphId - Stable text-node identity. @param runs - Canonical paragraph runs. @param index - Current run index. @returns Stable projection key. */
-function getWriterRunProjectionKey(
-  paragraphId: string,
-  runs: readonly WriterTextRun[],
-  index: number,
-): string {
-  let offset = 0;
-  for (const run of runs.slice(0, index)) offset += run.text.length;
-  const run = runs[index] as WriterTextRun;
+/** Builds a deterministic view-only key from the projected run boundary and semantic state. @param paragraphId - Stable text-node identity. @param run - Projected run. @returns Stable projection key. */
+function getWriterRunProjectionKey(paragraphId: string, run: WriterProjectedTextRun): string {
   const attributes = run.attributes;
-  return `${paragraphId}:${offset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.fontFamily ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
+  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.fontFamily ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
 }

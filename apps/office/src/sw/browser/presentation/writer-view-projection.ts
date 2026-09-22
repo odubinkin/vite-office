@@ -44,14 +44,28 @@ export interface WriterParagraphProjection {
   readonly computedStyle: WriterParagraphComputedStyle;
   readonly id: string;
   readonly list: WriterParagraphList;
+  readonly listLayout?: WriterParagraphListLayout;
   readonly listId: string;
   readonly listMarker?: string;
   readonly textLeftMargin: number;
   readonly numRuleName: string;
-  readonly runs: readonly WriterTextRun[];
+  readonly runs: readonly WriterProjectedTextRun[];
   readonly style: WriterParagraphStyle;
   readonly styleDisplayName: string;
   readonly text: string;
+}
+
+/** Browser-ready numbering geometry resolved from the paragraph's active SwNumFormat. */
+export interface WriterParagraphListLayout {
+  readonly firstLineIndentPt: number;
+  readonly indentAtPt: number;
+  readonly labelFollowedBy: "listtab" | "nothing" | "space";
+  readonly listTabPositionPt: number;
+}
+
+/** One text run with its linear-time projection boundary. */
+export interface WriterProjectedTextRun extends WriterTextRun {
+  readonly startOffset: number;
 }
 
 /** Browser-ready values projected from effective Writer paragraph items. */
@@ -154,7 +168,10 @@ export class WriterViewProjection {
             ? node.GetNumRule()?.GetNumFormat(node.list.level).GetBulletChar()
             : undefined;
         const listMarker = node.GetListLabel();
+        const listFormat =
+          node.list.kind === "none" ? undefined : node.GetNumRule()?.GetNumFormat(node.list.level);
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
+        let runOffset = 0;
         return Object.freeze({
           alignment: node.alignment,
           ...(bulletChar === undefined ? {} : { bulletChar }),
@@ -173,13 +190,24 @@ export class WriterViewProjection {
               ? 700
               : 400,
             lineHeight:
-              (node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace() / 100,
+              ((node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace() ||
+                100) / 100,
             lowerSpacingPt: spacing.GetLower() / 20,
             rightMarginPt:
               (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight() / 20,
             upperSpacingPt: spacing.GetUpper() / 20,
           }),
           list: Object.freeze({ ...node.list }),
+          ...(listFormat === undefined
+            ? {}
+            : {
+                listLayout: Object.freeze({
+                  firstLineIndentPt: listFormat.GetFirstLineIndent() / 20,
+                  indentAtPt: listFormat.GetIndentAt() / 20,
+                  labelFollowedBy: listFormat.GetLabelFollowedBy(),
+                  listTabPositionPt: listFormat.GetListtabPos() / 20,
+                }),
+              }),
           listId: node.GetListId(),
           ...(listMarker === undefined ? {} : { listMarker }),
           numRuleName: node.GetNumRuleName(),
@@ -187,7 +215,15 @@ export class WriterViewProjection {
             projectWriterTextRuns(node).map(
               /** Freezes one primitive text run. @param run - Live run value. @returns Frozen run. */ (
                 run,
-              ) => Object.freeze({ ...run, attributes: Object.freeze({ ...run.attributes }) }),
+              ) => {
+                const projected = Object.freeze({
+                  ...run,
+                  attributes: Object.freeze({ ...run.attributes }),
+                  startOffset: runOffset,
+                });
+                runOffset += run.text.length;
+                return projected;
+              },
             ),
           ),
           style: node.style,

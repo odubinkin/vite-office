@@ -208,7 +208,7 @@ export class SvxLineSpacingItem extends SfxPoolItem {
     which: number,
   ) {
     super(which);
-    if (!Number.isInteger(percent) || percent <= 0)
+    if (!Number.isInteger(percent) || percent < 0)
       throw new Error("SvxLineSpacingItem value is invalid.");
   }
   /** Returns proportional line height. @returns Percent. */

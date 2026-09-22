@@ -8,6 +8,7 @@ import {
   WRITER_PARAGRAPH_STYLE_POOL,
 } from "./poolfmt";
 import { createWriterDocument } from "../source/core/doc/doc";
+import { getWriterParagraphStyleDefaults } from "../source/core/doc/poolfmt-defaults";
 import {
   FontItalic,
   FontWeight,
@@ -153,6 +154,77 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     ).toBe(false);
   });
 
+  it("matches the source-derived direct-default table for every exposed style", /** Differentially verifies all materializable pool branches rather than a representative subset. @returns Nothing. */ () => {
+    const expected = {
+      default: {},
+      "text-body": { lineHeightPercent: 115, lowerTwips: 140 },
+      "first-line-indent": { firstLineTwips: 283 },
+      "hanging-indent": { firstLineTwips: -283, textLeftTwips: 567 },
+      "text-body-indent": { firstLineTwips: 0, textLeftTwips: 283 },
+      marginalia: { firstLineTwips: 0, textLeftTwips: 2268 },
+      caption: { fontSizeTwips: 200, italic: true, lowerTwips: 120, upperTwips: 120 },
+      footnote: { firstLineTwips: -340, fontSizeTwips: 200, textLeftTwips: 340 },
+      endnote: { firstLineTwips: -340, fontSizeTwips: 200, textLeftTwips: 340 },
+      comment: {
+        firstLineTwips: 0,
+        fontSizeTwips: 200,
+        lineHeightPercent: 0,
+        lowerTwips: 0,
+        rightTwips: 57,
+        textLeftTwips: 57,
+        upperTwips: 57,
+      },
+      title: { adjust: SvxAdjust.Center, bold: true, fontSizeTwips: 560 },
+      subtitle: {
+        adjust: SvxAdjust.Center,
+        fontSizeTwips: 360,
+        lowerTwips: 120,
+        upperTwips: 60,
+      },
+      appendix: { adjust: SvxAdjust.Center, bold: true, fontSizeTwips: 320 },
+      heading: { fontRole: "heading", fontSizeTwips: 280, lowerTwips: 120, upperTwips: 240 },
+      "heading-1": { bold: true, fontSizeTwips: 360, lowerTwips: 120, upperTwips: 240 },
+      "heading-2": { bold: true, fontSizeTwips: 320, lowerTwips: 120, upperTwips: 200 },
+      "heading-3": { bold: true, fontSizeTwips: 280, lowerTwips: 120, upperTwips: 140 },
+      "heading-4": {
+        bold: true,
+        fontSizeTwips: 260,
+        italic: true,
+        lowerTwips: 120,
+        upperTwips: 120,
+      },
+      "heading-5": { bold: true, fontSizeTwips: 240, lowerTwips: 60, upperTwips: 120 },
+      "heading-6": {
+        bold: true,
+        fontSizeTwips: 240,
+        italic: true,
+        lowerTwips: 60,
+        upperTwips: 60,
+      },
+      "heading-7": { bold: true, fontSizeTwips: 200, lowerTwips: 60, upperTwips: 60 },
+      "heading-8": {
+        bold: true,
+        fontSizeTwips: 200,
+        italic: true,
+        lowerTwips: 60,
+        upperTwips: 60,
+      },
+      "heading-9": { bold: true, fontSizeTwips: 180, lowerTwips: 60, upperTwips: 60 },
+      "heading-10": { bold: true, fontSizeTwips: 180, lowerTwips: 60, upperTwips: 60 },
+      quotations: { firstLineTwips: 0, lowerTwips: 283, rightTwips: 567, textLeftTwips: 567 },
+      "preformatted-text": { fontRole: "fixed", fontSizeTwips: 200, lowerTwips: 0 },
+    } as const;
+    expect(Object.keys(expected)).toEqual(
+      WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
+        /** Projects one available style identity. @param style - Pool entry. @returns ID. */ (
+          style,
+        ) => style.id,
+      ),
+    );
+    for (const [id, defaults] of Object.entries(expected))
+      expect(getWriterParagraphStyleDefaults(id)).toEqual(defaults);
+  });
+
   it("materializes source-derived item defaults and script slots", /** Verifies representative upstream style switch branches. @returns Nothing. */ () => {
     const document = createWriterDocument();
     const textBody = document.GetTextFormatColl("text-body").GetAttrSet();
@@ -192,6 +264,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect((comment.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(57);
     expect((comment.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight()).toBe(57);
     expect((comment.Get(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([57, 0]);
+    expect((comment.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace()).toBe(0);
 
     const hanging = document.GetTextFormatColl("hanging-indent").GetAttrSet();
     expect(

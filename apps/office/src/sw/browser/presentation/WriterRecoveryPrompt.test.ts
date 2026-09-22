@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   WriterRecoveryPresentationController,
   WriterRecoveryPrompt,
+  type WriterRecoveryNotice,
   type WriterRecoveryPresentationPort,
 } from "./WriterRecoveryPrompt";
 
@@ -66,7 +67,7 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     await controller.Restore();
     expect(controller.GetSnapshot()).toEqual({
       kind: "open",
-      notice: "Recovered document generation 7.",
+      notice: { generation: 7, kind: "restored" },
     });
     expect(begin).toHaveBeenCalledTimes(1);
     unsubscribe();
@@ -121,7 +122,7 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     await inaccessible.Start();
     expect(inaccessible.GetSnapshot()).toMatchObject({
       kind: "open",
-      notice: expect.stringContaining("could not be inspected"),
+      notice: { kind: "inspect-failed" },
     });
 
     const damaged = new WriterRecoveryPresentationController({
@@ -146,7 +147,7 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     await damaged.Restore();
     expect(damaged.GetSnapshot()).toMatchObject({
       kind: "open",
-      notice: expect.stringContaining("damaged"),
+      notice: { kind: "restore-damaged" },
     });
   });
 
@@ -175,7 +176,7 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     await discardFailure.Start();
     await discardFailure.Discard();
     expect(discardFailure.GetSnapshot()).toMatchObject({
-      notice: expect.stringContaining("could not be discarded"),
+      notice: { kind: "discard-failed" },
     });
 
     const restoreFailure = new WriterRecoveryPresentationController(
@@ -189,7 +190,7 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     await restoreFailure.Start();
     await restoreFailure.Restore();
     expect(restoreFailure.GetSnapshot()).toMatchObject({
-      notice: expect.stringContaining("could not be restored"),
+      notice: { kind: "restore-failed" },
     });
 
     const missing = new WriterRecoveryPresentationController(
@@ -205,7 +206,7 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     await missing.Start();
     await missing.Restore();
     expect(missing.GetSnapshot()).toMatchObject({
-      notice: expect.stringContaining("no longer available"),
+      notice: { kind: "restore-missing" },
     });
   });
 
@@ -348,12 +349,16 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
       createElement(WriterRecoveryPrompt, {
         children:
           /** Renders restored recovery feedback. @param notice - Recovery notice. @returns Test workspace. */ (
-            notice: string | undefined,
+            notice: WriterRecoveryNotice | undefined,
           ) =>
             createElement(
               "div",
               undefined,
-              createElement("output", { "aria-label": "Recovery status" }, notice),
+              createElement(
+                "output",
+                { "aria-label": "Recovery status" },
+                notice === undefined ? "" : JSON.stringify(notice),
+              ),
               "Writer workspace",
             ),
         recovery: restorePort,
@@ -361,7 +366,7 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     );
     fireEvent.click(await screen.findByRole("button", { name: "Restore" }));
     expect(await screen.findByRole("status", { name: "Recovery status" })).toHaveTextContent(
-      "Recovered document generation 5.",
+      '"kind":"restored"',
     );
     expect(screen.queryByText("Recover Writer document?")).not.toBeInTheDocument();
     expect(screen.getByText("Writer workspace")).toBeInTheDocument();
@@ -372,12 +377,16 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
       createElement(WriterRecoveryPrompt, {
         children:
           /** Renders discarded recovery feedback. @param notice - Recovery notice. @returns Test workspace. */ (
-            notice: string | undefined,
+            notice: WriterRecoveryNotice | undefined,
           ) =>
             createElement(
               "div",
               undefined,
-              createElement("output", { "aria-label": "Recovery status" }, notice),
+              createElement(
+                "output",
+                { "aria-label": "Recovery status" },
+                notice === undefined ? "" : JSON.stringify(notice),
+              ),
               "Discarded workspace",
             ),
         recovery: discardPort,
@@ -385,7 +394,7 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
     );
     fireEvent.click(await screen.findByRole("button", { name: "Discard" }));
     expect(await screen.findByRole("status", { name: "Recovery status" })).toHaveTextContent(
-      "Recovery data was discarded.",
+      '"kind":"discarded"',
     );
     discarded.unmount();
 
@@ -394,12 +403,16 @@ describe("WriterRecoveryPresentationController", /** Registers recovery presenta
       createElement(WriterRecoveryPrompt, {
         children:
           /** Renders clean-continue feedback. @param notice - Recovery notice. @returns Test workspace. */ (
-            notice: string | undefined,
+            notice: WriterRecoveryNotice | undefined,
           ) =>
             createElement(
               "div",
               undefined,
-              createElement("output", { "aria-label": "Recovery status" }, notice),
+              createElement(
+                "output",
+                { "aria-label": "Recovery status" },
+                notice === undefined ? "" : JSON.stringify(notice),
+              ),
               "Continued workspace",
             ),
         recovery: continuePort,

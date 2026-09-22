@@ -226,7 +226,8 @@ describe("command registry" /**
         },
         {
           /** Rejects an asynchronous command result. @returns Rejected promise. */
-          execute: async (): Promise<void> => Promise.reject(new Error("request failed")),
+          execute: async (): Promise<void> =>
+            Promise.reject(Object.assign(new Error("request failed"), { code: "request-failed" })),
           id: ".uno:RejectedResult",
           label: "Rejected result",
           slotId: 106,
@@ -287,6 +288,7 @@ describe("command registry" /**
     expect(rejectedRequest.IsDone()).toBe(true);
     expect(dispatcher.QueryState(".uno:RejectedResult").error).toBe("request failed");
     expect(dispatcher.GetLastCommandError()).toEqual({
+      code: "request-failed",
       commandId: ".uno:RejectedResult",
       error: "request failed",
     });

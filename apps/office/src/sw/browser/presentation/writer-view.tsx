@@ -7,6 +7,7 @@ import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
 import { WriterParagraphProperties } from "./WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
+import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
 import {
   createBrowserCommandSource,
   type BrowserCommandSource,
@@ -24,12 +25,13 @@ import type { WriterCursorSelection } from "../editor/writer-selection-types";
 import type { SwView } from "../../source/uibase/uiview/view";
 import type { WriterPasteCommandArguments } from "../workflows/writer-workflows";
 import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
+import type { WriterRecoveryNotice } from "./WriterRecoveryPrompt";
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
   readonly isActive: boolean;
-  /** Recovery result shown through the existing Writer footer status surface. */
-  readonly recoveryNotice?: string;
+  /** Typed recovery result shown through the existing Writer footer status surface. */
+  readonly recoveryNotice?: WriterRecoveryNotice;
   readonly view: SwView;
   readonly viewStore?: WriterViewStore;
 }
@@ -244,8 +246,12 @@ export function WriterWorkbench({
           />
         }
         status={
-          recoveryNotice ??
-          presentWriterStatus(view, snapshot, localization.GetText.bind(localization))
+          (recoveryNotice === undefined
+            ? undefined
+            : presentWriterRecoveryNotice(
+                recoveryNotice,
+                localization.GetText.bind(localization),
+              )) ?? presentWriterStatus(view, snapshot, localization.GetText.bind(localization))
         }
         toolbar={
           <WriterCommandToolbar
@@ -268,7 +274,6 @@ export function WriterWorkbench({
           onTextCut={executeNativeCut}
           onTextPaste={executeNativePaste}
           paragraphs={snapshot.paragraphs}
-          projectionVersion={snapshot.viewVersion}
         />
       </WriterWorkspaceChrome>
       {dialogRequest?.request.kind !== "hyperlink" ? null : (
@@ -331,14 +336,14 @@ function presentWriterCommandError(
   if (failure === undefined) return undefined;
   const errors: readonly Readonly<{
     commandId: string;
-    present: (error: string) => string;
+    present: (failure: CommandFailure) => string;
   }>[] = [
     {
       commandId: WRITER_COMMAND_IDS.openOdt,
       present:
-        /** Presents an ODT-open failure. @param error - Failure text. @returns Status text. */ (
-          error,
-        ) => `${getText("writer.error.open-odt", "Could not open ODT")}: ${error}`,
+        /** Presents an ODT-open failure. @param commandFailure - Failure state. @returns Status text. */ (
+          commandFailure,
+        ) => `${getText("writer.error.open-odt", "Could not open ODT")}: ${commandFailure.error}`,
     },
     {
       commandId: WRITER_COMMAND_IDS.openLocal,
@@ -348,9 +353,9 @@ function presentWriterCommandError(
     {
       commandId: WRITER_COMMAND_IDS.saveOdt,
       present:
-        /** Presents an ODT-save failure. @param error - Failure text. @returns Status text. */ (
-          error,
-        ) => `${getText("writer.error.save-odt", "Could not save ODT")}: ${error}`,
+        /** Presents an ODT-save failure. @param commandFailure - Failure state. @returns Status text. */ (
+          commandFailure,
+        ) => `${getText("writer.error.save-odt", "Could not save ODT")}: ${commandFailure.error}`,
     },
     {
       commandId: WRITER_COMMAND_IDS.exportText,
@@ -360,44 +365,88 @@ function presentWriterCommandError(
     {
       commandId: WRITER_COMMAND_IDS.saveLocal,
       present:
-        /** Presents a local-save failure. @param error - Failure text. @returns Status text. */ (
-          error,
+        /** Presents a local-save failure. @param commandFailure - Failure state. @returns Status text. */ (
+          commandFailure,
         ) =>
-          error === "Browser storage is unavailable."
-            ? error
+          commandFailure.code === "storage-unavailable"
+            ? getText("writer.error.storage-unavailable", "Browser storage is unavailable.")
             : getText("writer.error.save-local", "Could not save locally."),
     },
     {
       commandId: WRITER_COMMAND_IDS.copy,
-      present: /** Presents a Copy failure. @param error - Failure text. @returns Status text. */ (
-        error,
-      ) =>
-        error === "Select text to copy."
-          ? error
-          : getText("writer.error.copy", "Could not copy selection."),
+      present:
+        /** Presents a Copy failure. @param commandFailure - Failure state. @returns Status text. */ (
+          commandFailure,
+        ) =>
+          commandFailure.code === "selection-required"
+            ? getText("writer.error.copy-selection-required", "Select text to copy.")
+            : getText("writer.error.copy", "Could not copy selection."),
     },
     {
       commandId: WRITER_COMMAND_IDS.cut,
-      present: /** Presents a Cut failure. @param error - Failure text. @returns Status text. */ (
-        error,
-      ) =>
-        error === "Select text to cut."
-          ? error
-          : getText("writer.error.cut", "Could not copy selection."),
+      present:
+        /** Presents a Cut failure. @param commandFailure - Failure state. @returns Status text. */ (
+          commandFailure,
+        ) =>
+          commandFailure.code === "selection-required"
+            ? getText("writer.error.cut-selection-required", "Select text to cut.")
+            : getText("writer.error.cut", "Could not copy selection."),
     },
     {
       commandId: WRITER_COMMAND_IDS.paste,
-      present: /** Presents a Paste failure. @param error - Failure text. @returns Status text. */ (
-        error,
-      ) =>
-        error === "Clipboard has no text to paste."
-          ? error
-          : getText("writer.error.paste", "Could not read browser clipboard."),
+      present:
+        /** Presents a Paste failure. @param commandFailure - Failure state. @returns Status text. */ (
+          commandFailure,
+        ) =>
+          commandFailure.code === "clipboard-empty"
+            ? getText("writer.error.clipboard-empty", "Clipboard has no text to paste.")
+            : getText("writer.error.paste", "Could not read browser clipboard."),
     },
   ];
   for (const candidate of errors) {
-    if (candidate.commandId === failure.commandId) return candidate.present(failure.error);
+    if (candidate.commandId === failure.commandId) return candidate.present(failure);
   }
   /* v8 ignore next -- an attached SwView dispatcher contains only the exhaustively mapped Writer commands above. */
   return failure.error;
+}
+
+/** Localizes a typed recovery outcome at the presentation boundary. @param notice - Recovery result state. @param getText - Localization lookup. @returns Status text. */
+function presentWriterRecoveryNotice(
+  notice: WriterRecoveryNotice,
+  getText: (messageId: string, fallback: string) => string,
+): string {
+  switch (notice.kind) {
+    case "restored":
+      return getText(
+        "writer.recovery.restored",
+        `Recovered document generation ${notice.generation}.`,
+      ).replace("{generation}", String(notice.generation));
+    case "discarded":
+      return getText("writer.recovery.discarded", "Recovery data was discarded.");
+    case "inspect-failed":
+      return getText(
+        "writer.recovery.inspect-failed",
+        "Recovery data could not be inspected. A clean document was opened.",
+      );
+    case "discard-failed":
+      return getText(
+        "writer.recovery.discard-failed",
+        "Recovery data could not be discarded. A clean document was opened.",
+      );
+    case "restore-damaged":
+      return getText(
+        "writer.recovery.damaged",
+        "Recovery data is damaged. A clean document was opened.",
+      );
+    case "restore-missing":
+      return getText(
+        "writer.recovery.missing",
+        "Recovery data is no longer available. A clean document was opened.",
+      );
+    case "restore-failed":
+      return getText(
+        "writer.recovery.failed",
+        "Recovery data could not be restored. A clean document was opened.",
+      );
+  }
 }

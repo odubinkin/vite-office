@@ -59,6 +59,11 @@
       "stackNecessity": "generated-resource-boundary"
     },
     {
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates structural editing algorithms from SwWrtShell cursor and notification ownership while preserving the reviewed wrtsh1.cxx responsibility.",
+      "stackNecessity": "responsibility-split"
+    },
+    {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
       "rationale": "Stack constraint: the bounded ECMAScript shell decomposition keeps selection-aware hyperlink actions beside SwWrtShell while preserving upstream editsh.cxx InsertURL responsibility.",
       "stackNecessity": "responsibility-split"
@@ -105,6 +110,41 @@
     }
   ],
   "entries": [
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwWrtShellEditingOperations",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwWrtShell",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+      "localSymbols": [
+        "SwWrtShellEditingPort",
+        "SwWrtShellEditingOperations"
+      ],
+      "omittedResponsibilities": [
+        "Native layout, table, object, and multi-selection edit modes outside the bounded browser text shell remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Separates Writer text, range, paste, split, and join algorithms from the SwWrtShell cursor identity and undo-notification orchestration boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "upstreamSymbols": [
+        "SwWrtShell",
+        "SwWrtShell::Insert",
+        "SwWrtShell::SplitNode"
+      ]
+    },
     {
       "classification": "upstream-mechanism",
       "evidence": {
@@ -2236,21 +2276,21 @@
       "localSymbols": [
         "DocumentContentOperationsManager"
       ],
-    "omittedResponsibilities": [
-      "Tables, redlines, fly frames, sections, non-text nodes, and cross-node copy/move algorithms remain outside the supported Writer slice."
-    ],
-    "preservedResponsibilities": [
-      "Owns supported insert, delete, replace, split, join, copy, and move mutations through SwPosition and SwPaM."
-    ],
+      "omittedResponsibilities": [
+        "Tables, redlines, fly frames, sections, non-text nodes, and cross-node copy/move algorithms remain outside the supported Writer slice."
+      ],
+      "preservedResponsibilities": [
+        "Owns supported insert, delete, replace, split, join, copy, and move mutations through SwPosition and SwPaM."
+      ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx",
       "upstreamSymbols": [
-      "DocumentContentOperationsManager::CopyRange",
-      "DocumentContentOperationsManager::DeleteAndJoin",
-      "DocumentContentOperationsManager::InsertString",
-      "DocumentContentOperationsManager::MoveRange",
-      "DocumentContentOperationsManager::ReplaceRange",
-      "DocumentContentOperationsManager::SplitNode"
+        "DocumentContentOperationsManager::CopyRange",
+        "DocumentContentOperationsManager::DeleteAndJoin",
+        "DocumentContentOperationsManager::InsertString",
+        "DocumentContentOperationsManager::MoveRange",
+        "DocumentContentOperationsManager::ReplaceRange",
+        "DocumentContentOperationsManager::SplitNode"
       ]
     },
     {
@@ -2484,17 +2524,17 @@
         "SwNumRule"
       ],
       "omittedResponsibilities": [
-      "Non-Arabic numbering, bitmap bullets, character styles, outline rules, list-format patterns, and native layout integration remain unsupported and unclaimed."
+        "Non-Arabic numbering, bitmap bullets, character styles, outline rules, list-format patterns, and native layout integration remain unsupported and unclaimed."
       ],
       "preservedResponsibilities": [
-      "Owns the ten-level bullet and Arabic numbering subset, including upstream spacing, upper-level, prefix/suffix, restart, and label construction fields."
+        "Owns the ten-level bullet and Arabic numbering subset, including upstream spacing, upper-level, prefix/suffix, restart, and label construction fields."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/number.cxx",
       "upstreamSymbols": [
-      "SwNumFormat::SwNumFormat",
-      "SwNumRule::MakeNumString",
-      "SwNumRule::SwNumRule"
+        "SwNumFormat::SwNumFormat",
+        "SwNumRule::MakeNumString",
+        "SwNumRule::SwNumRule"
       ]
     },
     {
@@ -3552,10 +3592,10 @@
         "SwDocShell"
       ],
       "omittedResponsibilities": [
-      "Native storage implementations, file dialogs, printing, and unsupported Writer filter families remain outside the browser Writer slice."
+        "Native storage implementations, file dialogs, printing, and unsupported Writer filter families remain outside the browser Writer slice."
       ],
       "preservedResponsibilities": [
-      "Owns Writer model replacement, filter invocation, history, recovery hooks, and SfxMedium lifecycle while browser port orchestration terminates under sw/browser/workflows."
+        "Owns Writer model replacement, filter invocation, history, recovery hooks, and SfxMedium lifecycle while browser port orchestration terminates under sw/browser/workflows."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/app/docsh.cxx",
