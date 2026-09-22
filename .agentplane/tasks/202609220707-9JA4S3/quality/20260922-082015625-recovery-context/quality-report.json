@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220707-9JA4S3",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T08:20:15.625Z",
+  "verdict": "pass",
+  "summary": "P1.4-P1.7 converge character formatting, list state, text-node APIs, and persistence on canonical Writer/Sfx graph contracts.",
+  "evaluated_sha": "777e1f4f65927cfbd56ce890e2d0325d00307a47",
+  "blueprint_digest": "d900c31a348076b92398a88d9ff9ff503f2e9efb456100979c8f0a5e6a7c1bb1",
+  "findings": [
+    "All declared verification steps pass; obsolete storage and Worker envelope versions are intentionally rejected with no compatibility path."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220707-9JA4S3/README.md",
+    "777e1f4f6592"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
