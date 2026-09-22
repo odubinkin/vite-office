@@ -1,10 +1,11 @@
 ---
 id: "202609220708-E20A7K"
 title: "Align Writer lifecycle medium and browser storage ownership"
-status: "DOING"
+result_summary: "verified-202609220708-E20A7K"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -27,9 +28,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T10:11:21.876Z"
+  updated_at: "2026-09-22T10:11:54.761Z"
   updated_by: "CODER"
-  note: "P1.13-P1.15 verified: focused lifecycle/storage/recovery workflows pass; app 366/366 and inventory 96/96 tests at 100% coverage; Playwright 11/11; static build, dependencies, source tree, provenance, parity inventory, resource generation, docs, invariants, lint, typecheck, file-size, formatting, and diff checks pass."
+  note: "verified-202609220708-E20A7K"
   attempts: 0
 quality_review:
   state: "pass"
@@ -49,11 +50,16 @@ quality_review:
     - "apps/office/src/sw/browser/workflows/writer-workflows.test.ts"
   findings:
     - "SfxObjectShell directly owns lifecycle fields and primary save-position state; the thin browser Sfx shell routes directly to document/transfer owners; schema-11 cache and AutoRecovery adaptation live under sw/browser/storage with no basflt claim."
-commit: null
+commit:
+  hash: "e8b43ce3dc5fc7671e351e403454a888156b8bcb"
+  message: "🧪 E20A7K parity: record lifecycle convergence evidence"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609220708-E20A7K. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -68,8 +74,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "P1.13-P1.15 verified: focused lifecycle/storage/recovery workflows pass; app 366/366 and inventory 96/96 tests at 100% coverage; Playwright 11/11; static build, dependencies, source tree, provenance, parity inventory, resource generation, docs, invariants, lint, typecheck, file-size, formatting, and diff checks pass."
+  -
+    type: "verify"
+    at: "2026-09-22T10:11:54.761Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609220708-E20A7K"
+  -
+    type: "status"
+    at: "2026-09-22T10:11:54.953Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609220708-E20A7K. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-22T10:11:21.956Z"
+doc_updated_at: "2026-09-22T10:11:54.953Z"
 doc_updated_by: "CODER"
 description: "Implement P1.13-P1.15: consolidate lifecycle state on SfxObjectShell, SfxMedium and SwDocShell, collapse browser workflow pass-through layers, and relocate browser snapshot ownership out of sw/source/filter/basflt."
 sections:
@@ -123,11 +142,45 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-22T10:11:54.761Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609220708-E20A7K
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T10:11:21.956Z, excerpt_hash=sha256:c450b0daee8d27d8d5210ef71765d61f1a46bb6fd9db767c99dee50343825f8b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220708-E20A7K/blueprint/resolved-snapshot.json
+    - old_digest: ea7d84a19d1ad2c77dac74d5b6569200a17acac96971447761ac9fb74e5af15e
+    - current_digest: ea7d84a19d1ad2c77dac74d5b6569200a17acac96971447761ac9fb74e5af15e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220708-E20A7K
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609220708-E20A7K --result verified-202609220708-E20A7K --commit e8b43ce3dc5fc7671e351e403454a888156b8bcb
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "1f65e817f6738605201ef27c64a4201a5aafb8f9"
+    message: "🚧 E20A7K parity: align Writer lifecycle and browser storage"
 id_source: "generated"
 ---
 ## Summary
@@ -182,6 +235,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609220708-E20A7K
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T10:11:54.761Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609220708-E20A7K
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T10:11:21.956Z, excerpt_hash=sha256:c450b0daee8d27d8d5210ef71765d61f1a46bb6fd9db767c99dee50343825f8b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220708-E20A7K/blueprint/resolved-snapshot.json
+- old_digest: ea7d84a19d1ad2c77dac74d5b6569200a17acac96971447761ac9fb74e5af15e
+- current_digest: ea7d84a19d1ad2c77dac74d5b6569200a17acac96971447761ac9fb74e5af15e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220708-E20A7K
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609220708-E20A7K --result verified-202609220708-E20A7K --commit e8b43ce3dc5fc7671e351e403454a888156b8bcb
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
