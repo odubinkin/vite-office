@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220708-G33WPE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T10:53:15.191Z",
+  "verdict": "pass",
+  "summary": "P1.16 preserves canonical Writer ownership while completing the modeled ODT property surface.",
+  "evaluated_sha": "0aef53dda666112fa057fc2c0c9a9b1054f348cc",
+  "blueprint_digest": "8777af47a54c09a3642acf3fb488c8f7cabe76cbf9009d40a23acb2defeb1f65",
+  "findings": [
+    "Foreground/highlight colors and tab/keep/line-number paragraph items round-trip through upstream-shaped xmloff contexts; unsupported structural families remain rejected until SwDoc owners exist."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220708-G33WPE/README.md",
+    "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+    "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
