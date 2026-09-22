@@ -28,32 +28,26 @@ action-based undo, list rules, ODF package/XML code, shell-stack dispatch, and b
 that are usually kept outside model code. Those are valuable assets and should be evolved rather
 than replaced.
 
-It is not yet valid to describe the implemented surface as upstream-parity complete. The current
-parity report says `parityReady: true` only because 45 records describe deliberately narrow slices
-and convert large missing parts into `scopeLimitations`. At the same time, the runtime inventory
-itself records most mapped runtime modules as semantically unverified. The first parity iteration
-therefore treats those aggregate claims as an audit caveat, not as a separate remediation stream.
-The program plans code changes only. Each code task must update the existing inventory records for
-the source files and capabilities it actually changes, using the current schema, tooling, and
-checks. Unrelated existing records are left untouched.
+It is not yet valid to describe the implemented surface as upstream-parity complete. Inventory
+counts below are audit context only, not a remediation stream. The program plans code changes only.
+Each code task must update the existing inventory records for the source files and capabilities it
+actually changes, using the current schema, tooling, and checks. Unrelated existing records are
+left untouched.
 
 The most important architectural problems are:
 
-1. the existing inventory is populated too optimistically: bounded assertions and broad
-   `scopeLimitations` are recorded as complete parity while many mapped runtime responsibilities
-   remain unverified;
-2. several LibreOffice command identities have different local semantics, most visibly
+1. several LibreOffice command identities have different local semantics, most visibly
    `.uno:ExportTo`, which currently means a direct plain-text download;
-3. defaults are not centrally extracted from pinned upstream configuration and already diverge;
-4. `sfx2/source/control/dispatch.ts` and the Writer command registries form a custom command
+2. defaults are not centrally extracted from pinned upstream configuration and already diverge;
+3. `sfx2/source/control/dispatch.ts` and the Writer command registries form a custom command
    framework behind LibreOffice names instead of a bounded port of the Sfx slot/interface model;
-5. Writer core and shell code still expose browser-era convenience DTOs beside the upstream-shaped
+4. Writer core and shell code still expose browser-era convenience DTOs beside the upstream-shaped
    item/node model;
-6. React presentation owns too much orchestration and contains several overlapping adapters and
+5. React presentation owns too much orchestration and contains several overlapping adapters and
    copied projections;
-7. the source-tree gate, source-tree documentation, and actual source tree disagree about Writer
+6. the source-tree gate, source-tree documentation, and actual source tree disagree about Writer
    UI ownership;
-8. browser persistence and transport codecs occupy upstream filter directories even where there is
+7. browser persistence and transport codecs occupy upstream filter directories even where there is
    no corresponding upstream responsibility.
 
 ## Audit evidence and inventory
@@ -91,8 +85,8 @@ The inventory's own semantic status is materially less complete than the capabil
 | Default | 8 | 74 | 68 | 0 |
 | Source responsibility | 23 aligned | 67 unverified | 46 browser-owned | 14 divergent |
 
-This contradiction is a P0 program defect: a slice report cannot declare the implementation ready
-while its mapped runtime owners remain predominantly unverified.
+These counts describe the current documentation state. They do not create a standalone inventory
+cleanup phase; records change only with their related source implementation.
 
 ### Implemented shared-office surface
 
@@ -144,30 +138,6 @@ permission to change the document model, UNO command meaning, Sfx request shape,
 filter semantics.
 
 ## Confirmed divergences and refactoring artifacts
-
-### P0 — existing inventory records permit false closure
-
-`npm run inventory:parity` currently reports 45 implemented/verified records, zero gaps, and
-`parityReady: true`. That result is incompatible with `runtime-inventory.json`, which records 119
-behavior-unverified modules and 67 unverified upstream source responsibilities.
-
-Specific weaknesses:
-
-- evidence validation checks paths and markers, but generally does not prove that local and
-  upstream assertions have equivalent preconditions, operations, results, and defaults;
-- some capability records reuse broad upstream tests for unrelated local assertions;
-- major normal Writer behavior is moved into `scopeLimitations` while the enclosing capability is
-  still called verified;
-- browser presentation components can be recorded as the contract or ownership owner for an
-  upstream command/resource capability;
-- `runtime-inventory.json` includes a test helper as a runtime module;
-- all non-Writer suites are placeholders, but the report name and `parityReady` field do not encode
-  that the verdict is only for a bounded Writer slice.
-
-Planning consequence: this is not a standalone inventory-cleanup task. When a planned code change
-touches a mapped source file or capability, update only its related existing records and ensure the
-result does not overstate the implemented behavior. Do not revise unrelated legacy records, and do
-not change inventory schemas, reports, validators, tooling, or deterministic checks.
 
 ### P0 — command identity and behavior mismatch
 
@@ -426,7 +396,7 @@ Each work item below should be an independent Agentplane task unless two adjacen
 have the same owner and verification boundary. Do not mark a parent feature parity-complete merely
 because one atomic operation passes.
 
-### Phase 0 — fix known contract and default mismatches
+### Phase 1 — fix known contract and default mismatches
 
 #### P0.1 Correct command identities
 
@@ -462,7 +432,7 @@ Remove the duplicate list-restart write, reconcile ruler implementation or remov
 claim consistently, repair stale source-tree docs, and make the source-tree gate validate the target
 responsibility split.
 
-### Phase 1 — converge Sfx command architecture
+### Phase 2 — converge Sfx command architecture
 
 #### P1.1 Port bounded Sfx slot/interface metadata
 
@@ -480,7 +450,7 @@ to the interface/slot modules, and browser async observation to `framework/brows
 Move `Execute`/`GetState` declarations into generated interfaces and the corresponding Writer shell
 owners. Remove `writercommands.ts` and duplicate resource attachment in `listsh.ts`.
 
-Acceptance for Phase 1:
+Acceptance for Phase 2:
 
 - the active shell stack and shadowing behavior match pinned Sfx assertions;
 - no React/browser type is present in Sfx core;
@@ -488,7 +458,7 @@ Acceptance for Phase 1:
 - adding a supported command requires upstream resource selection plus its shell handler, not edits
   in several unrelated registries.
 
-### Phase 2 — remove parallel model contracts
+### Phase 3 — remove parallel model contracts
 
 #### P1.4 Canonicalize character formatting
 
@@ -514,7 +484,7 @@ Use one versioned canonical graph record for structured clone and browser cache.
 IndexedDB their own small envelopes. Add browser-cache migrations. Keep the pinned upstream commit
 as evidence metadata, not as a reason to reject otherwise compatible user data.
 
-Acceptance for Phase 2:
+Acceptance for Phase 3:
 
 - core and shell mutation APIs contain no browser/render/storage DTOs;
 - one canonical object graph is tested across edit, undo, Worker transfer, cache restore, ODT
@@ -522,7 +492,7 @@ Acceptance for Phase 2:
 - differential tests preserve WhichIds, inherited/direct distinction, list identity, cursor
   positions, and defaults.
 
-### Phase 3 — rebuild the UI boundary around Writer ownership
+### Phase 4 — rebuild the UI boundary around Writer ownership
 
 #### P1.8 Add the Writer edit-window controller boundary
 
@@ -562,7 +532,7 @@ Split generic accessibility primitives from Writer presenters. Move service-spec
 error strings to resource-backed presenters. Replace the display-only properties panel with a
 command/binding-backed sidebar panel or explicitly classify it as a temporary read-only preview.
 
-Acceptance for Phase 3:
+Acceptance for Phase 4:
 
 - all visible controls use generated resource order and binding state;
 - no implemented command is silently filtered by a second handwritten policy;
@@ -572,7 +542,7 @@ Acceptance for Phase 3:
 - React component size falls because responsibilities disappear, not because code is mechanically
   split.
 
-### Phase 4 — align lifecycle, medium, persistence, and filters
+### Phase 5 — align lifecycle, medium, persistence, and filters
 
 #### P1.13 Consolidate document lifecycle ownership
 
@@ -597,7 +567,7 @@ paragraph and character properties, styles and automatic styles, lists/outline, 
 fields, frames/images, annotations/redlines, metadata/settings, then embedded objects where the
 browser runtime supports them.
 
-Acceptance for Phase 4:
+Acceptance for Phase 5:
 
 - save/open/export identities and arguments match upstream;
 - local cache failure never changes document-format semantics;
@@ -606,7 +576,7 @@ Acceptance for Phase 4:
 - supported ODT features round-trip against pinned LibreOffice fixtures and a runnable upstream
   oracle when one is added.
 
-### Phase 5 — complete the currently implemented Writer feature families
+### Phase 6 — complete the currently implemented Writer feature families
 
 This phase implements missing breadth currently documented as limitations of already verified
 capabilities. Split work into atomic tasks, but do not claim broader parity until the code is
@@ -629,7 +599,7 @@ Do not broaden into tables, drawings, fields, tracked changes, or other new feat
 the shared architecture needed by that feature is upstream-shaped. When such a feature begins, add
 its complete parent contract and record partial status honestly in the existing inventory.
 
-### Phase 6 — documentation and closure
+### Phase 7 — documentation and closure
 
 #### P1.17 Reconcile documentation for changed code
 
@@ -646,17 +616,17 @@ introduced.
 P0.1 command audit
   -> P0.2 defaults
   -> P0.3 stale artifacts
-      -> Phase 1 Sfx convergence
-          -> Phase 2 model convergence
-              -> Phase 3 UI convergence
-              -> Phase 4 lifecycle/filter convergence
-                  -> Phase 5 feature-family completion
-                      -> Phase 6 documentation for changed code
+      -> Phase 2 Sfx convergence
+          -> Phase 3 model convergence
+              -> Phase 4 UI convergence
+              -> Phase 5 lifecycle/filter convergence
+                  -> Phase 6 feature-family completion
+                      -> Phase 7 documentation for changed code
 ```
 
-Phase 3 can begin after the command contracts and canonical model boundaries are stable. Phase 4
-can proceed in parallel with Phase 3 only where it does not touch shared `SwDocShell`, `SfxMedium`,
-dispatch, or graph-codec contracts. Feature breadth must not race ahead of Phases 0–2.
+Phase 4 can begin after the command contracts and canonical model boundaries are stable. Phase 5
+can proceed in parallel with Phase 4 only where it does not touch shared `SwDocShell`, `SfxMedium`,
+dispatch, or graph-codec contracts. Feature breadth must not race ahead of Phases 1–3.
 Every code task must update the existing inventory records associated with the source files and
 capabilities it changes. It must not expand into cleanup of unrelated inventory records.
 
