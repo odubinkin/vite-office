@@ -32,13 +32,16 @@ It is not yet valid to describe the implemented surface as upstream-parity compl
 parity report says `parityReady: true` only because 45 records describe deliberately narrow slices
 and convert large missing parts into `scopeLimitations`. At the same time, the runtime inventory
 itself records most mapped runtime modules as semantically unverified. The first parity iteration
-must therefore repair the definition and evidence system before using it to drive more feature
-work.
+therefore treats those aggregate claims as an audit caveat, not as a separate remediation stream.
+The program plans code changes only. Each code task must update the existing inventory records for
+the source files and capabilities it actually changes, using the current schema, tooling, and
+checks. Unrelated existing records are left untouched.
 
 The most important architectural problems are:
 
-1. parity closure is currently based largely on marker existence and self-authored bounded
-   assertions, not on a complete upstream contract and assertion mapping;
+1. the existing inventory is populated too optimistically: bounded assertions and broad
+   `scopeLimitations` are recorded as complete parity while many mapped runtime responsibilities
+   remain unverified;
 2. several LibreOffice command identities have different local semantics, most visibly
    `.uno:ExportTo`, which currently means a direct plain-text download;
 3. defaults are not centrally extracted from pinned upstream configuration and already diverge;
@@ -142,7 +145,7 @@ filter semantics.
 
 ## Confirmed divergences and refactoring artifacts
 
-### P0 — parity evidence permits false closure
+### P0 — existing inventory records permit false closure
 
 `npm run inventory:parity` currently reports 45 implemented/verified records, zero gaps, and
 `parityReady: true`. That result is incompatible with `runtime-inventory.json`, which records 119
@@ -161,10 +164,10 @@ Specific weaknesses:
 - all non-Writer suites are placeholders, but the report name and `parityReady` field do not encode
   that the verdict is only for a bounded Writer slice.
 
-Required correction: parity must be computed bottom-up from source responsibility and exact
-behavior assertions. A bounded operation may be green, but its module and parent feature remain
-partial until every in-scope upstream responsibility is mapped or explicitly approved as a genuine
-browser exclusion.
+Planning consequence: this is not a standalone inventory-cleanup task. When a planned code change
+touches a mapped source file or capability, update only its related existing records and ensure the
+result does not overstate the implemented behavior. Do not revise unrelated legacy records, and do
+not change inventory schemas, reports, validators, tooling, or deterministic checks.
 
 ### P0 — command identity and behavior mismatch
 
@@ -362,10 +365,7 @@ operation and consolidate operation state in the medium or browser port that own
 - `writer-view-projection.ts` carries both `textLeftMargin` and a computed first-line/right-margin
   style, an example of view DTO growth around item APIs.
 - `writer-command-surfaces.ts` is a second resource policy layer after generation.
-- `test/wrtsh-test-helpers.ts` is classified as runtime inventory.
 - source-tree docs contain broken links to deleted `docvw` files.
-- multiple runtime inventory records cite an upstream file and symbol while all three semantic
-  dimensions remain `unverified`; the current check treats that as acceptable indefinitely.
 - several large source files are below the hard 1,000-line limit but above the 500-line review
   threshold; file size is a symptom of mixed responsibility and should be addressed during the
   relevant architectural task, not by arbitrary splitting.
@@ -426,54 +426,9 @@ Each work item below should be an independent Agentplane task unless two adjacen
 have the same owner and verification boundary. Do not mark a parent feature parity-complete merely
 because one atomic operation passes.
 
-### Phase 0 — repair the parity control plane
+### Phase 0 — fix known contract and default mismatches
 
-#### P0.1 Define hierarchical parity status
-
-Change the parity schema and report so it emits separate verdicts for atomic operation, module,
-feature, suite, and program. Replace the unqualified `parityReady` boolean with scoped verdicts.
-A module cannot pass while its runtime semantic status is unverified or divergent.
-
-Primary files:
-
-- `scripts/libreoffice-inventory/parity-mappings.ts`;
-- `scripts/libreoffice-inventory/parity-mapping-support.ts`;
-- `scripts/libreoffice-inventory/runtime-inventory.ts`;
-- `docs/program/parity/*.json`;
-- `docs/program/parity-matrix.md`.
-
-Acceptance:
-
-- the current checkout reports the 45 operations as bounded operation results, not Writer/module or
-  program parity;
-- all 92 upstream-mechanism modules have an explicit semantic verdict that affects their parent;
-- `scopeLimitations` cannot exclude behavior named by the capability or required by its upstream
-  public contract;
-- test-only files are excluded from runtime counts.
-
-#### P0.2 Require assertion-semantic evidence
-
-Extend records from path/marker pairs to structured cases: setup, input, operation, observable
-result, default precondition, upstream assertion, local assertion, and allowed normalization. Add an
-independent review state for source-derived goldens.
-
-Acceptance:
-
-- generic test markers cannot satisfy unrelated assertions;
-- every green default has a pinned source/config expression and a local assertion;
-- every browser divergence identifies exactly which layer changes and proves that model/command
-  semantics do not;
-- inventory fails on stale, over-broad, or circular documentation-only evidence.
-
-#### P0.3 Generate a complete implemented-surface ledger
-
-Generate one deterministic ledger joining runtime module, exported symbols, command IDs, model
-items, persistence fields, upstream owners, tests, docs, and current semantic status. This document
-should consume the ledger rather than manually duplicating future counts.
-
-### Phase 1 — fix known contract and default mismatches
-
-#### P0.4 Correct command identities
+#### P0.1 Correct command identities
 
 Audit all 35 registered commands against pinned SDI/XCU/UI definitions. Fix `.uno:ExportTo` first,
 then verify slot, arguments, return item, state, default shortcut, menu/toolbar placement, and owning
@@ -486,7 +441,7 @@ Acceptance:
 - parameterized `.uno:StyleApply` requests retain upstream item arguments through `SfxRequest`;
 - differential command tests cover success, disabled, invalid argument, and cancellation behavior.
 
-#### P0.5 Generate and apply upstream defaults
+#### P0.2 Generate and apply upstream defaults
 
 Generate supported defaults from `Office/Recovery.xcs`, command configuration, Writer item defaults,
 style pool definitions, numbering defaults, locale data, and UI resources.
@@ -501,13 +456,13 @@ Immediate corrections:
 
 Acceptance: no implemented constructor/factory has an unexplained product default literal.
 
-#### P0.6 Remove confirmed stale artifacts
+#### P0.3 Remove confirmed stale artifacts
 
 Remove the duplicate list-restart write, reconcile ruler implementation or remove its unsupported
 claim consistently, repair stale source-tree docs, and make the source-tree gate validate the target
 responsibility split.
 
-### Phase 2 — converge Sfx command architecture
+### Phase 1 — converge Sfx command architecture
 
 #### P1.1 Port bounded Sfx slot/interface metadata
 
@@ -525,7 +480,7 @@ to the interface/slot modules, and browser async observation to `framework/brows
 Move `Execute`/`GetState` declarations into generated interfaces and the corresponding Writer shell
 owners. Remove `writercommands.ts` and duplicate resource attachment in `listsh.ts`.
 
-Acceptance for Phase 2:
+Acceptance for Phase 1:
 
 - the active shell stack and shadowing behavior match pinned Sfx assertions;
 - no React/browser type is present in Sfx core;
@@ -533,7 +488,7 @@ Acceptance for Phase 2:
 - adding a supported command requires upstream resource selection plus its shell handler, not edits
   in several unrelated registries.
 
-### Phase 3 — remove parallel model contracts
+### Phase 2 — remove parallel model contracts
 
 #### P1.4 Canonicalize character formatting
 
@@ -559,7 +514,7 @@ Use one versioned canonical graph record for structured clone and browser cache.
 IndexedDB their own small envelopes. Add browser-cache migrations. Keep the pinned upstream commit
 as evidence metadata, not as a reason to reject otherwise compatible user data.
 
-Acceptance for Phase 3:
+Acceptance for Phase 2:
 
 - core and shell mutation APIs contain no browser/render/storage DTOs;
 - one canonical object graph is tested across edit, undo, Worker transfer, cache restore, ODT
@@ -567,7 +522,7 @@ Acceptance for Phase 3:
 - differential tests preserve WhichIds, inherited/direct distinction, list identity, cursor
   positions, and defaults.
 
-### Phase 4 — rebuild the UI boundary around Writer ownership
+### Phase 3 — rebuild the UI boundary around Writer ownership
 
 #### P1.8 Add the Writer edit-window controller boundary
 
@@ -607,7 +562,7 @@ Split generic accessibility primitives from Writer presenters. Move service-spec
 error strings to resource-backed presenters. Replace the display-only properties panel with a
 command/binding-backed sidebar panel or explicitly classify it as a temporary read-only preview.
 
-Acceptance for Phase 4:
+Acceptance for Phase 3:
 
 - all visible controls use generated resource order and binding state;
 - no implemented command is silently filtered by a second handwritten policy;
@@ -617,7 +572,7 @@ Acceptance for Phase 4:
 - React component size falls because responsibilities disappear, not because code is mechanically
   split.
 
-### Phase 5 — align lifecycle, medium, persistence, and filters
+### Phase 4 — align lifecycle, medium, persistence, and filters
 
 #### P1.13 Consolidate document lifecycle ownership
 
@@ -642,7 +597,7 @@ paragraph and character properties, styles and automatic styles, lists/outline, 
 fields, frames/images, annotations/redlines, metadata/settings, then embedded objects where the
 browser runtime supports them.
 
-Acceptance for Phase 5:
+Acceptance for Phase 4:
 
 - save/open/export identities and arguments match upstream;
 - local cache failure never changes document-format semantics;
@@ -651,10 +606,11 @@ Acceptance for Phase 5:
 - supported ODT features round-trip against pinned LibreOffice fixtures and a runnable upstream
   oracle when one is added.
 
-### Phase 6 — complete the currently implemented Writer feature families
+### Phase 5 — complete the currently implemented Writer feature families
 
-This phase closes breadth that current records improperly classify as limitations of already
-verified capabilities. Split work into atomic tasks, but keep parent status partial until complete.
+This phase implements missing breadth currently documented as limitations of already verified
+capabilities. Split work into atomic tasks, but do not claim broader parity until the code is
+complete.
 
 Priority order:
 
@@ -671,48 +627,38 @@ Priority order:
 
 Do not broaden into tables, drawings, fields, tracked changes, or other new feature families until
 the shared architecture needed by that feature is upstream-shaped. When such a feature begins, add
-its complete parent contract and let the ledger show partial status honestly.
+its complete parent contract and record partial status honestly in the existing inventory.
 
-### Phase 7 — documentation and closure
+### Phase 6 — documentation and closure
 
-#### P1.17 Rebuild program documentation from the ledger
+#### P1.17 Reconcile documentation for changed code
 
 Update architecture, source tree, command placement, UI shell, storage, recovery, ODT, test
-strategy, roadmap, and parity matrix from verified current paths and behavior. Add a broken-link
-gate for repository-relative Markdown links.
-
-#### P1.18 Add a parity review gate
-
-Require independent review for every transition to module/feature parity. The review must inspect
-upstream source and tests, local implementation and tests, defaults, operation cycles, exclusions,
-and file ownership. A green local suite alone is insufficient.
-
-#### P2.19 Add an executable differential oracle
-
-Where licensing/build constraints permit, add a pinned headless LibreOffice runner in a separate
-verification environment. Use it for ODF results, UNO command state, defaults, and document
-properties. Until then, label source-derived goldens as goldens, not native differential execution.
+strategy, and roadmap where the preceding code changes make them stale. For each changed source or
+capability, update its related existing inventory records with the implemented behavior and
+evidence. Do not use this phase to audit or rewrite unrelated inventory entries. Inventory updates
+use the current formats, commands, and checks only; no new documentation pipeline or parity gate is
+introduced.
 
 ## Delivery sequence and dependencies
 
 ```text
-P0.1 hierarchical status
-  -> P0.2 semantic evidence
-  -> P0.3 generated ledger
-      -> P0.4 command audit
-      -> P0.5 defaults
-      -> P0.6 stale artifacts
-          -> Phase 2 Sfx convergence
-              -> Phase 3 model convergence
-                  -> Phase 4 UI convergence
-                  -> Phase 5 lifecycle/filter convergence
-                      -> Phase 6 feature-family completion
-                          -> Phase 7 documentation and closure
+P0.1 command audit
+  -> P0.2 defaults
+  -> P0.3 stale artifacts
+      -> Phase 1 Sfx convergence
+          -> Phase 2 model convergence
+              -> Phase 3 UI convergence
+              -> Phase 4 lifecycle/filter convergence
+                  -> Phase 5 feature-family completion
+                      -> Phase 6 documentation for changed code
 ```
 
-Phase 4 can begin after the command contracts and canonical model boundaries are stable. Phase 5
-can proceed in parallel with Phase 4 only where it does not touch shared `SwDocShell`, `SfxMedium`,
-dispatch, or graph-codec contracts. Feature breadth must not race ahead of Phases 0–3.
+Phase 3 can begin after the command contracts and canonical model boundaries are stable. Phase 4
+can proceed in parallel with Phase 3 only where it does not touch shared `SwDocShell`, `SfxMedium`,
+dispatch, or graph-codec contracts. Feature breadth must not race ahead of Phases 0–2.
+Every code task must update the existing inventory records associated with the source files and
+capabilities it changes. It must not expand into cleanup of unrelated inventory records.
 
 ## Required verification strategy
 
@@ -771,11 +717,11 @@ verification.
 
 The implemented portion of Vite Office reaches parity only when all of the following are true:
 
-1. every production module is in the generated ledger and has an approved upstream or browser
-   responsibility;
+1. every production module changed by this program is accurately documented in its existing
+   inventory records and has an upstream or browser responsibility;
 2. every implemented upstream responsibility has contract, behavior, default, ownership, and
    applicable serialization/operation-cycle evidence;
-3. no parent module, feature, suite, or program verdict is inferred from a narrower green slice;
+3. inventory records updated by this program do not infer broad parity from a narrower green slice;
 4. every visible command preserves upstream identity, arguments, state, default placement, and
    owning shell, or is visibly a browser extension;
 5. canonical document state exists only in upstream-shaped model objects; boundary DTOs cannot be
@@ -785,8 +731,11 @@ The implemented portion of Vite Office reaches parity only when all of the follo
    references current files;
 8. all supported defaults match the pinned LibreOffice baseline before user configuration;
 9. all known unjustified adapters and refactor artifacts listed in this audit are removed;
-10. repository verification, semantic parity validation, differential fixtures/oracles, browser
-    E2E, accessibility, performance, and security checks pass with no hidden exclusions.
+10. existing repository verification, semantic parity tests, available differential fixtures,
+    browser E2E, accessibility, performance, and security checks pass with no hidden exclusions;
+11. each code change includes valid updates to its related existing inventory records, while
+    unrelated records, inventory tooling, schemas, reports, validators, and deterministic checks
+    remain outside this plan.
 
 Until these conditions hold, reports should use precise phrases such as “implemented bounded
 operation”, “source-mapped”, or “locally verified”, not “LibreOffice parity”.

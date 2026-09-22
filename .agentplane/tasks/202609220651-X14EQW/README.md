@@ -4,7 +4,7 @@ title: "Remove inventory-system changes from parity plan"
 status: "DOING"
 priority: "med"
 owner: "DOCS"
-revision: 9
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: revise the parity plan to use the existing inventory strictly without changing its mechanisms or deterministic checks."
 doc_version: 3
-doc_updated_at: "2026-09-22T06:52:03.462Z"
+doc_updated_at: "2026-09-22T07:00:44.748Z"
 doc_updated_by: "DOCS"
 description: "Revise the upstream parity plan so it requires accurate completion of the existing inventory documentation and mechanisms without proposing schema, validator, gate, or deterministic-check enhancements."
 sections:
@@ -44,14 +44,12 @@ sections:
     Remove inventory-system changes from parity plan
 
     Revise the upstream parity plan so it requires accurate completion of the existing inventory documentation and mechanisms without proposing schema, validator, gate, or deterministic-check enhancements.
-  Scope: |-
-    - In scope: Revise the upstream parity plan so it requires accurate completion of the existing inventory documentation and mechanisms without proposing schema, validator, gate, or deterministic-check enhancements.
-    - Out of scope: unrelated refactors not required for "Remove inventory-system changes from parity plan".
-  Plan: "Revise only the parity plan: preserve the existing inventory system, require strict accurate population through current mechanisms, remove proposed schema/report/validator/ledger/gate enhancements, and update dependencies and completion criteria."
-  Verify Steps: "1. Confirm the plan contains no work item proposing inventory schema, validator, report, ledger, or deterministic-gate development. 2. Confirm it explicitly requires complete and correct use of the existing inventory mechanisms. 3. Run Prettier check, git diff --check, routing validation, and ap doctor."
-  Verification: "Pending execution."
+  Scope: "Edit only docs/program/vite-office-upstream-parity-plan.md. Remove all standalone inventory remediation and all proposed inventory schema, tooling, report, validator, ledger, or deterministic-check work. Plan code changes only; each task updates existing inventory records only for the source files and capabilities it changes."
+  Plan: "1. Treat current inventory inconsistencies only as audit context. 2. Start execution with code contract/default corrections rather than inventory cleanup. 3. Require valid updates to existing inventory records only when related source files or capabilities change. 4. Explicitly leave unrelated legacy records and all inventory mechanisms untouched."
+  Verify Steps: "1. Confirm the plan has no standalone inventory cleanup phase or work item. 2. Confirm it proposes no inventory schema, tooling, report, validator, ledger, parity-gate, or deterministic-check changes. 3. Confirm every code task must update only related existing inventory records and leave unrelated records untouched. 4. Run Prettier check, git diff --check, routing validation, and ap doctor."
+  Verification: "Command: npx prettier --check docs/program/vite-office-upstream-parity-plan.md — Result: pass. Command: git diff --check — Result: pass. Command: targeted Node content assertion — Result: pass; required code-only/related-record language present and all forbidden inventory-system work items absent. Command: node .agentplane/policy/check-routing.mjs — Result: pass. Command: ap doctor — Result: pass with only the existing historical-task warning and fallback-hook information."
   Rollback Plan: "Revert only this task commit; do not alter unrelated working-tree changes."
-  Findings: "Pending."
+  Findings: "The plan now contains no standalone inventory remediation. Current inventory inconsistencies remain audit context only. Inventory work is limited to valid updates of existing records directly associated with source files or capabilities changed by each code task; unrelated records and all inventory mechanisms remain untouched."
 id_source: "generated"
 ---
 ## Summary
@@ -62,20 +60,19 @@ Revise the upstream parity plan so it requires accurate completion of the existi
 
 ## Scope
 
-- In scope: Revise the upstream parity plan so it requires accurate completion of the existing inventory documentation and mechanisms without proposing schema, validator, gate, or deterministic-check enhancements.
-- Out of scope: unrelated refactors not required for "Remove inventory-system changes from parity plan".
+Edit only docs/program/vite-office-upstream-parity-plan.md. Remove all standalone inventory remediation and all proposed inventory schema, tooling, report, validator, ledger, or deterministic-check work. Plan code changes only; each task updates existing inventory records only for the source files and capabilities it changes.
 
 ## Plan
 
-Revise only the parity plan: preserve the existing inventory system, require strict accurate population through current mechanisms, remove proposed schema/report/validator/ledger/gate enhancements, and update dependencies and completion criteria.
+1. Treat current inventory inconsistencies only as audit context. 2. Start execution with code contract/default corrections rather than inventory cleanup. 3. Require valid updates to existing inventory records only when related source files or capabilities change. 4. Explicitly leave unrelated legacy records and all inventory mechanisms untouched.
 
 ## Verify Steps
 
-1. Confirm the plan contains no work item proposing inventory schema, validator, report, ledger, or deterministic-gate development. 2. Confirm it explicitly requires complete and correct use of the existing inventory mechanisms. 3. Run Prettier check, git diff --check, routing validation, and ap doctor.
+1. Confirm the plan has no standalone inventory cleanup phase or work item. 2. Confirm it proposes no inventory schema, tooling, report, validator, ledger, parity-gate, or deterministic-check changes. 3. Confirm every code task must update only related existing inventory records and leave unrelated records untouched. 4. Run Prettier check, git diff --check, routing validation, and ap doctor.
 
 ## Verification
 
-Pending execution.
+Command: npx prettier --check docs/program/vite-office-upstream-parity-plan.md — Result: pass. Command: git diff --check — Result: pass. Command: targeted Node content assertion — Result: pass; required code-only/related-record language present and all forbidden inventory-system work items absent. Command: node .agentplane/policy/check-routing.mjs — Result: pass. Command: ap doctor — Result: pass with only the existing historical-task warning and fallback-hook information.
 
 ## Rollback Plan
 
@@ -83,4 +80,4 @@ Revert only this task commit; do not alter unrelated working-tree changes.
 
 ## Findings
 
-Pending.
+The plan now contains no standalone inventory remediation. Current inventory inconsistencies remain audit context only. Inventory work is limited to valid updates of existing records directly associated with source files or capabilities changed by each code task; unrelated records and all inventory mechanisms remain untouched.
