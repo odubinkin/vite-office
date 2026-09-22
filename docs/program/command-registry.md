@@ -1,26 +1,27 @@
-# Browser Command Registry
+# Sfx command dispatch
 
-[`apps/office/src/framework/source/dispatch/dispatchprovider.ts`](../../apps/office/src/framework/source/dispatch/dispatchprovider.ts)
-defines the initial shared command contract. It registers typed handlers sharing
-a caller-defined context, validates stable IDs and shortcut collisions, and
-normalizes modifier aliases and ordering deterministically. For example,
-`shift + ctrl + g` becomes `Ctrl+Shift+G`.
+The supported command path follows the pinned Sfx ownership split. `SfxSlot` in
+[`msg.ts`](../../apps/office/src/sfx2/source/control/msg.ts) owns immutable slot
+identity and Execute/GetState callbacks. `SfxInterface` in
+[`objface.ts`](../../apps/office/src/sfx2/source/control/objface.ts) owns the
+generated slot map. [`shell.ts`](../../apps/office/src/sfx2/source/control/shell.ts)
+binds that interface to a concrete shell context, and
+[`dispatch.ts`](../../apps/office/src/sfx2/source/control/dispatch.ts) performs
+only shell-stack resolution and `SfxRequest` execution.
 
-`dispatchCommand` returns an explicit `executed`, `disabled`, or `missing`
-outcome. Descriptors also carry label keys, state/check/radio semantics,
-argument contracts, resource placement references, keyboard bindings, and
-execution-shell ownership. `SfxDispatcher` publishes pending and error state
-for asynchronous commands through the same query contract.
+Writer interface metadata is attached in
+[`swriter.ts`](../../apps/office/src/sw/sdi/swriter.ts) from generated SDI, HRC,
+XCU, and UI-resource data. Concrete Writer shell files retain command execution
+and state. Upstream commands therefore require a generated numeric slot; the
+dispatcher never manufactures one. Browser extensions use their separately
+reserved IDs.
 
-The Writer menu module also exports the complete `writerUserCommands` inventory:
-31 visible command IDs, labels, and domain-agnostic capability IDs. The Stage 0
-runtime validator rejects duplicate IDs, unknown capability references, or a
-visible command omitted from that registry. This is an audit surface rather
-than a second dispatch implementation; command handlers remain in their
-existing Writer shells and view composition.
+Shortcut normalization belongs to
+[`keymapping.ts`](../../apps/office/src/framework/source/accelerators/keymapping.ts).
+Promise pending/error observation belongs to the browser-only
+[`browser-dispatcher.ts`](../../apps/office/src/framework/browser/dispatch/browser-dispatcher.ts),
+so core Sfx execution has no browser operation state.
 
-The Writer workbench uses separate browser selection and accelerator adapters
-before dispatching through this registry. Menus, toolbars, selectors, and
-shortcuts resolve the same descriptors and state; `WriterWorkbench` does not
-translate formatting values to command IDs or thread per-command callbacks
-through the React tree.
+Dispatch returns explicit `executed`, `disabled`, or `missing` outcomes. Menus,
+toolbars, selectors, and accelerators resolve the same active slot and binding
+state rather than maintaining a second command registry.

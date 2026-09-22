@@ -1,19 +1,16 @@
 /** @fileoverview Owns the supported Writer view-shell execute/state handlers. */
 
-import {
-  createCommandShell,
-  type CommandRegistry,
-  type SfxShell,
-} from "../../../../sfx2/source/control/dispatch";
+import type { SfxInterface } from "../../../../sfx2/source/control/objface";
+import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
-import { createWriterCommandRegistry, type WriterViewCommandTarget } from "./writercommands";
+import { createWriterInterface, type WriterViewCommandTarget } from "../../../sdi/swriter";
 
 /** Dedicated view command shell owning Writer view and chrome registration. */
 export class SwViewCommandShell {
   private readonly shell: SfxShell;
   /** Creates the view-shell slot owner. @param target - Active Writer view. @returns Nothing. */
   public constructor(target: WriterViewCommandTarget) {
-    this.shell = createCommandShell(target, createWriterViewCommandRegistry(target));
+    this.shell = createSfxShell(target, createWriterViewCommandRegistry(target));
   }
   /** Returns the dispatcher-facing shell. @returns Registered Sfx shell. */
   public GetShell(): SfxShell {
@@ -24,11 +21,11 @@ export class SwViewCommandShell {
 /** Creates SwView-owned document, selection, and view-option commands. @param target - Persistent Writer view. @returns Validated immutable descriptors. */
 export function createWriterViewCommandRegistry(
   target: WriterViewCommandTarget,
-): CommandRegistry<WriterViewCommandTarget> {
+): SfxInterface<WriterViewCommandTarget> {
   const lifecycleEnabled =
     /** Reads lifecycle command availability. @returns True outside a pending medium operation. */ (): boolean =>
       !target.IsStoragePending();
-  return createWriterCommandRegistry([
+  return createWriterInterface([
     {
       capabilityId: "CAP-0114",
       /** Creates a new document in the persistent shell. @returns Nothing. */

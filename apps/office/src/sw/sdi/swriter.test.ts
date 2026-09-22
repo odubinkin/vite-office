@@ -2,8 +2,15 @@
 
 import { describe, expect, it } from "vitest";
 
+import { SfxRequest } from "../../sfx2/source/control/request";
+import { SfxStringItem, SfxUnoAnyItem } from "../../svl/source/items/poolitem";
 import generated from "../uiconfig/swriter/writer-ui.generated.json" with { type: "json" };
-import { getWriterSlotId, WRITER_UPSTREAM_SLOT_IDS } from "./swriter";
+import {
+  createWriterInterface,
+  getWriterCommandArguments,
+  getWriterSlotId,
+  WRITER_UPSTREAM_SLOT_IDS,
+} from "./swriter";
 
 describe("generated Writer slots", /** Exercises generated SDI identities and order. @returns Nothing. */ () => {
   it("uses pinned HRC values for parameterized UNO and browser-owned commands" /** Verifies slot lookup and browser reservations. @returns Nothing. */, () => {
@@ -37,5 +44,39 @@ describe("generated Writer slots", /** Exercises generated SDI identities and or
       ".uno:Redo",
       ".uno:HyperlinkDialog",
     ]);
+  });
+
+  it("attaches generated interface metadata while retaining shell-owned state", /** Verifies generated interfaces. @returns Nothing. */ () => {
+    const sfxInterface = createWriterInterface([
+      {
+        execute: /** Returns a result. @returns Result. */ () => "executed",
+        getStateValue: /** Returns state value. @returns Value. */ () => "value",
+        id: ".uno:Bold",
+        isChecked: /** Returns checked state. @returns True. */ () => true,
+        isEnabled: /** Returns enabled state. @returns False. */ () => false,
+        isMixed: /** Returns mixed state. @returns True. */ () => true,
+      },
+      {
+        capabilityId: "CAP-0109",
+        execute: /** Returns nothing. @returns Undefined. */ () => undefined,
+        id: ".uno:Italic",
+      },
+    ]);
+    const bold = sfxInterface.GetSlot(".uno:Bold");
+    expect(bold?.GetState({})).toEqual({
+      checked: true,
+      enabled: false,
+      mixed: true,
+      value: "value",
+    });
+    expect(bold?.Execute({}, new SfxRequest(10_009))).toBe("executed");
+    expect(sfxInterface.GetSlot(".uno:Italic")?.GetState({})).toEqual({ enabled: true });
+  });
+
+  it("reads only structured Any request arguments", /** Verifies Any extraction. @returns Nothing. */ () => {
+    const value = { fontFamily: "Noto Serif" };
+    expect(getWriterCommandArguments(undefined)).toBeUndefined();
+    expect(getWriterCommandArguments([new SfxStringItem(1, "text")])).toBeUndefined();
+    expect(getWriterCommandArguments([new SfxUnoAnyItem(1, value)])).toBe(value);
   });
 });

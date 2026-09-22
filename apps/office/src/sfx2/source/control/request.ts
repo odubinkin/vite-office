@@ -3,7 +3,13 @@
  * `sfx2/source/control/request.cxx`.
  */
 
-import type { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import {
+  SfxBoolItem,
+  SfxInt16Item,
+  SfxPoolItem,
+  SfxStringItem,
+  SfxUnoAnyItem,
+} from "../../../svl/source/items/poolitem";
 
 /** One slot invocation with item arguments, completion state, and an optional return item. */
 export class SfxRequest {
@@ -43,4 +49,48 @@ export class SfxRequest {
   public GetReturnValue(): SfxPoolItem | undefined {
     return this.returnValue;
   }
+}
+
+/** Converts a bounded primitive result to its Sfx return item. @param slot - Slot ID. @param value - Result. @returns Return item. */
+export function createRequestReturnItem(slot: number, value: unknown): SfxPoolItem | undefined {
+  if (typeof value === "boolean") return new SfxBoolItem(slot, value);
+  if (typeof value === "string") return new SfxStringItem(slot, value);
+  if (typeof value === "number" && Number.isInteger(value) && value >= -32_768 && value <= 32_767)
+    return new SfxInt16Item(slot, value);
+  return undefined;
+}
+
+/** Converts a presentation-bound value to immutable Sfx request items. @param slot - Slot ID. @param value - Payload. @returns Request items. */
+export function createRequestArguments(slot: number, value: unknown): readonly SfxPoolItem[] {
+  if (value === undefined) return [];
+  if (
+    Array.isArray(value) &&
+    value.every(
+      /** Detects a prebuilt pooled item. @param item - Candidate. @returns Whether pooled. */ (
+        item,
+      ) => item instanceof SfxPoolItem,
+    )
+  )
+    return value as readonly SfxPoolItem[];
+  if (typeof value === "boolean") return [new SfxBoolItem(slot, value)];
+  if (typeof value === "string") return [new SfxStringItem(slot, value)];
+  if (typeof value === "number" && Number.isInteger(value) && value >= -32_768 && value <= 32_767)
+    return [new SfxInt16Item(slot, value)];
+  return [new SfxUnoAnyItem(slot, value)];
+}
+
+/** Parses typed UNO URL parameters for the request boundary. @param commandUrl - Command URL. @returns Parsed fields. */
+export function parseCommandUrlArguments(
+  commandUrl: string,
+): Readonly<Record<string, string>> | undefined {
+  const query = commandUrl.indexOf("?");
+  if (query < 0) return undefined;
+  const arguments_: Record<string, string> = {};
+  for (const field of commandUrl.slice(query + 1).split("&")) {
+    const separator = field.indexOf("=");
+    if (separator < 0) continue;
+    const key = field.slice(0, separator).split(":", 1)[0] as string;
+    arguments_[key] = decodeURIComponent(field.slice(separator + 1));
+  }
+  return arguments_;
 }

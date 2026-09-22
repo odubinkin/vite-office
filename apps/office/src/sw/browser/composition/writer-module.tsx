@@ -8,6 +8,7 @@
 import { useEffect, useState } from "react";
 
 import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
+import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import {
   AutoRecovery,
@@ -118,7 +119,7 @@ export function createWriterDocumentSession(
     view.GetWrtShell(),
     services,
   );
-  const frame = new SfxViewFrame<SwView>();
+  const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
   const autoRecovery =
     services.recoverySave === undefined
       ? undefined

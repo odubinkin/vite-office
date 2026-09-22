@@ -4,7 +4,7 @@
  */
 
 import type { PrimarySavePort, StoredDocumentOpenPort } from "../../../sfx2/source/doc/docfile";
-import { createCommandShell, type SfxShell } from "../../../sfx2/source/control/dispatch";
+import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
 import type { AutoRecoveryEnvironment } from "../../../framework/source/services/autorecovery";
 import type { RecoverySavePort } from "../../../svl/source/misc/recovery";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../svl/source/misc/storage";
@@ -16,10 +16,7 @@ import { createWriterTextFragment } from "../../source/core/txtnode/text-run-pro
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
 import type { WriterPasteDocument } from "../../source/uibase/wrtsh/wrtsh-paste";
-import {
-  createWriterCommandRegistry,
-  getWriterCommandArguments,
-} from "../../source/uibase/shells/writercommands";
+import { createWriterInterface, getWriterCommandArguments } from "../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import {
   exportWriterTextToPort,
@@ -222,9 +219,9 @@ export class WriterWorkflowCommandShell {
     const lifecycleEnabled =
       /** Reads lifecycle command availability. @returns True outside a pending medium operation. */ (): boolean =>
         docShell.GetMedium().lastOperation.state !== "pending";
-    this.shell = createCommandShell(
+    this.shell = createSfxShell(
       { clipboard, docShell, file, localStorage },
-      createWriterCommandRegistry([
+      createWriterInterface([
         {
           capabilityId: "CAP-0113",
           /** Opens an ODT through the browser file workflow. @returns Completion after import. */

@@ -54,11 +54,6 @@
       "stackNecessity": "responsibility-split"
     },
     {
-      "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
-      "rationale": "Stack constraint: generated SDI metadata requires a shared typed ECMAScript assembly module for dedicated text and view shell owners; it remains narrower than swriter.sdi.",
-      "stackNecessity": "generated-resource-boundary"
-    },
-    {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
       "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates structural editing algorithms from SwWrtShell cursor and notification ownership while preserving the reviewed wrtsh1.cxx responsibility.",
       "stackNecessity": "responsibility-split"
@@ -338,6 +333,27 @@
       "stackDivergence": {
         "kind": "local-infrastructure",
         "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserSfxDispatcher",
+            "path": "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts",
+      "rationale": "Promise lifecycle, pending state, and browser-facing failure normalization have no native Sfx dispatcher ownership and remain explicit browser adaptation.",
+      "responsibilities": [
+        "Observes asynchronous browser command completion without changing core Sfx dispatch semantics."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser Promise operations replace native asynchronous dispatch-result listeners."
       },
       "status": "local-only"
     },
@@ -848,16 +864,13 @@
       },
       "localPath": "apps/office/src/sfx2/source/control/dispatch.ts",
       "localSymbols": [
-        "SfxDispatcher",
-        "SfxShell",
-        "CommandRegistry",
-        "createCommandShell"
+        "SfxDispatcher"
       ],
       "omittedResponsibilities": [
         "UNO dispatch transforms, native controllers, macro recording, and asynchronous result listeners remain outside the bounded browser slice."
       ],
       "preservedResponsibilities": [
-        "Owns shell-stack ordering, command resolution, SfxRequest execution, and bindings invalidation."
+        "Owns shell-stack ordering, numeric slot resolution, and SfxRequest execution."
       ],
       "status": "mapped",
       "upstreamPath": "sfx2/source/control/dispatch.cxx",
@@ -865,6 +878,71 @@
         "SfxDispatcher::Push",
         "SfxDispatcher::Pop",
         "SfxDispatcher::Execute"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxSlot",
+            "path": "apps/office/src/sfx2/source/control/msg.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "class SfxSlot",
+            "path": "vendor/libreoffice-reference/include/sfx2/msg.hxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/control/msg.ts",
+      "localSymbols": [
+        "SfxSlot"
+      ],
+      "omittedResponsibilities": [
+        "Native slot modes, UNO type metadata, linked-list siblings, and recording flags remain outside the bounded browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Preserves numeric slot identity, command URL, and shell-owned Execute/GetState callbacks."
+      ],
+      "status": "mapped",
+      "upstreamPath": "include/sfx2/msg.hxx",
+      "upstreamSymbols": [
+        "SfxSlot"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxInterface",
+            "path": "apps/office/src/sfx2/source/control/objface.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxInterface::GetSlot",
+            "path": "vendor/libreoffice-reference/sfx2/source/control/objface.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/control/objface.ts",
+      "localSymbols": [
+        "SfxInterface"
+      ],
+      "omittedResponsibilities": [
+        "Native object bars, child windows, popup menus, status bars, and interface inheritance remain outside the supported slice."
+      ],
+      "preservedResponsibilities": [
+        "Preserves immutable generated slot maps and lookup by numeric slot or command URL."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sfx2/source/control/objface.cxx",
+      "upstreamSymbols": [
+        "SfxInterface::GetSlot",
+        "SfxInterface::SetSlotMap"
       ]
     },
     {
@@ -885,7 +963,9 @@
       },
       "localPath": "apps/office/src/sfx2/source/control/request.ts",
       "localSymbols": [
-        "SfxRequest"
+        "SfxRequest",
+        "createRequestArguments",
+        "createRequestReturnItem"
       ],
       "omittedResponsibilities": [
         "Recording, macro calls, UNO transforms, and native call-mode flags remain outside the supported browser request slice."
@@ -897,6 +977,40 @@
       "upstreamPath": "sfx2/source/control/request.cxx",
       "upstreamSymbols": [
         "SfxRequest::SfxRequest"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "createSfxShell",
+            "path": "apps/office/src/sfx2/source/control/shell.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxShell::ExecuteSlot",
+            "path": "vendor/libreoffice-reference/sfx2/source/control/shell.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/control/shell.ts",
+      "localSymbols": [
+        "SfxShell",
+        "createSfxShell"
+      ],
+      "omittedResponsibilities": [
+        "Native item-pool ownership, broadcasters, verbs, frames, and sub-shell management remain outside the bounded slice."
+      ],
+      "preservedResponsibilities": [
+        "Binds one SfxInterface to its shell context and resolves Execute/GetState by numeric slot."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sfx2/source/control/shell.cxx",
+      "upstreamSymbols": [
+        "SfxShell::ExecuteSlot",
+        "SfxShell::GetSlotState"
       ]
     },
     {
@@ -2010,7 +2124,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "getWriterSlotId",
+            "marker": "createWriterInterface",
             "path": "apps/office/src/sw/sdi/swriter.ts"
           }
         ],
@@ -2024,13 +2138,15 @@
       "localPath": "apps/office/src/sw/sdi/swriter.ts",
       "localSymbols": [
         "getWriterSlotId",
-        "WRITER_UPSTREAM_SLOT_IDS"
+        "WRITER_UPSTREAM_SLOT_IDS",
+        "createWriterInterface",
+        "getWriterCommandArguments"
       ],
       "omittedResponsibilities": [
         "Slots outside the implemented browser command subset remain explicitly filtered."
       ],
       "preservedResponsibilities": [
-        "Exposes exact supported numeric slot identities generated from pinned SDI declarations and HRC expressions."
+        "Exposes exact supported numeric slot identities and assembles generated Writer SfxInterface metadata while concrete shells own execution and state."
       ],
       "status": "mapped",
       "upstreamPath": "sw/sdi/swriter.sdi",
@@ -3775,45 +3891,6 @@
       "upstreamPath": "sw/source/uibase/uiview/view.cxx",
       "upstreamSymbols": [
         "SwView::SwView"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterCharacterCommandArguments",
-            "path": "apps/office/src/sw/source/uibase/shells/writercommands.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "CreateSWDrawView",
-            "path": "vendor/libreoffice-reference/sw/sdi/swriter.sdi"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
-      "localSymbols": [
-        "WriterCharacterCommandArguments",
-        "WriterHyperlinkCommandArguments",
-        "WriterViewCommandTarget",
-        "createWriterCommandRegistry",
-        "getWriterCommandArguments"
-      ],
-      "omittedResponsibilities": [
-        "Upstream obligations outside CreateSWDrawView, AcceptTrackedChanges, TrackChanges, TrackChangesBar and the bounded WriterCharacterCommandArguments and WriterViewCommandTarget contract remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Attaches generated slot and presentation metadata to handlers owned by concrete Writer shells."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/sdi/swriter.sdi",
-      "upstreamSymbols": [
-        "CreateSWDrawView",
-        "AcceptTrackedChanges",
-        "TrackChanges",
-        "TrackChangesBar"
       ]
     },
     {

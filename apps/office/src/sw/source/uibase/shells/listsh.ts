@@ -1,11 +1,7 @@
 /** @fileoverview Implements the bounded Writer list context shell from `listsh.cxx`. */
 
-import {
-  createCommandRegistry,
-  createCommandShell,
-  type CommandRegistry,
-  type SfxShell,
-} from "../../../../sfx2/source/control/dispatch";
+import type { SfxInterface } from "../../../../sfx2/source/control/objface";
+import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import {
   isWriterParagraphListKind,
   WRITER_MAX_LIST_LEVEL,
@@ -15,8 +11,7 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwUndoInsNum } from "../../core/undo/unnum";
 import type { SwUndoCursorState } from "../../core/undo/undobj";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
-import { getWriterSlotId } from "../../../sdi/swriter";
-import { getWriterCommandResource } from "../../../uiconfig/swriter/writer-command-resources";
+import { createWriterInterface } from "../../../sdi/swriter";
 import { changeWriterParagraphListLevel } from "../wrtsh/wrtsh-indent";
 
 /** Identifies the two executable Writer list-level commands. */
@@ -35,7 +30,7 @@ export class SwListShell {
 
   /** Creates the active list shell. @param wrtShell - Editing shell target. @returns Nothing. */
   public constructor(private readonly wrtShell: SwListShellTarget) {
-    this.commandShell = createCommandShell(this, createListCommandRegistry(this));
+    this.commandShell = createSfxShell(this, createListCommandRegistry(this));
   }
 
   /** Returns the Sfx dispatch shell. @returns Command shell. */
@@ -78,8 +73,8 @@ export class SwListShell {
 }
 
 /** Builds the bounded list toolbar registry using generated slot/resource identity. @param target - Active list shell. @returns Command registry. */
-function createListCommandRegistry(target: SwListShell): CommandRegistry<SwListShell> {
-  return createCommandRegistry([
+function createListCommandRegistry(target: SwListShell): SfxInterface<SwListShell> {
+  return createWriterInterface([
     ...(["bullet", "numbered", "none"] as const).map(
       /** Creates one list-kind command owned by listsh. @param kind - Requested list kind. @returns Descriptor. */ (
         kind,
@@ -89,7 +84,6 @@ function createListCommandRegistry(target: SwListShell): CommandRegistry<SwListS
           none: WRITER_COMMAND_IDS.removeBullets,
           numbered: WRITER_COMMAND_IDS.orderedList,
         }[kind];
-        const resource = getWriterCommandResource(id);
         return {
           capabilityId: "CAP-0105" as const,
           execute:
@@ -100,8 +94,6 @@ function createListCommandRegistry(target: SwListShell): CommandRegistry<SwListS
           id,
           isChecked: /** Reads active list kind. @returns Checked state. */ (): boolean =>
             target.GetKind() === kind,
-          label: resource.label,
-          slotId: getWriterSlotId(id),
         };
       },
     ),
@@ -110,7 +102,6 @@ function createListCommandRegistry(target: SwListShell): CommandRegistry<SwListS
         command,
       ) => {
         const id = command === "promote" ? WRITER_COMMAND_IDS.promote : WRITER_COMMAND_IDS.demote;
-        const resource = getWriterCommandResource(id);
         return {
           capabilityId: "CAP-0107" as const,
           execute: /** Executes the bound list command. @returns Whether changed. */ (): boolean =>
@@ -122,8 +113,6 @@ function createListCommandRegistry(target: SwListShell): CommandRegistry<SwListS
               (command === "promote"
                 ? target.GetLevel() > 0
                 : target.GetLevel() < WRITER_MAX_LIST_LEVEL),
-          label: resource.label,
-          slotId: getWriterSlotId(id),
         };
       },
     ),

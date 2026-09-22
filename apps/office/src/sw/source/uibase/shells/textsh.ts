@@ -1,10 +1,8 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
 
-import {
-  createCommandShell,
-  type CommandRegistry,
-  type SfxShell,
-} from "../../../../sfx2/source/control/dispatch";
+import type { SfxShell } from "../../../../sfx2/source/control/shell";
+import { createSfxShell } from "../../../../sfx2/source/control/shell";
+import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import { SwPosition } from "../../core/crsr/pam";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
@@ -30,11 +28,11 @@ import { canChangeWriterParagraphIndent, changeWriterParagraphIndent } from "../
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../wrtsh/wrtsh-hyperlink";
 import { getWriterSelectedTextRange, type WriterTextRange } from "../wrtsh/wrtsh-selection";
 import {
-  createWriterCommandRegistry,
+  createWriterInterface,
   getWriterCommandArguments,
   type WriterCharacterCommandArguments,
   type WriterHyperlinkCommandArguments,
-} from "./writercommands";
+} from "../../../sdi/swriter";
 
 /** Cursor/model primitives consumed by the text shell without importing SwWrtShell. */
 export interface SwTextShellTarget {
@@ -68,7 +66,7 @@ export class SwTextShell {
     private readonly target: SwTextShellTarget,
     dialogs: WriterDialogController,
   ) {
-    this.shell = createCommandShell(this, createWriterTextCommandRegistry(this, dialogs));
+    this.shell = createSfxShell(this, createWriterTextCommandRegistry(this, dialogs));
   }
   /** Returns the dispatcher-facing shell. @returns Registered Sfx shell. */
   public GetShell(): SfxShell {
@@ -296,7 +294,7 @@ export class SwTextShell {
 export function createWriterTextCommandRegistry(
   target: SwTextShell,
   dialogController: WriterDialogController,
-): CommandRegistry<SwTextShell> {
+): SfxInterface<SwTextShell> {
   const active =
     /** Reads the currently targeted paragraph. @returns Active paragraph projection. */ (): ReturnType<
       SwTextShell["GetActiveParagraph"]
@@ -313,7 +311,7 @@ export function createWriterTextCommandRegistry(
       /** Reports a mixed direct-format selection. @returns True when selected text has both values. */
       isMixed: (): boolean => target.GetCharacterFormatState(format) === "mixed",
     });
-  return createWriterCommandRegistry([
+  return createWriterInterface([
     {
       capabilityId: "CAP-0102",
       /** Restores the previous history state. @returns Whether navigation occurred. */

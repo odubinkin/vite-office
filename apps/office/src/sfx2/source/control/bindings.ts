@@ -18,6 +18,20 @@ export interface SfxBindingsDispatcher {
   readonly Subscribe: (listener: () => void) => () => void;
 }
 
+/** Applies parameterized command state without teaching the dispatcher UI URL semantics. @param _commandUrl - Requested URL. @param state - Base state. @param parameters - Parsed parameters. @returns Derived state. */
+export function deriveParameterizedSlotState(
+  _commandUrl: string,
+  state: SfxSlotState,
+  parameters: Readonly<Record<string, string>> | undefined,
+): SfxSlotState {
+  if (parameters?.Style === undefined || typeof state.value !== "string") return state;
+  const style = parameters.Style === "Default Paragraph Style" ? "default" : parameters.Style;
+  return {
+    ...state,
+    checked: state.value === style.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-"),
+  };
+}
+
 /** Central state cache/invalidation facade owned by an Sfx frame. */
 export class SfxBindings {
   /** Creates bindings for one dispatcher. @param dispatcher - Frame dispatcher. @returns Nothing. */

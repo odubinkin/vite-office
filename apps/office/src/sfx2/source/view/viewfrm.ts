@@ -12,9 +12,9 @@ export class SfxViewFrame<View> {
   private readonly bindings: SfxBindings;
   private readonly dispatcher: SfxDispatcher;
 
-  /** Creates an empty frame and its Sfx control objects. @returns Nothing. */
-  public constructor() {
-    this.dispatcher = new SfxDispatcher();
+  /** Creates an empty frame and its Sfx control objects. @param dispatcher - Frame dispatcher. @returns Nothing. */
+  public constructor(dispatcher: SfxDispatcher = new SfxDispatcher()) {
+    this.dispatcher = dispatcher;
     this.bindings = new SfxBindings(this.dispatcher);
   }
 

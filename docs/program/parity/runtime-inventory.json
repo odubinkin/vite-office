@@ -184,6 +184,32 @@
       }
     },
     {
+      "path": "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "browser-dispatch",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/dispatch/browser-dispatcher.ts#BrowserSfxDispatcher"
+        ],
+        "justification": "Observes Promise completion, pending state, and browser-facing failures outside the upstream-shaped Sfx dispatcher contract.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -719,13 +745,10 @@
           "apps/office/src/sfx2/source/control/dispatch.ts#SfxDispatcher",
           "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx#SfxDispatcher"
         ],
-        "justification": "Owns the bounded Sfx shell stack, slot resolution, request execution, and invalidation contract under the upstream sfx2 responsibility; unsupported UNO and native controller paths remain explicitly outside the slice.",
+        "justification": "Owns only the bounded Sfx shell stack, slot resolution, and SfxRequest execution contract; slot/interface metadata and browser Promise observation have separate owners.",
         "knownViolations": [],
         "localSymbols": [
-          "SfxDispatcher",
-          "SfxShell",
-          "CommandRegistry",
-          "createCommandShell"
+          "SfxDispatcher"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "sfx2/source/control/dispatch.cxx",
@@ -734,6 +757,69 @@
           "SfxDispatcher::Push",
           "SfxDispatcher::Pop",
           "SfxDispatcher::Execute"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/msg.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/control/msg.ts#SfxSlot",
+          "vendor/libreoffice-reference/include/sfx2/msg.hxx#class SfxSlot"
+        ],
+        "justification": "Ports the bounded immutable SfxSlot identity and Execute/GetState callback metadata used by the supported command slice.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxSlot"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "include/sfx2/msg.hxx",
+        "upstreamSymbols": [
+          "SfxSlot"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/objface.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/control/objface.ts#SfxInterface",
+          "vendor/libreoffice-reference/sfx2/source/control/objface.cxx#SfxInterface::GetSlot"
+        ],
+        "justification": "Ports the bounded generated SfxInterface slot map and command/slot lookup contract.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxInterface"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sfx2/source/control/objface.cxx",
+        "upstreamSymbols": [
+          "SfxInterface::GetSlot",
+          "SfxInterface::SetSlotMap"
         ]
       }
     },
@@ -758,12 +844,47 @@
         "justification": "Ports the bounded slot, item-argument, completion, and return-item request contract while exposing browser payloads only at the adapter boundary.",
         "knownViolations": [],
         "localSymbols": [
-          "SfxRequest"
+          "SfxRequest",
+          "createRequestArguments",
+          "createRequestReturnItem"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sfx2/source/control/request.cxx",
         "upstreamSymbols": [
           "SfxRequest"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/shell.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/control/shell.ts#createSfxShell",
+          "vendor/libreoffice-reference/sfx2/source/control/shell.cxx#SfxShell::ExecuteSlot"
+        ],
+        "justification": "Binds one generated SfxInterface to its concrete shell context and keeps Execute/GetState resolution outside the dispatcher.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxShell",
+          "createSfxShell"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sfx2/source/control/shell.cxx",
+        "upstreamSymbols": [
+          "SfxShell::ExecuteSlot",
+          "SfxShell::GetSlotState"
         ]
       }
     },
@@ -883,7 +1004,19 @@
       "subsystem": "dispatch",
       "capabilityIds": [
         "CAP-0101",
-        "CAP-0115"
+        "CAP-0102",
+        "CAP-0103",
+        "CAP-0104",
+        "CAP-0105",
+        "CAP-0106",
+        "CAP-0107",
+        "CAP-0109",
+        "CAP-0110",
+        "CAP-0112",
+        "CAP-0113",
+        "CAP-0114",
+        "CAP-0115",
+        "CAP-0135"
       ],
       "semantic": {
         "behaviorStatus": "unverified",
@@ -2031,14 +2164,16 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/sdi/swriter.ts#getWriterSlotId",
-          "vendor/libreoffice-reference/sw/sdi/swriter.sdi"
+          "apps/office/src/sw/sdi/swriter.ts#createWriterInterface",
+          "vendor/libreoffice-reference/sw/sdi/swriter.sdi#interface Text"
         ],
-        "justification": "Exposes the supported slot identities deterministically generated from pinned sw, sfx2, and svx SDI declarations and their HRC macro values.",
+        "justification": "Owns the supported generated Writer SfxInterface assembly from pinned SDI/HRC/XCU metadata while concrete shell files retain Execute and GetState behavior.",
         "knownViolations": [],
         "localSymbols": [
           "getWriterSlotId",
-          "WRITER_UPSTREAM_SLOT_IDS"
+          "WRITER_UPSTREAM_SLOT_IDS",
+          "createWriterInterface",
+          "getWriterCommandArguments"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/sdi/swriter.sdi",
@@ -3803,53 +3938,6 @@
         "upstreamFile": "sw/source/uibase/uiview/view.cxx",
         "upstreamSymbols": [
           "SwView"
-        ]
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/shells/writercommands.ts",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "command-shell",
-      "capabilityIds": [
-        "CAP-0101",
-        "CAP-0102",
-        "CAP-0103",
-        "CAP-0104",
-        "CAP-0105",
-        "CAP-0106",
-        "CAP-0107",
-        "CAP-0109",
-        "CAP-0110",
-        "CAP-0112",
-        "CAP-0113",
-        "CAP-0114",
-        "CAP-0115",
-        "CAP-0135"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
-        "divergenceClass": "X",
-        "evidence": [
-          "apps/office/src/sw/source/uibase/shells/writercommands.ts#createWriterCommandRegistry",
-          "vendor/libreoffice-reference/sw/sdi/swriter.sdi#interface Text"
-        ],
-        "justification": "Provides TypeScript descriptor assembly shared by the dedicated text and view command shells; no single upstream source owns this browser/Sfx adapter and no semantic parity is claimed for the module itself.",
-        "knownViolations": [],
-        "localSymbols": [
-          "WriterCharacterCommandArguments",
-          "WriterHyperlinkCommandArguments",
-          "WriterViewCommandTarget",
-          "createWriterCommandRegistry",
-          "getWriterCommandArguments"
-        ],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": "sw/sdi/swriter.sdi",
-        "upstreamSymbols": [
-          "interface Text"
         ]
       }
     },

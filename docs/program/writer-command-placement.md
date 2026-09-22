@@ -50,10 +50,12 @@ Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 - `WriterCommands.xcu` declares Default Paragraph and Heading 1 style commands;
   the bounded browser style choices are available in **Styles**.
 
-Slot descriptors remain declarative in `writercommands.ts`. Registration and
-dispatcher priority are owned by the dedicated `SwTextShell`, `SwListShell`, and
-`SwViewCommandShell` modules; `SwWrtShell` supplies cursor/edit operations and
-`SwView` supplies frame/lifecycle coordination without constructing registries.
+Generated slot/interface metadata is assembled at the upstream-corresponding
+`sw/sdi/swriter.ts` boundary. Execute and GetState handlers remain in the
+dedicated `SwTextShell`, `SwListShell`, `SwViewCommandShell`, and thin browser
+workflow shell; dispatcher priority is determined solely by the active Sfx
+shell stack. `SwWrtShell` supplies cursor/edit operations and `SwView` supplies
+frame/lifecycle coordination without a parallel Writer registry layer.
 
 `sw/uiconfig/swriter/toolbar/standardbar.xml` supplies Open, Save, Cut, Copy,
 Paste, Undo, and Redo, but no generic plain-text download command. Accordingly,
