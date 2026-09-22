@@ -1,10 +1,11 @@
 ---
 id: "202609220557-026YHJ"
 title: "Close upstream parity implementation gaps"
-status: "DOING"
+result_summary: "Fixed concurrent async request races and upstream ownership boundaries"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T06:25:20.803Z"
+  updated_at: "2026-09-22T06:26:03.431Z"
   updated_by: "CODER"
-  note: "verified-202609220557-026YHJ"
+  note: "Fixed async request races and upstream ownership boundaries"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,19 @@ quality_review:
     - "npm run verify"
   findings:
     - "Concurrent Sfx requests are isolated; HTML defaults, neutral medium ownership, native paste boundary, and static enforcement are covered."
-commit: null
+commit:
+  hash: "79f7244529d6dcd2d0101638b104b0cf37208946"
+  message: "🚧 026YHJ task: record quality review"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved upstream-aligned dispatcher, style, lifecycle-boundary, static-enforcement, and regression-test changes."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609220557-026YHJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: Fixed concurrent async request races and upstream ownership boundaries; full repository verification passed."
 events:
   -
     type: "status"
@@ -63,8 +72,34 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609220557-026YHJ"
+  -
+    type: "verify"
+    at: "2026-09-22T06:25:50.576Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609220557-026YHJ"
+  -
+    type: "status"
+    at: "2026-09-22T06:25:50.708Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609220557-026YHJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "verify"
+    at: "2026-09-22T06:26:03.431Z"
+    author: "CODER"
+    state: "ok"
+    note: "Fixed async request races and upstream ownership boundaries"
+  -
+    type: "status"
+    at: "2026-09-22T06:27:07.807Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: Fixed concurrent async request races and upstream ownership boundaries; full repository verification passed."
 doc_version: 3
-doc_updated_at: "2026-09-22T06:25:20.879Z"
+doc_updated_at: "2026-09-22T06:27:07.809Z"
 doc_updated_by: "CODER"
 description: "Fix the audited non-P0-1 gaps: concurrent Sfx async dispatch state, HTML-mode Writer style defaults, browser lifecycle ownership, and enforceable module boundaries."
 sections:
@@ -149,6 +184,66 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-22T06:25:50.576Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609220557-026YHJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T06:25:20.879Z, excerpt_hash=sha256:882d397316800a9639995825004c3d7c3c7ec3f0b6272fc80650373910a238bd
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220557-026YHJ/blueprint/resolved-snapshot.json
+    - old_digest: 5ebadba77c73c25fb7449a9f0ddc1ccd28952ad243f1886b32fdc28e2b4bbe5a
+    - current_digest: 5ebadba77c73c25fb7449a9f0ddc1ccd28952ad243f1886b32fdc28e2b4bbe5a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220557-026YHJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609220557-026YHJ --result verified-202609220557-026YHJ --commit 79f7244529d6dcd2d0101638b104b0cf37208946
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-22T06:26:03.431Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Fixed async request races and upstream ownership boundaries
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T06:25:50.709Z, excerpt_hash=sha256:882d397316800a9639995825004c3d7c3c7ec3f0b6272fc80650373910a238bd
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220557-026YHJ/blueprint/resolved-snapshot.json
+    - old_digest: 5ebadba77c73c25fb7449a9f0ddc1ccd28952ad243f1886b32fdc28e2b4bbe5a
+    - current_digest: 5ebadba77c73c25fb7449a9f0ddc1ccd28952ad243f1886b32fdc28e2b4bbe5a
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220557-026YHJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202609220557-026YHJ --close --unstage-others
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -157,6 +252,10 @@ sections:
     - Observation: The dispatcher previously keyed async state only by command id, allowing stale completions to overwrite a newer request.
       Impact: Overlapping executions of one slot could publish incorrect pending/error state despite each SfxRequest completing independently.
       Resolution: Added request generations so every SfxRequest completes, while only the latest execution may publish aggregate command/error state; added all out-of-order fulfillment/rejection cases.
+extensions:
+  implementation_commit:
+    hash: "5879593082af6b31221e8f92fabe36d034af5c20"
+    message: "🚧 026YHJ task: fix upstream parity ownership"
 id_source: "generated"
 ---
 ## Summary
@@ -242,6 +341,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609220557-026YHJ --result verified-202609220557-026YHJ --commit 5879593082af6b31221e8f92fabe36d034af5c20
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T06:25:50.576Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609220557-026YHJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T06:25:20.879Z, excerpt_hash=sha256:882d397316800a9639995825004c3d7c3c7ec3f0b6272fc80650373910a238bd
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220557-026YHJ/blueprint/resolved-snapshot.json
+- old_digest: 5ebadba77c73c25fb7449a9f0ddc1ccd28952ad243f1886b32fdc28e2b4bbe5a
+- current_digest: 5ebadba77c73c25fb7449a9f0ddc1ccd28952ad243f1886b32fdc28e2b4bbe5a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220557-026YHJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609220557-026YHJ --result verified-202609220557-026YHJ --commit 79f7244529d6dcd2d0101638b104b0cf37208946
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T06:26:03.431Z — VERIFY — ok
+
+By: CODER
+
+Note: Fixed async request races and upstream ownership boundaries
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T06:25:50.709Z, excerpt_hash=sha256:882d397316800a9639995825004c3d7c3c7ec3f0b6272fc80650373910a238bd
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220557-026YHJ/blueprint/resolved-snapshot.json
+- old_digest: 5ebadba77c73c25fb7449a9f0ddc1ccd28952ad243f1886b32fdc28e2b4bbe5a
+- current_digest: 5ebadba77c73c25fb7449a9f0ddc1ccd28952ad243f1886b32fdc28e2b4bbe5a
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220557-026YHJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202609220557-026YHJ --close --unstage-others
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
