@@ -28,7 +28,7 @@ static application runtime.
 | `apps/office/src/sw/source/core/para` | `sw/source/core/para` | Writer paragraph pool items, currently `SwNumRuleItem` |
 | `apps/office/src/sw/source/core/txtnode` | `sw/source/core/txtnode` | `SwTextNode` text storage and `SwpHints`/`SwTextAttr` character attributes |
 | `apps/office/src/sw/source/core/crsr` | `sw/source/core/crsr` | `SwNodeIndex`, `SwPosition`, and directional `SwPaM` model ranges |
-| `apps/office/src/sw/source/uibase/docvw` | `sw/source/uibase/docvw` | Document-page editor and editable paragraphs |
+| `apps/office/src/sw/source/uibase/docvw` | `sw/source/uibase/docvw` | DOM-neutral `SwEditWin` ownership and current `SwNodes` coordinate conversion |
 | `apps/office/src/sw/source/uibase/wrtsh` | `sw/source/uibase/wrtsh` | Writer shell selection and editing operations |
 | `apps/office/src/sw/source/uibase/dochdl` | `sw/source/uibase/dochdl` | Selection transfer-document preparation and clipboard ownership |
 | `apps/office/src/sw/source/filter/html` | `sw/source/filter/html` | Writer HTML transfer serialization |
@@ -38,7 +38,7 @@ static application runtime.
 | `apps/office/src/sw/source/uibase/uiview` | `sw/source/uibase/uiview` | Persistent Writer view/session composition |
 | `apps/office/src/sw/source/uibase/app` | `sw/source/uibase/app` | `SwDocShell` new/load/save ownership and module composition |
 | `apps/office/src/sw/uiconfig/swriter` | `sw/uiconfig/swriter` | Presentation-free menu and toolbar placement data derived from pinned XML resources |
-| `apps/office/src/sw/browser` | Browser-only | React presenters, accelerator binding, and DOM selection adaptation |
+| `apps/office/src/sw/browser` | Browser-only | React projections plus the single DOM edit-window, accelerator, filter, and storage adapters |
 
 Tests remain colocated with the module they protect, matching the local source
 ownership rather than imitating LibreOffice's CppUnit/Python harnesses. Browser
@@ -82,16 +82,11 @@ documentation have dedicated parity evidence.
 ## Intentional mapped filename divergences
 
 Mapped modules ordinarily use the exact LibreOffice filename. The exhaustive
-`filenameDivergences` manifest field and provenance gate allow the following
-four cases only; adding, removing, or renaming one must update both the table and
-machine-checked record.
-
-| Local browser module | Pinned upstream module | Reason |
-| --- | --- | --- |
-| `svl/source/misc/recovery.ts` | `svl/source/misc/lockfilecommon.cxx` | Browser recovery coordinator at the shared lockfile ownership boundary |
-| `sw/source/uibase/docvw/edtwin-paragraph.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | React paragraph decomposition beneath the one editor boundary |
-| `sw/uiconfig/swriter/menubar/menubar-commands.ts` | `sw/uiconfig/swriter/menubar/menubar.xml` | Typed command declaration extracted from XML configuration |
-| `vcl/browser/browser-clipboard.ts` | `vcl/source/app/ClipboardBase.cxx` | Explicit static-browser clipboard platform adapter |
+`filenameDivergences` array in `source-provenance.json` is the authoritative
+machine-checked list of intentional responsibility splits, browser boundaries,
+generated-resource modules, and ECMAScript module-resolution names. The current
+Writer edit-window owner uses the exact `sw/source/uibase/docvw/edtwin` identity;
+its DOM implementation is separately and honestly classified under `sw/browser`.
 
 ## File-level provenance in active Writer list, character-formatting, clipboard, and model slices
 
@@ -142,7 +137,8 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/uibase/wrtsh/wrtsh-editing.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Action-based text, range, paste, split, and join editing algorithms |
 | `sw/source/uibase/wrtsh/wrtsh-hyperlink.ts` | `sw/source/core/edit/editsh.cxx` | Selection-aware hyperlink insertion, replacement, and removal actions |
 | `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Canonical text-node storage, item-set formatting/list mutation, hint-aware editing, and split/append |
-| `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
+| `sw/source/uibase/docvw/edtwin.ts` | `sw/source/uibase/docvw/edtwin.cxx` | DOM-neutral edit-window operations and DOM-coordinate-to-`SwPaM` ownership |
+| `sw/browser/editor/browser-writer-edit-window.ts` | Browser-only | Single DOM adapter for selection, beforeinput, IME, pointer, clipboard, drag/drop, and focus |
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
 | `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Bounded nested semantic `ul`/`ol`/`li` clipboard HTML serialization |
 | `sw/source/filter/ascii/ascatr.ts` | `sw/source/filter/ascii/ascatr.cxx` | Level-indented plain-text list-marker clipboard serialization |
@@ -171,8 +167,9 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/uibase/uiview/viewfunc.ts` | `sw/source/uibase/uiview/viewfunc.hxx` | Pure focused-document, identity, formatting-command, and command-history helpers |
 | `sw/source/uibase/uiview/viewstat.ts` | `sw/source/uibase/uiview/viewstat.cxx` | Browser view-status and visibility state |
 | `sw/browser/presentation/WriterWorkspaceChrome.tsx` | Browser-only | Writer workspace chrome regions |
-| `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Editable browser document-view orchestration |
-| `sw/source/uibase/docvw/edtwin-paragraph.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser-only editable paragraph leaf beneath the matching editor module |
+| `sw/source/uibase/docvw/edtwin.ts` | `sw/source/uibase/docvw/edtwin.cxx` | Persistent DOM-neutral Writer edit-window owner |
+| `sw/browser/editor/browser-writer-edit-window.ts` | Browser-only | One browser implementation of the edit-window platform boundary |
+| `sw/browser/editor/WriterPlainTextEditor.tsx` | Browser-only | Immutable React paragraph projection and stable controller binding |
 | `sw/browser/editor/writer-selection.ts` | Browser-only | DOM selection and collapsed-caret mapping |
 | `sw/browser/presentation/WriterFormattingToolbar.tsx` | Browser-only | Generic formatting-toolbar presenter |
-| `sw/browser/presentation/WriterPropertiesPanel.tsx` | Browser-only | Focused paragraph Properties panel |
+| `sw/browser/presentation/WriterPropertiesPanel.tsx` | Browser-only | Binding-backed paragraph command panel plus immutable current-value projection |

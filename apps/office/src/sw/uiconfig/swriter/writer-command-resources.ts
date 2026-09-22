@@ -5,10 +5,12 @@ import generated from "./writer-ui.generated.json" with { type: "json" };
 
 /** Presentation metadata owned by generated UI resources rather than Writer shells or React. */
 export interface WriterCommandResource {
+  readonly argumentSchema: readonly string[];
   readonly browserOwned: boolean;
   readonly capabilityId?: `CAP-${string}`;
   readonly controlLabel: string;
   readonly label: string;
+  readonly iconName?: string;
   readonly placements: readonly string[];
   readonly selectionValue?: string;
   readonly semantics: "action" | "check" | "radio";
@@ -31,6 +33,7 @@ export function getWriterCommandResource(commandUrl: string): WriterCommandResou
     if (style !== undefined)
       return {
         browserOwned: false,
+        argumentSchema: ["Style:SfxStringItem", "FamilyName:SfxStringItem"],
         capabilityId: "CAP-0112",
         controlLabel: label as string,
         label: label as string,

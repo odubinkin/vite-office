@@ -1,6 +1,5 @@
 /** @fileoverview Test-only adapters from legacy fixture IDs to canonical Writer positions. */
 
-import { BrowserWriterEditController } from "../sw/browser/editor/writer-edit-controller";
 import type { WriterCursorSelection } from "../sw/browser/editor/writer-selection-types";
 import { SwPosition } from "../sw/source/core/crsr/pam";
 import type { WriterHyperlink } from "../sw/source/core/txtnode/fmtinfmt";
@@ -66,31 +65,50 @@ export function handleTestInput(
   inputType: string,
   data: string | null,
 ): boolean {
-  const controller = new BrowserWriterEditController({
-    deleteForward: /** Deletes forward through the fixture shell. @returns Whether changed. */ () =>
-      shell.DelRight(),
-    deleteLeft: /** Deletes backward through the fixture shell. @returns Whether changed. */ () =>
-      shell.DelLeft(),
-    deleteSelection: /** Deletes the fixture selection. @returns Whether changed. */ () =>
-      shell.DeleteSelection(),
-    insert: /** Inserts fixture text. @param text - Text. @returns Whether changed. */ (text) =>
-      shell.Insert(text),
-    redo: /** Redoes a fixture edit. @returns Whether changed. */ () => shell.Redo(),
-    replace: /** Replaces the fixture selection. @param text - Text. @returns Whether changed. */ (
-      text,
-    ) => shell.Replace(text),
-    setListKind: /** Sets fixture list kind. @param kind - List kind. @returns Whether changed. */ (
-      kind,
-    ) => shell.SetParagraphListKind(kind),
-    splitNode: /** Splits the fixture node. @returns Whether changed. */ () => shell.SplitNode(),
-    synchronizeSelection: /** Accepts the fixture selection. @returns Always true. */ () => true,
-    toggleCharacterFormat:
-      /** Toggles fixture formatting. @param format - Format. @returns Whether changed. */ (
-        format,
-      ) => shell.ToggleCharacterFormat(format),
-    undo: /** Undoes a fixture edit. @returns Whether changed. */ () => shell.Undo(),
-  });
-  return controller.HandleIntent({ data, inputType }) === "handled";
+  switch (inputType) {
+    case "insertText":
+      return data === null || data.length === 0 || shell.Insert(data);
+    case "insertReplacementText":
+      return data === null || data.length === 0 || shell.Replace(data);
+    case "insertLineBreak":
+    case "insertParagraph":
+      return shell.SplitNode();
+    case "deleteContentBackward":
+      return shell.DelLeft();
+    case "deleteContentForward":
+      return shell.DelRight();
+    case "deleteByCut":
+    case "deleteByDrag":
+    case "deleteContent":
+      return shell.DeleteSelection();
+    case "formatBold":
+      shell.ToggleCharacterFormat("bold");
+      return true;
+    case "formatItalic":
+      shell.ToggleCharacterFormat("italic");
+      return true;
+    case "formatUnderline":
+      shell.ToggleCharacterFormat("underline");
+      return true;
+    case "insertOrderedList":
+      shell.SetParagraphListKind("numbered");
+      return true;
+    case "insertUnorderedList":
+      shell.SetParagraphListKind("bullet");
+      return true;
+    case "historyUndo":
+      shell.Undo();
+      return true;
+    case "historyRedo":
+      shell.Redo();
+      return true;
+    case "insertFromComposition":
+    case "insertFromDrop":
+    case "insertFromPaste":
+      return true;
+    default:
+      return false;
+  }
 }
 
 /** Replaces one fixture-ID range through a canonical node range. @param shell - Test shell. @param range - Fixture range. @param runs - Replacement runs. @returns Whether changed. */

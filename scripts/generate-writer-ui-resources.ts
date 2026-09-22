@@ -1,6 +1,6 @@
 /** @fileoverview Generates the supported Writer UI resource subset from the pinned LibreOffice checkout. */
 
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 
 import { format } from "prettier";
 import {
@@ -13,6 +13,7 @@ import {
 
 /** One supported command and any explicit browser-bound divergence. */
 interface CommandSpec {
+  readonly browserArguments?: readonly string[];
   readonly browserControlLabel?: string;
   readonly browserLabel?: string;
   readonly browserSlotId?: number;
@@ -36,8 +37,16 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:DecrementIndent" },
   { commandUrl: ".uno:EditHyperlink", showsDialog: true },
   { commandUrl: ".uno:ExportTo", showsDialog: true },
-  { browserControlLabel: "Font name", commandUrl: ".uno:CharFontName" },
-  { browserControlLabel: "Font size", commandUrl: ".uno:FontHeight" },
+  {
+    browserArguments: ["fontFamily:string"],
+    browserControlLabel: "Font name",
+    commandUrl: ".uno:CharFontName",
+  },
+  {
+    browserArguments: ["fontSizePt:number"],
+    browserControlLabel: "Font size",
+    commandUrl: ".uno:FontHeight",
+  },
   { commandUrl: ".uno:HyperlinkDialog", showsDialog: true },
   { commandUrl: ".uno:Italic", semantics: "check" },
   { commandUrl: ".uno:AddDirect" },
@@ -238,6 +247,7 @@ const resourceTexts = remainingTexts.slice(0, resourcePaths.length);
 const sdiTexts = remainingTexts.slice(resourcePaths.length, resourcePaths.length + sdiPaths.length);
 const macroTexts = remainingTexts.slice(resourcePaths.length + sdiPaths.length);
 const macros = parseMacros(macroTexts);
+const upstreamIconFiles = new Set(await readdir(`${upstreamRoot}/icon-themes/sifr_dark_svg/cmd`));
 
 const commands = Object.fromEntries(
   specs.map(
@@ -259,13 +269,16 @@ const commands = Object.fromEntries(
         throw new Error(
           `Supported upstream command has no Writer resource placement: ${sourceUrl}`,
         );
+      const iconName = `lc_${spec.commandUrl.replace(/^\.uno:/, "").toLowerCase()}.svg`;
       return [
         spec.commandUrl,
         {
           browserOwned: spec.browserLabel !== undefined,
+          argumentSchema: spec.browserArguments ?? findArgumentSchema(sourceUrl, sdiTexts),
           capabilityId: commandCapabilities[spec.commandUrl],
           controlLabel: spec.browserControlLabel ?? stripMnemonic(label),
           label: stripMnemonic(label),
+          ...(upstreamIconFiles.has(iconName) ? { iconName } : {}),
           placements:
             spec.browserLabel === undefined ? placements : ["browser-extension:file-menu"],
           semantics: spec.semantics ?? "action",
@@ -333,6 +346,33 @@ const unsupported = Object.fromEntries(
     ) => [path, resourceGraphs[path]?.exclusions ?? []],
   ),
 );
+const dispositions = [
+  ...Object.entries(commands).map(
+    /** Records one supported or browser-owned command disposition. @param entry - Command URL and metadata. @returns Reviewable disposition. */ ([
+      commandUrl,
+      command,
+    ]) => ({
+      classification: command.browserOwned ? "browser-extension" : "supported-upstream",
+      commandUrl,
+      sources: command.placements,
+    }),
+  ),
+  ...Object.entries(unsupported).flatMap(
+    /** Flattens one resource's explicit X records. @param entry - Resource path and exclusions. @returns Reviewable dispositions. */ ([
+      sourcePath,
+      exclusions,
+    ]) =>
+      exclusions.map(
+        /** Adds the owning resource path to one exclusion. @param exclusion - Generated X record. @returns Reviewable disposition. */ (
+          exclusion,
+        ) => ({
+          ...exclusion,
+          reason: "outside-p1-supported-command-slice",
+          sourcePath,
+        }),
+      ),
+  ),
+];
 const generated = await format(
   JSON.stringify({
     baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
@@ -346,8 +386,9 @@ const generated = await format(
       }),
     ),
     commands,
+    dispositions,
     locale: "en-US",
-    schemaVersion: 2,
+    schemaVersion: 3,
     surfaces,
     unsupported,
   }),
@@ -463,6 +504,31 @@ function findSlotSymbol(commandUrl: string, catalogs: readonly string[]): string
     if (match?.[1] !== undefined) return match[1];
   }
   throw new Error(`Missing upstream SDI slot declaration: ${commandUrl}`);
+}
+
+/** Reads the typed SDI argument declaration immediately following one command. @param commandUrl - Source UNO command. @param catalogs - Pinned SDI texts. @returns Ordered argument schema. */
+function findArgumentSchema(commandUrl: string, catalogs: readonly string[]): readonly string[] {
+  const commandName = commandUrl.slice(".uno:".length).split("?", 1)[0] as string;
+  for (const catalog of catalogs) {
+    const match = catalog.match(
+      new RegExp(
+        `^\\S+\\s+${escapeRegExp(commandName)}\\s+[A-Z][A-Z0-9_]+\\s*\\n(?:\\(([^\\n]*)\\))?`,
+        "m",
+      ),
+    );
+    if (match === null) continue;
+    const declaration = match[1];
+    if (declaration === undefined || declaration.trim().length === 0) return [];
+    return declaration.split(",").map(
+      /** Projects one typed SDI parameter. @param parameter - Type/name/slot declaration. @returns Type/name schema. */ (
+        parameter,
+      ) => {
+        const fields = parameter.trim().split(/\s+/u);
+        return `${fields[1] as string}:${fields[0] as string}`;
+      },
+    );
+  }
+  return [];
 }
 
 /** Collects object-like HRC definitions. @param catalogs - HRC source texts. @returns Macro expressions by name. */

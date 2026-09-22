@@ -24,4 +24,8 @@ so core Sfx execution has no browser operation state.
 
 Dispatch returns explicit `executed`, `disabled`, or `missing` outcomes. Menus,
 toolbars, selectors, and accelerators resolve the same active slot and binding
-state rather than maintaining a second command registry.
+state rather than maintaining a second command registry. `SfxControllerItem` in
+[`ctrlitem.ts`](../../apps/office/src/sfx2/source/control/ctrlitem.ts) owns one
+stable slot snapshot and one bindings subscription per visible control; the
+browser hook disposes it with the presenter. Generated Writer menu placement is
+used directly, without an additional handwritten command filter.

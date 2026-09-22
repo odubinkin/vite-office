@@ -7,6 +7,14 @@ copy native menu pixels.
 
 Current mappings are derived from pinned `libreoffice-26.8.0.2`:
 
+The generated Writer UI manifest records the complete reviewed graph as an
+explicit disposition for every encountered command reference: supported
+upstream, browser extension, or excluded with source and reason. Supported
+resources include generated labels, shortcuts, semantics, selection values,
+validated Sifr icon names, and typed SDI argument schemas. Menus and toolbars
+consume that generated order directly; no second handwritten allowlist filters
+implemented commands.
+
 - `sw/uiconfig/swriter/menubar/menubar.xml` places New, Open, Save, and Save As
   in **File**. The browser exposes **New**, **Open ODT…**, and **Save as ODT…**
   through the view shell and browser workflow adapters into `SwDocShell`;

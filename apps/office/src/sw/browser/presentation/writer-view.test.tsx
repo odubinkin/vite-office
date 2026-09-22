@@ -245,20 +245,21 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const cursor = wrtShell.GetCursor();
     const initialDocument = docShell.GetDoc();
     const initialSnapshot = session.viewStore.GetSnapshot();
-    const projection = session.viewStore.projection;
+    const editWindow = view.GetEditWin();
     expect(
-      projection.SetSelection(initialDocument, wrtShell, {
-        point: { offset: 0, paragraphId: "missing-projection" },
+      editWindow.SetSelection({
+        point: { contentIndex: 0, nodeIndex: -1 },
       }),
     ).toBe(false);
-    expect(projection.FocusParagraph(initialDocument, wrtShell, "missing-projection")).toBe(false);
+    expect(editWindow.FocusNode(-1)).toBe(false);
+    expect(editWindow.FocusNode(initialSnapshot.activeParagraph.nodeIndex)).toBe(true);
     expect(
-      projection.FocusParagraph(initialDocument, wrtShell, initialSnapshot.activeParagraph.id),
-    ).toBe(true);
-    expect(
-      projection.SetSelection(initialDocument, wrtShell, {
-        mark: { offset: 0, paragraphId: "missing-mark" },
-        point: initialSnapshot.cursorSelection.point,
+      editWindow.SetSelection({
+        mark: { contentIndex: 0, nodeIndex: -1 },
+        point: {
+          contentIndex: initialSnapshot.cursorSelection.point.offset,
+          nodeIndex: initialSnapshot.cursorSelection.point.nodeIndex as number,
+        },
       }),
     ).toBe(false);
     expect(session.viewStore.GetSnapshot()).toBe(initialSnapshot);
@@ -750,7 +751,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     session.Close();
   });
 
-  it("keeps projection keys scoped to their live canonical document", /** Verifies browser keys cannot resolve into another document graph. @returns Nothing. */ function scopesProjectionKeys(): void {
+  it("keeps projection keys stable without retaining mutable node resolution", /** Verifies browser keys are render-only identities. @returns Nothing. */ function scopesProjectionKeys(): void {
     const first = new SwDoc();
     const second = new SwDoc();
     const projection = new WriterViewProjection();
@@ -758,9 +759,9 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     if (firstNode === undefined) throw new Error("First Writer document has no paragraph.");
     const projectionId = projection.GetNodeId(firstNode);
     expect(projection.GetNodeId(firstNode)).toBe(projectionId);
-    expect(projection.ResolveNode(first, projectionId)).toBe(firstNode);
-    expect(projection.ResolveNode(second, projectionId)).toBeUndefined();
-    expect(projection.ResolveNode(first, "missing-projection")).toBeUndefined();
+    const secondNode = second.paragraphs[0];
+    if (secondNode === undefined) throw new Error("Second Writer document has no paragraph.");
+    expect(projection.GetNodeId(secondNode)).not.toBe(projectionId);
   });
 
   it("projects list geometry from the active numbering format", /** Verifies browser layout consumes model-owned indents instead of deriving geometry from list depth. @returns Nothing. */ function projectsNumberingGeometry(): void {

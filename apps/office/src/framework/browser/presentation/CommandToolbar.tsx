@@ -2,7 +2,7 @@
 
 import type { ComponentType, ReactNode } from "react";
 
-import type { BrowserCommandSurfaceProps } from "./command-surface";
+import { type BrowserCommandSurfaceProps, useBrowserCommandState } from "./command-surface";
 
 /** Minimal icon contract used by command buttons without coupling to an icon package. */
 export type CommandIcon = ComponentType<Readonly<{ "aria-hidden"?: boolean; size?: number }>>;
@@ -38,10 +38,10 @@ export function CommandButton({
   icon: Icon,
   resolveArguments,
 }: CommandButtonProps): React.JSX.Element | null {
+  const state = useBrowserCommandState(commandSource, commandId);
   const command = commandSource.QueryCommand(commandId);
   if (command === undefined) return null;
   const resource = getCommandResource(commandId);
-  const state = commandSource.QueryState(commandId);
   const pressed = resource.semantics === "action" ? undefined : state.checked === true;
   return (
     <button

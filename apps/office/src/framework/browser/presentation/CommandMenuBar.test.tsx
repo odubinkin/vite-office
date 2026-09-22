@@ -3,12 +3,33 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import type { BrowserCommandSource } from "./command-surface";
+import type { BrowserCommandControllerItem, BrowserCommandSource } from "./command-surface";
 import { CommandMenuBar } from "./CommandMenuBar";
+
+/** Creates a test controller-item factory around deterministic state. @param queryState - State reader. @returns Controller-item factory. */
+function createControllerItem(
+  queryState: () => ReturnType<BrowserCommandControllerItem["GetState"]>,
+): BrowserCommandSource["CreateControllerItem"] {
+  return /** Creates one inert test controller item. @returns Controller item. */ () => {
+    const state = queryState();
+    return {
+      Dispose: /** Releases no test resources. @returns Nothing. */ () => undefined,
+      GetState: /** Returns the stable fixture snapshot. @returns Command state. */ () => state,
+      Subscribe: /** Registers no invalidation in a static fixture. @returns Cleanup. */ () =>
+        /** Cleans up no test resources. @returns Nothing. */ () =>
+          undefined,
+    };
+  };
+}
 
 describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing. */ function defineCommandMenuBarTests(): void {
   it("uses placement labels when no localization adapter is supplied", /** Verifies the generated-label default. @returns Nothing. */ function usesFallbackLabel(): void {
     const commandSource: BrowserCommandSource = {
+      CreateControllerItem: createControllerItem(
+        /** Returns deterministic disabled state. @returns Disabled state. */ () => ({
+          enabled: false,
+        }),
+      ),
       Execute: vi.fn(
         /** Returns a deterministic dispatch result. @param commandId - Dispatched identity. @returns Executed result. */ (
           commandId,
@@ -20,11 +41,6 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
       ),
       QueryCommand: vi.fn(
         /** Resolves no commands for an empty test menu. @returns Undefined. */ () => undefined,
-      ),
-      QueryState: vi.fn(
-        /** Returns deterministic disabled state. @returns Disabled command state. */ () => ({
-          enabled: false,
-        }),
       ),
     };
     render(
@@ -48,6 +64,11 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
 
   it("switches open top-level menus on hover", /** Verifies hover switching does not open a closed menubar. @returns Nothing. */ function switchesOpenMenusOnHover(): void {
     const commandSource: BrowserCommandSource = {
+      CreateControllerItem: createControllerItem(
+        /** Returns deterministic disabled state. @returns Disabled state. */ () => ({
+          enabled: false,
+        }),
+      ),
       Execute: vi.fn(
         /** Returns a deterministic dispatch result. @param commandId - Dispatched identity. @returns Executed result. */ (
           commandId,
@@ -59,11 +80,6 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
       ),
       QueryCommand: vi.fn(
         /** Resolves no commands for empty test menus. @returns Undefined. */ () => undefined,
-      ),
-      QueryState: vi.fn(
-        /** Returns deterministic disabled state. @returns Disabled command state. */ () => ({
-          enabled: false,
-        }),
       ),
     };
     render(
@@ -101,6 +117,12 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
     const commandId = "view-sidebar";
     let isChecked = true;
     const commandSource: BrowserCommandSource = {
+      CreateControllerItem: createControllerItem(
+        /** Returns current check state. @returns Enabled checked state. */ () => ({
+          checked: isChecked,
+          enabled: true,
+        }),
+      ),
       Execute: vi.fn(
         /** Returns a deterministic dispatch result. @param dispatchedCommandId - Dispatched identity. @returns Executed result. */ (
           dispatchedCommandId,
@@ -125,12 +147,6 @@ describe("CommandMenuBar", /** Groups generic menubar behavior. @returns Nothing
                 label: "Sidebar",
               }
             : undefined,
-      ),
-      QueryState: vi.fn(
-        /** Returns an enabled command state. @returns Current command state. */ () => ({
-          checked: isChecked,
-          enabled: true,
-        }),
       ),
     };
     render(

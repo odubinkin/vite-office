@@ -774,8 +774,8 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.test.ts",
-            "marker": "hides the ruler command"
+            "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx",
+            "marker": "executes domain commands without DOM through the top Writer shell"
           },
           {
             "path": "apps/office/e2e/foundation.spec.ts",
@@ -808,8 +808,8 @@
         {
           "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Toggle and query one bounded view visibility flag.",
           "local": {
-            "marker": "hides the ruler command",
-            "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.test.ts"
+            "marker": "executes domain commands without DOM through the top Writer shell",
+            "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx"
           },
           "upstream": {
             "marker": "testStatusBarPageNumber",
@@ -852,8 +852,8 @@
         },
         "behavior": {
           "local": {
-            "marker": "hides the ruler command",
-            "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.test.ts"
+            "marker": "executes domain commands without DOM through the top Writer shell",
+            "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx"
           },
           "method": "unit-test",
           "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
@@ -865,8 +865,8 @@
         },
         "defaults": {
           "local": {
-            "marker": "hides the ruler command",
-            "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.test.ts"
+            "marker": "executes domain commands without DOM through the top Writer shell",
+            "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx"
           },
           "method": "source-derived-golden",
           "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
@@ -888,8 +888,8 @@
         },
         "differential": {
           "local": {
-            "marker": "hides the ruler command",
-            "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.test.ts"
+            "marker": "executes domain commands without DOM through the top Writer shell",
+            "path": "apps/office/src/sw/browser/presentation/writer-view.test.tsx"
           },
           "method": "source-derived-golden",
           "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
@@ -1293,7 +1293,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
-            "marker": "BrowserWriterClipboardEvents"
+            "marker": "readBrowserWriterClipboardPaste"
           }
         ],
         "tests": [
@@ -2377,7 +2377,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
-            "marker": "BrowserWriterClipboardEvents"
+            "marker": "readBrowserWriterClipboardPaste"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -5125,7 +5125,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
-            "marker": "BrowserWriterClipboardEvents"
+            "marker": "readBrowserWriterClipboardPaste"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",

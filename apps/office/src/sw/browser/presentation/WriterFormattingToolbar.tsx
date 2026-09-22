@@ -16,7 +16,10 @@ import {
   CommandToolbarItems,
   type CommandIcon,
 } from "../../../framework/browser/presentation/CommandToolbar";
-import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
+import {
+  type BrowserCommandSurfaceProps,
+  useBrowserCommandState,
+} from "../../../framework/browser/presentation/command-surface";
 import type { BrowserLocalizationService } from "../../../framework/browser/localization/browser-localization";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { getWriterParagraphStyleCommandId } from "../../uiconfig/swriter/menubar/menubar-commands";
@@ -146,19 +149,41 @@ function renderSpecialToolbarItem(
         resolveArguments={resolveArguments}
       />
     );
-  const selectedCommandId = item.options.find(
-    /** Finds the active radio-style command. @param id - Candidate command identity. @returns Whether the command is checked. */ (
-      id,
-    ) => commandSource.QueryState(id).checked === true,
+  return (
+    <ParagraphStyleSelect
+      commandSource={commandSource}
+      getCommandResource={getCommandResource}
+      item={item}
+      key={item.label}
+      localization={localization}
+      paragraphStyleOptions={paragraphStyleOptions}
+      resolveArguments={resolveArguments}
+    />
   );
-  /* v8 ignore next -- Generated paragraph-style selectors always contain commands. */
-  if (selectedCommandId === undefined) return null;
-  const selected = getCommandResource(selectedCommandId).selectionValue;
-  /* v8 ignore next -- Every generated style command has a selection value. */
-  if (selected === undefined) return null;
+}
+
+/** Binding-backed paragraph-style selector. @param props - Generated resource and command state inputs. @returns Style selector. */
+function ParagraphStyleSelect({
+  commandSource,
+  getCommandResource,
+  item,
+  localization,
+  paragraphStyleOptions,
+  resolveArguments,
+}: Readonly<{
+  commandSource: BrowserCommandSurfaceProps["commandSource"];
+  getCommandResource: typeof getWriterCommandResource;
+  item: Extract<WriterToolbarItemPlacement, { kind: "command-select" }>;
+  localization: BrowserLocalizationService;
+  paragraphStyleOptions: readonly WriterParagraphStyleOption[];
+  resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
+}>): React.JSX.Element {
+  const selected = String(
+    useBrowserCommandState(commandSource, WRITER_COMMAND_IDS.styleApply).value,
+  );
   const label = localization.GetText("writer.toolbar.paragraph-style", item.label);
   return (
-    <label className="contents" key={item.label}>
+    <label className="contents">
       <span className="sr-only">{label}</span>
       <select
         aria-label={label}
@@ -241,7 +266,7 @@ function FontNameSelect({
   readonly resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
 }): React.JSX.Element {
   const [fonts, setFonts] = useState<readonly string[]>(FALLBACK_FONT_FAMILIES);
-  const selected = String(commandSource.QueryState(commandId).value);
+  const selected = String(useBrowserCommandState(commandSource, commandId).value);
   useEffect(
     /** Loads device fonts after mount. @returns Cleanup. */ () => {
       let active = true;
@@ -307,7 +332,7 @@ function FontSizeSelect({
   readonly label: string;
   readonly resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
 }): React.JSX.Element {
-  const selected = Number(commandSource.QueryState(commandId).value);
+  const selected = Number(useBrowserCommandState(commandSource, commandId).value);
   /* v8 ignore next -- Imported nonstandard point sizes are retained for round-trip fidelity. */
   const options = STANDARD_FONT_SIZES_PT.includes(
     selected as (typeof STANDARD_FONT_SIZES_PT)[number],

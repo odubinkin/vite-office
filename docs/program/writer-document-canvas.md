@@ -7,12 +7,12 @@ browser workbench the same information placement as Writer: document content
 lives on the page, paragraph formatting lives in the formatting toolbar, and
 focused properties live in the right sidebar.
 
-[`edtwin`](../../apps/office/src/sw/source/uibase/docvw/edtwin.tsx)
-uses one accessible `contenteditable` paragraph block per projected
-`WriterParagraph`. Each block retains a stable accessible name, exposes its
+[`WriterPlainTextEditor`](../../apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx)
+uses one root `contenteditable` host containing immutable projected paragraph
+blocks. Each block retains a stable accessible name, exposes its
 bounded paragraph style through an assistive description, identifies focus to
-the workbench, and sends edit intents through the persistent Writer shell. The
-component is not a custom text-engine: browser
+the single browser edit-window, and sends edit intents through DOM-neutral
+`SwEditWin` and the persistent Writer shell. The component is not a custom text-engine: browser
 selection, caret behavior, and line wrapping remain browser-owned.
 
 ## Paragraph command placement
@@ -29,9 +29,9 @@ range deletion remains a later model capability.
 
 ## Deliberate limits
 
-This is not native LibreOffice rendering, WYSIWYG pagination, a rich-text or
-range editor, a custom selection model, clipboard semantics, Backspace
-paragraph merging, context menus, track changes, lists, tables,
-ODT/OOXML import/export, or complete Writer parity. It preserves the existing
+This is not native LibreOffice rendering, WYSIWYG pagination, a custom selection
+model, context menus, track changes, tables, OOXML import/export, or complete
+Writer parity. Bounded rich text, range editing, clipboard, adjacent-paragraph
+joining, lists, and ODT I/O are implemented through Writer-owned operations. It preserves the existing
 indigo, slate, rounded, and accessible application design rather than copying
 LibreOffice pixels or theme assets.

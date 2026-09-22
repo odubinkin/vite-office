@@ -712,9 +712,9 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sfx2/source/control/bindings.ts#SfxBindings",
-          "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx#SfxBindings"
+          "vendor/libreoffice-reference/sfx2/source/control/bindings.cxx#SfxBindings::SfxBindings"
         ],
-        "justification": "Ports the bounded frame-owned state query, invalidation, version, and subscription responsibilities used by the supported Writer slot slice.",
+        "justification": "Ports the bounded frame-owned command state query and invalidation facade.",
         "knownViolations": [],
         "localSymbols": [
           "SfxBindings"
@@ -722,7 +722,38 @@
         "sourceResponsibility": "unverified",
         "upstreamFile": "sfx2/source/control/bindings.cxx",
         "upstreamSymbols": [
-          "SfxBindings"
+          "SfxBindings::SfxBindings"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sfx2/source/control/ctrlitem.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/control/ctrlitem.ts#SfxControllerItem",
+          "vendor/libreoffice-reference/sfx2/source/control/ctrlitem.cxx#SfxControllerItem::SfxControllerItem"
+        ],
+        "justification": "Ports one persistent slot-specific SfxControllerItem subscription per visible browser control.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxControllerItem"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sfx2/source/control/ctrlitem.cxx",
+        "upstreamSymbols": [
+          "SfxControllerItem::SfxControllerItem"
         ]
       }
     },
@@ -1386,7 +1417,36 @@
         "evidence": [
           "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#WriterPlainTextEditor"
         ],
-        "justification": "Binds isolated browser editor adapters to one React document projection and one logical contenteditable host; it no longer claims native SwEditWin ownership.",
+        "justification": "Renders immutable paragraphs in one contenteditable host and binds exactly one stable BrowserWriterEditWindow to the DOM-neutral SwEditWin owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-editor",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0106",
+        "CAP-0117",
+        "CAP-0118",
+        "CAP-0120"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts#BrowserWriterEditWindow"
+        ],
+        "justification": "Provides the single DOM implementation of SwEditWin for selection, beforeinput, composition, pointer geometry, clipboard, drag/drop, and focus.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1411,62 +1471,9 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/editor/writer-clipboard-events.ts#BrowserWriterClipboardEvents"
+          "apps/office/src/sw/browser/editor/writer-clipboard-events.ts#readBrowserWriterClipboardPaste"
         ],
-        "justification": "Isolates native ClipboardEvent and DataTransfer mechanics behind canonical Writer selection and command ports; no native LibreOffice source file is claimed as its owner.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/browser/editor/writer-composition.ts",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "browser-editor",
-      "capabilityIds": [
-        "CAP-0103",
-        "CAP-0118"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/browser/editor/writer-composition.ts#BrowserWriterCompositionAdapter"
-        ],
-        "justification": "Owns browser IME staging and trailing event suppression while delegating extended-text-input semantics to SwWrtShell; no native LibreOffice source file is claimed as its owner.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/browser/editor/writer-edit-controller.ts",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "browser-editor",
-      "capabilityIds": [
-        "CAP-0103",
-        "CAP-0117",
-        "CAP-0118"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/browser/editor/writer-edit-controller.ts#BrowserWriterEditController"
-        ],
-        "justification": "Normalizes browser Input Events intent before invoking the Writer shell and exposes guarded fallback diagnostics; no native LibreOffice source file is claimed as its owner.",
+        "justification": "Parses native DataTransfer MIME values at the single browser edit-window boundary; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1518,7 +1525,7 @@
         "evidence": [
           "apps/office/src/sw/browser/editor/writer-selection-types.ts#WriterCursorSelection"
         ],
-        "justification": "Defines projection-keyed selection values only for the DOM presentation boundary; canonical Writer code uses SwPosition and SwPaM object identities.",
+        "justification": "Defines immutable DOM selection values; render IDs restore DOM selection while current SwNodes indexes are consumed only by the edit-window adapter for SwPaM conversion.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1545,7 +1552,7 @@
         "evidence": [
           "apps/office/src/sw/browser/editor/writer-selection.ts#getWriterDomSelection"
         ],
-        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "justification": "Renders immutable current paragraph values together with alignment and list controls backed by generated commands and persistent bindings state.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1761,7 +1768,7 @@
         "evidence": [
           "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx#WriterParagraphProperties"
         ],
-        "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "justification": "Renders immutable current paragraph values together with alignment and list controls backed by generated commands and persistent bindings state.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1840,7 +1847,7 @@
         "evidence": [
           "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts#writerBrowserMenuPlacements"
         ],
-        "justification": "Filters generated Writer resources to commands backed by honest browser capabilities.",
+        "justification": "Exports the supported generated Writer menubar verbatim so no second handwritten presentation policy can hide an implemented command.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1865,7 +1872,7 @@
         "evidence": [
           "apps/office/src/sw/browser/presentation/writer-view-projection.ts#WriterViewStore"
         ],
-        "justification": "Browser-only projection or persistence adaptation kept outside the canonical Writer model.",
+        "justification": "Projects live Writer nodes into immutable render values and current SwNodes coordinates without exposing node resolution or mutation closures to React.",
         "knownViolations": [],
         "localSymbols": [
           "WriterParagraphProjection",
@@ -3835,6 +3842,41 @@
           "UITestLogger::getInstance",
           "SwTransferable::SwTransferable",
           "URIHelper::removePassword"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-view",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0117",
+        "CAP-0118",
+        "CAP-0120"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/uibase/docvw/edtwin.ts#SwEditWin",
+          "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx#SwEditWin::KeyInput"
+        ],
+        "justification": "Ports the bounded platform-neutral SwEditWin ownership boundary while browser event vocabulary remains in one outer adapter.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwEditWin"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/uibase/docvw/edtwin.cxx",
+        "upstreamSymbols": [
+          "SwEditWin::KeyInput",
+          "SwEditWin::Command",
+          "SwEditWin::MouseButtonDown"
         ]
       }
     },

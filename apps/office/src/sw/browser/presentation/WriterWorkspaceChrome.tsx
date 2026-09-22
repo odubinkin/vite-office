@@ -20,6 +20,8 @@ export interface WriterWorkspaceChromeProps {
   readonly formattingToolbar: ReactNode;
   /** Whether the Writer properties sidebar is rendered beside the document canvas. */
   readonly isPropertiesSidebarVisible: boolean;
+  /** Whether the browser measurement-ruler chrome is rendered above the canvas. */
+  readonly isHorizontalRulerVisible: boolean;
   /** Whether the Writer status bar is rendered below the document canvas. */
   readonly isStatusBarVisible: boolean;
   /** Current contextual controls and feedback placed in the Writer properties sidebar. */
@@ -39,6 +41,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.onDocumentTitleChange - Applies a committed document title.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
+ * @param props.isHorizontalRulerVisible - Whether the horizontal measurement chrome remains visible.
  * @param props.isStatusBarVisible - Whether the status feedback row remains visible below the canvas.
  * @param props.menuBar - Functional Writer menus placed beside the document title row.
  * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
@@ -50,6 +53,7 @@ export function WriterWorkspaceChrome({
   children,
   documentTitle,
   formattingToolbar,
+  isHorizontalRulerVisible,
   isPropertiesSidebarVisible,
   isStatusBarVisible,
   menuBar,
@@ -143,6 +147,14 @@ export function WriterWorkspaceChrome({
           {formattingToolbar}
         </div>
       </header>
+
+      {isHorizontalRulerVisible ? (
+        <div
+          aria-label="Writer horizontal ruler"
+          className="h-5 shrink-0 border-b border-slate-300 bg-[repeating-linear-gradient(to_right,transparent_0,transparent_23px,rgb(148_163_184)_24px)] bg-white"
+          role="img"
+        />
+      ) : null}
 
       <div
         className={`min-h-0 min-w-0 flex-1 overflow-hidden ${

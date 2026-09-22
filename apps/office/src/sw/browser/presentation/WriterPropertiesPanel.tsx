@@ -3,16 +3,14 @@
  * claiming LibreOffice Writer Inspector ownership.
  */
 
-import type { WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
-import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
-import {
-  getWriterParagraphStyleDefinition,
-  type WriterParagraphStyleDefinition,
-} from "../../inc/poolfmt";
-import type { WriterParagraphListKind } from "../../source/core/doc/list";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
+import { CommandButton } from "../../../framework/browser/presentation/CommandToolbar";
+import type { WriterParagraphListKind } from "../../source/core/doc/list";
+import type { WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
+import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 
-/** Maps serializable alignment literals to concise reader-facing property values. */
 const alignmentLabels: Readonly<Record<WriterParagraphAlignment, string>> = {
   center: "Centered",
   justify: "Justified",
@@ -20,7 +18,6 @@ const alignmentLabels: Readonly<Record<WriterParagraphAlignment, string>> = {
   right: "Right",
 };
 
-/** Maps serializable list literals to concise focused properties labels. */
 const listLabels: Readonly<Record<WriterParagraphListKind, string>> = {
   bullet: "Unordered List",
   none: "No List",
@@ -28,36 +25,45 @@ const listLabels: Readonly<Record<WriterParagraphListKind, string>> = {
 };
 
 /** Defines the focused paragraph details rendered by the Writer properties sidebar. */
-export interface WriterParagraphPropertiesProps {
-  /** Alignment currently applied to the focused Writer paragraph. */
+export interface WriterParagraphPropertiesProps extends BrowserCommandSurfaceProps {
   readonly alignment: WriterParagraphAlignment;
+  readonly listKind: WriterParagraphListKind;
   /** One-based document position of the focused Writer paragraph. */
   readonly paragraphNumber: number;
-  /** List presentation currently applied to the focused Writer paragraph. */
-  readonly listKind: WriterParagraphListKind;
-  /** Style currently applied to the focused Writer paragraph. */
-  readonly style: WriterParagraphStyle;
+  readonly styleDisplayName: string;
 }
 
 /**
  * Renders focused paragraph formatting feedback in the Writer properties sidebar.
  *
  * @param props - Immutable selected paragraph information supplied by the Writer workbench.
- * @param props.alignment - Current horizontal alignment for the active paragraph.
- * @param props.listKind - Current default-list presentation for the active paragraph.
+ * @param props.alignment - Current paragraph alignment.
+ * @param props.commandSource - Active bindings-backed command source.
+ * @param props.listKind - Current paragraph list kind.
  * @param props.paragraphNumber - One-based visible position for the active paragraph.
- * @param props.style - Current bounded paragraph style for the active paragraph.
- * @returns A concise properties panel with no unimplemented interactive controls.
+ * @param props.resolveArguments - Browser argument adapter.
+ * @param props.styleDisplayName - Current paragraph style display name.
+ * @returns A command- and bindings-backed paragraph sidebar.
  */
 export function WriterParagraphProperties({
   alignment,
+  commandSource,
   listKind,
   paragraphNumber,
-  style,
+  resolveArguments,
+  styleDisplayName,
 }: WriterParagraphPropertiesProps): React.JSX.Element {
   const localization = useBrowserLocalization();
-  const styleName = (getWriterParagraphStyleDefinition(style) as WriterParagraphStyleDefinition)
-    .name;
+  const getCommandResource =
+    /** Localizes one generated sidebar command. @param commandUrl - Command URL. @returns Localized resource. */ (
+      commandUrl: string,
+    ) => {
+      const resource = getWriterCommandResource(commandUrl);
+      return {
+        ...resource,
+        label: `Properties: ${localization.GetText(`writer.command.${commandUrl}.label`, resource.label)}`,
+      };
+    };
   return (
     <>
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-indigo-700">
@@ -73,32 +79,63 @@ export function WriterParagraphProperties({
           { number: paragraphNumber },
         )}
       </p>
-      <dl className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-3">
-        <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+      <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
           {localization.GetText("writer.properties.alignment", "Alignment")}
-        </dt>
-        <dd className="mt-1 text-sm font-bold text-slate-900">
+        </p>
+        <p className="mt-1 text-sm font-bold text-slate-900">
           {localization.GetText(`writer.alignment.${alignment}`, alignmentLabels[alignment])}
-        </dd>
-        <dt className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+        </p>
+        <div className="mt-2 flex flex-wrap gap-1">
+          {[
+            WRITER_COMMAND_IDS.alignLeft,
+            WRITER_COMMAND_IDS.alignCenter,
+            WRITER_COMMAND_IDS.alignRight,
+            WRITER_COMMAND_IDS.alignJustify,
+          ].map(
+            /** Renders one alignment command. @param commandId - Generated command URL. @returns Command button. */ (
+              commandId,
+            ) => (
+              <CommandButton
+                commandId={commandId}
+                commandSource={commandSource}
+                getCommandResource={getCommandResource}
+                key={commandId}
+                resolveArguments={resolveArguments}
+              />
+            ),
+          )}
+        </div>
+        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
           {localization.GetText("writer.properties.style", "Style")}
-        </dt>
-        <dd className="mt-1 text-sm font-bold text-slate-900">
-          {localization.GetText(`writer.style.${style}`, styleName)}
-        </dd>
-        <dt className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+        </p>
+        <p className="mt-1 text-sm font-bold text-slate-900">{styleDisplayName}</p>
+        <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
           {localization.GetText("writer.properties.list", "List")}
-        </dt>
-        <dd className="mt-1 text-sm font-bold text-slate-900">
+        </p>
+        <p className="mt-1 text-sm font-bold text-slate-900">
           {localization.GetText(`writer.list.${listKind}`, listLabels[listKind])}
-        </dd>
-      </dl>
-      <p className="mt-5 text-sm leading-6 text-slate-600">
-        {localization.GetText(
-          "writer.properties.scope-note",
-          "Indents, spacing, text flow, and character formatting are separate Writer features.",
-        )}
-      </p>
+        </p>
+        <div className="mt-2 flex flex-wrap gap-1">
+          {[
+            WRITER_COMMAND_IDS.removeBullets,
+            WRITER_COMMAND_IDS.unorderedList,
+            WRITER_COMMAND_IDS.orderedList,
+          ].map(
+            /** Renders one list command. @param commandId - Generated command URL. @returns Command button. */ (
+              commandId,
+            ) => (
+              <CommandButton
+                commandId={commandId}
+                commandSource={commandSource}
+                getCommandResource={getCommandResource}
+                key={commandId}
+                resolveArguments={resolveArguments}
+              />
+            ),
+          )}
+        </div>
+      </div>
     </>
   );
 }

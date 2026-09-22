@@ -1,7 +1,7 @@
 /** @fileoverview Renders generated menu resources through one reusable command-driven state machine. */
 import { useEffect, useRef, useState } from "react";
 
-import type { BrowserCommandSurfaceProps } from "./command-surface";
+import { type BrowserCommandSurfaceProps, useBrowserCommandState } from "./command-surface";
 
 /** Command resource fields consumed by an accessible menu item. */
 export interface MenuCommandResource {
@@ -319,44 +319,15 @@ export function CommandMenuBar({
         const command = commandSource.QueryCommand(item.commandId);
         /* v8 ignore next -- Resource/registry consistency is validated before presentation. */
         if (command === undefined) return null;
-        const state = commandSource.QueryState(item.commandId);
-        const resource = getCommandResource(item.commandId);
-        const role =
-          resource.semantics === "check"
-            ? "menuitemcheckbox"
-            : resource.semantics === "radio"
-              ? "menuitemradio"
-              : "menuitem";
-        const isCheckable = role !== "menuitem";
-        const isChecked = state.checked === true;
-        const label = `${resource.label}${item.showsDialog === true ? "…" : ""}`;
         return (
-          <button
-            aria-checked={isCheckable ? isChecked : undefined}
-            aria-keyshortcuts={resource.shortcuts[0]}
-            className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
-            disabled={!state.enabled || state.pending === true}
+          <BindingsMenuCommand
+            closeMenu={closeMenu}
+            commandSource={commandSource}
+            getCommandResource={getCommandResource}
+            item={item}
             key={item.commandId}
-            onClick={
-              /** Dispatches this command and dismisses the popup. @returns Nothing. */ () => {
-                commandSource.Execute(item.commandId, resolveArguments(item.commandId));
-                closeMenu();
-              }
-            }
-            role={role}
-            tabIndex={-1}
-            title={state.error}
-            type="button"
-          >
-            <span
-              aria-hidden="true"
-              className="flex w-4 shrink-0 justify-center font-semibold"
-              data-menu-checkmark="true"
-            >
-              {isCheckable && isChecked ? "✓" : null}
-            </span>
-            <span>{label}</span>
-          </button>
+            resolveArguments={resolveArguments}
+          />
         );
       },
     );
@@ -427,5 +398,59 @@ export function CommandMenuBar({
         },
       )}
     </div>
+  );
+}
+
+/** Renders one menu command through a persistent slot controller item. @param props - Command/menu inputs. @returns Bindings-backed menu item. */
+function BindingsMenuCommand({
+  closeMenu,
+  commandSource,
+  getCommandResource,
+  item,
+  resolveArguments,
+}: Readonly<{
+  closeMenu: () => void;
+  commandSource: BrowserCommandSurfaceProps["commandSource"];
+  getCommandResource: CommandMenuBarProps["getCommandResource"];
+  item: Extract<CommandMenuItemPlacement, { kind: "command" }>;
+  resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
+}>): React.JSX.Element {
+  const state = useBrowserCommandState(commandSource, item.commandId);
+  const resource = getCommandResource(item.commandId);
+  const role =
+    resource.semantics === "check"
+      ? "menuitemcheckbox"
+      : resource.semantics === "radio"
+        ? "menuitemradio"
+        : "menuitem";
+  const isCheckable = role !== "menuitem";
+  const isChecked = state.checked === true;
+  const label = `${resource.label}${item.showsDialog === true ? "…" : ""}`;
+  return (
+    <button
+      aria-checked={isCheckable ? isChecked : undefined}
+      aria-keyshortcuts={resource.shortcuts[0]}
+      className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
+      disabled={!state.enabled || state.pending === true}
+      onClick={
+        /** Dispatches this command and dismisses the popup. @returns Nothing. */ () => {
+          commandSource.Execute(item.commandId, resolveArguments(item.commandId));
+          closeMenu();
+        }
+      }
+      role={role}
+      tabIndex={-1}
+      title={state.error}
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+        className="flex w-4 shrink-0 justify-center font-semibold"
+        data-menu-checkmark="true"
+      >
+        {isCheckable && isChecked ? "✓" : null}
+      </span>
+      <span>{label}</span>
+    </button>
   );
 }

@@ -431,9 +431,9 @@
         ]
       },
       "localPath": "apps/office/src/framework/browser/presentation/command-surface.ts",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "rationale": "Adapts frame-owned Sfx bindings to persistent browser controller items and React external-store subscriptions.",
       "responsibilities": [
-        "Defines the replaceable command query and dispatch port consumed by browser presenters."
+        "Defines the controller-item and dispatch port consumed by browser presenters without render-time state queries."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -835,15 +835,47 @@
         "SfxBindings"
       ],
       "omittedResponsibilities": [
-        "Native controllers, timers, dispatch-result listeners, and UNO state conversion remain outside the bounded browser dispatcher."
+        "Native timers, dispatch-result listeners, and UNO state conversion remain outside the bounded browser dispatcher."
       ],
       "preservedResponsibilities": [
-        "Preserves frame-owned command state queries, invalidation generations, and listener publication for the supported slot subset."
+        "Preserves frame-owned command state queries and invalidation."
       ],
       "status": "mapped",
       "upstreamPath": "sfx2/source/control/bindings.cxx",
       "upstreamSymbols": [
         "SfxBindings::SfxBindings"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxControllerItem",
+            "path": "apps/office/src/sfx2/source/control/ctrlitem.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxControllerItem::SfxControllerItem",
+            "path": "vendor/libreoffice-reference/sfx2/source/control/ctrlitem.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/control/ctrlitem.ts",
+      "localSymbols": [
+        "SfxControllerItem"
+      ],
+      "omittedResponsibilities": [
+        "UNO controller dispatch, native status listeners, and VCL control ownership remain outside the bounded browser implementation."
+      ],
+      "preservedResponsibilities": [
+        "Preserves one persistent bindings subscription and stable slot-specific state publication per visible control."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sfx2/source/control/ctrlitem.cxx",
+      "upstreamSymbols": [
+        "SfxControllerItem::SfxControllerItem"
       ]
     },
     {
@@ -1449,15 +1481,15 @@
       "evidence": {
         "local": [
           {
-            "marker": "BrowserWriterClipboardEvents",
+            "marker": "readBrowserWriterClipboardPaste",
             "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
-      "rationale": "Isolates native ClipboardEvent and DataTransfer mechanics behind canonical Writer selection and command ports; no native LibreOffice source file is claimed as its owner.",
+      "rationale": "Parses DataTransfer MIME values at the single browser edit-window boundary; no native LibreOffice source file is claimed as its owner.",
       "responsibilities": [
-        "Adapts native copy, cut, and paste events to bounded Writer transfer payloads and canonical selections."
+        "Parses native HTML/plain-text clipboard values into the bounded Writer transfer filter record."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1470,42 +1502,55 @@
       "evidence": {
         "local": [
           {
-            "marker": "BrowserWriterCompositionAdapter",
-            "path": "apps/office/src/sw/browser/editor/writer-composition.ts"
+            "marker": "BrowserWriterEditWindow",
+            "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/browser/editor/writer-composition.ts",
-      "rationale": "Owns browser IME staging and trailing event suppression while delegating extended-text-input semantics to SwWrtShell; no native LibreOffice source file is claimed as its owner.",
+      "localPath": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
+      "rationale": "Provides the single DOM implementation of the platform-neutral SwEditWin boundary.",
       "responsibilities": [
-        "Adapts browser composition events to one shell-owned extended-text-input transaction."
+        "Translates DOM selection, beforeinput, composition, pointer, clipboard, drag/drop, and focus events into SwEditWin operations."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
-        "rationale": "DOM composition events replace native VCL input-method events."
+        "rationale": "DOM events and selection geometry replace native VCL event delivery at one outer adapter."
       },
       "status": "local-only"
     },
     {
-      "classification": "browser-adaptation",
+      "classification": "upstream-mechanism",
       "evidence": {
         "local": [
           {
-            "marker": "BrowserWriterEditController",
-            "path": "apps/office/src/sw/browser/editor/writer-edit-controller.ts"
+            "marker": "SwEditWin",
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwEditWin::KeyInput",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/browser/editor/writer-edit-controller.ts",
-      "rationale": "Normalizes browser Input Events intent before invoking the Writer shell and exposes guarded fallback diagnostics; no native LibreOffice source file is claimed as its owner.",
-      "responsibilities": [
-        "Translates normalized browser edit intents into canonical Writer shell operations."
+      "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "localSymbols": [
+        "SwEditWin"
       ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Input Events replace native VCL key and command event delivery."
-      },
-      "status": "local-only"
+      "omittedResponsibilities": [
+        "Native VCL painting, accessibility, drag services, and platform event classes remain in the browser adapter."
+      ],
+      "preservedResponsibilities": [
+        "Owns platform-neutral edit, selection, composition, transfer, and history operations over one persistent SwWrtShell."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
+      "upstreamSymbols": [
+        "SwEditWin::KeyInput",
+        "SwEditWin::Command",
+        "SwEditWin::MouseButtonDown"
+      ]
     },
     {
       "classification": "browser-adaptation",
@@ -1539,9 +1584,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/writer-selection-types.ts",
-      "rationale": "Keeps projection-keyed DOM selection values outside Writer shell and core contracts.",
+      "rationale": "Keeps immutable DOM selection values outside Writer shell and core contracts; current SwNodes indexes are consumed only by the edit-window adapter.",
       "responsibilities": [
-        "Defines immutable browser selection coordinates whose paragraph keys are owned by WriterViewProjection."
+        "Defines render-keyed restoration coordinates plus current edit-window node coordinates without retaining mutable nodes."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1602,9 +1647,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
-      "rationale": "Binds isolated browser editor adapters to one React document projection and one logical contenteditable host; it no longer claims native SwEditWin ownership.",
+      "rationale": "Binds exactly one stable BrowserWriterEditWindow to immutable React paragraph projections and one logical contenteditable host.",
       "responsibilities": [
-        "Renders Writer paragraphs inside one browser editing host and binds model-neutral adapter entry points."
+        "Renders Writer paragraphs and forwards DOM events without constructing Writer mutation closures."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1707,9 +1752,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts",
-      "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
+      "rationale": "Exposes the supported generated Writer menubar unchanged at the browser presentation boundary.",
       "responsibilities": [
-        "Filters generated Writer resources to commands backed by honest browser capabilities."
+        "Prevents a second handwritten policy from filtering implemented generated commands."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1841,9 +1886,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "rationale": "Combines immutable current paragraph values with alignment and list controls backed by generated commands and persistent bindings state.",
       "responsibilities": [
-        "Renders the bounded browser Writer paragraph-properties summary."
+        "Renders the bounded Writer paragraph-properties summary and binding-backed sidebar commands."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",

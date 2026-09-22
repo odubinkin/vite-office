@@ -17,13 +17,8 @@ import { useBrowserLocalization } from "../../../framework/browser/localization/
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import { writerBrowserMenuPlacements } from "./writer-command-surfaces";
-import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
-import { readBrowserWriterClipboardPaste } from "../editor/writer-clipboard-events";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
-import type { BrowserWriterEditPort } from "../editor/writer-edit-controller";
-import type { WriterCursorSelection } from "../editor/writer-selection-types";
 import type { SwView } from "../../source/uibase/uiview/view";
-import type { WriterPasteCommandArguments } from "../workflows/writer-workflows";
 import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
 import type { WriterRecoveryNotice } from "./WriterRecoveryPrompt";
 
@@ -65,75 +60,6 @@ export function WriterWorkbench({
     dialogController.Subscribe,
     dialogController.GetSnapshot,
     dialogController.GetSnapshot,
-  );
-  const wrtShell = view.GetWrtShell();
-  const viewProjection = presentationStore.projection;
-  const editPort = useMemo<Omit<BrowserWriterEditPort, "synchronizeSelection">>(
-    /** Binds browser intent translation to Writer-native shell operations. @returns Stable edit port. */ () => ({
-      deleteForward: /** Deletes after the Writer cursor. @returns Whether changed. */ () =>
-        wrtShell.DelRight(),
-      deleteLeft: /** Deletes before the Writer cursor. @returns Whether changed. */ () =>
-        wrtShell.DelLeft(),
-      /* v8 ignore next -- Wiring-only path; BrowserWriterEditController and SwWrtShell own coverage. */
-      deleteSelection: /** Deletes the Writer selection. @returns Whether changed. */ () =>
-        wrtShell.DeleteSelection(),
-      insert:
-        /** Inserts text at the Writer cursor. @param text - Browser text. @returns Whether changed. */ (
-          text,
-        ) => wrtShell.Insert(text),
-      /* v8 ignore next -- Wiring-only path; BrowserWriterEditController and SwWrtShell own coverage. */
-      redo: /** Redoes the last Writer edit. @returns Whether changed. */ () => wrtShell.Redo(),
-      replace:
-        /** Replaces the Writer selection. @param text - Browser text. @returns Whether changed. */ (
-          text,
-        ) => wrtShell.Replace(text),
-      /* v8 ignore next -- Wiring-only path; BrowserWriterEditController and SwWrtShell own coverage. */
-      setListKind:
-        /** Sets the active Writer list kind. @param kind - List kind. @returns Whether changed. */ (
-          kind,
-        ) => wrtShell.SetParagraphListKind(kind),
-      splitNode: /** Splits the active Writer node. @returns Whether changed. */ () =>
-        wrtShell.SplitNode(),
-      toggleCharacterFormat:
-        /** Toggles direct Writer character formatting. @param format - Format. @returns Whether changed. */ (
-          format,
-        ) => wrtShell.ToggleCharacterFormat(format),
-      /* v8 ignore next -- Wiring-only path; BrowserWriterEditController and SwWrtShell own coverage. */
-      undo: /** Undoes the last Writer edit. @returns Whether changed. */ () => wrtShell.Undo(),
-    }),
-    [wrtShell],
-  );
-  const handleCompositionEnd = useCallback(
-    /** Commits the active IME transaction. @returns Whether Writer changed. */ () =>
-      wrtShell.EndComposition(),
-    [wrtShell],
-  );
-  const handleCompositionStart = useCallback(
-    /** Starts transient shell IME state. @returns Nothing. */ () => wrtShell.StartComposition(),
-    [wrtShell],
-  );
-  const handleCompositionUpdate = useCallback(
-    /** Updates transient IME text. @param text - Current composed text. @returns Nothing. */
-    (text: string): void => wrtShell.UpdateComposition(text),
-    [wrtShell],
-  );
-  const handleParagraphFocus = useCallback(
-    /** Moves the shell cursor to a focused projection. @param paragraphId - Stable Writer paragraph ID. @returns Nothing. */
-    (paragraphId: string): void =>
-      void viewProjection.FocusParagraph(view.GetDocShell().GetDoc(), wrtShell, paragraphId),
-    [view, viewProjection, wrtShell],
-  );
-  const handleSelectionChange = useCallback(
-    /** Stores native selection endpoints as the shell PaM. @param selection - Canonical Writer endpoints. @returns Whether the selection changed. */
-    (selection: WriterCursorSelection): boolean =>
-      viewProjection.SetSelection(view.GetDocShell().GetDoc(), wrtShell, selection),
-    [view, viewProjection, wrtShell],
-  );
-  const handleSelectAll = useCallback(
-    /** Dispatches the canonical Select All command. @returns Nothing. */ () => {
-      view.Execute(WRITER_COMMAND_IDS.selectAll);
-    },
-    [view],
   );
   const handleDocumentTitleChange = useCallback(
     /** Persists an inline-edited document title through the owning shell. @param title - Committed title. @returns Nothing. */
@@ -180,34 +106,6 @@ export function WriterWorkbench({
     resolveArguments: resolveCommandArguments,
   });
 
-  const createNativeTransfer = useCallback(
-    /** Serializes the shell-owned SwPaM without consulting rendered descendants. @returns Model transfer data, if selected. */
-    function createNativeTransfer(): WriterClipboardSelection | undefined {
-      return wrtShell.CreateTransferable().CreateSelection();
-    },
-    [wrtShell],
-  );
-
-  const executeNativeCut = useCallback(
-    /** Dispatches an already browser-handled native Cut against the shell-owned SwPaM. @returns Nothing. */
-    function dispatchNativeCut(): void {
-      view.Execute(WRITER_COMMAND_IDS.cut, { clipboardHandled: true });
-    },
-    [view],
-  );
-
-  const executeNativePaste = useCallback(
-    /** Dispatches an already browser-handled native Paste. @param selection - Replacement selection. @param clipboardData - Native clipboard data. @returns Nothing. */
-    function dispatchNativePaste(clipboardData: DataTransfer): void {
-      const paste = readBrowserWriterClipboardPaste(clipboardData, globalThis.document);
-      view.Execute(WRITER_COMMAND_IDS.paste, {
-        clipboardHandled: true,
-        ...(paste === undefined ? {} : { paste }),
-      } satisfies WriterPasteCommandArguments);
-    },
-    [view],
-  );
-
   return (
     <div hidden={!isActive}>
       <WriterWorkspaceChrome
@@ -219,6 +117,7 @@ export function WriterWorkbench({
             resolveArguments={resolveCommandArguments}
           />
         }
+        isHorizontalRulerVisible={snapshot.isHorizontalRulerVisible}
         isPropertiesSidebarVisible={snapshot.isPropertiesSidebarVisible}
         isStatusBarVisible={snapshot.isStatusBarVisible}
         menuBar={
@@ -241,9 +140,11 @@ export function WriterWorkbench({
         propertiesSidebar={
           <WriterParagraphProperties
             alignment={snapshot.activeParagraph.alignment}
+            commandSource={commandSource}
             listKind={snapshot.activeParagraph.list.kind}
             paragraphNumber={snapshot.activeParagraphIndex + 1}
-            style={snapshot.activeParagraph.style}
+            resolveArguments={resolveCommandArguments}
+            styleDisplayName={snapshot.activeParagraph.styleDisplayName}
           />
         }
         status={
@@ -264,16 +165,7 @@ export function WriterWorkbench({
         <WriterPlainTextEditor
           activeParagraphId={snapshot.activeParagraph.id}
           cursorSelection={snapshot.cursorSelection}
-          editPort={editPort}
-          onCompositionEnd={handleCompositionEnd}
-          onCompositionStart={handleCompositionStart}
-          onCompositionUpdate={handleCompositionUpdate}
-          onCreateTransfer={createNativeTransfer}
-          onParagraphFocus={handleParagraphFocus}
-          onSelectAll={handleSelectAll}
-          onSelectionChange={handleSelectionChange}
-          onTextCut={executeNativeCut}
-          onTextPaste={executeNativePaste}
+          editWindow={view.GetEditWin()}
           paragraphs={snapshot.paragraphs}
         />
       </WriterWorkspaceChrome>

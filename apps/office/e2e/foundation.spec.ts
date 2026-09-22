@@ -82,9 +82,24 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "View" }).click();
-  await expect(page.getByRole("menuitem", { name: "Rulers" })).toHaveCount(0);
+  await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
+  const rulersMenu = page.getByRole("menuitem", { name: "Rulers" });
+  await rulersMenu.focus();
+  await rulersMenu.press("ArrowRight");
+  const rulerMenuItem = page.getByRole("menuitemcheckbox", { name: "Rulers" });
+  await expect(rulerMenuItem).toHaveAttribute("aria-checked", "true");
+  await rulerMenuItem.click();
   await expect(page.getByLabel("Writer horizontal ruler")).toHaveCount(0);
+  await page.getByRole("button", { name: "View" }).click();
+  const hiddenRulersMenu = page.getByRole("menuitem", { name: "Rulers" });
+  await hiddenRulersMenu.focus();
+  await hiddenRulersMenu.press("ArrowRight");
+  const hiddenRulerMenuItem = page.getByRole("menuitemcheckbox", { name: "Rulers" });
+  await expect(hiddenRulerMenuItem).toHaveAttribute("aria-checked", "false");
+  await hiddenRulerMenuItem.click();
+  await expect(page.getByLabel("Writer horizontal ruler")).toBeVisible();
   await expect(page.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+  await page.getByRole("button", { name: "View" }).click();
   const statusBarMenuItem = page.getByRole("menuitemcheckbox", { name: "Status Bar" });
   await expect(statusBarMenuItem).toHaveAttribute("aria-checked", "true");
   await statusBarMenuItem.click();
@@ -135,9 +150,9 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toContainText("Heading 1");
-  await page.getByRole("button", { name: "Center" }).click();
+  await page.getByRole("button", { exact: true, name: "Center" }).click();
   await expect(writerEditor).toHaveCSS("text-align", "center");
-  await expect(page.getByRole("button", { name: "Center" })).toHaveAttribute(
+  await expect(page.getByRole("button", { exact: true, name: "Center" })).toHaveAttribute(
     "aria-pressed",
     "true",
   );

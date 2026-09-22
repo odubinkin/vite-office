@@ -19,7 +19,7 @@ Implemented command placement comes from the declarative
 [`standardbar`](../../apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.ts)
 and [`menubar`](../../apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts)
 resources. Generic React presenters live under `sw/browser/presentation` and
-query the shared dispatcher descriptor/state contract. See
+subscribe through persistent `SfxControllerItem`-style bindings clients. See
 [Writer command placement](writer-command-placement.md) for pinned provenance.
 **Edit → Select All** is a direct browser selection action: it selects the
 complete current page-integrated document body without changing its serialized
@@ -41,9 +41,18 @@ snapshots.
 The direct **View → Status Bar** check item controls only the existing status
 feedback row. Hiding it leaves the document canvas and editing controls intact,
 and it does not alter document history, content, or browser-local snapshots.
+The DOM-neutral `SwEditWin` under `sw/source/uibase/docvw` owns Writer editing,
+selection, composition, transfer, and history operations over the persistent
+`SwWrtShell`. One browser implementation under `sw/browser/editor` translates
+DOM selection, `beforeinput`, IME, pointer, clipboard, drag/drop, and focus.
+React receives immutable render values and binds that stable controller; it does
+not construct document-mutation closures or resolve projection IDs to model nodes.
+
 The existing editor renders as integrated editable paragraph blocks in the document canvas. The formatting toolbar now
 contains real left, center, right, and justified controls for the focused
-paragraph; their current value appears in the properties sidebar. The existing
+paragraph; their current value appears in the properties sidebar. The sidebar
+also exposes binding-backed alignment and list commands instead of remaining a
+read-only preview. The existing
 Paragraph style selector likewise applies Default Paragraph Style or Heading 1
 to the focused paragraph. The page does not display persistent paragraph action
 buttons. Adjacent paragraph movement is in the formatting toolbar's Paragraph

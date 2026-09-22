@@ -252,7 +252,13 @@ function getWriterDomPosition(
   /* v8 ignore next -- A live native Selection endpoint is a valid Range endpoint by construction. */
   return writerOffset === undefined
     ? undefined
-    : { offset: writerOffset, paragraphId: paragraph.dataset.writerParagraphId as string };
+    : {
+        ...(paragraph.dataset.writerNodeIndex === undefined
+          ? {}
+          : { nodeIndex: Number(paragraph.dataset.writerNodeIndex) }),
+        offset: writerOffset,
+        paragraphId: paragraph.dataset.writerParagraphId as string,
+      };
 }
 
 /** Finds the Writer editable paragraph enclosing one selection container. @param node - Browser text or element node from a selection endpoint. @returns Enclosing Writer paragraph, or undefined outside the editor. */

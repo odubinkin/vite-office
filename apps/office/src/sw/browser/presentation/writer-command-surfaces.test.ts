@@ -2,7 +2,10 @@
 
 import { describe, expect, it } from "vitest";
 
-import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
+import {
+  WRITER_COMMAND_IDS,
+  writerMenuPlacements,
+} from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerBrowserMenuPlacements } from "./writer-command-surfaces";
 
 /** Collects every nested command URL. @param items - Generated placement nodes. @returns Flattened command URLs. */
@@ -22,9 +25,10 @@ function collectCommands(items: readonly unknown[]): string[] {
   );
 }
 
-describe("writer browser command surfaces", /** Groups browser capability filtering. @returns Nothing. */ function defineWriterCommandSurfaceTests(): void {
-  it("hides the ruler command until measured layout state exists", /** Verifies decorative layout commands stay absent. @returns Nothing. */ function hidesUnsupportedRuler(): void {
-    expect(collectCommands(writerBrowserMenuPlacements)).not.toContain(
+describe("writer browser command surfaces", /** Groups generated browser command placement. @returns Nothing. */ function defineWriterCommandSurfaceTests(): void {
+  it("preserves the complete generated supported menu without a second filter", /** Verifies generated placement is authoritative. @returns Nothing. */ function preservesGeneratedMenu(): void {
+    expect(writerBrowserMenuPlacements).toBe(writerMenuPlacements);
+    expect(collectCommands(writerBrowserMenuPlacements)).toContain(
       WRITER_COMMAND_IDS.toggleHorizontalRuler,
     );
   });

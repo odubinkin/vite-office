@@ -14,7 +14,17 @@ const definition = {
 
 /** Creates a deterministic Sfx-shaped command source. @returns Mock command source. */
 function createCommandSource(): BrowserCommandSource {
+  const controllerState = { checked: true, enabled: true };
   return {
+    CreateControllerItem:
+      /** Creates one static controller item. @returns Test controller item. */ () => ({
+        Dispose: /** Releases no test resources. @returns Nothing. */ () => undefined,
+        GetState: /** Returns checked enabled state. @returns Command state. */ () =>
+          controllerState,
+        Subscribe: /** Registers no invalidation in a static fixture. @returns Cleanup. */ () =>
+          /** Cleans up no test resources. @returns Nothing. */ () =>
+            undefined,
+      }),
     Execute: vi.fn(
       /** Returns deterministic dispatch. @param commandId - Command identity. @returns Executed result. */ (
         commandId,
@@ -28,12 +38,6 @@ function createCommandSource(): BrowserCommandSource {
       /** Resolves only the known descriptor. @param commandId - Command identity. @returns Descriptor or undefined. */ (
         commandId,
       ) => (commandId === definition.id ? definition : undefined),
-    ),
-    QueryState: vi.fn(
-      /** Returns active deterministic state. @returns Checked enabled state. */ () => ({
-        checked: true,
-        enabled: true,
-      }),
     ),
   };
 }

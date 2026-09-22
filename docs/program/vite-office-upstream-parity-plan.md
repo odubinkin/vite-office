@@ -174,14 +174,16 @@ browser-only with an explicit rationale.
 
 ### P0 — source ownership and documentation disagree
 
-`scripts/check-lo-source-tree.mjs` forbids
+At the start of this plan, `scripts/check-lo-source-tree.mjs` forbade
 `sw/source/uibase/docvw/edtwin.tsx` and `edtwin-paragraph.tsx`, while
 `docs/program/source-tree.md`, `writer-plain-text-editor.md`,
 `writer-document-canvas.md`, and `writer-paragraph-breaks.md` still describe those deleted files as
 the implementation. The gate therefore certifies a tree that the architecture documentation says
 should exist.
 
-This is evidence of a previous refactor that moved code without completing the ownership model.
+P1.8-P1.9 resolve this finding: `sw/source/uibase/docvw/edtwin.ts` is now the
+DOM-neutral owner, and the one DOM implementation is explicitly browser-owned.
+The original mismatch was evidence of a previous refactor that moved code without completing the ownership model.
 React files do not need to impersonate `edtwin.cxx`, but the upstream document-view responsibility
 must still have a corresponding non-React owner. The target split is:
 
@@ -499,6 +501,13 @@ Acceptance for Phase 3:
   positions, and defaults.
 
 ### Phase 4 — rebuild the UI boundary around Writer ownership
+
+Implementation status: P1.8-P1.12 are complete in the current checkout. A
+DOM-neutral `SwEditWin` and one browser edit-window adapter now own editing;
+React projects immutable values only; visible command controls subscribe through
+`SfxControllerItem`; generated resources include argument schemas, validated
+icon names, and complete supported/browser/excluded dispositions; and the
+Properties sidebar dispatches binding-backed commands.
 
 #### P1.8 Add the Writer edit-window controller boundary
 

@@ -82,6 +82,7 @@ export function WriterEditableParagraph({
           data-list-marker={listMarker}
           data-style={paragraph.style}
           data-writer-paragraph-id={paragraph.id}
+          data-writer-node-index={paragraph.nodeIndex}
           ref={
             /** Retains the mounted paragraph projection. @param element - Mounted paragraph or null. @returns Nothing. */ (
               element,

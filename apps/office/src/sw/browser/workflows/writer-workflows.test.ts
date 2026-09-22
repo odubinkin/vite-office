@@ -2,6 +2,7 @@
 
 import { describe, expect, it, vi } from "vitest";
 
+import { createWriterDocument } from "../../source/core/doc/doc";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
 import { WriterClipboardWorkflowController, WriterPlatformError } from "./writer-workflows";
 
@@ -61,5 +62,27 @@ describe("WriterPlatformError", /** Registers platform-error tests. @returns Not
       code: "clipboard-empty",
     });
     expect(shell.PasteAtCursor).not.toHaveBeenCalled();
+  });
+
+  it("accepts a browser-parsed paste supplied by the native edit window", /** Verifies the already-read clipboard branch converts through the target pool. @returns Completion after insertion. */ async function acceptsNativePaste(): Promise<void> {
+    const paragraph = createWriterDocument().paragraphs[0];
+    if (paragraph === undefined) throw new Error("Writer paste fixture has no paragraph.");
+    const pasteAtCursor = vi.fn();
+    const controller = new WriterClipboardWorkflowController(
+      {
+        GetActiveParagraph: /** Returns the target pool owner. @returns Fixture paragraph. */ () =>
+          paragraph,
+        PasteAtCursor: pasteAtCursor,
+      } as unknown as SwWrtShell,
+      { copyRichText: vi.fn(), readRichClipboard: vi.fn() },
+    );
+    await controller.Paste({
+      paste: {
+        isBlock: false,
+        paragraphs: [{ listKind: "none", listLevel: 0, runs: [{ attributes: {}, text: "x" }] }],
+        source: "plain-text",
+      },
+    });
+    expect(pasteAtCursor).toHaveBeenCalledOnce();
   });
 });

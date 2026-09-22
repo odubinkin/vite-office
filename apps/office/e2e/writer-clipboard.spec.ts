@@ -14,7 +14,7 @@ test("copies visible formatted Writer content through the native browser copy ev
   await writerEditor.fill("Copied Writer heading");
   await page.getByRole("button", { name: "Styles" }).click();
   await page.getByRole("menuitemradio", { exact: true, name: "Heading 1" }).click();
-  await page.getByRole("button", { name: "Center" }).click();
+  await page.getByRole("button", { exact: true, name: "Center" }).click();
   await page.getByRole("button", { exact: true, name: "Edit" }).click();
   await page.getByRole("menuitem", { name: "Select All" }).click();
   const clipboardPayload = await writerEditor.evaluate(

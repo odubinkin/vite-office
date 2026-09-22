@@ -5,13 +5,13 @@ direct document interaction as Writer: the user presses unmodified **Enter**
 at a collapsed caret in an editable paragraph. There is intentionally no menu
 item, toolbar button, or canvas action button for paragraph creation.
 
-[`edtwin`](../../apps/office/src/sw/source/uibase/docvw/edtwin.tsx)
+[`BrowserWriterEditWindow`](../../apps/office/src/sw/browser/editor/browser-writer-edit-window.ts)
 uses the browser selection API to calculate the UTF-16 caret offset relative to
-the editable paragraph. When that selection is collapsed and belongs to the
-paragraph, it prevents the browser's uncontrolled DOM mutation and asks
-[`writer-view`](../../apps/office/src/sw/browser/presentation/writer-view.tsx) to dispatch the
-edit to the persistent `SwWrtShell`. The shell applies `SwUndoSplitNode` to the
-same `SwDoc` graph and records one action-history boundary.
+the editable paragraph. It prevents uncontrolled DOM mutation and sends current
+`SwNodes` coordinates to DOM-neutral
+[`SwEditWin`](../../apps/office/src/sw/source/uibase/docvw/edtwin.ts), which
+executes the split through the persistent `SwWrtShell`. The shell applies
+`SwUndoSplitNode` to the same `SwDoc` graph and records one action-history boundary.
 
 `SwWrtShell.SplitParagraph` replaces the source text with the prefix, inserts
 an adjacent paragraph containing the suffix, marks the document dirty, and
@@ -41,10 +41,7 @@ identity, style, and alignment, and merges its following sibling into it. Like
 Backspace, this is direct document editing rather than an independent Writer
 command, so it has no menu item or toolbar button.
 
-Only unmodified Enter with a collapsed selection is modeled. Shift+Enter,
-modified Enter shortcuts, replacing a non-collapsed selection, rich-text
-boundaries, list continuation beyond this inherited first list state, table-cell behavior, page breaks, and Backspace
-or Delete inside text, Backspace in the first paragraph, and Delete in the last
-paragraph remain separate future features. When the browser selection is not a
-collapsed caret inside the editable paragraph, this slice leaves the native
-event untouched rather than guessing at a document transformation.
+Shift+Enter, modified Enter shortcuts, table-cell behavior, and page breaks
+remain separate features. Ordinary range replacement/deletion and adjacent
+paragraph joining use the same edit-window-to-shell path rather than browser DOM
+mutation.

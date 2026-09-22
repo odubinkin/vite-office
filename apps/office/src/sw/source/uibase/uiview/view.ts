@@ -16,6 +16,7 @@ import type { SwModelHint } from "../../../inc/hints";
 import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
+import { SwEditWin } from "../docvw/edtwin";
 import { SwViewCommandShell } from "../shells/viewsh";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 
@@ -26,11 +27,17 @@ export class SwView {
   private readonly viewCommandShell: SwViewCommandShell;
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
+  private readonly editWindow: SwEditWin;
   private readonly wrtShellSubscription: () => void;
 
   /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @returns Nothing. */
   public constructor(private readonly docShell: SwDocShell) {
     this.wrtShell = new SwWrtShell(docShell, this.dialogController);
+    this.editWindow = new SwEditWin(
+      this.wrtShell,
+      /** Publishes final operation state after edit-window compound actions close. @returns Nothing. */ () =>
+        this.Invalidate("document", "history", "selection"),
+    );
     this.viewOptions = new SwViewOption(
       /** Invalidates view-option slot state. @returns Nothing. */ () => this.Invalidate("view"),
     );
@@ -56,6 +63,11 @@ export class SwView {
   /** Returns the persistent Writer editing shell. @returns SwWrtShell. */
   public GetWrtShell(): SwWrtShell {
     return this.wrtShell;
+  }
+
+  /** Returns the platform-neutral Writer edit-window owner. @returns Persistent edit window. */
+  public GetEditWin(): SwEditWin {
+    return this.editWindow;
   }
 
   /** Returns the view-owned typed child-window request controller. @returns Writer dialog controller. */
