@@ -46,18 +46,18 @@ describe("SfxMedium", /** Registers medium tests. @returns Nothing. */ function 
   it("retains identity while operation state changes", /** Verifies retained identity. @returns Nothing. */ function retainsIdentity(): void {
     const sourceReference = { id: "blob" };
     const medium = new SfxMedium({
-      indexedDbKey: "local-key",
-      kind: "browser-local",
+      kind: "primary",
       name: "Local document",
-      source: { kind: "blob", reference: sourceReference },
+      source: { kind: "external", reference: sourceReference },
+      storageKey: "local-key",
     });
     medium.SetOperation("save", "pending", 2);
     expect(medium).toMatchObject({
       capabilities: { canConfirmWrite: true, canLock: true, canRead: true, canWrite: true },
-      destination: { key: "local-key", kind: "indexeddb" },
+      destination: { key: "local-key", kind: "storage" },
       lastOperation: { generation: 2, operation: "save", state: "pending" },
       origin: "external",
-      source: { kind: "blob", reference: sourceReference },
+      source: { kind: "external", reference: sourceReference },
     });
     expect(acquireSfxMedium(medium)).toBe(medium);
     medium.SetOperation("save", "succeeded", 2);
@@ -78,46 +78,46 @@ describe("SfxMedium", /** Registers medium tests. @returns Nothing. */ function 
       source: { kind: "none" },
     });
     expect(
-      new SfxMedium({ indexedDbKey: "recovery", kind: "recovery", name: "Recovered" }),
+      new SfxMedium({ kind: "recovery", name: "Recovered", storageKey: "recovery" }),
     ).toMatchObject({ origin: "recovered", readOnly: true });
     expect(
       new SfxMedium({
-        indexedDbKey: "local",
-        kind: "browser-local",
+        kind: "primary",
         name: "Recovered local",
-        source: { key: "recovery", kind: "indexeddb", store: "recovery" },
+        source: { key: "recovery", kind: "storage", store: "recovery" },
+        storageKey: "local",
       }).origin,
     ).toBe("recovered");
     expect(
       new SfxMedium({
-        indexedDbKey: "local",
-        kind: "browser-local",
+        kind: "primary",
         name: "Primary local",
-        source: { key: "primary", kind: "indexeddb", store: "primary" },
+        source: { key: "primary", kind: "storage", store: "primary" },
+        storageKey: "local",
       }).origin,
-    ).toBe("browser-local");
+    ).toBe("primary");
     expect(
       /** Constructs a blank medium. @returns Invalid medium; throws. */ () =>
         new SfxMedium({ kind: "untitled", name: " " }),
     ).toThrow("blank");
     expect(
       /** Constructs a local medium without a key. @returns Invalid medium; throws. */ () =>
-        new SfxMedium({ kind: "browser-local", name: "Local" } as never),
+        new SfxMedium({ kind: "primary", name: "Local" } as never),
     ).toThrow("required");
     expect(
-      /** Constructs a download without a target. @returns Invalid medium; throws. */ () =>
-        new SfxMedium({ kind: "download", name: "Download" } as never),
-    ).toThrow("Download target is required");
+      /** Constructs a primary medium without a storage key. @returns Invalid medium; throws. */ () =>
+        new SfxMedium({ kind: "primary", name: "Primary" } as never),
+    ).toThrow("Storage key is required");
     for (const source of [
       undefined,
       { kind: "none" },
-      { kind: "file", reference: 1 },
-      { kind: "blob", reference: null },
+      { kind: "external", reference: 1 },
+      { kind: "external", reference: null },
     ])
       expect(
         /** Constructs an ODT medium with an invalid source. @returns Invalid medium; throws. */ () =>
-          new SfxMedium({ kind: "odt-source", name: "Source", source } as never),
-      ).toThrow("opaque Blob or File reference");
+          new SfxMedium({ kind: "input", name: "Source", source } as never),
+      ).toThrow("opaque external reference");
   });
 });
 

@@ -29,10 +29,10 @@ export async function openWriterOdtFromPort(
       createDocument({ id: `writer-odt:${opened.name}`, suiteId: "writer", title }),
       {
         filterId: "writer8",
-        kind: "odt-source",
+        kind: "input",
         mediaType: SwDocShell.ODT_MEDIA_TYPE,
         name: opened.name,
-        source: { kind: "file", reference: opened.reference },
+        source: { kind: "external", reference: opened.reference },
       },
     );
     return { name: opened.name, status: "opened" };
@@ -49,15 +49,14 @@ export async function saveWriterOdtToPort(
   filename: string,
 ): Promise<void> {
   const bytes = await docShell.SerializeOdt();
-  docShell.Download(
+  await docShell.Export(
     {
-      downloadTarget: filename,
       filterId: "writer8",
-      kind: "download",
+      kind: "export",
       mediaType: SwDocShell.ODT_MEDIA_TYPE,
       name: filename,
     },
-    /** Starts the browser export after SwDocShell records its download medium. @returns Port completion. */ () =>
+    /** Delegates the storage-neutral export to the browser-owned port. @returns Port completion. */ () =>
       port.export({ data: bytes, mediaType: SwDocShell.ODT_MEDIA_TYPE, name: filename }),
   );
 }
@@ -70,9 +69,8 @@ export function exportWriterTextToPort(
 ): Promise<void> {
   return docShell.Export(
     {
-      downloadTarget: filename,
       filterId: "Text",
-      kind: "download",
+      kind: "export",
       mediaType: "text/plain;charset=utf-8",
       name: filename,
     },
@@ -108,18 +106,18 @@ export async function saveWriterToPrimaryPort(
   const state = docShell.GetDocumentState();
   const medium = docShell.GetMedium();
   if (
-    medium.kind === "browser-local" &&
-    medium.destination.kind === "indexeddb" &&
+    medium.kind === "primary" &&
+    medium.destination.kind === "storage" &&
     medium.destination.key === state.id
   )
     await docShell.Save(persist);
   else
     await docShell.SaveAs(
       {
-        indexedDbKey: state.id,
-        kind: "browser-local",
+        kind: "primary",
         name: state.title,
         source: medium.source,
+        storageKey: state.id,
       },
       persist,
     );
@@ -140,14 +138,14 @@ export async function loadWriterFromPrimaryPort(
     }
     docShell.ReplaceDocument(result.document, result.documentState, {
       filterId: "writer-browser-snapshot",
-      indexedDbKey: result.documentState.id,
-      kind: "browser-local",
+      kind: "primary",
       lastOperation: {
         generation: result.documentState.contentGeneration,
         operation: "open",
         state: "succeeded",
       },
       name: result.documentState.title,
+      storageKey: result.documentState.id,
     });
     return "loaded";
   } catch (error) {

@@ -179,7 +179,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     });
   });
 
-  it("separates primary save, export, download, and recovery state", /** Verifies independent persistence channels. @returns Completion after assertions. */ async () => {
+  it("separates primary save, export, and recovery state", /** Verifies independent persistence channels. @returns Completion after assertions. */ async () => {
     const active = fixture("dirty");
     const generation = active.shell.GetDocumentState().contentGeneration;
     await expect(
@@ -188,7 +188,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       ),
     ).rejects.toThrow("Save As");
     await active.shell.SaveAs(
-      { indexedDbKey: "primary-key", kind: "browser-local", name: "Primary" },
+      { kind: "primary", name: "Primary", storageKey: "primary-key" },
       /** Confirms primary persistence. @returns Evidence. */ async () => ({ generation }),
     );
     expect(active.shell.GetDocumentState()).toMatchObject({
@@ -202,7 +202,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     const changedGeneration = active.shell.GetDocumentState().contentGeneration;
     let exportMedium;
     await active.shell.Export(
-      { downloadTarget: "copy.odt", kind: "download", name: "copy.odt" },
+      { kind: "export", name: "copy.odt" },
       /** Completes export. @param _document - Active model. @param medium - Export medium. @returns Nothing. */ (
         _document,
         medium,
@@ -210,26 +210,13 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
         exportMedium = medium;
       },
     );
-    let downloadMedium;
-    active.shell.Download(
-      { downloadTarget: "copy.odt", kind: "download", name: "copy.odt" },
-      /** Starts download. @param _document - Active model. @param medium - Download medium. @returns Nothing. */ (
-        _document,
-        medium,
-      ) => {
-        downloadMedium = medium;
-      },
-    );
     expect(active.shell.GetMedium()).toMatchObject({
-      destination: { key: "primary-key", kind: "indexeddb" },
-      kind: "browser-local",
+      destination: { key: "primary-key", kind: "storage" },
+      kind: "primary",
       lastOperation: { operation: "save-as", state: "succeeded" },
     });
     expect(exportMedium).toMatchObject({
       lastOperation: { operation: "export", state: "succeeded" },
-    });
-    expect(downloadMedium).toMatchObject({
-      lastOperation: { operation: "download", state: "unconfirmed" },
     });
     expect(active.shell.GetDocumentState().isModified).toBe(true);
     active.shell.AcknowledgeRecoverySave(changedGeneration);
@@ -250,7 +237,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       ) => (completeWrite = resolve),
     );
     const saving = active.shell.SaveAs(
-      { indexedDbKey: "primary", kind: "browser-local", name: "primary" },
+      { kind: "primary", name: "primary", storageKey: "primary" },
       /** Waits for durable completion. @returns Captured evidence. */ async () => {
         await completed;
         return { generation: savedGeneration };
@@ -279,11 +266,11 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     const active = fixture("dirty");
     const invalidMedia: SfxMediumInput[] = [
       {
-        kind: "odt-source",
+        kind: "input",
         name: "read-only",
-        source: { kind: "file", reference: {} },
+        source: { kind: "external", reference: {} },
       },
-      { downloadTarget: "unconfirmed.odt", kind: "download", name: "unconfirmed.odt" },
+      { kind: "export", name: "unconfirmed.odt" },
       { kind: "untitled", name: "not-writable" },
     ];
     for (const medium of invalidMedia)
@@ -297,7 +284,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     let failedExportMedium;
     await expect(
       active.shell.Export(
-        { downloadTarget: "failed.odt", kind: "download", name: "failed.odt" },
+        { kind: "export", name: "failed.odt" },
         /** Rejects export with a non-Error platform value. @param _document - Active model. @param medium - Export medium. @returns Rejected completion. */ async (
           _document,
           medium,
@@ -328,7 +315,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     const storageFailure = new Error("primary storage failed");
     await expect(
       active.shell.SaveAs(
-        { indexedDbKey: "primary", kind: "browser-local", name: "primary" },
+        { kind: "primary", name: "primary", storageKey: "primary" },
         /** Propagates a durable storage rejection. @returns Rejected completion. */ async () =>
           Promise.reject(storageFailure),
       ),
@@ -337,9 +324,9 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     expect(active.shell.GetMedium()).toBe(mediumBeforePrimaryFailure);
 
     const writable = new SwDocShell(createWriterDocument(), dirtyState, {
-      indexedDbKey: dirtyState.id,
-      kind: "browser-local",
+      kind: "primary",
       name: dirtyState.title,
+      storageKey: dirtyState.id,
     });
     await expect(
       writable.Save(
@@ -354,7 +341,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
 
     await expect(
       active.shell.SaveAs(
-        { indexedDbKey: "primary", kind: "browser-local", name: "primary" },
+        { kind: "primary", name: "primary", storageKey: "primary" },
         /** Returns mismatched evidence. @returns Invalid evidence. */ async () => ({
           generation: 2,
         }),
@@ -371,7 +358,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       ) => (completeWrite = resolve),
     );
     const saving = racing.shell.SaveAs(
-      { indexedDbKey: "primary", kind: "browser-local", name: "primary" },
+      { kind: "primary", name: "primary", storageKey: "primary" },
       /** Waits while the active model is replaced. @returns Evidence for the retired model. */ async () => {
         await completed;
         return { generation: 1 };

@@ -204,10 +204,10 @@ export class SwDocShell extends SfxObjectShell {
       medium ??
       ({
         filterId: "writer8",
-        kind: "odt-source",
+        kind: "input",
         mediaType: SwDocShell.ODT_MEDIA_TYPE,
         name: metadata.title,
-        source: { kind: "blob", reference: bytes },
+        source: { kind: "external", reference: bytes },
       } satisfies SfxMediumInput);
     return this.ReplaceDocument(
       loaded.document,
@@ -287,24 +287,6 @@ export class SwDocShell extends SfxObjectShell {
     }
   }
 
-  /** Starts a browser download, whose completion cannot confirm primary persistence. @param medium - Download target. @param start - Browser adapter. @returns Nothing. */
-  public Download(
-    medium: SfxMediumInput,
-    start: (document: SwDoc, medium: SfxMedium) => void,
-  ): void {
-    this.EnsureOpen();
-    const generation = this.documentState.contentGeneration;
-    const destination = acquireSfxMedium(medium);
-    destination.SetOperation("download", "pending", generation);
-    try {
-      start(this.document, destination);
-      destination.SetOperation("download", "unconfirmed", generation);
-    } catch (error) {
-      destination.SetOperation("download", "failed", generation, getErrorMessage(error));
-      throw error;
-    }
-  }
-
   /** Returns the stable identity used by application AutoRecovery. @returns Document identity. */
   public GetRecoveryIdentity(): string {
     return this.documentState.id;
@@ -343,7 +325,6 @@ export class SwDocShell extends SfxObjectShell {
   public RestoreRecoverySnapshot(snapshot: DocumentSnapshot<WriterSnapshotState>): void {
     const recovered = restoreWriterSnapshot(snapshot, "recovery");
     this.ReplaceDocument(recovered.document, recovered.documentState, {
-      indexedDbKey: snapshot.id,
       kind: "recovery",
       lastOperation: {
         generation: snapshot.version,
@@ -351,6 +332,7 @@ export class SwDocShell extends SfxObjectShell {
         state: "succeeded",
       },
       name: recovered.documentState.title,
+      storageKey: snapshot.id,
     });
   }
 

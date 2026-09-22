@@ -20,13 +20,13 @@ import { SwUndoInsert } from "../../core/undo/unins";
 import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
-import type {
-  WriterClipboardPaste,
-  WriterClipboardPasteParagraph,
-} from "../../filter/html/html-filter-types";
 import { getWriterTypingCharacterClass } from "./delete";
 import type { WriterTextRange } from "./wrtsh-selection";
-import { pasteWriterTransfer } from "./wrtsh-paste";
+import {
+  pasteWriterTransfer,
+  type WriterPasteDocument,
+  type WriterPasteParagraph,
+} from "./wrtsh-paste";
 
 /** Cursor, history, and notification operations retained by SwWrtShell. */
 export interface SwWrtShellEditingPort {
@@ -205,7 +205,7 @@ export class SwWrtShellEditingOperations {
   }
 
   /** Pastes one safe transfer document as a compound Writer action. @param paste - Parsed clipboard content. @returns Whether changed. */
-  public Paste(paste: WriterClipboardPaste): boolean {
+  public Paste(paste: WriterPasteDocument): boolean {
     const manager = this.port.getUndoManager();
     const cursor = this.port.getCursor();
     return pasteWriterTransfer(paste, {
@@ -330,7 +330,7 @@ export class SwWrtShellEditingOperations {
   }
 
   /** Applies imported list metadata through Writer numbering undo. @param paragraph - Parsed clipboard paragraph. @returns Whether changed. */
-  private ApplyPastedParagraphList(paragraph: WriterClipboardPasteParagraph): boolean {
+  private ApplyPastedParagraphList(paragraph: WriterPasteParagraph): boolean {
     const target = this.port.getActiveParagraph();
     const nextList = { kind: paragraph.listKind, level: paragraph.listLevel } as const;
     if (target.list.kind === nextList.kind && target.list.level === nextList.level) return false;

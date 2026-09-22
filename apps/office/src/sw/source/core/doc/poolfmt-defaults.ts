@@ -73,6 +73,11 @@ const headingSizes = [18, 16, 14, 13, 12, 12, 10, 10, 9, 9].map(
   /** Converts points to twips. @param points - Font size. @returns Twips. */ (points) =>
     points * 20,
 );
+const htmlHeadingSizes = [24, 18, 14, 12, 10, 7, 7, 7, 7, 7].map(
+  /** Converts HTML-mode points to twips. @param points - Font size. @returns Twips. */ (points) =>
+    points * 20,
+);
+const HTML_PARSPACE_TWIPS = 283;
 const headingSpacing = [
   [12, 6],
   [10, 6],
@@ -86,16 +91,20 @@ const headingSpacing = [
   [3, 3],
 ] as const;
 
-/** Returns the direct defaults implemented for one built-in paragraph style. @param id - Pool style identity. @returns Immutable source-derived values. */
-export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyleDefaults {
+/** Returns the direct defaults implemented for one built-in paragraph style. @param id - Pool style identity. @param htmlMode - Whether Writer constructs the HTML-mode branch. @returns Immutable source-derived values. */
+export function getWriterParagraphStyleDefaults(
+  id: string,
+  htmlMode = false,
+): WriterParagraphStyleDefaults {
   const heading = /^heading-(10|[1-9])$/.exec(id);
   if (heading !== null) {
     const level = Number(heading[1]) - 1;
     const spacing = headingSpacing[level] as readonly [number, number];
     return {
       bold: true,
-      fontSizeTwips: headingSizes[level] as number,
-      ...([3, 5, 7].includes(level) ? { italic: true as const } : {}),
+      fontSizeTwips: (htmlMode ? htmlHeadingSizes : headingSizes)[level] as number,
+      ...(!htmlMode && [3, 5, 7].includes(level) ? { italic: true as const } : {}),
+      ...(htmlMode ? { fontRole: "text" as const } : {}),
       lowerTwips: spacing[1] * 20,
       keepWithNext: true,
       upperTwips: spacing[0] * 20,
@@ -103,7 +112,7 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
   }
   switch (id) {
     case "text-body":
-      return { lineHeightPercent: 115, lowerTwips: 7 * 20 };
+      return { lineHeightPercent: 115, lowerTwips: htmlMode ? HTML_PARSPACE_TWIPS : 7 * 20 };
     case "first-line-indent":
       return { firstLineTwips: 283, textLeftTwips: 0 };
     case "hanging-indent":
@@ -117,7 +126,7 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
         fontRole: "heading",
         fontSizeTwips: 14 * 20,
         keepWithNext: true,
-        lowerTwips: 6 * 20,
+        lowerTwips: htmlMode ? HTML_PARSPACE_TWIPS : 6 * 20,
         upperTwips: 12 * 20,
       };
     case "caption":
@@ -170,7 +179,10 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
 
 /** Applies the direct defaults for one newly materialized pool style. @param collection - Target style. @returns Nothing. */
 export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl): void {
-  const defaults = getWriterParagraphStyleDefaults(collection.id);
+  const defaults = getWriterParagraphStyleDefaults(
+    collection.id,
+    collection.GetAttrSet().GetDoc().GetDocumentSettingManager().get("HTML_MODE"),
+  );
   if (defaults.adjust !== undefined)
     collection.SetFormatAttr(new SvxAdjustItem(defaults.adjust, RES_PARATR_ADJUST));
   if (defaults.firstLineTwips !== undefined)

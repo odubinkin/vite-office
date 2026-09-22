@@ -558,4 +558,96 @@ describe("command registry" /**
       error: "String denied",
     });
   });
+
+  it("keeps async completion request-scoped when the same slot overlaps" /** Verifies that stale fulfillment or rejection completes its own SfxRequest without replacing the latest command state. @returns Completion after controlled promises settle out of order. */, async function isolatesOverlappingRequests(): Promise<void> {
+    const completions: Array<{
+      readonly promise: Promise<string>;
+      readonly reject: (error: Error) => void;
+      readonly resolve: (value: string) => void;
+    }> = [];
+    const dispatcher = new SfxDispatcher();
+    dispatcher.Push(
+      createCommandShell(
+        {},
+        createCommandRegistry([
+          {
+            /** Creates one externally controlled execution. @returns Pending result. */
+            execute: (): Promise<string> => {
+              let reject!: (error: Error) => void;
+              let resolve!: (value: string) => void;
+              const promise = new Promise<string>(
+                /** Captures deterministic completion controls. @param resolvePromise - Promise fulfillment. @param rejectPromise - Promise rejection. @returns Nothing. */ (
+                  resolvePromise,
+                  rejectPromise,
+                ) => {
+                  resolve = resolvePromise;
+                  reject = rejectPromise;
+                },
+              );
+              completions.push({ promise, reject, resolve });
+              return promise;
+            },
+            id: ".uno:OverlappingAsync",
+            label: "Overlapping async",
+            slotId: 107,
+          },
+        ]),
+      ),
+    );
+    const oldRequest = new SfxRequest(107);
+    const oldResult = dispatcher.ExecuteRequest(oldRequest);
+    const newRequest = new SfxRequest(107);
+    const newResult = dispatcher.ExecuteRequest(newRequest);
+    completions[0]?.resolve("old");
+    if (oldResult.status !== "executed") throw new Error("Old request must execute.");
+    await oldResult.value;
+    expect(oldRequest.GetReturnValue()).toEqual(new SfxStringItem(107, "old"));
+    expect(dispatcher.QueryState(".uno:OverlappingAsync")).toMatchObject({
+      enabled: true,
+      pending: true,
+    });
+    completions[1]?.resolve("new");
+    if (newResult.status !== "executed") throw new Error("New request must execute.");
+    await newResult.value;
+    expect(newRequest.GetReturnValue()).toEqual(new SfxStringItem(107, "new"));
+    expect(dispatcher.QueryState(".uno:OverlappingAsync")).toEqual({ enabled: true });
+
+    const staleRequest = new SfxRequest(107);
+    const staleResult = dispatcher.ExecuteRequest(staleRequest);
+    const latestRequest = new SfxRequest(107);
+    const latestResult = dispatcher.ExecuteRequest(latestRequest);
+    completions[3]?.resolve("latest");
+    if (latestResult.status !== "executed") throw new Error("Latest request must execute.");
+    await latestResult.value;
+    completions[2]?.reject(new Error("stale failure"));
+    if (staleResult.status !== "executed") throw new Error("Stale request must execute.");
+    await staleResult.value;
+    expect(staleRequest.IsDone()).toBe(true);
+    expect(latestRequest.GetReturnValue()).toEqual(new SfxStringItem(107, "latest"));
+    expect(dispatcher.QueryState(".uno:OverlappingAsync")).toEqual({ enabled: true });
+    expect(dispatcher.GetLastCommandError()).toBeUndefined();
+
+    const olderSuccessRequest = new SfxRequest(107);
+    const olderSuccessResult = dispatcher.ExecuteRequest(olderSuccessRequest);
+    const latestFailureRequest = new SfxRequest(107);
+    const latestFailureResult = dispatcher.ExecuteRequest(latestFailureRequest);
+    completions[5]?.reject(new Error("latest failure"));
+    if (latestFailureResult.status !== "executed")
+      throw new Error("Latest failure request must execute.");
+    await latestFailureResult.value;
+    completions[4]?.resolve("older success");
+    if (olderSuccessResult.status !== "executed")
+      throw new Error("Older success request must execute.");
+    await olderSuccessResult.value;
+    expect(olderSuccessRequest.GetReturnValue()).toEqual(new SfxStringItem(107, "older success"));
+    expect(latestFailureRequest.IsDone()).toBe(true);
+    expect(dispatcher.QueryState(".uno:OverlappingAsync")).toEqual({
+      enabled: true,
+      error: "latest failure",
+    });
+    expect(dispatcher.GetLastCommandError()).toEqual({
+      commandId: ".uno:OverlappingAsync",
+      error: "latest failure",
+    });
+  });
 });

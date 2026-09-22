@@ -21,7 +21,6 @@ import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
 import { SwTextShell } from "../shells/textsh";
 import type { SwDocShell } from "../app/docsh";
 import { SwTransferable } from "../dochdl/swdtflvr";
-import type { WriterClipboardPaste } from "../../filter/html/html-filter-types";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
 import {
   createWriterCollapsedCursorState,
@@ -33,6 +32,7 @@ import { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE } from "../../../inc/hintids";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwWrtShellEditingOperations } from "./wrtsh-editing";
+import type { WriterPasteDocument } from "./wrtsh-paste";
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwModify {
@@ -244,7 +244,7 @@ export class SwWrtShell extends SwModify {
     this.SetPaM(new SwPosition(last, last.Len()), new SwPosition(first, 0));
   }
   /** Pastes at the current canonical PaM without a projected string selection. @param paste - Parsed clipboard content. @returns Whether content changed. */
-  public PasteAtCursor(paste: WriterClipboardPaste): boolean {
+  public PasteAtCursor(paste: WriterPasteDocument): boolean {
     return this.editing.Paste(paste);
   }
 
@@ -313,7 +313,7 @@ export class SwWrtShell extends SwModify {
   }
 
   /** Pastes one safe transfer document at the persistent SwPaM as a single Writer undo transaction. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */
-  public Paste(paste: WriterClipboardPaste): boolean {
+  public Paste(paste: WriterPasteDocument): boolean {
     return this.editing.Paste(paste);
   }
 

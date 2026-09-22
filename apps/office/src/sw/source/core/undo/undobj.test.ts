@@ -41,9 +41,9 @@ function createSession(text = "") {
   });
   if (text.length > 0) document.paragraphs[0]?.InsertText(text, 0);
   const docShell = new SwDocShell(document, documentState, {
-    indexedDbKey: documentState.id,
-    kind: "browser-local",
+    kind: "primary",
     name: documentState.title,
+    storageKey: documentState.id,
   });
   return { docShell, document, shell: new SwWrtShell(docShell) };
 }

@@ -12,8 +12,10 @@ import type { RichClipboardPayload } from "../../../vcl/browser/browser-clipboar
 import type { WriterSnapshotState } from "../../source/filter/basflt/writer-storage";
 import { parseWriterClipboardPaste, type WriterClipboardPaste } from "../filter/html/swhtml";
 import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
+import { createWriterTextFragment } from "../../source/core/txtnode/text-run-projection";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
+import type { WriterPasteDocument } from "../../source/uibase/wrtsh/wrtsh-paste";
 import {
   createWriterCommandRegistry,
   getWriterCommandArguments,
@@ -184,8 +186,28 @@ export class WriterClipboardWorkflowController {
         throw new WriterPlatformError("clipboard-empty", "Clipboard has no text to paste.");
       paste = parsed;
     }
-    this.wrtShell.PasteAtCursor(paste);
+    this.wrtShell.PasteAtCursor(createNativeWriterPaste(this.wrtShell, paste));
   }
+}
+
+/** Converts a browser/filter run DTO to native text-plus-hints before crossing the Writer shell boundary. @param wrtShell - Target shell supplying the document pool. @param paste - Parsed browser transfer. @returns Native Writer paste document. */
+function createNativeWriterPaste(
+  wrtShell: SwWrtShell,
+  paste: WriterClipboardPaste,
+): WriterPasteDocument {
+  const paragraph = wrtShell.GetActiveParagraph();
+  return {
+    isBlock: paste.isBlock,
+    paragraphs: paste.paragraphs.map(
+      /** Converts one transfer paragraph through the target document pool. @param item - Parsed transfer paragraph. @returns Native paragraph. */ (
+        item,
+      ) => ({
+        fragment: createWriterTextFragment(paragraph, item.runs),
+        listKind: item.listKind,
+        listLevel: item.listLevel,
+      }),
+    ),
+  };
 }
 
 /** Browser-owned Sfx shell that terminates file, storage, and clipboard commands at adapters. */

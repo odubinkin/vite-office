@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   getProtectedBrowserGlobalReferences,
+  getProtectedOwnershipReferences,
   getRuntimeOwnershipLayer,
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
@@ -122,5 +123,26 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
         }
       `),
     ).toEqual(["DedicatedWorkerGlobalScope", "IDBDatabase", "Worker"]);
+  });
+
+  it("rejects browser storage and clipboard DTO ownership in protected layers", /** Verifies semantic boundary names are parsed as identifiers and remain allowed in their outer/filter owners. @returns Nothing. */ function detectsOwnershipLeaks(): void {
+    const source = `
+      /** indexedDbKey and WriterClipboardPaste in comments are harmless. */
+      interface BrowserRoute { indexedDbKey: string }
+      function paste(value: WriterClipboardPaste): BrowserRoute {
+        void "browser-local";
+        return value as never;
+      }
+    `;
+    expect(getProtectedOwnershipReferences("sw/source/uibase/app/docsh.ts", source)).toEqual([
+      "WriterClipboardPaste",
+      "browser-local",
+      "indexedDbKey",
+    ]);
+    expect(getProtectedOwnershipReferences("sw/source/filter/html/swhtml.ts", source)).toEqual([
+      "browser-local",
+      "indexedDbKey",
+    ]);
+    expect(getProtectedOwnershipReferences("sw/browser/workflows/io.ts", source)).toEqual([]);
   });
 });

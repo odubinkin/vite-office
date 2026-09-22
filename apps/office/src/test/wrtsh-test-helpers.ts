@@ -168,7 +168,19 @@ export function pasteTestSelection(
         }
       : selection,
   );
-  return shell.Paste(paste);
+  const paragraph = shell.GetActiveParagraph();
+  return shell.Paste({
+    isBlock: paste.isBlock,
+    paragraphs: paste.paragraphs.map(
+      /** Converts one browser transfer fixture before crossing the Writer shell boundary. @param item - Fixture paragraph. @returns Native paste paragraph. */ (
+        item,
+      ) => ({
+        fragment: createWriterTextFragment(paragraph, item.runs),
+        listKind: item.listKind,
+        listLevel: item.listLevel,
+      }),
+    ),
+  });
 }
 
 /** Reads an ordinal fixture ID from a canonical node without adding identity to Writer core. @param shell - Owning shell. @param node - Writer node. @returns Test ID. */

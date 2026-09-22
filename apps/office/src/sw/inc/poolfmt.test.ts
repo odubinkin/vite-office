@@ -359,4 +359,29 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       new SfxInt16Item(RES_PARATR_TABSTOP, 0),
     );
   });
+
+  it("materializes the pinned HTML-mode text and heading branches", /** Verifies HTML paragraph spacing, heading sizes, font role, and posture rules from DocumentStylePoolManager.cxx. @returns Nothing. */ () => {
+    expect(getWriterParagraphStyleDefaults("text-body", true)).toMatchObject({
+      lineHeightPercent: 115,
+      lowerTwips: 283,
+    });
+    expect(getWriterParagraphStyleDefaults("heading-1", true)).toMatchObject({
+      bold: true,
+      fontRole: "text",
+      fontSizeTwips: 24 * 20,
+    });
+    expect(getWriterParagraphStyleDefaults("heading-4", true)).not.toHaveProperty("italic");
+
+    const document = createWriterDocument();
+    document.GetDocumentSettingManager().set("HTML_MODE", true);
+    const textBody = document.GetTextFormatColl("text-body").GetAttrSet();
+    expect((textBody.Get(RES_UL_SPACE) as SvxULSpaceItem).GetLower()).toBe(283);
+    const headingBase = document.GetTextFormatColl("heading").GetAttrSet();
+    expect((headingBase.Get(RES_UL_SPACE) as SvxULSpaceItem).GetLower()).toBe(283);
+    const heading1 = document.GetTextFormatColl("heading-1").GetAttrSet();
+    expect((heading1.Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(24 * 20);
+    const heading4 = document.GetTextFormatColl("heading-4").GetAttrSet();
+    expect((heading4.Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(12 * 20);
+    expect(heading4.GetItemIfSet(RES_CHRATR_POSTURE, false)).toBeUndefined();
+  });
 });

@@ -360,8 +360,13 @@ export function createCommandShell<Context>(
  * pushed shell and command lookup stops at the first shell providing the slot.
  */
 export class SfxDispatcher {
-  private readonly asyncStates = new Map<string, Readonly<{ error?: string; pending: boolean }>>();
+  private readonly asyncStates = new Map<
+    string,
+    Readonly<{ error?: string; generation: number; pending: boolean }>
+  >();
+  private executionGeneration = 0;
   private lastCommandError: Readonly<CommandFailure> | undefined;
+  private latestExecutionGeneration = 0;
   private readonly listeners = new Set<() => void>();
   private readonly shells: SfxShell[] = [];
   private version = 0;
@@ -422,32 +427,37 @@ export class SfxDispatcher {
     const command = this.QuerySlot(request.GetSlot());
     if (command === undefined) return { commandId: `slot:${request.GetSlot()}`, status: "missing" };
     const commandId = command.command.id;
+    const generation = ++this.executionGeneration;
+    this.latestExecutionGeneration = generation;
     this.lastCommandError = undefined;
     const result = command.execute(request);
     if (result.status === "executed" && !isPromiseLike(result.value))
       request.Done(createRequestReturnItem(request.GetSlot(), result.value));
     if (result.status !== "executed" || !isPromiseLike(result.value)) return result;
-    this.asyncStates.set(commandId, { pending: true });
+    this.asyncStates.set(commandId, { generation, pending: true });
     this.Invalidate("command-async");
     const tracked = Promise.resolve(result.value).then(
       /** Clears pending state after fulfillment. @param value - Fulfilled command value. @returns Original command value. */
       (value) => {
-        this.asyncStates.delete(commandId);
         request.Done(createRequestReturnItem(request.GetSlot(), value));
+        if (this.asyncStates.get(commandId)?.generation === generation)
+          this.asyncStates.delete(commandId);
         this.Invalidate("command-async");
         return value;
       },
       /** Publishes a normalized asynchronous failure. @param error - Rejected command value. @returns Undefined after recording the failure. */
       (error: unknown) => {
         const message = getErrorMessage(error);
-        this.asyncStates.set(commandId, { error: message, pending: false });
+        if (this.asyncStates.get(commandId)?.generation === generation)
+          this.asyncStates.set(commandId, { error: message, generation, pending: false });
         const code = getErrorCode(error);
-        this.lastCommandError = {
-          commandId,
-          ...(code === undefined ? {} : { code }),
-          error: message,
-        };
         request.Done();
+        if (this.latestExecutionGeneration === generation)
+          this.lastCommandError = {
+            commandId,
+            ...(code === undefined ? {} : { code }),
+            error: message,
+          };
         this.Invalidate("command-async");
         return undefined;
       },

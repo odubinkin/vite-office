@@ -584,7 +584,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     session.Close();
   });
 
-  it("keeps downloads independent from the browser-local primary medium" /** Verifies UI commands use Save As for the first confirmed local write, Save thereafter, and never acknowledge downloads. @returns Completion after local persistence. */, async function separatesUiMediumOperations(): Promise<void> {
+  it("keeps exports independent from the browser primary medium" /** Verifies UI commands use Save As for the first confirmed local write, Save thereafter, and never acknowledge exports. @returns Completion after local persistence. */, async function separatesUiMediumOperations(): Promise<void> {
     let stored: DocumentSnapshot<WriterSnapshotState> | undefined;
     const storedDocumentOpen: StoredDocumentOpenPort<WriterSnapshotState> = {
       /** Loads the current matching fixture snapshot. @param id - Requested identity. @returns Matching snapshot or undefined. */
@@ -631,8 +631,8 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       savedGeneration: dirtyGeneration,
     });
     expect(session.docShell.GetMedium()).toMatchObject({
-      destination: { key: "writer-workbench", kind: "indexeddb" },
-      kind: "browser-local",
+      destination: { key: "writer-workbench", kind: "storage" },
+      kind: "primary",
       lastOperation: { operation: "save-as", state: "succeeded" },
     });
 

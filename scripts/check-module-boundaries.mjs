@@ -30,6 +30,12 @@ const protectedBrowserGlobalSymbols = new Set([
   "InputEvent",
   "Worker",
 ]);
+const protectedBrowserStorageSymbols = new Set(["downloadTarget", "indexedDbKey"]);
+const protectedBrowserStorageValues = new Set(["browser-local", "indexeddb"]);
+const protectedWriterTransferSymbols = new Set([
+  "WriterClipboardPaste",
+  "WriterClipboardPasteParagraph",
+]);
 const upstreamMechanismLayers = new Set([
   "sfx",
   "upstream-mechanism",
@@ -94,6 +100,32 @@ export function getProtectedBrowserGlobalReferences(sourceText) {
   /** Visits identifiers in the parsed source. @param node - Current syntax node. @returns Nothing. */
   function visit(node) {
     if (ts.isIdentifier(node) && protectedBrowserGlobalSymbols.has(node.text))
+      references.add(node.text);
+    ts.forEachChild(node, visit);
+  }
+  visit(sourceFile);
+  return [...references].sort();
+}
+
+/** Finds browser/storage DTO identities that must be converted before entering an upstream-shaped source layer. @param relativePath - Source-relative path. @param sourceText - Authored TypeScript. @returns Stable forbidden symbol names. */
+export function getProtectedOwnershipReferences(relativePath, sourceText) {
+  const layer = getRuntimeOwnershipLayer(relativePath);
+  if (!upstreamMechanismLayers.has(layer)) return [];
+  const protectedSymbols = new Set(protectedBrowserStorageSymbols);
+  if (layer !== "writer-filter")
+    for (const symbol of protectedWriterTransferSymbols) protectedSymbols.add(symbol);
+  const references = new Set();
+  const sourceFile = ts.createSourceFile(
+    relativePath,
+    sourceText,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  /** Visits source identifiers without matching comments or string documentation. @param node - Current syntax node. @returns Nothing. */
+  function visit(node) {
+    if (ts.isIdentifier(node) && protectedSymbols.has(node.text)) references.add(node.text);
+    if (ts.isStringLiteral(node) && protectedBrowserStorageValues.has(node.text))
       references.add(node.text);
     ts.forEachChild(node, visit);
   }
@@ -205,6 +237,10 @@ for (const sourceFile of runtimeSources) {
     for (const browserGlobalSymbol of getProtectedBrowserGlobalReferences(sourceText))
       failures.push(
         `${displayPath(sourceFile)}: protected source layers must not reference browser global ${browserGlobalSymbol}`,
+      );
+    for (const ownershipSymbol of getProtectedOwnershipReferences(relativeSource, sourceText))
+      failures.push(
+        `${displayPath(sourceFile)}: protected source layers must receive ${ownershipSymbol} through an outer adapter`,
       );
   }
   const imports = ts.preProcessFile(sourceText, true, true).importedFiles;
