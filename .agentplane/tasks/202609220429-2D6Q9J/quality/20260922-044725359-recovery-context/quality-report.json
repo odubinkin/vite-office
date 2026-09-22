@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220429-2D6Q9J",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T04:47:25.359Z",
+  "verdict": "pass",
+  "summary": "Writer font-size selector is fully wired through upstream resource metadata, command state/execute, undoable model hints, browser rendering, and ODT-compatible font-size items.",
+  "evaluated_sha": "2e19f348a9508107ce06a946f7a30d41615b8867",
+  "blueprint_digest": "bcc4e1a7c65defa1b5444966bfbc3b911c052772da2aaab4ee6879b44b5eac00",
+  "findings": [
+    "Implementation preserves nonstandard imported sizes, validates twip-representable positive values, synchronizes script font-height items, and passes the complete repository verification suite."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220429-2D6Q9J/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
