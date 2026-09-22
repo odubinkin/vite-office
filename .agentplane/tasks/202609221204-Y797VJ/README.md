@@ -4,7 +4,7 @@ title: "Fix Writer UI ruler, multi-paragraph formatting, lists, and sidebar cont
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: implementing the approved Writer UI corrections in the direct-mode checkout."
 doc_version: 3
-doc_updated_at: "2026-09-22T12:04:29.389Z"
+doc_updated_at: "2026-09-22T12:11:09.562Z"
 doc_updated_by: "CODER"
 description: "Correct document-only ruler layout, apply character formatting across full and multi-paragraph selections, reconcile list marker/paragraph indentation and vertical alignment with pinned Writer behavior, and render sidebar commands as icon buttons."
 sections:
@@ -59,7 +59,12 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: Command: npx vitest run src/sw/source/uibase/wrtsh/wrtsh.test.ts src/sw/source/core/undo/undobj.test.ts src/sw/browser/editor/writer-selection.test.ts src/sw/browser/editor/WriterPlainTextEditor.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx; npx playwright test e2e/writer-character-formatting.spec.ts e2e/writer-lists.spec.ts; npm run build; npm run lint -- --max-warnings=0. Result: pass. Evidence: 57 targeted unit tests, 2 Writer E2E specs, production build, and lint passed. Scope: ruler grid, sidebar icon controls, list marker typography, and multi-paragraph character formatting.
+      Impact: None.
+      Resolution: Regression coverage confirms the approved Writer UI scope.
+      Promotion: incident-candidate
+      Fixability: repo-fixable
 id_source: "generated"
 ---
 ## Summary
@@ -95,3 +100,9 @@ Correct document-only ruler layout, apply character formatting across full and m
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: Command: npx vitest run src/sw/source/uibase/wrtsh/wrtsh.test.ts src/sw/source/core/undo/undobj.test.ts src/sw/browser/editor/writer-selection.test.ts src/sw/browser/editor/WriterPlainTextEditor.test.tsx src/sw/browser/presentation/WriterMenuBar.test.tsx; npx playwright test e2e/writer-character-formatting.spec.ts e2e/writer-lists.spec.ts; npm run build; npm run lint -- --max-warnings=0. Result: pass. Evidence: 57 targeted unit tests, 2 Writer E2E specs, production build, and lint passed. Scope: ruler grid, sidebar icon controls, list marker typography, and multi-paragraph character formatting.
+  Impact: None.
+  Resolution: Regression coverage confirms the approved Writer UI scope.
+  Promotion: incident-candidate
+  Fixability: repo-fixable
