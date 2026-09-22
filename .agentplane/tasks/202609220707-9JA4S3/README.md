@@ -1,10 +1,11 @@
 ---
 id: "202609220707-9JA4S3"
 title: "Canonicalize Writer core models and graph serialization"
-status: "DOING"
+result_summary: "Canonicalized Writer core models and graph serialization for P1.4-P1.7."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -47,11 +48,16 @@ quality_review:
     - "777e1f4f6592"
   findings:
     - "All declared verification steps pass; obsolete storage and Worker envelope versions are intentionally rejected with no compatibility path."
-commit: null
+commit:
+  hash: "777e1f4f65927cfbd56ce890e2d0325d00307a47"
+  message: "🚧 9JA4S3 task: canonicalize Writer models and graph serialization"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: canonical Writer/Sfx item mutation and shared graph serialization pass all focused, coverage, inventory, static, provenance, and hygiene checks."
 events:
   -
     type: "status"
@@ -66,8 +72,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified canonical SfxItemSet character/list mutation, removed SwTextNode compatibility accessors, and shared Writer graph serialization. Full app coverage: 76 files/367 tests at 100%; inventory coverage: 34 files/96 tests at 100%; static build, focused tests, format, lint, typecheck, dependencies, source provenance, parity inventory, file-size, docs, source-tree, Writer resources, and git diff checks passed."
+  -
+    type: "status"
+    at: "2026-09-22T08:20:31.774Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical Writer/Sfx item mutation and shared graph serialization pass all focused, coverage, inventory, static, provenance, and hygiene checks."
 doc_version: 3
-doc_updated_at: "2026-09-22T08:20:08.902Z"
+doc_updated_at: "2026-09-22T08:20:31.775Z"
 doc_updated_by: "CODER"
 description: "Implement P1.4-P1.7: make pooled items, Writer attributes, numbering/list objects and SwPaM the model mutation vocabulary; remove core compatibility DTOs and unify graph serialization without legacy-schema compatibility."
 sections:
