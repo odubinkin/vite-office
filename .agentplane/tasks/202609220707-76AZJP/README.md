@@ -1,10 +1,11 @@
 ---
 id: "202609220707-76AZJP"
 title: "Converge Sfx command architecture for P1"
-status: "DOING"
+result_summary: "Converged Sfx command architecture for P1.1-P1.3"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -26,7 +27,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T07:45:40.440Z"
+  updated_at: "2026-09-22T07:46:00.188Z"
   updated_by: "CODER"
   note: "verified-202609220707-76AZJP"
   attempts: 0
@@ -46,11 +47,19 @@ quality_review:
     - "apps/office/src/sfx2/source/control/dispatch.test.ts"
   findings:
     - "All declared verification checks passed; source inventory and command architecture documentation were updated."
-commit: null
+commit:
+  hash: "7fdb35bd313e35d466c79bd53a80f506822abd1b"
+  message: "🚧 76AZJP task: implement P1 Sfx command architecture"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609220707-76AZJP. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: Sfx command architecture converged on upstream shell, interface, slot, and request boundaries."
 events:
   -
     type: "status"
@@ -71,8 +80,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609220707-76AZJP"
+  -
+    type: "verify"
+    at: "2026-09-22T07:46:00.188Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609220707-76AZJP"
+  -
+    type: "status"
+    at: "2026-09-22T07:46:00.338Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609220707-76AZJP. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-09-22T07:47:00.555Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: Sfx command architecture converged on upstream shell, interface, slot, and request boundaries."
 doc_version: 3
-doc_updated_at: "2026-09-22T07:45:40.514Z"
+doc_updated_at: "2026-09-22T07:47:00.557Z"
 doc_updated_by: "CODER"
 description: "Implement P1.1-P1.3 from docs/program/vite-office-upstream-parity-plan.md: port bounded SfxSlot and SfxInterface metadata from pinned LibreOffice, decompose dispatcher responsibilities, and remove Writer registry glue."
 sections:
@@ -149,6 +178,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202609220707-76AZJP --result verified-202609220707-76AZJP --commit 7fdb35bd313e35d466c79bd53a80f506822abd1b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-22T07:46:00.188Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609220707-76AZJP
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T07:45:40.514Z, excerpt_hash=sha256:3f200219af0b18670a3d1bd97dc6d835923c09b71380e1cd51afded146d2ddba
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220707-76AZJP/blueprint/resolved-snapshot.json
+    - old_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+    - current_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220707-76AZJP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609220707-76AZJP --result verified-202609220707-76AZJP --commit 3c2aef4bccc9bc89c485ce3bdf9cdffc368169c2
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -245,6 +304,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609220707-76AZJP --result verified-202609220707-76AZJP --commit 7fdb35bd313e35d466c79bd53a80f506822abd1b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T07:46:00.188Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609220707-76AZJP
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T07:45:40.514Z, excerpt_hash=sha256:3f200219af0b18670a3d1bd97dc6d835923c09b71380e1cd51afded146d2ddba
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220707-76AZJP/blueprint/resolved-snapshot.json
+- old_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+- current_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220707-76AZJP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609220707-76AZJP --result verified-202609220707-76AZJP --commit 3c2aef4bccc9bc89c485ce3bdf9cdffc368169c2
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
