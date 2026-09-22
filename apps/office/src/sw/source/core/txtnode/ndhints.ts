@@ -593,6 +593,7 @@ function equalAttributes(
   return (
     left.bold === right.bold &&
     left.fontFamily === right.fontFamily &&
+    left.fontSizeTwips === right.fontSizeTwips &&
     left.italic === right.italic &&
     left.underline === right.underline
   );

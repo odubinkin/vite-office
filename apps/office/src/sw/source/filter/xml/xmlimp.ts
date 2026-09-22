@@ -1,11 +1,20 @@
 /** @fileoverview Implements Writer's streaming SwXMLImport bridge over fast SAX contexts. */
 
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  SvxAdjust,
+  SvxAdjustItem,
+  SvxFirstLineIndentItem,
+  SvxLineSpacingItem,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+  SvxULSpaceItem,
+} from "../../../../editeng/source/items/paraitem";
 import {
   FontItalic,
   FontLineStyle,
   FontWeight,
   SvxFontItem,
+  SvxFontHeightItem,
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
@@ -29,6 +38,7 @@ import type {
   OdfCharacterProperties,
   OdfHyperlink,
   OdfParagraphAlignment,
+  OdfParagraphProperties,
   XMLParagraphStyle,
 } from "../../../../xmloff/source/text/txtparae";
 import {
@@ -47,15 +57,23 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
+  RES_PARATR_LINESPACING,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_MARGIN_TEXTLEFT,
+  RES_UL_SPACE,
 } from "../../../inc/hintids";
 import {
   getWriterOdfStyleName,
@@ -245,11 +263,12 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     this.titleSeen = true;
   }
 
-  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param properties - Direct character properties. @param list - Optional list state. @returns Paragraph target. */
+  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param list - Optional list state. @returns Paragraph target. */
   public createParagraph(
     style: XMLParagraphStyle,
     alignment: OdfParagraphAlignment | undefined,
     leftMargin: number | undefined,
+    paragraphProperties: OdfParagraphProperties | undefined,
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
   ): XMLParagraphImportTarget {
@@ -258,6 +277,13 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     node.ChgFormatColl(this.document.GetTextFormatColl(style));
     if (alignment !== undefined) node.SetParagraphAlignment(alignment);
     if (leftMargin !== undefined) node.SetParagraphTextLeftMargin(leftMargin);
+    if (paragraphProperties !== undefined)
+      putParagraphProperties(
+        paragraphProperties,
+        /** Applies one direct paragraph item. @param item - Imported item. @returns Set result. */ (
+          item,
+        ) => node.SetAttr(item),
+      );
     if (list !== undefined) {
       /* v8 ignore next -- list contexts only expose rules registered in this same temporary document. */
       if (this.document.FindNumRulePtr(list.ruleName) === undefined)
@@ -287,7 +313,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     if (this.officeTextCount !== 1)
       throw new Error("ODF content must contain exactly one office:text.");
     if (this.paragraphCount === 0)
-      this.createParagraph("default", undefined, undefined, undefined, undefined);
+      this.createParagraph("default", undefined, undefined, undefined, undefined, undefined);
   }
 }
 
@@ -445,6 +471,17 @@ function applyNamedParagraphStyles(
       collection.SetFormatAttr(
         new SvxAdjustItem(toSvxAdjust(definition.alignment), RES_PARATR_ADJUST),
       );
+    if (definition.leftMargin !== undefined)
+      collection.SetFormatAttr(
+        new SvxTextLeftMarginItem(definition.leftMargin, RES_MARGIN_TEXTLEFT),
+      );
+    if (definition.paragraphProperties !== undefined)
+      putParagraphProperties(
+        definition.paragraphProperties,
+        /** Applies one named-style paragraph item. @param item - Imported item. @returns Set result. */ (
+          item,
+        ) => collection.SetFormatAttr(item),
+      );
     if (definition.properties !== undefined)
       putCharacterProperties(
         definition.properties,
@@ -488,6 +525,9 @@ function putCharacterProperties(
   if (properties.fontFamily !== undefined)
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       put(new SvxFontItem(properties.fontFamily, which));
+  if (properties.fontSizeTwips !== undefined)
+    for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
+      put(new SvxFontHeightItem(properties.fontSizeTwips, which));
   if (properties.bold !== undefined)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       put(new SvxWeightItem(properties.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
@@ -501,6 +541,23 @@ function putCharacterProperties(
         RES_CHRATR_UNDERLINE,
       ),
     );
+}
+
+/** Converts ODF paragraph deltas into pooled items. @param properties - Property deltas. @param put - Item sink. @returns Nothing. */
+function putParagraphProperties(
+  properties: OdfParagraphProperties,
+  put: (item: SfxPoolItem) => unknown,
+): void {
+  if (properties.firstLineIndent !== undefined)
+    put(new SvxFirstLineIndentItem(properties.firstLineIndent, RES_MARGIN_FIRSTLINE));
+  if (properties.rightMargin !== undefined)
+    put(new SvxRightMarginItem(properties.rightMargin, RES_MARGIN_RIGHT));
+  if (properties.upperSpacing !== undefined || properties.lowerSpacing !== undefined)
+    put(
+      new SvxULSpaceItem(properties.upperSpacing ?? 0, properties.lowerSpacing ?? 0, RES_UL_SPACE),
+    );
+  if (properties.lineHeightPercent !== undefined)
+    put(new SvxLineSpacingItem(properties.lineHeightPercent, RES_PARATR_LINESPACING));
 }
 
 /** Converts ODF alignment to Writer adjustment. @param alignment - ODF alignment. @returns Writer adjustment. */

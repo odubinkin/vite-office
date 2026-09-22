@@ -1,5 +1,6 @@
 /** @fileoverview Verifies the pinned built-in Writer paragraph-style pool. */
 import { describe, expect, it } from "vitest";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../svl/source/items/poolitem";
 import {
   encodeWriterOdfStyleName,
   getWriterOdfStyleName,
@@ -31,10 +32,12 @@ import {
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_COLOR,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_POSTURE,
@@ -44,7 +47,10 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
   RES_UL_SPACE,
+  RES_KEEP,
+  RES_LINENUMBER,
 } from "./hintids";
 
 describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothing. */ () => {
@@ -158,20 +164,28 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     const expected = {
       default: {},
       "text-body": { lineHeightPercent: 115, lowerTwips: 140 },
-      "first-line-indent": { firstLineTwips: 283 },
-      "hanging-indent": { firstLineTwips: -283, textLeftTwips: 567 },
+      "first-line-indent": { firstLineTwips: 283, textLeftTwips: 0 },
+      "hanging-indent": { firstLineTwips: -283, tabStopTwips: 0, textLeftTwips: 567 },
       "text-body-indent": { firstLineTwips: 0, textLeftTwips: 283 },
       marginalia: { firstLineTwips: 0, textLeftTwips: 2268 },
-      caption: { fontSizeTwips: 200, italic: true, lowerTwips: 120, upperTwips: 120 },
-      footnote: { firstLineTwips: -340, fontSizeTwips: 200, textLeftTwips: 340 },
-      endnote: { firstLineTwips: -340, fontSizeTwips: 200, textLeftTwips: 340 },
+      caption: {
+        fontSizeTwips: 200,
+        italic: true,
+        lineNumber: false,
+        lowerTwips: 120,
+        upperTwips: 120,
+      },
+      footnote: { firstLineTwips: -340, fontSizeTwips: 200, lineNumber: false, textLeftTwips: 340 },
+      endnote: { firstLineTwips: -340, fontSizeTwips: 200, lineNumber: false, textLeftTwips: 340 },
       comment: {
+        autoColor: true,
         firstLineTwips: 0,
         fontSizeTwips: 200,
         lineHeightPercent: 0,
         lowerTwips: 0,
         rightTwips: 57,
         textLeftTwips: 57,
+        transparentHighlight: true,
         upperTwips: 57,
       },
       title: { adjust: SvxAdjust.Center, bold: true, fontSizeTwips: 560 },
@@ -182,35 +196,86 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
         upperTwips: 60,
       },
       appendix: { adjust: SvxAdjust.Center, bold: true, fontSizeTwips: 320 },
-      heading: { fontRole: "heading", fontSizeTwips: 280, lowerTwips: 120, upperTwips: 240 },
-      "heading-1": { bold: true, fontSizeTwips: 360, lowerTwips: 120, upperTwips: 240 },
-      "heading-2": { bold: true, fontSizeTwips: 320, lowerTwips: 120, upperTwips: 200 },
-      "heading-3": { bold: true, fontSizeTwips: 280, lowerTwips: 120, upperTwips: 140 },
+      heading: {
+        fontRole: "heading",
+        fontSizeTwips: 280,
+        keepWithNext: true,
+        lowerTwips: 120,
+        upperTwips: 240,
+      },
+      "heading-1": {
+        bold: true,
+        fontSizeTwips: 360,
+        keepWithNext: true,
+        lowerTwips: 120,
+        upperTwips: 240,
+      },
+      "heading-2": {
+        bold: true,
+        fontSizeTwips: 320,
+        keepWithNext: true,
+        lowerTwips: 120,
+        upperTwips: 200,
+      },
+      "heading-3": {
+        bold: true,
+        fontSizeTwips: 280,
+        keepWithNext: true,
+        lowerTwips: 120,
+        upperTwips: 140,
+      },
       "heading-4": {
         bold: true,
         fontSizeTwips: 260,
         italic: true,
+        keepWithNext: true,
         lowerTwips: 120,
         upperTwips: 120,
       },
-      "heading-5": { bold: true, fontSizeTwips: 240, lowerTwips: 60, upperTwips: 120 },
+      "heading-5": {
+        bold: true,
+        fontSizeTwips: 240,
+        keepWithNext: true,
+        lowerTwips: 60,
+        upperTwips: 120,
+      },
       "heading-6": {
         bold: true,
         fontSizeTwips: 240,
         italic: true,
+        keepWithNext: true,
         lowerTwips: 60,
         upperTwips: 60,
       },
-      "heading-7": { bold: true, fontSizeTwips: 200, lowerTwips: 60, upperTwips: 60 },
+      "heading-7": {
+        bold: true,
+        fontSizeTwips: 200,
+        keepWithNext: true,
+        lowerTwips: 60,
+        upperTwips: 60,
+      },
       "heading-8": {
         bold: true,
         fontSizeTwips: 200,
         italic: true,
+        keepWithNext: true,
         lowerTwips: 60,
         upperTwips: 60,
       },
-      "heading-9": { bold: true, fontSizeTwips: 180, lowerTwips: 60, upperTwips: 60 },
-      "heading-10": { bold: true, fontSizeTwips: 180, lowerTwips: 60, upperTwips: 60 },
+      "heading-9": {
+        bold: true,
+        fontSizeTwips: 180,
+        keepWithNext: true,
+        lowerTwips: 60,
+        upperTwips: 60,
+      },
+      "heading-10": {
+        bold: true,
+        fontSizeTwips: 180,
+        keepWithNext: true,
+        lowerTwips: 60,
+        upperTwips: 60,
+      },
       quotations: { firstLineTwips: 0, lowerTwips: 283, rightTwips: 567, textLeftTwips: 567 },
       "preformatted-text": { fontRole: "fixed", fontSizeTwips: 200, lowerTwips: 0 },
     } as const;
@@ -271,6 +336,11 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       (hanging.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
     ).toBe(-283);
     expect((hanging.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(567);
+    expect((hanging.Get(RES_PARATR_TABSTOP) as SfxInt16Item).GetValue()).toBe(0);
+    expect((heading.Get(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+    expect((caption.Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
+    expect((comment.Get(RES_CHRATR_COLOR) as SfxStringItem).GetValue()).toBe("auto");
+    expect((comment.Get(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue()).toBe("transparent");
     const quotations = document.GetTextFormatColl("quotations").GetAttrSet();
     expect((quotations.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight()).toBe(567);
     expect(
@@ -279,5 +349,14 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect(
       document.GetAttrPool().CreateItem({ which: RES_MARGIN_RIGHT, value: 10 }),
     ).toBeInstanceOf(SvxRightMarginItem);
+    expect(document.GetAttrPool().CreateItem({ which: RES_CHRATR_COLOR, value: "auto" })).toEqual(
+      new SfxStringItem(RES_CHRATR_COLOR, "auto"),
+    );
+    expect(
+      document.GetAttrPool().CreateItem({ which: RES_CHRATR_HIGHLIGHT, value: "transparent" }),
+    ).toEqual(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
+    expect(document.GetAttrPool().CreateItem({ which: RES_PARATR_TABSTOP, value: 0 })).toEqual(
+      new SfxInt16Item(RES_PARATR_TABSTOP, 0),
+    );
   });
 });

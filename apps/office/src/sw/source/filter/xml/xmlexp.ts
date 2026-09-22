@@ -2,9 +2,18 @@
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
 
-import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/source/items/paraitem";
+import {
+  SvxAdjust,
+  SvxAdjustItem,
+  SvxFirstLineIndentItem,
+  SvxLineSpacingItem,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+  SvxULSpaceItem,
+} from "../../../../editeng/source/items/paraitem";
 import {
   SvxFontItem,
+  SvxFontHeightItem,
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
@@ -13,14 +22,17 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   escapeXml,
   exportCharacterAttributes,
+  exportParagraphAttributes,
   exportTextParagraphs,
   ODF_NAMESPACES,
   type OdfCharacterProperties,
   type OdfParagraphAlignment,
+  type OdfParagraphProperties,
   type XMLTextParagraphSource,
 } from "../../../../xmloff/source/text/txtparae";
 import {
   RES_CHRATR_CJK_POSTURE,
+  RES_CHRATR_COLOR,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_WEIGHT,
@@ -30,6 +42,7 @@ import {
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
@@ -38,12 +51,15 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
   RES_UL_SPACE,
+  RES_KEEP,
+  RES_LINENUMBER,
 } from "../../../inc/hintids";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { SwDoc } from "../../core/doc/doc";
@@ -70,10 +86,17 @@ export function exportStylesXml(document: SwDoc): string {
         parentCollection instanceof Object && "id" in parentCollection
           ? ` style:parent-style-name="${getWriterOdfStyleName(String(parentCollection.id))}"`
           : "";
+      const leftMargin = getDirectLeftMargin(collection.GetAttrSet());
+      const directParagraphProperties = getParagraphProperties(collection.GetAttrSet());
+      const paragraphAttributes = [
+        ...(alignment === undefined ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
+        ...(leftMargin === undefined ? [] : [`fo:margin-left="${exportOdfLength(leftMargin)}"`]),
+        ...exportParagraphAttributes(directParagraphProperties ?? {}),
+      ];
       const paragraphProperties =
-        alignment === undefined
+        paragraphAttributes.length === 0
           ? ""
-          : `<style:paragraph-properties fo:text-align="${exportAlignment(alignment)}"/>`;
+          : `<style:paragraph-properties ${paragraphAttributes.join(" ")}/>`;
       const characterProperties = getCharacterProperties(collection.GetAttrSet(), false);
       const textProperties =
         characterProperties === undefined
@@ -136,10 +159,12 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
   );
   const hasDirectLeftMargin =
     node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_TEXTLEFT, false) !== undefined;
+  const paragraphProperties = getParagraphProperties(node.GetpSwAttrSet());
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
   return {
     ...(alignment === undefined ? {} : { alignment }),
     ...(hasDirectLeftMargin ? { leftMargin: node.textLeftMargin } : {}),
+    ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
     inheritedProperties: getCharacterProperties(
       node.GetSwAttrSet(),
       true,
@@ -191,6 +216,7 @@ function assertSupportedItems(
 ): void {
   const supported = new Set<number>([
     RES_CHRATR_POSTURE,
+    RES_CHRATR_COLOR,
     RES_CHRATR_FONT,
     RES_CHRATR_FONTSIZE,
     RES_CHRATR_UNDERLINE,
@@ -203,12 +229,16 @@ function assertSupportedItems(
     RES_CHRATR_CTL_FONT,
     RES_CHRATR_CTL_FONTSIZE,
     RES_CHRATR_CTL_WEIGHT,
+    RES_CHRATR_HIGHLIGHT,
     RES_PARATR_ADJUST,
     RES_PARATR_LINESPACING,
+    RES_PARATR_TABSTOP,
     RES_MARGIN_FIRSTLINE,
     RES_MARGIN_RIGHT,
     RES_MARGIN_TEXTLEFT,
     RES_UL_SPACE,
+    RES_KEEP,
+    RES_LINENUMBER,
   ]);
   if (allowListItems)
     for (const which of [
@@ -244,8 +274,21 @@ function getCharacterProperties(
     (which) => set.GetItemIfSet(which, false) !== undefined,
   );
   const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
+  const fontSizeIds = [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE];
+  const directFontSize = fontSizeIds.some(
+    /** Detects a direct script font size. @param which - Font-size WhichId. @returns Whether set. */ (
+      which,
+    ) => set.GetItemIfSet(which, false) !== undefined,
+  );
   const font = set.GetItemIfSet(RES_CHRATR_FONT, inherited);
-  if (!inherited && !directWeight && !directPosture && !directUnderline && font === undefined)
+  if (
+    !inherited &&
+    !directWeight &&
+    !directPosture &&
+    !directUnderline &&
+    !directFontSize &&
+    font === undefined
+  )
     return undefined;
   const weight = set.Get(RES_CHRATR_WEIGHT, inherited);
   const asianWeight = set.Get(RES_CHRATR_CJK_WEIGHT, inherited);
@@ -254,6 +297,9 @@ function getCharacterProperties(
   const asianPosture = set.Get(RES_CHRATR_CJK_POSTURE, inherited);
   const complexPosture = set.Get(RES_CHRATR_CTL_POSTURE, inherited);
   const underline = set.Get(RES_CHRATR_UNDERLINE, inherited);
+  const fontSize = set.Get(RES_CHRATR_FONTSIZE, inherited);
+  const asianFontSize = set.Get(RES_CHRATR_CJK_FONTSIZE, inherited);
+  const complexFontSize = set.Get(RES_CHRATR_CTL_FONTSIZE, inherited);
   if (
     !(weight instanceof SvxWeightItem) ||
     !(asianWeight instanceof SvxWeightItem) ||
@@ -261,22 +307,70 @@ function getCharacterProperties(
     !(posture instanceof SvxPostureItem) ||
     !(asianPosture instanceof SvxPostureItem) ||
     !(complexPosture instanceof SvxPostureItem) ||
-    !(underline instanceof SvxUnderlineItem)
+    !(underline instanceof SvxUnderlineItem) ||
+    !(fontSize instanceof SvxFontHeightItem) ||
+    !(asianFontSize instanceof SvxFontHeightItem) ||
+    !(complexFontSize instanceof SvxFontHeightItem)
   )
     throw new Error("ODT character item is invalid.");
   if (
     weight.GetBoolValue() !== asianWeight.GetBoolValue() ||
     weight.GetBoolValue() !== complexWeight.GetBoolValue() ||
     posture.GetBoolValue() !== asianPosture.GetBoolValue() ||
-    posture.GetBoolValue() !== complexPosture.GetBoolValue()
+    posture.GetBoolValue() !== complexPosture.GetBoolValue() ||
+    fontSize.GetHeight() !== asianFontSize.GetHeight() ||
+    fontSize.GetHeight() !== complexFontSize.GetHeight()
   )
     throw new Error("ODT export does not support script-specific character formatting.");
   return {
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
+    ...(directFontSize ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     ...(inherited || directWeight ? { bold: weight.GetBoolValue() } : {}),
     ...(inherited || directPosture ? { italic: posture.GetBoolValue() } : {}),
     ...(inherited || directUnderline ? { underline: underline.GetBoolValue() } : {}),
   };
+}
+
+/** Projects direct paragraph items to ODF properties. @param set - Optional item set. @returns Properties when present. */
+function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProperties | undefined {
+  if (set === undefined) return undefined;
+  const firstLine = set.GetItemIfSet(RES_MARGIN_FIRSTLINE, false);
+  const right = set.GetItemIfSet(RES_MARGIN_RIGHT, false);
+  const spacing = set.GetItemIfSet(RES_UL_SPACE, false);
+  const lineSpacing = set.GetItemIfSet(RES_PARATR_LINESPACING, false);
+  if (
+    (firstLine !== undefined && !(firstLine instanceof SvxFirstLineIndentItem)) ||
+    (right !== undefined && !(right instanceof SvxRightMarginItem)) ||
+    (spacing !== undefined && !(spacing instanceof SvxULSpaceItem)) ||
+    (lineSpacing !== undefined && !(lineSpacing instanceof SvxLineSpacingItem))
+  )
+    throw new Error("ODT paragraph item is invalid.");
+  const properties: OdfParagraphProperties = {
+    ...(firstLine instanceof SvxFirstLineIndentItem
+      ? { firstLineIndent: firstLine.ResolveTextFirstLineOffset() }
+      : {}),
+    ...(right instanceof SvxRightMarginItem ? { rightMargin: right.ResolveRight() } : {}),
+    ...(spacing instanceof SvxULSpaceItem
+      ? { upperSpacing: spacing.GetUpper(), lowerSpacing: spacing.GetLower() }
+      : {}),
+    ...(lineSpacing instanceof SvxLineSpacingItem
+      ? { lineHeightPercent: lineSpacing.GetPropLineSpace() }
+      : {}),
+  };
+  return Object.keys(properties).length === 0 ? undefined : properties;
+}
+
+/** Projects a direct text-left margin. @param set - Item set. @returns Twips when directly set. */
+function getDirectLeftMargin(set: SfxItemSet): number | undefined {
+  const item = set.GetItemIfSet(RES_MARGIN_TEXTLEFT, false);
+  if (item === undefined) return undefined;
+  if (!(item instanceof SvxTextLeftMarginItem)) throw new Error("ODT left-margin item is invalid.");
+  return item.ResolveTextLeft();
+}
+
+/** Serializes twips as a bounded ODF centimetre length. @param twips - Length. @returns ODF length. */
+function exportOdfLength(twips: number): string {
+  return `${Number(((twips * 2.54) / 1440).toFixed(4))}cm`;
 }
 
 /** Converts a direct adjustment item to model alignment. @param item - Optional pool item. @returns Alignment when directly set. */

@@ -9,6 +9,7 @@ import {
   exportCharacterAttributes,
   exportTextParagraphs,
   type OdfCharacterProperties,
+  type OdfParagraphProperties,
   type XMLTextExportSource,
   type XMLTextParagraphSource,
 } from "./txtparae";
@@ -35,6 +36,7 @@ interface ImportedParagraph {
   alignment?: XMLTextParagraphSource["alignment"];
   leftMargin?: number;
   list?: XMLParagraphListState;
+  paragraphProperties?: OdfParagraphProperties;
   properties?: Partial<OdfCharacterProperties>;
   runs: {
     hyperlink?: XMLTextParagraphSource["runs"][number]["hyperlink"];
@@ -52,11 +54,19 @@ function importBody(
 ): ImportedParagraph[] {
   const paragraphs: ImportedParagraph[] = [];
   const target: XMLTextImportTarget = {
-    /** Creates one canonical paragraph operation target. @param style - Resolved style. @param alignment - Alignment. @param leftMargin - Direct text-left margin. @param properties - Direct properties. @param list - List state. @returns Text sink. */
-    createParagraph(style, alignment, leftMargin, properties, list): XMLParagraphImportTarget {
+    /** Creates one canonical paragraph operation target. @param style - Resolved style. @param alignment - Alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param list - List state. @returns Text sink. */
+    createParagraph(
+      style,
+      alignment,
+      leftMargin,
+      paragraphProperties,
+      properties,
+      list,
+    ): XMLParagraphImportTarget {
       const paragraph: ImportedParagraph = {
         ...(alignment === undefined ? {} : { alignment }),
         ...(leftMargin === undefined ? {} : { leftMargin }),
+        ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
         ...(list === undefined ? {} : { list }),
         ...(properties === undefined ? {} : { properties }),
         runs: [],

@@ -8,7 +8,7 @@ import { useBrowserLocalization } from "../../../framework/browser/localization/
 
 /** Defines the content injected into stable Writer workspace chrome regions. */
 export interface WriterWorkspaceChromeProps {
-  /** Document editing surface placed on the simulated page canvas. */
+  /** Document editing surface placed in the continuous Writer canvas. */
   readonly children: ReactNode;
   /** Human-readable title of the open Writer document. */
   readonly documentTitle: string;
@@ -154,9 +154,17 @@ export function WriterWorkspaceChrome({
         <div
           aria-label="Writer document canvas"
           className="min-h-0 min-w-0 flex-1 overscroll-contain overflow-auto bg-slate-200/70 p-5 sm:p-8"
+          data-layout-mode="continuous"
           role="region"
         >
-          <div className="mx-auto w-full max-w-5xl bg-white px-7 py-10 shadow-xl shadow-slate-400/30 sm:px-12 sm:py-14">
+          <div
+            aria-label={localization.GetText(
+              "writer.workspace.continuous-view",
+              "Continuous document view",
+            )}
+            className="mx-auto w-full max-w-5xl bg-white px-7 py-10 shadow-xl shadow-slate-400/30 sm:px-12 sm:py-14"
+            role="document"
+          >
             {children}
           </div>
         </div>

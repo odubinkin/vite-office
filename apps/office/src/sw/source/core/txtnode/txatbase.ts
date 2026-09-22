@@ -7,6 +7,7 @@ import {
   FontLineStyle,
   FontWeight,
   SvxFontItem,
+  SvxFontHeightItem,
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
@@ -16,10 +17,13 @@ import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/it
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
@@ -38,6 +42,8 @@ export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 export interface WriterCharacterAttributes {
   /** Explicit font family; absent means the paragraph style or document default. */
   readonly fontFamily?: string;
+  /** Explicit font height in twips; absent means the paragraph style or document default. */
+  readonly fontSizeTwips?: number;
   /** Whether the text uses a bold font weight. */
   readonly bold: boolean;
   /** Whether the text uses an italic posture. */
@@ -167,6 +173,12 @@ export function createSwFormatAutoFormat(
   if (attributes.fontFamily !== inherited.fontFamily && attributes.fontFamily !== undefined)
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       items.Put(new SvxFontItem(attributes.fontFamily, which));
+  if (
+    attributes.fontSizeTwips !== inherited.fontSizeTwips &&
+    attributes.fontSizeTwips !== undefined
+  )
+    for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
+      items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, which));
   if (attributes.bold !== inherited.bold)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       items.Put(new SvxWeightItem(attributes.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
@@ -194,8 +206,12 @@ export function projectWriterCharacterAttributes(
       items.GetItemIfSet(which, false) ?? inherited?.Get(which) ?? items.Get(which);
   const font =
     items.GetItemIfSet(RES_CHRATR_FONT, false) ?? inherited?.GetItemIfSet(RES_CHRATR_FONT);
+  const fontSize =
+    items.GetItemIfSet(RES_CHRATR_FONTSIZE, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_FONTSIZE, false);
   return {
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
+    ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     bold: (get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
     italic: (get(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
     underline: (get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),

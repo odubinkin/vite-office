@@ -7,6 +7,7 @@ import type {
   OdfHyperlink,
   OdfListLevelKind,
   OdfParagraphAlignment,
+  OdfParagraphProperties,
   XMLParagraphStyle,
 } from "./txtparae";
 
@@ -17,6 +18,7 @@ export interface OdfStyleDefinition {
   readonly family: "paragraph" | "text";
   /** Direct text-left margin imported from paragraph properties, in twips. */
   readonly leftMargin?: number;
+  readonly paragraphProperties?: OdfParagraphProperties;
   readonly nextStyleName?: string;
   readonly parentStyleName?: string;
   readonly properties?: Partial<OdfCharacterProperties>;
@@ -49,6 +51,7 @@ export interface XMLTextImportTarget {
     style: XMLParagraphStyle,
     alignment: OdfParagraphAlignment | undefined,
     leftMargin: number | undefined,
+    paragraphProperties: OdfParagraphProperties | undefined,
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
   ): XMLParagraphImportTarget;
@@ -129,6 +132,7 @@ export class XMLParaContext extends SvXMLImportContext {
       resolved.style,
       resolved.alignment,
       resolved.leftMargin,
+      resolved.paragraphProperties,
       resolved.properties,
       list,
     );
@@ -427,6 +431,7 @@ interface ResolvedParagraphStyle {
   readonly alignment?: OdfParagraphAlignment;
   readonly effectiveProperties?: Partial<OdfCharacterProperties>;
   readonly leftMargin?: number;
+  readonly paragraphProperties?: OdfParagraphProperties;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly style: XMLParagraphStyle;
 }
@@ -453,6 +458,9 @@ export function resolveParagraphStyle(
         ? {}
         : { effectiveProperties: { ...parent.effectiveProperties, ...definition?.properties } }),
       ...(definition?.leftMargin === undefined ? {} : { leftMargin: definition.leftMargin }),
+      ...(definition?.paragraphProperties === undefined
+        ? {}
+        : { paragraphProperties: definition.paragraphProperties }),
       style: builtInStyle,
     };
   }
@@ -470,6 +478,9 @@ export function resolveParagraphStyle(
   return {
     ...(definition.alignment === undefined ? {} : { alignment: definition.alignment }),
     ...(definition.leftMargin === undefined ? {} : { leftMargin: definition.leftMargin }),
+    ...(definition.paragraphProperties === undefined
+      ? {}
+      : { paragraphProperties: definition.paragraphProperties }),
     ...(parent.effectiveProperties === undefined && definition.properties === undefined
       ? {}
       : { effectiveProperties: { ...parent.effectiveProperties, ...definition.properties } }),

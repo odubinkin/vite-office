@@ -5,6 +5,9 @@
 /** First Writer character-format WhichId. */
 export const RES_CHRATR_BEGIN = 1 as const;
 
+/** Automatic or explicit character color, `RES_CHRATR_BEGIN + 2`. */
+export const RES_CHRATR_COLOR = 3 as const;
+
 /** Western font family, `RES_CHRATR_BEGIN + 6`. */
 export const RES_CHRATR_FONT = 7 as const;
 
@@ -44,6 +47,9 @@ export const RES_CHRATR_CTL_FONTSIZE = 28 as const;
 /** Complex-text font weight, `RES_CHRATR_BEGIN + 30`. */
 export const RES_CHRATR_CTL_WEIGHT = 31 as const;
 
+/** Character highlight/background, `RES_CHRATR_BEGIN + 41`. */
+export const RES_CHRATR_HIGHLIGHT = 42 as const;
+
 /** First WhichId after Writer character-format items. */
 export const RES_CHRATR_END = 49 as const;
 
@@ -55,6 +61,9 @@ export const RES_TXTATR_INETFMT = 54 as const;
 
 /** Paragraph adjustment item, `RES_PARATR_BEGIN + 1`. */
 export const RES_PARATR_ADJUST = 65 as const;
+
+/** Paragraph tab-stop collection, `RES_PARATR_BEGIN + 5`. */
+export const RES_PARATR_TABSTOP = 69 as const;
 
 /** Proportional paragraph line spacing, `RES_PARATR_BEGIN`. */
 export const RES_PARATR_LINESPACING = 64 as const;
@@ -89,8 +98,15 @@ export const RES_MARGIN_RIGHT = 94 as const;
 /** Upper/lower paragraph spacing, matching `RES_UL_SPACE`. */
 export const RES_UL_SPACE = 99 as const;
 
+/** Keep paragraph with the following paragraph, matching `RES_KEEP`. */
+export const RES_KEEP = 117 as const;
+
+/** Paragraph line-number participation, matching `RES_LINENUMBER`. */
+export const RES_LINENUMBER = 123 as const;
+
 /** WhichIds supported by the current Writer text-node auto-attribute set. */
 export const WRITER_TEXT_NODE_WHICH_RANGES = [
+  [RES_CHRATR_COLOR, RES_CHRATR_COLOR],
   [RES_CHRATR_FONT, RES_CHRATR_FONT],
   [RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE],
   [RES_CHRATR_POSTURE, RES_CHRATR_POSTURE],
@@ -101,15 +117,20 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT],
   [RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_FONTSIZE],
   [RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT],
+  [RES_CHRATR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT],
   [RES_PARATR_LINESPACING, RES_PARATR_ADJUST],
+  [RES_PARATR_TABSTOP, RES_PARATR_TABSTOP],
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
   [RES_PARATR_LIST_ID, RES_PARATR_LIST_ISCOUNTED],
   [RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT],
   [RES_UL_SPACE, RES_UL_SPACE],
+  [RES_KEEP, RES_KEEP],
+  [RES_LINENUMBER, RES_LINENUMBER],
 ] as const;
 
 /** WhichIds supported by the current Writer paragraph-style attribute set. */
 export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
+  [RES_CHRATR_COLOR, RES_CHRATR_COLOR],
   [RES_CHRATR_FONT, RES_CHRATR_FONT],
   [RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE],
   [RES_CHRATR_POSTURE, RES_CHRATR_POSTURE],
@@ -120,11 +141,15 @@ export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
   [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT],
   [RES_CHRATR_CTL_FONTSIZE, RES_CHRATR_CTL_FONTSIZE],
   [RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT],
+  [RES_CHRATR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT],
   [RES_PARATR_LINESPACING, RES_PARATR_ADJUST],
+  [RES_PARATR_TABSTOP, RES_PARATR_TABSTOP],
   [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
   [RES_PARATR_LIST_LEVEL, RES_PARATR_LIST_LEVEL],
   [RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT],
   [RES_UL_SPACE, RES_UL_SPACE],
+  [RES_KEEP, RES_KEEP],
+  [RES_LINENUMBER, RES_LINENUMBER],
 ] as const;
 
 /** WhichIds stored inside the bounded SwFormatAutoFormat item set. */

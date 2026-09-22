@@ -6,6 +6,7 @@ import type {
   OdfCharacterProperties,
   OdfListLevelKind,
   OdfParagraphAlignment,
+  OdfParagraphProperties,
 } from "../text/txtparae";
 import type { OdfStyleDefinition, XMLTextListRule } from "../text/txtparai";
 
@@ -49,10 +50,14 @@ export class XMLStylesContext extends SvXMLImportContext {
 class XMLStyleContext extends SvXMLImportContext {
   private alignment: OdfParagraphAlignment | undefined;
   private leftMargin: number | undefined;
+  private paragraphProperties: OdfParagraphProperties | undefined;
   private hasParagraphProperties = false;
   private properties: Partial<OdfCharacterProperties> | undefined;
   private readonly name: string;
-  private readonly definition: Omit<OdfStyleDefinition, "alignment" | "leftMargin" | "properties">;
+  private readonly definition: Omit<
+    OdfStyleDefinition,
+    "alignment" | "leftMargin" | "paragraphProperties" | "properties"
+  >;
   private readonly supported: boolean;
 
   /** Reads style identity attributes. @param target - Definition consumer. @param attributes - Style attributes. @returns Context. */
@@ -92,12 +97,15 @@ class XMLStyleContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (!this.supported) return new SvXMLIgnoreContext();
-    if (element === XMLToken.STYLE_PARAGRAPH_PROPERTIES && this.definition.family === "paragraph") {
+    if (element === XMLToken.STYLE_PARAGRAPH_PROPERTIES && this.definition.family !== "paragraph")
+      return new SvXMLIgnoreContext();
+    if (element === XMLToken.STYLE_PARAGRAPH_PROPERTIES) {
       if (this.hasParagraphProperties)
         throw new Error("ODF style has duplicate paragraph-properties.");
       this.hasParagraphProperties = true;
       this.alignment = importAlignment(attributes);
       this.leftMargin = importLeftMargin(attributes);
+      this.paragraphProperties = importParagraphProperties(attributes);
       return new XMLPropertyContext();
     }
     if (element === XMLToken.STYLE_TEXT_PROPERTIES) {
@@ -116,6 +124,9 @@ class XMLStyleContext extends SvXMLImportContext {
       ...this.definition,
       ...(this.alignment === undefined ? {} : { alignment: this.alignment }),
       ...(this.leftMargin === undefined ? {} : { leftMargin: this.leftMargin }),
+      ...(this.paragraphProperties === undefined
+        ? {}
+        : { paragraphProperties: this.paragraphProperties }),
       ...(this.properties === undefined ? {} : { properties: this.properties }),
     });
   }
@@ -228,8 +239,71 @@ function importAlignment(attributes: FastAttributeList): OdfParagraphAlignment |
 function importLeftMargin(attributes: FastAttributeList): number | undefined {
   const value = attributes.get(XMLToken.FO_MARGIN_LEFT);
   if (value === null) return undefined;
-  const match = /^(0|[0-9]+(?:\.[0-9]+)?)(cm|in|mm|pt)$/.exec(value);
-  if (match === null) throw new Error(`Unsupported ODF paragraph left margin: ${value}`);
+  return importOdfLength(value, false, "paragraph left margin");
+}
+
+/** Imports supported paragraph properties. @param attributes - Property attributes. @returns Property deltas. */
+function importParagraphProperties(
+  attributes: FastAttributeList,
+): OdfParagraphProperties | undefined {
+  const firstLineIndent = importOptionalLength(
+    attributes,
+    XMLToken.FO_TEXT_INDENT,
+    true,
+    "text indent",
+  );
+  const rightMargin = importOptionalLength(
+    attributes,
+    XMLToken.FO_MARGIN_RIGHT,
+    false,
+    "right margin",
+  );
+  const upperSpacing = importOptionalLength(
+    attributes,
+    XMLToken.FO_MARGIN_TOP,
+    false,
+    "upper spacing",
+  );
+  const lowerSpacing = importOptionalLength(
+    attributes,
+    XMLToken.FO_MARGIN_BOTTOM,
+    false,
+    "lower spacing",
+  );
+  const rawLineHeight = attributes.get(XMLToken.FO_LINE_HEIGHT);
+  let lineHeightPercent: number | undefined;
+  if (rawLineHeight !== null) {
+    const match = /^(\d+(?:\.\d+)?)%$/.exec(rawLineHeight);
+    if (match === null) throw new Error(`Unsupported ODF paragraph line height: ${rawLineHeight}`);
+    lineHeightPercent = Math.round(Number(match[1]));
+  }
+  const result: OdfParagraphProperties = {
+    ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
+    ...(rightMargin === undefined ? {} : { rightMargin }),
+    ...(upperSpacing === undefined ? {} : { upperSpacing }),
+    ...(lowerSpacing === undefined ? {} : { lowerSpacing }),
+    ...(lineHeightPercent === undefined ? {} : { lineHeightPercent }),
+  };
+  return Object.keys(result).length === 0 ? undefined : result;
+}
+
+/** Imports an optional ODF length attribute. @param attributes - Attributes. @param token - Attribute token. @param signed - Whether negative values are allowed. @param label - Error label. @returns Twips. */
+function importOptionalLength(
+  attributes: FastAttributeList,
+  token: XMLToken,
+  signed: boolean,
+  label: string,
+): number | undefined {
+  const value = attributes.get(token);
+  return value === null ? undefined : importOdfLength(value, signed, label);
+}
+
+/** Converts one bounded ODF absolute length to Writer twips. @param value - ODF length. @param signed - Whether negative values are allowed. @param label - Error label. @returns Twips. */
+function importOdfLength(value: string, signed: boolean, label: string): number {
+  const match = new RegExp(`^(${signed ? "-?" : ""}(?:0|[0-9]+(?:\\.[0-9]+)?))(cm|in|mm|pt)$`).exec(
+    value,
+  );
+  if (match === null) throw new Error(`Unsupported ODF ${label}: ${value}`);
   const amount = Number(match[1]);
   const unit = match[2];
   const twips =
@@ -251,6 +325,7 @@ function importCharacterProperties(
   const weight = attributes.get(XMLToken.FO_FONT_WEIGHT);
   const faceName = attributes.get(XMLToken.STYLE_FONT_NAME);
   const fallbackFontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
+  const fontSize = attributes.get(XMLToken.FO_FONT_SIZE);
   const posture = attributes.get(XMLToken.FO_FONT_STYLE);
   const underline = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_STYLE);
   const underlineWidth = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_WIDTH);
@@ -278,8 +353,19 @@ function importCharacterProperties(
   if (faceName !== null && declaredFontFamily === undefined)
     throw new Error(`Undefined ODF font face: ${faceName}`);
   const fontFamily = declaredFontFamily ?? fallbackFontFamily?.replace(/^(['"])(.*)\1$/, "$2");
+  let fontSizeTwips: number | undefined;
+  if (fontSize !== null) {
+    try {
+      const imported = importOdfLength(fontSize, false, "font size");
+      if (imported > 0) fontSizeTwips = imported;
+      else console.warn(`Unsupported ODF font size ignored: ${fontSize}`);
+    } catch {
+      console.warn(`Unsupported ODF font size ignored: ${fontSize}`);
+    }
+  }
   return {
     ...(fontFamily === undefined || fontFamily.trim().length === 0 ? {} : { fontFamily }),
+    ...(fontSizeTwips === undefined ? {} : { fontSizeTwips }),
     ...(weight === null ? {} : { bold: weight === "bold" }),
     ...(posture === null ? {} : { italic: posture === "italic" }),
     ...(underline === null ? {} : { underline: underline === "solid" }),

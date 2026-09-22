@@ -92,6 +92,9 @@ export function normalizeWriterCharacterAttributes(candidate: unknown): WriterCh
     ...(typeof attributes.fontFamily === "string" && attributes.fontFamily.trim().length > 0
       ? { fontFamily: attributes.fontFamily }
       : {}),
+    ...(Number.isInteger(attributes.fontSizeTwips) && Number(attributes.fontSizeTwips) > 0
+      ? { fontSizeTwips: Number(attributes.fontSizeTwips) }
+      : {}),
     bold: attributes.bold === true,
     italic: attributes.italic === true,
     underline: attributes.underline === true,
@@ -134,7 +137,8 @@ function areWriterCharacterAttributesEqual(
     left.bold === right.bold &&
     left.italic === right.italic &&
     left.underline === right.underline &&
-    left.fontFamily === right.fontFamily
+    left.fontFamily === right.fontFamily &&
+    left.fontSizeTwips === right.fontSizeTwips
   );
 }
 

@@ -19,8 +19,8 @@ import {
 import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
 import type { BrowserLocalizationService } from "../../../framework/browser/localization/browser-localization";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import { getWriterParagraphStyleCommandId } from "../../uiconfig/swriter/menubar/menubar-commands";
+import type { WriterParagraphStyleOption } from "./writer-view-projection";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerTextObjectBarItems } from "../../uiconfig/swriter/toolbar/textobjectbar";
@@ -38,14 +38,15 @@ const icons = new Map<string, CommandIcon>([
   [WRITER_COMMAND_IDS.decreaseIndent, Outdent],
 ]);
 
-const writerParagraphStyleOptions = createParagraphStyleOptions();
-
 /** Inputs shared by the complete Writer text formatting toolbar. */
-export type WriterFormattingToolbarProps = BrowserCommandSurfaceProps;
+export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps {
+  readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
+}
 
 /** Renders the complete Writer text toolbar. Its generic indent commands select list-level or paragraph-margin behavior in the text shell. @param props - Shared command surface and shell context. @returns Toolbar item fragment. */
 export function WriterFormattingToolbar({
   commandSource,
+  paragraphStyleOptions,
   resolveArguments,
 }: WriterFormattingToolbarProps): React.JSX.Element {
   const localization = useBrowserLocalization();
@@ -82,6 +83,7 @@ export function WriterFormattingToolbar({
             commandSource,
             getCommandResource,
             localization,
+            paragraphStyleOptions,
             resolveArguments,
           );
         }
@@ -108,12 +110,13 @@ function getWriterButtonContent(commandUrl: string): React.ReactNode {
   return undefined;
 }
 
-/** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param localization - Browser localization service. @param resolveArguments - Browser argument adapter. @returns Rendered special item. */
+/** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param localization - Browser localization service. @param paragraphStyleOptions - Binding-backed style selector options. @param resolveArguments - Browser argument adapter. @returns Rendered special item. */
 function renderSpecialToolbarItem(
   placement: Extract<WriterToolbarItemPlacement, { kind: "command-select" | "font-select" }>,
   commandSource: BrowserCommandSurfaceProps["commandSource"],
   getCommandResource: typeof getWriterCommandResource,
   localization: BrowserLocalizationService,
+  paragraphStyleOptions: readonly WriterParagraphStyleOption[],
   resolveArguments: BrowserCommandSurfaceProps["resolveArguments"],
 ): React.ReactNode {
   const item = placement;
@@ -159,16 +162,17 @@ function renderSpecialToolbarItem(
         }
         value={selected}
       >
-        {renderParagraphStyleOptions(getCommandResource, localization)}
+        {renderParagraphStyleOptions(getCommandResource, localization, paragraphStyleOptions)}
       </select>
     </label>
   );
 }
 
-/** Renders upstream pool ranges with hierarchy. @param getCommandResource - Command resource lookup. @param localization - Browser localization service. @returns Options. */
+/** Renders upstream pool ranges with hierarchy. @param getCommandResource - Command resource lookup. @param localization - Browser localization service. @param paragraphStyleOptions - Binding-backed style selector options. @returns Options. */
 function renderParagraphStyleOptions(
   getCommandResource: typeof getWriterCommandResource,
   localization: BrowserLocalizationService,
+  paragraphStyleOptions: readonly WriterParagraphStyleOption[],
 ): React.ReactNode {
   const labels = {
     text: "Text styles",
@@ -184,7 +188,7 @@ function renderParagraphStyleOptions(
       label,
     ]) => (
       <optgroup key={group} label={localization.GetText(`writer.style-group.${group}`, label)}>
-        {writerParagraphStyleOptions
+        {paragraphStyleOptions
           .filter(
             /** Selects precomputed group styles. @param style - Candidate. @returns Whether included. */ (
               style,
@@ -205,34 +209,6 @@ function renderParagraphStyleOptions(
           )}
       </optgroup>
     ),
-  );
-}
-
-/** Resolves the static style hierarchy once when the generated resource module loads. @returns Flat options with stable depths. */
-function createParagraphStyleOptions(): readonly Readonly<{
-  depth: number;
-  group: (typeof WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL)[number]["group"];
-  id: string;
-}>[] {
-  const parents = new Map(
-    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
-      /** Indexes one generated style. @param style - Pool style. @returns ID/parent pair. */ (
-        style,
-      ) => [style.id, style.parentId],
-    ),
-  );
-  return WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
-    /** Computes one bounded hierarchy depth. @param style - Pool style. @returns Render metadata. */ (
-      style,
-    ) => {
-      let depth = 0;
-      let parentId = style.parentId;
-      while (parentId !== undefined && depth < 8) {
-        depth += 1;
-        parentId = parents.get(parentId);
-      }
-      return Object.freeze({ depth, group: style.group, id: style.id });
-    },
   );
 }
 

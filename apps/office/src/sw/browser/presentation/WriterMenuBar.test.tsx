@@ -98,6 +98,11 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       screen.queryByRole("complementary", { name: "Writer properties sidebar" }),
     ).not.toBeInTheDocument();
     expect(screen.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
+    expect(screen.getByRole("region", { name: "Writer document canvas" })).toHaveAttribute(
+      "data-layout-mode",
+      "continuous",
+    );
+    expect(screen.getByRole("document", { name: "Continuous document view" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "View" }));
     const hiddenSidebarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
     expect(hiddenSidebarMenuItem).toHaveAttribute("aria-checked", "false");

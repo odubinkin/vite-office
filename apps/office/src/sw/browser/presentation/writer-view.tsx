@@ -215,6 +215,7 @@ export function WriterWorkbench({
         formattingToolbar={
           <WriterFormattingToolbar
             commandSource={commandSource}
+            paragraphStyleOptions={snapshot.paragraphStyleOptions}
             resolveArguments={resolveCommandArguments}
           />
         }

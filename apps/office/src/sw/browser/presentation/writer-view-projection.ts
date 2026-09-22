@@ -37,6 +37,16 @@ import {
   RES_PARATR_LINESPACING,
   RES_UL_SPACE,
 } from "../../inc/hintids";
+import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
+
+/** Browser selector metadata projected outside React from the Writer style pool. */
+export interface WriterParagraphStyleOption {
+  readonly depth: number;
+  readonly group: (typeof WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL)[number]["group"];
+  readonly id: string;
+}
+
+const paragraphStyleOptions = createParagraphStyleOptions();
 /** Primitive/resource-ID projection of one text node, owned only by the browser presenter. */
 export interface WriterParagraphProjection {
   readonly alignment: WriterParagraphAlignment;
@@ -89,6 +99,7 @@ export interface WriterPresentationProjection {
   readonly documentState: OfficeDocument;
   readonly modelRevision: number;
   readonly paragraphs: readonly WriterParagraphProjection[];
+  readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
 }
 
 /** Complete browser external-store snapshot. */
@@ -257,8 +268,35 @@ export class WriterViewProjection {
       documentState: Object.freeze({ ...documentState }),
       modelRevision: document.GetDocumentStateManager().GetModelRevision(),
       paragraphs: Object.freeze(paragraphs),
+      paragraphStyleOptions,
     });
   }
+}
+
+/** Resolves the immutable Writer style hierarchy once for binding-backed view snapshots. @returns Selector options. */
+function createParagraphStyleOptions(): readonly WriterParagraphStyleOption[] {
+  const parents = new Map(
+    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
+      /** Indexes one style parent. @param style - Pool style. @returns ID and parent pair. */ (
+        style,
+      ) => [style.id, style.parentId],
+    ),
+  );
+  return Object.freeze(
+    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
+      /** Projects one style option. @param style - Pool style. @returns Immutable option. */ (
+        style,
+      ) => {
+        let depth = 0;
+        let parentId = style.parentId;
+        while (parentId !== undefined && depth < 8) {
+          depth += 1;
+          parentId = parents.get(parentId);
+        }
+        return Object.freeze({ depth, group: style.group, id: style.id });
+      },
+    ),
+  );
 }
 
 /** Owns browser projection caching and external-store subscriptions outside SwView. */

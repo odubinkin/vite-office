@@ -29,17 +29,20 @@ import {
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_COLOR,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
@@ -50,6 +53,8 @@ import {
   RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
+  RES_KEEP,
+  RES_LINENUMBER,
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem } from "../para/paratr";
@@ -115,12 +120,26 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */
       (value) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
     );
+    for (const [which, value] of [
+      [RES_CHRATR_COLOR, "auto"],
+      [RES_CHRATR_HIGHLIGHT, "transparent"],
+    ] as const)
+      this.RegisterDefaultItem(
+        new SfxStringItem(which, value),
+        /** Restores a string-valued compatibility item. @param stored - Persisted value. @returns String item. */
+        (stored) => new SfxStringItem(which, String(stored)),
+      );
     this.RegisterDefaultItem(
       new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST),
       /** Restores an adjustment item. @param value - Persisted enum value. @returns Concrete adjustment item. */
       function restoreAdjust(value): SvxAdjustItem {
         return new SvxAdjustItem(value as SvxAdjust, RES_PARATR_ADJUST);
       },
+    );
+    this.RegisterDefaultItem(
+      new SfxInt16Item(RES_PARATR_TABSTOP, -1),
+      /** Restores the bounded tab-stop position. @param value - Persisted twips. @returns Integer item. */
+      (value) => new SfxInt16Item(RES_PARATR_TABSTOP, Number(value)),
     );
     this.RegisterDefaultItem(
       new SvxTextLeftMarginItem(0, RES_MARGIN_TEXTLEFT),
@@ -154,6 +173,12 @@ export class SwAttrPool extends SfxItemPool {
         value,
       ) => new SvxLineSpacingItem(Number(value), RES_PARATR_LINESPACING),
     );
+    for (const which of [RES_KEEP, RES_LINENUMBER])
+      this.RegisterDefaultItem(
+        new SfxBoolItem(which, false),
+        /** Restores one boolean paragraph compatibility item. @param value - Persisted flag. @returns Boolean item. */
+        (value) => new SfxBoolItem(which, Boolean(value)),
+      );
     this.RegisterDefaultItem(
       new SwNumRuleItem(),
       /** Restores a numbering-rule item. @param value - Persisted rule name. @returns Concrete rule item. */

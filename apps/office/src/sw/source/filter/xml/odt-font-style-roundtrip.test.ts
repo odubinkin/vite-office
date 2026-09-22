@@ -1,12 +1,19 @@
 /** @fileoverview Verifies complete Writer style and font ODT round-trip compatibility. */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import { SvxFontItem } from "../../../../editeng/source/items/textitem";
+import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, RES_CHRATR_FONT } from "../../../inc/hintids";
+import {
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+} from "../../../inc/hintids";
 import { getWriterOdfStyleName, WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { createWriterDocument } from "../../core/doc/doc";
 import {
@@ -169,6 +176,8 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     const textBody = writer.GetTextFormatColl("text-body");
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       textBody.SetFormatAttr(new SvxFontItem("Source Serif 4", which));
+    for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
+      textBody.SetFormatAttr(new SvxFontHeightItem(13 * 20, which));
     const paragraph = writer.paragraphs[0];
     paragraph?.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
@@ -181,6 +190,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
           attributes: {
             bold: false,
             fontFamily: "Noto Sans",
+            fontSizeTwips: 15 * 20,
             italic: false,
             underline: false,
           },
@@ -200,6 +210,27 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(contentXml).toContain(
       '<style:font-face style:name="Noto Sans" svg:font-family="&apos;Noto Sans&apos;"/>',
     );
+    expect(stylesXml).toContain('fo:font-size="13pt"');
+    expect(contentXml).toContain('fo:font-size="15pt"');
+    const warn = vi
+      .spyOn(console, "warn")
+      .mockImplementation(
+        /** Suppresses expected diagnostics. @returns Nothing. */ () => undefined,
+      );
+    for (const unsupportedSize of ["0pt", "130%"])
+      await expect(
+        readOdtDocument(
+          await rewriteStylesXml(
+            firstBytes,
+            /** Replaces one absolute size with an unsupported form. @param xml - Styles XML. @returns Updated XML. */ (
+              xml,
+            ) => xml.replace(/fo:font-size="[^"]+"/, `fo:font-size="${unsupportedSize}"`),
+          ),
+          state,
+        ),
+      ).resolves.toBeDefined();
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("font size ignored"));
+    warn.mockRestore();
     expect(contentXml).toContain('style:parent-style-name="Heading_20_1"');
     for (const style of WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL) {
       const name = getWriterOdfStyleName(style.id);
@@ -228,10 +259,21 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
           .GetItemIfSet(RES_CHRATR_FONT, false) as SvxFontItem
       ).GetFamilyName(),
     ).toBe("Source Serif 4");
+    expect(
+      (
+        opened.document
+          .GetTextFormatColl("text-body")
+          .GetAttrSet()
+          .GetItemIfSet(RES_CHRATR_FONTSIZE, false) as SvxFontHeightItem
+      ).GetHeight(),
+    ).toBe(13 * 20);
     expect(opened.document.paragraphs[0]?.style).toBe("heading-1");
     expect(projectWriterTextRuns(opened.document.paragraphs[0]).at(0)?.attributes.fontFamily).toBe(
       "Noto Sans",
     );
+    expect(
+      projectWriterTextRuns(opened.document.paragraphs[0]).at(0)?.attributes.fontSizeTwips,
+    ).toBe(15 * 20);
 
     const reopened = await readOdtDocument(
       writeOdtDocument(opened.document, { title: opened.title }),

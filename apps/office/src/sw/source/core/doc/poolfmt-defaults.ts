@@ -20,15 +20,18 @@ import {
   SvxPostureItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_COLOR,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_POSTURE,
@@ -38,7 +41,10 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
   RES_UL_SPACE,
+  RES_KEEP,
+  RES_LINENUMBER,
 } from "../../../inc/hintids";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "./default-font";
 import type { SwTextFormatColl } from "./fmtcol";
@@ -46,15 +52,20 @@ import type { SwTextFormatColl } from "./fmtcol";
 /** Direct item values created by one upstream pool-style switch branch. */
 export interface WriterParagraphStyleDefaults {
   readonly adjust?: SvxAdjust;
+  readonly autoColor?: true;
   readonly bold?: true;
   readonly firstLineTwips?: number;
   readonly fontRole?: "fixed" | "heading" | "text";
   readonly fontSizeTwips?: number;
   readonly italic?: true;
+  readonly keepWithNext?: true;
+  readonly lineNumber?: false;
   readonly lineHeightPercent?: number;
   readonly lowerTwips?: number;
   readonly rightTwips?: number;
   readonly textLeftTwips?: number;
+  readonly tabStopTwips?: number;
+  readonly transparentHighlight?: true;
   readonly upperTwips?: number;
 }
 
@@ -86,6 +97,7 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
       fontSizeTwips: headingSizes[level] as number,
       ...([3, 5, 7].includes(level) ? { italic: true as const } : {}),
       lowerTwips: spacing[1] * 20,
+      keepWithNext: true,
       upperTwips: spacing[0] * 20,
     };
   }
@@ -93,9 +105,9 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
     case "text-body":
       return { lineHeightPercent: 115, lowerTwips: 7 * 20 };
     case "first-line-indent":
-      return { firstLineTwips: 283 };
+      return { firstLineTwips: 283, textLeftTwips: 0 };
     case "hanging-indent":
-      return { firstLineTwips: -283, textLeftTwips: 567 };
+      return { firstLineTwips: -283, tabStopTwips: 0, textLeftTwips: 567 };
     case "text-body-indent":
       return { firstLineTwips: 0, textLeftTwips: 283 };
     case "marginalia":
@@ -104,22 +116,36 @@ export function getWriterParagraphStyleDefaults(id: string): WriterParagraphStyl
       return {
         fontRole: "heading",
         fontSizeTwips: 14 * 20,
+        keepWithNext: true,
         lowerTwips: 6 * 20,
         upperTwips: 12 * 20,
       };
     case "caption":
-      return { fontSizeTwips: 10 * 20, italic: true, lowerTwips: 6 * 20, upperTwips: 6 * 20 };
+      return {
+        fontSizeTwips: 10 * 20,
+        italic: true,
+        lineNumber: false,
+        lowerTwips: 6 * 20,
+        upperTwips: 6 * 20,
+      };
     case "footnote":
     case "endnote":
-      return { firstLineTwips: -340, fontSizeTwips: 10 * 20, textLeftTwips: 340 };
+      return {
+        firstLineTwips: -340,
+        fontSizeTwips: 10 * 20,
+        lineNumber: false,
+        textLeftTwips: 340,
+      };
     case "comment":
       return {
+        autoColor: true,
         firstLineTwips: 0,
         fontSizeTwips: 10 * 20,
         lineHeightPercent: 0,
         lowerTwips: 0,
         rightTwips: 57,
         textLeftTwips: 57,
+        transparentHighlight: true,
         upperTwips: 57,
       };
     case "title":
@@ -170,6 +196,16 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(
       new SvxLineSpacingItem(defaults.lineHeightPercent, RES_PARATR_LINESPACING),
     );
+  if (defaults.tabStopTwips !== undefined)
+    collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_TABSTOP, defaults.tabStopTwips));
+  if (defaults.keepWithNext !== undefined)
+    collection.SetFormatAttr(new SfxBoolItem(RES_KEEP, defaults.keepWithNext));
+  if (defaults.lineNumber !== undefined)
+    collection.SetFormatAttr(new SfxBoolItem(RES_LINENUMBER, defaults.lineNumber));
+  if (defaults.autoColor !== undefined)
+    collection.SetFormatAttr(new SfxStringItem(RES_CHRATR_COLOR, "auto"));
+  if (defaults.transparentHighlight !== undefined)
+    collection.SetFormatAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
   for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
     if (defaults.bold !== undefined)
       collection.SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, which));
