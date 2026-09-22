@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220708-AZBN1P",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T11:13:21.889Z",
+  "verdict": "pass",
+  "summary": "P1.17 documentation reconciliation is complete and matches the verified P1 implementation.",
+  "evaluated_sha": "222702f0feff5cb0cfa4a76a673db17ce06d4532",
+  "blueprint_digest": "4b5682ebecc3616fcc47c2ece7ab8f3f463e904738094f13e73f4c65840212fd",
+  "findings": [
+    "All changed documentation reflects canonical Writer ownership and explicit residual limits; full repository verification, policy routing, and Agentplane doctor pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220708-AZBN1P/README.md",
+    "docs/program/vite-office-upstream-parity-plan.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
