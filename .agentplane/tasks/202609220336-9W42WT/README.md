@@ -1,10 +1,11 @@
 ---
 id: "202609220336-9W42WT"
 title: "Close remaining Writer parity gaps"
-status: "DOING"
+result_summary: "verified-202609220336-9W42WT"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T04:25:54.899Z"
+  updated_at: "2026-09-22T04:26:58.228Z"
   updated_by: "CODER"
-  note: "Verified Writer parity fixes: npm run verify passed; 359 unit tests and 96 inventory tests at 100% coverage, 11 Playwright tests passed, static/docs/dependency/source-tree/provenance/invariant/parity gates passed."
+  note: "verified-202609220336-9W42WT"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "Built-in style defaults now cover all representable upstream values; ODT import/export round-trips represented paragraph and character properties; React consumes binding-backed style options; workspace declares continuous layout."
-commit: null
+commit:
+  hash: "11820188ff7af8d5ef79e24cbea247b31c5c5074"
+  message: "🧩 9W42WT task: record parity evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Writer style defaults, symmetric tolerant ODT property support, binding-backed style options, and explicit continuous-view presentation with focused and full verification."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609220336-9W42WT. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Verified Writer parity fixes: npm run verify passed; 359 unit tests and 96 inventory tests at 100% coverage, 11 Playwright tests passed, static/docs/dependency/source-tree/provenance/invariant/parity gates passed."
+  -
+    type: "verify"
+    at: "2026-09-22T04:26:58.228Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609220336-9W42WT"
+  -
+    type: "status"
+    at: "2026-09-22T04:26:58.402Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609220336-9W42WT. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-22T04:25:54.976Z"
+doc_updated_at: "2026-09-22T04:26:58.403Z"
 doc_updated_by: "CODER"
 description: "Complete the approved non-P0-1 remediation: align exposed Writer style defaults with the pinned upstream baseline, guarantee symmetric ODT import/export for the supported slice while continuing to ignore unsupported data, move style hierarchy ownership out of React, and label the browser layout contract as continuous."
 sections:
@@ -100,9 +119,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-22T04:26:58.228Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609220336-9W42WT
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T04:25:54.976Z, excerpt_hash=sha256:67175d3d1c769b373f498944f3b332d3bc722212285a21b091156fcb059961e1
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220336-9W42WT/blueprint/resolved-snapshot.json
+    - old_digest: 747856d8974f29388f556dc052609a253fef8568f92ff7f5b4dc7db0053dca71
+    - current_digest: 747856d8974f29388f556dc052609a253fef8568f92ff7f5b4dc7db0053dca71
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220336-9W42WT
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609220336-9W42WT --result verified-202609220336-9W42WT --commit 11820188ff7af8d5ef79e24cbea247b31c5c5074
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation and task-state commits, then rerun the focused suites and npm run verify to confirm restoration."
   Findings: "Initial audit found incomplete upstream item-set defaults for exposed styles, import/export symmetry gaps hidden by permissive ODF parsing, React-owned style hierarchy construction, and an unnamed continuous layout contract. Unsupported ODF data must remain non-blocking and ignored by design."
+extensions:
+  implementation_commit:
+    hash: "05a3aeb83a39db15d05dd242f636cbc23cd05206"
+    message: "🧩 9W42WT code: implement Writer parity fixes"
 id_source: "generated"
 ---
 ## Summary
@@ -149,6 +202,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609220336-9W42WT
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T04:26:58.228Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609220336-9W42WT
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T04:25:54.976Z, excerpt_hash=sha256:67175d3d1c769b373f498944f3b332d3bc722212285a21b091156fcb059961e1
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220336-9W42WT/blueprint/resolved-snapshot.json
+- old_digest: 747856d8974f29388f556dc052609a253fef8568f92ff7f5b4dc7db0053dca71
+- current_digest: 747856d8974f29388f556dc052609a253fef8568f92ff7f5b4dc7db0053dca71
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220336-9W42WT
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609220336-9W42WT --result verified-202609220336-9W42WT --commit 11820188ff7af8d5ef79e24cbea247b31c5c5074
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
