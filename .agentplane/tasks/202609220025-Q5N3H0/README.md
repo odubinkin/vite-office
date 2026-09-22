@@ -4,7 +4,7 @@ title: "Complete Vite Office upstream parity remediation"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,25 @@ verification:
   updated_by: "CODER"
   note: "Full npm run verify passed: 357 app tests and 96 inventory tests at 100% coverage, 11 Playwright tests, builds, static/docs/dependency/provenance/invariant gates, and parity report 45/45 verified with zero gaps."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-22T01:03:02.043Z"
+  updated_by: "EVALUATOR"
+  note: "All approved non-P0-1 parity remediations are implemented and the complete verification contract passes."
+  evaluated_sha: "a8e7a2e979734e3930e2ff8d6779b85998d9964f"
+  blueprint_digest: "00eeb0e2bbc8898fd847f83d91e7537f97b1a2aa83d620cb14f43e1b33ae2d59"
+  evidence_refs:
+    - ".agentplane/tasks/202609220025-Q5N3H0/README.md"
+    - ".agentplane/tasks/202609220025-Q5N3H0/quality/20260922-010302043-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609220025-Q5N3H0/quality/20260922-010302043-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609220025-Q5N3H0/quality/20260922-010302043-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609220025-Q5N3H0/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/browser/presentation/writer-view-projection.ts"
+    - "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts"
+    - "docs/program/parity/writer-command-slice.json"
+    - "npm run verify"
+  findings:
+    - "List layout and run projection now consume model-owned values; command and recovery failures are typed; style defaults and parity inventory are evidence-backed; SwWrtShell editing algorithms are decomposed."
 commit: null
 comments:
   -

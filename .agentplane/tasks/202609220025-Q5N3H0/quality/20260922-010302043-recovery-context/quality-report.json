@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220025-Q5N3H0",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T01:03:02.043Z",
+  "verdict": "pass",
+  "summary": "All approved non-P0-1 parity remediations are implemented and the complete verification contract passes.",
+  "evaluated_sha": "a8e7a2e979734e3930e2ff8d6779b85998d9964f",
+  "blueprint_digest": "00eeb0e2bbc8898fd847f83d91e7537f97b1a2aa83d620cb14f43e1b33ae2d59",
+  "findings": [
+    "List layout and run projection now consume model-owned values; command and recovery failures are typed; style defaults and parity inventory are evidence-backed; SwWrtShell editing algorithms are decomposed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220025-Q5N3H0/README.md",
+    "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+    "docs/program/parity/writer-command-slice.json",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "The existing production bundle-size warning remains advisory and outside this task; P0-1 remains intentionally excluded by user decision."
+  ]
+}
