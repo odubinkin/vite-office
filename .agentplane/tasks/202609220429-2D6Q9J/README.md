@@ -1,10 +1,11 @@
 ---
 id: "202609220429-2D6Q9J"
 title: "Add Writer font-size selector"
-status: "DOING"
+result_summary: "verified-202609220429-2D6Q9J"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T04:47:05.623Z"
+  updated_at: "2026-09-22T04:48:14.015Z"
   updated_by: "CODER"
   note: "verified-202609220429-2D6Q9J"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "Implementation preserves nonstandard imported sizes, validates twip-representable positive values, synchronizes script font-height items, and passes the complete repository verification suite."
-commit: null
+commit:
+  hash: "6ed6d433aa3bbec95cd13fa625e6290f68789680"
+  message: "🧩 2D6Q9J task: persist quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved .uno:FontHeight command and compact Writer toolbar selector with native hint, undo, state, and ODT regression coverage."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609220429-2D6Q9J. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609220429-2D6Q9J"
+  -
+    type: "verify"
+    at: "2026-09-22T04:48:14.015Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609220429-2D6Q9J"
+  -
+    type: "status"
+    at: "2026-09-22T04:48:14.190Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609220429-2D6Q9J. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-22T04:47:05.698Z"
+doc_updated_at: "2026-09-22T04:48:14.191Z"
 doc_updated_by: "CODER"
 description: "Expose the pinned .uno:FontHeight toolbar control and connect it through Writer command state, text-shell mutation, native hints, undo, and existing ODT font-size support."
 sections:
@@ -134,6 +153,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-22T04:48:14.015Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609220429-2D6Q9J
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T04:47:05.698Z, excerpt_hash=sha256:efc53b069942c56c3a1e92ac3e392555e79dc33818cd8cb496da22a4b5b869c4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220429-2D6Q9J/blueprint/resolved-snapshot.json
+    - old_digest: bcc4e1a7c65defa1b5444966bfbc3b911c052772da2aaab4ee6879b44b5eac00
+    - current_digest: bcc4e1a7c65defa1b5444966bfbc3b911c052772da2aaab4ee6879b44b5eac00
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220429-2D6Q9J
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609220429-2D6Q9J --result verified-202609220429-2D6Q9J --commit 6ed6d433aa3bbec95cd13fa625e6290f68789680
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation and task evidence commits, then rerun focused tests and npm run verify."
   Findings: |-
@@ -142,6 +191,10 @@ sections:
     - Observation: FontHeight was imported/exported but lacked a Writer command and UI selector.
       Impact: Users could preserve imported font sizes but could not choose them in the toolbar.
       Resolution: Added generated .uno:FontHeight support, shell state/execute and undoable range formatting, compact point-size selector, rendering, and coverage.
+extensions:
+  implementation_commit:
+    hash: "2e19f348a9508107ce06a946f7a30d41615b8867"
+    message: "🧩 2D6Q9J code: add Writer font-size selector"
 id_source: "generated"
 ---
 ## Summary
@@ -216,6 +269,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609220429-2D6Q9J --result verified-202609220429-2D6Q9J --commit 2e19f348a9508107ce06a946f7a30d41615b8867
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T04:48:14.015Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609220429-2D6Q9J
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T04:47:05.698Z, excerpt_hash=sha256:efc53b069942c56c3a1e92ac3e392555e79dc33818cd8cb496da22a4b5b869c4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220429-2D6Q9J/blueprint/resolved-snapshot.json
+- old_digest: bcc4e1a7c65defa1b5444966bfbc3b911c052772da2aaab4ee6879b44b5eac00
+- current_digest: bcc4e1a7c65defa1b5444966bfbc3b911c052772da2aaab4ee6879b44b5eac00
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220429-2D6Q9J
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609220429-2D6Q9J --result verified-202609220429-2D6Q9J --commit 6ed6d433aa3bbec95cd13fa625e6290f68789680
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
