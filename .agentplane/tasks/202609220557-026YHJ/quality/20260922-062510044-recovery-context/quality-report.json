@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220557-026YHJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T06:25:10.044Z",
+  "verdict": "pass",
+  "summary": "Approved scope is implemented and all declared verification gates pass.",
+  "evaluated_sha": "5879593082af6b31221e8f92fabe36d034af5c20",
+  "blueprint_digest": "5ebadba77c73c25fb7449a9f0ddc1ccd28952ad243f1886b32fdc28e2b4bbe5a",
+  "findings": [
+    "Concurrent Sfx requests are isolated; HTML defaults, neutral medium ownership, native paste boundary, and static enforcement are covered."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220557-026YHJ/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
