@@ -1,10 +1,11 @@
 ---
 id: "202609220651-X14EQW"
 title: "Remove inventory-system changes from parity plan"
-status: "DOING"
+result_summary: "Scoped parity roadmap to code changes and related inventory records"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -41,11 +42,16 @@ quality_review:
     - "ap doctor"
   findings:
     - "Execution phases start at Phase 1 with code changes; inventory tooling, schemas, reports, validators, gates, and unrelated records are explicitly out of scope. The requested phase-8 closure file deletion is included."
-commit: null
+commit:
+  hash: "38bffb41edcbb12237e607ec088bd0d69701a98b"
+  message: "📝 X14EQW docs: record verification review"
 comments:
   -
     author: "DOCS"
     body: "Start: revise the parity plan to use the existing inventory strictly without changing its mechanisms or deterministic checks."
+  -
+    author: "DOCS"
+    body: "Verified: removed the inventory remediation phase, started the roadmap with code changes, limited inventory updates to records related to changed code, and included the requested phase-8 closure deletion."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "DOCS"
     state: "ok"
     note: "Verified that the roadmap starts at Phase 1, contains code work only, restricts inventory updates to related changed sources/capabilities, proposes no inventory-system enhancements, and includes the requested phase-8 closure deletion."
+  -
+    type: "status"
+    at: "2026-09-22T07:04:56.379Z"
+    author: "DOCS"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: removed the inventory remediation phase, started the roadmap with code changes, limited inventory updates to records related to changed code, and included the requested phase-8 closure deletion."
 doc_version: 3
-doc_updated_at: "2026-09-22T07:04:31.435Z"
+doc_updated_at: "2026-09-22T07:04:56.380Z"
 doc_updated_by: "DOCS"
 description: "Revise the upstream parity plan so it requires accurate completion of the existing inventory documentation and mechanisms without proposing schema, validator, gate, or deterministic-check enhancements."
 sections:
@@ -114,6 +127,10 @@ sections:
     - Observation: The earlier P0 inventory finding could be mistaken for an implementation phase even after standalone inventory work was removed.
       Impact: The revised plan now has no Phase 0 and no inventory remediation workstream.
       Resolution: Removed the inventory P0 block, renumbered code phases 1–7, tightened inventory scope, and committed phase-8-closure.md deletion.
+extensions:
+  implementation_commit:
+    hash: "3bfd08e3cb55a0717815ffe15fa3f65f9fe45baf"
+    message: "📝 X14EQW docs: remove inventory remediation phase"
 id_source: "generated"
 ---
 ## Summary
