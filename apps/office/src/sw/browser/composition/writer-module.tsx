@@ -28,7 +28,7 @@ import {
   IndexedDbDocumentStorageAdapter,
   IndexedDbRecoveryStorageAdapter,
 } from "../../../vcl/browser/indexeddb-storage";
-import type { WriterSnapshotState } from "../../source/filter/basflt/writer-storage";
+import { BrowserWriterRecoveryDocument, type WriterSnapshotState } from "../storage/writer-storage";
 import {
   createInlineOdtFilterService,
   type OdtFilterService,
@@ -129,7 +129,8 @@ export function createWriterDocumentSession(
             : { environment: services.recoveryEnvironment }),
           ownerId: createRecoveryOwnerId(),
         });
-  const unregisterRecovery = autoRecovery?.RegisterDocument(docShell);
+  const recoveryDocument = new BrowserWriterRecoveryDocument(docShell);
+  const unregisterRecovery = autoRecovery?.RegisterDocument(recoveryDocument);
   view.AttachFrame(frame);
   frame.SetActiveView(view, [
     view.GetCommandShell(),

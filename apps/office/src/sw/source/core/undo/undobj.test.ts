@@ -1,7 +1,7 @@
 /** @fileoverview Verifies semantic Writer actions, grouping, cursor restoration, lifecycle, limits, and payload scaling. */
 
 import { describe, expect, it } from "vitest";
-import { encodeWriterDocument } from "../../filter/basflt/writer-document-codec";
+import { encodeWriterDocument } from "../doc/writer-document-codec";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../doc/doc";
 import { createWriterListItemSet, projectWriterParagraphList } from "../doc/list";
@@ -253,19 +253,16 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(docShell.GetDocumentState()).toMatchObject({
       contentGeneration: 2,
       isModified: true,
-      savedGeneration: 1,
     });
     shell.Undo();
     expect(docShell.GetDocumentState()).toMatchObject({
       contentGeneration: 3,
       isModified: false,
-      savedGeneration: 1,
     });
     shell.Redo();
     expect(docShell.GetDocumentState()).toMatchObject({
       contentGeneration: 4,
       isModified: true,
-      savedGeneration: 1,
     });
   });
 

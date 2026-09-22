@@ -1010,11 +1010,10 @@
           "apps/office/src/sfx2/source/doc/objsh.ts#SfxObjectShell",
           "vendor/libreoffice-reference/sfx2/source/doc/objmisc.cxx#void SfxObjectShell::SetModified"
         ],
-        "justification": "SfxObjectShell owns modified/save/close transitions. Monotonic primary and recovery generations are the documented browser extension required for asynchronous persistence.",
+        "justification": "SfxObjectShell directly owns identity, title, modified/save-position/close state, and its retained primary medium. Only asynchronous content and recovery lease generations remain browser extensions.",
         "knownViolations": [],
         "localSymbols": [
           "SfxObjectShell",
-          "OfficeDocument",
           "SetModified",
           "SaveCompleted",
           "RecoverySaveCompleted",
@@ -1927,6 +1926,33 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0114",
+        "CAP-0131",
+        "CAP-0132"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/storage/writer-storage.ts#WriterSnapshotState"
+        ],
+        "justification": "Owns the browser cache envelope and AutoRecovery adapter over the canonical Writer graph serializer; schema 11 rejects every retired local cache shape.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/workflows/writer-document-io.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -2626,6 +2652,32 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/doc/item-codec.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "storage-contract",
+      "capabilityIds": [
+        "CAP-0112",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/item-codec.ts#encodeSfxPoolItem"
+        ],
+        "justification": "Owns the storage-neutral pooled-item graph codec used by canonical Writer graph serialization without adding persistence methods to SfxPoolItem subclasses.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/doc/list.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -2736,6 +2788,31 @@
           "lcl_SetHeadline",
           "lcl_SetDfltFont"
         ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/writer-document-codec.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/writer-document-codec.ts#WriterDocumentRecord"
+        ],
+        "justification": "Defines the single canonical primitive Writer graph representation shared by ODT worker transfer and browser cache envelopes.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": null,
+        "upstreamSymbols": []
       }
     },
     {
@@ -3295,111 +3372,6 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/filter/basflt/item-codec.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "storage-contract",
-      "capabilityIds": [
-        "CAP-0112",
-        "CAP-0131"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/source/filter/basflt/item-codec.ts#encodeSfxPoolItem"
-        ],
-        "justification": "Owns JSON discrimination for pooled items at the browser persistence boundary so core SfxPoolItem subclasses expose only canonical value operations.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/filter/basflt/writer-document-codec.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "document-lifecycle",
-      "capabilityIds": [
-        "CAP-0111"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/source/filter/basflt/writer-document-codec.ts#WriterDocumentRecord"
-        ],
-        "justification": "Browser-only projection or persistence adaptation kept outside the canonical Writer model.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "document-lifecycle",
-      "capabilityIds": [
-        "CAP-0114",
-        "CAP-0131",
-        "CAP-0132"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts#WriterStorageDocumentRecord"
-        ],
-        "justification": "Defines a thin durable browser-storage envelope around the one canonical WriterDocumentRecord graph and intentionally rejects every retired schema.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "document-lifecycle",
-      "capabilityIds": [
-        "CAP-0114",
-        "CAP-0131",
-        "CAP-0132"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/source/filter/basflt/writer-storage.ts#WriterSnapshotState"
-        ],
-        "justification": "Defines Writer-specific snapshot creation, restoration, and persistence evidence over the generic browser storage contract without acknowledging or cloning the live document. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
       "path": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
       "classification": "local-infrastructure",
       "state": "active",
@@ -3762,7 +3734,7 @@
           "apps/office/src/sw/source/uibase/app/docsh.ts#SwDocShell",
           "vendor/libreoffice-reference/sw/source/uibase/app/docsh.cxx#SwDocShell"
         ],
-        "justification": "Owns Writer model replacement, filter invocation, history, lifecycle hooks, recovery snapshot hooks, and SfxMedium transitions. Browser file-picker, download, and IndexedDB port orchestration is confined to sw/browser/workflows/writer-document-io.ts.",
+        "justification": "Owns Writer model replacement, filter invocation, undo save positions, lifecycle hooks, and SfxMedium transitions. Browser cache serialization and ports stay under sw/browser.",
         "knownViolations": [],
         "localSymbols": [
           "SwDocShell"

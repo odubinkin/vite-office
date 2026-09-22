@@ -16,7 +16,7 @@ import { writeOdtDocument } from "../../../sw/source/filter/xml/wrtxml";
 import {
   saveWriterDocument,
   type WriterSnapshotState,
-} from "../../../sw/source/filter/basflt/writer-storage";
+} from "../../../sw/browser/storage/writer-storage";
 import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-storage";
 import { createWriterModuleFactory } from "../../../sw/browser/composition/writer-module";
 import { SwDocShell } from "../../../sw/source/uibase/app/docsh";

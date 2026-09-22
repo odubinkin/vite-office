@@ -105,7 +105,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
         ),
     ).toThrow("Content generation");
     expect(active.shell.GetDoc()).toBe(active.document);
-    expect(active.shell.GetDocumentState()).toBe(state);
+    expect(active.shell.GetDocumentState()).toEqual(state);
     expect(active.shell.GetMedium()).toBe(medium);
     expect(medium.IsOpen()).toBe(true);
     expect(active.writerShell.Insert(" session")).toBe(true);
@@ -194,7 +194,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     );
     expect(active.shell.GetDocumentState()).toMatchObject({
       isModified: false,
-      savedGeneration: generation,
+      lifecycle: "saved",
     });
     const stableMedium = active.shell.GetMedium();
 
@@ -221,16 +221,26 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     });
     expect(active.shell.GetDocumentState().isModified).toBe(true);
     active.shell.AcknowledgeRecoverySave(changedGeneration);
+    expect(active.shell.AcknowledgeRecoverySave(changedGeneration)).toBe(false);
     expect(active.shell.GetDocumentState()).toMatchObject({
       recoveryGeneration: changedGeneration,
-      savedGeneration: generation,
     });
+    await active.shell.Save(
+      /** Confirms the changed generation. @returns Matching evidence. */ async () => ({
+        generation: changedGeneration,
+      }),
+    );
+    await active.shell.Save(
+      /** Reconfirms the unchanged save position. @returns Matching evidence. */ async () => ({
+        generation: changedGeneration,
+      }),
+    );
   });
 
   it("keeps a concurrent edit dirty after an older save completes", /** Verifies generation-aware acknowledgement. @returns Completion after assertions. */ async () => {
     const active = fixture();
     active.writerShell.Insert("saved");
-    const savedGeneration = active.shell.GetDocumentState().contentGeneration;
+    const capturedGeneration = active.shell.GetDocumentState().contentGeneration;
     let completeWrite: (() => void) | undefined;
     const completed = new Promise<void>(
       /** Captures durable-write completion. @param resolve - Completion callback. @returns Nothing. */ (
@@ -241,7 +251,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       { kind: "primary", name: "primary", storageKey: "primary" },
       /** Waits for durable completion. @returns Captured evidence. */ async () => {
         await completed;
-        return { generation: savedGeneration };
+        return { generation: capturedGeneration };
       },
     );
     active.writerShell.Insert(" later");
@@ -250,7 +260,6 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     expect(active.shell.GetDocumentState()).toMatchObject({
       contentGeneration: 2,
       isModified: true,
-      savedGeneration: savedGeneration,
     });
   });
 
@@ -321,7 +330,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
           Promise.reject(storageFailure),
       ),
     ).rejects.toBe(storageFailure);
-    expect(active.shell.GetDocumentState()).toBe(stateBeforePrimaryFailure);
+    expect(active.shell.GetDocumentState()).toEqual(stateBeforePrimaryFailure);
     expect(active.shell.GetMedium()).toBe(mediumBeforePrimaryFailure);
 
     const writable = new SwDocShell(createWriterDocument(), dirtyState, {
@@ -348,7 +357,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
         }),
       ),
     ).rejects.toThrow("does not match");
-    expect(active.shell.GetDocumentState()).toBe(stateBeforePrimaryFailure);
+    expect(active.shell.GetDocumentState()).toEqual(stateBeforePrimaryFailure);
     expect(active.shell.GetMedium()).toBe(mediumBeforePrimaryFailure);
 
     const racing = fixture("racing", "Racing", "racing");
@@ -392,8 +401,8 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     active.shell.Close();
     expect(active.shell.GetDocumentState().lifecycle).toBe("closed");
     expect(
-      /** Creates recovery after close. @returns Invalid result. */ () =>
-        active.shell.CreateRecoverySnapshot(),
+      /** Starts recovery after close. @returns Invalid result. */ () =>
+        active.shell.RecoverySaveStarted(0),
     ).toThrow("Closed document shells");
     expect(
       /** Replaces after close. @returns Invalid result. */ () =>

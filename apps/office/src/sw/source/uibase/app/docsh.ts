@@ -3,10 +3,9 @@
  * `sw/source/uibase/app/docsh.cxx` and `docshini.cxx`.
  */
 
-import { SfxObjectShell, type OfficeDocument } from "../../../../sfx2/source/doc/objsh";
+import { SfxObjectShell, type SfxObjectShellState } from "../../../../sfx2/source/doc/objsh";
 import {
   acquireSfxMedium,
-  type DocumentSnapshot,
   type SfxMedium,
   type SfxMediumInput,
   type SfxMediumInputOrInstance,
@@ -17,11 +16,6 @@ import { ODT_MIMETYPE } from "../../../../package/source/manifest/ManifestExport
 import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwDoc } from "../../core/doc/doc";
-import {
-  createWriterSnapshot,
-  restoreWriterSnapshot,
-  type WriterSnapshotState,
-} from "../../filter/basflt/writer-storage";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import {
   createOdtFilterDocument,
@@ -44,7 +38,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Creates a shell around an existing Writer model and explicit object-shell state. @param document - Active model. @param documentState - Shell lifecycle state. @param medium - Current medium. @param odtFilter - ODT filter service. @returns Nothing. */
   public constructor(
     private document: SwDoc,
-    documentState: OfficeDocument,
+    documentState: SfxObjectShellState,
     medium: SfxMediumInput = { kind: "untitled", name: documentState.title },
     private readonly odtFilter: OdtFilterService = createInlineOdtFilterService(),
   ) {
@@ -73,13 +67,14 @@ export class SwDocShell extends SfxObjectShell {
   public RenameDocument(title: string): boolean {
     this.EnsureOpen();
     const nextTitle = title.trim();
-    if (nextTitle.length === 0 || nextTitle === this.documentState.title) return false;
-    return this.SetDocumentState({
-      ...this.documentState,
-      isModified: true,
-      lifecycle: "dirty",
-      title: nextTitle,
-    });
+    if (nextTitle.length === 0) return false;
+    const wasModified = this.IsModified();
+    const changed = this.SetTitle(nextTitle);
+    if (!changed) return false;
+    if (!wasModified)
+      this.notifications.CallSwClientNotify({ kind: "document-modified", modified: true });
+    this.notifications.CallSwClientNotify({ kind: "document-state-changed" });
+    return true;
   }
 
   /** Subscribes one typed shell consumer through the Writer notification graph. @param listener - Typed receiver. @returns Cleanup callback. */
@@ -150,7 +145,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Atomically replaces model, lifecycle, medium, and history for New/Open/Load. @param document - Replacement model. @param documentState - Replacement lifecycle. @param medium - Replacement medium. @returns Installed model. */
   public ReplaceDocument(
     document: SwDoc,
-    documentState: OfficeDocument,
+    documentState: SfxObjectShellState,
     medium: SfxMediumInputOrInstance,
   ): SwDoc {
     this.EnsureOpen();
@@ -171,7 +166,7 @@ export class SwDocShell extends SfxObjectShell {
   }
 
   /** Replaces the shell contents with a new empty Writer graph. @param metadata - New lifecycle metadata. @returns New model. */
-  public InitNew(metadata: OfficeDocument): SwDoc {
+  public InitNew(metadata: SfxObjectShellState): SwDoc {
     return this.ReplaceDocument(new SwDoc(), metadata, {
       kind: "untitled",
       name: metadata.title,
@@ -181,7 +176,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Loads an ODT candidate before atomically replacing the active graph. @param bytes - Complete ODT bytes. @param metadata - Fallback lifecycle metadata. @param medium - Open medium. @param options - Filter controls. @returns Loaded model. */
   public async Open(
     bytes: Uint8Array,
-    metadata: OfficeDocument,
+    metadata: SfxObjectShellState,
     medium?: SfxMediumInput,
     options?: OdtFilterOperationOptions,
   ): Promise<SwDoc> {
@@ -192,12 +187,11 @@ export class SwDocShell extends SfxObjectShell {
     if (requestGeneration !== this.odtRequestGeneration)
       throw new OdtFilterError("stale", "ODT open result is stale.");
     const loaded = restoreOdtFilterDocument(transfer);
-    const loadedState: OfficeDocument = Object.freeze({
+    const loadedState: SfxObjectShellState = Object.freeze({
       ...metadata,
       isModified: false,
       lifecycle: "saved",
       recoveryGeneration: null,
-      savedGeneration: metadata.contentGeneration,
       title: loaded.title,
     });
     const openMedium =
@@ -224,7 +218,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Alias for the atomic ODT open boundary. @param bytes - Complete ODT bytes. @param metadata - Fallback metadata. @param medium - Optional open medium. @returns Loaded model. */
   public Load(
     bytes: Uint8Array,
-    metadata: OfficeDocument,
+    metadata: SfxObjectShellState,
     medium?: SfxMediumInput,
   ): Promise<SwDoc> {
     return medium === undefined ? this.Open(bytes, metadata) : this.Open(bytes, metadata, medium);
@@ -233,10 +227,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Serializes a captured active model/state snapshot without changing medium state. @param options - Filter controls. @returns ODT bytes. */
   public SerializeOdt(options?: OdtFilterOperationOptions): Promise<Uint8Array> {
     this.EnsureOpen();
-    return this.odtFilter.Export(
-      createOdtFilterDocument(this.document, this.documentState.title),
-      options,
-    );
+    return this.odtFilter.Export(createOdtFilterDocument(this.document, this.GetTitle()), options);
   }
 
   /** Saves to the current confirmed writable primary medium. @param persist - Confirmed write adapter. @returns Completion after acknowledgement. */
@@ -275,7 +266,7 @@ export class SwDocShell extends SfxObjectShell {
     persist: (document: SwDoc, medium: SfxMedium) => Promise<void> | void,
   ): Promise<void> {
     this.EnsureOpen();
-    const generation = this.documentState.contentGeneration;
+    const generation = this.GetContentGeneration();
     const destination = acquireSfxMedium(medium);
     destination.SetOperation("export", "pending", generation);
     try {
@@ -289,7 +280,7 @@ export class SwDocShell extends SfxObjectShell {
 
   /** Returns the stable identity used by application AutoRecovery. @returns Document identity. */
   public GetRecoveryIdentity(): string {
-    return this.documentState.id;
+    return this.GetDocumentId();
   }
 
   /** Returns the lifecycle fields used by generation-aware recovery decisions. @returns Current recovery state. */
@@ -298,47 +289,26 @@ export class SwDocShell extends SfxObjectShell {
     isModified: boolean;
     recoveryGeneration: number | null;
   }> {
-    const { contentGeneration, isModified, recoveryGeneration } = this.documentState;
+    const { contentGeneration, isModified, recoveryGeneration } = this.GetDocumentState();
     return { contentGeneration, isModified, recoveryGeneration };
-  }
-
-  /** Creates a complete Writer recovery payload without mutating the document. @returns Current snapshot. */
-  public CreateRecoverySnapshot(): DocumentSnapshot<WriterSnapshotState> {
-    this.EnsureOpen();
-    return createWriterSnapshot(this.document, this.documentState);
   }
 
   /** Records recovery operation start without changing lifecycle generations. @param generation - Attempted generation. @returns Nothing. */
   public RecoverySaveStarted(generation: number): void {
     this.EnsureOpen();
-    assertRecoveryGeneration(this.documentState, generation);
+    assertRecoveryGeneration(this.GetDocumentState(), generation);
   }
 
   /** Records recovery failure without acknowledging the attempted generation. @param generation - Attempted generation. @param error - Storage error. @returns Nothing. */
   public RecoverySaveFailed(generation: number, error: unknown): void {
     this.EnsureOpen();
-    assertRecoveryGeneration(this.documentState, generation);
+    assertRecoveryGeneration(this.GetDocumentState(), generation);
     void error;
-  }
-
-  /** Validates and atomically installs one recovered Writer snapshot. @param snapshot - Recovery payload. @returns Nothing. */
-  public RestoreRecoverySnapshot(snapshot: DocumentSnapshot<WriterSnapshotState>): void {
-    const recovered = restoreWriterSnapshot(snapshot, "recovery");
-    this.ReplaceDocument(recovered.document, recovered.documentState, {
-      kind: "recovery",
-      lastOperation: {
-        generation: snapshot.version,
-        operation: "open",
-        state: "succeeded",
-      },
-      name: recovered.documentState.title,
-      storageKey: snapshot.id,
-    });
   }
 
   /** Closes the shell, model, filter, and broadcaster graph. @returns Nothing. */
   public Close(): void {
-    if (this.documentState.lifecycle === "closed") return;
+    if (this.GetDocumentState().lifecycle === "closed") return;
     this.odtRequestGeneration += 1;
     this.odtFilter.Close();
     this.notifications.RunNotificationTransaction(
@@ -352,18 +322,27 @@ export class SwDocShell extends SfxObjectShell {
     this.notifications.DisposeModify();
   }
 
-  /** Publishes lifecycle changes without copying them into the independent medium. @param document - Next lifecycle state. @returns Whether state changed. */
-  protected override SetDocumentState(document: OfficeDocument): boolean {
-    const previousModified = this.documentState.isModified;
-    const changed = super.SetDocumentState(document);
-    if (changed) {
-      if (previousModified !== document.isModified)
-        this.notifications.CallSwClientNotify({
-          kind: "document-modified",
-          modified: document.isModified,
-        });
-      this.notifications.CallSwClientNotify({ kind: "document-state-changed" });
-    }
+  /** Publishes direct object-shell modified transitions. @param modified - Next flag. @param contentChanged - Whether the browser race generation advances. @returns Whether state changed. */
+  protected override SetModified(modified = true, contentChanged = false): boolean {
+    const previousModified = this.IsModified();
+    const changed = super.SetModified(modified, contentChanged);
+    if (changed) this.PublishObjectShellState(previousModified);
+    return changed;
+  }
+
+  /** Publishes successful primary-save transitions. @param generation - Confirmed generation. @returns Whether state changed. */
+  protected override SaveCompleted(generation = this.GetContentGeneration()): boolean {
+    const previousModified = this.IsModified();
+    const changed = super.SaveCompleted(generation);
+    if (changed) this.PublishObjectShellState(previousModified);
+    return changed;
+  }
+
+  /** Publishes recovery acknowledgement without changing primary save state. @param generation - Persisted generation. @returns Whether state changed. */
+  protected override RecoverySaveCompleted(generation = this.GetContentGeneration()): boolean {
+    const previousModified = this.IsModified();
+    const changed = super.RecoverySaveCompleted(generation);
+    if (changed) this.PublishObjectShellState(previousModified);
     return changed;
   }
 
@@ -384,6 +363,16 @@ export class SwDocShell extends SfxObjectShell {
     this.SetHistorySavePosition(this.document.GetUndoManager().IsAtSavePosition());
   }
 
+  /** Emits the bounded lifecycle hints for one direct object-shell transition. @param previousModified - Modified flag before the transition. @returns Nothing. */
+  private PublishObjectShellState(previousModified: boolean): void {
+    if (previousModified !== this.IsModified())
+      this.notifications.CallSwClientNotify({
+        kind: "document-modified",
+        modified: this.IsModified(),
+      });
+    this.notifications.CallSwClientNotify({ kind: "document-state-changed" });
+  }
+
   /** Performs primary Save/Save As and adopts the candidate only after commit. @param operation - Save operation. @param candidate - Candidate medium. @param persist - Confirmed adapter. @param replaceMedium - Whether to adopt candidate. @returns Completion after acknowledgement. */
   private async PerformPrimarySave(
     operation: "save" | "save-as",
@@ -393,7 +382,7 @@ export class SwDocShell extends SfxObjectShell {
   ): Promise<void> {
     const document = this.document;
     const previousMedium = this.medium;
-    const generation = this.documentState.contentGeneration;
+    const generation = this.GetContentGeneration();
     const savePosition: SfxUndoSavePosition = this.document.GetUndoManager().CaptureSavePosition();
     const operationMedium = replaceMedium ? candidate : previousMedium;
     operationMedium.SetOperation(operation, "pending", generation);
@@ -465,7 +454,7 @@ function isContentMutationHint(hint: SwModelHint): boolean {
 }
 
 /** Rejects impossible recovery callbacks without copying recovery state into SfxMedium. @param document - Shell lifecycle state. @param generation - Attempted recovery generation. @returns Nothing for an existing content generation. */
-function assertRecoveryGeneration(document: OfficeDocument, generation: number): void {
+function assertRecoveryGeneration(document: SfxObjectShellState, generation: number): void {
   if (!Number.isInteger(generation) || generation < 0 || generation > document.contentGeneration)
     throw new Error("Recovery generation must identify existing document content.");
 }

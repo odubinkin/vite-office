@@ -15,7 +15,7 @@ import { createDownloadFilename } from "../../../vcl/browser/browser-download";
 import { WriterPlatformError, type WriterSessionServices } from "../workflows/writer-workflows";
 import { SwDoc } from "../../source/core/doc/doc";
 import { projectWriterTextRuns } from "../../source/core/txtnode/text-run-projection";
-import type { WriterSnapshotState } from "../../source/filter/basflt/writer-storage";
+import type { WriterSnapshotState } from "../storage/writer-storage";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import {
@@ -614,10 +614,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const saveOdt = session.view.Execute(WRITER_COMMAND_IDS.saveOdt);
     if (saveOdt.status !== "executed") throw new Error("Save ODT command did not execute.");
     await saveOdt.value;
-    expect(session.docShell.GetDocumentState()).toMatchObject({
-      isModified: true,
-      savedGeneration: null,
-    });
+    expect(session.docShell.GetDocumentState()).toMatchObject({ isModified: true });
     expect(session.docShell.GetMedium()).toMatchObject({
       kind: "untitled",
       lastOperation: { operation: "none", state: "idle" },
@@ -629,7 +626,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(stored?.version).toBe(dirtyGeneration);
     expect(session.docShell.GetDocumentState()).toMatchObject({
       isModified: false,
-      savedGeneration: dirtyGeneration,
+      lifecycle: "saved",
     });
     expect(session.docShell.GetMedium()).toMatchObject({
       destination: { key: "writer-workbench", kind: "storage" },
@@ -641,10 +638,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     handleTestInput(session.view.GetWrtShell(), "insertText", "!");
     const nextGeneration = session.docShell.GetDocumentState().contentGeneration;
     session.view.Execute(WRITER_COMMAND_IDS.exportText);
-    expect(session.docShell.GetDocumentState()).toMatchObject({
-      isModified: true,
-      savedGeneration: dirtyGeneration,
-    });
+    expect(session.docShell.GetDocumentState()).toMatchObject({ isModified: true });
     const secondLocalSave = session.view.Execute(WRITER_COMMAND_IDS.saveLocal);
     if (secondLocalSave.status !== "executed") throw new Error("Local save did not execute.");
     await secondLocalSave.value;
@@ -689,7 +683,6 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(reloaded.docShell.GetDocumentState()).toMatchObject({
       isModified: true,
       recoveryGeneration: 1,
-      savedGeneration: null,
     });
     await reloaded.DiscardRecovery();
     await expect(reloaded.GetRecoveryCandidate()).resolves.toBeUndefined();

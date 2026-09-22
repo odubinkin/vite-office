@@ -2,24 +2,25 @@
 
 import { describe, expect, it } from "vitest";
 
-import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { createDocument } from "../../../sfx2/source/doc/objsh";
 import type {
   DocumentSnapshot,
   PrimarySavePort,
   StoredDocumentOpenPort,
-} from "../../../../sfx2/source/doc/docfile";
-import { SwDocShell } from "../../uibase/app/docsh";
-import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
-import { createWriterDocument, type SwDoc as WriterDocument } from "./doc";
+} from "../../../sfx2/source/doc/docfile";
+import { SwDocShell } from "../../source/uibase/app/docsh";
+import { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
+import { createWriterDocument, type SwDoc as WriterDocument } from "../../source/core/doc/doc";
 import {
+  BrowserWriterRecoveryDocument,
   createWriterSnapshot,
   loadWriterDocument,
   restoreWriterSnapshot,
   saveWriterDocument,
   type WriterSnapshotState,
-} from "../../filter/basflt/writer-storage";
-import { decodeWriterStorageDocument } from "../../filter/basflt/writer-storage-codec";
-import { projectWriterParagraphList } from "./list";
+} from "./writer-storage";
+import { decodeWriterDocument } from "../../source/core/doc/writer-document-codec";
+import { projectWriterParagraphList } from "../../source/core/doc/list";
 
 /** Live target-schema storage fixture. */
 interface WriterFixture {
@@ -54,6 +55,34 @@ function createAdapter(
 }
 
 describe("Writer storage orchestration", /** Registers storage tests. @returns Nothing. */ () => {
+  it("adapts AutoRecovery to SwDocShell without moving the cache codec into uibase", /** Verifies the browser-owned recovery boundary. @returns Nothing. */ () => {
+    const fixture = createWriterFixture();
+    const recovery = new BrowserWriterRecoveryDocument(fixture.shell);
+    expect(recovery.GetRecoveryIdentity()).toBe("writer-store");
+    expect(recovery.GetRecoveryState()).toMatchObject({
+      contentGeneration: 1,
+      isModified: true,
+      recoveryGeneration: null,
+    });
+    recovery.RecoverySaveStarted(1);
+    recovery.RecoverySaveFailed(1, new Error("quota"));
+    const snapshot = recovery.CreateRecoverySnapshot();
+    recovery.AcknowledgeRecoverySave(1);
+    expect(fixture.shell.GetRecoveryGeneration()).toBe(1);
+    new SwWrtShell(fixture.shell).Insert(" later");
+    recovery.RestoreRecoverySnapshot(snapshot);
+    expect(fixture.shell.GetDoc().paragraphs[0]?.GetText()).toBe("Saved text");
+    expect(fixture.shell.GetMedium()).toMatchObject({
+      kind: "recovery",
+      lastOperation: { operation: "open", state: "succeeded" },
+    });
+    fixture.shell.Close();
+    expect(
+      /** Captures recovery after terminal shell close. @returns Invalid record. */ () =>
+        recovery.CreateRecoverySnapshot(),
+    ).toThrow("Closed document shells");
+  });
+
   it("saves and loads the split shell/model target schema", /** Verifies current-schema persistence. @returns Completion after assertions. */ async () => {
     const adapter = createAdapter();
     const fixture = createWriterFixture();
@@ -62,13 +91,10 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     expect(saved.snapshot).toMatchObject({
       id: "writer-store",
       state: {
-        baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
-        baselineTag: "libreoffice-26.8.0.2",
-        codec: "vite-office.writer-browser-storage",
-        documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
-        modelVersion: 12,
-        schemaVersion: 10,
-        storageModel: { document: { swModelVersion: 12 }, storageModelVersion: 2 },
+        codec: "writer.browser-snapshot",
+        document: { swModelVersion: 12 },
+        schemaVersion: 11,
+        shell: { contentGeneration: 1, id: "writer-store", isModified: true },
       },
       version: 1,
     });
@@ -77,7 +103,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     expect(loaded.status).toBe("found");
     if (loaded.status === "found") {
       expect(loaded.document.paragraphs[0]?.GetText()).toBe("Saved text");
-      expect(loaded.documentState).toMatchObject({ isModified: false, savedGeneration: 1 });
+      expect(loaded.documentState).toMatchObject({ isModified: false, lifecycle: "saved" });
     }
     await expect(loadWriterDocument(adapter, "missing")).resolves.toEqual({
       id: "missing",
@@ -96,10 +122,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     await expect(
       saveWriterDocument(adapter, fixture.document, fixture.shell.GetDocumentState()),
     ).rejects.toBe(failure);
-    expect(fixture.shell.GetDocumentState()).toMatchObject({
-      isModified: true,
-      savedGeneration: null,
-    });
+    expect(fixture.shell.GetDocumentState()).toMatchObject({ isModified: true });
   });
 
   it("restores recovery state without acknowledging the primary medium", /** Verifies recovery ownership. @returns Nothing. */ () => {
@@ -109,7 +132,6 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     expect(recovered.documentState).toMatchObject({
       isModified: true,
       recoveryGeneration: 1,
-      savedGeneration: null,
     });
     expect(
       /** Restores a mismatched identity. @returns Invalid result. */ () =>
@@ -135,40 +157,32 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     ).toThrow("schema is unsupported");
     const wrongSchema = {
       ...current,
-      state: { ...current.state, schemaVersion: 9 as 10 },
+      state: { ...current.state, schemaVersion: 10 },
     };
     expect(
       /** Restores an unknown schema version. @returns Invalid result. */ () =>
-        restoreWriterSnapshot(wrongSchema, "primary"),
+        restoreWriterSnapshot(
+          wrongSchema as unknown as DocumentSnapshot<WriterSnapshotState>,
+          "primary",
+        ),
     ).toThrow("schema is unsupported");
-    const retiredEnvelopes = [
-      { ...current.state, codec: "writer.snapshot.v1" },
-      { ...current.state, modelVersion: 9 },
-      { ...current.state, baselineTag: "libreoffice-25.2.0.0" },
-      { ...current.state, baselineCommit: "wrong-id-schema" },
-    ];
+    const retiredEnvelopes = [{ ...current.state, codec: "writer.snapshot.v1" }];
     for (const state of retiredEnvelopes)
       expect(
         /** Rejects one non-current storage identity without migration. @returns Invalid result. */ () =>
           restoreWriterSnapshot({ ...current, state: state as WriterSnapshotState }, "primary"),
       ).toThrow("schema is unsupported");
-    for (const storageModel of [
-      null,
-      [],
-      {},
-      { storageModelVersion: 0 },
-      { storageModelVersion: 1 },
-    ])
+    for (const document of [null, [], {}, { swModelVersion: 11 }, { swModelVersion: 12 }])
       expect(
         /** Rejects one malformed durable model envelope. @returns Invalid result. */ () =>
-          decodeWriterStorageDocument(storageModel),
+          decodeWriterDocument(document),
       ).toThrow("schema is unsupported");
   });
 
   it("rejects malformed target lifecycle records" /** Exercises target-schema runtime validation without legacy fallbacks. @returns Nothing. */, function rejectsMalformedLifecycle(): void {
     const fixture = createWriterFixture();
     const current = createWriterSnapshot(fixture.document, fixture.shell.GetDocumentState());
-    const state = current.state.documentState as unknown as Record<string, unknown>;
+    const state = current.state.shell as unknown as Record<string, unknown>;
     const invalidStates: unknown[] = [
       null,
       [],
@@ -178,11 +192,10 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
       { ...state, isModified: "yes" },
       { ...state, lifecycle: "retired" },
       { ...state, recoveryGeneration: "none" },
-      { ...state, savedGeneration: "none" },
       { ...state, suiteId: 7 },
       { ...state, title: 7 },
     ];
-    for (const documentState of invalidStates)
+    for (const shellState of invalidStates)
       expect(
         /** Restores one malformed target record. @returns Invalid result. */ () =>
           restoreWriterSnapshot(
@@ -190,12 +203,12 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
               ...current,
               state: {
                 ...current.state,
-                documentState: documentState as WriterSnapshotState["documentState"],
+                shell: shellState as WriterSnapshotState["shell"],
               },
             },
             "primary",
           ),
-      ).toThrow("lifecycle state is invalid");
+      ).toThrow("object-shell state is invalid");
 
     for (const lifecycle of ["new", "saved"] as const) {
       const restored = restoreWriterSnapshot(
@@ -203,12 +216,11 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
           ...current,
           state: {
             ...current.state,
-            documentState: {
+            shell: {
               ...state,
               lifecycle,
               recoveryGeneration: 0,
-              savedGeneration: 0,
-            } as WriterSnapshotState["documentState"],
+            } as WriterSnapshotState["shell"],
           },
         },
         "primary",
@@ -222,10 +234,10 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
             ...current,
             state: {
               ...current.state,
-              documentState: {
+              shell: {
                 ...state,
                 lifecycle: "closed",
-              } as WriterSnapshotState["documentState"],
+              } as WriterSnapshotState["shell"],
             },
           },
           "primary",
@@ -243,7 +255,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     if (loaded.status === "found")
       expect(
         projectWriterParagraphList(
-          loaded.document.paragraphs[0] as import("../txtnode/ndtxt").SwTextNode,
+          loaded.document.paragraphs[0] as import("../../source/core/txtnode/ndtxt").SwTextNode,
         ),
       ).toEqual({
         kind: "numbered",

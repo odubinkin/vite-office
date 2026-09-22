@@ -20,7 +20,7 @@ import {
   createWriterTextFragment,
   projectWriterTextRuns,
 } from "../../core/txtnode/text-run-projection";
-import { encodeWriterDocument } from "../basflt/writer-document-codec";
+import { encodeWriterDocument } from "../../core/doc/writer-document-codec";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 

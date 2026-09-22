@@ -1,13 +1,13 @@
 /** @fileoverview Verifies Writer's document-owned pool, style collections, paragraph item sets, numbering rules, and current snapshots. */
 
 import { describe, expect, it } from "vitest";
-import { encodeSfxItemSet, encodeSfxPoolItem } from "../../filter/basflt/item-codec";
+import { encodeSfxItemSet, encodeSfxPoolItem } from "./item-codec";
 import {
   decodeWriterDocument,
   decodeWriterDocument as normalizeWriterParagraphFormatting,
   encodeWriterDocument,
   encodeWriterDocument as serializeWriterDocument,
-} from "../../filter/basflt/writer-document-codec";
+} from "./writer-document-codec";
 import { createWriterTextFragment, projectWriterTextRuns } from "../txtnode/text-run-projection";
 import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
 

@@ -519,7 +519,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async Copy"
+            "marker": "copyWriterSelection"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -2373,7 +2373,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async Paste"
+            "marker": "pasteWriterClipboard"
           },
           {
             "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
@@ -3327,7 +3327,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async OpenOdt"
+            "marker": "openWriterOdtFromPort"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -3644,7 +3644,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {
@@ -3662,7 +3662,7 @@
             "marker": "saves each changed generation"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.test.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
             "marker": "does not acknowledge a failed primary save"
           },
           {
@@ -3673,7 +3673,7 @@
         "docs": [
           {
             "path": "docs/program/document-lifecycle.md",
-            "marker": "content generation"
+            "marker": "contentGeneration"
           },
           {
             "path": "docs/program/autosave-recovery.md",
@@ -3812,7 +3812,7 @@
             "classification": "B",
             "description": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -3824,7 +3824,7 @@
             "classification": "X",
             "description": "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -3836,7 +3836,7 @@
             "classification": "X",
             "description": "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -4339,7 +4339,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async Copy"
+            "marker": "copyWriterSelection"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -4581,7 +4581,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async Copy"
+            "marker": "copyWriterSelection"
           },
           {
             "path": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
@@ -5121,7 +5121,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async Paste"
+            "marker": "pasteWriterClipboard"
           },
           {
             "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
@@ -5503,7 +5503,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async OpenOdt"
+            "marker": "openWriterOdtFromPort"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -5804,7 +5804,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {
@@ -5822,7 +5822,7 @@
             "marker": "saves each changed generation"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.test.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
             "marker": "does not acknowledge a failed primary save"
           },
           {
@@ -5833,7 +5833,7 @@
         "docs": [
           {
             "path": "docs/program/document-lifecycle.md",
-            "marker": "content generation"
+            "marker": "contentGeneration"
           },
           {
             "path": "docs/program/autosave-recovery.md",
@@ -5956,7 +5956,7 @@
             "classification": "B",
             "description": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -5968,7 +5968,7 @@
             "classification": "X",
             "description": "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -5980,7 +5980,7 @@
             "classification": "X",
             "description": "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -7529,7 +7529,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async OpenOdt"
+            "marker": "openWriterOdtFromPort"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -7971,7 +7971,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async OpenOdt"
+            "marker": "openWriterOdtFromPort"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -8405,7 +8405,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "public async OpenOdt"
+            "marker": "openWriterOdtFromPort"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -8722,7 +8722,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {
@@ -8740,7 +8740,7 @@
             "marker": "saves each changed generation"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.test.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
             "marker": "does not acknowledge a failed primary save"
           },
           {
@@ -8751,7 +8751,7 @@
         "docs": [
           {
             "path": "docs/program/document-lifecycle.md",
-            "marker": "content generation"
+            "marker": "contentGeneration"
           },
           {
             "path": "docs/program/autosave-recovery.md",
@@ -8890,7 +8890,7 @@
             "classification": "B",
             "description": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -8902,7 +8902,7 @@
             "classification": "X",
             "description": "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -8914,7 +8914,7 @@
             "classification": "X",
             "description": "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -8992,7 +8992,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {
@@ -9010,7 +9010,7 @@
             "marker": "saves each changed generation"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.test.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
             "marker": "does not acknowledge a failed primary save"
           },
           {
@@ -9021,7 +9021,7 @@
         "docs": [
           {
             "path": "docs/program/document-lifecycle.md",
-            "marker": "content generation"
+            "marker": "contentGeneration"
           },
           {
             "path": "docs/program/autosave-recovery.md",
@@ -9152,7 +9152,7 @@
             "classification": "B",
             "description": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -9164,7 +9164,7 @@
             "classification": "X",
             "description": "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -9176,7 +9176,7 @@
             "classification": "X",
             "description": "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -9254,7 +9254,7 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
           },
           {
@@ -9272,7 +9272,7 @@
             "marker": "saves each changed generation"
           },
           {
-            "path": "apps/office/src/sw/source/core/doc/writer-storage.test.ts",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
             "marker": "does not acknowledge a failed primary save"
           },
           {
@@ -9283,7 +9283,7 @@
         "docs": [
           {
             "path": "docs/program/document-lifecycle.md",
-            "marker": "content generation"
+            "marker": "contentGeneration"
           },
           {
             "path": "docs/program/autosave-recovery.md",
@@ -9422,7 +9422,7 @@
             "classification": "B",
             "description": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -9434,7 +9434,7 @@
             "classification": "X",
             "description": "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {
@@ -9446,7 +9446,7 @@
             "classification": "X",
             "description": "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping.",
             "local": {
-              "marker": "content generation",
+              "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
             },
             "upstream": {

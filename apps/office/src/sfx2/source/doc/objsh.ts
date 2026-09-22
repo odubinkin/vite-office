@@ -5,166 +5,211 @@
 
 import { acquireSfxMedium, type SfxMedium, type SfxMediumInputOrInstance } from "./docfile";
 
-/** Identifies the permitted lifecycle states for a locally held browser document. */
+/** Identifies the externally observable lifecycle of a locally held document shell. */
 export type DocumentLifecycle = "closed" | "dirty" | "new" | "saved";
 
-/** Identifies the application module that owns a document body without coupling sfx2 to framework discovery. */
+/** Identifies the application module that owns a document body. */
 export type DocumentModuleId = string;
 
-/** Describes one immutable, serializable document header and lifecycle state. */
-export interface OfficeDocument {
-  /** Monotonic generation advanced by every successful domain-content mutation. */
+/**
+ * Serializable projection of SfxObjectShell state for browser and worker boundaries.
+ *
+ * The projection is not the lifecycle owner: SfxObjectShell stores and mutates the
+ * individual fields, matching upstream object-shell ownership.
+ */
+export interface SfxObjectShellState {
   readonly contentGeneration: number;
-  /** Stable caller-provided document identity; generation and persistence remain separate platform concerns. */
   readonly id: string;
-  /** Whether the current content differs from the last confirmed primary-medium state. */
   readonly isModified: boolean;
-  /** Current lifecycle state, independent of any React component or browser capability. */
   readonly lifecycle: DocumentLifecycle;
-  /** Content generation most recently persisted as a recovery snapshot, or null before recovery. */
   readonly recoveryGeneration: number | null;
-  /** Content generation corresponding to the last confirmed primary-medium save, or null before save. */
-  readonly savedGeneration: number | null;
-  /** Office suite that owns the eventual document body model. */
   readonly suiteId: DocumentModuleId;
-  /** Human-readable document title retained as serializable metadata. */
   readonly title: string;
 }
 
-/** Describes immutable input required to create a browser document header. */
+/** Describes input required to initialize an object shell. */
 export interface CreateDocumentInput {
-  /** Stable non-empty document identity supplied by a caller or future identity service. */
   readonly id: string;
-  /** Suite that owns the document body model. */
   readonly suiteId: DocumentModuleId;
-  /** Non-empty human-readable title for the document. */
   readonly title: string;
 }
 
-/** Framework document shell owning identity, lifecycle generations, and the current medium. */
+/** Framework document shell owning identity, title, modified state, and the primary medium. */
 export class SfxObjectShell {
-  protected documentState: OfficeDocument;
+  private closed = false;
+  private contentGeneration: number;
+  private hasSavePosition: boolean;
+  private id: string;
+  private modified: boolean;
   protected medium: SfxMedium;
+  private moduleId: DocumentModuleId;
+  private recoveryGeneration: number | null;
+  private title: string;
 
-  /** Creates an object shell from explicit lifecycle and medium inputs. @param document - Lifecycle state. @param medium - Current medium. @returns Nothing. */
-  public constructor(document: OfficeDocument, medium: SfxMediumInputOrInstance) {
-    assertDocumentState(document);
-    this.documentState = Object.freeze({ ...document });
+  /** Creates an object shell from an initial state projection and medium. @param state - Initial shell state. @param medium - Current medium. @returns Nothing. */
+  public constructor(state: SfxObjectShellState, medium: SfxMediumInputOrInstance) {
+    assertObjectShellState(state);
+    if (state.lifecycle === "closed") throw new Error("Cannot construct a closed document shell.");
+    this.contentGeneration = state.contentGeneration;
+    this.hasSavePosition = state.lifecycle === "saved";
+    this.id = state.id;
+    this.modified = state.isModified;
+    this.moduleId = state.suiteId;
+    this.recoveryGeneration = state.recoveryGeneration;
+    this.title = state.title;
     this.medium = acquireSfxMedium(medium);
   }
 
-  /** Returns immutable lifecycle state owned by this shell. @returns Current state. */
-  public GetDocumentState(): OfficeDocument {
-    return this.documentState;
+  /** Returns a fresh immutable boundary projection of shell-owned lifecycle fields. @returns Current shell state. */
+  public GetDocumentState(): SfxObjectShellState {
+    return Object.freeze({
+      contentGeneration: this.contentGeneration,
+      id: this.id,
+      isModified: this.modified,
+      lifecycle: this.GetLifecycle(),
+      recoveryGeneration: this.recoveryGeneration,
+      suiteId: this.moduleId,
+      title: this.title,
+    });
   }
 
-  /** Returns the stable current medium; lifecycle state remains owned separately by this shell. @returns Medium descriptor. */
+  /** Returns the stable document identity. @returns Shell identity. */
+  public GetDocumentId(): string {
+    return this.id;
+  }
+
+  /** Returns the current title owned by this shell. @returns Document title. */
+  public GetTitle(): string {
+    return this.title;
+  }
+
+  /** Returns whether model or title state differs from the current save position. @returns Modified state. */
+  public IsModified(): boolean {
+    return this.modified;
+  }
+
+  /** Returns the browser race-prevention generation. @returns Current generation. */
+  public GetContentGeneration(): number {
+    return this.contentGeneration;
+  }
+
+  /** Returns the current recovery lease generation. @returns Recovery generation. */
+  public GetRecoveryGeneration(): number | null {
+    return this.recoveryGeneration;
+  }
+
+  /** Returns the stable current medium. @returns Medium descriptor. */
   public GetMedium(): SfxMedium {
     return this.medium;
   }
 
   /** Rejects commands and persistence after shell closure. @returns Nothing for an open shell. */
   public EnsureOpen(): void {
-    if (this.documentState.lifecycle === "closed")
+    if (this.closed)
       throw new Error("Closed document shells cannot execute commands or persistence.");
   }
 
-  /** Validates and acquires replacement state before an owning shell mutates its active model. @param document - New lifecycle. @param medium - New medium. @returns Prepared immutable replacement. */
+  /** Validates replacement state and acquires its medium before model replacement. @param state - New shell state. @param medium - New medium. @returns Prepared replacement. */
   protected PrepareObjectStateReplacement(
-    document: OfficeDocument,
+    state: SfxObjectShellState,
     medium: SfxMediumInputOrInstance,
-  ): Readonly<{ document: OfficeDocument; medium: SfxMedium }> {
-    assertDocumentState(document);
-    return Object.freeze({
-      document: Object.freeze({ ...document }),
-      medium: acquireSfxMedium(medium),
-    });
+  ): Readonly<{ medium: SfxMedium; state: SfxObjectShellState }> {
+    assertObjectShellState(state);
+    if (state.lifecycle === "closed") throw new Error("Cannot install a closed document state.");
+    return Object.freeze({ medium: acquireSfxMedium(medium), state: Object.freeze({ ...state }) });
   }
 
-  /** Commits previously prepared shell state without further validation. @param replacement - Prepared lifecycle and medium. @returns Nothing. */
+  /** Commits a prepared replacement and closes the displaced medium. @param replacement - Prepared state and medium. @returns Nothing. */
   protected CommitObjectStateReplacement(
-    replacement: Readonly<{ document: OfficeDocument; medium: SfxMedium }>,
+    replacement: Readonly<{ medium: SfxMedium; state: SfxObjectShellState }>,
   ): void {
     const previousMedium = this.medium;
-    this.documentState = replacement.document;
+    this.InstallObjectShellState(replacement.state);
     this.medium = replacement.medium;
     if (previousMedium !== this.medium) previousMedium.Close();
   }
 
-  /** Replaces shell-owned lifecycle and medium atomically. @param document - New lifecycle. @param medium - New medium. @returns Nothing. */
-  protected ReplaceObjectState(document: OfficeDocument, medium: SfxMediumInputOrInstance): void {
-    this.CommitObjectStateReplacement(this.PrepareObjectStateReplacement(document, medium));
+  /** Replaces shell-owned lifecycle and medium atomically. @param state - New state. @param medium - New medium. @returns Nothing. */
+  protected ReplaceObjectState(state: SfxObjectShellState, medium: SfxMediumInputOrInstance): void {
+    this.CommitObjectStateReplacement(this.PrepareObjectStateReplacement(state, medium));
   }
 
-  /** Stores a lifecycle transition owned by this framework shell. @param document - New state. @returns Whether state identity changed. */
-  protected SetDocumentState(document: OfficeDocument): boolean {
-    assertDocumentState(document);
-    if (isSameDocumentState(document, this.documentState)) return false;
-    this.documentState = Object.freeze({ ...document });
+  /** Mirrors SfxObjectShell::SetModified and advances only the browser race generation for model changes. @param modified - Next flag. @param contentChanged - Whether content generation advances. @returns Whether state changed. */
+  protected SetModified(modified = true, contentChanged = false): boolean {
+    this.EnsureOpen();
+    const previousModified = this.modified;
+    const previousGeneration = this.contentGeneration;
+    this.modified = modified;
+    if (contentChanged) this.contentGeneration += 1;
+    return previousModified !== this.modified || previousGeneration !== this.contentGeneration;
+  }
+
+  /** Updates the shell-owned title and modified state. @param title - Validated title. @returns Whether title changed. */
+  protected SetTitle(title: string): boolean {
+    this.EnsureOpen();
+    assertNonBlank(title, "Document title");
+    if (title === this.title) return false;
+    this.title = title;
+    this.modified = true;
     return true;
   }
 
-  /** Mirrors SfxObjectShell::SetModified and advances the browser content generation only for model changes. @param modified - Next modified flag. @param contentChanged - Whether content generation advances. @returns Whether state changed. */
-  protected SetModified(modified = true, contentChanged = false): boolean {
+  /** Completes a confirmed primary-medium save at a captured generation. @param generation - Confirmed generation. @returns Whether state changed. */
+  protected SaveCompleted(generation = this.contentGeneration): boolean {
     this.EnsureOpen();
-    const nextGeneration = contentChanged
-      ? this.documentState.contentGeneration + 1
-      : this.documentState.contentGeneration;
-    const lifecycle: DocumentLifecycle = modified
-      ? "dirty"
-      : this.documentState.savedGeneration === null
-        ? "new"
-        : "saved";
-    return this.SetDocumentState({
-      ...this.documentState,
-      contentGeneration: nextGeneration,
-      isModified: modified,
-      lifecycle,
-    });
+    assertAcknowledgedGeneration(this.contentGeneration, generation, "Saved generation");
+    const previousModified = this.modified;
+    const previousSavePosition = this.hasSavePosition;
+    this.hasSavePosition = true;
+    this.modified = generation !== this.contentGeneration;
+    return previousModified !== this.modified || previousSavePosition !== this.hasSavePosition;
   }
 
-  /** Completes a confirmed primary-medium save without replacing shell identity. @param generation - Confirmed generation. @returns Whether state changed. */
-  protected SaveCompleted(generation = this.documentState.contentGeneration): boolean {
+  /** Acknowledges browser recovery independently of the primary medium. @param generation - Persisted recovery generation. @returns Whether state changed. */
+  protected RecoverySaveCompleted(generation = this.contentGeneration): boolean {
     this.EnsureOpen();
-    assertAcknowledgedGeneration(this.documentState, generation, "Saved generation");
-    const isModified = generation !== this.documentState.contentGeneration;
-    return this.SetDocumentState({
-      ...this.documentState,
-      isModified,
-      lifecycle: isModified ? "dirty" : "saved",
-      savedGeneration: generation,
-    });
-  }
-
-  /** Acknowledges the browser recovery extension independently of primary save completion. @param generation - Recovered generation. @returns Whether state changed. */
-  protected RecoverySaveCompleted(generation = this.documentState.contentGeneration): boolean {
-    this.EnsureOpen();
-    assertAcknowledgedGeneration(this.documentState, generation, "Recovery generation");
-    return this.SetDocumentState({ ...this.documentState, recoveryGeneration: generation });
+    assertAcknowledgedGeneration(this.contentGeneration, generation, "Recovery generation");
+    if (this.recoveryGeneration === generation) return false;
+    this.recoveryGeneration = generation;
+    return true;
   }
 
   /** Reconciles modified state with the document undo manager save position. @param isSavePosition - Whether history matches the save mark. @returns Whether state changed. */
   protected SetHistorySavePosition(isSavePosition: boolean): boolean {
+    if (isSavePosition) this.hasSavePosition = true;
     return this.SetModified(!isSavePosition, false);
   }
 
-  /** Marks this shell closed without mutating its underlying document model. @returns Whether closure changed state. */
+  /** Marks this shell and its medium closed. @returns Whether closure changed state. */
   protected CloseObjectShell(): boolean {
-    if (this.documentState.lifecycle === "closed") return false;
-    this.documentState = Object.freeze({ ...this.documentState, lifecycle: "closed" });
+    if (this.closed) return false;
+    this.closed = true;
     this.medium.Close();
     return true;
   }
+
+  /** Installs a complete boundary projection into independently owned shell fields. @param state - Validated state. @returns Nothing. */
+  private InstallObjectShellState(state: SfxObjectShellState): void {
+    this.closed = state.lifecycle === "closed";
+    this.contentGeneration = state.contentGeneration;
+    this.hasSavePosition = state.lifecycle === "saved";
+    this.id = state.id;
+    this.modified = state.isModified;
+    this.moduleId = state.suiteId;
+    this.recoveryGeneration = state.recoveryGeneration;
+    this.title = state.title;
+  }
+
+  /** Derives the public lifecycle from owned flags and save-position state. @returns Current lifecycle. */
+  private GetLifecycle(): DocumentLifecycle {
+    if (this.closed) return "closed";
+    if (this.modified) return "dirty";
+    return this.hasSavePosition ? "saved" : "new";
+  }
 }
 
-/**
- * Creates a new immutable document header with its initial unsaved lifecycle state.
- *
- * @param input - Complete caller-owned identity, suite, and title metadata.
- * @returns A JSON-serializable unsaved document at content generation zero.
- * @throws {Error} When id or title is blank after trimming.
- */
-export function createDocument(input: CreateDocumentInput): OfficeDocument {
+/** Creates an initial state projection for a new object shell. @param input - Identity metadata. @returns Unsaved shell state. */
+export function createDocument(input: CreateDocumentInput): SfxObjectShellState {
   assertNonBlank(input.id, "Document id");
   assertNonBlank(input.suiteId, "Document module id");
   assertNonBlank(input.title, "Document title");
@@ -174,72 +219,38 @@ export function createDocument(input: CreateDocumentInput): OfficeDocument {
     isModified: false,
     lifecycle: "new",
     recoveryGeneration: null,
-    savedGeneration: null,
     suiteId: input.suiteId,
     title: input.title,
   });
 }
 
-/**
- * Validates a generation acknowledged by primary or recovery persistence.
- *
- * @param document - Current document whose existing generation bounds the acknowledgement.
- * @param generation - Candidate integral generation to acknowledge.
- * @param label - Human-readable persistence kind for deterministic errors.
- * @returns Nothing after successful validation.
- */
-function assertAcknowledgedGeneration(
-  document: OfficeDocument,
-  generation: number,
-  label: string,
-): void {
-  if (!Number.isInteger(generation) || generation < 0 || generation > document.contentGeneration)
+/** Validates a persistence callback generation. @param current - Current content generation. @param generation - Candidate generation. @param label - Error label. @returns Nothing. */
+function assertAcknowledgedGeneration(current: number, generation: number, label: string): void {
+  if (!Number.isInteger(generation) || generation < 0 || generation > current)
     throw new Error(`${label} must identify existing document content.`);
 }
 
-/**
- * Rejects blank identity or title metadata before it enters a serializable document contract.
- *
- * @param value - Candidate string value to validate without mutation.
- * @param label - Human-readable field label included in a deterministic error.
- * @returns Nothing; invalid input throws an Error.
- * @throws {Error} When value contains no non-whitespace character.
- */
+/** Rejects blank metadata. @param value - Candidate value. @param label - Error label. @returns Nothing. */
 function assertNonBlank(value: string, label: string): void {
   if (value.trim().length === 0) throw new Error(`${label} must not be blank.`);
 }
 
-/**
- * Rejects transitions that require an open document when lifecycle state is closed.
- *
- * @param document - Immutable document state whose lifecycle is inspected.
- * @returns Nothing; closed state throws an Error.
- * @throws {Error} When document.lifecycle is closed.
- */
-function assertDocumentState(document: OfficeDocument): void {
-  assertNonBlank(document.id, "Document id");
-  assertNonBlank(document.suiteId, "Document module id");
-  assertNonBlank(document.title, "Document title");
-  if (!Number.isInteger(document.contentGeneration) || document.contentGeneration < 0)
+/** Validates a shell-state boundary projection. @param state - Candidate state. @returns Nothing. */
+function assertObjectShellState(state: SfxObjectShellState): void {
+  assertNonBlank(state.id, "Document id");
+  assertNonBlank(state.suiteId, "Document module id");
+  assertNonBlank(state.title, "Document title");
+  if (!Number.isInteger(state.contentGeneration) || state.contentGeneration < 0)
     throw new Error("Content generation must be a non-negative integer.");
-  for (const generation of [document.savedGeneration, document.recoveryGeneration])
-    if (
-      generation !== null &&
-      (!Number.isInteger(generation) || generation < 0 || generation > document.contentGeneration)
-    )
-      throw new Error("Persistence generations must identify existing document content.");
-}
-
-/** Compares value state while preserving the shell as its sole mutation owner. @param left - First state. @param right - Second state. @returns Whether equal. */
-function isSameDocumentState(left: OfficeDocument, right: OfficeDocument): boolean {
-  return (
-    left.contentGeneration === right.contentGeneration &&
-    left.id === right.id &&
-    left.isModified === right.isModified &&
-    left.lifecycle === right.lifecycle &&
-    left.recoveryGeneration === right.recoveryGeneration &&
-    left.savedGeneration === right.savedGeneration &&
-    left.suiteId === right.suiteId &&
-    left.title === right.title
-  );
+  if (
+    state.recoveryGeneration !== null &&
+    (!Number.isInteger(state.recoveryGeneration) ||
+      state.recoveryGeneration < 0 ||
+      state.recoveryGeneration > state.contentGeneration)
+  )
+    throw new Error("Recovery generation must identify existing document content.");
+  if (state.lifecycle === "dirty" && !state.isModified)
+    throw new Error("Dirty lifecycle requires modified state.");
+  if (state.lifecycle !== "dirty" && state.isModified)
+    throw new Error("Modified state requires dirty lifecycle.");
 }

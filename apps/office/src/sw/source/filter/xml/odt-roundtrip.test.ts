@@ -33,7 +33,7 @@ import {
 import { applyWriterParagraphList, projectWriterParagraphList } from "../../core/doc/list";
 import { createWriterDocument } from "../../core/doc/doc";
 import { createWriterTextFragment } from "../../core/txtnode/text-run-projection";
-import { encodeWriterDocument } from "../basflt/writer-document-codec";
+import { encodeWriterDocument } from "../../core/doc/writer-document-codec";
 import { readOdtDocument, SwXMLReader } from "./swxml";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml, parseOdfXml } from "./xmlimp";

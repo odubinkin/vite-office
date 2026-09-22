@@ -98,7 +98,7 @@ cleanup phase; records change only with their related source implementation.
 | Item system | Pool items, item pool, item sets and Writer attribute pool | `svl/source/items`, `editeng/source/items`, `sw/source/core/attr` | `svl`, `editeng`, `sw` item implementations | Strongest reusable parity foundation; broaden contracts and eliminate browser-shaped projections from core APIs. |
 | Notifications | `SfxBroadcaster`, `SfxListener`, `SwModify`, transactional model hints | `svl/source/notify`, `sw/inc/calbck.ts`, `DocumentStateManager.ts` | Svl broadcasters and Writer callback graph | Shape is useful; current coarse revision/hint model needs assertion-level comparison. |
 | Undo/redo | Bounded `SfxUndoManager`, compound actions, save marks, Writer actions | `svl/source/undo`, `sw/source/core/undo` | `svl/source/undo/undo.cxx`, Writer undo files | Retain; expand from the supported text slice without snapshot-based fallbacks. |
-| Document shell and medium | Modified state, save generations, medium identity and operation state | `sfx2/source/doc`, `sw/source/uibase/app/docsh.ts` | `SfxObjectShell`, `SfxMedium`, `SwDocShell` | Ownership is partly aligned, but the parallel `OfficeDocument` state machine and browser generations are mixed into upstream contracts. |
+| Document shell and medium | Shell-owned title/modified/save-position state, medium identity and operation state, browser race/recovery generations | `sfx2/source/doc`, `sw/source/uibase/app/docsh.ts` | `SfxObjectShell`, `SfxMedium`, `SwDocShell` | P1.13 aligned ownership: the state projection is boundary-only and primary save state follows the undo save mark. |
 | Storage/recovery | IndexedDB primary/recovery stores, leases, autosave scheduling, recovery prompt | `svl/source/misc`, `framework/source/services/autorecovery.ts`, `vcl/browser/indexeddb-storage.ts` | framework AutoRecovery and document storage | IndexedDB and lease adapters are justified; defaults and service contract are not yet upstream-equivalent. |
 | Worker protocol | Typed request IDs, cancellation, progress, stale-result rejection | `framework/source/services/worker-protocol.ts`, `sw/browser/filter/xml` | No direct native equivalent | Necessary browser infrastructure; it must remain outside filter/model contracts. |
 | ZIP/manifest/XML | ZIP32 read/write, CRC32, manifest, SAX-like XML parser, text/style contexts | `package/source`, `xmloff/source` | Matching package/xmloff files and `sax/source/fastparser` | Useful bounded ports; most module contracts/defaults are still recorded as unverified. |
@@ -228,10 +228,10 @@ The canonical model is text + `SwpHints` + pooled items, but several convenience
   passed through core undo and shell APIs;
 - `SwTextNode` exposes compatibility getters such as `text`, `alignment`, `style`, and `list` in
   addition to upstream-shaped methods/items;
-- `OfficeDocument` is a second immutable document lifecycle aggregate beside `SfxObjectShell`,
-  `SfxMedium`, `SwDoc`, and the undo save position;
-- `WriterPresentationProjection`, `WriterTextRun`, `WriterDocumentRecord`, ODT worker-transfer
-  records, and browser-storage records overlap substantially.
+- `SfxObjectShellState` is now only a serialization/UI projection of fields owned directly by
+  `SfxObjectShell`; primary save state belongs to the undo save position;
+- `WriterPresentationProjection` and clipboard DTOs remain named outer boundaries, while one
+  `WriterDocumentRecord` graph is shared by worker transfer and browser cache envelopes.
 
 Boundary DTOs are necessary for React, structured clone, clipboard, and IndexedDB. They are not
 necessary as core mutation contracts. Required correction:
@@ -300,13 +300,15 @@ browser-extension. Rendering must not silently filter a command that the view cl
 
 ### P1 — browser persistence is placed in filter ownership
 
-`sw/source/filter/basflt/writer-document-codec.ts`, `writer-storage-codec.ts`, and
-`writer-storage.ts` implement browser-local graph persistence rather than the corresponding
-LibreOffice `basflt` responsibilities. The path gives a false upstream ownership signal. The
-storage schema also embeds the Vite Office codec name, baseline commit, and rapidly changing model
-versions, and deliberately rejects all prior local schemas.
+Resolved by P1.15. The canonical graph codec now lives at
+`sw/source/core/doc/writer-document-codec.ts`, while browser cache schema 11
+and `BrowserWriterRecoveryDocument` live under `sw/browser/storage`.
+`sw/source/filter/basflt` no longer contains local snapshot code or claims
+that browser cache persistence is a basic-filter responsibility. The current
+cache envelope is independent of the pinned upstream commit and rejects every
+retired local schema without migration.
 
-Required correction:
+Implemented correction:
 
 - place browser snapshot envelope and migration code under `sw/browser/storage` or the VCL browser
   adapter layer;
@@ -320,12 +322,13 @@ Required correction:
 
 ### P1 — browser workflow adapter stack is wider than necessary
 
-`writer-workflows.ts` contains three small controller classes plus a command shell, while
-`writer-document-io.ts`, `SwDocShell`, `SfxMedium`, VCL browser ports, and the React view also
-participate in the same operations. This creates multiple pass-through layers and splits error and
-pending-state ownership.
+Resolved by P1.14. `writer-workflows.ts` contains one thin browser Sfx shell;
+the three forwarding controller classes were removed. File and cache commands
+route to `SwDocShell`/`SfxMedium`, clipboard commands route to
+`SwTransferable`/`SwWrtShell`, and browser ports remain in the browser
+adapter layer.
 
-Required correction: retain VCL browser ports and a thin browser Sfx shell, but route file and save
+Implemented correction: retain VCL browser ports and a thin browser Sfx shell, but route file and save
 operations directly through `SwDocShell`/`SfxMedium`. Remove controllers that only forward one
 operation and consolidate operation state in the medium or browser port that owns it.
 
@@ -558,6 +561,15 @@ Acceptance for Phase 4:
   split.
 
 ### Phase 5 — align lifecycle, medium, persistence, and filters
+
+Implementation status: P1.13-P1.15 are complete in the current checkout.
+`SfxObjectShell` directly owns title, modified/save-position, close, identity,
+and primary-medium state; only browser race/recovery generations remain in its
+boundary projection. The browser Sfx shell routes directly to
+`SwDocShell`/`SfxMedium` and `SwTransferable`, and the former forwarding
+controllers are removed. Browser cache schema 11 and its AutoRecovery adapter
+now live under `sw/browser/storage`; `basflt` no longer claims local snapshot
+ownership. P1.16 remains the next Phase 5 item.
 
 #### P1.13 Consolidate document lifecycle ownership
 

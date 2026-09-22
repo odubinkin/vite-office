@@ -5,7 +5,7 @@ import {
   decodeWriterDocument,
   encodeWriterDocument,
   type WriterDocumentRecord,
-} from "../basflt/writer-document-codec";
+} from "../../core/doc/writer-document-codec";
 
 /** Current structured-clone envelope used by ODT Worker adapters. */
 export interface OdtWriterTransferRecord {

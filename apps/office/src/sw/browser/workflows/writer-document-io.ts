@@ -8,7 +8,7 @@ import {
   loadWriterDocument,
   saveWriterDocument,
   type WriterSnapshotState,
-} from "../../source/filter/basflt/writer-storage";
+} from "../storage/writer-storage";
 
 /** Opens one browser-selected ODT through a read-only SfxMedium. @param docShell - Active Writer shell. @param port - Browser picker adapter. @returns Open/cancel result. */
 export async function openWriterOdtFromPort(

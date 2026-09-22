@@ -1,7 +1,7 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
 
 import type { SwDoc } from "../../source/core/doc/doc";
-import type { OfficeDocument } from "../../../sfx2/source/doc/objsh";
+import type { SfxObjectShellState } from "../../../sfx2/source/doc/objsh";
 import type { SfxMediumOperationStatus } from "../../../sfx2/source/doc/docfile";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
 import type { SwTextNode, WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
@@ -95,7 +95,7 @@ export interface WriterPresentationProjection {
   readonly activeParagraph: WriterParagraphProjection;
   readonly activeParagraphIndex: number;
   readonly cursorSelection: WriterCursorSelection;
-  readonly documentState: OfficeDocument;
+  readonly documentState: SfxObjectShellState;
   readonly modelRevision: number;
   readonly paragraphs: readonly WriterParagraphProjection[];
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
@@ -130,7 +130,7 @@ export class WriterViewProjection {
     document: SwDoc,
     activeParagraph: SwTextNode,
     cursor: SwPaM,
-    documentState: OfficeDocument,
+    documentState: SfxObjectShellState,
   ): WriterPresentationProjection {
     const paragraphs = document.paragraphs.map(
       /** Projects one canonical text node. @param node - Live node. @returns Frozen primitive paragraph. */ (

@@ -102,8 +102,9 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/core/doc/DocumentSettingManager.ts` | `sw/source/core/doc/DocumentSettingManager.cxx` | Document setting ownership |
 | `sw/source/core/doc/DocumentStateManager.ts` | `sw/source/core/doc/DocumentStateManager.cxx` | Model revision state and batched mutation notifications |
 | `sw/source/core/doc/DocumentStylePoolManager.ts` | `sw/source/core/doc/DocumentStylePoolManager.cxx` | Paragraph-style pool ownership |
-| `sw/source/filter/basflt/writer-document-codec.ts` | TypeScript filter adaptation | Versioned primitive transport shared by filters and storage ports |
-| `sw/source/filter/basflt/writer-storage.ts` | TypeScript filter adaptation | Port-neutral storage orchestration outside Writer core |
+| `sw/source/core/doc/writer-document-codec.ts` | Local graph boundary | Single primitive Writer graph representation shared by ODT worker transfer and browser cache |
+| `sw/source/core/doc/item-codec.ts` | Local graph boundary | Pooled-item graph encoding outside item subclasses |
+| `sw/browser/storage/writer-storage.ts` | Browser adaptation | Schema-11 cache envelope and AutoRecovery adapter; no filter ownership claim |
 | `sw/browser/presentation/writer-view-projection.ts` | Browser adaptation | Immutable primitive React projection with external node labels |
 | `svl/source/items/itempool.ts` | `svl/source/items/itempool.cxx` | Pool defaults and persisted-item factories |
 | `svl/source/items/itemset.ts` | `svl/source/items/itemset.cxx` | Direct item deltas, parent/default lookup, state, clone, and clear operations |

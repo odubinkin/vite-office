@@ -36,6 +36,19 @@ class TestObjectShell extends SfxObjectShell {
   public RetainMedium(medium: SfxMedium): void {
     this.ReplaceObjectState(this.GetDocumentState(), medium);
   }
+
+  /** Attempts a complete state replacement. @param state - Candidate state. @param medium - Candidate medium. @returns Nothing. */
+  public ReplaceState(
+    state: ReturnType<TestObjectShell["GetDocumentState"]>,
+    medium: SfxMedium,
+  ): void {
+    this.ReplaceObjectState(state, medium);
+  }
+
+  /** Exposes raw title validation. @param title - Candidate title. @returns Whether changed. */
+  public RenameRaw(title: string): boolean {
+    return this.SetTitle(title);
+  }
 }
 
 /** Creates one shell over a stable untitled medium. @returns Shell fixture. */
@@ -56,7 +69,6 @@ describe("SfxObjectShell lifecycle", /** Registers object-shell tests. @returns 
       isModified: false,
       lifecycle: "new",
       recoveryGeneration: null,
-      savedGeneration: null,
       suiteId: "writer",
       title: "Untitled Writer Document",
     });
@@ -69,7 +81,6 @@ describe("SfxObjectShell lifecycle", /** Registers object-shell tests. @returns 
       isModified: true,
       lifecycle: "dirty",
       recoveryGeneration: 2,
-      savedGeneration: 1,
     });
     expect(shell.CompleteSave()).toBe(true);
     expect(shell.GetDocumentState()).toMatchObject({ isModified: false, lifecycle: "saved" });
@@ -102,6 +113,10 @@ describe("SfxObjectShell lifecycle", /** Registers object-shell tests. @returns 
       /** Creates blank title metadata. @returns Invalid state; throws. */ () =>
         createDocument({ id: "doc", suiteId: "writer", title: " " }),
     ).toThrow("blank");
+    expect(
+      /** Creates blank module metadata. @returns Invalid state; throws. */ () =>
+        createDocument({ id: "doc", suiteId: " ", title: "Document" }),
+    ).toThrow("blank");
     const valid = createDocument({ id: "doc", suiteId: "writer", title: "Document" });
     const validationMedium = new SfxMedium({ kind: "untitled", name: "Document" });
     expect(
@@ -109,14 +124,44 @@ describe("SfxObjectShell lifecycle", /** Registers object-shell tests. @returns 
         new TestObjectShell({ ...valid, contentGeneration: -1 }, validationMedium),
     ).toThrow("non-negative integer");
     expect(
-      /** Creates a shell with an invalid save generation. @returns Invalid shell; throws. */ () =>
-        new TestObjectShell({ ...valid, savedGeneration: 1 }, validationMedium),
+      /** Creates a shell with an invalid recovery generation. @returns Invalid shell; throws. */ () =>
+        new TestObjectShell({ ...valid, recoveryGeneration: 1 }, validationMedium),
     ).toThrow("existing document content");
+    for (const recoveryGeneration of [-1, 0.5])
+      expect(
+        /** Creates a shell with a malformed recovery generation. @returns Invalid shell; throws. */ () =>
+          new TestObjectShell({ ...valid, recoveryGeneration }, validationMedium),
+      ).toThrow("existing document content");
+    expect(
+      /** Creates a contradictory dirty projection. @returns Invalid shell; throws. */ () =>
+        new TestObjectShell({ ...valid, lifecycle: "dirty" }, validationMedium),
+    ).toThrow("Dirty lifecycle");
+    expect(
+      /** Creates a contradictory modified projection. @returns Invalid shell; throws. */ () =>
+        new TestObjectShell({ ...valid, isModified: true }, validationMedium),
+    ).toThrow("Modified state");
+    expect(
+      /** Creates an already closed shell. @returns Invalid shell; throws. */ () =>
+        new TestObjectShell({ ...valid, lifecycle: "closed" }, validationMedium),
+    ).toThrow("construct a closed");
     const shell = createFixture();
     const medium = shell.GetMedium();
     shell.RetainMedium(medium);
     expect(medium.IsOpen()).toBe(true);
     shell.ContentChanged();
+    expect(shell.RenameRaw("Renamed")).toBe(true);
+    expect(shell.RenameRaw("Renamed")).toBe(false);
+    expect(
+      /** Applies an invalid raw title. @returns Invalid title; throws. */ () =>
+        shell.RenameRaw(" "),
+    ).toThrow("blank");
+    expect(
+      /** Installs a closed replacement projection. @returns Invalid replacement; throws. */ () =>
+        shell.ReplaceState(
+          { ...shell.GetDocumentState(), isModified: false, lifecycle: "closed" },
+          shell.GetMedium(),
+        ),
+    ).toThrow("install a closed");
     for (const generation of [-1, 0.5, 2])
       expect(
         /** Acknowledges an invalid generation. @returns Nothing; throws. */ () =>

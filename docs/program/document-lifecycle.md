@@ -2,49 +2,43 @@
 
 The browser document lifecycle contract is implemented in
 [`apps/office/src/sfx2/source/doc/objsh.ts`](../../apps/office/src/sfx2/source/doc/objsh.ts).
-`SfxObjectShell` owns a JSON-serializable document header and current
-`SfxMedium`, while `SwDoc` contains only Writer model data. The header carries a
-caller-provided identity, suite ID, title, lifecycle state, and three independent
-persistence coordinates:
+`SfxObjectShell` directly owns identity, suite ID, title, modified/closed
+state, the primary save-position flag, and the current `SfxMedium`, while
+`SwDoc` contains only Writer model data. `GetDocumentState()` creates an
+immutable serialization/UI projection; it is not a second lifecycle owner.
 
-- `contentGeneration` is a monotonic content generation advanced by every
-  successful domain mutation, including Undo and Redo;
-- `savedGeneration` identifies the generation acknowledged only after a
-  successful primary-medium save;
-- `recoveryGeneration` identifies the generation acknowledged only after a
-  successful recovery write;
-- `isModified` describes whether the current history position differs from the
-  primary save mark.
+Only two browser concurrency coordinates remain:
 
-The object shell applies the pure transitions `createDocument`, `markDocumentDirty`,
-`markDocumentSaved`, `markDocumentRecoverySaved`,
-`markDocumentHistoryRestored`, and `closeDocument`. They do not mutate inputs
-and rejects content or persistence transitions after close. New and opened
-documents start clean. Repeated edits receive distinct generations even while
-the document is already modified. A failed or stale primary save cannot clear
-`isModified`, and a recovery write never changes primary-save state.
+- `contentGeneration` advances for successful domain mutations, including
+  Undo and Redo, and prevents stale asynchronous operations from winning;
+- `recoveryGeneration` acknowledges the last successful recovery write and
+  participates in browser recovery lease decisions.
 
-This follows LibreOffice's observable lifecycle rules at the pinned baseline:
-`SfxObjectShell::SetModified` owns the modified flag,
-`SfxObjectShell::Save`/`DoSaveCompleted` clear it only after successful primary
-storage, `SfxBaseModel::storeToRecoveryFile` acknowledges recovery separately,
-and `SwUndoManager` restores clean state when Undo reaches its saved-action
-mark. The explicit counters are a browser adaptation for asynchronous storage;
-LibreOffice represents the same decisions with flags, timestamps, and an undo
-save mark. The bounded implementation is recorded as `CAP-0114` /
-`LO-WRITER-0114`; its remaining autosave-session gaps keep it `implemented`,
-not `verified`. Model mutations reach the shell through typed `SwModify`
-transactions; document replacement and disposal detach clients explicitly.
-`SfxMedium` retains only source, primary destination, filter metadata,
-capabilities, and the last medium operation. It does not duplicate document
-identity or save/recovery generations. `GetMedium()` returns the stable current
-descriptor, matching upstream `SfxMedium` identity semantics instead of
-reconstructing a defensive snapshot on every read.
+Primary save state is not a generation DTO. `SwUndoManager` owns the save
+position, and `isModified` reports whether the current history position differs
+from it. The object shell applies upstream-shaped `SetModified`,
+`SaveCompleted`, `RecoverySaveCompleted`, `SetHistorySavePosition`, and
+close transitions. A failed or stale primary save cannot clear
+`isModified`, and a recovery write never changes the primary save position.
 
-`SwDocShell` owns Writer-specific model replacement, filter invocation, history,
-recovery hooks, and the `SfxMedium` state transitions used by those operations.
-It does not accept browser file-picker, download, or IndexedDB ports. Those ports
-terminate in `sw/browser/workflows/writer-document-io.ts`, which adapts them to
-the shell's `Open`, `Load`, `Save`, `SaveAs`, `Export`, and `Download` primitives.
-Durable model serialization is versioned separately in
-`writer-storage-codec.ts`; old schemas are rejected rather than migrated.
+This follows the pinned LibreOffice lifecycle: `SfxObjectShell::SetModified`
+owns the modified flag, successful primary storage clears it, and
+`SwUndoManager` restores clean state at its saved-action mark. The content and
+recovery counters are explicit browser adaptations for asynchronous races and
+recovery leases. Model mutations reach the shell through typed `SwModify`
+transactions; replacement and disposal detach clients explicitly.
+
+`SfxMedium` retains source, primary destination, filter metadata,
+capabilities, and the latest owned operation. It does not duplicate document
+identity or save/recovery state. `GetMedium()` returns the stable instance,
+matching upstream identity semantics.
+
+`SwDocShell` owns Writer model replacement, filter invocation, history,
+recovery lifecycle hooks, and medium transitions. Browser file-picker,
+download, clipboard, and IndexedDB ports terminate in the thin Sfx shell and
+`sw/browser/workflows/writer-document-io.ts`.
+
+The browser-only `BrowserWriterRecoveryDocument` adapter under
+`sw/browser/storage` owns recovery snapshot serialization. Cache schema 11
+wraps the single canonical `WriterDocumentRecord`; all retired local schemas
+are rejected without migration.

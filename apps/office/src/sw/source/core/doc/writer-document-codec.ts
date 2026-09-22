@@ -2,20 +2,16 @@
 
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwPosition } from "../../core/crsr/pam";
-import { SwDoc } from "../../core/doc/doc";
-import {
-  isWriterParagraphStyle,
-  SwTextFormatColl,
-  type WriterParagraphStyle,
-} from "../../core/doc/fmtcol";
-import { SwNumFormat, SwNumRule } from "../../core/doc/number";
+import { SwPosition } from "../crsr/pam";
+import { SwDoc } from "./doc";
+import { isWriterParagraphStyle, SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
+import { SwNumFormat, SwNumRule } from "./number";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
-import type { WriterParagraphListKind } from "../../core/doc/list";
+import type { WriterParagraphListKind } from "./list";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
-import { SwpHints } from "../../core/txtnode/ndhints";
-import { SwFormatINetFormat } from "../../core/txtnode/fmtinfmt";
-import { SwFormatAutoFormat, SwTextAttr } from "../../core/txtnode/txatbase";
+import { SwpHints } from "../txtnode/ndhints";
+import { SwFormatINetFormat } from "../txtnode/fmtinfmt";
+import { SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
 import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 
 /** Primitive graph record for one numbering level. */

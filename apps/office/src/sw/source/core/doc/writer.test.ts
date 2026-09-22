@@ -2,10 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import {
-  decodeWriterDocument,
-  encodeWriterDocument,
-} from "../../filter/basflt/writer-document-codec";
+import { decodeWriterDocument, encodeWriterDocument } from "./writer-document-codec";
 import { isWriterParagraphAlignment } from "../txtnode/ndtxt";
 import { createWriterDocument, SwDoc } from "./doc";
 

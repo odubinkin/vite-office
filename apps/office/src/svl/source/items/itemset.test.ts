@@ -5,7 +5,7 @@ import {
   decodeSfxItemSet,
   encodeSfxItemSet,
   encodeSfxPoolItem,
-} from "../../../sw/source/filter/basflt/item-codec";
+} from "../../../sw/source/core/doc/item-codec";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
 import { SfxItemPool } from "./itempool";

@@ -110,75 +110,6 @@
       "evidence": {
         "local": [
           {
-            "marker": "SwWrtShellEditingOperations",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwWrtShell",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
-      "localSymbols": [
-        "SwWrtShellEditingPort",
-        "SwWrtShellEditingOperations"
-      ],
-      "omittedResponsibilities": [
-        "Native layout, table, object, and multi-selection edit modes outside the bounded browser text shell remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Separates Writer text, range, paste, split, and join algorithms from the SwWrtShell cursor identity and undo-notification orchestration boundary."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
-      "upstreamSymbols": [
-        "SwWrtShell",
-        "SwWrtShell::Insert",
-        "SwWrtShell::SplitNode"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "pasteWriterTransfer",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwTransferable::Paste",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
-      "localSymbols": [
-        "WriterPasteOperations",
-        "pasteWriterTransfer"
-      ],
-      "omittedResponsibilities": [
-        "Native clipboard formats, table/object insertion, comments, anchors, and paste listeners outside the bounded sanitized paragraph transfer remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Coordinates selection deletion, grouped undo, paragraph splitting, range insertion, cursor movement, and list metadata for the supported Writer paste operation."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx",
-      "upstreamSymbols": [
-        "SwTransferable::Paste",
-        "SwPasteContext"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
             "marker": "SvxAdjust",
             "path": "apps/office/src/editeng/source/items/paraitem.ts"
           }
@@ -1139,7 +1070,6 @@
       "localPath": "apps/office/src/sfx2/source/doc/objsh.ts",
       "localSymbols": [
         "SfxObjectShell",
-        "OfficeDocument",
         "SetModified",
         "SaveCompleted",
         "RecoverySaveCompleted",
@@ -1149,7 +1079,7 @@
         "UNO model integration, native storage, signing, macro, printer, and desktop UI obligations remain outside the bounded browser object-shell layer."
       ],
       "preservedResponsibilities": [
-        "Owns document identity, modified state, save completion, close state, browser generation extensions, and the retained SfxMedium outside the Writer model graph."
+        "Directly owns document identity, title, modified/save-position/close state, and the retained primary SfxMedium; only browser race and recovery lease generations extend the upstream contract."
       ],
       "status": "mapped",
       "upstreamPath": "include/sfx2/objsh.hxx",
@@ -1481,27 +1411,6 @@
       "evidence": {
         "local": [
           {
-            "marker": "readBrowserWriterClipboardPaste",
-            "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
-      "rationale": "Parses DataTransfer MIME values at the single browser edit-window boundary; no native LibreOffice source file is claimed as its owner.",
-      "responsibilities": [
-        "Parses native HTML/plain-text clipboard values into the bounded Writer transfer filter record."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser ClipboardEvent and DataTransfer replace native VCL clipboard event delivery."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
             "marker": "BrowserWriterEditWindow",
             "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts"
           }
@@ -1519,38 +1428,25 @@
       "status": "local-only"
     },
     {
-      "classification": "upstream-mechanism",
+      "classification": "browser-adaptation",
       "evidence": {
         "local": [
           {
-            "marker": "SwEditWin",
-            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwEditWin::KeyInput",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx"
+            "marker": "readBrowserWriterClipboardPaste",
+            "path": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
-      "localSymbols": [
-        "SwEditWin"
+      "localPath": "apps/office/src/sw/browser/editor/writer-clipboard-events.ts",
+      "rationale": "Parses DataTransfer MIME values at the single browser edit-window boundary; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Parses native HTML/plain-text clipboard values into the bounded Writer transfer filter record."
       ],
-      "omittedResponsibilities": [
-        "Native VCL painting, accessibility, drag services, and platform event classes remain in the browser adapter."
-      ],
-      "preservedResponsibilities": [
-        "Owns platform-neutral edit, selection, composition, transfer, and history operations over one persistent SwWrtShell."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
-      "upstreamSymbols": [
-        "SwEditWin::KeyInput",
-        "SwEditWin::Command",
-        "SwEditWin::MouseButtonDown"
-      ]
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser ClipboardEvent and DataTransfer replace native VCL clipboard event delivery."
+      },
+      "status": "local-only"
     },
     {
       "classification": "browser-adaptation",
@@ -1936,6 +1832,28 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterSnapshotState",
+            "path": "apps/office/src/sw/browser/storage/writer-storage.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/storage/writer-storage.ts",
+      "rationale": "Owns the browser cache envelope and BrowserWriterRecoveryDocument adapter over the shared canonical Writer graph.",
+      "responsibilities": [
+        "Versions and validates the current browser cache envelope without compatibility migration.",
+        "Adapts framework AutoRecovery to SwDocShell without importing browser persistence into uibase."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
       },
       "status": "local-only"
     },
@@ -2622,6 +2540,27 @@
       ]
     },
     {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "encodeSfxPoolItem",
+            "path": "apps/office/src/sw/source/core/doc/item-codec.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/item-codec.ts",
+      "rationale": "Keeps canonical pooled-item graph encoding outside SfxPoolItem subclasses for reuse by graph boundary codecs.",
+      "responsibilities": [
+        "Encodes and restores the bounded pooled-item and item-set graph."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "JSON persistence is a browser storage adaptation and is not part of the native SfxPoolItem value contract."
+      },
+      "status": "local-only"
+    },
+    {
       "classification": "upstream-mechanism",
       "evidence": {
         "local": [
@@ -2739,6 +2678,27 @@
         "lcl_SetHeadline",
         "lcl_SetDfltFont"
       ]
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterDocumentRecord",
+            "path": "apps/office/src/sw/source/core/doc/writer-document-codec.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/writer-document-codec.ts",
+      "rationale": "Defines the one primitive Writer graph representation reused by worker transfer and browser cache envelopes.",
+      "responsibilities": [
+        "Encodes and decodes the canonical Writer graph at explicit serialization boundaries."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The browser-specific WriterDocumentRecord boundary has no single native LibreOffice implementation unit and therefore remains explicit."
+      },
+      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",
@@ -3352,48 +3312,6 @@
       "evidence": {
         "local": [
           {
-            "marker": "encodeSfxPoolItem",
-            "path": "apps/office/src/sw/source/filter/basflt/item-codec.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/filter/basflt/item-codec.ts",
-      "rationale": "Keeps JSON type discrimination and restoration outside SfxPoolItem subclasses at the explicit browser persistence boundary.",
-      "responsibilities": [
-        "Encodes and restores the bounded pooled-item and item-set persistence graph."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "JSON persistence is a browser storage adaptation and is not part of the native SfxPoolItem value contract."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterDocumentRecord",
-            "path": "apps/office/src/sw/source/filter/basflt/writer-document-codec.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/filter/basflt/writer-document-codec.ts",
-      "rationale": "Encodes and decodes the canonical Writer graph only at the browser persistence boundary. This browser boundary has no single native LibreOffice implementation unit and remains explicit in the parity inventory.",
-      "responsibilities": [
-        "Encodes and decodes the canonical Writer graph only at the browser persistence boundary."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The browser-specific WriterDocumentRecord boundary has no single native LibreOffice implementation unit and therefore remains explicit."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
             "marker": "WriterTransferParagraph",
             "path": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts"
           }
@@ -3407,48 +3325,6 @@
       "stackDivergence": {
         "kind": "local-infrastructure",
         "rationale": "The TypeScript module graph requires a neutral structural record at the filter boundary instead of a native C++ header dependency."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterStorageDocumentRecord",
-            "path": "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts",
-      "rationale": "Defines the current durable browser-storage envelope around the shared canonical WriterDocumentRecord graph.",
-      "responsibilities": [
-        "Versions and validates the durable Writer model payload without compatibility migration."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "Browser snapshot persistence has no native LibreOffice JSON model contract."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterSnapshotState",
-            "path": "apps/office/src/sw/source/filter/basflt/writer-storage.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/filter/basflt/writer-storage.ts",
-      "rationale": "Defines browser-owned Writer snapshot orchestration over canonical SwDoc without placing serialization on model classes. This browser persistence boundary has no single native LibreOffice implementation unit.",
-      "responsibilities": [
-        "Creates and restores Writer snapshots and returns exact adapter-confirmed storage evidence without mutating the live SwDoc."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
       },
       "status": "local-only"
     },
@@ -3759,7 +3635,7 @@
         "Native storage implementations, file dialogs, printing, and unsupported Writer filter families remain outside the browser Writer slice."
       ],
       "preservedResponsibilities": [
-        "Owns Writer model replacement, filter invocation, history, recovery hooks, and SfxMedium lifecycle while browser port orchestration terminates under sw/browser/workflows."
+        "Owns Writer model replacement, filter invocation, undo save positions, lifecycle hooks, and SfxMedium transitions while browser cache serialization and ports remain under sw/browser."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/app/docsh.cxx",
@@ -3836,6 +3712,40 @@
         "UITestLogger::getInstance",
         "SwTransferable::SwTransferable",
         "URIHelper::removePassword"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwEditWin",
+            "path": "apps/office/src/sw/source/uibase/docvw/edtwin.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwEditWin::KeyInput",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
+      "localSymbols": [
+        "SwEditWin"
+      ],
+      "omittedResponsibilities": [
+        "Native VCL painting, accessibility, drag services, and platform event classes remain in the browser adapter."
+      ],
+      "preservedResponsibilities": [
+        "Owns platform-neutral edit, selection, composition, transfer, and history operations over one persistent SwWrtShell."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/docvw/edtwin.cxx",
+      "upstreamSymbols": [
+        "SwEditWin::KeyInput",
+        "SwEditWin::Command",
+        "SwEditWin::MouseButtonDown"
       ]
     },
     {
@@ -4050,6 +3960,41 @@
       "evidence": {
         "local": [
           {
+            "marker": "SwWrtShellEditingOperations",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwWrtShell",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
+      "localSymbols": [
+        "SwWrtShellEditingPort",
+        "SwWrtShellEditingOperations"
+      ],
+      "omittedResponsibilities": [
+        "Native layout, table, object, and multi-selection edit modes outside the bounded browser text shell remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Separates Writer text, range, paste, split, and join algorithms from the SwWrtShell cursor identity and undo-notification orchestration boundary."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",
+      "upstreamSymbols": [
+        "SwWrtShell",
+        "SwWrtShell::Insert",
+        "SwWrtShell::SplitNode"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "createWriterHyperlinkAction",
             "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts"
           }
@@ -4115,6 +4060,40 @@
         "SID_INC_INDENT",
         "NumUpDown",
         "MoveLeftMargin"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "pasteWriterTransfer",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwTransferable::Paste",
+            "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
+      "localSymbols": [
+        "WriterPasteOperations",
+        "pasteWriterTransfer"
+      ],
+      "omittedResponsibilities": [
+        "Native clipboard formats, table/object insertion, comments, anchors, and paste listeners outside the bounded sanitized paragraph transfer remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Coordinates selection deletion, grouped undo, paragraph splitting, range insertion, cursor movement, and list metadata for the supported Writer paste operation."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx",
+      "upstreamSymbols": [
+        "SwTransferable::Paste",
+        "SwPasteContext"
       ]
     },
     {
