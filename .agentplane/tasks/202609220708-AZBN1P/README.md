@@ -1,10 +1,11 @@
 ---
 id: "202609220708-AZBN1P"
 title: "Reconcile P1 inventories documentation and closure"
-status: "DOING"
+result_summary: "verified-202609220708-AZBN1P"
+status: "DONE"
 priority: "high"
 owner: "DOCS"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -27,9 +28,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T11:13:13.473Z"
-  updated_by: "DOCS"
-  note: "Command: npm run verify. Result: pass. Evidence: 78 app test files/370 tests and 34 inventory test files/96 tests at 100% coverage; 11 Chromium E2E tests; static build, docs, file-size, source-tree, provenance, 34 invariants, and parity 45/45 with gapCount 0 all passed. Scope: final P1.17 documentation reconciliation for architecture, ownership, UI, clipboard, ODT, persistence, testing, roadmap, and parity-plan closure. Links: docs/program/vite-office-upstream-parity-plan.md and commit 222702f0feff. Additional command: ap doctor && node .agentplane/policy/check-routing.mjs; result pass with one unrelated historical-task warning."
+  updated_at: "2026-09-22T11:13:54.294Z"
+  updated_by: "CODER"
+  note: "verified-202609220708-AZBN1P"
   attempts: 0
 quality_review:
   state: "pass"
@@ -47,11 +48,16 @@ quality_review:
     - "docs/program/vite-office-upstream-parity-plan.md"
   findings:
     - "All changed documentation reflects canonical Writer ownership and explicit residual limits; full repository verification, policy routing, and Agentplane doctor pass."
-commit: null
+commit:
+  hash: "979ca82691515436c9ffa8b52956bbd288c056e5"
+  message: "🧪 AZBN1P task: persist verification and quality evidence"
 comments:
   -
     author: "DOCS"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609220708-AZBN1P. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,9 +72,22 @@ events:
     author: "DOCS"
     state: "ok"
     note: "Command: npm run verify. Result: pass. Evidence: 78 app test files/370 tests and 34 inventory test files/96 tests at 100% coverage; 11 Chromium E2E tests; static build, docs, file-size, source-tree, provenance, 34 invariants, and parity 45/45 with gapCount 0 all passed. Scope: final P1.17 documentation reconciliation for architecture, ownership, UI, clipboard, ODT, persistence, testing, roadmap, and parity-plan closure. Links: docs/program/vite-office-upstream-parity-plan.md and commit 222702f0feff. Additional command: ap doctor && node .agentplane/policy/check-routing.mjs; result pass with one unrelated historical-task warning."
+  -
+    type: "verify"
+    at: "2026-09-22T11:13:54.294Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609220708-AZBN1P"
+  -
+    type: "status"
+    at: "2026-09-22T11:13:54.496Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609220708-AZBN1P. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-22T11:13:13.570Z"
-doc_updated_by: "DOCS"
+doc_updated_at: "2026-09-22T11:13:54.497Z"
+doc_updated_by: "CODER"
 description: "Implement P1.17 and close P1: reconcile architecture and program documentation with the delivered code, update only affected source inventory/provenance/capability records, run repository-wide verification, and record remaining limitations honestly."
 sections:
   Summary: |-
@@ -120,11 +139,45 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-22T11:13:54.294Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609220708-AZBN1P
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:13:13.570Z, excerpt_hash=sha256:dd3531e108ea90d23248ba7e884f9b55a1ad07d6aeb7bb61d30d48fe4cc33829
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220708-AZBN1P/blueprint/resolved-snapshot.json
+    - old_digest: 4b5682ebecc3616fcc47c2ece7ab8f3f463e904738094f13e73f4c65840212fd
+    - current_digest: 4b5682ebecc3616fcc47c2ece7ab8f3f463e904738094f13e73f4c65840212fd
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220708-AZBN1P
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609220708-AZBN1P --result verified-202609220708-AZBN1P --commit 979ca82691515436c9ffa8b52956bbd288c056e5
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "222702f0feff5cb0cfa4a76a673db17ce06d4532"
+    message: "📝 AZBN1P task: reconcile P1 documentation and closure"
 id_source: "generated"
 ---
 ## Summary
@@ -178,6 +231,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609220708-AZBN1P
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T11:13:54.294Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609220708-AZBN1P
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:13:13.570Z, excerpt_hash=sha256:dd3531e108ea90d23248ba7e884f9b55a1ad07d6aeb7bb61d30d48fe4cc33829
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220708-AZBN1P/blueprint/resolved-snapshot.json
+- old_digest: 4b5682ebecc3616fcc47c2ece7ab8f3f463e904738094f13e73f4c65840212fd
+- current_digest: 4b5682ebecc3616fcc47c2ece7ab8f3f463e904738094f13e73f4c65840212fd
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220708-AZBN1P
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609220708-AZBN1P --result verified-202609220708-AZBN1P --commit 979ca82691515436c9ffa8b52956bbd288c056e5
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
