@@ -4,7 +4,7 @@ title: "Close Writer parity ownership gaps"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,29 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T05:22:40.861Z"
+  updated_at: "2026-09-22T05:23:39.060Z"
   updated_by: "CODER"
-  note: "Full verification passed: focused Writer and ODT suites, module-boundary tests, typecheck, dependency checks, provenance/invariants/parity, and npm run verify (360 app tests, 96 inventory tests, 11 Playwright tests; 100% coverage)."
+  note: "verified-202609220508-PRN6ZW"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-22T05:24:06.331Z"
+  updated_by: "EVALUATOR"
+  note: "Implementation closes both audited ownership gaps with narrow adapters and regression enforcement; full verification is green."
+  evaluated_sha: "fe669b91bb5e766fb8c0d5bd5c0ec3ee489f28f4"
+  blueprint_digest: "1a64a0b5fb651e32c43a110f43b487c9e494eeedd51b612be68f3c819df52b4b"
+  evidence_refs:
+    - ".agentplane/tasks/202609220508-PRN6ZW/README.md"
+    - ".agentplane/tasks/202609220508-PRN6ZW/quality/20260922-052406331-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609220508-PRN6ZW/quality/20260922-052406331-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609220508-PRN6ZW/quality/20260922-052406331-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609220508-PRN6ZW/blueprint/resolved-snapshot.json"
+    - "commit fe669b91bb5e766fb8c0d5bd5c0ec3ee489f28f4"
+    - "npm run verify: 360 app tests, 96 inventory tests, 11 Playwright tests, 100% coverage"
+    - "npm run check:dependencies and scripts/check-module-boundaries.test.ts"
+  findings:
+    - "SwWrtShell range mutation now accepts native SwTextFragment and clipboard/test projections convert at ingress without changing undo or formatting behavior."
+    - "ODT filter no longer imports worker protocol; browser adapters own transport mapping and dependency checks reject both protocol imports and browser-global identifiers in protected source layers."
 commit: null
 comments:
   -
@@ -41,8 +60,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full verification passed: focused Writer and ODT suites, module-boundary tests, typecheck, dependency checks, provenance/invariants/parity, and npm run verify (360 app tests, 96 inventory tests, 11 Playwright tests; 100% coverage)."
+  -
+    type: "verify"
+    at: "2026-09-22T05:23:39.060Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609220508-PRN6ZW"
 doc_version: 3
-doc_updated_at: "2026-09-22T05:22:40.941Z"
+doc_updated_at: "2026-09-22T05:23:39.142Z"
 doc_updated_by: "CODER"
 description: "Remove boundary text-run DTOs from public Writer shell mutation APIs, make the ODT filter service worker-neutral, and enforce filter/browser ownership with negative tests."
 sections:
@@ -77,6 +102,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task verify-show 202609220508-PRN6ZW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-22T05:23:39.060Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609220508-PRN6ZW
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T05:22:40.941Z, excerpt_hash=sha256:b3105720ee9a22913a05772e2f89b2271b47cb0e35c7c23b3927e7c6e8f7eee5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220508-PRN6ZW/blueprint/resolved-snapshot.json
+    - old_digest: 1a64a0b5fb651e32c43a110f43b487c9e494eeedd51b612be68f3c819df52b4b
+    - current_digest: 1a64a0b5fb651e32c43a110f43b487c9e494eeedd51b612be68f3c819df52b4b
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220508-PRN6ZW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609220508-PRN6ZW --result verified-202609220508-PRN6ZW --commit fe669b91bb5e766fb8c0d5bd5c0ec3ee489f28f4
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -138,6 +193,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task verify-show 202609220508-PRN6ZW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T05:23:39.060Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609220508-PRN6ZW
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T05:22:40.941Z, excerpt_hash=sha256:b3105720ee9a22913a05772e2f89b2271b47cb0e35c7c23b3927e7c6e8f7eee5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220508-PRN6ZW/blueprint/resolved-snapshot.json
+- old_digest: 1a64a0b5fb651e32c43a110f43b487c9e494eeedd51b612be68f3c819df52b4b
+- current_digest: 1a64a0b5fb651e32c43a110f43b487c9e494eeedd51b612be68f3c819df52b4b
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220508-PRN6ZW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609220508-PRN6ZW --result verified-202609220508-PRN6ZW --commit fe669b91bb5e766fb8c0d5bd5c0ec3ee489f28f4
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
