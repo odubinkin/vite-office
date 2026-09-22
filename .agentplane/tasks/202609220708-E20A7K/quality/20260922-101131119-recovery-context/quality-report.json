@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220708-E20A7K",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T10:11:31.119Z",
+  "verdict": "pass",
+  "summary": "Writer lifecycle, workflow, and browser cache ownership match P1.13-P1.15.",
+  "evaluated_sha": "1f65e817f6738605201ef27c64a4201a5aafb8f9",
+  "blueprint_digest": "ea7d84a19d1ad2c77dac74d5b6569200a17acac96971447761ac9fb74e5af15e",
+  "findings": [
+    "SfxObjectShell directly owns lifecycle fields and primary save-position state; the thin browser Sfx shell routes directly to document/transfer owners; schema-11 cache and AutoRecovery adaptation live under sw/browser/storage with no basflt claim."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220708-E20A7K/README.md",
+    "apps/office/src/sfx2/source/doc/objsh.test.ts",
+    "apps/office/src/sw/browser/storage/writer-storage.test.ts",
+    "apps/office/src/sw/browser/workflows/writer-workflows.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
