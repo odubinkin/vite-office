@@ -1,10 +1,11 @@
 ---
 id: "202609221204-Y797VJ"
 title: "Fix Writer UI ruler, multi-paragraph formatting, lists, and sidebar controls"
-status: "DOING"
+result_summary: "verified-202609221204-Y797VJ"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T12:11:35.734Z"
+  updated_at: "2026-09-22T12:12:22.177Z"
   updated_by: "CODER"
   note: "verified-202609221204-Y797VJ"
   attempts: 0
@@ -38,11 +39,16 @@ quality_review:
     - "npm run build; npm run lint -- --max-warnings=0; npx playwright test e2e/writer-character-formatting.spec.ts e2e/writer-lists.spec.ts"
   findings:
     - "Targeted unit tests, Writer formatting/list E2E, build, lint, and whitespace checks passed."
-commit: null
+commit:
+  hash: "53160e24e0ab6de1b55c667ba7667ac468f22d20"
+  message: "🧩 Y797VJ task: persist quality review artifacts"
 comments:
   -
     author: "CODER"
     body: "Start: implementing the approved Writer UI corrections in the direct-mode checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609221204-Y797VJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609221204-Y797VJ"
+  -
+    type: "verify"
+    at: "2026-09-22T12:12:22.177Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609221204-Y797VJ"
+  -
+    type: "status"
+    at: "2026-09-22T12:12:22.659Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609221204-Y797VJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-22T12:11:35.811Z"
+doc_updated_at: "2026-09-22T12:12:22.660Z"
 doc_updated_by: "CODER"
 description: "Correct document-only ruler layout, apply character formatting across full and multi-paragraph selections, reconcile list marker/paragraph indentation and vertical alignment with pinned Writer behavior, and render sidebar commands as icon buttons."
 sections:
@@ -143,6 +162,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-22T12:12:22.177Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609221204-Y797VJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T12:11:35.811Z, excerpt_hash=sha256:8ee98ea92562a6478ba5bf411ca74c8fd5584de7c8d9a06c6c2992f981558194
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221204-Y797VJ/blueprint/resolved-snapshot.json
+    - old_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+    - current_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609221204-Y797VJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609221204-Y797VJ --result verified-202609221204-Y797VJ --commit 53160e24e0ab6de1b55c667ba7667ac468f22d20
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -153,6 +202,10 @@ sections:
       Resolution: Regression coverage confirms the approved Writer UI scope.
       Promotion: incident-candidate
       Fixability: repo-fixable
+extensions:
+  implementation_commit:
+    hash: "f487500076df65591b8d4aa8a2cb7d2860f6a79c"
+    message: "🧩 Y797VJ task: implement Writer UI fixes"
 id_source: "generated"
 ---
 ## Summary
@@ -233,6 +286,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609221204-Y797VJ --result verified-202609221204-Y797VJ --commit 9a83a4fb5cd73b2399819d32de0ee62dc21af8a8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T12:12:22.177Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609221204-Y797VJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T12:11:35.811Z, excerpt_hash=sha256:8ee98ea92562a6478ba5bf411ca74c8fd5584de7c8d9a06c6c2992f981558194
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221204-Y797VJ/blueprint/resolved-snapshot.json
+- old_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+- current_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609221204-Y797VJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609221204-Y797VJ --result verified-202609221204-Y797VJ --commit 53160e24e0ab6de1b55c667ba7667ac468f22d20
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
