@@ -58,13 +58,13 @@ The audited checkout contains:
 
 | Surface | Current size | Interpretation |
 | --- | ---: | --- |
-| Authored production TypeScript/TSX under `apps/office/src` | 149 files | Current executable application surface. |
-| Runtime inventory entries | 150 | Includes 149 production modules plus `src/test/wrtsh-test-helpers.ts`. Test-only code must not be counted as runtime. |
-| Application unit/integration test files | 74 | Broad local coverage, but mostly local-contract coverage. |
+| Authored production TypeScript/TSX under `apps/office/src` | 153 files | Current executable application surface, excluding the two test-support modules under `src/test`. |
+| Runtime inventory entries | 154 | Includes the 153 production modules plus `src/test/wrtsh-test-helpers.ts`; the Vitest-only setup module is excluded. |
+| Application unit/integration test files | 78 | Broad local coverage, but mostly local-contract coverage. |
 | Browser E2E specifications | 8 | Writer and foundation flows only. |
 | Inventory implementation files | 37 | Baseline, module, test, help, translation, dictionary, and parity tooling. |
 | Inventory test files | 34 | Good structural coverage of inventory code. |
-| Program documentation files, excluding this plan | 44 | Several are stale relative to the latest UI relocation. |
+| Program documentation files, excluding this plan | 59 | Reconciled for the final P1 implementation; historical audit text remains explicitly historical. |
 | Recorded atomic capability records | 45 | `CAP-0101` through `CAP-0145`, all currently marked `verified`. |
 | Placeholder suites | 6 | Calc, Impress, Draw, Base, Math, and Chart have no runtime implementation. |
 
@@ -72,18 +72,18 @@ Runtime inventory classification:
 
 | Classification | Modules | Meaning |
 | --- | ---: | --- |
-| `upstream-mechanism` | 92 | Claims a corresponding LibreOffice responsibility. |
-| `browser-adaptation` | 37 | React, DOM, Worker, IndexedDB, File, Clipboard, or font-platform boundary. |
-| `local-infrastructure` | 21 | Composition or local transport/storage infrastructure. |
+| `upstream-mechanism` | 97 | Claims a corresponding LibreOffice responsibility. |
+| `browser-adaptation` | 38 | React, DOM, Worker, IndexedDB, File, Clipboard, or font-platform boundary. |
+| `local-infrastructure` | 19 | Composition or local transport/storage infrastructure. |
 
 The inventory's own semantic status is materially less complete than the capability report:
 
 | Dimension | Parity | Unverified | Not applicable | Divergent |
 | --- | ---: | ---: | ---: | ---: |
-| Behavior | 8 | 119 | 23 | 0 |
-| Contract | 7 | 84 | 58 | 1 |
-| Default | 8 | 74 | 68 | 0 |
-| Source responsibility | 23 aligned | 67 unverified | 46 browser-owned | 14 divergent |
+| Behavior | 9 | 123 | 22 | 0 |
+| Contract | 8 | 88 | 57 | 1 |
+| Default | 8 | 74 | 72 | 0 |
+| Source responsibility | 27 aligned | 71 unverified | 43 browser-owned | 13 divergent |
 
 These counts describe the current documentation state. They do not create a standalone inventory
 cleanup phase; records change only with their related source implementation.
@@ -94,7 +94,7 @@ cleanup phase; records change only with their related source implementation.
 | --- | --- | --- | --- | --- |
 | Browser application bootstrap | Static Vite/React mount, suite launcher, pathname routing, lazy Writer session | `framework/browser/app`, `main.tsx` | `framework/source/services/desktop.cxx`, module manager services | Browser-specific composition is justified; suite and document identity must stop leaking into generic value DTOs. |
 | Localization | Locale normalization, fallback catalog, React provider | `framework/browser/localization`, `framework/source/services/messages.ts` | officecfg/resource/translation catalogs | Browser provider is justified; current catalog and fallback model is local infrastructure, not parity evidence. |
-| Command and dispatch foundation | Command registry, shell stack, slot requests, bindings invalidation, async result state | `sfx2/source/control`, `framework/source/dispatch` | `include/sfx2/{dispatch,request,bindings,shell}.hxx`, matching `sfx2/source/control` files | Directionally correct, but a custom descriptor framework is concentrated in `dispatch.ts`. |
+| Command and dispatch foundation | Generated slot/interface metadata, shell stack, slot requests, bindings invalidation, async browser completion observation | `sfx2/source/control`, `framework/source/dispatch`, `sw/sdi` | `include/sfx2/{dispatch,request,bindings,shell}.hxx`, matching `sfx2/source/control` files and Writer SDI | Execute/GetState ownership is upstream-shaped; asynchronous browser completion remains an explicit outer observer rather than core request state. |
 | Item system | Pool items, item pool, item sets and Writer attribute pool | `svl/source/items`, `editeng/source/items`, `sw/source/core/attr` | `svl`, `editeng`, `sw` item implementations | Strongest reusable parity foundation; broaden contracts and eliminate browser-shaped projections from core APIs. |
 | Notifications | `SfxBroadcaster`, `SfxListener`, `SwModify`, transactional model hints | `svl/source/notify`, `sw/inc/calbck.ts`, `DocumentStateManager.ts` | Svl broadcasters and Writer callback graph | Shape is useful; current coarse revision/hint model needs assertion-level comparison. |
 | Undo/redo | Bounded `SfxUndoManager`, compound actions, save marks, Writer actions | `svl/source/undo`, `sw/source/core/undo` | `svl/source/undo/undo.cxx`, Writer undo files | Retain; expand from the supported text slice without snapshot-based fallbacks. |
@@ -109,18 +109,18 @@ cleanup phase; records change only with their related source implementation.
 | Area | Implemented today | Principal local owners | Important limitations still inside normal Writer behavior |
 | --- | --- | --- | --- |
 | Document graph | Five fixed sections, text nodes, node indices, registered content positions | `sw/source/core/doc`, `docnode`, `bastyp` | No tables, sections, frames, fields, marks, redlines, content controls, anchored objects, or layout frames. |
-| Text model | UTF-16 text, ranged auto-format and hyperlink hints, split/join/replace | `sw/source/core/txtnode` | A parallel boolean/run DTO remains widely used at shell, transfer, and test boundaries. |
+| Text model | UTF-16 text, ranged auto-format and hyperlink hints, split/join/replace | `sw/source/core/txtnode` | Text runs and character-attribute values are immutable render/clipboard/test projections derived from canonical hints, not parallel document storage. |
 | Cursor and selection | Directional point/mark `SwPaM`, cross-paragraph selection/deletion | `sw/source/core/crsr`, `sw/source/uibase/wrtsh` | Formatting and several transfer paths are still same-paragraph only; no multi-selection/table selection modes. |
-| Paragraph formatting | Alignment, margins, line spacing, selected built-in paragraph styles | `editeng/source/items`, `sw/source/core/doc/fmtcol.ts`, `DocumentStylePoolManager.ts` | Only 26 of 126 catalogued styles are materialized; start/end and bidi semantics are flattened in presentation APIs. |
-| Character formatting | Font family/size, bold, italic, single underline through pooled items | `editeng/source/items/textitem.ts`, `sw/source/core/txtnode` | Western/CJK/CTL values are often synchronized; color, language, complex underline/decoration, character styles, and many defaults are absent. |
+| Paragraph formatting | Alignment, margins, spacing, line height, tabs, keep-with-next, line numbering, and all 126 built-in paragraph styles | `editeng/source/items`, `sw/source/core/doc/fmtcol.ts`, `DocumentStylePoolManager.ts` | Start/end and bidi semantics are flattened in presentation APIs; many layout-dependent properties remain unimplemented. |
+| Character formatting | Font family/size, bold, italic, single underline, foreground, and highlight through pooled items | `editeng/source/items/textitem.ts`, `sw/source/core/txtnode` | Western/CJK/CTL values are often synchronized; language, complex underline/decoration, character styles, and many defaults are absent. |
 | Lists and numbering | Bullet/decimal rules, ten levels, list identity, continuation, restart, promote/demote | `sw/source/core/doc/{list,number}.ts`, `SwNumberTree`, `listsh.ts` | Custom formats, complete numbering types, outline rules, full list tree behavior, and broader clipboard/ODF semantics are absent. |
 | Editing shell | Insert, replace, delete, paragraph split/join, paste, IME staging, hyperlink operations | `sw/source/uibase/wrtsh` and `shells` | The public surface mixes upstream-like methods with local DTO methods and command convenience operations. |
 | Command surfaces | 35 supported resources; menu, standard, text, and numbering toolbar subsets | `sw/sdi`, `sw/uiconfig/swriter`, `framework/browser/presentation` | Upstream menubar alone contains 557 unique command references; unsupported counts are 523/44/32/13/57 across the generated menu/toolbars/popup resources. |
-| Browser editor | One contenteditable root, DOM selection mapping, beforeinput translation, IME, pointer geometry | `sw/browser/editor` | This is a necessary browser boundary, but it is split into more controllers and copied value shapes than React requires. |
-| React workbench | Menu/toolbar/chrome/sidebar/status/dialog/recovery presentation | `sw/browser/presentation`, `sw/browser/composition` | Hand-wired orchestration, duplicated command state reads, handwritten visual defaults, and stale view-option behavior remain. |
+| Browser editor | DOM-neutral `SwEditWin` plus one browser implementation for the contenteditable root, selection, beforeinput, IME, pointer geometry, clipboard, drag/drop, and focus | `sw/source/uibase/docvw`, `sw/browser/editor` | Browser event adaptation is intentionally outside Writer core; multi-range and several cross-paragraph operations remain absent. |
+| React workbench | Generated-resource and binding-backed menu/toolbar/chrome/sidebar/status/dialog/recovery presentation | `sw/browser/presentation`, `sw/browser/composition` | React consumes projections and dispatches commands; layout and broader Writer command coverage remain incomplete. |
 | Clipboard | Native copy/cut/paste, plain text and bounded HTML, list serialization | `vcl/browser/browser-clipboard.ts`, `swdtflvr.ts`, HTML/ASCII filters | Full transfer flavors, RTF, objects, images, tables, tracked changes, Paste Special, and several cross-paragraph cases are absent. |
-| ODT | Bounded ODF 1.3 ZIP/manifest, paragraph text/styles, fonts, alignment, lists, hyperlinks | `package`, `xmloff`, `sw/source/filter/xml` | It intentionally rejects most Writer content and does not yet constitute general Writer ODT compatibility. |
-| Local persistence | Versioned complete graph snapshot plus shell state | `sw/source/filter/basflt`, `sfx2/source/doc`, IndexedDB adapter | Three related graph/transport/storage representations exist and old local schemas are deliberately rejected. |
+| ODT | Bounded ODF 1.3 ZIP/manifest, paragraph text/styles, implemented character and paragraph items, lists, and hyperlinks | `package`, `xmloff`, `sw/source/filter/xml` | Structural families without canonical model owners are rejected; this is not general Writer ODT compatibility. |
+| Local persistence | Canonical graph codec plus shell state and a browser IndexedDB adapter | `sw/source/core/doc`, `sfx2/source/doc`, `vcl/browser` | Stored schema versions are validated and old local schemas are deliberately rejected without compatibility machinery. |
 
 ### Explicitly out of current implementation scope
 
@@ -651,6 +651,13 @@ capability, update its related existing inventory records with the implemented b
 evidence. Do not use this phase to audit or rewrite unrelated inventory entries. Inventory updates
 use the current formats, commands, and checks only; no new documentation pipeline or parity gate is
 introduced.
+
+Implementation result: complete. Architecture, source ownership, command placement, UI shell,
+storage/recovery, ODT, test strategy, roadmap, and feature documentation now describe the final P1
+implementation. The maintained runtime inventory contains 154 modules: 97 upstream mechanisms, 38
+browser adaptations, and 19 local-infrastructure modules. This closes the P1 convergence program;
+it does not claim general LibreOffice Writer parity, and the explicitly unsupported structural
+families and semantic inventory gaps remain future work.
 
 ## Delivery sequence and dependencies
 

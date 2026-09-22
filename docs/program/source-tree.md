@@ -23,7 +23,7 @@ static application runtime.
 | `apps/office/src/xmloff/source/text` | `xmloff/source/text` | Writer-neutral ODF paragraph, automatic-style, and significant-whitespace conversion |
 | `apps/office/src/sw/inc` | `sw/inc` | Pinned numeric Writer WhichIds and bounded item ranges |
 | `apps/office/src/sw/source/core/attr` | `sw/source/core/attr` | Writer attribute pool/set specialization and format inheritance |
-| `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | `SwDoc` ownership, style collections, numbering rules, content operations, Writer command façade, and snapshot conversion |
+| `apps/office/src/sw/source/core/doc` | `sw/source/core/doc` | `SwDoc` ownership, style collections, numbering rules, content operations, and canonical graph codec |
 | `apps/office/src/sw/source/core/docnode` | `sw/source/core/docnode` | Ordered `SwNodes` storage, fixed section sentinels, and node types |
 | `apps/office/src/sw/source/core/para` | `sw/source/core/para` | Writer paragraph pool items, currently `SwNumRuleItem` |
 | `apps/office/src/sw/source/core/txtnode` | `sw/source/core/txtnode` | `SwTextNode` text storage and `SwpHints`/`SwTextAttr` character attributes |
@@ -125,7 +125,7 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/core/para/paratr.ts` | `sw/source/core/para/paratr.cxx` | Paragraph `SwNumRuleItem` rule-name value |
 | `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Document-owned list tree plus explicit boundary projection to and from canonical numbering items |
 | `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Document-owned per-level numbering rules and deterministic visible markers |
-| `sw/source/core/doc/doc.ts` | `sw/source/core/doc/doc.cxx` | `SwDoc` owner of `SwNodes` plus explicit browser snapshot conversion |
+| `sw/source/core/doc/doc.ts` | `sw/source/core/doc/doc.cxx` | `SwDoc` owner of `SwNodes`, style/list managers, and canonical graph codec entrypoints |
 | `sw/source/core/docnode/nodes.ts` | `sw/source/core/docnode/nodes.cxx` | Ordered nodes and LibreOffice-matching fixed section sentinels |
 | `sw/source/core/crsr/pam.ts` | `sw/source/core/crsr/pam.cxx` | Model positions and directional point/mark ranges |
 | `sw/source/core/txtnode/ndhints.ts` | `sw/source/core/txtnode/ndhints.cxx` | Start-sorted item-set-backed text attribute hints and derived browser runs |

@@ -17,7 +17,7 @@ selection, caret behavior, and line wrapping remain browser-owned.
 
 ## Paragraph command placement
 
-The active paragraph's Default Paragraph Style, Heading 1, and alignment
+The active paragraph's 126 pinned built-in paragraph styles and alignment
 controls stay in the formatting toolbar. Adjacent movement is exposed through
 **Format → Bullets and Numbering**, not beside text. Its bounded browser
 semantics and pinned menu provenance are recorded in

@@ -67,8 +67,9 @@ The first executable surface is
 --mappings docs/program/parity/writer-command-slice.json --local-root .
 --runtime-inventory docs/program/parity/runtime-inventory.json --runtime-root
 apps/office/src --upstream-root vendor/libreoffice-reference` to verify its exact paths and
-markers. Its non-zero `gapCount` is intentional until each bounded browser
-slice is behaviorally equivalent.
+markers. The current bounded mapping reports `gapCount: 0` and
+`parityReady: true`; those values mean its 45 declared records have complete
+evidence, not that the rest of LibreOffice Writer is implemented.
 
 Deletion, disablement, quarantine, or weakened assertions require matrix updates
 and review. An upstream test is not covered by an unrelated local test that only
@@ -155,10 +156,12 @@ persists formal verification and decides closure.
 
 ## Quality tooling backlog
 
-The bootstrap establishes strict TypeScript, unit coverage, Chromium E2E,
-accessibility smoke tests, documentation/JSDoc checks, size checks, and a
-static-build smoke test. Later tasks add generated upstream inventory, format
-fixtures, visual baselines, fuzzing, performance budgets, and cross-browser CI.
+The repository has strict TypeScript, 100% unit coverage, Chromium E2E,
+accessibility smoke tests, documentation/JSDoc and size checks, static-build
+smoke tests, generated upstream/runtime inventories, and pinned ODT fixtures.
+Remaining quality work includes assertion-level semantic expansion, visual
+baselines, fuzzing, performance budgets, runnable differential oracles, and
+cross-browser CI.
 
 See the [roadmap](roadmap.md) and
 [documentation strategy](documentation-strategy.md).

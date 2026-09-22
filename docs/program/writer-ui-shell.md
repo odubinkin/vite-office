@@ -53,8 +53,8 @@ contains real left, center, right, and justified controls for the focused
 paragraph; their current value appears in the properties sidebar. The sidebar
 also exposes binding-backed alignment and list commands instead of remaining a
 read-only preview. The existing
-Paragraph style selector likewise applies Default Paragraph Style or Heading 1
-to the focused paragraph. The page does not display persistent paragraph action
+Paragraph style selector likewise applies any of the 126 pinned built-in
+paragraph styles to the focused paragraph. The page does not display persistent paragraph action
 buttons. Adjacent paragraph movement is in the formatting toolbar's Paragraph
 Format menu, which follows Writer menubar placement without claiming
 LibreOffice drag, range, or tracked-change movement. Whole-paragraph removal
@@ -70,9 +70,12 @@ visible Writer menu label from becoming a dead control or implying an
 unimplemented LibreOffice command. The menu bar deliberately keeps overflow
 visible so positioned popups are not clipped below the toolbar row.
 
-The remaining character-format controls, ruler, page count, language indicator,
-and most Writer commands are visual placement contracts only. They do not yet
-measure layout or provide native LibreOffice behavior. Each enabled capability
+The remaining character-format families, measured ruler behavior, page count,
+language indicator, and most Writer commands are visual placement contracts
+only. Implemented font family/size and emphasis controls are binding-backed;
+foreground and highlight currently round-trip through the model, ODT, rendering,
+and clipboard without dedicated controls. The shell does not yet measure layout or provide complete
+native LibreOffice behavior. Each enabled capability
 must receive its own mapped feature task and tests.
 
 The Writer integration and Playwright tests assert named structural landmarks

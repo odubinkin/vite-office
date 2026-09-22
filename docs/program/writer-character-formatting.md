@@ -2,9 +2,12 @@
 
 ## Implemented browser slice
 
-The static Writer workbench supports direct **Bold**, **Italic**, single
-**Underline**, and **Font name** formatting for one non-empty native selection contained in one
-editable paragraph. `SwTextNode` stores canonical text in
+The static Writer workbench exposes direct **Bold**, **Italic**, single
+**Underline**, **Font name**, and **Font size** formatting for one non-empty
+native selection contained in one editable paragraph. The same canonical item
+model stores foreground color and highlight imported from ODT or safe clipboard
+HTML and preserves them through export and rendering; dedicated color controls
+are not yet exposed. `SwTextNode` stores canonical text in
 [`ndtxt.ts`](../../apps/office/src/sw/source/core/txtnode/ndtxt.ts), while its
 optional [`SwpHints`](../../apps/office/src/sw/source/core/txtnode/ndhints.ts)
 owns start-sorted [`SwTextAttr`](../../apps/office/src/sw/source/core/txtnode/txatbase.ts)
@@ -31,8 +34,9 @@ deliberately separates model range formatting from browser DOM selection convers
 
 ## Clipboard and accessibility
 
-Rendered runs use `strong`, `em`, and a single-underline `span`. Copy exports
-only those semantic elements, portable paragraph styles, and visible text;
+Rendered runs use semantic emphasis and bounded sanitized style spans. Copy
+exports those elements, font/foreground/highlight values, portable paragraph
+styles, and visible text;
 screen-reader paragraph descriptions and arbitrary editable markup are never
 copied. A partial selection within one shared formatted run retains that shared
 format. This is a bounded browser counterpart to Writer transfer preparation,
@@ -57,6 +61,7 @@ stored as `SvxFontItem` deltas and participates in Undo/Redo, snapshots, bounded
 ODT interchange, rendering, and clipboard sanitization.
 
 This slice does not yet implement cross-paragraph or multi-range formatting,
-font size/colour attributes, character styles, double underline, strikeout,
-overline, full IME behavior, Paste, RTF, or ODT/DOCX interchange. Those gaps
-remain explicit in `LO-WRITER-0109`; they are not browser-runtime exceptions.
+character styles, language/script-specific editing, double underline,
+strikeout, overline, full IME behavior, RTF, or DOCX interchange. Bounded Paste
+and ODT interchange cover the implemented attributes. The remaining gaps stay
+explicit in `LO-WRITER-0109`; they are not browser-runtime exceptions.

@@ -25,9 +25,11 @@ implemented commands.
   standard toolbar. The browser **Copy** command writes sanitized visible plain
   text and bounded inline HTML through a browser-only clipboard adapter; it has
   no document-history transition. **Cut** writes that same data and then deletes
-  a same-paragraph selection as one history transition. **Paste** reads only
-  plain text or the bounded `strong`/`em`/single-underline HTML subset and
-  inserts it at a same-paragraph selection or caret.
+  a same-paragraph selection as one history transition. **Paste** reads plain
+  text or bounded sanitized HTML with semantic emphasis, font family,
+  foreground/highlight, paragraphs, and nested lists. Inline content inserts at
+  a same-paragraph selection or caret; supported block/list fragments create
+  Writer paragraphs through one undoable operation.
 - It places `.uno:SelectAll` in **Edit**. The browser **Select All** command
   requests a native selection range over the current integrated Writer body; it
   has no standard-toolbar counterpart in this bounded slice. Native
@@ -55,8 +57,9 @@ implemented commands.
   applies them to a native non-empty same-paragraph selection, or records a
   pending direct attribute at a collapsed caret. **Ctrl/Cmd+B**,
   **Ctrl/Cmd+I**, and **Ctrl/Cmd+U** invoke the same command shell.
-- `WriterCommands.xcu` declares Default Paragraph and Heading 1 style commands;
-  the bounded browser style choices are available in **Styles**.
+- `WriterCommands.xcu` and the Writer pool declare the built-in style family;
+  all 126 pinned paragraph-style choices are available through the generated
+  style command family and formatting-toolbar selector.
 
 Generated slot/interface metadata is assembled at the upstream-corresponding
 `sw/sdi/swriter.ts` boundary. Execute and GetState handlers remain in the

@@ -29,9 +29,10 @@ selection remains responsible for partial text selection inside one paragraph.
 
 The Writer selection adapter emits paired `text/plain` and `text/html` values.
 The rich HTML uses portable inline styles for the bounded model's paragraph
-alignment plus Default Paragraph Style or Heading 1 sizing, weight, and line
-height. It also retains implemented direct character formatting as semantic
-`strong`, `em`, and single-underline `span` elements, including a selected
+alignment and representative built-in paragraph-style presentation. It also
+retains implemented direct character formatting as semantic `strong`, `em`,
+single-underline spans, font-family spans, and sanitized foreground/highlight
+styles, including a selected
 partial span whose shared semantic ancestor would otherwise be lost by browser
 range cloning. [`copyRichText`](../../apps/office/src/vcl/browser/browser-clipboard.ts)
 prefers `navigator.clipboard.write` with `ClipboardItem`; another rich-text
@@ -68,16 +69,17 @@ one same-paragraph selection or inserts at a collapsed Writer caret. Native Past
 reads its `ClipboardEvent` synchronously; menu and toolbar Paste use a
 user-initiated `navigator.clipboard.read` request, with `readText` fallback.
 
-Paste accepts plain text and a strict rich subset: `strong`, `em`, and a single
-underline `span`. Other tags are reduced to their visible text; scripts and styles
-are discarded, and no clipboard HTML is mounted in the editable document. The
-browser slice deliberately does not yet support cross-paragraph Cut/Paste, lists or
-paragraph structure on Paste, RTF, images, objects, tables, Paste Special,
-multi-range transfer, or ODT/DOCX transfer filters.
+Paste accepts plain text and a strict rich subset: `strong`, `em`, single
+underline, font family, foreground/highlight, paragraphs, and semantic nested
+`ul`/`ol`/`li` structure. Unsupported tags are reduced to visible text; script
+and style elements are discarded, CSS values are sanitized, and clipboard HTML
+is never mounted in the editable document. The browser slice deliberately does
+not yet support arbitrary cross-paragraph Cut/Paste, RTF, images, objects,
+tables, Paste Special, multi-range transfer, or ODT/DOCX transfer filters.
 
 The pinned LibreOffice `sw/uiconfig/swriter/menubar/menubar.xml` declares
 `.uno:Cut`, `.uno:Copy`, and `.uno:Paste` in **Edit**, and
 `sw/uiconfig/swriter/toolbar/standardbar.xml` declares the same commands in the
 standard toolbar. This browser slice maps placement and bounded browser behavior
-only. Rich transfer covers just the implemented direct character formatting; full
-Writer transfer semantics remain future work.
+only. Rich transfer covers the implemented paragraph/list structure and direct
+character formatting; full Writer transfer semantics remain future work.

@@ -153,13 +153,13 @@ The following documents form the program control plane:
 - [Browser Writer paragraph alignment](writer-paragraph-alignment.md): bounded
   left, center, right, and justified formatting state, focused controls, and
   browser-local snapshot compatibility behavior.
-- [Browser Writer paragraph styles](writer-paragraph-styles.md): bounded Default
-  Paragraph Style and Heading 1 state, focused selection, and snapshot defaults.
+- [Browser Writer paragraph styles](writer-paragraph-styles.md): all 126 pinned
+  built-in paragraph styles, hierarchy/follow links, focused selection, and graph persistence.
 - [Browser Writer paragraph lists](writer-paragraph-lists.md): bounded default
   bullets, numbering, removal, serializable state, and pinned command placement.
 - [Browser Writer direct character formatting](writer-character-formatting.md):
-  bounded Bold, Italic, and single Underline text runs, command placement, and
-  semantic clipboard export.
+  pooled font, size, emphasis, foreground, and highlight ranges, command placement,
+  rendering, and semantic clipboard export.
 - [Writer ODF 1.3 package slice](writer-odt-format.md): source-guided ZIP and XML
   import/export for the bounded canonical `SwDoc` graph, including explicit
   security ceilings and unsupported-feature rejection.
@@ -177,11 +177,11 @@ The following documents form the program control plane:
 - [Browser Writer command placement](writer-command-placement.md): pinned
   menu and toolbar locations for every currently enabled Writer command.
 - [Browser Writer clipboard](writer-clipboard.md): browser-only Cut, Copy, and Paste
-  Copy behavior at the pinned Edit and standard-toolbar locations.
+  behavior at the pinned Edit and standard-toolbar locations.
 - [Browser command registry](command-registry.md): typed, browser-independent
   command definitions, shortcut lookup, and dispatch outcomes.
-- [Browser transaction history](transaction-history.md): immutable snapshot
-  history, cursor selection, and pure apply/undo/redo transitions.
+- [Browser transaction history](transaction-history.md): action-based
+  `SfxUndoManager` history, save marks, cursor restoration, and compound transitions.
 - [Browser document storage adapter contract](storage-adapter.md):
   browser-independent JSON snapshot boundary and deterministic load/save
   orchestration without a persistence implementation.

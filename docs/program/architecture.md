@@ -38,13 +38,14 @@ constructor and owns `SwTextNode` content. Paragraph properties resolve through
 node-local `SwAttrSet` deltas, `SwTextFormatColl` parents, and pool defaults. Text attributes
 are stored as `SwTextAttr` ranges in `SwpHints`, while `SwPosition` and `SwPaM`
 identify model positions and selections. React receives derived paragraph and
-run projections from this graph. The document editor separately owns DOM caret
-conversion and editable-paragraph presentation in `docvw`.
+run projections from this graph. The DOM-neutral `SwEditWin` lives in
+`sw/source/uibase/docvw`; its single DOM implementation and editable-paragraph
+presentation live under `sw/browser/editor`.
 
 The TypeScript core is source-guided rather than ABI-compatible: it preserves
 the applicable LibreOffice model and algorithms, while substituting browser
-transactions and explicit snapshots where C++ pointers, notifications,
-and native UI services do not yet exist. The exact implemented boundary and its
+adapters and an explicit canonical graph codec where C++ pointers and native UI
+services do not exist. The exact implemented boundary and its
 remaining gaps are recorded in the [Writer core model](writer-core-model.md).
 
 The Vite production base is relative (`./`), and the static smoke check rejects
@@ -85,7 +86,7 @@ UI state.
    lifecycle presentation.
 2. **Application/domain layer** implements typed use cases and suite behavior.
 3. **Document layer** owns the canonical in-memory object graph, transactions,
-   explicit persistence snapshots, undo/redo inputs, and deterministic
+   explicit persistence records, undo/redo actions, and deterministic
    calculation or layout inputs.
 4. **Format layer** parses and emits external formats, preferably in workers.
 5. **Rendering layer** projects document state into accessible UI and printable
@@ -100,20 +101,19 @@ not called from document-domain code.
 - Every user-visible mutation is represented by a typed command with explicit
   preconditions, deterministic state effects, undo information, and parity IDs.
 - The canonical document model may be an identity-bearing, cyclic object graph,
-  as in Writer. Persistence and browser history use explicit, versioned snapshot
-  conversion rather than forcing the runtime model into a view DTO.
-- Each successful content mutation advances a monotonic content generation.
-  Primary save and recovery completion acknowledge separate generations only
-  after their respective writes succeed. `isModified` follows the Writer undo
-  save mark, so Undo can return to clean state without rewinding the monotonic
-  operation counter.
-- Document snapshots must be serializable independently of React or another
+  as in Writer. Persistence uses an explicit, versioned graph codec rather than
+  forcing the runtime model into a view DTO; history stores Writer undo actions.
+- Recovery scheduling advances and acknowledges a monotonic content generation
+  after its write succeeds. Primary save follows the Writer undo save mark;
+  `isModified` can therefore return to clean state through Undo without a
+  parallel primary-save generation DTO.
+- Persistence records must be serializable independently of React or another
   view library. UI framework objects do not belong in the document model.
 - ODT ZIP/XML import and export run in a Dedicated Worker behind a versioned
   message contract; later expensive calculation and layout work should follow
   the same isolation rule.
-- Worker messages and persistence schemas are documented and compatibility
-  tested like public APIs.
+- Worker messages and persistence schemas are documented and version rejection
+  is tested like a public API; migrations are not added by default.
 - Concurrency rules must specify cancellation, stale result rejection, and
   deterministic ordering.
 
@@ -185,9 +185,10 @@ dependencies; later tasks must pass the same gates for their own selections.
 
 ## Architecture verification
 
-The bootstrap enforces TypeScript strictness, linting, formatting, initial unit
-coverage, Chromium/axe smoke behavior, relative-path static builds, authored
-JSDoc, and file-size rules. Future tasks still need package-boundary checks,
-worker contract tests, generated API documentation, cross-browser coverage, and
-parity-ID traceability. See the [test strategy](test-strategy.md) and
-[roadmap](roadmap.md).
+The current repository enforces TypeScript strictness, linting, formatting,
+100% unit coverage, Chromium/axe behavior, relative-path static builds, authored
+JSDoc, file-size rules, dependency boundaries, worker contracts, generated
+resource freshness, runtime provenance, and semantic parity records. Residual
+quality work includes cross-browser and visual coverage, performance/fuzz
+budgets, and broader assertion-level differential evidence. See the
+[test strategy](test-strategy.md) and [roadmap](roadmap.md).
