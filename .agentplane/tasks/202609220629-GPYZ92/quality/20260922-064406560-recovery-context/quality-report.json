@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220629-GPYZ92",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T06:44:06.560Z",
+  "verdict": "pass",
+  "summary": "Parity plan is complete, evidence-based, actionable, and policy-compliant.",
+  "evaluated_sha": "feef2502c7e5e0ec3629aea76756fff426cd8b2e",
+  "blueprint_digest": "77827e6f994a82f6b761686a73b3071c0d0b4961197c5e41ff93ba035eb64c6b",
+  "findings": [
+    "Document inventories the implemented surface, distinguishes justified browser adaptations from unjustified divergences, prioritizes concrete refactoring findings, and defines phased acceptance criteria."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220629-GPYZ92/README.md",
+    "docs/program/vite-office-upstream-parity-plan.md",
+    "npx prettier --check docs/program/vite-office-upstream-parity-plan.md",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Execution phases remain future work; parity claims must be re-established using the stronger evidence model defined in Phase 0."
+  ]
+}
