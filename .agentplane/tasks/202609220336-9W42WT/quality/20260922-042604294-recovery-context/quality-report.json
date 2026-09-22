@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609220336-9W42WT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T04:26:04.294Z",
+  "verdict": "pass",
+  "summary": "Writer parity gaps closed with symmetric supported ODT properties and tolerant unsupported-data import.",
+  "evaluated_sha": "05a3aeb83a39db15d05dd242f636cbc23cd05206",
+  "blueprint_digest": "747856d8974f29388f556dc052609a253fef8568f92ff7f5b4dc7db0053dca71",
+  "findings": [
+    "Built-in style defaults now cover all representable upstream values; ODT import/export round-trips represented paragraph and character properties; React consumes binding-backed style options; workspace declares continuous layout."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609220336-9W42WT/README.md",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
