@@ -2,7 +2,7 @@
 
 ## Result
 
-The 35 bounded Writer capabilities, `CAP-0101` through `CAP-0135`, use the
+The 45 bounded Writer capabilities, `CAP-0101` through `CAP-0145`, use the
 schema-six closure contract in `writer-command-slice.json`. The parity command
 accepts the slice only when every verified record has:
 
@@ -15,8 +15,8 @@ accepts the slice only when every verified record has:
 - evidence for every remaining `B` browser adaptation and `X` excluded
   desktop-only or out-of-slice boundary.
 
-The deterministic report contains 35 verified records, zero gaps, zero
-unclassified divergences, 23 classified browser adaptations, and 69 classified
+The deterministic report contains 45 verified records, zero gaps, zero
+unclassified divergences, 33 classified browser adaptations, and 79 classified
 scope exclusions. A scope exclusion remains visible and does not imply that the
 adjacent LibreOffice feature is implemented.
 

@@ -8,18 +8,18 @@ suite table remains a planning inventory; machine-readable JSON records are the
 source of truth for atomic capability delivery and parity status.
 
 The first authored atomic records live in
-[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Its 35
+[`parity/writer-command-slice.json`](parity/writer-command-slice.json). Its 45
 bounded Writer records are machine-validated together with the exhaustive
 [`parity/runtime-inventory.json`](parity/runtime-inventory.json) by
 `npm run inventory:parity`. Verification is promoted per atomic operation only
 after its assertion-level upstream/local evidence and task result are recorded;
 every unresolved parity gap remains visible and does not count as parity.
-All 35 records have local implementation, but only CAP-0130 has independently
-attested contract, behavior, default, and verification parity. Its claim is
-limited to the bounded ODF fixture round trip. The other 34 records remain
-explicitly unresolved and the aggregate report therefore has
-`parityReady: false`. CAP-0135 records Writer text hyperlinks, their browser
-commands, and `text:a` interoperability without claiming upstream parity.
+All 45 records now have independently attested contract, ownership, behavior,
+default, serialization/operation-cycle disposition, and differential evidence.
+The aggregate report therefore has zero gaps and `parityReady: true`. The ODF
+umbrella records use the checked-in pinned LibreOffice fixtures, while the
+property-level records use their mapped atomic tests; scope limitations remain
+explicit exclusions rather than implied implementation claims.
 
 ## Stable identifier format
 

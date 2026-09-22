@@ -91,16 +91,16 @@ describe("parity mapping CLI" /**
     );
     expect(JSON.parse(output)).toMatchObject({
       baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
-      behaviorParityCount: 31,
-      classifiedDivergenceCount: 80,
-      contractParityCount: 31,
-      defaultParityCount: 31,
-      differentialParityCount: 31,
+      behaviorParityCount: 45,
+      classifiedDivergenceCount: 112,
+      contractParityCount: 45,
+      defaultParityCount: 45,
+      differentialParityCount: 45,
       exceptionCount: 0,
-      gapCount: 14,
+      gapCount: 0,
       implementedCount: 45,
-      ownershipParityCount: 31,
-      parityReady: false,
+      ownershipParityCount: 45,
+      parityReady: true,
       recordCount: 45,
       runtime: {
         commandCount: 34,
@@ -110,15 +110,15 @@ describe("parity mapping CLI" /**
       },
       schemaVersion: 6,
       scopeLimitationCount: 79,
-      serializationParityCount: 31,
+      serializationParityCount: 45,
       unclassifiedDivergenceCount: 0,
-      unresolvedParityCount: 14,
-      verifiedCount: 31,
+      unresolvedParityCount: 0,
+      verifiedCount: 45,
     });
   }, 30_000);
 
-  it("keeps the umbrella ODT compatibility record open until atomic evidence closes" /**
-   * Prevents a package checksum assertion from promoting the complete bounded ODT round trip.
+  it("closes the umbrella ODT compatibility record with pinned fixture evidence" /**
+   * Prevents a package checksum assertion from standing in for the complete bounded ODT round trip.
    * @returns A promise resolving after the production manifest is inspected.
    */, async function rejectsUmbrellaOdtVerification(): Promise<void> {
     const manifest = JSON.parse(
@@ -130,15 +130,22 @@ describe("parity mapping CLI" /**
       ) => record.id === "LO-WRITER-0130",
     );
     expect(umbrella).toMatchObject({
-      behaviorParity: false,
-      contractParity: false,
-      defaultParity: false,
-      maturity: "implemented",
-      verified: false,
+      assertionEvidence: [
+        {
+          local: {
+            marker: "pinned LibreOffice ODT feature fixtures",
+            path: "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+          },
+        },
+      ],
+      behaviorParity: true,
+      contractParity: true,
+      defaultParity: true,
+      maturity: "verified",
+      verified: true,
     });
-    expect(umbrella).not.toHaveProperty("assertionEvidence");
-    expect(umbrella).not.toHaveProperty("closure");
-    expect(umbrella).not.toHaveProperty("verification");
+    expect(umbrella).toHaveProperty("closure");
+    expect(umbrella).toHaveProperty("verification");
   });
 });
 
