@@ -3,6 +3,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  getProtectedBrowserGlobalReferences,
   getRuntimeOwnershipLayer,
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
@@ -78,6 +79,13 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
         "../../../framework/browser/app/desktop",
       ),
     ).toMatch(/browser adapters/u);
+    expect(
+      getRuntimeOwnershipViolation(
+        "sw/source/filter/xml/swxml.ts",
+        "framework/source/services/worker-protocol.ts",
+        "../../../../framework/source/services/worker-protocol",
+      ),
+    ).toMatch(/worker protocol through a browser adapter/u);
   });
 
   it("allows inward and browser-adapter dependencies", /** Verifies supported dependency directions. @returns Nothing. */ function allowsInwardEdges(): void {
@@ -95,5 +103,24 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
         "../../source/uibase/uiview/view",
       ),
     ).toBeUndefined();
+    expect(
+      getRuntimeOwnershipViolation(
+        "sw/browser/filter/xml/odt-worker-runtime.ts",
+        "framework/source/services/worker-protocol.ts",
+        "../../../../framework/source/services/worker-protocol",
+      ),
+    ).toBeUndefined();
+  });
+
+  it("detects browser globals through syntax rather than comments or larger names", /** Prevents browser execution types from leaking into protected source layers without false positives on documentation or adapter-specific names. @returns Nothing. */ function detectsBrowserGlobals(): void {
+    expect(
+      getProtectedBrowserGlobalReferences(`
+        /** Worker adaptation remains outside this module. */
+        interface OdtWorkerTransport {}
+        function attach(worker: Worker, scope: DedicatedWorkerGlobalScope): IDBDatabase {
+          return scope as unknown as IDBDatabase;
+        }
+      `),
+    ).toEqual(["DedicatedWorkerGlobalScope", "IDBDatabase", "Worker"]);
   });
 });

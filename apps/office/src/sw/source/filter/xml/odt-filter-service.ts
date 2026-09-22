@@ -1,9 +1,8 @@
 /**
  * @fileoverview Defines the neutral asynchronous ODT filter service used by SwDocShell and by
- * the Dedicated Worker adapter while retaining package/xmloff/sw ownership inside the filter.
+ * remote execution adapters while retaining package/xmloff/sw ownership inside the filter.
  */
 
-import type { WorkerErrorCategory } from "../../../../framework/source/services/worker-protocol";
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import type { SwDoc } from "../../core/doc/doc";
 import {
@@ -17,6 +16,17 @@ import { writeOdtDocument, type OdtExportProgressStage } from "./wrtxml";
 /** Progress stages qualified by import/export direction. */
 export type OdtFilterProgressStage =
   `import:${OdtImportProgressStage}` | `export:${OdtExportProgressStage}`;
+
+/** Stable filter failure categories independent of any execution or transport adapter. */
+export type OdtFilterErrorCategory =
+  | "cancelled"
+  | "format"
+  | "internal"
+  | "protocol"
+  | "resource"
+  | "stale"
+  | "timeout"
+  | "unsupported";
 
 /** Platform-neutral cancellation subset implemented by AbortSignal at the browser boundary. */
 export interface OdtCancellationSignal {
@@ -39,18 +49,18 @@ export interface OdtFilterOperationOptions {
   readonly zipLimits?: ZipFileLimits;
 }
 
-/** Structured-clone boundary used only to cross the browser Worker port. */
+/** Neutral serialized document boundary accepted by inline and remote filter adapters. */
 export interface OdtFilterDocument {
   readonly document: OdtWriterTransferRecord;
   readonly metadata: Readonly<{ title: string }>;
 }
 
-/** Captures the canonical graph for the Worker adaptation without shell lifecycle state. @param document - Canonical Writer graph. @param title - Shell-owned title copied as filter metadata. @returns Cloneable filter input. */
+/** Captures the canonical graph for filter adaptation without shell lifecycle state. @param document - Canonical Writer graph. @param title - Shell-owned title copied as filter metadata. @returns Cloneable filter input. */
 export function createOdtFilterDocument(document: SwDoc, title: string): OdtFilterDocument {
   return { document: createOdtWriterTransfer(document), metadata: { title } };
 }
 
-/** Restores a Worker transfer into a canonical graph and filter metadata. @param input - Cloneable filter value. @returns Decoded graph and title. */
+/** Restores a filter transfer into a canonical graph and filter metadata. @param input - Cloneable filter value. @returns Decoded graph and title. */
 export function restoreOdtFilterDocument(input: OdtFilterDocument): {
   readonly document: SwDoc;
   readonly title: string;
@@ -80,7 +90,7 @@ export interface OdtFilterService {
 export class OdtFilterError extends Error {
   /** Creates one typed filter failure. @param category - Stable machine category. @param message - Human-readable detail. @returns Nothing. */
   public constructor(
-    public readonly category: WorkerErrorCategory,
+    public readonly category: OdtFilterErrorCategory,
     message: string,
   ) {
     super(message);
@@ -177,7 +187,7 @@ export function normalizeOdtFilterError(error: unknown): OdtFilterError {
   if (error instanceof OdtFilterError) return error;
   const message = error instanceof Error ? error.message : String(error);
   const lower = message.toLowerCase();
-  const category: WorkerErrorCategory = lower.includes("cancel")
+  const category: OdtFilterErrorCategory = lower.includes("cancel")
     ? "cancelled"
     : lower.includes("limit") || lower.includes("exceeds")
       ? "resource"

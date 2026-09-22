@@ -6,16 +6,10 @@ import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import {
   getWriterNextGraphemeBoundary,
   getWriterPreviousGraphemeBoundary,
+  type SwTextFragment,
   type SwTextNode as WriterParagraph,
   type WriterCharacterAttributes,
 } from "../../core/txtnode/ndtxt";
-import {
-  copyWriterTextRangeRuns,
-  createWriterTextFragment,
-  getWriterTextFromRuns,
-  normalizeWriterTextRuns,
-  type WriterTextRun,
-} from "../../core/txtnode/text-run-projection";
 import {
   SwUndoDelete,
   SwUndoJoinParagraphs,
@@ -178,8 +172,8 @@ export class SwWrtShellEditingOperations {
     return true;
   }
 
-  /** Replaces one same-paragraph range with Writer text runs. @param range - Target range. @param runs - Inserted runs. @returns Whether changed. */
-  public ReplaceRange(range: WriterTextRange, runs: readonly WriterTextRun[]): boolean {
+  /** Replaces one same-paragraph range with a native Writer text fragment. @param range - Target range. @param replacement - Inserted native fragment. @returns Whether changed. */
+  public ReplaceRange(range: WriterTextRange, replacement: SwTextFragment): boolean {
     const paragraph = range.node;
     if (paragraph.GetDoc() !== this.port.getDoc()) throw new Error("Writer text range is foreign.");
     if (
@@ -190,17 +184,20 @@ export class SwWrtShellEditingOperations {
       range.end > paragraph.Len()
     )
       throw new Error("Writer text range is outside the paragraph.");
-    const removedRuns = copyWriterTextRangeRuns(paragraph, range.start, range.end);
-    const insertedRuns = normalizeWriterTextRuns(runs);
-    if (JSON.stringify(removedRuns) === JSON.stringify(insertedRuns)) return false;
-    const nextOffset = range.start + getWriterTextFromRuns(insertedRuns).length;
+    const removedFragment = paragraph.CaptureTextFragment(range.start, range.end);
+    if (
+      removedFragment.text === replacement.text &&
+      removedFragment.hints.equals(replacement.hints)
+    )
+      return false;
+    const nextOffset = range.start + replacement.text.length;
     return this.port.applyAction(
       new SwUndoReplace(
         paragraph,
         range.start,
-        paragraph.CaptureTextFragment(range.start, range.end),
-        createWriterTextFragment(paragraph, insertedRuns),
-        insertedRuns.length === 0 ? "Delete" : "Paste",
+        removedFragment,
+        replacement,
+        replacement.text.length === 0 ? "Delete" : "Paste",
         this.port.captureCursorState(),
         this.port.createCollapsedCursorState(paragraph, nextOffset),
       ),
@@ -228,10 +225,10 @@ export class SwWrtShellEditingOperations {
           cursor.GetPoint(),
       hasSelection: /** Reports mark state. @returns Whether selected. */ () => cursor.HasMark(),
       replaceRange:
-        /** Replaces a paragraph range. @param range - Target range. @param runs - Inserted runs. @returns Whether changed. */ (
+        /** Replaces a paragraph range. @param range - Target range. @param replacement - Inserted native fragment. @returns Whether changed. */ (
           range,
-          runs,
-        ) => this.ReplaceRange(range, runs),
+          replacement,
+        ) => this.ReplaceRange(range, replacement),
       setCursor:
         /** Moves the shell cursor. @param position - Canonical position. @returns Whether changed. */ (
           position,
@@ -311,10 +308,19 @@ export class SwWrtShellEditingOperations {
     const manager = this.port.getUndoManager();
     manager.EnterListAction("Delete");
     try {
-      this.ReplaceRange({ end: startNode.Len(), node: startNode, start: startOffset }, []);
+      this.ReplaceRange(
+        { end: startNode.Len(), node: startNode, start: startOffset },
+        startNode.CaptureTextFragment(startOffset, startOffset),
+      );
       for (const selected of selectedNodes.slice(1, -1))
-        this.ReplaceRange({ end: selected.Len(), node: selected, start: 0 }, []);
-      this.ReplaceRange({ end: endOffset, node: endNode, start: 0 }, []);
+        this.ReplaceRange(
+          { end: selected.Len(), node: selected, start: 0 },
+          selected.CaptureTextFragment(0, 0),
+        );
+      this.ReplaceRange(
+        { end: endOffset, node: endNode, start: 0 },
+        endNode.CaptureTextFragment(0, 0),
+      );
       for (const selected of selectedNodes.slice(1)) this.MergeParagraphWithPrevious(selected);
     } finally {
       manager.LeaveListAction();

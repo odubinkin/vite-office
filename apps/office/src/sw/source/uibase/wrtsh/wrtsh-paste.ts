@@ -1,8 +1,8 @@
 /** @fileoverview Coordinates Writer clipboard paragraph insertion outside the persistent shell owner. */
 
 import { SwPosition } from "../../core/crsr/pam";
-import type { SwTextNode as WriterParagraph } from "../../core/txtnode/ndtxt";
-import { getWriterTextFromRuns } from "../../core/txtnode/text-run-projection";
+import type { SwTextFragment, SwTextNode as WriterParagraph } from "../../core/txtnode/ndtxt";
+import { createWriterTextFragment } from "../../core/txtnode/text-run-projection";
 import type {
   WriterClipboardPaste,
   WriterClipboardPasteParagraph,
@@ -17,10 +17,7 @@ export interface WriterPasteOperations {
   readonly endUndoGroup: () => void;
   readonly getInsertionPoint: () => SwPosition;
   readonly hasSelection: () => boolean;
-  readonly replaceRange: (
-    range: WriterTextRange,
-    runs: WriterClipboardPasteParagraph["runs"],
-  ) => boolean;
+  readonly replaceRange: (range: WriterTextRange, replacement: SwTextFragment) => boolean;
   readonly setCursor: (position: SwPosition) => void;
   readonly splitParagraph: (position: SwPosition) => WriterParagraph;
 }
@@ -45,18 +42,18 @@ export function pasteWriterTransfer(
       node: insertionPoint.GetNode() as WriterParagraph,
       start: insertionPoint.GetContentIndex(),
     };
-    changed = operations.replaceRange(range, first.runs) || changed;
+    const firstFragment = createWriterTextFragment(range.node, first.runs);
+    changed = operations.replaceRange(range, firstFragment) || changed;
     let paragraph = range.node;
-    let offset = range.start + getWriterTextFromRuns(first.runs).length;
+    let offset = range.start + firstFragment.text.length;
     operations.setCursor(new SwPosition(paragraph, offset));
     if (paste.isBlock) changed = operations.applyParagraphList(first) || changed;
     for (const pastedParagraph of paste.paragraphs.slice(1)) {
       paragraph = operations.splitParagraph(new SwPosition(paragraph, offset));
       changed = true;
-      changed =
-        operations.replaceRange({ end: 0, node: paragraph, start: 0 }, pastedParagraph.runs) ||
-        changed;
-      offset = getWriterTextFromRuns(pastedParagraph.runs).length;
+      const fragment = createWriterTextFragment(paragraph, pastedParagraph.runs);
+      changed = operations.replaceRange({ end: 0, node: paragraph, start: 0 }, fragment) || changed;
+      offset = fragment.text.length;
       operations.setCursor(new SwPosition(paragraph, offset));
       changed = operations.applyParagraphList(pastedParagraph) || changed;
     }

@@ -22,6 +22,14 @@ const allowedEdges = new Map([
 ]);
 const suiteModules = new Set(["sw"]);
 const browserPackageImports = ["lucide-react", "react", "react-dom"];
+const protectedBrowserGlobalSymbols = new Set([
+  "ClipboardEvent",
+  "DedicatedWorkerGlobalScope",
+  "IDBDatabase",
+  "IDBFactory",
+  "InputEvent",
+  "Worker",
+]);
 const upstreamMechanismLayers = new Set([
   "sfx",
   "upstream-mechanism",
@@ -54,6 +62,12 @@ export function getRuntimeOwnershipViolation(sourcePath, targetPath, importName)
     )
   )
     return `${sourceLayer} must not import browser presentation package ${importName}`;
+  const portableTargetPath = targetPath
+    .split(path.sep)
+    .join("/")
+    .replace(/\.[cm]?[jt]sx?$/u, "");
+  if (portableTargetPath === "framework/source/services/worker-protocol")
+    return `${sourceLayer} must receive worker protocol through a browser adapter`;
   const targetLayer = getRuntimeOwnershipLayer(targetPath);
   if (targetLayer === "browser")
     return `${sourceLayer} must receive browser adapters through an injected contract`;
@@ -65,6 +79,26 @@ export function getRuntimeOwnershipViolation(sourcePath, targetPath, importName)
   if (sourceLayer === "writer-filter" && targetLayer === "writer-uibase")
     return "Writer filter must not depend on uibase";
   return undefined;
+}
+
+/** Finds browser-global identifiers that must remain behind adapters. Comments and larger domain names are ignored by parsing the source AST. @param sourceText - Authored TypeScript source. @returns Stable forbidden symbol names. */
+export function getProtectedBrowserGlobalReferences(sourceText) {
+  const sourceFile = ts.createSourceFile(
+    "protected-source.ts",
+    sourceText,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  const references = new Set();
+  /** Visits identifiers in the parsed source. @param node - Current syntax node. @returns Nothing. */
+  function visit(node) {
+    if (ts.isIdentifier(node) && protectedBrowserGlobalSymbols.has(node.text))
+      references.add(node.text);
+    ts.forEachChild(node, visit);
+  }
+  visit(sourceFile);
+  return [...references].sort();
 }
 
 /** Recursively collects runtime TypeScript sources in deterministic path order. @param directory - Directory to scan. @returns Ordered absolute source paths. */
@@ -158,8 +192,6 @@ for (const sourceFile of runtimeSources) {
   const sourceText = fs.readFileSync(sourceFile, "utf8");
   if (upstreamMechanismLayers.has(getRuntimeOwnershipLayer(relativeSource))) {
     for (const browserProjectionSymbol of [
-      "ClipboardEvent",
-      "InputEvent",
       "WriterPresentationProjection",
       "WriterViewSnapshot",
       "clipboardHandled",
@@ -170,6 +202,10 @@ for (const sourceFile of runtimeSources) {
         failures.push(
           `${displayPath(sourceFile)}: Writer source layers must not declare browser projection symbol ${browserProjectionSymbol}`,
         );
+    for (const browserGlobalSymbol of getProtectedBrowserGlobalReferences(sourceText))
+      failures.push(
+        `${displayPath(sourceFile)}: protected source layers must not reference browser global ${browserGlobalSymbol}`,
+      );
   }
   const imports = ts.preProcessFile(sourceText, true, true).importedFiles;
   for (const imported of imports) {

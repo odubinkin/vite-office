@@ -74,7 +74,10 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
 
     expect(
       /** Replaces through a foreign node. @returns Invalid edit. */ () =>
-        shell.ReplaceRange({ end: 1, node: foreignParagraph, start: 0 }, []),
+        shell.ReplaceRange(
+          { end: 1, node: foreignParagraph, start: 0 },
+          foreignParagraph.CaptureTextFragment(0, 0),
+        ),
     ).toThrow("foreign");
     expect(
       /** Splits through a foreign position. @returns Invalid edit. */ () =>

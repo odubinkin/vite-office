@@ -6,7 +6,6 @@
 import {
   WORKER_PROTOCOL_VERSION,
   type WorkerCancellation,
-  type WorkerErrorCategory,
   type WorkerFailure,
   type WorkerProgress,
   type WorkerRequest,
@@ -16,6 +15,7 @@ import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import {
   createInlineOdtFilterService,
   normalizeOdtFilterError,
+  type OdtFilterErrorCategory,
   type OdtFilterProgressStage,
   type OdtFilterDocument,
   type OdtFilterService,
@@ -139,7 +139,7 @@ export class OdtWorkerRuntime {
   }
 
   /** Posts one structured failure. @param id - Request identity or zero for unreadable input. @param category - Stable category. @param message - Diagnostic text. @returns Nothing. */
-  private PostError(id: number, category: WorkerErrorCategory, message: string): void {
+  private PostError(id: number, category: OdtFilterErrorCategory, message: string): void {
     const failure: WorkerFailure = {
       error: { category, message },
       id,

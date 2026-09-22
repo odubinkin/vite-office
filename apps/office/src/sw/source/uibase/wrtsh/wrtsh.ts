@@ -9,15 +9,13 @@ import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type { WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import type {
+  SwTextFragment,
   SwTextNode as WriterParagraph,
   WriterCharacterAttributes,
   WriterCharacterFormat,
   WriterParagraphAlignment,
 } from "../../core/txtnode/ndtxt";
-import {
-  DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
-  type WriterTextRun,
-} from "../../core/txtnode/text-run-projection";
+import { DEFAULT_WRITER_CHARACTER_ATTRIBUTES } from "../../core/txtnode/text-run-projection";
 import type { WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
 import { SwTextShell } from "../shells/textsh";
@@ -309,9 +307,9 @@ export class SwWrtShell extends SwModify {
     return this.cursor.HasMark() && this.editing.DeleteAtCursor("delete");
   }
 
-  /** Replaces one same-paragraph range with Writer text runs. @param range - Target range. @param runs - Inserted safe runs. @returns Whether document content changed. */
-  public ReplaceRange(range: WriterTextRange, runs: readonly WriterTextRun[]): boolean {
-    return this.editing.ReplaceRange(range, runs);
+  /** Replaces one same-paragraph range with a native Writer text fragment. @param range - Target range. @param replacement - Inserted native fragment. @returns Whether document content changed. */
+  public ReplaceRange(range: WriterTextRange, replacement: SwTextFragment): boolean {
+    return this.editing.ReplaceRange(range, replacement);
   }
 
   /** Pastes one safe transfer document at the persistent SwPaM as a single Writer undo transaction. @param paste - Parsed clipboard paragraphs and list metadata. @returns Whether document content or paragraph formatting changed. */

@@ -5,7 +5,10 @@ import type { WriterCursorSelection } from "../sw/browser/editor/writer-selectio
 import { SwPosition } from "../sw/source/core/crsr/pam";
 import type { WriterHyperlink } from "../sw/source/core/txtnode/fmtinfmt";
 import type { WriterCharacterFormat } from "../sw/source/core/txtnode/ndtxt";
-import type { WriterTextRun } from "../sw/source/core/txtnode/text-run-projection";
+import {
+  createWriterTextFragment,
+  type WriterTextRun,
+} from "../sw/source/core/txtnode/text-run-projection";
 import type { SwTextNode } from "../sw/source/core/txtnode/ndtxt";
 import type { WriterClipboardPaste } from "../sw/source/filter/html/html-filter-types";
 import type { SwWrtShell } from "../sw/source/uibase/wrtsh/wrtsh";
@@ -96,9 +99,10 @@ export function fixtureReplaceRange(
   range: Readonly<{ end: number; paragraphId: string; start: number }>,
   runs: readonly WriterTextRun[],
 ): boolean {
+  const paragraph = getTestParagraph(shell, range.paragraphId);
   return shell.ReplaceRange(
-    { end: range.end, node: getTestParagraph(shell, range.paragraphId), start: range.start },
-    runs,
+    { end: range.end, node: paragraph, start: range.start },
+    createWriterTextFragment(paragraph, runs),
   );
 }
 
