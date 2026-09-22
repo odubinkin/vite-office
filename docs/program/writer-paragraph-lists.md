@@ -25,7 +25,10 @@ list state.
 
 The same submenu also implements `.uno:DecrementLevel` (**Demote**) and
 `.uno:IncrementLevel` (**Promote**) for the active list paragraph.
-`SwWrtShell.ChangeParagraphListLevel` applies `SwUndoNumLevel`, while
+`SwWrtShell.ChangeParagraphListLevel` applies `SwUndoNumLevel`, whose before and
+after payloads are cloned `SfxItemSet` instances containing the numbering/list
+WhichIds rather than `WriterParagraphList` DTOs. The latter exists only as an
+outer projection for rendering, clipboard, and filter conversion. Meanwhile,
 [`listsh.ts`](../../apps/office/src/sw/source/uibase/shells/listsh.ts) retains
 the bounded command identity from `listsh.cxx`. Demote raises the bounded nesting
 level by one; Promote lowers it by one. The browser allows levels 0 through 9,

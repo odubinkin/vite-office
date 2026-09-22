@@ -306,7 +306,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(view.Execute(WRITER_COMMAND_IDS.fontHeight, { fontSizePt: 14 }).status).toBe("executed");
     expect(view.QueryState(WRITER_COMMAND_IDS.fontHeight).value).toBe(14);
     expect(docShell.GetDoc()).toBe(initialDocument);
-    expect(docShell.GetDoc().paragraphs[0]?.alignment).toBe("center");
+    expect(docShell.GetDoc().paragraphs[0]?.GetParagraphAlignment()).toBe("center");
     expect(view.QueryState(WRITER_COMMAND_IDS.alignCenter)).toMatchObject({
       checked: true,
       enabled: true,
@@ -341,7 +341,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     expect(wrtShell.GetCursor()).toBe(cursor);
     expect(listener).toHaveBeenCalled();
     expect(view.Execute(WRITER_COMMAND_IDS.undo).status).toBe("executed");
-    expect(docShell.GetDoc().paragraphs[0]?.alignment).toBe("left");
+    expect(docShell.GetDoc().paragraphs[0]?.GetParagraphAlignment()).toBe("left");
     const sameDocShell = view.GetDocShell();
     view.Execute(WRITER_COMMAND_IDS.newDocument);
     expect(view.GetDocShell()).toBe(sameDocShell);
@@ -684,7 +684,7 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
       generation: 1,
       status: "restored",
     });
-    expect(reloaded.docShell.GetDoc().paragraphs[0]?.text).toBe("Recovered text");
+    expect(reloaded.docShell.GetDoc().paragraphs[0]?.GetText()).toBe("Recovered text");
     expect(reloaded.docShell.GetDocumentState()).toMatchObject({
       isModified: true,
       recoveryGeneration: 1,

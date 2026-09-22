@@ -52,6 +52,17 @@ export interface WriterCharacterAttributes {
   readonly underline: boolean;
 }
 
+/** Creates a canonical character item set from a browser/filter projection at a named boundary. @param pool - Writer attribute pool. @param attributes - Boundary values. @returns Effective character items. */
+export function createWriterCharacterItemSet(
+  pool: SwAttrPool,
+  attributes: WriterCharacterAttributes,
+): SfxItemSet {
+  const set = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
+  const format = createSwFormatAutoFormat(pool, attributes);
+  set.PutSet(format.GetStyleHandle());
+  return set;
+}
+
 /** SfxPoolItem wrapper around the character item set referenced by RES_TXTATR_AUTOFMT. */
 export class SwFormatAutoFormat extends SfxPoolItem {
   private readonly styleHandle: SfxItemSet;

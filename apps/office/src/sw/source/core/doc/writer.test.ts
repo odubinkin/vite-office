@@ -15,7 +15,7 @@ describe("Writer document boundaries", /** Registers construction and persistenc
 
     expect(writer).toBeInstanceOf(SwDoc);
     expect(writer.paragraphs).toHaveLength(1);
-    expect(writer.paragraphs[0]?.text).toBe("");
+    expect(writer.paragraphs[0]?.GetText()).toBe("");
     expect(isWriterParagraphAlignment("center")).toBe(true);
     expect(isWriterParagraphAlignment("diagonal")).toBe(false);
   });

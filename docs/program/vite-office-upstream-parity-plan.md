@@ -460,6 +460,12 @@ Acceptance for Phase 2:
 
 ### Phase 3 — remove parallel model contracts
 
+Implementation status: P1.4-P1.7 are complete in the current checkout. Character
+insertion and undo cursor state use character `SfxItemSet` values; numbering undo
+captures list WhichIds in `SfxItemSet`; `SwTextNode` compatibility accessors have
+been removed; and Worker plus IndexedDB envelopes share `WriterDocumentRecord`.
+The new envelope versions intentionally reject all earlier local schemas.
+
 #### P1.4 Canonicalize character formatting
 
 Change shell and undo APIs to accept `SfxItemSet`/pool items and Writer text-attribute operations.

@@ -2,7 +2,18 @@
  * @fileoverview Defines the browser projection and command-boundary normalization for Writer list state at LibreOffice's `sw/source/core/doc/list.cxx` ownership boundary.
  */
 
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import {
+  RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_ISCOUNTED,
+  RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_LEVEL,
+  RES_PARATR_LIST_RESTARTVALUE,
+  RES_PARATR_NUMRULE,
+} from "../../../inc/hintids";
 import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
+import { SwNumRuleItem } from "../para/paratr";
 import type { SwTextNode } from "../txtnode/ndtxt";
 
 /** Enumerates list variants currently mapped to LibreOffice Writer's default bullet and numbering commands. */
@@ -10,6 +21,12 @@ export const WRITER_PARAGRAPH_LIST_KINDS = ["none", "bullet", "numbered"] as con
 
 /** Defines the deepest bounded list nesting level currently supported by the browser Writer document model. */
 export const WRITER_MAX_LIST_LEVEL = 9;
+
+/** WhichIds captured by Writer numbering undo actions. */
+export const WRITER_LIST_WHICH_RANGES = [
+  [RES_PARATR_NUMRULE, RES_PARATR_NUMRULE],
+  [RES_PARATR_LIST_ID, RES_PARATR_LIST_ISCOUNTED],
+] as const;
 
 /** Document-owned list with the supported single document-range counter tree. */
 export class SwList {
@@ -182,4 +199,83 @@ export function normalizeWriterParagraphList(value: unknown): WriterParagraphLis
     ...(restart ? { restart: true } : {}),
     ...(startValue === undefined ? {} : { startValue }),
   };
+}
+
+/** Projects canonical numbering items for browser, clipboard, and filter boundaries. @param node - Canonical paragraph. @returns Immutable list projection. */
+export function projectWriterParagraphList(node: SwTextNode): WriterParagraphList {
+  const ruleName = node.GetNumRuleName();
+  const level = node.GetAttrListLevel();
+  if (ruleName.length === 0) {
+    const listId = (node.GetAttr(RES_PARATR_LIST_ID) as SfxStringItem).GetValue();
+    return listId.length === 0 ? { kind: "none", level } : { kind: "none", level, styleId: listId };
+  }
+  const rule = node.GetNumRule();
+  if (rule === undefined) return createDefaultWriterParagraphList();
+  const restart = node.IsListRestart();
+  const startValue = node.HasAttrListRestartValue() ? node.GetAttrListRestartValue() : undefined;
+  return {
+    kind: rule.GetNumFormat(level).GetKind(),
+    level,
+    ...(rule.IsAutoRule() ? {} : { styleId: ruleName }),
+    ...(restart ? { restart: true } : {}),
+    ...(startValue === undefined ? {} : { startValue }),
+  };
+}
+
+/** Converts a boundary list projection to canonical paragraph items and document-owned rule/list identities. @param node - Target paragraph. @param value - Boundary value. @returns Captured list item set. */
+export function createWriterListItemSet(node: SwTextNode, value: unknown): SfxItemSet {
+  const normalized = normalizeWriterParagraphList(value);
+  const items = new SfxItemSet(node.GetDoc().GetAttrPool(), WRITER_LIST_WHICH_RANGES);
+  if (normalized.kind === "none") {
+    if (normalized.styleId !== undefined)
+      items.Put(new SfxStringItem(RES_PARATR_LIST_ID, normalized.styleId));
+    if (normalized.level > 0) items.Put(new SfxInt16Item(RES_PARATR_LIST_LEVEL, normalized.level));
+    return items;
+  }
+  let ruleName = normalized.styleId ?? normalized.ruleName ?? "";
+  if (ruleName.length === 0) {
+    const index = node.GetDoc().paragraphs.indexOf(node);
+    const previous = index > 0 ? node.GetDoc().paragraphs[index - 1] : undefined;
+    const previousRule = previous?.GetNumRule();
+    ruleName =
+      previousRule?.IsAutoRule() === true &&
+      previous !== undefined &&
+      previousRule.GetNumFormat(previous.GetAttrListLevel()).GetKind() === normalized.kind
+        ? previousRule.GetName()
+        : node.GetDoc().GetDocumentListsManager().CreateAutomaticNumRule(normalized.kind).GetName();
+  }
+  const namedRule = node.GetDoc().FindNumRulePtr(ruleName);
+  if (
+    normalized.styleId !== undefined &&
+    namedRule !== undefined &&
+    namedRule.GetNumFormat(normalized.level).GetKind() !== normalized.kind
+  )
+    ruleName = node
+      .GetDoc()
+      .GetDocumentListsManager()
+      .CreateAutomaticNumRule(normalized.kind)
+      .GetName();
+  const rule = node.GetDoc().EnsureNumRule(ruleName, normalized.kind, normalized.level);
+  const documentLists = node.GetDoc().GetDocumentListsManager();
+  const index = node.GetDoc().paragraphs.indexOf(node);
+  const previous = index > 0 ? node.GetDoc().paragraphs[index - 1] : undefined;
+  const continuedListId =
+    normalized.listId ??
+    (previous?.GetNumRuleName() === rule.GetName() ? previous.GetListId() : undefined);
+  const list =
+    continuedListId === undefined
+      ? documentLists.GetListForListStyle(rule.GetName())
+      : documentLists.CreateList(rule.GetName(), continuedListId);
+  items.Put(new SwNumRuleItem(rule.GetName()));
+  items.Put(new SfxStringItem(RES_PARATR_LIST_ID, list.GetListId()));
+  if (normalized.level > 0) items.Put(new SfxInt16Item(RES_PARATR_LIST_LEVEL, normalized.level));
+  if (normalized.restart === true) items.Put(new SfxBoolItem(RES_PARATR_LIST_ISRESTART, true));
+  if (normalized.startValue !== undefined)
+    items.Put(new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, normalized.startValue));
+  return items;
+}
+
+/** Converts and applies a list boundary value while keeping SwTextNode mutation item-set based. @param node - Target paragraph. @param value - Boundary projection. @returns Nothing. */
+export function applyWriterParagraphList(node: SwTextNode, value: unknown): void {
+  node.SetListItems(createWriterListItemSet(node, value));
 }

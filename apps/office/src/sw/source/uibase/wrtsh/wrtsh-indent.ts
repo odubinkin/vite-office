@@ -1,6 +1,10 @@
 /** @fileoverview Implements the bounded `MoveLeftMargin` and `NumUpDown` branch used by Writer text-shell indent commands. */
 
-import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
+import {
+  createWriterListItemSet,
+  projectWriterParagraphList,
+  WRITER_MAX_LIST_LEVEL,
+} from "../../core/doc/list";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwUndoMoveLeftMargin } from "../../core/undo/unattr";
 import { SwUndoNumLevel } from "../../core/undo/unnum";
@@ -25,13 +29,19 @@ export function changeWriterParagraphListLevel(
   if (command !== "demote" && command !== "promote")
     throw new Error(`Unsupported Writer list-level command: ${command}`);
   const paragraph = target.GetActiveParagraph();
-  if (paragraph.list.kind === "none") return false;
-  const level = paragraph.list.level + (command === "demote" ? 1 : -1);
+  if (paragraph.GetListKind() === "none") return false;
+  const level = paragraph.GetAttrListLevel() + (command === "demote" ? 1 : -1);
   if (level < 0 || level > WRITER_MAX_LIST_LEVEL) return false;
   const cursor = target.CaptureCursorState();
-  const before = paragraph.CaptureParagraphListState();
+  const before = paragraph.CaptureListItems();
   return target.ApplyAction(
-    new SwUndoNumLevel(paragraph, before, { ...before, level }, cursor, cursor),
+    new SwUndoNumLevel(
+      paragraph,
+      before,
+      createWriterListItemSet(paragraph, { ...projectWriterParagraphList(paragraph), level }),
+      cursor,
+      cursor,
+    ),
   );
 }
 
@@ -41,9 +51,9 @@ export function changeWriterParagraphIndent(
   increase: boolean,
 ): boolean {
   const paragraph = target.GetActiveParagraph();
-  if (paragraph.list.kind !== "none")
+  if (paragraph.GetListKind() !== "none")
     return changeWriterParagraphListLevel(target, increase ? "demote" : "promote");
-  const before = paragraph.textLeftMargin;
+  const before = paragraph.GetParagraphTextLeftMargin();
   const after = Math.max(
     0,
     before + (increase ? WRITER_PARAGRAPH_INDENT_STEP : -WRITER_PARAGRAPH_INDENT_STEP),
@@ -55,7 +65,9 @@ export function changeWriterParagraphIndent(
 
 /** Mirrors text-shell enabled state for the active paragraph's generic indent commands. @param paragraph - Active paragraph. @param increase - Whether indentation increases. @returns Whether enabled. */
 export function canChangeWriterParagraphIndent(paragraph: SwTextNode, increase: boolean): boolean {
-  if (paragraph.list.kind !== "none")
-    return increase ? paragraph.list.level < WRITER_MAX_LIST_LEVEL : paragraph.list.level > 0;
-  return increase || paragraph.textLeftMargin > 0;
+  if (paragraph.GetListKind() !== "none")
+    return increase
+      ? paragraph.GetAttrListLevel() < WRITER_MAX_LIST_LEVEL
+      : paragraph.GetAttrListLevel() > 0;
+  return increase || paragraph.GetParagraphTextLeftMargin() > 0;
 }

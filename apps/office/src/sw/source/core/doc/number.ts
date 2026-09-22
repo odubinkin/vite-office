@@ -228,7 +228,11 @@ function createUniformFormats(
 /** Describes the list subset of a Writer paragraph needed for deterministic marker calculation. */
 export interface WriterNumberingParagraph {
   /** Serializable list state applied to the paragraph. */
-  readonly list: WriterParagraphList;
+  readonly list?: WriterParagraphList;
+  /** Canonical list family supplied by SwTextNode. */
+  readonly GetListKind?: () => WriterParagraphList["kind"];
+  /** Canonical list level supplied by SwTextNode. */
+  readonly GetAttrListLevel?: () => number;
   /** Optional canonical SwTextNode list identity used to separate adjacent lists. */
   readonly GetListId?: () => string;
   /** Primitive list identity supplied by a presentation projection. */
@@ -258,13 +262,13 @@ export function getWriterParagraphListMarker(
   paragraphs: readonly WriterNumberingParagraph[],
   paragraph: WriterNumberingParagraph,
 ): string | undefined {
-  if (!paragraphs.includes(paragraph) || paragraph.list.kind === "none") return undefined;
+  const kind = paragraph.GetListKind?.() ?? paragraph.list?.kind ?? "none";
+  const level = paragraph.GetAttrListLevel?.() ?? paragraph.list?.level ?? 0;
+  if (!paragraphs.includes(paragraph) || kind === "none") return undefined;
   if (paragraph.listMarker !== undefined) return paragraph.listMarker;
-  if (paragraph.list.kind === "bullet")
+  if (kind === "bullet")
     return (
-      paragraph.bulletChar ??
-      paragraph.GetNumRule?.()?.GetNumFormat(paragraph.list.level).GetBulletChar() ??
-      "•"
+      paragraph.bulletChar ?? paragraph.GetNumRule?.()?.GetNumFormat(level).GetBulletChar() ?? "•"
     );
   const documentNumber = paragraph.GetListItemNumber?.();
   if (documentNumber !== undefined) return `${documentNumber}.`;

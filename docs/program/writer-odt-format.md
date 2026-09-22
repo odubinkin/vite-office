@@ -86,13 +86,13 @@ monotonic request IDs and transferable `ArrayBuffer` payloads. The worker perfor
 ZIP, manifest, SAX/xmloff, Writer XML mapping, and package serialization, returning
 only a versioned ODT filter transfer or complete ODT bytes. The filter transfer is
 not the durable browser snapshot schema: `odt-transfer.ts` owns the worker-only
-structured-clone envelope, while `writer-storage-codec.ts` owns the current durable
-model envelope and `writer-storage.ts` combines it with Sfx lifecycle metadata.
-The current worker envelope uses `transferVersion: 3` and a filter-owned `graph`
-record; it neither imports nor embeds the durable `writer-document-codec` record.
-Its graph decoder reconstructs text through the document-bound content-operations
-manager. Neither boundary is treated as the live Writer model, and retired storage
-or worker transfer versions are rejected without migration.
+`transferVersion: 4` envelope, while `writer-storage-codec.ts` owns the current
+`storageModelVersion: 2` envelope and `writer-storage.ts` combines it with Sfx
+lifecycle metadata. Both envelopes carry the same `WriterDocumentRecord` from
+`writer-document-codec.ts`; there is no second Worker graph schema. The shared
+decoder reconstructs text through the document-bound content-operations manager.
+Neither boundary is treated as the live Writer model, and retired storage or
+Worker transfer versions are rejected without migration.
 
 The LibreOffice-shaped `SwDocShell` remains the active `SwDoc` owner. It validates
 the returned snapshot on the main thread and replaces the current graph only after

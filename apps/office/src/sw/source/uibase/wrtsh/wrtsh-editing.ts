@@ -1,14 +1,15 @@
 /** @fileoverview Owns structural text-edit algorithms invoked by the cursor/undo-orchestrating SwWrtShell. */
 
 import type { SfxUndoAction, SfxUndoManager } from "../../../../svl/source/undo/undo";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition, type SwPaM } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
+import { createWriterListItemSet } from "../../core/doc/list";
 import {
   getWriterNextGraphemeBoundary,
   getWriterPreviousGraphemeBoundary,
   type SwTextFragment,
   type SwTextNode as WriterParagraph,
-  type WriterCharacterAttributes,
 } from "../../core/txtnode/ndtxt";
 import {
   SwUndoDelete,
@@ -39,7 +40,7 @@ export interface SwWrtShellEditingPort {
   readonly getActiveParagraph: () => WriterParagraph;
   readonly getCursor: () => SwPaM;
   readonly getDoc: () => WriterDocument;
-  readonly getPendingCharacterAttributes: () => WriterCharacterAttributes;
+  readonly getPendingCharacterItems: () => SfxItemSet;
   readonly getUndoManager: () => SfxUndoManager<SwUndoRedoContext>;
   readonly setCursor: (position: SwPosition) => boolean;
 }
@@ -74,7 +75,7 @@ export class SwWrtShellEditingOperations {
           paragraph,
           start,
           paragraph.CaptureTextFragment(start, end),
-          paragraph.CreateTextFragmentFromText(text, this.port.getPendingCharacterAttributes()),
+          paragraph.CreateTextFragmentFromText(text, this.port.getPendingCharacterItems()),
           "Replace",
           before,
           this.port.createCollapsedCursorState(paragraph, start + text.length),
@@ -87,7 +88,7 @@ export class SwWrtShellEditingOperations {
       new SwUndoInsert(
         paragraph,
         offset,
-        paragraph.CreateTextFragmentFromText(text, this.port.getPendingCharacterAttributes()),
+        paragraph.CreateTextFragmentFromText(text, this.port.getPendingCharacterItems()),
         group,
         before,
         this.port.createCollapsedCursorState(paragraph, offset + text.length),
@@ -127,13 +128,15 @@ export class SwWrtShellEditingOperations {
       return this.MergeParagraphWithNext(paragraph);
     const start =
       direction === "backspace"
-        ? getWriterPreviousGraphemeBoundary(paragraph.text, offset)
+        ? getWriterPreviousGraphemeBoundary(paragraph.GetText(), offset)
         : offset;
     const end =
-      direction === "backspace" ? offset : getWriterNextGraphemeBoundary(paragraph.text, offset);
+      direction === "backspace"
+        ? offset
+        : getWriterNextGraphemeBoundary(paragraph.GetText(), offset);
     /* v8 ignore next -- Valid non-boundary cursor offsets still lie inside one grapheme. */
     if (start === end) return false;
-    const deletedText = paragraph.text.slice(start, end);
+    const deletedText = paragraph.GetText().slice(start, end);
     const group =
       deletedText.length === 1
         ? /[\p{L}\p{N}]/u.test(deletedText)
@@ -266,7 +269,7 @@ export class SwWrtShellEditingOperations {
     const index = document.paragraphs.indexOf(paragraph);
     if (index <= 0) return false;
     const preceding = document.paragraphs[index - 1] as WriterParagraph;
-    const offset = preceding.text.length;
+    const offset = preceding.Len();
     return this.port.applyAction(
       new SwUndoJoinParagraphs(
         preceding,
@@ -333,10 +336,17 @@ export class SwWrtShellEditingOperations {
   private ApplyPastedParagraphList(paragraph: WriterPasteParagraph): boolean {
     const target = this.port.getActiveParagraph();
     const nextList = { kind: paragraph.listKind, level: paragraph.listLevel } as const;
-    if (target.list.kind === nextList.kind && target.list.level === nextList.level) return false;
+    if (target.GetListKind() === nextList.kind && target.GetAttrListLevel() === nextList.level)
+      return false;
     const cursor = this.port.captureCursorState();
     return this.port.applyAction(
-      new SwUndoInsNum(target, target.CaptureParagraphListState(), nextList, cursor, cursor),
+      new SwUndoInsNum(
+        target,
+        target.CaptureListItems(),
+        createWriterListItemSet(target, nextList),
+        cursor,
+        cursor,
+      ),
     );
   }
 }

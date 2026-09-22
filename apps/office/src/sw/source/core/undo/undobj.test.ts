@@ -4,8 +4,10 @@ import { describe, expect, it } from "vitest";
 import { encodeWriterDocument } from "../../filter/basflt/writer-document-codec";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../doc/doc";
+import { createWriterListItemSet, projectWriterParagraphList } from "../doc/list";
 import { SwPosition } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import { projectWriterCharacterAttributes } from "../txtnode/txatbase";
 import {
   copyWriterTextRangeRuns,
   createWriterTextFragment,
@@ -62,7 +64,7 @@ function fragment(node: SwTextNode, runs: readonly WriterTextRun[]) {
 function cursorState(paragraph: SwTextNode, offset = 0): SwUndoCursorState {
   return {
     activeParagraph: paragraph,
-    pendingCharacterAttributes: { bold: false, italic: false, underline: false },
+    pendingCharacterItems: paragraph.GetCharacterItemsAt(Math.min(offset, paragraph.Len())),
     point: { node: paragraph, offset },
   };
 }
@@ -74,15 +76,15 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     handleTestInput(shell, "insertText", "b");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoInsert);
-    expect(document.paragraphs[0]?.text).toBe("ab");
+    expect(document.paragraphs[0]?.GetText()).toBe("ab");
     handleTestInput(shell, "insertText", " ");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(2);
     expect(shell.Undo()).toBe(true);
-    expect(document.paragraphs[0]?.text).toBe("ab");
+    expect(document.paragraphs[0]?.GetText()).toBe("ab");
     expect(shell.Undo()).toBe(true);
-    expect(document.paragraphs[0]?.text).toBe("");
+    expect(document.paragraphs[0]?.GetText()).toBe("");
     expect(shell.Redo()).toBe(true);
-    expect(document.paragraphs[0]?.text).toBe("ab");
+    expect(document.paragraphs[0]?.GetText()).toBe("ab");
     setTestCursor(shell, "p-1", 2);
     handleTestInput(shell, "insertText", "x");
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(2);
@@ -114,7 +116,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     handleTestInput(forward.shell, "deleteContentForward", null);
     expect(forward.docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     forward.shell.Undo();
-    expect(forward.document.paragraphs[0]?.text).toBe("abcd");
+    expect(forward.document.paragraphs[0]?.GetText()).toBe("abcd");
 
     const delimiter = createSession("a ");
     setTestCursor(delimiter.shell, "p-1", 2);
@@ -129,9 +131,9 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     shell.EndComposition();
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(1);
     expect(handleTestInput(shell, "insertTranspose", "AX")).toBe(false);
-    expect(document.paragraphs[0]?.text).toBe("あい");
+    expect(document.paragraphs[0]?.GetText()).toBe("あい");
     shell.Undo();
-    expect(document.paragraphs[0]?.text).toBe("");
+    expect(document.paragraphs[0]?.GetText()).toBe("");
   });
 
   it("undoes paste and cut as range actions with exact direct formatting" /** Verifies compound replacement semantics without document snapshots. @returns Nothing. */, function replacesRanges(): void {
@@ -147,7 +149,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(projectWriterTextRuns(document.paragraphs[0])).toEqual([run("hello")]);
     shell.Redo();
     fixtureReplaceRange(shell, { paragraphId: "p-1", start: 1, end: 3 }, []);
-    expect(document.paragraphs[0]?.text).toBe("ho");
+    expect(document.paragraphs[0]?.GetText()).toBe("ho");
     shell.Undo();
     expect(projectWriterTextRuns(document.paragraphs[0])).toEqual([
       run("h"),
@@ -166,7 +168,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(
       document.paragraphs.map(
         /** Returns visible paragraph text. @param paragraph - Writer paragraph. @returns Its text. */
-        (paragraph) => paragraph.text,
+        (paragraph) => paragraph.GetText(),
       ),
     ).toEqual(["ab", "cd"]);
     expect(shell.GetCursor().GetPoint().GetNode()).toBe(document.paragraphs[1]);
@@ -175,7 +177,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(
       document.paragraphs.map(
         /** Returns visible paragraph text. @param paragraph - Writer paragraph. @returns Its text. */
-        (paragraph) => paragraph.text,
+        (paragraph) => paragraph.GetText(),
       ),
     ).toEqual(["abcd"]);
     expect(shell.GetCursor().GetPoint().GetNode()).toBe(document.paragraphs[0]);
@@ -194,7 +196,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(
       document.paragraphs.map(
         /** Returns visible paragraph text. @param paragraph - Writer paragraph. @returns Its text. */
-        (paragraph) => paragraph.text,
+        (paragraph) => paragraph.GetText(),
       ),
     ).toEqual(["abcd"]);
   });
@@ -211,12 +213,12 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(shell.GetCursor().HasMark()).toBe(true);
     expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(1);
     expect(shell.GetCursor().GetMark().GetContentIndex()).toBe(3);
-    expect(shell.GetPendingCharacterAttributes().bold).toBe(false);
+    expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).bold).toBe(false);
     shell.Redo();
     expect(shell.GetCursor().HasMark()).toBe(true);
     expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(1);
     expect(shell.GetCursor().GetMark().GetContentIndex()).toBe(3);
-    expect(shell.GetPendingCharacterAttributes().bold).toBe(false);
+    expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).bold).toBe(false);
 
     shell.SetParagraphAlignment("center");
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoParagraphFormat);
@@ -226,16 +228,17 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoInsNum);
     shell.ChangeParagraphListLevel("demote");
     expect(docShell.GetUndoManager().GetUndoAction()).toBeInstanceOf(SwUndoNumLevel);
-    expect(paragraph).toMatchObject({ alignment: "center", style: "heading-1" });
-    expect(paragraph.list).toMatchObject({ kind: "numbered", level: 1 });
+    expect(paragraph.GetParagraphAlignment()).toBe("center");
+    expect(paragraph.GetParagraphStyle()).toBe("heading-1");
+    expect(projectWriterParagraphList(paragraph)).toMatchObject({ kind: "numbered", level: 1 });
     shell.Undo();
-    expect(paragraph.list.level).toBe(0);
+    expect(projectWriterParagraphList(paragraph).level).toBe(0);
     shell.Undo();
-    expect(paragraph.list.kind).toBe("none");
+    expect(projectWriterParagraphList(paragraph).kind).toBe("none");
     shell.Undo();
-    expect(paragraph.style).toBe("default");
+    expect(paragraph.GetParagraphStyle()).toBe("default");
     shell.Undo();
-    expect(paragraph.alignment).toBe("left");
+    expect(paragraph.GetParagraphAlignment()).toBe("left");
   });
 
   it("preserves lifecycle generations and the moved save mark across action navigation" /** Verifies document lifecycle ownership after removing historical snapshots. @returns A fulfilled assertion promise. */, async function preservesSaveMark(): Promise<void> {
@@ -277,7 +280,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(docShell.GetUndoManager().GetUndoActionCount()).toBe(2);
     shell.Undo();
     shell.Undo();
-    expect(document.paragraphs[0]?.text).toBe("a");
+    expect(document.paragraphs[0]?.GetText()).toBe("a");
     expect(shell.Undo()).toBe(false);
   });
 
@@ -397,8 +400,8 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const style = new SwUndoFormatColl(target, "default", "heading-1", state, state);
     const numbering = new SwUndoInsNum(
       target,
-      { kind: "none", level: 0 },
-      { kind: "numbered", level: 0 },
+      createWriterListItemSet(target, { kind: "none", level: 0 }),
+      createWriterListItemSet(target, { kind: "numbered", level: 0 }),
       state,
       state,
     );
@@ -489,7 +492,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     shell.SetParagraphListKind("numbered");
     expect(shell.ChangeParagraphListLevel("promote")).toBe(false);
     while (shell.ChangeParagraphListLevel("demote")) continue;
-    expect(document.paragraphs[0]?.list.level).toBe(9);
+    expect(projectWriterParagraphList(document.paragraphs[0] as SwTextNode).level).toBe(9);
 
     const context = (shell as unknown as { undoContext: SwUndoRedoContext }).undoContext;
     const foreign = createWriterDocument().paragraphs[0] as SwTextNode;

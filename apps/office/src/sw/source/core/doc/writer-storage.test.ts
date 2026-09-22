@@ -19,6 +19,7 @@ import {
   type WriterSnapshotState,
 } from "../../filter/basflt/writer-storage";
 import { decodeWriterStorageDocument } from "../../filter/basflt/writer-storage-codec";
+import { projectWriterParagraphList } from "./list";
 
 /** Live target-schema storage fixture. */
 interface WriterFixture {
@@ -67,7 +68,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
         documentState: { contentGeneration: 1, id: "writer-store", isModified: true },
         modelVersion: 12,
         schemaVersion: 10,
-        storageModel: { document: { swModelVersion: 12 }, storageModelVersion: 1 },
+        storageModel: { document: { swModelVersion: 12 }, storageModelVersion: 2 },
       },
       version: 1,
     });
@@ -75,7 +76,7 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     const loaded = await loadWriterDocument(adapter, "writer-store");
     expect(loaded.status).toBe("found");
     if (loaded.status === "found") {
-      expect(loaded.document.paragraphs).toMatchObject([{ text: "Saved text" }]);
+      expect(loaded.document.paragraphs[0]?.GetText()).toBe("Saved text");
       expect(loaded.documentState).toMatchObject({ isModified: false, savedGeneration: 1 });
     }
     await expect(loadWriterDocument(adapter, "missing")).resolves.toEqual({
@@ -237,9 +238,16 @@ describe("Writer storage orchestration", /** Registers storage tests. @returns N
     const fixture = createWriterFixture();
     new SwWrtShell(fixture.shell).SetParagraphListKind("numbered");
     await saveWriterDocument(adapter, fixture.document, fixture.shell.GetDocumentState());
-    await expect(loadWriterDocument(adapter, "writer-store")).resolves.toMatchObject({
-      document: { paragraphs: [{ list: { kind: "numbered", level: 0 } }] },
-      status: "found",
-    });
+    const loaded = await loadWriterDocument(adapter, "writer-store");
+    expect(loaded.status).toBe("found");
+    if (loaded.status === "found")
+      expect(
+        projectWriterParagraphList(
+          loaded.document.paragraphs[0] as import("../txtnode/ndtxt").SwTextNode,
+        ),
+      ).toEqual({
+        kind: "numbered",
+        level: 0,
+      });
   });
 });

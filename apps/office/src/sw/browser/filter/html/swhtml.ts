@@ -9,7 +9,7 @@ import {
   normalizeWriterTextRuns,
   type WriterTextRun,
 } from "../../../source/core/txtnode/text-run-projection";
-import type { WriterCharacterAttributes } from "../../../source/core/txtnode/ndtxt";
+import type { WriterCharacterAttributes } from "../../../source/core/txtnode/txatbase";
 import type {
   WriterClipboardPaste,
   WriterClipboardPasteParagraph,

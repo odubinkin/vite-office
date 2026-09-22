@@ -2601,13 +2601,16 @@
         "WriterParagraphList",
         "createDefaultWriterParagraphList",
         "isWriterParagraphListKind",
-        "normalizeWriterParagraphList"
+        "normalizeWriterParagraphList",
+        "projectWriterParagraphList",
+        "createWriterListItemSet",
+        "applyWriterParagraphList"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwList::SwList, std::move, uno::RuntimeException, SwList::~SwList and the bounded SwList and WriterParagraphList contracts remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Ports the bounded document-owned SwList registration, invalidation, and counter-tree behavior while retaining browser command-boundary normalization at LibreOffice's `sw/source/core/doc/list.cxx` ownership boundary."
+        "Ports the bounded document-owned SwList registration, invalidation, and counter-tree behavior while isolating boundary projection/conversion from item-set based SwTextNode and undo mutation contracts."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/list.cxx",
@@ -2911,7 +2914,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterCharacterAttributes",
+            "marker": "SwTextNode",
             "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts"
           }
         ],
@@ -2924,13 +2927,13 @@
       },
       "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
       "localSymbols": [
-        "WriterCharacterAttributes",
         "WRITER_CHARACTER_FORMATS",
         "WriterCharacterFormat",
-        "WRITER_PARAGRAPH_ALIGNMENTS"
+        "WRITER_PARAGRAPH_ALIGNMENTS",
+        "SwTextNode"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SwTextNode, SwNodes::MakeTextNode, SwTextNode::SwTextNode, sw::TextNodeNotificationSuppressor and the bounded WriterCharacterAttributes, WRITER_CHARACTER_FORMATS, WriterCharacterFormat contract remain intentionally omitted."
+        "Upstream obligations outside SwTextNode, SwNodes::MakeTextNode, SwTextNode::SwTextNode, sw::TextNodeNotificationSuppressor and the bounded item-set, range-hint, and WriterCharacterFormat contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
         "Implements Writer text nodes, canonical text, paragraph items, and range hints at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary."
@@ -3373,7 +3376,7 @@
         ]
       },
       "localPath": "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts",
-      "rationale": "Defines the current durable browser-storage model envelope independently from worker and filter transfer contracts.",
+      "rationale": "Defines the current durable browser-storage envelope around the shared canonical WriterDocumentRecord graph.",
       "responsibilities": [
         "Versions and validates the durable Writer model payload without compatibility migration."
       ],
@@ -3492,9 +3495,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/source/filter/xml/odt-transfer.ts",
-      "rationale": "Defines the current ODT worker structured-clone graph independently from durable browser storage.",
+      "rationale": "Defines the current ODT Worker structured-clone envelope around the shared canonical WriterDocumentRecord graph.",
       "responsibilities": [
-        "Versions and validates the graph transferred across the browser Worker boundary."
+        "Versions and validates the Worker envelope while delegating graph encoding and decoding to writer-document-codec.ts."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",

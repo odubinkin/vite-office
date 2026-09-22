@@ -4,14 +4,19 @@ import type { SfxShell } from "../../../../sfx2/source/control/shell";
 import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition } from "../../core/crsr/pam";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type {
   SwTextNode,
-  WriterCharacterAttributes,
   WriterCharacterFormat,
   WriterParagraphAlignment,
 } from "../../core/txtnode/ndtxt";
+import {
+  createWriterCharacterItemSet,
+  projectWriterCharacterAttributes,
+  type WriterCharacterAttributes,
+} from "../../core/txtnode/txatbase";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import {
   CreateWriterFontSizeUndo,
@@ -50,11 +55,11 @@ export interface SwTextShellTarget {
       GetUndoActionCount(): number;
     }>;
   }>;
-  readonly GetPendingCharacterAttributes: () => WriterCharacterAttributes;
+  readonly GetPendingCharacterItems: () => SfxItemSet;
   readonly NotifySelectionChanged: () => void;
   readonly Redo: () => boolean;
   readonly SetPaM: (point: SwPosition, mark?: SwPosition) => boolean;
-  readonly SetPendingCharacterAttributes: (attributes: WriterCharacterAttributes) => void;
+  readonly SetPendingCharacterItems: (items: SfxItemSet) => void;
   readonly Undo: () => boolean;
 }
 
@@ -79,7 +84,7 @@ export class SwTextShell {
     if (range === undefined)
       return this.target.GetCursor().HasMark()
         ? "mixed"
-        : this.target.GetPendingCharacterAttributes()[format]
+        : this.GetPendingCharacterAttributes()[format]
           ? "on"
           : "off";
     return range.node.GetTextRangeFormatState(range.start, range.end, format);
@@ -112,10 +117,12 @@ export class SwTextShell {
     }
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRange(this.target.GetCursor());
-    this.target.SetPendingCharacterAttributes({
-      ...this.target.GetPendingCharacterAttributes(),
-      [format]: this.GetCharacterFormatState(format) !== "on",
-    });
+    this.target.SetPendingCharacterItems(
+      createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
+        ...this.GetPendingCharacterAttributes(),
+        [format]: this.GetCharacterFormatState(format) !== "on",
+      }),
+    );
     if (selected === undefined) {
       if (this.target.GetCursor().HasMark()) {
         this.target.NotifySelectionChanged();
@@ -156,7 +163,7 @@ export class SwTextShell {
     const action = createWriterHyperlinkAction(
       this.target.GetDoc(),
       this.target.GetCursor(),
-      this.target.GetPendingCharacterAttributes(),
+      this.target.GetPendingCharacterItems(),
       this.target.CaptureCursorState(),
       hyperlink,
       text,
@@ -170,10 +177,12 @@ export class SwTextShell {
     if (family.length === 0) throw new Error("Writer font family must not be blank.");
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRange(this.target.GetCursor());
-    this.target.SetPendingCharacterAttributes({
-      ...this.target.GetPendingCharacterAttributes(),
-      fontFamily: family,
-    });
+    this.target.SetPendingCharacterItems(
+      createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
+        ...this.GetPendingCharacterAttributes(),
+        fontFamily: family,
+      }),
+    );
     if (selected === undefined) {
       this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
       this.target.NotifySelectionChanged();
@@ -197,10 +206,12 @@ export class SwTextShell {
       throw new Error("Writer font size must be a positive value representable in twips.");
     const before = this.target.CaptureCursorState();
     const selected = getWriterSelectedTextRange(this.target.GetCursor());
-    this.target.SetPendingCharacterAttributes({
-      ...this.target.GetPendingCharacterAttributes(),
-      fontSizeTwips,
-    });
+    this.target.SetPendingCharacterItems(
+      createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
+        ...this.GetPendingCharacterAttributes(),
+        fontSizeTwips,
+      }),
+    );
     if (selected === undefined) {
       this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
       this.target.NotifySelectionChanged();
@@ -220,10 +231,16 @@ export class SwTextShell {
   /** Applies paragraph alignment through the text shell. @param alignment - Next alignment. @returns Whether changed. */
   public SetParagraphAlignment(alignment: WriterParagraphAlignment): boolean {
     const paragraph = this.target.GetActiveParagraph();
-    if (paragraph.alignment === alignment) return false;
+    if (paragraph.GetParagraphAlignment() === alignment) return false;
     const cursor = this.target.CaptureCursorState();
     return this.target.ApplyAction(
-      new SwUndoParagraphFormat(paragraph, paragraph.alignment, alignment, cursor, cursor),
+      new SwUndoParagraphFormat(
+        paragraph,
+        paragraph.GetParagraphAlignment(),
+        alignment,
+        cursor,
+        cursor,
+      ),
     );
   }
 
@@ -232,10 +249,10 @@ export class SwTextShell {
     if (!isWriterParagraphStyle(style))
       throw new Error(`Unsupported Writer paragraph style: ${style}`);
     const paragraph = this.target.GetActiveParagraph();
-    if (paragraph.style === style) return false;
+    if (paragraph.GetParagraphStyle() === style) return false;
     const cursor = this.target.CaptureCursorState();
     return this.target.ApplyAction(
-      new SwUndoFormatColl(paragraph, paragraph.style, style, cursor, cursor),
+      new SwUndoFormatColl(paragraph, paragraph.GetParagraphStyle(), style, cursor, cursor),
     );
   }
 
@@ -256,7 +273,7 @@ export class SwTextShell {
 
   /** Returns pending character attributes for command state. @returns Attribute copy. */
   public GetPendingCharacterAttributes(): WriterCharacterAttributes {
-    return this.target.GetPendingCharacterAttributes();
+    return projectWriterCharacterAttributes(this.target.GetPendingCharacterItems());
   }
 
   /** Returns the device-resolved default font. @returns Font family. */
@@ -416,7 +433,7 @@ export function createWriterTextCommandRegistry(
           right: WRITER_COMMAND_IDS.alignRight,
         }[alignment],
         /** Compares the active alignment with this command. @returns Checked state. */
-        isChecked: (): boolean => active().alignment === alignment,
+        isChecked: (): boolean => active().GetParagraphAlignment() === alignment,
       }),
     ),
     ...([true, false] as const).map(
@@ -447,7 +464,7 @@ export function createWriterTextCommandRegistry(
         return target.SetParagraphStyle(style.id);
       },
       /** Reads the active paragraph style value. @returns Stable style ID. */
-      getStateValue: (): string => active().style,
+      getStateValue: (): string => active().GetParagraphStyle(),
       id: WRITER_COMMAND_IDS.styleApply,
     },
   ]);

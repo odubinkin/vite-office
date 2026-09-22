@@ -11,6 +11,7 @@ import { describe, expect, it, vi } from "vitest";
 import { createDocument } from "../../apps/office/src/sfx2/source/doc/objsh";
 import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
 import type { SwDoc } from "../../apps/office/src/sw/source/core/doc/doc";
+import { projectWriterParagraphList } from "../../apps/office/src/sw/source/core/doc/list";
 import { projectWriterTextRuns } from "../../apps/office/src/sw/source/core/txtnode/text-run-projection";
 import { readOdtDocument } from "../../apps/office/src/sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrtxml";
@@ -30,11 +31,11 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
     /** Projects one canonical text node to the ODF subset covered by the pinned fixtures. @param paragraph - Writer text node. @returns Stable semantic record. */
     function normalizeParagraph(paragraph): object {
       return {
-        alignment: paragraph.alignment,
-        list: paragraph.list,
+        alignment: paragraph.GetParagraphAlignment(),
+        list: projectWriterParagraphList(paragraph),
         runs: projectWriterTextRuns(paragraph),
-        style: paragraph.style,
-        text: paragraph.text,
+        style: paragraph.GetParagraphStyle(),
+        text: paragraph.GetText(),
       };
     },
   );
@@ -51,7 +52,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
       });
       const imported = await readOdtDocument(bytes, metadata);
       expect(imported.document.paragraphs).toHaveLength(1);
-      expect(imported.document.paragraphs[0]?.text).toBe("Hello World!");
+      expect(imported.document.paragraphs[0]?.GetText()).toBe("Hello World!");
       expect(projectWriterTextRuns(imported.document.paragraphs[0])).toEqual([
         {
           attributes: {
@@ -78,13 +79,13 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         expect(
           document.paragraphs.map(
             /** Projects list paragraph text. @param paragraph - Imported paragraph. @returns Text. */
-            (paragraph) => paragraph.text,
+            (paragraph) => paragraph.GetText(),
           ),
         ).toEqual(["One", "Two", "Three", ""]);
         expect(
           document.paragraphs.every(
             /** Checks one imported list paragraph. @param paragraph - Imported paragraph. @returns Whether numbered. */
-            (paragraph) => paragraph.list.kind === "numbered",
+            (paragraph) => paragraph.GetListKind() === "numbered",
           ),
         ).toBe(true);
       },
@@ -96,7 +97,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         expect(
           document.paragraphs.map(
             /** Projects one imported style identifier. @param paragraph - Imported paragraph. @returns Style identity. */
-            (paragraph) => paragraph.style,
+            (paragraph) => paragraph.GetParagraphStyle(),
           ),
         ).toEqual(["default", "default", "default", "title", "text-body"]);
       },

@@ -20,6 +20,7 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { createWriterCharacterItemSet } from "../../core/txtnode/txatbase";
 import {
   FastAttributeList,
   parseOdfXmlStream,
@@ -335,7 +336,11 @@ class SwXMLParagraphTarget implements XMLParagraphImportTarget {
         .GetDocumentContentOperationsManager()
         .InsertTextFragment(
           position,
-          this.node.CreateTextFragmentFromText(text, properties, hyperlink),
+          this.node.CreateTextFragmentFromText(
+            text,
+            createWriterCharacterItemSet(this.node.GetDoc().GetAttrPool(), properties),
+            hyperlink,
+          ),
         );
     } finally {
       position.Dispose();

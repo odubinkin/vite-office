@@ -4,7 +4,9 @@ import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
+import { projectWriterParagraphList } from "../../core/doc/list";
 import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
+import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import { SwDocShell } from "../app/docsh";
 import { SwTransferable } from "../dochdl/swdtflvr";
 import { SwWrtShell } from "./wrtsh";
@@ -40,20 +42,20 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     const paragraph = shell.GetActiveParagraph();
     expect(shell.CanChangeParagraphIndent(false)).toBe(false);
     expect(shell.ChangeParagraphIndent(true)).toBe(true);
-    expect(paragraph.textLeftMargin).toBe(1134);
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(1134);
     expect(shell.CanChangeParagraphIndent(false)).toBe(true);
     expect(shell.Undo()).toBe(true);
-    expect(paragraph.textLeftMargin).toBe(0);
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(0);
     expect(shell.Redo()).toBe(true);
-    expect(paragraph.textLeftMargin).toBe(1134);
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(1134);
     expect(shell.ChangeParagraphIndent(false)).toBe(true);
-    expect(paragraph.textLeftMargin).toBe(0);
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(0);
     expect(shell.ChangeParagraphIndent(false)).toBe(false);
     expect(shell.ChangeParagraphIndent(true)).toBe(true);
     expect(shell.SetParagraphListKind("numbered")).toBe(true);
     expect(shell.ChangeParagraphIndent(true)).toBe(true);
-    expect(paragraph.list).toMatchObject({ kind: "numbered", level: 1 });
-    expect(paragraph.textLeftMargin).toBe(1134);
+    expect(projectWriterParagraphList(paragraph)).toMatchObject({ kind: "numbered", level: 1 });
+    expect(paragraph.GetParagraphTextLeftMargin()).toBe(1134);
   });
 
   it("validates canonical cursor offsets against the owning node", /** Covers integer and node-bound offset validation. @returns Nothing. */ () => {
@@ -127,10 +129,10 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
 
     setTestCursor(shell, "p-1", 4);
     expect(shell.SetHyperlink({ url: "relative/path" }, "Shown")).toBe(true);
-    expect(shell.GetActiveParagraph().text).toBe("abcdShown");
+    expect(shell.GetActiveParagraph().GetText()).toBe("abcdShown");
     const emptyShell = createShell();
     expect(emptyShell.SetHyperlink({ url: "fallback-url" })).toBe(true);
-    expect(emptyShell.GetActiveParagraph().text).toBe("fallback-url");
+    expect(emptyShell.GetActiveParagraph().GetText()).toBe("fallback-url");
     expect(
       /** Resolves a stale fixture ID only at the test boundary. @returns Invalid test operation. */ () =>
         setTestHyperlink(shell, { url: "ignored" }, undefined, {
@@ -174,7 +176,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     const paragraph = document.paragraphs[0] as NonNullable<(typeof document.paragraphs)[number]>;
     const before = {
       activeParagraph: paragraph,
-      pendingCharacterAttributes: { bold: false, italic: false, underline: false },
+      pendingCharacterItems: paragraph.GetCharacterItemsAt(0),
       point: { node: paragraph, offset: 0 },
     };
     expect(
@@ -182,7 +184,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         createWriterHyperlinkAction(
           document,
           foreignSelection,
-          before.pendingCharacterAttributes,
+          before.pendingCharacterItems,
           before,
           { url: "link" },
         ),
@@ -192,7 +194,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         createWriterHyperlinkAction(
           document,
           foreignCaret,
-          before.pendingCharacterAttributes,
+          before.pendingCharacterItems,
           before,
           { url: "link" },
           "text",
@@ -287,22 +289,22 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(handleTestInput(shell, "insertText", null)).toBe(true);
     expect(handleTestInput(shell, "insertReplacementText", "")).toBe(true);
     expect(handleTestInput(shell, "formatBold", null)).toBe(true);
-    expect(shell.GetPendingCharacterAttributes().bold).toBe(true);
+    expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).bold).toBe(true);
     expect(handleTestInput(shell, "formatBold", null)).toBe(true);
     expect(handleTestInput(shell, "insertText", "a b")).toBe(true);
     setTestCursor(shell, "p-1", 1);
     expect(handleTestInput(shell, "deleteContentForward", null)).toBe(true);
-    expect(shell.GetActiveParagraph().text).toBe("ab");
+    expect(shell.GetActiveParagraph().GetText()).toBe("ab");
     expect(handleTestInput(shell, "historyUndo", null)).toBe(true);
-    expect(shell.GetActiveParagraph().text).toBe("a b");
+    expect(shell.GetActiveParagraph().GetText()).toBe("a b");
     expect(handleTestInput(shell, "historyRedo", null)).toBe(true);
-    expect(shell.GetActiveParagraph().text).toBe("ab");
+    expect(shell.GetActiveParagraph().GetText()).toBe("ab");
     setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 1, paragraphId: "p-1" },
     });
     expect(handleTestInput(shell, "insertReplacementText", "A")).toBe(true);
-    expect(shell.GetActiveParagraph().text).toBe("Ab");
+    expect(shell.GetActiveParagraph().GetText()).toBe("Ab");
     setTestCursor(shell, "p-1", 1);
     expect(handleTestInput(shell, "insertLineBreak", null)).toBe(true);
     expect(
@@ -311,7 +313,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         .paragraphs.map(
           /** Reads one paragraph's visible text. @param paragraph - Writer paragraph. @returns Visible text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["A", "b"]);
   });
@@ -328,7 +330,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     ]);
 
     expect(shell.Undo()).toBe(true);
-    expect(shell.GetActiveParagraph().text).toBe("");
+    expect(shell.GetActiveParagraph().GetText()).toBe("");
     expect(shell.Redo()).toBe(true);
     expect(projectWriterTextRuns(shell.GetActiveParagraph())).toEqual([
       { attributes: { bold: true, italic: false, underline: false }, text: "ab" },
@@ -347,14 +349,14 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       { attributes: { italic: true, underline: true }, text: "selected" },
     ]);
     expect(handleTestInput(shell, "insertOrderedList", null)).toBe(true);
-    expect(shell.GetActiveParagraph().list.kind).toBe("numbered");
+    expect(projectWriterParagraphList(shell.GetActiveParagraph()).kind).toBe("numbered");
     expect(handleTestInput(shell, "insertUnorderedList", null)).toBe(true);
-    expect(shell.GetActiveParagraph().list.kind).toBe("bullet");
+    expect(projectWriterParagraphList(shell.GetActiveParagraph()).kind).toBe("bullet");
     expect(handleTestInput(shell, "insertFromPaste", null)).toBe(true);
     expect(handleTestInput(shell, "insertFromDrop", null)).toBe(true);
     expect(handleTestInput(shell, "insertFromComposition", null)).toBe(true);
     expect(handleTestInput(shell, "deleteByCut", null)).toBe(true);
-    expect(shell.GetActiveParagraph().text).toBe("");
+    expect(shell.GetActiveParagraph().GetText()).toBe("");
     shell.Insert("again");
     setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
@@ -373,13 +375,13 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       point: { offset: 3, paragraphId: "p-1" },
     });
     handleTestInput(shell, "deleteContentBackward", null);
-    expect(shell.GetActiveParagraph().text).toBe("ad");
+    expect(shell.GetActiveParagraph().GetText()).toBe("ad");
     setTestSelection(shell, {
       mark: { offset: 1, paragraphId: "p-1" },
       point: { offset: 1, paragraphId: "p-1" },
     });
     handleTestInput(shell, "deleteContentForward", null);
-    expect(shell.GetActiveParagraph().text).toBe("ad");
+    expect(shell.GetActiveParagraph().GetText()).toBe("ad");
     setTestSelection(shell, {
       mark: { offset: 0, paragraphId: "p-1" },
       point: { offset: 1, paragraphId: "p-1" },
@@ -392,7 +394,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         .paragraphs.map(
           /** Reads one paragraph's visible text. @param paragraph - Writer paragraph. @returns Visible text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["", "d"]);
     expect(secondId).toBe(getNodeId(shell, shell.GetActiveParagraph()));
@@ -415,7 +417,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         .paragraphs.map(
           /** Reads visible paragraph text. @param paragraph - Writer paragraph. @returns Visible text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["aXf"]);
     expect(crossShell.Undo()).toBe(true);
@@ -425,7 +427,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         .paragraphs.map(
           /** Reads visible paragraph text. @param paragraph - Writer paragraph. @returns Visible text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["ab", "cd", "ef"]);
     setTestSelection(crossShell, {
@@ -439,7 +441,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         .paragraphs.map(
           /** Reads visible paragraph text. @param paragraph - Writer paragraph. @returns Visible text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["af"]);
     expect(crossShell.Undo()).toBe(true);
@@ -454,7 +456,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         .paragraphs.map(
           /** Reads one paragraph's visible text. @param paragraph - Writer paragraph. @returns Visible text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["a", "f"]);
   });
@@ -468,9 +470,9 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     });
     shell.UpdateComposition("X");
     shell.StartComposition();
-    expect(shell.GetActiveParagraph().text).toBe("ab");
+    expect(shell.GetActiveParagraph().GetText()).toBe("ab");
     expect(shell.EndComposition()).toBe(true);
-    expect(shell.GetActiveParagraph().text).toBe("Xb");
+    expect(shell.GetActiveParagraph().GetText()).toBe("Xb");
     shell.StartComposition();
     expect(shell.EndComposition()).toBe(false);
     setTestCursor(shell, "p-1", 1);
@@ -489,7 +491,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         .paragraphs.map(
           /** Reads visible paragraph text. @param paragraph - Writer paragraph. @returns Visible text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["joinedb"]);
   });
@@ -501,10 +503,10 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       const shell = createShell("😀x");
       setTestCursor(shell, "p-1", 0);
       handleTestInput(shell, "deleteContentForward", null);
-      expect(shell.GetActiveParagraph().text).toBe("x");
+      expect(shell.GetActiveParagraph().GetText()).toBe("x");
       setTestCursor(shell, "p-1", 1);
       handleTestInput(shell, "deleteContentBackward", null);
-      expect(shell.GetActiveParagraph().text).toBe("");
+      expect(shell.GetActiveParagraph().GetText()).toBe("");
     } finally {
       if (descriptor !== undefined) Object.defineProperty(Intl, "Segmenter", descriptor);
     }
@@ -559,9 +561,9 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         /** Projects pasted text and list metadata. @param paragraph - Canonical Writer paragraph. @returns Observable paragraph state. */ (
           paragraph,
         ) => ({
-          list: paragraph.list,
+          list: projectWriterParagraphList(paragraph),
           runs: projectWriterTextRuns(paragraph),
-          text: paragraph.text,
+          text: paragraph.GetText(),
         }),
       ),
     ).toEqual([
@@ -594,7 +596,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         .paragraphs.map(
           /** Projects canonical text after Undo. @param paragraph - Restored Writer paragraph. @returns Visible paragraph text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["prefix  suffix"]);
     expect(shell.Redo()).toBe(true);
@@ -604,7 +606,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         .paragraphs.map(
           /** Projects canonical text after Redo. @param paragraph - Reapplied Writer paragraph. @returns Visible paragraph text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["prefix Parent", "Child", "Sibling suffix"]);
     expect(
@@ -662,7 +664,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
         },
       ),
     ).toBe(true);
-    expect(replacementShell.GetActiveParagraph().text).toBe("oXd");
+    expect(replacementShell.GetActiveParagraph().GetText()).toBe("oXd");
   });
 
   it("routes formatting and list commands through one mutable undo history" /** Verifies the retired clone facades have one identity-preserving shell replacement with reversible action objects. @returns Nothing. */, function routesFormattingCommands(): void {
@@ -683,10 +685,15 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.SetParagraphListKind("numbered")).toBe(true);
     expect(shell.ChangeParagraphListLevel("demote")).toBe(true);
     expect(shell.GetDoc()).toBe(document);
-    expect(document.paragraphs[0]).toMatchObject({
-      alignment: "center",
-      list: { kind: "numbered", level: 1 },
-      style: "heading-1",
+    expect(document.paragraphs[0]?.GetParagraphAlignment()).toBe("center");
+    expect(document.paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
+    expect(
+      projectWriterParagraphList(
+        document.paragraphs[0] as import("../../core/txtnode/ndtxt").SwTextNode,
+      ),
+    ).toMatchObject({
+      kind: "numbered",
+      level: 1,
     });
     expect(projectWriterTextRuns(document.paragraphs[0]).at(0)).toMatchObject({
       attributes: { bold: true },
@@ -694,7 +701,14 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     });
     expect(shell.GetDocShell().GetUndoManager().GetUndoActionCount()).toBe(5);
     expect(shell.Undo()).toBe(true);
-    expect(document.paragraphs[0]?.list).toMatchObject({ kind: "numbered", level: 0 });
+    expect(
+      projectWriterParagraphList(
+        document.paragraphs[0] as import("../../core/txtnode/ndtxt").SwTextNode,
+      ),
+    ).toMatchObject({
+      kind: "numbered",
+      level: 0,
+    });
     expect(shell.ChangeParagraphListLevel("promote")).toBe(false);
     expect(
       /** Rejects an unsupported list-level command at the shell boundary. @returns Invalid command. */ () =>
@@ -709,7 +723,9 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
   it("applies a font family through range hints and restores it through history", /** Verifies font formatting history. @returns Nothing. */ () => {
     const shell = createShell("abcd");
     expect(shell.SetFontFamily("Noto Sans")).toBe(false);
-    expect(shell.GetPendingCharacterAttributes().fontFamily).toBe("Noto Sans");
+    expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).fontFamily).toBe(
+      "Noto Sans",
+    );
     expect(
       /** Rejects a blank font. @returns Invalid mutation. */ () => shell.SetFontFamily(" "),
     ).toThrow("blank");
@@ -741,7 +757,9 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     const shell = createShell("abcd");
     expect(shell.GetDefaultFontSizePt()).toBe(12);
     expect(shell.SetFontSize(13.5)).toBe(false);
-    expect(shell.GetPendingCharacterAttributes().fontSizeTwips).toBe(270);
+    expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).fontSizeTwips).toBe(
+      270,
+    );
     for (const invalid of [Number.NaN, 0, 13.03])
       expect(
         /** Rejects one invalid point height. @returns Invalid mutation. */ () =>

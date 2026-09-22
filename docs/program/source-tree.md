@@ -126,7 +126,7 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/core/attr/format.ts` | `sw/source/core/attr/format.cxx` | `SwFormat` attributes and derived-from links |
 | `sw/source/core/doc/fmtcol.ts` | `sw/source/core/doc/fmtcol.cxx` | Named `SwFormatColl` and paragraph `SwTextFormatColl` |
 | `sw/source/core/para/paratr.ts` | `sw/source/core/para/paratr.cxx` | Paragraph `SwNumRuleItem` rule-name value |
-| `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Serializable list metadata and legacy normalization |
+| `sw/source/core/doc/list.ts` | `sw/source/core/doc/list.cxx` | Document-owned list tree plus explicit boundary projection to and from canonical numbering items |
 | `sw/source/core/doc/number.ts` | `sw/source/core/doc/number.cxx` | Document-owned per-level numbering rules and deterministic visible markers |
 | `sw/source/core/doc/doc.ts` | `sw/source/core/doc/doc.cxx` | `SwDoc` owner of `SwNodes` plus explicit browser snapshot conversion |
 | `sw/source/core/docnode/nodes.ts` | `sw/source/core/docnode/nodes.cxx` | Ordered nodes and LibreOffice-matching fixed section sentinels |
@@ -141,7 +141,7 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/uibase/wrtsh/wrtsh.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Persistent cursor, undo orchestration, notification transactions, and command-shell facades |
 | `sw/source/uibase/wrtsh/wrtsh-editing.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Action-based text, range, paste, split, and join editing algorithms |
 | `sw/source/uibase/wrtsh/wrtsh-hyperlink.ts` | `sw/source/core/edit/editsh.cxx` | Selection-aware hyperlink insertion, replacement, and removal actions |
-| `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Canonical text-node storage, hint-aware editing, split/append, and derived rendering runs |
+| `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Canonical text-node storage, item-set formatting/list mutation, hint-aware editing, and split/append |
 | `sw/source/uibase/docvw/edtwin.tsx` | `sw/source/uibase/docvw/edtwin.cxx` | Browser document-view integration for markers and editing hosts |
 | `sw/source/uibase/dochdl/swdtflvr.ts` | `sw/source/uibase/dochdl/swdtflvr.cxx` | Selection transfer-document preparation and format-writer dispatch |
 | `sw/source/filter/html/htmlnumwriter.ts` | `sw/source/filter/html/htmlnumwriter.cxx` | Bounded nested semantic `ul`/`ol`/`li` clipboard HTML serialization |

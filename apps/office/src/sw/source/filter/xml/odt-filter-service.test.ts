@@ -61,8 +61,8 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       "import:mapping",
     ]);
     expect(imported.document).toMatchObject({
-      graph: { odtTransferModelVersion: 1, textNodes: [{ hints: [], text: "worker body" }] },
-      transferVersion: 3,
+      graph: { swModelVersion: 12, textNodes: [{ hints: [], text: "worker body" }] },
+      transferVersion: 4,
     });
     expect(imported.document).not.toHaveProperty("document");
   });
@@ -125,7 +125,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       {},
       { transferVersion: 1 },
       { transferVersion: 2 },
-      { document: {}, transferVersion: 3 },
+      { document: {}, transferVersion: 4 },
     ])
       expect(
         /** Restores one malformed worker transfer. @returns Invalid result. */ () =>
@@ -152,8 +152,8 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
 
     expect(
       /** Restores a malformed graph. @returns Invalid result. */ () =>
-        restoreOdtWriterTransfer({ graph: {}, transferVersion: 3 }),
-    ).toThrow("graph schema is unsupported");
+        restoreOdtWriterTransfer({ graph: {}, transferVersion: 4 }),
+    ).toThrow("document schema is unsupported");
     expect(
       /** Restores a graph without a body node. @returns Invalid result. */ () =>
         restoreOdtWriterTransfer({

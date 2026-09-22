@@ -8,6 +8,7 @@ import {
   SvxTextLeftMarginItem,
 } from "../../../../editeng/source/items/paraitem";
 import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   RES_PARATR_ADJUST,
   RES_MARGIN_TEXTLEFT,
@@ -18,10 +19,9 @@ import {
   RES_PARATR_NUMRULE,
 } from "../../../inc/hintids";
 import {
-  createDefaultWriterParagraphList,
-  normalizeWriterParagraphList,
+  WRITER_LIST_WHICH_RANGES,
   WRITER_MAX_LIST_LEVEL,
-  type WriterParagraphList,
+  type WriterParagraphListKind,
 } from "../doc/list";
 import { type SwTextFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
 import { type SwNumRule } from "../doc/number";
@@ -66,8 +66,7 @@ function getWriterGraphemeBoundaries(text: string): readonly number[] {
 }
 import { SwNumRuleItem } from "../para/paratr";
 import { SwpHints } from "./ndhints";
-import type { WriterCharacterAttributes } from "./txatbase";
-export type { WriterCharacterAttributes } from "./txatbase";
+import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
 
 /** Names the bounded direct character attributes currently supported by the browser Writer. */
 export const WRITER_CHARACTER_FORMATS = ["bold", "italic", "underline"] as const;
@@ -112,11 +111,6 @@ export class SwTextNode extends SwContentNode {
     return this.mText;
   }
 
-  /** Exposes canonical text to existing read-only Writer view adapters. @returns Canonical text. */
-  public get text(): string {
-    return this.mText;
-  }
-
   /** Returns text length in UTF-16 code units, matching Writer content indices. @returns UTF-16 length. */
   public Len(): number {
     return this.mText.length;
@@ -147,38 +141,20 @@ export class SwTextNode extends SwContentNode {
   }
 
   /** Returns the paragraph adjustment item as a view-friendly value. @returns Paragraph alignment. */
-  public get alignment(): WriterParagraphAlignment {
+  public GetParagraphAlignment(): WriterParagraphAlignment {
     const adjust = (this.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust();
     return getWriterParagraphAlignment(adjust);
   }
 
   /** Returns the effective direct text-left margin in twips. @returns Text-left margin. */
-  public get textLeftMargin(): number {
+  public GetParagraphTextLeftMargin(): number {
     return (this.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft();
   }
 
-  /** Returns a copy of the bounded numbering/list items. @returns Paragraph list items. */
-  public get list(): WriterParagraphList {
-    const ruleName = this.GetNumRuleName();
-    if (ruleName.length === 0) {
-      const listId = (this.GetAttr(RES_PARATR_LIST_ID) as SfxStringItem).GetValue();
-      const level = this.GetAttrListLevel();
-      return listId.length === 0
-        ? { kind: "none", level }
-        : { kind: "none", level, styleId: listId };
-    }
+  /** Returns the effective list family from the paragraph's SwNumRule. @returns List kind. */
+  public GetListKind(): WriterParagraphListKind {
     const rule = this.GetNumRule();
-    if (rule === undefined) return createDefaultWriterParagraphList();
-    const level = this.GetAttrListLevel();
-    const restart = this.IsListRestart();
-    const startValue = this.HasAttrListRestartValue() ? this.GetAttrListRestartValue() : undefined;
-    return {
-      kind: rule.GetNumFormat(level).GetKind(),
-      level,
-      ...(rule.IsAutoRule() ? {} : { styleId: ruleName }),
-      ...(restart ? { restart: true } : {}),
-      ...(startValue === undefined ? {} : { startValue }),
-    };
+    return rule === undefined ? "none" : rule.GetNumFormat(this.GetAttrListLevel()).GetKind();
   }
 
   /** Returns the SwNumRuleItem value applied to this text node. @returns Rule name, or an empty string. */
@@ -263,7 +239,7 @@ export class SwTextNode extends SwContentNode {
   }
 
   /** Returns the paragraph's text format collection identity. @returns Paragraph style identity. */
-  public get style(): WriterParagraphStyle {
+  public GetParagraphStyle(): WriterParagraphStyle {
     return this.GetTextFormatColl().id;
   }
 
@@ -277,69 +253,43 @@ export class SwTextNode extends SwContentNode {
     this.SetAttr(new SvxTextLeftMarginItem(margin, RES_MARGIN_TEXTLEFT));
   }
 
-  /** Sets the bounded numbering/list items. @param list - New list items. @returns Nothing. */
-  public SetParagraphList(list: WriterParagraphList): void {
+  /** Replaces the canonical numbering/list item subset captured by Writer undo. @param items - Direct list items. @returns Nothing. */
+  public SetListItems(items: SfxItemSet): void {
     const previousListId = this.GetListId();
     if (previousListId.length > 0)
       this.GetDoc().GetDocumentListsManager().GetListByName(previousListId)?.RemoveListItem(this);
-    const normalized = normalizeWriterParagraphList(list);
-    if (normalized.kind === "none") {
-      this.SetListRestart(false);
-      this.SetNumRule("");
-      if (normalized.styleId === undefined) this.ResetAttr(RES_PARATR_LIST_ID);
-      else this.SetListId(normalized.styleId);
-      this.SetAttrListLevel(normalized.level);
-      return;
-    }
-    let ruleName = normalized.styleId ?? normalized.ruleName ?? "";
-    if (ruleName.length === 0) {
-      const index = this.GetDoc().paragraphs.indexOf(this);
-      const previous = index > 0 ? this.GetDoc().paragraphs[index - 1] : undefined;
-      const previousRule = previous?.GetNumRule();
-      ruleName =
-        previousRule?.IsAutoRule() === true && previous?.list.kind === normalized.kind
-          ? previousRule.GetName()
-          : this.GetDoc()
-              .GetDocumentListsManager()
-              .CreateAutomaticNumRule(normalized.kind)
-              .GetName();
-    }
-    const namedRule = this.GetDoc().FindNumRulePtr(ruleName);
-    if (
-      normalized.styleId !== undefined &&
-      namedRule !== undefined &&
-      namedRule.GetNumFormat(normalized.level).GetKind() !== normalized.kind
-    )
-      ruleName = this.GetDoc()
+    for (const which of [
+      RES_PARATR_NUMRULE,
+      RES_PARATR_LIST_ID,
+      RES_PARATR_LIST_LEVEL,
+      RES_PARATR_LIST_ISRESTART,
+      RES_PARATR_LIST_RESTARTVALUE,
+    ])
+      this.ResetAttr(which);
+    this.SetAttr(items);
+    const listId = this.GetListId();
+    if (this.GetNumRule() !== undefined && listId.length > 0)
+      this.GetDoc()
         .GetDocumentListsManager()
-        .CreateAutomaticNumRule(normalized.kind)
-        .GetName();
-    const rule = this.GetDoc().EnsureNumRule(ruleName, normalized.kind, normalized.level);
-    this.SetNumRule(rule.GetName());
-    const documentLists = this.GetDoc().GetDocumentListsManager();
-    const continuedListId =
-      normalized.listId ??
-      (this.GetDoc().paragraphs[this.GetDoc().paragraphs.indexOf(this) - 1]?.GetNumRuleName() ===
-      rule.GetName()
-        ? this.GetDoc().paragraphs[this.GetDoc().paragraphs.indexOf(this) - 1]?.GetListId()
-        : undefined);
-    const documentList =
-      continuedListId === undefined
-        ? documentLists.GetListForListStyle(rule.GetName())
-        : documentLists.CreateList(rule.GetName(), continuedListId);
-    this.SetListId(documentList.GetListId());
-    this.SetAttrListLevel(normalized.level);
-    this.SetListRestart(normalized.restart === true, normalized.startValue);
-    documentList.InsertListItem(this, normalized.level);
+        .CreateList(this.GetNumRuleName(), listId)
+        .InsertListItem(this, this.GetAttrListLevel());
   }
 
-  /** Captures list items including internal automatic identities for exact undo/redo. @returns Complete list state. */
-  public CaptureParagraphListState(): WriterParagraphList {
-    const visible = this.list;
-    const rule = this.GetNumRule();
-    return rule?.IsAutoRule() === true
-      ? { ...visible, listId: this.GetListId(), ruleName: rule.GetName() }
-      : visible;
+  /** Captures direct numbering/list items for exact undo/redo. @returns Independent item set. */
+  public CaptureListItems(): SfxItemSet {
+    const captured = new SfxItemSet(this.GetDoc().GetAttrPool(), WRITER_LIST_WHICH_RANGES);
+    const attributes = this.GetpSwAttrSet();
+    for (const which of [
+      RES_PARATR_NUMRULE,
+      RES_PARATR_LIST_ID,
+      RES_PARATR_LIST_LEVEL,
+      RES_PARATR_LIST_ISRESTART,
+      RES_PARATR_LIST_RESTARTVALUE,
+    ]) {
+      const item = attributes?.GetItemIfSet(which, false);
+      if (item !== undefined) captured.Put(item);
+    }
+    return captured;
   }
 
   /** Returns the document-owned list counter after validation. @returns One-based value for numbered list items. */
@@ -370,7 +320,7 @@ export class SwTextNode extends SwContentNode {
   public InsertText(
     text: string,
     offset: number,
-    attributes = this.getCharacterAttributesAt(offset),
+    attributes = this.GetCharacterItemsAt(offset),
     hyperlink = this.getHyperlinkAt(offset),
   ): string {
     if (text.length === 0) return text;
@@ -379,7 +329,7 @@ export class SwTextNode extends SwContentNode {
       this.mText.length,
       offset,
       text.length,
-      attributes,
+      projectWriterCharacterAttributes(attributes),
       this.GetSwAttrSet(),
       hyperlink,
     );
@@ -491,14 +441,16 @@ export class SwTextNode extends SwContentNode {
   }
 
   /** Reads direct attributes inherited by a collapsed caret. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
-  public getCharacterAttributesAt(offset: number): WriterCharacterAttributes {
-    return this.pSwpHints === undefined
-      ? new SwpHints(this.GetDoc().GetAttrPool()).getCharacterAttributes(
-          this.mText,
-          offset,
-          this.GetSwAttrSet(),
-        )
-      : this.pSwpHints.getCharacterAttributes(this.mText, offset, this.GetSwAttrSet());
+  public GetCharacterItemsAt(offset: number): SfxItemSet {
+    const attributes =
+      this.pSwpHints === undefined
+        ? new SwpHints(this.GetDoc().GetAttrPool()).getCharacterAttributes(
+            this.mText,
+            offset,
+            this.GetSwAttrSet(),
+          )
+        : this.pSwpHints.getCharacterAttributes(this.mText, offset, this.GetSwAttrSet());
+    return createWriterCharacterItemSet(this.GetDoc().GetAttrPool(), attributes);
   }
 
   /** Queries one direct character item over a native text range. @param start - Inclusive range start. @param end - Exclusive range end. @param format - Queried item group. @returns Uniform or mixed state. */
@@ -582,7 +534,7 @@ export class SwTextNode extends SwContentNode {
     const clone = new SwTextNode(
       nodes,
       nodes.GetEndOfContent().StartOfSectionNode(),
-      nodes.GetDoc().GetTextFormatColl(this.style),
+      nodes.GetDoc().GetTextFormatColl(this.GetParagraphStyle()),
     );
     const direct = this.GetpSwAttrSet();
     if (direct !== undefined) clone.SetAttr(direct);
@@ -600,12 +552,12 @@ export class SwTextNode extends SwContentNode {
   /** Creates a native insertion fragment from text and effective character items. @param text - Inserted text. @param attributes - Effective direct character state. @param hyperlink - Optional inserted hyperlink. @returns Native text/hint fragment. */
   public CreateTextFragmentFromText(
     text: string,
-    attributes: WriterCharacterAttributes,
+    attributes: SfxItemSet,
     hyperlink?: WriterHyperlink,
   ): SwTextFragment {
     const hints = new SwpHints(this.GetDoc().GetAttrPool()).createTextHints(
       text.length,
-      attributes,
+      projectWriterCharacterAttributes(attributes),
       this.GetSwAttrSet(),
       hyperlink,
     );

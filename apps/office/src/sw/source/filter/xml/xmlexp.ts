@@ -163,7 +163,7 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
   return {
     ...(alignment === undefined ? {} : { alignment }),
-    ...(hasDirectLeftMargin ? { leftMargin: node.textLeftMargin } : {}),
+    ...(hasDirectLeftMargin ? { leftMargin: node.GetParagraphTextLeftMargin() } : {}),
     ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
     inheritedProperties: getCharacterProperties(
       node.GetSwAttrSet(),
@@ -203,8 +203,8 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
         text: run.text,
       }),
     ),
-    style: node.style,
-    styleName: getWriterOdfStyleName(node.style),
+    style: node.GetParagraphStyle(),
+    styleName: getWriterOdfStyleName(node.GetParagraphStyle()),
   };
 }
 

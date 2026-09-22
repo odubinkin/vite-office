@@ -43,7 +43,8 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     expect(new ZipFile(bytes).getEntryNames()).toContain("content.xml");
 
     const fresh = active.shell.InitNew(metadata("New document", "new-document"));
-    expect(fresh.paragraphs).toMatchObject([{ text: "" }]);
+    expect(fresh.paragraphs).toHaveLength(1);
+    expect(fresh.paragraphs[0]?.GetText()).toBe("");
     const loaded = await active.shell.Load(bytes, metadata("Fallback", "opened-document"));
     expect(active.shell.GetDoc()).toBe(loaded);
     expect(active.shell.GetDocumentState()).toMatchObject({
@@ -51,7 +52,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
       lifecycle: "saved",
       title: "Shell document",
     });
-    expect(loaded.paragraphs[0]?.text).toBe("ODT body");
+    expect(loaded.paragraphs[0]?.GetText()).toBe("ODT body");
   });
 
   it("renames the document through shell state", /** Verifies title metadata is validated, published, and marked dirty. @returns Nothing. */ () => {
@@ -108,7 +109,7 @@ describe("SwDocShell", /** Registers document-shell tests. @returns Nothing. */ 
     expect(active.shell.GetMedium()).toBe(medium);
     expect(medium.IsOpen()).toBe(true);
     expect(active.writerShell.Insert(" session")).toBe(true);
-    expect(active.document.paragraphs[0]?.text).toBe("kept session");
+    expect(active.document.paragraphs[0]?.GetText()).toBe("kept session");
 
     expect(
       /** Attempts replacement with invalid medium input. @returns Invalid replacement; throws. */ () =>

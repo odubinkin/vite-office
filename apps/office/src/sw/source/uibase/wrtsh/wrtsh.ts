@@ -2,6 +2,7 @@
 
 import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
 import type { SfxUndoAction, SfxUndoManager } from "../../../../svl/source/undo/undo";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
@@ -11,11 +12,9 @@ import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import type {
   SwTextFragment,
   SwTextNode as WriterParagraph,
-  WriterCharacterAttributes,
   WriterCharacterFormat,
   WriterParagraphAlignment,
 } from "../../core/txtnode/ndtxt";
-import { DEFAULT_WRITER_CHARACTER_ATTRIBUTES } from "../../core/txtnode/text-run-projection";
 import type { WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
 import { SwTextShell } from "../shells/textsh";
@@ -43,9 +42,7 @@ export class SwWrtShell extends SwModify {
   private readonly docShellSubscription: () => void;
   private readonly editing: SwWrtShellEditingOperations;
   private readonly listShell: SwListShell;
-  private pendingCharacterAttributes: WriterCharacterAttributes = {
-    ...DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
-  };
+  private pendingCharacterItems: SfxItemSet;
   private readonly undoContext: SwUndoRedoContext;
   /** Creates a shell at the end of the first Writer paragraph. @param docShell - Persistent owning document shell. @param dialogController - Writer dialog lifecycle controller. @returns Nothing. */
   public constructor(
@@ -55,8 +52,8 @@ export class SwWrtShell extends SwModify {
     super();
     const paragraph = docShell.GetDoc().paragraphs[0] as WriterParagraph;
     this.activeParagraph = paragraph;
-    this.cursor = new SwPaM(new SwPosition(paragraph, paragraph.text.length));
-    this.pendingCharacterAttributes = paragraph.getCharacterAttributesAt(paragraph.text.length);
+    this.cursor = new SwPaM(new SwPosition(paragraph, paragraph.Len()));
+    this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
     this.undoContext = {
       GetDoc: /** Returns the shell's current SwDoc. @returns Active document. */ () =>
         this.docShell.GetDoc(),
@@ -82,9 +79,8 @@ export class SwWrtShell extends SwModify {
         this.GetActiveParagraph(),
       getCursor: /** Returns the persistent PaM. @returns Cursor. */ () => this.GetCursor(),
       getDoc: /** Returns the active document. @returns Writer document. */ () => this.GetDoc(),
-      getPendingCharacterAttributes:
-        /** Returns caret attributes. @returns Copied attributes. */ () =>
-          this.GetPendingCharacterAttributes(),
+      getPendingCharacterItems: /** Returns caret items. @returns Copied item set. */ () =>
+        this.GetPendingCharacterItems(),
       getUndoManager: /** Returns document history. @returns Undo manager. */ () =>
         this.docShell.GetUndoManager(),
       setCursor:
@@ -130,12 +126,12 @@ export class SwWrtShell extends SwModify {
     return this.activeParagraph;
   }
   /** Returns pending direct attributes for a collapsed caret. @returns Copied attribute state. */
-  public GetPendingCharacterAttributes(): WriterCharacterAttributes {
-    return { ...this.pendingCharacterAttributes };
+  public GetPendingCharacterItems(): SfxItemSet {
+    return this.pendingCharacterItems.Clone();
   }
   /** Replaces pending direct attributes on behalf of the active text shell. @param attributes - Next caret attributes. @returns Nothing. */
-  public SetPendingCharacterAttributes(attributes: WriterCharacterAttributes): void {
-    this.pendingCharacterAttributes = { ...attributes };
+  public SetPendingCharacterItems(items: SfxItemSet): void {
+    this.pendingCharacterItems = items.Clone();
   }
   /** Publishes a cursor/attribute state change owned by a child context shell. @returns Nothing. */
   public NotifySelectionChanged(): void {
@@ -188,8 +184,8 @@ export class SwWrtShell extends SwModify {
     const paragraph = this.GetDoc().paragraphs[0] as WriterParagraph;
     this.activeParagraph = paragraph;
     this.composition = undefined;
-    this.pendingCharacterAttributes = paragraph.getCharacterAttributesAt(paragraph.text.length);
-    this.AssignCursor(paragraph, paragraph.text.length);
+    this.pendingCharacterItems = paragraph.GetCharacterItemsAt(paragraph.Len());
+    this.AssignCursor(paragraph, paragraph.Len());
     this.NotifySelection();
   }
   /** Releases the persistent PaM and broadcaster registrations. @returns Nothing. */
@@ -221,7 +217,7 @@ export class SwWrtShell extends SwModify {
     )
       return false;
     this.activeParagraph = pointNode;
-    this.pendingCharacterAttributes = pointNode.getCharacterAttributesAt(point.GetContentIndex());
+    this.pendingCharacterItems = pointNode.GetCharacterItemsAt(point.GetContentIndex());
     this.docShell.GetUndoManager().BreakUndoGrouping();
     this.cursor.Assign(point, mark);
     this.NotifySelection();
@@ -439,7 +435,7 @@ export class SwWrtShell extends SwModify {
       mark?.GetNode() as WriterParagraph | undefined,
       mark?.GetContentIndex(),
       this.GetActiveParagraph(),
-      this.pendingCharacterAttributes,
+      this.pendingCharacterItems,
     );
   }
 
@@ -449,7 +445,7 @@ export class SwWrtShell extends SwModify {
     offset: number,
   ): SwUndoCursorState {
     if (paragraph.GetDoc() !== this.GetDoc()) throw new Error("Writer cursor node is foreign.");
-    return createWriterCollapsedCursorState(paragraph, offset, this.pendingCharacterAttributes);
+    return createWriterCollapsedCursorState(paragraph, offset, this.pendingCharacterItems);
   }
 
   /** Restores action-owned cursor state against the current mutable SwDoc graph. @param state - Stored cursor boundary. @returns Nothing. */
@@ -467,7 +463,7 @@ export class SwWrtShell extends SwModify {
         : new SwPosition(markNode, Math.min(state.mark.offset, markNode.Len()));
     this.activeParagraph =
       state.activeParagraph.GetDoc() === document ? state.activeParagraph : pointNode;
-    this.pendingCharacterAttributes = { ...state.pendingCharacterAttributes };
+    this.pendingCharacterItems = state.pendingCharacterItems.Clone();
     this.cursor.Assign(point, mark);
   }
 

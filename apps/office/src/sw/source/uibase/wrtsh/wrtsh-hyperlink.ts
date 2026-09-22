@@ -1,11 +1,9 @@
 /** @fileoverview Implements Writer hyperlink shell operations from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
 
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
-import type {
-  SwTextNode as WriterParagraph,
-  WriterCharacterAttributes,
-} from "../../core/txtnode/ndtxt";
+import type { SwTextNode as WriterParagraph } from "../../core/txtnode/ndtxt";
 import {
   copyWriterTextRangeRuns,
   projectWriterTextRuns,
@@ -48,7 +46,7 @@ export function getWriterHyperlinkAtCursor(
 export function createWriterHyperlinkAction(
   document: WriterDocument,
   cursor: SwPaM,
-  pendingAttributes: WriterCharacterAttributes,
+  pendingItems: SfxItemSet,
   before: SwUndoCursorState,
   hyperlink: WriterHyperlink | undefined,
   text?: string,
@@ -84,12 +82,12 @@ export function createWriterHyperlinkAction(
   return new SwUndoInsert(
     paragraph,
     offset,
-    paragraph.CreateTextFragmentFromText(value, pendingAttributes, hyperlink),
+    paragraph.CreateTextFragmentFromText(value, pendingItems, hyperlink),
     undefined,
     before,
     {
       activeParagraph: paragraph,
-      pendingCharacterAttributes: { ...pendingAttributes },
+      pendingCharacterItems: pendingItems.Clone(),
       point: { node: paragraph, offset: offset + value.length },
     },
   );

@@ -4,6 +4,7 @@ import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/shell";
 import {
   isWriterParagraphListKind,
+  createWriterListItemSet,
   WRITER_MAX_LIST_LEVEL,
   type WriterParagraphListKind,
 } from "../../core/doc/list";
@@ -48,27 +49,33 @@ export class SwListShell {
     if (!isWriterParagraphListKind(kind))
       throw new Error(`Unsupported Writer paragraph list kind: ${kind}`);
     const paragraph = this.wrtShell.GetActiveParagraph();
-    if (paragraph.list.kind === kind) return false;
+    if (paragraph.GetListKind() === kind) return false;
     const cursor = this.wrtShell.CaptureCursorState();
-    const before = paragraph.CaptureParagraphListState();
+    const before = paragraph.CaptureListItems();
     return this.wrtShell.ApplyAction(
-      new SwUndoInsNum(paragraph, before, { ...paragraph.list, kind }, cursor, cursor),
+      new SwUndoInsNum(
+        paragraph,
+        before,
+        createWriterListItemSet(paragraph, { kind, level: paragraph.GetAttrListLevel() }),
+        cursor,
+        cursor,
+      ),
     );
   }
 
   /** Returns the active list level. @returns Zero-based level. */
   public GetLevel(): number {
-    return this.wrtShell.GetActiveParagraph().list.level;
+    return this.wrtShell.GetActiveParagraph().GetAttrListLevel();
   }
 
   /** Returns the active paragraph list family. @returns Current list kind. */
   public GetKind(): WriterParagraphListKind {
-    return this.wrtShell.GetActiveParagraph().list.kind;
+    return this.wrtShell.GetActiveParagraph().GetListKind();
   }
 
   /** Reports whether the active paragraph belongs to a list. @returns Whether in a list. */
   public IsInList(): boolean {
-    return this.wrtShell.GetActiveParagraph().list.kind !== "none";
+    return this.wrtShell.GetActiveParagraph().GetListKind() !== "none";
   }
 }
 

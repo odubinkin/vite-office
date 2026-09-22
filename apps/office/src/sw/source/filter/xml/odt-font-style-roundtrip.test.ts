@@ -267,7 +267,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
           .GetItemIfSet(RES_CHRATR_FONTSIZE, false) as SvxFontHeightItem
       ).GetHeight(),
     ).toBe(13 * 20);
-    expect(opened.document.paragraphs[0]?.style).toBe("heading-1");
+    expect(opened.document.paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
     expect(projectWriterTextRuns(opened.document.paragraphs[0]).at(0)?.attributes.fontFamily).toBe(
       "Noto Sans",
     );
@@ -296,7 +296,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(projectStyles(encodeWriterDocument(reopened.document))).toEqual(
       projectStyles(encodeWriterDocument(opened.document)),
     );
-    expect(reopened.document.paragraphs[0]?.style).toBe("heading-1");
+    expect(reopened.document.paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
     expect(
       projectWriterTextRuns(reopened.document.paragraphs[0]).at(0)?.attributes.fontFamily,
     ).toBe("Noto Sans");

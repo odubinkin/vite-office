@@ -4,8 +4,9 @@
  */
 
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPaM, SwPosition } from "../crsr/pam";
-import type { SwTextFragment, WriterCharacterAttributes } from "../txtnode/ndtxt";
+import type { SwTextFragment } from "../txtnode/ndtxt";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "../doc/doc";
 
@@ -24,7 +25,7 @@ export interface SwUndoCursorState {
   /** Optional fixed selection endpoint; its presence retains direction. */
   readonly mark?: SwUndoCursorPosition;
   /** Direct attributes active at a collapsed Writer cursor. */
-  readonly pendingCharacterAttributes: WriterCharacterAttributes;
+  readonly pendingCharacterItems: SfxItemSet;
   /** Moving selection endpoint. */
   readonly point: SwUndoCursorPosition;
 }
@@ -164,7 +165,7 @@ function cloneCursorState(state: SwUndoCursorState): SwUndoCursorState {
   return {
     activeParagraph: state.activeParagraph,
     ...(state.mark === undefined ? {} : { mark: { ...state.mark, node: state.mark.node } }),
-    pendingCharacterAttributes: { ...state.pendingCharacterAttributes },
+    pendingCharacterItems: state.pendingCharacterItems.Clone(),
     point: { ...state.point, node: state.point.node },
   };
 }

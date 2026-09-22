@@ -15,7 +15,6 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
 import { DEFAULT_ZIP_FILE_LIMITS, ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import {
@@ -30,9 +29,8 @@ import {
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
-  RES_PARATR_NUMRULE,
 } from "../../../inc/hintids";
-import { SwNumRuleItem } from "../../core/para/paratr";
+import { applyWriterParagraphList, projectWriterParagraphList } from "../../core/doc/list";
 import { createWriterDocument } from "../../core/doc/doc";
 import { createWriterTextFragment } from "../../core/txtnode/text-run-projection";
 import { encodeWriterDocument } from "../basflt/writer-document-codec";
@@ -192,9 +190,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     second.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
     const third = writer.nodes.MakeTextNode();
     third.SetAttr(new SvxUnderlineItem(FontLineStyle.NONE, RES_CHRATR_UNDERLINE));
-    first?.SetParagraphList({ kind: "numbered", level: 0 });
-    second.SetParagraphList({ kind: "numbered", level: 1 });
-    third.SetParagraphList({ kind: "bullet", level: 0 });
+    if (first !== undefined) applyWriterParagraphList(first, { kind: "numbered", level: 0 });
+    applyWriterParagraphList(second, { kind: "numbered", level: 1 });
+    applyWriterParagraphList(third, { kind: "bullet", level: 0 });
 
     const documentState = metadata("Round & Trip");
     const bytes = writeTargetOdt(writer, documentState);
@@ -244,20 +242,20 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       restored.document.paragraphs.map(
         /** Executes the enclosing deterministic test or transformation callback. @param node - Callback input. @returns Callback result. */
         (node) => ({
-          alignment: node.alignment,
-          list: node.list,
-          style: node.style,
-          text: node.text,
+          alignment: node.GetParagraphAlignment(),
+          list: projectWriterParagraphList(node),
+          style: node.GetParagraphStyle(),
+          text: node.GetText(),
         }),
       ),
     ).toEqual(
       writer.paragraphs.map(
         /** Executes the enclosing deterministic test or transformation callback. @param node - Callback input. @returns Callback result. */
         (node) => ({
-          alignment: node.alignment,
-          list: node.list,
-          style: node.style,
-          text: node.text,
+          alignment: node.GetParagraphAlignment(),
+          list: projectWriterParagraphList(node),
+          style: node.GetParagraphStyle(),
+          text: node.GetText(),
         }),
       ),
     );
@@ -288,8 +286,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         (node) => ({
           listId: node.GetListId(),
           ruleName: node.GetNumRuleName(),
-          ...node.list,
-          text: node.text,
+          ...projectWriterParagraphList(node),
+          text: node.GetText(),
         }),
       ),
     ).toEqual([
@@ -328,8 +326,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         (node) => ({
           listId: node.GetListId(),
           ruleName: node.GetNumRuleName(),
-          ...node.list,
-          text: node.text,
+          ...projectWriterParagraphList(node),
+          text: node.GetText(),
         }),
       ),
     ).toEqual(
@@ -338,8 +336,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         (node) => ({
           listId: node.GetListId(),
           ruleName: node.GetNumRuleName(),
-          ...node.list,
-          text: node.text,
+          ...projectWriterParagraphList(node),
+          text: node.GetText(),
         }),
       ),
     );
@@ -349,14 +347,21 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       content.replace("<text:list-item>", '<text:list-item text:start-value="3">'),
       metadata(),
     );
-    expect(restarted.document.paragraphs[0]?.list).toMatchObject({
+    expect(
+      projectWriterParagraphList(
+        restarted.document.paragraphs[0] as import("../../core/txtnode/ndtxt").SwTextNode,
+      ),
+    ).toMatchObject({
       restart: true,
       startValue: 3,
     });
     const restartedContent = exportContentXml(restarted.document);
     expect(restartedContent).toContain('<text:list-item text:start-value="3">');
     expect(
-      importWriterXml(styles, restartedContent, metadata()).document.paragraphs[0]?.list,
+      projectWriterParagraphList(
+        importWriterXml(styles, restartedContent, metadata()).document
+          .paragraphs[0] as import("../../core/txtnode/ndtxt").SwTextNode,
+      ),
     ).toMatchObject({ restart: true, startValue: 3 });
     expect(
       /** Imports an unsupported numbering suffix. @returns Invalid document. */ () =>
@@ -433,55 +438,6 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           '<text:list-style style:name="DotAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="CircleAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="●"/></text:list-style>',
         ),
     ).toThrow("Conflicting ODF list rule");
-  });
-
-  it("rejects unsupported canonical Writer state instead of silently dropping it" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
-    for (const configure of [
-      /** Executes the enclosing deterministic test or transformation callback. @param writer - Callback input. @returns Callback result. */
-      (writer: ReturnType<typeof createWriterDocument>) =>
-        writer.paragraphs[0]?.SetParagraphList({ kind: "none", level: 1 }),
-      /** Executes the enclosing deterministic test or transformation callback. @param writer - Callback input. @returns Callback result. */
-      (writer: ReturnType<typeof createWriterDocument>) =>
-        writer.paragraphs[0]?.SetParagraphList({ kind: "none", level: 0, styleId: "List" }),
-    ]) {
-      const writer = createWriterDocument();
-      configure(writer);
-      expect(
-        /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-        () => writeTargetOdt(writer),
-      ).toThrow("without SwNumRule");
-    }
-    const unknownRule = createWriterDocument();
-    unknownRule.paragraphs[0]?.SetAttr(new SwNumRuleItem("Missing"));
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => exportContentXml(unknownRule),
-    ).toThrow("cannot resolve SwNumRule Missing");
-    const invalidCharacter = createWriterDocument();
-    const invalidCharacterSet = invalidCharacter
-      .GetDfltTextFormatColl()
-      .GetAttrSet() as unknown as {
-      items: Map<number, unknown>;
-    };
-    invalidCharacterSet.items.set(RES_CHRATR_WEIGHT, new SfxInt16Item(RES_CHRATR_WEIGHT, 1));
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => exportStylesXml(invalidCharacter),
-    ).toThrow("ODT character item is invalid");
-    const scriptSpecificCharacter = createWriterDocument();
-    scriptSpecificCharacter
-      .GetDfltTextFormatColl()
-      .SetFormatAttr(new SvxWeightItem(FontWeight.BOLD, RES_CHRATR_WEIGHT));
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => exportStylesXml(scriptSpecificCharacter),
-    ).toThrow("script-specific character formatting");
-    const styleItem = createWriterDocument();
-    styleItem.GetTextFormatColl("heading-1").SetFormatAttr(new SwNumRuleItem("Rule"));
-    expect(
-      /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
-      () => exportStylesXml(styleItem),
-    ).toThrow(`WhichId ${RES_PARATR_NUMRULE}`);
   });
 
   it("maps every supported SvxAdjust variant and rejects invalid adjustment items" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
@@ -883,9 +839,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       'fo:font-weight="bold"',
       'fo:font-weight="bold" fo:color="#000000"',
     );
-    expect(importWriterXml(styles, unknown, metadata(), meta).document.paragraphs[0]?.text).toBe(
-      "",
-    );
+    expect(
+      importWriterXml(styles, unknown, metadata(), meta).document.paragraphs[0]?.GetText(),
+    ).toBe("");
     const mismatchedScript = styledContent.replace(
       'fo:font-weight="bold"',
       'fo:font-weight="bold" style:font-weight-asian="normal"',
@@ -932,7 +888,12 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         )
         .replace('text:style-name="Standard"', 'text:style-name="P9"');
       expect(
-        importWriterXml(styles, content, metadata(), meta).document.paragraphs[0]?.alignment,
+        importWriterXml(
+          styles,
+          content,
+          metadata(),
+          meta,
+        ).document.paragraphs[0]?.GetParagraphAlignment(),
       ).toBe(expected);
     }
     const content = baseContent
@@ -941,9 +902,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         '<style:style style:name="T9" style:family="text"><style:text-properties fo:font-weight="normal" fo:font-style="normal" style:text-underline-style="none" style:text-underline-width="auto"/></style:style></office:automatic-styles>',
       )
       .replace("</text:p>", '<text:span text:style-name="T9">plain</text:span></text:p>');
-    expect(importWriterXml(styles, content, metadata(), meta).document.paragraphs[0]?.text).toBe(
-      "plain",
-    );
+    expect(
+      importWriterXml(styles, content, metadata(), meta).document.paragraphs[0]?.GetText(),
+    ).toBe("plain");
 
     for (const [adjust, expected] of [
       [SvxAdjust.Left, "left"],

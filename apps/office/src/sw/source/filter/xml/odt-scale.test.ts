@@ -36,8 +36,8 @@ describe("Writer streaming XML scale", /** Groups scale scenarios. @returns Noth
     expect(imported.paragraphs).toHaveLength(count);
     const roundTripped = importWriterXml(styles, exportContentXml(imported), metadata()).document;
     expect(roundTripped.paragraphs).toHaveLength(count);
-    expect(roundTripped.paragraphs[0]?.text).toBe("p0");
-    expect(roundTripped.paragraphs[count - 1]?.text).toBe(`p${count - 1}`);
+    expect(roundTripped.paragraphs[0]?.GetText()).toBe("p0");
+    expect(roundTripped.paragraphs[count - 1]?.GetText()).toBe(`p${count - 1}`);
   });
 
   it("keeps deeply nested and numerous inline spans bounded to the active paragraph", /** Verifies active-context scaling. @returns Nothing. */ () => {
@@ -54,8 +54,8 @@ describe("Writer streaming XML scale", /** Groups scale scenarios. @returns Noth
       content(`<text:p>${nested}</text:p><text:p>${many}</text:p>`, automaticStyle),
       metadata(),
     ).document;
-    expect(document.paragraphs[0]?.text).toBe("deep");
-    expect(document.paragraphs[1]?.text).toHaveLength(1_000);
+    expect(document.paragraphs[0]?.GetText()).toBe("deep");
+    expect(document.paragraphs[1]?.GetText()).toHaveLength(1_000);
     expect(projectWriterTextRuns(document.paragraphs[1])).toHaveLength(1);
   });
 

@@ -82,7 +82,7 @@ export function exportWriterTextToPort(
           .map(
             /** Selects canonical paragraph text. @param paragraph - Text node. @returns Plain text. */ (
               paragraph,
-            ) => paragraph.text,
+            ) => paragraph.GetText(),
           )
           .join("\n"),
         mediaType: "text/plain;charset=utf-8",

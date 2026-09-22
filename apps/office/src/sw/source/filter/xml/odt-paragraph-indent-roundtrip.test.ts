@@ -49,9 +49,11 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     const bytes = writeOdtDocument(writer, metadata());
     const content = await new ZipFile(bytes).readTextEntry("content.xml");
     expect(content).toContain('fo:margin-left="2.0003cm"');
-    expect((await readOdtDocument(bytes, metadata())).document.paragraphs[0]?.textLeftMargin).toBe(
-      1134,
-    );
+    expect(
+      (
+        await readOdtDocument(bytes, metadata())
+      ).document.paragraphs[0]?.GetParagraphTextLeftMargin(),
+    ).toBe(1134);
     for (const [value, expected] of [
       ["1cm", 567],
       ["1in", 1440],
@@ -62,7 +64,7 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
         await replaceEntry(bytes, "content.xml", content.replace("2.0003cm", value)),
         metadata(),
       );
-      expect(imported.document.paragraphs[0]?.textLeftMargin).toBe(expected);
+      expect(imported.document.paragraphs[0]?.GetParagraphTextLeftMargin()).toBe(expected);
     }
     await expect(
       readOdtDocument(

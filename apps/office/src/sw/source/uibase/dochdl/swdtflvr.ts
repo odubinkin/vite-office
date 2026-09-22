@@ -46,18 +46,18 @@ export class SwTransferable {
         const end = index === endIndex ? ordered.end.GetContentIndex() : paragraph.Len();
         const runs = getSelectedRuns(paragraph, start, end);
         const complete = start === 0 && end === paragraph.Len();
-        const listKind = complete ? paragraph.list.kind : "none";
+        const listKind = complete ? paragraph.GetListKind() : "none";
         const number = listKind === "numbered" ? paragraph.GetListItemNumber() : undefined;
         const marker =
           listKind === "bullet"
-            ? paragraph.GetNumRule()?.GetNumFormat(paragraph.list.level).GetBulletChar()
+            ? paragraph.GetNumRule()?.GetNumFormat(paragraph.GetAttrListLevel()).GetBulletChar()
             : number === undefined
               ? undefined
               : `${number}.`;
         return {
           html: serializeRuns(runs),
           listKind,
-          listLevel: complete ? paragraph.list.level : 0,
+          listLevel: complete ? paragraph.GetAttrListLevel() : 0,
           marker,
           style: getModelParagraphStyle(paragraph),
           text: runs
@@ -133,8 +133,8 @@ function serializeRuns(runs: readonly WriterTextRun[]): string {
 
 /** Projects the bounded paragraph attributes used by the clipboard writer. @param paragraph - Canonical text node. @returns Inline paragraph CSS used by the HTML writer. */
 function getModelParagraphStyle(paragraph: SwTextNode): string {
-  const heading = paragraph.style === "heading-1";
-  return `text-align: ${paragraph.alignment}; font-size: ${heading ? "1.5rem" : "1rem"}; font-weight: ${heading ? "700" : "400"}; line-height: ${heading ? "2.25rem" : "1.75rem"};`;
+  const heading = paragraph.GetParagraphStyle() === "heading-1";
+  return `text-align: ${paragraph.GetParagraphAlignment()}; font-size: ${heading ? "1.5rem" : "1rem"}; font-weight: ${heading ? "700" : "400"}; line-height: ${heading ? "2.25rem" : "1.75rem"};`;
 }
 
 /** Escapes canonical Writer text before it becomes clipboard HTML. @param text - Untrusted model text. @returns HTML-safe text. */

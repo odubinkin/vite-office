@@ -40,6 +40,32 @@ describe("Writer list state" /** Groups serializable list-state tests. @returns 
       kind: "bullet",
       level: 9,
     });
+    expect(
+      normalizeWriterParagraphList({
+        kind: "numbered",
+        level: 1,
+        ruleName: "Numbering 1",
+        listId: "list-a",
+        restart: true,
+        startValue: 5,
+      }),
+    ).toEqual({
+      kind: "numbered",
+      level: 1,
+      ruleName: "Numbering 1",
+      listId: "list-a",
+      restart: true,
+      startValue: 5,
+    });
+    expect(
+      normalizeWriterParagraphList({
+        kind: "bullet",
+        level: 0,
+        ruleName: "  ",
+        listId: 42,
+        startValue: -1,
+      }),
+    ).toEqual({ kind: "bullet", level: 0 });
   });
 
   it("owns, invalidates, validates, and removes bounded SwNodeNum items", /** Verifies the supported SwList lifecycle. @returns Nothing. */ () => {

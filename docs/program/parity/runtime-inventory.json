@@ -2647,7 +2647,10 @@
           "WriterParagraphList",
           "createDefaultWriterParagraphList",
           "isWriterParagraphListKind",
-          "normalizeWriterParagraphList"
+          "normalizeWriterParagraphList",
+          "projectWriterParagraphList",
+          "createWriterListItemSet",
+          "applyWriterParagraphList"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/doc/list.cxx",
@@ -2923,7 +2926,7 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/core/txtnode/ndtxt.ts#WriterCharacterAttributes",
+          "apps/office/src/sw/source/core/txtnode/ndtxt.ts#SwTextNode",
           "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/core/txtnode/ndtxt.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
@@ -2931,7 +2934,8 @@
         "localSymbols": [
           "WRITER_CHARACTER_FORMATS",
           "WriterCharacterFormat",
-          "WRITER_PARAGRAPH_ALIGNMENTS"
+          "WRITER_PARAGRAPH_ALIGNMENTS",
+          "SwTextNode"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/txtnode/ndtxt.cxx",
@@ -3353,7 +3357,7 @@
         "evidence": [
           "apps/office/src/sw/source/filter/basflt/writer-storage-codec.ts#WriterStorageDocumentRecord"
         ],
-        "justification": "Defines the current durable browser-storage model envelope separately from worker and live filter contracts and intentionally rejects every retired schema.",
+        "justification": "Defines a thin durable browser-storage envelope around the one canonical WriterDocumentRecord graph and intentionally rejects every retired schema.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -3516,7 +3520,7 @@
         "evidence": [
           "apps/office/src/sw/source/filter/xml/odt-transfer.ts#OdtWriterTransferRecord"
         ],
-        "justification": "Defines the versioned structured-clone graph used only by the ODT worker and keeps it distinct from durable browser storage and the live Writer document.",
+        "justification": "Defines a thin versioned ODT Worker envelope around the shared canonical WriterDocumentRecord graph; only the envelope differs from durable browser storage.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",

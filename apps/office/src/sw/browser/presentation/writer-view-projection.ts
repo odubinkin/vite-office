@@ -9,7 +9,7 @@ import {
   projectWriterTextRuns,
   type WriterTextRun,
 } from "../../source/core/txtnode/text-run-projection";
-import type { WriterParagraphList } from "../../source/core/doc/list";
+import { projectWriterParagraphList, type WriterParagraphList } from "../../source/core/doc/list";
 import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";
 import { SwPosition } from "../../source/core/crsr/pam";
@@ -174,17 +174,18 @@ export class WriterViewProjection {
       /** Projects one canonical text node. @param node - Live node. @returns Frozen primitive paragraph. */ (
         node,
       ) => {
+        const list = projectWriterParagraphList(node);
         const bulletChar =
-          node.list.kind === "bullet"
-            ? node.GetNumRule()?.GetNumFormat(node.list.level).GetBulletChar()
+          list.kind === "bullet"
+            ? node.GetNumRule()?.GetNumFormat(list.level).GetBulletChar()
             : undefined;
         const listMarker = node.GetListLabel();
         const listFormat =
-          node.list.kind === "none" ? undefined : node.GetNumRule()?.GetNumFormat(node.list.level);
+          list.kind === "none" ? undefined : node.GetNumRule()?.GetNumFormat(list.level);
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         let runOffset = 0;
         return Object.freeze({
-          alignment: node.alignment,
+          alignment: node.GetParagraphAlignment(),
           ...(bulletChar === undefined ? {} : { bulletChar }),
           id: this.GetNodeId(node),
           computedStyle: Object.freeze({
@@ -208,7 +209,7 @@ export class WriterViewProjection {
               (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight() / 20,
             upperSpacingPt: spacing.GetUpper() / 20,
           }),
-          list: Object.freeze({ ...node.list }),
+          list: Object.freeze({ ...list }),
           ...(listFormat === undefined
             ? {}
             : {
@@ -237,10 +238,10 @@ export class WriterViewProjection {
               },
             ),
           ),
-          style: node.style,
+          style: node.GetParagraphStyle(),
           styleDisplayName: node.GetTextFormatColl().GetName(),
-          text: node.text,
-          textLeftMargin: node.textLeftMargin,
+          text: node.GetText(),
+          textLeftMargin: node.GetParagraphTextLeftMargin(),
         });
       },
     );

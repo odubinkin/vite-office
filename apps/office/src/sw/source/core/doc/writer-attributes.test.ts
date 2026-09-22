@@ -9,6 +9,7 @@ import {
   encodeWriterDocument as serializeWriterDocument,
 } from "../../filter/basflt/writer-document-codec";
 import { createWriterTextFragment, projectWriterTextRuns } from "../txtnode/text-run-projection";
+import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
 
 import {
   SvxAdjust,
@@ -126,26 +127,26 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(node.GetSwAttrSet()).toBe(defaultStyle.GetAttrSet());
     expect(node.GetpSwAttrSet()).toBeUndefined();
     expect(node.HasSwAttrSet()).toBe(false);
-    expect(node.alignment).toBe("left");
+    expect(node.GetParagraphAlignment()).toBe("left");
     expect(defaultStyle.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST))).toBe(
       true,
     );
     expect(defaultStyle.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST))).toBe(
       false,
     );
-    expect(node.alignment).toBe("center");
+    expect(node.GetParagraphAlignment()).toBe("center");
     node.ChgFormatColl(heading);
-    expect(node.alignment).toBe("center");
+    expect(node.GetParagraphAlignment()).toBe("center");
     expect(node.SetAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST))).toBe(true);
     expect(node.SetAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST))).toBe(false);
     expect(node.HasSwAttrSet()).toBe(true);
     expect(node.GetpSwAttrSet()?.GetParent()).toBe(heading.GetAttrSet());
     expect(node.GetAttr(RES_PARATR_ADJUST)).toMatchObject({});
-    expect(node.alignment).toBe("right");
+    expect(node.GetParagraphAlignment()).toBe("right");
     expect(node.ResetAttr(RES_PARATR_LIST_LEVEL)).toBe(false);
     expect(node.ResetAttr(RES_PARATR_ADJUST)).toBe(true);
     expect(node.HasSwAttrSet()).toBe(false);
-    expect(node.alignment).toBe("center");
+    expect(node.GetParagraphAlignment()).toBe("center");
     expect(node.ResetAttr(RES_PARATR_ADJUST)).toBe(false);
     expect(node.ResetAllAttr()).toBe(0);
     expect(node.SetAttr(new SfxItemSet(pool, WRITER_TEXT_NODE_WHICH_RANGES))).toBe(false);
@@ -215,6 +216,10 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
     expect(set.GetAdjust(false).GetAdjust()).toBe(SvxAdjust.ParaStart);
     expect(set.GetNumRule().GetValue()).toBe("");
     expect(set.GetNumRule(false).GetValue()).toBe("");
+    const numRuleItem = new SwNumRuleItem("Rule");
+    expect(numRuleItem.Clone()).toEqual(numRuleItem);
+    expect(numRuleItem.equals(new SwNumRuleItem("Rule"))).toBe(true);
+    expect(numRuleItem.equals(new SfxStringItem(RES_PARATR_NUMRULE, "Rule"))).toBe(false);
     expect(pool.CreateItem({ value: 1134, which: RES_MARGIN_TEXTLEFT })).toEqual(
       new SvxTextLeftMarginItem(1134, RES_MARGIN_TEXTLEFT),
     );
@@ -344,20 +349,28 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
           writer.AddNumRule(new SwNumRule("List 1", "bullet")),
       ),
     ).toThrow("Duplicate");
-    node.SetParagraphList({ kind: "numbered", level: 2, styleId: "Outline" });
-    expect(node.list).toEqual({ kind: "numbered", level: 2, styleId: "Outline" });
+    applyWriterParagraphList(node, { kind: "numbered", level: 2, styleId: "Outline" });
+    expect(projectWriterParagraphList(node)).toEqual({
+      kind: "numbered",
+      level: 2,
+      styleId: "Outline",
+    });
     expect(node.GetSwAttrSet().GetItemState(RES_PARATR_NUMRULE)).toBe(SfxItemState.SET);
     expect((node.GetAttr(RES_PARATR_LIST_ID) as SfxStringItem).GetValue()).toBe("Outline");
     expect((node.GetAttr(RES_PARATR_LIST_LEVEL) as SfxInt16Item).GetValue()).toBe(2);
-    node.SetParagraphList({ kind: "none", level: 2, styleId: "Outline" });
-    expect(node.list).toEqual({ kind: "none", level: 2, styleId: "Outline" });
-    node.SetParagraphList({ kind: "none", level: 0 });
-    expect(node.list).toEqual({ kind: "none", level: 0 });
+    applyWriterParagraphList(node, { kind: "none", level: 2, styleId: "Outline" });
+    expect(projectWriterParagraphList(node)).toEqual({
+      kind: "none",
+      level: 2,
+      styleId: "Outline",
+    });
+    applyWriterParagraphList(node, { kind: "none", level: 0 });
+    expect(projectWriterParagraphList(node)).toEqual({ kind: "none", level: 0 });
     expect((node.GetAttr(RES_PARATR_NUMRULE) as SwNumRuleItem).GetValue()).toBe("");
     node.SetAttr(new SwNumRuleItem("Missing rule"));
-    expect(node.list).toEqual({ kind: "none", level: 0 });
-    node.SetParagraphList({ kind: "numbered", level: 0, styleId: "Custom" });
-    node.SetParagraphList({ kind: "bullet", level: 0, styleId: "Custom" });
+    expect(projectWriterParagraphList(node)).toEqual({ kind: "none", level: 0 });
+    applyWriterParagraphList(node, { kind: "numbered", level: 0, styleId: "Custom" });
+    applyWriterParagraphList(node, { kind: "bullet", level: 0, styleId: "Custom" });
     const automaticRuleName = node.GetNumRuleName();
     expect(automaticRuleName).toBe("List 2");
     expect(writer.FindNumRulePtr(automaticRuleName)?.IsAutoRule()).toBe(true);
@@ -415,7 +428,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     writer.GetTextFormatColl("heading-1").SetFormatName("Custom heading");
     node.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
     node.SetParagraphAlignment("right");
-    node.SetParagraphList({ kind: "bullet", level: 1, styleId: "Bullets" });
+    applyWriterParagraphList(node, { kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
     expect(snapshot).toMatchObject({ swModelVersion: 12 });
     expect(snapshot.textNodes[0]).toMatchObject({
@@ -429,8 +442,15 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(serializeWriterDocument(restored)).toEqual(snapshot);
     expect(restored.GetAttrPool()).not.toBe(writer.GetAttrPool());
     expect(restored.GetTextFormatColl("heading-1").GetName()).toBe("Custom heading");
-    expect(restored.paragraphs[0]).toMatchObject({ alignment: "right", style: "heading-1" });
-    expect(restored.paragraphs[0]?.list).toEqual({ kind: "bullet", level: 1, styleId: "Bullets" });
+    expect(restored.paragraphs[0]?.GetParagraphAlignment()).toBe("right");
+    expect(restored.paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
+    expect(
+      projectWriterParagraphList(restored.paragraphs[0] as import("../txtnode/ndtxt").SwTextNode),
+    ).toEqual({
+      kind: "bullet",
+      level: 1,
+      styleId: "Bullets",
+    });
     const copied = new SwDoc();
     copied.nodes.copyContentFrom(restored.nodes);
     expect(projectWriterTextRuns(copied.paragraphs[1])).toEqual(
@@ -439,7 +459,13 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const copiedWithRule = new SwDoc();
     copiedWithRule.AddNumRule(restored.GetNumRuleTable()[0] as SwNumRule);
     copiedWithRule.nodes.copyContentFrom(restored.nodes);
-    expect(copiedWithRule.paragraphs[1]?.list).toEqual(restored.paragraphs[0]?.list);
+    expect(
+      projectWriterParagraphList(
+        copiedWithRule.paragraphs[1] as import("../txtnode/ndtxt").SwTextNode,
+      ),
+    ).toEqual(
+      projectWriterParagraphList(restored.paragraphs[0] as import("../txtnode/ndtxt").SwTextNode),
+    );
   });
 
   it("rejects obsolete snapshot schemas instead of preserving pre-canonical models" /** Keeps the core contract limited to the current LO-shaped schema. @returns Nothing. */, function rejectsObsoleteSchemas(): void {

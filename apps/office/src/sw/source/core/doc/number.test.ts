@@ -9,6 +9,7 @@ import {
   type WriterNumberingParagraph,
 } from "./number";
 import { createWriterDocument } from "./doc";
+import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
 
 /** Numbering fixture with a label that remains outside the production model. */
 type NumberingFixture = WriterNumberingParagraph & { testId: string };
@@ -16,7 +17,7 @@ type NumberingFixture = WriterNumberingParagraph & { testId: string };
 /** Provides a compact immutable list paragraph fixture for marker calculations. @param id - Stable paragraph identity. @param kind - List presentation. @param level - Zero-based list level. @param listId - Optional canonical list identity. @param listMarker - Precalculated projection marker. @returns Serializable numbering paragraph. */
 function createParagraph(
   id: string,
-  kind: WriterNumberingParagraph["list"]["kind"],
+  kind: NonNullable<WriterNumberingParagraph["list"]>["kind"],
   level = 0,
   listId?: string,
   listMarker?: string,
@@ -76,6 +77,17 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(getFixtureMarker(paragraphs, "nested")).toBe("1.");
     expect(getFixtureMarker(paragraphs, "restart")).toBe("1.");
     expect(getFixtureMarker([createParagraph("pending", "numbered")], "pending")).toBeUndefined();
+    const canonical = {
+      /** Returns the canonical list kind. @returns Numbered list kind. */
+      GetListKind: () => "numbered" as const,
+      /** Returns the canonical list level. @returns Root list level. */
+      GetAttrListLevel: () => 0,
+      /** Returns the document-owned list item number. @returns Current item number. */
+      GetListItemNumber: () => 7,
+    } satisfies WriterNumberingParagraph;
+    expect(getWriterParagraphListMarker([canonical], canonical)).toBe("7.");
+    const ordinary = {} satisfies WriterNumberingParagraph;
+    expect(getWriterParagraphListMarker([ordinary], ordinary)).toBeUndefined();
   });
 
   it("continues a root number across nested items within the same canonical list" /** Verifies Writer list identity and level traversal. @returns Nothing. */, function continuesAcrossNestedItems(): void {
@@ -173,9 +185,9 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     const first = document.paragraphs[0];
     const nested = document.nodes.MakeTextNode();
     const second = document.nodes.MakeTextNode();
-    first?.SetParagraphList({ kind: "numbered", level: 0 });
-    nested.SetParagraphList({ kind: "numbered", level: 1 });
-    second.SetParagraphList({ kind: "numbered", level: 0 });
+    if (first !== undefined) applyWriterParagraphList(first, { kind: "numbered", level: 0 });
+    applyWriterParagraphList(nested, { kind: "numbered", level: 1 });
+    applyWriterParagraphList(second, { kind: "numbered", level: 0 });
     expect(first?.GetNumRuleName()).toBe(nested.GetNumRuleName());
     expect(nested.GetNumRuleName()).toBe(second.GetNumRuleName());
     expect(first?.GetListId()).toBe(second.GetListId());
@@ -202,7 +214,7 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(manager.GetListForListStyle(ruleName).GetListItemNumberVector(nested)).toEqual([1, 1]);
     const plain = document.nodes.MakeTextNode();
     expect(plain.GetListLabel()).toBeUndefined();
-    plain.SetParagraphList({ kind: "bullet", level: 0 });
+    applyWriterParagraphList(plain, { kind: "bullet", level: 0 });
     expect(plain.GetListLabel()).toBe("•");
     const unregistered = document.nodes.MakeTextNode();
     unregistered.SetNumRule(ruleName);
@@ -212,15 +224,15 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(unregistered.GetListLabel()).toBeUndefined();
     expect(getWriterParagraphListMarker(document.paragraphs, second)).toBe("2.");
     expect(nested.GetActualListStartValue()).toBe(1);
-    nested.SetParagraphList({ kind: "numbered", level: 0 });
+    applyWriterParagraphList(nested, { kind: "numbered", level: 0 });
     expect(getWriterParagraphListMarker(document.paragraphs, second)).toBe("3.");
-    second.SetParagraphList({ kind: "numbered", level: 0, restart: true, startValue: 5 });
+    applyWriterParagraphList(second, { kind: "numbered", level: 0, restart: true, startValue: 5 });
     expect(second.IsListRestart()).toBe(true);
     expect(second.HasAttrListRestartValue()).toBe(true);
     expect(second.GetAttrListRestartValue()).toBe(5);
     expect(second.GetActualListStartValue()).toBe(5);
     expect(second.GetListItemNumber()).toBe(5);
-    expect(second.list).toMatchObject({ restart: true, startValue: 5 });
+    expect(projectWriterParagraphList(second)).toMatchObject({ restart: true, startValue: 5 });
     second.SetListRestart(true);
     expect(second.HasAttrListRestartValue()).toBe(false);
     expect(
@@ -231,7 +243,7 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
       /** Installs an out-of-range restart value. @returns Nothing. */ () =>
         second.SetListRestart(true, 40_000),
     ).toThrow("outside the supported range");
-    second.SetParagraphList({ kind: "none", level: 0 });
+    applyWriterParagraphList(second, { kind: "none", level: 0 });
     expect(second.IsListRestart()).toBe(false);
     expect(second.GetActualListStartValue()).toBe(1);
   });

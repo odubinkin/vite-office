@@ -66,7 +66,7 @@ describe("Writer upstream hyperlink ODT fixtures", /** Runs exact LibreOffice pa
     for (const fixture of fixtures) {
       const metadata = createDocument({ id: "odt-link", suiteId: "writer", title: "Imported" });
       const imported = await readOdtDocument(upstreamOdt(fixture.path), metadata);
-      expect(imported.document.paragraphs[0]?.text).toBe(fixture.text);
+      expect(imported.document.paragraphs[0]?.GetText()).toBe(fixture.text);
       const linked = projectWriterTextRuns(imported.document.paragraphs[0]).find(
         /** Finds the imported hyperlink portion. @param run - Writer run. @returns Whether linked. */
         (run) => run.hyperlink !== undefined,

@@ -25,8 +25,10 @@ import { SwNodeIndex, SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterTextFragment, projectWriterTextRuns } from "../txtnode/text-run-projection";
 import { SwpHints } from "../txtnode/ndhints";
+import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
 import {
   createSwFormatAutoFormat,
+  createWriterCharacterItemSet,
   projectWriterCharacterAttributes,
   RES_TXTATR_AUTOFMT,
   SwFormatAutoFormat,
@@ -609,41 +611,49 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     node.EraseText(0, 0);
     node.SetParagraphAlignment("justify");
     node.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
-    node.SetParagraphList({ kind: "numbered", level: 2, styleId: "List 1" });
-    expect(node.alignment).toBe("justify");
-    expect(node.style).toBe("heading-1");
-    expect(node.list).toEqual({ kind: "numbered", level: 2, styleId: "List 1" });
+    applyWriterParagraphList(node, { kind: "numbered", level: 2, styleId: "List 1" });
+    expect(node.GetParagraphAlignment()).toBe("justify");
+    expect(node.GetParagraphStyle()).toBe("heading-1");
+    expect(projectWriterParagraphList(node)).toEqual({
+      kind: "numbered",
+      level: 2,
+      styleId: "List 1",
+    });
     writer.EnsureNumRule("Conflicting List", "numbered", 2);
-    node.SetParagraphList({ kind: "bullet", level: 2, styleId: "Conflicting List" });
-    expect(node.list).toEqual({ kind: "bullet", level: 2 });
+    applyWriterParagraphList(node, { kind: "bullet", level: 2, styleId: "Conflicting List" });
+    expect(projectWriterParagraphList(node)).toEqual({ kind: "bullet", level: 2 });
     writer.EnsureNumRule("Conflicting Bullet", "bullet", 2);
-    node.SetParagraphList({ kind: "numbered", level: 2, styleId: "Conflicting Bullet" });
-    expect(node.list).toEqual({ kind: "numbered", level: 2 });
-    node.InsertText("abcd", 0, bold);
+    applyWriterParagraphList(node, { kind: "numbered", level: 2, styleId: "Conflicting Bullet" });
+    expect(projectWriterParagraphList(node)).toEqual({ kind: "numbered", level: 2 });
+    node.InsertText("abcd", 0, createWriterCharacterItemSet(writer.GetAttrPool(), bold));
     node.InsertText("X", 2);
     expect(node.GetText()).toBe("abXcd");
     expect(projectWriterTextRuns(node)).toMatchObject([{ attributes: bold, text: "abXcd" }]);
     node.EraseText(1, 2);
-    expect(node.text).toBe("acd");
+    expect(node.GetText()).toBe("acd");
     node.ReplaceRange(1, 2, createWriterTextFragment(node, [{ attributes: italic, text: "YZ" }]));
-    expect(node.text).toBe("aYZd");
+    expect(node.GetText()).toBe("aYZd");
     node.ToggleTextRangeFormat(1, 3, "underline");
     expect(projectWriterTextRuns(node)[1]?.attributes).toMatchObject({
       italic: true,
       underline: true,
     });
-    expect(node.getCharacterAttributesAt(2)).toMatchObject({ italic: true, underline: true });
+    expect(projectWriterCharacterAttributes(node.GetCharacterItemsAt(2))).toMatchObject({
+      italic: true,
+      underline: true,
+    });
     const direct = createModelFixture().paragraphs[0] as SwTextNode;
-    direct.InsertText("bold", 0, bold);
+    direct.InsertText("bold", 0, createWriterCharacterItemSet(direct.GetDoc().GetAttrPool(), bold));
     direct.ToggleTextRangeFormat(0, 4, "bold");
     expect(direct.GetpSwpHints()).toBeUndefined();
     const trailing = node.SplitContent(2);
     writer.nodes.insertTextNodeAfter(node, trailing);
-    expect(node.text).toBe("aY");
-    expect(trailing.text).toBe("Zd");
-    expect(trailing).toMatchObject({ alignment: "justify", style: "text-body" });
+    expect(node.GetText()).toBe("aY");
+    expect(trailing.GetText()).toBe("Zd");
+    expect(trailing.GetParagraphAlignment()).toBe("justify");
+    expect(trailing.GetParagraphStyle()).toBe("text-body");
     node.AppendTextNode(trailing);
-    expect(node.text).toBe("aYZd");
+    expect(node.GetText()).toBe("aYZd");
     expect(
       throwing(
         /** Appends a node to itself. @returns Invalid mutation. */ () => node.AppendTextNode(node),
@@ -658,10 +668,10 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     ).toThrow("different documents");
     const cloneDocument = createModelFixture("clone");
     const restored = node.CloneTo(cloneDocument.nodes);
-    expect(restored.alignment).toBe(node.alignment);
-    expect(restored.style).toBe(node.style);
-    expect(restored.text).toBe("aYZd");
-    expect(createWriterDocument().paragraphs[0]?.CloneTo(cloneDocument.nodes).text).toBe("");
+    expect(restored.GetParagraphAlignment()).toBe(node.GetParagraphAlignment());
+    expect(restored.GetParagraphStyle()).toBe(node.GetParagraphStyle());
+    expect(restored.GetText()).toBe("aYZd");
+    expect(createWriterDocument().paragraphs[0]?.CloneTo(cloneDocument.nodes).GetText()).toBe("");
     node.SetText("plain");
     expect(projectWriterTextRuns(node)).toMatchObject([
       { attributes: { bold: true }, text: "plain" },
@@ -670,7 +680,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     node.SetText("pl");
     node.SetText("xy");
     node.SetTextHints(new SwpHints(writer.GetAttrPool()));
-    expect(node.text).toBe("xy");
+    expect(node.GetText()).toBe("xy");
     expect(
       throwing(/** Erases before text. @returns Nothing. */ () => node.EraseText(-1, 1)),
     ).toThrow("outside the text node");
@@ -680,7 +690,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
           node.ReplaceRange(0, 9, createWriterTextFragment(node, [])),
       ),
     ).toThrow("outside the text node");
-    expect(node.SplitContent(0).text).toBe("xy");
+    expect(node.SplitContent(0).GetText()).toBe("xy");
   });
 
   it("applies insert, delete, and replacement operations through SwPosition and SwPaM" /** Verifies DocumentContentOperationsManager owns canonical content changes and guards cross-node ranges. @returns Nothing; assertions inspect document state. */, function appliesContentOperations(): void {
@@ -703,18 +713,18 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
       new SwPaM(new SwPosition(first, 3), new SwPosition(first, 1)),
       createWriterTextFragment(first, [{ attributes: italic, text: "X" }]),
     );
-    expect(first.text).toBe("aXd");
+    expect(first.GetText()).toBe("aXd");
     manager.DeleteRange(new SwPaM(new SwPosition(first, 2), new SwPosition(first, 1)));
-    expect(first.text).toBe("ad");
+    expect(first.GetText()).toBe("ad");
     manager.DeleteRange(new SwPaM(new SwPosition(first, 1)));
-    expect(first.text).toBe("ad");
+    expect(first.GetText()).toBe("ad");
     expect(
       manager.CopyRange(
         new SwPaM(new SwPosition(first, 1), new SwPosition(first, 0)),
         new SwPosition(second, 0),
       ),
     ).toBe(1);
-    expect(second.text).toBe("a");
+    expect(second.GetText()).toBe("a");
     expect(
       manager
         .MoveRange(
@@ -723,8 +733,8 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
         )
         .GetContentIndex(),
     ).toBe(2);
-    expect(first.text).toBe("a");
-    expect(second.text).toBe("ad");
+    expect(first.GetText()).toBe("a");
+    expect(second.GetText()).toBe("ad");
     const trailing = manager.SplitNode(new SwPosition(first, 0));
     expect(
       writer.paragraphs
@@ -732,7 +742,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
         .map(
           /** Selects text from one canonical paragraph. @param paragraph - Text node. @returns Plain text. */ (
             paragraph,
-          ) => paragraph.text,
+          ) => paragraph.GetText(),
         ),
     ).toEqual(["", "a", "ad"]);
     expect(manager.JoinTextNodes(first, trailing)).toBe(0);
@@ -740,7 +750,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
       writer.paragraphs.map(
         /** Selects text from one joined paragraph. @param paragraph - Text node. @returns Plain text. */ (
           paragraph,
-        ) => paragraph.text,
+        ) => paragraph.GetText(),
       ),
     ).toEqual(["a", "ad"]);
     const crossNode = new SwPaM(new SwPosition(second), new SwPosition(first));
@@ -759,7 +769,7 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
           manager.InsertString(new SwPosition(new TestContentNode(writer)), "x"),
       ),
     ).toThrow("requires a SwTextNode");
-    expect(first.text).toBe("a");
+    expect(first.GetText()).toBe("a");
   });
 
   it("rejects unsupported content-operation ranges before mutation" /** Covers the manager's same-document, adjacency, connectivity, and move-overlap guards. @returns Nothing; assertions inspect deterministic failures. */, function rejectsUnsupportedContentOperations(): void {
@@ -867,14 +877,14 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     ).toThrow("into itself");
     const movedAfter = manager.MoveRange(source, new SwPosition(first, 4));
     expect(movedAfter.GetContentIndex()).toBe(4);
-    expect(first.text).toBe("adbc");
+    expect(first.GetText()).toBe("adbc");
     const movedBefore = manager.MoveRange(
       new SwPaM(new SwPosition(first, 4), new SwPosition(first, 2)),
       new SwPosition(first),
     );
     expect(movedBefore.GetContentIndex()).toBe(2);
-    expect(first.text).toBe("bcad");
-    expect(second.text).toBe("");
+    expect(first.GetText()).toBe("bcad");
+    expect(second.GetText()).toBe("");
   });
 
   it("round-trips the current SwDoc schema and rejects obsolete roots" /** Verifies current snapshot restoration and rejects non-canonical schemas. @returns Nothing; assertions inspect serialization. */, function restoresDocuments(): void {

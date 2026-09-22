@@ -66,8 +66,9 @@ Heading 1 derived from the default collection. Alignment is an
 `SvxAdjustItem`. List application stores a `SwNumRuleItem` name, list identity,
 and level while the corresponding `SwNumRule` and its ten per-level
 `SwNumFormat` records are owned by `SwDoc`.
-The browser-facing `alignment`, `style`, and `list` properties are derived
-projections, like `runs`; they are not canonical storage.
+Browser-facing alignment, style, list, margin, text, and run values are created
+by named projection functions. `SwTextNode` exposes upstream-shaped methods and
+item queries only; it no longer carries compatibility properties for those values.
 
 Character items may also live on `SwTextFormatColl` or a node-local
 `SwAttrSet`; browser runs resolve hint, node, style-parent, and pool-default
@@ -90,15 +91,16 @@ document root. `doc.ts` exposes construction and the canonical model aggregate;
 browser persistence codecs remain outside Writer core, and interactive commands
 have no functional-clone alternative.
 
-Persistence accepts only the split target snapshot: transport `schemaVersion: 5`
-contains shell-owned `documentState` and a model-only `writerModel` with
-`swModelVersion: 7`. The browser codec records the complete materialized
+Persistence accepts only the current split target snapshot. Its shell-owned
+`documentState` is separate from the model-only `WriterDocumentRecord` with
+`swModelVersion: 12`. The canonical graph codec records the complete materialized
 paragraph-style pool, document-owned numbering definitions, ordered text-node
 content, direct item deltas, and text hints. Text-node projection identities,
 title, lifecycle, save/recovery generations, and medium state never enter
 `SwDoc`. The browser decoder reconstructs model ownership and inheritance links.
-Retired combined DTO/snapshot roots are rejected rather than
-adapted.
+Worker and IndexedDB transports wrap that same graph record in small independent
+envelopes. Retired combined DTO, graph, and envelope schemas are rejected rather
+than adapted.
 
 ## Deliberate remaining gaps
 

@@ -13,8 +13,10 @@ storage. Adjacent equal spans are normalized during hint-to-run conversion, so
 browser-local snapshots, Undo, Redo, Enter splits, and paragraph joins retain
 the supported attributes.
 
-At a collapsed caret, each command toggles the pending attributes used by the
-next contiguous insertion. The command is available at **Format → Text**, on
+At a collapsed caret, each command updates a pending character `SfxItemSet` used
+by the next contiguous insertion. Undo cursor snapshots clone that item set;
+boolean/font values exist only in render, clipboard, and command-state projections.
+The command is available at **Format → Text**, on
 the Writer text-object formatting toolbar before alignment/list controls, and
 through **Ctrl/Cmd+B**, **Ctrl/Cmd+I**, and **Ctrl/Cmd+U**. These browser
 placements derive from pinned `sw/uiconfig/swriter/menubar/menubar.xml` and

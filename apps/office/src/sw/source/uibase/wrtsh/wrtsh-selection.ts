@@ -3,10 +3,8 @@
  * pinned LibreOffice `sw/source/uibase/wrtsh/select.cxx`.
  */
 
-import type {
-  SwTextNode as WriterParagraph,
-  WriterCharacterAttributes,
-} from "../../core/txtnode/ndtxt";
+import type { SwTextNode as WriterParagraph } from "../../core/txtnode/ndtxt";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwPaM } from "../../core/crsr/pam";
 import type { SwUndoCursorState } from "../../core/undo/undobj";
 
@@ -51,14 +49,14 @@ export function createWriterUndoCursorState(
   mark: WriterParagraph | undefined,
   markOffset: number | undefined,
   activeParagraph: WriterParagraph,
-  pendingCharacterAttributes: WriterCharacterAttributes,
+  pendingCharacterItems: SfxItemSet,
 ): SwUndoCursorState {
   return {
     activeParagraph,
     ...(mark === undefined || markOffset === undefined
       ? {}
       : { mark: { node: mark, offset: markOffset } }),
-    pendingCharacterAttributes: { ...pendingCharacterAttributes },
+    pendingCharacterItems: pendingCharacterItems.Clone(),
     point: { node: point, offset: pointOffset },
   };
 }
@@ -67,11 +65,11 @@ export function createWriterUndoCursorState(
 export function createWriterCollapsedCursorState(
   paragraph: WriterParagraph,
   offset: number,
-  pendingCharacterAttributes: WriterCharacterAttributes,
+  pendingCharacterItems: SfxItemSet,
 ): SwUndoCursorState {
   return {
     activeParagraph: paragraph,
-    pendingCharacterAttributes: { ...pendingCharacterAttributes },
+    pendingCharacterItems: pendingCharacterItems.Clone(),
     point: { node: paragraph, offset },
   };
 }

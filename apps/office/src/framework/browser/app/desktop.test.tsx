@@ -433,7 +433,7 @@ describe("App" /**
       const archive = new ZipFile(downloadedBytes);
       expect(await archive.readTextEntry("content.xml")).toContain("Imported");
       expect(
-        (await readOdtDocument(downloadedBytes, importedState)).document.paragraphs[0]?.text,
+        (await readOdtDocument(downloadedBytes, importedState)).document.paragraphs[0]?.GetText(),
       ).toBe("Imported package body");
       expect(screen.getByText("Document opened.")).toBeInTheDocument();
     } finally {
