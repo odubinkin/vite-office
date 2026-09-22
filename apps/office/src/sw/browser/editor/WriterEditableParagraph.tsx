@@ -58,7 +58,7 @@ export function WriterEditableParagraph({
         {listMarker === undefined ? null : (
           <span
             aria-hidden="true"
-            className="shrink-0 pt-0.5 text-right text-slate-700"
+            className="shrink-0 self-start text-right text-slate-700"
             contentEditable={false}
             data-testid={`writer-list-marker-${paragraph.id}`}
             data-writer-list-marker={paragraph.id}
@@ -66,6 +66,11 @@ export function WriterEditableParagraph({
               /* v8 ignore next -- Space-follow numbering is imported but not exposed by the current command surface. */
               marginInlineEnd: listLayout?.labelFollowedBy === "space" ? "0.25em" : undefined,
               width: `${markerWidthPt}pt`,
+              fontFamily: paragraph.computedStyle.fontFamily,
+              fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
+              fontStyle: paragraph.computedStyle.fontStyle,
+              fontWeight: paragraph.computedStyle.fontWeight,
+              lineHeight: paragraph.computedStyle.lineHeight,
             }}
           >
             {listMarker}

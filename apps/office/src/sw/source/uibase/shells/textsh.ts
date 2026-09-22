@@ -3,7 +3,7 @@
 import type { SfxShell } from "../../../../sfx2/source/control/shell";
 import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
-import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition } from "../../core/crsr/pam";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
@@ -31,7 +31,11 @@ import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-co
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { canChangeWriterParagraphIndent, changeWriterParagraphIndent } from "../wrtsh/wrtsh-indent";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../wrtsh/wrtsh-hyperlink";
-import { getWriterSelectedTextRange, type WriterTextRange } from "../wrtsh/wrtsh-selection";
+import {
+  getWriterSelectedTextRange,
+  getWriterSelectedTextRanges,
+  type WriterTextRange,
+} from "../wrtsh/wrtsh-selection";
 import {
   createWriterInterface,
   getWriterCommandArguments,
@@ -80,14 +84,21 @@ export class SwTextShell {
 
   /** Returns on/off/mixed state for one direct character format. @param format - Writer format. @returns Selection-aware state. */
   public GetCharacterFormatState(format: WriterCharacterFormat): "mixed" | "off" | "on" {
-    const range = getWriterSelectedTextRange(this.target.GetCursor());
-    if (range === undefined)
+    const ranges = getWriterSelectedTextRanges(this.target.GetCursor());
+    if (ranges === undefined)
       return this.target.GetCursor().HasMark()
         ? "mixed"
         : this.GetPendingCharacterAttributes()[format]
           ? "on"
           : "off";
-    return range.node.GetTextRangeFormatState(range.start, range.end, format);
+    if (ranges.length === 0) return "mixed";
+    const state = ranges[0]?.node.GetTextRangeFormatState(ranges[0].start, ranges[0].end, format);
+    return ranges.every(
+      /** Preserves the tri-state command state across every selected paragraph. */ (range) =>
+        range.node.GetTextRangeFormatState(range.start, range.end, format) === state,
+    )
+      ? (state as "off" | "on")
+      : "mixed";
   }
 
   /** Applies direct character formatting through the text-shell responsibility. @param format - Writer format. @param range - Optional resolved range. @returns Whether content changed. */
@@ -116,32 +127,33 @@ export class SwTextShell {
         );
     }
     const before = this.target.CaptureCursorState();
-    const selected = getWriterSelectedTextRange(this.target.GetCursor());
+    const selected = getWriterSelectedTextRanges(this.target.GetCursor());
     this.target.SetPendingCharacterItems(
       createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
         ...this.GetPendingCharacterAttributes(),
         [format]: this.GetCharacterFormatState(format) !== "on",
       }),
     );
-    if (selected === undefined) {
-      if (this.target.GetCursor().HasMark()) {
-        this.target.NotifySelectionChanged();
-        return false;
-      }
+    if (selected === undefined || selected.length === 0) {
+      if (this.target.GetCursor().HasMark()) this.target.NotifySelectionChanged();
       this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
-      this.target.NotifySelectionChanged();
       return false;
     }
-    return this.target.ApplyAction(
-      new SwUndoAttr(
-        selected.node,
-        selected.start,
-        selected.node.CaptureTextFragment(selected.start, selected.end),
-        selected.node.CreateToggledTextFragment(selected.start, selected.end, format),
-        before,
-        before,
-      ),
+    const actions = selected.map(
+      /** Creates one reversible fragment replacement per selected paragraph. */ (range) =>
+        new SwUndoAttr(
+          range.node,
+          range.start,
+          range.node.CaptureTextFragment(range.start, range.end),
+          range.node.CreateToggledTextFragment(range.start, range.end, format),
+          before,
+          before,
+        ),
     );
+    if (actions.length === 1) return this.target.ApplyAction(actions[0] as SwUndoAttr);
+    const action = new SfxListUndoAction<SwUndoRedoContext>("Character Formatting");
+    for (const child of actions) action.AddAction(child);
+    return this.target.ApplyAction(action);
   }
 
   /** Returns the uniform hyperlink at the active selection or caret. @returns Hyperlink or undefined. */
@@ -176,27 +188,30 @@ export class SwTextShell {
     const family = fontFamily.trim();
     if (family.length === 0) throw new Error("Writer font family must not be blank.");
     const before = this.target.CaptureCursorState();
-    const selected = getWriterSelectedTextRange(this.target.GetCursor());
+    const selected = getWriterSelectedTextRanges(this.target.GetCursor());
     this.target.SetPendingCharacterItems(
       createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
         ...this.GetPendingCharacterAttributes(),
         fontFamily: family,
       }),
     );
-    if (selected === undefined) {
+    if (selected === undefined || selected.length === 0) {
       this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
       this.target.NotifySelectionChanged();
       return false;
     }
-    const action = CreateWriterFontUndo(
-      selected.node,
-      selected.start,
-      selected.end,
-      family,
-      before,
-      this.target.CaptureCursorState(),
+    return this.ApplySelectedFontChange(
+      selected,
+      /** Creates one per-paragraph family change. */ (range) =>
+        CreateWriterFontUndo(
+          range.node,
+          range.start,
+          range.end,
+          family,
+          before,
+          this.target.CaptureCursorState(),
+        ),
     );
-    return action === undefined ? false : this.target.ApplyAction(action);
   }
 
   /** Applies a font height through one text-shell history action. @param fontSizePt - Requested height in points. @returns Whether changed. */
@@ -205,27 +220,48 @@ export class SwTextShell {
     if (!Number.isFinite(fontSizePt) || fontSizePt <= 0 || !Number.isInteger(fontSizeTwips))
       throw new Error("Writer font size must be a positive value representable in twips.");
     const before = this.target.CaptureCursorState();
-    const selected = getWriterSelectedTextRange(this.target.GetCursor());
+    const selected = getWriterSelectedTextRanges(this.target.GetCursor());
     this.target.SetPendingCharacterItems(
       createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
         ...this.GetPendingCharacterAttributes(),
         fontSizeTwips,
       }),
     );
-    if (selected === undefined) {
+    if (selected === undefined || selected.length === 0) {
       this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
       this.target.NotifySelectionChanged();
       return false;
     }
-    const action = CreateWriterFontSizeUndo(
-      selected.node,
-      selected.start,
-      selected.end,
-      fontSizeTwips,
-      before,
-      this.target.CaptureCursorState(),
+    return this.ApplySelectedFontChange(
+      selected,
+      /** Creates one per-paragraph height change. */ (range) =>
+        CreateWriterFontSizeUndo(
+          range.node,
+          range.start,
+          range.end,
+          fontSizeTwips,
+          before,
+          this.target.CaptureCursorState(),
+        ),
     );
-    return action === undefined ? false : this.target.ApplyAction(action);
+  }
+
+  /** Applies all non-no-op per-paragraph font actions as one Writer history entry. */
+  private ApplySelectedFontChange(
+    ranges: readonly WriterTextRange[],
+    createAction: (range: WriterTextRange) => SwUndoAttr | undefined,
+  ): boolean {
+    const actions = ranges.flatMap(
+      /** Excludes paragraphs whose effective formatting already matches the request. */ (range) => {
+        const action = createAction(range);
+        return action === undefined ? [] : [action];
+      },
+    );
+    if (actions.length === 0) return false;
+    if (actions.length === 1) return this.target.ApplyAction(actions[0] as SwUndoAttr);
+    const action = new SfxListUndoAction<SwUndoRedoContext>("Character Formatting");
+    for (const child of actions) action.AddAction(child);
+    return this.target.ApplyAction(action);
   }
 
   /** Applies paragraph alignment through the text shell. @param alignment - Next alignment. @returns Whether changed. */

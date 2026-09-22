@@ -6,6 +6,16 @@
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
 import { CommandButton } from "../../../framework/browser/presentation/CommandToolbar";
+import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
+  List,
+  ListOrdered,
+  ListX,
+  type LucideIcon,
+} from "lucide-react";
 import type { WriterParagraphListKind } from "../../source/core/doc/list";
 import type { WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
@@ -23,6 +33,23 @@ const listLabels: Readonly<Record<WriterParagraphListKind, string>> = {
   none: "No List",
   numbered: "Ordered List",
 };
+
+const sidebarIcons: Readonly<Record<string, LucideIcon>> = {
+  [WRITER_COMMAND_IDS.alignLeft]: AlignLeft,
+  [WRITER_COMMAND_IDS.alignCenter]: AlignCenter,
+  [WRITER_COMMAND_IDS.alignRight]: AlignRight,
+  [WRITER_COMMAND_IDS.alignJustify]: AlignJustify,
+  [WRITER_COMMAND_IDS.removeBullets]: ListX,
+  [WRITER_COMMAND_IDS.unorderedList]: List,
+  [WRITER_COMMAND_IDS.orderedList]: ListOrdered,
+};
+
+/** Resolves the required icon for one fixed sidebar command placement. */
+function getSidebarIcon(commandId: string): LucideIcon {
+  const icon = sidebarIcons[commandId];
+  if (icon === undefined) throw new Error(`Writer sidebar icon is missing for ${commandId}.`);
+  return icon;
+}
 
 /** Defines the focused paragraph details rendered by the Writer properties sidebar. */
 export interface WriterParagraphPropertiesProps extends BrowserCommandSurfaceProps {
@@ -100,6 +127,7 @@ export function WriterParagraphProperties({
                 commandId={commandId}
                 commandSource={commandSource}
                 getCommandResource={getCommandResource}
+                icon={getSidebarIcon(commandId)}
                 key={commandId}
                 resolveArguments={resolveArguments}
               />
@@ -129,6 +157,7 @@ export function WriterParagraphProperties({
                 commandId={commandId}
                 commandSource={commandSource}
                 getCommandResource={getCommandResource}
+                icon={getSidebarIcon(commandId)}
                 key={commandId}
                 resolveArguments={resolveArguments}
               />

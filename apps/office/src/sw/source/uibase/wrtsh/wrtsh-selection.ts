@@ -42,6 +42,34 @@ export function getWriterSelectedTextRange(cursor: SwPaM): WriterTextRange | und
   return start === end ? undefined : { end, node: point.GetNode() as WriterParagraph, start };
 }
 
+/** Returns every non-empty paragraph-local range covered by an ordered Writer selection. */
+export function getWriterSelectedTextRanges(cursor: SwPaM): readonly WriterTextRange[] | undefined {
+  if (!cursor.HasMark()) return undefined;
+  const point = cursor.GetPoint();
+  const mark = cursor.GetMark();
+  const first = point.compare(mark) <= 0 ? point : mark;
+  const last = first === point ? mark : point;
+  const firstNode = first.GetNode() as WriterParagraph;
+  const lastNode = last.GetNode() as WriterParagraph;
+  if (firstNode.GetDoc() !== lastNode.GetDoc()) return undefined;
+  return firstNode
+    .GetDoc()
+    .paragraphs.filter(
+      /** Keeps only body paragraphs within the inclusive Writer node span. */ (node) =>
+        node.GetIndex() >= firstNode.GetIndex() && node.GetIndex() <= lastNode.GetIndex(),
+    )
+    .map(
+      /** Converts one selected paragraph to its local bounded range. */ (node) => ({
+        end: node === lastNode ? last.GetContentIndex() : node.Len(),
+        node,
+        start: node === firstNode ? first.GetContentIndex() : 0,
+      }))
+    .filter(
+      /** Excludes zero-width boundary paragraphs without discarding the enclosing selection. */ (range) =>
+        range.start < range.end,
+    );
+}
+
 /** Creates an undo cursor state from canonical node references. @param point - Moving endpoint node. @param pointOffset - Moving endpoint offset. @param mark - Optional fixed endpoint node. @param markOffset - Optional fixed endpoint offset. @param activeParagraph - Active node. @param pendingCharacterAttributes - Pending caret attributes. @returns Complete undo cursor state. */
 export function createWriterUndoCursorState(
   point: WriterParagraph,

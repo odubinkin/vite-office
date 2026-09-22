@@ -753,6 +753,24 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.SetFontFamily("Noto Serif")).toBe(false);
   });
 
+  it("formats complete and cross-paragraph selections as one history action", /** Verifies Writer character commands do not discard paragraph-boundary selections. @returns Nothing. */ () => {
+    const shell = createShell("first");
+    expect(shell.SplitNode()).toBe(true);
+    expect(shell.Insert("second")).toBe(true);
+    const [first, second] = shell.GetDoc().paragraphs;
+    if (first === undefined || second === undefined) throw new Error("Writer split did not create two paragraphs.");
+    shell.SetPaM(new SwPosition(second, second.Len()), new SwPosition(first, 0));
+    expect(shell.ToggleCharacterFormat("bold")).toBe(true);
+    expect(projectWriterTextRuns(first)[0]?.attributes.bold).toBe(true);
+    expect(projectWriterTextRuns(second)[0]?.attributes.bold).toBe(true);
+    expect(shell.Undo()).toBe(true);
+    expect(projectWriterTextRuns(first)[0]?.attributes.bold).toBe(false);
+    expect(projectWriterTextRuns(second)[0]?.attributes.bold).toBe(false);
+    expect(shell.SetFontFamily("Noto Serif")).toBe(true);
+    expect(projectWriterTextRuns(first)[0]?.attributes.fontFamily).toBe("Noto Serif");
+    expect(projectWriterTextRuns(second)[0]?.attributes.fontFamily).toBe("Noto Serif");
+  });
+
   it("applies a font height through range hints and restores it through history", /** Verifies font-height state, validation, no-op, and history. @returns Nothing. */ () => {
     const shell = createShell("abcd");
     expect(shell.GetDefaultFontSizePt()).toBe(12);

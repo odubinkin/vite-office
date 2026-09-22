@@ -148,24 +148,23 @@ export function WriterWorkspaceChrome({
         </div>
       </header>
 
-      {isHorizontalRulerVisible ? (
-        <div
-          aria-label="Writer horizontal ruler"
-          className="h-5 shrink-0 border-b border-slate-300 bg-[repeating-linear-gradient(to_right,transparent_0,transparent_23px,rgb(148_163_184)_24px)] bg-white"
-          role="img"
-        />
-      ) : null}
-
       <div
         className={`min-h-0 min-w-0 flex-1 overflow-hidden ${
           isPropertiesSidebarVisible
-            ? "grid grid-rows-[minmax(0,1fr)_auto] lg:grid-cols-[minmax(0,1fr)_240px] lg:grid-rows-1"
-            : "flex"
+            ? "grid grid-rows-[auto_minmax(0,1fr)_auto] lg:grid-cols-[minmax(0,1fr)_240px] lg:grid-rows-[auto_minmax(0,1fr)]"
+            : "flex flex-col"
         }`}
       >
+        {isHorizontalRulerVisible ? (
+          <div
+            aria-label="Writer horizontal ruler"
+            className="h-5 shrink-0 border-b border-slate-300 bg-[repeating-linear-gradient(to_right,transparent_0,transparent_23px,rgb(148_163_184)_24px)] bg-white lg:col-start-1"
+            role="img"
+          />
+        ) : null}
         <div
           aria-label="Writer document canvas"
-          className="min-h-0 min-w-0 flex-1 overscroll-contain overflow-auto bg-slate-200/70 p-5 sm:p-8"
+          className="min-h-0 min-w-0 flex-1 overscroll-contain overflow-auto bg-slate-200/70 p-5 sm:p-8 lg:col-start-1"
           data-layout-mode="continuous"
           role="region"
         >
@@ -183,7 +182,7 @@ export function WriterWorkspaceChrome({
         {isPropertiesSidebarVisible ? (
           <aside
             aria-label="Writer properties sidebar"
-            className="hidden min-h-0 overflow-hidden border-l border-slate-200 bg-white p-4 lg:block"
+            className="hidden min-h-0 overflow-hidden border-l border-slate-200 bg-white p-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:block"
           >
             {propertiesSidebar}
           </aside>

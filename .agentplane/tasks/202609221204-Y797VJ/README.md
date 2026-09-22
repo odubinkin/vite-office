@@ -4,7 +4,7 @@ title: "Fix Writer UI ruler, multi-paragraph formatting, lists, and sidebar cont
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-22T12:11:35.734Z"
+  updated_by: "CODER"
+  note: "verified-202609221204-Y797VJ"
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implementing the approved Writer UI corrections in the direct-mode checkout."
+  -
+    type: "verify"
+    at: "2026-09-22T12:11:29.497Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified: targeted Writer unit tests (57), character-formatting and list E2E specs (2), production build, lint, and diff whitespace checks all passed; the implemented scope covers document-only ruler layout, multi-paragraph direct formatting, list marker alignment/typography, and icon-only sidebar controls."
+  -
+    type: "verify"
+    at: "2026-09-22T12:11:35.734Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609221204-Y797VJ"
 doc_version: 3
-doc_updated_at: "2026-09-22T12:11:09.562Z"
+doc_updated_at: "2026-09-22T12:11:35.811Z"
 doc_updated_by: "CODER"
 description: "Correct document-only ruler layout, apply character formatting across full and multi-paragraph selections, reconcile list marker/paragraph indentation and vertical alignment with pinned Writer behavior, and render sidebar commands as icon buttons."
 sections:
@@ -55,6 +67,66 @@ sections:
     4. Confirm the horizontal ruler is constrained to the document canvas beside an open sidebar and sidebar command controls expose icon-only accessible buttons.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-22T12:11:29.497Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified: targeted Writer unit tests (57), character-formatting and list E2E specs (2), production build, lint, and diff whitespace checks all passed; the implemented scope covers document-only ruler layout, multi-paragraph direct formatting, list marker alignment/typography, and icon-only sidebar controls.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T12:11:09.562Z, excerpt_hash=sha256:8ee98ea92562a6478ba5bf411ca74c8fd5584de7c8d9a06c6c2992f981558194
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221204-Y797VJ/blueprint/resolved-snapshot.json
+    - old_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+    - current_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609221204-Y797VJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609221204-Y797VJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-22T12:11:35.734Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609221204-Y797VJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T12:11:29.579Z, excerpt_hash=sha256:8ee98ea92562a6478ba5bf411ca74c8fd5584de7c8d9a06c6c2992f981558194
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221204-Y797VJ/blueprint/resolved-snapshot.json
+    - old_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+    - current_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609221204-Y797VJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609221204-Y797VJ --result verified-202609221204-Y797VJ --commit 9a83a4fb5cd73b2399819d32de0ee62dc21af8a8
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -92,6 +164,66 @@ Correct document-only ruler layout, apply character formatting across full and m
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-22T12:11:29.497Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified: targeted Writer unit tests (57), character-formatting and list E2E specs (2), production build, lint, and diff whitespace checks all passed; the implemented scope covers document-only ruler layout, multi-paragraph direct formatting, list marker alignment/typography, and icon-only sidebar controls.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T12:11:09.562Z, excerpt_hash=sha256:8ee98ea92562a6478ba5bf411ca74c8fd5584de7c8d9a06c6c2992f981558194
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221204-Y797VJ/blueprint/resolved-snapshot.json
+- old_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+- current_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609221204-Y797VJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609221204-Y797VJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T12:11:35.734Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609221204-Y797VJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T12:11:29.579Z, excerpt_hash=sha256:8ee98ea92562a6478ba5bf411ca74c8fd5584de7c8d9a06c6c2992f981558194
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221204-Y797VJ/blueprint/resolved-snapshot.json
+- old_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+- current_digest: 36eec53d60ad77957c96e2af74f1dfbe8a39d087bb234a504460f455a889726f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609221204-Y797VJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609221204-Y797VJ --result verified-202609221204-Y797VJ --commit 9a83a4fb5cd73b2399819d32de0ee62dc21af8a8
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
