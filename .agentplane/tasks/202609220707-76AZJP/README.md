@@ -4,7 +4,7 @@ title: "Converge Sfx command architecture for P1"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 5
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -25,11 +25,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-22T07:45:40.440Z"
+  updated_by: "CODER"
+  note: "verified-202609220707-76AZJP"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-22T07:45:28.541Z"
+  updated_by: "EVALUATOR"
+  note: "Sfx dispatcher now follows upstream shell/interface/slot/request boundaries with browser async observation separated."
+  evaluated_sha: "7fdb35bd313e35d466c79bd53a80f506822abd1b"
+  blueprint_digest: "30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c"
+  evidence_refs:
+    - ".agentplane/tasks/202609220707-76AZJP/README.md"
+    - ".agentplane/tasks/202609220707-76AZJP/quality/20260922-074528541-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609220707-76AZJP/quality/20260922-074528541-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609220707-76AZJP/quality/20260922-074528541-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609220707-76AZJP/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sfx2/source/control/dispatch.test.ts"
+  findings:
+    - "All declared verification checks passed; source inventory and command architecture documentation were updated."
 commit: null
 comments:
   -
@@ -43,8 +59,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-09-22T07:45:21.420Z"
+    author: "CODER"
+    state: "ok"
+    note: "Focused Sfx/Writer tests, 100% coverage, writer resource generation, dependency/provenance/parity/source-tree, formatting, lint, typecheck, file-size, docs, and diff checks all pass."
+  -
+    type: "verify"
+    at: "2026-09-22T07:45:40.440Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609220707-76AZJP"
 doc_version: 3
-doc_updated_at: "2026-09-22T07:10:02.744Z"
+doc_updated_at: "2026-09-22T07:45:40.514Z"
 doc_updated_by: "CODER"
 description: "Implement P1.1-P1.3 from docs/program/vite-office-upstream-parity-plan.md: port bounded SfxSlot and SfxInterface metadata from pinned LibreOffice, decompose dispatcher responsibilities, and remove Writer registry glue."
 sections:
@@ -68,6 +96,66 @@ sections:
     4. Run npm run format:check && npm run lint && npm run typecheck && npm run check:file-size && git diff --check. Expected: static and repository hygiene checks pass.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-22T07:45:21.420Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Focused Sfx/Writer tests, 100% coverage, writer resource generation, dependency/provenance/parity/source-tree, formatting, lint, typecheck, file-size, docs, and diff checks all pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T07:10:02.744Z, excerpt_hash=sha256:3f200219af0b18670a3d1bd97dc6d835923c09b71380e1cd51afded146d2ddba
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220707-76AZJP/blueprint/resolved-snapshot.json
+    - old_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+    - current_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220707-76AZJP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609220707-76AZJP
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-22T07:45:40.440Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609220707-76AZJP
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T07:45:21.500Z, excerpt_hash=sha256:3f200219af0b18670a3d1bd97dc6d835923c09b71380e1cd51afded146d2ddba
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220707-76AZJP/blueprint/resolved-snapshot.json
+    - old_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+    - current_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220707-76AZJP
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609220707-76AZJP --result verified-202609220707-76AZJP --commit 7fdb35bd313e35d466c79bd53a80f506822abd1b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -104,6 +192,66 @@ Implement P1.1-P1.3 from docs/program/vite-office-upstream-parity-plan.md: port 
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-22T07:45:21.420Z — VERIFY — ok
+
+By: CODER
+
+Note: Focused Sfx/Writer tests, 100% coverage, writer resource generation, dependency/provenance/parity/source-tree, formatting, lint, typecheck, file-size, docs, and diff checks all pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T07:10:02.744Z, excerpt_hash=sha256:3f200219af0b18670a3d1bd97dc6d835923c09b71380e1cd51afded146d2ddba
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220707-76AZJP/blueprint/resolved-snapshot.json
+- old_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+- current_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220707-76AZJP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609220707-76AZJP
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T07:45:40.440Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609220707-76AZJP
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T07:45:21.500Z, excerpt_hash=sha256:3f200219af0b18670a3d1bd97dc6d835923c09b71380e1cd51afded146d2ddba
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220707-76AZJP/blueprint/resolved-snapshot.json
+- old_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+- current_digest: 30b3f7c2f5cb31af50166065479dbff711583464c599207419973f485181ef5c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220707-76AZJP
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609220707-76AZJP --result verified-202609220707-76AZJP --commit 7fdb35bd313e35d466c79bd53a80f506822abd1b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
