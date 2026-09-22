@@ -139,6 +139,8 @@ function WriterTextRunProjection({
   let content: React.ReactNode = run.text;
   if (run.attributes.underline)
     content = <span style={{ textDecoration: "underline" }}>{content}</span>;
+  if (run.attributes.fontSizeTwips !== undefined)
+    content = <span style={{ fontSize: `${run.attributes.fontSizeTwips / 20}pt` }}>{content}</span>;
   if (run.attributes.fontFamily !== undefined)
     content = <span style={{ fontFamily: run.attributes.fontFamily }}>{content}</span>;
   if (run.attributes.italic) content = <em>{content}</em>;
@@ -162,5 +164,5 @@ function WriterTextRunProjection({
 /** Builds a deterministic view-only key from the projected run boundary and semantic state. @param paragraphId - Stable text-node identity. @param run - Projected run. @returns Stable projection key. */
 function getWriterRunProjectionKey(paragraphId: string, run: WriterProjectedTextRun): string {
   const attributes = run.attributes;
-  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.fontFamily ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
+  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.fontFamily ?? ""}:${attributes.fontSizeTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
 }

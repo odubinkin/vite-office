@@ -31,8 +31,8 @@ import {
   type WriterCompositionState,
   type WriterTextRange,
 } from "./wrtsh-selection";
-import { RES_CHRATR_FONT } from "../../../inc/hintids";
-import { SvxFontItem } from "../../../../editeng/source/items/textitem";
+import { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE } from "../../../inc/hintids";
+import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwWrtShellEditingOperations } from "./wrtsh-editing";
 
@@ -148,6 +148,12 @@ export class SwWrtShell extends SwModify {
     return (
       this.GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_FONT) as SvxFontItem
     ).GetFamilyName();
+  }
+  /** Returns the active paragraph's effective Western text height. @returns Font height in points. */
+  public GetDefaultFontSizePt(): number {
+    return (
+      (this.GetActiveParagraph().GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20
+    );
   }
   /** Subscribes to cursor and pending-attribute changes. @param listener - View invalidation callback. @returns Cleanup removing it. */
   public Subscribe(listener: (hint: SwModelHint) => void): () => void {
@@ -350,6 +356,11 @@ export class SwWrtShell extends SwModify {
   /** Applies a font family. @param fontFamily - Selected family. @returns Whether document content changed. */
   public SetFontFamily(fontFamily: string): boolean {
     return this.textShell.SetFontFamily(fontFamily);
+  }
+
+  /** Applies a font height. @param fontSizePt - Selected height in points. @returns Whether document content changed. */
+  public SetFontSize(fontSizePt: number): boolean {
+    return this.textShell.SetFontSize(fontSizePt);
   }
 
   /** Applies paragraph alignment through one shell-owned history transition. @param alignment - Next alignment. @returns Whether content changed. */

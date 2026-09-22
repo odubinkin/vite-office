@@ -96,8 +96,11 @@ export function WriterFormattingToolbar({
 /** Narrows a generic special toolbar placement to its generated Writer resource. @param item - Generic placement. @returns Whether Writer metadata is present. */
 function isWriterSpecialToolbarPlacement(
   item: CommandToolbarPlacement,
-): item is Extract<WriterToolbarItemPlacement, { kind: "command-select" | "font-select" }> {
-  return item.kind === "font-select"
+): item is Extract<
+  WriterToolbarItemPlacement,
+  { kind: "command-select" | "font-select" | "font-size-select" }
+> {
+  return item.kind === "font-select" || item.kind === "font-size-select"
     ? "commandId" in item && "label" in item
     : item.kind === "command-select" && "label" in item && "options" in item;
 }
@@ -112,7 +115,10 @@ function getWriterButtonContent(commandUrl: string): React.ReactNode {
 
 /** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param localization - Browser localization service. @param paragraphStyleOptions - Binding-backed style selector options. @param resolveArguments - Browser argument adapter. @returns Rendered special item. */
 function renderSpecialToolbarItem(
-  placement: Extract<WriterToolbarItemPlacement, { kind: "command-select" | "font-select" }>,
+  placement: Extract<
+    WriterToolbarItemPlacement,
+    { kind: "command-select" | "font-select" | "font-size-select" }
+  >,
   commandSource: BrowserCommandSurfaceProps["commandSource"],
   getCommandResource: typeof getWriterCommandResource,
   localization: BrowserLocalizationService,
@@ -123,6 +129,16 @@ function renderSpecialToolbarItem(
   if (item.kind === "font-select")
     return (
       <FontNameSelect
+        commandId={item.commandId}
+        commandSource={commandSource}
+        key={item.commandId}
+        label={localization.GetText(`writer.command.${item.commandId}.control-label`, item.label)}
+        resolveArguments={resolveArguments}
+      />
+    );
+  if (item.kind === "font-size-select")
+    return (
+      <FontSizeSelect
         commandId={item.commandId}
         commandSource={commandSource}
         key={item.commandId}
@@ -270,6 +286,57 @@ function FontNameSelect({
             <option key={font} style={{ fontFamily: font }}>
               {font}
             </option>
+          ),
+        )}
+      </select>
+    </label>
+  );
+}
+
+const STANDARD_FONT_SIZES_PT = [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36, 48, 72] as const;
+
+/** Point-size selector backed by Writer command state. @param props - Command surface properties. @returns Selector. */
+function FontSizeSelect({
+  commandId,
+  commandSource,
+  label,
+  resolveArguments,
+}: {
+  readonly commandId: string;
+  readonly commandSource: BrowserCommandSurfaceProps["commandSource"];
+  readonly label: string;
+  readonly resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
+}): React.JSX.Element {
+  const selected = Number(commandSource.QueryState(commandId).value);
+  /* v8 ignore next -- Imported nonstandard point sizes are retained for round-trip fidelity. */
+  const options = STANDARD_FONT_SIZES_PT.includes(
+    selected as (typeof STANDARD_FONT_SIZES_PT)[number],
+  )
+    ? STANDARD_FONT_SIZES_PT
+    : [selected, ...STANDARD_FONT_SIZES_PT];
+  return (
+    <label className="contents">
+      <span className="sr-only">{label}</span>
+      <select
+        aria-label={label}
+        className="h-8 min-w-20 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700"
+        onChange={
+          /** Applies the selected font height. @param event - Select change. @returns Nothing. */ (
+            event,
+          ) => {
+            const base = resolveArguments(commandId);
+            commandSource.Execute(commandId, {
+              /* v8 ignore next -- The Writer view always resolves font arguments to a cursor object. */
+              ...(typeof base === "object" && base !== null ? base : {}),
+              fontSizePt: Number(event.target.value),
+            });
+          }
+        }
+        value={selected}
+      >
+        {options.map(
+          /** Renders one point size. @param size - Point height. @returns Option. */ (size) => (
+            <option key={size} value={size}>{`${size} pt`}</option>
           ),
         )}
       </select>

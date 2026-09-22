@@ -224,6 +224,30 @@ export class SwpHints {
     );
   }
 
+  /** Applies one font height over a native hint range. @param textLength - Complete text length. @param start - Inclusive range start. @param end - Exclusive range end. @param fontSizeTwips - Requested height in twips. @param inherited - Node/style items. @returns Updated independent hints. */
+  public setFontSize(
+    textLength: number,
+    start: number,
+    end: number,
+    fontSizeTwips: number,
+    inherited: SfxItemSet,
+  ): SwpHints {
+    return this.replaceCharacterRange(
+      textLength,
+      start,
+      end,
+      this.collectCharacterSegments(textLength, start, end, inherited).map(
+        /** Applies the requested height. @param segment - Effective native segment. @returns Updated segment. */ (
+          segment,
+        ) => ({
+          ...segment,
+          attributes: { ...segment.attributes, fontSizeTwips },
+        }),
+      ),
+      inherited,
+    );
+  }
+
   /** Queries one supported character item over a native range. @param textLength - Complete text length. @param start - Inclusive range start. @param end - Exclusive range end. @param format - Queried item group. @param inherited - Node/style items. @returns Uniform or mixed state. */
   public getCharacterFormatState(
     textLength: number,

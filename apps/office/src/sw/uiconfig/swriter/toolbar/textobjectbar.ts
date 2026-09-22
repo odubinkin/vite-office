@@ -23,6 +23,14 @@ export const writerTextObjectBarItems: readonly WriterToolbarItemPlacement[] =
               label: getWriterCommandResource(item.commandUrl).controlLabel,
             },
           ];
+        if (item.commandUrl === generated.commandAliases.fontHeight)
+          return [
+            {
+              commandId: item.commandUrl,
+              kind: "font-size-select",
+              label: getWriterCommandResource(item.commandUrl).controlLabel,
+            },
+          ];
         if (item.commandUrl === generated.commandAliases.styleApply)
           return [
             {

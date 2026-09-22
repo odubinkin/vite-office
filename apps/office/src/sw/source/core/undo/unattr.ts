@@ -76,6 +76,22 @@ export function CreateWriterFontUndo(
     : new SwUndoAttr(paragraph, start, beforeFragment, afterFragment, before, after);
 }
 
+/** Builds a font-height range undo action. @param paragraph - Target node. @param start - Range start. @param end - Range end. @param fontSizeTwips - Font height in twips. @param before - Initial cursor. @param after - Final cursor. @returns Undo action or undefined for a no-op. */
+export function CreateWriterFontSizeUndo(
+  paragraph: SwTextNode,
+  start: number,
+  end: number,
+  fontSizeTwips: number,
+  before: SwUndoCursorState,
+  after: SwUndoCursorState,
+): SwUndoAttr | undefined {
+  const beforeFragment = CopyTextFragment(paragraph, start, end);
+  const afterFragment = paragraph.CreateFontSizeTextFragment(start, end, fontSizeTwips);
+  return beforeFragment.hints.equals(afterFragment.hints)
+    ? undefined
+    : new SwUndoAttr(paragraph, start, beforeFragment, afterFragment, before, after);
+}
+
 /** Reversible RES_PARATR_ADJUST change for one paragraph. */
 export class SwUndoParagraphFormat extends SwUndo {
   /** Creates one alignment action. @param paragraph - Target node. @param beforeAlignment - Original adjustment. @param afterAlignment - New adjustment. @param before - Cursor before formatting. @param after - Cursor after formatting. @returns Nothing. */

@@ -225,7 +225,7 @@ describe("App" /**
     expect(editor.querySelector("strong em span")).toBeInTheDocument();
   });
 
-  it("selects local-compatible fonts and exposes source-backed paragraph styles", /** Verifies the two Writer selectors and visible style classes. @returns Nothing. */ function selectsWriterFontsAndStyles(): void {
+  it("selects local-compatible fonts and sizes and exposes source-backed paragraph styles", /** Verifies the Writer selectors and visible style classes. @returns Nothing. */ function selectsWriterFontsAndStyles(): void {
     render(<App />);
     const editor = screen.getByRole("textbox", { name: "Writer document text" });
     enterWriterParagraphText(editor, "Styled");
@@ -234,6 +234,10 @@ describe("App" /**
     expect(within(fontSelect).getByRole("option", { name: "Noto Serif" })).toBeInTheDocument();
     fireEvent.change(fontSelect, { target: { value: "Noto Serif" } });
     expect(editor.querySelector("span")).toHaveStyle({ fontFamily: "Noto Serif" });
+    const fontSizeSelect = screen.getByLabelText("Font size");
+    expect(within(fontSizeSelect).getByRole("option", { name: "14 pt" })).toBeInTheDocument();
+    fireEvent.change(fontSizeSelect, { target: { value: "14" } });
+    expect(editor.querySelector('[style*="font-size"]')).toHaveStyle({ fontSize: "14pt" });
 
     const styleSelect = screen.getByLabelText("Paragraph style");
     expect(within(styleSelect).getAllByRole("option")).toHaveLength(26);

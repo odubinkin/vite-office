@@ -14,6 +14,7 @@
     "editHyperlink": ".uno:EditHyperlink",
     "exportText": ".uno:ExportTo",
     "fontName": ".uno:CharFontName",
+    "fontHeight": ".uno:FontHeight",
     "hyperlinkDialog": ".uno:HyperlinkDialog",
     "headingOne": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles",
     "italic": ".uno:Italic",
@@ -225,6 +226,7 @@
     },
     ".uno:CharFontName": {
       "browserOwned": false,
+      "capabilityId": "CAP-0109",
       "controlLabel": "Font name",
       "label": "Font Name",
       "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
@@ -232,6 +234,17 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 10007
+    },
+    ".uno:FontHeight": {
+      "browserOwned": false,
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Font size",
+      "label": "Font Size",
+      "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10015
     },
     ".uno:HyperlinkDialog": {
       "browserOwned": false,
@@ -678,6 +691,8 @@
       { "commandUrl": ".uno:StyleApply", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:CharFontName", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:FontHeight", "kind": "command", "visible": true },
       { "kind": "separator" },
       { "commandUrl": ".uno:Bold", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
@@ -4073,12 +4088,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:EditStyle"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:FontHeight"
       },
       { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Grow" },
       { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Shrink" },

@@ -52,6 +52,7 @@ export function createWriterCommandRegistry<Context>(
 /** Arguments supplied by the DOM selection adapter to a character-format command. */
 export interface WriterCharacterCommandArguments {
   readonly fontFamily?: string;
+  readonly fontSizePt?: number;
 }
 /** Arguments submitted by the browser hyperlink dialog. */
 export interface WriterHyperlinkCommandArguments {

@@ -57,6 +57,11 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       ),
     ).toBe(true);
     expect(writerTextObjectBarItems).toContainEqual({
+      commandId: WRITER_COMMAND_IDS.fontHeight,
+      kind: "font-size-select",
+      label: "Font size",
+    });
+    expect(writerTextObjectBarItems).toContainEqual({
       commandId: WRITER_COMMAND_IDS.increaseIndent,
       kind: "command",
     });

@@ -301,6 +301,10 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const unsubscribe = session.viewStore.Subscribe(listener);
     expect(view.Execute(WRITER_COMMAND_IDS.alignCenter).status).toBe("executed");
     expect(view.Execute(WRITER_COMMAND_IDS.fontName).status).toBe("executed");
+    expect(view.QueryState(WRITER_COMMAND_IDS.fontHeight).value).toBe(12);
+    expect(view.Execute(WRITER_COMMAND_IDS.fontHeight).status).toBe("executed");
+    expect(view.Execute(WRITER_COMMAND_IDS.fontHeight, { fontSizePt: 14 }).status).toBe("executed");
+    expect(view.QueryState(WRITER_COMMAND_IDS.fontHeight).value).toBe(14);
     expect(docShell.GetDoc()).toBe(initialDocument);
     expect(docShell.GetDoc().paragraphs[0]?.alignment).toBe("center");
     expect(view.QueryState(WRITER_COMMAND_IDS.alignCenter)).toMatchObject({

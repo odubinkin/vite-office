@@ -734,6 +734,40 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.SetFontFamily("Noto Serif")).toBe(false);
   });
 
+  it("applies a font height through range hints and restores it through history", /** Verifies font-height state, validation, no-op, and history. @returns Nothing. */ () => {
+    const shell = createShell("abcd");
+    expect(shell.GetDefaultFontSizePt()).toBe(12);
+    expect(shell.SetFontSize(13.5)).toBe(false);
+    expect(shell.GetPendingCharacterAttributes().fontSizeTwips).toBe(270);
+    for (const invalid of [Number.NaN, 0, 13.03])
+      expect(
+        /** Rejects one invalid point height. @returns Invalid mutation. */ () =>
+          shell.SetFontSize(invalid),
+      ).toThrow("positive value representable in twips");
+    setTestSelection(shell, {
+      mark: { offset: 1, paragraphId: "p-1" },
+      point: { offset: 3, paragraphId: "p-1" },
+    });
+    expect(shell.SetFontSize(14)).toBe(true);
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())).toEqual([
+      { attributes: { bold: false, italic: false, underline: false }, text: "a" },
+      {
+        attributes: { bold: false, fontSizeTwips: 280, italic: false, underline: false },
+        text: "bc",
+      },
+      { attributes: { bold: false, italic: false, underline: false }, text: "d" },
+    ]);
+    expect(shell.Undo()).toBe(true);
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())).toEqual([
+      { attributes: { bold: false, italic: false, underline: false }, text: "abcd" },
+    ]);
+    expect(shell.Redo()).toBe(true);
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())[1]?.attributes.fontSizeTwips).toBe(
+      280,
+    );
+    expect(shell.SetFontSize(14)).toBe(false);
+  });
+
   it("creates clipboard transfer data from the shell SwPaM without rendered DOM", /** Verifies model-owned transfer serialization. @returns Nothing. */ function createsModelTransfer(): void {
     const shell = createShell("alpha beta");
     setTestSelection(shell, {

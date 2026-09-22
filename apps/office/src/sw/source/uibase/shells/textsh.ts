@@ -15,7 +15,12 @@ import type {
   WriterParagraphAlignment,
 } from "../../core/txtnode/ndtxt";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
-import { CreateWriterFontUndo, SwUndoAttr, SwUndoParagraphFormat } from "../../core/undo/unattr";
+import {
+  CreateWriterFontSizeUndo,
+  CreateWriterFontUndo,
+  SwUndoAttr,
+  SwUndoParagraphFormat,
+} from "../../core/undo/unattr";
 import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
@@ -38,6 +43,7 @@ export interface SwTextShellTarget {
   readonly GetActiveParagraph: () => SwTextNode;
   readonly GetCursor: () => import("../../core/crsr/pam").SwPaM;
   readonly GetDefaultFontFamily: () => string;
+  readonly GetDefaultFontSizePt: () => number;
   readonly GetDoc: () => import("../../core/doc/doc").SwDoc;
   readonly GetDocShell: () => Readonly<{
     GetUndoManager(): Readonly<{
@@ -186,6 +192,33 @@ export class SwTextShell {
     return action === undefined ? false : this.target.ApplyAction(action);
   }
 
+  /** Applies a font height through one text-shell history action. @param fontSizePt - Requested height in points. @returns Whether changed. */
+  public SetFontSize(fontSizePt: number): boolean {
+    const fontSizeTwips = fontSizePt * 20;
+    if (!Number.isFinite(fontSizePt) || fontSizePt <= 0 || !Number.isInteger(fontSizeTwips))
+      throw new Error("Writer font size must be a positive value representable in twips.");
+    const before = this.target.CaptureCursorState();
+    const selected = getWriterSelectedTextRange(this.target.GetCursor());
+    this.target.SetPendingCharacterAttributes({
+      ...this.target.GetPendingCharacterAttributes(),
+      fontSizeTwips,
+    });
+    if (selected === undefined) {
+      this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
+      this.target.NotifySelectionChanged();
+      return false;
+    }
+    const action = CreateWriterFontSizeUndo(
+      selected.node,
+      selected.start,
+      selected.end,
+      fontSizeTwips,
+      before,
+      this.target.CaptureCursorState(),
+    );
+    return action === undefined ? false : this.target.ApplyAction(action);
+  }
+
   /** Applies paragraph alignment through the text shell. @param alignment - Next alignment. @returns Whether changed. */
   public SetParagraphAlignment(alignment: WriterParagraphAlignment): boolean {
     const paragraph = this.target.GetActiveParagraph();
@@ -231,6 +264,11 @@ export class SwTextShell {
   /** Returns the device-resolved default font. @returns Font family. */
   public GetDefaultFontFamily(): string {
     return this.target.GetDefaultFontFamily();
+  }
+
+  /** Returns the effective paragraph font height. @returns Font height in points. */
+  public GetDefaultFontSizePt(): number {
+    return this.target.GetDefaultFontSizePt();
   }
 
   /** Returns whether undo is available. @returns Availability. */
@@ -353,6 +391,19 @@ export function createWriterTextCommandRegistry(
       getStateValue: (): string =>
         target.GetPendingCharacterAttributes().fontFamily ?? target.GetDefaultFontFamily(),
       id: WRITER_COMMAND_IDS.fontName,
+    },
+    {
+      capabilityId: "CAP-0109",
+      /** Applies a selected font height. @param _context - Bound shell. @param arguments_ - Font arguments. @returns Whether changed. */
+      execute: (_context, arguments_: unknown): boolean => {
+        const args = getWriterCommandArguments<WriterCharacterCommandArguments>(arguments_);
+        return args?.fontSizePt === undefined ? false : target.SetFontSize(args.fontSizePt);
+      },
+      /** Reads the caret font height. @returns Current height in points. */
+      getStateValue: (): number =>
+        (target.GetPendingCharacterAttributes().fontSizeTwips ??
+          target.GetDefaultFontSizePt() * 20) / 20,
+      id: WRITER_COMMAND_IDS.fontHeight,
     },
     ...(["left", "center", "right", "justify"] as const).map(
       /** Creates one paragraph-alignment descriptor. @param alignment - Supported alignment. @returns Command descriptor. */

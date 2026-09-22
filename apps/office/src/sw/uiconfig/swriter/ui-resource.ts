@@ -35,7 +35,8 @@ export type WriterToolbarItemPlacement =
   | WriterCommandPlacement
   | WriterSeparatorPlacement
   | Readonly<{ kind: "command-select"; label: string; options: readonly string[] }>
-  | Readonly<{ commandId: string; kind: "font-select"; label: string }>;
+  | Readonly<{ commandId: string; kind: "font-select"; label: string }>
+  | Readonly<{ commandId: string; kind: "font-size-select"; label: string }>;
 
 /** Removes separators orphaned when hidden or unsupported toolbar commands are filtered. @param items - Filtered placements. @returns Normalized placements. */
 export function normalizeWriterToolbarItems(
