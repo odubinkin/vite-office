@@ -4,7 +4,7 @@ title: "Remove browser document recovery mechanism"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-22T11:44:03.675Z"
+  updated_by: "CODER"
+  note: "verified-202609221113-N9GZ47"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-22T11:44:11.235Z"
+  updated_by: "EVALUATOR"
+  note: "Recovery mechanism removed; primary IndexedDB save/load is preserved."
+  evaluated_sha: "b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54"
+  blueprint_digest: "c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898"
+  evidence_refs:
+    - ".agentplane/tasks/202609221113-N9GZ47/README.md"
+    - ".agentplane/tasks/202609221113-N9GZ47/quality/20260922-114411235-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609221113-N9GZ47/quality/20260922-114411235-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609221113-N9GZ47/quality/20260922-114411235-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609221113-N9GZ47/blueprint/resolved-snapshot.json"
+    - "npm run typecheck; npx vitest run src/framework/browser/app/desktop.test.tsx; npm run inventory:parity; npm run check:source-provenance"
+  findings:
+    - "No recovery scheduler, restore UI, history, leases, or lifecycle API remains active; documentation and runtime inventory record the intentional refusal."
 commit: null
 comments:
   -
@@ -35,8 +51,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: remove recovery only; preserve IndexedDB primary document storage and all other persistence."
+  -
+    type: "verify"
+    at: "2026-09-22T11:43:55.164Z"
+    author: "CODER"
+    state: "ok"
+    note: "Verified recovery removal while preserving primary IndexedDB save/load: focused Writer desktop persistence test passed (14 tests); format, lint, full typecheck, source-tree, source-provenance, parity inventory, JSDoc, diff, doctor, and policy routing passed. npm run verify was started and completed its pre-test gates; the long coverage stage exceeded the interactive observation window."
+  -
+    type: "verify"
+    at: "2026-09-22T11:44:03.675Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609221113-N9GZ47"
 doc_version: 3
-doc_updated_at: "2026-09-22T11:14:21.815Z"
+doc_updated_at: "2026-09-22T11:44:03.864Z"
 doc_updated_by: "CODER"
 description: "Remove only the browser document-recovery mechanism (recovery scheduling, candidate persistence/restore, recovery UI, lifecycle APIs, and tests). Preserve existing IndexedDB document storage and all non-recovery persistence paths. Record the intentional, durable decision not to implement recovery because frequent full autosave will be the future browser strategy."
 sections:
@@ -61,6 +89,66 @@ sections:
     4. Run ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check, and git status --short --untracked-files=all. Expected: policy, whitespace, and task state checks pass; only intended task artifacts and changes remain.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-22T11:43:55.164Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Verified recovery removal while preserving primary IndexedDB save/load: focused Writer desktop persistence test passed (14 tests); format, lint, full typecheck, source-tree, source-provenance, parity inventory, JSDoc, diff, doctor, and policy routing passed. npm run verify was started and completed its pre-test gates; the long coverage stage exceeded the interactive observation window.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:14:21.815Z, excerpt_hash=sha256:f7cea786dc421d3b401b00f8e95431aacb0c4d26ca52cd5deb15ff751da65053
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221113-N9GZ47/blueprint/resolved-snapshot.json
+    - old_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+    - current_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609221113-N9GZ47
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609221113-N9GZ47
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-22T11:44:03.675Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609221113-N9GZ47
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:43:55.362Z, excerpt_hash=sha256:f7cea786dc421d3b401b00f8e95431aacb0c4d26ca52cd5deb15ff751da65053
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221113-N9GZ47/blueprint/resolved-snapshot.json
+    - old_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+    - current_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609221113-N9GZ47
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609221113-N9GZ47 --result verified-202609221113-N9GZ47 --commit b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -98,6 +186,66 @@ Remove only the browser document-recovery mechanism (recovery scheduling, candid
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-22T11:43:55.164Z — VERIFY — ok
+
+By: CODER
+
+Note: Verified recovery removal while preserving primary IndexedDB save/load: focused Writer desktop persistence test passed (14 tests); format, lint, full typecheck, source-tree, source-provenance, parity inventory, JSDoc, diff, doctor, and policy routing passed. npm run verify was started and completed its pre-test gates; the long coverage stage exceeded the interactive observation window.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:14:21.815Z, excerpt_hash=sha256:f7cea786dc421d3b401b00f8e95431aacb0c4d26ca52cd5deb15ff751da65053
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221113-N9GZ47/blueprint/resolved-snapshot.json
+- old_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+- current_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609221113-N9GZ47
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609221113-N9GZ47
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T11:44:03.675Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609221113-N9GZ47
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:43:55.362Z, excerpt_hash=sha256:f7cea786dc421d3b401b00f8e95431aacb0c4d26ca52cd5deb15ff751da65053
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221113-N9GZ47/blueprint/resolved-snapshot.json
+- old_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+- current_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609221113-N9GZ47
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609221113-N9GZ47 --result verified-202609221113-N9GZ47 --commit b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

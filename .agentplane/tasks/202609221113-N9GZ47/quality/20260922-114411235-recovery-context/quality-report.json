@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609221113-N9GZ47",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-22T11:44:11.235Z",
+  "verdict": "pass",
+  "summary": "Recovery mechanism removed; primary IndexedDB save/load is preserved.",
+  "evaluated_sha": "b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54",
+  "blueprint_digest": "c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898",
+  "findings": [
+    "No recovery scheduler, restore UI, history, leases, or lifecycle API remains active; documentation and runtime inventory record the intentional refusal."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609221113-N9GZ47/README.md",
+    "npm run typecheck; npx vitest run src/framework/browser/app/desktop.test.tsx; npm run inventory:parity; npm run check:source-provenance"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
