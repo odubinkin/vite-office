@@ -1,538 +1,792 @@
-# Vite Office Upstream Parity Plan
+# Vite Office upstream parity plan
 
-Status: proposed remediation plan
+## Status and intent
 
-Audit date: 2026-09-21
+This document replaces the previous parity-iteration plan. It is based on a fresh audit of the
+current checkout against the repository-pinned LibreOffice baseline; the deleted predecessor was
+not used as input.
 
-Pinned baseline: LibreOffice `libreoffice-26.8.0.2`, commit `9bc445578031fecf56086729d8e4940c77e14d65`
+The objective is not to reproduce LibreOffice's native process, windowing, operating-system, or
+UNO deployment machinery in a browser. The objective is to keep every implemented office
+capability as close as practical to the corresponding LibreOffice source ownership, data model,
+public and internal contracts, command identity, serialization behavior, and defaults. React is a
+renderer and browser-event adapter. It must not become an alternative Writer model, command
+framework, or persistence architecture.
 
-Local upstream tree: `vendor/libreoffice-reference/`
+Baseline used by this audit:
 
-## 1. Executive conclusion
+- tag: `libreoffice-26.8.0.2`;
+- commit: `9bc445578031fecf56086729d8e4940c77e14d65`;
+- local checkout: `vendor/libreoffice-reference`;
+- application source: `apps/office/src`.
 
-Vite Office currently contains a meaningful browser-native Writer vertical slice, not a generally equivalent LibreOffice office suite. Its strongest parts are the upstream-shaped Writer node skeleton, item/undo foundations, a bounded ODT pipeline, browser input/clipboard integration, and extensive local tests. Calc, Impress, Draw, Base, Math, and Chart are launch-surface placeholders and are not parity targets for the current implementation.
+## Executive assessment
 
-The current implementation nevertheless falls short of the requested architectural target in several material ways:
+The repository has a substantial LibreOffice-shaped foundation, especially in Writer. It has real
+`SfxPoolItem`/`SfxItemSet` ownership, a Writer node graph, `SwPaM`, text hints, Writer shells,
+action-based undo, list rules, ODF package/XML code, shell-stack dispatch, and browser adapters
+that are usually kept outside model code. Those are valuable assets and should be evolved rather
+than replaced.
 
-1. Command dispatch and frame responsibilities are assigned to `framework` even though their LibreOffice owners are primarily `sfx2`.
-2. Browser event, projection, persistence, and React external-store concepts leak into Writer shell and document-facing modules.
-3. Text-run DTOs and string paragraph IDs act as a second model beside `SwTextNode`, `SwPosition`, `SwPaM`, hints, and item sets.
-4. Mutation logic is concentrated in large shell/text-node files and bypasses the upstream `IDocumentContentOperations` ownership model.
-5. The paragraph-style catalogue preserves names and relationships but not the corresponding upstream item-set defaults; React CSS currently supplies part of the missing semantics.
-6. Numbering, lifecycle, filtering, and recovery contracts cover useful subsets but are narrower or differently layered than their current parity claims imply.
-7. The parity pipeline proves path and marker presence, not semantic contract, behavior, or default equivalence. It can therefore report 35/35 verified capabilities while the runtime inventory still marks most modules unverified.
+It is not yet valid to describe the implemented surface as upstream-parity complete. The current
+parity report says `parityReady: true` only because 45 records describe deliberately narrow slices
+and convert large missing parts into `scopeLimitations`. At the same time, the runtime inventory
+itself records most mapped runtime modules as semantically unverified. The first parity iteration
+must therefore repair the definition and evidence system before using it to drive more feature
+work.
 
-The first remediation step must be to restore trustworthy inventory semantics. Architectural refactoring should then proceed from the lowest-level model and command contracts outward to browser adapters and React UI. UI cleanup before the model and state contracts are stable would merely move the current adapters around.
+The most important architectural problems are:
 
-## 2. Goal and parity rules
+1. parity closure is currently based largely on marker existence and self-authored bounded
+   assertions, not on a complete upstream contract and assertion mapping;
+2. several LibreOffice command identities have different local semantics, most visibly
+   `.uno:ExportTo`, which currently means a direct plain-text download;
+3. defaults are not centrally extracted from pinned upstream configuration and already diverge;
+4. `sfx2/source/control/dispatch.ts` and the Writer command registries form a custom command
+   framework behind LibreOffice names instead of a bounded port of the Sfx slot/interface model;
+5. Writer core and shell code still expose browser-era convenience DTOs beside the upstream-shaped
+   item/node model;
+6. React presentation owns too much orchestration and contains several overlapping adapters and
+   copied projections;
+7. the source-tree gate, source-tree documentation, and actual source tree disagree about Writer
+   UI ownership;
+8. browser persistence and transport codecs occupy upstream filter directories even where there is
+   no corresponding upstream responsibility.
 
-The target is the closest practical TypeScript implementation of the corresponding pinned LibreOffice modules:
+## Audit evidence and inventory
 
-- preserve module ownership, public contracts, state transitions, data structures, defaults, and observable behavior where the capability exists locally;
-- keep files under the closest matching LibreOffice module/path and keep unrelated browser code outside those paths;
-- use stack-specific substitutions only at explicit browser boundaries;
-- retain React as the presentation technology without moving Writer semantics into components;
-- do not implement native-only facilities that have no browser product requirement;
-- do not claim parity for a capability wider than the tested local subset.
+### Repository measurements
 
-For this plan, parity has four independent dimensions:
+The audited checkout contains:
 
-| Dimension | Required evidence |
-| --- | --- |
-| Contract | Equivalent callable surface, argument/result meaning, state ownership, and error semantics, allowing documented TypeScript representation changes. |
-| Behavior | The same state transition and externally observable result for a defined operation and precondition. |
-| Defaults | Values derived from the pinned upstream source or fixtures, including locale/script branches and initialization order. |
-| Responsibility | Code lives in the equivalent module/layer, or a browser-only adapter is clearly separated and depends inward. |
+| Surface | Current size | Interpretation |
+| --- | ---: | --- |
+| Authored production TypeScript/TSX under `apps/office/src` | 149 files | Current executable application surface. |
+| Runtime inventory entries | 150 | Includes 149 production modules plus `src/test/wrtsh-test-helpers.ts`. Test-only code must not be counted as runtime. |
+| Application unit/integration test files | 74 | Broad local coverage, but mostly local-contract coverage. |
+| Browser E2E specifications | 8 | Writer and foundation flows only. |
+| Inventory implementation files | 37 | Baseline, module, test, help, translation, dictionary, and parity tooling. |
+| Inventory test files | 34 | Good structural coverage of inventory code. |
+| Program documentation files, excluding this plan | 44 | Several are stale relative to the latest UI relocation. |
+| Recorded atomic capability records | 45 | `CAP-0101` through `CAP-0145`, all currently marked `verified`. |
+| Placeholder suites | 6 | Calc, Impress, Draw, Base, Math, and Chart have no runtime implementation. |
 
-A path, symbol, comment, or test-name match is provenance evidence only. It is not parity evidence by itself.
+Runtime inventory classification:
 
-## 3. Audit scope and method
+| Classification | Modules | Meaning |
+| --- | ---: | --- |
+| `upstream-mechanism` | 92 | Claims a corresponding LibreOffice responsibility. |
+| `browser-adaptation` | 37 | React, DOM, Worker, IndexedDB, File, Clipboard, or font-platform boundary. |
+| `local-infrastructure` | 21 | Composition or local transport/storage infrastructure. |
 
-The audit covered:
-
-- all 136 production modules listed in `docs/program/parity/runtime-inventory.json`;
-- the application entry point and source trees under `apps/office/src/{editeng,framework,package,sfx2,svl,svtools,sw,vcl,xmloff}` (`svtools` currently contains no source files);
-- package scripts, manifests, 73 colocated unit-test files, and eight Playwright specifications;
-- Writer command metadata, parity records, source provenance, and source-tree enforcement;
-- the pinned upstream implementations referenced below.
-
-The following checks were used as structural evidence during the audit:
-
-- `npm run inventory:parity`
-- `npm run check:source-provenance`
-- `npm run check:source-tree`
-- `npm run check:dependencies`
-
-All four passed. Their passing result is not treated as proof of semantic parity because their present contracts are narrower than that claim.
-
-No content from the previously deleted version of this document was used.
-
-## 4. Implemented-function inventory
-
-### 4.1 Product-level inventory
-
-| Area | Current implementation | Upstream anchor | Assessment |
-| --- | --- | --- | --- |
-| Browser application shell | Launcher, module routing, localization, Writer composition in `framework/browser/app` and `sw/browser/composition` | No single upstream counterpart; desktop bootstrap is distributed across `desktop`, `framework`, and application modules | Justified browser infrastructure. Only Writer has a functional editor; other suite cards are placeholders. |
-| Command surfaces | React menus/toolbars, generated Writer command resources, shortcuts, enablement and checked state | `sw/uiconfig/swriter/**`, `sw/sdi/swriter.sdi`, `sfx2/source/control/{dispatch,bindings}.cxx` | UI rendering is justified; command ownership and dispatch architecture are not yet aligned. |
-| Sfx lifecycle | `SfxObjectShell`, `SfxMedium`, request/bindings, modified/save/recovery generations | `include/sfx2/{objsh,docfile,request,bindings}.hxx`, `sfx2/source/{doc,control}/**` | Useful subset; browser document DTOs and storage orchestration are mixed into upstream-shaped classes. |
-| SVL foundations | Pool items, item pool/set, broadcaster/listener, undo manager, storage/recovery contracts | `include/svl/**`, `svl/source/{items,notify,undo}/**` | Best-aligned shared foundation, but the item universe remains too small for claimed Writer defaults. |
-| Edit engine items | Font family/weight/posture/underline and paragraph-adjustment pool items in `editeng/source/items` | `editeng/source/items/{textitem,paraitem}.cxx` | Correct module family, but only a narrow subset of the item contracts and defaults required by Writer is implemented. |
-| Writer document model | `SwDoc`, five sentinel sections, `SwNodes`, text nodes, positions, `SwPaM`, content-index registry, formats and style collections | `sw/inc/{doc,node,pam}.hxx`, `sw/source/core/{doc,docnode,crsr}/**` | Recognizably upstream-shaped, but stable string IDs and run DTOs have become competing canonical identities. |
-| Writer editing | Insert/delete/replace, split/join/move, selections, undo/redo, character formatting, alignment, style assignment, lists, indent, hyperlinks | `sw/source/core/doc/DocumentContentOperationsManager.cxx`, `sw/source/uibase/wrtsh/**`, `sw/source/uibase/shells/**` | Functional, but too much behavior is in `SwWrtShell` and `SwTextNode` rather than upstream managers and shell partitions. |
-| Style pool | 126 paragraph-style identities, parent/follow relations, style selection | `sw/inc/poolfmt.hxx`, `sw/source/core/doc/{poolfmt,DocumentStylePoolManager}.cxx` | Identity catalogue exists; default item sets and script/locale-dependent semantics do not. |
-| Numbering | Bullet/numbered rules, list tree, levels, promote/demote, indent and marker projection | `sw/source/core/doc/{number,list}.cxx`, `sw/source/core/SwNumberTree/**` | Implements a small uniform-rule subset; data model and defaults are substantially narrower than `SwNumRule`/`SvxNumberFormat`. |
-| Transfer | `SwTransferable`, plain/HTML serialization, browser clipboard and drag/drop-facing operations | `sw/source/uibase/dochdl/swdtflvr.cxx` | Browser integration is necessary, but contract parity is explicitly divergent in the runtime inventory and should remain unclaimed until the supported flavor/action contract is defined. |
-| ODF/package | ZIP32 reader, STORE writer, CRC32, manifest, SAX parsing, styles/content import-export, lists, fonts, hyperlinks, worker execution | `package/source/{zipapi,manifest}/**`, `xmloff/source/**`, `sw/source/filter/xml/**` | Valuable bounded ODT subset. It does not justify broad ODF round-trip parity claims. |
-| Persistence/recovery | JSON graph codec, IndexedDB primary snapshot, AutoRecovery, file picker and downloads | `sfx2/source/doc/**`, `framework/source/services/autorecovery.cxx`, `svl` storage interfaces | Browser storage is justified; one snapshot DTO currently serves too many roles and crosses model/filter/lifecycle boundaries. |
-| Writer UI | Contenteditable paragraphs, DOM/model selection mapping, IME, geometry, menu, toolbar, sidebar, status, dialogs and recovery prompt | Native VCL UI plus `sw/source/uibase/docvw/edtwin*.cxx` | React/DOM architecture may differ. Functional state must still originate in Writer/Sfx contracts rather than CSS, string matching, or duplicated projections. |
-
-### 4.2 Current inventory truth
-
-`docs/program/parity/runtime-inventory.json` lists 136 production modules:
-
-- 84 `upstream-mechanism` modules;
-- 35 `browser-adaptation` modules;
-- 17 `local-infrastructure` modules;
-- 134 active and two foundation modules.
-
-Its semantic status is materially less complete than the command-slice closure:
+The inventory's own semantic status is materially less complete than the capability report:
 
 | Dimension | Parity | Unverified | Not applicable | Divergent |
 | --- | ---: | ---: | ---: | ---: |
-| Behavior | 8 | 110 | 18 | 0 |
-| Contract | 7 | 76 | 52 | 1 |
-| Defaults | 7 | 72 | 57 | 0 |
-
-Only eight modules have any `parity` semantic dimension. The sole explicit contract divergence is `apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts`. By contrast, `docs/program/parity/writer-command-slice.json` marks all 35 records as implemented, contract-equivalent, behavior-equivalent, default-equivalent, and verified. `docs/program/parity-matrix.md` and `docs/program/parity/phase-8-closure.md` also disagree on the degree of independent attestation. These claims cannot simultaneously describe the same verification standard.
-
-## 5. Deviations that are justified by the browser stack
-
-The following deviations should be preserved, but their boundaries and contracts must be explicit:
-
-1. React components and hooks under `framework/browser/**` and `sw/browser/**` replace VCL widgets and native layout code.
-2. `InputEvent`, DOM selection, caret geometry, IME/composition, `ClipboardEvent`, and pointer adapters belong under `sw/browser/editor/**`.
-3. File picker, download, IndexedDB, browser clipboard, and local-font discovery belong under `vcl/browser/**` or a similarly explicit browser platform layer.
-4. Worker messages, cancellation, and structured-clone DTOs are legitimate adapters for expensive ODT work.
-5. Browser launch/routing/composition has no obligation to mirror LibreOffice desktop bootstrap internals.
-6. A JavaScript ZIP/SAX implementation may substitute for native libraries if it preserves the supported package/filter contract and limits are explicit.
-7. A serializable recovery/storage representation is necessary, but it must not replace the live Writer graph as the canonical model.
-8. Browser-only commands may exist under a clearly namespaced URL such as `vnd.vite-office.browser:*`; they must not masquerade as supported UNO commands.
-
-The dependency rule is one-way: browser adapters may call upstream-shaped core modules; core modules must not import DOM, React, IndexedDB, worker protocols, browser command DTOs, or presentation projections.
-
-## 6. Material unjustified deviations
-
-### P0-1. Parity verification currently proves markers, not semantics
-
-Local evidence:
-
-- `scripts/libreoffice-inventory/parity-mapping-support.ts` accepts an assertion when referenced files exist and their contents contain configured markers.
-- `scripts/libreoffice-inventory/parity-mappings.ts` derives closure from authored booleans and marker resolution.
-- `docs/program/parity/writer-command-slice.json` consequently reports 35/35 verified capabilities.
-- `docs/program/source-provenance.json` includes weak or unrelated mappings such as `SfxItemPool` to Calc/Writer color helpers, AutoRecovery to generic UNO lifetime symbols, `DocumentStateManager` to comment-ID generation, and `writercommands.ts` to drawing/tracked-change symbols.
-
-Upstream evidence: the cited files exist in the pinned tree, but marker presence does not execute or compare `SfxItemPool`, AutoRecovery, Writer command, style, list, or XML behavior.
-
-Target state: parity records are generated from executable assertions or reviewed contract/default tables. Provenance, implementation, verification, and parity are distinct maturity states. Every current `verified` record that lacks such evidence is reset to `mapped` or `implemented`.
-
-### P0-2. Sfx dispatch and frame ownership is misplaced
-
-Local evidence: `apps/office/src/framework/source/dispatch/dispatchprovider.ts` defines `CommandDefinition`, `CommandRegistry`, `SfxShell`, `SfxDispatcher`, and `OfficeFrame` in one custom 650-line module.
-
-Upstream evidence:
-
-- `framework/source/dispatch/dispatchprovider.cxx` is a UNO dispatch-provider implementation;
-- `include/sfx2/dispatch.hxx` and `sfx2/source/control/dispatch.cxx` own `SfxDispatcher`;
-- `include/sfx2/bindings.hxx` and `sfx2/source/control/bindings.cxx` own binding/state propagation;
-- Sfx view-frame responsibilities live under `sfx2/source/view/**`.
-
-Target state: implement upstream-shaped dispatcher, shell stack, view frame, bindings, request, and slot state under `sfx2`. Keep `framework` as an outer UNO/provider or application integration layer. Generated command metadata describes slots and presentation; it must not become a parallel execution framework.
-
-### P0-3. Browser identities and events leak into Writer shell contracts
-
-Local evidence:
-
-- `apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts` exposes positions by `paragraphId: string`;
-- `apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts` searches nodes by IDs and dispatches raw browser `beforeinput` strings in `HandleInput`;
-- `apps/office/src/sw/source/core/docnode/node.ts` exposes UI-stable node IDs;
-- `apps/office/src/sw/browser/editor/writer-edit-controller.ts` already exists as the natural browser translation boundary.
-
-Upstream evidence:
-
-- `sw/inc/pam.hxx` and `sw/inc/node.hxx` use node/content indexes and object relationships;
-- `sw/source/uibase/inc/wrtsh.hxx` and `sw/source/uibase/wrtsh/{wrtsh1,select,delete}.cxx` expose Writer operations rather than DOM event names;
-- native event translation belongs to `sw/source/uibase/docvw/edtwin*.cxx`, outside the core model.
-
-Target state: DOM IDs exist only in projection/rendering maps. Browser events are translated once into shell methods or Sfx requests. All model and undo operations use `SwPosition`, `SwPaM`, node indexes/references, and Writer-native command arguments.
-
-### P0-4. The text-run DTO is a competing canonical model
-
-Local evidence: `apps/office/src/sw/source/core/txtnode/ndtxt.ts` combines `SwTextNode` with `WriterTextRun` normalization, grapheme helpers, direct-format manipulation, and alignment data; `writer-document-codec.ts`, UI projection, clipboard, and filters consume these runs directly.
-
-Upstream evidence: `sw/source/core/txtnode/{ndtxt,ndhints,txatbase}.cxx` and their headers model text plus hints/attributes; formatting is represented through pool items and attribute sets rather than a primitive run schema.
-
-Target state: text plus `SwpHints`/`SwTextAttr`/`SfxItemSet` is canonical. A run is a derived, immutable projection for React, HTML, or serialization only. It cannot carry authoritative state back into the core without conversion through Writer operations.
-
-### P0-5. Style names exist without upstream style defaults
-
-Local evidence:
-
-- `apps/office/src/sw/inc/poolfmt.ts` enumerates 126 style identities and relations;
-- `apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts` mainly instantiates those definitions;
-- `apps/office/src/sw/source/core/doc/fmtcol.ts` supplies only a small fraction of actual properties;
-- `apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx` hard-codes title, heading, caption, quotation, and other style CSS by slug.
-
-Upstream evidence: `sw/inc/poolfmt.hxx`, `sw/source/core/doc/poolfmt.cxx`, and `sw/source/core/doc/DocumentStylePoolManager.cxx` construct item sets with fonts, size, language/script, margins, spacing, alignment, outline/list relationships, HTML-mode variants, and parent/follow semantics.
-
-Target state: implemented styles are created from source-derived default item tables and normal Writer inheritance. React renders computed style/item state; it does not define Writer semantics. Unimplemented style families remain explicit and unavailable rather than name-only shells.
-
-### P1-1. Document mutations bypass the upstream content-operations owner
-
-Local evidence: `apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts` is a thin facade, while insert/delete/replace/split/join and snapshot logic live largely in `SwWrtShell`, `SwTextNode`, and bespoke undo actions.
-
-Upstream evidence: `sw/inc/IDocumentContentOperations.hxx` and `sw/source/core/doc/DocumentContentOperationsManager.cxx` own core insert/delete/replace/copy operations; shells coordinate view and cursor behavior.
-
-Target state: the manager owns all canonical model mutations and returns/updates Writer positions according to upstream rules. Shells group actions and maintain cursor/view state. Undo objects record Writer ranges and operation-specific state rather than UI projections.
-
-### P1-2. Writer shell and command modules are catch-alls
-
-Local evidence:
-
-- `apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts` combines input dispatch, selection, editing, formatting, lists, hyperlink, indent, and history operations;
-- `apps/office/src/sw/source/uibase/shells/writercommands.ts` registers most commands in a single module;
-- `apps/office/src/sw/source/core/txtnode/ndtxt.ts` combines model and presentation helpers.
-
-Upstream evidence: Writer separates `wrtsh1.cxx`, `select.cxx`, `delete.cxx`, `textsh*.cxx`, `listsh.cxx`, view functions, core operations, text attributes, and node logic. `sw/sdi/swriter.sdi` is declarative slot metadata, not a handler implementation.
-
-Target state: split by upstream responsibility. Character/paragraph commands live in text shells, list commands in list shell, view actions in view functions, core mutations in the content manager, and generated SDI data remains declarative.
-
-### P1-3. Numbering is a locally simplified model with overly broad claims
-
-Local evidence: `apps/office/src/sw/source/core/doc/number.ts` represents a bullet/numbered `kind` and uniform formats; `DocumentListsManager.ts`, `list.ts`, and `SwNodeNum.ts` implement a bounded list tree and marker flow.
-
-Upstream evidence: `sw/source/core/doc/number.cxx`, `sw/source/core/doc/list.cxx`, and `sw/source/core/SwNumberTree/**` include numbering types, label alignment modes, include-upper-levels, prefixes/suffixes/list formats, restart behavior, character styles, outline rules, and richer invalidation.
-
-Target state: first define the exact numbering subset needed by current commands, then preserve the corresponding upstream `SwNumRule`/`SwNumFormat` fields and defaults without a second local abstraction. Unsupported rule types must round-trip opaquely where practical or be rejected explicitly before mutation.
-
-### P1-4. Document lifecycle owns browser storage and filter orchestration
-
-Local evidence: `apps/office/src/sw/source/uibase/app/docsh.ts` contains browser open/export ports, IndexedDB primary load/save, download orchestration, worker service calls, and recovery snapshot methods.
-
-Upstream evidence: `sw/source/uibase/app/{docsh,docshini}.cxx` owns Writer document-shell lifecycle; `sfx2/source/doc/{docfile,objstor,objmisc}.cxx` owns medium/storage/load-save coordination; filters own import/export.
-
-Target state: `SwDocShell` retains Writer lifecycle hooks and delegates medium/filter operations. Browser file/storage/worker ports adapt `SfxMedium` or filter services outside the shell. Recovery listens to shell state but serializes through a dedicated storage contract.
-
-### P1-5. One graph codec serves persistence, worker transport, and filter staging
-
-Local evidence: `apps/office/src/sw/source/filter/basflt/writer-document-codec.ts` defines a versioned graph snapshot used by storage and ODT worker flows.
-
-Upstream evidence: LibreOffice distinguishes the live Writer graph, Sfx storage/medium lifecycle, filter import/export state, and AutoRecovery. There is no upstream counterpart to a single canonical JSON graph format.
-
-Target state: distinguish three contracts: durable browser recovery/storage schema, narrow worker-transfer DTO, and live filter model access. Avoid encode/decode of the entire document merely to cross a worker boundary; if the worker must own the filter, give it a documented structured-clone boundary and reconstruct only through normal Writer import operations.
-
-### P1-6. ODT capabilities are broader than their evidence
-
-Local evidence: `apps/office/src/sw/source/filter/xml/**`, `xmloff/source/**`, and `package/source/**` support a useful subset: stored ZIP output, stored/raw-deflate input, manifest, paragraphs/styles/lists/basic character properties/fonts/hyperlinks, and limits. Several CAP records share the same broad implementation/test bundles.
-
-Upstream evidence: `sw/source/filter/xml/{swxml,wrtxml,xmlexp,xmlimp}.cxx`, `xmloff/source/text/**`, and package ZIP code cover substantially more content and compatibility behavior.
-
-Target state: split ODT inventory by stream and property. Each claim names the supported XML element/attribute, import behavior, export behavior, default, and lossless round-trip expectation. Unsupported tables, images, fields, sections, changes, embedded objects, signatures, encryption, and foreign content are not silently covered by a generic ODT claim.
-
-### P2-1. `SwView` contains React/browser presentation responsibilities
-
-Local evidence: `apps/office/src/sw/source/uibase/uiview/view.ts` contains presentation projections, workflow controllers, cut/paste adapter arguments, view snapshots, and external-store `Subscribe`/`GetSnapshot` concerns.
-
-Upstream evidence: `sw/source/uibase/uiview/view*.cxx` and `sw/inc/view.hxx` own Writer view/shell/frame state and command coordination, not React projection DTOs.
-
-Target state: keep `SwView` upstream-shaped. Move React snapshots/projectors/subscriptions to `sw/browser/presentation` and workflows to `sw/browser/workflows`; expose only a narrow observable adapter over Writer/Sfx state.
-
-### P2-2. Source layout checks do not prove responsibility alignment
-
-Local evidence:
-
-- `scripts/check-lo-source-tree.mjs` checks a required-path list and retired paths, but not code responsibility;
-- `scripts/check-module-boundaries.mjs` enforces coarse top-level edges and permits broad `sw` internal coupling;
-- `docs/program/source-provenance.json` has filename-divergence allowances that can hide ownership errors.
-
-Upstream evidence: the pinned tree provides direct responsibility anchors for Sfx dispatch, Writer shells, model managers, filters, and UI configuration.
-
-Target state: add ownership rules for inner layers (`sw/core`, `sw/uibase`, `sw/browser`, filters, Sfx), forbid browser imports from core/upstream-mechanism files, and require each filename divergence to state a stack necessity rather than a TypeScript convenience.
-
-## 7. UI and previous-refactor artifacts
-
-These issues are lower-level symptoms of the ownership problems above and should be removed during the relevant work package:
-
-| Artifact | Local evidence | Why it is a problem | Intended replacement |
+| Behavior | 8 | 119 | 23 | 0 |
+| Contract | 7 | 84 | 58 | 1 |
+| Default | 8 | 74 | 68 | 0 |
+| Source responsibility | 23 aligned | 67 unverified | 46 browser-owned | 14 divergent |
+
+This contradiction is a P0 program defect: a slice report cannot declare the implementation ready
+while its mapped runtime owners remain predominantly unverified.
+
+### Implemented shared-office surface
+
+| Area | Implemented today | Principal local owners | Upstream reference families | Audit disposition |
+| --- | --- | --- | --- | --- |
+| Browser application bootstrap | Static Vite/React mount, suite launcher, pathname routing, lazy Writer session | `framework/browser/app`, `main.tsx` | `framework/source/services/desktop.cxx`, module manager services | Browser-specific composition is justified; suite and document identity must stop leaking into generic value DTOs. |
+| Localization | Locale normalization, fallback catalog, React provider | `framework/browser/localization`, `framework/source/services/messages.ts` | officecfg/resource/translation catalogs | Browser provider is justified; current catalog and fallback model is local infrastructure, not parity evidence. |
+| Command and dispatch foundation | Command registry, shell stack, slot requests, bindings invalidation, async result state | `sfx2/source/control`, `framework/source/dispatch` | `include/sfx2/{dispatch,request,bindings,shell}.hxx`, matching `sfx2/source/control` files | Directionally correct, but a custom descriptor framework is concentrated in `dispatch.ts`. |
+| Item system | Pool items, item pool, item sets and Writer attribute pool | `svl/source/items`, `editeng/source/items`, `sw/source/core/attr` | `svl`, `editeng`, `sw` item implementations | Strongest reusable parity foundation; broaden contracts and eliminate browser-shaped projections from core APIs. |
+| Notifications | `SfxBroadcaster`, `SfxListener`, `SwModify`, transactional model hints | `svl/source/notify`, `sw/inc/calbck.ts`, `DocumentStateManager.ts` | Svl broadcasters and Writer callback graph | Shape is useful; current coarse revision/hint model needs assertion-level comparison. |
+| Undo/redo | Bounded `SfxUndoManager`, compound actions, save marks, Writer actions | `svl/source/undo`, `sw/source/core/undo` | `svl/source/undo/undo.cxx`, Writer undo files | Retain; expand from the supported text slice without snapshot-based fallbacks. |
+| Document shell and medium | Modified state, save generations, medium identity and operation state | `sfx2/source/doc`, `sw/source/uibase/app/docsh.ts` | `SfxObjectShell`, `SfxMedium`, `SwDocShell` | Ownership is partly aligned, but the parallel `OfficeDocument` state machine and browser generations are mixed into upstream contracts. |
+| Storage/recovery | IndexedDB primary/recovery stores, leases, autosave scheduling, recovery prompt | `svl/source/misc`, `framework/source/services/autorecovery.ts`, `vcl/browser/indexeddb-storage.ts` | framework AutoRecovery and document storage | IndexedDB and lease adapters are justified; defaults and service contract are not yet upstream-equivalent. |
+| Worker protocol | Typed request IDs, cancellation, progress, stale-result rejection | `framework/source/services/worker-protocol.ts`, `sw/browser/filter/xml` | No direct native equivalent | Necessary browser infrastructure; it must remain outside filter/model contracts. |
+| ZIP/manifest/XML | ZIP32 read/write, CRC32, manifest, SAX-like XML parser, text/style contexts | `package/source`, `xmloff/source` | Matching package/xmloff files and `sax/source/fastparser` | Useful bounded ports; most module contracts/defaults are still recorded as unverified. |
+| Browser platform ports | Clipboard, file picker, download, local fonts, default-font device | `vcl/browser` | VCL/system services | Necessary stack divergence. Keep ports narrow and prevent their DTOs from becoming core types. |
+
+### Implemented Writer surface
+
+| Area | Implemented today | Principal local owners | Important limitations still inside normal Writer behavior |
 | --- | --- | --- | --- |
-| Style-by-slug CSS | `sw/browser/editor/WriterEditableParagraph.tsx` | React owns Writer style semantics and masks missing defaults. | Render computed item-set/style projection. |
-| Duplicate list marker calculation | `WriterEditableParagraph.tsx` recomputes a marker although `writer-view-projection.ts` already exposes one | Two presentation paths can disagree and add unnecessary traversal. | One list-layout projection produced from `SwNodeNum` state. |
-| `projectionVersion` consumed only to trigger rendering | `WriterEditableParagraph.tsx` | Version plumbing signals an unstable projection contract. | Stable immutable paragraph/run snapshots with referential change semantics. |
-| O(n²) run-key generation | `WriterEditableParagraph.tsx` derives keys from preceding sliced runs | Avoidable UI work and fragile identity. | Projection supplies stable render-segment keys. |
-| Fixed fake page geometry | `WriterWorkspaceChrome.tsx` uses a fixed page-like minimum height/width | It visually implies pagination without a Writer layout model. | Label as continuous web view, or add a separate layout/page projection before claiming page behavior. |
-| English error-string switching | `sw/browser/presentation/writer-view.tsx` maps exact error messages to UI | Presentation depends on message text and cannot localize reliably. | Typed domain/filter error codes plus localized resources. |
-| Recovery status embedded as prose | `writer-view.tsx`/recovery prompt flow | Conflates lifecycle state and status rendering. | Typed recovery state projected separately. |
-| Toolbar computes style hierarchy | `WriterFormattingToolbar.tsx` walks the style pool in render | UI reconstructs model relationships and defaults. | A style-list/state controller backed by `SfxBindings` and style pool. |
-| Assumed command presence/casts | `WriterFormattingToolbar.tsx` and command surfaces | Hides unsupported or incorrectly registered commands. | Typed generated slot IDs and explicit unavailable states. |
-| Browser font fallback as Writer default | `vcl/browser/{font-list,default-font-device}.ts` and `sw/source/core/doc/default-font.ts` | Availability fallback and document default are different contracts. | Source-derived Writer default request followed by an explicit device substitution result. |
-| `writercommands.ts` all-in-one registry | `sw/source/uibase/shells/writercommands.ts` | Preserves command names but erases upstream handler ownership. | Generated slot metadata plus handlers in text/list/view/document shells. |
-| Graph snapshots in view state | `sw/source/uibase/uiview/view.ts` and storage workflow | Copies persistence concerns into presentation state. | Lightweight observable Writer/Sfx state; persistence is independent. |
+| Document graph | Five fixed sections, text nodes, node indices, registered content positions | `sw/source/core/doc`, `docnode`, `bastyp` | No tables, sections, frames, fields, marks, redlines, content controls, anchored objects, or layout frames. |
+| Text model | UTF-16 text, ranged auto-format and hyperlink hints, split/join/replace | `sw/source/core/txtnode` | A parallel boolean/run DTO remains widely used at shell, transfer, and test boundaries. |
+| Cursor and selection | Directional point/mark `SwPaM`, cross-paragraph selection/deletion | `sw/source/core/crsr`, `sw/source/uibase/wrtsh` | Formatting and several transfer paths are still same-paragraph only; no multi-selection/table selection modes. |
+| Paragraph formatting | Alignment, margins, line spacing, selected built-in paragraph styles | `editeng/source/items`, `sw/source/core/doc/fmtcol.ts`, `DocumentStylePoolManager.ts` | Only 26 of 126 catalogued styles are materialized; start/end and bidi semantics are flattened in presentation APIs. |
+| Character formatting | Font family/size, bold, italic, single underline through pooled items | `editeng/source/items/textitem.ts`, `sw/source/core/txtnode` | Western/CJK/CTL values are often synchronized; color, language, complex underline/decoration, character styles, and many defaults are absent. |
+| Lists and numbering | Bullet/decimal rules, ten levels, list identity, continuation, restart, promote/demote | `sw/source/core/doc/{list,number}.ts`, `SwNumberTree`, `listsh.ts` | Custom formats, complete numbering types, outline rules, full list tree behavior, and broader clipboard/ODF semantics are absent. |
+| Editing shell | Insert, replace, delete, paragraph split/join, paste, IME staging, hyperlink operations | `sw/source/uibase/wrtsh` and `shells` | The public surface mixes upstream-like methods with local DTO methods and command convenience operations. |
+| Command surfaces | 35 supported resources; menu, standard, text, and numbering toolbar subsets | `sw/sdi`, `sw/uiconfig/swriter`, `framework/browser/presentation` | Upstream menubar alone contains 557 unique command references; unsupported counts are 523/44/32/13/57 across the generated menu/toolbars/popup resources. |
+| Browser editor | One contenteditable root, DOM selection mapping, beforeinput translation, IME, pointer geometry | `sw/browser/editor` | This is a necessary browser boundary, but it is split into more controllers and copied value shapes than React requires. |
+| React workbench | Menu/toolbar/chrome/sidebar/status/dialog/recovery presentation | `sw/browser/presentation`, `sw/browser/composition` | Hand-wired orchestration, duplicated command state reads, handwritten visual defaults, and stale view-option behavior remain. |
+| Clipboard | Native copy/cut/paste, plain text and bounded HTML, list serialization | `vcl/browser/browser-clipboard.ts`, `swdtflvr.ts`, HTML/ASCII filters | Full transfer flavors, RTF, objects, images, tables, tracked changes, Paste Special, and several cross-paragraph cases are absent. |
+| ODT | Bounded ODF 1.3 ZIP/manifest, paragraph text/styles, fonts, alignment, lists, hyperlinks | `package`, `xmloff`, `sw/source/filter/xml` | It intentionally rejects most Writer content and does not yet constitute general Writer ODT compatibility. |
+| Local persistence | Versioned complete graph snapshot plus shell state | `sw/source/filter/basflt`, `sfx2/source/doc`, IndexedDB adapter | Three related graph/transport/storage representations exist and old local schemas are deliberately rejected. |
 
-## 8. Target module and dependency architecture
+### Explicitly out of current implementation scope
 
-The intended dependency direction is:
+The current plan does not require desktop-only process/window integration, UCB/native filesystem
+plumbing, native print drivers, operating-system clipboard internals, native extension loading,
+Java integration, or desktop crash-lock-file mechanics. Calc, Impress, Draw, Base, Math, and Chart
+are placeholder suites and are outside the refactoring scope of this plan because the request is to
+bring the already implemented part to parity. Their eventual work must reuse the repaired shared
+platform rather than copy the current Writer-specific shortcuts.
+
+Browser replacements remain valid where the platform genuinely differs: React rendering, DOM
+selection, `beforeinput` and composition events, Clipboard and File APIs, downloads, IndexedDB,
+Dedicated Workers, CSS/font discovery, and browser lifecycle events. A browser replacement is not
+permission to change the document model, UNO command meaning, Sfx request shape, default value, or
+filter semantics.
+
+## Confirmed divergences and refactoring artifacts
+
+### P0 — parity evidence permits false closure
+
+`npm run inventory:parity` currently reports 45 implemented/verified records, zero gaps, and
+`parityReady: true`. That result is incompatible with `runtime-inventory.json`, which records 119
+behavior-unverified modules and 67 unverified upstream source responsibilities.
+
+Specific weaknesses:
+
+- evidence validation checks paths and markers, but generally does not prove that local and
+  upstream assertions have equivalent preconditions, operations, results, and defaults;
+- some capability records reuse broad upstream tests for unrelated local assertions;
+- major normal Writer behavior is moved into `scopeLimitations` while the enclosing capability is
+  still called verified;
+- browser presentation components can be recorded as the contract or ownership owner for an
+  upstream command/resource capability;
+- `runtime-inventory.json` includes a test helper as a runtime module;
+- all non-Writer suites are placeholders, but the report name and `parityReady` field do not encode
+  that the verdict is only for a bounded Writer slice.
+
+Required correction: parity must be computed bottom-up from source responsibility and exact
+behavior assertions. A bounded operation may be green, but its module and parent feature remain
+partial until every in-scope upstream responsibility is mapped or explicitly approved as a genuine
+browser exclusion.
+
+### P0 — command identity and behavior mismatch
+
+`WriterWorkflowCommandShell` registers `.uno:ExportTo` as `ExportText()`. Pinned upstream declares
+`ExportTo` (`SID_EXPORTDOC`) as a container request with URL, filter name, overwrite, filter options,
+and save-a-copy arguments. A direct plain-text browser download is a useful feature, but it is not
+the `.uno:ExportTo` contract.
+
+Required correction:
+
+- implement `.uno:ExportTo` through the Sfx medium/filter contract, including its arguments and
+  format-selection behavior; or keep it disabled until that contract exists;
+- give direct plain-text download a browser-owned URL such as
+  `vnd.vite-office.browser:ExportText`, placed explicitly as a browser extension;
+- audit all 35 registered commands for the same URL/slot/argument/result/state/default mismatch.
+
+### P0 — default behavior is not upstream-derived
+
+Concrete confirmed mismatches include:
+
+- local `DEFAULT_AUTORECOVERY_INTERVAL_MS` is 60,000 ms; pinned
+  `Office/Recovery.xcs` defaults `TimeIntervall` to 10 minutes and upstream multiplies it by 60,000;
+- new Writer sessions use the fixed English title `Untitled Writer Document`; upstream uses the
+  localized untitled-number service and document-specific naming;
+- the `.uno:StartPara` path eventually calls `SetParagraphAlignment("left")`, and `getSvxAdjust`
+  stores `SvxAdjust.Left` rather than preserving `SvxAdjust.ParaStart`; start/end semantics therefore
+  collapse for RTL text;
+- several browser UI defaults are handwritten rather than generated from officecfg/UI resources,
+  including font-size options and workspace visibility decisions.
+
+Required correction: add a generated default manifest from pinned officecfg, SDI, XCU, HRC, and UI
+resources. Every constructor and factory default must cite and test one manifest value or be marked
+browser-only with an explicit rationale.
+
+### P0 — source ownership and documentation disagree
+
+`scripts/check-lo-source-tree.mjs` forbids
+`sw/source/uibase/docvw/edtwin.tsx` and `edtwin-paragraph.tsx`, while
+`docs/program/source-tree.md`, `writer-plain-text-editor.md`,
+`writer-document-canvas.md`, and `writer-paragraph-breaks.md` still describe those deleted files as
+the implementation. The gate therefore certifies a tree that the architecture documentation says
+should exist.
+
+This is evidence of a previous refactor that moved code without completing the ownership model.
+React files do not need to impersonate `edtwin.cxx`, but the upstream document-view responsibility
+must still have a corresponding non-React owner. The target split is:
+
+- upstream-shaped document-view/controller responsibilities under
+  `sw/source/uibase/docvw`;
+- DOM and React adaptation under `sw/browser/editor` and `sw/browser/presentation`;
+- an explicit one-way boundary between them.
+
+The source-tree checker must validate responsibility pairs instead of forbidding upstream-shaped
+paths.
+
+### P1 — custom Sfx command framework under upstream names
+
+`sfx2/source/control/dispatch.ts` is a 699-line module that combines generic command definitions,
+shortcut normalization, generated/synthetic slot assignment, shell construction, dispatch,
+asynchronous browser operation tracking, command URL parsing, request-item conversion, and failure
+presentation state. Upstream distributes these responsibilities across `SfxShell`, `SfxInterface`,
+`SfxSlot`, `SfxDispatcher`, `SfxRequest`, `SfxBindings`, and frame/view ownership.
+
+`sw/source/uibase/shells/writercommands.ts` is an additional descriptor assembly layer with no one
+upstream owner and is already classified as divergence `X`. `SwListShell` separately bypasses this
+helper and repeats resource/slot attachment.
+
+Required correction:
+
+- introduce bounded `SfxSlot`, `SfxInterface`, and typed item-state concepts;
+- generate slot/interface metadata from SDI/HRC inputs;
+- keep command execution and `GetState` in their corresponding Writer shell files;
+- move browser Promise tracking to a browser dispatch observer or medium operation, not the core
+  dispatcher contract;
+- remove synthetic slot IDs for upstream commands and make browser extension IDs visibly separate;
+- delete `writercommands.ts` after its remaining type conversions are absorbed by request/item and
+  generated metadata owners.
+
+### P1 — parallel core-facing value models
+
+The canonical model is text + `SwpHints` + pooled items, but several convenience models remain:
+
+- `WriterCharacterAttributes` turns pooled items into booleans and is consumed throughout core,
+  shell, undo, transfer, and tests;
+- `WriterParagraphList` combines rule, list, restart, and presentation kind into one DTO and is
+  passed through core undo and shell APIs;
+- `SwTextNode` exposes compatibility getters such as `text`, `alignment`, `style`, and `list` in
+  addition to upstream-shaped methods/items;
+- `OfficeDocument` is a second immutable document lifecycle aggregate beside `SfxObjectShell`,
+  `SfxMedium`, `SwDoc`, and the undo save position;
+- `WriterPresentationProjection`, `WriterTextRun`, `WriterDocumentRecord`, ODT worker-transfer
+  records, and browser-storage records overlap substantially.
+
+Boundary DTOs are necessary for React, structured clone, clipboard, and IndexedDB. They are not
+necessary as core mutation contracts. Required correction:
+
+- make pooled items, `SwTextAttr`, `SwNumRule`, `SwList`, `SwPaM`, and Sfx items the only model/shell
+  mutation vocabulary;
+- keep DTO conversion at named outer boundaries;
+- use one canonical graph serialization representation, with boundary-specific envelopes rather
+  than separate graph schemas;
+- remove compatibility getters once all consumers use the canonical APIs;
+- model modified/save/recovery state on `SfxObjectShell` and `SfxMedium`; keep only browser
+  concurrency generations as a documented extension.
+
+### P1 — React composition duplicates controller work
+
+High-complexity UI files are currently:
+
+- `CommandMenuBar.tsx`: 431 lines;
+- `WriterFormattingToolbar.tsx`: 345 lines;
+- `writer-view-projection.ts`: 361 lines;
+- `writer-view.tsx`: 453 lines;
+- `WriterPlainTextEditor.tsx`: 320 lines;
+- `WriterRecoveryPrompt.tsx`: 222 lines;
+- `WriterWorkspaceChrome.tsx`: 194 lines.
+
+`WriterWorkbench` constructs mutation closures for nearly every editor operation, creates command
+sources, resolves resource localization, converts clipboard data, maps selection, formats status
+messages, and renders all chrome. `WriterViewProjection` both projects immutable values and mutates
+shell focus/selection through projection IDs. `WriterPlainTextEditor` then creates three more
+controller objects, each repeating selection synchronization.
+
+This layering is more elaborate than required by React and less similar to Writer's view/edit-window
+ownership than it appears. Required correction:
+
+- add one browser `SwEditWin`-equivalent controller that owns DOM event translation, selection
+  synchronization, composition, clipboard, drag/drop, and focus;
+- keep the React editor a declarative projection with event forwarding only;
+- make projection IDs opaque render keys only; selection conversion belongs to the edit-window
+  adapter;
+- expose command state through binding/controller hooks analogous to `SfxControllerItem` instead of
+  repeated `QueryState` calls during render;
+- split status/error presentation by service and resource, not by a large conditional in
+  `writer-view.tsx`;
+- preserve generic accessible React menu/toolbar primitives, but remove Writer-specific behavior
+  from them.
+
+### P1 — generated UI resources are still a handwritten allowlist
+
+The generator reads pinned menus, toolbars, accelerators, SDI, HRC, and XCU files, but its `specs`,
+aliases, capability IDs, semantics, dialog flags, browser labels, and visible subset are handwritten.
+It supports 35 commands while recording hundreds of excluded resource references.
+
+That is acceptable for feature staging, but not for claiming resource parity. It also produces
+current inconsistencies:
+
+- `.uno:Ruler` has a view state and handler but `writer-command-surfaces.ts` explicitly removes it;
+- older documentation still claims a visible ruler and corresponding command behavior;
+- unsupported top-level menus can render as local unavailable states rather than matching upstream
+  enablement and population rules;
+- `STANDARD_FONT_SIZES_PT` is handwritten inside a React component;
+- icon selection is a component-local map rather than generated command/image metadata.
+
+Required correction: generate the complete command/resource graph first, then attach one explicit
+disposition to every entry: implemented, disabled-unimplemented, browser-inapplicable, or
+browser-extension. Rendering must not silently filter a command that the view claims to implement.
+
+### P1 — browser persistence is placed in filter ownership
+
+`sw/source/filter/basflt/writer-document-codec.ts`, `writer-storage-codec.ts`, and
+`writer-storage.ts` implement browser-local graph persistence rather than the corresponding
+LibreOffice `basflt` responsibilities. The path gives a false upstream ownership signal. The
+storage schema also embeds the Vite Office codec name, baseline commit, and rapidly changing model
+versions, and deliberately rejects all prior local schemas.
+
+Required correction:
+
+- place browser snapshot envelope and migration code under `sw/browser/storage` or the VCL browser
+  adapter layer;
+- retain upstream-corresponding basic-filter code under `sw/source/filter/basflt` only when such a
+  source responsibility is actually implemented;
+- reuse the canonical graph serializer also used at the worker boundary;
+- define forward migrations for browser-owned schemas independently from the pinned upstream
+  commit;
+- keep ODT as the durable interoperable document format and browser snapshots as recoverable cache,
+  not an alternative document model.
+
+### P1 — browser workflow adapter stack is wider than necessary
+
+`writer-workflows.ts` contains three small controller classes plus a command shell, while
+`writer-document-io.ts`, `SwDocShell`, `SfxMedium`, VCL browser ports, and the React view also
+participate in the same operations. This creates multiple pass-through layers and splits error and
+pending-state ownership.
+
+Required correction: retain VCL browser ports and a thin browser Sfx shell, but route file and save
+operations directly through `SwDocShell`/`SfxMedium`. Remove controllers that only forward one
+operation and consolidate operation state in the medium or browser port that owns it.
+
+### P2 — smaller concrete artifacts
+
+- `SwTextNode.SetListRestart` writes the same `RES_PARATR_LIST_RESTARTVALUE` item twice.
+- `WriterWorkspaceChrome` accepts no horizontal-ruler state and renders no ruler although `SwView`,
+  generated resources, and older docs retain that concept.
+- `writer-view-projection.ts` carries both `textLeftMargin` and a computed first-line/right-margin
+  style, an example of view DTO growth around item APIs.
+- `writer-command-surfaces.ts` is a second resource policy layer after generation.
+- `test/wrtsh-test-helpers.ts` is classified as runtime inventory.
+- source-tree docs contain broken links to deleted `docvw` files.
+- multiple runtime inventory records cite an upstream file and symbol while all three semantic
+  dimensions remain `unverified`; the current check treats that as acceptable indefinitely.
+- several large source files are below the hard 1,000-line limit but above the 500-line review
+  threshold; file size is a symptom of mixed responsibility and should be addressed during the
+  relevant architectural task, not by arbitrary splitting.
+
+## Target architecture
+
+### Dependency and ownership rules
+
+1. `svl`, `editeng`, `sfx2`, `package`, `xmloff`, and `sw/source` contain bounded ports of upstream
+   concepts, named and placed after the corresponding upstream owner.
+2. `*/browser/**` contains all React, DOM, browser API, Worker scheduling, IndexedDB, and browser
+   lifecycle code.
+3. Browser code may depend inward on upstream-shaped code. Upstream-shaped code receives browser
+   capabilities through narrow interfaces and never imports browser DTOs or globals.
+4. A local infrastructure module must not be placed at an upstream path merely to look similar.
+   Conversely, an implemented upstream responsibility must have a corresponding owner even if its
+   final drawing is performed by React.
+5. Generated resource/configuration data is allowed beside its upstream source area. Handwritten
+   browser additions are stored in separate extension manifests and never masquerade as upstream
+   commands.
+
+### Model rules
+
+- `SwDoc`, `SwNodes`, `SwNode`/`SwTextNode`, `SwPaM`, pooled items, text attributes, formats,
+  `SwNumRule`, `SwList`, and Writer managers are the canonical model.
+- Commands and undo actions operate on those objects and item sets, not on render/storage DTOs.
+- Render, clipboard, worker, and storage DTOs are immutable one-way boundary products with no
+  mutation methods.
+- One graph serializer owns canonical primitive encoding. ODT import/export remains a semantic
+  filter, not a persistence shortcut.
+- Default values come from a pinned generated manifest and retain script, locale, bidi, and unit
+  semantics.
+
+### Command rules
+
+- UNO URL, numeric slot, argument item set, result item, enablement, checked/mixed/value state, and
+  default shortcut are one generated command contract.
+- `SfxDispatcher` resolves slots through an active `SfxShell`/`SfxInterface` stack.
+- Writer execution and state live in the matching `textsh`, `listsh`, `viewsh`, `docsh`, or other
+  upstream owner.
+- Browser asynchronous observation decorates execution without changing the core request result.
+- Browser-only commands use a separate URL namespace and explicit UI-resource extensions.
+
+### UI rules
+
+- React owns rendering, accessibility semantics, focusable elements, and browser event attachment.
+- Sfx bindings own command state; Writer view/edit-window controllers own selection and editing
+  semantics; the Writer model owns document state.
+- Menus and toolbars are generated from complete pinned resource graphs plus explicit browser
+  extensions and dispositions.
+- The React tree may differ from VCL's widget tree, but visible commands, default state, keyboard
+  behavior, labels, ordering, and enablement must match the implemented upstream surface.
+- UI tests distinguish browser accessibility behavior from Writer command/model parity.
+
+## Execution plan
+
+Each work item below should be an independent Agentplane task unless two adjacent items prove to
+have the same owner and verification boundary. Do not mark a parent feature parity-complete merely
+because one atomic operation passes.
+
+### Phase 0 — repair the parity control plane
+
+#### P0.1 Define hierarchical parity status
+
+Change the parity schema and report so it emits separate verdicts for atomic operation, module,
+feature, suite, and program. Replace the unqualified `parityReady` boolean with scoped verdicts.
+A module cannot pass while its runtime semantic status is unverified or divergent.
+
+Primary files:
+
+- `scripts/libreoffice-inventory/parity-mappings.ts`;
+- `scripts/libreoffice-inventory/parity-mapping-support.ts`;
+- `scripts/libreoffice-inventory/runtime-inventory.ts`;
+- `docs/program/parity/*.json`;
+- `docs/program/parity-matrix.md`.
+
+Acceptance:
+
+- the current checkout reports the 45 operations as bounded operation results, not Writer/module or
+  program parity;
+- all 92 upstream-mechanism modules have an explicit semantic verdict that affects their parent;
+- `scopeLimitations` cannot exclude behavior named by the capability or required by its upstream
+  public contract;
+- test-only files are excluded from runtime counts.
+
+#### P0.2 Require assertion-semantic evidence
+
+Extend records from path/marker pairs to structured cases: setup, input, operation, observable
+result, default precondition, upstream assertion, local assertion, and allowed normalization. Add an
+independent review state for source-derived goldens.
+
+Acceptance:
+
+- generic test markers cannot satisfy unrelated assertions;
+- every green default has a pinned source/config expression and a local assertion;
+- every browser divergence identifies exactly which layer changes and proves that model/command
+  semantics do not;
+- inventory fails on stale, over-broad, or circular documentation-only evidence.
+
+#### P0.3 Generate a complete implemented-surface ledger
+
+Generate one deterministic ledger joining runtime module, exported symbols, command IDs, model
+items, persistence fields, upstream owners, tests, docs, and current semantic status. This document
+should consume the ledger rather than manually duplicating future counts.
+
+### Phase 1 — fix known contract and default mismatches
+
+#### P0.4 Correct command identities
+
+Audit all 35 registered commands against pinned SDI/XCU/UI definitions. Fix `.uno:ExportTo` first,
+then verify slot, arguments, return item, state, default shortcut, menu/toolbar placement, and owning
+shell for every command. Browser local-save/load and text-download commands remain extensions.
+
+Acceptance:
+
+- `.uno:ExportTo` no longer directly means plain-text download;
+- browser extension commands have no upstream slot claim;
+- parameterized `.uno:StyleApply` requests retain upstream item arguments through `SfxRequest`;
+- differential command tests cover success, disabled, invalid argument, and cancellation behavior.
+
+#### P0.5 Generate and apply upstream defaults
+
+Generate supported defaults from `Office/Recovery.xcs`, command configuration, Writer item defaults,
+style pool definitions, numbering defaults, locale data, and UI resources.
+
+Immediate corrections:
+
+- AutoRecovery interval: 10 minutes before user configuration;
+- untitled document naming/numbering and localization;
+- `ParaStart`/`ParaEnd` preservation, including RTL projection;
+- toolbar/menu visibility and enablement defaults;
+- default font/size lists and script-specific values.
+
+Acceptance: no implemented constructor/factory has an unexplained product default literal.
+
+#### P0.6 Remove confirmed stale artifacts
+
+Remove the duplicate list-restart write, reconcile ruler implementation or remove its unsupported
+claim consistently, repair stale source-tree docs, and make the source-tree gate validate the target
+responsibility split.
+
+### Phase 2 — converge Sfx command architecture
+
+#### P1.1 Port bounded Sfx slot/interface metadata
+
+Introduce `SfxSlot` and `SfxInterface` equivalents and generate their supported metadata from pinned
+SDI/HRC/XCU resources. Keep source files aligned with the corresponding Sfx control modules.
+
+#### P1.2 Decompose dispatch responsibilities
+
+Reduce `dispatch.ts` to dispatcher stack/resolution/execution. Move shortcut normalization to
+accelerators, request conversion to `request.ts`, binding state/cache to `bindings.ts`, shell metadata
+to the interface/slot modules, and browser async observation to `framework/browser`.
+
+#### P1.3 Delete Writer registry glue
+
+Move `Execute`/`GetState` declarations into generated interfaces and the corresponding Writer shell
+owners. Remove `writercommands.ts` and duplicate resource attachment in `listsh.ts`.
+
+Acceptance for Phase 2:
+
+- the active shell stack and shadowing behavior match pinned Sfx assertions;
+- no React/browser type is present in Sfx core;
+- no upstream command uses a synthetic slot;
+- adding a supported command requires upstream resource selection plus its shell handler, not edits
+  in several unrelated registries.
+
+### Phase 3 — remove parallel model contracts
+
+#### P1.4 Canonicalize character formatting
+
+Change shell and undo APIs to accept `SfxItemSet`/pool items and Writer text-attribute operations.
+Keep `WriterCharacterAttributes` only as a browser/clipboard projection, then rename and move it to
+the boundary that owns it.
+
+#### P1.5 Canonicalize list state
+
+Replace `WriterParagraphList` mutation and undo contracts with `SwNumRuleItem`, list attribute items,
+`SwNumRule`, `SwList`, and explicit captured item sets. Keep a render-only list projection outside
+core.
+
+#### P1.6 Remove `SwTextNode` compatibility accessors
+
+Migrate consumers of `text`, `style`, `alignment`, `list`, and `textLeftMargin` to upstream-shaped
+methods and item queries. Do not remove them until all filters, undo actions, tests, and UI
+boundaries have been migrated.
+
+#### P1.7 Unify graph serialization
+
+Use one versioned canonical graph record for structured clone and browser cache. Give Worker and
+IndexedDB their own small envelopes. Add browser-cache migrations. Keep the pinned upstream commit
+as evidence metadata, not as a reason to reject otherwise compatible user data.
+
+Acceptance for Phase 3:
+
+- core and shell mutation APIs contain no browser/render/storage DTOs;
+- one canonical object graph is tested across edit, undo, Worker transfer, cache restore, ODT
+  export/import, and reopen;
+- differential tests preserve WhichIds, inherited/direct distinction, list identity, cursor
+  positions, and defaults.
+
+### Phase 4 — rebuild the UI boundary around Writer ownership
+
+#### P1.8 Add the Writer edit-window controller boundary
+
+Create an upstream-corresponding document-view/edit-window owner under
+`sw/source/uibase/docvw` without importing React or DOM. Create one browser implementation under
+`sw/browser/editor` for DOM selection, `beforeinput`, composition, pointer geometry, clipboard,
+drag/drop, and focus.
+
+Then remove the separate edit, composition, clipboard-event, and pointer controller objects where
+they only repeat selection synchronization.
+
+#### P1.9 Make React a projection-only layer
+
+Refactor `WriterWorkbench`, `WriterPlainTextEditor`, and `WriterViewProjection` so:
+
+- projections contain render values only;
+- projection IDs are not used to mutate the shell;
+- the edit-window controller owns DOM-to-`SwPaM` conversion;
+- one stable controller hook exposes event handlers;
+- React does not construct Writer mutation closures per operation.
+
+#### P1.10 Add binding-backed command controls
+
+Introduce a browser hook/controller corresponding to `SfxControllerItem`. It subscribes once to
+bindings and publishes stable state per slot. Menus, toolbar buttons, selectors, and dialogs consume
+that state and dispatch an `SfxRequest`.
+
+#### P1.11 Generate complete UI resources and dispositions
+
+Generate the complete Writer resource graph and a reviewable disposition manifest. Separate
+browser additions. Generate labels, shortcuts, semantics, selection lists, icons, and supported
+argument schemas where upstream defines them.
+
+#### P1.12 Reduce presentation components
+
+Split generic accessibility primitives from Writer presenters. Move service-specific status and
+error strings to resource-backed presenters. Replace the display-only properties panel with a
+command/binding-backed sidebar panel or explicitly classify it as a temporary read-only preview.
+
+Acceptance for Phase 4:
+
+- all visible controls use generated resource order and binding state;
+- no implemented command is silently filtered by a second handwritten policy;
+- menu keyboard behavior, focus restoration, shortcuts, dialogs, and enablement have browser tests;
+- editing, selection, IME, and clipboard tests assert the same Writer operations independently of
+  React;
+- React component size falls because responsibilities disappear, not because code is mechanically
+  split.
+
+### Phase 5 — align lifecycle, medium, persistence, and filters
+
+#### P1.13 Consolidate document lifecycle ownership
+
+Move title, modified state, save position, and primary medium behavior onto `SfxObjectShell`,
+`SfxMedium`, and `SwDocShell` contracts. Keep browser generation IDs only for asynchronous race
+prevention and recovery leases.
+
+#### P1.14 Collapse browser workflow pass-through layers
+
+Route Open, Save As, Export, local cache, Copy, Cut, and Paste from a thin browser Sfx shell to the
+owning document shell/transferable/medium. Remove workflow controllers that add no policy.
+
+#### P1.15 Relocate browser snapshot code
+
+Move local-cache envelope/migrations out of `sw/source/filter/basflt`. Update source provenance and
+source-tree gates. Leave actual upstream basic-filter ports in that directory only when implemented.
+
+#### P1.16 Expand ODF by upstream import/export contexts
+
+After architecture convergence, expand the implemented ODT surface in dependency order: complete
+paragraph and character properties, styles and automatic styles, lists/outline, sections, tables,
+fields, frames/images, annotations/redlines, metadata/settings, then embedded objects where the
+browser runtime supports them.
+
+Acceptance for Phase 5:
+
+- save/open/export identities and arguments match upstream;
+- local cache failure never changes document-format semantics;
+- AutoRecovery defaults and dirty/save transitions match upstream before browser concurrency
+  extensions;
+- supported ODT features round-trip against pinned LibreOffice fixtures and a runnable upstream
+  oracle when one is added.
+
+### Phase 6 — complete the currently implemented Writer feature families
+
+This phase closes breadth that current records improperly classify as limitations of already
+verified capabilities. Split work into atomic tasks, but keep parent status partial until complete.
+
+Priority order:
+
+1. multi-paragraph character formatting and transfer behavior;
+2. complete text/paragraph item coverage required by the visible formatting UI;
+3. bidi/script/language and locale-sensitive defaults;
+4. full default list and outline behavior for the exposed list commands;
+5. style family behavior for every style currently shown in the selector;
+6. complete implemented command state/undo/redo behavior;
+7. ODT coverage for every implemented model item;
+8. accessibility and keyboard behavior for every visible UI control;
+9. recovery, cancellation, concurrency, and damaged-cache behavior;
+10. performance for large text, hint, list, and ODT inputs.
+
+Do not broaden into tables, drawings, fields, tracked changes, or other new feature families until
+the shared architecture needed by that feature is upstream-shaped. When such a feature begins, add
+its complete parent contract and let the ledger show partial status honestly.
+
+### Phase 7 — documentation and closure
+
+#### P1.17 Rebuild program documentation from the ledger
+
+Update architecture, source tree, command placement, UI shell, storage, recovery, ODT, test
+strategy, roadmap, and parity matrix from verified current paths and behavior. Add a broken-link
+gate for repository-relative Markdown links.
+
+#### P1.18 Add a parity review gate
+
+Require independent review for every transition to module/feature parity. The review must inspect
+upstream source and tests, local implementation and tests, defaults, operation cycles, exclusions,
+and file ownership. A green local suite alone is insufficient.
+
+#### P2.19 Add an executable differential oracle
+
+Where licensing/build constraints permit, add a pinned headless LibreOffice runner in a separate
+verification environment. Use it for ODF results, UNO command state, defaults, and document
+properties. Until then, label source-derived goldens as goldens, not native differential execution.
+
+## Delivery sequence and dependencies
 
 ```text
-React/Vite composition
-  -> framework/browser and sw/browser adapters
-    -> Sfx view frame, dispatcher, bindings, requests
-      -> SwView and Writer shells
-        -> SwDoc interfaces/managers, nodes, positions, hints, items
-          -> svl/editeng foundations
-
-Browser file/IndexedDB/worker ports
-  -> SfxMedium/filter/recovery adapters
-    -> Writer import/export and document operations
+P0.1 hierarchical status
+  -> P0.2 semantic evidence
+  -> P0.3 generated ledger
+      -> P0.4 command audit
+      -> P0.5 defaults
+      -> P0.6 stale artifacts
+          -> Phase 2 Sfx convergence
+              -> Phase 3 model convergence
+                  -> Phase 4 UI convergence
+                  -> Phase 5 lifecycle/filter convergence
+                      -> Phase 6 feature-family completion
+                          -> Phase 7 documentation and closure
 ```
 
-No arrow may point from a lower row back to React, DOM, browser storage, or presentation DTOs.
-
-### 8.1 Required file/responsibility moves
-
-| Current location | Target location/responsibility | Upstream anchor |
-| --- | --- | --- |
-| `framework/source/dispatch/dispatchprovider.ts` Sfx classes | `sfx2/source/control/dispatch.ts`, `sfx2/source/view/viewfrm.ts`; leave only provider facade in `framework` | `sfx2/source/control/dispatch.cxx`, `include/sfx2/dispatch.hxx`, `sfx2/source/view/**` |
-| `sw/source/uibase/shells/writercommands.ts` | Declarative slots under `sw/sdi`; handlers in `textsh*.ts`, `listsh.ts`, `viewfunc.ts`, and document shell | `sw/sdi/swriter.sdi`, `sw/source/uibase/shells/{textsh1,listsh}.cxx` |
-| Browser event switch in `wrtsh.ts` | `sw/browser/editor/writer-edit-controller.ts` | `sw/source/uibase/docvw/edtwin*.cxx` as responsibility analogue |
-| Projection/workflow DTOs in `uibase/uiview/view.ts` | `sw/browser/presentation/**` and `sw/browser/workflows/**` | `sw/inc/view.hxx`, `sw/source/uibase/uiview/view*.cxx` |
-| Run helpers in `core/txtnode/ndtxt.ts` | Derived projection/serialization helpers outside the canonical node implementation | `sw/source/core/txtnode/{ndtxt,ndhints,txatbase}.cxx` |
-| Browser ports in `uibase/app/docsh.ts` | Browser platform adapters around `SfxMedium`, filters, and recovery | `sw/source/uibase/app/docsh*.cxx`, `sfx2/source/doc/**` |
-
-Names do not have to reproduce `.cxx` mechanically, but every TypeScript file must have one upstream-equivalent responsibility. A TypeScript split is acceptable when it exposes the same owner and contract; combining unrelated upstream owners is not.
-
-## 9. Dependency-ordered work plan
-
-### WP0 — Rebuild inventory and parity truth
-
-Priority: P0. Dependencies: none.
-
-Work:
-
-1. Replace boolean-authored parity closure with maturity states: `discovered`, `mapped`, `implemented`, `verified-contract`, `verified-behavior`, `verified-default`, `parity`.
-2. Reset unsupported 35/35 closure claims to the highest evidenced state.
-3. Make every assertion atomic and identify preconditions, operation, expected state/output, local executable test, and upstream oracle.
-4. Separate provenance checks from semantic verification scripts and reports.
-5. Remove irrelevant source-symbol mappings and review every filename-divergence allowance.
-6. Generate contradiction checks between `runtime-inventory.json`, command-slice records, parity matrix, and closure reports.
-
-Acceptance:
-
-- a record cannot reach parity through marker presence or manually set booleans;
-- no capability claims a wider behavior than its named tests;
-- runtime and capability summaries agree by construction;
-- all known deviations in this document appear as tracked gaps.
-
-### WP1 — Restore Sfx command/frame contracts
-
-Priority: P0. Dependencies: WP0 schema available.
-
-Work:
-
-1. Introduce upstream-owned `SfxDispatcher`, shell stack, slot lookup, `SfxRequest`, `SfxBindings`, and view frame under `sfx2`.
-2. Replace custom `undoPolicy`, target, and presentation execution metadata with slot metadata plus handler/state methods.
-3. Generate typed slot IDs/URLs and command resources from pinned SDI/HRC/XML inputs.
-4. Keep React menu/toolbar adapters as consumers of binding state.
-5. Treat browser-only actions as explicitly non-UNO slots.
-
-Acceptance:
-
-- Writer handlers expose upstream-like execute/state entry points;
-- enablement and checked state come from bindings/shell state, not component-local inference;
-- dispatch tests cover shell priority, disabled slots, arguments, result/error, and invalidation;
-- `framework/source/dispatch` no longer owns Sfx core classes.
-
-### WP2 — Canonicalize Writer positions, text, and mutations
-
-Priority: P0. Dependencies: WP1 request/slot contract for command-facing tests.
-
-Work:
-
-1. Remove paragraph IDs from core shell APIs and use `SwPosition`/`SwPaM`/node indexes.
-2. Make text plus hints/items canonical; reduce `WriterTextRun` to a derived boundary DTO.
-3. Move insert/delete/replace/split/join/copy/move behavior into `DocumentContentOperationsManager` and corresponding upstream-shaped helpers.
-4. Rebase undo objects on Writer ranges and operation state.
-5. Translate DOM selections and `beforeinput` actions entirely in the browser editor controller.
-6. Add index-registry tests for every mutation and undo/redo direction.
-
-Acceptance:
-
-- no `sw/source/core/**` or `sw/source/uibase/**` public model API accepts DOM input types or presentation IDs;
-- all mutations flow through the content-operations interface;
-- nested selections, grapheme boundaries, split/join, and index updates match source-derived golden cases;
-- UI projection can be recreated from the document without loss of authoritative state.
-
-### WP3 — Complete the implemented item, style, font, and numbering defaults
-
-Priority: P0. Dependencies: WP2 canonical attributes.
-
-Work:
-
-1. Define the minimum upstream `WhichId`/pool-item set needed by every currently visible command and ODT property.
-2. Port the corresponding style construction branches from `DocumentStylePoolManager.cxx` and `poolfmt.cxx`, including Western/CJK/CTL and HTML-mode choices where relevant.
-3. Implement inheritance and computed item-set resolution; delete style-by-slug CSS semantics.
-4. Model browser font substitution separately from requested Writer defaults.
-5. Expand numbering structures only to the exact current feature surface, preserving upstream field names, defaults, invalidation, and restart behavior.
-
-Acceptance:
-
-- every implemented built-in style has a source-derived default table and differential test;
-- paragraph rendering depends only on computed projection values;
-- requested font, resolved device font, and serialized font are distinguishable;
-- list marker, indent, restart, promote/demote, and undo tests cover all supported levels and defaults.
-
-### WP4 — Decompose shells and view by upstream ownership
-
-Priority: P1. Dependencies: WP1-WP3.
-
-Work:
-
-1. Split `writercommands.ts` into generated slot declarations and text/list/view/document handlers.
-2. Split `wrtsh.ts` according to upstream Writer shell responsibilities.
-3. Strip React projections, workflow ports, and storage snapshots from `SwView`.
-4. Move text-run projection helpers out of `SwTextNode` implementation.
-5. Add inner-module dependency enforcement for core, uibase, filter, and browser layers.
-
-Acceptance:
-
-- each upstream-shaped file has a documented one-to-one or narrowly justified many-to-one responsibility mapping;
-- core and uibase pass a browser-import prohibition;
-- no catch-all module remains responsible for unrelated command, persistence, presentation, and model behavior.
-
-### WP5 — Align document lifecycle, filters, workers, and recovery
-
-Priority: P1. Dependencies: WP2 canonical import operations and WP4 ownership.
-
-Work:
-
-1. Recenter load/save state transitions on `SfxObjectShell` and `SfxMedium`; retain Writer-specific hooks in `SwDocShell`.
-2. Separate durable recovery schema, worker DTO, and live document graph.
-3. Make filter services mutate/build documents only through canonical Writer operations.
-4. Split ODT parity records by package stream and XML property; define preservation or rejection for unsupported content.
-5. Test cancellation, malformed/oversized inputs, modified-state transitions, recovery generations, and failed-save rollback.
-6. Decide whether unsupported but parseable XML is preserved opaquely or explicitly rejected; never silently drop it under a round-trip claim.
-
-Acceptance:
-
-- opening, saving, export, primary persistence, and recovery have distinct typed contracts;
-- a worker round trip does not redefine canonical document identity;
-- ODT verification identifies exactly which elements/attributes and defaults match upstream;
-- lifecycle states and error behavior match source-derived transition tables.
-
-### WP6 — Remove UI adapters that own domain behavior
-
-Priority: P1. Dependencies: WP1, WP3-WP5.
-
-Work:
-
-1. Replace hard-coded style/list formatting with computed Writer projection data.
-2. Make paragraph/run/list segment identities stable and remove version-only rerender plumbing and O(n²) keys.
-3. Replace string-based error handling with typed localized errors.
-4. Expose style lists, command availability, checked state, recovery state, and document status through binding-backed view models.
-5. Choose and name the supported layout contract: continuous browser view now, paginated Writer layout only after a real layout model exists.
-6. Keep React components declarative and free of Writer mutation/default logic.
-
-Acceptance:
-
-- component tests can render from typed projections without importing style pools or document managers;
-- all visible command state is traceable to Sfx/Writer state;
-- no UI CSS rule supplies a semantic default that is absent from the model;
-- accessibility, IME, selection, clipboard, and keyboard e2e behavior remains intact.
-
-### WP7 — Differential verification and parity promotion
-
-Priority: P0 quality gate. Dependencies: each preceding package promotes its own records; final closure depends on all.
-
-Work:
-
-1. Build source-derived golden tables for constants/defaults and small deterministic state transitions.
-2. Where buildable, run equivalent upstream tests or a minimal LibreOffice oracle that emits normalized fixtures.
-3. Add contract-shape checks for slots, item IDs, style IDs, numbering values, filter properties, and lifecycle states.
-4. Add behavioral traces for command -> request -> shell -> model -> undo -> state invalidation.
-5. Require independent review of every parity promotion and store the exact baseline commit with evidence.
-
-Acceptance:
-
-- `parity` means all applicable dimensions pass executable evidence against the pinned baseline;
-- no unresolved class-B architectural divergence remains in an upstream-mechanism module;
-- class-A browser adaptations have explicit boundary tests and no reverse dependency;
-- generated inventories fail on contradictory claims or stale evidence.
-
-## 10. Verification strategy
-
-Use the cheapest reliable oracle for each concern:
-
-1. **Constants and defaults:** extract normalized JSON from pinned enums, constructors, style builders, and command resources; compare exact values locally.
-2. **Pure state transitions:** run table-driven local tests from upstream cases for nodes, positions, hints, lists, undo, dispatcher, and lifecycle.
-3. **Round trips:** maintain minimal ODT fixtures per supported XML property and compare normalized model/XML results, not byte identity.
-4. **Command traces:** assert slot ID, state query, request arguments, handler owner, model delta, undo delta, and invalidation sequence.
-5. **Boundary tests:** prove that DOM/React/browser storage types terminate at their adapters.
-6. **Static architecture:** enforce imports and responsibility mappings, including negative checks for browser types in core/uibase.
-7. **UI/e2e:** preserve user-visible parity for supported commands, selection, IME, clipboard, lists, hyperlinks, open/save/recovery, and accessibility.
-8. **Evidence integrity:** hash the upstream file/commit and local test artifact; invalidate verification when either changes.
-
-Each capability record must link one local executable assertion to one of:
-
-- an upstream executable test and normalized result;
-- an extracted source-derived default/contract table;
-- a reviewed behavioral trace whose upstream branches are cited precisely.
-
-Manual inspection may establish mapping and responsibility but cannot alone establish behavior parity.
-
-## 11. Explicit exclusions for the current program
-
-The following are not required to bring the currently implemented portion to parity:
-
-- Calc, Impress, Draw, Base, Math, and Chart functionality beyond honest placeholder/unsupported presentation;
-- native VCL widget architecture, native accessibility bridges, desktop window management, and platform menu integration;
-- native printing, system dialogs, OS clipboard internals, and native file locking where no browser equivalent is required;
-- UNO extension loading, macros, scripting, Java integration, and desktop plugin discovery;
-- database, collaboration server, mail merge, and other modules with no implemented browser feature;
-- complete Writer pagination/layout, tables, images, fields, change tracking, comments, embedded objects, signatures, and encryption until a product requirement adds them.
-
-Exclusion means “not implemented and not claimed,” not “implemented with different defaults.” Shared lower-level contracts needed by the current slice remain in scope even if their broader consumers are excluded.
-
-## 12. Risks and controls
-
-| Risk | Control |
-| --- | --- |
-| Large refactors break already working browser behavior | Land dependency-ordered slices with old/new trace comparison and e2e gates. |
-| Blind C++ transliteration produces unusable TypeScript | Preserve contracts, ownership, data, defaults, and state machines; adapt memory/lifetime syntax explicitly. |
-| React needs stable identities not exposed by upstream | Keep identity maps in the projection adapter, keyed by node object/index generations, never in the canonical API. |
-| Browser APIs force async contracts | Put async at medium/filter/platform boundaries; do not make core Writer operations browser-aware. |
-| ODT scope expands accidentally | Use property-level capability records and explicit unsupported-content policy. |
-| Generated upstream data becomes stale | Pin generators and evidence to the baseline commit and make drift fail CI. |
-| “Upstream-like” paths hide local semantics | Require responsibility review plus executable parity evidence, not path checks alone. |
-| Default parity varies by locale/font availability | Test requested upstream default separately from device substitution and cover Western/CJK/CTL branches. |
-
-## 13. Completion criteria
-
-The current implemented scope is upstream-parity-ready only when all of the following are true:
-
-1. Every production module is classified as upstream mechanism, browser adaptation, or local infrastructure with a reviewed responsibility boundary.
-2. Every implemented capability has non-contradictory contract, behavior, default, and responsibility evidence.
-3. No core or uibase module depends on React, DOM event names, IndexedDB, browser workers, or presentation IDs.
-4. Writer state is canonical in `SwDoc`/nodes/positions/hints/items/managers; runs and snapshots are derived boundary representations.
-5. Commands flow through Sfx slots, requests, shells, bindings, and state invalidation owned by the corresponding modules.
-6. Current style, font, and numbering behavior is produced by source-derived model defaults rather than UI CSS or local convenience defaults.
-7. Writer document mutations flow through the upstream-equivalent content-operations interface and preserve indexes and undo semantics.
-8. `SwDocShell`, `SfxObjectShell`, `SfxMedium`, filters, workers, storage, and recovery have distinct upstream-aligned responsibilities.
-9. ODT claims are property-level, loss behavior is explicit, and each verified property has import/export/default evidence.
-10. React remains a replaceable presentation adapter and retains functional parity for all supported user-visible operations.
-11. Source-tree and dependency checks enforce inner-layer ownership, not merely file presence.
-12. The parity report contains no manually asserted green status, unresolved contradictory inventory, or unjustified architectural divergence.
-
-## 14. Recommended execution order
-
-Start with WP0 and do not use the existing 35/35 result as a release gate. Then execute WP1 and WP2 in sequence, followed by WP3. Those packages establish the command, identity, mutation, and default contracts on which the remaining cleanup depends. WP4 and WP5 may proceed in parallel only after those contracts stabilize. WP6 follows their public adapters. WP7 is continuous for every package and becomes the final promotion gate.
-
-The immediate first implementation milestone should be deliberately small: one end-to-end text command (for example `.uno:Bold`) must travel through the new Sfx slot/request/bindings path, operate on `SwPaM` via canonical content/attribute operations, derive its UI state from bindings, undo correctly, serialize correctly, and pass a source-derived contract/default trace. That slice establishes the pattern before the remaining commands are migrated.
+Phase 4 can begin after the command contracts and canonical model boundaries are stable. Phase 5
+can proceed in parallel with Phase 4 only where it does not touch shared `SwDocShell`, `SfxMedium`,
+dispatch, or graph-codec contracts. Feature breadth must not race ahead of Phases 0–3.
+
+## Required verification strategy
+
+Every implementation task must include the applicable checks below in addition to repository-wide
+verification.
+
+### Structural checks
+
+- source path and module responsibility match an existing upstream owner or an explicit browser
+  owner;
+- dependency direction remains inward from browser adapters;
+- no browser global or DTO enters protected core/source code;
+- every generated resource is fresh against the pinned checkout;
+- no stale or broken program-document links remain.
+
+### Contract checks
+
+- exported symbols and method signatures map to pinned upstream symbols;
+- command URL, slot, request items, result items, state and shortcut match;
+- item WhichIds, defaults, inheritance and serialization match;
+- browser extensions are namespaced and cannot be confused with upstream commands.
+
+### Behavioral checks
+
+- port the exact upstream test setup/operation/assertion where executable;
+- record any normalization needed for browser rendering separately from model behavior;
+- cover edit -> undo -> redo and import -> mutate -> export -> reopen cycles;
+- cover cancellation, failure, stale asynchronous completion, and concurrent edits;
+- use real pinned fixtures for document-format claims.
+
+### Default checks
+
+- assert state before any user action;
+- source values from pinned configuration or source code;
+- cover locale, script, bidi, font availability, and browser capability absence;
+- test default changes separately from user-configured overrides.
+
+### UI checks
+
+- unit-test controller behavior without React;
+- integration-test bindings and generated resources with React;
+- E2E-test keyboard, pointer, clipboard, IME, focus, dialogs, responsive layout, and accessibility;
+- add visual regression only for stable rendering contracts; do not use screenshots as model parity
+  evidence.
+
+### Performance and safety checks
+
+- maintain ZIP/XML limits and malformed-input rejection;
+- benchmark projection and serialization so model edits do not clone the full document on every
+  keystroke;
+- verify large documents do not produce unbounded React reconciliation, undo payloads, or worker
+  copies;
+- keep pasted HTML sanitized and browser storage isolated by document identity.
+
+## Definition of done for this parity program
+
+The implemented portion of Vite Office reaches parity only when all of the following are true:
+
+1. every production module is in the generated ledger and has an approved upstream or browser
+   responsibility;
+2. every implemented upstream responsibility has contract, behavior, default, ownership, and
+   applicable serialization/operation-cycle evidence;
+3. no parent module, feature, suite, or program verdict is inferred from a narrower green slice;
+4. every visible command preserves upstream identity, arguments, state, default placement, and
+   owning shell, or is visibly a browser extension;
+5. canonical document state exists only in upstream-shaped model objects; boundary DTOs cannot be
+   used to mutate the model;
+6. React contains presentation and browser event adaptation, not Writer business rules;
+7. file paths correspond to their actual upstream or browser responsibility and all documentation
+   references current files;
+8. all supported defaults match the pinned LibreOffice baseline before user configuration;
+9. all known unjustified adapters and refactor artifacts listed in this audit are removed;
+10. repository verification, semantic parity validation, differential fixtures/oracles, browser
+    E2E, accessibility, performance, and security checks pass with no hidden exclusions.
+
+Until these conditions hold, reports should use precise phrases such as “implemented bounded
+operation”, “source-mapped”, or “locally verified”, not “LibreOffice parity”.
