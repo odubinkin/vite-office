@@ -1,10 +1,11 @@
 ---
 id: "202609221113-N9GZ47"
 title: "Remove browser document recovery mechanism"
-status: "DOING"
+result_summary: "verified-202609221113-N9GZ47"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T11:44:03.675Z"
+  updated_at: "2026-09-22T11:44:37.238Z"
   updated_by: "CODER"
-  note: "verified-202609221113-N9GZ47"
+  note: "browser-recovery-removed-primary-indexeddb-preserved"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "npm run typecheck; npx vitest run src/framework/browser/app/desktop.test.tsx; npm run inventory:parity; npm run check:source-provenance"
   findings:
     - "No recovery scheduler, restore UI, history, leases, or lifecycle API remains active; documentation and runtime inventory record the intentional refusal."
-commit: null
+commit:
+  hash: "b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54"
+  message: "🧩 N9GZ47 code: remove browser document recovery"
 comments:
   -
     author: "CODER"
     body: "Start: remove recovery only; preserve IndexedDB primary document storage and all other persistence."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609221113-N9GZ47. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -63,8 +69,27 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609221113-N9GZ47"
+  -
+    type: "verify"
+    at: "2026-09-22T11:44:30.639Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609221113-N9GZ47"
+  -
+    type: "status"
+    at: "2026-09-22T11:44:30.808Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609221113-N9GZ47. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "verify"
+    at: "2026-09-22T11:44:37.238Z"
+    author: "CODER"
+    state: "ok"
+    note: "browser-recovery-removed-primary-indexeddb-preserved"
 doc_version: 3
-doc_updated_at: "2026-09-22T11:44:03.864Z"
+doc_updated_at: "2026-09-22T11:44:37.310Z"
 doc_updated_by: "CODER"
 description: "Remove only the browser document-recovery mechanism (recovery scheduling, candidate persistence/restore, recovery UI, lifecycle APIs, and tests). Preserve existing IndexedDB document storage and all non-recovery persistence paths. Record the intentional, durable decision not to implement recovery because frequent full autosave will be the future browser strategy."
 sections:
@@ -142,6 +167,66 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202609221113-N9GZ47 --result verified-202609221113-N9GZ47 --commit b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-22T11:44:30.639Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609221113-N9GZ47
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:44:03.864Z, excerpt_hash=sha256:f7cea786dc421d3b401b00f8e95431aacb0c4d26ca52cd5deb15ff751da65053
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221113-N9GZ47/blueprint/resolved-snapshot.json
+    - old_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+    - current_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609221113-N9GZ47
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609221113-N9GZ47 --result verified-202609221113-N9GZ47 --commit 503d2009a1231e60c737257cde5da61172d0af40
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-22T11:44:37.238Z — VERIFY — ok
+
+    By: CODER
+
+    Note: browser-recovery-removed-primary-indexeddb-preserved
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:44:30.809Z, excerpt_hash=sha256:f7cea786dc421d3b401b00f8e95431aacb0c4d26ca52cd5deb15ff751da65053
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221113-N9GZ47/blueprint/resolved-snapshot.json
+    - old_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+    - current_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609221113-N9GZ47
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202609221113-N9GZ47 --close --unstage-others
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -239,6 +324,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609221113-N9GZ47 --result verified-202609221113-N9GZ47 --commit b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T11:44:30.639Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609221113-N9GZ47
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:44:03.864Z, excerpt_hash=sha256:f7cea786dc421d3b401b00f8e95431aacb0c4d26ca52cd5deb15ff751da65053
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221113-N9GZ47/blueprint/resolved-snapshot.json
+- old_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+- current_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609221113-N9GZ47
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609221113-N9GZ47 --result verified-202609221113-N9GZ47 --commit 503d2009a1231e60c737257cde5da61172d0af40
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T11:44:37.238Z — VERIFY — ok
+
+By: CODER
+
+Note: browser-recovery-removed-primary-indexeddb-preserved
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T11:44:30.809Z, excerpt_hash=sha256:f7cea786dc421d3b401b00f8e95431aacb0c4d26ca52cd5deb15ff751da65053
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609221113-N9GZ47/blueprint/resolved-snapshot.json
+- old_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+- current_digest: c4477c7b0105fb0c20318c402cec6ac6b7a2289fa76e6a12084d64d6214f9898
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609221113-N9GZ47
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202609221113-N9GZ47 --close --unstage-others
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
