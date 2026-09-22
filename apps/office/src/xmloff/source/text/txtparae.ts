@@ -6,9 +6,11 @@ export { ODF_NAMESPACES } from "../core/xmltoken";
 
 /** Direct character properties supported by the bounded text exporter. */
 export interface OdfCharacterProperties {
+  readonly color?: string;
   readonly fontFamily?: string;
   /** Absolute font height in twips. */
   readonly fontSizeTwips?: number;
+  readonly highlight?: string;
   readonly bold: boolean;
   readonly italic: boolean;
   readonly underline: boolean;
@@ -38,10 +40,14 @@ export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
 
 /** Direct paragraph properties represented by the bounded Writer model. */
 export interface OdfParagraphProperties {
+  readonly countLineNumbers?: boolean;
   readonly firstLineIndent?: number;
   readonly lineHeightPercent?: number;
+  readonly keepWithNext?: boolean;
   readonly lowerSpacing?: number;
   readonly rightMargin?: number;
+  /** Single bounded tab-stop position represented by the Writer item, in twips. */
+  readonly tabStopPosition?: number;
   readonly upperSpacing?: number;
 }
 
@@ -173,13 +179,15 @@ export class XMLTextParagraphExport {
           ...(leftMargin === "" ? [] : [`fo:margin-left="${exportOdfLength(Number(leftMargin))}"`]),
           ...exportParagraphAttributes(parseParagraphPropertiesKey(paragraphPropertiesKey)),
         ];
+        const parsedParagraphProperties = parseParagraphPropertiesKey(paragraphPropertiesKey);
+        const paragraphChildren = exportParagraphPropertyChildren(parsedParagraphProperties);
         const paragraphProperties =
-          paragraphAttributes.length === 0
+          paragraphAttributes.length === 0 && paragraphChildren.length === 0
             ? ""
-            : `<style:paragraph-properties ${paragraphAttributes.join(" ")}/>`;
+            : `<style:paragraph-properties${paragraphAttributes.length === 0 ? "" : ` ${paragraphAttributes.join(" ")}`}>${paragraphChildren}</style:paragraph-properties>`;
         const properties = parseCharacterPropertiesKey(propertiesKey);
         const textProperties =
-          propertiesKey === "---||"
+          Object.keys(properties).length === 0
             ? ""
             : `<style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/>`;
         return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}">${paragraphProperties}${textProperties}</style:style>`;
@@ -438,6 +446,9 @@ function paragraphPropertiesKey(properties?: OdfParagraphProperties): string {
     properties?.upperSpacing,
     properties?.lowerSpacing,
     properties?.lineHeightPercent,
+    properties?.tabStopPosition,
+    properties?.keepWithNext === undefined ? "" : Number(properties.keepWithNext),
+    properties?.countLineNumbers === undefined ? "" : Number(properties.countLineNumbers),
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -449,7 +460,16 @@ function paragraphPropertiesKey(properties?: OdfParagraphProperties): string {
 
 /** Restores paragraph properties from an internal key. @param key - Paragraph key. @returns Properties. */
 function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
-  const [firstLineIndent, rightMargin, upperSpacing, lowerSpacing, lineHeightPercent] = key
+  const [
+    firstLineIndent,
+    rightMargin,
+    upperSpacing,
+    lowerSpacing,
+    lineHeightPercent,
+    tabStopPosition,
+    keepWithNext,
+    countLineNumbers,
+  ] = key
     .split(",")
     .map(
       /** Decodes one optional paragraph metric. @param value - Stable field. @returns Metric. */ (
@@ -462,6 +482,9 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
     ...(upperSpacing === undefined ? {} : { upperSpacing }),
     ...(lowerSpacing === undefined ? {} : { lowerSpacing }),
     ...(lineHeightPercent === undefined ? {} : { lineHeightPercent }),
+    ...(tabStopPosition === undefined ? {} : { tabStopPosition }),
+    ...(keepWithNext === undefined ? {} : { keepWithNext: keepWithNext === 1 }),
+    ...(countLineNumbers === undefined ? {} : { countLineNumbers: countLineNumbers === 1 }),
   };
 }
 
@@ -483,7 +506,20 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.lineHeightPercent === undefined
       ? []
       : [`fo:line-height="${properties.lineHeightPercent}%"`]),
+    ...(properties.keepWithNext === undefined
+      ? []
+      : [`fo:keep-with-next="${properties.keepWithNext ? "always" : "auto"}"`]),
+    ...(properties.countLineNumbers === undefined
+      ? []
+      : [`text:number-lines="${properties.countLineNumbers}"`]),
   ];
+}
+
+/** Emits child elements of supported ODF paragraph properties. @param properties - Direct properties. @returns XML fragment. */
+export function exportParagraphPropertyChildren(properties: OdfParagraphProperties): string {
+  return properties.tabStopPosition === undefined
+    ? ""
+    : `<style:tab-stops><style:tab-stop style:position="${exportOdfLength(properties.tabStopPosition)}"/></style:tab-stops>`;
 }
 
 /** Serializes a bounded twip margin as an ODF centimetre length. @param twips - Margin in twips. @returns ODF length. */
@@ -556,16 +592,18 @@ function equalCharacterProperties(
 ): boolean {
   return (
     left.bold === right.bold &&
+    left.color === right.color &&
     left.italic === right.italic &&
     left.underline === right.underline &&
     left.fontFamily === right.fontFamily &&
-    left.fontSizeTwips === right.fontSizeTwips
+    left.fontSizeTwips === right.fontSizeTwips &&
+    left.highlight === right.highlight
   );
 }
 
 /** Creates a stable style-deduplication key. @param properties - Character properties. @returns Key. */
 function characterPropertiesKey(properties: OdfCharacterProperties): string {
-  return `${Number(properties.bold)}${Number(properties.italic)}${Number(properties.underline)}|${encodeURIComponent(properties.fontFamily ?? "")}|${properties.fontSizeTwips ?? ""}`;
+  return `${Number(properties.bold)}${Number(properties.italic)}${Number(properties.underline)}|${encodeURIComponent(properties.fontFamily ?? "")}|${properties.fontSizeTwips ?? ""}|${encodeURIComponent(properties.color ?? "")}|${encodeURIComponent(properties.highlight ?? "")}`;
 }
 
 /** Creates a three-state character key for automatic paragraph styles. @param properties - Optional direct deltas. @returns Stable key. */
@@ -577,7 +615,7 @@ function partialCharacterPropertiesKey(properties?: Partial<OdfCharacterProperti
     )
     .join(
       "",
-    )}|${encodeURIComponent(properties?.fontFamily ?? "")}|${properties?.fontSizeTwips ?? ""}`;
+    )}|${encodeURIComponent(properties?.fontFamily ?? "")}|${properties?.fontSizeTwips ?? ""}|${encodeURIComponent(properties?.color ?? "")}|${encodeURIComponent(properties?.highlight ?? "")}`;
 }
 
 /** Restores properties from an internal key. @param key - Three-bit key. @returns Character properties. */
@@ -586,17 +624,22 @@ function parseCharacterPropertiesKey(key: string): Partial<OdfCharacterPropertie
     /** Decodes one three-state property. @param value - Key character. @returns Direct property. */
     (value: string | undefined): boolean | undefined =>
       value === "-" || value === undefined ? undefined : value === "1";
-  const [flags = "---", encodedFont = "", fontSize = ""] = key.split("|");
+  const [flags = "---", encodedFont = "", fontSize = "", encodedColor = "", encodedHighlight = ""] =
+    key.split("|");
   const bold = decode(flags[0]);
   const italic = decode(flags[1]);
   const underline = decode(flags[2]);
   const fontFamily = decodeURIComponent(encodedFont);
+  const color = decodeURIComponent(encodedColor);
+  const highlight = decodeURIComponent(encodedHighlight);
   return {
     ...(bold === undefined ? {} : { bold }),
     ...(italic === undefined ? {} : { italic }),
     ...(underline === undefined ? {} : { underline }),
     ...(fontFamily.length === 0 ? {} : { fontFamily }),
     ...(fontSize.length === 0 ? {} : { fontSizeTwips: Number(fontSize) }),
+    ...(color.length === 0 ? {} : { color }),
+    ...(highlight.length === 0 ? {} : { highlight }),
   };
 }
 
@@ -605,7 +648,14 @@ export function exportCharacterAttributes(
   properties: Partial<OdfCharacterProperties>,
   fontFaceName?: (familyName: string) => string,
 ): string {
+  assertOdfColor(properties.color, "auto", "font color");
+  assertOdfColor(properties.highlight, "transparent", "highlight color");
   return [
+    properties.color === undefined
+      ? ""
+      : properties.color === "auto"
+        ? ' style:use-window-font-color="true"'
+        : ` fo:color="${escapeXml(properties.color)}"`,
     properties.fontFamily === undefined
       ? ""
       : fontFaceName === undefined
@@ -614,6 +664,9 @@ export function exportCharacterAttributes(
     properties.fontSizeTwips === undefined
       ? ""
       : ` fo:font-size="${properties.fontSizeTwips / 20}pt"`,
+    properties.highlight === undefined
+      ? ""
+      : ` fo:background-color="${escapeXml(properties.highlight)}"`,
     properties.bold === undefined
       ? ""
       : ` fo:font-weight="${properties.bold ? "bold" : "normal"}" style:font-weight-asian="${properties.bold ? "bold" : "normal"}" style:font-weight-complex="${properties.bold ? "bold" : "normal"}"`,
@@ -624,6 +677,16 @@ export function exportCharacterAttributes(
       ? ""
       : ` style:text-underline-style="${properties.underline ? "solid" : "none"}"${properties.underline ? ' style:text-underline-width="auto"' : ""}`,
   ].join("");
+}
+
+/** Rejects character colors outside the bounded upstream color mapping. @param value - Color value. @param special - Allowed Writer special value. @param label - Diagnostic label. @returns Nothing. */
+function assertOdfColor(
+  value: string | undefined,
+  special: "auto" | "transparent",
+  label: string,
+): void {
+  if (value !== undefined && !/^#[0-9a-f]{6}$/iu.test(value) && value !== special)
+    throw new Error(`Unsupported ODF ${label}: ${value}`);
 }
 
 /** Selects the Writer-projected ODF name while retaining the neutral legacy fallback. @param paragraph - Model paragraph projection. @returns ODF name. */

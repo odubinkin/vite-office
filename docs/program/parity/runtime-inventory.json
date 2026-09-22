@@ -4848,6 +4848,40 @@
       }
     },
     {
+      "path": "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ],
+      "semantic": {
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts#XMLTextPropertySetContext",
+          "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#Writer ODT mapped pooled properties",
+          "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx#XMLTextPropertySetContext::createFastChildContext"
+        ],
+        "justification": "Preserves upstream element-valued text-property context ownership for the currently modeled single Writer tab-stop item; unmodeled text columns, complex colors, and drop caps are not claimed.",
+        "knownViolations": [],
+        "localSymbols": [
+          "XMLTextPropertySetContext",
+          "importOdfLength"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "xmloff/source/text/XMLTextPropertySetContext.cxx",
+        "upstreamSymbols": [
+          "XMLTextPropertySetContext",
+          "XMLTextPropertySetContext::createFastChildContext"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/xmloff/source/text/txtparae.ts",
       "classification": "upstream-mechanism",
       "state": "active",

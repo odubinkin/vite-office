@@ -45,11 +45,12 @@ needed for later sections, redlines, tables, fields, and layout work.
 
 ## Text, attributes, and ranges
 
-Visible paragraph text lives only in `SwTextNode`. Direct Bold, Italic, and
-single Underline are represented by `SwTextAttr` ranges carrying the exact
+Visible paragraph text lives only in `SwTextNode`. Direct Bold, Italic, single
+Underline, foreground color, and highlight are represented by `SwTextAttr` ranges carrying the exact
 `RES_TXTATR_AUTOFMT` WhichId. Each `SwFormatAutoFormat` owns an independent
-`SfxItemSet` of `SvxWeightItem`, `SvxPostureItem`, and `SvxUnderlineItem`
-deltas, including synchronized Western, CJK, and complex-text weight/posture
+`SfxItemSet` of `SvxWeightItem`, `SvxPostureItem`, `SvxUnderlineItem`, and
+corresponding string-valued Writer color-item deltas, including synchronized
+Western, CJK, and complex-text weight/posture
 items. Insert, erase, replace, split, and append operations update both text and
 applicable hint ranges.
 
@@ -61,8 +62,8 @@ in a `SwTextFormatColl`; reads fall through the optional direct `SwAttrSet`, its
 collection and parent collections, and finally the pool default. The direct set
 is allocated on first mutation and released when its last delta is cleared.
 
-The current style table contains Default Paragraph Style and Heading 1, with
-Heading 1 derived from the default collection. Alignment is an
+The style table materializes the supported 126-entry pinned paragraph-style
+catalog on demand and retains derived-from and follow-style links. Alignment is an
 `SvxAdjustItem`. List application stores a `SwNumRuleItem` name, list identity,
 and level while the corresponding `SwNumRule` and its ten per-level
 `SwNumFormat` records are owned by `SwDoc`.
@@ -75,7 +76,7 @@ Character items may also live on `SwTextFormatColl` or a node-local
 values in that order. Explicit normal values therefore override inherited
 bold/italic/underline formatting without introducing a parallel boolean store.
 
-The `runs` consumed by React and clipboard code are a derived boolean projection of the
+The `runs` consumed by React and clipboard code are a derived character-property projection of the
 text and pooled hints. They are not duplicated canonical state. `SwPosition` combines
 a node with a UTF-16 content offset; `SwPaM` preserves LibreOffice's independent
 point and optional mark, including selection direction, while exposing ordered

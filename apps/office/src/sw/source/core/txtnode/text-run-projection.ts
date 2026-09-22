@@ -89,11 +89,15 @@ export function normalizeWriterTextRuns(candidate: unknown): readonly WriterText
 export function normalizeWriterCharacterAttributes(candidate: unknown): WriterCharacterAttributes {
   const attributes = isRecord(candidate) ? candidate : {};
   return {
+    ...(isWriterColor(attributes.color, "auto") ? { color: attributes.color } : {}),
     ...(typeof attributes.fontFamily === "string" && attributes.fontFamily.trim().length > 0
       ? { fontFamily: attributes.fontFamily }
       : {}),
     ...(Number.isInteger(attributes.fontSizeTwips) && Number(attributes.fontSizeTwips) > 0
       ? { fontSizeTwips: Number(attributes.fontSizeTwips) }
+      : {}),
+    ...(isWriterColor(attributes.highlight, "transparent")
+      ? { highlight: attributes.highlight }
       : {}),
     bold: attributes.bold === true,
     italic: attributes.italic === true,
@@ -135,11 +139,18 @@ function areWriterCharacterAttributesEqual(
 ): boolean {
   return (
     left.bold === right.bold &&
+    left.color === right.color &&
     left.italic === right.italic &&
     left.underline === right.underline &&
     left.fontFamily === right.fontFamily &&
-    left.fontSizeTwips === right.fontSizeTwips
+    left.fontSizeTwips === right.fontSizeTwips &&
+    left.highlight === right.highlight
   );
+}
+
+/** Validates one bounded Writer color value. @param value - Candidate. @param special - Allowed Writer special value. @returns Whether supported. */
+function isWriterColor(value: unknown, special: "auto" | "transparent"): value is string {
+  return typeof value === "string" && (/^#[0-9a-f]{6}$/iu.test(value) || value === special);
 }
 
 /** Checks for a non-array object. @param value - Candidate. @returns Whether record-like. */

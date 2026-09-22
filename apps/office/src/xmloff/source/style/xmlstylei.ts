@@ -9,6 +9,7 @@ import type {
   OdfParagraphProperties,
 } from "../text/txtparae";
 import type { OdfStyleDefinition, XMLTextListRule } from "../text/txtparai";
+import { importOdfLength, XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 
 const ignoredStyleDefinitions = new Set([
   XMLToken.STYLE_DEFAULT_STYLE,
@@ -106,13 +107,18 @@ class XMLStyleContext extends SvXMLImportContext {
       this.alignment = importAlignment(attributes);
       this.leftMargin = importLeftMargin(attributes);
       this.paragraphProperties = importParagraphProperties(attributes);
-      return new XMLPropertyContext();
+      return new XMLTextPropertySetContext(
+        /** Retains the single tab-stop value in the paragraph property set. @param tabStopPosition - Imported twip position. @returns Nothing. */
+        (tabStopPosition) => {
+          this.paragraphProperties = { ...this.paragraphProperties, tabStopPosition };
+        },
+      );
     }
     if (element === XMLToken.STYLE_TEXT_PROPERTIES) {
       if (this.properties !== undefined)
         throw new Error("ODF style has duplicate text-properties.");
       this.properties = importCharacterProperties(attributes, this.target);
-      return new XMLPropertyContext();
+      return new XMLTextPropertySetContext();
     }
     return null;
   }
@@ -222,9 +228,6 @@ class XMLListStyleContext extends SvXMLImportContext {
   }
 }
 
-/** Leaf context for a supported property element. */
-class XMLPropertyContext extends SvXMLImportContext {}
-
 /** Imports paragraph alignment. @param attributes - Property attributes. @returns Alignment or undefined. */
 function importAlignment(attributes: FastAttributeList): OdfParagraphAlignment | undefined {
   const value = attributes.get(XMLToken.FO_TEXT_ALIGN);
@@ -277,12 +280,21 @@ function importParagraphProperties(
     if (match === null) throw new Error(`Unsupported ODF paragraph line height: ${rawLineHeight}`);
     lineHeightPercent = Math.round(Number(match[1]));
   }
+  const rawKeep = attributes.get(XMLToken.FO_KEEP_WITH_NEXT);
+  if (rawKeep !== null && rawKeep !== "always" && rawKeep !== "auto")
+    throw new Error(`Unsupported ODF keep-with-next: ${rawKeep}`);
+  const countLineNumbers = importOptionalBoolean(
+    attributes.get(XMLToken.TEXT_NUMBER_LINES),
+    "paragraph line-number participation",
+  );
   const result: OdfParagraphProperties = {
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
     ...(rightMargin === undefined ? {} : { rightMargin }),
     ...(upperSpacing === undefined ? {} : { upperSpacing }),
     ...(lowerSpacing === undefined ? {} : { lowerSpacing }),
     ...(lineHeightPercent === undefined ? {} : { lineHeightPercent }),
+    ...(rawKeep === null ? {} : { keepWithNext: rawKeep === "always" }),
+    ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
   };
   return Object.keys(result).length === 0 ? undefined : result;
 }
@@ -298,25 +310,6 @@ function importOptionalLength(
   return value === null ? undefined : importOdfLength(value, signed, label);
 }
 
-/** Converts one bounded ODF absolute length to Writer twips. @param value - ODF length. @param signed - Whether negative values are allowed. @param label - Error label. @returns Twips. */
-function importOdfLength(value: string, signed: boolean, label: string): number {
-  const match = new RegExp(`^(${signed ? "-?" : ""}(?:0|[0-9]+(?:\\.[0-9]+)?))(cm|in|mm|pt)$`).exec(
-    value,
-  );
-  if (match === null) throw new Error(`Unsupported ODF ${label}: ${value}`);
-  const amount = Number(match[1]);
-  const unit = match[2];
-  const twips =
-    unit === "cm"
-      ? (amount * 1440) / 2.54
-      : unit === "in"
-        ? amount * 1440
-        : unit === "mm"
-          ? (amount * 1440) / 25.4
-          : amount * 20;
-  return Math.round(twips);
-}
-
 /** Imports supported character properties. @param attributes - Property attributes. @param target - Style and font resolver. @returns Property deltas. */
 function importCharacterProperties(
   attributes: FastAttributeList,
@@ -329,6 +322,12 @@ function importCharacterProperties(
   const posture = attributes.get(XMLToken.FO_FONT_STYLE);
   const underline = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_STYLE);
   const underlineWidth = attributes.get(XMLToken.STYLE_TEXT_UNDERLINE_WIDTH);
+  const color = attributes.get(XMLToken.FO_COLOR);
+  const useWindowColor = importOptionalBoolean(
+    attributes.get(XMLToken.STYLE_USE_WINDOW_FONT_COLOR),
+    "automatic font color",
+  );
+  const highlight = attributes.get(XMLToken.FO_BACKGROUND_COLOR);
   if (weight !== null && weight !== "normal" && weight !== "bold")
     throw new Error(`Unsupported ODF font weight: ${weight}`);
   if (posture !== null && posture !== "normal" && posture !== "italic")
@@ -337,6 +336,10 @@ function importCharacterProperties(
     throw new Error(`Unsupported ODF underline style: ${underline}`);
   if (underlineWidth !== null && underlineWidth !== "auto")
     throw new Error(`Unsupported ODF underline width: ${underlineWidth}`);
+  if (color !== null && !isOdfColor(color, false))
+    throw new Error(`Unsupported ODF font color: ${color}`);
+  if (highlight !== null && !isOdfColor(highlight, true))
+    throw new Error(`Unsupported ODF highlight color: ${highlight}`);
   assertAgreement(
     "font weight",
     weight,
@@ -364,12 +367,27 @@ function importCharacterProperties(
     }
   }
   return {
+    ...(useWindowColor === true ? { color: "auto" } : color === null ? {} : { color }),
     ...(fontFamily === undefined || fontFamily.trim().length === 0 ? {} : { fontFamily }),
     ...(fontSizeTwips === undefined ? {} : { fontSizeTwips }),
+    ...(highlight === null ? {} : { highlight }),
     ...(weight === null ? {} : { bold: weight === "bold" }),
     ...(posture === null ? {} : { italic: posture === "italic" }),
     ...(underline === null ? {} : { underline: underline === "solid" }),
   };
+}
+
+/** Imports one optional ODF boolean. @param value - Raw attribute. @param label - Diagnostic label. @returns Boolean or undefined. */
+function importOptionalBoolean(value: string | null, label: string): boolean | undefined {
+  if (value === null) return undefined;
+  if (value === "true" || value === "1") return true;
+  if (value === "false" || value === "0") return false;
+  throw new Error(`Unsupported ODF ${label}: ${value}`);
+}
+
+/** Tests the bounded ODF color syntax. @param value - Raw value. @param allowTransparent - Whether transparent is accepted. @returns Whether supported. */
+function isOdfColor(value: string, allowTransparent: boolean): boolean {
+  return /^#[0-9a-f]{6}$/iu.test(value) || (allowTransparent && value === "transparent");
 }
 
 /** Rejects script-specific divergence. @param property - Property label. @param western - Western value. @param asian - Asian value. @param complex - Complex value. @returns Nothing. */

@@ -11,9 +11,11 @@ import type {
   StoredDocumentOpenPort,
 } from "../../../sfx2/source/doc/docfile";
 import type { RecoverySavePort } from "../../../svl/source/misc/recovery";
+import { SfxStringItem } from "../../../svl/source/items/poolitem";
 import { createDownloadFilename } from "../../../vcl/browser/browser-download";
 import { WriterPlatformError, type WriterSessionServices } from "../workflows/writer-workflows";
 import { SwDoc } from "../../source/core/doc/doc";
+import { RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT } from "../../inc/hintids";
 import { projectWriterTextRuns } from "../../source/core/txtnode/text-run-projection";
 import type { WriterSnapshotState } from "../storage/writer-storage";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
@@ -755,6 +757,18 @@ describe("persistent Writer view session" /** Groups Stage 2 ownership and dispa
     const secondNode = second.paragraphs[0];
     if (secondNode === undefined) throw new Error("Second Writer document has no paragraph.");
     expect(projection.GetNodeId(secondNode)).not.toBe(projectionId);
+  });
+
+  it("projects non-default paragraph colors without storing browser style state", /** Verifies canonical color items are read at the presentation boundary. @returns Nothing. */ function projectsParagraphColors(): void {
+    const session = createWriterDocumentSession(createServices());
+    const paragraph = session.view.GetWrtShell().GetActiveParagraph();
+    paragraph.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
+    paragraph.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#abcdef"));
+    expect(session.viewStore.GetSnapshot().activeParagraph.computedStyle).toMatchObject({
+      color: "#123456",
+      highlight: "#abcdef",
+    });
+    session.Close();
   });
 
   it("projects list geometry from the active numbering format", /** Verifies browser layout consumes model-owned indents instead of deriving geometry from list depth. @returns Nothing. */ function projectsNumberingGeometry(): void {

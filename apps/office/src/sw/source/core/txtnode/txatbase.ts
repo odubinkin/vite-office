@@ -13,18 +13,24 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
+import {
+  SfxPoolItem,
+  SfxStringItem,
+  type SfxPoolItemSnapshot,
+} from "../../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_COLOR,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
@@ -40,10 +46,14 @@ export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
 /** Names the bounded direct character properties currently carried by an auto-format item. */
 export interface WriterCharacterAttributes {
+  /** CSS-compatible explicit foreground color or Writer's automatic color marker. */
+  readonly color?: string;
   /** Explicit font family; absent means the paragraph style or document default. */
   readonly fontFamily?: string;
   /** Explicit font height in twips; absent means the paragraph style or document default. */
   readonly fontSizeTwips?: number;
+  /** CSS-compatible explicit highlight color or Writer's transparent marker. */
+  readonly highlight?: string;
   /** Whether the text uses a bold font weight. */
   readonly bold: boolean;
   /** Whether the text uses an italic posture. */
@@ -181,6 +191,8 @@ export function createSwFormatAutoFormat(
   inherited: WriterCharacterAttributes = { bold: false, italic: false, underline: false },
 ): SwFormatAutoFormat {
   const items = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
+  if (attributes.color !== inherited.color && attributes.color !== undefined)
+    items.Put(new SfxStringItem(RES_CHRATR_COLOR, attributes.color));
   if (attributes.fontFamily !== inherited.fontFamily && attributes.fontFamily !== undefined)
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       items.Put(new SvxFontItem(attributes.fontFamily, which));
@@ -190,6 +202,8 @@ export function createSwFormatAutoFormat(
   )
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, which));
+  if (attributes.highlight !== inherited.highlight && attributes.highlight !== undefined)
+    items.Put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, attributes.highlight));
   if (attributes.bold !== inherited.bold)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       items.Put(new SvxWeightItem(attributes.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
@@ -220,9 +234,16 @@ export function projectWriterCharacterAttributes(
   const fontSize =
     items.GetItemIfSet(RES_CHRATR_FONTSIZE, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_FONTSIZE, false);
+  const color =
+    items.GetItemIfSet(RES_CHRATR_COLOR, false) ?? inherited?.GetItemIfSet(RES_CHRATR_COLOR, false);
+  const highlight =
+    items.GetItemIfSet(RES_CHRATR_HIGHLIGHT, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_HIGHLIGHT, false);
   return {
+    ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
+    ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),
     bold: (get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
     italic: (get(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
     underline: (get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),

@@ -4692,6 +4692,40 @@
       "evidence": {
         "local": [
           {
+            "marker": "XMLTextPropertySetContext",
+            "path": "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "XMLTextPropertySetContext::createFastChildContext",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts",
+      "localSymbols": [
+        "XMLTextPropertySetContext",
+        "importOdfLength"
+      ],
+      "omittedResponsibilities": [
+        "Text columns, complex colors, drop caps, and other element-valued properties without current Writer model owners remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Dispatches the implemented element-valued paragraph property to a dedicated import context and writes the result through the caller's canonical item sink."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/text/XMLTextPropertySetContext.cxx",
+      "upstreamSymbols": [
+        "XMLTextPropertySetContext",
+        "XMLTextPropertySetContext::createFastChildContext"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "ODF_NAMESPACES",
             "path": "apps/office/src/xmloff/source/text/txtparae.ts"
           }

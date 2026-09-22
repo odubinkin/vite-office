@@ -19,7 +19,12 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
-import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import {
+  SfxBoolItem,
+  SfxInt16Item,
+  SfxStringItem,
+  type SfxPoolItem,
+} from "../../../../svl/source/items/poolitem";
 import { createWriterCharacterItemSet } from "../../core/txtnode/txatbase";
 import {
   FastAttributeList,
@@ -60,21 +65,26 @@ import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_COLOR,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_UL_SPACE,
+  RES_KEEP,
+  RES_LINENUMBER,
 } from "../../../inc/hintids";
 import {
   getWriterOdfStyleName,
@@ -527,12 +537,15 @@ function putCharacterProperties(
   properties: Partial<OdfCharacterProperties>,
   put: (item: SfxPoolItem) => unknown,
 ): void {
+  if (properties.color !== undefined) put(new SfxStringItem(RES_CHRATR_COLOR, properties.color));
   if (properties.fontFamily !== undefined)
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       put(new SvxFontItem(properties.fontFamily, which));
   if (properties.fontSizeTwips !== undefined)
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       put(new SvxFontHeightItem(properties.fontSizeTwips, which));
+  if (properties.highlight !== undefined)
+    put(new SfxStringItem(RES_CHRATR_HIGHLIGHT, properties.highlight));
   if (properties.bold !== undefined)
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       put(new SvxWeightItem(properties.bold ? FontWeight.BOLD : FontWeight.NORMAL, which));
@@ -563,6 +576,12 @@ function putParagraphProperties(
     );
   if (properties.lineHeightPercent !== undefined)
     put(new SvxLineSpacingItem(properties.lineHeightPercent, RES_PARATR_LINESPACING));
+  if (properties.tabStopPosition !== undefined)
+    put(new SfxInt16Item(RES_PARATR_TABSTOP, properties.tabStopPosition));
+  if (properties.keepWithNext !== undefined)
+    put(new SfxBoolItem(RES_KEEP, properties.keepWithNext));
+  if (properties.countLineNumbers !== undefined)
+    put(new SfxBoolItem(RES_LINENUMBER, properties.countLineNumbers));
 }
 
 /** Converts ODF alignment to Writer adjustment. @param alignment - ODF alignment. @returns Writer adjustment. */

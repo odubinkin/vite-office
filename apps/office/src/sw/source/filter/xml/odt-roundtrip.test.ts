@@ -744,7 +744,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       expect(warn).toHaveBeenCalledWith(
         "Unknown ODF attribute ignored: style:default-outline-level",
       );
-      expect(warn).toHaveBeenCalledWith("Unknown ODF attribute ignored: fo:color");
+      expect(warn).toHaveBeenCalledWith("Unsupported ODF style attribute ignored: fo:color");
     } finally {
       warn.mockRestore();
     }

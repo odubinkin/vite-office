@@ -25,9 +25,12 @@ import {
   SvxPostureItem,
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
+import { SfxStringItem } from "../../../svl/source/items/poolitem";
 import {
+  RES_CHRATR_COLOR,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
+  RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_WEIGHT,
   RES_MARGIN_FIRSTLINE,
@@ -79,11 +82,13 @@ export interface WriterProjectedTextRun extends WriterTextRun {
 
 /** Browser-ready values projected from effective Writer paragraph items. */
 export interface WriterParagraphComputedStyle {
+  readonly color?: string;
   readonly firstLineIndentPt: number;
   readonly fontFamily?: string;
   readonly fontStyle: "italic" | "normal";
   readonly fontSizePt: number;
   readonly fontWeight: 400 | 700;
+  readonly highlight?: string;
   readonly lineHeight: number;
   readonly lowerSpacingPt: number;
   readonly rightMarginPt: number;
@@ -145,12 +150,15 @@ export class WriterViewProjection {
         const listFormat =
           list.kind === "none" ? undefined : node.GetNumRule()?.GetNumFormat(list.level);
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
+        const color = (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue();
+        const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
         let runOffset = 0;
         return Object.freeze({
           alignment: node.GetParagraphAlignment(),
           ...(bulletChar === undefined ? {} : { bulletChar }),
           id: this.GetNodeId(node),
           computedStyle: Object.freeze({
+            ...(color === "auto" ? {} : { color }),
             firstLineIndentPt:
               (
                 node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
@@ -163,6 +171,7 @@ export class WriterViewProjection {
             fontWeight: (node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue()
               ? 700
               : 400,
+            ...(highlight === "transparent" ? {} : { highlight }),
             lineHeight:
               ((node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace() ||
                 100) / 100,

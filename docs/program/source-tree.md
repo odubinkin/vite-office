@@ -115,6 +115,7 @@ The same table now also includes the active ODT file-command boundary.
 | `vcl/browser/browser-file.ts` | Browser-only | Sandboxed user file selection and byte reading without document ownership |
 | `vcl/browser/browser-download.ts` | Browser-only | Sandboxed byte and plain-text download dispatch |
 | `xmloff/source/core/xml-parser.ts` | `sax/source/fastparser/fastparser.cxx` | Worker-safe namespace-aware SAX tree with DTD and depth rejection |
+| `xmloff/source/text/XMLTextPropertySetContext.ts` | `xmloff/source/text/XMLTextPropertySetContext.cxx` | Element-valued text-property import, currently the canonical Writer tab-stop item |
 | `xmloff/source/text/txtparae.ts` | `xmloff/source/text/txtparae.cxx` | Neutral ODF paragraph, inline, list-style, and nested-list export |
 | `xmloff/source/text/txtparai.ts` | `xmloff/source/text/txtparai.cxx` | Neutral ODF paragraph, inline, and recursive list import |
 | `sw/inc/hintids.ts` | `sw/inc/hintids.hxx` | Numeric WhichIds and bounded Writer ranges |

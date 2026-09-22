@@ -115,14 +115,37 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
       clipboardData: {
         /** Supplies safe rich HTML plus plain text for the test-owned native Paste event. @param type - Requested clipboard MIME type. @returns Bounded rich HTML or plain fallback text. */
         getData(type: string): string {
-          return type === "text/html" ? "<strong>Inserted</strong>" : "Inserted";
+          return type === "text/html"
+            ? '<span style="color: rgb(18, 52, 86); background-color: rgb(171, 205, 239)"><span style="color: var(--unsupported)"><strong>Inserted</strong></span><span style="background-color: transparent"></span></span>'
+            : "Inserted";
         },
       },
     });
     const pastedParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     expect(pastedParagraph).toHaveTextContent("Inserted");
     expect(pastedParagraph.querySelector("strong")).toHaveTextContent("Inserted");
+    expect(pastedParagraph.querySelector('[style*="color: rgb(18, 52, 86)"]')).toHaveTextContent(
+      "Inserted",
+    );
+    expect(
+      pastedParagraph.querySelector('[style*="background-color: rgb(171, 205, 239)"]'),
+    ).toHaveTextContent("Inserted");
     expect(pastedParagraph).toHaveClass("whitespace-pre-wrap");
+    const copied = new Map<string, string>();
+    const copiedRange = document.createRange();
+    copiedRange.selectNodeContents(pastedParagraph);
+    selection.removeAllRanges();
+    selection.addRange(copiedRange);
+    fireEvent.copy(pastedParagraph, {
+      clipboardData: {
+        /** Captures the browser clipboard flavors. @param type - MIME type. @param value - Serialized selection. @returns Nothing. */
+        setData(type: string, value: string): void {
+          copied.set(type, value);
+        },
+      },
+    });
+    expect(copied.get("text/html")).toContain("color: #123456");
+    expect(copied.get("text/html")).toContain("background-color: #abcdef");
   });
 
   it("pastes semantic nested lists as separate Writer paragraphs" /** Verifies native rich Paste retains item boundaries, kinds, levels, direct formatting, and one-step undo. @returns Nothing; canonical list projections are asserted. */, function pastesStructuredLists(): void {

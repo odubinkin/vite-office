@@ -28,12 +28,22 @@ a second compression implementation to the browser bundle, and is bounded by a
 
 The implemented ODF subset preserves ordered `SwTextNode` paragraphs, Default
 Paragraph Style and Heading 1 collection membership and names, style inheritance,
-style-level and node-local alignment, title metadata, and bold, italic, and
-single-underline pooled items. Named and automatic paragraph styles may carry
-character properties. ODF automatic paragraph and text styles are converted
+style-level and node-local alignment, title metadata, and bold, italic,
+single-underline, foreground-color, and highlight pooled items. Named and
+automatic paragraph styles may carry character properties. ODF automatic
+paragraph and text styles are converted
 into node `SwAttrSet` deltas and `SfxItemSet`-backed `SwFormatAutoFormat` hints
 rather than becoming parallel view fields. Explicit normal text properties can
 override inherited formatting and survive a package round trip.
+
+The paragraph-property mapper also preserves first-line and right margins,
+upper/lower spacing, proportional line height, the bounded single
+`RES_PARATR_TABSTOP` position, `RES_KEEP` through `fo:keep-with-next`, and
+`RES_LINENUMBER` through `text:number-lines`. Element-valued tab stops are
+owned by `xmloff/source/text/XMLTextPropertySetContext.ts`, matching the pinned
+upstream context split. Automatic font color uses
+`style:use-window-font-color`; explicit colors and highlights use the pinned
+`fo:color` and `fo:background-color` mappings.
 
 Default bullets, decimal numbering, and levels zero through nine use the same
 split ownership as Writer: `SwDoc` owns a `SwNumRule` with one `SwNumFormat`
@@ -69,7 +79,8 @@ styles, unsupported semantic values, and differing Western/CJK/CTL weight or
 posture values until script-specific browser projections are implemented.
 
 Lossy export is not permitted. Paragraph item IDs outside the implemented
-alignment, list, and character subset fail explicitly. Imported tables, images,
+alignment, list, paragraph-property, and character subset fail explicitly.
+Imported tables, images,
 fields, annotations, tracked changes, sections, objects, scripts, signatures,
 encryption, RDF, custom bullet glyphs, non-decimal numbering, and list headers
 remain unsupported. Unrelated style families, page-style data, and properties
@@ -86,10 +97,11 @@ monotonic request IDs and transferable `ArrayBuffer` payloads. The worker perfor
 ZIP, manifest, SAX/xmloff, Writer XML mapping, and package serialization, returning
 only a versioned ODT filter transfer or complete ODT bytes. The filter transfer is
 not the durable browser snapshot schema: `odt-transfer.ts` owns the worker-only
-`transferVersion: 4` envelope, while `writer-storage-codec.ts` owns the current
-`storageModelVersion: 2` envelope and `writer-storage.ts` combines it with Sfx
+`transferVersion: 4` envelope, while `sw/browser/storage/writer-storage.ts`
+owns the current schema-11 browser cache envelope and combines it with Sfx
 lifecycle metadata. Both envelopes carry the same `WriterDocumentRecord` from
-`writer-document-codec.ts`; there is no second Worker graph schema. The shared
+`sw/source/core/doc/writer-document-codec.ts`; there is no second Worker graph
+schema. The shared
 decoder reconstructs text through the document-bound content-operations manager.
 Neither boundary is treated as the live Writer model, and retired storage or
 Worker transfer versions are rejected without migration.
@@ -110,4 +122,7 @@ format parity; the unsupported model and package cases above still fail explicit
 The compatibility suite also imports the exact pinned LibreOffice
 `feature_text.odt`, `feature_text_bold.odt`, and `feature_text_italic.odt` fixtures
 used by `sw/qa/extras/odfimport/odffeatures.cxx`, then verifies the supported text
-and character semantics through a local export/reimport round trip.
+and character semantics through a local export/reimport round trip. Focused
+import-export-import tests additionally cover every currently implemented
+paragraph and character pooled item, including element-valued tab stops and
+automatic colors.

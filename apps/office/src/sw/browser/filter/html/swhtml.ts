@@ -178,16 +178,44 @@ function getWriterClipboardNodeAttributes(
   element: HTMLElement,
   inheritedAttributes: WriterCharacterAttributes,
 ): WriterCharacterAttributes {
+  const color = normalizeCssWriterColor(element.style.color, inheritedAttributes.color, false);
+  const highlight = normalizeCssWriterColor(
+    element.style.backgroundColor,
+    inheritedAttributes.highlight,
+    true,
+  );
   return {
+    ...(color === undefined ? {} : { color }),
     ...(element.tagName === "SPAN" && element.style.fontFamily.trim().length > 0
       ? { fontFamily: element.style.fontFamily }
       : inheritedAttributes.fontFamily === undefined
         ? {}
         : { fontFamily: inheritedAttributes.fontFamily }),
+    ...(highlight === undefined ? {} : { highlight }),
     bold: inheritedAttributes.bold || element.tagName === "STRONG",
     italic: inheritedAttributes.italic || element.tagName === "EM",
     underline:
       inheritedAttributes.underline ||
       (element.tagName === "SPAN" && element.style.textDecoration === "underline"),
   };
+}
+
+/** Converts browser-normalized inline CSS colors to the bounded Writer representation. @param css - CSS declaration. @param inherited - Parent value. @param allowTransparent - Whether transparency is valid. @returns Writer color. */
+function normalizeCssWriterColor(
+  css: string,
+  inherited: string | undefined,
+  allowTransparent: boolean,
+): string | undefined {
+  if (css.length === 0) return inherited;
+  if (allowTransparent && css === "transparent") return css;
+  const rgb = /^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/u.exec(css);
+  if (rgb === null) return inherited;
+  return `#${rgb
+    .slice(1)
+    .map(
+      /** Serializes one RGB channel. @param channel - Decimal channel. @returns Two hexadecimal digits. */ (
+        channel,
+      ) => Number(channel).toString(16).padStart(2, "0"),
+    )
+    .join("")}`;
 }

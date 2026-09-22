@@ -19,10 +19,12 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   escapeXml,
   exportCharacterAttributes,
   exportParagraphAttributes,
+  exportParagraphPropertyChildren,
   exportTextParagraphs,
   ODF_NAMESPACES,
   type OdfCharacterProperties,
@@ -93,10 +95,11 @@ export function exportStylesXml(document: SwDoc): string {
         ...(leftMargin === undefined ? [] : [`fo:margin-left="${exportOdfLength(leftMargin)}"`]),
         ...exportParagraphAttributes(directParagraphProperties ?? {}),
       ];
+      const paragraphChildren = exportParagraphPropertyChildren(directParagraphProperties ?? {});
       const paragraphProperties =
-        paragraphAttributes.length === 0
+        paragraphAttributes.length === 0 && paragraphChildren.length === 0
           ? ""
-          : `<style:paragraph-properties ${paragraphAttributes.join(" ")}/>`;
+          : `<style:paragraph-properties${paragraphAttributes.length === 0 ? "" : ` ${paragraphAttributes.join(" ")}`}>${paragraphChildren}</style:paragraph-properties>`;
       const characterProperties = getCharacterProperties(collection.GetAttrSet(), false);
       const textProperties =
         characterProperties === undefined
@@ -274,6 +277,8 @@ function getCharacterProperties(
     (which) => set.GetItemIfSet(which, false) !== undefined,
   );
   const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
+  const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
+  const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
   const fontSizeIds = [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE];
   const directFontSize = fontSizeIds.some(
     /** Detects a direct script font size. @param which - Font-size WhichId. @returns Whether set. */ (
@@ -287,6 +292,8 @@ function getCharacterProperties(
     !directPosture &&
     !directUnderline &&
     !directFontSize &&
+    color === undefined &&
+    highlight === undefined &&
     font === undefined
   )
     return undefined;
@@ -308,6 +315,8 @@ function getCharacterProperties(
     !(asianPosture instanceof SvxPostureItem) ||
     !(complexPosture instanceof SvxPostureItem) ||
     !(underline instanceof SvxUnderlineItem) ||
+    (color !== undefined && !(color instanceof SfxStringItem)) ||
+    (highlight !== undefined && !(highlight instanceof SfxStringItem)) ||
     !(fontSize instanceof SvxFontHeightItem) ||
     !(asianFontSize instanceof SvxFontHeightItem) ||
     !(complexFontSize instanceof SvxFontHeightItem)
@@ -323,8 +332,10 @@ function getCharacterProperties(
   )
     throw new Error("ODT export does not support script-specific character formatting.");
   return {
+    ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     ...(directFontSize ? { fontSizeTwips: fontSize.GetHeight() } : {}),
+    ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),
     ...(inherited || directWeight ? { bold: weight.GetBoolValue() } : {}),
     ...(inherited || directPosture ? { italic: posture.GetBoolValue() } : {}),
     ...(inherited || directUnderline ? { underline: underline.GetBoolValue() } : {}),
@@ -338,11 +349,17 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const right = set.GetItemIfSet(RES_MARGIN_RIGHT, false);
   const spacing = set.GetItemIfSet(RES_UL_SPACE, false);
   const lineSpacing = set.GetItemIfSet(RES_PARATR_LINESPACING, false);
+  const tabStop = set.GetItemIfSet(RES_PARATR_TABSTOP, false);
+  const keep = set.GetItemIfSet(RES_KEEP, false);
+  const lineNumber = set.GetItemIfSet(RES_LINENUMBER, false);
   if (
     (firstLine !== undefined && !(firstLine instanceof SvxFirstLineIndentItem)) ||
     (right !== undefined && !(right instanceof SvxRightMarginItem)) ||
     (spacing !== undefined && !(spacing instanceof SvxULSpaceItem)) ||
-    (lineSpacing !== undefined && !(lineSpacing instanceof SvxLineSpacingItem))
+    (lineSpacing !== undefined && !(lineSpacing instanceof SvxLineSpacingItem)) ||
+    (tabStop !== undefined && !(tabStop instanceof SfxInt16Item)) ||
+    (keep !== undefined && !(keep instanceof SfxBoolItem)) ||
+    (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem))
   )
     throw new Error("ODT paragraph item is invalid.");
   const properties: OdfParagraphProperties = {
@@ -356,6 +373,11 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     ...(lineSpacing instanceof SvxLineSpacingItem
       ? { lineHeightPercent: lineSpacing.GetPropLineSpace() }
       : {}),
+    ...(tabStop instanceof SfxInt16Item && tabStop.GetValue() >= 0
+      ? { tabStopPosition: tabStop.GetValue() }
+      : {}),
+    ...(keep instanceof SfxBoolItem ? { keepWithNext: keep.GetValue() } : {}),
+    ...(lineNumber instanceof SfxBoolItem ? { countLineNumbers: lineNumber.GetValue() } : {}),
   };
   return Object.keys(properties).length === 0 ? undefined : properties;
 }

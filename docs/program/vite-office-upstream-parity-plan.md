@@ -569,7 +569,10 @@ boundary projection. The browser Sfx shell routes directly to
 `SwDocShell`/`SfxMedium` and `SwTransferable`, and the former forwarding
 controllers are removed. Browser cache schema 11 and its AutoRecovery adapter
 now live under `sw/browser/storage`; `basflt` no longer claims local snapshot
-ownership. P1.16 remains the next Phase 5 item.
+ownership. P1.16 is complete for every property family that has a canonical
+owner in the current Writer graph; unsupported structural families remain
+blocked on their upstream-shaped model owners instead of being invented inside
+the filter.
 
 #### P1.13 Consolidate document lifecycle ownership
 
@@ -593,6 +596,18 @@ After architecture convergence, expand the implemented ODT surface in dependency
 paragraph and character properties, styles and automatic styles, lists/outline, sections, tables,
 fields, frames/images, annotations/redlines, metadata/settings, then embedded objects where the
 browser runtime supports them.
+
+Implementation result: the filter now round-trips every implemented character
+and paragraph item, including foreground/highlight colors, margins, spacing,
+line height, the bounded tab-stop item, keep-with-next, and line-number
+participation. Named/automatic styles, ten-level list identity/restart behavior,
+hyperlinks, metadata title, and the pinned text fixtures remain covered by the
+same canonical graph path. `XMLTextPropertySetContext` owns element-valued tab
+stops at its pinned upstream path. Sections, tables, fields, frames/images,
+annotations/redlines, broader metadata/settings, and embedded objects remain
+unsupported because the current `SwDoc` graph has no corresponding canonical
+owners; the exporter rejects those cases instead of introducing filter-owned
+document state.
 
 Acceptance for Phase 5:
 

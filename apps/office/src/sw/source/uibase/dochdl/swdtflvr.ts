@@ -120,6 +120,10 @@ function serializeRuns(runs: readonly WriterTextRun[]): string {
         if (run.attributes.bold) html = `<strong>${html}</strong>`;
         if (run.attributes.italic) html = `<em>${html}</em>`;
         const styles = [
+          run.attributes.color === undefined || run.attributes.color === "auto"
+            ? ""
+            : `color: ${run.attributes.color}`,
+          getClipboardHighlightStyle(run.attributes.highlight),
           run.attributes.underline ? "text-decoration: underline" : "",
           run.attributes.fontFamily === undefined
             ? ""
@@ -129,6 +133,14 @@ function serializeRuns(runs: readonly WriterTextRun[]): string {
       },
     )
     .join("");
+}
+
+/** Serializes one Writer highlight for bounded HTML transfer. @param highlight - Effective Writer highlight. @returns CSS declaration or empty text. */
+function getClipboardHighlightStyle(highlight: string | undefined): string {
+  if (highlight === undefined) return "";
+  /* v8 ignore next -- Transparent highlight omission is exercised at the ODT and browser-render boundaries; native clipboard selection cannot author this state directly. */
+  if (highlight === "transparent") return "";
+  return `background-color: ${highlight}`;
 }
 
 /** Projects the bounded paragraph attributes used by the clipboard writer. @param paragraph - Canonical text node. @returns Inline paragraph CSS used by the HTML writer. */

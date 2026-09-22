@@ -93,6 +93,12 @@ export function WriterEditableParagraph({
           }
           role="textbox"
           style={{
+            backgroundColor:
+              paragraph.computedStyle.highlight === "transparent"
+                ? undefined
+                : paragraph.computedStyle.highlight,
+            color:
+              paragraph.computedStyle.color === "auto" ? undefined : paragraph.computedStyle.color,
             fontFamily: paragraph.computedStyle.fontFamily,
             fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
             fontStyle: paragraph.computedStyle.fontStyle,
@@ -138,6 +144,23 @@ function WriterTextRunProjection({
   run: WriterProjectedTextRun;
 }>): React.ReactNode {
   let content: React.ReactNode = run.text;
+  if (run.attributes.highlight !== undefined)
+    content = (
+      <span
+        style={{
+          backgroundColor:
+            run.attributes.highlight === "transparent" ? "transparent" : run.attributes.highlight,
+        }}
+      >
+        {content}
+      </span>
+    );
+  if (run.attributes.color !== undefined)
+    content = (
+      <span style={{ color: run.attributes.color === "auto" ? "initial" : run.attributes.color }}>
+        {content}
+      </span>
+    );
   if (run.attributes.underline)
     content = <span style={{ textDecoration: "underline" }}>{content}</span>;
   if (run.attributes.fontSizeTwips !== undefined)
@@ -165,5 +188,5 @@ function WriterTextRunProjection({
 /** Builds a deterministic view-only key from the projected run boundary and semantic state. @param paragraphId - Stable text-node identity. @param run - Projected run. @returns Stable projection key. */
 function getWriterRunProjectionKey(paragraphId: string, run: WriterProjectedTextRun): string {
   const attributes = run.attributes;
-  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.fontFamily ?? ""}:${attributes.fontSizeTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
+  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontSizeTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
 }
