@@ -1,10 +1,11 @@
 ---
 id: "202609220708-ACW8QC"
 title: "Rebuild Writer browser UI boundary for P1"
-status: "DOING"
+result_summary: "verified-202609220708-ACW8QC"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on:
@@ -27,7 +28,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-22T09:34:17.598Z"
+  updated_at: "2026-09-22T09:34:46.940Z"
   updated_by: "CODER"
   note: "verified-202609220708-ACW8QC"
   attempts: 0
@@ -49,11 +50,16 @@ quality_review:
     - "apps/office/e2e/foundation.spec.ts"
   findings:
     - "Persistent SwEditWin owns editing semantics; browser controller owns DOM events; generated command resources and SfxControllerItem-backed state drive surfaces without React mutation logic."
-commit: null
+commit:
+  hash: "0ab4393ffc1b0b19bd0cf2832ff1d69d8f8b23a4"
+  message: "🧪 ACW8QC parity: record Writer UI parity evidence"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609220708-ACW8QC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -74,8 +80,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609220708-ACW8QC"
+  -
+    type: "verify"
+    at: "2026-09-22T09:34:46.940Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609220708-ACW8QC"
+  -
+    type: "status"
+    at: "2026-09-22T09:34:47.139Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609220708-ACW8QC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-22T09:34:17.667Z"
+doc_updated_at: "2026-09-22T09:34:47.140Z"
 doc_updated_by: "CODER"
 description: "Implement P1.8-P1.12: add the edit-window controller boundary, make React projection-only, publish binding-backed command state, generate the complete resource graph with dispositions, and reduce Writer-specific presentation orchestration."
 sections:
@@ -159,11 +178,45 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-22T09:34:46.940Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609220708-ACW8QC
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T09:34:17.667Z, excerpt_hash=sha256:904a91636bc20588f24dad214d87bb5b02a4b4efb799845e3b5a279350b623b8
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220708-ACW8QC/blueprint/resolved-snapshot.json
+    - old_digest: 04a5f7c5c6401a463a788e5aacb9759161c41265bb2011de5eaad57dc1e3b032
+    - current_digest: 04a5f7c5c6401a463a788e5aacb9759161c41265bb2011de5eaad57dc1e3b032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609220708-ACW8QC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609220708-ACW8QC --result verified-202609220708-ACW8QC --commit 0ab4393ffc1b0b19bd0cf2832ff1d69d8f8b23a4
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "31ab502dd07051da9f1e49745be5ac212605fa1e"
+    message: "🚧 ACW8QC task: implement Writer edit window and command bindings"
 id_source: "generated"
 ---
 ## Summary
@@ -248,6 +301,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609220708-ACW8QC --result verified-202609220708-ACW8QC --commit 31ab502dd07051da9f1e49745be5ac212605fa1e
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-22T09:34:46.940Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609220708-ACW8QC
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-22T09:34:17.667Z, excerpt_hash=sha256:904a91636bc20588f24dad214d87bb5b02a4b4efb799845e3b5a279350b623b8
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609220708-ACW8QC/blueprint/resolved-snapshot.json
+- old_digest: 04a5f7c5c6401a463a788e5aacb9759161c41265bb2011de5eaad57dc1e3b032
+- current_digest: 04a5f7c5c6401a463a788e5aacb9759161c41265bb2011de5eaad57dc1e3b032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609220708-ACW8QC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609220708-ACW8QC --result verified-202609220708-ACW8QC --commit 0ab4393ffc1b0b19bd0cf2832ff1d69d8f8b23a4
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
