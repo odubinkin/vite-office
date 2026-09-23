@@ -1,10 +1,11 @@
 ---
 id: "202609230922-E9WGR1"
 title: "Separate Writer ruler indent triangles vertically"
-status: "DOING"
+result_summary: "Separated horizontal ruler indent triangles while preserving drag behavior"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx"
   findings:
     - "Paragraph left and right indent markers render at the ruler bottom; first-line marker remains at the top; browser geometry and seven tests pass."
-commit: null
+commit:
+  hash: "844f3eed88e066b8e948de1d3499f6e7262fc99d"
+  message: "🧩 E9WGR1 task: separate ruler indent markers vertically"
 comments:
   -
     author: "CODER"
     body: "Start: Move paragraph indent triangles to the lower ruler edge and verify that first-line and body indent controls stay independent."
+  -
+    author: "CODER"
+    body: "Verified: Body indent triangles now sit at the bottom of the horizontal ruler while the first-line triangle remains at the top; independent drag controls and browser geometry checks passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Ruler placement and drag tests passed; browser geometry confirms 15 px vertical separation; typecheck, lint, format, doctor, routing, and diff checks passed."
+  -
+    type: "status"
+    at: "2026-09-23T09:24:45.885Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Body indent triangles now sit at the bottom of the horizontal ruler while the first-line triangle remains at the top; independent drag controls and browser geometry checks passed."
 doc_version: 3
-doc_updated_at: "2026-09-23T09:24:30.172Z"
+doc_updated_at: "2026-09-23T09:24:45.888Z"
 doc_updated_by: "CODER"
 description: "Place paragraph left and right indent markers along the bottom of the horizontal ruler while the first-line marker stays at the top, preserving independent drag behavior."
 sections:
