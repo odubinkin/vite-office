@@ -1,7 +1,7 @@
 /** @fileoverview Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
 
 import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
-import type { SfxUndoAction, SfxUndoManager } from "../../../../svl/source/undo/undo";
+import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
@@ -21,6 +21,7 @@ import { SwTextShell } from "../shells/textsh";
 import type { SwDocShell } from "../app/docsh";
 import { SwTransferable } from "../dochdl/swdtflvr";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
+import type { UndoManager } from "../../core/undo/docundo";
 import {
   createWriterCollapsedCursorState,
   createWriterUndoCursorState,
@@ -510,4 +511,4 @@ export class SwWrtShell extends SwModify {
 }
 
 /** Exposes the current shell history type for command-state tests without duplicating ownership. */
-export type SwWrtShellHistory = SfxUndoManager<SwUndoRedoContext>;
+export type SwWrtShellHistory = UndoManager;

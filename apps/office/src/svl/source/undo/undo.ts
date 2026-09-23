@@ -37,6 +37,9 @@ export abstract class SfxUndoAction<Context> {
   public GetPayloadSize(): number {
     return 0;
   }
+
+  /** Releases payload owned by an action removed from history. @returns Nothing. */
+  public Dispose(): void {}
 }
 
 /** Composite action whose children undo in reverse order and redo in forward order. */
@@ -52,7 +55,10 @@ export class SfxListUndoAction<Context> extends SfxUndoAction<Context> {
   /** Adds or merges one child action. @param action - Child operation. @param tryMerge - Whether the current child may absorb it. @returns Nothing. */
   public AddAction(action: SfxUndoAction<Context>, tryMerge = false): void {
     const current = this.actions[this.actions.length - 1];
-    if (tryMerge && current?.Merge(action) === true) return;
+    if (tryMerge && current?.Merge(action) === true) {
+      action.Dispose();
+      return;
+    }
     this.actions.push(action);
   }
 
@@ -85,6 +91,12 @@ export class SfxListUndoAction<Context> extends SfxUndoAction<Context> {
       0,
     );
   }
+
+  /** Releases child payloads when the compound action leaves history. @returns Nothing. */
+  public override Dispose(): void {
+    for (const action of this.actions) action.Dispose();
+    this.actions.length = 0;
+  }
 }
 
 /** Action-based undo manager following LibreOffice's single array plus current-action cursor model. */
@@ -111,12 +123,14 @@ export class SfxUndoManager<Context> {
     this.TruncateRedoBranch();
     const current = this.actions[this.currentAction - 1];
     if (tryMerge && this.mergeAllowed && current?.Merge(action) === true) {
+      action.Dispose();
       return;
     }
     if (this.maximumActionCount === 0) {
       if (this.savePosition === this.currentAction) this.savePosition = undefined;
       this.historyRootRevision += 1;
       this.mergeAllowed = false;
+      action.Dispose();
       return;
     }
     this.actions.push(action);
@@ -160,7 +174,10 @@ export class SfxUndoManager<Context> {
     const action = this.listActions.pop();
     if (action === undefined) throw new Error("No Sfx list action is open.");
     const count = action.GetActionCount();
-    if (count === 0) return 0;
+    if (count === 0) {
+      action.Dispose();
+      return 0;
+    }
     const parent = this.listActions[this.listActions.length - 1];
     if (parent === undefined) this.AddUndoAction(action);
     else parent.AddAction(action);
@@ -263,6 +280,7 @@ export class SfxUndoManager<Context> {
   /** Clears all retained actions and treats the current state as the new clean boundary. @returns Nothing. */
   public Clear(): void {
     if (this.IsInListAction()) throw new Error("Cannot clear SfxUndoManager inside a list action.");
+    for (const action of this.actions) action.Dispose();
     this.actions.length = 0;
     this.currentAction = 0;
     this.historyRootRevision += 1;
@@ -273,7 +291,7 @@ export class SfxUndoManager<Context> {
   /** Removes the redo branch before a newly executed command is recorded. @returns Nothing. */
   private TruncateRedoBranch(): void {
     if (this.currentAction === this.actions.length) return;
-    this.actions.splice(this.currentAction);
+    for (const action of this.actions.splice(this.currentAction)) action.Dispose();
     if (this.savePosition !== undefined && this.savePosition > this.currentAction)
       this.savePosition = undefined;
   }
@@ -282,7 +300,7 @@ export class SfxUndoManager<Context> {
   private TrimToMaximum(): void {
     const removeCount = this.actions.length - this.maximumActionCount;
     if (removeCount <= 0) return;
-    this.actions.splice(0, removeCount);
+    for (const action of this.actions.splice(0, removeCount)) action.Dispose();
     this.historyRootRevision += 1;
     this.currentAction = Math.max(0, this.currentAction - removeCount);
     if (this.savePosition !== undefined) {

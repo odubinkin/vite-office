@@ -11,8 +11,7 @@ import { DocumentStylePoolManager } from "./DocumentStylePoolManager";
 import type { SwTextFormatColl, WriterParagraphStyle } from "./fmtcol";
 import type { SwNumRule } from "./number";
 import type { SwAtomicModelHint } from "../../../inc/hints";
-import { SfxUndoManager } from "../../../../svl/source/undo/undo";
-import type { SwUndoRedoContext } from "../undo/undobj";
+import { UndoManager } from "../undo/docundo";
 import type { DefaultFontDevice } from "./default-font";
 import {
   createDefaultWriterPageDescriptor,
@@ -36,7 +35,7 @@ export class SwDoc {
   private readonly settingManager = new DocumentSettingManager();
   private readonly stateManager = new DocumentStateManager();
   private readonly stylePoolManager: DocumentStylePoolManager;
-  private readonly undoManager = new SfxUndoManager<SwUndoRedoContext>();
+  private readonly undoManager = new UndoManager(this);
   private readonly defaultFontDevice: DefaultFontDevice | undefined;
   private readonly locale: string;
   private readonly pageDesc: SwPageDesc;
@@ -112,7 +111,7 @@ export class SwDoc {
     return this.stylePoolManager;
   }
   /** Returns Writer's document-owned undo manager. @returns Undo manager. */
-  public GetUndoManager(): SfxUndoManager<SwUndoRedoContext> {
+  public GetUndoManager(): UndoManager {
     return this.undoManager;
   }
   /** Returns the default paragraph collection. @returns Default collection. */
@@ -157,6 +156,7 @@ export class SwDoc {
   }
   /** Disposes the document notification graph. @returns Nothing. */
   public Dispose(): void {
+    this.undoManager.Dispose();
     this.stateManager.Dispose();
   }
 }

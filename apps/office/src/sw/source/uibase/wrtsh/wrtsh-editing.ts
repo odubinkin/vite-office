@@ -1,6 +1,6 @@
 /** @fileoverview Owns structural text-edit algorithms invoked by the cursor/undo-orchestrating SwWrtShell. */
 
-import type { SfxUndoAction, SfxUndoManager } from "../../../../svl/source/undo/undo";
+import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition, type SwPaM } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
@@ -21,6 +21,7 @@ import { SwUndoInsert } from "../../core/undo/unins";
 import { SwUndoInsNum } from "../../core/undo/unnum";
 import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
+import type { UndoManager } from "../../core/undo/docundo";
 import { getWriterTypingCharacterClass } from "./delete";
 import type { WriterTextRange } from "./wrtsh-selection";
 import {
@@ -41,7 +42,7 @@ export interface SwWrtShellEditingPort {
   readonly getCursor: () => SwPaM;
   readonly getDoc: () => WriterDocument;
   readonly getPendingCharacterItems: () => SfxItemSet;
-  readonly getUndoManager: () => SfxUndoManager<SwUndoRedoContext>;
+  readonly getUndoManager: () => UndoManager;
   readonly setCursor: (position: SwPosition) => boolean;
 }
 

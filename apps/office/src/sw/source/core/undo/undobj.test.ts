@@ -23,6 +23,7 @@ import { SwUndoAttr, SwUndoMoveLeftMargin, SwUndoParagraphFormat } from "./unatt
 import { SwUndoInsNum, SwUndoNumLevel } from "./unnum";
 import { SwUndoSplitNode } from "./unspnd";
 import { GetUndoTextNode, type SwUndoCursorState, type SwUndoRedoContext } from "./undobj";
+import { UndoManager } from "./docundo";
 import {
   handleTestInput,
   fixtureMergeParagraphWithNext,
@@ -31,6 +32,7 @@ import {
   setTestCursor,
   fixtureSplitParagraph,
   toggleTestFormat,
+  setTestSelection,
 } from "../../../../test/wrtsh-test-helpers";
 
 /** Creates a clean document/session fixture with optional plain text. @param text - Initial first-paragraph text. @returns Document, document shell, and Writer shell. */
@@ -70,6 +72,80 @@ function cursorState(paragraph: SwTextNode, offset = 0): SwUndoCursorState {
 }
 
 describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance coverage. @returns Nothing. */, function defineWriterUndoTests(): void {
+  it("owns removed text and paragraphs in Writer history and releases them with discarded actions" /** Verifies undo-node retention follows stack truncation, grouping, and clearing. @returns Nothing. */, function ownsUndoNodes(): void {
+    const { docShell, document, shell } = createSession("abcd");
+    const manager = docShell.GetUndoManager();
+    expect(manager).toBeInstanceOf(UndoManager);
+    const undoNodes = manager.GetUndoNodes();
+    setTestCursor(shell, "p-1", 4);
+    handleTestInput(shell, "deleteContentBackward", null);
+    handleTestInput(shell, "deleteContentBackward", null);
+    expect(manager.GetUndoActionCount()).toBe(1);
+    expect(undoNodes.Count()).toBe(1);
+    expect(shell.Undo()).toBe(true);
+    expect(document.paragraphs[0]?.GetText()).toBe("abcd");
+    expect(undoNodes.Count()).toBe(1);
+    shell.Insert("X");
+    expect(undoNodes.Count()).toBe(0);
+    expect(manager.GetRedoActionCount()).toBe(0);
+    fixtureReplaceRange(shell, { paragraphId: "p-1", start: 0, end: 1 }, [run("Y")]);
+    expect(undoNodes.Count()).toBe(1);
+    manager.Clear();
+    expect(undoNodes.Count()).toBe(0);
+
+    fixtureSplitParagraph(shell, "p-1", 2);
+    expect(fixtureMergeParagraphWithNext(shell, "p-1")).toBe(true);
+    expect(undoNodes.Count()).toBe(1);
+    expect(shell.Undo()).toBe(true);
+    expect(undoNodes.Count()).toBe(1);
+    manager.Clear();
+    expect(undoNodes.Count()).toBe(0);
+  });
+
+  it("uses Writer command grouping while keeping the Sfx action stack" /** Checks Writer group policy and explicit compound commands. @returns Nothing. */, function groupsWriterCommands(): void {
+    const { docShell, document, shell } = createSession();
+    const manager = docShell.GetUndoManager();
+    manager.DoGroupUndo(false);
+    expect(manager.DoesGroupUndo()).toBe(false);
+    shell.Insert("a");
+    shell.Insert("b");
+    expect(manager.GetUndoActionCount()).toBe(2);
+    manager.DoGroupUndo(true);
+    manager.StartUndo("Typing");
+    shell.Insert("c");
+    shell.Insert("d");
+    expect(manager.EndUndo()).toBe(1);
+    expect(manager.GetUndoActionCount()).toBe(3);
+    expect(shell.Undo()).toBe(true);
+    expect(document.paragraphs[0]?.GetText()).toBe("ab");
+    expect(shell.Redo()).toBe(true);
+    expect(document.paragraphs[0]?.GetText()).toBe("abcd");
+  });
+
+  it("rejects foreign undo contexts and mismatched retained node types" /** Checks document and undo-node ownership boundaries. @returns Nothing. */, function validatesWriterUndoOwnership(): void {
+    const { document } = createSession("a");
+    const manager = document.GetUndoManager();
+    const paragraph = document.paragraphs[0] as SwTextNode;
+    const nodes = manager.GetUndoNodes();
+    const textId = nodes.RetainText(fragment(paragraph, [run("a")]));
+    const nodeId = nodes.RetainNode(paragraph);
+    expect(nodes.GetText(textId).text).toBe("a");
+    expect(nodes.GetNode(nodeId)).toBe(paragraph);
+    expect(() => nodes.GetText(nodeId)).toThrow("Missing Writer undo text");
+    expect(() => nodes.GetNode(textId)).toThrow("Missing Writer undo node");
+    nodes.Release(textId);
+    nodes.Release(nodeId);
+    expect(() => nodes.GetText(textId)).toThrow("Missing Writer undo text");
+    expect(() => nodes.GetNode(nodeId)).toThrow("Missing Writer undo node");
+    const foreign = createWriterDocument();
+    const context: SwUndoRedoContext = {
+      GetDoc: () => foreign,
+      RestoreCursor: () => undefined,
+    };
+    expect(() => manager.Undo(context)).toThrow("another document");
+    expect(() => manager.Redo(context)).toThrow("another document");
+  });
+
   it("groups compatible typing, separates delimiter and cursor boundaries, and truncates redo" /** Verifies SwUndoInsert::CanGrouping behavior and branch replacement. @returns Nothing. */, function groupsTyping(): void {
     const { docShell, document, shell } = createSession();
     handleTestInput(shell, "insertText", "a");
@@ -264,6 +340,31 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
       contentGeneration: 4,
       isModified: true,
     });
+  });
+
+  it("restores the save mark across page and hyperlink actions" /** Checks Writer history position and modified state for unlike actions around a primary save. @returns A fulfilled assertion promise. */, async function restoresMixedActionSaveMark(): Promise<void> {
+    const { docShell, document, shell } = createSession("abc");
+    shell.SetParagraphAlignment("center");
+    await docShell.Save(async () => ({
+      generation: docShell.GetDocumentState().contentGeneration,
+    }));
+    const beforePage = document.GetPageDesc().GetValue();
+    const afterPage = { ...beforePage, leftMargin: beforePage.leftMargin + 120 };
+    expect(shell.SetPageDescriptor(afterPage)).toBe(true);
+    setTestSelection(shell, {
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 3, paragraphId: "p-1" },
+    });
+    expect(shell.SetHyperlink({ url: "https://example.test" })).toBe(true);
+    expect(docShell.IsModified()).toBe(true);
+    expect(shell.Undo()).toBe(true);
+    expect(shell.Undo()).toBe(true);
+    expect(document.GetPageDesc().GetValue()).toEqual(beforePage);
+    expect(docShell.IsModified()).toBe(false);
+    expect(shell.Redo()).toBe(true);
+    expect(shell.Redo()).toBe(true);
+    expect(document.GetPageDesc().GetValue()).toEqual(afterPage);
+    expect(docShell.IsModified()).toBe(true);
   });
 
   it("keeps bounded history state valid after old actions are discarded" /** Verifies the current document is never rolled back merely because history reaches its limit. @returns Nothing. */, function boundsWriterHistory(): void {

@@ -48,6 +48,7 @@ export class SwDocShell extends SfxObjectShell {
     super(documentState, medium);
     this.defaultFontDevice = document.GetDefaultFontDevice();
     this.defaultLocale = document.GetLocale();
+    this.BindUndoManager();
     if (documentState.isModified) this.document.GetUndoManager().ClearSavePosition();
     this.modelClient = new SwClient(
       /** Relays one model notification into shell policy. @param _source - Model source. @param hint - Typed hint. @returns Nothing. */ (
@@ -126,7 +127,7 @@ export class SwDocShell extends SfxObjectShell {
           /** Executes the current undo action. @returns Whether an action ran. */ () =>
             this.document.GetUndoManager().Undo(context),
         );
-        if (changed) this.MarkHistoryMutation();
+        if (changed) this.document.GetUndoManager().ReconcileHistoryPosition();
         return changed;
       },
     );
@@ -141,7 +142,7 @@ export class SwDocShell extends SfxObjectShell {
           /** Executes the current redo action. @returns Whether an action ran. */ () =>
             this.document.GetUndoManager().Redo(context),
         );
-        if (changed) this.MarkHistoryMutation();
+        if (changed) this.document.GetUndoManager().ReconcileHistoryPosition();
         return changed;
       },
     );
@@ -164,6 +165,7 @@ export class SwDocShell extends SfxObjectShell {
     previous.Dispose();
     this.document = document;
     this.CommitObjectStateReplacement(replacementState);
+    this.BindUndoManager();
     if (documentState.isModified) this.document.GetUndoManager().ClearSavePosition();
     this.modelClient.RegisterToModify(document.GetDocumentStateManager());
     this.notifications.CallSwClientNotify({ kind: "document-replaced" });
@@ -343,9 +345,14 @@ export class SwDocShell extends SfxObjectShell {
     );
   }
 
-  /** Restores modified state from the undo save mark after history navigation. @returns Nothing. */
-  private MarkHistoryMutation(): void {
-    this.SetHistorySavePosition(this.document.GetUndoManager().IsAtSavePosition());
+  /** Connects Writer history navigation to object-shell save state. @returns Nothing. */
+  private BindUndoManager(): void {
+    this.document.GetUndoManager().SetHistoryPositionChanged(
+      /** Applies the Writer save mark to shell lifecycle. @param isSavePosition - Whether history matches the last primary save. @returns Nothing. */
+      (isSavePosition) => {
+        this.SetHistorySavePosition(isSavePosition);
+      },
+    );
   }
 
   /** Emits the bounded lifecycle hints for one direct object-shell transition. @param previousModified - Modified flag before the transition. @returns Nothing. */
