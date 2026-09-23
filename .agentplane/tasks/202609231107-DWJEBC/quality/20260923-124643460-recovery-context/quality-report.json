@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609231107-DWJEBC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T12:46:43.460Z",
+  "verdict": "pass",
+  "summary": "Approved Writer layout and ODT list parity implemented and full repository verification passed.",
+  "evaluated_sha": "8cef19859c8d605964012bf667601bfa313d52fd",
+  "blueprint_digest": "29b68380bfaae078ce9b1897734d84b88068d6c55189e73e60781993d7095218",
+  "findings": [
+    "Proportional line height, collapsed paragraph spacing, default paragraph styles and list geometry round trip; 100% app and inventory coverage with 11 passing e2e tests."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609231107-DWJEBC/README.md",
+    "apps/office/coverage/coverage-summary.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
