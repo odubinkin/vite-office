@@ -6,6 +6,13 @@ import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
+import { WriterFileDialog } from "./WriterFileDialog";
+import type {
+  WriterFileDialogController,
+  WriterFileDialogKind,
+} from "../workflows/writer-file-dialog-controller";
+import type { WriterSessionServices } from "../workflows/writer-workflows";
+import type { WriterAutosaveController } from "../workflows/writer-autosave";
 import { WriterRulers, WriterVerticalRuler } from "./WriterRulers";
 import { WriterParagraphProperties } from "./WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
@@ -29,13 +36,35 @@ export interface WriterWorkbenchProps {
   readonly isActive: boolean;
   readonly view: SwView;
   readonly viewStore?: WriterViewStore;
+  readonly fileDialogs?: WriterFileDialogController;
+  readonly services?: WriterSessionServices;
+  readonly autosave?: WriterAutosaveController;
 }
+
+const subscribeNoDialog =
+  /**
+   * Handles the Writer browser operation.
+   * @returns Operation result.
+   */ (): (() => void) =>
+    /**
+     * Handles the Writer browser operation.
+     * @returns Operation result.
+     */ () =>
+      undefined;
+const getNoDialog =
+  /**
+   * Handles the Writer browser operation.
+   * @returns Operation result.
+   */ (): WriterFileDialogKind | undefined => undefined;
 
 /** Projects one Writer view through browser presenters. @param props - Active view selection. @returns Writer workspace. */
 export function WriterWorkbench({
   isActive,
   view,
   viewStore,
+  fileDialogs,
+  services,
+  autosave,
 }: WriterWorkbenchProps): React.JSX.Element {
   const localization = useBrowserLocalization();
   const [presentationStore] = useState(
@@ -60,12 +89,35 @@ export function WriterWorkbench({
     dialogController.GetSnapshot,
     dialogController.GetSnapshot,
   );
+  const fileDialogKind = useSyncExternalStore(
+    fileDialogs?.Subscribe ?? subscribeNoDialog,
+    fileDialogs?.GetSnapshot ?? getNoDialog,
+    fileDialogs?.GetSnapshot ?? getNoDialog,
+  );
   const handleDocumentTitleChange = useCallback(
     /** Persists an inline-edited document title through the owning shell. @param title - Committed title. @returns Nothing. */
     (title: string): void => {
-      view.GetDocShell().RenameDocument(title);
+      const shell = view.GetDocShell();
+      const previous = shell.GetTitle();
+      if (!shell.RenameDocument(title)) return;
+      if (autosave !== undefined)
+        void autosave.Flush().catch(
+          /**
+           * Handles the Writer browser operation.
+           * @param error - Input value.
+           * @returns Operation result.
+           */ (error: unknown) => {
+            shell.RenameDocument(previous);
+            shell.SetMediumOperation(
+              "save",
+              "failed",
+              shell.GetDocumentState().contentGeneration,
+              error instanceof Error ? error.message : String(error),
+            );
+          },
+        );
     },
-    [view],
+    [view, autosave],
   );
 
   const resolveCommandArguments = useCallback(
@@ -226,6 +278,22 @@ export function WriterWorkbench({
           }
         />
       )}
+      {fileDialogKind === undefined ||
+      services === undefined ||
+      fileDialogs === undefined ? null : (
+        <WriterFileDialog
+          {...(autosave === undefined ? {} : { autosave })}
+          docShell={view.GetDocShell()}
+          kind={fileDialogKind}
+          onClose={
+            /**
+             * Handles the Writer browser operation.
+             * @returns Operation result.
+             */ () => fileDialogs.Close()
+          }
+          services={services}
+        />
+      )}
     </div>
   );
 }
@@ -275,11 +343,6 @@ export function presentWriterCommandError(
         ) => `${getText("writer.error.open-odt", "Could not open ODT")}: ${commandFailure.error}`,
     },
     {
-      commandId: WRITER_COMMAND_IDS.openLocal,
-      present: /** Presents a local-load failure. @returns Status text. */ () =>
-        getText("writer.error.open-local", "Could not load local copy."),
-    },
-    {
       commandId: WRITER_COMMAND_IDS.saveOdt,
       present:
         /** Presents an ODT-save failure. @param commandFailure - Failure state. @returns Status text. */ (
@@ -290,16 +353,6 @@ export function presentWriterCommandError(
       commandId: WRITER_COMMAND_IDS.exportText,
       present: /** Presents an export failure. @returns Status text. */ () =>
         getText("writer.error.export-text", "Could not start plain-text download."),
-    },
-    {
-      commandId: WRITER_COMMAND_IDS.saveLocal,
-      present:
-        /** Presents a local-save failure. @param commandFailure - Failure state. @returns Status text. */ (
-          commandFailure,
-        ) =>
-          commandFailure.code === "storage-unavailable"
-            ? getText("writer.error.storage-unavailable", "Browser storage is unavailable.")
-            : getText("writer.error.save-local", "Could not save locally."),
     },
     {
       commandId: WRITER_COMMAND_IDS.copy,

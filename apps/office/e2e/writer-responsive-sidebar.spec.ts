@@ -4,7 +4,7 @@ import { expect, test } from "@playwright/test";
 
 test.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 
-test("sidebar remains reachable and its checked state follows visibility on a touch viewport", async ({
+test("sidebar remains reachable and its checked state follows visibility on a touch viewport", /** Runs the focused test callback. @param argument1 - Input for this operation. @returns Operation result. */ async ({
   page,
 }): Promise<void> => {
   await page.goto("/writer");

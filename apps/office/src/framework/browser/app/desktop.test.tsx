@@ -9,18 +9,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Desktop } from "./desktop";
 import { createOfficeModuleDescriptors } from "./modulemanager";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
-import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../../sw/source/core/doc/doc";
-import { readOdtDocument } from "../../../sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../../sw/source/filter/xml/wrtxml";
-import {
-  saveWriterDocument,
-  type WriterSnapshotState,
-} from "../../../sw/browser/storage/writer-storage";
-import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-storage";
 import { createWriterModuleFactory } from "../../../sw/browser/composition/writer-module";
-import { SwDocShell } from "../../../sw/source/uibase/app/docsh";
-import { SwWrtShell } from "../../../sw/source/uibase/wrtsh/wrtsh";
 
 /** Renders framework Desktop with the Writer factory registered by a test composition root. @returns Configured desktop element. */
 function App(): React.JSX.Element {
@@ -368,312 +359,155 @@ describe("App" /**
     expect(document.querySelector("#workspace")).not.toBeInTheDocument();
   });
 
-  it("opens a supported ODT atomically and starts a parseable ODT download" /** Verifies the product File boundary uses the existing Writer package filters. @returns A fulfilled assertion promise. */, async () => {
-    const importedState = createDocument({ id: "fixture", suiteId: "writer", title: "Opened ODT" });
-    const imported = createWriterDocument();
-    new SwWrtShell(new SwDocShell(imported, importedState)).Insert("Imported package body");
-    const inputClick = vi.spyOn(HTMLInputElement.prototype, "click").mockImplementation(
-      /** Supplies the generated ODT to the transient browser chooser. @param this - Transient file input. @returns Nothing. */
-      function chooseOdt(this: HTMLInputElement): void {
-        const file = new File(
-          [writeOdtDocument(imported, importedState) as BlobPart],
-          "fixture.odt",
-          {
-            type: "application/vnd.oasis.opendocument.text",
-          },
-        );
-        Object.defineProperty(this, "files", { configurable: true, value: [file] });
-        this.dispatchEvent(new Event("change"));
+  it("opens an ODT through the computer tab and exports a parseable package", /** Exercises the browser file dialog boundaries. @returns Completed assertions. */ async () => {
+    const oldFactory = globalThis.indexedDB;
+    Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: new IDBFactory() });
+    const source = createWriterDocument();
+    source.paragraphs[0]?.SetText("Imported package body");
+    const bytes = writeOdtDocument(source, { title: "Imported package" });
+    let downloaded: Blob | undefined;
+    const createUrl = vi.spyOn(URL, "createObjectURL").mockImplementation(
+      /** Captures exported content. @param blob - Download body. @returns Test URL. */ (blob) => {
+        if (blob instanceof Blob) downloaded = blob;
+        return "blob:writer-test";
       },
     );
-    let downloadedBlob: Blob | undefined;
-    const originalCreateObjectUrl = URL.createObjectURL;
-    const originalRevokeObjectUrl = URL.revokeObjectURL;
-    Object.defineProperty(URL, "createObjectURL", {
-      configurable: true,
-      value: vi.fn(
-        /** Captures an ODT Blob. @param blob - Downloaded package. @returns Test URL. */
-        (blob: Blob): string => {
-          downloadedBlob = blob;
-          return "blob:writer-odt";
-        },
-      ),
-    });
-    Object.defineProperty(URL, "revokeObjectURL", {
-      configurable: true,
-      value: vi.fn(),
-    });
-    const anchorClick = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(
-      /** Records download dispatch without navigation. @returns Nothing. */
-      () => undefined,
-    );
+    const revokeUrl = vi
+      .spyOn(URL, "revokeObjectURL")
+      .mockImplementation(/** Suppresses browser navigation. @returns Nothing. */ () => undefined);
+    const click = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(/** Suppresses browser navigation. @returns Nothing. */ () => undefined);
+    try {
+      render(<App />);
+      await invokeWriterFileCommand("Open…");
+      expect(screen.getByRole("dialog", { name: "Open" })).toBeVisible();
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: { files: [new File([bytes as BlobPart], "imported.odt")] },
+      });
+      await waitFor(
+        /** Waits for the imported body. @returns Nothing. */ () =>
+          expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
+            "Imported package body",
+          ),
+      );
+      await waitFor(
+        /** Waits for the immediate browser save. @returns Nothing. */ () =>
+          expect(screen.queryByRole("dialog", { name: "Open" })).not.toBeInTheDocument(),
+      );
+      await invokeWriterFileCommand("Open…");
+      await waitFor(
+        /** Finds the imported browser copy without waiting for autosave. @returns Nothing. */ () =>
+          expect(screen.getByRole("button", { name: "Imported package" })).toBeVisible(),
+      );
+      fireEvent.click(screen.getByRole("button", { name: "Close" }));
+      await invokeWriterFileCommand("Export…");
+      expect(screen.getByRole("button", { name: "Download ODT" })).toHaveTextContent("ODT");
+      expect(screen.getByRole("button", { name: "Download TXT" })).toHaveTextContent("TXT");
+      fireEvent.click(screen.getByRole("button", { name: "Download ODT" }));
+      await waitFor(
+        /** Waits for an ODT download. @returns Nothing. */ () =>
+          expect(downloaded).toBeInstanceOf(Blob),
+      );
+      if (downloaded === undefined) throw new Error("Expected an ODT download.");
+      const archive = new ZipFile(new Uint8Array(await downloaded.arrayBuffer()));
+      expect(await archive.readTextEntry("content.xml")).toContain(
+        "Imported<text:s/>package<text:s/>body",
+      );
+    } finally {
+      createUrl.mockRestore();
+      revokeUrl.mockRestore();
+      click.mockRestore();
+      Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: oldFactory });
+    }
+  });
+
+  it("immediately saves imported TXT but never saves an empty import", /** Checks imported document persistence timing. @returns Completed assertions. */ async () => {
+    const oldFactory = globalThis.indexedDB;
+    Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: new IDBFactory() });
+    try {
+      render(<App />);
+      await invokeWriterFileCommand("Open…");
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: { files: [new File(["Imported text"], "notes.txt", { type: "text/plain" })] },
+      });
+      await waitFor(
+        /** Waits for TXT import and immediate storage. @returns Nothing. */ () =>
+          expect(screen.queryByRole("dialog", { name: "Open" })).not.toBeInTheDocument(),
+      );
+      await invokeWriterFileCommand("Open…");
+      await waitFor(
+        /** Finds the newly imported browser copy. @returns Nothing. */ () =>
+          expect(screen.getByRole("button", { name: "notes" })).toBeVisible(),
+      );
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: { files: [new File([""], "empty.txt", { type: "text/plain" })] },
+      });
+      await waitFor(
+        /** Waits for empty import to finish. @returns Nothing. */ () =>
+          expect(screen.queryByRole("dialog", { name: "Open" })).not.toBeInTheDocument(),
+      );
+      await invokeWriterFileCommand("Open…");
+      await waitFor(
+        /** Confirms the earlier nonempty copy remains available. @returns Nothing. */ () =>
+          expect(screen.getByRole("button", { name: "notes" })).toBeVisible(),
+      );
+      expect(screen.queryByRole("button", { name: "empty" })).not.toBeInTheDocument();
+    } finally {
+      Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: oldFactory });
+    }
+  });
+
+  it("keeps named browser copies available from Open", /** Covers Save As copy and browser listing without manual Save. @returns Completed assertions. */ async () => {
+    const oldFactory = globalThis.indexedDB;
+    Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: new IDBFactory() });
     try {
       render(<App />);
       enterWriterParagraphText(
         screen.getByRole("textbox", { name: "Writer document text" }),
-        "Discarded current body",
+        "Stored body",
+      );
+      await invokeWriterFileCommand("Save As…");
+      fireEvent.change(screen.getByLabelText("New copy name"), {
+        target: { value: "First copy" },
+      });
+      fireEvent.click(screen.getByRole("button", { name: "Save copy" }));
+      await waitFor(
+        /** Waits for the saved title. @returns Nothing. */ () =>
+          expect(screen.getByRole("button", { name: "Edit document title" })).toHaveTextContent(
+            "First copy",
+          ),
       );
       await invokeWriterFileCommand("Open…");
+      expect(screen.getByRole("tab", { name: "In browser" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      const browserTab = screen.getByRole("tab", { name: "In browser" });
+      browserTab.focus();
+      fireEvent.keyDown(browserTab, { key: "ArrowRight" });
+      expect(screen.getByRole("tab", { name: "On computer" })).toHaveAttribute(
+        "aria-selected",
+        "true",
+      );
+      fireEvent.keyDown(screen.getByRole("tab", { name: "On computer" }), { key: "Home" });
+      expect(browserTab).toHaveAttribute("aria-selected", "true");
       await waitFor(
-        /** Waits for the imported session. @returns Nothing. */
-        () => expect(screen.getByText("Imported package body")).toBeInTheDocument(),
+        /** Waits for the browser document list. @returns Nothing. */ () =>
+          expect(screen.getByRole("button", { name: "First copy" })).toBeVisible(),
       );
-      expect(screen.getByText("Opened ODT")).toBeInTheDocument();
-      expect(screen.getByText("Document opened.")).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
-
-      fireEvent.click(screen.getByRole("button", { name: "Save As" }));
+      fireEvent.click(screen.getByRole("button", { name: "First copy" }));
       await waitFor(
-        /** Waits for worker-shaped asynchronous ODT serialization. @returns Nothing. */
-        () => expect(anchorClick).toHaveBeenCalledOnce(),
-      );
-      expect(downloadedBlob?.type).toBe("application/vnd.oasis.opendocument.text");
-      expect(downloadedBlob).toBeInstanceOf(Blob);
-      const downloadedBytes = new Uint8Array(await (downloadedBlob as Blob).arrayBuffer());
-      const archive = new ZipFile(downloadedBytes);
-      expect(await archive.readTextEntry("content.xml")).toContain("Imported");
-      expect(
-        (await readOdtDocument(downloadedBytes, importedState)).document.paragraphs[0]?.GetText(),
-      ).toBe("Imported package body");
-      expect(screen.getByText("Document opened.")).toBeInTheDocument();
-    } finally {
-      inputClick.mockRestore();
-      anchorClick.mockRestore();
-      Object.defineProperty(URL, "createObjectURL", {
-        configurable: true,
-        value: originalCreateObjectUrl,
-      });
-      Object.defineProperty(URL, "revokeObjectURL", {
-        configurable: true,
-        value: originalRevokeObjectUrl,
-      });
-    }
-  });
-
-  it("keeps the active document on cancelled or invalid ODT open and exposes New" /** Verifies failure atomicity and the core new-document command. @returns A fulfilled assertion promise. */, async () => {
-    const inputClick = vi.spyOn(HTMLInputElement.prototype, "click");
-    try {
-      render(<App />);
-      const editor = screen.getByRole("textbox", { name: "Writer document text" });
-      enterWriterParagraphText(editor, "Current body");
-      inputClick.mockImplementationOnce(
-        /** Cancels the first chooser. @param this - Transient file input. @returns Nothing. */
-        function cancelOpen(this: HTMLInputElement): void {
-          this.dispatchEvent(new Event("cancel"));
-        },
-      );
-      await invokeWriterFileCommand("Open…");
-      expect(editor).toHaveTextContent("Current body");
-      expect(screen.getByText("Document has unsaved changes.")).toBeInTheDocument();
-
-      inputClick.mockImplementationOnce(
-        /** Supplies an invalid package. @param this - Transient file input. @returns Nothing. */
-        function chooseInvalid(this: HTMLInputElement): void {
-          Object.defineProperty(this, "files", {
-            configurable: true,
-            value: [new File(["not an odt"], ".odt")],
-          });
-          this.dispatchEvent(new Event("change"));
-        },
-      );
-      await invokeWriterFileCommand("Open…");
-      expect(editor).toHaveTextContent("Current body");
-      expect(screen.getByText(/Could not open ODT:/)).toBeInTheDocument();
-
-      await invokeWriterFileCommand("New Document");
-      expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent("");
-      expect(screen.getByText("Untitled Writer Document")).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
-    } finally {
-      inputClick.mockRestore();
-    }
-  });
-
-  it("saves and restores a Writer paragraph through browser-local IndexedDB" /**
-   * Verifies Save persists the current body and Load restores it after a later in-memory edit.
-   * @returns A promise resolved after the asynchronous storage feedback is asserted.
-   */, async function savesAndLoadsWriterDocument(): Promise<void> {
-    const originalIndexedDb = globalThis.indexedDB;
-    Object.defineProperty(globalThis, "indexedDB", {
-      configurable: true,
-      value: new IDBFactory(),
-    });
-    try {
-      render(<App />);
-      const editor = screen.getByRole("textbox", { name: "Writer document text" });
-      enterWriterParagraphText(editor, "Stored body");
-      fireEvent.change(screen.getByLabelText("Paragraph style"), {
-        target: { value: "heading-1" },
-      });
-      await invokeWriterFileCommand("Save Local Copy");
-      await waitFor(
-        /** Waits for successful save feedback. @returns A fulfilled polling promise. */
-        async function verifiesSavedStatus(): Promise<void> {
-          expect(screen.getByText("Saved locally in this browser.")).toBeInTheDocument();
-        },
-      );
-      enterWriterParagraphText(editor, "Changed body");
-      await invokeWriterFileCommand("Open Local Copy…");
-      await waitFor(
-        /** Waits for restored text and load feedback. @returns A fulfilled polling promise. */
-        async function verifiesLoadedDocument(): Promise<void> {
-          const restoredEditor = screen.getByRole("textbox", { name: "Writer document text" });
-          expect(restoredEditor).toHaveTextContent("Stored body");
-          expect(restoredEditor).toHaveStyle({ fontSize: "18pt" });
-          expect(screen.getByText("Document opened.")).toBeInTheDocument();
-        },
+        /** Waits for the browser copy. @returns Nothing. */ () =>
+          expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
+            "Stored body",
+          ),
       );
     } finally {
-      Object.defineProperty(globalThis, "indexedDB", {
-        configurable: true,
-        value: originalIndexedDb,
-      });
+      Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: oldFactory });
     }
-  });
-
-  it("assigns a non-colliding paragraph identity after loading an irregular saved body" /**
-   * Verifies the workbench skips an occupied generated identity when historical local data has a gap.
-   *
-   * @returns A promise resolved after the loaded body and focused-list command are asserted.
-   */, async function loadsIrregularBody(): Promise<void> {
-    const originalIndexedDb = globalThis.indexedDB;
-    Object.defineProperty(globalThis, "indexedDB", {
-      configurable: true,
-      value: new IDBFactory(),
-    });
-    try {
-      const adapter = new IndexedDbDocumentStorageAdapter<WriterSnapshotState>(
-        "vite-office-writer-workbench",
-      );
-      const irregularState = createDocument({
-        id: "writer-workbench",
-        suiteId: "writer",
-        title: "Untitled Writer Document",
-      });
-      const irregular = createWriterDocument();
-      irregular.paragraphs[0]?.SetText("First stored paragraph");
-      irregular.nodes.MakeTextNode("Third stored paragraph");
-      await saveWriterDocument(adapter, irregular, irregularState);
-      render(<App />);
-      await invokeWriterFileCommand("Open Local Copy…");
-      await waitFor(
-        /** Waits for the loaded body to become visible. @returns A fulfilled polling promise. */
-        async function verifiesIrregularBody(): Promise<void> {
-          expect(screen.getByRole("textbox", { name: "Writer paragraph 2" })).toHaveTextContent(
-            "Third stored paragraph",
-          );
-        },
-      );
-      const secondParagraph = screen.getByRole("textbox", { name: "Writer paragraph 2" });
-      fireEvent.focus(secondParagraph);
-      fireEvent.click(screen.getByRole("button", { name: "Format" }));
-      fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "Lists" }));
-      fireEvent.click(screen.getByRole("menuitemradio", { name: /^Unordered List$/ }));
-      expect(
-        screen.getByTestId(
-          `writer-list-marker-${secondParagraph.dataset.writerParagraphId as string}`,
-        ),
-      ).toHaveTextContent("•");
-    } finally {
-      Object.defineProperty(globalThis, "indexedDB", {
-        configurable: true,
-        value: originalIndexedDb,
-      });
-    }
-  });
-
-  it("reports missing and unavailable browser storage without changing Writer text" /**
-   * Verifies non-destructive feedback for unavailable browser storage outcomes.
-   * @returns A promise resolved after asynchronous status feedback is asserted.
-   */, async function reportsStorageFailures(): Promise<void> {
-    const originalIndexedDb = globalThis.indexedDB;
-    try {
-      Object.defineProperty(globalThis, "indexedDB", {
-        configurable: true,
-        value: new IDBFactory(),
-      });
-      render(<App />);
-      await invokeWriterFileCommand("Open Local Copy…");
-      await waitFor(
-        /** Waits for missing-snapshot feedback. @returns A fulfilled polling promise. */
-        async function verifiesMissing(): Promise<void> {
-          expect(screen.getByText("Not saved in this browser.")).toBeInTheDocument();
-        },
-      );
-      Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: undefined });
-      cleanup();
-      render(<App />);
-      await invokeWriterFileCommand("Save Local Copy");
-      expect(screen.getByText("Browser storage is unavailable.")).toBeInTheDocument();
-      await invokeWriterFileCommand("Open Local Copy…");
-    } finally {
-      Object.defineProperty(globalThis, "indexedDB", {
-        configurable: true,
-        value: originalIndexedDb,
-      });
-    }
-  });
-
-  it("starts browser downloads and reports adapter failures" /**
-   * Verifies the user-visible result for successful plain-text and rejected ODT download capabilities.
-   * @returns A promise resolved after Blob text serialization is asserted.
-   */, async function downloadsWriterText(): Promise<void> {
-    let downloadedBlob: Blob | undefined;
-    const createObjectUrl = vi.fn(
-      /**
-       * Captures the generated Blob and produces the deterministic test object URL.
-       *
-       * @param blob - Plain-text Blob supplied by the browser download adapter.
-       * @returns Fixed object URL.
-       */
-      function createObjectUrl(blob: Blob): string {
-        downloadedBlob = blob;
-        return "blob:writer";
-      },
-    );
-    const revokeObjectUrl = vi.fn(
-      /** Records URL cleanup without external side effects. @returns Nothing. */
-      function revokeObjectUrl(): void {},
-    );
-    const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(
-      /** Simulates browser download activation. @returns Nothing. */
-      function clickAnchor(): void {},
-    );
-    Object.defineProperty(URL, "createObjectURL", { configurable: true, value: createObjectUrl });
-    Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: revokeObjectUrl });
-    render(<App />);
-    enterWriterParagraphText(
-      screen.getByRole("textbox", { name: "Writer document text" }),
-      "Download body",
-    );
-    fireEvent.click(screen.getByRole("button", { name: "File" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Export…" }));
-    expect(screen.getByText("Document has unsaved changes.")).toBeInTheDocument();
-    expect(await downloadedBlob?.text()).toBe("Download body");
-    createObjectUrl.mockImplementationOnce(
-      /** Simulates unsupported browser object URL creation. @returns No URL because this call throws. */
-      function rejectsObjectUrl(): string {
-        throw new Error("unsupported");
-      },
-    );
-    fireEvent.click(screen.getByRole("button", { name: "File" }));
-    fireEvent.click(screen.getByRole("menuitem", { name: "Export…" }));
-    await waitFor(
-      /** Waits for the Sfx asynchronous command failure state. @returns Nothing. */ () =>
-        expect(screen.getByText("Could not start plain-text download.")).toBeInTheDocument(),
-    );
-    createObjectUrl.mockImplementationOnce(
-      /** Simulates a non-Error browser capability rejection. @returns No URL because this call throws. */
-      function rejectsOdtObjectUrl(): string {
-        const rejection: unknown = "download denied";
-        throw rejection;
-      },
-    );
-    fireEvent.click(screen.getByRole("button", { name: "Save As" }));
-    await waitFor(
-      /** Waits for asynchronous ODT export failure feedback. @returns Nothing. */
-      () => expect(screen.getByText("Could not save ODT: download denied")).toBeInTheDocument(),
-    );
-    click.mockRestore();
   });
 });

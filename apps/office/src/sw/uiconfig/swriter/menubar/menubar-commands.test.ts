@@ -41,7 +41,6 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
     ).toEqual([
       WRITER_COMMAND_IDS.newDocument,
       WRITER_COMMAND_IDS.openOdt,
-      WRITER_COMMAND_IDS.saveOdt,
       WRITER_COMMAND_IDS.cut,
       WRITER_COMMAND_IDS.copy,
       WRITER_COMMAND_IDS.paste,

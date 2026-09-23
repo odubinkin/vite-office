@@ -33,6 +33,9 @@ import { createDocument, SfxObjectShell, type SfxObjectShellState } from "./objs
   /** Runs the close test helper. @returns Test callback result. */ public close() {
     return this.CloseObjectShell();
   }
+  /** Adopts the current medium without closing it. @returns Nothing. */ public retainPrimaryIdentity() {
+    this.AdoptPrimaryIdentity("retained", "Retained", this.GetMedium());
+  }
 }
 
 const initial = createDocument({ id: "doc", suiteId: "writer", title: "Draft" });
@@ -50,7 +53,7 @@ describe("SfxObjectShell", /** Groups SfxObjectShell. @returns Test callback res
     expect(shell.save()).toBe(true);
     expect(shell.GetDocumentState().lifecycle).toBe("saved");
     expect(shell.modify(true, true)).toBe(true);
-    expect(shell.GetContentGeneration()).toBe(1);
+    expect(shell.GetContentGeneration()).toBe(2);
     expect(shell.save(0)).toBe(false);
     expect(shell.GetDocumentState().lifecycle).toBe("dirty");
     expect(shell.history(true)).toBe(true);
@@ -120,5 +123,8 @@ describe("SfxObjectShell", /** Groups SfxObjectShell. @returns Test callback res
     retained.retain({ ...initial, title: "Updated" });
     expect(medium.IsOpen()).toBe(true);
     expect(retained.GetTitle()).toBe("Updated");
+    retained.retainPrimaryIdentity();
+    expect(medium.IsOpen()).toBe(true);
+    expect(retained.GetDocumentId()).toBe("retained");
   });
 });

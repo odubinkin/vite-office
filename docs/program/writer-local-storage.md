@@ -1,25 +1,15 @@
-# Writer browser-local save and load
+# Writer browser-local documents
 
-The Writer workbench provides explicit **Save locally** and **Load locally**
-controls. They persist a complete JSON-compatible Writer snapshot under the
-document's stable browser-local ID through the native IndexedDB adapter; no
-application server, account, or network request is involved.
+Writer saves complete ODT packages in IndexedDB. Each document has an opaque ID,
+a unique displayed title, a content generation, and ODT bytes. The ODT package
+is the only durable document body. The prior JSON Writer cache is retired. The ODT store does not read, convert, or delete its records.
 
-Save replaces the previous local snapshot for that ID. The snapshot version is
-the current browser race generation. Writer moves the undo manager's primary
-save position and clears `isModified` only after IndexedDB confirms the write;
-a rejected write leaves the document modified. Load restores the saved
-Writer document, including its ordered plain-text paragraph body and paragraph
-alignment and bounded style values, into the current in-memory workbench history. A missing copy,
-unavailable browser storage, and native storage failures leave the current text
-unchanged and report deterministic feedback. Storage accepts only browser cache
-schema 11 under `sw/browser/storage/writer-storage.ts`. It contains an
-object-shell projection and the shared canonical Writer graph record; every
-retired local schema is rejected without runtime migration.
+The Open dialog lists all browser copies and imports ODT or UTF-8 TXT files from
+the computer. Save As creates a separate browser copy with a new identity; title
+editing renames the current copy. Export downloads ODT or TXT without changing
+the primary browser copy. Names are unique and conflicting operations fail.
+Nonempty ODT and TXT imports are committed before the Open dialog closes.
+Empty documents, including whitespace-only TXT imports, are never saved.
 
-Browser-local storage is the current primary medium. Browser recovery snapshots,
-scheduling, generation retention, and startup recovery prompts are intentionally
-unsupported and must not be reintroduced. Future loss protection will use
-frequent full autosave through this primary storage path. Explicit text/ODT
-export, browser download, and the ODT file picker remain separate adapters.
-Cross-tab coordination, encryption, and OOXML import/export remain unsupported.
+The 10-second dirty-aware autosave policy and its intentional upstream divergence
+are documented in [browser persistence decision](autosave-recovery.md).

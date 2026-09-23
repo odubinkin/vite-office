@@ -19,7 +19,11 @@ exclusion: native crash/session recovery and its prompt are not targets for
 browser parity. `CAP-0122` and `CAP-0133` are explicit approved exceptions,
 not recovery implementation tasks; `CAP-0114` covers the browser content
 generation used by primary saves. Evaluate primary save/load separately.
-Reopening recovery requires an explicit new product decision. The 45 records
+The 10-second dirty-aware ODT autosave, one-second idle, 30-second maximum wait,
+browser Save As copy/rename behavior, and Open/Export dialogs are also approved
+browser product divergences. They must not be "fixed" to match the upstream
+10-minute recovery-file scheduler or its desktop file workflows. Reopening
+recovery requires an explicit new product decision. The 45 records
 therefore contain 43 verified operations and two approved exclusions. The ODF
 umbrella records use the checked-in pinned LibreOffice fixtures, while the
 property-level records use their mapped atomic tests; scope limitations remain

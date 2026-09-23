@@ -142,7 +142,26 @@ export class SfxObjectShell {
     if (title === this.title) return false;
     this.title = title;
     this.modified = true;
+    this.contentGeneration += 1;
     return true;
+  }
+
+  /** Changes the browser primary identity after a confirmed Save As without replacing the model. */
+  /**
+   * Handles the Writer browser operation.
+   * @param id - Input value.
+   * @param title - Input value.
+   * @param medium - Input value.
+   * @returns Operation result.
+   */ protected AdoptPrimaryIdentity(id: string, title: string, medium: SfxMedium): void {
+    this.EnsureOpen();
+    assertNonBlank(id, "Document id");
+    assertNonBlank(title, "Document title");
+    const previous = this.medium;
+    this.id = id;
+    this.title = title;
+    this.medium = medium;
+    if (previous !== medium) previous.Close();
   }
 
   /** Completes a confirmed primary-medium save at a captured generation. @param generation - Confirmed generation. @returns Whether state changed. */

@@ -7,7 +7,7 @@ import {
 } from "../../source/core/text/txtfrm";
 import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
 
-/** Computes the upstream-shaped adjacent paragraph gap for a browser paragraph projection. @param previous - Previous paragraph. @param current - Current paragraph. @returns Gap in points. */
+/** Computes the upstream-shaped adjacent paragraph gap for a browser paragraph projection. @param previous - Previous paragraph. @param current - Current paragraph. @param settings - Writer spacing policy. @returns Gap in points. */
 export function getWriterParagraphGap(
   previous: WriterParagraphProjection | undefined,
   current: WriterParagraphProjection,

@@ -41,6 +41,7 @@ describe("SwEditWin", /** Registers platform-neutral edit-window tests. @returns
     expect(editWindow.FocusNode(-1)).toBe(false);
     expect(editWindow.SetSelection({ point: { contentIndex: 0, nodeIndex } })).toBe(true);
     expect(editWindow.InsertText("Body")).toBe(true);
+    expect(editWindow.Paste({ isBlock: false, paragraphs: [] })).toBe(false);
     expect(
       editWindow.SetSelection({
         mark: { contentIndex: 0, nodeIndex },

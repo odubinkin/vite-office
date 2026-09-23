@@ -3,11 +3,11 @@
  * operation-presentation workflows outside the SwView model/view-shell boundary.
  */
 
-import type { PrimarySavePort, StoredDocumentOpenPort } from "../../../sfx2/source/doc/docfile";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
 import type { DocumentExportPort, DocumentOpenPort } from "../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../vcl/browser/browser-clipboard";
-import type { WriterSnapshotState } from "../storage/writer-storage";
+import type { WriterOdtStore } from "../storage/writer-odt-store";
+import type { WriterFileDialogController } from "./writer-file-dialog-controller";
 import { parseWriterClipboardPaste } from "../filter/html/swhtml";
 import { createWriterTransferDocument } from "../editor/writer-clipboard-events";
 import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
@@ -15,13 +15,6 @@ import { SwDocShell } from "../../source/uibase/app/docsh";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
 import { createWriterInterface } from "../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
-import {
-  exportWriterTextToPort,
-  loadWriterFromPrimaryPort,
-  openWriterOdtFromPort,
-  saveWriterOdtToPort,
-  saveWriterToPrimaryPort,
-} from "./writer-document-io";
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
@@ -30,8 +23,8 @@ export interface WriterSessionServices {
   readonly documentExport: DocumentExportPort;
   readonly createDownloadFilename: (title: string, extension: string) => string;
   readonly readRichClipboard: () => Promise<RichClipboardPayload>;
-  readonly primarySave?: PrimarySavePort<WriterSnapshotState>;
-  readonly storedDocumentOpen?: StoredDocumentOpenPort<WriterSnapshotState>;
+  readonly odtStore?: WriterOdtStore;
+  readonly fileDialogs?: WriterFileDialogController;
 }
 
 /** Explicit platform failure retained by Sfx command completion state. */
@@ -89,57 +82,21 @@ export class WriterWorkflowCommandShell {
         {
           capabilityId: "CAP-0113",
           /** Opens an ODT through the browser file workflow. @returns Completion after import. */
-          execute: async (): Promise<void> => {
-            await openWriterOdtFromPort(docShell, ports.documentOpen);
-          },
+          execute: (): void => ports.fileDialogs?.Show("open"),
           id: WRITER_COMMAND_IDS.openOdt,
           isEnabled: lifecycleEnabled,
         },
         {
           capabilityId: "CAP-0113",
           /** Exports the active document through the browser download workflow. @returns Completion after export. */
-          execute: (): Promise<void> =>
-            saveWriterOdtToPort(
-              docShell,
-              ports.documentExport,
-              ports.createDownloadFilename(docShell.GetTitle(), ".odt"),
-            ),
+          execute: (): void => ports.fileDialogs?.Show("save-as"),
           id: WRITER_COMMAND_IDS.saveOdt,
-          isEnabled: lifecycleEnabled,
-        },
-        {
-          capabilityId: "CAP-0114",
-          /** Loads the active identity from browser-local storage. @returns Completion after replacement. */
-          execute: async (): Promise<"loaded" | "missing"> => {
-            if (ports.storedDocumentOpen === undefined)
-              throw new WriterPlatformError(
-                "storage-unavailable",
-                "Browser storage is unavailable.",
-              );
-            return await loadWriterFromPrimaryPort(docShell, ports.storedDocumentOpen);
-          },
-          id: WRITER_COMMAND_IDS.openLocal,
-          isEnabled: lifecycleEnabled,
-        },
-        {
-          capabilityId: "CAP-0114",
-          /** Saves the active identity to browser-local storage. @returns Completion after acknowledgement. */
-          execute: async (): Promise<void> => {
-            if (ports.primarySave === undefined)
-              throw new WriterPlatformError(
-                "storage-unavailable",
-                "Browser storage is unavailable.",
-              );
-            await saveWriterToPrimaryPort(docShell, ports.primarySave);
-          },
-          id: WRITER_COMMAND_IDS.saveLocal,
           isEnabled: lifecycleEnabled,
         },
         {
           capabilityId: "CAP-0101",
           /** Exports the active document as plain text. @returns Completion after download. */
-          execute: (): Promise<void> =>
-            exportWriterTextToPort(docShell, ports.documentExport, `${docShell.GetTitle()}.txt`),
+          execute: (): void => ports.fileDialogs?.Show("export"),
           id: WRITER_COMMAND_IDS.exportText,
         },
         {

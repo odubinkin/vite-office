@@ -50,12 +50,6 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:HyperlinkDialog", showsDialog: true },
   { commandUrl: ".uno:Italic", semantics: "check" },
   { commandUrl: ".uno:AddDirect" },
-  {
-    browserLabel: "Open Local Copy",
-    browserSlotId: 65_001,
-    commandUrl: "vnd.vite-office.browser:OpenLocal",
-    showsDialog: true,
-  },
   { commandUrl: ".uno:Open", showsDialog: true, sourceUrl: ".uno:OpenFromWriter" },
   { commandUrl: ".uno:PageDialog", showsDialog: true },
   { commandUrl: ".uno:DefaultNumbering", semantics: "radio" },
@@ -65,11 +59,6 @@ const specs: readonly CommandSpec[] = [
   { commandUrl: ".uno:Redo" },
   { commandUrl: ".uno:RemoveBullets", semantics: "radio" },
   { commandUrl: ".uno:RemoveHyperlink" },
-  {
-    browserLabel: "Save Local Copy",
-    browserSlotId: 65_002,
-    commandUrl: "vnd.vite-office.browser:SaveLocal",
-  },
   { commandUrl: ".uno:SaveAs", showsDialog: true },
   { commandUrl: ".uno:SelectAll" },
   { commandUrl: ".uno:Ruler", semantics: "check" },
@@ -103,7 +92,6 @@ const commandAliases = {
   italic: ".uno:Italic",
   increaseIndent: ".uno:IncrementIndent",
   newDocument: ".uno:AddDirect",
-  openLocal: "vnd.vite-office.browser:OpenLocal",
   openOdt: ".uno:Open",
   pageDialog: ".uno:PageDialog",
   orderedList: ".uno:DefaultNumbering",
@@ -112,7 +100,6 @@ const commandAliases = {
   redo: ".uno:Redo",
   removeBullets: ".uno:RemoveBullets",
   removeHyperlink: ".uno:RemoveHyperlink",
-  saveLocal: "vnd.vite-office.browser:SaveLocal",
   saveOdt: ".uno:SaveAs",
   selectAll: ".uno:SelectAll",
   styleApply: ".uno:StyleApply",
@@ -160,8 +147,6 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:StatusBarVisible": "CAP-0104",
   ".uno:Underline": "CAP-0109",
   ".uno:Undo": "CAP-0102",
-  "vnd.vite-office.browser:OpenLocal": "CAP-0114",
-  "vnd.vite-office.browser:SaveLocal": "CAP-0114",
   ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles":
     "CAP-0112",
   ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles": "CAP-0112",
@@ -185,7 +170,6 @@ const inventoryAliasNames = [
   "increaseIndent",
   "hyperlinkDialog",
   "newDocument",
-  "openLocal",
   "openOdt",
   "pageDialog",
   "orderedList",
@@ -194,7 +178,6 @@ const inventoryAliasNames = [
   "redo",
   "removeHyperlink",
   "removeBullets",
-  "saveLocal",
   "saveOdt",
   "selectAll",
   "toggleHorizontalRuler",
@@ -434,18 +417,6 @@ function addBrowserMenuExtensions(nodes: readonly ResourceNode[]): readonly Reso
   function extend(node: ResourceNode): ResourceNode {
     if (node.kind !== "menu") return node;
     let items: readonly ResourceNode[] = node.items.map(extend);
-    if (node.id === ".uno:PickList") {
-      items = insertAfter(items, ".uno:Open", {
-        commandUrl: commandAliases.openLocal,
-        kind: "command",
-        visible: true,
-      });
-      items = insertAfter(items, ".uno:SaveAs", {
-        commandUrl: commandAliases.saveLocal,
-        kind: "command",
-        visible: true,
-      });
-    }
     if (node.id === ".uno:FormatStylesMenu")
       items = [
         { commandUrl: ".uno:StyleApply", kind: "command", visible: true },
@@ -455,21 +426,6 @@ function addBrowserMenuExtensions(nodes: readonly ResourceNode[]): readonly Reso
     return { ...node, items };
   }
   return nodes.map(extend);
-}
-
-/** Inserts a browser resource after a supported upstream anchor. @param nodes - Sibling nodes. @param anchor - Upstream command URL. @param inserted - Browser resource. @returns Extended siblings. */
-function insertAfter(
-  nodes: readonly ResourceNode[],
-  anchor: string,
-  inserted: ResourceNode,
-): readonly ResourceNode[] {
-  const index = nodes.findIndex(
-    /** Finds the upstream anchor. @param node - Candidate node. @returns Whether it matches. */ (
-      node,
-    ) => node.kind === "command" && node.commandUrl === anchor,
-  );
-  if (index < 0) throw new Error(`Browser resource anchor is missing: ${anchor}`);
-  return [...nodes.slice(0, index + 1), inserted, ...nodes.slice(index + 1)];
 }
 
 /** Finds the pinned English command label. @param commandUrl - UNO command URL. @param catalogs - XCU command catalogs. @returns Localized label. */

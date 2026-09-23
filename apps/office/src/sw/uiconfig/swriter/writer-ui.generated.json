@@ -20,7 +20,6 @@
     "italic": ".uno:Italic",
     "increaseIndent": ".uno:IncrementIndent",
     "newDocument": ".uno:AddDirect",
-    "openLocal": "vnd.vite-office.browser:OpenLocal",
     "openOdt": ".uno:Open",
     "pageDialog": ".uno:PageDialog",
     "orderedList": ".uno:DefaultNumbering",
@@ -29,7 +28,6 @@
     "redo": ".uno:Redo",
     "removeBullets": ".uno:RemoveBullets",
     "removeHyperlink": ".uno:RemoveHyperlink",
-    "saveLocal": "vnd.vite-office.browser:SaveLocal",
     "saveOdt": ".uno:SaveAs",
     "selectAll": ".uno:SelectAll",
     "styleApply": ".uno:StyleApply",
@@ -65,7 +63,6 @@
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementIndent" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:HyperlinkDialog" },
     { "capabilityId": "CAP-0114", "commandUrl": ".uno:AddDirect" },
-    { "capabilityId": "CAP-0114", "commandUrl": "vnd.vite-office.browser:OpenLocal" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:Open" },
     { "capabilityId": "CAP-0136", "commandUrl": ".uno:PageDialog" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultNumbering" },
@@ -74,7 +71,6 @@
     { "capabilityId": "CAP-0102", "commandUrl": ".uno:Redo" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:RemoveHyperlink" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:RemoveBullets" },
-    { "capabilityId": "CAP-0114", "commandUrl": "vnd.vite-office.browser:SaveLocal" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:SaveAs" },
     { "capabilityId": "CAP-0103", "commandUrl": ".uno:SelectAll" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Ruler" },
@@ -324,18 +320,6 @@
       "shortcuts": ["Ctrl+N", "Meta+N"],
       "slotId": 5537
     },
-    "vnd.vite-office.browser:OpenLocal": {
-      "browserOwned": true,
-      "argumentSchema": [],
-      "capabilityId": "CAP-0114",
-      "controlLabel": "Open Local Copy",
-      "label": "Open Local Copy",
-      "placements": ["browser-extension:file-menu"],
-      "semantics": "action",
-      "showsDialog": true,
-      "shortcuts": [],
-      "slotId": 65001
-    },
     ".uno:Open": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -479,18 +463,6 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 10459
-    },
-    "vnd.vite-office.browser:SaveLocal": {
-      "browserOwned": true,
-      "argumentSchema": [],
-      "capabilityId": "CAP-0114",
-      "controlLabel": "Save Local Copy",
-      "label": "Save Local Copy",
-      "placements": ["browser-extension:file-menu"],
-      "semantics": "action",
-      "showsDialog": false,
-      "shortcuts": [],
-      "slotId": 65002
     },
     ".uno:SaveAs": {
       "browserOwned": false,
@@ -767,11 +739,6 @@
       ]
     },
     {
-      "classification": "browser-extension",
-      "commandUrl": "vnd.vite-office.browser:OpenLocal",
-      "sources": ["browser-extension:file-menu"]
-    },
-    {
       "classification": "supported-upstream",
       "commandUrl": ".uno:Open",
       "sources": [
@@ -842,11 +809,6 @@
       "classification": "supported-upstream",
       "commandUrl": ".uno:RemoveHyperlink",
       "sources": ["sw/uiconfig/swriter/popupmenu/text.xml"]
-    },
-    {
-      "classification": "browser-extension",
-      "commandUrl": "vnd.vite-office.browser:SaveLocal",
-      "sources": ["browser-extension:file-menu"]
     },
     {
       "classification": "supported-upstream",
@@ -6252,10 +6214,8 @@
         "items": [
           { "commandUrl": ".uno:AddDirect", "kind": "command", "visible": true },
           { "commandUrl": ".uno:Open", "kind": "command", "visible": true },
-          { "commandUrl": "vnd.vite-office.browser:OpenLocal", "kind": "command", "visible": true },
           { "kind": "separator" },
           { "commandUrl": ".uno:SaveAs", "kind": "command", "visible": true },
-          { "commandUrl": "vnd.vite-office.browser:SaveLocal", "kind": "command", "visible": true },
           { "kind": "separator" },
           { "commandUrl": ".uno:ExportTo", "kind": "command", "visible": true }
         ],

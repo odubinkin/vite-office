@@ -1,7 +1,7 @@
 # Browser Writer command placement
 
-Every enabled Writer command must use its pinned LibreOffice Writer menu location
-and, only where an upstream toolbar placement exists, the corresponding toolbar.
+Enabled Writer commands normally use their pinned LibreOffice menu and toolbar
+locations. Browser file commands have the approved exceptions described below.
 The browser workbench keeps its own indigo/slate visual language and does not
 copy native menu pixels.
 
@@ -16,10 +16,10 @@ consume that generated order directly; no second handwritten allowlist filters
 implemented commands.
 
 - `sw/uiconfig/swriter/menubar/menubar.xml` places New, Open, Save, and Save As
-  in **File**. The browser exposes **New**, **Open ODT…**, and **Save as ODT…**
-  through the view shell and browser workflow adapters into `SwDocShell`;
-  browser-local IndexedDB persistence and plain-text
-  download remain explicitly labelled secondary commands in the same menu.
+  in **File**. The browser keeps **New**, **Open**, **Save As**, and **Export**
+  there. Open selects a browser copy or imports ODT/TXT; Save As creates a
+  separate browser copy; Export downloads ODT/TXT. Manual Save is absent because
+  a nonempty document is saved automatically as a primary ODT package.
 - The same file places Undo and Redo in **Edit**.
 - It places `.uno:Cut`, `.uno:Copy`, and `.uno:Paste` in **Edit** and the
   standard toolbar. The browser **Copy** command writes sanitized visible plain
@@ -69,10 +69,10 @@ shell stack. `SwWrtShell` supplies cursor/edit operations and `SwView` supplies
 frame/lifecycle coordination without a parallel Writer registry layer.
 
 `sw/uiconfig/swriter/toolbar/standardbar.xml` supplies Open, Save, Cut, Copy,
-Paste, Undo, and Redo, but no generic plain-text download command. Accordingly,
-the standard toolbar uses **Open ODT** and **Save as ODT** for its bounded file
-commands and retains Cut, Copy, Paste, Undo, and Redo; local IndexedDB actions
-and text export remain in **File**. The former **Add
+Paste, Undo, and Redo. The browser toolbar retains Open, Cut, Copy, Paste,
+Undo, and Redo. Save As appears only in **File**; manual Save is absent.
+This placement is an approved browser divergence and must survive parity work.
+The former **Add
 paragraph** toolbar control was removed: normal Writer paragraph
 creation is caret/Enter behavior, not a standalone toolbar command. The
 implemented browser equivalent now intercepts unmodified **Enter** at a

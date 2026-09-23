@@ -26,7 +26,7 @@ export interface SwPageDescriptorLayout {
   readonly initialName: string;
 }
 
-/** Creates at least the initial page; splits a text node only at measured line boundaries. @param paragraphs - Ordered text node measurements. @param descriptor - Physical page geometry. @returns Ordered page frames. */
+/** Creates at least the initial page; splits a text node only at measured line boundaries. @param paragraphs - Ordered text node measurements. @param descriptor - Physical page geometry. @param settings - Paragraph spacing policy. @returns Ordered page frames. */
 export function createSwPageFrames(
   paragraphs: readonly SwTextFrameInput[],
   descriptor: WriterPageDescriptorValue | SwPageDescriptorLayout,

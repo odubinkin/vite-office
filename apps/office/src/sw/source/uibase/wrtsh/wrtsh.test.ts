@@ -46,6 +46,7 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       paperFormat: "custom" as const,
     };
     expect(shell.SetPageDescriptor(initialPage)).toBe(false);
+    expect(shell.SetPageDescriptor(initialPage, "Missing page style")).toBe(false);
     expect(shell.SetPageDescriptor(nextPage)).toBe(true);
     expect(shell.GetDoc().GetPageDesc().GetValue()).toEqual(nextPage);
     expect(shell.Undo()).toBe(true);

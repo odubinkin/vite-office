@@ -37,17 +37,16 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   const sourceBytes = writeOdtDocument(source, docShell.GetDocumentState());
 
   await page.goto("/writer");
-  const fileChooserPromise = page.waitForEvent("filechooser");
   await page.getByRole("button", { name: "Open" }).click();
-  const fileChooser = await fileChooserPromise;
-  await fileChooser.setFiles({
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
     buffer: Buffer.from(sourceBytes),
     mimeType: "application/vnd.oasis.opendocument.text",
     name: "browser-fixture.odt",
   });
 
   await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
-    "Document opened.",
+    "Saved locally in this browser.",
   );
   const editor = page.getByRole("textbox", { name: "Writer document text" });
   await expect(editor).toHaveText("BrowserODTContent");
@@ -61,7 +60,9 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   await expect(page.getByText("Browser ODT Fixture")).toBeVisible();
 
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Save As" }).click();
+  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download ODT" }).click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toBe("Browser ODT Fixture.odt");
   const downloadPath = await download.path();
@@ -75,8 +76,8 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   expect(contentXml).toContain("<text:list-item>");
 
   await page.getByRole("button", { name: "File" }).click();
-  await expect(page.getByRole("menuitem", { name: "Open Local Copy…" })).toBeVisible();
-  await expect(page.getByRole("menuitem", { name: "Save Local Copy" })).toBeVisible();
+  await expect(page.getByRole("menuitem", { name: "Open Local Copy…" })).toHaveCount(0);
+  await expect(page.getByRole("menuitem", { name: "Save Local Copy" })).toHaveCount(0);
   await expect(page.getByRole("menuitem", { name: "Export…" })).toBeVisible();
   await page.getByRole("menuitem", { name: "New Document" }).click();
   await expect(page.getByRole("textbox", { name: "Writer document text" })).toHaveText("");
@@ -94,11 +95,9 @@ test("Writer keeps one ODT text node across visible page fragments after reopen"
   const sourceBytes = writeOdtDocument(document, metadata);
 
   await page.goto("/writer");
-  const chooserPromise = page.waitForEvent("filechooser");
   await page.getByRole("button", { name: "Open" }).click();
-  await (
-    await chooserPromise
-  ).setFiles({
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
     buffer: Buffer.from(sourceBytes),
     mimeType: "application/vnd.oasis.opendocument.text",
     name: "pages.odt",
@@ -116,14 +115,14 @@ test("Writer keeps one ODT text node across visible page fragments after reopen"
     expect(await fragment.getAttribute("data-writer-paragraph-id")).toBe(id);
 
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Save As" }).click();
+  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download ODT" }).click();
   const savedPath = await (await downloadPromise).path();
   if (savedPath === null) throw new Error("Chromium did not expose the paginated ODT download.");
-  const reopenPromise = page.waitForEvent("filechooser");
   await page.getByRole("button", { name: "Open" }).click();
-  await (
-    await reopenPromise
-  ).setFiles({
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
     buffer: await readFile(savedPath),
     mimeType: "application/vnd.oasis.opendocument.text",
     name: "reopened-pages.odt",

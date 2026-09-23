@@ -131,19 +131,32 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     const nodeId = nodes.RetainNode(paragraph);
     expect(nodes.GetText(textId).text).toBe("a");
     expect(nodes.GetNode(nodeId)).toBe(paragraph);
-    expect(() => nodes.GetText(nodeId)).toThrow("Missing Writer undo text");
-    expect(() => nodes.GetNode(textId)).toThrow("Missing Writer undo node");
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () => nodes.GetText(nodeId),
+    ).toThrow("Missing Writer undo text");
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () => nodes.GetNode(textId),
+    ).toThrow("Missing Writer undo node");
     nodes.Release(textId);
     nodes.Release(nodeId);
-    expect(() => nodes.GetText(textId)).toThrow("Missing Writer undo text");
-    expect(() => nodes.GetNode(nodeId)).toThrow("Missing Writer undo node");
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () => nodes.GetText(textId),
+    ).toThrow("Missing Writer undo text");
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () => nodes.GetNode(nodeId),
+    ).toThrow("Missing Writer undo node");
     const foreign = createWriterDocument();
     const context: SwUndoRedoContext = {
-      GetDoc: () => foreign,
-      RestoreCursor: () => undefined,
+      GetDoc: /** Runs the focused test callback. @returns Operation result. */ () => foreign,
+      RestoreCursor: /** Runs the focused test callback. @returns Operation result. */ () =>
+        undefined,
     };
-    expect(() => manager.Undo(context)).toThrow("another document");
-    expect(() => manager.Redo(context)).toThrow("another document");
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () => manager.Undo(context),
+    ).toThrow("another document");
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () => manager.Redo(context),
+    ).toThrow("another document");
   });
 
   it("groups compatible typing, separates delimiter and cursor boundaries, and truncates redo" /** Verifies SwUndoInsert::CanGrouping behavior and branch replacement. @returns Nothing. */, function groupsTyping(): void {
@@ -345,9 +358,11 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
   it("restores the save mark across page and hyperlink actions" /** Checks Writer history position and modified state for unlike actions around a primary save. @returns A fulfilled assertion promise. */, async function restoresMixedActionSaveMark(): Promise<void> {
     const { docShell, document, shell } = createSession("abc");
     shell.SetParagraphAlignment("center");
-    await docShell.Save(async () => ({
-      generation: docShell.GetDocumentState().contentGeneration,
-    }));
+    await docShell.Save(
+      /** Runs the focused test callback. @returns Operation result. */ async () => ({
+        generation: docShell.GetDocumentState().contentGeneration,
+      }),
+    );
     const beforePage = document.GetPageDesc().GetValue();
     const afterPage = { ...beforePage, leftMargin: beforePage.leftMargin + 120 };
     expect(shell.SetPageDescriptor(afterPage)).toBe(true);

@@ -60,6 +60,7 @@ describe("Writer page descriptor", /** Registers page-descriptor cases. @returns
     expect(standard.GetFollow()).toBe(standard);
     standard.SetFollow(left);
     expect(standard.GetFollow()).toBe(left);
+    expect(standard.Clone().GetFollow()).toBe(left);
     standard.SetFollow(null);
     expect(standard.GetFollow()).toBe(standard);
     expect(left.Clone().GetFollow().GetName()).toBe("Left Page");

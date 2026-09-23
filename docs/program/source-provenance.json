@@ -188,6 +188,27 @@
       "evidence": {
         "local": [
           {
+            "marker": "SuiteCardProps",
+            "path": "apps/office/src/framework/browser/app/SuiteCard.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/app/SuiteCard.tsx",
+      "rationale": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "responsibilities": [
+        "Renders one accessible suite link for the office application launcher."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
             "marker": "mountApplication",
             "path": "apps/office/src/framework/browser/app/bootstrap.tsx"
           }
@@ -247,27 +268,6 @@
       "status": "local-only"
     },
     {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SuiteCardProps",
-            "path": "apps/office/src/framework/browser/app/SuiteCard.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/browser/app/SuiteCard.tsx",
-      "rationale": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Renders one accessible suite link for the office application launcher."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
-    },
-    {
       "classification": "browser-adaptation",
       "evidence": {
         "local": [
@@ -285,6 +285,27 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser Promise operations replace native asynchronous dispatch-result listeners."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserLocalizationProvider",
+            "path": "apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx",
+      "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Provides one browser localization service to the React presentation tree."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
       },
       "status": "local-only"
     },
@@ -335,48 +356,6 @@
       "evidence": {
         "local": [
           {
-            "marker": "BrowserLocalizationProvider",
-            "path": "apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/browser/localization/BrowserLocalizationProvider.tsx",
-      "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
-      "responsibilities": [
-        "Provides one browser localization service to the React presentation tree."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "BrowserCommandSource",
-            "path": "apps/office/src/framework/browser/presentation/command-surface.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/browser/presentation/command-surface.ts",
-      "rationale": "Adapts frame-owned Sfx bindings to persistent browser controller items and React external-store subscriptions.",
-      "responsibilities": [
-        "Defines the controller-item and dispatch port consumed by browser presenters without render-time state queries."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
             "marker": "CommandMenuBar",
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
           }
@@ -412,6 +391,27 @@
       "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
       "responsibilities": [
         "Projects generated toolbar placements through frame-owned Sfx command state and dispatch."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserCommandSource",
+            "path": "apps/office/src/framework/browser/presentation/command-surface.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/presentation/command-surface.ts",
+      "rationale": "Adapts frame-owned Sfx bindings to persistent browser controller items and React external-store subscriptions.",
+      "responsibilities": [
+        "Defines the controller-item and dispatch port consumed by browser presenters without render-time state queries."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1258,15 +1258,15 @@
       "evidence": {
         "local": [
           {
-            "marker": "SerializableValue",
+            "marker": "DocumentOpenPort",
             "path": "apps/office/src/svl/source/misc/storage.ts"
           }
         ]
       },
       "localPath": "apps/office/src/svl/source/misc/storage.ts",
-      "rationale": "Defines neutral serializable versioned-record storage used by application services and browser adapters without depending on a document shell. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "rationale": "Defines shell-neutral browser document open and export ports without a document shell or JSON snapshot persistence contract. These ports adapt platform file selection and downloads while Writer owns its document lifecycle.",
       "responsibilities": [
-        "Defines neutral serializable versioned-record storage used by application services and browser adapters without depending on a document shell."
+        "Defines external document open and export ports for browser adapters."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -1410,13 +1410,55 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterEditableParagraph",
+            "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+      "rationale": "Projects canonical Writer text nodes into browser DOM descendants that inherit editability from one root host; it no longer claims native SwEditWin ownership.",
+      "responsibilities": [
+        "Projects paragraph attributes and formatted runs without owning input or document mutation."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM projection replace native VCL painting at the outer presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterPlainTextEditor",
+            "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
+      "rationale": "Binds exactly one stable BrowserWriterEditWindow to immutable React paragraph projections and one logical contenteditable host.",
+      "responsibilities": [
+        "Renders Writer paragraphs and forwards DOM events without constructing Writer mutation closures."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM event binding replace the native VCL window boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "BrowserWriterEditWindow",
             "path": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
-      "rationale": "Provides the single DOM implementation of the platform-neutral SwEditWin boundary.",
+      "rationale": "Provides the single DOM implementation of the platform-neutral SwEditWin boundary. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
       "responsibilities": [
         "Translates DOM selection, beforeinput, composition, pointer, clipboard, drag/drop, and focus events into SwEditWin operations."
       ],
@@ -1473,6 +1515,48 @@
       "evidence": {
         "local": [
           {
+            "marker": "measureWriterTextLines",
+            "path": "apps/office/src/sw/browser/editor/writer-line-measurement.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/writer-line-measurement.ts",
+      "rationale": "Uses browser DOM Range geometry to supply shaped visual line boundaries and heights to Writer-owned text frames. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
+      "responsibilities": [
+        "Measures styled browser text lines without owning page breaks."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "DOM Range supplies line geometry in place of the native VCL text device."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "getWriterParagraphGap",
+            "path": "apps/office/src/sw/browser/editor/writer-page-pagination.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/writer-page-pagination.ts",
+      "rationale": "Projects Writer-owned adjacent paragraph spacing into browser point values; page breaks and follow text frames are owned by sw/source/core/layout/newfrm.ts and sw/source/core/text/txtfrm.ts.",
+      "responsibilities": [
+        "Projects adjacent Writer paragraph spacing for browser rendering."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Converts Writer twip spacing to browser point values."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterCursorSelection",
             "path": "apps/office/src/sw/browser/editor/writer-selection-types.ts"
           }
@@ -1507,48 +1591,6 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterEditableParagraph",
-            "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
-      "rationale": "Projects canonical Writer text nodes into browser DOM descendants that inherit editability from one root host; it no longer claims native SwEditWin ownership.",
-      "responsibilities": [
-        "Projects paragraph attributes and formatted runs without owning input or document mutation."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "React and DOM projection replace native VCL painting at the outer presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterPlainTextEditor",
-            "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
-      "rationale": "Binds exactly one stable BrowserWriterEditWindow to immutable React paragraph projections and one logical contenteditable host.",
-      "responsibilities": [
-        "Renders Writer paragraphs and forwards DOM events without constructing Writer mutation closures."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "React and DOM event binding replace the native VCL window boundary."
       },
       "status": "local-only"
     },
@@ -1641,13 +1683,232 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterCommandToolbar",
+            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
+      "localSymbols": [
+        "WriterCommandToolbarProps",
+        "WriterCommandToolbar"
+      ],
+      "status": "local-only",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the implemented Writer commands in a compact standard-toolbar presentation."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      }
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterFileDialog",
+            "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "rationale": "Presents browser document selection, computer ODT/TXT import, browser copy creation, and ODT/TXT export. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
+      "responsibilities": [
+        "Presents browser document selection, computer ODT/TXT import, browser copy creation, and ODT/TXT export."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Deliberate browser document lifecycle policy differs from upstream AutoRecovery and native file menus."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterFormattingToolbar",
+            "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the browser Writer paragraph-formatting toolbar."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterHyperlinkDialog",
+            "path": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx",
+      "localSymbols": [
+        "WriterHyperlinkDialogProps",
+        "WriterHyperlinkDialog"
+      ],
+      "rationale": "Contains React and browser DOM adaptation behind Writer hyperlink command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the accessible browser counterpart of LibreOffice Writer's hyperlink create and edit dialog."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterPageStyleDialog",
+            "path": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx",
+      "rationale": "Presents the bounded Writer page-format settings through accessible React controls and forwards changes to the document model instead of retaining independent page state.",
+      "responsibilities": [
+        "Presents the bounded page-format controls and validates page settings."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React controls replace the native PageFormatPage dialog."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterParagraphProperties",
+            "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
+      "rationale": "Combines immutable current paragraph values with alignment and list controls backed by generated commands and persistent bindings state.",
+      "responsibilities": [
+        "Renders the bounded Writer paragraph-properties summary and binding-backed sidebar commands."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterRecoveryPresentationController",
+            "path": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx",
+      "rationale": "Presents browser recovery candidates and requires an explicit restore, discard, or clean-continue choice; no native dialog implementation is claimed.",
+      "responsibilities": [
+        "Coordinates recovery candidate presentation without owning recovery storage or Writer document mutation.",
+        "Delays AutoRecovery scheduling until candidate inspection and any required user choice complete."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and browser interaction replace the native recovery dialog presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterRulers",
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+      "rationale": "Projects Writer page margins and paragraph indents into browser pointer handles while leaving authoritative geometry and undo transactions in Writer-owned model objects.",
+      "responsibilities": [
+        "Presents page-margin and paragraph-indent handles for the browser Writer workspace."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "DOM pointer handles replace native Writer and VCL ruler widgets."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterWorkspaceChrome",
+            "path": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx",
+      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "responsibilities": [
+        "Renders the browser Writer workspace chrome and presentation regions."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "selectWriterCommandResource",
+            "path": "apps/office/src/sw/browser/presentation/writer-command-presentation.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/writer-command-presentation.ts",
+      "rationale": "Projects pinned Writer command metadata through the browser localization service without changing the generated command identity or Writer model behavior.",
+      "responsibilities": [
+        "Localizes generated Writer command presentation labels for browser UI surfaces."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and browser localization replace native VCL command presentation."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "writerBrowserMenuPlacements",
             "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts",
-      "rationale": "Exposes the supported generated Writer menubar unchanged at the browser presentation boundary.",
+      "rationale": "Exposes the supported generated Writer menubar unchanged at the browser presentation boundary. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
       "responsibilities": [
         "Prevents a second handwritten policy from filtering implemented generated commands."
       ],
@@ -1704,44 +1965,19 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterCommandToolbar",
-            "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx"
+            "marker": "IndexedDbWriterOdtStore",
+            "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
-      "localSymbols": [
-        "WriterCommandToolbarProps",
-        "WriterCommandToolbar"
-      ],
-      "status": "local-only",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "localPath": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
+      "rationale": "Stores complete ODT package bytes as the only browser document body; old JSON records are not read or migrated. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
       "responsibilities": [
-        "Renders the implemented Writer commands in a compact standard-toolbar presentation."
+        "Stores complete ODT package bytes as the only browser document body; old JSON records are not read or migrated."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-      }
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterFormattingToolbar",
-            "path": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/WriterFormattingToolbar.tsx",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
-      "responsibilities": [
-        "Renders the browser Writer paragraph-formatting toolbar."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+        "rationale": "Deliberate browser document lifecycle policy differs from upstream AutoRecovery and native file menus."
       },
       "status": "local-only"
     },
@@ -1750,23 +1986,19 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterHyperlinkDialog",
-            "path": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx"
+            "marker": "WriterAutosaveController",
+            "path": "apps/office/src/sw/browser/workflows/writer-autosave.ts"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/browser/presentation/WriterHyperlinkDialog.tsx",
-      "localSymbols": [
-        "WriterHyperlinkDialogProps",
-        "WriterHyperlinkDialog"
-      ],
-      "rationale": "Contains React and browser DOM adaptation behind Writer hyperlink command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+      "localPath": "apps/office/src/sw/browser/workflows/writer-autosave.ts",
+      "rationale": "Schedules browser autosaves after ten seconds, one idle second, and UI capture release. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
       "responsibilities": [
-        "Renders the accessible browser counterpart of LibreOffice Writer's hyperlink create and edit dialog."
+        "Schedules browser autosaves after ten seconds, one idle second, and UI capture release."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+        "rationale": "Deliberate browser document lifecycle policy differs from upstream AutoRecovery and native file menus."
       },
       "status": "local-only"
     },
@@ -1775,106 +2007,61 @@
       "evidence": {
         "local": [
           {
-            "marker": "WriterParagraphProperties",
-            "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
-      "rationale": "Combines immutable current paragraph values with alignment and list controls backed by generated commands and persistent bindings state.",
-      "responsibilities": [
-        "Renders the bounded Writer paragraph-properties summary and binding-backed sidebar commands."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterRecoveryPresentationController",
-            "path": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx",
-      "rationale": "Presents browser recovery candidates and requires an explicit restore, discard, or clean-continue choice; no native dialog implementation is claimed.",
-      "responsibilities": [
-        "Coordinates recovery candidate presentation without owning recovery storage or Writer document mutation.",
-        "Delays AutoRecovery scheduling until candidate inspection and any required user choice complete."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "React and browser interaction replace the native recovery dialog presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterWorkspaceChrome",
-            "path": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/WriterWorkspaceChrome.tsx",
-      "rationale": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
-      "responsibilities": [
-        "Renders the browser Writer workspace chrome and presentation regions."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterSnapshotState",
-            "path": "apps/office/src/sw/browser/storage/writer-storage.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/storage/writer-storage.ts",
-      "rationale": "Owns the browser cache envelope and BrowserWriterRecoveryDocument adapter over the shared canonical Writer graph.",
-      "responsibilities": [
-        "Versions and validates the current browser cache envelope without compatibility migration.",
-        "Adapts framework AutoRecovery to SwDocShell without importing browser persistence into uibase."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "openWriterOdtFromPort",
+            "marker": "saveWriterOdtToPort",
             "path": "apps/office/src/sw/browser/workflows/writer-document-io.ts"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/workflows/writer-document-io.ts",
-      "rationale": "Terminates browser file-picker, download, and IndexedDB ports and adapts them to explicit SfxMedium and SwDocShell operations.",
+      "rationale": "Owns browser ODT and TXT download workflows while the Writer document graph and filters remain in the shell and filter modules.",
       "responsibilities": [
-        "Adapts browser file selection and downloads to Writer filter operations.",
-        "Adapts durable browser storage ports to confirmed SfxMedium save and open transitions."
+        "Adapts Writer ODT and TXT exports to browser download ports."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser file and IndexedDB APIs replace native file dialogs and storage implementations."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterFileDialogController",
+            "path": "apps/office/src/sw/browser/workflows/writer-file-dialog-controller.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/workflows/writer-file-dialog-controller.ts",
+      "rationale": "Coordinates browser Open, Save As, and Export dialogs. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
+      "responsibilities": [
+        "Coordinates browser Open, Save As, and Export dialogs."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Deliberate browser document lifecycle policy differs from upstream AutoRecovery and native file menus."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "autosaveWriter",
+            "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "rationale": "Adapts dirty Writer shell generations to ODT IndexedDB saves and refuses empty documents. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
+      "responsibilities": [
+        "Adapts dirty Writer shell generations to ODT IndexedDB saves and refuses empty documents."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Deliberate browser document lifecycle policy differs from upstream AutoRecovery and native file menus."
       },
       "status": "local-only"
     },
@@ -2121,6 +2308,39 @@
       "evidence": {
         "local": [
           {
+            "marker": "SwNodeNum",
+            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwNodeNum",
+            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "localSymbols": [
+        "SwNodeNum"
+      ],
+      "omittedResponsibilities": [
+        "Redline-specific parallel trees and layout notification remain outside the supported browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Stores a list item's level and validated counter under document-list ownership."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "upstreamSymbols": [
+        "SwNodeNum::SwNodeNum",
+        "SwNodeNum::GetStartValue"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SwFormat",
             "path": "apps/office/src/sw/source/core/attr/format.ts"
           }
@@ -2259,79 +2479,6 @@
         "SwPosition",
         "SwPaM",
         "SwPosition::SwPosition"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "getDefaultFont",
-            "path": "apps/office/src/sw/source/core/doc/default-font.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "lcl_SetDfltFont",
-            "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/doc/default-font.ts",
-      "localSymbols": [
-        "WriterFontScript",
-        "WriterDefaultFontType",
-        "DefaultFontDevice",
-        "getDefaultFont",
-        "getWriterFontScript"
-      ],
-      "omittedResponsibilities": [
-        "Native font configuration and physical-device enumeration remain behind the injected output-device contract."
-      ],
-      "preservedResponsibilities": [
-        "Selects stable Western, CJK, and CTL Writer defaults by language and font role."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
-      "upstreamSymbols": [
-        "lcl_SetDfltFont",
-        "OutputDevice::GetDefaultFont"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SwDoc",
-            "path": "apps/office/src/sw/source/core/doc/doc.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwDoc",
-            "path": "vendor/libreoffice-reference/sw/source/core/doc/doc.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/doc/doc.ts",
-      "localSymbols": [
-        "SwDoc",
-        "createWriterDocument"
-      ],
-      "omittedResponsibilities": [
-        "Upstream subsystems outside the bounded SwDoc aggregate remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Owns the final Writer document aggregate and composes upstream-shaped content, list, setting, state, style, and undo managers."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/doc/doc.cxx",
-      "upstreamSymbols": [
-        "SwDoc",
-        "SwDoc::acquire",
-        "SwDoc::release",
-        "SwDoc::getReferenceCount"
       ]
     },
     {
@@ -2497,6 +2644,79 @@
       "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
       "upstreamSymbols": [
         "DocumentStylePoolManager::DocumentStylePoolManager"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "getDefaultFont",
+            "path": "apps/office/src/sw/source/core/doc/default-font.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "lcl_SetDfltFont",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/default-font.ts",
+      "localSymbols": [
+        "WriterFontScript",
+        "WriterDefaultFontType",
+        "DefaultFontDevice",
+        "getDefaultFont",
+        "getWriterFontScript"
+      ],
+      "omittedResponsibilities": [
+        "Native font configuration and physical-device enumeration remain behind the injected output-device contract."
+      ],
+      "preservedResponsibilities": [
+        "Selects stable Western, CJK, and CTL Writer defaults by language and font role."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+      "upstreamSymbols": [
+        "lcl_SetDfltFont",
+        "OutputDevice::GetDefaultFont"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwDoc",
+            "path": "apps/office/src/sw/source/core/doc/doc.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwDoc",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/doc.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/doc.ts",
+      "localSymbols": [
+        "SwDoc",
+        "createWriterDocument"
+      ],
+      "omittedResponsibilities": [
+        "Upstream subsystems outside the bounded SwDoc aggregate remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns the final Writer document aggregate and composes upstream-shaped content, list, setting, state, style, and undo managers."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/doc.cxx",
+      "upstreamSymbols": [
+        "SwDoc",
+        "SwDoc::acquire",
+        "SwDoc::release",
+        "SwDoc::getReferenceCount"
       ]
     },
     {
@@ -2689,9 +2909,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/source/core/doc/writer-document-codec.ts",
-      "rationale": "Defines the one primitive Writer graph representation reused by worker transfer and browser cache envelopes.",
+      "rationale": "Defines a structured-clone Writer graph representation for ODT Worker transfer; it is not used by browser document persistence.",
       "responsibilities": [
-        "Encodes and decodes the canonical Writer graph at explicit serialization boundaries."
+        "Encodes and decodes the Writer graph for the ODT Worker message boundary."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
@@ -2778,6 +2998,72 @@
       "evidence": {
         "local": [
           {
+            "marker": "createSwPageFrames",
+            "path": "apps/office/src/sw/source/core/layout/newfrm.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "InsertNewPage",
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/layout/newfrm.ts",
+      "localSymbols": [
+        "SwPageFrame",
+        "createSwPageFrames"
+      ],
+      "omittedResponsibilities": [
+        "Native frames for tables, anchored objects, footnotes, and page-style families beyond the supported Standard page remain outside this slice."
+      ],
+      "preservedResponsibilities": [
+        "Creates physical page frames and places text-frame fragments by available body height."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/layout/newfrm.cxx",
+      "upstreamSymbols": [
+        "InsertNewPage"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwPageDesc",
+            "path": "apps/office/src/sw/source/core/layout/pagedesc.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwPageDesc::SwPageDesc",
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/pagedesc.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/layout/pagedesc.ts",
+      "localSymbols": [
+        "SwPageDesc",
+        "createDefaultWriterPageDescriptor"
+      ],
+      "omittedResponsibilities": [
+        "Native printer integration and page-frame features beyond supported paragraphs remain outside the browser Writer slice."
+      ],
+      "preservedResponsibilities": [
+        "Owns bounded physical page size, margin, orientation, and descriptor copy semantics."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/layout/pagedesc.cxx",
+      "upstreamSymbols": [
+        "SwPageDesc::SwPageDesc"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SwNumRuleItem",
             "path": "apps/office/src/sw/source/core/para/paratr.ts"
           }
@@ -2813,32 +3099,33 @@
       "evidence": {
         "local": [
           {
-            "marker": "SwNodeNum",
-            "path": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts"
+            "marker": "SwTextFrame",
+            "path": "apps/office/src/sw/source/core/text/txtfrm.ts"
           }
         ],
         "upstream": [
           {
-            "marker": "SwNodeNum",
-            "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx"
+            "marker": "SwTextFrame::SwTextFrame",
+            "path": "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/source/core/SwNumberTree/SwNodeNum.ts",
+      "localPath": "apps/office/src/sw/source/core/text/txtfrm.ts",
       "localSymbols": [
-        "SwNodeNum"
+        "SwTextLine",
+        "SwTextFrame",
+        "makeSwTextFrame"
       ],
       "omittedResponsibilities": [
-        "Redline-specific parallel trees and layout notification remain outside the supported browser slice."
+        "Native text shaping, fly objects, footnotes, and other unsupported frame behaviors remain outside the paragraph slice."
       ],
       "preservedResponsibilities": [
-        "Stores a list item's level and validated counter under document-list ownership."
+        "Represents master and follow text frames with source-node offsets and paragraph spacing."
       ],
       "status": "mapped",
-      "upstreamPath": "sw/source/core/SwNumberTree/SwNodeNum.cxx",
+      "upstreamPath": "sw/source/core/text/txtfrm.cxx",
       "upstreamSymbols": [
-        "SwNodeNum::SwNodeNum",
-        "SwNodeNum::GetStartValue"
+        "SwTextFrame::SwTextFrame"
       ]
     },
     {
@@ -3009,6 +3296,74 @@
         "SwTextAttr",
         "SwTextAttr::SwTextAttr",
         "SwTextAttr::~SwTextAttr"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwUndoPageDesc",
+            "path": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwUndoPageDesc::UndoImpl",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/SwUndoPageDesc.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
+      "localSymbols": [
+        "SwUndoPageDesc",
+        "SwUndoRulerIndent"
+      ],
+      "omittedResponsibilities": [
+        "Undo interactions with native layout frames and broader page-style families remain outside the bounded implementation."
+      ],
+      "preservedResponsibilities": [
+        "Restores bounded page-descriptor and ruler-indent changes through Writer undo actions."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/SwUndoPageDesc.cxx",
+      "upstreamSymbols": [
+        "SwUndoPageDesc::UndoImpl",
+        "SwUndoPageDesc::RedoImpl"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "UndoManager",
+            "path": "apps/office/src/sw/source/core/undo/docundo.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "UndoManager::UndoManager",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/docundo.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/docundo.ts",
+      "localSymbols": [
+        "SwUndoNodes",
+        "UndoManager"
+      ],
+      "omittedResponsibilities": [
+        "Desktop undo storage and native document lifetime responsibilities beyond the bounded Writer browser action manager remain omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns Writer-specific undo nodes and action manager corresponding to pinned LibreOffice docundo.cxx."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/docundo.cxx",
+      "upstreamSymbols": [
+        "UndoManager::UndoManager",
+        "UndoManager::GetUndoNodes"
       ]
     },
     {
@@ -3415,7 +3770,7 @@
         ]
       },
       "localPath": "apps/office/src/sw/source/filter/xml/odt-transfer.ts",
-      "rationale": "Defines the current ODT Worker structured-clone envelope around the shared canonical WriterDocumentRecord graph.",
+      "rationale": "Defines the versioned ODT Worker structured-clone envelope around the internal Writer graph representation, independent of IndexedDB ODT bytes.",
       "responsibilities": [
         "Versions and validates the Worker envelope while delegating graph encoding and decoding to writer-document-codec.ts."
       ],
@@ -4262,7 +4617,8 @@
         "writerStandardBarItems"
       ],
       "omittedResponsibilities": [
-        "Commands outside the implemented browser subset remain explicitly unavailable."
+        "Commands outside the implemented browser subset remain explicitly unavailable.",
+        "Save As is intentionally omitted from the browser toolbar and remains in the File menu; manual Save is absent."
       ],
       "preservedResponsibilities": [
         "Preserves supported command ordering from the pinned LibreOffice XML resource."
@@ -4486,27 +4842,6 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "The Local Font Access API replaces LibreOffice OutputDevice font enumeration."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "DEFAULT_RECOVERY_GENERATION_LIMIT",
-            "path": "apps/office/src/vcl/browser/indexeddb-storage.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/vcl/browser/indexeddb-storage.ts",
-      "rationale": "Implements a browser-native IndexedDB adapter for versioned JSON document snapshots without backend, autosave, or file-picker policy. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
-      "responsibilities": [
-        "Implements a browser-native IndexedDB adapter for versioned JSON document snapshots without backend, autosave, or file-picker policy."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
       },
       "status": "local-only"
     },
@@ -4797,178 +5132,6 @@
         "XMLCharContext::XMLCharContext",
         "sax_fastparser::castToFastAttributeList"
       ]
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "getWriterParagraphGap",
-            "path": "apps/office/src/sw/browser/editor/writer-page-pagination.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/editor/writer-page-pagination.ts",
-      "rationale": "Projects Writer-owned adjacent paragraph spacing into browser point values; page breaks and follow text frames are owned by sw/source/core/layout/newfrm.ts and sw/source/core/text/txtfrm.ts.",
-      "responsibilities": [
-        "Projects adjacent Writer paragraph spacing for browser rendering."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Converts Writer twip spacing to browser point values."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterPageStyleDialog",
-            "path": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx",
-      "rationale": "Presents the bounded Writer page-format settings through accessible React controls and forwards changes to the document model instead of retaining independent page state.",
-      "responsibilities": [
-        "Presents the bounded page-format controls and validates page settings."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "React controls replace the native PageFormatPage dialog."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterRulers",
-            "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
-      "rationale": "Projects Writer page margins and paragraph indents into browser pointer handles while leaving authoritative geometry and undo transactions in Writer-owned model objects.",
-      "responsibilities": [
-        "Presents page-margin and paragraph-indent handles for the browser Writer workspace."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "DOM pointer handles replace native Writer and VCL ruler widgets."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SwPageDesc",
-            "path": "apps/office/src/sw/source/core/layout/pagedesc.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwPageDesc::SwPageDesc",
-            "path": "vendor/libreoffice-reference/sw/source/core/layout/pagedesc.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/layout/pagedesc.ts",
-      "localSymbols": [
-        "SwPageDesc",
-        "createDefaultWriterPageDescriptor"
-      ],
-      "omittedResponsibilities": [
-        "Native printer integration and page-frame features beyond supported paragraphs remain outside the browser Writer slice."
-      ],
-      "preservedResponsibilities": [
-        "Owns bounded physical page size, margin, orientation, and descriptor copy semantics."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/layout/pagedesc.cxx",
-      "upstreamSymbols": [
-        "SwPageDesc::SwPageDesc"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "SwUndoPageDesc",
-            "path": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwUndoPageDesc::UndoImpl",
-            "path": "vendor/libreoffice-reference/sw/source/core/undo/SwUndoPageDesc.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
-      "localSymbols": [
-        "SwUndoPageDesc",
-        "SwUndoRulerIndent"
-      ],
-      "omittedResponsibilities": [
-        "Undo interactions with native layout frames and broader page-style families remain outside the bounded implementation."
-      ],
-      "preservedResponsibilities": [
-        "Restores bounded page-descriptor and ruler-indent changes through Writer undo actions."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/undo/SwUndoPageDesc.cxx",
-      "upstreamSymbols": [
-        "SwUndoPageDesc::UndoImpl",
-        "SwUndoPageDesc::RedoImpl"
-      ]
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [{ "marker": "measureWriterTextLines", "path": "apps/office/src/sw/browser/editor/writer-line-measurement.ts" }]
-      },
-      "localPath": "apps/office/src/sw/browser/editor/writer-line-measurement.ts",
-      "rationale": "Uses browser DOM Range geometry to supply shaped visual line boundaries and heights to Writer-owned text frames.",
-      "responsibilities": ["Measures styled browser text lines without owning page breaks."],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "DOM Range supplies line geometry in place of the native VCL text device."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [{ "marker": "createSwPageFrames", "path": "apps/office/src/sw/source/core/layout/newfrm.ts" }],
-        "upstream": [{ "marker": "InsertNewPage", "path": "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx" }]
-      },
-      "localPath": "apps/office/src/sw/source/core/layout/newfrm.ts",
-      "localSymbols": ["SwPageFrame", "createSwPageFrames"],
-      "omittedResponsibilities": ["Native frames for tables, anchored objects, footnotes, and page-style families beyond the supported Standard page remain outside this slice."],
-      "preservedResponsibilities": ["Creates physical page frames and places text-frame fragments by available body height."],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/layout/newfrm.cxx",
-      "upstreamSymbols": ["InsertNewPage"]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [{ "marker": "SwTextFrame", "path": "apps/office/src/sw/source/core/text/txtfrm.ts" }],
-        "upstream": [{ "marker": "SwTextFrame::SwTextFrame", "path": "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx" }]
-      },
-      "localPath": "apps/office/src/sw/source/core/text/txtfrm.ts",
-      "localSymbols": ["SwTextLine", "SwTextFrame", "makeSwTextFrame"],
-      "omittedResponsibilities": ["Native text shaping, fly objects, footnotes, and other unsupported frame behaviors remain outside the paragraph slice."],
-      "preservedResponsibilities": ["Represents master and follow text frames with source-node offsets and paragraph spacing."],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/text/txtfrm.cxx",
-      "upstreamSymbols": ["SwTextFrame::SwTextFrame"]
     }
   ]
 }

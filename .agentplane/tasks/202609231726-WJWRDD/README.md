@@ -4,7 +4,7 @@ title: "Implement browser ODT autosave and Writer file workflows"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -13,14 +13,14 @@ tags:
 verify: []
 plan_approval:
   state: "approved"
-  updated_at: "2026-09-23T17:26:21.371Z"
+  updated_at: "2026-09-23T18:01:25.925Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-23T18:45:33.141Z"
+  updated_by: "CODER"
+  note: "Pass: npm run verify; office coverage 100% across statements, branches, functions, and lines (428 tests); inventory coverage 100% (96 tests); 13 E2E; routing check and ap doctor passed. ODT storage tests confirm no JSON migration and no empty document persistence."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement approved ODT autosave and Writer file workflows while preserving existing unrelated edits."
+  -
+    type: "verify"
+    at: "2026-09-23T18:45:33.141Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pass: npm run verify; office coverage 100% across statements, branches, functions, and lines (428 tests); inventory coverage 100% (96 tests); 13 E2E; routing check and ap doctor passed. ODT storage tests confirm no JSON migration and no empty document persistence."
 doc_version: 3
-doc_updated_at: "2026-09-23T17:26:22.132Z"
+doc_updated_at: "2026-09-23T18:45:33.193Z"
 doc_updated_by: "CODER"
 description: "Replace durable JSON snapshots with ODT autosave, implement Save As/rename semantics and Open/Export dialogs, and document deliberate upstream divergence in parity inventory."
 sections:
@@ -47,10 +53,40 @@ sections:
   Scope: |-
     - In scope: Replace durable JSON snapshots with ODT autosave, implement Save As/rename semantics and Open/Export dialogs, and document deliberate upstream divergence in parity inventory.
     - Out of scope: unrelated refactors not required for "Implement browser ODT autosave and Writer file workflows".
-  Plan: "1. Replace durable JSON snapshot storage with ODT bytes and atomic metadata, including one-time legacy migration. 2. Add dirty-aware 10-second autosave with one-second idle, 30-second maximum, UI capture deferral, serialized writes, and exact generation acknowledgement. 3. Implement browser Save As copy and atomic rename move with collision refusal. 4. Implement Open browser/computer tabs (ODT/TXT) and Export format dialog; remove manual Save. 5. Record intentional upstream divergences in canonical docs and parity inventory. 6. Verify targeted tests, build, routing, doctor, and changed scope."
-  Verify Steps: "1. Run targeted Writer storage, workflow, dialog, and autosave tests: ODT round trip, legacy migration, rename collision safety, Save As copy, TXT/ODT open, export, 10-second/idle/cap/UI timing, concurrent edits, and undo retention. 2. Run npm run verify and confirm all repository gates pass. 3. Run node .agentplane/policy/check-routing.mjs and ap doctor. 4. Inspect docs/program/autosave-recovery.md and parity inventory to confirm intentional upstream divergence is recorded."
+  Plan: "1. Replace durable JSON snapshot storage with ODT bytes and atomic metadata. Do not read or migrate old JSON records. 2. Add dirty-aware 10-second autosave with one-second idle, 30-second maximum, UI capture deferral, serialized writes, and exact generation acknowledgement; never save empty documents. 3. Implement browser Save As copy and atomic rename with collision refusal. 4. Implement Open browser/computer tabs for ODT and TXT and Export format dialog; remove manual Save. 5. Record intentional upstream divergences in docs and parity inventory. 6. Verify targeted behavior and repository gates."
+  Verify Steps: "1. Run targeted Writer storage, workflow, dialog, and autosave tests: ODT round trip, absence of JSON migration, rename collision safety, Save As copy, TXT/ODT open, export, 10-second/idle/cap/UI timing, concurrent edits, and undo retention. 2. Run npm run verify and confirm all repository gates pass. 3. Run node .agentplane/policy/check-routing.mjs and ap doctor. 4. Inspect docs/program/autosave-recovery.md and parity inventory to confirm intentional upstream divergence is recorded."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-23T18:45:33.141Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pass: npm run verify; office coverage 100% across statements, branches, functions, and lines (428 tests); inventory coverage 100% (96 tests); 13 E2E; routing check and ap doctor passed. ODT storage tests confirm no JSON migration and no empty document persistence.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T18:44:41.755Z, excerpt_hash=sha256:97b0f792aa342e4e5114beadee5468816a6b17e4bfdae5fb4fa2a98f2379ed6b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231726-WJWRDD/blueprint/resolved-snapshot.json
+    - old_digest: efcb19450fd4dcecf8abeec378d50da7f6383217409314468cce5f719af5ffdf
+    - current_digest: efcb19450fd4dcecf8abeec378d50da7f6383217409314468cce5f719af5ffdf
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609231726-WJWRDD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609231726-WJWRDD
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -71,15 +107,45 @@ Replace durable JSON snapshots with ODT autosave, implement Save As/rename seman
 
 ## Plan
 
-1. Replace durable JSON snapshot storage with ODT bytes and atomic metadata, including one-time legacy migration. 2. Add dirty-aware 10-second autosave with one-second idle, 30-second maximum, UI capture deferral, serialized writes, and exact generation acknowledgement. 3. Implement browser Save As copy and atomic rename move with collision refusal. 4. Implement Open browser/computer tabs (ODT/TXT) and Export format dialog; remove manual Save. 5. Record intentional upstream divergences in canonical docs and parity inventory. 6. Verify targeted tests, build, routing, doctor, and changed scope.
+1. Replace durable JSON snapshot storage with ODT bytes and atomic metadata. Do not read or migrate old JSON records. 2. Add dirty-aware 10-second autosave with one-second idle, 30-second maximum, UI capture deferral, serialized writes, and exact generation acknowledgement; never save empty documents. 3. Implement browser Save As copy and atomic rename with collision refusal. 4. Implement Open browser/computer tabs for ODT and TXT and Export format dialog; remove manual Save. 5. Record intentional upstream divergences in docs and parity inventory. 6. Verify targeted behavior and repository gates.
 
 ## Verify Steps
 
-1. Run targeted Writer storage, workflow, dialog, and autosave tests: ODT round trip, legacy migration, rename collision safety, Save As copy, TXT/ODT open, export, 10-second/idle/cap/UI timing, concurrent edits, and undo retention. 2. Run npm run verify and confirm all repository gates pass. 3. Run node .agentplane/policy/check-routing.mjs and ap doctor. 4. Inspect docs/program/autosave-recovery.md and parity inventory to confirm intentional upstream divergence is recorded.
+1. Run targeted Writer storage, workflow, dialog, and autosave tests: ODT round trip, absence of JSON migration, rename collision safety, Save As copy, TXT/ODT open, export, 10-second/idle/cap/UI timing, concurrent edits, and undo retention. 2. Run npm run verify and confirm all repository gates pass. 3. Run node .agentplane/policy/check-routing.mjs and ap doctor. 4. Inspect docs/program/autosave-recovery.md and parity inventory to confirm intentional upstream divergence is recorded.
 
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-23T18:45:33.141Z — VERIFY — ok
+
+By: CODER
+
+Note: Pass: npm run verify; office coverage 100% across statements, branches, functions, and lines (428 tests); inventory coverage 100% (96 tests); 13 E2E; routing check and ap doctor passed. ODT storage tests confirm no JSON migration and no empty document persistence.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T18:44:41.755Z, excerpt_hash=sha256:97b0f792aa342e4e5114beadee5468816a6b17e4bfdae5fb4fa2a98f2379ed6b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231726-WJWRDD/blueprint/resolved-snapshot.json
+- old_digest: efcb19450fd4dcecf8abeec378d50da7f6383217409314468cce5f719af5ffdf
+- current_digest: efcb19450fd4dcecf8abeec378d50da7f6383217409314468cce5f719af5ffdf
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609231726-WJWRDD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609231726-WJWRDD
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

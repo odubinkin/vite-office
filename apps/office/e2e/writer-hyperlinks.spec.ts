@@ -51,7 +51,9 @@ test("Writer creates, edits, and round-trips hyperlinks", /** Verifies upstream-
   );
 
   const downloadPromise = page.waitForEvent("download");
-  await page.getByRole("button", { name: "Save As" }).click();
+  await page.getByRole("button", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download ODT" }).click();
   const download = await downloadPromise;
   const downloadPath = await download.path();
   if (downloadPath === null) throw new Error("Chromium did not expose the saved ODT path.");
@@ -61,10 +63,9 @@ test("Writer creates, edits, and round-trips hyperlinks", /** Verifies upstream-
     '<text:a xlink:type="simple" xlink:href="https://example.test/updated" office:target-frame-name="_blank" xlink:show="new">Linked<text:s/>text</text:a>',
   );
 
-  const fileChooserPromise = page.waitForEvent("filechooser");
   await page.getByRole("button", { name: "Open" }).click();
-  const fileChooser = await fileChooserPromise;
-  await fileChooser.setFiles(downloadPath);
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(downloadPath);
   await expect(editor.getByRole("link", { name: "Linked text" })).toHaveAttribute(
     "href",
     "https://example.test/updated",

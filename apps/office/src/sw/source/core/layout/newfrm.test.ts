@@ -100,11 +100,40 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
       ],
       initialName: "Standard",
     });
-    expect(frames.map((frame) => frame.descriptor.name)).toEqual([
-      "Standard",
-      "First Page",
-      "Standard",
-    ]);
+    expect(
+      frames.map(
+        /** Runs the focused test callback. @param frame - Input for this operation. @returns Operation result. */ (
+          frame,
+        ) => frame.descriptor.name,
+      ),
+    ).toEqual(["Standard", "First Page", "Standard"]);
+  });
+
+  it("rejects missing initial and follow page styles", /** Checks malformed ODT page-style graphs. @returns Nothing. */ () => {
+    const page = { ...standardPage, height: 800, topMargin: 100, bottomMargin: 100 };
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () =>
+        createSwPageFrames([], { descriptors: [], initialName: "Standard" }),
+    ).toThrow("requires a page descriptor");
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () =>
+        createSwPageFrames([], {
+          descriptors: [{ followName: "Standard", value: page }],
+          initialName: "Missing",
+        }),
+    ).toThrow("initial page descriptor is missing");
+    const broken = {
+      descriptors: [{ followName: "Missing", value: page }],
+      initialName: "Standard",
+    };
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () =>
+        createSwPageFrames([paragraph("a", 1, 400), paragraph("b", 1, 400)], broken),
+    ).toThrow("follow page descriptor is missing");
+    expect(
+      /** Runs the focused test callback. @returns Operation result. */ () =>
+        createSwPageFrames([paragraph("long", 3, 400)], broken),
+    ).toThrow("follow page descriptor is missing");
   });
 
   it("suppresses matching contextual spacing and rejects invalid line ranges", /** Verifies upstream spacing rule and range guard. @returns Nothing. */ () => {

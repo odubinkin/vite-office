@@ -3327,7 +3327,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "openWriterOdtFromPort"
+            "marker": "WriterWorkflowCommandShell"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -3389,7 +3389,7 @@
           },
           {
             "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
-            "marker": "opens a supported ODT atomically"
+            "marker": "opens an ODT through the computer tab"
           },
           {
             "path": "apps/office/e2e/writer-odt-file.spec.ts",
@@ -3640,8 +3640,8 @@
             "marker": "contentGeneration"
           },
           {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
-            "marker": "restoreWriterSnapshot"
+            "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+            "marker": "autosaveWriter"
           }
         ],
         "tests": [
@@ -3650,8 +3650,8 @@
             "marker": "owns modified and persistence generations"
           },
           {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
-            "marker": "does not acknowledge a failed primary save"
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+            "marker": "keeps named browser copies available from Open"
           },
           {
             "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
@@ -5474,7 +5474,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "openWriterOdtFromPort"
+            "marker": "WriterWorkflowCommandShell"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -5536,7 +5536,7 @@
           },
           {
             "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
-            "marker": "opens a supported ODT atomically"
+            "marker": "opens an ODT through the computer tab"
           },
           {
             "path": "apps/office/e2e/writer-odt-file.spec.ts",
@@ -5770,7 +5770,7 @@
         "docs": [
           {
             "path": "docs/program/autosave-recovery.md",
-            "marker": "Browser document recovery is intentionally unsupported and must not be"
+            "marker": "Browser persistence decision"
           }
         ]
       },
@@ -7334,7 +7334,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "openWriterOdtFromPort"
+            "marker": "WriterWorkflowCommandShell"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -7396,7 +7396,7 @@
           },
           {
             "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
-            "marker": "opens a supported ODT atomically"
+            "marker": "opens an ODT through the computer tab"
           },
           {
             "path": "apps/office/e2e/writer-odt-file.spec.ts",
@@ -7776,7 +7776,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "openWriterOdtFromPort"
+            "marker": "WriterWorkflowCommandShell"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -7838,7 +7838,7 @@
           },
           {
             "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
-            "marker": "opens a supported ODT atomically"
+            "marker": "opens an ODT through the computer tab"
           },
           {
             "path": "apps/office/e2e/writer-odt-file.spec.ts",
@@ -8210,7 +8210,7 @@
           },
           {
             "path": "apps/office/src/sw/browser/workflows/writer-workflows.ts",
-            "marker": "openWriterOdtFromPort"
+            "marker": "WriterWorkflowCommandShell"
           },
           {
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
@@ -8272,7 +8272,7 @@
           },
           {
             "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
-            "marker": "opens a supported ODT atomically"
+            "marker": "opens an ODT through the computer tab"
           },
           {
             "path": "apps/office/e2e/writer-odt-file.spec.ts",
@@ -8468,7 +8468,7 @@
       "type": "lifecycle",
       "maturity": "verified",
       "assertions": [
-        "The pinned upstream and local assertion markers cover this atomic operation: Persist and restore one primary IndexedDB snapshot."
+        "The pinned upstream and local assertion markers cover this atomic operation: Persist and restore one primary IndexedDB ODT package."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -8527,12 +8527,12 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
-            "marker": "restoreWriterSnapshot"
+            "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+            "marker": "autosaveWriter"
           },
           {
             "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
-            "marker": "MarkHistoryMutation"
+            "marker": "SerializeOdt"
           }
         ],
         "tests": [
@@ -8545,8 +8545,8 @@
             "marker": "saves each changed generation"
           },
           {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
-            "marker": "does not acknowledge a failed primary save"
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+            "marker": "keeps named browser copies available from Open"
           },
           {
             "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
@@ -8560,7 +8560,7 @@
           },
           {
             "path": "docs/program/autosave-recovery.md",
-            "marker": "recovery generation"
+            "marker": "Deliberate divergence from LibreOffice"
           },
           {
             "path": "docs/program/transaction-history.md",
@@ -8569,7 +8569,7 @@
         ]
       },
       "aspect": "persistence-filter",
-      "atomicOperation": "Persist and restore one primary IndexedDB snapshot",
+      "atomicOperation": "Persist and restore one primary IndexedDB ODT package",
       "scopeLimitations": [
         "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
         "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
@@ -8581,7 +8581,7 @@
       "verified": true,
       "assertionEvidence": [
         {
-          "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Persist and restore one primary IndexedDB snapshot.",
+          "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Persist and restore one primary IndexedDB ODT package.",
           "local": {
             "marker": "owns modified and persistence generations",
             "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
@@ -8797,12 +8797,12 @@
             "marker": "recoveryGeneration"
           },
           {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
-            "marker": "restoreWriterSnapshot"
+            "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+            "marker": "autosaveWriter"
           },
           {
             "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
-            "marker": "MarkHistoryMutation"
+            "marker": "SerializeOdt"
           }
         ],
         "tests": [
@@ -8815,8 +8815,8 @@
             "marker": "saves each changed generation"
           },
           {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
-            "marker": "does not acknowledge a failed primary save"
+            "path": "apps/office/src/framework/browser/app/desktop.test.tsx",
+            "marker": "keeps named browser copies available from Open"
           },
           {
             "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
@@ -8830,7 +8830,7 @@
           },
           {
             "path": "docs/program/autosave-recovery.md",
-            "marker": "recovery generation"
+            "marker": "Deliberate divergence from LibreOffice"
           },
           {
             "path": "docs/program/transaction-history.md",
@@ -9054,7 +9054,7 @@
         "docs": [
           {
             "path": "docs/program/autosave-recovery.md",
-            "marker": "Browser document recovery is intentionally unsupported and must not be"
+            "marker": "Browser persistence decision"
           }
         ]
       },

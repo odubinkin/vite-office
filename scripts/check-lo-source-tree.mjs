@@ -96,7 +96,7 @@ const requiredFiles = [
   "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
   "apps/office/src/sw/source/core/doc/item-codec.ts",
   "apps/office/src/sw/source/core/doc/writer-document-codec.ts",
-  "apps/office/src/sw/browser/storage/writer-storage.ts",
+  "apps/office/src/sw/browser/storage/writer-odt-store.ts",
   "apps/office/src/sw/source/filter/xml/odt-transfer.ts",
   "apps/office/src/sw/browser/workflows/writer-document-io.ts",
   "apps/office/src/sw/source/uibase/shells/textsh.ts",

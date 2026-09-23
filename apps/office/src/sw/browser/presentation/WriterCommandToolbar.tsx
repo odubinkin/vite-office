@@ -6,7 +6,6 @@ import {
   FolderOpen,
   Link,
   Redo2,
-  Save,
   Scissors,
   Undo2,
 } from "lucide-react";
@@ -24,7 +23,6 @@ import { useBrowserLocalization } from "../../../framework/browser/localization/
 const icons = new Map<string, CommandIcon>([
   [WRITER_COMMAND_IDS.newDocument, FilePlus],
   [WRITER_COMMAND_IDS.openOdt, FolderOpen],
-  [WRITER_COMMAND_IDS.saveOdt, Save],
   [WRITER_COMMAND_IDS.cut, Scissors],
   [WRITER_COMMAND_IDS.copy, Copy],
   [WRITER_COMMAND_IDS.paste, ClipboardPaste],

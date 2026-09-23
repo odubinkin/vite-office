@@ -1,4 +1,4 @@
-/** @fileoverview Exposes generated Writer UI resources without a second handwritten policy. */
+/** @fileoverview Exposes generated Writer UI resources. */
 
 import { writerMenuPlacements } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type { WriterMenuPlacement } from "../../uiconfig/swriter/ui-resource";

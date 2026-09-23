@@ -64,4 +64,14 @@ describe("browser file selection" /** Groups the platform file adapter. @returns
     expect(select).toHaveBeenCalledWith(".odt");
     expect(read).toHaveBeenCalledWith(file);
   });
+
+  it("preserves file-picker cancellation through the open port", /** Checks the empty selection path. @returns Completion. */ async () => {
+    const read = vi.fn();
+    const port = createBrowserDocumentOpenPort(
+      /** Runs the focused test callback. @returns Operation result. */ async () => undefined,
+      read,
+    );
+    await expect(port.open(".odt,.txt")).resolves.toBeUndefined();
+    expect(read).not.toHaveBeenCalled();
+  });
 });

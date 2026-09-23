@@ -18,8 +18,9 @@ import {
 } from "../../../vcl/browser/browser-download";
 import { createBrowserDocumentOpenPort } from "../../../vcl/browser/browser-file";
 import { createBrowserDefaultFontDevice } from "../../../vcl/browser/default-font-device";
-import { IndexedDbDocumentStorageAdapter } from "../../../vcl/browser/indexeddb-storage";
-import type { WriterSnapshotState } from "../storage/writer-storage";
+import { IndexedDbWriterOdtStore } from "../storage/writer-odt-store";
+import { WriterAutosaveController } from "../workflows/writer-autosave";
+import { WriterFileDialogController } from "../workflows/writer-file-dialog-controller";
 import {
   createInlineOdtFilterService,
   type OdtFilterService,
@@ -47,26 +48,20 @@ export interface WriterDocumentSession {
   readonly view: SwView;
   /** Browser-owned projection and external-store cache. */
   readonly viewStore: WriterViewStore;
+  readonly autosave?: WriterAutosaveController;
+  readonly fileDialogs: WriterFileDialogController;
+  readonly services: WriterSessionServices;
 }
 
 /** Creates the production browser adapters without leaking them into document or Writer shell code. @returns Injected session services. */
 export function createWriterBrowserSessionServices(): WriterSessionServices {
-  const primaryStorage =
-    globalThis.indexedDB === undefined
-      ? undefined
-      : new IndexedDbDocumentStorageAdapter<WriterSnapshotState>("vite-office-writer-workbench");
   return {
     copyRichText,
     createDownloadFilename,
     documentExport: createBrowserDocumentExportPort(),
     documentOpen: createBrowserDocumentOpenPort(),
     readRichClipboard,
-    ...(primaryStorage === undefined
-      ? {}
-      : {
-          primarySave: primaryStorage,
-          storedDocumentOpen: primaryStorage,
-        }),
+    ...(globalThis.indexedDB === undefined ? {} : { odtStore: new IndexedDbWriterOdtStore() }),
   };
 }
 
@@ -90,10 +85,12 @@ export function createWriterDocumentSession(
     odtFilter,
   );
   const view = new SwView(docShell);
+  const fileDialogs = new WriterFileDialogController();
+  const sessionServices = { ...services, fileDialogs };
   const workflowCommandShell = new WriterWorkflowCommandShell(
     docShell,
     view.GetWrtShell(),
-    services,
+    sessionServices,
   );
   const frame = new SfxViewFrame<SwView>(new BrowserSfxDispatcher());
   view.AttachFrame(frame);
@@ -104,12 +101,17 @@ export function createWriterDocumentSession(
     view.GetWrtShell().GetListShell().GetCommandShell(),
   ]);
   const viewStore = new WriterViewStore(view);
+  const autosave =
+    services.odtStore === undefined
+      ? undefined
+      : new WriterAutosaveController(docShell, services.odtStore);
   let closed = false;
   return {
     /** Closes the persistent Writer session. @returns Nothing. */
     Close: function closeWriterSession(): void {
       if (closed) return;
       closed = true;
+      autosave?.Close();
       viewStore.Close();
       view.Close();
     },
@@ -117,6 +119,9 @@ export function createWriterDocumentSession(
     frame,
     view,
     viewStore,
+    ...(autosave === undefined ? {} : { autosave }),
+    fileDialogs,
+    services: sessionServices,
   };
 }
 
@@ -136,7 +141,16 @@ function WriterWorkspaceSession({
       session.Close,
     [session],
   );
-  return <WriterWorkbench isActive view={session.view} viewStore={session.viewStore} />;
+  return (
+    <WriterWorkbench
+      isActive
+      view={session.view}
+      viewStore={session.viewStore}
+      fileDialogs={session.fileDialogs}
+      services={session.services}
+      {...(session.autosave === undefined ? {} : { autosave: session.autosave })}
+    />
+  );
 }
 
 /** Creates a module factory that remains resource-free until Writer mounts. @param options - Optional injected session factory. @returns Lazy Writer workspace factory. */

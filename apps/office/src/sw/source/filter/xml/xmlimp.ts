@@ -369,23 +369,27 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   /** Applies imported named style state. @returns Nothing. */
   public finishNamedStyles(): void {
     applyNamedParagraphStyles(this.document, this.styles, this.defaultParagraphStyle);
-    const createValue = (name: string, layout: OdfPageLayout): WriterPageDescriptorValue => {
-      const a4 = WRITER_PAPER_SIZES.A4;
-      const letter = WRITER_PAPER_SIZES.Letter;
-      const matchesPaper =
-        /** Matches imported oriented dimensions to one known paper size. @param size - Portrait paper dimensions. @returns Whether dimensions match. */ (
-          size: Readonly<{ height: number; width: number }>,
-        ): boolean =>
-          layout.landscape
-            ? layout.width === size.height && layout.height === size.width
-            : layout.width === size.width && layout.height === size.height;
-      const paperFormat = matchesPaper(a4) ? "A4" : matchesPaper(letter) ? "Letter" : "custom";
-      return {
-        ...layout,
-        name,
-        paperFormat,
+    const createValue =
+      /** Converts a registered page layout to Writer geometry. @param name - Master-page name. @param layout - Imported page layout. @returns Writer page descriptor. */ (
+        name: string,
+        layout: OdfPageLayout,
+      ): WriterPageDescriptorValue => {
+        const a4 = WRITER_PAPER_SIZES.A4;
+        const letter = WRITER_PAPER_SIZES.Letter;
+        const matchesPaper =
+          /** Matches imported oriented dimensions to one known paper size. @param size - Portrait paper dimensions. @returns Whether dimensions match. */ (
+            size: Readonly<{ height: number; width: number }>,
+          ): boolean =>
+            layout.landscape
+              ? layout.width === size.height && layout.height === size.width
+              : layout.width === size.width && layout.height === size.height;
+        const paperFormat = matchesPaper(a4) ? "A4" : matchesPaper(letter) ? "Letter" : "custom";
+        return {
+          ...layout,
+          name,
+          paperFormat,
+        };
       };
-    };
     if (this.masterPages.size === 0) {
       const layout = this.pageLayouts.values().next().value;
       if (layout !== undefined) this.document.ChgPageDesc(createValue("Standard", layout));

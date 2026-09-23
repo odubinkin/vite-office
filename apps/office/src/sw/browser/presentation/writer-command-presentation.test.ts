@@ -6,8 +6,8 @@ import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-comma
 import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import { selectWriterCommandResource } from "./writer-command-presentation";
 
-describe("Writer command presentation", () => {
-  it("keeps generated command policy and localizes both visible and control labels", () => {
+describe("Writer command presentation", /** Runs the focused test callback. @returns Operation result. */ () => {
+  it("keeps generated command policy and localizes both visible and control labels", /** Runs the focused test callback. @returns Operation result. */ () => {
     const commandUrl = WRITER_COMMAND_IDS.alignLeft;
     const generated = getWriterCommandResource(commandUrl);
     const localization = new BrowserLocalizationService("fr-FR", {

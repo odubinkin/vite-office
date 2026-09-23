@@ -21,6 +21,20 @@ import { SwDocShell } from "./docsh";
 }
 
 describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ () => {
+  it("reports a browser save failure and preserves a newer dirty generation", /** Checks save feedback and concurrent edits. @returns Nothing. */ () => {
+    const shell = makeShell();
+    shell.GetDoc().paragraphs[0]?.InsertText("Edited", 0);
+    const generation = shell.GetDocumentState().contentGeneration;
+    shell.SetMediumOperation("save", "failed", generation, "Storage unavailable");
+    expect(shell.GetMedium().GetLastOperation()).toMatchObject({
+      operation: "save",
+      state: "failed",
+      message: "Storage unavailable",
+    });
+    shell.AdoptSavedBrowserCopy("copy-id", "Copy", generation - 1);
+    expect(shell.GetDoc().paragraphs[0]?.GetText()).toBe("Edited");
+    shell.Close();
+  });
   it("retains session locale and device defaults through New after an imported document", /** Verifies shell construction context. @returns Nothing. */ () => {
     const device: DefaultFontDevice = {
       getDefaultFont: /** Resolves the test family. @returns Family. */ () => "Source Han Sans",

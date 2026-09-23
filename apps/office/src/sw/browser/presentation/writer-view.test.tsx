@@ -1,8 +1,8 @@
 /** @fileoverview Coverage for the Writer browser presentation. */
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Local test fixtures keep setup and assertions concise. */
 
-import { describe, expect, it } from "vitest";
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { projectWriterLineHeight, projectWriterLineHeightItem } from "./writer-view-projection";
 import { SvxLineSpacingItem } from "../../../editeng/source/items/paraitem";
 import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
@@ -18,6 +18,7 @@ import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import { RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_PARATR_LINESPACING } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
+import type { WriterAutosaveController } from "../workflows/writer-autosave";
 
 /** Runs the failureView test helper. @param failure - Test input. @returns Test callback result. */ function failureView(
   failure?: CommandFailure,
@@ -134,11 +135,8 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
   it("maps command errors to stable user-facing messages", /** Checks maps command errors to stable user-facing messages. @returns Test callback result. */ () => {
     const cases: readonly [string, string, string][] = [
       [WRITER_COMMAND_IDS.openOdt, "error", "Could not open ODT: error"],
-      [WRITER_COMMAND_IDS.openLocal, "error", "Could not load local copy."],
       [WRITER_COMMAND_IDS.saveOdt, "error", "Could not save ODT: error"],
       [WRITER_COMMAND_IDS.exportText, "error", "Could not start plain-text download."],
-      [WRITER_COMMAND_IDS.saveLocal, "storage-unavailable", "Browser storage is unavailable."],
-      [WRITER_COMMAND_IDS.saveLocal, "error", "Could not save locally."],
       [WRITER_COMMAND_IDS.copy, "selection-required", "Select text to copy."],
       [WRITER_COMMAND_IDS.copy, "error", "Could not copy selection."],
       [WRITER_COMMAND_IDS.cut, "selection-required", "Select text to cut."],
@@ -224,6 +222,97 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     await expect(acceptedPage).resolves.toMatchObject({ pageDescriptor: { name: "Standard" } });
     view.unmount();
+    session.Close();
+  });
+
+  it("rolls back a title edit when immediate browser persistence fails", /** Checks rename collision feedback. @returns Completion. */ async () => {
+    const session = createWriterDocumentSession();
+    const previous = session.docShell.GetTitle();
+    const autosave = {
+      Flush: vi.fn().mockRejectedValue(new Error("Name already exists")),
+    } as unknown as WriterAutosaveController;
+    const rendered = render(<WriterWorkbench autosave={autosave} isActive view={session.view} />);
+    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
+      target: { value: "Conflicting title" },
+    });
+    fireEvent.blur(screen.getByRole("textbox", { name: "Document title" }));
+    await waitFor(
+      /** Runs the focused test callback. @returns Operation result. */ () =>
+        expect(session.docShell.GetTitle()).toBe(previous),
+    );
+    expect(autosave.Flush).toHaveBeenCalledTimes(1);
+    expect(session.docShell.GetMedium().GetLastOperation()).toMatchObject({
+      operation: "save",
+      state: "failed",
+      message: "Name already exists",
+    });
+    rendered.unmount();
+    session.Close();
+  });
+  it("ignores a rejected title and presents non-Error save failures", /** Checks title validation and adapter error reporting. @returns Completion. */ async () => {
+    const session = createWriterDocumentSession();
+    const previous = session.docShell.GetTitle();
+    const rename = vi.spyOn(session.docShell, "RenameDocument");
+    const autosave = {
+      Flush: vi.fn().mockRejectedValue("quota exceeded"),
+    } as unknown as WriterAutosaveController;
+    const rendered = render(<WriterWorkbench autosave={autosave} isActive view={session.view} />);
+    rename.mockReturnValueOnce(false);
+    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
+      target: { value: "Rejected" },
+    });
+    fireEvent.blur(screen.getByRole("textbox", { name: "Document title" }));
+    expect(autosave.Flush).not.toHaveBeenCalled();
+    expect(session.docShell.GetTitle()).toBe(previous);
+    fireEvent.click(screen.getByRole("button", { name: "Edit document title" }));
+    fireEvent.change(screen.getByRole("textbox", { name: "Document title" }), {
+      target: { value: "Later" },
+    });
+    fireEvent.blur(screen.getByRole("textbox", { name: "Document title" }));
+    await waitFor(
+      /** Runs the focused test callback. @returns Operation result. */ () =>
+        expect(session.docShell.GetMedium().GetLastOperation().message).toBe("quota exceeded"),
+    );
+    expect(session.docShell.GetTitle()).toBe(previous);
+    rendered.unmount();
+    session.Close();
+  });
+
+  it("passes an active autosave controller into file dialogs", /** Checks file dialog composition. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const autosave = { Flush: vi.fn() } as unknown as WriterAutosaveController;
+    const rendered = render(
+      <WriterWorkbench
+        autosave={autosave}
+        fileDialogs={session.fileDialogs}
+        isActive
+        services={session.services}
+        view={session.view}
+      />,
+    );
+    act(
+      /** Runs the focused test callback. @returns Operation result. */ () =>
+        session.fileDialogs.Show("export"),
+    );
+    expect(screen.getByRole("dialog", { name: "Export" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Close" }));
+    expect(screen.queryByRole("dialog", { name: "Export" })).toBeNull();
+    rendered.rerender(
+      <WriterWorkbench
+        fileDialogs={session.fileDialogs}
+        isActive
+        services={session.services}
+        view={session.view}
+      />,
+    );
+    act(
+      /** Runs the focused test callback. @returns Operation result. */ () =>
+        session.fileDialogs.Show("export"),
+    );
+    expect(screen.getByRole("dialog", { name: "Export" })).toBeVisible();
+    rendered.unmount();
     session.Close();
   });
   // executes domain commands without DOM through the top Writer shell

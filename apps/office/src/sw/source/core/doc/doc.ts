@@ -72,7 +72,11 @@ export class SwDoc {
   }
   /** Finds one descriptor by its stable page-style name. @param name - Page-style name. @returns Descriptor or undefined. */
   public FindPageDesc(name: string): SwPageDesc | undefined {
-    return this.pageDescs.find((descriptor) => descriptor.GetName() === name);
+    return this.pageDescs.find(
+      /** Matches a page style by stable name. @param descriptor - Candidate page style. @returns Whether names match. */ (
+        descriptor,
+      ) => descriptor.GetName() === name,
+    );
   }
   /** Reports whether a descriptor belongs to this document. @param descriptor - Candidate identity. @returns Membership. */
   public ContainsPageDesc(descriptor: SwPageDesc | undefined): boolean {
@@ -93,7 +97,11 @@ export class SwDoc {
     const index =
       typeof descriptor === "number"
         ? descriptor
-        : this.pageDescs.findIndex((item) => item.GetName() === descriptor);
+        : this.pageDescs.findIndex(
+            /** Finds a page style by name. @param item - Candidate page style. @returns Whether names match. */ (
+              item,
+            ) => item.GetName() === descriptor,
+          );
     if (index <= 0 || index >= this.pageDescs.length) return false;
     const removed = this.pageDescs[index] as SwPageDesc;
     for (const item of this.pageDescs) if (item.GetFollow() === removed) item.SetFollow(null);

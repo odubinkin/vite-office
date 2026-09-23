@@ -88,6 +88,28 @@ export class SwDocShell extends SfxObjectShell {
     return true;
   }
 
+  /** Adopts a committed browser Save As copy while keeping the live Writer model and undo queue. */
+  /**
+   * Handles the Writer browser operation.
+   * @param id - Input value.
+   * @param title - Input value.
+   * @param generation - Input value.
+   * @returns Operation result.
+   */ public AdoptSavedBrowserCopy(id: string, title: string, generation: number): void {
+    this.EnsureOpen();
+    const medium = acquireSfxMedium({
+      kind: "primary",
+      name: title,
+      storageKey: id,
+    });
+    this.AdoptPrimaryIdentity(id, title, medium);
+    this.SaveCompleted(generation);
+    if (generation === this.GetContentGeneration()) this.GetUndoManager().SetSavePosition();
+    medium.SetOperation("save-as", "succeeded", generation);
+    this.notifications.CallSwClientNotify({ kind: "document-state-changed" });
+    this.notifications.CallSwClientNotify({ kind: "medium-operation-changed" });
+  }
+
   /** Subscribes one typed shell consumer through the Writer notification graph. @param listener - Typed receiver. @returns Cleanup callback. */
   public Subscribe(listener: (hint: SwModelHint) => void): () => void {
     return subscribeToSwModify(
@@ -248,9 +270,17 @@ export class SwDocShell extends SfxObjectShell {
   }
 
   /** Serializes a captured active model/state snapshot without changing medium state. @param options - Filter controls. @returns ODT bytes. */
-  public SerializeOdt(options?: OdtFilterOperationOptions): Promise<Uint8Array> {
+  /**
+   * Handles the Writer browser operation.
+   * @param options - Input value.
+   * @param title - Input value.
+   * @returns Operation result.
+   */ public SerializeOdt(
+    options?: OdtFilterOperationOptions,
+    title = this.GetTitle(),
+  ): Promise<Uint8Array> {
     this.EnsureOpen();
-    return this.odtFilter.Export(createOdtFilterDocument(this.document, this.GetTitle()), options);
+    return this.odtFilter.Export(createOdtFilterDocument(this.document, title), options);
   }
 
   /** Saves to the current confirmed writable primary medium. @param persist - Confirmed write adapter. @returns Completion after acknowledgement. */

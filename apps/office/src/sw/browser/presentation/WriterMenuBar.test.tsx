@@ -87,15 +87,20 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(newMenuItem).toHaveAttribute("aria-keyshortcuts", "Ctrl+N");
     expect(newMenuItem).toHaveTextContent("Ctrl+N");
     expect(
-      within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).getByRole(
-        "button",
-        { name: "New Document" },
-      ),
+      within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).getByRole("button", {
+        name: "New Document",
+      }),
     ).toHaveAttribute("aria-keyshortcuts", "Ctrl+N");
     expect(screen.getByRole("menuitem", { name: "Open…" })).toBeEnabled();
     expect(screen.getByRole("menuitem", { name: "Save As…" })).toBeEnabled();
-    expect(screen.getByRole("menuitem", { name: "Open Local Copy…" })).toBeEnabled();
-    expect(screen.getByRole("menuitem", { name: "Save Local Copy" })).toBeEnabled();
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).queryByRole(
+        "button",
+        { name: "Save As" },
+      ),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Open Local Copy…" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: "Save Local Copy" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     expect(screen.queryByRole("menu", { name: "File menu" })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "View" }));

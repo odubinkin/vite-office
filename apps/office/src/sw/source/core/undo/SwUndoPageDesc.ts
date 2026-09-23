@@ -6,7 +6,7 @@ import { GetUndoTextNode, SwUndo, type SwUndoCursorState, type SwUndoRedoContext
 
 /** Reversible Standard page descriptor replacement. */
 export class SwUndoPageDesc extends SwUndo {
-  /** Captures the before and after Standard page descriptor values. @param beforeValue - Original geometry. @param afterValue - Replacement geometry. @param before - Original cursor state. @param after - Result cursor state. @returns Nothing. */
+  /** Captures the before and after Standard page descriptor values. @param beforeValue - Original geometry. @param afterValue - Replacement geometry. @param before - Original cursor state. @param after - Result cursor state. @param descriptorName - Named page style identity. @returns Nothing. */
   public constructor(
     private readonly beforeValue: WriterPageDescriptorValue,
     private readonly afterValue: WriterPageDescriptorValue,

@@ -459,7 +459,9 @@
         "contractStatus": "unverified",
         "defaultStatus": "unverified",
         "divergenceClass": "none",
-        "evidence": ["docs/program/autosave-recovery.md#Browser-persistence-decision"],
+        "evidence": [
+          "docs/program/autosave-recovery.md#Browser-persistence-decision"
+        ],
         "justification": "Intentional browser product decision: recovery is unsupported and must not be reintroduced. Future loss protection will be frequent full autosave through primary storage.",
         "knownViolations": [],
         "localSymbols": [],
@@ -1210,9 +1212,9 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "A",
         "evidence": [
-          "apps/office/src/svl/source/misc/storage.ts#SerializableValue"
+          "apps/office/src/svl/source/misc/storage.ts#DocumentOpenPort"
         ],
-        "justification": "Defines neutral serializable versioned-record storage used by application services and browser adapters without depending on a document shell. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "justification": "Defines only shell-neutral browser file open and export ports. Retired JSON snapshot contracts were removed.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "divergent",
@@ -1500,16 +1502,22 @@
       "state": "active",
       "suite": "writer",
       "subsystem": "browser-editor",
-      "capabilityIds": ["CAP-0111"],
+      "capabilityIds": [
+        "CAP-0111"
+      ],
       "semantic": {
         "behaviorStatus": "unverified",
         "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
-        "evidence": ["apps/office/src/sw/browser/editor/writer-line-measurement.ts#measureWriterTextLines"],
+        "evidence": [
+          "apps/office/src/sw/browser/editor/writer-line-measurement.ts#measureWriterTextLines"
+        ],
         "justification": "Supplies browser-shaped visual line offsets and heights to Writer-owned text frames; DOM Range measurement is the browser device boundary.",
         "knownViolations": [],
-        "localSymbols": ["measureWriterTextLines"],
+        "localSymbols": [
+          "measureWriterTextLines"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1535,7 +1543,9 @@
         ],
         "justification": "Converts Writer-owned adjacent text-frame spacing from twips to browser points; page breaks are produced by Writer layout frames.",
         "knownViolations": [],
-        "localSymbols": ["getWriterParagraphGap"],
+        "localSymbols": [
+          "getWriterParagraphGap"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1719,6 +1729,33 @@
           "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx#WriterCommandToolbar"
         ],
         "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-workflows",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0114",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "divergent",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "divergent",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx#WriterFileDialog"
+        ],
+        "justification": "Presents browser document selection, computer ODT/TXT import, browser copy creation, and ODT/TXT export. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -1917,6 +1954,31 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/presentation/writer-command-presentation.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0104"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/writer-command-presentation.ts#selectWriterCommandResource"
+        ],
+        "justification": "This existing module is classified for exhaustive runtime inventory coverage; no new parity claim is made by the browser autosave task.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -2014,25 +2076,52 @@
       }
     },
     {
-      "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
+      "path": "apps/office/src/sw/browser/storage/writer-odt-store.ts",
       "classification": "browser-adaptation",
       "state": "active",
       "suite": "writer",
       "subsystem": "document-lifecycle",
       "capabilityIds": [
+        "CAP-0113",
         "CAP-0114",
-        "CAP-0131",
-        "CAP-0132"
+        "CAP-0131"
       ],
       "semantic": {
-        "behaviorStatus": "not-applicable",
+        "behaviorStatus": "divergent",
         "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
+        "defaultStatus": "divergent",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/storage/writer-storage.ts#WriterSnapshotState"
+          "apps/office/src/sw/browser/storage/writer-odt-store.ts#IndexedDbWriterOdtStore"
         ],
-        "justification": "Owns only the primary browser cache envelope over the canonical Writer graph serializer; it has no recovery adapter or recovery restore path.",
+        "justification": "Stores complete ODT package bytes as the only browser document body; old JSON records are not read or migrated. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-autosave.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0114",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "divergent",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "divergent",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/workflows/writer-autosave.ts#WriterAutosaveController"
+        ],
+        "justification": "Schedules browser autosaves after ten seconds, one idle second, and UI capture release. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -2057,10 +2146,63 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/workflows/writer-document-io.ts#openWriterOdtFromPort",
-          "apps/office/src/sw/browser/workflows/writer-document-io.ts#saveWriterToPrimaryPort"
+          "apps/office/src/sw/browser/workflows/writer-document-io.ts#saveWriterOdtToPort"
         ],
-        "justification": "Terminates browser file-picker, download, and IndexedDB ports and adapts them to explicit SfxMedium and SwDocShell lifecycle operations without moving browser contracts into uibase.",
+        "justification": "Exports ODT and TXT through browser download ports; native Save is intentionally absent.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-file-dialog-controller.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-workflows",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0114",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "divergent",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "divergent",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/workflows/writer-file-dialog-controller.ts#WriterFileDialogController"
+        ],
+        "justification": "Coordinates browser Open, Save As, and Export dialogs. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/workflows/writer-odt-io.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-workflows",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0114",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "divergent",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "divergent",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/workflows/writer-odt-io.ts#autosaveWriter"
+        ],
+        "justification": "Adapts dirty Writer shell generations to ODT IndexedDB saves and refuses empty documents. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -2895,7 +3037,7 @@
         "evidence": [
           "apps/office/src/sw/source/core/doc/writer-document-codec.ts#WriterDocumentRecord"
         ],
-        "justification": "Defines the single canonical primitive Writer graph representation shared by ODT worker transfer and browser cache envelopes.",
+        "justification": "Encodes and decodes the Writer graph for ODT Worker structured-clone transfer only; IndexedDB persistence stores complete ODT bytes.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "unverified",
@@ -2981,7 +3123,9 @@
       "state": "active",
       "suite": "writer",
       "subsystem": "page-layout",
-      "capabilityIds": ["CAP-0111"],
+      "capabilityIds": [
+        "CAP-0111"
+      ],
       "semantic": {
         "behaviorStatus": "unverified",
         "contractStatus": "unverified",
@@ -2993,10 +3137,15 @@
         ],
         "justification": "Creates physical page frames and places measured text-frame fragments for the supported paragraph slice; full upstream layout semantics remain unverified.",
         "knownViolations": [],
-        "localSymbols": ["SwPageFrame", "createSwPageFrames"],
+        "localSymbols": [
+          "SwPageFrame",
+          "createSwPageFrames"
+        ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/layout/newfrm.cxx",
-        "upstreamSymbols": ["InsertNewPage"]
+        "upstreamSymbols": [
+          "InsertNewPage"
+        ]
       }
     },
     {
@@ -3073,7 +3222,9 @@
       "state": "active",
       "suite": "writer",
       "subsystem": "page-layout",
-      "capabilityIds": ["CAP-0111"],
+      "capabilityIds": [
+        "CAP-0111"
+      ],
       "semantic": {
         "behaviorStatus": "unverified",
         "contractStatus": "unverified",
@@ -3085,10 +3236,17 @@
         ],
         "justification": "Represents master and follow fragments over one unchanged source text node with measured line boundaries; broader upstream text-frame behavior remains unverified.",
         "knownViolations": [],
-        "localSymbols": ["SwTextLine", "SwTextFrame", "getSwTextFrameGap", "makeSwTextFrame"],
+        "localSymbols": [
+          "SwTextLine",
+          "SwTextFrame",
+          "getSwTextFrameGap",
+          "makeSwTextFrame"
+        ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/text/txtfrm.cxx",
-        "upstreamSymbols": ["SwTextFrame"]
+        "upstreamSymbols": [
+          "SwTextFrame"
+        ]
       }
     },
     {
@@ -3291,6 +3449,36 @@
           "SwUndoPageDesc",
           "SwUndoPageDesc::UndoImpl",
           "SwUndoPageDesc::RedoImpl"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/docundo.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/docundo.ts#SwUndoNodes",
+          "vendor/libreoffice-reference/sw/source/core/undo/docundo.cxx#SwDoc"
+        ],
+        "justification": "This existing module is classified for exhaustive runtime inventory coverage; no new parity claim is made by the browser autosave task.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoNodes"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/undo/docundo.cxx",
+        "upstreamSymbols": [
+          "SwDoc"
         ]
       }
     },
@@ -3701,7 +3889,7 @@
         "evidence": [
           "apps/office/src/sw/source/filter/xml/odt-transfer.ts#OdtWriterTransferRecord"
         ],
-        "justification": "Defines a thin versioned ODT Worker envelope around the shared canonical WriterDocumentRecord graph; only the envelope differs from durable browser storage.",
+        "justification": "Defines the versioned ODT Worker envelope around a structured-clone Writer graph; durable browser storage contains ODT bytes, not this envelope.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -4585,15 +4773,15 @@
         "CAP-0135"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
-        "divergenceClass": "none",
+        "behaviorStatus": "divergent",
+        "contractStatus": "divergent",
+        "defaultStatus": "divergent",
+        "divergenceClass": "B",
         "evidence": [
           "apps/office/src/sw/uiconfig/swriter/toolbar/standardbar.ts#writerStandardBarItems",
           "vendor/libreoffice-reference/sw/uiconfig/swriter/toolbar/standardbar.xml#.uno:"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/uiconfig/swriter/toolbar/standardbar.xml; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Approved browser file workflow: Save As appears only in File and manual Save is absent from the toolbar. Other mapped toolbar placement remains subject to the bounded parity inventory.",
         "knownViolations": [],
         "localSymbols": [
           "writerStandardBarItems"
@@ -4843,34 +5031,6 @@
           "apps/office/src/vcl/browser/font-list.ts#export class FontList"
         ],
         "justification": "Adapts LibreOffice FontList device enumeration to the browser Local Font Access API with deterministic metric-compatible fallbacks when access is unavailable.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/vcl/browser/indexeddb-storage.ts",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "shared",
-      "subsystem": "browser-platform",
-      "capabilityIds": [
-        "CAP-0114",
-        "CAP-0122",
-        "CAP-0131",
-        "CAP-0133"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/vcl/browser/indexeddb-storage.ts#IndexedDbDocumentStorageAdapter"
-        ],
-        "justification": "Implements the primary browser-native IndexedDB adapter for versioned JSON document snapshots. Recovery history, leases, and restore behavior are intentionally unsupported; future protection is full autosave through this primary path.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",

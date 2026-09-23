@@ -104,19 +104,14 @@ upstream import-context behavior instead of inventing browser document fields.
 
 ## Browser File integration
 
-The Writer workbench exposes **File → Open ODT…**, **File → Save as ODT…**, and
-matching standard-toolbar actions. A browser-only VCL adapter obtains user-selected
-bytes or starts a sandboxed byte download; it does not parse or own the document.
-Production import and export cross a version-one Dedicated Worker protocol using
-monotonic request IDs and transferable `ArrayBuffer` payloads. The worker performs
-ZIP, manifest, SAX/xmloff, Writer XML mapping, and package serialization, returning
-only a versioned ODT filter transfer or complete ODT bytes. The filter transfer is
-not the durable browser snapshot schema: `odt-transfer.ts` owns the worker-only
-`transferVersion: 4` envelope, while `sw/browser/storage/writer-storage.ts`
-owns the current schema-11 browser cache envelope and combines it with Sfx
-lifecycle metadata. Both envelopes carry the same `WriterDocumentRecord` from
-`sw/source/core/doc/writer-document-codec.ts`; there is no second Worker graph
-schema. The shared
+The Writer workbench exposes Open with browser and computer tabs, Save As for a new
+browser copy, and Export for ODT and TXT downloads. Browser import and export
+cross a version-one Dedicated Worker protocol using transferable `ArrayBuffer`
+payloads. `odt-transfer.ts` owns the Worker-only graph envelope around
+`WriterDocumentRecord` from `sw/source/core/doc/writer-document-codec.ts`.
+This structured-clone codec is not used by IndexedDB persistence: the browser
+stores complete ODT bytes and does not read old JSON snapshot records.
+The shared
 decoder reconstructs text through the document-bound content-operations manager.
 Neither boundary is treated as the live Writer model, and retired storage or
 Worker transfer versions are rejected without migration.

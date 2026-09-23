@@ -183,11 +183,11 @@ The following documents form the program control plane:
 - [Browser transaction history](transaction-history.md): action-based
   `SfxUndoManager` history, save marks, cursor restoration, and compound transitions.
 - [Browser document storage adapter contract](storage-adapter.md):
-  browser-independent JSON snapshot boundary and deterministic load/save
-  orchestration without a persistence implementation.
+  browser-independent file open and export ports without a JSON snapshot
+  persistence contract.
 - [Browser IndexedDB document storage adapter](indexeddb-storage-adapter.md):
-  native browser persistence for complete snapshots, with explicit schema and
-  migration limits.
+  native browser persistence for complete ODT bytes, with no JSON snapshot
+  migration.
 - [Writer browser-local save and load](writer-local-storage.md): explicit
   IndexedDB snapshots for the bounded in-memory Writer workbench.
 - [Writer plain-text download](writer-plain-text-download.md): browser-only

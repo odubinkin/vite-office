@@ -260,13 +260,19 @@ export class WriterViewProjection {
       paragraphStyleOptions,
       pageDescriptor: document.GetPageDesc().GetValue(),
       pageDescriptors: Object.freeze(
-        Array.from({ length: document.GetPageDescCnt() }, (_, index) => {
-          const descriptor = document.GetPageDesc(index);
-          return Object.freeze({
-            followName: descriptor.GetFollow().GetName(),
-            value: descriptor.GetValue(),
-          });
-        }),
+        Array.from(
+          { length: document.GetPageDescCnt() },
+          /** Builds one paragraph frame input. @param _ - Source paragraph slot. @param index - Paragraph position. @returns Frame input. */ (
+            _,
+            index,
+          ) => {
+            const descriptor = document.GetPageDesc(index);
+            return Object.freeze({
+              followName: descriptor.GetFollow().GetName(),
+              value: descriptor.GetValue(),
+            });
+          },
+        ),
       ),
       paragraphSpacingSettings: Object.freeze({
         paraSpaceMax: document.GetDocumentSettingManager().get("PARA_SPACE_MAX"),

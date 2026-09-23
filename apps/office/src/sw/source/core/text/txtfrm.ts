@@ -38,7 +38,7 @@ export interface SwTextFrame {
   readonly topSpacing: number;
 }
 
-/** Writer's adjacent paragraph spacing, with contextual suppression for equal styles. @param previous - Preceding text frame input. @param current - Current text frame input. @returns Gap in twips. */
+/** Writer's adjacent paragraph spacing, with contextual suppression for equal styles. @param previous - Preceding text frame input. @param current - Current text frame input. @param settings - Document spacing flags. @returns Gap in twips. */
 export function getSwTextFrameGap(
   previous: SwTextFrameInput | undefined,
   current: SwTextFrameInput,

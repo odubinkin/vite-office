@@ -23,6 +23,8 @@ describe("SfxMedium", /** Groups SfxMedium. @returns Test callback result. */ ()
       generation: 4,
       message: "committed",
     });
+    medium.SetOperation("save", "pending");
+    expect(medium.GetLastOperation()).toEqual({ operation: "save", state: "pending" });
     expect(medium.IsOpen()).toBe(true);
     medium.Close();
     expect(medium.IsOpen()).toBe(false);

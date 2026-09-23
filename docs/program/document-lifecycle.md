@@ -35,10 +35,10 @@ and medium transitions. Browser file-picker,
 download, clipboard, and IndexedDB ports terminate in the thin Sfx shell and
 `sw/browser/workflows/writer-document-io.ts`.
 
-The browser-only `writer-storage.ts` adapter under `sw/browser/storage` owns
-primary snapshot serialization. Cache schema 12 wraps the single canonical
-`WriterDocumentRecord`; all retired local schemas
-are rejected without migration. The graph stores the document locale, while
+The browser-only `writer-odt-store.ts` adapter stores complete ODT bytes in IndexedDB.
+The former JSON snapshot adapter is removed; no migration reads its records.
+The `writer-document-codec.ts` graph codec remains only for ODT Worker transfer.
+The graph stores the document locale, while
 the current session supplies the output font device when a cache or ODT
 worker transfer is restored. `SwDocShell` keeps the original session locale
 and device for File → New, even after opening another document. ODT metadata
