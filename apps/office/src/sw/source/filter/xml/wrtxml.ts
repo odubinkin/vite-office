@@ -46,7 +46,10 @@ export class SwXMLWriter {
       encoder.encode(exportContentXml(document, control.isCancelled)),
     );
     checkpoint(control, "metadata");
-    output.putNextEntry("meta.xml", encoder.encode(exportMetaXml(metadata.title)));
+    output.putNextEntry(
+      "meta.xml",
+      encoder.encode(exportMetaXml(metadata.title, document.GetLocale())),
+    );
     checkpoint(control, "package");
     const bytes = output.finish();
     if (bytes.length > (control.maxOutputBytes ?? ODT_EXPORT_BYTE_LIMIT))

@@ -3,7 +3,9 @@
 import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import { createWriterDocument } from "../../source/core/doc/doc";
+import { createWriterDocument, SwDoc } from "../../source/core/doc/doc";
+import { RES_CHRATR_CJK_FONT } from "../../inc/hintids";
+import { SvxFontItem } from "../../../editeng/source/items/textitem";
 import {
   createWriterSnapshot,
   restoreWriterSnapshot,
@@ -13,6 +15,25 @@ import {
 } from "./writer-storage";
 
 describe("Writer primary snapshot storage", /** Groups Writer primary snapshot storage. @returns Test callback result. */ () => {
+  it("restores document locale with the current device", /** Verifies cache construction context. @returns Nothing. */ () => {
+    const source = new SwDoc({ locale: "ja-JP" });
+    const saved = createWriterSnapshot(
+      source,
+      createDocument({ id: "locale", suiteId: "writer", title: "Locale" }),
+    );
+    const device = {
+      getDefaultFont: /** Resolves the test family. @returns Family. */ () => "Source Han Sans",
+    };
+    const restored = restoreWriterSnapshot(saved, device).document;
+    expect(restored.GetLocale()).toBe("ja-JP");
+    expect(restored.GetPageDesc().GetValue().paperFormat).toBe("A4");
+    expect(
+      (
+        restored.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
+      ).GetResolvedFamilyName(),
+    ).toBe("Source Han Sans");
+  });
+
   const document = createWriterDocument();
   const shell = createDocument({ id: "stored", suiteId: "writer", title: "Stored" });
   const snapshot = createWriterSnapshot(document, shell);
@@ -47,7 +68,7 @@ describe("Writer primary snapshot storage", /** Groups Writer primary snapshot s
   it("rejects incompatible schema, shell state, identity and generation", /** Checks rejects incompatible schema, shell state, identity and generation. @returns Test callback result. */ () => {
     expect(
       /** Runs the test callback. @returns Test callback result. */ () =>
-        restoreWriterSnapshot(withState({ schemaVersion: 10 as 11 })),
+        restoreWriterSnapshot(withState({ schemaVersion: 11 as 12 })),
     ).toThrow(/schema is unsupported/);
     expect(
       /** Runs the test callback. @returns Test callback result. */ () =>

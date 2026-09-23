@@ -141,11 +141,17 @@ export function parseOdfXml(xml: string, expectedRoot: string, maxDepth?: number
 export function importWriterXml(
   stylesXml: string,
   contentXml: string,
-  metadata: Readonly<{ title: string }>,
+  metadata: Readonly<{ title: string; locale?: string }>,
   metaXml?: string,
   options: OdfXmlParseOptions = {},
 ): ImportedWriterDocument {
-  const xmlImport = new SwXMLImport(new SwDoc(false));
+  let locale = metadata.locale ?? "en-US";
+  if (metaXml !== undefined) {
+    const metadataImport = new SwXMLImport(new SwDoc(false));
+    metadataImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
+    locale = metadataImport.language ?? locale;
+  }
+  const xmlImport = new SwXMLImport(new SwDoc({ createInitialTextNode: false, locale }));
   xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
   xmlImport.finishNamedStyles();
   xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);
@@ -170,6 +176,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   private readonly pageLayouts = new Map<string, OdfPageLayout>();
   private standardPageLayoutName: string | undefined;
   public title: string | undefined;
+  public language: string | undefined;
 
   /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @returns Coordinator. */
   public constructor(public readonly document: SwDoc) {}
@@ -530,6 +537,16 @@ class XMLMetaContext extends SvXMLImportContext {
         /** Commits the parsed title. @param title - Normalized title. @returns Nothing. */
         (title) => {
           this.xmlImport.title = title;
+        },
+      );
+    }
+    if (element === XMLToken.DC_LANGUAGE) {
+      attributes.assertOnly([], "metadata language");
+      return new XMLTitleContext(
+        /** Retains the document language for construction defaults. @param language - Parsed tag. @returns Nothing. */ (
+          language,
+        ) => {
+          this.xmlImport.language = language;
         },
       );
     }

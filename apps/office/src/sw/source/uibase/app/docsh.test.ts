@@ -3,7 +3,10 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { createWriterDocument } from "../../core/doc/doc";
+import { createWriterDocument, SwDoc } from "../../core/doc/doc";
+import type { DefaultFontDevice } from "../../core/doc/default-font";
+import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
+import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import {
   createOdtFilterDocument,
   type OdtFilterService,
@@ -18,6 +21,60 @@ import { SwDocShell } from "./docsh";
 }
 
 describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ () => {
+  it("retains session locale and device defaults through New after an imported document", /** Verifies shell construction context. @returns Nothing. */ () => {
+    const device: DefaultFontDevice = {
+      getDefaultFont: /** Resolves the test family. @returns Family. */ () => "Source Han Sans",
+    };
+    const shell = new SwDocShell(
+      new SwDoc({ defaultFontDevice: device, locale: "ja-JP" }),
+      createDocument({ id: "doc", suiteId: "writer", title: "Draft" }),
+    );
+    shell.ReplaceDocument(
+      new SwDoc({ locale: "en-US" }),
+      createDocument({ id: "imported", suiteId: "writer", title: "Imported" }),
+      { kind: "untitled", name: "Imported" },
+    );
+    const fresh = shell.InitNew(createDocument({ id: "new", suiteId: "writer", title: "New" }));
+    expect(fresh.GetLocale()).toBe("ja-JP");
+    expect(fresh.GetDefaultFontDevice()).toBe(device);
+    expect(fresh.GetPageDesc().GetValue().paperFormat).toBe("A4");
+    expect(
+      (
+        fresh.GetAttrPool().GetUserOrPoolDefaultItem(RES_CHRATR_CJK_FONT) as SvxFontItem
+      ).GetResolvedFamilyName(),
+    ).toBe("Source Han Sans");
+    shell.Close();
+  });
+
+  it.each([
+    ["en-US", "Letter", RES_CHRATR_CJK_FONT],
+    ["ar-SA", "A4", RES_CHRATR_CTL_FONT],
+  ] as const)(
+    "uses %s session defaults after New",
+    /** Checks regional and script defaults. @param locale - Session locale. @param paper - Expected format. @param fontWhich - Script font item. @returns Nothing. */ (
+      locale,
+      paper,
+      fontWhich,
+    ) => {
+      const device: DefaultFontDevice = {
+        getDefaultFont: /** Resolves the test family. @returns Family. */ () => "Device family",
+      };
+      const shell = new SwDocShell(
+        new SwDoc({ defaultFontDevice: device, locale }),
+        createDocument({ id: "doc", suiteId: "writer", title: "Draft" }),
+      );
+      const fresh = shell.InitNew(createDocument({ id: "new", suiteId: "writer", title: "New" }));
+      expect(fresh.GetLocale()).toBe(locale);
+      expect(fresh.GetPageDesc().GetValue().paperFormat).toBe(paper);
+      expect(
+        (
+          fresh.GetAttrPool().GetUserOrPoolDefaultItem(fontWhich) as SvxFontItem
+        ).GetResolvedFamilyName(),
+      ).toBe("Device family");
+      shell.Close();
+    },
+  );
+
   it("renames, publishes state, and rejects replacement with the active graph", /** Checks renames, publishes state, and rejects replacement with the active graph. @returns Test callback result. */ () => {
     const shell = makeShell();
     const hints: string[] = [];

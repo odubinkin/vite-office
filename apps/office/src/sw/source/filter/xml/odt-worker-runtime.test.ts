@@ -7,11 +7,11 @@ import {
   createWorkerClientState,
 } from "../../../../framework/source/services/worker-protocol";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { createWriterDocument } from "../../core/doc/doc";
+import { createWriterDocument, SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { writeOdtDocument } from "./wrtxml";
-import { createOdtFilterDocument } from "./odt-filter-service";
+import { createOdtFilterDocument, restoreOdtFilterDocument } from "./odt-filter-service";
 import {
   OdtWorkerRuntime,
   type OdtWorkerRequestPayload,
@@ -66,6 +66,23 @@ async function terminal(scope: CapturingScope): Promise<Record<string, unknown>>
 }
 
 describe("ODT worker runtime" /** Groups worker execution behavior. @returns Nothing. */, () => {
+  it("returns the ODT document language across the structured-clone boundary", /** Checks worker import context. @returns Completion after assertions. */ async () => {
+    const scope = new CapturingScope();
+    const source = new SwDoc({ locale: "ar-SA" });
+    new OdtWorkerRuntime(scope).HandleMessage(
+      request({
+        bytes: writeOdtDocument(source, metadata()).buffer as ArrayBuffer,
+        metadata: { title: "Runtime", locale: "en-US" },
+        operation: "import",
+      }),
+    );
+    const result = await terminal(scope);
+    expect(result.type).toBe("result");
+    const transferred = (result.payload as { document: ReturnType<typeof createOdtFilterDocument> })
+      .document;
+    expect(restoreOdtFilterDocument(transferred).document.GetLocale()).toBe("ar-SA");
+  });
+
   it("imports into a neutral filter document with ordered progress" /** Verifies worker-side ZIP/XML work. @returns Completion after result. */, async () => {
     const scope = new CapturingScope();
     const runtime = new OdtWorkerRuntime(scope);

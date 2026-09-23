@@ -5,6 +5,7 @@
 
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import type { SwDoc } from "../../core/doc/doc";
+import type { DefaultFontDevice } from "../../core/doc/default-font";
 import {
   createOdtWriterTransfer,
   restoreOdtWriterTransfer,
@@ -60,14 +61,20 @@ export function createOdtFilterDocument(document: SwDoc, title: string): OdtFilt
   return { document: createOdtWriterTransfer(document), metadata: { title } };
 }
 
-/** Restores a filter transfer into a canonical graph and filter metadata. @param input - Cloneable filter value. @returns Decoded graph and title. */
-export function restoreOdtFilterDocument(input: OdtFilterDocument): {
+/** Restores a filter transfer into a canonical graph and filter metadata. @param input - Cloneable filter value. @param defaultFontDevice - Current output device. @returns Decoded graph and title. */
+export function restoreOdtFilterDocument(
+  input: OdtFilterDocument,
+  defaultFontDevice?: DefaultFontDevice,
+): {
   readonly document: SwDoc;
   readonly title: string;
 } {
   if (!isRecord(input) || !isRecord(input.metadata) || typeof input.metadata.title !== "string")
     throw new Error("ODT filter document metadata is invalid.");
-  return { document: restoreOdtWriterTransfer(input.document), title: input.metadata.title };
+  return {
+    document: restoreOdtWriterTransfer(input.document, defaultFontDevice),
+    title: input.metadata.title,
+  };
 }
 
 /** Asynchronous filter contract returning structured-clone values only. */
@@ -81,7 +88,7 @@ export interface OdtFilterService {
   /** Imports one ODT into a neutral validated transfer. @param bytes - Complete package bytes. @param metadata - Fallback filter metadata. @param options - Cancellation/progress/resource controls. @returns Candidate graph transfer for main-thread validation. */
   Import(
     bytes: Uint8Array,
-    metadata: Readonly<{ title: string }>,
+    metadata: Readonly<{ title: string; locale?: string }>,
     options?: OdtFilterOperationOptions,
   ): Promise<OdtFilterDocument>;
 }
@@ -143,7 +150,7 @@ export class InlineOdtFilterService implements OdtFilterService {
   /** Imports through the existing package/XML filter and serializes the candidate graph. @param bytes - Complete package. @param metadata - Fallback metadata. @param options - Cooperative controls. @returns Candidate filter transfer. */
   public async Import(
     bytes: Uint8Array,
-    metadata: Readonly<{ title: string }>,
+    metadata: Readonly<{ title: string; locale?: string }>,
     options: OdtFilterOperationOptions = {},
   ): Promise<OdtFilterDocument> {
     this.Begin(options.signal);

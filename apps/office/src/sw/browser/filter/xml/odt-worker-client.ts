@@ -95,7 +95,7 @@ export class OdtWorkerClient implements OdtFilterService {
   /** Imports transferred package bytes. @param bytes - Complete ODT bytes copied before transfer. @param metadata - Fallback document metadata. @param options - Cancellation/progress/resource controls. @returns Neutral candidate snapshot. */
   public async Import(
     bytes: Uint8Array,
-    metadata: Readonly<{ title: string }>,
+    metadata: Readonly<{ title: string; locale?: string }>,
     options: OdtFilterOperationOptions = {},
   ): Promise<OdtFilterDocument> {
     const buffer = bytes.slice().buffer;

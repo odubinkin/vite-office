@@ -434,7 +434,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     applyWriterParagraphList(node, { kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 13 });
+    expect(snapshot).toMatchObject({ swModelVersion: 14 });
     expect(snapshot.textNodes[0]).toMatchObject({
       formatCollId: "heading-1",
       hints: [],

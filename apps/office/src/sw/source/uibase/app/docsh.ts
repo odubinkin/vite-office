@@ -16,6 +16,7 @@ import { ODT_MIMETYPE } from "../../../../package/source/manifest/ManifestExport
 import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwDoc } from "../../core/doc/doc";
+import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import {
   createOdtFilterDocument,
@@ -34,6 +35,8 @@ export class SwDocShell extends SfxObjectShell {
   private odtRequestGeneration = 0;
   private readonly modelClient: SwClient;
   private readonly notifications = new SwModify();
+  private readonly defaultFontDevice: DefaultFontDevice | undefined;
+  private readonly defaultLocale: string;
 
   /** Creates a shell around an existing Writer model and explicit object-shell state. @param document - Active model. @param documentState - Shell lifecycle state. @param medium - Current medium. @param odtFilter - ODT filter service. @returns Nothing. */
   public constructor(
@@ -43,6 +46,8 @@ export class SwDocShell extends SfxObjectShell {
     private readonly odtFilter: OdtFilterService = createInlineOdtFilterService(),
   ) {
     super(documentState, medium);
+    this.defaultFontDevice = document.GetDefaultFontDevice();
+    this.defaultLocale = document.GetLocale();
     if (documentState.isModified) this.document.GetUndoManager().ClearSavePosition();
     this.modelClient = new SwClient(
       /** Relays one model notification into shell policy. @param _source - Model source. @param hint - Typed hint. @returns Nothing. */ (
@@ -56,6 +61,11 @@ export class SwDocShell extends SfxObjectShell {
   /** Returns the shell-owned Writer model. @returns Active model. */
   public GetDoc(): SwDoc {
     return this.document;
+  }
+
+  /** Returns the session output device used when constructing document defaults. @returns Device or undefined. */
+  public GetDefaultFontDevice(): DefaultFontDevice | undefined {
+    return this.defaultFontDevice;
   }
 
   /** Returns the document-owned action manager. @returns Current undo manager. */
@@ -162,10 +172,19 @@ export class SwDocShell extends SfxObjectShell {
 
   /** Replaces the shell contents with a new empty Writer graph. @param metadata - New lifecycle metadata. @returns New model. */
   public InitNew(metadata: SfxObjectShellState): SwDoc {
-    return this.ReplaceDocument(new SwDoc(), metadata, {
-      kind: "untitled",
-      name: metadata.title,
-    });
+    return this.ReplaceDocument(
+      new SwDoc({
+        ...(this.defaultFontDevice === undefined
+          ? {}
+          : { defaultFontDevice: this.defaultFontDevice }),
+        locale: this.defaultLocale,
+      }),
+      metadata,
+      {
+        kind: "untitled",
+        name: metadata.title,
+      },
+    );
   }
 
   /** Loads an ODT candidate before atomically replacing the active graph. @param bytes - Complete ODT bytes. @param metadata - Fallback lifecycle metadata. @param medium - Open medium. @param options - Filter controls. @returns Loaded model. */
@@ -178,10 +197,17 @@ export class SwDocShell extends SfxObjectShell {
     this.EnsureOpen();
     this.odtFilter.Cancel();
     const requestGeneration = ++this.odtRequestGeneration;
-    const transfer = await this.odtFilter.Import(bytes, { title: metadata.title }, options);
+    const transfer = await this.odtFilter.Import(
+      bytes,
+      {
+        title: metadata.title,
+        locale: this.defaultLocale,
+      },
+      options,
+    );
     if (requestGeneration !== this.odtRequestGeneration)
       throw new OdtFilterError("stale", "ODT open result is stale.");
-    const loaded = restoreOdtFilterDocument(transfer);
+    const loaded = restoreOdtFilterDocument(transfer, this.defaultFontDevice);
     const loadedState: SfxObjectShellState = Object.freeze({
       ...metadata,
       isModified: false,

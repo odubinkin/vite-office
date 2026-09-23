@@ -11,6 +11,7 @@ import {
 } from "../../../sfx2/source/doc/docfile";
 import type { SfxObjectShellState } from "../../../sfx2/source/doc/objsh";
 import type { SwDoc } from "../../source/core/doc/doc";
+import type { DefaultFontDevice } from "../../source/core/doc/default-font";
 import {
   decodeWriterDocument,
   encodeWriterDocument,
@@ -24,7 +25,7 @@ export type WriterSnapshotState = {
   readonly [key: string]: SerializableValue;
   readonly codec: typeof WRITER_STORAGE_CODEC;
   readonly document: SerializableValue;
-  readonly schemaVersion: 11;
+  readonly schemaVersion: 12;
   readonly shell: SerializableValue;
 };
 
@@ -42,7 +43,7 @@ export function createWriterSnapshot(
   const state: WriterSnapshotState = {
     codec: WRITER_STORAGE_CODEC,
     document: encodeWriterDocument(document) as unknown as SerializableValue,
-    schemaVersion: 11,
+    schemaVersion: 12,
     shell: { ...shellState } as unknown as SerializableValue,
   };
   return Object.freeze({
@@ -52,15 +53,16 @@ export function createWriterSnapshot(
   });
 }
 
-/** Restores only the current primary-storage cache schema. @param snapshot - Stored payload. @returns Restored graph. */
+/** Restores only the current primary-storage cache schema. @param snapshot - Stored payload. @param defaultFontDevice - Current output device. @returns Restored graph. */
 export function restoreWriterSnapshot(
   snapshot: DocumentSnapshot<WriterSnapshotState>,
+  defaultFontDevice?: DefaultFontDevice,
 ): RestoredWriterSnapshot {
-  if (snapshot.state.schemaVersion !== 11 || snapshot.state.codec !== WRITER_STORAGE_CODEC)
+  if (snapshot.state.schemaVersion !== 12 || snapshot.state.codec !== WRITER_STORAGE_CODEC)
     throw new Error(
       "Stored Writer snapshot schema is unsupported; open an ODT file or discard the browser copy.",
     );
-  const document = decodeWriterDocument(snapshot.state.document);
+  const document = decodeWriterDocument(snapshot.state.document, defaultFontDevice);
   if (!isSfxObjectShellState(snapshot.state.shell))
     throw new Error("Stored Writer object-shell state is invalid.");
   const restoredState = snapshot.state.shell as unknown as SfxObjectShellState;
@@ -88,10 +90,11 @@ export function saveWriterDocument(
   return saveSnapshot(adapter, createWriterSnapshot(document, shellState));
 }
 
-/** Loads one Writer cache record by shell identity. @param adapter - Open port. @param id - Document identity. @returns Missing or restored result. */
+/** Loads one Writer cache record by shell identity. @param adapter - Open port. @param id - Document identity. @param defaultFontDevice - Current output device. @returns Missing or restored result. */
 export async function loadWriterDocument(
   adapter: StoredDocumentOpenPort<WriterSnapshotState>,
   id: string,
+  defaultFontDevice?: DefaultFontDevice,
 ): Promise<
   | { readonly id: string; readonly status: "missing" }
   | ({ readonly status: "found" } & RestoredWriterSnapshot)
@@ -99,7 +102,7 @@ export async function loadWriterDocument(
   const result = await loadSnapshot(adapter, id);
   return result.status === "missing"
     ? result
-    : { status: "found", ...restoreWriterSnapshot(result.snapshot) };
+    : { status: "found", ...restoreWriterSnapshot(result.snapshot, defaultFontDevice) };
 }
 
 /** Validates the current object-shell boundary projection. @param value - Stored candidate. @returns Whether valid. */

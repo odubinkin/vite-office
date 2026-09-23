@@ -24,7 +24,7 @@ import {
 /** Import request transferred into the worker. */
 export interface OdtWorkerImportRequest {
   readonly bytes: ArrayBuffer;
-  readonly metadata: Readonly<{ title: string }>;
+  readonly metadata: Readonly<{ title: string; locale?: string }>;
   readonly operation: "import";
   readonly zipLimits?: ZipFileLimits;
 }

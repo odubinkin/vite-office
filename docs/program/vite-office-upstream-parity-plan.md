@@ -100,6 +100,12 @@ document language as model/format state where upstream does; never silently
 recreate with `en-US`. Verify metric and imperial locales, script-specific
 fonts, page defaults, New, save/reopen, and worker round trips.
 
+**Implementation:** `SwDocShell` retains the session construction context for
+New and ODT import. The canonical document record stores locale; cache and
+worker restoration attach the current output device. ODT metadata carries
+document language through `dc:language`. Focused tests cover metric and
+imperial New defaults, script fonts, cache restore, and ODT worker transfer.
+
 ### 3. Writer undo ownership is reduced to the shared Sfx manager (H; confirmed)
 
 [`SwDoc`](../../apps/office/src/sw/source/core/doc/doc.ts) directly owns

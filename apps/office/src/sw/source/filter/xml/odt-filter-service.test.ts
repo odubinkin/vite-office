@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwPosition } from "../../core/crsr/pam";
-import { createWriterDocument } from "../../core/doc/doc";
+import { createWriterDocument, SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import {
@@ -61,10 +61,25 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       "import:mapping",
     ]);
     expect(imported.document).toMatchObject({
-      graph: { swModelVersion: 13, textNodes: [{ hints: [], text: "worker body" }] },
-      transferVersion: 4,
+      graph: { swModelVersion: 14, textNodes: [{ hints: [], text: "worker body" }] },
+      transferVersion: 5,
     });
     expect(imported.document).not.toHaveProperty("document");
+  });
+
+  it("preserves document language through ODT and worker transfer", /** Verifies document locale through package and graph transfer. @returns Completion after assertions. */ async () => {
+    const service = createInlineOdtFilterService();
+    const source = new SwDoc({ locale: "ja-JP" });
+    const bytes = await service.Export(createOdtFilterDocument(source, "Japanese"));
+    const transferred = await service.Import(bytes, { title: "Japanese", locale: "en-US" });
+    const device = {
+      getDefaultFont: /** Resolves the test family. @returns Family. */ () => "Source Han Sans",
+    };
+    const restored = restoreOdtWriterTransfer(transferred.document, device);
+    expect(restored.GetLocale()).toBe("ja-JP");
+    expect(restored.GetDefaultFontDevice()).toBe(device);
+    expect(restored.GetPageDesc().GetValue().paperFormat).toBe("A4");
+    service.Close();
   });
 
   it("cooperatively cancels, honors AbortSignal, and rejects closed services" /** Covers all inline lifecycle stops. @returns Completion after assertions. */, async () => {
@@ -125,7 +140,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       {},
       { transferVersion: 1 },
       { transferVersion: 2 },
-      { document: {}, transferVersion: 4 },
+      { document: {}, transferVersion: 5 },
     ])
       expect(
         /** Restores one malformed worker transfer. @returns Invalid result. */ () =>
@@ -152,7 +167,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
 
     expect(
       /** Restores a malformed graph. @returns Invalid result. */ () =>
-        restoreOdtWriterTransfer({ graph: {}, transferVersion: 4 }),
+        restoreOdtWriterTransfer({ graph: {}, transferVersion: 5 }),
     ).toThrow("document schema is unsupported");
     expect(
       /** Restores a graph without a body node. @returns Invalid result. */ () =>

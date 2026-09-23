@@ -39,6 +39,11 @@ download, clipboard, and IndexedDB ports terminate in the thin Sfx shell and
 `sw/browser/workflows/writer-document-io.ts`.
 
 The browser-only `BrowserWriterRecoveryDocument` adapter under
-`sw/browser/storage` owns recovery snapshot serialization. Cache schema 11
+`sw/browser/storage` owns recovery snapshot serialization. Cache schema 12
 wraps the single canonical `WriterDocumentRecord`; all retired local schemas
-are rejected without migration.
+are rejected without migration. The graph stores the document locale, while
+the current session supplies the output font device when a cache or ODT
+worker transfer is restored. `SwDocShell` keeps the original session locale
+and device for File → New, even after opening another document. ODT metadata
+stores document language in `dc:language`; import reads it before constructing
+the Writer model, with the session locale used when the package has no language.

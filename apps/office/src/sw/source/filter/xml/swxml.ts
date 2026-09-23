@@ -31,7 +31,7 @@ export class SwXMLReader {
   /** Imports one ODF 1.3 text package. @param bytes - Complete ODT bytes. @param metadata - Caller identity and lifecycle. @param limits - Optional ZIP ceilings. @param control - Cooperative progress/cancellation controls. @returns Canonical SwDoc. */
   public async Read(
     bytes: Uint8Array,
-    metadata: Readonly<{ title: string }>,
+    metadata: Readonly<{ title: string; locale?: string }>,
     limits?: ZipFileLimits,
     control: OdtImportControl = {},
   ): Promise<ImportedWriterDocument> {
@@ -59,7 +59,7 @@ export class SwXMLReader {
 /** Convenience ODT import boundary. @param bytes - Complete ODT bytes. @param metadata - Caller document identity. @param limits - Optional ZIP ceilings. @param control - Cooperative progress/cancellation controls. @returns Canonical SwDoc. */
 export async function readOdtDocument(
   bytes: Uint8Array,
-  metadata: Readonly<{ title: string }>,
+  metadata: Readonly<{ title: string; locale?: string }>,
   limits?: ZipFileLimits,
   control?: OdtImportControl,
 ): Promise<ImportedWriterDocument> {

@@ -131,7 +131,11 @@ export async function loadWriterFromPrimaryPort(
   const generation = docShell.GetDocumentState().contentGeneration;
   docShell.SetMediumOperation("open", "pending", generation);
   try {
-    const result = await loadWriterDocument(port, docShell.GetDocumentState().id);
+    const result = await loadWriterDocument(
+      port,
+      docShell.GetDocumentState().id,
+      docShell.GetDefaultFontDevice(),
+    );
     if (result.status === "missing") {
       docShell.SetMediumOperation("none", "idle");
       return "missing";

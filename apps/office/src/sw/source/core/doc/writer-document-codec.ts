@@ -4,6 +4,7 @@ import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem"
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition } from "../crsr/pam";
 import { SwDoc } from "./doc";
+import type { DefaultFontDevice } from "./default-font";
 import { isWriterParagraphStyle, SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
 import { SwNumFormat, SwNumRule } from "./number";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
@@ -75,9 +76,10 @@ type WriterTextHintRecord =
 
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
+  readonly locale: string;
   readonly numRules: readonly WriterNumberRuleRecord[];
   readonly pageDescriptor: WriterPageDescriptorValue;
-  readonly swModelVersion: 13;
+  readonly swModelVersion: 14;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -85,6 +87,7 @@ export interface WriterDocumentRecord {
 /** Encodes the model at the browser boundary. @param document - Canonical graph. @returns Current record. */
 export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
   return {
+    locale: document.GetLocale(),
     numRules: document.GetNumRuleTable().map(
       /** Encodes one document rule. @param rule - Model rule. @returns Primitive rule record. */ (
         rule,
@@ -118,7 +121,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
       }),
     ),
     pageDescriptor: document.GetPageDesc().GetValue(),
-    swModelVersion: 13,
+    swModelVersion: 14,
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -172,11 +175,16 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
   };
 }
 
-/** Decodes only the current schema; legacy records are intentionally unsupported. @param candidate - Stored value. @returns Canonical graph. */
-export function decodeWriterDocument(candidate: unknown): SwDoc {
+/** Decodes only the current schema; legacy records are intentionally unsupported. @param candidate - Stored value. @param defaultFontDevice - Current output device. @returns Canonical graph. */
+export function decodeWriterDocument(
+  candidate: unknown,
+  defaultFontDevice?: DefaultFontDevice,
+): SwDoc {
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 13 ||
+    candidate.swModelVersion !== 14 ||
+    typeof candidate.locale !== "string" ||
+    candidate.locale.length === 0 ||
     !Array.isArray(candidate.numRules) ||
     !("pageDescriptor" in candidate) ||
     !Array.isArray(candidate.textFormatCollections) ||
@@ -184,7 +192,11 @@ export function decodeWriterDocument(candidate: unknown): SwDoc {
   )
     throw new Error("Stored Writer document schema is unsupported.");
   const record = candidate as unknown as WriterDocumentRecord;
-  const document = new SwDoc(false);
+  const document = new SwDoc({
+    createInitialTextNode: false,
+    ...(defaultFontDevice === undefined ? {} : { defaultFontDevice }),
+    locale: record.locale,
+  });
   document.ChgPageDesc(record.pageDescriptor);
   for (const style of record.textFormatCollections) {
     if (!isWriterParagraphStyle(style.id)) throw new Error("Stored Writer style is invalid.");
