@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609231616-YXHG1W",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T16:28:40.584Z",
+  "verdict": "pass",
+  "summary": "Section 5 implementation matches approved UI scope and declared checks pass.",
+  "evaluated_sha": "44215ea64d3da6fe97b155ed4c7d03f51fa5477c",
+  "blueprint_digest": "989aaa81f8c62f93b1de2b8db4930aa5bd6013977bd518b21158bba386f8566e",
+  "findings": [
+    "Generated Writer resources and Sfx bindings now feed shared presentation selectors; narrow sidebar follows command state and remains keyboard reachable."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609231616-YXHG1W/README.md",
+    "apps/office/src/sw/browser/presentation/writer-command-presentation.ts",
+    "apps/office/e2e/writer-responsive-sidebar.spec.ts",
+    "npx vitest run: 27 focused tests passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Optional repository-wide coverage threshold remains below 100 percent on untouched model/layout/XML modules."
+  ]
+}
