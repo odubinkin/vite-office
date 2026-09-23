@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609230918-HKX8WE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T09:20:53.478Z",
+  "verdict": "pass",
+  "summary": "Default paragraph height and narrow page reachability corrected and verified.",
+  "evaluated_sha": "de7a2e604a4cd259584e0f7d0ba9e5f0d1bc1960",
+  "blueprint_digest": "27eb318a01ae2850fd93560b3b49b432590d4770bf25c6456c10fd562ed4ebcb",
+  "findings": [
+    "Rendered 12 pt paragraph now measures 16 px rather than 28 px; narrow page and vertical ruler are reachable inside the scrollable canvas."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609230918-HKX8WE/README.md",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.test.tsx"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
