@@ -1,10 +1,11 @@
 ---
 id: "202609230918-HKX8WE"
 title: "Correct Writer text proportions on pages"
-status: "DOING"
+result_summary: "Aligned Writer paragraph height and narrow page geometry with rendered text"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -38,11 +39,16 @@ quality_review:
     - "apps/office/src/sw/browser/editor/WriterEditableParagraph.test.tsx"
   findings:
     - "Rendered 12 pt paragraph now measures 16 px rather than 28 px; narrow page and vertical ruler are reachable inside the scrollable canvas."
-commit: null
+commit:
+  hash: "de7a2e604a4cd259584e0f7d0ba9e5f0d1bc1960"
+  message: "🧩 HKX8WE task: align Writer text height with page layout"
 comments:
   -
     author: "CODER"
     body: "Start: Correct Writer paragraph height and narrow page positioning using measured browser geometry and upstream layout semantics."
+  -
+    author: "CODER"
+    body: "Verified: Writer paragraph height now follows the computed line height, and narrow pages remain horizontally reachable; focused tests and browser geometry checks passed."
 events:
   -
     type: "status"
@@ -57,8 +63,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Focused layout/editor tests and real browser geometry passed; typecheck, lint, format, doctor, routing, and diff hygiene passed."
+  -
+    type: "status"
+    at: "2026-09-23T09:21:02.870Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer paragraph height now follows the computed line height, and narrow pages remain horizontally reachable; focused tests and browser geometry checks passed."
 doc_version: 3
-doc_updated_at: "2026-09-23T09:20:47.429Z"
+doc_updated_at: "2026-09-23T09:21:02.873Z"
 doc_updated_by: "CODER"
 description: "Follow-up to verified ruler and pagination work: remove artificial paragraph height and preserve horizontal page reachability on narrow canvases, matching upstream page text geometry."
 sections:
