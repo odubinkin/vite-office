@@ -60,6 +60,10 @@ describe("Writer HTML transfer import", /** Groups bounded HTML filter tests. @r
         text: "controlprotocol-relative",
       },
     ]);
+    const missing = parseWriterClipboardPaste('<a>missing</a><a href="">empty</a>', "", document);
+    expect(missing?.paragraphs[0]?.runs).toEqual([
+      { attributes: { bold: false, italic: false, underline: false }, text: "missingempty" },
+    ]);
   });
 
   it("retains semantic block and nested-list order", /** Verifies paragraph and list import order. @returns Nothing. */ function importsStructuredHtml(): void {

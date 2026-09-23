@@ -4,7 +4,7 @@ title: "Consolidate Writer transfer workflow ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     state: "needs_rework"
     note: "Task-specific transfer tests, browser tests, build, lint, typecheck, and boundaries pass; repository-wide verify remains red on unrelated format, coverage, JSDoc, size, and parity gates."
 doc_version: 3
-doc_updated_at: "2026-09-23T17:21:25.732Z"
+doc_updated_at: "2026-09-23T17:25:01.961Z"
 doc_updated_by: "CODER"
 description: "Implement section 7 transfer and browser workflow ownership audit against pinned LibreOffice swdtflvr.cxx"
 sections:
@@ -134,6 +134,10 @@ sections:
     - Observation: The repository-wide validation contract cannot pass against the current baseline.
       Impact: The task cannot be closed under the approved verification criterion despite passing task-specific behavior checks.
       Resolution: Request approval for narrowly scoped gate exceptions or a separate expanded task to repair baseline failures.
+
+    - Observation: Final coverage rerun after two additional boundary tests: 401/401 unit tests pass; browser edit adapter and HTML import now have 100% line and statement coverage.
+      Impact: Global 100% coverage gate remains red at 99.55% statements, 99.38% branches, 99.74% functions, and 99.66% lines; remaining report points to existing core, layout, XML, and defensive source branches.
+      Resolution: Keep the approved task scope limited to transfer ownership and request a decision on repository-wide gate exceptions before closure.
 id_source: "generated"
 ---
 ## Summary
@@ -241,3 +245,7 @@ Revert the task implementation and close commits, then rerun focused transfer te
 - Observation: The repository-wide validation contract cannot pass against the current baseline.
   Impact: The task cannot be closed under the approved verification criterion despite passing task-specific behavior checks.
   Resolution: Request approval for narrowly scoped gate exceptions or a separate expanded task to repair baseline failures.
+
+- Observation: Final coverage rerun after two additional boundary tests: 401/401 unit tests pass; browser edit adapter and HTML import now have 100% line and statement coverage.
+  Impact: Global 100% coverage gate remains red at 99.55% statements, 99.38% branches, 99.74% functions, and 99.66% lines; remaining report points to existing core, layout, XML, and defensive source branches.
+  Resolution: Keep the approved task scope limited to transfer ownership and request a decision on repository-wide gate exceptions before closure.

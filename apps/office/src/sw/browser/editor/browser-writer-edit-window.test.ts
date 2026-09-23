@@ -4,6 +4,7 @@ import type React from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
+import { WriterTransferError } from "../../source/uibase/dochdl/swdtflvr";
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 
 describe("browser Writer edit window links", /** Groups browser Writer edit window links. @returns Test callback result. */ () => {
@@ -157,6 +158,15 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
       /** Runs the failed native write. @returns Nothing. */ () =>
         boundary.WriteTransfer(copyEvent as unknown as React.ClipboardEvent<HTMLElement>, false),
     ).toThrow("native write failed");
+    editWindow.CopyTransfer.mockImplementationOnce(
+      /** Represents an empty Writer selection. @returns Nothing. */ () => {
+        throw new WriterTransferError();
+      },
+    );
+    expect(
+      /** Runs a native Copy with no transferable selection. @returns Nothing. */ () =>
+        boundary.WriteTransfer(copyEvent as unknown as React.ClipboardEvent<HTMLElement>, false),
+    ).not.toThrow();
     const drag = {
       dataTransfer: {
         getData: /** Runs the test callback. @returns Test callback result. */ () => "",
