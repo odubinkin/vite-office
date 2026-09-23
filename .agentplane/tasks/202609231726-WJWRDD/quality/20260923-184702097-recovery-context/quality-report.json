@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609231726-WJWRDD",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T18:47:02.097Z",
+  "verdict": "pass",
+  "summary": "Verified browser ODT persistence, file dialogs, and deliberate parity divergence.",
+  "evaluated_sha": "1407aaf8941dcaf4fd3ae410e5d8ad8c19dc9918",
+  "blueprint_digest": "efcb19450fd4dcecf8abeec378d50da7f6383217409314468cce5f719af5ffdf",
+  "findings": [
+    "All declared checks pass; nonempty imported files save immediately, empty documents remain unstored, and no JSON migration runs."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609231726-WJWRDD/README.md",
+    "npm run verify",
+    "node .agentplane/policy/check-routing.mjs",
+    "docs/program/autosave-recovery.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
