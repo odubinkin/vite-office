@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609231301-QBYCZX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T13:32:42.331Z",
+  "verdict": "pass",
+  "summary": "ODT paragraph spacing modes and inherited style resolution are implemented and fully verified",
+  "evaluated_sha": "2b013dfa1d7ae7610ba886cbf752199dbc136860",
+  "blueprint_digest": "3254b88e9e91c7014d184a5713336d7b1fb70faf23cbcdc1c943487b452230b8",
+  "findings": [
+    "The supplied document retains a separate unsupported 15-cell table, so complete page parity requires a future table-model task."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609231301-QBYCZX/README.md",
+    "npm run verify: 377 office tests, 96 inventory tests, 11 e2e, 100% coverage"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser font metrics remain a bounded approximation; table content in the sample is unsupported."
+  ]
+}
