@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202609231520-J8VS4Q",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T15:34:17.552Z",
+  "verdict": "pass",
+  "summary": "Writer undo ownership matches approved scope and all declared checks pass.",
+  "evaluated_sha": "169798e4c6f3c8623e019bd9b2ad18a87da792a1",
+  "blueprint_digest": "057fd7264fb9736475a9a52650af48bc0d94dfedd3817b0376f2ced4795dda04",
+  "findings": [
+    "SwDoc owns a Writer manager over Sfx; deleted text and joined nodes are retained and released with history actions; mixed action undo and redo return modified state to the save mark. 393 unit tests pass with 100 percent coverage, and static checks pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609231520-J8VS4Q/README.md",
+    "apps/office/src/sw/source/core/undo/docundo.ts",
+    "npm run test:coverage --workspace @vite-office/office",
+    "npm run typecheck",
+    "npm run lint"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
