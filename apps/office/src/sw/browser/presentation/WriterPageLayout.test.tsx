@@ -1,12 +1,14 @@
 /** @fileoverview Verifies the browser page dialog, rulers, pagination, and paged workspace chrome. */
 
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { paginateWriterParagraphs } from "../editor/writer-page-pagination";
+import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
+import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
-import { WriterRulers } from "./WriterRulers";
+import { WriterRulers, WriterVerticalRuler } from "./WriterRulers";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import type { WriterParagraphProjection } from "./writer-view-projection";
 
@@ -69,14 +71,16 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     const onPageChange = vi.fn();
     const onParagraphIndentChange = vi.fn();
     const { rerender } = render(
-      <WriterRulers
-        horizontalVisible
-        onPageChange={onPageChange}
-        onParagraphIndentChange={onParagraphIndentChange}
-        page={page}
-        paragraph={paragraph("p1", "Ruler")}
-        verticalVisible
-      />,
+      <>
+        <WriterRulers
+          horizontalVisible
+          onPageChange={onPageChange}
+          onParagraphIndentChange={onParagraphIndentChange}
+          page={page}
+          paragraph={paragraph("p1", "Ruler")}
+        />
+        <WriterVerticalRuler onPageChange={onPageChange} page={page} />
+      </>,
     );
     for (const [name, axis] of [
       ["Left page margin", "x"],
@@ -88,7 +92,13 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
       ["Bottom page margin", "y"],
     ] as const) {
       const handle = screen.getByRole("button", { name });
+      const originalPosition = axis === "x" ? handle.style.left : handle.style.top;
       fireEvent.pointerDown(handle, { clientX: 40, clientY: 40 });
+      fireEvent.pointerMove(window, {
+        clientX: axis === "x" ? 48 : 40,
+        clientY: axis === "y" ? 48 : 40,
+      });
+      expect(axis === "x" ? handle.style.left : handle.style.top).not.toBe(originalPosition);
       fireEvent.pointerUp(window, {
         clientX: axis === "x" ? 48 : 40,
         clientY: axis === "y" ? 48 : 40,
@@ -104,11 +114,72 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
         onParagraphIndentChange={onParagraphIndentChange}
         page={page}
         paragraph={paragraph("p1", "Ruler")}
-        verticalVisible={false}
       />,
     );
     expect(screen.queryByLabelText("Writer horizontal ruler")).not.toBeInTheDocument();
     expect(screen.queryByLabelText("Writer vertical ruler")).not.toBeInTheDocument();
+  });
+
+  it("anchors each vertical ruler to its rendered page and starts tick zero at the text margins", /** Verifies page ownership and origins. @returns Nothing. */ () => {
+    const tinyPage = { ...page, bottomMargin: 100, height: 650, topMargin: 100 };
+    const { container } = render(
+      <WriterPlainTextEditor
+        activeParagraphId="p1"
+        cursorSelection={{ point: { paragraphId: "p1", offset: 0 } }}
+        editWindow={{ FocusNode: vi.fn(), SetSelection: vi.fn() } as unknown as SwEditWin}
+        pageDescriptor={tinyPage}
+        paragraphs={[paragraph("p1", "first"), paragraph("p2", "second")]}
+        verticalRuler={<WriterVerticalRuler onPageChange={vi.fn()} page={tinyPage} />}
+      />,
+    );
+    const pages = container.querySelectorAll("[data-writer-page]");
+    expect(pages).toHaveLength(2);
+    for (const pageElement of pages) {
+      const ruler = pageElement.parentElement?.querySelector(
+        '[aria-label="Writer vertical ruler"]',
+      );
+      expect(ruler).not.toBeNull();
+      expect(ruler?.querySelector("span")?.style.top).toBe(`${tinyPage.topMargin / 15}px`);
+      expect(ruler?.querySelector("span")?.textContent).toBe("0");
+    }
+  });
+
+  it("uses laid-out paragraph heights when deciding page breaks", /** Verifies that glyph-width estimates cannot leave half a page blank. @returns Nothing. */ async () => {
+    const paragraphs = Array.from({ length: 8 }, (_, index) =>
+      paragraph(`p${index}`, "A long text paragraph ".repeat(20)),
+    );
+    const shortPage = { ...page, bottomMargin: 100, height: 1100, topMargin: 100 };
+    const measured = new Map(paragraphs.map((item) => [item.id, 20]));
+    expect(
+      paginateWriterParagraphs(paragraphs, shortPage, measured).map((group) => group.length),
+    ).toEqual([3, 3, 2]);
+    const measure = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      /** Supplies paragraph geometry as a browser layout engine would. @returns Element rectangle. */ function (
+        this: HTMLElement,
+      ): DOMRect {
+        return { height: this.classList.contains("shrink-0") ? 20 : 0 } as DOMRect;
+      },
+    );
+    try {
+      const { container } = render(
+        <WriterPlainTextEditor
+          activeParagraphId="p0"
+          cursorSelection={{ point: { paragraphId: "p0", offset: 0 } }}
+          editWindow={{ FocusNode: vi.fn(), SetSelection: vi.fn() } as unknown as SwEditWin}
+          pageDescriptor={shortPage}
+          paragraphs={paragraphs}
+        />,
+      );
+      await waitFor(() => {
+        expect(
+          [...container.querySelectorAll("[data-writer-page]")].map(
+            (pageElement) => pageElement.querySelectorAll("[data-writer-paragraph-id]").length,
+          ),
+        ).toEqual([3, 3, 2]);
+      });
+    } finally {
+      measure.mockRestore();
+    }
   });
 
   it("paginates by physical text area and renders optional workspace regions", /** Exercises page grouping and workspace branches. @returns Nothing. */ () => {

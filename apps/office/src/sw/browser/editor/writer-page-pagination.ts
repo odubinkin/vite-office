@@ -7,11 +7,12 @@ import type { WriterParagraphProjection as WriterParagraph } from "../presentati
 export function paginateWriterParagraphs(
   paragraphs: readonly WriterParagraph[],
   page: WriterPageDescriptorValue,
+  measuredHeights?: ReadonlyMap<string, number>,
 ): readonly (readonly WriterParagraph[])[] {
   const contentWidthPt = Math.max(1, (page.width - page.leftMargin - page.rightMargin) / 20);
-  const contentHeightPt = Math.max(1, (page.height - page.topMargin - page.bottomMargin) / 20);
+  const contentHeightPixels = Math.max(1, (page.height - page.topMargin - page.bottomMargin) / 15);
   const pages: WriterParagraph[][] = [[]];
-  let usedHeightPt = 0;
+  let usedHeightPixels = 0;
   for (const paragraph of paragraphs) {
     const style = paragraph.computedStyle;
     const usableWidthPt = Math.max(
@@ -32,17 +33,18 @@ export function paginateWriterParagraphs(
           0,
         ),
     );
-    const heightPt =
+    const estimatedHeightPt =
       style.upperSpacingPt +
       style.lowerSpacingPt +
       visualLines * Math.max(14, style.fontSizePt * style.lineHeight);
+    const heightPixels = measuredHeights?.get(paragraph.id) ?? (estimatedHeightPt * 4) / 3;
     const current = pages[pages.length - 1] as WriterParagraph[];
-    if (current.length > 0 && usedHeightPt + heightPt > contentHeightPt) {
+    if (current.length > 0 && usedHeightPixels + heightPixels > contentHeightPixels) {
       pages.push([paragraph]);
-      usedHeightPt = heightPt;
+      usedHeightPixels = heightPixels;
     } else {
       current.push(paragraph);
-      usedHeightPt += heightPt;
+      usedHeightPixels += heightPixels;
     }
   }
   return pages;

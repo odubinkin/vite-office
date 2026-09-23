@@ -1,6 +1,7 @@
 /** @fileoverview Projects Writer paragraphs through one browser implementation of SwEditWin. */
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import type { ReactNode } from "react";
 
 import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
 import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
@@ -17,6 +18,7 @@ export interface WriterPlainTextEditorProps {
   readonly editWindow: SwEditWin;
   readonly paragraphs: readonly WriterParagraph[];
   readonly pageDescriptor: WriterPageDescriptorValue;
+  readonly verticalRuler?: ReactNode;
 }
 
 /** Renders one root `contenteditable` and forwards browser events to one stable controller. @param props - Immutable projection and edit-window owner. @returns Logical Writer document editing host. */
@@ -43,7 +45,46 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       ),
     [paragraphElements, props.editWindow],
   );
-  const pages = paginateWriterParagraphs(props.paragraphs, props.pageDescriptor);
+  const [measuredHeights, setMeasuredHeights] = useState<ReadonlyMap<string, number>>(
+    /** Starts with the bounded estimate until the browser has laid out the paragraphs. @returns Empty measurements. */ () =>
+      new Map(),
+  );
+  const pages = paginateWriterParagraphs(props.paragraphs, props.pageDescriptor, measuredHeights);
+
+  useLayoutEffect(
+    /** Uses browser layout heights for page breaks, just as Writer uses laid-out text frames. @returns Nothing. */
+    function measureParagraphs(): () => void {
+      let active = true;
+      const next = new Map<string, number>();
+      for (const paragraph of props.paragraphs) {
+        const wrapper = paragraphElements.get(paragraph.id)?.parentElement?.parentElement;
+        if (wrapper === undefined || wrapper === null) continue;
+        const height = wrapper.getBoundingClientRect().height;
+        if (height <= 0) continue;
+        const style = globalThis.getComputedStyle(wrapper);
+        next.set(
+          paragraph.id,
+          height +
+            (parseFloat(style.marginBlockStart) || 0) +
+            (parseFloat(style.marginBlockEnd) || 0),
+        );
+      }
+      if (
+        next.size !== measuredHeights.size ||
+        [...next].some(([id, height]) => measuredHeights.get(id) !== height)
+      ) {
+        globalThis.queueMicrotask(
+          /** Applies measured browser geometry after this layout pass. @returns Nothing. */ (): void => {
+            if (active) setMeasuredHeights(next);
+          },
+        );
+      }
+      return () => {
+        active = false;
+      };
+    },
+    [measuredHeights, paragraphElements, props.pageDescriptor, props.paragraphs],
+  );
 
   useLayoutEffect(
     /** Restores the shell-owned selection after canonical paragraph projection. @returns Nothing. */
@@ -90,48 +131,50 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           page,
           pageIndex,
         ) => (
-          <section
-            aria-label={`Page ${pageIndex + 1}`}
-            className="box-border shrink-0 overflow-hidden bg-white shadow-xl shadow-slate-400/30"
-            data-writer-page={pageIndex + 1}
-            key={page[0]?.id ?? `empty-page-${pageIndex}`}
-            role="document"
-            style={{
-              height: props.pageDescriptor.height / 15,
-              paddingBottom: props.pageDescriptor.bottomMargin / 15,
-              paddingLeft: props.pageDescriptor.leftMargin / 15,
-              paddingRight: props.pageDescriptor.rightMargin / 15,
-              paddingTop: props.pageDescriptor.topMargin / 15,
-              width: props.pageDescriptor.width / 15,
-            }}
-          >
-            {page.map(
-              /** Renders one paragraph on the current page. @param paragraph - Paragraph projection. @returns Paragraph element. */ (
-                paragraph,
-              ) => {
-                const index = props.paragraphs.indexOf(paragraph);
-                return (
-                  <WriterEditableParagraph
-                    index={index}
-                    isActive={paragraph.id === props.activeParagraphId}
-                    isLast={index === props.paragraphs.length - 1}
-                    key={paragraph.id}
-                    listMarker={paragraph.listMarker}
-                    paragraph={paragraph}
-                    retainElement={
-                      /** Retains the DOM identity used by SwEditWin. @param paragraphId - Projection identity. @param element - Mounted paragraph or null. @returns Nothing. */ (
-                        paragraphId,
-                        element,
-                      ) => {
-                        if (element === null) paragraphElements.delete(paragraphId);
-                        else paragraphElements.set(paragraphId, element);
+          <div className="relative" key={page[0]?.id ?? `empty-page-${pageIndex}`}>
+            {props.verticalRuler}
+            <section
+              aria-label={`Page ${pageIndex + 1}`}
+              className="box-border flex shrink-0 flex-col overflow-hidden bg-white shadow-xl shadow-slate-400/30"
+              data-writer-page={pageIndex + 1}
+              role="document"
+              style={{
+                height: props.pageDescriptor.height / 15,
+                paddingBottom: props.pageDescriptor.bottomMargin / 15,
+                paddingLeft: props.pageDescriptor.leftMargin / 15,
+                paddingRight: props.pageDescriptor.rightMargin / 15,
+                paddingTop: props.pageDescriptor.topMargin / 15,
+                width: props.pageDescriptor.width / 15,
+              }}
+            >
+              {page.map(
+                /** Renders one paragraph on the current page. @param paragraph - Paragraph projection. @returns Paragraph element. */ (
+                  paragraph,
+                ) => {
+                  const index = props.paragraphs.indexOf(paragraph);
+                  return (
+                    <WriterEditableParagraph
+                      index={index}
+                      isActive={paragraph.id === props.activeParagraphId}
+                      isLast={index === props.paragraphs.length - 1}
+                      key={paragraph.id}
+                      listMarker={paragraph.listMarker}
+                      paragraph={paragraph}
+                      retainElement={
+                        /** Retains the DOM identity used by SwEditWin. @param paragraphId - Projection identity. @param element - Mounted paragraph or null. @returns Nothing. */ (
+                          paragraphId,
+                          element,
+                        ) => {
+                          if (element === null) paragraphElements.delete(paragraphId);
+                          else paragraphElements.set(paragraphId, element);
+                        }
                       }
-                    }
-                  />
-                );
-              },
-            )}
-          </section>
+                    />
+                  );
+                },
+              )}
+            </section>
+          </div>
         ),
       )}
     </article>

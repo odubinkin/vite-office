@@ -39,6 +39,7 @@ export function WriterEditableParagraph({
   const markerWidthPt = Math.max(0, contentStartPt - markerStartPt);
   return (
     <div
+      className="shrink-0"
       data-active={isActive}
       style={{
         marginBlockEnd: isLast ? undefined : `${paragraph.computedStyle.lowerSpacingPt}pt`,

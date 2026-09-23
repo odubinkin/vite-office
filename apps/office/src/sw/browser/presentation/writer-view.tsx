@@ -5,7 +5,7 @@ import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
-import { WriterRulers } from "./WriterRulers";
+import { WriterRulers, WriterVerticalRuler } from "./WriterRulers";
 import { WriterParagraphProperties } from "./WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
@@ -163,7 +163,6 @@ export function WriterWorkbench({
             }
             page={snapshot.pageDescriptor}
             paragraph={snapshot.activeParagraph}
-            verticalVisible={snapshot.isVerticalRulerVisible}
           />
         }
         status={presentWriterStatus(view, snapshot, localization.GetText.bind(localization))}
@@ -180,6 +179,16 @@ export function WriterWorkbench({
           editWindow={view.GetEditWin()}
           pageDescriptor={snapshot.pageDescriptor}
           paragraphs={snapshot.paragraphs}
+          verticalRuler={
+            snapshot.isVerticalRulerVisible ? (
+              <WriterVerticalRuler
+                onPageChange={(pageDescriptor) => {
+                  view.GetWrtShell().SetPageDescriptor(pageDescriptor);
+                }}
+                page={snapshot.pageDescriptor}
+              />
+            ) : null
+          }
         />
       </WriterWorkspaceChrome>
       {dialogRequest?.request.kind !== "hyperlink" ? null : (

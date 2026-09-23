@@ -1,6 +1,6 @@
 /** @fileoverview Browser projection of Writer's SwRuler/SvxRuler page and paragraph handles. */
 
-import type { PointerEvent as ReactPointerEvent } from "react";
+import { useState, type PointerEvent as ReactPointerEvent } from "react";
 
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import type { WriterParagraphProjection } from "./writer-view-projection";
@@ -16,13 +16,11 @@ export interface WriterRulersProps {
   ) => void;
   readonly page: WriterPageDescriptorValue;
   readonly paragraph: WriterParagraphProjection;
-  readonly verticalVisible: boolean;
 }
 
 /** Renders physical centimetre ticks and draggable Writer margin/indent markers. @param props - Geometry, paragraph, visibility, and commit callbacks. @returns Writer rulers. */
 export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
   const pageWidth = props.page.width / TWIPS_PER_CSS_PIXEL;
-  const pageHeight = props.page.height / TWIPS_PER_CSS_PIXEL;
   const paragraphLeft = props.paragraph.textLeftMargin;
   const firstLine = props.paragraph.computedStyle.firstLineIndentPt * 20;
   const paragraphRight = props.paragraph.computedStyle.rightMarginPt * 20;
@@ -38,7 +36,6 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
             className="relative mx-auto h-full bg-white text-[9px] text-slate-500"
             style={{ width: pageWidth }}
           >
-            <RulerTicks lengthTwips={props.page.width} orientation="horizontal" />
             <div
               className="absolute inset-y-0 left-0 bg-slate-300/80"
               style={{ width: props.page.leftMargin / TWIPS_PER_CSS_PIXEL }}
@@ -46,6 +43,11 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
             <div
               className="absolute inset-y-0 right-0 bg-slate-300/80"
               style={{ width: props.page.rightMargin / TWIPS_PER_CSS_PIXEL }}
+            />
+            <RulerTicks
+              lengthTwips={props.page.width}
+              orientation="horizontal"
+              originTwips={props.page.leftMargin}
             />
             <RulerHandle
               ariaLabel="Left page margin"
@@ -136,61 +138,66 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
           </div>
         </div>
       ) : null}
-      {props.verticalVisible ? (
-        <div
-          aria-label="Writer vertical ruler"
-          className="sticky left-0 top-0 z-10 col-start-1 row-start-2 mt-5 w-8 shrink-0 border-r border-slate-300 bg-white sm:mt-8"
-          role="toolbar"
-          style={{ height: pageHeight }}
-        >
-          <RulerTicks lengthTwips={props.page.height} orientation="vertical" />
-          <div
-            className="absolute inset-x-0 top-0 bg-slate-300/80"
-            style={{ height: props.page.topMargin / TWIPS_PER_CSS_PIXEL }}
-          />
-          <div
-            className="absolute inset-x-0 bottom-0 bg-slate-300/80"
-            style={{ height: props.page.bottomMargin / TWIPS_PER_CSS_PIXEL }}
-          />
-          <RulerHandle
-            ariaLabel="Top page margin"
-            axis="y"
-            className="h-2 w-full bg-indigo-700/70"
-            position={props.page.topMargin / TWIPS_PER_CSS_PIXEL}
-            onCommit={
-              /** Commits the top page margin. @param delta - Drag delta in twips. @returns Nothing. */ (
-                delta,
-              ) =>
-                props.onPageChange({
-                  ...props.page,
-                  topMargin: clampMargin(
-                    props.page.topMargin + delta,
-                    props.page.height - props.page.bottomMargin,
-                  ),
-                })
-            }
-          />
-          <RulerHandle
-            ariaLabel="Bottom page margin"
-            axis="y"
-            className="h-2 w-full bg-indigo-700/70"
-            position={(props.page.height - props.page.bottomMargin) / TWIPS_PER_CSS_PIXEL}
-            onCommit={
-              /** Commits the bottom page margin. @param delta - Drag delta in twips. @returns Nothing. */ (
-                delta,
-              ) =>
-                props.onPageChange({
-                  ...props.page,
-                  bottomMargin: clampMargin(
-                    props.page.bottomMargin - delta,
-                    props.page.height - props.page.topMargin,
-                  ),
-                })
-            }
-          />
-        </div>
-      ) : null}
     </>
+  );
+}
+
+/** Renders a page-owned vertical ruler in the same scroll and page coordinate space. */
+export function WriterVerticalRuler({
+  onPageChange,
+  page,
+}: Readonly<{
+  onPageChange: (value: WriterPageDescriptorValue) => void;
+  page: WriterPageDescriptorValue;
+}>): React.JSX.Element {
+  return (
+    <div
+      aria-label="Writer vertical ruler"
+      className="absolute -left-8 top-0 w-8 border-r border-slate-300 bg-white text-[9px] text-slate-500"
+      contentEditable={false}
+      role="toolbar"
+      style={{ height: page.height / TWIPS_PER_CSS_PIXEL }}
+    >
+      <div
+        className="absolute inset-x-0 top-0 bg-slate-300/80"
+        style={{ height: page.topMargin / TWIPS_PER_CSS_PIXEL }}
+      />
+      <div
+        className="absolute inset-x-0 bottom-0 bg-slate-300/80"
+        style={{ height: page.bottomMargin / TWIPS_PER_CSS_PIXEL }}
+      />
+      <RulerTicks lengthTwips={page.height} orientation="vertical" originTwips={page.topMargin} />
+      <RulerHandle
+        ariaLabel="Top page margin"
+        axis="y"
+        className="h-2 w-full bg-indigo-700/70"
+        position={page.topMargin / TWIPS_PER_CSS_PIXEL}
+        onCommit={
+          /** Commits the top page margin. @param delta - Drag delta in twips. @returns Nothing. */ (
+            delta,
+          ) =>
+            onPageChange({
+              ...page,
+              topMargin: clampMargin(page.topMargin + delta, page.height - page.bottomMargin),
+            })
+        }
+      />
+      <RulerHandle
+        ariaLabel="Bottom page margin"
+        axis="y"
+        className="h-2 w-full bg-indigo-700/70"
+        position={(page.height - page.bottomMargin) / TWIPS_PER_CSS_PIXEL}
+        onCommit={
+          /** Commits the bottom page margin. @param delta - Drag delta in twips. @returns Nothing. */ (
+            delta,
+          ) =>
+            onPageChange({
+              ...page,
+              bottomMargin: clampMargin(page.bottomMargin - delta, page.height - page.topMargin),
+            })
+        }
+      />
+    </div>
   );
 }
 
@@ -198,17 +205,25 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
 function RulerTicks({
   lengthTwips,
   orientation,
-}: Readonly<{ lengthTwips: number; orientation: "horizontal" | "vertical" }>): React.JSX.Element {
-  const centimetres = Math.floor((lengthTwips * 2.54) / 1440);
+  originTwips,
+}: Readonly<{
+  lengthTwips: number;
+  orientation: "horizontal" | "vertical";
+  originTwips: number;
+}>): React.JSX.Element {
+  const centimetreTwips = 1440 / 2.54;
+  const first = Math.ceil(-originTwips / centimetreTwips);
+  const last = Math.floor((lengthTwips - originTwips) / centimetreTwips);
   return (
-    <div className="absolute inset-0" aria-hidden="true">
+    <div className="pointer-events-none absolute inset-0" aria-hidden="true">
       {Array.from(
-        { length: centimetres + 1 },
+        { length: last - first + 1 },
         /** Renders one centimetre tick. @param _value - Unused array value. @param index - Centimetre index. @returns Tick element. */ (
           _value,
-          index,
+          offset,
         ) => {
-          const position = (index * 1440) / 2.54 / TWIPS_PER_CSS_PIXEL;
+          const index = first + offset;
+          const position = (originTwips + index * centimetreTwips) / TWIPS_PER_CSS_PIXEL;
           return (
             <span
               className="absolute border-slate-400"
@@ -219,7 +234,7 @@ function RulerTicks({
                   : { borderTopWidth: 1, left: 0, top: position, width: index % 5 === 0 ? 12 : 7 }
               }
             >
-              {index % 5 === 0 ? index : ""}
+              {index % 5 === 0 ? Math.abs(index) : ""}
             </span>
           );
         },
@@ -242,6 +257,7 @@ function RulerHandle({
   onCommit: (deltaTwips: number) => void;
   position: number;
 }>): React.JSX.Element {
+  const [dragDelta, setDragDelta] = useState(0);
   return (
     <button
       aria-label={ariaLabel}
@@ -249,12 +265,22 @@ function RulerHandle({
       onPointerDown={
         /** Starts one handle drag. @param event - Pointer-down event. @returns Nothing. */ (
           event,
-        ) => startDrag(event, axis, onCommit)
+        ) => startDrag(event, axis, setDragDelta, onCommit)
       }
       style={
         axis === "x"
-          ? { cursor: "ew-resize", left: position, top: 0, transform: "translateX(-50%)" }
-          : { cursor: "ns-resize", left: 0, top: position, transform: "translateY(-50%)" }
+          ? {
+              cursor: "ew-resize",
+              left: position + dragDelta,
+              top: 0,
+              transform: "translateX(-50%)",
+            }
+          : {
+              cursor: "ns-resize",
+              left: 0,
+              top: position + dragDelta,
+              transform: "translateY(-50%)",
+            }
       }
       title={ariaLabel}
       type="button"
@@ -266,19 +292,34 @@ function RulerHandle({
 function startDrag(
   event: ReactPointerEvent<HTMLButtonElement>,
   axis: "x" | "y",
+  onPreview: (deltaPixels: number) => void,
   onCommit: (deltaTwips: number) => void,
 ): void {
   event.preventDefault();
   const start = axis === "x" ? event.clientX : event.clientY;
+  const move =
+    /** Updates the handle while dragging. @param pointerEvent - Pointer-move event. @returns Nothing. */ (
+      pointerEvent: PointerEvent,
+    ): void => onPreview((axis === "x" ? pointerEvent.clientX : pointerEvent.clientY) - start);
+  const cancel = /** Cancels a pointer gesture. @returns Nothing. */ (): void => cleanup();
+  const cleanup =
+    /** Releases gesture listeners and the visual preview. @returns Nothing. */ (): void => {
+      globalThis.removeEventListener("pointermove", move);
+      globalThis.removeEventListener("pointerup", finish);
+      globalThis.removeEventListener("pointercancel", cancel);
+      onPreview(0);
+    };
   const finish =
     /** Commits the final pointer position. @param pointerEvent - Pointer-up event. @returns Nothing. */ (
       pointerEvent: PointerEvent,
     ): void => {
-      globalThis.removeEventListener("pointerup", finish);
       const end = axis === "x" ? pointerEvent.clientX : pointerEvent.clientY;
+      cleanup();
       onCommit(Math.round((end - start) * TWIPS_PER_CSS_PIXEL));
     };
-  globalThis.addEventListener("pointerup", finish, { once: true });
+  globalThis.addEventListener("pointermove", move);
+  globalThis.addEventListener("pointerup", finish);
+  globalThis.addEventListener("pointercancel", cancel);
 }
 
 /** Keeps a dragged margin inside the page while retaining a minimum text area. @param value - Candidate margin. @param oppositeBoundary - Available opposite edge. @returns Clamped margin. */
