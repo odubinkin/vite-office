@@ -17,7 +17,7 @@ import type { WriterParagraphProjection } from "./writer-view-projection";
 const page = createDefaultWriterPageDescriptor("en-GB").GetValue();
 
 describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisions. @returns Nothing. */ () => {
-  it("uses the greater adjacent margin and suppresses contextual gaps for matching styles", /** Checks normal and contextual gap formulas. @returns Nothing. */ () => {
+  it("uses configured additive spacing and suppresses contextual gaps for matching styles", /** Checks normal and contextual gap formulas. @returns Nothing. */ () => {
     const first = {
       ...paragraph("first", "A"),
       computedStyle: {
@@ -63,13 +63,26 @@ describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisio
         computedStyle: { ...second.computedStyle, upperSpacingPt: 4, contextualSpacing: false },
       }),
     ).toBe(4);
-    expect(getWriterParagraphGap({ ...first, style: "heading-1" }, second)).toBe(12);
+    expect(getWriterParagraphGap({ ...first, style: "heading-1" }, second)).toBe(24);
     expect(
       getWriterParagraphGap(
         { ...first, computedStyle: { ...first.computedStyle, contextualSpacing: false } },
         { ...second, computedStyle: { ...second.computedStyle, contextualSpacing: false } },
       ),
+    ).toBe(24);
+    expect(
+      getWriterParagraphGap(
+        { ...first, computedStyle: { ...first.computedStyle, contextualSpacing: false } },
+        { ...second, computedStyle: { ...second.computedStyle, contextualSpacing: false } },
+        { paraSpaceMax: false, paraSpaceMaxAtPages: false },
+      ),
     ).toBe(12);
+    expect(
+      getWriterParagraphGap(undefined, second, {
+        paraSpaceMax: true,
+        paraSpaceMaxAtPages: false,
+      }),
+    ).toBe(0);
   });
 });
 
@@ -334,7 +347,7 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
   });
 
   it("paginates by physical text area and renders optional workspace regions", /** Exercises page grouping and workspace branches. @returns Nothing. */ () => {
-    expect(createSwPageFrames([], page)).toEqual([{ number: 1, textFrames: [] }]);
+    expect(createSwPageFrames([], page)).toEqual([{ descriptor: page, number: 1, textFrames: [] }]);
 
     const onDocumentTitleChange = vi.fn();
     const { rerender } = render(

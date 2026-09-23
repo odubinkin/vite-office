@@ -1,4 +1,4 @@
-/** @fileoverview Implements the bounded standard SwPageDesc geometry from pinned Writer docdesc.cxx. */
+/** @fileoverview Implements the supported SwPageDesc contract from pinned Writer pagedesc/docdesc. */
 
 /** Supported physical paper identities exposed by the bounded Page tab. */
 export type WriterPaperFormat = "A4" | "Letter" | "custom";
@@ -9,7 +9,7 @@ export interface WriterPageDescriptorValue {
   readonly height: number;
   readonly landscape: boolean;
   readonly leftMargin: number;
-  readonly name: "Standard";
+  readonly name: string;
   readonly paperFormat: WriterPaperFormat;
   readonly rightMargin: number;
   readonly topMargin: number;
@@ -27,6 +27,7 @@ const MAX_PAGE_TWIPS = 90_720;
 
 /** Upstream-shaped standard page descriptor with value-copy semantics. */
 export class SwPageDesc {
+  private follow: SwPageDesc = this;
   private value: WriterPageDescriptorValue;
 
   /** Creates and validates one standard page descriptor. @param value - Physical page value. @returns Nothing. */
@@ -39,14 +40,31 @@ export class SwPageDesc {
     return Object.freeze({ ...this.value });
   }
 
+  /** Returns the stable page-style identity. @returns Page descriptor name. */
+  public GetName(): string {
+    return this.value.name;
+  }
+
   /** Replaces all supported page attributes atomically. @param value - New page value. @returns Nothing. */
   public SetValue(value: WriterPageDescriptorValue): void {
     this.value = validateWriterPageDescriptor(value);
   }
 
+  /** Selects the descriptor used by subsequent pages; null restores upstream's self-follow. @param follow - Next descriptor or null. @returns Nothing. */
+  public SetFollow(follow: SwPageDesc | null): void {
+    this.follow = follow ?? this;
+  }
+
+  /** Returns the descriptor used by subsequent pages. @returns Follow descriptor. */
+  public GetFollow(): SwPageDesc {
+    return this.follow;
+  }
+
   /** Creates an independent descriptor. @returns Clone. */
   public Clone(): SwPageDesc {
-    return new SwPageDesc(this.GetValue());
+    const clone = new SwPageDesc(this.GetValue());
+    clone.follow = this.follow === this ? clone : this.follow;
+    return clone;
   }
 }
 
@@ -130,8 +148,7 @@ export function validateWriterPageDescriptor(
     throw new Error("Writer horizontal page margins leave no text area.");
   if (value.topMargin + value.bottomMargin + MIN_PAGE_CONTENT_TWIPS > value.height)
     throw new Error("Writer vertical page margins leave no text area.");
-  if (value.name !== "Standard")
-    throw new Error("Only the Standard Writer page style is supported.");
+  if (value.name.trim().length === 0) throw new Error("Writer page style name must not be empty.");
   if (!(["A4", "Letter", "custom"] as const).includes(value.paperFormat))
     throw new Error("Writer paper format is unsupported.");
   return Object.freeze({ ...value });

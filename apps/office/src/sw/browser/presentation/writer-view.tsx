@@ -179,6 +179,8 @@ export function WriterWorkbench({
           cursorSelection={snapshot.cursorSelection}
           editWindow={view.GetEditWin()}
           pageDescriptor={snapshot.pageDescriptor}
+          pageDescriptors={snapshot.pageDescriptors}
+          paragraphSpacingSettings={snapshot.paragraphSpacingSettings}
           paragraphs={snapshot.paragraphs}
           verticalRuler={
             snapshot.isVerticalRulerVisible ? (

@@ -389,12 +389,14 @@ export class SwWrtShell extends SwModify {
   public ChangeParagraphIndent(increase: boolean): boolean {
     return this.textShell.ChangeParagraphIndent(increase);
   }
-  /** Applies Standard page geometry as one Writer undo action. @param value - Replacement geometry. @returns Whether it changed. */
-  public SetPageDescriptor(value: WriterPageDescriptorValue): boolean {
-    const before = this.GetDoc().GetPageDesc().GetValue();
+  /** Applies named page geometry as one Writer undo action. @param value - Replacement geometry. @param descriptorName - Target identity. @returns Whether it changed. */
+  public SetPageDescriptor(value: WriterPageDescriptorValue, descriptorName = value.name): boolean {
+    const descriptor = this.GetDoc().FindPageDesc(descriptorName);
+    if (descriptor === undefined) return false;
+    const before = descriptor.GetValue();
     if (equalWriterPageDescriptors(before, value)) return false;
     const cursor = this.CaptureCursorState();
-    return this.ApplyAction(new SwUndoPageDesc(before, value, cursor, cursor));
+    return this.ApplyAction(new SwUndoPageDesc(before, value, cursor, cursor, descriptorName));
   }
   /** Applies direct active-paragraph ruler indents as one Writer undo action. @param value - Replacement indent tuple. @returns Whether it changed. */
   public SetParagraphRulerIndents(value: WriterParagraphIndentValue): boolean {

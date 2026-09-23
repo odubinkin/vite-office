@@ -705,6 +705,13 @@ describe("Writer SwTextNode and content manager" /** Groups canonical text mutat
     expect(writer.GetDocumentStylePoolManager()).toBeDefined();
     const settings = writer.GetDocumentSettingManager();
     expect(settings.get("HTML_MODE")).toBe(false);
+    expect(settings.get("TAB_COMPAT")).toBe(true);
+    expect(settings.get("TABS_RELATIVE_TO_INDENT")).toBe(true);
+    expect(settings.get("TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST")).toBe(false);
+    expect(settings.get("PARA_SPACE_MAX")).toBe(true);
+    expect(settings.get("OLD_LINE_SPACING")).toBe(false);
+    expect(settings.get("PROP_LINE_SPACING_SHRINKS_FIRST_LINE")).toBe(true);
+    expect(settings.get("STYLES_NODEFAULT")).toBe(false);
     settings.set("HTML_MODE", true);
     expect(settings.get("HTML_MODE")).toBe(true);
     manager.InsertString(new SwPosition(first), "abcd");

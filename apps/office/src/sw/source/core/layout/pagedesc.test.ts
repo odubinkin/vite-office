@@ -44,12 +44,24 @@ describe("Writer page descriptor", /** Registers page-descriptor cases. @returns
       { ...initial.GetValue(), height: 100_000 },
       { ...initial.GetValue(), leftMargin: 10_000, rightMargin: 10_000 },
       { ...initial.GetValue(), bottomMargin: 10_000, topMargin: 10_000 },
-      { ...initial.GetValue(), name: "Other" as "Standard" },
+      { ...initial.GetValue(), name: "" },
       { ...initial.GetValue(), paperFormat: "A3" as "A4" },
     ])
       expect(
         /** Validates one invalid fixture. @returns Rejected validation. */ () =>
           validateWriterPageDescriptor(invalid),
       ).toThrow();
+  });
+
+  it("retains descriptor identity and upstream self/follow semantics", /** Verifies the supported SwPageDesc identity graph. @returns Nothing. */ () => {
+    const standard = createDefaultWriterPageDescriptor("en-GB");
+    const left = new SwPageDesc({ ...standard.GetValue(), name: "Left Page" });
+    expect(standard.GetName()).toBe("Standard");
+    expect(standard.GetFollow()).toBe(standard);
+    standard.SetFollow(left);
+    expect(standard.GetFollow()).toBe(left);
+    standard.SetFollow(null);
+    expect(standard.GetFollow()).toBe(standard);
+    expect(left.Clone().GetFollow().GetName()).toBe("Left Page");
   });
 });

@@ -115,6 +115,29 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(imported.document.GetPageDesc().GetValue()).toEqual(page);
   });
 
+  it("round-trips named master pages and their follow relationship", /** Verifies Writer page descriptor collection ownership across ODF. @returns A fulfilled import promise. */ async () => {
+    const writer = createWriterDocument();
+    const standard = writer.GetPageDesc();
+    const first = writer.MakePageDesc("First Page", standard);
+    writer.ChgPageDesc(
+      { ...first.GetValue(), topMargin: 720, paperFormat: "custom" },
+      first.GetName(),
+    );
+    first.SetFollow(standard);
+    standard.SetFollow(first);
+    const bytes = writeTargetOdt(writer);
+    const styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    expect(styles).toContain('style:name="First Page"');
+    expect(styles).toContain('style:next-style-name="First Page"');
+    expect(styles).toContain('style:next-style-name="Standard"');
+
+    const imported = await readOdtDocument(bytes, metadata());
+    expect(imported.document.GetPageDescCnt()).toBe(2);
+    expect(imported.document.GetPageDesc().GetFollow().GetName()).toBe("First Page");
+    expect(imported.document.FindPageDesc("First Page")?.GetFollow().GetName()).toBe("Standard");
+    expect(imported.document.FindPageDesc("First Page")?.GetValue().topMargin).toBe(720);
+  });
+
   it("retains a known landscape paper identity through ODT", /** Verifies oriented known-paper detection. @returns A fulfilled import promise. */ async () => {
     const writer = createWriterDocument();
     const initial = writer.GetPageDesc().GetValue();

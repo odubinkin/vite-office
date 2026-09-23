@@ -434,7 +434,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     applyWriterParagraphList(node, { kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 14 });
+    expect(snapshot).toMatchObject({ swModelVersion: 15 });
     expect(snapshot.textNodes[0]).toMatchObject({
       formatCollId: "heading-1",
       hints: [],
@@ -498,11 +498,49 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     ).toThrow("Stored Writer line-spacing mode is invalid");
   });
 
+  it("round-trips page descriptor identities, follow links, and document settings", /** Verifies the current canonical document schema. @returns Nothing. */ () => {
+    const writer = createWriterDocument();
+    const standard = writer.GetPageDesc();
+    const first = writer.MakePageDesc("First Page", standard);
+    writer.ChgPageDesc(
+      { ...first.GetValue(), leftMargin: 720, paperFormat: "custom" },
+      first.GetName(),
+    );
+    first.SetFollow(standard);
+    standard.SetFollow(first);
+    writer.GetDocumentSettingManager().set("TAB_COMPAT", false);
+    writer.GetDocumentSettingManager().set("PARA_SPACE_MAX", true);
+
+    const snapshot = encodeWriterDocument(writer);
+    expect(snapshot).toMatchObject({
+      swModelVersion: 15,
+      pageDescriptors: [
+        { followName: "First Page", value: { name: "Standard" } },
+        { followName: "Standard", value: { leftMargin: 720, name: "First Page" } },
+      ],
+    });
+    const restored = decodeWriterDocument(snapshot);
+    expect(restored.GetPageDescCnt()).toBe(2);
+    expect(restored.GetPageDesc().GetFollow()).toBe(restored.FindPageDesc("First Page"));
+    expect(restored.FindPageDesc("First Page")?.GetFollow()).toBe(restored.GetPageDesc());
+    expect(restored.GetDocumentSettingManager().get("TAB_COMPAT")).toBe(false);
+    expect(restored.GetDocumentSettingManager().get("PARA_SPACE_MAX")).toBe(true);
+    expect(encodeWriterDocument(restored)).toEqual(snapshot);
+  });
+
   it("rejects obsolete snapshot schemas instead of preserving pre-canonical models" /** Keeps the core contract limited to the current LO-shaped schema. @returns Nothing. */, function rejectsObsoleteSchemas(): void {
     for (const obsolete of [
       { document: {}, paragraphs: [] },
       { document: {}, swModelVersion: 1, textNodes: [] },
       { document: {}, numRules: [], swModelVersion: 2, textFormatCollections: [], textNodes: [] },
+      {
+        locale: "en-US",
+        numRules: [],
+        pageDescriptor: createWriterDocument().GetPageDesc().GetValue(),
+        swModelVersion: 14,
+        textFormatCollections: [],
+        textNodes: [],
+      },
     ])
       expect(
         throwing(

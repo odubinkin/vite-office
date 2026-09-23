@@ -61,7 +61,7 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       "import:mapping",
     ]);
     expect(imported.document).toMatchObject({
-      graph: { swModelVersion: 14, textNodes: [{ hints: [], text: "worker body" }] },
+      graph: { swModelVersion: 15, textNodes: [{ hints: [], text: "worker body" }] },
       transferVersion: 5,
     });
     expect(imported.document).not.toHaveProperty("document");

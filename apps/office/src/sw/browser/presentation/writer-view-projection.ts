@@ -107,6 +107,14 @@ export interface WriterPresentationProjection {
   readonly paragraphs: readonly WriterParagraphProjection[];
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
   readonly pageDescriptor: WriterPageDescriptorValue;
+  readonly pageDescriptors: readonly Readonly<{
+    followName: string;
+    value: WriterPageDescriptorValue;
+  }>[];
+  readonly paragraphSpacingSettings: Readonly<{
+    paraSpaceMax: boolean;
+    paraSpaceMaxAtPages: boolean;
+  }>;
 }
 
 /** Complete browser external-store snapshot. */
@@ -251,6 +259,19 @@ export class WriterViewProjection {
       paragraphs: Object.freeze(paragraphs),
       paragraphStyleOptions,
       pageDescriptor: document.GetPageDesc().GetValue(),
+      pageDescriptors: Object.freeze(
+        Array.from({ length: document.GetPageDescCnt() }, (_, index) => {
+          const descriptor = document.GetPageDesc(index);
+          return Object.freeze({
+            followName: descriptor.GetFollow().GetName(),
+            value: descriptor.GetValue(),
+          });
+        }),
+      ),
+      paragraphSpacingSettings: Object.freeze({
+        paraSpaceMax: document.GetDocumentSettingManager().get("PARA_SPACE_MAX"),
+        paraSpaceMaxAtPages: document.GetDocumentSettingManager().get("PARA_SPACE_MAX_AT_PAGES"),
+      }),
     });
   }
 }

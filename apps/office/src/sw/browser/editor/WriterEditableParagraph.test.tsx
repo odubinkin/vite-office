@@ -147,7 +147,7 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
     const editor = screen.getByRole("textbox", { name: "Writer document text" });
     expect(marker).toHaveStyle({ width: "18pt", textAlign: "left" });
     expect(marker.parentElement).toHaveStyle({ marginInlineStart: "18pt" });
-    expect(marker.parentElement?.parentElement).toHaveStyle({ marginBlockStart: "12pt" });
+    expect(marker.parentElement?.parentElement).toHaveStyle({ marginBlockStart: "20pt" });
     expect(editor).not.toHaveStyle({ textIndent: "-18pt" });
   });
 

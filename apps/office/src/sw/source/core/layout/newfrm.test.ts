@@ -77,7 +77,34 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
       ),
     ).toEqual([["first"], ["second"]]);
     expect(createSwPageFrames([paragraph("large", 1, 700)], page)[0]?.textFrames).toHaveLength(1);
-    expect(createSwPageFrames([], page)).toEqual([{ number: 1, textFrames: [] }]);
+    expect(createSwPageFrames([], page)).toEqual([{ descriptor: page, number: 1, textFrames: [] }]);
+  });
+
+  it("applies descriptor follow links to subsequent page frames", /** Verifies page-dependent descriptor application. @returns Nothing. */ () => {
+    const standard = {
+      ...standardPage,
+      bottomMargin: 100,
+      height: 800,
+      topMargin: 100,
+    };
+    const first = {
+      ...standard,
+      height: 600,
+      name: "First Page",
+      paperFormat: "custom" as const,
+    };
+    const frames = createSwPageFrames([paragraph("node", 3, 500)], {
+      descriptors: [
+        { followName: "First Page", value: standard },
+        { followName: "Standard", value: first },
+      ],
+      initialName: "Standard",
+    });
+    expect(frames.map((frame) => frame.descriptor.name)).toEqual([
+      "Standard",
+      "First Page",
+      "Standard",
+    ]);
   });
 
   it("suppresses matching contextual spacing and rejects invalid line ranges", /** Verifies upstream spacing rule and range guard. @returns Nothing. */ () => {
@@ -86,7 +113,17 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
     expect(getSwTextFrameGap(first, second)).toBe(0);
     expect(getSwTextFrameGap(undefined, second)).toBe(100);
     expect(getSwTextFrameGap({ ...first, contextualSpacing: false }, second)).toBe(200);
-    expect(getSwTextFrameGap(first, { ...second, style: "heading" })).toBe(200);
+    expect(getSwTextFrameGap(first, { ...second, style: "heading" })).toBe(300);
+    expect(
+      getSwTextFrameGap(
+        first,
+        { ...second, style: "heading" },
+        {
+          paraSpaceMax: false,
+          paraSpaceMaxAtPages: true,
+        },
+      ),
+    ).toBe(200);
     expect(
       /** Attempts an invalid line range. @returns Never. */ () => makeSwTextFrame(first, 1, 0, 0),
     ).toThrow(/non-empty/);

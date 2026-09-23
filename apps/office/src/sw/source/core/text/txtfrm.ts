@@ -17,6 +17,18 @@ export interface SwTextFrameInput {
   readonly upperSpacing: number;
 }
 
+/** Document settings consumed by the supported paragraph-spacing path. */
+export interface SwTextFrameSettings {
+  readonly paraSpaceMax: boolean;
+  readonly paraSpaceMaxAtPages: boolean;
+}
+
+/** Pinned LibreOffice compatibility defaults from Office/Compatibility.xcs. */
+export const DEFAULT_SW_TEXT_FRAME_SETTINGS: SwTextFrameSettings = Object.freeze({
+  paraSpaceMax: true,
+  paraSpaceMaxAtPages: true,
+});
+
 /** A master or follow frame; offsets always refer to the same source text node. */
 export interface SwTextFrame {
   readonly end: number;
@@ -30,14 +42,14 @@ export interface SwTextFrame {
 export function getSwTextFrameGap(
   previous: SwTextFrameInput | undefined,
   current: SwTextFrameInput,
+  settings: SwTextFrameSettings = DEFAULT_SW_TEXT_FRAME_SETTINGS,
 ): number {
-  if (previous === undefined) return current.upperSpacing;
+  if (previous === undefined) return settings.paraSpaceMaxAtPages ? current.upperSpacing : 0;
   const sameStyle = previous.style === current.style;
   if (sameStyle && previous.contextualSpacing && current.contextualSpacing) return 0;
-  return Math.max(
-    sameStyle && previous.contextualSpacing ? 0 : previous.lowerSpacing,
-    sameStyle && current.contextualSpacing ? 0 : current.upperSpacing,
-  );
+  const lower = sameStyle && previous.contextualSpacing ? 0 : previous.lowerSpacing;
+  const upper = sameStyle && current.contextualSpacing ? 0 : current.upperSpacing;
+  return settings.paraSpaceMax ? lower + upper : Math.max(lower, upper);
 }
 
 /** Makes one frame from a consecutive range of measured lines. @param input - Source text node lines. @param firstLine - First line index. @param lastLine - Last line index. @param topSpacing - Gap before the frame. @returns Master or follow frame. */

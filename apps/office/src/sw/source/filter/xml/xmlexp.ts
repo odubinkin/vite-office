@@ -115,10 +115,25 @@ export function exportStylesXml(document: SwDoc): string {
       return `<style:style style:name="${escapeXml(name)}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph"${next}${parent}>${paragraphProperties}${textProperties}</style:style>`;
     },
   );
-  const page = document.GetPageDesc().GetValue();
-  const pageLayout = `<style:page-layout style:name="pm1"><style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${exportOdfLength(page.topMargin)}" fo:margin-bottom="${exportOdfLength(page.bottomMargin)}" fo:margin-left="${exportOdfLength(page.leftMargin)}" fo:margin-right="${exportOdfLength(page.rightMargin)}"/></style:page-layout>`;
-  const masterPage = `<style:master-page style:name="Standard" style:page-layout-name="pm1"/>`;
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}</office:styles><office:automatic-styles>${pageLayout}</office:automatic-styles><office:master-styles>${masterPage}</office:master-styles></office:document-styles>`;
+  const pageLayouts: string[] = [];
+  const masterPages: string[] = [];
+  for (let index = 0; index < document.GetPageDescCnt(); index += 1) {
+    const descriptor = document.GetPageDesc(index);
+    const page = descriptor.GetValue();
+    const layoutName = `pm${index + 1}`;
+    pageLayouts.push(
+      `<style:page-layout style:name="${layoutName}"><style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${exportOdfLength(page.topMargin)}" fo:margin-bottom="${exportOdfLength(page.bottomMargin)}" fo:margin-left="${exportOdfLength(page.leftMargin)}" fo:margin-right="${exportOdfLength(page.rightMargin)}"/></style:page-layout>`,
+    );
+    const followName = descriptor.GetFollow().GetName();
+    const follow =
+      followName === descriptor.GetName()
+        ? ""
+        : ` style:next-style-name="${escapeXml(followName)}"`;
+    masterPages.push(
+      `<style:master-page style:name="${escapeXml(descriptor.GetName())}" style:page-layout-name="${layoutName}"${follow}/>`,
+    );
+  }
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}</office:styles><office:automatic-styles>${pageLayouts.join("")}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
 }
 
 /** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @returns Complete XML. */

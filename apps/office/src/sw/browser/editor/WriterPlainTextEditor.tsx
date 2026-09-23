@@ -10,8 +10,12 @@ import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
-import { createSwPageFrames } from "../../source/core/layout/newfrm";
-import type { SwTextFrameInput, SwTextLine } from "../../source/core/text/txtfrm";
+import { createSwPageFrames, type SwPageDescriptorLayout } from "../../source/core/layout/newfrm";
+import type {
+  SwTextFrameInput,
+  SwTextFrameSettings,
+  SwTextLine,
+} from "../../source/core/text/txtfrm";
 import { measureWriterTextLines } from "./writer-line-measurement";
 
 /** Defines immutable render values plus the persistent Writer edit-window owner. */
@@ -21,6 +25,8 @@ export interface WriterPlainTextEditorProps {
   readonly editWindow: SwEditWin;
   readonly paragraphs: readonly WriterParagraph[];
   readonly pageDescriptor: WriterPageDescriptorValue;
+  readonly pageDescriptors?: SwPageDescriptorLayout["descriptors"];
+  readonly paragraphSpacingSettings?: SwTextFrameSettings;
   readonly verticalRuler?: ReactNode;
 }
 
@@ -93,7 +99,13 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       upperSpacing: paragraph.computedStyle.upperSpacingPt * 20,
     }),
   );
-  const pages = createSwPageFrames(inputs, props.pageDescriptor);
+  const pages = createSwPageFrames(
+    inputs,
+    props.pageDescriptors === undefined
+      ? props.pageDescriptor
+      : { descriptors: props.pageDescriptors, initialName: props.pageDescriptor.name },
+    props.paragraphSpacingSettings,
+  );
   const paragraphById = new Map(
     props.paragraphs.map(
       /** Indexes one view paragraph. @param paragraph - View paragraph. @returns Key and paragraph pair. */ (
@@ -135,7 +147,9 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       measurementRoot,
       measurementRevision,
       props.pageDescriptor,
+      props.pageDescriptors,
       props.paragraphs,
+      props.paragraphSpacingSettings,
     ],
   );
 
@@ -220,6 +234,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                       key={`measure-${paragraph.id}`}
                       listMarker={paragraph.listMarker}
                       paragraph={paragraph}
+                      paragraphSpacingSettings={props.paragraphSpacingSettings}
                       retainElement={
                         /** Retains the measurement paragraph. @param _id - Source node ID. @param element - Mounted element. @returns Nothing. */ (
                           _id,
@@ -272,12 +287,12 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                 data-writer-page={pageIndex + 1}
                 role="document"
                 style={{
-                  height: props.pageDescriptor.height / 15,
-                  paddingBottom: props.pageDescriptor.bottomMargin / 15,
-                  paddingLeft: props.pageDescriptor.leftMargin / 15,
-                  paddingRight: props.pageDescriptor.rightMargin / 15,
-                  paddingTop: props.pageDescriptor.topMargin / 15,
-                  width: props.pageDescriptor.width / 15,
+                  height: page.descriptor.height / 15,
+                  paddingBottom: page.descriptor.bottomMargin / 15,
+                  paddingLeft: page.descriptor.leftMargin / 15,
+                  paddingRight: page.descriptor.rightMargin / 15,
+                  paddingTop: page.descriptor.topMargin / 15,
+                  width: page.descriptor.width / 15,
                 }}
               >
                 {page.textFrames.map(
@@ -293,6 +308,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                         key={`${paragraph.id}:${frame.start}`}
                         listMarker={paragraph.listMarker}
                         paragraph={paragraph}
+                        paragraphSpacingSettings={props.paragraphSpacingSettings}
                         fragmentStart={frame.start}
                         fragmentEnd={frame.end}
                         topSpacingPt={frame.topSpacing / 20}

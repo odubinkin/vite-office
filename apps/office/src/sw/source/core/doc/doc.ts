@@ -38,7 +38,7 @@ export class SwDoc {
   private readonly undoManager = new UndoManager(this);
   private readonly defaultFontDevice: DefaultFontDevice | undefined;
   private readonly locale: string;
-  private readonly pageDesc: SwPageDesc;
+  private readonly pageDescs: SwPageDesc[];
   public readonly nodes: SwNodes;
 
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
@@ -46,7 +46,7 @@ export class SwDoc {
     const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
     this.defaultFontDevice = options?.defaultFontDevice;
     this.locale = options?.locale ?? "en-US";
-    this.pageDesc = createDefaultWriterPageDescriptor(this.locale);
+    this.pageDescs = [createDefaultWriterPageDescriptor(this.locale)];
     this.attrPool = new SwAttrPool(this);
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
     this.listsManager = new DocumentListsManager(this.stateManager);
@@ -60,15 +60,57 @@ export class SwDoc {
   public GetLocale(): string {
     return this.locale;
   }
-  /** Returns the document-owned Standard page descriptor. @returns Page descriptor. */
-  public GetPageDesc(): SwPageDesc {
-    return this.pageDesc;
+  /** Returns one document-owned page descriptor by stable collection position. @param index - Descriptor position. @returns Page descriptor. */
+  public GetPageDesc(index = 0): SwPageDesc {
+    const descriptor = this.pageDescs[index];
+    if (descriptor === undefined) throw new Error("Writer page descriptor index is out of range.");
+    return descriptor;
   }
-  /** Replaces the supported Standard page geometry and publishes one model hint. @param value - Page geometry. @returns Whether it changed. */
-  public ChgPageDesc(value: WriterPageDescriptorValue): boolean {
-    const before = this.pageDesc.GetValue();
+  /** Returns the number of document-owned page descriptors. @returns Descriptor count. */
+  public GetPageDescCnt(): number {
+    return this.pageDescs.length;
+  }
+  /** Finds one descriptor by its stable page-style name. @param name - Page-style name. @returns Descriptor or undefined. */
+  public FindPageDesc(name: string): SwPageDesc | undefined {
+    return this.pageDescs.find((descriptor) => descriptor.GetName() === name);
+  }
+  /** Reports whether a descriptor belongs to this document. @param descriptor - Candidate identity. @returns Membership. */
+  public ContainsPageDesc(descriptor: SwPageDesc | undefined): boolean {
+    return descriptor !== undefined && this.pageDescs.includes(descriptor);
+  }
+  /** Creates a named descriptor, optionally copying supported geometry. @param name - Unique page-style name. @param source - Optional source descriptor. @returns New document-owned descriptor. */
+  public MakePageDesc(name: string, source?: SwPageDesc): SwPageDesc {
+    if (this.FindPageDesc(name) !== undefined)
+      throw new Error(`Writer page descriptor exists: ${name}`);
+    const descriptor = source?.Clone() ?? createDefaultWriterPageDescriptor(this.locale);
+    descriptor.SetValue({ ...descriptor.GetValue(), name });
+    this.pageDescs.push(descriptor);
+    this.NotifyModelChange({ kind: "page-descriptor-changed" });
+    return descriptor;
+  }
+  /** Deletes a non-default descriptor and restores incoming follow links to self-follow. @param descriptor - Name or position. @returns Whether deleted. */
+  public DelPageDesc(descriptor: number | string): boolean {
+    const index =
+      typeof descriptor === "number"
+        ? descriptor
+        : this.pageDescs.findIndex((item) => item.GetName() === descriptor);
+    if (index <= 0 || index >= this.pageDescs.length) return false;
+    const removed = this.pageDescs[index] as SwPageDesc;
+    for (const item of this.pageDescs) if (item.GetFollow() === removed) item.SetFollow(null);
+    this.pageDescs.splice(index, 1);
+    this.NotifyModelChange({ kind: "page-descriptor-changed" });
+    return true;
+  }
+  /** Replaces supported geometry at an existing descriptor identity and publishes one model hint. @param value - Page geometry. @param target - Name or position. @returns Whether it changed. */
+  public ChgPageDesc(value: WriterPageDescriptorValue, target: number | string = 0): boolean {
+    const descriptor =
+      typeof target === "number" ? this.GetPageDesc(target) : this.FindPageDesc(target);
+    if (descriptor === undefined) return false;
+    if (value.name !== descriptor.GetName())
+      throw new Error("Writer page descriptor replacement must preserve its identity.");
+    const before = descriptor.GetValue();
     if (equalWriterPageDescriptors(before, value)) return false;
-    this.pageDesc.SetValue(value);
+    descriptor.SetValue(value);
     this.NotifyModelChange({ kind: "page-descriptor-changed" });
     return true;
   }

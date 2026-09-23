@@ -61,6 +61,7 @@ import { SwDoc } from "../../core/doc/doc";
 import { SwNumFormat, SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { WRITER_PAPER_SIZES } from "../../core/layout/pagedesc";
+import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONT,
@@ -173,8 +174,11 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   private defaultParagraphStyle: OdfStyleDefinition | undefined;
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
+  private readonly masterPages = new Map<
+    string,
+    Readonly<{ followName?: string; pageLayoutName: string }>
+  >();
   private readonly pageLayouts = new Map<string, OdfPageLayout>();
-  private standardPageLayoutName: string | undefined;
   public title: string | undefined;
   public language: string | undefined;
 
@@ -249,10 +253,13 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     this.pageLayouts.set(name, layout);
   }
 
-  /** Associates the Standard master page with its page layout. @param name - Master-page name. @param pageLayoutName - Referenced layout. @returns Nothing. */
-  public registerMasterPage(name: string, pageLayoutName: string): void {
-    if (name === "Standard" || this.standardPageLayoutName === undefined)
-      this.standardPageLayoutName = pageLayoutName;
+  /** Associates a named master page with its layout and optional follow style. @param name - Master-page name. @param pageLayoutName - Referenced layout. @param followName - Optional next master page. @returns Nothing. */
+  public registerMasterPage(name: string, pageLayoutName: string, followName?: string): void {
+    if (this.masterPages.has(name)) throw new Error(`Duplicate ODF master page: ${name}`);
+    this.masterPages.set(name, {
+      ...(followName === undefined ? {} : { followName }),
+      pageLayoutName,
+    });
   }
 
   /** Registers one numbering definition in Writer. @param styleName - ODF style name. @param rule - Parsed rule. @returns Nothing. */
@@ -362,12 +369,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   /** Applies imported named style state. @returns Nothing. */
   public finishNamedStyles(): void {
     applyNamedParagraphStyles(this.document, this.styles, this.defaultParagraphStyle);
-    const layout =
-      (this.standardPageLayoutName === undefined
-        ? undefined
-        : this.pageLayouts.get(this.standardPageLayoutName)) ??
-      this.pageLayouts.values().next().value;
-    if (layout !== undefined) {
+    const createValue = (name: string, layout: OdfPageLayout): WriterPageDescriptorValue => {
       const a4 = WRITER_PAPER_SIZES.A4;
       const letter = WRITER_PAPER_SIZES.Letter;
       const matchesPaper =
@@ -378,11 +380,36 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
             ? layout.width === size.height && layout.height === size.width
             : layout.width === size.width && layout.height === size.height;
       const paperFormat = matchesPaper(a4) ? "A4" : matchesPaper(letter) ? "Letter" : "custom";
-      this.document.ChgPageDesc({
+      return {
         ...layout,
-        name: "Standard",
+        name,
         paperFormat,
-      });
+      };
+    };
+    if (this.masterPages.size === 0) {
+      const layout = this.pageLayouts.values().next().value;
+      if (layout !== undefined) this.document.ChgPageDesc(createValue("Standard", layout));
+      return;
+    }
+    for (const [name, master] of this.masterPages) {
+      const layout = this.pageLayouts.get(master.pageLayoutName);
+      if (layout === undefined)
+        throw new Error(`Missing ODF page layout: ${master.pageLayoutName}`);
+      if (name === "Standard") this.document.ChgPageDesc(createValue(name, layout));
+      else {
+        this.document.MakePageDesc(name);
+        this.document.ChgPageDesc(createValue(name, layout), name);
+      }
+    }
+    for (const [name, master] of this.masterPages) {
+      const descriptor = this.document.FindPageDesc(name);
+      const follow =
+        master.followName === undefined
+          ? descriptor
+          : this.document.FindPageDesc(master.followName);
+      if (descriptor === undefined || follow === undefined)
+        throw new Error(`Missing ODF follow master page: ${master.followName ?? name}`);
+      descriptor.SetFollow(follow);
     }
   }
 
@@ -494,7 +521,8 @@ class XMLMasterStylesContext extends SvXMLImportContext {
       XMLToken.STYLE_PAGE_LAYOUT_NAME,
       "master page layout name",
     );
-    this.xmlImport.registerMasterPage(name, pageLayoutName);
+    const followName = attributes.get(XMLToken.STYLE_NEXT_STYLE_NAME) ?? undefined;
+    this.xmlImport.registerMasterPage(name, pageLayoutName, followName);
     return new SvXMLIgnoreContext();
   }
 }

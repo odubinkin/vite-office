@@ -12,6 +12,7 @@ export class SwUndoPageDesc extends SwUndo {
     private readonly afterValue: WriterPageDescriptorValue,
     before: SwUndoCursorState,
     after: SwUndoCursorState,
+    private readonly descriptorName = beforeValue.name,
   ) {
     super("Page Style", before, after);
   }
@@ -21,11 +22,11 @@ export class SwUndoPageDesc extends SwUndo {
   }
   /** Restores the prior page descriptor. @param context - Active Writer context. @returns Nothing. */
   protected override UndoImpl(context: SwUndoRedoContext): void {
-    context.GetDoc().ChgPageDesc(this.beforeValue);
+    context.GetDoc().ChgPageDesc(this.beforeValue, this.descriptorName);
   }
   /** Reapplies the replacement page descriptor. @param context - Active Writer context. @returns Nothing. */
   protected override RedoImpl(context: SwUndoRedoContext): void {
-    context.GetDoc().ChgPageDesc(this.afterValue);
+    context.GetDoc().ChgPageDesc(this.afterValue, this.descriptorName);
   }
 }
 

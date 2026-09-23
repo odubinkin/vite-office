@@ -1,12 +1,17 @@
 /** @fileoverview Projects Writer's text-frame paragraph spacing into browser point values. */
 
-import { getSwTextFrameGap, type SwTextFrameInput } from "../../source/core/text/txtfrm";
+import {
+  getSwTextFrameGap,
+  type SwTextFrameInput,
+  type SwTextFrameSettings,
+} from "../../source/core/text/txtfrm";
 import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
 
 /** Computes the upstream-shaped adjacent paragraph gap for a browser paragraph projection. @param previous - Previous paragraph. @param current - Current paragraph. @returns Gap in points. */
 export function getWriterParagraphGap(
   previous: WriterParagraphProjection | undefined,
   current: WriterParagraphProjection,
+  settings?: SwTextFrameSettings,
 ): number {
   const toInput =
     /** Converts one view paragraph to Writer spacing input. @param paragraph - View paragraph. @returns Text frame input. */ (
@@ -20,6 +25,10 @@ export function getWriterParagraphGap(
       upperSpacing: paragraph.computedStyle.upperSpacingPt * 20,
     });
   return (
-    getSwTextFrameGap(previous === undefined ? undefined : toInput(previous), toInput(current)) / 20
+    getSwTextFrameGap(
+      previous === undefined ? undefined : toInput(previous),
+      toInput(current),
+      settings,
+    ) / 20
   );
 }

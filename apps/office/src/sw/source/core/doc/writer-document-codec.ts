@@ -14,6 +14,7 @@ import { SwpHints } from "../txtnode/ndhints";
 import { SwFormatINetFormat } from "../txtnode/fmtinfmt";
 import { SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
 import type { WriterPageDescriptorValue } from "../layout/pagedesc";
+import type { DocumentSettingId } from "./DocumentSettingManager";
 import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 
 /** Primitive graph record for one numbering level. */
@@ -76,10 +77,14 @@ type WriterTextHintRecord =
 
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
+  readonly documentSettings: Readonly<Record<DocumentSettingId, boolean>>;
   readonly locale: string;
   readonly numRules: readonly WriterNumberRuleRecord[];
-  readonly pageDescriptor: WriterPageDescriptorValue;
-  readonly swModelVersion: 14;
+  readonly pageDescriptors: readonly Readonly<{
+    followName: string;
+    value: WriterPageDescriptorValue;
+  }>[];
+  readonly swModelVersion: 15;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -87,6 +92,7 @@ export interface WriterDocumentRecord {
 /** Encodes the model at the browser boundary. @param document - Canonical graph. @returns Current record. */
 export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
   return {
+    documentSettings: document.GetDocumentSettingManager().GetValues(),
     locale: document.GetLocale(),
     numRules: document.GetNumRuleTable().map(
       /** Encodes one document rule. @param rule - Model rule. @returns Primitive rule record. */ (
@@ -120,8 +126,20 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         name: rule.GetName(),
       }),
     ),
-    pageDescriptor: document.GetPageDesc().GetValue(),
-    swModelVersion: 14,
+    pageDescriptors: Array.from(
+      { length: document.GetPageDescCnt() },
+      /** Encodes one stable descriptor identity and its follow link. @param _unused - Array placeholder. @param index - Collection position. @returns Descriptor record. */ (
+        _,
+        index,
+      ) => {
+        const descriptor = document.GetPageDesc(index);
+        return {
+          followName: descriptor.GetFollow().GetName(),
+          value: descriptor.GetValue(),
+        };
+      },
+    ),
+    swModelVersion: 15,
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -182,11 +200,13 @@ export function decodeWriterDocument(
 ): SwDoc {
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 14 ||
+    candidate.swModelVersion !== 15 ||
+    !isRecord(candidate.documentSettings) ||
     typeof candidate.locale !== "string" ||
     candidate.locale.length === 0 ||
     !Array.isArray(candidate.numRules) ||
-    !("pageDescriptor" in candidate) ||
+    !Array.isArray(candidate.pageDescriptors) ||
+    candidate.pageDescriptors.length === 0 ||
     !Array.isArray(candidate.textFormatCollections) ||
     !Array.isArray(candidate.textNodes)
   )
@@ -197,7 +217,34 @@ export function decodeWriterDocument(
     ...(defaultFontDevice === undefined ? {} : { defaultFontDevice }),
     locale: record.locale,
   });
-  document.ChgPageDesc(record.pageDescriptor);
+  const firstPageDescriptor = record.pageDescriptors[0];
+  if (
+    firstPageDescriptor === undefined ||
+    !isRecord(firstPageDescriptor) ||
+    !isRecord(firstPageDescriptor.value) ||
+    typeof firstPageDescriptor.followName !== "string" ||
+    firstPageDescriptor.value.name !== "Standard"
+  )
+    throw new Error("Stored Writer page descriptor collection is invalid.");
+  document.ChgPageDesc(firstPageDescriptor.value);
+  for (const descriptorRecord of record.pageDescriptors.slice(1)) {
+    if (
+      !isRecord(descriptorRecord) ||
+      !isRecord(descriptorRecord.value) ||
+      typeof descriptorRecord.followName !== "string"
+    )
+      throw new Error("Stored Writer page descriptor collection is invalid.");
+    document.MakePageDesc(descriptorRecord.value.name);
+    document.ChgPageDesc(descriptorRecord.value, descriptorRecord.value.name);
+  }
+  for (const descriptorRecord of record.pageDescriptors) {
+    const descriptor = document.FindPageDesc(descriptorRecord.value.name);
+    const follow = document.FindPageDesc(descriptorRecord.followName);
+    if (descriptor === undefined || follow === undefined)
+      throw new Error("Stored Writer page descriptor follow link is invalid.");
+    descriptor.SetFollow(follow);
+  }
+  document.GetDocumentSettingManager().SetValues(record.documentSettings);
   for (const style of record.textFormatCollections) {
     if (!isWriterParagraphStyle(style.id)) throw new Error("Stored Writer style is invalid.");
     const collection = document.GetTextFormatColl(style.id);
