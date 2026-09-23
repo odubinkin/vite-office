@@ -14,7 +14,9 @@ import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
 import {
   SvxAdjust,
   SvxAdjustItem,
+  SvxLineSpacingItem,
   SvxTextLeftMarginItem,
+  SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
 import {
   FontItalic,
@@ -30,6 +32,8 @@ import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source
 import {
   RES_PARATR_ADJUST,
   RES_MARGIN_TEXTLEFT,
+  RES_PARATR_LINESPACING,
+  RES_UL_SPACE,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
@@ -466,6 +470,32 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     ).toEqual(
       projectWriterParagraphList(restored.paragraphs[0] as import("../txtnode/ndtxt").SwTextNode),
     );
+  });
+
+  it("persists contextual spacing and Writer line-spacing modes", /** Checks pooled item compatibility across snapshots. @returns Nothing. */ () => {
+    const writer = createWriterDocument();
+    const node = writer.paragraphs[0] as NonNullable<(typeof writer.paragraphs)[number]>;
+    node.SetAttr(new SvxULSpaceItem(240, 120, RES_UL_SPACE, true));
+    node.SetAttr(new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "fixed", true));
+    const restored = decodeWriterDocument(encodeWriterDocument(writer))
+      .paragraphs[0] as typeof node;
+    expect((restored.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([240, 120, 1]);
+    expect((restored.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).QueryValue()).toEqual([
+      1, 360, 1,
+    ]);
+    const pool = writer.GetAttrPool();
+    expect(
+      (pool.CreateItem({ which: RES_UL_SPACE, value: [240, 120] }) as SvxULSpaceItem).GetContext(),
+    ).toBe(false);
+    expect(
+      (
+        pool.CreateItem({ which: RES_PARATR_LINESPACING, value: 115 }) as SvxLineSpacingItem
+      ).GetPropLineSpace(),
+    ).toBe(115);
+    expect(
+      /** Rejects an invalid stored line mode. @returns Invalid item. */ () =>
+        pool.CreateItem({ which: RES_PARATR_LINESPACING, value: [9, 100, 0] }),
+    ).toThrow("Stored Writer line-spacing mode is invalid");
   });
 
   it("rejects obsolete snapshot schemas instead of preserving pre-canonical models" /** Keeps the core contract limited to the current LO-shaped schema. @returns Nothing. */, function rejectsObsoleteSchemas(): void {

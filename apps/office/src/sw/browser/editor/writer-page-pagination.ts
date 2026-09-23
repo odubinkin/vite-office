@@ -3,6 +3,22 @@
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
 
+/** Computes the effective gap between Writer paragraphs, including contextual spacing. @param previous - Previous paragraph when present. @param current - Current paragraph. @returns Gap in points. */
+export function getWriterParagraphGap(
+  previous: WriterParagraph | undefined,
+  current: WriterParagraph,
+): number {
+  if (previous === undefined) return current.computedStyle.upperSpacingPt;
+  const prev = previous.computedStyle;
+  const next = current.computedStyle;
+  const sameStyle = previous.style === current.style;
+  if (sameStyle && prev.contextualSpacing && next.contextualSpacing) return 0;
+  return Math.max(
+    sameStyle && prev.contextualSpacing ? 0 : prev.lowerSpacingPt,
+    sameStyle && next.contextualSpacing ? 0 : next.upperSpacingPt,
+  );
+}
+
 /** Produces a stable bounded page projection without adding layout state to SwDoc. @param paragraphs - Immutable paragraphs. @param page - Physical page geometry. @param measuredHeights - Optional browser paragraph heights. @returns Ordered page groups. */
 export function paginateWriterParagraphs(
   paragraphs: readonly WriterParagraph[],
@@ -15,8 +31,7 @@ export function paginateWriterParagraphs(
   let usedHeightPixels = 0;
   for (const [index, paragraph] of paragraphs.entries()) {
     const style = paragraph.computedStyle;
-    const previousLowerSpacingPt =
-      index === 0 ? 0 : (paragraphs[index - 1] as WriterParagraph).computedStyle.lowerSpacingPt;
+    const previous = index === 0 ? undefined : paragraphs[index - 1];
     const usableWidthPt = Math.max(
       style.fontSizePt * 4,
       contentWidthPt - paragraph.textLeftMargin / 20 - style.rightMarginPt,
@@ -36,8 +51,7 @@ export function paginateWriterParagraphs(
         ),
     );
     const estimatedHeightPt =
-      Math.max(0, style.upperSpacingPt - previousLowerSpacingPt) +
-      (index === paragraphs.length - 1 ? 0 : style.lowerSpacingPt) +
+      getWriterParagraphGap(previous, paragraph) +
       visualLines * style.fontSizePt * style.lineHeight;
     const heightPixels = measuredHeights?.get(paragraph.id) ?? (estimatedHeightPt * 4) / 3;
     const current = pages[pages.length - 1] as WriterParagraph[];

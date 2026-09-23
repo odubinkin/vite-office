@@ -65,7 +65,6 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
       <WriterEditableParagraph
         index={0}
         isActive
-        isLast
         listMarker="•"
         paragraph={{
           ...source,
@@ -99,7 +98,6 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
       <WriterEditableParagraph
         index={0}
         isActive
-        isLast
         listMarker={undefined}
         paragraph={{
           ...source,
@@ -136,10 +134,12 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
       <WriterEditableParagraph
         index={0}
         isActive
-        isLast
         listMarker="•"
         paragraph={item}
-        previousLowerSpacingPt={12}
+        previousParagraph={{
+          ...paragraph(),
+          computedStyle: { ...paragraph().computedStyle, lowerSpacingPt: 12 },
+        }}
         retainElement={/** Ignores the mounted node. @returns Nothing. */ () => undefined}
       />,
     );
@@ -147,7 +147,7 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
     const editor = screen.getByRole("textbox", { name: "Writer document text" });
     expect(marker).toHaveStyle({ width: "18pt", textAlign: "left" });
     expect(marker.parentElement).toHaveStyle({ marginInlineStart: "18pt" });
-    expect(marker.parentElement?.parentElement).toHaveStyle({ marginBlockStart: "0pt" });
+    expect(marker.parentElement?.parentElement).toHaveStyle({ marginBlockStart: "12pt" });
     expect(editor).not.toHaveStyle({ textIndent: "-18pt" });
   });
 
@@ -156,7 +156,6 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
       <WriterEditableParagraph
         index={0}
         isActive
-        isLast
         listMarker={undefined}
         paragraph={paragraph("#112233", "#ddeeff")}
         retainElement={/** Ignores the mounted node. @returns Nothing. */ () => undefined}
@@ -178,7 +177,6 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
       <WriterEditableParagraph
         index={0}
         isActive
-        isLast
         listMarker={undefined}
         paragraph={paragraph("auto", "transparent")}
         retainElement={/** Ignores the mounted node. @returns Nothing. */ () => undefined}

@@ -681,12 +681,41 @@ function putParagraphProperties(
     put(new SvxFirstLineIndentItem(properties.firstLineIndent, RES_MARGIN_FIRSTLINE));
   if (properties.rightMargin !== undefined)
     put(new SvxRightMarginItem(properties.rightMargin, RES_MARGIN_RIGHT));
-  if (properties.upperSpacing !== undefined || properties.lowerSpacing !== undefined)
+  if (
+    properties.upperSpacing !== undefined ||
+    properties.lowerSpacing !== undefined ||
+    properties.contextualSpacing !== undefined
+  )
     put(
-      new SvxULSpaceItem(properties.upperSpacing ?? 0, properties.lowerSpacing ?? 0, RES_UL_SPACE),
+      new SvxULSpaceItem(
+        properties.upperSpacing ?? 0,
+        properties.lowerSpacing ?? 0,
+        RES_UL_SPACE,
+        properties.contextualSpacing === true,
+      ),
     );
-  if (properties.lineHeightPercent !== undefined)
-    put(new SvxLineSpacingItem(properties.lineHeightPercent, RES_PARATR_LINESPACING));
+  const lineMode =
+    properties.lineHeightTwips !== undefined
+      ? "fixed"
+      : properties.lineHeightAtLeastTwips !== undefined
+        ? "minimum"
+        : properties.lineSpacingTwips !== undefined
+          ? "leading"
+          : "proportional";
+  const lineValue =
+    properties.lineHeightTwips ??
+    properties.lineHeightAtLeastTwips ??
+    properties.lineSpacingTwips ??
+    properties.lineHeightPercent;
+  if (lineValue !== undefined)
+    put(
+      new SvxLineSpacingItem(
+        lineValue,
+        RES_PARATR_LINESPACING,
+        lineMode,
+        properties.fontIndependentLineSpacing === true,
+      ),
+    );
   if (properties.tabStopPosition !== undefined)
     put(new SfxInt16Item(RES_PARATR_TABSTOP, properties.tabStopPosition));
   if (properties.keepWithNext !== undefined)

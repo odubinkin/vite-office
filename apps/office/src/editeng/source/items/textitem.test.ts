@@ -198,7 +198,13 @@ describe("EditEngine character items" /** Groups pooled character item contracts
     expect(spacing.GetUpper()).toBe(120);
     expect(spacing.GetLower()).toBe(60);
     expect(spacing.QueryValue()).toEqual([120, 60]);
+    expect(spacing.GetContext()).toBe(false);
     expect(spacing.Clone().equals(spacing)).toBe(true);
+    const contextual = new SvxULSpaceItem(120, 60, weightWhich, true);
+    expect(contextual.GetContext()).toBe(true);
+    expect(contextual.QueryValue()).toEqual([120, 60, 1]);
+    expect(contextual.Clone().equals(contextual)).toBe(true);
+    expect(spacing.equals(contextual)).toBe(false);
     expect(spacing.equals(new SvxULSpaceItem(120, 61, weightWhich))).toBe(false);
     expect(spacing.equals(new SfxInt16Item(weightWhich, 120))).toBe(false);
     expect(
@@ -208,11 +214,26 @@ describe("EditEngine character items" /** Groups pooled character item contracts
 
     const line = new SvxLineSpacingItem(115, weightWhich);
     expect(line.GetPropLineSpace()).toBe(115);
+    expect(line.GetMode()).toBe("proportional");
+    expect(line.GetValue()).toBe(115);
+    expect(line.IsFontIndependent()).toBe(false);
     expect(line.QueryValue()).toBe(115);
     expect(line.Clone().equals(line)).toBe(true);
     expect(line.equals(new SvxLineSpacingItem(100, weightWhich))).toBe(false);
     expect(line.equals(new SfxInt16Item(weightWhich, 115))).toBe(false);
     expect(new SvxLineSpacingItem(0, weightWhich).GetPropLineSpace()).toBe(0);
+    const fixed = new SvxLineSpacingItem(300, weightWhich, "fixed", true);
+    expect(fixed.GetPropLineSpace()).toBe(0);
+    expect(fixed.GetMode()).toBe("fixed");
+    expect(fixed.GetValue()).toBe(300);
+    expect(fixed.IsFontIndependent()).toBe(true);
+    expect(fixed.QueryValue()).toEqual([1, 300, 1]);
+    expect(fixed.Clone().equals(fixed)).toBe(true);
+    expect(fixed.equals(new SvxLineSpacingItem(300, weightWhich, "minimum", true))).toBe(false);
+    expect(fixed.equals(new SvxLineSpacingItem(300, weightWhich, "fixed"))).toBe(false);
+    expect(new SvxLineSpacingItem(115, weightWhich, "proportional", true).QueryValue()).toEqual([
+      0, 115, 1,
+    ]);
     expect(
       /** Creates an invalid line-height percentage. @returns Invalid item. */ () =>
         new SvxLineSpacingItem(-1, weightWhich),

@@ -3,7 +3,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { paginateWriterParagraphs } from "../editor/writer-page-pagination";
+import { getWriterParagraphGap, paginateWriterParagraphs } from "../editor/writer-page-pagination";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
 import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
@@ -13,6 +13,63 @@ import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import type { WriterParagraphProjection } from "./writer-view-projection";
 
 const page = createDefaultWriterPageDescriptor("en-GB").GetValue();
+
+describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisions. @returns Nothing. */ () => {
+  it("uses the greater adjacent margin and suppresses contextual gaps for matching styles", /** Checks normal and contextual gap formulas. @returns Nothing. */ () => {
+    const first = {
+      ...paragraph("first", "A"),
+      computedStyle: {
+        ...paragraph("first", "A").computedStyle,
+        lowerSpacingPt: 12,
+        contextualSpacing: true,
+      },
+    };
+    const second = {
+      ...paragraph("second", "B"),
+      computedStyle: {
+        ...paragraph("second", "B").computedStyle,
+        upperSpacingPt: 12,
+        contextualSpacing: true,
+      },
+    };
+    expect(getWriterParagraphGap(undefined, second)).toBe(12);
+    expect(getWriterParagraphGap(first, second)).toBe(0);
+    expect(
+      getWriterParagraphGap(
+        { ...first, computedStyle: { ...first.computedStyle, contextualSpacing: false } },
+        second,
+      ),
+    ).toBe(12);
+    expect(
+      getWriterParagraphGap(first, {
+        ...second,
+        computedStyle: { ...second.computedStyle, contextualSpacing: false },
+      }),
+    ).toBe(12);
+    expect(
+      getWriterParagraphGap(
+        {
+          ...first,
+          computedStyle: { ...first.computedStyle, lowerSpacingPt: 4, contextualSpacing: false },
+        },
+        second,
+      ),
+    ).toBe(4);
+    expect(
+      getWriterParagraphGap(first, {
+        ...second,
+        computedStyle: { ...second.computedStyle, upperSpacingPt: 4, contextualSpacing: false },
+      }),
+    ).toBe(4);
+    expect(getWriterParagraphGap({ ...first, style: "heading-1" }, second)).toBe(12);
+    expect(
+      getWriterParagraphGap(
+        { ...first, computedStyle: { ...first.computedStyle, contextualSpacing: false } },
+        { ...second, computedStyle: { ...second.computedStyle, contextualSpacing: false } },
+      ),
+    ).toBe(12);
+  });
+});
 
 /** Creates the minimum complete paragraph projection used by browser pagination and ruler tests. @param id - Projection identity. @param text - Paragraph text. @returns Paragraph projection. */
 function paragraph(id: string, text: string): WriterParagraphProjection {

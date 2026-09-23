@@ -163,15 +163,28 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores paragraph spacing. @param value - Persisted tuple. @returns Spacing item. */ (
         value,
       ) => {
-        const tuple = value as unknown as readonly [number, number];
-        return new SvxULSpaceItem(Number(tuple[0]), Number(tuple[1]), RES_UL_SPACE);
+        const tuple = value as unknown as readonly [number, number, number?];
+        return new SvxULSpaceItem(Number(tuple[0]), Number(tuple[1]), RES_UL_SPACE, tuple[2] === 1);
       },
     );
     this.RegisterDefaultItem(
       new SvxLineSpacingItem(100, RES_PARATR_LINESPACING),
-      /** Restores proportional line spacing. @param value - Persisted percent. @returns Line-spacing item. */ (
+      /** Restores Writer line spacing. @param value - Persisted percent or rule tuple. @returns Line-spacing item. */ (
         value,
-      ) => new SvxLineSpacingItem(Number(value), RES_PARATR_LINESPACING),
+      ) => {
+        if (Array.isArray(value)) {
+          const [modeCode, amount, fontIndependent] = value as [number, number, number?];
+          const mode = (["proportional", "fixed", "minimum", "leading"] as const)[modeCode];
+          if (mode === undefined) throw new Error("Stored Writer line-spacing mode is invalid.");
+          return new SvxLineSpacingItem(
+            Number(amount),
+            RES_PARATR_LINESPACING,
+            mode,
+            fontIndependent === 1,
+          );
+        }
+        return new SvxLineSpacingItem(Number(value), RES_PARATR_LINESPACING);
+      },
     );
     for (const which of [RES_KEEP, RES_LINENUMBER])
       this.RegisterDefaultItem(

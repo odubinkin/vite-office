@@ -45,9 +45,12 @@ applying the descriptor to `SwDoc`; export and re-import preserve A4, Letter,
 custom dimensions, landscape state, and margins.
 
 The paragraph-property mapper also preserves first-line and right margins,
-upper/lower spacing, proportional line height, the bounded single
+upper/lower and contextual spacing, proportional, fixed, minimum, and extra
+leading line height, the bounded single
 `RES_PARATR_TABSTOP` position, `RES_KEEP` through `fo:keep-with-next`, and
-`RES_LINENUMBER` through `text:number-lines`. Element-valued tab stops are
+`RES_LINENUMBER` through `text:number-lines`. Named and automatic style chains
+merge inherited paragraph properties before applying their direct deltas.
+Element-valued tab stops are
 owned by `xmloff/source/text/XMLTextPropertySetContext.ts`, matching the pinned
 upstream context split. Automatic font color uses
 `style:use-window-font-color`; explicit colors and highlights use the pinned
@@ -91,7 +94,10 @@ alignment, list, paragraph-property, and character subset fail explicitly.
 Imported tables, images,
 fields, annotations, tracked changes, sections, objects, scripts, signatures,
 encryption, RDF, custom bullet glyphs, non-decimal numbering, and list headers
-remain unsupported. Headers, footers, columns, borders, backgrounds, page numbering,
+remain unsupported. A document containing tables therefore loses the table's
+cells and their paragraphs during import; the certification regression sample
+contains one 5-row, 15-cell table, so whole-document page parity is outside
+the current paragraph-only model. Headers, footers, columns, borders, backgrounds, page numbering,
 printer trays, multiple page styles, unrelated style families, and properties
 outside the bounded Writer model are ignored during import, matching the scoped
 upstream import-context behavior instead of inventing browser document fields.

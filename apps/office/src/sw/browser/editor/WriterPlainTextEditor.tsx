@@ -160,16 +160,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                     <WriterEditableParagraph
                       index={index}
                       isActive={paragraph.id === props.activeParagraphId}
-                      isLast={index === props.paragraphs.length - 1}
                       key={paragraph.id}
                       listMarker={paragraph.listMarker}
                       paragraph={paragraph}
-                      previousLowerSpacingPt={
-                        index === 0
-                          ? 0
-                          : (props.paragraphs[index - 1] as WriterParagraph).computedStyle
-                              .lowerSpacingPt
-                      }
+                      previousParagraph={index === 0 ? undefined : props.paragraphs[index - 1]}
                       retainElement={
                         /** Retains the DOM identity used by SwEditWin. @param paragraphId - Projection identity. @param element - Mounted paragraph or null. @returns Nothing. */ (
                           paragraphId,

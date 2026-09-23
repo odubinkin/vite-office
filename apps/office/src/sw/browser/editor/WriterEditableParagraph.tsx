@@ -6,15 +6,15 @@ import type {
   WriterParagraphProjection as WriterParagraph,
   WriterProjectedTextRun,
 } from "../presentation/writer-view-projection";
+import { getWriterParagraphGap } from "./writer-page-pagination";
 
 /** Immutable projection properties for one Writer text node. */
 export interface WriterEditableParagraphProps {
   readonly isActive: boolean;
-  readonly isLast: boolean;
   readonly index: number;
   readonly listMarker: string | undefined;
   readonly paragraph: WriterParagraph;
-  readonly previousLowerSpacingPt?: number;
+  readonly previousParagraph?: WriterParagraph | undefined;
   readonly retainElement: (paragraphId: string, element: HTMLParagraphElement | null) => void;
 }
 
@@ -22,10 +22,9 @@ export interface WriterEditableParagraphProps {
 export function WriterEditableParagraph({
   index,
   isActive,
-  isLast,
   listMarker,
   paragraph,
-  previousLowerSpacingPt = 0,
+  previousParagraph,
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
@@ -44,8 +43,7 @@ export function WriterEditableParagraph({
       className="shrink-0"
       data-active={isActive}
       style={{
-        marginBlockEnd: isLast ? undefined : `${paragraph.computedStyle.lowerSpacingPt}pt`,
-        marginBlockStart: `${Math.max(0, paragraph.computedStyle.upperSpacingPt - previousLowerSpacingPt)}pt`,
+        marginBlockStart: `${getWriterParagraphGap(previousParagraph, paragraph)}pt`,
       }}
     >
       <span className="sr-only" id={styleDescriptionId} contentEditable={false}>

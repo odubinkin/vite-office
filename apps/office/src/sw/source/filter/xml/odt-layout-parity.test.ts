@@ -3,11 +3,11 @@
 
 import { describe, expect, it } from "vitest";
 
-import { SvxLineSpacingItem } from "../../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
 import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
-import { RES_CHRATR_FONTSIZE, RES_PARATR_LINESPACING } from "../../../inc/hintids";
+import { RES_CHRATR_FONTSIZE, RES_PARATR_LINESPACING, RES_UL_SPACE } from "../../../inc/hintids";
 import { exportContentXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
 
@@ -50,6 +50,67 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     ).document;
     expect(document.paragraphs[0]?.GetParagraphAlignment()).toBe("center");
     expect(document.paragraphs[0]?.GetParagraphTextLeftMargin()).toBe(720);
+  });
+
+  it("retains certification-style spacing and inherited paragraph deltas", /** Reproduces the supplied document's style metrics without copying its content. @returns Nothing. */ () => {
+    const definitions =
+      '<style:style style:name="Base" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="center" fo:margin-left="0.5in" fo:margin-top="0.1665in" fo:line-height="100%"/></style:style><style:style style:name="Child" style:family="paragraph" style:parent-style-name="Base"><style:paragraph-properties fo:margin-bottom="0.1665in" style:contextual-spacing="false"/></style:style>';
+    const document = importWriterXml(
+      styles(definitions),
+      content("", '<text:p text:style-name="Child">Body</text:p>'),
+      metadata,
+    ).document;
+    const node = document.paragraphs[0]!;
+    const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
+    expect(spacing.GetUpper()).toBe(240);
+    expect(spacing.GetLower()).toBe(240);
+    expect(spacing.GetContext()).toBe(false);
+    expect(node.GetParagraphAlignment()).toBe("center");
+    expect(node.GetParagraphTextLeftMargin()).toBe(720);
+    expect((node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace()).toBe(
+      100,
+    );
+    const exported = exportContentXml(document);
+    expect(exported).toContain('style:contextual-spacing="false"');
+  });
+
+  it("imports and exports fixed, minimum, and extra line spacing", /** Checks upstream ODF line-spacing modes and font-independent round trips. @returns Nothing. */ () => {
+    const modes = [
+      ['fo:line-height="0.25in"', "fixed", 360],
+      ['style:line-height-at-least="0.3in"', "minimum", 432],
+      ['style:line-spacing="0.1in"', "leading", 144],
+    ] as const;
+    for (const [attribute, mode, value] of modes) {
+      const automatic = `<style:style style:name="P" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties ${attribute} style:font-independent-line-spacing="true"/></style:style>`;
+      const source = importWriterXml(
+        styles(""),
+        content(automatic, '<text:p text:style-name="P">Line</text:p>'),
+        metadata,
+      ).document;
+      const line = source.paragraphs[0]!.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+      expect(line.GetMode()).toBe(mode);
+      expect(line.GetValue()).toBe(value);
+      expect(line.IsFontIndependent()).toBe(true);
+      const exported = exportContentXml(source);
+      expect(exported).toContain(`${attribute.split("=")[0]}=`);
+      const reopened = importWriterXml(styles(""), exported, metadata).document;
+      expect(
+        (reopened.paragraphs[0]!.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetMode(),
+      ).toBe(mode);
+    }
+  });
+
+  it("rejects contradictory ODF line-spacing modes", /** Ensures one Writer item receives only one mode. @returns Nothing. */ () => {
+    const conflicting =
+      '<style:style style:name="P" style:family="paragraph"><style:paragraph-properties fo:line-height="120%" style:line-spacing="0.1in"/></style:style>';
+    expect(
+      /** Rejects conflicting style modes. @returns Invalid import. */ () =>
+        importWriterXml(
+          styles(""),
+          content(conflicting, '<text:p text:style-name="P">Line</text:p>'),
+          metadata,
+        ),
+    ).toThrow("Conflicting ODF paragraph line-spacing modes");
   });
 
   it("preserves label-alignment list geometry through the Writer model and ODT export", /** Verifies modern ODF list geometry round-trips. @returns Nothing. */ () => {

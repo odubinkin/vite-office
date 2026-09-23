@@ -41,8 +41,13 @@ export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
 /** Direct paragraph properties represented by the bounded Writer model. */
 export interface OdfParagraphProperties {
   readonly countLineNumbers?: boolean;
+  readonly contextualSpacing?: boolean;
   readonly firstLineIndent?: number;
   readonly lineHeightPercent?: number;
+  readonly lineHeightTwips?: number;
+  readonly lineHeightAtLeastTwips?: number;
+  readonly lineSpacingTwips?: number;
+  readonly fontIndependentLineSpacing?: boolean;
   readonly keepWithNext?: boolean;
   readonly lowerSpacing?: number;
   readonly rightMargin?: number;
@@ -492,6 +497,13 @@ function paragraphPropertiesKey(properties?: OdfParagraphProperties): string {
     properties?.upperSpacing,
     properties?.lowerSpacing,
     properties?.lineHeightPercent,
+    properties?.lineHeightTwips,
+    properties?.lineHeightAtLeastTwips,
+    properties?.lineSpacingTwips,
+    properties?.fontIndependentLineSpacing === undefined
+      ? ""
+      : Number(properties.fontIndependentLineSpacing),
+    properties?.contextualSpacing === undefined ? "" : Number(properties.contextualSpacing),
     properties?.tabStopPosition,
     properties?.keepWithNext === undefined ? "" : Number(properties.keepWithNext),
     properties?.countLineNumbers === undefined ? "" : Number(properties.countLineNumbers),
@@ -512,6 +524,11 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
     upperSpacing,
     lowerSpacing,
     lineHeightPercent,
+    lineHeightTwips,
+    lineHeightAtLeastTwips,
+    lineSpacingTwips,
+    fontIndependentLineSpacing,
+    contextualSpacing,
     tabStopPosition,
     keepWithNext,
     countLineNumbers,
@@ -528,6 +545,13 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
     ...(upperSpacing === undefined ? {} : { upperSpacing }),
     ...(lowerSpacing === undefined ? {} : { lowerSpacing }),
     ...(lineHeightPercent === undefined ? {} : { lineHeightPercent }),
+    ...(lineHeightTwips === undefined ? {} : { lineHeightTwips }),
+    ...(lineHeightAtLeastTwips === undefined ? {} : { lineHeightAtLeastTwips }),
+    ...(lineSpacingTwips === undefined ? {} : { lineSpacingTwips }),
+    ...(fontIndependentLineSpacing === undefined
+      ? {}
+      : { fontIndependentLineSpacing: fontIndependentLineSpacing === 1 }),
+    ...(contextualSpacing === undefined ? {} : { contextualSpacing: contextualSpacing === 1 }),
     ...(tabStopPosition === undefined ? {} : { tabStopPosition }),
     ...(keepWithNext === undefined ? {} : { keepWithNext: keepWithNext === 1 }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers: countLineNumbers === 1 }),
@@ -552,6 +576,21 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.lineHeightPercent === undefined
       ? []
       : [`fo:line-height="${properties.lineHeightPercent}%"`]),
+    ...(properties.lineHeightTwips === undefined
+      ? []
+      : [`fo:line-height="${exportOdfLength(properties.lineHeightTwips)}"`]),
+    ...(properties.lineHeightAtLeastTwips === undefined
+      ? []
+      : [`style:line-height-at-least="${exportOdfLength(properties.lineHeightAtLeastTwips)}"`]),
+    ...(properties.lineSpacingTwips === undefined
+      ? []
+      : [`style:line-spacing="${exportOdfLength(properties.lineSpacingTwips)}"`]),
+    ...(properties.fontIndependentLineSpacing === undefined
+      ? []
+      : [`style:font-independent-line-spacing="${properties.fontIndependentLineSpacing}"`]),
+    ...(properties.contextualSpacing === undefined
+      ? []
+      : [`style:contextual-spacing="${properties.contextualSpacing}"`]),
     ...(properties.keepWithNext === undefined
       ? []
       : [`fo:keep-with-next="${properties.keepWithNext ? "always" : "auto"}"`]),

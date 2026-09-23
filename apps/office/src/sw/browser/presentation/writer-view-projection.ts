@@ -84,6 +84,7 @@ export interface WriterProjectedTextRun extends WriterTextRun {
 /** Browser-ready values projected from effective Writer paragraph items. */
 export interface WriterParagraphComputedStyle {
   readonly color?: string;
+  readonly contextualSpacing?: boolean;
   readonly firstLineIndentPt: number;
   readonly fontFamily?: string;
   readonly fontStyle: "italic" | "normal";
@@ -162,6 +163,7 @@ export class WriterViewProjection {
           id: this.GetNodeId(node),
           computedStyle: Object.freeze({
             ...(color === "auto" ? {} : { color }),
+            contextualSpacing: spacing.GetContext(),
             firstLineIndentPt:
               (
                 node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
@@ -175,8 +177,9 @@ export class WriterViewProjection {
               ? 700
               : 400,
             ...(highlight === "transparent" ? {} : { highlight }),
-            lineHeight: projectWriterLineHeight(
-              (node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace(),
+            lineHeight: projectWriterLineHeightItem(
+              node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
+              (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,
             ),
             lowerSpacingPt: spacing.GetLower() / 20,
             rightMarginPt:
@@ -259,6 +262,22 @@ export function projectWriterLineHeight(percent: number): number {
   // VCL's ascent/descent is unavailable in CSS; Writer's 1.15 font-size fallback
   // from frmtool.cxx supplies the base, while the leading stays additive.
   return Math.max(0.05, Math.round((1.15 + (resolved - 100) / 100) * 100) / 100);
+}
+
+/** Projects a Writer line-spacing rule onto the browser line box. @param item - Canonical rule. @param fontSizePt - Paragraph font size. @returns CSS multiplier. */
+export function projectWriterLineHeightItem(item: SvxLineSpacingItem, fontSizePt: number): number {
+  const natural = 1.15;
+  const valuePt = item.GetValue() / 20;
+  switch (item.GetMode()) {
+    case "fixed":
+      return Math.max(0.05, valuePt / fontSizePt);
+    case "minimum":
+      return Math.max(natural, valuePt / fontSizePt);
+    case "leading":
+      return natural + valuePt / fontSizePt;
+    case "proportional":
+      return projectWriterLineHeight(item.GetValue());
+  }
 }
 
 /** Resolves the immutable Writer style hierarchy once for binding-backed view snapshots. @returns Selector options. */

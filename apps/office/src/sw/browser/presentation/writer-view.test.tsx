@@ -3,7 +3,8 @@
 
 import { describe, expect, it } from "vitest";
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import { projectWriterLineHeight } from "./writer-view-projection";
+import { projectWriterLineHeight, projectWriterLineHeightItem } from "./writer-view-projection";
+import { SvxLineSpacingItem } from "../../../editeng/source/items/paraitem";
 import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwView } from "../../source/uibase/uiview/view";
@@ -14,7 +15,7 @@ import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { SfxStringItem } from "../../../svl/source/items/poolitem";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
-import { RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT } from "../../inc/hintids";
+import { RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_PARATR_LINESPACING } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 
@@ -55,6 +56,35 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(projectWriterLineHeight(100)).toBe(1.15);
     expect(projectWriterLineHeight(115)).toBeCloseTo(1.3);
     expect(projectWriterLineHeight(150)).toBeCloseTo(1.65);
+  });
+  it("projects fixed, minimum, and extra Writer line spacing", /** Covers the imported ODF spacing rules. @returns Nothing. */ () => {
+    expect(
+      projectWriterLineHeightItem(new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "fixed"), 12),
+    ).toBe(1.5);
+    expect(
+      projectWriterLineHeightItem(new SvxLineSpacingItem(1, RES_PARATR_LINESPACING, "fixed"), 12),
+    ).toBe(0.05);
+    expect(
+      projectWriterLineHeightItem(
+        new SvxLineSpacingItem(200, RES_PARATR_LINESPACING, "minimum"),
+        12,
+      ),
+    ).toBe(1.15);
+    expect(
+      projectWriterLineHeightItem(
+        new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "minimum"),
+        12,
+      ),
+    ).toBe(1.5);
+    expect(
+      projectWriterLineHeightItem(
+        new SvxLineSpacingItem(60, RES_PARATR_LINESPACING, "leading"),
+        12,
+      ),
+    ).toBe(1.4);
+    expect(
+      projectWriterLineHeightItem(new SvxLineSpacingItem(115, RES_PARATR_LINESPACING), 12),
+    ).toBe(1.3);
   });
   it("projects explicit paragraph colors without altering native text attributes", /** Checks projects explicit paragraph colors without altering native text attributes. @returns Test callback result. */ () => {
     const document = createWriterDocument();

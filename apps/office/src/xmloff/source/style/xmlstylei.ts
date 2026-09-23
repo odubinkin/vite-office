@@ -457,11 +457,41 @@ function importParagraphProperties(
   );
   const rawLineHeight = attributes.get(XMLToken.FO_LINE_HEIGHT);
   let lineHeightPercent: number | undefined;
+  let lineHeightTwips: number | undefined;
   if (rawLineHeight !== null) {
     const match = /^(\d+(?:\.\d+)?)%$/.exec(rawLineHeight);
-    if (match === null) throw new Error(`Unsupported ODF paragraph line height: ${rawLineHeight}`);
-    lineHeightPercent = Math.round(Number(match[1]));
+    if (match !== null) lineHeightPercent = Math.round(Number(match[1]));
+    else if (rawLineHeight === "normal") lineHeightPercent = 100;
+    else lineHeightTwips = importOdfLength(rawLineHeight, false, "paragraph line height");
   }
+  const lineHeightAtLeastTwips = importOptionalLength(
+    attributes,
+    XMLToken.STYLE_LINE_HEIGHT_AT_LEAST,
+    false,
+    "minimum line height",
+  );
+  const lineSpacingTwips = importOptionalLength(
+    attributes,
+    XMLToken.STYLE_LINE_SPACING,
+    false,
+    "line spacing",
+  );
+  if (
+    [lineHeightPercent, lineHeightTwips, lineHeightAtLeastTwips, lineSpacingTwips].filter(
+      /** Counts mutually exclusive Writer line-spacing modes. @param value - Parsed mode value. @returns Whether present. */ (
+        value,
+      ) => value !== undefined,
+    ).length > 1
+  )
+    throw new Error("Conflicting ODF paragraph line-spacing modes.");
+  const contextualSpacing = importOptionalBoolean(
+    attributes.get(XMLToken.STYLE_CONTEXTUAL_SPACING),
+    "contextual paragraph spacing",
+  );
+  const fontIndependentLineSpacing = importOptionalBoolean(
+    attributes.get(XMLToken.STYLE_FONT_INDEPENDENT_LINE_SPACING),
+    "font-independent line spacing",
+  );
   const rawKeep = attributes.get(XMLToken.FO_KEEP_WITH_NEXT);
   if (rawKeep !== null && rawKeep !== "always" && rawKeep !== "auto")
     throw new Error(`Unsupported ODF keep-with-next: ${rawKeep}`);
@@ -475,6 +505,11 @@ function importParagraphProperties(
     ...(upperSpacing === undefined ? {} : { upperSpacing }),
     ...(lowerSpacing === undefined ? {} : { lowerSpacing }),
     ...(lineHeightPercent === undefined ? {} : { lineHeightPercent }),
+    ...(lineHeightTwips === undefined ? {} : { lineHeightTwips }),
+    ...(lineHeightAtLeastTwips === undefined ? {} : { lineHeightAtLeastTwips }),
+    ...(lineSpacingTwips === undefined ? {} : { lineSpacingTwips }),
+    ...(contextualSpacing === undefined ? {} : { contextualSpacing }),
+    ...(fontIndependentLineSpacing === undefined ? {} : { fontIndependentLineSpacing }),
     ...(rawKeep === null ? {} : { keepWithNext: rawKeep === "always" }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
   };

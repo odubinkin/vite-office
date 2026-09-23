@@ -105,12 +105,15 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     expect(
       (onlyLower.document.paragraphs[0]?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).QueryValue(),
     ).toEqual([0, 60]);
-    await expect(
-      readOdtDocument(
-        await replaceEntry(bytes, "content.xml", content.replace("115%", "normal")),
-        metadata(),
-      ),
-    ).rejects.toThrow("Unsupported ODF paragraph line height");
+    const normal = await readOdtDocument(
+      await replaceEntry(bytes, "content.xml", content.replace("115%", "normal")),
+      metadata(),
+    );
+    expect(
+      (
+        normal.document.paragraphs[0]?.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem
+      ).GetPropLineSpace(),
+    ).toBe(100);
 
     const extended = content
       .replace("office:version=", 'xmlns:ext="urn:vite-office:test" office:version=')

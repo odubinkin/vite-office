@@ -15,6 +15,7 @@ import {
 } from "./txtparae";
 import {
   XMLTextBodyContext,
+  resolveParagraphStyle,
   type OdfStyleDefinition,
   type XMLParagraphImportTarget,
   type XMLParagraphListState,
@@ -23,6 +24,25 @@ import {
 } from "./txtparai";
 
 const plain: OdfCharacterProperties = { bold: false, italic: false, underline: false };
+
+it("falls back to Standard for an undeclared built-in heading", /** Covers the bounded style resolver when a named definition is absent. @returns Nothing. */ () => {
+  const resolved = resolveParagraphStyle("Heading_20_1", true, {
+    getStyle: /** Has no named definitions. @returns No style. */ () => undefined,
+  });
+  expect(resolved.style).toBe("heading-1");
+});
+
+it("rejects a cycle through a built-in paragraph style", /** Covers named-style cycle detection before following its parent. @returns Nothing. */ () => {
+  expect(
+    /** Resolves a cyclic built-in definition. @returns Invalid style. */ () =>
+      resolveParagraphStyle("Heading_20_1", true, {
+        getStyle: /** Provides the cyclic style. @returns Style definition. */ () => ({
+          family: "paragraph",
+          parentStyleName: "Heading_20_1",
+        }),
+      }),
+  ).toThrow("Cyclic ODF paragraph style");
+});
 
 /** Creates a reiterable test source. @param paragraphs - Paragraph fixtures. @returns Export source. */
 function source(paragraphs: readonly XMLTextParagraphSource[]): XMLTextExportSource {

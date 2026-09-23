@@ -389,10 +389,23 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
       : {}),
     ...(right instanceof SvxRightMarginItem ? { rightMargin: right.ResolveRight() } : {}),
     ...(spacing instanceof SvxULSpaceItem
-      ? { upperSpacing: spacing.GetUpper(), lowerSpacing: spacing.GetLower() }
+      ? {
+          upperSpacing: spacing.GetUpper(),
+          lowerSpacing: spacing.GetLower(),
+          contextualSpacing: spacing.GetContext(),
+        }
       : {}),
     ...(lineSpacing instanceof SvxLineSpacingItem
-      ? { lineHeightPercent: lineSpacing.GetPropLineSpace() }
+      ? {
+          ...(lineSpacing.GetMode() === "proportional"
+            ? { lineHeightPercent: lineSpacing.GetValue() }
+            : lineSpacing.GetMode() === "fixed"
+              ? { lineHeightTwips: lineSpacing.GetValue() }
+              : lineSpacing.GetMode() === "minimum"
+                ? { lineHeightAtLeastTwips: lineSpacing.GetValue() }
+                : { lineSpacingTwips: lineSpacing.GetValue() }),
+          fontIndependentLineSpacing: lineSpacing.IsFontIndependent(),
+        }
       : {}),
     ...(tabStop instanceof SfxInt16Item && tabStop.GetValue() >= 0
       ? { tabStopPosition: tabStop.GetValue() }

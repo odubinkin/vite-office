@@ -450,19 +450,31 @@ export function resolveParagraphStyle(
     target.resolveBuiltInParagraphStyle?.(name) ??
     (name === "Standard" ? "default" : name === "Heading_20_1" ? "heading-1" : undefined);
   if (builtInStyle !== undefined) {
-    const parent =
-      builtInStyle !== "default"
-        ? resolveParagraphStyle("Standard", heading, target, seen)
-        : { style: heading ? ("heading-1" as const) : ("default" as const) };
+    if (seen.has(name)) throw new Error(`Cyclic ODF paragraph style: ${name}`);
+    seen.add(name);
     const definition = target.getStyle(name);
+    const parent: ResolvedParagraphStyle =
+      builtInStyle !== "default"
+        ? resolveParagraphStyle(definition?.parentStyleName ?? "Standard", heading, target, seen)
+        : { style: heading ? ("heading-1" as const) : ("default" as const) };
     return {
+      ...(definition?.alignment === undefined && parent.alignment === undefined
+        ? {}
+        : { alignment: definition?.alignment ?? parent.alignment }),
+      ...(definition?.leftMargin === undefined && parent.leftMargin === undefined
+        ? {}
+        : { leftMargin: definition?.leftMargin ?? parent.leftMargin }),
       ...(definition?.properties === undefined && parent.effectiveProperties === undefined
         ? {}
         : { effectiveProperties: { ...parent.effectiveProperties, ...definition?.properties } }),
-      ...(definition?.leftMargin === undefined ? {} : { leftMargin: definition.leftMargin }),
-      ...(definition?.paragraphProperties === undefined
+      ...(definition?.paragraphProperties === undefined && parent.paragraphProperties === undefined
         ? {}
-        : { paragraphProperties: definition.paragraphProperties }),
+        : {
+            paragraphProperties: {
+              ...parent.paragraphProperties,
+              ...definition?.paragraphProperties,
+            },
+          }),
       style: builtInStyle,
     };
   }
@@ -478,11 +490,17 @@ export function resolveParagraphStyle(
     seen,
   );
   return {
-    ...(definition.alignment === undefined ? {} : { alignment: definition.alignment }),
-    ...(definition.leftMargin === undefined ? {} : { leftMargin: definition.leftMargin }),
-    ...(definition.paragraphProperties === undefined
+    ...(definition.alignment === undefined && parent.alignment === undefined
       ? {}
-      : { paragraphProperties: definition.paragraphProperties }),
+      : { alignment: definition.alignment ?? parent.alignment }),
+    ...(definition.leftMargin === undefined && parent.leftMargin === undefined
+      ? {}
+      : { leftMargin: definition.leftMargin ?? parent.leftMargin }),
+    ...(definition.paragraphProperties === undefined && parent.paragraphProperties === undefined
+      ? {}
+      : {
+          paragraphProperties: { ...parent.paragraphProperties, ...definition.paragraphProperties },
+        }),
     ...(parent.effectiveProperties === undefined && definition.properties === undefined
       ? {}
       : { effectiveProperties: { ...parent.effectiveProperties, ...definition.properties } }),

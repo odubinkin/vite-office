@@ -157,11 +157,12 @@ export class SvxRightMarginItem extends SfxPoolItem {
 
 /** Stores upper and lower paragraph spacing in twips. */
 export class SvxULSpaceItem extends SfxPoolItem {
-  /** Creates a spacing item. @param upper - Space above. @param lower - Space below. @param which - Item identity. @returns Nothing. */
+  /** Creates a spacing item. @param upper - Space above. @param lower - Space below. @param which - Item identity. @param contextual - Suppress adjacent spacing for identical styles. @returns Nothing. */
   public constructor(
     private readonly upper: number,
     private readonly lower: number,
     which: number,
+    private readonly contextual = false,
   ) {
     super(which);
     if (
@@ -181,9 +182,13 @@ export class SvxULSpaceItem extends SfxPoolItem {
   public GetLower(): number {
     return this.lower;
   }
+  /** Reports Writer's contextual paragraph-spacing flag. @returns Whether matching styles suppress spacing. */
+  public GetContext(): boolean {
+    return this.contextual;
+  }
   /** Creates an independent item. @returns Clone. */
   public Clone(): SvxULSpaceItem {
-    return new SvxULSpaceItem(this.upper, this.lower, this.Which());
+    return new SvxULSpaceItem(this.upper, this.lower, this.Which(), this.contextual);
   }
   /** Compares identity and values. @param other - Candidate. @returns Whether equal. */
   public equals(other: SfxPoolItem): boolean {
@@ -191,44 +196,70 @@ export class SvxULSpaceItem extends SfxPoolItem {
       other instanceof SvxULSpaceItem &&
       other.Which() === this.Which() &&
       other.upper === this.upper &&
-      other.lower === this.lower
+      other.lower === this.lower &&
+      other.contextual === this.contextual
     );
   }
   /** Serializes spacing. @returns Upper/lower tuple. */
-  public QueryValue(): readonly [number, number] {
-    return [this.upper, this.lower];
+  public QueryValue(): readonly [number, number] | readonly [number, number, number] {
+    return this.contextual ? [this.upper, this.lower, 1] : [this.upper, this.lower];
   }
 }
 
-/** Stores proportional line spacing for the bounded style projection. */
+/** Writer line-spacing modes corresponding to proportional, fixed, minimum, and extra leading. */
+export type SvxLineSpacingMode = "proportional" | "fixed" | "minimum" | "leading";
+
+/** Stores the Writer paragraph line-spacing rule in twips or percent. */
 export class SvxLineSpacingItem extends SfxPoolItem {
-  /** Creates line spacing. @param percent - Proportional height. @param which - Item identity. @returns Nothing. */
+  /** Creates line spacing. @param value - Percent or twips according to mode. @param which - Item identity. @param mode - Writer line-spacing rule. @param fontIndependent - ODF compatibility flag. @returns Nothing. */
   public constructor(
-    private readonly percent: number,
+    private readonly value: number,
     which: number,
+    private readonly mode: SvxLineSpacingMode = "proportional",
+    private readonly fontIndependent = false,
   ) {
     super(which);
-    if (!Number.isInteger(percent) || percent < 0)
+    if (!Number.isInteger(value) || value < 0)
       throw new Error("SvxLineSpacingItem value is invalid.");
+  }
+  /** Returns the Writer rule. @returns Line-spacing mode. */
+  public GetMode(): SvxLineSpacingMode {
+    return this.mode;
   }
   /** Returns proportional line height. @returns Percent. */
   public GetPropLineSpace(): number {
-    return this.percent;
+    return this.mode === "proportional" ? this.value : 0;
+  }
+  /** Returns the rule's raw percent or twip value. @returns Stored value. */
+  public GetValue(): number {
+    return this.value;
+  }
+  /** Reports the imported font-independent setting. @returns ODF compatibility flag. */
+  public IsFontIndependent(): boolean {
+    return this.fontIndependent;
   }
   /** Creates an independent item. @returns Clone. */
   public Clone(): SvxLineSpacingItem {
-    return new SvxLineSpacingItem(this.percent, this.Which());
+    return new SvxLineSpacingItem(this.value, this.Which(), this.mode, this.fontIndependent);
   }
   /** Compares identity and value. @param other - Candidate. @returns Whether equal. */
   public equals(other: SfxPoolItem): boolean {
     return (
       other instanceof SvxLineSpacingItem &&
       other.Which() === this.Which() &&
-      other.percent === this.percent
+      other.value === this.value &&
+      other.mode === this.mode &&
+      other.fontIndependent === this.fontIndependent
     );
   }
-  /** Serializes line spacing. @returns Percent. */
-  public QueryValue(): number {
-    return this.percent;
+  /** Serializes line spacing compatibly with existing percentage records. @returns Percent or rule tuple. */
+  public QueryValue(): number | readonly [number, number, number] {
+    return this.mode === "proportional" && !this.fontIndependent
+      ? this.value
+      : [
+          ["proportional", "fixed", "minimum", "leading"].indexOf(this.mode),
+          this.value,
+          Number(this.fontIndependent),
+        ];
   }
 }
