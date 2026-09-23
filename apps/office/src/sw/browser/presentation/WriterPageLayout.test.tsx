@@ -120,6 +120,32 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     expect(screen.queryByLabelText("Writer vertical ruler")).not.toBeInTheDocument();
   });
 
+  it("separates paragraph and first-line indent triangles even at the same horizontal offset", /** Keeps the two drag controls visible and independently reachable. @returns Nothing. */ () => {
+    const item = paragraph("same-offset", "Text");
+    render(
+      <WriterRulers
+        horizontalVisible
+        onPageChange={vi.fn()}
+        onParagraphIndentChange={vi.fn()}
+        page={page}
+        paragraph={{
+          ...item,
+          computedStyle: { ...item.computedStyle, firstLineIndentPt: 0 },
+          textLeftMargin: 0,
+        }}
+      />,
+    );
+    const bodyIndent = screen.getByRole("button", { name: "Paragraph left indent" });
+    const firstLineIndent = screen.getByRole("button", { name: "First line indent" });
+    const rightIndent = screen.getByRole("button", { name: "Paragraph right indent" });
+    expect(bodyIndent.style.left).toBe(firstLineIndent.style.left);
+    expect(bodyIndent.style.bottom).toBe("0px");
+    expect(bodyIndent.style.top).toBe("");
+    expect(firstLineIndent.style.top).toBe("0px");
+    expect(firstLineIndent.style.bottom).toBe("");
+    expect(rightIndent.style.bottom).toBe("0px");
+  });
+
   it("anchors each vertical ruler to its rendered page and starts tick zero at the text margins", /** Verifies page ownership and origins. @returns Nothing. */ () => {
     const tinyPage = { ...page, bottomMargin: 100, height: 650, topMargin: 100 };
     const { container } = render(

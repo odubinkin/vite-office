@@ -89,6 +89,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               ariaLabel="Paragraph left indent"
               axis="x"
               className="h-0 w-0 border-x-[6px] border-b-[8px] border-x-transparent border-b-slate-950"
+              edge="bottom"
               position={(props.page.leftMargin + paragraphLeft) / TWIPS_PER_CSS_PIXEL}
               onCommit={
                 /** Commits the paragraph left indent. @param delta - Drag delta in twips. @returns Nothing. */ (
@@ -121,6 +122,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               ariaLabel="Paragraph right indent"
               axis="x"
               className="h-0 w-0 border-x-[6px] border-b-[8px] border-x-transparent border-b-slate-950"
+              edge="bottom"
               position={
                 (props.page.width - props.page.rightMargin - paragraphRight) / TWIPS_PER_CSS_PIXEL
               }
@@ -248,12 +250,14 @@ function RulerHandle({
   ariaLabel,
   axis,
   className,
+  edge,
   onCommit,
   position,
 }: Readonly<{
   ariaLabel: string;
   axis: "x" | "y";
   className: string;
+  edge?: "top" | "bottom";
   onCommit: (deltaTwips: number) => void;
   position: number;
 }>): React.JSX.Element {
@@ -272,7 +276,7 @@ function RulerHandle({
           ? {
               cursor: "ew-resize",
               left: position + dragDelta,
-              top: 0,
+              ...(edge === "bottom" ? { bottom: 0 } : { top: 0 }),
               transform: "translateX(-50%)",
             }
           : {
