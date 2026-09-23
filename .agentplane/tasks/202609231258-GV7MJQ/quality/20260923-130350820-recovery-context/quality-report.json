@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609231258-GV7MJQ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T13:03:50.820Z",
+  "verdict": "pass",
+  "summary": "Approved docs-only audit is evidence-linked, covers all implemented runtime groups, and defines bounded remediation with browser/React exceptions.",
+  "evaluated_sha": "55ab999d24fe6cbcc85525b9253d97b733144f0c",
+  "blueprint_digest": "f726abb2eb11d114a378a5af4b458c6070b7e4cf8a7a26170ecc14d73094b10d",
+  "findings": [
+    "Plan names concrete local and pinned-upstream sources for confirmed divergences, separates unverified module status from defects, excludes inventory mutations, and has passing format, routing, doctor, diff, and 41-link checks."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609231258-GV7MJQ/README.md",
+    "docs/program/vite-office-upstream-parity-plan.md",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
