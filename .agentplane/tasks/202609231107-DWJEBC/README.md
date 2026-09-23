@@ -1,10 +1,11 @@
 ---
 id: "202609231107-DWJEBC"
 title: "Match Writer ODT vertical layout and list geometry to LibreOffice"
-status: "DOING"
+result_summary: "verified-202609231107-DWJEBC"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +19,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-23T12:45:20.580Z"
+  updated_at: "2026-09-23T12:47:12.009Z"
   updated_by: "CODER"
-  note: "Full npm run verify passed: 369 office tests and 96 inventory tests at 100% coverage, 11 e2e tests, build, static and repository gates. ODT layout/list regressions passed; diff and status inspected."
+  note: "verified-202609231107-DWJEBC"
   attempts: 0
 quality_review:
   state: "pass"
@@ -38,11 +39,16 @@ quality_review:
     - "apps/office/coverage/coverage-summary.json"
   findings:
     - "Proportional line height, collapsed paragraph spacing, default paragraph styles and list geometry round trip; 100% app and inventory coverage with 11 passing e2e tests."
-commit: null
+commit:
+  hash: "773da0fc4788219be91cb109aaab13a512100882"
+  message: "🧩 DWJEBC task: record quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved ODT paragraph and list geometry parity in the direct checkout with focused regression coverage."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609231107-DWJEBC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -57,8 +63,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full npm run verify passed: 369 office tests and 96 inventory tests at 100% coverage, 11 e2e tests, build, static and repository gates. ODT layout/list regressions passed; diff and status inspected."
+  -
+    type: "verify"
+    at: "2026-09-23T12:47:12.009Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609231107-DWJEBC"
+  -
+    type: "status"
+    at: "2026-09-23T12:47:12.195Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609231107-DWJEBC. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-23T12:45:20.675Z"
+doc_updated_at: "2026-09-23T12:47:12.195Z"
 doc_updated_by: "CODER"
 description: "Import supported paragraph and list layout properties and correct browser presentation so line spacing and list markers follow pinned LibreOffice behavior."
 sections:
@@ -101,6 +120,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-09-23T12:47:12.009Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609231107-DWJEBC
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T12:45:20.675Z, excerpt_hash=sha256:9b090150a3affa6cb485a2b9f5d7a29bdaacb900dcf4e6c9178edd3cd3d2ab29
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231107-DWJEBC/blueprint/resolved-snapshot.json
+    - old_digest: 29b68380bfaae078ce9b1897734d84b88068d6c55189e73e60781993d7095218
+    - current_digest: 29b68380bfaae078ce9b1897734d84b88068d6c55189e73e60781993d7095218
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609231107-DWJEBC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609231107-DWJEBC --result verified-202609231107-DWJEBC --commit 773da0fc4788219be91cb109aaab13a512100882
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -119,6 +168,10 @@ sections:
     Implementation: Imported ODF paragraph default styles and list level alignment or legacy geometry; projected LibreOffice proportional line height and paragraph spacing; corrected marker slot placement and inherited character attributes; retained native ODT round trips. Added meaningful coverage for remaining app paths to satisfy the user requested global 100% gate. Simplified guards unreachable under SwPaM and ordered paragraph invariants.
 
     Residual risk: Browser text shaping remains a bounded approximation; no user-specific ODT was supplied for pixel-by-pixel comparison.
+extensions:
+  implementation_commit:
+    hash: "8cef19859c8d605964012bf667601bfa313d52fd"
+    message: "🧩 DWJEBC task: implement Writer ODT layout parity and full coverage"
 id_source: "generated"
 ---
 ## Summary
@@ -170,6 +223,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-23T12:47:12.009Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609231107-DWJEBC
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T12:45:20.675Z, excerpt_hash=sha256:9b090150a3affa6cb485a2b9f5d7a29bdaacb900dcf4e6c9178edd3cd3d2ab29
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231107-DWJEBC/blueprint/resolved-snapshot.json
+- old_digest: 29b68380bfaae078ce9b1897734d84b88068d6c55189e73e60781993d7095218
+- current_digest: 29b68380bfaae078ce9b1897734d84b88068d6c55189e73e60781993d7095218
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609231107-DWJEBC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609231107-DWJEBC --result verified-202609231107-DWJEBC --commit 773da0fc4788219be91cb109aaab13a512100882
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
