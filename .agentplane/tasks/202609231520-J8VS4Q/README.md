@@ -1,10 +1,11 @@
 ---
 id: "202609231520-J8VS4Q"
 title: "Restore Writer undo manager ownership"
-status: "DOING"
+result_summary: "verified-202609231520-J8VS4Q"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-23T15:34:02.186Z"
+  updated_at: "2026-09-23T15:34:35.029Z"
   updated_by: "CODER"
   note: "verified-202609231520-J8VS4Q"
   attempts: 0
@@ -41,11 +42,16 @@ quality_review:
     - "npm run lint"
   findings:
     - "SwDoc owns a Writer manager over Sfx; deleted text and joined nodes are retained and released with history actions; mixed action undo and redo return modified state to the save mark. 393 unit tests pass with 100 percent coverage, and static checks pass."
-commit: null
+commit:
+  hash: "169798e4c6f3c8623e019bd9b2ad18a87da792a1"
+  message: "🧩 J8VS4Q task: restore Writer undo manager ownership"
 comments:
   -
     author: "CODER"
     body: "Start: implement approved Writer undo manager ownership and verify supported operations and save boundaries."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609231520-J8VS4Q. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609231520-J8VS4Q"
+  -
+    type: "verify"
+    at: "2026-09-23T15:34:35.029Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609231520-J8VS4Q"
+  -
+    type: "status"
+    at: "2026-09-23T15:34:35.167Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609231520-J8VS4Q. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-23T15:34:02.266Z"
+doc_updated_at: "2026-09-23T15:34:35.168Z"
 doc_updated_by: "CODER"
 description: "Implement parity plan item 3: document-owned sw::UndoManager with Writer grouping, cursor restoration, deleted-text retention, save marks, and supported command replay; preserve upstream structure and avoid legacy model compatibility."
 sections:
@@ -135,6 +154,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202609231520-J8VS4Q --result verified-202609231520-J8VS4Q --commit 169798e4c6f3c8623e019bd9b2ad18a87da792a1
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-23T15:34:35.029Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609231520-J8VS4Q
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T15:34:02.266Z, excerpt_hash=sha256:cce0f5b9d6a6b3874008aa66dd7553bb4e903ed26ec13a3644b8406718e1f78c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231520-J8VS4Q/blueprint/resolved-snapshot.json
+    - old_digest: 057fd7264fb9736475a9a52650af48bc0d94dfedd3817b0376f2ced4795dda04
+    - current_digest: 057fd7264fb9736475a9a52650af48bc0d94dfedd3817b0376f2ced4795dda04
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609231520-J8VS4Q
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609231520-J8VS4Q --result verified-202609231520-J8VS4Q --commit 56137b6cd4908259fc81c65f24776cdf2356f9aa
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -250,6 +299,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609231520-J8VS4Q --result verified-202609231520-J8VS4Q --commit 169798e4c6f3c8623e019bd9b2ad18a87da792a1
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-23T15:34:35.029Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609231520-J8VS4Q
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T15:34:02.266Z, excerpt_hash=sha256:cce0f5b9d6a6b3874008aa66dd7553bb4e903ed26ec13a3644b8406718e1f78c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231520-J8VS4Q/blueprint/resolved-snapshot.json
+- old_digest: 057fd7264fb9736475a9a52650af48bc0d94dfedd3817b0376f2ced4795dda04
+- current_digest: 057fd7264fb9736475a9a52650af48bc0d94dfedd3817b0376f2ced4795dda04
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609231520-J8VS4Q
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609231520-J8VS4Q --result verified-202609231520-J8VS4Q --commit 56137b6cd4908259fc81c65f24776cdf2356f9aa
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
