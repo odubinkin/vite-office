@@ -150,12 +150,12 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await expect(
     page.getByRole("complementary", { name: "Writer properties sidebar" }),
   ).toContainText("Heading 1");
-  await page.getByRole("button", { exact: true, name: "Center" }).click();
+  const centerButton = page
+    .getByRole("toolbar", { name: "Writer formatting toolbar" })
+    .getByRole("button", { exact: true, name: "Center" });
+  await centerButton.click();
   await expect(writerEditor).toHaveCSS("text-align", "center");
-  await expect(page.getByRole("button", { exact: true, name: "Center" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(centerButton).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByText("Centered")).toBeVisible();
   await expect(page.getByRole("button", { name: "Add paragraph" })).toHaveCount(0);
   await writerEditor.evaluate(

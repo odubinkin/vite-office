@@ -1,6 +1,6 @@
 /** @fileoverview Verifies browser-visible paragraph breaks in the Writer projection. */
 
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Desktop } from "../../../framework/browser/app/desktop";
@@ -349,7 +349,12 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     const firstParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     enterWriterParagraphText(firstParagraph, "Before after");
     fireEvent.change(screen.getByLabelText("Paragraph style"), { target: { value: "heading-1" } });
-    fireEvent.click(screen.getByRole("button", { name: "Center" }));
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Center" },
+      ),
+    );
     firstParagraph.focus();
     placeWriterCaret(firstParagraph, 0);
     beforeInputWriterParagraph(firstParagraph, "deleteContentBackward");

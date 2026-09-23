@@ -18,7 +18,7 @@ import {
 import { useCommandShortcuts } from "../../../framework/browser/presentation/use-command-shortcuts";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
+import { selectWriterCommandResource } from "./writer-command-presentation";
 import { writerBrowserMenuPlacements } from "./writer-command-surfaces";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import type { SwView } from "../../source/uibase/uiview/view";
@@ -85,15 +85,7 @@ export function WriterWorkbench({
   const getLocalizedCommandResource = useCallback(
     /** Resolves generated command metadata through the application locale service. @param commandUrl - Canonical command URL. @returns Localized resource. */
     (commandUrl: string) => {
-      const resource = getWriterCommandResource(commandUrl);
-      return {
-        ...resource,
-        controlLabel: localization.GetText(
-          `writer.command.${commandUrl}.control-label`,
-          resource.controlLabel,
-        ),
-        label: localization.GetText(`writer.command.${commandUrl}.label`, resource.label),
-      };
+      return selectWriterCommandResource(localization, commandUrl);
     },
     [localization],
   );

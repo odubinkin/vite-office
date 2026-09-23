@@ -1,7 +1,7 @@
 /** @fileoverview Renders generated menu resources through one reusable command-driven state machine. */
 import { useEffect, useRef, useState } from "react";
 
-import { type BrowserCommandSurfaceProps, useBrowserCommandState } from "./command-surface";
+import { type BrowserCommandSurfaceProps, useBrowserCommandPresentation } from "./command-surface";
 
 /** Command resource fields consumed by an accessible menu item. */
 export interface MenuCommandResource {
@@ -415,8 +415,12 @@ function BindingsMenuCommand({
   item: Extract<CommandMenuItemPlacement, { kind: "command" }>;
   resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
 }>): React.JSX.Element {
-  const state = useBrowserCommandState(commandSource, item.commandId);
-  const resource = getCommandResource(item.commandId);
+  const presentation = useBrowserCommandPresentation(
+    commandSource,
+    item.commandId,
+    getCommandResource,
+  );
+  const resource = presentation.resource;
   const role =
     resource.semantics === "check"
       ? "menuitemcheckbox"
@@ -424,14 +428,14 @@ function BindingsMenuCommand({
         ? "menuitemradio"
         : "menuitem";
   const isCheckable = role !== "menuitem";
-  const isChecked = state.checked === true;
+  const isChecked = presentation.checked;
   const label = `${resource.label}${item.showsDialog === true ? "…" : ""}`;
   return (
     <button
       aria-checked={isCheckable ? isChecked : undefined}
       aria-keyshortcuts={resource.shortcuts[0]}
       className="flex w-full items-center rounded-md px-3 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
-      disabled={!state.enabled || state.pending === true}
+      disabled={!presentation.enabled}
       onClick={
         /** Dispatches this command and dismisses the popup. @returns Nothing. */ () => {
           commandSource.Execute(item.commandId, resolveArguments(item.commandId));
@@ -440,7 +444,7 @@ function BindingsMenuCommand({
       }
       role={role}
       tabIndex={-1}
-      title={state.error}
+      title={presentation.error}
       type="button"
     >
       <span
@@ -451,6 +455,11 @@ function BindingsMenuCommand({
         {isCheckable && isChecked ? "✓" : null}
       </span>
       <span>{label}</span>
+      {resource.shortcuts[0] === undefined ? null : (
+        <span aria-hidden="true" className="ml-auto pl-4 text-xs text-slate-500">
+          {resource.shortcuts[0]}
+        </span>
+      )}
     </button>
   );
 }

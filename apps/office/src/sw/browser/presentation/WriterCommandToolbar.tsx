@@ -13,7 +13,7 @@ import {
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerStandardBarItems } from "../../uiconfig/swriter/toolbar/standardbar";
-import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
+import { selectWriterCommandResource } from "./writer-command-presentation";
 import {
   CommandToolbarItems,
   type CommandIcon,
@@ -46,11 +46,7 @@ export function WriterCommandToolbar({
         /** Localizes one generated toolbar resource. @param commandUrl - Command URL. @returns Localized resource. */ (
           commandUrl,
         ) => {
-          const resource = getWriterCommandResource(commandUrl);
-          return {
-            ...resource,
-            label: localization.GetText(`writer.command.${commandUrl}.label`, resource.label),
-          };
+          return selectWriterCommandResource(localization, commandUrl);
         }
       }
       icons={icons}

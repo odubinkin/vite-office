@@ -70,3 +70,37 @@ export function useBrowserCommandState(
   );
   return useSyncExternalStore(controller.Subscribe, controller.GetState, controller.GetState);
 }
+
+/** Resource fields combined with a live bindings state for one browser command control. */
+export interface BrowserCommandPresentationResource {
+  readonly argumentSchema?: readonly string[];
+  readonly controlLabel?: string;
+  readonly label: string;
+  readonly selectionValue?: string;
+  readonly semantics: "action" | "check" | "radio";
+  readonly shortcuts?: readonly string[];
+}
+
+/** Selects one resource and its live Sfx slot state for every presentation surface. @param commandSource - Active frame adapter. @param commandUrl - Canonical slot URL. @param getCommandResource - Localized generated resource lookup. @returns Resource and live control state. */
+export function useBrowserCommandPresentation<Resource extends BrowserCommandPresentationResource>(
+  commandSource: BrowserCommandSource,
+  commandUrl: string,
+  getCommandResource: (commandUrl: string) => Resource,
+): Readonly<{
+  resource: Resource;
+  enabled: boolean;
+  checked: boolean;
+  selectedValue: CommandState["value"];
+  pending: boolean;
+  error: CommandState["error"];
+}> {
+  const state = useBrowserCommandState(commandSource, commandUrl);
+  return {
+    resource: getCommandResource(commandUrl),
+    enabled: state.enabled && state.pending !== true,
+    checked: state.checked === true,
+    selectedValue: state.value,
+    pending: state.pending === true,
+    error: state.error,
+  };
+}

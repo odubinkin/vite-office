@@ -2,7 +2,7 @@
  * @fileoverview Verifies Writer menu placement and browser-owned copy commands through the application shell.
  */
 
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Desktop } from "../../../framework/browser/app/desktop";
@@ -82,7 +82,16 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
 
     fireEvent.click(screen.getByRole("button", { name: "File" }));
     expect(screen.getByRole("menu", { name: "File menu" })).toBeVisible();
-    expect(screen.getByRole("menuitem", { name: "New Document" })).toBeEnabled();
+    const newMenuItem = screen.getByRole("menuitem", { name: "New Document" });
+    expect(newMenuItem).toBeEnabled();
+    expect(newMenuItem).toHaveAttribute("aria-keyshortcuts", "Ctrl+N");
+    expect(newMenuItem).toHaveTextContent("Ctrl+N");
+    expect(
+      within(screen.getByRole("toolbar", { name: "Writer standard toolbar" })).getByRole(
+        "button",
+        { name: "New Document" },
+      ),
+    ).toHaveAttribute("aria-keyshortcuts", "Ctrl+N");
     expect(screen.getByRole("menuitem", { name: "Open…" })).toBeEnabled();
     expect(screen.getByRole("menuitem", { name: "Save As…" })).toBeEnabled();
     expect(screen.getByRole("menuitem", { name: "Open Local Copy…" })).toBeEnabled();
@@ -295,7 +304,12 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
       fireEvent.change(screen.getByLabelText("Paragraph style"), {
         target: { value: "heading-1" },
       });
-      fireEvent.click(screen.getByRole("button", { name: "Center" }));
+      fireEvent.click(
+        within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+          "button",
+          { name: "Center" },
+        ),
+      );
       fireEvent.click(screen.getByRole("button", { name: "Edit" }));
       fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
       selectWriterParagraphText(editor);
@@ -469,7 +483,12 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     fireEvent.change(screen.getByLabelText("Paragraph style"), {
       target: { value: "heading-1" },
     });
-    fireEvent.click(screen.getByRole("button", { name: "Center" }));
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Center" },
+      ),
+    );
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
     fireEvent.click(screen.getByRole("menuitem", { name: "Select All" }));
     const setData = vi.fn();

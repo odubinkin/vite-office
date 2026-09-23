@@ -2,7 +2,7 @@
 
 import type { ComponentType, ReactNode } from "react";
 
-import { type BrowserCommandSurfaceProps, useBrowserCommandState } from "./command-surface";
+import { type BrowserCommandSurfaceProps, useBrowserCommandPresentation } from "./command-surface";
 
 /** Minimal icon contract used by command buttons without coupling to an icon package. */
 export type CommandIcon = ComponentType<Readonly<{ "aria-hidden"?: boolean; size?: number }>>;
@@ -11,6 +11,7 @@ export type CommandIcon = ComponentType<Readonly<{ "aria-hidden"?: boolean; size
 export interface ToolbarCommandResource {
   readonly label: string;
   readonly semantics: "action" | "check" | "radio";
+  readonly shortcuts?: readonly string[];
 }
 
 /** Resource placement rendered by the generic toolbar. */
@@ -38,26 +39,27 @@ export function CommandButton({
   icon: Icon,
   resolveArguments,
 }: CommandButtonProps): React.JSX.Element | null {
-  const state = useBrowserCommandState(commandSource, commandId);
+  const presentation = useBrowserCommandPresentation(commandSource, commandId, getCommandResource);
   const command = commandSource.QueryCommand(commandId);
   if (command === undefined) return null;
-  const resource = getCommandResource(commandId);
-  const pressed = resource.semantics === "action" ? undefined : state.checked === true;
+  const resource = presentation.resource;
+  const pressed = resource.semantics === "action" ? undefined : presentation.checked;
   return (
     <button
       aria-label={resource.label}
+      aria-keyshortcuts={resource.shortcuts?.[0]}
       aria-pressed={pressed}
       className={
         className ??
         "grid size-9 place-items-center rounded-lg text-sm font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:bg-indigo-100 data-[active=true]:text-indigo-900"
       }
       data-active={pressed}
-      disabled={!state.enabled || state.pending === true}
+      disabled={!presentation.enabled}
       onClick={
         /** Dispatches through the same Sfx source that supplied state. @returns Nothing. */ () =>
           commandSource.Execute(commandId, resolveArguments(commandId))
       }
-      title={state.error ?? resource.label}
+      title={presentation.error ?? resource.label}
       type="button"
     >
       {content ?? (Icon === undefined ? resource.label : <Icon aria-hidden={true} size={18} />)}

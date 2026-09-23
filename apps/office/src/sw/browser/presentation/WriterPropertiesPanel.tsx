@@ -20,7 +20,7 @@ import {
 import type { WriterParagraphListKind } from "../../source/core/doc/list";
 import type { WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
-import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
+import { selectWriterCommandResource } from "./writer-command-presentation";
 
 const alignmentLabels: Readonly<Record<WriterParagraphAlignment, string>> = {
   center: "Centered",
@@ -86,11 +86,7 @@ export function WriterParagraphProperties({
     /** Localizes one generated sidebar command. @param commandUrl - Command URL. @returns Localized resource. */ (
       commandUrl: string,
     ) => {
-      const resource = getWriterCommandResource(commandUrl);
-      return {
-        ...resource,
-        label: `Properties: ${localization.GetText(`writer.command.${commandUrl}.label`, resource.label)}`,
-      };
+      return selectWriterCommandResource(localization, commandUrl);
     };
   return (
     <>

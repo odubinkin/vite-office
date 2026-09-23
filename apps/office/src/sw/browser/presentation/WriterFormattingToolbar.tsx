@@ -18,7 +18,7 @@ import {
 } from "../../../framework/browser/presentation/CommandToolbar";
 import {
   type BrowserCommandSurfaceProps,
-  useBrowserCommandState,
+  useBrowserCommandPresentation,
 } from "../../../framework/browser/presentation/command-surface";
 import type { BrowserLocalizationService } from "../../../framework/browser/localization/browser-localization";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
@@ -27,7 +27,8 @@ import type { WriterParagraphStyleOption } from "./writer-view-projection";
 
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import { writerTextObjectBarItems } from "../../uiconfig/swriter/toolbar/textobjectbar";
-import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
+import { selectWriterCommandResource } from "./writer-command-presentation";
+import type { WriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 import type { WriterToolbarItemPlacement } from "../../uiconfig/swriter/ui-resource";
 
 const icons = new Map<string, CommandIcon>([
@@ -57,15 +58,7 @@ export function WriterFormattingToolbar({
     /** Localizes one generated formatting resource. @param commandUrl - Command URL. @returns Localized resource. */ (
       commandUrl: string,
     ) => {
-      const resource = getWriterCommandResource(commandUrl);
-      return {
-        ...resource,
-        controlLabel: localization.GetText(
-          `writer.command.${commandUrl}.control-label`,
-          resource.controlLabel,
-        ),
-        label: localization.GetText(`writer.command.${commandUrl}.label`, resource.label),
-      };
+      return selectWriterCommandResource(localization, commandUrl);
     };
   return (
     <CommandToolbarItems
@@ -123,7 +116,7 @@ function renderSpecialToolbarItem(
     { kind: "command-select" | "font-select" | "font-size-select" }
   >,
   commandSource: BrowserCommandSurfaceProps["commandSource"],
-  getCommandResource: typeof getWriterCommandResource,
+  getCommandResource: (commandUrl: string) => WriterCommandResource,
   localization: BrowserLocalizationService,
   paragraphStyleOptions: readonly WriterParagraphStyleOption[],
   resolveArguments: BrowserCommandSurfaceProps["resolveArguments"],
@@ -134,8 +127,9 @@ function renderSpecialToolbarItem(
       <FontNameSelect
         commandId={item.commandId}
         commandSource={commandSource}
+        getCommandResource={getCommandResource}
         key={item.commandId}
-        label={localization.GetText(`writer.command.${item.commandId}.control-label`, item.label)}
+        label={getCommandResource(item.commandId).controlLabel}
         resolveArguments={resolveArguments}
       />
     );
@@ -144,8 +138,9 @@ function renderSpecialToolbarItem(
       <FontSizeSelect
         commandId={item.commandId}
         commandSource={commandSource}
+        getCommandResource={getCommandResource}
         key={item.commandId}
-        label={localization.GetText(`writer.command.${item.commandId}.control-label`, item.label)}
+        label={getCommandResource(item.commandId).controlLabel}
         resolveArguments={resolveArguments}
       />
     );
@@ -172,16 +167,17 @@ function ParagraphStyleSelect({
   resolveArguments,
 }: Readonly<{
   commandSource: BrowserCommandSurfaceProps["commandSource"];
-  getCommandResource: typeof getWriterCommandResource;
+  getCommandResource: (commandUrl: string) => WriterCommandResource;
   item: Extract<WriterToolbarItemPlacement, { kind: "command-select" }>;
   localization: BrowserLocalizationService;
   paragraphStyleOptions: readonly WriterParagraphStyleOption[];
   resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
 }>): React.JSX.Element {
   const selected = String(
-    useBrowserCommandState(commandSource, WRITER_COMMAND_IDS.styleApply).value,
+    useBrowserCommandPresentation(commandSource, WRITER_COMMAND_IDS.styleApply, getCommandResource)
+      .selectedValue,
   );
-  const label = localization.GetText("writer.toolbar.paragraph-style", item.label);
+  const label = getCommandResource(WRITER_COMMAND_IDS.styleApply).controlLabel;
   return (
     <label className="contents">
       <span className="sr-only">{label}</span>
@@ -211,7 +207,7 @@ function ParagraphStyleSelect({
 
 /** Renders upstream pool ranges with hierarchy. @param getCommandResource - Command resource lookup. @param localization - Browser localization service. @param paragraphStyleOptions - Binding-backed style selector options. @returns Options. */
 function renderParagraphStyleOptions(
-  getCommandResource: typeof getWriterCommandResource,
+  getCommandResource: (commandUrl: string) => WriterCommandResource,
   localization: BrowserLocalizationService,
   paragraphStyleOptions: readonly WriterParagraphStyleOption[],
 ): React.ReactNode {
@@ -257,16 +253,20 @@ function renderParagraphStyleOptions(
 function FontNameSelect({
   commandId,
   commandSource,
+  getCommandResource,
   label,
   resolveArguments,
 }: {
   readonly commandId: string;
   readonly commandSource: BrowserCommandSurfaceProps["commandSource"];
+  readonly getCommandResource: (commandUrl: string) => WriterCommandResource;
   readonly label: string;
   readonly resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
 }): React.JSX.Element {
   const [fonts, setFonts] = useState<readonly string[]>(FALLBACK_FONT_FAMILIES);
-  const selected = String(useBrowserCommandState(commandSource, commandId).value);
+  const selected = String(
+    useBrowserCommandPresentation(commandSource, commandId, getCommandResource).selectedValue,
+  );
   useEffect(
     /** Loads device fonts after mount. @returns Cleanup. */ () => {
       let active = true;
@@ -324,15 +324,19 @@ const STANDARD_FONT_SIZES_PT = [8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 36
 function FontSizeSelect({
   commandId,
   commandSource,
+  getCommandResource,
   label,
   resolveArguments,
 }: {
   readonly commandId: string;
   readonly commandSource: BrowserCommandSurfaceProps["commandSource"];
+  readonly getCommandResource: (commandUrl: string) => WriterCommandResource;
   readonly label: string;
   readonly resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
 }): React.JSX.Element {
-  const selected = Number(useBrowserCommandState(commandSource, commandId).value);
+  const selected = Number(
+    useBrowserCommandPresentation(commandSource, commandId, getCommandResource).selectedValue,
+  );
   /* v8 ignore next -- Imported nonstandard point sizes are retained for round-trip fidelity. */
   const options = STANDARD_FONT_SIZES_PT.includes(
     selected as (typeof STANDARD_FONT_SIZES_PT)[number],
