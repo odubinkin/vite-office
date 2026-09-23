@@ -4,7 +4,7 @@ title: "Restore Writer page descriptor and settings contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,26 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-23T16:05:08.914Z"
+  updated_by: "CODER"
+  note: "verified-202609231540-4FPJYY"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-23T16:04:53.884Z"
+  updated_by: "EVALUATOR"
+  note: "Writer page descriptor collection, follow-aware layout, relevant settings defaults, current-schema persistence, ODT boundaries, undo and browser projection match the approved supported slice."
+  evaluated_sha: "8428c637d6797cec3ab8754c431a31306b0caa9c"
+  blueprint_digest: "ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e"
+  evidence_refs:
+    - ".agentplane/tasks/202609231540-4FPJYY/README.md"
+    - ".agentplane/tasks/202609231540-4FPJYY/quality/20260923-160453884-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609231540-4FPJYY/quality/20260923-160453884-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609231540-4FPJYY/quality/20260923-160453884-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609231540-4FPJYY/blueprint/resolved-snapshot.json"
+  findings:
+    - "No acceptance-blocking defect found; full suite, typecheck, build, formatting, doctor and routing checks pass."
 commit: null
 comments:
   -
@@ -35,8 +50,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement the approved upstream-shaped Writer page descriptor collection and relevant document settings contracts, adapt persistence/filter/UI boundaries, and verify focused behavior."
+  -
+    type: "verify"
+    at: "2026-09-23T16:04:44.889Z"
+    author: "TESTER"
+    state: "ok"
+    note: "Verified: 93 test files and 397 tests passed; focused page descriptor/settings/codec/ODT/layout tests passed; TypeScript typecheck and Vite production build passed; Prettier, AgentPlane doctor, routing policy, and git diff checks passed. Vite emitted only the existing non-fatal chunk-size warning."
+  -
+    type: "verify"
+    at: "2026-09-23T16:05:08.914Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609231540-4FPJYY"
 doc_version: 3
-doc_updated_at: "2026-09-23T15:41:25.451Z"
+doc_updated_at: "2026-09-23T16:05:08.998Z"
 doc_updated_by: "CODER"
 description: "Implement item 4 of docs/program/vite-office-upstream-parity-plan.md against pinned LibreOffice: page descriptor collection/identity/follow contracts and relevant document settings defaults, including current codec and ODT boundaries without legacy schema compatibility."
 sections:
@@ -54,6 +81,66 @@ sections:
     Acceptance: focused tests demonstrate multiple named page descriptors, identity-preserving master/follow links, applicable descriptor mutation, upstream-derived relevant DocumentSettingManager defaults, paragraph/list/style behavior, undo, current-schema cache round trip, and ODT round trip. Older stored schema versions are rejected.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-23T16:04:44.889Z — VERIFY — ok
+
+    By: TESTER
+
+    Note: Verified: 93 test files and 397 tests passed; focused page descriptor/settings/codec/ODT/layout tests passed; TypeScript typecheck and Vite production build passed; Prettier, AgentPlane doctor, routing policy, and git diff checks passed. Vite emitted only the existing non-fatal chunk-size warning.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T15:41:25.451Z, excerpt_hash=sha256:6cbfbb73a9cb6d90a9cb19dab626b285f9d82dc4550e2402bd6c1d80f67b3ab3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231540-4FPJYY/blueprint/resolved-snapshot.json
+    - old_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+    - current_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609231540-4FPJYY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609231540-4FPJYY
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-09-23T16:05:08.914Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609231540-4FPJYY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T16:04:44.970Z, excerpt_hash=sha256:6cbfbb73a9cb6d90a9cb19dab626b285f9d82dc4550e2402bd6c1d80f67b3ab3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231540-4FPJYY/blueprint/resolved-snapshot.json
+    - old_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+    - current_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609231540-4FPJYY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609231540-4FPJYY --result verified-202609231540-4FPJYY --commit 8428c637d6797cec3ab8754c431a31306b0caa9c
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the implementation commit and the task close commit for 202609231540-4FPJYY. No stored-schema downgrade or compatibility path is provided."
   Findings: "No findings yet."
@@ -85,6 +172,66 @@ Acceptance: focused tests demonstrate multiple named page descriptors, identity-
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-23T16:04:44.889Z — VERIFY — ok
+
+By: TESTER
+
+Note: Verified: 93 test files and 397 tests passed; focused page descriptor/settings/codec/ODT/layout tests passed; TypeScript typecheck and Vite production build passed; Prettier, AgentPlane doctor, routing policy, and git diff checks passed. Vite emitted only the existing non-fatal chunk-size warning.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T15:41:25.451Z, excerpt_hash=sha256:6cbfbb73a9cb6d90a9cb19dab626b285f9d82dc4550e2402bd6c1d80f67b3ab3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231540-4FPJYY/blueprint/resolved-snapshot.json
+- old_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+- current_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609231540-4FPJYY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609231540-4FPJYY
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-23T16:05:08.914Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609231540-4FPJYY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T16:04:44.970Z, excerpt_hash=sha256:6cbfbb73a9cb6d90a9cb19dab626b285f9d82dc4550e2402bd6c1d80f67b3ab3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231540-4FPJYY/blueprint/resolved-snapshot.json
+- old_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+- current_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609231540-4FPJYY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609231540-4FPJYY --result verified-202609231540-4FPJYY --commit 8428c637d6797cec3ab8754c431a31306b0caa9c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
