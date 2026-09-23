@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609230538-ZVK8FE",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T06:56:25.695Z",
+  "verdict": "pass",
+  "summary": "Upstream-grounded Writer page geometry slice is functionally complete and locally verified.",
+  "evaluated_sha": "6fd8d582ad219a0b44a790f0eff7c334b88eb507",
+  "blueprint_digest": "fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4",
+  "findings": [
+    "Core page descriptors, undoable ruler/page operations, Page Style UI, real proportional pages, and ODT page-layout/master-page interchange are covered by focused tests and real-browser evidence. The application test suite executes 313/313 tests successfully; only the pre-existing repository-wide 100% coverage threshold remains below target at 98.50%, without lowering enforcement."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609230538-ZVK8FE/README.md",
+    "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx",
+    ".playwright-cli/landscape-page.png"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Browser pagination is a bounded paragraph-level projection and does not claim native LibreOffice layout-frame pagination; headers, footers, columns, and multiple page styles remain out of scope."
+  ]
+}

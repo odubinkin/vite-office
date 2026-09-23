@@ -4,7 +4,7 @@ title: "Implement Writer page geometry, page dialog, rulers, and ODT page styles
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -19,11 +19,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-23T06:56:13.715Z"
+  updated_by: "CODER"
+  note: "verified-202609230538-ZVK8FE"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-23T06:56:25.695Z"
+  updated_by: "EVALUATOR"
+  note: "Upstream-grounded Writer page geometry slice is functionally complete and locally verified."
+  evaluated_sha: "6fd8d582ad219a0b44a790f0eff7c334b88eb507"
+  blueprint_digest: "fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4"
+  evidence_refs:
+    - ".agentplane/tasks/202609230538-ZVK8FE/README.md"
+    - ".agentplane/tasks/202609230538-ZVK8FE/quality/20260923-065625695-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609230538-ZVK8FE/quality/20260923-065625695-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609230538-ZVK8FE/quality/20260923-065625695-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609230538-ZVK8FE/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts"
+    - "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx"
+    - ".playwright-cli/landscape-page.png"
+  findings:
+    - "Core page descriptors, undoable ruler/page operations, Page Style UI, real proportional pages, and ODT page-layout/master-page interchange are covered by focused tests and real-browser evidence. The application test suite executes 313/313 tests successfully; only the pre-existing repository-wide 100% coverage threshold remains below target at 98.50%, without lowering enforcement."
 commit: null
 comments:
   -
@@ -37,8 +55,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement the approved upstream-grounded Writer page geometry, ODT page-style interchange, Page Style dialog, and functional horizontal and vertical rulers with regression and browser verification."
+  -
+    type: "verify"
+    at: "2026-09-23T06:55:57.270Z"
+    author: "CODER"
+    state: "ok"
+    note: "Implemented and verified Writer page geometry, Page Style dialog, horizontal/vertical rulers, undo/redo, codec persistence, and ODT page-layout/master-page round trips. 313/313 office tests execute successfully; the repository-wide npm test command still exits at its pre-existing 100% application coverage threshold (current aggregate 98.50% lines) despite zero test failures. Focused feature suite: 45/45 pass. Inventory suite: 96/96 at 100% coverage. format, lint, typecheck, build, resource generation, docs, routing, inventory invariants/parity, AgentPlane doctor, and Chromium interaction checks pass."
+  -
+    type: "verify"
+    at: "2026-09-23T06:56:13.715Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609230538-ZVK8FE"
 doc_version: 3
-doc_updated_at: "2026-09-23T05:39:51.974Z"
+doc_updated_at: "2026-09-23T06:56:13.802Z"
 doc_updated_by: "CODER"
 description: "Add upstream-grounded page descriptors, physical page rendering, page-format dialog, horizontal and vertical rulers for page margins and paragraph indents, plus ODT page-layout import/export."
 sections:
@@ -71,11 +101,74 @@ sections:
     8. Inspect an exported ODT and re-import it. Expected: page width, height, orientation, four margins, and paragraph indents survive import-export-import and are represented by ODF page-layout/master-page attributes.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-23T06:55:57.270Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Implemented and verified Writer page geometry, Page Style dialog, horizontal/vertical rulers, undo/redo, codec persistence, and ODT page-layout/master-page round trips. 313/313 office tests execute successfully; the repository-wide npm test command still exits at its pre-existing 100% application coverage threshold (current aggregate 98.50% lines) despite zero test failures. Focused feature suite: 45/45 pass. Inventory suite: 96/96 at 100% coverage. format, lint, typecheck, build, resource generation, docs, routing, inventory invariants/parity, AgentPlane doctor, and Chromium interaction checks pass.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T05:39:51.974Z, excerpt_hash=sha256:ff23f27c04f35c62626cfb6dd03f934a88571f62cbbd2280d34e499adfd0949b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609230538-ZVK8FE/blueprint/resolved-snapshot.json
+    - old_digest: fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4
+    - current_digest: fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609230538-ZVK8FE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609230538-ZVK8FE
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-23T06:56:13.715Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609230538-ZVK8FE
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T06:55:57.367Z, excerpt_hash=sha256:ff23f27c04f35c62626cfb6dd03f934a88571f62cbbd2280d34e499adfd0949b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609230538-ZVK8FE/blueprint/resolved-snapshot.json
+    - old_digest: fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4
+    - current_digest: fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609230538-ZVK8FE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609230538-ZVK8FE --result verified-202609230538-ZVK8FE --commit 6fd8d582ad219a0b44a790f0eff7c334b88eb507
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: npm test reaches 313 passing tests but the global application coverage threshold is 100%; aggregate coverage remains 98.50% because multiple pre-existing modules have uncovered paths.
+      Impact: No functional test failure; coverage gate remains non-zero and should be addressed as repository-wide test-debt work rather than by weakening thresholds.
+      Resolution: Added focused coverage for page descriptors, all ruler handles, dialog validation, pagination, undo payloads, and ODT geometry; preserved the 100% threshold and recorded the residual repository-wide gap.
 id_source: "generated"
 ---
 ## Summary
@@ -117,6 +210,66 @@ Implement the approved upstream-grounded end-to-end Writer page geometry slice: 
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-23T06:55:57.270Z — VERIFY — ok
+
+By: CODER
+
+Note: Implemented and verified Writer page geometry, Page Style dialog, horizontal/vertical rulers, undo/redo, codec persistence, and ODT page-layout/master-page round trips. 313/313 office tests execute successfully; the repository-wide npm test command still exits at its pre-existing 100% application coverage threshold (current aggregate 98.50% lines) despite zero test failures. Focused feature suite: 45/45 pass. Inventory suite: 96/96 at 100% coverage. format, lint, typecheck, build, resource generation, docs, routing, inventory invariants/parity, AgentPlane doctor, and Chromium interaction checks pass.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T05:39:51.974Z, excerpt_hash=sha256:ff23f27c04f35c62626cfb6dd03f934a88571f62cbbd2280d34e499adfd0949b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609230538-ZVK8FE/blueprint/resolved-snapshot.json
+- old_digest: fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4
+- current_digest: fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609230538-ZVK8FE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609230538-ZVK8FE
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-23T06:56:13.715Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609230538-ZVK8FE
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T06:55:57.367Z, excerpt_hash=sha256:ff23f27c04f35c62626cfb6dd03f934a88571f62cbbd2280d34e499adfd0949b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609230538-ZVK8FE/blueprint/resolved-snapshot.json
+- old_digest: fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4
+- current_digest: fe993f2be9d6070c13d9164ed99d98fb39ee8b529b402cde7c48a44861441cb4
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609230538-ZVK8FE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609230538-ZVK8FE --result verified-202609230538-ZVK8FE --commit 6fd8d582ad219a0b44a790f0eff7c334b88eb507
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -125,3 +278,7 @@ Implement the approved upstream-grounded end-to-end Writer page geometry slice: 
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: npm test reaches 313 passing tests but the global application coverage threshold is 100%; aggregate coverage remains 98.50% because multiple pre-existing modules have uncovered paths.
+  Impact: No functional test failure; coverage gate remains non-zero and should be addressed as repository-wide test-debt work rather than by weakening thresholds.
+  Resolution: Added focused coverage for page descriptors, all ruler handles, dialog validation, pagination, undo payloads, and ODT geometry; preserved the 100% threshold and recorded the residual repository-wide gap.
