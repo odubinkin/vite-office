@@ -1495,6 +1495,27 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/editor/writer-line-measurement.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-editor",
+      "capabilityIds": ["CAP-0111"],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": ["apps/office/src/sw/browser/editor/writer-line-measurement.ts#measureWriterTextLines"],
+        "justification": "Supplies browser-shaped visual line offsets and heights to Writer-owned text frames; DOM Range measurement is the browser device boundary.",
+        "knownViolations": [],
+        "localSymbols": ["measureWriterTextLines"],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/editor/writer-page-pagination.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1510,11 +1531,11 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/editor/writer-page-pagination.ts#paginateWriterParagraphs"
+          "apps/office/src/sw/browser/editor/writer-page-pagination.ts#getWriterParagraphGap"
         ],
-        "justification": "Estimates browser page breaks from canonical physical geometry and paragraph projections while leaving glyph shaping and native layout frames outside the bounded implementation.",
+        "justification": "Converts Writer-owned adjacent text-frame spacing from twips to browser points; page breaks are produced by Writer layout frames.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": ["getWriterParagraphGap"],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -2955,6 +2976,30 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/layout/newfrm.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "page-layout",
+      "capabilityIds": ["CAP-0111"],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/layout/newfrm.ts#createSwPageFrames",
+          "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx#InsertNewPage"
+        ],
+        "justification": "Creates physical page frames and places measured text-frame fragments for the supported paragraph slice; full upstream layout semantics remain unverified.",
+        "knownViolations": [],
+        "localSymbols": ["SwPageFrame", "createSwPageFrames"],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/layout/newfrm.cxx",
+        "upstreamSymbols": ["InsertNewPage"]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/layout/pagedesc.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -3020,6 +3065,30 @@
           "SwRegisterItem::CreateDefault",
           "SwNumRuleItem::CreateDefault"
         ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/text/txtfrm.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "page-layout",
+      "capabilityIds": ["CAP-0111"],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/text/txtfrm.ts#SwTextFrame",
+          "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx#SwTextFrame"
+        ],
+        "justification": "Represents master and follow fragments over one unchanged source text node with measured line boundaries; broader upstream text-frame behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": ["SwTextLine", "SwTextFrame", "getSwTextFrameGap", "makeSwTextFrame"],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/text/txtfrm.cxx",
+        "upstreamSymbols": ["SwTextFrame"]
       }
     },
     {

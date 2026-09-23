@@ -14,6 +14,7 @@ import type { WriterCursorSelection } from "./writer-selection-types";
 /** Mounted paragraph lookup retained by the browser edit window. */
 export type BrowserWriterParagraphResolver = (
   paragraphId: string,
+  offset?: number,
 ) => HTMLParagraphElement | undefined;
 
 /** Browser surfaces injected for deterministic edit-window tests. */

@@ -82,3 +82,57 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   await expect(page.getByRole("textbox", { name: "Writer document text" })).toHaveText("");
   await expect(page.getByText("Untitled Writer Document", { exact: true })).toBeVisible();
 });
+
+test("Writer keeps one ODT text node across visible page fragments after reopen" /** Checks long-paragraph pagination and persisted source text in Chromium. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns A promise resolved after reopen. */, async function reopensPaginatedParagraph({
+  page,
+}): Promise<void> {
+  const text = "Writer measured paragraph with shaped text. ".repeat(130);
+  const metadata = createDocument({ id: "e2e-pages", suiteId: "writer", title: "Paginated ODT" });
+  const document = createWriterDocument();
+  const shell = new SwWrtShell(new SwDocShell(document, metadata));
+  shell.Insert(text);
+  const sourceBytes = writeOdtDocument(document, metadata);
+
+  await page.goto("/writer");
+  const chooserPromise = page.waitForEvent("filechooser");
+  await page.getByRole("button", { name: "Open" }).click();
+  await (
+    await chooserPromise
+  ).setFiles({
+    buffer: Buffer.from(sourceBytes),
+    mimeType: "application/vnd.oasis.opendocument.text",
+    name: "pages.odt",
+  });
+  const fragments = page.locator("[data-writer-page] [data-writer-paragraph-id]");
+  await expect
+    .poll(
+      /** Waits for browser line measurement and Writer page-frame creation. @returns Fragment count. */ () =>
+        fragments.count(),
+    )
+    .toBeGreaterThan(1);
+  const id = await fragments.first().getAttribute("data-writer-paragraph-id");
+  expect((await fragments.allTextContents()).join("")).toBe(text);
+  for (const fragment of await fragments.all())
+    expect(await fragment.getAttribute("data-writer-paragraph-id")).toBe(id);
+
+  const downloadPromise = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Save As" }).click();
+  const savedPath = await (await downloadPromise).path();
+  if (savedPath === null) throw new Error("Chromium did not expose the paginated ODT download.");
+  const reopenPromise = page.waitForEvent("filechooser");
+  await page.getByRole("button", { name: "Open" }).click();
+  await (
+    await reopenPromise
+  ).setFiles({
+    buffer: await readFile(savedPath),
+    mimeType: "application/vnd.oasis.opendocument.text",
+    name: "reopened-pages.odt",
+  });
+  await expect
+    .poll(
+      /** Waits for reopened browser page fragments. @returns Fragment count. */ () =>
+        fragments.count(),
+    )
+    .toBeGreaterThan(1);
+  expect((await fragments.allTextContents()).join("")).toBe(text);
+});

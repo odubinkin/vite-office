@@ -166,6 +166,29 @@ describe("Writer selection shell" /** Groups nested Writer DOM selection bridge 
     ).toBe(false);
   });
 
+  it("maps a selection across two follow fragments of the same text node", /** Verifies model offsets remain source-node relative across pages. @returns Nothing. */ () => {
+    document.body.innerHTML =
+      '<p data-writer-paragraph-id="node" data-writer-fragment-start="0">abcd</p><p data-writer-paragraph-id="node" data-writer-fragment-start="4">efgh</p>';
+    const fragments = [...document.querySelectorAll<HTMLParagraphElement>("p")];
+    const cursor = {
+      mark: { paragraphId: "node", offset: 2 },
+      point: { paragraphId: "node", offset: 6 },
+    };
+    const resolve =
+      /** Resolves the source offset to one follow fragment. @param _id - Shared node ID. @param offset - Source offset. @returns Matching fragment. */ (
+        _id: string,
+        offset = 0,
+      ): HTMLParagraphElement | undefined => fragments[offset < 4 ? 0 : 1];
+    expect(restoreWriterDomSelection(cursor, resolve, globalThis.getSelection())).toBe(true);
+    expect(getWriterDomSelection(globalThis.getSelection())).toEqual(cursor);
+    expect(
+      getWriterCollapsedCaretOffset(
+        fragments[1] as HTMLParagraphElement,
+        globalThis.getSelection(),
+      ),
+    ).toBeUndefined();
+  });
+
   it("projects forward whole-paragraph selection around separate editing hosts" /** Verifies browser Select All includes every contenteditable paragraph instead of being clipped to the first host. @returns Nothing. */, function restoresWholeParagraphSelection(): void {
     const { first, second } = createSelectionFixture();
     expect(

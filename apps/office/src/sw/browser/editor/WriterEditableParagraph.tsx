@@ -15,6 +15,10 @@ export interface WriterEditableParagraphProps {
   readonly listMarker: string | undefined;
   readonly paragraph: WriterParagraph;
   readonly previousParagraph?: WriterParagraph | undefined;
+  readonly fragmentEnd?: number;
+  readonly fragmentStart?: number;
+  readonly topSpacingPt?: number;
+  readonly isFollow?: boolean;
   readonly retainElement: (paragraphId: string, element: HTMLParagraphElement | null) => void;
 }
 
@@ -25,6 +29,10 @@ export function WriterEditableParagraph({
   listMarker,
   paragraph,
   previousParagraph,
+  fragmentEnd = paragraph.text.length,
+  fragmentStart = 0,
+  topSpacingPt,
+  isFollow = false,
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
@@ -43,7 +51,7 @@ export function WriterEditableParagraph({
       className="shrink-0"
       data-active={isActive}
       style={{
-        marginBlockStart: `${getWriterParagraphGap(previousParagraph, paragraph)}pt`,
+        marginBlockStart: `${topSpacingPt ?? getWriterParagraphGap(previousParagraph, paragraph)}pt`,
       }}
     >
       <span className="sr-only" id={styleDescriptionId} contentEditable={false}>
@@ -56,7 +64,15 @@ export function WriterEditableParagraph({
         className={listMarker === undefined ? "" : "flex items-start"}
         style={{ marginInlineStart: listMarker === undefined ? undefined : `${markerStartPt}pt` }}
       >
-        {listMarker === undefined ? null : (
+        {listMarker !== undefined && isFollow ? (
+          <span
+            aria-hidden="true"
+            className="shrink-0"
+            contentEditable={false}
+            style={{ width: `${markerWidthPt}pt` }}
+          />
+        ) : null}
+        {listMarker === undefined || isFollow ? null : (
           <span
             aria-hidden="true"
             className="shrink-0 self-start text-slate-700"
@@ -90,6 +106,8 @@ export function WriterEditableParagraph({
           data-style={paragraph.style}
           data-writer-paragraph-id={paragraph.id}
           data-writer-node-index={paragraph.nodeIndex}
+          data-writer-fragment-start={fragmentStart}
+          data-writer-fragment-end={fragmentEnd}
           ref={
             /** Retains the mounted paragraph projection. @param element - Mounted paragraph or null. @returns Nothing. */ (
               element,
@@ -127,19 +145,31 @@ export function WriterEditableParagraph({
           }}
           tabIndex={-1}
         >
-          {paragraph.runs.map(
-            /** Projects one canonical text run with a deterministic view key. @param run - Immutable run. @returns Semantic run projection. */ (
-              run,
-            ) => (
-              <Fragment key={getWriterRunProjectionKey(paragraph.id, run)}>
-                <WriterTextRunProjection
-                  inheritedBold={paragraph.computedStyle.fontWeight === 700}
-                  inheritedItalic={paragraph.computedStyle.fontStyle === "italic"}
-                  run={run}
-                />
-              </Fragment>
-            ),
-          )}
+          {paragraph.runs
+            .filter(
+              /** Keeps runs intersecting this text-frame fragment. @param run - Source run. @returns Whether the run is visible. */
+              (run) =>
+                run.startOffset < fragmentEnd && run.startOffset + run.text.length > fragmentStart,
+            )
+            .map(
+              /** Projects one canonical text run with a deterministic view key. @param run - Immutable run. @returns Semantic run projection. */ (
+                run,
+              ) => (
+                <Fragment key={getWriterRunProjectionKey(paragraph.id, run)}>
+                  <WriterTextRunProjection
+                    inheritedBold={paragraph.computedStyle.fontWeight === 700}
+                    inheritedItalic={paragraph.computedStyle.fontStyle === "italic"}
+                    run={{
+                      ...run,
+                      text: run.text.slice(
+                        Math.max(0, fragmentStart - run.startOffset),
+                        Math.min(run.text.length, fragmentEnd - run.startOffset),
+                      ),
+                    }}
+                  />
+                </Fragment>
+              ),
+            )}
         </p>
       </div>
     </div>

@@ -151,6 +151,31 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
     expect(editor).not.toHaveStyle({ textIndent: "-18pt" });
   });
 
+  it("retains list text alignment in a follow frame without repeating its marker", /** Checks the upstream list label only appears on the master frame. @returns Nothing. */ () => {
+    const item: WriterParagraphProjection = {
+      ...paragraph(),
+      list: { kind: "bullet", level: 0 },
+      listLayout: {
+        firstLineIndentPt: -18,
+        indentAtPt: 36,
+        labelFollowedBy: "listtab",
+        listTabPositionPt: 36,
+      },
+    };
+    const { container } = render(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        isFollow
+        listMarker="•"
+        paragraph={item}
+        retainElement={/** Ignores the mounted node. @returns Nothing. */ () => undefined}
+      />,
+    );
+    expect(screen.queryByTestId("writer-list-marker-color-paragraph")).not.toBeInTheDocument();
+    expect(container.querySelector(".shrink-0[aria-hidden='true']")).toHaveStyle({ width: "18pt" });
+  });
+
   it("maps explicit and automatic Writer colors to CSS without changing model text", /** Verifies paragraph and run color branches. @returns Nothing. */ () => {
     const { rerender } = render(
       <WriterEditableParagraph

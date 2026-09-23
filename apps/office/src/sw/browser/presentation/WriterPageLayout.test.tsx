@@ -3,7 +3,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { getWriterParagraphGap, paginateWriterParagraphs } from "../editor/writer-page-pagination";
+import { getWriterParagraphGap } from "../editor/writer-page-pagination";
+import { createSwPageFrames } from "../../source/core/layout/newfrm";
+import { getWriterDomSelection } from "../editor/writer-selection";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
 import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
@@ -90,7 +92,7 @@ function paragraph(id: string, text: string): WriterParagraphProjection {
     listId: "",
     numRuleName: "",
     nodeIndex: 0,
-    runs: [],
+    runs: [{ startOffset: 0, text, attributes: { bold: false, italic: false, underline: false } }],
     style: "body-text",
     styleDisplayName: "Body Text",
     text,
@@ -233,75 +235,106 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     }
   });
 
-  it("uses laid-out paragraph heights when deciding page breaks", /** Verifies that glyph-width estimates cannot leave half a page blank. @returns Nothing. */ async () => {
-    const paragraphs = Array.from(
-      { length: 8 },
-      /** Creates one long paragraph. @param _unused - Array slot. @param index - Paragraph index. @returns Projection. */
-      (_unused, index) => paragraph(`p${index}`, "A long text paragraph ".repeat(20)),
-    );
+  it("creates page frames from measured text lines", /** Keeps physical page breaks owned by Writer layout. @returns Nothing. */ () => {
     const shortPage = { ...page, bottomMargin: 100, height: 1100, topMargin: 100 };
-    const measured = new Map(
-      paragraphs.map(
-        /** Supplies one measured height. @param item - Paragraph. @returns Id and pixel height. */
-        (item) => [item.id, 20],
-      ),
+    const inputs = Array.from(
+      { length: 8 },
+      /** Creates one measured paragraph. @param _unused - Array slot. @param index - Paragraph index. @returns Measured text input. */ (
+        _unused,
+        index,
+      ) => ({
+        id: `p${index}`,
+        lines: [{ start: 0, end: 1, height: 300 }],
+        lowerSpacing: 0,
+        style: "body-text",
+        contextualSpacing: false,
+        upperSpacing: 0,
+      }),
     );
     expect(
-      paginateWriterParagraphs(paragraphs, shortPage, measured).map(
-        /** Counts paragraphs on one page. @param group - Page paragraphs. @returns Count. */
-        (group) => group.length,
+      createSwPageFrames(inputs, shortPage).map(
+        /** Counts text frames per page. @param frame - Page frame. @returns Count. */ (frame) =>
+          frame.textFrames.length,
       ),
     ).toEqual([3, 3, 2]);
-    const measure = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
-      /** Supplies paragraph geometry as a browser layout engine would. @param this - Measured element. @returns Element rectangle. */ function (
-        this: HTMLElement,
-      ): DOMRect {
-        return { height: this.classList.contains("shrink-0") ? 20 : 0 } as DOMRect;
+  });
+
+  it("renders a measured long paragraph as two fragments with source-node caret offsets", /** Checks browser line measurement and source coordinates. @returns Test result. */ async () => {
+    let lineStep = 20;
+    const observe = vi.fn();
+    const disconnect = vi.fn();
+    vi.stubGlobal(
+      "ResizeObserver",
+      /** Browser resize observer test double. */
+      class {
+        /** Records the observed browser measurement host. @returns Nothing. */
+        public observe = observe;
+        /** Records cleanup. @returns Nothing. */
+        public disconnect = disconnect;
       },
     );
+    Object.defineProperty(Range.prototype, "getClientRects", {
+      configurable: true,
+      /** Returns deterministic browser line rectangles. @param this - Measured range. @returns Visual line geometry. */
+      value: function (this: Range): DOMRectList {
+        return [
+          { top: Math.floor(this.startOffset / 2) * lineStep, height: 20 },
+        ] as unknown as DOMRectList;
+      },
+    });
     try {
-      const { container } = render(
+      const shortPage = { ...page, bottomMargin: 100, height: 1100, topMargin: 100 };
+      const { container, unmount } = render(
         <WriterPlainTextEditor
-          activeParagraphId="p0"
-          cursorSelection={{ point: { paragraphId: "p0", offset: 0 } }}
+          activeParagraphId="split"
+          cursorSelection={{ point: { paragraphId: "split", offset: 8 } }}
           editWindow={{ FocusNode: vi.fn(), SetSelection: vi.fn() } as unknown as SwEditWin}
           pageDescriptor={shortPage}
-          paragraphs={paragraphs}
+          paragraphs={[paragraph("split", "abcdefghij")]}
         />,
       );
       await waitFor(
-        /** Waits for measured pagination. @returns Nothing. */ () => {
-          expect(
-            [...container.querySelectorAll("[data-writer-page]")].map(
-              /** Counts paragraphs on a rendered page. @param pageElement - Page surface. @returns Count. */
-              (pageElement) => pageElement.querySelectorAll("[data-writer-paragraph-id]").length,
-            ),
-          ).toEqual([3, 3, 2]);
-        },
+        /** Waits for the measured follow frame. @returns Nothing. */ () =>
+          expect(container.querySelectorAll("[data-writer-page]")).toHaveLength(2),
       );
+      const fragments = container.querySelectorAll<HTMLParagraphElement>(
+        "article [data-writer-paragraph-id='split']",
+      );
+      expect(
+        [...fragments].map(
+          /** Reads one visible fragment. @param element - Fragment element. @returns Visible text. */ (
+            element,
+          ) => element.textContent,
+        ),
+      ).toEqual(["abcdef", "ghij"]);
+      expect(
+        [...fragments].map(
+          /** Reads a source offset. @param element - Fragment element. @returns Starting offset. */ (
+            element,
+          ) => element.dataset.writerFragmentStart,
+        ),
+      ).toEqual(["0", "6"]);
+      expect(getWriterDomSelection(globalThis.getSelection())?.point).toMatchObject({
+        paragraphId: "split",
+        offset: 8,
+      });
+      expect(observe).toHaveBeenCalledOnce();
+      lineStep = 30;
+      fireEvent(window, new Event("resize"));
+      await waitFor(
+        /** Waits for the resized line layout. @returns Nothing. */ () =>
+          expect(container.querySelectorAll("[data-writer-page]")).toHaveLength(3),
+      );
+      unmount();
+      expect(disconnect).toHaveBeenCalledOnce();
     } finally {
-      measure.mockRestore();
+      Reflect.deleteProperty(Range.prototype, "getClientRects");
+      vi.unstubAllGlobals();
     }
   });
 
-  it("fits four default-style lines in four line heights before browser measurement", /** Keeps the initial page estimate aligned with the rendered font. @returns Nothing. */ () => {
-    const fourLines = Array.from(
-      { length: 4 },
-      /** Creates one short paragraph. @param _unused - Array slot. @param index - Paragraph index. @returns Projection. */
-      (_unused, index) => {
-        const item = paragraph(`line-${index}`, "x");
-        return { ...item, computedStyle: { ...item.computedStyle, lineHeight: 1 } };
-      },
-    );
-    const fourLinePage = { ...page, bottomMargin: 100, height: 1160, topMargin: 100 };
-    expect(paginateWriterParagraphs(fourLines, fourLinePage)).toHaveLength(1);
-  });
-
   it("paginates by physical text area and renders optional workspace regions", /** Exercises page grouping and workspace branches. @returns Nothing. */ () => {
-    const paragraphs = [paragraph("p1", "first\nline"), paragraph("p2", "second")];
-    const tinyPage = { ...page, bottomMargin: 100, height: 800, topMargin: 100 };
-    expect(paginateWriterParagraphs(paragraphs, tinyPage)).toHaveLength(2);
-    expect(paginateWriterParagraphs([], page)).toEqual([[]]);
+    expect(createSwPageFrames([], page)).toEqual([{ number: 1, textFrames: [] }]);
 
     const onDocumentTitleChange = vi.fn();
     const { rerender } = render(

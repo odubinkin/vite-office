@@ -4803,19 +4803,19 @@
       "evidence": {
         "local": [
           {
-            "marker": "paginateWriterParagraphs",
+            "marker": "getWriterParagraphGap",
             "path": "apps/office/src/sw/browser/editor/writer-page-pagination.ts"
           }
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/writer-page-pagination.ts",
-      "rationale": "Estimates browser page breaks from the canonical physical page and measured paragraph boxes, while leaving font shaping and native Writer frame layout outside this bounded projection.",
+      "rationale": "Projects Writer-owned adjacent paragraph spacing into browser point values; page breaks and follow text frames are owned by sw/source/core/layout/newfrm.ts and sw/source/core/text/txtfrm.ts.",
       "responsibilities": [
-        "Projects browser page breaks from paragraph geometry and measured heights."
+        "Projects adjacent Writer paragraph spacing for browser rendering."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
-        "rationale": "Uses browser layout measurements instead of native Writer text frames."
+        "rationale": "Converts Writer twip spacing to browser point values."
       },
       "status": "local-only"
     },
@@ -4883,7 +4883,7 @@
         "createDefaultWriterPageDescriptor"
       ],
       "omittedResponsibilities": [
-        "Native page-frame layout and paper/printer integration remain outside the browser Writer slice."
+        "Native printer integration and page-frame features beyond supported paragraphs remain outside the browser Writer slice."
       ],
       "preservedResponsibilities": [
         "Owns bounded physical page size, margin, orientation, and descriptor copy semantics."
@@ -4927,6 +4927,48 @@
         "SwUndoPageDesc::UndoImpl",
         "SwUndoPageDesc::RedoImpl"
       ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [{ "marker": "measureWriterTextLines", "path": "apps/office/src/sw/browser/editor/writer-line-measurement.ts" }]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/writer-line-measurement.ts",
+      "rationale": "Uses browser DOM Range geometry to supply shaped visual line boundaries and heights to Writer-owned text frames.",
+      "responsibilities": ["Measures styled browser text lines without owning page breaks."],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "DOM Range supplies line geometry in place of the native VCL text device."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [{ "marker": "createSwPageFrames", "path": "apps/office/src/sw/source/core/layout/newfrm.ts" }],
+        "upstream": [{ "marker": "InsertNewPage", "path": "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx" }]
+      },
+      "localPath": "apps/office/src/sw/source/core/layout/newfrm.ts",
+      "localSymbols": ["SwPageFrame", "createSwPageFrames"],
+      "omittedResponsibilities": ["Native frames for tables, anchored objects, footnotes, and page-style families beyond the supported Standard page remain outside this slice."],
+      "preservedResponsibilities": ["Creates physical page frames and places text-frame fragments by available body height."],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/layout/newfrm.cxx",
+      "upstreamSymbols": ["InsertNewPage"]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [{ "marker": "SwTextFrame", "path": "apps/office/src/sw/source/core/text/txtfrm.ts" }],
+        "upstream": [{ "marker": "SwTextFrame::SwTextFrame", "path": "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx" }]
+      },
+      "localPath": "apps/office/src/sw/source/core/text/txtfrm.ts",
+      "localSymbols": ["SwTextLine", "SwTextFrame", "makeSwTextFrame"],
+      "omittedResponsibilities": ["Native text shaping, fly objects, footnotes, and other unsupported frame behaviors remain outside the paragraph slice."],
+      "preservedResponsibilities": ["Represents master and follow text frames with source-node offsets and paragraph spacing."],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/text/txtfrm.cxx",
+      "upstreamSymbols": ["SwTextFrame::SwTextFrame"]
     }
   ]
 }

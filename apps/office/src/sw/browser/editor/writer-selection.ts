@@ -8,6 +8,7 @@ import type { WriterCursorSelection } from "./writer-selection-types";
 /** Resolves a rendered editable paragraph from its stable Writer text-node identity. */
 export type WriterParagraphElementResolver = (
   paragraphId: string,
+  offset?: number,
 ) => HTMLParagraphElement | undefined;
 
 /** Replaceable browser selection surface used by the document editor. */
@@ -115,12 +116,17 @@ export function restoreWriterDomSelection(
   const selection = browserSelection;
   /* c8 ignore next -- Writer requires browser selection support to mount its editable body. */
   if (selection === null) return false;
-  const pointParagraph = resolveParagraph(cursor.point.paragraphId);
+  const pointParagraph = resolveParagraph(cursor.point.paragraphId, cursor.point.offset);
   const markParagraph =
-    cursor.mark === undefined ? undefined : resolveParagraph(cursor.mark.paragraphId);
+    cursor.mark === undefined
+      ? undefined
+      : resolveParagraph(cursor.mark.paragraphId, cursor.mark.offset);
   if (pointParagraph === undefined || (cursor.mark !== undefined && markParagraph === undefined))
     return false;
-  const point = getWriterTextCaretPoint(pointParagraph, cursor.point.offset);
+  const point = getWriterTextCaretPoint(
+    pointParagraph,
+    cursor.point.offset - Number(pointParagraph.dataset.writerFragmentStart ?? 0),
+  );
   if (cursor.mark === undefined || markParagraph === undefined) {
     pointParagraph.focus();
     const range = pointParagraph.ownerDocument.createRange();
@@ -130,7 +136,10 @@ export function restoreWriterDomSelection(
     selection.addRange(range);
     return true;
   }
-  const mark = getWriterTextCaretPoint(markParagraph, cursor.mark.offset);
+  const mark = getWriterTextCaretPoint(
+    markParagraph,
+    cursor.mark.offset - Number(markParagraph.dataset.writerFragmentStart ?? 0),
+  );
   selection.setBaseAndExtent(mark.node, mark.offset, point.node, point.offset);
   return true;
 }
@@ -152,7 +161,9 @@ export function getWriterCollapsedCaretOffset(
   const precedingRange = caretRange.cloneRange();
   precedingRange.selectNodeContents(paragraphElement);
   precedingRange.setEnd(caretRange.startContainer, caretRange.startOffset);
-  return precedingRange.toString().length;
+  return (
+    precedingRange.toString().length + Number(paragraphElement.dataset.writerFragmentStart ?? 0)
+  );
 }
 
 /**
@@ -256,7 +267,7 @@ function getWriterDomPosition(
         ...(paragraph.dataset.writerNodeIndex === undefined
           ? {}
           : { nodeIndex: Number(paragraph.dataset.writerNodeIndex) }),
-        offset: writerOffset,
+        offset: writerOffset + Number(paragraph.dataset.writerFragmentStart ?? 0),
         paragraphId: paragraph.dataset.writerParagraphId as string,
       };
 }
