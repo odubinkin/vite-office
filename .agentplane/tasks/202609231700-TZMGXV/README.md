@@ -4,7 +4,7 @@ title: "Consolidate Writer transfer workflow ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
-  attempts: 0
+  state: "needs_rework"
+  updated_at: "2026-09-23T17:21:25.633Z"
+  updated_by: "CODER"
+  note: "Task-specific transfer tests, browser tests, build, lint, typecheck, and boundaries pass; repository-wide verify remains red on unrelated format, coverage, JSDoc, size, and parity gates."
+  attempts: 1
 commit: null
 comments:
   -
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Consolidate Writer transfer policy and native browser clipboard paths against pinned LibreOffice ownership, with focused tests and full verification."
+  -
+    type: "verify"
+    at: "2026-09-23T17:21:25.633Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Task-specific transfer tests, browser tests, build, lint, typecheck, and boundaries pass; repository-wide verify remains red on unrelated format, coverage, JSDoc, size, and parity gates."
 doc_version: 3
-doc_updated_at: "2026-09-23T17:20:57.590Z"
+doc_updated_at: "2026-09-23T17:21:25.732Z"
 doc_updated_by: "CODER"
 description: "Implement section 7 transfer and browser workflow ownership audit against pinned LibreOffice swdtflvr.cxx"
 sections:
@@ -82,6 +88,39 @@ sections:
     Result: pass.
     Evidence: all changed files formatted; no whitespace errors.
     Scope: task diff.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-23T17:21:25.633Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Task-specific transfer tests, browser tests, build, lint, typecheck, and boundaries pass; repository-wide verify remains red on unrelated format, coverage, JSDoc, size, and parity gates.
+    Attempts: 1
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T17:20:57.590Z, excerpt_hash=sha256:a72c0edd044bcc02c0dbc007a7c316fe6576e23abcec145b631aa2b9580d6039
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231700-TZMGXV/blueprint/resolved-snapshot.json
+    - old_digest: 928b25acfddf28cbd20adc15b1be6ccd21e4c063f9a64f08ccf598afdf41a5e5
+    - current_digest: 928b25acfddf28cbd20adc15b1be6ccd21e4c063f9a64f08ccf598afdf41a5e5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609231700-TZMGXV
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609231700-TZMGXV
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the task implementation and close commits, then rerun focused transfer tests and npm run verify."
   Findings: |-
     - Observation: Repository-wide gates fail on untouched formatting, coverage, JSDoc, file-size, and parity evidence while the task-specific implementation checks and 13 E2E tests pass.
@@ -91,6 +130,10 @@ sections:
     - Observation: The first task-scoped commit attempt was rejected by AgentPlane subject validation; its allowlist staged only the intended task files.
       Impact: No implementation commit was created; the index remained limited to the approved task paths.
       Resolution: Confirmed the staged path list and retried with the required emoji, task suffix, scope, and summary subject format.
+
+    - Observation: The repository-wide validation contract cannot pass against the current baseline.
+      Impact: The task cannot be closed under the approved verification criterion despite passing task-specific behavior checks.
+      Resolution: Request approval for narrowly scoped gate exceptions or a separate expanded task to repair baseline failures.
 id_source: "generated"
 ---
 ## Summary
@@ -148,6 +191,39 @@ Result: pass.
 Evidence: all changed files formatted; no whitespace errors.
 Scope: task diff.
 
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-23T17:21:25.633Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Task-specific transfer tests, browser tests, build, lint, typecheck, and boundaries pass; repository-wide verify remains red on unrelated format, coverage, JSDoc, size, and parity gates.
+Attempts: 1
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T17:20:57.590Z, excerpt_hash=sha256:a72c0edd044bcc02c0dbc007a7c316fe6576e23abcec145b631aa2b9580d6039
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231700-TZMGXV/blueprint/resolved-snapshot.json
+- old_digest: 928b25acfddf28cbd20adc15b1be6ccd21e4c063f9a64f08ccf598afdf41a5e5
+- current_digest: 928b25acfddf28cbd20adc15b1be6ccd21e4c063f9a64f08ccf598afdf41a5e5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609231700-TZMGXV
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609231700-TZMGXV
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
+
 ## Rollback Plan
 
 Revert the task implementation and close commits, then rerun focused transfer tests and npm run verify.
@@ -161,3 +237,7 @@ Revert the task implementation and close commits, then rerun focused transfer te
 - Observation: The first task-scoped commit attempt was rejected by AgentPlane subject validation; its allowlist staged only the intended task files.
   Impact: No implementation commit was created; the index remained limited to the approved task paths.
   Resolution: Confirmed the staged path list and retried with the required emoji, task suffix, scope, and summary subject format.
+
+- Observation: The repository-wide validation contract cannot pass against the current baseline.
+  Impact: The task cannot be closed under the approved verification criterion despite passing task-specific behavior checks.
+  Resolution: Request approval for narrowly scoped gate exceptions or a separate expanded task to repair baseline failures.
