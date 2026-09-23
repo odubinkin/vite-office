@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202609231642-874Q7B",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T16:49:21.701Z",
+  "verdict": "pass",
+  "summary": "Recovery is now a documented browser parity exclusion; no runtime behavior changed.",
+  "evaluated_sha": "4b97fb9bdf24747a4517997ccefe93b12a53def5",
+  "blueprint_digest": "3d2ef77f2fea057d4563e69868fb718c44928b44caf28c90ba9a40db6782a629",
+  "findings": [
+    "The parity plan has no R work package, the persistence decision forbids recovery reintroduction, CAP-0122 and CAP-0133 are exception-approved, and CAP-0114 retains only primary-save generation semantics. Required documentation checks pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609231642-874Q7B/README.md",
+    "docs/program/vite-office-upstream-parity-plan.md",
+    "docs/program/autosave-recovery.md",
+    "docs/program/parity/writer-command-slice.json",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full inventory:parity evidence resolution remains blocked by pre-existing stale MarkHistoryMutation markers in unrelated CAP-0131 and CAP-0132 records."
+  ]
+}
