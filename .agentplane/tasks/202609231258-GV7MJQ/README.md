@@ -4,7 +4,7 @@ title: "Audit implemented LibreOffice parity and write remediation plan"
 status: "DOING"
 priority: "med"
 owner: "DOCS"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-23T13:03:14.675Z"
+  updated_by: "DOCS"
+  note: "Documentation audit covers all runtime groups, identifies evidence-backed divergences and UI artifacts, excludes inventory mechanism changes, and passes formatting, link, routing, doctor, and diff checks."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: audit existing runtime and pinned upstream evidence, then write a bounded remediation plan for current functionality."
+  -
+    type: "verify"
+    at: "2026-09-23T13:03:14.675Z"
+    author: "DOCS"
+    state: "ok"
+    note: "Documentation audit covers all runtime groups, identifies evidence-backed divergences and UI artifacts, excludes inventory mechanism changes, and passes formatting, link, routing, doctor, and diff checks."
 doc_version: 3
-doc_updated_at: "2026-09-23T12:58:30.313Z"
+doc_updated_at: "2026-09-23T13:03:14.729Z"
 doc_updated_by: "DOCS"
 description: "Analyze existing implemented functionality, runtime inventory, pinned upstream architecture/contracts/defaults, and prior UI refactoring artifacts; write a new docs/program/vite-office-upstream-parity-plan.md without inventory mechanism changes."
 sections:
@@ -50,7 +56,39 @@ sections:
   Plan: "Inspect runtime inventory and current implementation; compare each implemented slice with pinned LibreOffice source and contracts; identify unjustified architectural/default deviations and UI refactoring artifacts; write prioritized, evidence-linked remediation plan in docs/program/vite-office-upstream-parity-plan.md; verify documentation and repository state."
   Verify Steps: "Confirm the new plan covers every implemented runtime slice and distinguishes browser/React exceptions; each finding names local and pinned-upstream evidence plus expected contract/default; no inventory mechanism changes; run node .agentplane/policy/check-routing.mjs and ap doctor; check document links and final git status."
   Verification: |-
+    Command: npx prettier --check docs/program/vite-office-upstream-parity-plan.md; Result: pass; Evidence: Prettier reports matching style; Scope: new parity plan. Command: node .agentplane/policy/check-routing.mjs; Result: pass; Evidence: policy routing OK; Scope: docs-only task. Command: ap doctor; Result: pass; Evidence: doctor OK with two pre-existing warnings and two info notices; Scope: repository workflow. Command: local Markdown link existence check; Result: pass; Evidence: 41 links, zero missing; Scope: plan and pinned upstream references. Command: git diff --check; Result: pass; Evidence: no whitespace errors; Scope: plan. No inventory code or data was changed.
+
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-23T13:03:14.675Z — VERIFY — ok
+
+    By: DOCS
+
+    Note: Documentation audit covers all runtime groups, identifies evidence-backed divergences and UI artifacts, excludes inventory mechanism changes, and passes formatting, link, routing, doctor, and diff checks.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T13:03:14.384Z, excerpt_hash=sha256:88775a66dd1e4ba3c0aa6948096c1d4602aa46675a40468e2cbdfef9de619533
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231258-GV7MJQ/blueprint/resolved-snapshot.json
+    - old_digest: f726abb2eb11d114a378a5af4b458c6070b7e4cf8a7a26170ecc14d73094b10d
+    - current_digest: f726abb2eb11d114a378a5af4b458c6070b7e4cf8a7a26170ecc14d73094b10d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609231258-GV7MJQ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609231258-GV7MJQ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's documentation and task-state commit if the audit evidence or plan is rejected."
   Findings: ""
@@ -77,7 +115,39 @@ Confirm the new plan covers every implemented runtime slice and distinguishes br
 
 ## Verification
 
+Command: npx prettier --check docs/program/vite-office-upstream-parity-plan.md; Result: pass; Evidence: Prettier reports matching style; Scope: new parity plan. Command: node .agentplane/policy/check-routing.mjs; Result: pass; Evidence: policy routing OK; Scope: docs-only task. Command: ap doctor; Result: pass; Evidence: doctor OK with two pre-existing warnings and two info notices; Scope: repository workflow. Command: local Markdown link existence check; Result: pass; Evidence: 41 links, zero missing; Scope: plan and pinned upstream references. Command: git diff --check; Result: pass; Evidence: no whitespace errors; Scope: plan. No inventory code or data was changed.
+
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-23T13:03:14.675Z — VERIFY — ok
+
+By: DOCS
+
+Note: Documentation audit covers all runtime groups, identifies evidence-backed divergences and UI artifacts, excludes inventory mechanism changes, and passes formatting, link, routing, doctor, and diff checks.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T13:03:14.384Z, excerpt_hash=sha256:88775a66dd1e4ba3c0aa6948096c1d4602aa46675a40468e2cbdfef9de619533
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231258-GV7MJQ/blueprint/resolved-snapshot.json
+- old_digest: f726abb2eb11d114a378a5af4b458c6070b7e4cf8a7a26170ecc14d73094b10d
+- current_digest: f726abb2eb11d114a378a5af4b458c6070b7e4cf8a7a26170ecc14d73094b10d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609231258-GV7MJQ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609231258-GV7MJQ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
