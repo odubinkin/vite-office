@@ -55,11 +55,11 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
       expect(imported.document.paragraphs[0]?.GetText()).toBe("Hello World!");
       expect(projectWriterTextRuns(imported.document.paragraphs[0])).toEqual([
         {
-          attributes: {
+          attributes: expect.objectContaining({
             bold: fixture.bold,
             italic: fixture.italic,
             underline: false,
-          },
+          }),
           text: "Hello World!",
         },
       ]);

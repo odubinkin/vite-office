@@ -196,6 +196,19 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
                 /** Projects one SwNumFormat family. @param _unused - Array value. @param index - Writer list level. @returns Marker family. */
                 (_unused, index) => rule.GetNumFormat(index).GetKind(),
               ),
+              levelLayouts: Array.from(
+                { length: WRITER_MAX_LIST_LEVEL + 1 },
+                /** Projects one canonical list level's label alignment. @param _unused - Array value. @param index - Writer list level. @returns ODF geometry. */
+                (_unused, index) => {
+                  const format = rule.GetNumFormat(index);
+                  return {
+                    firstLineIndent: format.GetFirstLineIndent(),
+                    indentAt: format.GetIndentAt(),
+                    labelFollowedBy: format.GetLabelFollowedBy(),
+                    listTabPosition: format.GetListtabPos(),
+                  };
+                },
+              ),
               name: rule.GetName(),
             },
           },
@@ -288,6 +301,11 @@ function getCharacterProperties(
       which,
     ) => set.GetItemIfSet(which, false) !== undefined,
   );
+  const explicitFontSize = fontSizeIds.some(
+    /** Detects an explicitly set script font size in the selected inheritance chain. @param which - Font-size WhichId. @returns Whether set. */ (
+      which,
+    ) => set.GetItemIfSet(which, inherited) !== undefined,
+  );
   const font = set.GetItemIfSet(RES_CHRATR_FONT, inherited);
   if (
     !inherited &&
@@ -337,7 +355,7 @@ function getCharacterProperties(
   return {
     ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
-    ...(directFontSize ? { fontSizeTwips: fontSize.GetHeight() } : {}),
+    ...(explicitFontSize ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),
     ...(inherited || directWeight ? { bold: weight.GetBoolValue() } : {}),
     ...(inherited || directPosture ? { italic: posture.GetBoolValue() } : {}),

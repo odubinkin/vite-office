@@ -3,7 +3,7 @@
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
 
-/** Produces a stable bounded page projection without adding layout state to SwDoc. @param paragraphs - Immutable paragraphs. @param page - Physical page geometry. @returns Ordered page groups. */
+/** Produces a stable bounded page projection without adding layout state to SwDoc. @param paragraphs - Immutable paragraphs. @param page - Physical page geometry. @param measuredHeights - Optional browser paragraph heights. @returns Ordered page groups. */
 export function paginateWriterParagraphs(
   paragraphs: readonly WriterParagraph[],
   page: WriterPageDescriptorValue,
@@ -13,8 +13,10 @@ export function paginateWriterParagraphs(
   const contentHeightPixels = Math.max(1, (page.height - page.topMargin - page.bottomMargin) / 15);
   const pages: WriterParagraph[][] = [[]];
   let usedHeightPixels = 0;
-  for (const paragraph of paragraphs) {
+  for (const [index, paragraph] of paragraphs.entries()) {
     const style = paragraph.computedStyle;
+    const previousLowerSpacingPt =
+      index === 0 ? 0 : (paragraphs[index - 1] as WriterParagraph).computedStyle.lowerSpacingPt;
     const usableWidthPt = Math.max(
       style.fontSizePt * 4,
       contentWidthPt - paragraph.textLeftMargin / 20 - style.rightMarginPt,
@@ -34,8 +36,8 @@ export function paginateWriterParagraphs(
         ),
     );
     const estimatedHeightPt =
-      style.upperSpacingPt +
-      style.lowerSpacingPt +
+      Math.max(0, style.upperSpacingPt - previousLowerSpacingPt) +
+      (index === paragraphs.length - 1 ? 0 : style.lowerSpacingPt) +
       visualLines * style.fontSizePt * style.lineHeight;
     const heightPixels = measuredHeights?.get(paragraph.id) ?? (estimatedHeightPt * 4) / 3;
     const current = pages[pages.length - 1] as WriterParagraph[];

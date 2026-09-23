@@ -107,6 +107,12 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     expect(onPageChange).toHaveBeenCalledTimes(4);
     expect(onParagraphIndentChange).toHaveBeenCalledTimes(3);
 
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Left page margin" }), {
+      clientX: 40,
+    });
+    fireEvent.pointerCancel(window);
+    expect(onPageChange).toHaveBeenCalledTimes(4);
+
     rerender(
       <WriterRulers
         horizontalVisible={false}
@@ -171,16 +177,26 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
   });
 
   it("uses laid-out paragraph heights when deciding page breaks", /** Verifies that glyph-width estimates cannot leave half a page blank. @returns Nothing. */ async () => {
-    const paragraphs = Array.from({ length: 8 }, (_, index) =>
-      paragraph(`p${index}`, "A long text paragraph ".repeat(20)),
+    const paragraphs = Array.from(
+      { length: 8 },
+      /** Creates one long paragraph. @param _unused - Array slot. @param index - Paragraph index. @returns Projection. */
+      (_unused, index) => paragraph(`p${index}`, "A long text paragraph ".repeat(20)),
     );
     const shortPage = { ...page, bottomMargin: 100, height: 1100, topMargin: 100 };
-    const measured = new Map(paragraphs.map((item) => [item.id, 20]));
+    const measured = new Map(
+      paragraphs.map(
+        /** Supplies one measured height. @param item - Paragraph. @returns Id and pixel height. */
+        (item) => [item.id, 20],
+      ),
+    );
     expect(
-      paginateWriterParagraphs(paragraphs, shortPage, measured).map((group) => group.length),
+      paginateWriterParagraphs(paragraphs, shortPage, measured).map(
+        /** Counts paragraphs on one page. @param group - Page paragraphs. @returns Count. */
+        (group) => group.length,
+      ),
     ).toEqual([3, 3, 2]);
     const measure = vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
-      /** Supplies paragraph geometry as a browser layout engine would. @returns Element rectangle. */ function (
+      /** Supplies paragraph geometry as a browser layout engine would. @param this - Measured element. @returns Element rectangle. */ function (
         this: HTMLElement,
       ): DOMRect {
         return { height: this.classList.contains("shrink-0") ? 20 : 0 } as DOMRect;
@@ -196,23 +212,30 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
           paragraphs={paragraphs}
         />,
       );
-      await waitFor(() => {
-        expect(
-          [...container.querySelectorAll("[data-writer-page]")].map(
-            (pageElement) => pageElement.querySelectorAll("[data-writer-paragraph-id]").length,
-          ),
-        ).toEqual([3, 3, 2]);
-      });
+      await waitFor(
+        /** Waits for measured pagination. @returns Nothing. */ () => {
+          expect(
+            [...container.querySelectorAll("[data-writer-page]")].map(
+              /** Counts paragraphs on a rendered page. @param pageElement - Page surface. @returns Count. */
+              (pageElement) => pageElement.querySelectorAll("[data-writer-paragraph-id]").length,
+            ),
+          ).toEqual([3, 3, 2]);
+        },
+      );
     } finally {
       measure.mockRestore();
     }
   });
 
   it("fits four default-style lines in four line heights before browser measurement", /** Keeps the initial page estimate aligned with the rendered font. @returns Nothing. */ () => {
-    const fourLines = Array.from({ length: 4 }, (_, index) => {
-      const item = paragraph(`line-${index}`, "x");
-      return { ...item, computedStyle: { ...item.computedStyle, lineHeight: 1 } };
-    });
+    const fourLines = Array.from(
+      { length: 4 },
+      /** Creates one short paragraph. @param _unused - Array slot. @param index - Paragraph index. @returns Projection. */
+      (_unused, index) => {
+        const item = paragraph(`line-${index}`, "x");
+        return { ...item, computedStyle: { ...item.computedStyle, lineHeight: 1 } };
+      },
+    );
     const fourLinePage = { ...page, bottomMargin: 100, height: 1160, topMargin: 100 };
     expect(paginateWriterParagraphs(fourLines, fourLinePage)).toHaveLength(1);
   });

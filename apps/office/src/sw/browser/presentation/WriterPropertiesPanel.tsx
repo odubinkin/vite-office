@@ -2,6 +2,7 @@
  * @fileoverview Displays focused paragraph formatting in the browser Properties panel without
  * claiming LibreOffice Writer Inspector ownership.
  */
+/* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import type { BrowserCommandSurfaceProps } from "../../../framework/browser/presentation/command-surface";
@@ -45,7 +46,7 @@ const sidebarIcons: Readonly<Record<string, LucideIcon>> = {
 };
 
 /** Resolves the required icon for one fixed sidebar command placement. @param commandId - Writer command. @returns Sidebar icon. */
-function getSidebarIcon(commandId: string): LucideIcon {
+export function getSidebarIcon(commandId: string): LucideIcon {
   const icon = sidebarIcons[commandId];
   if (icon === undefined) throw new Error(`Writer sidebar icon is missing for ${commandId}.`);
   return icon;

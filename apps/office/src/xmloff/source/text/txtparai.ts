@@ -6,6 +6,7 @@ import type {
   OdfCharacterProperties,
   OdfHyperlink,
   OdfListLevelKind,
+  OdfListLevelLayout,
   OdfParagraphAlignment,
   OdfParagraphProperties,
   XMLParagraphStyle,
@@ -28,6 +29,7 @@ export interface OdfStyleDefinition {
 export interface XMLTextListRule {
   readonly bulletChars?: readonly (string | undefined)[];
   readonly formats: readonly OdfListLevelKind[];
+  readonly levelLayouts?: readonly (OdfListLevelLayout | undefined)[];
   readonly name: string;
 }
 

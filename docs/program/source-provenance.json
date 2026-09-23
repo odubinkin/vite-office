@@ -4797,6 +4797,136 @@
         "XMLCharContext::XMLCharContext",
         "sax_fastparser::castToFastAttributeList"
       ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "paginateWriterParagraphs",
+            "path": "apps/office/src/sw/browser/editor/writer-page-pagination.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/writer-page-pagination.ts",
+      "rationale": "Estimates browser page breaks from the canonical physical page and measured paragraph boxes, while leaving font shaping and native Writer frame layout outside this bounded projection.",
+      "responsibilities": [
+        "Projects browser page breaks from paragraph geometry and measured heights."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Uses browser layout measurements instead of native Writer text frames."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterPageStyleDialog",
+            "path": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx",
+      "rationale": "Presents the bounded Writer page-format settings through accessible React controls and forwards changes to the document model instead of retaining independent page state.",
+      "responsibilities": [
+        "Presents the bounded page-format controls and validates page settings."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React controls replace the native PageFormatPage dialog."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterRulers",
+            "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+      "rationale": "Projects Writer page margins and paragraph indents into browser pointer handles while leaving authoritative geometry and undo transactions in Writer-owned model objects.",
+      "responsibilities": [
+        "Presents page-margin and paragraph-indent handles for the browser Writer workspace."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "DOM pointer handles replace native Writer and VCL ruler widgets."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwPageDesc",
+            "path": "apps/office/src/sw/source/core/layout/pagedesc.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwPageDesc::SwPageDesc",
+            "path": "vendor/libreoffice-reference/sw/source/core/layout/pagedesc.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/layout/pagedesc.ts",
+      "localSymbols": [
+        "SwPageDesc",
+        "createDefaultWriterPageDescriptor"
+      ],
+      "omittedResponsibilities": [
+        "Native page-frame layout and paper/printer integration remain outside the browser Writer slice."
+      ],
+      "preservedResponsibilities": [
+        "Owns bounded physical page size, margin, orientation, and descriptor copy semantics."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/layout/pagedesc.cxx",
+      "upstreamSymbols": [
+        "SwPageDesc::SwPageDesc"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwUndoPageDesc",
+            "path": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwUndoPageDesc::UndoImpl",
+            "path": "vendor/libreoffice-reference/sw/source/core/undo/SwUndoPageDesc.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
+      "localSymbols": [
+        "SwUndoPageDesc",
+        "SwUndoRulerIndent"
+      ],
+      "omittedResponsibilities": [
+        "Undo interactions with native layout frames and broader page-style families remain outside the bounded implementation."
+      ],
+      "preservedResponsibilities": [
+        "Restores bounded page-descriptor and ruler-indent changes through Writer undo actions."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/undo/SwUndoPageDesc.cxx",
+      "upstreamSymbols": [
+        "SwUndoPageDesc::UndoImpl",
+        "SwUndoPageDesc::RedoImpl"
+      ]
     }
   ]
 }

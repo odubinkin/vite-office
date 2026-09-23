@@ -79,7 +79,7 @@ export function WriterWorkspaceChrome({
       aria-label="Writer workspace"
       className="flex h-screen min-h-0 min-w-0 flex-col overflow-hidden bg-slate-100"
     >
-      <header className="shrink-0 border-b border-slate-200 bg-white">
+      <header className="relative z-50 shrink-0 border-b border-slate-200 bg-white">
         <div className="flex min-h-12 flex-wrap items-center gap-3 border-b border-slate-200 px-4 py-2 sm:px-5">
           <div className="min-w-0">
             {isEditingTitle ? (

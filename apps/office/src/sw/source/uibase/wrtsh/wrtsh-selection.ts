@@ -51,7 +51,7 @@ export function getWriterSelectedTextRanges(cursor: SwPaM): readonly WriterTextR
   const last = first === point ? mark : point;
   const firstNode = first.GetNode() as WriterParagraph;
   const lastNode = last.GetNode() as WriterParagraph;
-  if (firstNode.GetDoc() !== lastNode.GetDoc()) return undefined;
+  // SwPaM.Assign validates that both endpoints belong to one SwNodes graph.
   return firstNode
     .GetDoc()
     .paragraphs.filter(

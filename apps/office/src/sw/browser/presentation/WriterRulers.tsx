@@ -144,7 +144,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
   );
 }
 
-/** Renders a page-owned vertical ruler in the same scroll and page coordinate space. */
+/** Renders a page-owned vertical ruler in the same scroll and page coordinate space. @param props - Page descriptor and change callback. @returns Vertical ruler. */
 export function WriterVerticalRuler({
   onPageChange,
   page,
@@ -292,7 +292,7 @@ function RulerHandle({
   );
 }
 
-/** Tracks one pointer gesture and converts its selected-axis delta to twips. @param event - Pointer-down event. @param axis - Active axis. @param onCommit - Final delta callback. @returns Nothing. */
+/** Tracks one pointer gesture and converts its selected-axis delta to twips. @param event - Pointer-down event. @param axis - Active axis. @param onPreview - Transient pixel delta callback. @param onCommit - Final twip delta callback. @returns Nothing. */
 function startDrag(
   event: ReactPointerEvent<HTMLButtonElement>,
   axis: "x" | "y",

@@ -58,6 +58,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       const next = new Map<string, number>();
       for (const paragraph of props.paragraphs) {
         const wrapper = paragraphElements.get(paragraph.id)?.parentElement?.parentElement;
+        /* v8 ignore next -- A paragraph can unmount between React's ref callback and this layout pass. */
         if (wrapper === undefined || wrapper === null) continue;
         const height = wrapper.getBoundingClientRect().height;
         if (height <= 0) continue;
@@ -71,7 +72,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       }
       if (
         next.size !== measuredHeights.size ||
-        [...next].some(([id, height]) => measuredHeights.get(id) !== height)
+        [...next].some(
+          /** Detects changed paragraph height. @param entry - Paragraph id and height. @returns Whether geometry changed. */
+          ([id, height]) => measuredHeights.get(id) !== height,
+        )
       ) {
         globalThis.queueMicrotask(
           /** Applies measured browser geometry after this layout pass. @returns Nothing. */ (): void => {
@@ -79,7 +83,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           },
         );
       }
-      return () => {
+      return /** Cancels the pending measurement update. @returns Nothing. */ () => {
         active = false;
       };
     },
@@ -160,6 +164,12 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                       key={paragraph.id}
                       listMarker={paragraph.listMarker}
                       paragraph={paragraph}
+                      previousLowerSpacingPt={
+                        index === 0
+                          ? 0
+                          : (props.paragraphs[index - 1] as WriterParagraph).computedStyle
+                              .lowerSpacingPt
+                      }
                       retainElement={
                         /** Retains the DOM identity used by SwEditWin. @param paragraphId - Projection identity. @param element - Mounted paragraph or null. @returns Nothing. */ (
                           paragraphId,

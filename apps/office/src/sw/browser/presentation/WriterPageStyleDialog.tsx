@@ -1,4 +1,5 @@
 /** @fileoverview Renders the bounded browser Page tab from LibreOffice's PageFormatPage. */
+/* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 
 import { useMemo, useState } from "react";
 
@@ -264,7 +265,7 @@ function MetricField({
 }
 
 /** Swaps physical dimensions when the requested orientation changes. @param value - Current page value. @param landscape - Requested orientation. @returns Oriented page value. */
-function swapOrientation(
+export function swapOrientation(
   value: WriterPageDescriptorValue,
   landscape: boolean,
 ): WriterPageDescriptorValue {

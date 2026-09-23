@@ -379,8 +379,8 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
       fontSize: "12pt",
       fontStyle: "normal",
       fontWeight: "400",
-      lineHeight: "1.15",
     });
+    expect(Number(secondParagraph.style.lineHeight)).toBeCloseTo(1.3);
     expect(secondParagraph).toHaveStyle({ textAlign: "center" });
     expect(screen.getByText("Paragraph 2 is active.")).toBeInTheDocument();
     firstParagraph.focus();

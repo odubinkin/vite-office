@@ -1,4 +1,5 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
+/* eslint-disable react-refresh/only-export-components -- Pure presentation helpers are exported for focused behavior verification. */
 import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
@@ -182,9 +183,12 @@ export function WriterWorkbench({
           verticalRuler={
             snapshot.isVerticalRulerVisible ? (
               <WriterVerticalRuler
-                onPageChange={(pageDescriptor) => {
-                  view.GetWrtShell().SetPageDescriptor(pageDescriptor);
-                }}
+                onPageChange={
+                  /** Commits vertical-ruler page geometry. @param pageDescriptor - Updated page geometry. @returns Nothing. */
+                  (pageDescriptor) => {
+                    view.GetWrtShell().SetPageDescriptor(pageDescriptor);
+                  }
+                }
                 page={snapshot.pageDescriptor}
               />
             ) : null
@@ -233,7 +237,7 @@ export function WriterWorkbench({
 }
 
 /** Formats command completion and shell/medium state at the browser presentation boundary. @param view - Active Writer view. @param snapshot - Current projection. @param getText - Localization lookup. @returns Status text. */
-function presentWriterStatus(
+export function presentWriterStatus(
   view: SwView,
   snapshot: WriterViewSnapshot,
   getText: (messageId: string, fallback: string) => string,
@@ -259,7 +263,7 @@ function presentWriterStatus(
 }
 
 /** Resolves explicit Sfx command failures into browser presentation text. @param view - Active Writer view. @param getText - Localization lookup. @returns Status text, if a command failed. */
-function presentWriterCommandError(
+export function presentWriterCommandError(
   view: SwView,
   getText: (messageId: string, fallback: string) => string,
 ): string | undefined {

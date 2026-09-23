@@ -230,15 +230,15 @@ export function projectWriterCharacterAttributes(
     (which: number): SfxPoolItem =>
       items.GetItemIfSet(which, false) ?? inherited?.Get(which) ?? items.Get(which);
   const font =
-    items.GetItemIfSet(RES_CHRATR_FONT, false) ?? inherited?.GetItemIfSet(RES_CHRATR_FONT);
+    items.GetItemIfSet(RES_CHRATR_FONT, false) ?? inherited?.GetItemIfSet(RES_CHRATR_FONT, true);
   const fontSize =
     items.GetItemIfSet(RES_CHRATR_FONTSIZE, false) ??
-    inherited?.GetItemIfSet(RES_CHRATR_FONTSIZE, false);
+    inherited?.GetItemIfSet(RES_CHRATR_FONTSIZE, true);
   const color =
-    items.GetItemIfSet(RES_CHRATR_COLOR, false) ?? inherited?.GetItemIfSet(RES_CHRATR_COLOR, false);
+    items.GetItemIfSet(RES_CHRATR_COLOR, false) ?? inherited?.GetItemIfSet(RES_CHRATR_COLOR, true);
   const highlight =
     items.GetItemIfSet(RES_CHRATR_HIGHLIGHT, false) ??
-    inherited?.GetItemIfSet(RES_CHRATR_HIGHLIGHT, false);
+    inherited?.GetItemIfSet(RES_CHRATR_HIGHLIGHT, true);
   return {
     ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),

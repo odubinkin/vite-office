@@ -18,6 +18,12 @@ describe("Writer page descriptor", /** Registers page-descriptor cases. @returns
     expect(imperial).toMatchObject({ paperFormat: "Letter", leftMargin: 1800, topMargin: 1440 });
     expect(createDefaultWriterPageDescriptor("en-PH").GetValue().paperFormat).toBe("Letter");
     const landscape = applyWriterPaperFormat(metric, "Letter", true);
+    const portrait = applyWriterPaperFormat(landscape, "Letter", false);
+    expect(portrait).toMatchObject({
+      height: WRITER_PAPER_SIZES.Letter.height,
+      landscape: false,
+      width: WRITER_PAPER_SIZES.Letter.width,
+    });
     expect(landscape).toMatchObject({
       height: WRITER_PAPER_SIZES.Letter.width,
       landscape: true,

@@ -5,6 +5,7 @@ import { XMLToken } from "../core/xmltoken";
 import type {
   OdfCharacterProperties,
   OdfListLevelKind,
+  OdfListLevelLayout,
   OdfParagraphAlignment,
   OdfParagraphProperties,
 } from "../text/txtparae";
@@ -12,7 +13,6 @@ import type { OdfStyleDefinition, XMLTextListRule } from "../text/txtparai";
 import { importOdfLength, XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
 
 const ignoredStyleDefinitions = new Set([
-  XMLToken.STYLE_DEFAULT_STYLE,
   XMLToken.STYLE_DEFAULT_PAGE_LAYOUT,
   XMLToken.TEXT_OUTLINE_STYLE,
   XMLToken.TEXT_LINENUMBERING_CONFIGURATION,
@@ -23,6 +23,7 @@ const ignoredStyleDefinitions = new Set([
 export interface XMLStyleImportTarget {
   getFontFace(name: string): string | undefined;
   registerListStyle(styleName: string, rule: XMLTextListRule): void;
+  registerDefaultStyle(definition: OdfStyleDefinition): void;
   registerStyle(name: string, definition: OdfStyleDefinition): void;
   registerPageLayout(name: string, layout: OdfPageLayout): void;
 }
@@ -50,6 +51,8 @@ export class XMLStylesContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
+    if (element === XMLToken.STYLE_DEFAULT_STYLE)
+      return new XMLStyleContext(this.target, attributes, true);
     if (element === XMLToken.STYLE_STYLE) return new XMLStyleContext(this.target, attributes);
     if (element === XMLToken.TEXT_LIST_STYLE)
       return new XMLListStyleContext(this.target, attributes);
@@ -130,10 +133,11 @@ class XMLStyleContext extends SvXMLImportContext {
   >;
   private readonly supported: boolean;
 
-  /** Reads style identity attributes. @param target - Definition consumer. @param attributes - Style attributes. @returns Context. */
+  /** Reads style identity attributes. @param target - Definition consumer. @param attributes - Style attributes. @param isDefault - Whether this is style:default-style. @returns Context. */
   public constructor(
     private readonly target: XMLStyleImportTarget,
     attributes: FastAttributeList,
+    private readonly isDefault = false,
   ) {
     super();
     attributes.assertOnly(
@@ -147,9 +151,9 @@ class XMLStyleContext extends SvXMLImportContext {
       ],
       "style",
     );
-    this.name = attributes.require(XMLToken.STYLE_NAME, "style name");
+    this.name = isDefault ? "" : attributes.require(XMLToken.STYLE_NAME, "style name");
     const family = attributes.require(XMLToken.STYLE_FAMILY, "style family");
-    this.supported = family === "paragraph" || family === "text";
+    this.supported = family === "paragraph" || (!isDefault && family === "text");
     const displayName = attributes.get(XMLToken.STYLE_DISPLAY_NAME) ?? undefined;
     const nextStyleName = attributes.get(XMLToken.STYLE_NEXT_STYLE_NAME) ?? undefined;
     const parentStyleName = attributes.get(XMLToken.STYLE_PARENT_STYLE_NAME) ?? undefined;
@@ -195,7 +199,7 @@ class XMLStyleContext extends SvXMLImportContext {
   /** Publishes the completed supported style. @returns Nothing. */
   public override endFastElement(): void {
     if (!this.supported) return;
-    this.target.registerStyle(this.name, {
+    const definition: OdfStyleDefinition = {
       ...this.definition,
       ...(this.alignment === undefined ? {} : { alignment: this.alignment }),
       ...(this.leftMargin === undefined ? {} : { leftMargin: this.leftMargin }),
@@ -203,7 +207,9 @@ class XMLStyleContext extends SvXMLImportContext {
         ? {}
         : { paragraphProperties: this.paragraphProperties }),
       ...(this.properties === undefined ? {} : { properties: this.properties }),
-    });
+    };
+    if (this.isDefault) this.target.registerDefaultStyle(definition);
+    else this.target.registerStyle(this.name, definition);
   }
 }
 
@@ -211,6 +217,7 @@ class XMLStyleContext extends SvXMLImportContext {
 class XMLListStyleContext extends SvXMLImportContext {
   private readonly bulletChars: (string | undefined)[] = Array.from({ length: 10 });
   private readonly formats: (OdfListLevelKind | undefined)[] = Array.from({ length: 10 });
+  private readonly levelLayouts: (OdfListLevelLayout | undefined)[] = Array.from({ length: 10 });
   private readonly name: string;
   private readonly ruleName: string;
 
@@ -260,7 +267,12 @@ class XMLListStyleContext extends SvXMLImportContext {
         throw new Error(`Unsupported ODF numbering suffix: ${suffix}`);
     }
     this.formats[level - 1] = kind;
-    return new SvXMLIgnoreContext();
+    return new XMLListLevelContext(
+      /** Retains one level's label-alignment geometry. @param layout - Imported geometry. @returns Nothing. */
+      (layout) => {
+        this.levelLayouts[level - 1] = layout;
+      },
+    );
   }
 
   /** Rejects an unknown list-level family. @param _namespaceURI - Namespace. @param localName - Local name. @returns Never. */
@@ -292,8 +304,109 @@ class XMLListStyleContext extends SvXMLImportContext {
         /** Completes an undeclared level. @param format - Optional kind. @returns Complete kind. */
         (format) => format ?? fallback,
       ),
+      levelLayouts: this.levelLayouts,
       name: this.ruleName,
     });
+  }
+}
+
+/** Imports the label-alignment child of one list-level-properties element. */
+class XMLListLevelContext extends SvXMLImportContext {
+  /** Creates a level context. @param save - Model-facing geometry sink. @returns Nothing. */
+  public constructor(private readonly save: (layout: OdfListLevelLayout) => void) {
+    super();
+  }
+
+  /** Reads list-level-properties and its label-alignment child. @param element - Child token. @param attributes - Properties. @returns Nested context. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element !== XMLToken.STYLE_LIST_LEVEL_PROPERTIES) return new SvXMLIgnoreContext();
+    return new XMLListLevelPropertiesContext(this.save, attributes);
+  }
+}
+
+/** Reads the ODF label-alignment values used by SwNumFormat. */
+class XMLListLevelPropertiesContext extends SvXMLImportContext {
+  /** Creates a properties context. @param save - Model-facing geometry sink. @param attributes - Legacy and modern list properties. @returns Nothing. */
+  public constructor(
+    private readonly save: (layout: OdfListLevelLayout) => void,
+    attributes: FastAttributeList,
+  ) {
+    super();
+    const spaceBefore = importOptionalLength(
+      attributes,
+      XMLToken.TEXT_SPACE_BEFORE,
+      true,
+      "list space before",
+    );
+    const minLabelWidth = importOptionalLength(
+      attributes,
+      XMLToken.TEXT_MIN_LABEL_WIDTH,
+      false,
+      "list minimum label width",
+    );
+    const minLabelDistance = importOptionalLength(
+      attributes,
+      XMLToken.TEXT_MIN_LABEL_DISTANCE,
+      false,
+      "list minimum label distance",
+    );
+    if (
+      spaceBefore !== undefined ||
+      minLabelWidth !== undefined ||
+      minLabelDistance !== undefined
+    ) {
+      const indentAt = (spaceBefore ?? 0) + (minLabelWidth ?? 0);
+      this.save({
+        firstLineIndent: -(minLabelWidth ?? 0),
+        indentAt,
+        labelFollowedBy: "listtab",
+        listTabPosition: indentAt + (minLabelDistance ?? 0),
+      });
+    }
+  }
+
+  /** Reads the nested label alignment. @param element - Child token. @param attributes - Alignment values. @returns Leaf context. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element !== XMLToken.STYLE_LIST_LEVEL_LABEL_ALIGNMENT) return new SvXMLIgnoreContext();
+    const rawFollow = attributes.get(XMLToken.TEXT_LABEL_FOLLOWED_BY);
+    if (
+      rawFollow !== null &&
+      rawFollow !== "listtab" &&
+      rawFollow !== "nothing" &&
+      rawFollow !== "space"
+    )
+      throw new Error(`Unsupported ODF label-followed-by: ${rawFollow}`);
+    const firstLineIndent = importOptionalLength(
+      attributes,
+      XMLToken.FO_TEXT_INDENT,
+      true,
+      "list first-line indent",
+    );
+    const indentAt = importOptionalLength(
+      attributes,
+      XMLToken.FO_MARGIN_LEFT,
+      true,
+      "list body indent",
+    );
+    const listTabPosition = importOptionalLength(
+      attributes,
+      XMLToken.TEXT_LIST_TAB_STOP_POSITION,
+      false,
+      "list tab stop",
+    );
+    this.save({
+      ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
+      ...(indentAt === undefined ? {} : { indentAt }),
+      ...(rawFollow === null ? {} : { labelFollowedBy: rawFollow }),
+      ...(listTabPosition === undefined ? {} : { listTabPosition }),
+    });
+    return new SvXMLIgnoreContext();
   }
 }
 

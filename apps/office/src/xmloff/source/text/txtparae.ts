@@ -54,12 +54,21 @@ export interface OdfParagraphProperties {
 /** Marker family stored by one ODF list level style. */
 export type OdfListLevelKind = "bullet" | "numbered";
 
+/** Label-alignment geometry of one ODF list level, in Writer twips. */
+export interface OdfListLevelLayout {
+  readonly firstLineIndent?: number;
+  readonly indentAt?: number;
+  readonly labelFollowedBy?: "listtab" | "nothing" | "space";
+  readonly listTabPosition?: number;
+}
+
 /** Neutral projection of one document-owned Writer numbering rule. */
 export interface XMLTextListRuleSource {
   /** Per-level character-special markers in zero-based Writer order. */
   readonly bulletChars?: readonly (string | undefined)[];
   /** Per-level marker families in zero-based Writer order. */
   readonly formats: readonly OdfListLevelKind[];
+  readonly levelLayouts?: readonly (OdfListLevelLayout | undefined)[];
   /** Canonical SwNumRule name. */
   readonly name: string;
 }
@@ -133,6 +142,12 @@ export class XMLTextParagraphExport {
               (kind, index) =>
                 kind === "bullet" &&
                 (existing.bulletChars?.[index] ?? "•") !== (list.rule.bulletChars?.[index] ?? "•"),
+            ) ||
+            existing.formats.some(
+              /** Detects conflicting list geometry. @param _kind - Level kind. @param index - Level index. @returns Whether layouts differ. */
+              (_, index) =>
+                JSON.stringify(existing.levelLayouts?.[index] ?? {}) !==
+                JSON.stringify(list.rule.levelLayouts?.[index] ?? {}),
             ))
         )
           throw new Error(`Conflicting ODF list rule: ${list.rule.name}`);
@@ -210,10 +225,18 @@ export class XMLTextParagraphExport {
         const levels = rule.formats
           .map(
             /** Emits one list-level style. @param kind - Marker family. @param level - Zero-based Writer level. @returns Level XML. */
-            (kind, level) =>
-              kind === "bullet"
-                ? `<text:list-level-style-bullet text:level="${level + 1}" text:bullet-char="${escapeXml(rule.bulletChars?.[level] ?? "•")}"/>`
-                : `<text:list-level-style-number text:level="${level + 1}" style:num-format="1"/>`,
+            (kind, level) => {
+              const element =
+                kind === "bullet" ? "text:list-level-style-bullet" : "text:list-level-style-number";
+              const attributes =
+                kind === "bullet"
+                  ? ` text:bullet-char="${escapeXml(rule.bulletChars?.[level] ?? "•")}"`
+                  : ' style:num-format="1"';
+              const layout = exportListLevelLayout(rule.levelLayouts?.[level], level);
+              return layout === ""
+                ? `<${element} text:level="${level + 1}"${attributes}/>`
+                : `<${element} text:level="${level + 1}"${attributes}>${layout}</${element}>`;
+            },
           )
           .join("");
         return `<text:list-style style:name="${name}" style:display-name="${escapeXml(rule.name)}">${levels}</text:list-style>`;
@@ -231,6 +254,29 @@ export class XMLTextParagraphExport {
       body,
     };
   }
+}
+
+/** Emits non-default label-alignment geometry under its ODF list level. @param layout - Writer geometry. @param level - Zero-based level. @returns XML child or empty string. */
+export function exportListLevelLayout(
+  layout: OdfListLevelLayout | undefined,
+  level: number,
+): string {
+  if (layout === undefined) return "";
+  const defaultIndent = 720 + level * 360;
+  if (
+    (layout.firstLineIndent ?? -360) === -360 &&
+    (layout.indentAt ?? defaultIndent) === defaultIndent &&
+    (layout.labelFollowedBy ?? "listtab") === "listtab" &&
+    (layout.listTabPosition ?? defaultIndent) === defaultIndent
+  )
+    return "";
+  const attributes = [
+    `text:label-followed-by="${layout.labelFollowedBy ?? "listtab"}"`,
+    `text:list-tab-stop-position="${exportOdfLength(layout.listTabPosition ?? defaultIndent)}"`,
+    `fo:text-indent="${exportOdfLength(layout.firstLineIndent ?? -360)}"`,
+    `fo:margin-left="${exportOdfLength(layout.indentAt ?? defaultIndent)}"`,
+  ].join(" ");
+  return `<style:list-level-properties><style:list-level-label-alignment ${attributes}/></style:list-level-properties>`;
 }
 
 /** Exports live Writer paragraphs through an owned xmloff export context. @param source - Reiterable model source. @param isCancelled - Cooperative cancellation probe. @param fontFaceName - Optional family-to-face resolver. @returns XML fragments. */

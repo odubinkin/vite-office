@@ -4,7 +4,7 @@ title: "Match Writer ODT vertical layout and list geometry to LibreOffice"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-23T12:45:20.580Z"
+  updated_by: "CODER"
+  note: "Full npm run verify passed: 369 office tests and 96 inventory tests at 100% coverage, 11 e2e tests, build, static and repository gates. ODT layout/list regressions passed; diff and status inspected."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement approved ODT paragraph and list geometry parity in the direct checkout with focused regression coverage."
+  -
+    type: "verify"
+    at: "2026-09-23T12:45:20.580Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full npm run verify passed: 369 office tests and 96 inventory tests at 100% coverage, 11 e2e tests, build, static and repository gates. ODT layout/list regressions passed; diff and status inspected."
 doc_version: 3
-doc_updated_at: "2026-09-23T11:50:26.532Z"
+doc_updated_at: "2026-09-23T12:45:20.675Z"
 doc_updated_by: "CODER"
 description: "Import supported paragraph and list layout properties and correct browser presentation so line spacing and list markers follow pinned LibreOffice behavior."
 sections:
@@ -44,47 +50,59 @@ sections:
     Match Writer ODT vertical layout and list geometry to LibreOffice
 
     Import supported paragraph and list layout properties and correct browser presentation so line spacing and list markers follow pinned LibreOffice behavior.
-  Scope: "In scope: xmloff ODT paragraph/default-style and list-level layout import/export, corresponding Writer model fields, browser line and list rendering, page spacing/pagination, focused tests and necessary documentation. Out of scope: full LibreOffice shaping engine, unrelated ODT feature families, network or outside-repository access."
+  Scope: "In scope: xmloff ODT paragraph default style and list level layout import/export; Writer model geometry; browser proportional line height, paragraph spacing, pagination and list marker placement; regression tests; complete 100% office application coverage as explicitly requested by the user; necessary documentation and provenance. Out of scope: full LibreOffice text shaping and unrelated ODT feature families."
   Plan: "Match LibreOffice Writer ODT vertical flow and list geometry using upstream-compatible default paragraph styles, proportional line leading, paragraph spacing, and list-level alignment. Extend scope, as explicitly requested by the user on 2026-09-23, to bring the entire office app coverage gate to 100% for statements, branches, functions, and lines with meaningful tests or narrowly justified exclusions for unreachable code. Preserve ODT round trips and complete full npm run verify."
   Verify Steps: "1. Run focused Vitest suites for ODT paragraph styles, lists, Writer projection, and page layout; confirm round trips and marker placement. 2. Run npm run test:coverage; require 100% statements, branches, functions, and lines across the office app. 3. Run npm run verify; require all repository gates to pass. 4. Inspect git diff and git status --short --untracked-files=all; require only intentional task changes and clean final tracked state."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-23T12:45:20.580Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full npm run verify passed: 369 office tests and 96 inventory tests at 100% coverage, 11 e2e tests, build, static and repository gates. ODT layout/list regressions passed; diff and status inspected.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T12:45:05.103Z, excerpt_hash=sha256:9b090150a3affa6cb485a2b9f5d7a29bdaacb900dcf4e6c9178edd3cd3d2ab29
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231107-DWJEBC/blueprint/resolved-snapshot.json
+    - old_digest: 29b68380bfaae078ce9b1897734d84b88068d6c55189e73e60781993d7095218
+    - current_digest: 29b68380bfaae078ce9b1897734d84b88068d6c55189e73e60781993d7095218
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609231107-DWJEBC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609231107-DWJEBC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: |-
-    Command: npx vitest run (apps/office)
+    Command: npm run verify
     Result: pass
-    Evidence: 79 files, 322 tests passed.
-    Scope: Writer model, ODT filter, browser presentation.
+    Evidence: 369 office tests and 96 inventory tests passed; both suites reached 100% statements, branches, functions, and lines. All 11 browser e2e tests, production build, static tests, formatting, lint, typecheck, docs, provenance, module boundaries, file size, source tree, inventory invariants and parity passed.
+    Scope: Complete repository verification gate.
 
-    Command: npx vitest run --config scripts/libreoffice-inventory/vitest.config.ts
+    Command: git diff --check; git status --short --untracked-files=all
     Result: pass
-    Evidence: 34 files, 96 tests passed, including all six pinned upstream ODT fixtures.
-    Scope: Upstream fixture import, export, and inventory.
+    Evidence: No whitespace errors or unrelated generated artifacts; changed files are in the approved implementation, tests, provenance and task scope.
+    Scope: Final change inspection.
 
-    Command: npm run test:inventory:coverage
-    Result: pass
-    Evidence: 100% statements, branches, functions, and lines.
-    Scope: Inventory tooling.
+    Implementation: Imported ODF paragraph default styles and list level alignment or legacy geometry; projected LibreOffice proportional line height and paragraph spacing; corrected marker slot placement and inherited character attributes; retained native ODT round trips. Added meaningful coverage for remaining app paths to satisfy the user requested global 100% gate. Simplified guards unreachable under SwPaM and ordered paragraph invariants.
 
-    Command: npm run test:e2e
-    Result: pass
-    Evidence: 11 browser scenarios passed, including lists, ODT, and hyperlinks.
-    Scope: User-visible Writer flows.
-
-    Command: npm run typecheck; npm run lint; npm run format:check; npm run check:docs; npm run check:source-provenance; npm run check:dependencies; npm run test:static; npm run inventory:invariants
-    Result: pass
-    Evidence: All named checks exited zero.
-    Scope: Type safety, formatting, documentation, provenance, boundaries, build, and invariants.
-
-    Command: npm run verify; npm run test:coverage
-    Result: fail
-    Evidence: All 322 app tests pass, but global 100% coverage threshold fails at 98.51% lines and 96.52% branches. The report includes untouched modules with uncovered lines, including WriterLinkDialog at 0%.
-    Scope: Repository-wide app coverage gate. User decision on accepting this existing global gate gap is pending.
-
-    Residual risk: Browser text shaping and paragraph splitting are still bounded approximations; no user-specific ODT was supplied for pixel comparison.
+    Residual risk: Browser text shaping remains a bounded approximation; no user-specific ODT was supplied for pixel-by-pixel comparison.
 id_source: "generated"
 ---
 ## Summary
@@ -95,7 +113,7 @@ Import supported paragraph and list layout properties and correct browser presen
 
 ## Scope
 
-In scope: xmloff ODT paragraph/default-style and list-level layout import/export, corresponding Writer model fields, browser line and list rendering, page spacing/pagination, focused tests and necessary documentation. Out of scope: full LibreOffice shaping engine, unrelated ODT feature families, network or outside-repository access.
+In scope: xmloff ODT paragraph default style and list level layout import/export; Writer model geometry; browser proportional line height, paragraph spacing, pagination and list marker placement; regression tests; complete 100% office application coverage as explicitly requested by the user; necessary documentation and provenance. Out of scope: full LibreOffice text shaping and unrelated ODT feature families.
 
 ## Plan
 
@@ -108,6 +126,36 @@ Match LibreOffice Writer ODT vertical flow and list geometry using upstream-comp
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-23T12:45:20.580Z — VERIFY — ok
+
+By: CODER
+
+Note: Full npm run verify passed: 369 office tests and 96 inventory tests at 100% coverage, 11 e2e tests, build, static and repository gates. ODT layout/list regressions passed; diff and status inspected.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T12:45:05.103Z, excerpt_hash=sha256:9b090150a3affa6cb485a2b9f5d7a29bdaacb900dcf4e6c9178edd3cd3d2ab29
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231107-DWJEBC/blueprint/resolved-snapshot.json
+- old_digest: 29b68380bfaae078ce9b1897734d84b88068d6c55189e73e60781993d7095218
+- current_digest: 29b68380bfaae078ce9b1897734d84b88068d6c55189e73e60781993d7095218
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609231107-DWJEBC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609231107-DWJEBC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -117,34 +165,16 @@ Match LibreOffice Writer ODT vertical flow and list geometry using upstream-comp
 
 ## Findings
 
-Command: npx vitest run (apps/office)
+Command: npm run verify
 Result: pass
-Evidence: 79 files, 322 tests passed.
-Scope: Writer model, ODT filter, browser presentation.
+Evidence: 369 office tests and 96 inventory tests passed; both suites reached 100% statements, branches, functions, and lines. All 11 browser e2e tests, production build, static tests, formatting, lint, typecheck, docs, provenance, module boundaries, file size, source tree, inventory invariants and parity passed.
+Scope: Complete repository verification gate.
 
-Command: npx vitest run --config scripts/libreoffice-inventory/vitest.config.ts
+Command: git diff --check; git status --short --untracked-files=all
 Result: pass
-Evidence: 34 files, 96 tests passed, including all six pinned upstream ODT fixtures.
-Scope: Upstream fixture import, export, and inventory.
+Evidence: No whitespace errors or unrelated generated artifacts; changed files are in the approved implementation, tests, provenance and task scope.
+Scope: Final change inspection.
 
-Command: npm run test:inventory:coverage
-Result: pass
-Evidence: 100% statements, branches, functions, and lines.
-Scope: Inventory tooling.
+Implementation: Imported ODF paragraph default styles and list level alignment or legacy geometry; projected LibreOffice proportional line height and paragraph spacing; corrected marker slot placement and inherited character attributes; retained native ODT round trips. Added meaningful coverage for remaining app paths to satisfy the user requested global 100% gate. Simplified guards unreachable under SwPaM and ordered paragraph invariants.
 
-Command: npm run test:e2e
-Result: pass
-Evidence: 11 browser scenarios passed, including lists, ODT, and hyperlinks.
-Scope: User-visible Writer flows.
-
-Command: npm run typecheck; npm run lint; npm run format:check; npm run check:docs; npm run check:source-provenance; npm run check:dependencies; npm run test:static; npm run inventory:invariants
-Result: pass
-Evidence: All named checks exited zero.
-Scope: Type safety, formatting, documentation, provenance, boundaries, build, and invariants.
-
-Command: npm run verify; npm run test:coverage
-Result: fail
-Evidence: All 322 app tests pass, but global 100% coverage threshold fails at 98.51% lines and 96.52% branches. The report includes untouched modules with uncovered lines, including WriterLinkDialog at 0%.
-Scope: Repository-wide app coverage gate. User decision on accepting this existing global gate gap is pending.
-
-Residual risk: Browser text shaping and paragraph splitting are still bounded approximations; no user-specific ODT was supplied for pixel comparison.
+Residual risk: Browser text shaping remains a bounded approximation; no user-specific ODT was supplied for pixel-by-pixel comparison.

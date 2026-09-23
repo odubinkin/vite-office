@@ -14,6 +14,7 @@ export interface WriterEditableParagraphProps {
   readonly index: number;
   readonly listMarker: string | undefined;
   readonly paragraph: WriterParagraph;
+  readonly previousLowerSpacingPt?: number;
   readonly retainElement: (paragraphId: string, element: HTMLParagraphElement | null) => void;
 }
 
@@ -24,6 +25,7 @@ export function WriterEditableParagraph({
   isLast,
   listMarker,
   paragraph,
+  previousLowerSpacingPt = 0,
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
@@ -43,7 +45,7 @@ export function WriterEditableParagraph({
       data-active={isActive}
       style={{
         marginBlockEnd: isLast ? undefined : `${paragraph.computedStyle.lowerSpacingPt}pt`,
-        marginBlockStart: `${paragraph.computedStyle.upperSpacingPt}pt`,
+        marginBlockStart: `${Math.max(0, paragraph.computedStyle.upperSpacingPt - previousLowerSpacingPt)}pt`,
       }}
     >
       <span className="sr-only" id={styleDescriptionId} contentEditable={false}>
@@ -59,14 +61,15 @@ export function WriterEditableParagraph({
         {listMarker === undefined ? null : (
           <span
             aria-hidden="true"
-            className="shrink-0 self-start text-right text-slate-700"
+            className="shrink-0 self-start text-slate-700"
             contentEditable={false}
             data-testid={`writer-list-marker-${paragraph.id}`}
             data-writer-list-marker={paragraph.id}
             style={{
               /* v8 ignore next -- Space-follow numbering is imported but not exposed by the current command surface. */
               marginInlineEnd: listLayout?.labelFollowedBy === "space" ? "0.25em" : undefined,
-              width: `${markerWidthPt}pt`,
+              width: listLayout?.labelFollowedBy === "listtab" ? `${markerWidthPt}pt` : undefined,
+              textAlign: "left",
               fontFamily: paragraph.computedStyle.fontFamily,
               fontSize: `${paragraph.computedStyle.fontSizePt}pt`,
               fontStyle: paragraph.computedStyle.fontStyle,
@@ -117,7 +120,12 @@ export function WriterEditableParagraph({
                 : undefined,
             marginInlineEnd: `${paragraph.computedStyle.rightMarginPt}pt`,
             textAlign: paragraph.alignment,
-            textIndent: `${paragraph.computedStyle.firstLineIndentPt}pt`,
+            // SwNumFormat already places a list's first line; applying the
+            // paragraph indent here moves its text back into the marker slot.
+            textIndent:
+              paragraph.list.kind === "none"
+                ? `${paragraph.computedStyle.firstLineIndentPt}pt`
+                : undefined,
           }}
           tabIndex={-1}
         >

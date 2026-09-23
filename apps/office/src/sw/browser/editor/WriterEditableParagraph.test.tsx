@@ -59,6 +59,98 @@ function paragraph(color?: string, highlight?: string): WriterParagraphProjectio
 }
 
 describe("Writer editable paragraph colors", /** Groups color rendering tests. @returns Nothing. */ () => {
+  it("renders a compact list marker and semantic hyperlink separately from body text", /** Checks renders a compact list marker and semantic hyperlink separately from body text. @returns Test callback result. */ () => {
+    const source = paragraph();
+    const view = render(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        isLast
+        listMarker="•"
+        paragraph={{
+          ...source,
+          list: { kind: "bullet", level: 0 },
+          listLayout: {
+            firstLineIndentPt: -18,
+            indentAtPt: 36,
+            labelFollowedBy: "nothing",
+            listTabPositionPt: 36,
+          },
+          runs: [
+            {
+              attributes: { bold: false, italic: false, underline: false },
+              hyperlink: { url: "https://example.com", targetFrame: "_blank" },
+              startOffset: 0,
+              text: "Example",
+            },
+          ],
+          text: "Example",
+        }}
+        retainElement={
+          /** Runs the test callback. @returns Test callback result. */ () => undefined
+        }
+      />,
+    );
+    expect(screen.getByTestId("writer-list-marker-color-paragraph")).not.toHaveStyle({
+      width: "18pt",
+    });
+    expect(screen.getByRole("link", { name: "Example" })).toHaveAttribute("target", "_blank");
+    view.rerender(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        isLast
+        listMarker={undefined}
+        paragraph={{
+          ...source,
+          runs: [
+            {
+              attributes: { bold: false, italic: false, underline: false },
+              hyperlink: { url: "https://example.com" },
+              startOffset: 0,
+              text: "Example",
+            },
+          ],
+          text: "Example",
+        }}
+        retainElement={
+          /** Runs the test callback. @returns Test callback result. */ () => undefined
+        }
+      />,
+    );
+    expect(screen.getByRole("link", { name: "Example" })).not.toHaveAttribute("target");
+  });
+  it("keeps list text beyond its marker slot when the paragraph also has a hanging indent", /** Checks the first-line list text offset and adjacent paragraph spacing. @returns Nothing. */ () => {
+    const item: WriterParagraphProjection = {
+      ...paragraph(),
+      computedStyle: { ...paragraph().computedStyle, firstLineIndentPt: -18, upperSpacingPt: 8 },
+      list: { kind: "bullet", level: 0 },
+      listLayout: {
+        firstLineIndentPt: -18,
+        indentAtPt: 36,
+        labelFollowedBy: "listtab",
+        listTabPositionPt: 36,
+      },
+    };
+    render(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        isLast
+        listMarker="•"
+        paragraph={item}
+        previousLowerSpacingPt={12}
+        retainElement={/** Ignores the mounted node. @returns Nothing. */ () => undefined}
+      />,
+    );
+    const marker = screen.getByTestId("writer-list-marker-color-paragraph");
+    const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    expect(marker).toHaveStyle({ width: "18pt", textAlign: "left" });
+    expect(marker.parentElement).toHaveStyle({ marginInlineStart: "18pt" });
+    expect(marker.parentElement?.parentElement).toHaveStyle({ marginBlockStart: "0pt" });
+    expect(editor).not.toHaveStyle({ textIndent: "-18pt" });
+  });
+
   it("maps explicit and automatic Writer colors to CSS without changing model text", /** Verifies paragraph and run color branches. @returns Nothing. */ () => {
     const { rerender } = render(
       <WriterEditableParagraph

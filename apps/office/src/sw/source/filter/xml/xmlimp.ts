@@ -164,6 +164,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   private paragraphCount = 0;
   private titleSeen = false;
   private readonly styles = new Map<string, OdfStyleDefinition>();
+  private defaultParagraphStyle: OdfStyleDefinition | undefined;
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
   private readonly pageLayouts = new Map<string, OdfPageLayout>();
@@ -228,6 +229,13 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     this.styles.set(name, definition);
   }
 
+  /** Registers the paragraph-family default shared by all named paragraph styles. @param definition - Parsed default. @returns Nothing. */
+  public registerDefaultStyle(definition: OdfStyleDefinition): void {
+    if (this.defaultParagraphStyle !== undefined)
+      throw new Error("Duplicate ODF default paragraph style.");
+    this.defaultParagraphStyle = definition;
+  }
+
   /** Registers one named ODF page layout. @param name - Layout name. @param layout - Physical geometry. @returns Nothing. */
   public registerPageLayout(name: string, layout: OdfPageLayout): void {
     if (this.pageLayouts.has(name)) throw new Error(`Duplicate ODF page layout: ${name}`);
@@ -252,7 +260,19 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
           (kind, level) =>
             existing.GetNumFormat(level).GetKind() !== kind ||
             (kind === "bullet" &&
-              existing.GetNumFormat(level).GetBulletChar() !== (rule.bulletChars?.[level] ?? "•")),
+              existing.GetNumFormat(level).GetBulletChar() !==
+                (rule.bulletChars?.[level] ?? "•")) ||
+            Object.entries(rule.levelLayouts?.[level] ?? {}).some(
+              /** Compares imported geometry with an existing rule. @param entry - Geometry field and value. @returns Whether they conflict. */
+              ([key, value]) =>
+                key === "firstLineIndent"
+                  ? existing.GetNumFormat(level).GetFirstLineIndent() !== value
+                  : key === "indentAt"
+                    ? existing.GetNumFormat(level).GetIndentAt() !== value
+                    : key === "labelFollowedBy"
+                      ? existing.GetNumFormat(level).GetLabelFollowedBy() !== value
+                      : existing.GetNumFormat(level).GetListtabPos() !== value,
+            ),
         )
       )
         throw new Error(`Conflicting ODF list rule: ${rule.name}`);
@@ -263,7 +283,14 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
         rule.name,
         rule.formats.map(
           /** Creates one canonical level format. @param kind - Marker family. @param level - Zero-based level. @returns Writer format. */
-          (kind, level) => new SwNumFormat(kind, rule.bulletChars?.[level]),
+          (kind, level) => {
+            const indentAt = 720 + level * 360;
+            return new SwNumFormat(kind, rule.bulletChars?.[level], {
+              indentAt,
+              listTabPosition: indentAt,
+              ...rule.levelLayouts?.[level],
+            });
+          },
         ),
         rule.name,
         this.expectedRoot === XMLToken.OFFICE_DOCUMENT_CONTENT,
@@ -327,7 +354,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
 
   /** Applies imported named style state. @returns Nothing. */
   public finishNamedStyles(): void {
-    applyNamedParagraphStyles(this.document, this.styles);
+    applyNamedParagraphStyles(this.document, this.styles, this.defaultParagraphStyle);
     const layout =
       (this.standardPageLayoutName === undefined
         ? undefined
@@ -529,10 +556,11 @@ class XMLTitleContext extends SvXMLImportContext {
   }
 }
 
-/** Applies built-in named style state. @param document - Destination. @param styles - Parsed styles. @returns Nothing. */
+/** Applies built-in named style state. @param document - Destination. @param styles - Parsed styles. @param defaultStyle - Shared paragraph defaults. @returns Nothing. */
 function applyNamedParagraphStyles(
   document: SwDoc,
   styles: ReadonlyMap<string, OdfStyleDefinition>,
+  defaultStyle?: OdfStyleDefinition,
 ): void {
   const standard = styles.get("Standard");
   if (standard?.family !== "paragraph")
@@ -544,6 +572,26 @@ function applyNamedParagraphStyles(
       throw new Error(`ODF Writer ${poolStyle.name} paragraph style is invalid.`);
     const collection = document.GetTextFormatColl(poolStyle.id);
     collection.SetDerivedFrom(undefined);
+    if (defaultStyle?.alignment !== undefined)
+      collection.SetFormatAttr(
+        new SvxAdjustItem(toSvxAdjust(defaultStyle.alignment), RES_PARATR_ADJUST),
+      );
+    if (defaultStyle?.leftMargin !== undefined)
+      collection.SetFormatAttr(
+        new SvxTextLeftMarginItem(defaultStyle.leftMargin, RES_MARGIN_TEXTLEFT),
+      );
+    if (defaultStyle?.paragraphProperties !== undefined)
+      putParagraphProperties(
+        defaultStyle.paragraphProperties,
+        /** Applies one default paragraph item. @param item - Imported item. @returns Set result. */
+        (item) => collection.SetFormatAttr(item),
+      );
+    if (defaultStyle?.properties !== undefined)
+      putCharacterProperties(
+        defaultStyle.properties,
+        /** Applies one default character item. @param item - Imported item. @returns Set result. */
+        (item) => collection.SetFormatAttr(item),
+      );
     if (definition.displayName !== undefined) collection.SetFormatName(definition.displayName);
     if (definition.alignment !== undefined)
       collection.SetFormatAttr(

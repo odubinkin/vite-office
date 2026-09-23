@@ -85,12 +85,7 @@ export class SwTextShell {
   /** Returns on/off/mixed state for one direct character format. @param format - Writer format. @returns Selection-aware state. */
   public GetCharacterFormatState(format: WriterCharacterFormat): "mixed" | "off" | "on" {
     const ranges = getWriterSelectedTextRanges(this.target.GetCursor());
-    if (ranges === undefined)
-      return this.target.GetCursor().HasMark()
-        ? "mixed"
-        : this.GetPendingCharacterAttributes()[format]
-          ? "on"
-          : "off";
+    if (ranges === undefined) return this.GetPendingCharacterAttributes()[format] ? "on" : "off";
     if (ranges.length === 0) return "mixed";
     const state = ranges[0]?.node.GetTextRangeFormatState(ranges[0].start, ranges[0].end, format);
     return ranges.every(

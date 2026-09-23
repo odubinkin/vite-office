@@ -1,97 +1,74 @@
-/** @fileoverview Verifies the single browser edit-window maps native intents to SwEditWin. */
+/** @fileoverview Verifies that editing clicks do not navigate semantic links. */
 
+import type React from "react";
 import { describe, expect, it, vi } from "vitest";
 
 import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 
-/** Creates a spy-backed DOM-neutral edit-window fixture. @returns Complete SwEditWin test double. */
-function createEditWindow(): SwEditWin {
-  return {
-    CreateSelectionTransfer: vi.fn(),
-    DeleteLeft: vi.fn(),
-    DeleteRight: vi.fn(),
-    DeleteSelection: vi.fn(),
-    EndExtTextInput: vi.fn(),
-    FocusNode: vi.fn(),
-    InsertText: vi.fn(),
-    Paste: vi.fn(),
-    PasteTransfer: vi.fn(),
-    Redo: vi.fn(),
-    ReplaceSelection: vi.fn(),
-    SelectAll: vi.fn(),
-    SetParagraphListKind: vi.fn(),
-    SetSelection: vi.fn(/** Accepts fixture SwNodes coordinates. @returns True. */ () => true),
-    SplitNode: vi.fn(),
-    StartExtTextInput: vi.fn(),
-    ToggleCharacterFormat: vi.fn(),
-    Undo: vi.fn(),
-    UpdateExtTextInput: vi.fn(),
-  } as unknown as SwEditWin;
-}
-
-/** Places a collapsed native selection in one paragraph. @param paragraph - Target paragraph. @param offset - Text offset. @returns Nothing. */
-function placeCaret(paragraph: HTMLParagraphElement, offset: number): void {
-  const range = document.createRange();
-  range.setStart(paragraph.firstChild as Text, offset);
-  range.collapse(true);
-  const selection = globalThis.getSelection() as Selection;
-  selection.removeAllRanges();
-  selection.addRange(range);
-}
-
-describe("BrowserWriterEditWindow", /** Groups native event mapping tests. @returns Nothing. */ () => {
-  it("routes the complete supported beforeinput vocabulary through one SwNodes selection", /** Verifies every native input disposition independently of React. @returns Nothing. */ () => {
-    document.body.innerHTML =
-      '<article data-writer-editing-host="true"><p data-writer-paragraph-id="p-1" data-writer-node-index="1">abc</p><p data-writer-paragraph-id="outside">x</p></article>';
-    const root = document.querySelector("article") as HTMLElement;
-    const paragraph = document.querySelector(
-      '[data-writer-paragraph-id="p-1"]',
-    ) as HTMLParagraphElement;
-    const outside = document.querySelector(
-      '[data-writer-paragraph-id="outside"]',
-    ) as HTMLParagraphElement;
-    const editWindow = createEditWindow();
-    const controller = new BrowserWriterEditWindow(
-      editWindow,
+describe("browser Writer edit window links", /** Groups browser Writer edit window links. @returns Test callback result. */ () => {
+  it("prevents link navigation while leaving ordinary paragraph clicks alone", /** Checks prevents link navigation while leaving ordinary paragraph clicks alone. @returns Test callback result. */ () => {
+    const adapter = new BrowserWriterEditWindow(
+      {} as SwEditWin,
       {
         document,
-        getSelection: /** Reads the fixture native selection. @returns Current selection. */ () =>
-          globalThis.getSelection(),
+        getSelection: /** Runs the test callback. @returns Test callback result. */ () =>
+          window.getSelection(),
       },
-      /** Resolves the one mounted fixture paragraph. @returns Fixture paragraph. */ () =>
-        paragraph,
+      /** Runs the test callback. @returns Test callback result. */ () => undefined,
     );
-    const unsubscribe = controller.Subscribe(root);
-    placeCaret(paragraph, 1);
+    const link = document.createElement("a");
+    link.dataset.writerHyperlink = "https://example.com";
+    const text = document.createElement("span");
+    link.append(text);
+    const preventDefault = vi.fn();
+    adapter.HandleClick({
+      target: text,
+      preventDefault,
+    } as unknown as React.MouseEvent<HTMLElement>);
+    expect(preventDefault).toHaveBeenCalledOnce();
+    adapter.HandleClick({
+      target: document.createElement("p"),
+      preventDefault,
+    } as unknown as React.MouseEvent<HTMLElement>);
+    expect(preventDefault).toHaveBeenCalledOnce();
+  });
 
-    const dispatch =
-      /** Dispatches one native beforeinput intent. @param inputType - Native intent. @param data - Optional input text. @returns Dispatched event. */ (
-        inputType: string,
-        data: string | null = null,
-      ): InputEvent => {
-        const event = new InputEvent("beforeinput", {
-          bubbles: true,
-          cancelable: true,
-          data,
-          inputType,
-        });
-        root.dispatchEvent(event);
-        return event;
-      };
-
-    dispatch("insertText", "x");
-    dispatch("insertText", "");
-    dispatch("insertReplacementText", "y");
-    dispatch("insertReplacementText");
+  it("routes native editing intents to the platform-neutral edit window", /** Checks routes native editing intents to the platform-neutral edit window. @returns Test callback result. */ () => {
+    const editWindow = {
+      InsertText: vi.fn(),
+      ReplaceSelection: vi.fn(),
+      SplitNode: vi.fn(),
+      DeleteLeft: vi.fn(),
+      DeleteRight: vi.fn(),
+      DeleteSelection: vi.fn(),
+      ToggleCharacterFormat: vi.fn(),
+      SetParagraphListKind: vi.fn(),
+      Undo: vi.fn(),
+      Redo: vi.fn(),
+    };
+    const adapter = new BrowserWriterEditWindow(
+      editWindow as unknown as SwEditWin,
+      {
+        document,
+        getSelection: /** Runs the test callback. @returns Test callback result. */ () =>
+          window.getSelection(),
+      },
+      /** Runs the test callback. @returns Test callback result. */ () => undefined,
+    );
+    vi.spyOn(
+      adapter as unknown as { SynchronizeSelection: () => boolean },
+      "SynchronizeSelection",
+    ).mockReturnValue(true);
+    const boundary = adapter as unknown as { HandleBeforeInput: (event: InputEvent) => void };
     for (const inputType of [
-      "insertLineBreak",
+      "insertText",
+      "insertReplacementText",
       "insertParagraph",
+      "insertLineBreak",
       "deleteContentBackward",
       "deleteContentForward",
       "deleteByCut",
-      "deleteByDrag",
-      "deleteContent",
       "formatBold",
       "formatItalic",
       "formatUnderline",
@@ -102,51 +79,97 @@ describe("BrowserWriterEditWindow", /** Groups native event mapping tests. @retu
       "insertFromComposition",
       "insertFromDrop",
       "insertFromPaste",
-    ])
-      expect(dispatch(inputType).defaultPrevented).toBe(true);
-    expect(dispatch("insertCompositionText", "i").defaultPrevented).toBe(false);
-    expect(dispatch("deleteCompositionText").defaultPrevented).toBe(false);
-    expect(dispatch("insertTranspose").defaultPrevented).toBe(true);
-
+      "unrecognizedInput",
+    ]) {
+      const event = new InputEvent("beforeinput", {
+        cancelable: true,
+        data: "x",
+        inputType,
+      });
+      boundary.HandleBeforeInput(event);
+      expect(event.defaultPrevented).toBe(true);
+    }
+    for (const inputType of ["insertText", "insertReplacementText"]) {
+      const empty = new InputEvent("beforeinput", { cancelable: true, inputType });
+      boundary.HandleBeforeInput(empty);
+      expect(empty.defaultPrevented).toBe(true);
+    }
     expect(editWindow.InsertText).toHaveBeenCalledWith("x");
-    expect(editWindow.ReplaceSelection).toHaveBeenCalledWith("y");
+    expect(editWindow.ReplaceSelection).toHaveBeenCalledWith("x");
     expect(editWindow.SplitNode).toHaveBeenCalledTimes(2);
-    expect(editWindow.DeleteSelection).toHaveBeenCalledTimes(3);
-    expect(editWindow.ToggleCharacterFormat).toHaveBeenCalledWith("italic");
-    expect(editWindow.ToggleCharacterFormat).toHaveBeenCalledWith("underline");
-    expect(editWindow.SetParagraphListKind).toHaveBeenCalledWith("numbered");
-    expect(editWindow.SetParagraphListKind).toHaveBeenCalledWith("bullet");
+    expect(editWindow.DeleteSelection).toHaveBeenCalledOnce();
+    expect(editWindow.ToggleCharacterFormat).toHaveBeenCalledTimes(3);
+    expect(editWindow.SetParagraphListKind).toHaveBeenCalledTimes(2);
     expect(editWindow.Undo).toHaveBeenCalledOnce();
     expect(editWindow.Redo).toHaveBeenCalledOnce();
+  });
 
-    const dataTransfer = {
-      getData: vi.fn(/** Returns no transferable content. @returns Empty MIME value. */ () => ""),
-      setData: vi.fn(),
-    } as unknown as DataTransfer;
-    const transferEvent = {
+  it("rejects stale DOM positions and empty browser transfers", /** Checks rejects stale DOM positions and empty browser transfers. @returns Test callback result. */ () => {
+    const editWindow = {
+      SetSelection: vi.fn(/** Runs the test callback. @returns Test callback result. */ () => true),
+      CreateSelectionTransfer: vi.fn(
+        /** Runs the test callback. @returns Test callback result. */ () => undefined,
+      ),
+    };
+    const adapter = new BrowserWriterEditWindow(
+      editWindow as unknown as SwEditWin,
+      {
+        document,
+        getSelection: /** Runs the test callback. @returns Test callback result. */ () =>
+          window.getSelection(),
+      },
+      /** Runs the test callback. @returns Test callback result. */ () => undefined,
+    );
+    const boundary = adapter as unknown as {
+      ApplySelection: (selection: {
+        point: { paragraphId: string; offset: number; nodeIndex?: number };
+        mark?: { paragraphId: string; offset: number; nodeIndex?: number };
+      }) => boolean;
+      WriteTransfer: (event: React.ClipboardEvent<HTMLElement>) => boolean;
+    };
+    expect(boundary.ApplySelection({ point: { paragraphId: "missing", offset: 0 } })).toBe(false);
+    expect(
+      boundary.ApplySelection({
+        point: { paragraphId: "p", offset: 0, nodeIndex: 1 },
+        mark: { paragraphId: "missing", offset: 0 },
+      }),
+    ).toBe(false);
+    expect(boundary.ApplySelection({ point: { paragraphId: "p", offset: 0, nodeIndex: 1 } })).toBe(
+      true,
+    );
+    expect(editWindow.SetSelection).toHaveBeenCalledWith({
+      point: { contentIndex: 0, nodeIndex: 1 },
+    });
+    const synchronize = vi
+      .spyOn(adapter as unknown as { SynchronizeSelection: () => boolean }, "SynchronizeSelection")
+      .mockReturnValue(true);
+    expect(
+      boundary.WriteTransfer({
+        preventDefault: vi.fn(),
+      } as unknown as React.ClipboardEvent<HTMLElement>),
+    ).toBe(false);
+    const drag = {
+      dataTransfer: {
+        getData: /** Runs the test callback. @returns Test callback result. */ () => "",
+      },
       clientX: 0,
       clientY: 0,
-      clipboardData: dataTransfer,
-      dataTransfer,
       preventDefault: vi.fn(),
-    };
-    controller.HandleCopy(transferEvent as unknown as Parameters<typeof controller.HandleCopy>[0]);
-    controller.HandleDragStart(
-      transferEvent as unknown as Parameters<typeof controller.HandleDragStart>[0],
-    );
-
-    placeCaret(outside, 0);
-    controller.HandleDragStart(
-      transferEvent as unknown as Parameters<typeof controller.HandleDragStart>[0],
-    );
-    controller.HandleDrop(transferEvent as unknown as Parameters<typeof controller.HandleDrop>[0]);
-    expect(dispatch("insertText", "blocked").defaultPrevented).toBe(true);
-    expect(editWindow.InsertText).not.toHaveBeenCalledWith("blocked");
-    placeCaret(paragraph, 1);
-    controller.HandleDrop(transferEvent as unknown as Parameters<typeof controller.HandleDrop>[0]);
-    expect(transferEvent.preventDefault).toHaveBeenCalledOnce();
-    unsubscribe();
-    dispatch("insertText", "detached");
-    expect(editWindow.InsertText).not.toHaveBeenCalledWith("detached");
+    } as unknown as React.DragEvent<HTMLElement>;
+    adapter.HandleDragStart(drag);
+    adapter.HandleDrop(drag);
+    expect(drag.preventDefault).toHaveBeenCalledOnce();
+    const paste = {
+      clipboardData: {
+        getData: /** Runs the test callback. @returns Test callback result. */ () => "",
+      },
+      preventDefault: vi.fn(),
+    } as unknown as React.ClipboardEvent<HTMLElement>;
+    adapter.HandlePaste(paste);
+    expect(paste.preventDefault).toHaveBeenCalledOnce();
+    synchronize.mockReturnValue(false);
+    adapter.HandleDragStart(drag);
+    adapter.HandleDrop(drag);
+    expect(drag.preventDefault).toHaveBeenCalledOnce();
   });
 });

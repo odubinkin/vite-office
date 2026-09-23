@@ -175,9 +175,9 @@ export class WriterViewProjection {
               ? 700
               : 400,
             ...(highlight === "transparent" ? {} : { highlight }),
-            lineHeight:
-              ((node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace() ||
-                100) / 100,
+            lineHeight: projectWriterLineHeight(
+              (node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetPropLineSpace(),
+            ),
             lowerSpacingPt: spacing.GetLower() / 20,
             rightMarginPt:
               (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight() / 20,
@@ -250,6 +250,15 @@ export class WriterViewProjection {
       pageDescriptor: document.GetPageDesc().GetValue(),
     });
   }
+}
+
+/** Mirrors Writer's additive proportional leading with a browser font-size fallback for its VCL line metrics. @param percent - SvxLineSpacingItem percentage. @returns CSS line-height multiplier. */
+export function projectWriterLineHeight(percent: number): number {
+  const resolved = percent === 0 ? 100 : Math.max(50, percent);
+  // itrform2.cxx adds (resolved - 100)% of text height to the natural line box.
+  // VCL's ascent/descent is unavailable in CSS; Writer's 1.15 font-size fallback
+  // from frmtool.cxx supplies the base, while the leading stays additive.
+  return Math.max(0.05, Math.round((1.15 + (resolved - 100) / 100) * 100) / 100);
 }
 
 /** Resolves the immutable Writer style hierarchy once for binding-backed view snapshots. @returns Selector options. */
