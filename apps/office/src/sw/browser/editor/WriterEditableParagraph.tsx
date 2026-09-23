@@ -81,7 +81,7 @@ export function WriterEditableParagraph({
           aria-describedby={styleDescriptionId}
           aria-label={label}
           aria-multiline="true"
-          className={`min-h-7 whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"}`}
+          className={`whitespace-pre-wrap text-slate-950 outline-none ${listMarker === undefined ? "" : "min-w-0 flex-1"}`}
           data-alignment={paragraph.alignment}
           data-list-kind={paragraph.list.kind}
           data-list-level={paragraph.list.level}
@@ -110,6 +110,7 @@ export function WriterEditableParagraph({
             fontStyle: paragraph.computedStyle.fontStyle,
             fontWeight: paragraph.computedStyle.fontWeight,
             lineHeight: paragraph.computedStyle.lineHeight,
+            minHeight: `${paragraph.computedStyle.fontSizePt * paragraph.computedStyle.lineHeight}pt`,
             marginInlineStart:
               paragraph.list.kind === "none" && paragraph.textLeftMargin > 0
                 ? `${paragraph.textLeftMargin / 20}pt`

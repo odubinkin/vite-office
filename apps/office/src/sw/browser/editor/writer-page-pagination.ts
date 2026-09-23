@@ -36,7 +36,7 @@ export function paginateWriterParagraphs(
     const estimatedHeightPt =
       style.upperSpacingPt +
       style.lowerSpacingPt +
-      visualLines * Math.max(14, style.fontSizePt * style.lineHeight);
+      visualLines * style.fontSizePt * style.lineHeight;
     const heightPixels = measuredHeights?.get(paragraph.id) ?? (estimatedHeightPt * 4) / 3;
     const current = pages[pages.length - 1] as WriterParagraph[];
     if (current.length > 0 && usedHeightPixels + heightPixels > contentHeightPixels) {

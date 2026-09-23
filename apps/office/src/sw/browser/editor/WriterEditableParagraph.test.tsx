@@ -71,6 +71,7 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
       />,
     );
     const editor = screen.getByRole("textbox", { name: "Writer document text" });
+    expect(editor).toHaveStyle({ lineHeight: "1", minHeight: "12pt" });
     expect(editor).toHaveStyle({ backgroundColor: "rgb(221, 238, 255)", color: "rgb(17, 34, 51)" });
     expect(editor.querySelector('[style*="color: rgb(18, 52, 86)"]')).toHaveTextContent("explicit");
     expect(

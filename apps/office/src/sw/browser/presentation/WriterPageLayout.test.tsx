@@ -182,6 +182,15 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     }
   });
 
+  it("fits four default-style lines in four line heights before browser measurement", /** Keeps the initial page estimate aligned with the rendered font. @returns Nothing. */ () => {
+    const fourLines = Array.from({ length: 4 }, (_, index) => {
+      const item = paragraph(`line-${index}`, "x");
+      return { ...item, computedStyle: { ...item.computedStyle, lineHeight: 1 } };
+    });
+    const fourLinePage = { ...page, bottomMargin: 100, height: 1160, topMargin: 100 };
+    expect(paginateWriterParagraphs(fourLines, fourLinePage)).toHaveLength(1);
+  });
+
   it("paginates by physical text area and renders optional workspace regions", /** Exercises page grouping and workspace branches. @returns Nothing. */ () => {
     const paragraphs = [paragraph("p1", "first\nline"), paragraph("p2", "second")];
     const tinyPage = { ...page, bottomMargin: 100, height: 800, topMargin: 100 };

@@ -105,7 +105,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   return (
     <article
       aria-label="Writer document body"
-      className="grid justify-center gap-6 text-slate-950 outline-none"
+      className="grid w-max min-w-full justify-center gap-6 px-8 text-slate-950 outline-none"
       contentEditable
       data-writer-editing-host="true"
       onClick={controller.HandleClick}
