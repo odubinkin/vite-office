@@ -90,6 +90,49 @@ function findZipSignature(bytes: Uint8Array, signature: number): number {
 }
 
 describe("Writer ODF XML filters" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
+  it("round-trips Standard page geometry through page-layout and master-page", /** Verifies custom page-layout serialization. @returns A fulfilled import promise. */ async () => {
+    const writer = createWriterDocument();
+    const page = {
+      bottomMargin: 900,
+      height: 12_000,
+      landscape: true,
+      leftMargin: 720,
+      name: "Standard" as const,
+      paperFormat: "custom" as const,
+      rightMargin: 840,
+      topMargin: 960,
+      width: 16_000,
+    };
+    writer.ChgPageDesc(page);
+    const bytes = writeTargetOdt(writer);
+    const styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    expect(styles).toContain('<style:page-layout style:name="pm1">');
+    expect(styles).toContain('style:print-orientation="landscape"');
+    expect(styles).toContain(
+      '<style:master-page style:name="Standard" style:page-layout-name="pm1"/>',
+    );
+    const imported = await readOdtDocument(bytes, metadata());
+    expect(imported.document.GetPageDesc().GetValue()).toEqual(page);
+  });
+
+  it("retains a known landscape paper identity through ODT", /** Verifies oriented known-paper detection. @returns A fulfilled import promise. */ async () => {
+    const writer = createWriterDocument();
+    const initial = writer.GetPageDesc().GetValue();
+    writer.ChgPageDesc({
+      ...initial,
+      height: 12_240,
+      landscape: true,
+      paperFormat: "Letter",
+      width: 15_840,
+    });
+    const imported = await readOdtDocument(writeTargetOdt(writer), metadata());
+    expect(imported.document.GetPageDesc().GetValue()).toMatchObject({
+      height: 12_240,
+      landscape: true,
+      paperFormat: "Letter",
+      width: 15_840,
+    });
+  });
   it("opens LibreOffice ODTs containing a default page layout", /** Verifies the upstream style container accepts the default page-layout subtree even though the bounded Writer model does not consume page properties. @returns Nothing. */ async () => {
     const bytes = basicOdt();
     const archive = new ZipFile(bytes);

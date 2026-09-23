@@ -7,6 +7,7 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { projectWriterParagraphList } from "../../core/doc/list";
 import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
+import { SwUndoPageDesc, SwUndoRulerIndent } from "../../core/undo/SwUndoPageDesc";
 import { SwDocShell } from "../app/docsh";
 import { SwTransferable } from "../dochdl/swdtflvr";
 import { SwWrtShell } from "./wrtsh";
@@ -37,6 +38,53 @@ function createShell(text = ""): SwWrtShell {
 }
 
 describe("Writer canonical input shell", /** Registers canonical cursor and input tests. @returns Nothing. */ function defineWriterInputShellTests(): void {
+  it("applies page geometry and ruler indents through Writer undo", /** Verifies page and ruler actions plus payloads. @returns Nothing. */ () => {
+    const shell = createShell("Body");
+    const initialPage = shell.GetDoc().GetPageDesc().GetValue();
+    const nextPage = {
+      ...initialPage,
+      leftMargin: initialPage.leftMargin + 120,
+      paperFormat: "custom" as const,
+    };
+    expect(shell.SetPageDescriptor(initialPage)).toBe(false);
+    expect(shell.SetPageDescriptor(nextPage)).toBe(true);
+    expect(shell.GetDoc().GetPageDesc().GetValue()).toEqual(nextPage);
+    expect(shell.Undo()).toBe(true);
+    expect(shell.GetDoc().GetPageDesc().GetValue()).toEqual(initialPage);
+    expect(shell.Redo()).toBe(true);
+    expect(shell.GetDoc().GetPageDesc().GetValue()).toEqual(nextPage);
+    const paragraph = shell.GetActiveParagraph();
+    const cursorState = {
+      activeParagraph: paragraph,
+      pendingCharacterItems: paragraph.GetCharacterItemsAt(0),
+      point: { node: paragraph, offset: 0 },
+    };
+    expect(
+      new SwUndoPageDesc(initialPage, nextPage, cursorState, cursorState).GetPayloadSize(),
+    ).toBe(10);
+    expect(
+      new SwUndoRulerIndent(
+        paragraph,
+        { firstLine: 0, left: 0, right: 0 },
+        { firstLine: 180, left: 360, right: 240 },
+        cursorState,
+        cursorState,
+      ).GetPayloadSize(),
+    ).toBe(6);
+    expect(shell.SetParagraphRulerIndents({ firstLine: 180, left: 360, right: 240 })).toBe(true);
+    expect([
+      paragraph.GetParagraphFirstLineIndent(),
+      paragraph.GetParagraphTextLeftMargin(),
+      paragraph.GetParagraphRightMargin(),
+    ]).toEqual([180, 360, 240]);
+    expect(shell.SetParagraphRulerIndents({ firstLine: 180, left: 360, right: 240 })).toBe(false);
+    expect(shell.Undo()).toBe(true);
+    expect([
+      paragraph.GetParagraphFirstLineIndent(),
+      paragraph.GetParagraphTextLeftMargin(),
+      paragraph.GetParagraphRightMargin(),
+    ]).toEqual([0, 0, 0]);
+  });
   it("matches text-shell indent dispatch for ordinary and list paragraphs", /** Verifies `SID_INC_INDENT` changes margins outside lists and levels inside them. @returns Nothing. */ function routesContextualIndent(): void {
     const shell = createShell("Body");
     const paragraph = shell.GetActiveParagraph();
@@ -758,7 +806,8 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     expect(shell.SplitNode()).toBe(true);
     expect(shell.Insert("second")).toBe(true);
     const [first, second] = shell.GetDoc().paragraphs;
-    if (first === undefined || second === undefined) throw new Error("Writer split did not create two paragraphs.");
+    if (first === undefined || second === undefined)
+      throw new Error("Writer split did not create two paragraphs.");
     shell.SetPaM(new SwPosition(second, second.Len()), new SwPosition(first, 0));
     expect(shell.ToggleCharacterFormat("bold")).toBe(true);
     expect(projectWriterTextRuns(first)[0]?.attributes.bold).toBe(true);

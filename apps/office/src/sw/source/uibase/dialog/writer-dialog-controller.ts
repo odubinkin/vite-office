@@ -2,6 +2,7 @@
 
 import { SfxDialogController } from "../../../../sfx2/source/dialog/dialogcontroller";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
+import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 
 /** Hyperlink child-window request initialized entirely by the Writer shell. */
 export interface WriterHyperlinkDialogRequest {
@@ -15,18 +16,27 @@ export interface WriterHyperlinkDialogResult {
   readonly hyperlink: WriterHyperlink;
   readonly text: string;
 }
+/** Page Style child-window request initialized from the Standard page descriptor. */
+export interface WriterPageDialogRequest {
+  readonly commandUrl: string;
+  readonly initialValue: WriterPageDescriptorValue;
+  readonly kind: "page-style";
+}
+/** Accepted physical page geometry returned by the presentation adapter. */
+export interface WriterPageDialogResult {
+  readonly pageDescriptor: WriterPageDescriptorValue;
+}
 
 /** Every Writer child-window request supported by the browser presenter. */
-export type WriterDialogRequest = WriterHyperlinkDialogRequest;
+export type WriterDialogRequest = WriterHyperlinkDialogRequest | WriterPageDialogRequest;
+/** Every accepted result supported by the Writer dialog presenter. */
+export type WriterDialogResult = WriterHyperlinkDialogResult | WriterPageDialogResult;
 /** Observable snapshot published by the Writer dialog controller. */
 export type WriterDialogSnapshot = ReturnType<WriterDialogController["GetSnapshot"]>;
 
 /** Writer-specific controller facade around the generic Sfx request lifecycle. */
 export class WriterDialogController {
-  private readonly controller = new SfxDialogController<
-    WriterDialogRequest,
-    WriterHyperlinkDialogResult
-  >();
+  private readonly controller = new SfxDialogController<WriterDialogRequest, WriterDialogResult>();
 
   public readonly GetSnapshot = this.controller.GetSnapshot;
   public readonly Subscribe = this.controller.Subscribe;
@@ -41,11 +51,28 @@ export class WriterDialogController {
       ...(initialHyperlink === undefined ? {} : { initialHyperlink }),
       kind: "hyperlink",
     });
-    return completion.kind === "accepted" ? completion.result : undefined;
+    return completion.kind === "accepted"
+      ? (completion.result as WriterHyperlinkDialogResult)
+      : undefined;
+  }
+
+  /** Requests the Writer Page tab and returns accepted geometry or cancellation. @param commandUrl - Originating command. @param initialValue - Current Standard page geometry. @returns Accepted geometry or undefined. */
+  public async RequestPageDialog(
+    commandUrl: string,
+    initialValue: WriterPageDescriptorValue,
+  ): Promise<WriterPageDialogResult | undefined> {
+    const completion = await this.controller.Request({
+      commandUrl,
+      initialValue,
+      kind: "page-style",
+    });
+    return completion.kind === "accepted"
+      ? (completion.result as WriterPageDialogResult)
+      : undefined;
   }
 
   /** Completes the matching request. @param id - Request identity. @param result - Accepted fields. @returns Whether it matched. */
-  public Complete(id: number, result: WriterHyperlinkDialogResult): boolean {
+  public Complete(id: number, result: WriterDialogResult): boolean {
     return this.controller.Complete(id, result);
   }
 

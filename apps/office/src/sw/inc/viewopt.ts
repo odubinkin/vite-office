@@ -3,6 +3,7 @@
 /** View-local visibility flags consumed by SwView and browser presentation. */
 export class SwViewOption {
   private horizontalRulerVisible = true;
+  private verticalRulerVisible = true;
   private sidebarVisible = true;
   private statusBarVisible = true;
 
@@ -12,6 +13,10 @@ export class SwViewOption {
   /** Returns horizontal-ruler visibility. @returns Whether visible. */
   public IsHorizontalRulerVisible(): boolean {
     return this.horizontalRulerVisible;
+  }
+  /** Returns vertical-ruler visibility. @returns Whether visible. */
+  public IsVerticalRulerVisible(): boolean {
+    return this.verticalRulerVisible;
   }
 
   /** Returns sidebar visibility. @returns Whether visible. */
@@ -27,6 +32,11 @@ export class SwViewOption {
   /** Toggles horizontal-ruler visibility. @returns Nothing. */
   public ToggleHorizontalRuler(): void {
     this.horizontalRulerVisible = !this.horizontalRulerVisible;
+    this.changed();
+  }
+  /** Toggles vertical-ruler visibility. @returns Nothing. */
+  public ToggleVerticalRuler(): void {
+    this.verticalRulerVisible = !this.verticalRulerVisible;
     this.changed();
   }
 

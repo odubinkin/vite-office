@@ -42,7 +42,7 @@ export function getWriterSelectedTextRange(cursor: SwPaM): WriterTextRange | und
   return start === end ? undefined : { end, node: point.GetNode() as WriterParagraph, start };
 }
 
-/** Returns every non-empty paragraph-local range covered by an ordered Writer selection. */
+/** Returns every non-empty paragraph-local range covered by an ordered Writer selection. @param cursor - Writer selection. @returns Selected paragraph ranges or undefined. */
 export function getWriterSelectedTextRanges(cursor: SwPaM): readonly WriterTextRange[] | undefined {
   if (!cursor.HasMark()) return undefined;
   const point = cursor.GetPoint();
@@ -55,18 +55,23 @@ export function getWriterSelectedTextRanges(cursor: SwPaM): readonly WriterTextR
   return firstNode
     .GetDoc()
     .paragraphs.filter(
-      /** Keeps only body paragraphs within the inclusive Writer node span. */ (node) =>
-        node.GetIndex() >= firstNode.GetIndex() && node.GetIndex() <= lastNode.GetIndex(),
+      /** Keeps only body paragraphs within the inclusive Writer node span. @param node - Body paragraph. @returns Whether selected. */ (
+        node,
+      ) => node.GetIndex() >= firstNode.GetIndex() && node.GetIndex() <= lastNode.GetIndex(),
     )
     .map(
-      /** Converts one selected paragraph to its local bounded range. */ (node) => ({
+      /** Converts one selected paragraph to its local bounded range. @param node - Selected paragraph. @returns Local range. */ (
+        node,
+      ) => ({
         end: node === lastNode ? last.GetContentIndex() : node.Len(),
         node,
         start: node === firstNode ? first.GetContentIndex() : 0,
-      }))
+      }),
+    )
     .filter(
-      /** Excludes zero-width boundary paragraphs without discarding the enclosing selection. */ (range) =>
-        range.start < range.end,
+      /** Excludes zero-width boundary paragraphs without discarding the enclosing selection. @param range - Candidate range. @returns Whether non-empty. */ (
+        range,
+      ) => range.start < range.end,
     );
 }
 

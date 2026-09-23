@@ -81,12 +81,15 @@ export interface WriterHyperlinkCommandArguments {
 /** Bounded view-shell target for generated Writer view slots. */
 export interface WriterViewCommandTarget {
   readonly IsHorizontalRulerVisible: () => boolean;
+  readonly IsVerticalRulerVisible: () => boolean;
   readonly IsSidebarVisible: () => boolean;
   readonly IsStatusBarVisible: () => boolean;
   readonly IsStoragePending: () => boolean;
   readonly NewDocument: () => void;
+  readonly OpenPageDialog: () => Promise<boolean>;
   readonly RequestSelectAll: () => void;
   readonly ToggleHorizontalRuler: () => void;
+  readonly ToggleVerticalRuler: () => void;
   readonly ToggleSidebar: () => void;
   readonly ToggleStatusBar: () => void;
 }

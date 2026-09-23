@@ -19,6 +19,7 @@ import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwEditWin } from "../docvw/edtwin";
 import { SwViewCommandShell } from "../shells/viewsh";
 import { SwWrtShell } from "../wrtsh/wrtsh";
+import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
@@ -121,6 +122,10 @@ export class SwView {
   public IsHorizontalRulerVisible(): boolean {
     return this.viewOptions.IsHorizontalRulerVisible();
   }
+  /** Returns vertical-ruler command state. @returns Visibility. */
+  public IsVerticalRulerVisible(): boolean {
+    return this.viewOptions.IsVerticalRulerVisible();
+  }
 
   /** Returns sidebar command state. @returns Visibility. */
   public IsSidebarVisible(): boolean {
@@ -140,6 +145,18 @@ export class SwView {
   /** Toggles horizontal-ruler visibility. @returns Nothing. */
   public ToggleHorizontalRuler(): void {
     this.viewOptions.ToggleHorizontalRuler();
+  }
+  /** Toggles vertical-ruler visibility. @returns Nothing. */
+  public ToggleVerticalRuler(): void {
+    this.viewOptions.ToggleVerticalRuler();
+  }
+  /** Opens the upstream PageDialog boundary and applies an accepted descriptor through SwWrtShell. @returns Whether accepted geometry changed the document. */
+  public async OpenPageDialog(): Promise<boolean> {
+    const result = await this.dialogController.RequestPageDialog(
+      WRITER_COMMAND_IDS.pageDialog,
+      this.docShell.GetDoc().GetPageDesc().GetValue(),
+    );
+    return result === undefined ? false : this.wrtShell.SetPageDescriptor(result.pageDescriptor);
   }
 
   /** Toggles sidebar visibility. @returns Nothing. */

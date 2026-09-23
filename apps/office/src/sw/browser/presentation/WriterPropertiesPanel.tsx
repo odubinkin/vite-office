@@ -44,7 +44,7 @@ const sidebarIcons: Readonly<Record<string, LucideIcon>> = {
   [WRITER_COMMAND_IDS.orderedList]: ListOrdered,
 };
 
-/** Resolves the required icon for one fixed sidebar command placement. */
+/** Resolves the required icon for one fixed sidebar command placement. @param commandId - Writer command. @returns Sidebar icon. */
 function getSidebarIcon(commandId: string): LucideIcon {
   const icon = sidebarIcons[commandId];
   if (icon === undefined) throw new Error(`Writer sidebar icon is missing for ${commandId}.`);

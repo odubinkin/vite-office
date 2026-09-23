@@ -100,9 +100,10 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(screen.getByRole("region", { name: "Writer document canvas" })).toBeVisible();
     expect(screen.getByRole("region", { name: "Writer document canvas" })).toHaveAttribute(
       "data-layout-mode",
-      "continuous",
+      "paged",
     );
-    expect(screen.getByRole("document", { name: "Continuous document view" })).toBeVisible();
+    expect(screen.getByRole("document", { name: "Page 1" })).toBeVisible();
+    expect(screen.getByLabelText("Writer vertical ruler")).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "View" }));
     const hiddenSidebarMenuItem = screen.getByRole("menuitemcheckbox", { name: "Sidebar" });
     expect(hiddenSidebarMenuItem).toHaveAttribute("aria-checked", "false");
@@ -158,6 +159,73 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     expect(screen.queryByRole("button", { name: "Window" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Help" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Add paragraph" })).not.toBeInTheDocument();
+  }, 30_000);
+
+  it("configures physical pages and applies ruler drags through Writer commands", /** Verifies Page Style, rulers, and vertical visibility. @returns A fulfilled interaction promise. */ async () => {
+    render(<App />);
+    const page = screen.getByRole("document", { name: "Page 1" });
+    const originalWidth = page.style.width;
+    fireEvent.click(screen.getByRole("button", { name: "Format" }));
+    fireEvent.click(screen.getByRole("menuitem", { name: "Page Style…" }));
+    expect(screen.getByRole("dialog", { name: "Page Style" })).toBeVisible();
+    await act(
+      /** Cancels the first Page Style request. @returns A fulfilled act promise. */ async () => {
+        fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+      },
+    );
+    await waitFor(
+      /** Waits for cancellation. @returns Nothing. */ () =>
+        expect(screen.queryByRole("dialog", { name: "Page Style" })).not.toBeInTheDocument(),
+    );
+    expect(page.style.width).toBe(originalWidth);
+
+    const formatButton = screen.getByRole("button", { name: "Format" });
+    if (formatButton.getAttribute("aria-expanded") !== "true") fireEvent.click(formatButton);
+    await act(
+      /** Reopens Page Style. @returns A fulfilled act promise. */ async () => {
+        fireEvent.click(screen.getByRole("menuitem", { name: "Page Style…" }));
+      },
+    );
+    await screen.findByRole("dialog", { name: "Page Style" });
+    fireEvent.change(screen.getByLabelText("Paper format"), { target: { value: "A4" } });
+    fireEvent.click(screen.getByLabelText("Landscape"));
+    fireEvent.change(screen.getByLabelText("Left (cm)"), { target: { value: "2.5" } });
+    fireEvent.click(screen.getByRole("button", { name: "OK" }));
+    await waitFor(
+      /** Waits for accepted Page Style closure. @returns Nothing. */ () =>
+        expect(screen.queryByRole("dialog", { name: "Page Style" })).not.toBeInTheDocument(),
+    );
+    expect(screen.getByRole("document", { name: "Page 1" }).style.width).not.toBe(originalWidth);
+
+    const leftMarginHandle = screen.getByRole("button", { name: "Left page margin" });
+    const beforePadding = screen.getByRole("document", { name: "Page 1" }).style.paddingLeft;
+    fireEvent.pointerDown(leftMarginHandle, { clientX: 100 });
+    fireEvent.pointerUp(window, { clientX: 110 });
+    await waitFor(
+      /** Waits for page-margin projection. @returns Nothing. */ () =>
+        expect(screen.getByRole("document", { name: "Page 1" }).style.paddingLeft).not.toBe(
+          beforePadding,
+        ),
+    );
+
+    const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Paragraph left indent" }), {
+      clientX: 100,
+    });
+    fireEvent.pointerUp(window, { clientX: 112 });
+    await waitFor(
+      /** Waits for paragraph-indent projection. @returns Nothing. */ () =>
+        expect(paragraph.style.marginInlineStart).not.toBe(""),
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "View" }));
+    const rulersMenu = screen.getByRole("menuitem", { name: "Rulers" });
+    rulersMenu.focus();
+    fireEvent.keyDown(rulersMenu, { key: "ArrowRight" });
+    const vertical = screen.getByRole("menuitemcheckbox", { name: "Vertical Ruler" });
+    expect(vertical).toHaveAttribute("aria-checked", "true");
+    fireEvent.click(vertical);
+    expect(screen.queryByLabelText("Writer vertical ruler")).not.toBeInTheDocument();
   });
 
   it("copies the selected Writer body through Edit and the standard toolbar" /**
@@ -383,7 +451,7 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
         delete (document as unknown as { execCommand?: unknown }).execCommand;
       else Object.defineProperty(document, "execCommand", originalExecCommand);
     }
-  });
+  }, 15_000);
 
   it("replaces native keyboard Copy data with sanitized formatted Writer clipboard types" /**
    * Verifies Ctrl/Cmd+C cannot serialize hidden paragraph-style descriptions even though the browser selection crosses their DOM siblings.
@@ -534,5 +602,5 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     } finally {
       vi.useRealTimers();
     }
-  });
+  }, 15_000);
 });

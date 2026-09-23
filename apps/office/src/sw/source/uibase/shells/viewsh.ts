@@ -57,6 +57,20 @@ export function createWriterViewCommandRegistry(
     },
     {
       capabilityId: "CAP-0104",
+      /** Toggles vertical-ruler visibility. @returns Nothing. */
+      execute: (): void => target.ToggleVerticalRuler(),
+      id: WRITER_COMMAND_IDS.toggleVerticalRuler,
+      /** Reads vertical-ruler visibility. @returns Checked state. */
+      isChecked: (): boolean => target.IsVerticalRulerVisible(),
+    },
+    {
+      capabilityId: "CAP-0136",
+      /** Opens the Page Style dialog. @returns Whether accepted geometry changed the document. */
+      execute: (): Promise<boolean> => target.OpenPageDialog(),
+      id: WRITER_COMMAND_IDS.pageDialog,
+    },
+    {
+      capabilityId: "CAP-0104",
       /** Toggles sidebar visibility. @returns Nothing. */
       execute: (): void => target.ToggleSidebar(),
       id: WRITER_COMMAND_IDS.toggleSidebar,

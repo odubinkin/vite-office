@@ -14,6 +14,12 @@ import type { SwAtomicModelHint } from "../../../inc/hints";
 import { SfxUndoManager } from "../../../../svl/source/undo/undo";
 import type { SwUndoRedoContext } from "../undo/undobj";
 import type { DefaultFontDevice } from "./default-font";
+import {
+  createDefaultWriterPageDescriptor,
+  equalWriterPageDescriptors,
+  SwPageDesc,
+  type WriterPageDescriptorValue,
+} from "../layout/pagedesc";
 
 /** Construction policy for locale/device-dependent Writer defaults. */
 export interface SwDocOptions {
@@ -33,6 +39,7 @@ export class SwDoc {
   private readonly undoManager = new SfxUndoManager<SwUndoRedoContext>();
   private readonly defaultFontDevice: DefaultFontDevice | undefined;
   private readonly locale: string;
+  private readonly pageDesc: SwPageDesc;
   public readonly nodes: SwNodes;
 
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
@@ -40,6 +47,7 @@ export class SwDoc {
     const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
     this.defaultFontDevice = options?.defaultFontDevice;
     this.locale = options?.locale ?? "en-US";
+    this.pageDesc = createDefaultWriterPageDescriptor(this.locale);
     this.attrPool = new SwAttrPool(this);
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
     this.listsManager = new DocumentListsManager(this.stateManager);
@@ -52,6 +60,18 @@ export class SwDoc {
   /** Returns the document locale used for script-specific defaults. @returns BCP 47 locale. */
   public GetLocale(): string {
     return this.locale;
+  }
+  /** Returns the document-owned Standard page descriptor. @returns Page descriptor. */
+  public GetPageDesc(): SwPageDesc {
+    return this.pageDesc;
+  }
+  /** Replaces the supported Standard page geometry and publishes one model hint. @param value - Page geometry. @returns Whether it changed. */
+  public ChgPageDesc(value: WriterPageDescriptorValue): boolean {
+    const before = this.pageDesc.GetValue();
+    if (equalWriterPageDescriptors(before, value)) return false;
+    this.pageDesc.SetValue(value);
+    this.NotifyModelChange({ kind: "page-descriptor-changed" });
+    return true;
   }
 
   /** Returns the injected output-device font resolver. @returns Device or undefined. */

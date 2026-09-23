@@ -94,8 +94,9 @@ export class SwTextShell {
     if (ranges.length === 0) return "mixed";
     const state = ranges[0]?.node.GetTextRangeFormatState(ranges[0].start, ranges[0].end, format);
     return ranges.every(
-      /** Preserves the tri-state command state across every selected paragraph. */ (range) =>
-        range.node.GetTextRangeFormatState(range.start, range.end, format) === state,
+      /** Preserves the tri-state command state across every selected paragraph. @param range - Selected range. @returns Whether its state matches. */ (
+        range,
+      ) => range.node.GetTextRangeFormatState(range.start, range.end, format) === state,
     )
       ? (state as "off" | "on")
       : "mixed";
@@ -140,7 +141,9 @@ export class SwTextShell {
       return false;
     }
     const actions = selected.map(
-      /** Creates one reversible fragment replacement per selected paragraph. */ (range) =>
+      /** Creates one reversible fragment replacement per selected paragraph. @param range - Selected range. @returns Undo action. */ (
+        range,
+      ) =>
         new SwUndoAttr(
           range.node,
           range.start,
@@ -202,7 +205,9 @@ export class SwTextShell {
     }
     return this.ApplySelectedFontChange(
       selected,
-      /** Creates one per-paragraph family change. */ (range) =>
+      /** Creates one per-paragraph family change. @param range - Selected range. @returns Undo action. */ (
+        range,
+      ) =>
         CreateWriterFontUndo(
           range.node,
           range.start,
@@ -234,7 +239,9 @@ export class SwTextShell {
     }
     return this.ApplySelectedFontChange(
       selected,
-      /** Creates one per-paragraph height change. */ (range) =>
+      /** Creates one per-paragraph height change. @param range - Selected range. @returns Undo action. */ (
+        range,
+      ) =>
         CreateWriterFontSizeUndo(
           range.node,
           range.start,
@@ -246,13 +253,15 @@ export class SwTextShell {
     );
   }
 
-  /** Applies all non-no-op per-paragraph font actions as one Writer history entry. */
+  /** Applies all non-no-op per-paragraph font actions as one Writer history entry. @param ranges - Selected ranges. @param createAction - Per-range action factory. @returns Whether content changed. */
   private ApplySelectedFontChange(
     ranges: readonly WriterTextRange[],
     createAction: (range: WriterTextRange) => SwUndoAttr | undefined,
   ): boolean {
     const actions = ranges.flatMap(
-      /** Excludes paragraphs whose effective formatting already matches the request. */ (range) => {
+      /** Excludes paragraphs whose effective formatting already matches the request. @param range - Selected range. @returns Zero or one action. */ (
+        range,
+      ) => {
         const action = createAction(range);
         return action === undefined ? [] : [action];
       },

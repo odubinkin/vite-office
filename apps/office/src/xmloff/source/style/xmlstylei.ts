@@ -14,7 +14,6 @@ import { importOdfLength, XMLTextPropertySetContext } from "../text/XMLTextPrope
 const ignoredStyleDefinitions = new Set([
   XMLToken.STYLE_DEFAULT_STYLE,
   XMLToken.STYLE_DEFAULT_PAGE_LAYOUT,
-  XMLToken.STYLE_PAGE_LAYOUT,
   XMLToken.TEXT_OUTLINE_STYLE,
   XMLToken.TEXT_LINENUMBERING_CONFIGURATION,
   XMLToken.TEXT_NOTES_CONFIGURATION,
@@ -25,6 +24,18 @@ export interface XMLStyleImportTarget {
   getFontFace(name: string): string | undefined;
   registerListStyle(styleName: string, rule: XMLTextListRule): void;
   registerStyle(name: string, definition: OdfStyleDefinition): void;
+  registerPageLayout(name: string, layout: OdfPageLayout): void;
+}
+
+/** Physical ODF page-layout subset consumed by Writer's Standard page descriptor. */
+export interface OdfPageLayout {
+  readonly bottomMargin: number;
+  readonly height: number;
+  readonly landscape: boolean;
+  readonly leftMargin: number;
+  readonly rightMargin: number;
+  readonly topMargin: number;
+  readonly width: number;
 }
 
 /** Imports style and numbering definitions before document references. */
@@ -42,9 +53,67 @@ export class XMLStylesContext extends SvXMLImportContext {
     if (element === XMLToken.STYLE_STYLE) return new XMLStyleContext(this.target, attributes);
     if (element === XMLToken.TEXT_LIST_STYLE)
       return new XMLListStyleContext(this.target, attributes);
+    if (element === XMLToken.STYLE_PAGE_LAYOUT)
+      return new XMLPageLayoutContext(this.target, attributes);
     if (ignoredStyleDefinitions.has(element)) return new SvXMLIgnoreContext();
     return null;
   }
+}
+
+/** Imports one named page layout and its physical property child. */
+class XMLPageLayoutContext extends SvXMLImportContext {
+  private layout: OdfPageLayout | undefined;
+  private readonly name: string;
+
+  /** Creates a named page-layout context. @param target - Style import target. @param attributes - Layout attributes. @returns Nothing. */
+  public constructor(
+    private readonly target: XMLStyleImportTarget,
+    attributes: FastAttributeList,
+  ) {
+    super();
+    attributes.assertOnly([XMLToken.STYLE_NAME], "page layout");
+    this.name = attributes.require(XMLToken.STYLE_NAME, "page layout name");
+  }
+
+  /** Imports the single physical page-layout-properties child. @param element - Child token. @param attributes - Physical attributes. @returns Import context. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element !== XMLToken.STYLE_PAGE_LAYOUT_PROPERTIES) return new SvXMLIgnoreContext();
+    if (this.layout !== undefined) throw new Error("Duplicate ODF page layout properties.");
+    const width = importPageLength(attributes, XMLToken.FO_PAGE_WIDTH, "page width");
+    const height = importPageLength(attributes, XMLToken.FO_PAGE_HEIGHT, "page height");
+    const orientation = attributes.get(XMLToken.STYLE_PRINT_ORIENTATION) ?? "portrait";
+    if (orientation !== "portrait" && orientation !== "landscape")
+      throw new Error(`Unsupported ODF page orientation: ${orientation}`);
+    this.layout = {
+      bottomMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_BOTTOM),
+      height,
+      landscape: orientation === "landscape",
+      leftMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_LEFT),
+      rightMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_RIGHT),
+      topMargin: importOptionalPageLength(attributes, XMLToken.FO_MARGIN_TOP),
+      width,
+    };
+    return new SvXMLIgnoreContext();
+  }
+
+  /** Registers the completed page layout when its element closes. @returns Nothing. */
+  public override endFastElement(): void {
+    if (this.layout !== undefined) this.target.registerPageLayout(this.name, this.layout);
+  }
+}
+
+/** Imports one required non-percent page length in twips. @param attributes - Source attributes. @param token - Attribute token. @param label - Error label. @returns Twip length. */
+function importPageLength(attributes: FastAttributeList, token: XMLToken, label: string): number {
+  return importOdfLength(attributes.require(token, label), false, label);
+}
+
+/** Imports one optional page length, defaulting an omitted margin to zero. @param attributes - Source attributes. @param token - Attribute token. @returns Twip length. */
+function importOptionalPageLength(attributes: FastAttributeList, token: XMLToken): number {
+  const value = attributes.get(token);
+  return value === null ? 0 : importOdfLength(value, false, "page margin");
 }
 
 /** Accumulates one bounded style definition. */

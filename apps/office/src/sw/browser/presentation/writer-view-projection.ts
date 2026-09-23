@@ -39,6 +39,7 @@ import {
   RES_UL_SPACE,
 } from "../../inc/hintids";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
+import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 
 /** Browser selector metadata projected outside React from the Writer style pool. */
 export interface WriterParagraphStyleOption {
@@ -104,11 +105,13 @@ export interface WriterPresentationProjection {
   readonly modelRevision: number;
   readonly paragraphs: readonly WriterParagraphProjection[];
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
+  readonly pageDescriptor: WriterPageDescriptorValue;
 }
 
 /** Complete browser external-store snapshot. */
 export interface WriterViewSnapshot extends WriterPresentationProjection {
   readonly isHorizontalRulerVisible: boolean;
+  readonly isVerticalRulerVisible: boolean;
   readonly isPropertiesSidebarVisible: boolean;
   readonly isStoragePending: boolean;
   readonly isStatusBarVisible: boolean;
@@ -244,6 +247,7 @@ export class WriterViewProjection {
       modelRevision: document.GetDocumentStateManager().GetModelRevision(),
       paragraphs: Object.freeze(paragraphs),
       paragraphStyleOptions,
+      pageDescriptor: document.GetPageDesc().GetValue(),
     });
   }
 }
@@ -311,6 +315,7 @@ export class WriterViewStore {
       this.cachedSnapshot = Object.freeze({
         ...projected,
         isHorizontalRulerVisible: this.view.IsHorizontalRulerVisible(),
+        isVerticalRulerVisible: this.view.IsVerticalRulerVisible(),
         isPropertiesSidebarVisible: this.view.IsSidebarVisible(),
         isStatusBarVisible: this.view.IsStatusBarVisible(),
         isStoragePending: this.view.IsStoragePending(),

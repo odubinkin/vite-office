@@ -12,6 +12,7 @@ import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { SwpHints } from "../txtnode/ndhints";
 import { SwFormatINetFormat } from "../txtnode/fmtinfmt";
 import { SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
+import type { WriterPageDescriptorValue } from "../layout/pagedesc";
 import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 
 /** Primitive graph record for one numbering level. */
@@ -75,7 +76,8 @@ type WriterTextHintRecord =
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly numRules: readonly WriterNumberRuleRecord[];
-  readonly swModelVersion: 12;
+  readonly pageDescriptor: WriterPageDescriptorValue;
+  readonly swModelVersion: 13;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -115,7 +117,8 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         name: rule.GetName(),
       }),
     ),
-    swModelVersion: 12,
+    pageDescriptor: document.GetPageDesc().GetValue(),
+    swModelVersion: 13,
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -173,14 +176,16 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
 export function decodeWriterDocument(candidate: unknown): SwDoc {
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 12 ||
+    candidate.swModelVersion !== 13 ||
     !Array.isArray(candidate.numRules) ||
+    !("pageDescriptor" in candidate) ||
     !Array.isArray(candidate.textFormatCollections) ||
     !Array.isArray(candidate.textNodes)
   )
     throw new Error("Stored Writer document schema is unsupported.");
   const record = candidate as unknown as WriterDocumentRecord;
   const document = new SwDoc(false);
+  document.ChgPageDesc(record.pageDescriptor);
   for (const style of record.textFormatCollections) {
     if (!isWriterParagraphStyle(style.id)) throw new Error("Stored Writer style is invalid.");
     const collection = document.GetTextFormatColl(style.id);

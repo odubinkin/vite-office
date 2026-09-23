@@ -22,6 +22,7 @@
     "newDocument": ".uno:AddDirect",
     "openLocal": "vnd.vite-office.browser:OpenLocal",
     "openOdt": ".uno:Open",
+    "pageDialog": ".uno:PageDialog",
     "orderedList": ".uno:DefaultNumbering",
     "paste": ".uno:Paste",
     "promote": ".uno:IncrementLevel",
@@ -33,6 +34,7 @@
     "selectAll": ".uno:SelectAll",
     "styleApply": ".uno:StyleApply",
     "toggleHorizontalRuler": ".uno:Ruler",
+    "toggleVerticalRuler": ".uno:VRuler",
     "toggleSidebar": ".uno:Sidebar",
     "toggleStatusBar": ".uno:StatusBarVisible",
     "underline": ".uno:Underline",
@@ -65,6 +67,7 @@
     { "capabilityId": "CAP-0114", "commandUrl": ".uno:AddDirect" },
     { "capabilityId": "CAP-0114", "commandUrl": "vnd.vite-office.browser:OpenLocal" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:Open" },
+    { "capabilityId": "CAP-0136", "commandUrl": ".uno:PageDialog" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultNumbering" },
     { "capabilityId": "CAP-0110", "commandUrl": ".uno:Paste" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementLevel" },
@@ -75,6 +78,7 @@
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:SaveAs" },
     { "capabilityId": "CAP-0103", "commandUrl": ".uno:SelectAll" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Ruler" },
+    { "capabilityId": "CAP-0104", "commandUrl": ".uno:VRuler" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:Sidebar" },
     { "capabilityId": "CAP-0104", "commandUrl": ".uno:StatusBarVisible" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Underline" },
@@ -348,6 +352,22 @@
       "shortcuts": ["Ctrl+O", "Meta+O", "OPEN"],
       "slotId": 5501
     },
+    ".uno:PageDialog": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0136",
+      "controlLabel": "Page Style",
+      "label": "Page Style",
+      "iconName": "lc_pagedialog.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": ["Alt+Shift+P"],
+      "slotId": 20452
+    },
     ".uno:DefaultNumbering": {
       "browserOwned": false,
       "argumentSchema": ["On:SfxBoolItem"],
@@ -529,6 +549,19 @@
       "showsDialog": false,
       "shortcuts": [],
       "slotId": 20211
+    },
+    ".uno:VRuler": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0104",
+      "controlLabel": "Vertical Ruler",
+      "label": "Vertical Ruler",
+      "iconName": "lc_vruler.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "check",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 20216
     },
     ".uno:Sidebar": {
       "browserOwned": false,
@@ -748,6 +781,14 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:PageDialog",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:DefaultNumbering",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -826,6 +867,11 @@
     {
       "classification": "supported-upstream",
       "commandUrl": ".uno:Ruler",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:VRuler",
       "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
@@ -1697,14 +1743,6 @@
       "context": [".uno:ViewMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:AvailableToolbars",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ViewMenu", ".uno:RulerMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:VRuler",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -3009,14 +3047,6 @@
       "context": [".uno:FormatMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:ThemeDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:PageDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -6211,14 +6241,6 @@
       "sourceUrl": ".uno:EditCurrentRegion",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:PageDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
     }
   ],
   "locale": "en-US",
@@ -6264,7 +6286,10 @@
           { "kind": "separator" },
           {
             "id": ".uno:RulerMenu",
-            "items": [{ "commandUrl": ".uno:Ruler", "kind": "command", "visible": true }],
+            "items": [
+              { "commandUrl": ".uno:Ruler", "kind": "command", "visible": true },
+              { "commandUrl": ".uno:VRuler", "kind": "command", "visible": true }
+            ],
             "kind": "menu",
             "label": "Rulers"
           },
@@ -6314,7 +6339,9 @@
             ],
             "kind": "menu",
             "label": "Lists"
-          }
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:PageDialog", "kind": "command", "visible": true }
         ],
         "kind": "menu",
         "label": "Format"
@@ -6355,7 +6382,9 @@
       },
       { "kind": "separator" },
       { "commandUrl": ".uno:EditHyperlink", "kind": "command", "visible": true },
-      { "commandUrl": ".uno:RemoveHyperlink", "kind": "command", "visible": true }
+      { "commandUrl": ".uno:RemoveHyperlink", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:PageDialog", "kind": "command", "visible": true }
     ],
     "standardbar": [
       { "commandUrl": ".uno:AddDirect", "kind": "command", "visible": true },
@@ -7021,12 +7050,6 @@
         "context": [".uno:ViewMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:AvailableToolbars"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ViewMenu", ".uno:RulerMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:VRuler"
       },
       {
         "classification": "X",
@@ -8005,12 +8028,6 @@
         "context": [".uno:FormatMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:ThemeDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:PageDialog"
       },
       {
         "classification": "X",
@@ -10328,12 +10345,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:EditCurrentRegion"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:PageDialog"
       }
     ]
   }

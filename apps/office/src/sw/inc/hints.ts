@@ -25,6 +25,7 @@ export type SwAtomicModelHint =
   | Readonly<{ index: number; kind: "node-removed"; nodeId?: string }>
   | Readonly<{ kind: "node-content-changed"; nodeId?: string; nodeIndex?: number | undefined }>
   | Readonly<{ kind: "numbering-changed"; nodeIndex?: number; ruleName?: string }>
+  | Readonly<{ kind: "page-descriptor-changed" }>
   | Readonly<{ kind: "medium-operation-changed" }>;
 
 /** One bounded notification transaction, possibly containing several atomic model hints. */

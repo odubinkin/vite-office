@@ -20,8 +20,8 @@ export interface WriterWorkspaceChromeProps {
   readonly formattingToolbar: ReactNode;
   /** Whether the Writer properties sidebar is rendered beside the document canvas. */
   readonly isPropertiesSidebarVisible: boolean;
-  /** Whether the browser measurement-ruler chrome is rendered above the canvas. */
-  readonly isHorizontalRulerVisible: boolean;
+  /** Upstream-shaped horizontal and vertical ruler projections. */
+  readonly rulers: ReactNode;
   /** Whether the Writer status bar is rendered below the document canvas. */
   readonly isStatusBarVisible: boolean;
   /** Current contextual controls and feedback placed in the Writer properties sidebar. */
@@ -41,7 +41,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.onDocumentTitleChange - Applies a committed document title.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
- * @param props.isHorizontalRulerVisible - Whether the horizontal measurement chrome remains visible.
+ * @param props.rulers - Horizontal and vertical measurement chrome.
  * @param props.isStatusBarVisible - Whether the status feedback row remains visible below the canvas.
  * @param props.menuBar - Functional Writer menus placed beside the document title row.
  * @param props.propertiesSidebar - Contextual properties content placed in the right sidebar.
@@ -53,12 +53,12 @@ export function WriterWorkspaceChrome({
   children,
   documentTitle,
   formattingToolbar,
-  isHorizontalRulerVisible,
   isPropertiesSidebarVisible,
   isStatusBarVisible,
   menuBar,
   onDocumentTitleChange,
   propertiesSidebar,
+  rulers,
   status,
   toolbar,
 }: WriterWorkspaceChromeProps): React.JSX.Element {
@@ -155,26 +155,13 @@ export function WriterWorkspaceChrome({
             : "flex flex-col"
         }`}
       >
-        {isHorizontalRulerVisible ? (
+        <div className="grid min-h-0 min-w-0 flex-1 grid-cols-[auto_minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)] lg:col-start-1">
+          {rulers}
           <div
-            aria-label="Writer horizontal ruler"
-            className="h-5 shrink-0 border-b border-slate-300 bg-[repeating-linear-gradient(to_right,transparent_0,transparent_23px,rgb(148_163_184)_24px)] bg-white lg:col-start-1"
-            role="img"
-          />
-        ) : null}
-        <div
-          aria-label="Writer document canvas"
-          className="min-h-0 min-w-0 flex-1 overscroll-contain overflow-auto bg-slate-200/70 p-5 sm:p-8 lg:col-start-1"
-          data-layout-mode="continuous"
-          role="region"
-        >
-          <div
-            aria-label={localization.GetText(
-              "writer.workspace.continuous-view",
-              "Continuous document view",
-            )}
-            className="mx-auto w-full max-w-5xl bg-white px-7 py-10 shadow-xl shadow-slate-400/30 sm:px-12 sm:py-14"
-            role="document"
+            aria-label="Writer document canvas"
+            className="col-start-2 row-start-2 min-h-0 min-w-0 overscroll-contain overflow-auto bg-slate-200/70 p-5 sm:p-8"
+            data-layout-mode="paged"
+            role="region"
           >
             {children}
           </div>

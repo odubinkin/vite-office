@@ -32,6 +32,13 @@ import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwWrtShellEditingOperations } from "./wrtsh-editing";
 import type { WriterPasteDocument } from "./wrtsh-paste";
+import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
+import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
+import {
+  SwUndoPageDesc,
+  SwUndoRulerIndent,
+  type WriterParagraphIndentValue,
+} from "../../core/undo/SwUndoPageDesc";
 
 /** Persistent Writer editing shell over one document shell and one direction-preserving PaM. */
 export class SwWrtShell extends SwModify {
@@ -380,6 +387,30 @@ export class SwWrtShell extends SwModify {
   /** Executes the text-shell indent command: list levels for list items and a direct left margin otherwise. @param increase - Whether to increase indentation. @returns Whether content changed. */
   public ChangeParagraphIndent(increase: boolean): boolean {
     return this.textShell.ChangeParagraphIndent(increase);
+  }
+  /** Applies Standard page geometry as one Writer undo action. @param value - Replacement geometry. @returns Whether it changed. */
+  public SetPageDescriptor(value: WriterPageDescriptorValue): boolean {
+    const before = this.GetDoc().GetPageDesc().GetValue();
+    if (equalWriterPageDescriptors(before, value)) return false;
+    const cursor = this.CaptureCursorState();
+    return this.ApplyAction(new SwUndoPageDesc(before, value, cursor, cursor));
+  }
+  /** Applies direct active-paragraph ruler indents as one Writer undo action. @param value - Replacement indent tuple. @returns Whether it changed. */
+  public SetParagraphRulerIndents(value: WriterParagraphIndentValue): boolean {
+    const paragraph = this.GetActiveParagraph();
+    const before = {
+      firstLine: paragraph.GetParagraphFirstLineIndent(),
+      left: paragraph.GetParagraphTextLeftMargin(),
+      right: paragraph.GetParagraphRightMargin(),
+    };
+    if (
+      before.firstLine === value.firstLine &&
+      before.left === value.left &&
+      before.right === value.right
+    )
+      return false;
+    const cursor = this.CaptureCursorState();
+    return this.ApplyAction(new SwUndoRulerIndent(paragraph, before, value, cursor, cursor));
   }
 
   /** Reports whether the text-shell indent command has an available transition. @param increase - Whether to increase indentation. @returns Whether enabled. */

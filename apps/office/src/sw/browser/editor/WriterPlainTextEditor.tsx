@@ -7,6 +7,8 @@ import type { WriterParagraphProjection as WriterParagraph } from "../presentati
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import type { WriterCursorSelection } from "./writer-selection-types";
+import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
+import { paginateWriterParagraphs } from "./writer-page-pagination";
 
 /** Defines immutable render values plus the persistent Writer edit-window owner. */
 export interface WriterPlainTextEditorProps {
@@ -14,6 +16,7 @@ export interface WriterPlainTextEditorProps {
   readonly cursorSelection: WriterCursorSelection;
   readonly editWindow: SwEditWin;
   readonly paragraphs: readonly WriterParagraph[];
+  readonly pageDescriptor: WriterPageDescriptorValue;
 }
 
 /** Renders one root `contenteditable` and forwards browser events to one stable controller. @param props - Immutable projection and edit-window owner. @returns Logical Writer document editing host. */
@@ -40,6 +43,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       ),
     [paragraphElements, props.editWindow],
   );
+  const pages = paginateWriterParagraphs(props.paragraphs, props.pageDescriptor);
 
   useLayoutEffect(
     /** Restores the shell-owned selection after canonical paragraph projection. @returns Nothing. */
@@ -60,7 +64,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   return (
     <article
       aria-label="Writer document body"
-      className="min-h-[600px] text-slate-950 outline-none"
+      className="grid justify-center gap-6 text-slate-950 outline-none"
       contentEditable
       data-writer-editing-host="true"
       onClick={controller.HandleClick}
@@ -81,28 +85,53 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       ref={rootElement}
       suppressContentEditableWarning
     >
-      {props.paragraphs.map(
-        /** Projects one Writer paragraph. @param paragraph - Canonical paragraph projection. @param index - Paragraph order. @returns Paragraph element. */ (
-          paragraph,
-          index,
+      {pages.map(
+        /** Renders one physical page. @param page - Page paragraphs. @param pageIndex - Zero-based page index. @returns Page element. */ (
+          page,
+          pageIndex,
         ) => (
-          <WriterEditableParagraph
-            index={index}
-            isActive={paragraph.id === props.activeParagraphId}
-            isLast={index === props.paragraphs.length - 1}
-            key={paragraph.id}
-            listMarker={paragraph.listMarker}
-            paragraph={paragraph}
-            retainElement={
-              /** Maintains the browser render registry. @param paragraphId - Render key. @param element - Mounted paragraph or null. @returns Nothing. */ (
-                paragraphId,
-                element,
+          <section
+            aria-label={`Page ${pageIndex + 1}`}
+            className="box-border shrink-0 overflow-hidden bg-white shadow-xl shadow-slate-400/30"
+            data-writer-page={pageIndex + 1}
+            key={page[0]?.id ?? `empty-page-${pageIndex}`}
+            role="document"
+            style={{
+              height: props.pageDescriptor.height / 15,
+              paddingBottom: props.pageDescriptor.bottomMargin / 15,
+              paddingLeft: props.pageDescriptor.leftMargin / 15,
+              paddingRight: props.pageDescriptor.rightMargin / 15,
+              paddingTop: props.pageDescriptor.topMargin / 15,
+              width: props.pageDescriptor.width / 15,
+            }}
+          >
+            {page.map(
+              /** Renders one paragraph on the current page. @param paragraph - Paragraph projection. @returns Paragraph element. */ (
+                paragraph,
               ) => {
-                if (element === null) paragraphElements.delete(paragraphId);
-                else paragraphElements.set(paragraphId, element);
-              }
-            }
-          />
+                const index = props.paragraphs.indexOf(paragraph);
+                return (
+                  <WriterEditableParagraph
+                    index={index}
+                    isActive={paragraph.id === props.activeParagraphId}
+                    isLast={index === props.paragraphs.length - 1}
+                    key={paragraph.id}
+                    listMarker={paragraph.listMarker}
+                    paragraph={paragraph}
+                    retainElement={
+                      /** Retains the DOM identity used by SwEditWin. @param paragraphId - Projection identity. @param element - Mounted paragraph or null. @returns Nothing. */ (
+                        paragraphId,
+                        element,
+                      ) => {
+                        if (element === null) paragraphElements.delete(paragraphId);
+                        else paragraphElements.set(paragraphId, element);
+                      }
+                    }
+                  />
+                );
+              },
+            )}
+          </section>
         ),
       )}
     </article>

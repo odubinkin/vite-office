@@ -39,7 +39,7 @@ import {
   XMLFontStylesContext,
   type XMLFontStylesImportTarget,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
-import { XMLStylesContext } from "../../../../xmloff/source/style/xmlstylei";
+import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstylei";
 import type {
   OdfCharacterProperties,
   OdfHyperlink,
@@ -60,6 +60,7 @@ import { SwPosition } from "../../core/crsr/pam";
 import { SwDoc } from "../../core/doc/doc";
 import { SwNumFormat, SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { WRITER_PAPER_SIZES } from "../../core/layout/pagedesc";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONT,
@@ -92,11 +93,7 @@ import {
   WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
 } from "../../../inc/poolfmt";
 
-const ignoredDocumentChildren = new Set([
-  XMLToken.OFFICE_MASTER_STYLES,
-  XMLToken.OFFICE_SETTINGS,
-  XMLToken.OFFICE_SCRIPTS,
-]);
+const ignoredDocumentChildren = new Set([XMLToken.OFFICE_SETTINGS, XMLToken.OFFICE_SCRIPTS]);
 
 const ignoredMetadataChildren = new Set([
   XMLToken.META_GENERATOR,
@@ -169,6 +166,8 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   private readonly styles = new Map<string, OdfStyleDefinition>();
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
+  private readonly pageLayouts = new Map<string, OdfPageLayout>();
+  private standardPageLayoutName: string | undefined;
   public title: string | undefined;
 
   /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @returns Coordinator. */
@@ -227,6 +226,18 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   public registerStyle(name: string, definition: OdfStyleDefinition): void {
     if (this.styles.has(name)) throw new Error(`Duplicate ODF style: ${name}`);
     this.styles.set(name, definition);
+  }
+
+  /** Registers one named ODF page layout. @param name - Layout name. @param layout - Physical geometry. @returns Nothing. */
+  public registerPageLayout(name: string, layout: OdfPageLayout): void {
+    if (this.pageLayouts.has(name)) throw new Error(`Duplicate ODF page layout: ${name}`);
+    this.pageLayouts.set(name, layout);
+  }
+
+  /** Associates the Standard master page with its page layout. @param name - Master-page name. @param pageLayoutName - Referenced layout. @returns Nothing. */
+  public registerMasterPage(name: string, pageLayoutName: string): void {
+    if (name === "Standard" || this.standardPageLayoutName === undefined)
+      this.standardPageLayoutName = pageLayoutName;
   }
 
   /** Registers one numbering definition in Writer. @param styleName - ODF style name. @param rule - Parsed rule. @returns Nothing. */
@@ -317,6 +328,28 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   /** Applies imported named style state. @returns Nothing. */
   public finishNamedStyles(): void {
     applyNamedParagraphStyles(this.document, this.styles);
+    const layout =
+      (this.standardPageLayoutName === undefined
+        ? undefined
+        : this.pageLayouts.get(this.standardPageLayoutName)) ??
+      this.pageLayouts.values().next().value;
+    if (layout !== undefined) {
+      const a4 = WRITER_PAPER_SIZES.A4;
+      const letter = WRITER_PAPER_SIZES.Letter;
+      const matchesPaper =
+        /** Matches imported oriented dimensions to one known paper size. @param size - Portrait paper dimensions. @returns Whether dimensions match. */ (
+          size: Readonly<{ height: number; width: number }>,
+        ): boolean =>
+          layout.landscape
+            ? layout.width === size.height && layout.height === size.width
+            : layout.width === size.width && layout.height === size.height;
+      const paperFormat = matchesPaper(a4) ? "A4" : matchesPaper(letter) ? "Letter" : "custom";
+      this.document.ChgPageDesc({
+        ...layout,
+        name: "Standard",
+        paperFormat,
+      });
+    }
   }
 
   /** Validates body cardinality and supplies Writer's empty paragraph. @returns Nothing. */
@@ -382,6 +415,13 @@ class SwXMLDocContext extends SvXMLImportContext {
       return new XMLFontStylesContext(this.xmlImport);
     }
     if (
+      element === XMLToken.OFFICE_MASTER_STYLES &&
+      this.root === XMLToken.OFFICE_DOCUMENT_STYLES
+    ) {
+      attributes.assertOnly([], "master styles");
+      return new XMLMasterStylesContext(this.xmlImport);
+    }
+    if (
       (element === XMLToken.OFFICE_STYLES || element === XMLToken.OFFICE_AUTOMATIC_STYLES) &&
       (this.root === XMLToken.OFFICE_DOCUMENT_STYLES ||
         this.root === XMLToken.OFFICE_DOCUMENT_CONTENT)
@@ -399,6 +439,29 @@ class SwXMLDocContext extends SvXMLImportContext {
     }
     if (ignoredDocumentChildren.has(element)) return new SvXMLIgnoreContext();
     return null;
+  }
+}
+
+/** Imports the page-layout association from Writer master pages. */
+class XMLMasterStylesContext extends SvXMLImportContext {
+  /** Creates the master-page context for one Writer XML import. @param xmlImport - Import coordinator. @returns Nothing. */
+  public constructor(private readonly xmlImport: SwXMLImport) {
+    super();
+  }
+
+  /** Imports supported master-page children and ignores their unmodeled content. @param element - Child token. @param attributes - Child attributes. @returns Import context. */
+  public override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext | null {
+    if (element !== XMLToken.STYLE_MASTER_PAGE) return new SvXMLIgnoreContext();
+    const name = attributes.require(XMLToken.STYLE_NAME, "master page name");
+    const pageLayoutName = attributes.require(
+      XMLToken.STYLE_PAGE_LAYOUT_NAME,
+      "master page layout name",
+    );
+    this.xmlImport.registerMasterPage(name, pageLayoutName);
+    return new SvXMLIgnoreContext();
   }
 }
 

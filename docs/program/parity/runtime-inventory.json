@@ -1495,6 +1495,32 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/editor/writer-page-pagination.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0103",
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/writer-page-pagination.ts#paginateWriterParagraphs"
+        ],
+        "justification": "Estimates browser page breaks from canonical physical geometry and paragraph projections while leaving glyph shaping and native layout frames outside the bounded implementation.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/editor/writer-selection-types.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1735,6 +1761,32 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0104"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterPageStyleDialog.tsx#WriterPageStyleDialog"
+        ],
+        "justification": "Adapts the pinned PageFormatPage controls and validation boundary to an accessible React dialog while leaving page geometry in SwDoc.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/presentation/WriterPropertiesPanel.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1784,6 +1836,32 @@
           "apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx#WriterRecoveryPresentationController"
         ],
         "justification": "Intentional browser product decision: recovery prompts are unsupported and must not be reintroduced. The retained inert source marker has no UI or restore behavior.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0104",
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterRulers.tsx#WriterRulers"
+        ],
+        "justification": "Projects SwRuler/SvxRuler page-margin and paragraph-indent semantics into browser pointer controls without moving canonical values into React state.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -2877,6 +2955,39 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/layout/pagedesc.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "page-layout",
+      "capabilityIds": [
+        "CAP-0111",
+        "CAP-0113"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/layout/pagedesc.ts#SwPageDesc",
+          "vendor/libreoffice-reference/sw/source/core/layout/pagedesc.cxx#SwPageDesc"
+        ],
+        "justification": "Implements the bounded Standard page descriptor, locale defaults, physical dimensions, orientation, margins, and copy semantics at the pinned SwPageDesc ownership boundary.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwPageDesc",
+          "WriterPageDescriptorValue",
+          "createDefaultWriterPageDescriptor"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/layout/pagedesc.cxx",
+        "upstreamSymbols": [
+          "SwPageDesc"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/para/paratr.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -3078,6 +3189,39 @@
           "SwTextAttr",
           "SwTextAttr::SwTextAttr",
           "SwTextAttr::~SwTextAttr"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "undo-redo",
+      "capabilityIds": [
+        "CAP-0102"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/undo/SwUndoPageDesc.ts#SwUndoPageDesc",
+          "vendor/libreoffice-reference/sw/source/core/undo/SwUndoPageDesc.cxx#SwUndoPageDesc"
+        ],
+        "justification": "Implements reversible page-descriptor replacement and ruler-indent changes using the pinned Writer undo action boundary.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwUndoPageDesc",
+          "SwUndoRulerIndent"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/undo/SwUndoPageDesc.cxx",
+        "upstreamSymbols": [
+          "SwUndoPageDesc",
+          "SwUndoPageDesc::UndoImpl",
+          "SwUndoPageDesc::RedoImpl"
         ]
       }
     },

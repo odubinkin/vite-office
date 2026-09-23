@@ -36,6 +36,14 @@ into node `SwAttrSet` deltas and `SfxItemSet`-backed `SwFormatAutoFormat` hints
 rather than becoming parallel view fields. Explicit normal text properties can
 override inherited formatting and survive a package round trip.
 
+The Standard Writer page descriptor is serialized in `styles.xml` as one
+`style:page-layout` with `style:page-layout-properties` and one associated
+`style:master-page`. Width, height, print orientation, and all four margins map
+to `fo:page-width`, `fo:page-height`, `style:print-orientation`, and the
+`fo:margin-*` attributes. Import resolves the master-page association before
+applying the descriptor to `SwDoc`; export and re-import preserve A4, Letter,
+custom dimensions, landscape state, and margins.
+
 The paragraph-property mapper also preserves first-line and right margins,
 upper/lower spacing, proportional line height, the bounded single
 `RES_PARATR_TABSTOP` position, `RES_KEEP` through `fo:keep-with-next`, and
@@ -83,7 +91,8 @@ alignment, list, paragraph-property, and character subset fail explicitly.
 Imported tables, images,
 fields, annotations, tracked changes, sections, objects, scripts, signatures,
 encryption, RDF, custom bullet glyphs, non-decimal numbering, and list headers
-remain unsupported. Unrelated style families, page-style data, and properties
+remain unsupported. Headers, footers, columns, borders, backgrounds, page numbering,
+printer trays, multiple page styles, unrelated style families, and properties
 outside the bounded Writer model are ignored during import, matching the scoped
 upstream import-context behavior instead of inventing browser document fields.
 

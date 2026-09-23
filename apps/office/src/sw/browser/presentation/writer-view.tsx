@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
+import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
+import { WriterRulers } from "./WriterRulers";
 import { WriterParagraphProperties } from "./WriterPropertiesPanel";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
@@ -113,7 +115,6 @@ export function WriterWorkbench({
             resolveArguments={resolveCommandArguments}
           />
         }
-        isHorizontalRulerVisible={snapshot.isHorizontalRulerVisible}
         isPropertiesSidebarVisible={snapshot.isPropertiesSidebarVisible}
         isStatusBarVisible={snapshot.isStatusBarVisible}
         menuBar={
@@ -143,6 +144,28 @@ export function WriterWorkbench({
             styleDisplayName={snapshot.activeParagraph.styleDisplayName}
           />
         }
+        rulers={
+          <WriterRulers
+            horizontalVisible={snapshot.isHorizontalRulerVisible}
+            onPageChange={
+              /** Applies ruler-owned page geometry. @param pageDescriptor - Replacement descriptor. @returns Nothing. */ (
+                pageDescriptor,
+              ) => {
+                view.GetWrtShell().SetPageDescriptor(pageDescriptor);
+              }
+            }
+            onParagraphIndentChange={
+              /** Applies ruler-owned direct paragraph indents. @param value - Replacement indents. @returns Nothing. */ (
+                value,
+              ) => {
+                view.GetWrtShell().SetParagraphRulerIndents(value);
+              }
+            }
+            page={snapshot.pageDescriptor}
+            paragraph={snapshot.activeParagraph}
+            verticalVisible={snapshot.isVerticalRulerVisible}
+          />
+        }
         status={presentWriterStatus(view, snapshot, localization.GetText.bind(localization))}
         toolbar={
           <WriterCommandToolbar
@@ -155,6 +178,7 @@ export function WriterWorkbench({
           activeParagraphId={snapshot.activeParagraph.id}
           cursorSelection={snapshot.cursorSelection}
           editWindow={view.GetEditWin()}
+          pageDescriptor={snapshot.pageDescriptor}
           paragraphs={snapshot.paragraphs}
         />
       </WriterWorkspaceChrome>
@@ -175,6 +199,22 @@ export function WriterWorkbench({
                 hyperlink,
                 text,
               });
+            }
+          }
+        />
+      )}
+      {dialogRequest?.request.kind !== "page-style" ? null : (
+        <WriterPageStyleDialog
+          initialValue={dialogRequest.request.initialValue}
+          onCancel={
+            /** Cancels the exact Page Style request. @returns Nothing. */ () =>
+              dialogController.Cancel(dialogRequest.id)
+          }
+          onSubmit={
+            /** Completes the exact Page Style request. @param pageDescriptor - Accepted geometry. @returns Nothing. */ (
+              pageDescriptor,
+            ) => {
+              dialogController.Complete(dialogRequest.id, { pageDescriptor });
             }
           }
         />

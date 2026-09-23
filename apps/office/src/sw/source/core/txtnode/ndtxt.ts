@@ -5,12 +5,16 @@
 import {
   SvxAdjust,
   SvxAdjustItem,
+  SvxFirstLineIndentItem,
+  SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/source/items/paraitem";
 import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   RES_PARATR_ADJUST,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
@@ -150,6 +154,16 @@ export class SwTextNode extends SwContentNode {
   public GetParagraphTextLeftMargin(): number {
     return (this.GetAttr(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft();
   }
+  /** Returns the effective first-line indent in twips. @returns First-line indent. */
+  public GetParagraphFirstLineIndent(): number {
+    return (
+      this.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+    ).ResolveTextFirstLineOffset();
+  }
+  /** Returns the effective right paragraph margin in twips. @returns Right margin. */
+  public GetParagraphRightMargin(): number {
+    return (this.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight();
+  }
 
   /** Returns the effective list family from the paragraph's SwNumRule. @returns List kind. */
   public GetListKind(): WriterParagraphListKind {
@@ -251,6 +265,14 @@ export class SwTextNode extends SwContentNode {
   /** Sets the direct text-left margin in twips. @param margin - Non-negative margin. @returns Nothing. */
   public SetParagraphTextLeftMargin(margin: number): void {
     this.SetAttr(new SvxTextLeftMarginItem(margin, RES_MARGIN_TEXTLEFT));
+  }
+  /** Sets the direct first-line indent in twips. @param indent - Signed first-line indent. @returns Nothing. */
+  public SetParagraphFirstLineIndent(indent: number): void {
+    this.SetAttr(new SvxFirstLineIndentItem(indent, RES_MARGIN_FIRSTLINE));
+  }
+  /** Sets the direct right paragraph margin in twips. @param margin - Non-negative right margin. @returns Nothing. */
+  public SetParagraphRightMargin(margin: number): void {
+    this.SetAttr(new SvxRightMarginItem(margin, RES_MARGIN_RIGHT));
   }
 
   /** Replaces the canonical numbering/list item subset captured by Writer undo. @param items - Direct list items. @returns Nothing. */
