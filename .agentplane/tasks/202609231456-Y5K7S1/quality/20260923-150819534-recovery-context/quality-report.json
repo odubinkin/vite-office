@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609231456-Y5K7S1",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T15:08:19.534Z",
+  "verdict": "pass",
+  "summary": "Writer defaults retain session context through New and document language through storage and ODT.",
+  "evaluated_sha": "88819cf8ed42b72411b4f1d15331dd591bef1b09",
+  "blueprint_digest": "9da3f1605f623e92e86c39f7acab50e947bd761b254b892f1b584f287d2b2159",
+  "findings": [
+    "New, cache restore, ODT import/export, and worker transfer tests pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609231456-Y5K7S1/README.md",
+    "npm run test:coverage --workspace @vite-office/office: 93 files, 388 tests passed",
+    "npm run typecheck --workspace @vite-office/office: passed",
+    "npm run lint: passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
