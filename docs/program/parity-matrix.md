@@ -14,9 +14,13 @@ bounded Writer records are machine-validated together with the exhaustive
 `npm run inventory:parity`. Verification is promoted per atomic operation only
 after its assertion-level upstream/local evidence and task result are recorded;
 every unresolved parity gap remains visible and does not count as parity.
-All 45 records now have independently attested contract, ownership, behavior,
-default, serialization/operation-cycle disposition, and differential evidence.
-The aggregate report therefore has zero gaps and `parityReady: true`. The ODF
+The [browser persistence decision](autosave-recovery.md) is a product-level
+exclusion: native crash/session recovery and its prompt are not targets for
+browser parity. `CAP-0122` and `CAP-0133` are explicit approved exceptions,
+not recovery implementation tasks; `CAP-0114` covers the browser content
+generation used by primary saves. Evaluate primary save/load separately.
+Reopening recovery requires an explicit new product decision. The 45 records
+therefore contain 43 verified operations and two approved exclusions. The ODF
 umbrella records use the checked-in pinned LibreOffice fixtures, while the
 property-level records use their mapped atomic tests; scope limitations remain
 explicit exclusions rather than implied implementation claims.

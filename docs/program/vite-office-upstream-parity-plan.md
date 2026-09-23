@@ -11,10 +11,15 @@ slice. React rendering and browser input, storage, clipboard, file picker, downl
 font-device, and Worker boundaries may differ where the platform requires it.
 Browser-irrelevant native services are outside this plan. Work on inventory
 generators, validators, schemas, or inventory data is outside this plan.
+The [browser persistence decision](autosave-recovery.md) explicitly excludes
+LibreOffice crash/session recovery, recovery snapshots, and recovery prompts.
+Do not create parity work from native AutoRecovery defaults or inert local
+provenance markers. A future full autosave policy for the primary browser save
+path is a separate product decision, not recovery parity work.
 
 This is a remediation plan, **not** a new parity attestation. A path or symbol
 mapping is evidence of provenance, not of equivalent semantics. The 45
-`verified` bounded [capability records](parity/writer-command-slice.json) explicitly
+bounded [capability records](parity/writer-command-slice.json) explicitly
 exclude adjacent behavior; their status must not be generalized to whole
 LibreOffice modules. Conversely, a module marked `unverified` below is an audit
 target, not a proven defect.
@@ -27,8 +32,9 @@ infrastructure modules. It also records ten UI behaviors, three internal
 operations, and six placeholder suites. There are 153 active, four foundation,
 and two internal modules. Its source-responsibility assessment has 27 aligned,
 46 browser-owned, 13 divergent, and 73 unverified entries; 90 module contracts
-and most defaults remain unverified even though all 45 atomic Writer records
-are marked verified. There are 37 generated supported command resources and
+and most defaults remain unverified even though 43 atomic Writer records are
+verified and two native recovery records are approved browser exclusions. There
+are 37 generated supported command resources and
 five explicitly unsupported entries in
 [`writer-ui.generated.json`](../../apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json).
 These counts describe the current implementation, not overall suite completion.
@@ -41,12 +47,12 @@ command path:
 | Current implemented group | Local ownership | Pinned upstream comparison | Plan work |
 | --- | --- | --- | --- |
 | Command registration, dispatch, bindings, accelerators, and menu/toolbar resources | `framework/{source,browser}`, `sfx2/source/control`, `sw/sdi`, `sw/uiconfig` | `framework/source/{dispatch,accelerators}`, `sfx2/source/control`, `sw/sdi`, `sw/uiconfig/swriter` | C, U |
-| Document shell, medium, lifecycle, storage, save, and recovery | `sfx2/source/{doc,view}`, `sw/source/uibase/app`, `sw/browser/{storage,workflows}`, `framework/source/services`, `svl/source/misc` | `sfx2/source/doc`, `sw/source/uibase/app`, `framework/source/services/autorecovery.cxx` | D, R |
+| Document shell, medium, lifecycle, storage, and primary save | `sfx2/source/{doc,view}`, `sw/source/uibase/app`, `sw/browser/{storage,workflows}`, `svl/source/misc` | `sfx2/source/doc`, `sw/source/uibase/app` | D |
 | Pooled formatting, defaults, styles, settings, page descriptors | `svl/source/items`, `editeng/source/items`, `sw/{inc,source/core/{attr,doc,layout,para}}` | Corresponding `svl`, `editeng`, and `sw` modules, especially `DocumentStylePoolManager.cxx`, `DocumentSettingManager.cxx`, `docdesc.cxx` | M, D, L |
 | Writer nodes, text hints, cursor/ranges, content mutations, lists, numbering, and undo | `sw/source/core/{docnode,txtnode,crsr,doc,SwNumberTree,undo}`, `sw/source/uibase/{wrtsh,docvw,shells}` | Corresponding `sw/source/core` and `sw/source/uibase` modules | M, H, L |
 | Clipboard HTML/text, ZIP/manifest, XML/ODF import and export | `sw/source/{filter,uibase/dochdl}`, `xmloff/source`, `package/source`, `sw/browser/filter` | Corresponding `sw`, `xmloff`, and `package` modules | F, H |
 | Writer view, dialogs, ruler, properties, page canvas, editing DOM, and app shell | `sw/source/uibase/uiview`, `sw/browser/{presentation,editor,composition}`, `framework/browser` | `sw/source/uibase`, `sw/source/core/{layout,text}`, Writer UI resources | U, L |
-| Browser platform ports | `vcl/browser`, Worker client/runtime, IndexedDB, browser localization | Native behavior at the applicable `vcl`, `sfx2`, `framework`, and filter boundary | B, R |
+| Browser platform ports | `vcl/browser`, Worker client/runtime, IndexedDB, browser localization | Native behavior at the applicable `vcl`, `sfx2`, `framework`, and filter boundary | B |
 
 Calc, Impress, Draw, Base, Math, and Chart are currently launcher placeholders,
 not implemented office suites. They are excluded from implementation work here;
@@ -176,28 +182,23 @@ screens, present the sidebar through a reachable responsive surface, or expose
 an explicit hidden state that agrees with the view command. Verify keyboard,
 screen reader, touch viewport, focus, locale change, and command-state parity.
 
-### 6. Recovery stubs and incompatible protection default (R; confirmed
-artifact; product decision to resolve)
+### 6. Browser recovery exclusion (resolved product decision; no work package)
 
 [`framework/source/services/autorecovery.ts`](../../apps/office/src/framework/source/services/autorecovery.ts),
 [`svl/source/misc/recovery.ts`](../../apps/office/src/svl/source/misc/recovery.ts), and
 [`WriterRecoveryPrompt.tsx`](../../apps/office/src/sw/browser/presentation/WriterRecoveryPrompt.tsx)
-only export `{}`. They are inert artifacts of a previous removal, not modules
-implementing their named responsibilities. Current browser persistence has
-manual local save and a stated future full autosave policy, while pinned
+only export `{}`. They are inert provenance artifacts of the deliberate removal,
+not implementations or incomplete tasks. Pinned
 [`autorecovery.cxx`](../../vendor/libreoffice-reference/framework/source/services/autorecovery.cxx)
-distinguishes autosave, recovery, timing, and restored document state. Browser
-storage can support meaningful crash/session protection; an unconditional
-absence therefore needs a deliberate, user-visible parity decision rather
-than a source-shaped empty module.
-
-**Target:** first decide the browser-equivalent protection contract for the
-implemented document lifecycle, including default enablement, interval,
-unsaved edits, restart discovery, restore/discard, and version/schema failure.
-Implement it at application-service/storage boundaries if browser-relevant;
-otherwise document the exact non-applicable native behavior. Remove empty
-marker modules, retain provenance in documentation, and test restart and
-primary-save interactions. Do not add a prompt merely to mimic native UI.
+distinguishes temporary recovery files and session restoration from ordinary
+document saving. That native crash/session mechanism is outside this browser
+product's document lifecycle by explicit decision
+([`autosave-recovery.md`](autosave-recovery.md)). The browser uses primary
+IndexedDB save/load; it has no recovery copy, timer, lease, restore state, or
+prompt. The empty modules preserve source provenance only. Their names and the
+native default must not be used to reopen recovery as a parity gap or work item.
+Future frequent full autosave, if specified, belongs to primary persistence and
+requires its own product policy.
 
 ### 7. Transfer and browser workflow ownership (F/U; architectural audit)
 
@@ -261,10 +262,7 @@ an automatic claim that all upstream behavior is required.
    verify menus, toolbars, dialogs, keyboard, IME, pointer/drag, focus, a11y,
    and locale behavior. Preserve React composition and browser event adapters.
    Depends on C/L/F for stable contracts.
-8. **R — Recovery decision and cleanup.** Resolve browser-relevant default
-   protection behavior and remove the three empty markers. Can proceed after D;
-   verify interrupted edits and restart using real browser storage.
-9. **B — Boundary and file-layout pass.** For every current runtime module,
+8. **B — Boundary and file-layout pass.** For every current runtime module,
    confirm the exact upstream responsibility is in the corresponding local
    directory/file. Move domain policy out of `sw/browser` where it does not
    require browser APIs, retain justified `browser` ports, and remove obsolete
@@ -294,3 +292,6 @@ an automatic claim that all upstream behavior is required.
   its justified browser/React differences are explicit. Keep unrelated
   LibreOffice suites, native-only integration, and not-yet-implemented
   Writer features out of the scope of these remediation packages.
+- Apply the documented browser recovery exclusion when interpreting inventory
+  and upstream defaults; inert recovery markers do not create implementation
+  requirements.

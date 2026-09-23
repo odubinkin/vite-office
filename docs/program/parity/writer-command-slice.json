@@ -3589,7 +3589,7 @@
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
-        "rationale": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations."
+        "rationale": "LibreOffice tracks modified state and undo save position; the browser uses contentGeneration to reject stale asynchronous primary saves."
       },
       "capability": "Writer lifecycle generation state",
       "gaps": [],
@@ -3640,26 +3640,14 @@
             "marker": "contentGeneration"
           },
           {
-            "path": "apps/office/src/svl/source/misc/recovery.ts",
-            "marker": "recoveryGeneration"
-          },
-          {
             "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
             "marker": "restoreWriterSnapshot"
-          },
-          {
-            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
-            "marker": "MarkHistoryMutation"
           }
         ],
         "tests": [
           {
             "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
             "marker": "owns modified and persistence generations"
-          },
-          {
-            "path": "apps/office/src/svl/source/misc/recovery.test.ts",
-            "marker": "saves each changed generation"
           },
           {
             "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
@@ -3676,10 +3664,6 @@
             "marker": "contentGeneration"
           },
           {
-            "path": "docs/program/autosave-recovery.md",
-            "marker": "recovery generation"
-          },
-          {
             "path": "docs/program/transaction-history.md",
             "marker": "save position"
           }
@@ -3688,8 +3672,7 @@
       "aspect": "persistence-filter",
       "atomicOperation": "Advance and acknowledge one document lifecycle generation",
       "scopeLimitations": [
-        "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
-        "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
+        "Native crash/session recovery is intentionally excluded from the browser lifecycle."
       ],
       "implemented": true,
       "contractParity": true,
@@ -3810,7 +3793,7 @@
         "divergences": [
           {
             "classification": "B",
-            "description": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations.",
+            "description": "LibreOffice tracks modified state and undo save position; the browser uses contentGeneration to reject stale asynchronous primary saves.",
             "local": {
               "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
@@ -3822,19 +3805,7 @@
           },
           {
             "classification": "X",
-            "description": "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
-            "local": {
-              "marker": "contentGeneration",
-              "path": "docs/program/document-lifecycle.md"
-            },
-            "upstream": {
-              "marker": "void SfxObjectShell::SetModified",
-              "path": "sfx2/source/doc/objmisc.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping.",
+            "description": "Native crash/session recovery is intentionally excluded from the browser lifecycle.",
             "local": {
               "marker": "contentGeneration",
               "path": "docs/program/document-lifecycle.md"
@@ -5743,16 +5714,16 @@
       "suite": "writer",
       "subsystem": "document-lifecycle",
       "type": "lifecycle",
-      "maturity": "verified",
-      "assertions": [
-        "The pinned upstream and local assertion markers cover this atomic operation: Present and resolve one recovery candidate prompt."
-      ],
+      "maturity": "exception-approved",
+      "assertions": [],
       "stackDivergence": {
         "kind": "browser-adaptation",
-        "rationale": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations."
+        "rationale": "Browser persistence uses confirmed primary save/load; native temporary recovery and process/session restoration are excluded by product decision."
       },
       "capability": "Writer recovery prompt behavior",
-      "gaps": [],
+      "gaps": [
+        "Native recovery behavior is intentionally not implemented in the browser product."
+      ],
       "upstream": {
         "implementation": [
           {
@@ -5794,201 +5765,35 @@
         ]
       },
       "local": {
-        "implementation": [
-          {
-            "path": "apps/office/src/sfx2/source/doc/objsh.ts",
-            "marker": "contentGeneration"
-          },
-          {
-            "path": "apps/office/src/svl/source/misc/recovery.ts",
-            "marker": "recoveryGeneration"
-          },
-          {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
-            "marker": "restoreWriterSnapshot"
-          },
-          {
-            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
-            "marker": "MarkHistoryMutation"
-          }
-        ],
-        "tests": [
-          {
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
-            "marker": "owns modified and persistence generations"
-          },
-          {
-            "path": "apps/office/src/svl/source/misc/recovery.test.ts",
-            "marker": "saves each changed generation"
-          },
-          {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
-            "marker": "does not acknowledge a failed primary save"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
-            "marker": "moved save mark across action navigation"
-          }
-        ],
+        "implementation": [],
+        "tests": [],
         "docs": [
           {
-            "path": "docs/program/document-lifecycle.md",
-            "marker": "contentGeneration"
-          },
-          {
             "path": "docs/program/autosave-recovery.md",
-            "marker": "recovery generation"
-          },
-          {
-            "path": "docs/program/transaction-history.md",
-            "marker": "save position"
+            "marker": "Browser document recovery is intentionally unsupported and must not be"
           }
         ]
       },
       "aspect": "browser-input",
       "atomicOperation": "Present and resolve one recovery candidate prompt",
-      "scopeLimitations": [
-        "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
-        "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
-      ],
-      "implemented": true,
-      "contractParity": true,
-      "behaviorParity": true,
-      "defaultParity": true,
-      "verified": true,
-      "assertionEvidence": [
-        {
-          "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Present and resolve one recovery candidate prompt.",
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        }
-      ],
+      "scopeLimitations": [],
+      "implemented": false,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false,
       "verification": {
-        "commit": "7632bdc505ec",
-        "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+        "commit": "b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54",
+        "evidence": "Removal task verification; docs/program/autosave-recovery.md",
         "scope": "bounded",
-        "taskId": "202609210851-1GHX09"
+        "taskId": "202609221113-N9GZ47"
       },
-      "closure": {
-        "contract": {
-          "local": {
-            "marker": "contentGeneration",
-            "path": "apps/office/src/sfx2/source/doc/objsh.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0122 API and identifiers resolve to exact local and pinned upstream symbols.",
-          "status": "pass",
-          "upstream": {
-            "marker": "void SfxObjectShell::SetModified",
-            "path": "sfx2/source/doc/objmisc.cxx"
-          }
-        },
-        "ownership": {
-          "local": {
-            "marker": "contentGeneration",
-            "path": "apps/office/src/sfx2/source/doc/objsh.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0122 owner is checked at the mapped local and upstream implementation boundary.",
-          "status": "pass",
-          "upstream": {
-            "marker": "void SfxObjectShell::SetModified",
-            "path": "sfx2/source/doc/objmisc.cxx"
-          }
-        },
-        "behavior": {
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "method": "browser-test",
-          "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        },
-        "defaults": {
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        },
-        "serialization": {
-          "method": "not-applicable",
-          "rationale": "Present and resolve one recovery candidate prompt does not cross a serialization boundary.",
-          "status": "not-applicable"
-        },
-        "operationCycle": {
-          "method": "not-applicable",
-          "rationale": "Present and resolve one recovery candidate prompt has no applicable import-mutation-undo-export-reopen cycle.",
-          "status": "not-applicable"
-        },
-        "differential": {
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        },
-        "divergences": [
-          {
-            "classification": "B",
-            "description": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations.",
-            "local": {
-              "marker": "contentGeneration",
-              "path": "docs/program/document-lifecycle.md"
-            },
-            "upstream": {
-              "marker": "void SfxObjectShell::SetModified",
-              "path": "sfx2/source/doc/objmisc.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
-            "local": {
-              "marker": "contentGeneration",
-              "path": "docs/program/document-lifecycle.md"
-            },
-            "upstream": {
-              "marker": "void SfxObjectShell::SetModified",
-              "path": "sfx2/source/doc/objmisc.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping.",
-            "local": {
-              "marker": "contentGeneration",
-              "path": "docs/program/document-lifecycle.md"
-            },
-            "upstream": {
-              "marker": "void SfxObjectShell::SetModified",
-              "path": "sfx2/source/doc/objmisc.cxx"
-            }
-          }
-        ]
+      "manualContract": "Native LibreOffice recovery is intentionally outside the Vite Office browser product lifecycle; no local recovery implementation is required.",
+      "exception": {
+        "approvedBy": "User decision reaffirming 202609221113-N9GZ47",
+        "disposition": "not-implementable",
+        "reason": "browser-runtime-inapplicable",
+        "rationale": "Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow."
       }
     },
     {
@@ -9193,16 +8998,16 @@
       "suite": "writer",
       "subsystem": "document-lifecycle",
       "type": "lifecycle",
-      "maturity": "verified",
-      "assertions": [
-        "The pinned upstream and local assertion markers cover this atomic operation: Schedule and retain one changed AutoRecovery generation."
-      ],
+      "maturity": "exception-approved",
+      "assertions": [],
       "stackDivergence": {
         "kind": "browser-adaptation",
-        "rationale": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations."
+        "rationale": "Browser persistence uses confirmed primary save/load; native temporary recovery and process/session restoration are excluded by product decision."
       },
       "capability": "Writer AutoRecovery scheduling",
-      "gaps": [],
+      "gaps": [
+        "Native recovery behavior is intentionally not implemented in the browser product."
+      ],
       "upstream": {
         "implementation": [
           {
@@ -9244,217 +9049,35 @@
         ]
       },
       "local": {
-        "implementation": [
-          {
-            "path": "apps/office/src/sfx2/source/doc/objsh.ts",
-            "marker": "contentGeneration"
-          },
-          {
-            "path": "apps/office/src/svl/source/misc/recovery.ts",
-            "marker": "recoveryGeneration"
-          },
-          {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.ts",
-            "marker": "restoreWriterSnapshot"
-          },
-          {
-            "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
-            "marker": "MarkHistoryMutation"
-          }
-        ],
-        "tests": [
-          {
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
-            "marker": "owns modified and persistence generations"
-          },
-          {
-            "path": "apps/office/src/svl/source/misc/recovery.test.ts",
-            "marker": "saves each changed generation"
-          },
-          {
-            "path": "apps/office/src/sw/browser/storage/writer-storage.test.ts",
-            "marker": "does not acknowledge a failed primary save"
-          },
-          {
-            "path": "apps/office/src/sw/source/core/undo/undobj.test.ts",
-            "marker": "moved save mark across action navigation"
-          }
-        ],
+        "implementation": [],
+        "tests": [],
         "docs": [
           {
-            "path": "docs/program/document-lifecycle.md",
-            "marker": "contentGeneration"
-          },
-          {
             "path": "docs/program/autosave-recovery.md",
-            "marker": "recovery generation"
-          },
-          {
-            "path": "docs/program/transaction-history.md",
-            "marker": "save position"
+            "marker": "Browser document recovery is intentionally unsupported and must not be"
           }
         ]
       },
       "aspect": "persistence-filter",
       "atomicOperation": "Schedule and retain one changed AutoRecovery generation",
-      "scopeLimitations": [
-        "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
-        "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping."
-      ],
-      "implemented": true,
-      "contractParity": true,
-      "behaviorParity": true,
-      "defaultParity": true,
-      "verified": true,
-      "assertionEvidence": [
-        {
-          "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Schedule and retain one changed AutoRecovery generation.",
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        }
-      ],
+      "scopeLimitations": [],
+      "implemented": false,
+      "contractParity": false,
+      "behaviorParity": false,
+      "defaultParity": false,
+      "verified": false,
       "verification": {
-        "commit": "7632bdc505ec",
-        "evidence": "Parity closure evidence resolution; npm run inventory:parity; npm test; npm run test:e2e",
+        "commit": "b64dddf8177d8a160a09dff4ea1fd8d1f54c4d54",
+        "evidence": "Removal task verification; docs/program/autosave-recovery.md",
         "scope": "bounded",
-        "taskId": "202609210851-1GHX09"
+        "taskId": "202609221113-N9GZ47"
       },
-      "closure": {
-        "contract": {
-          "local": {
-            "marker": "contentGeneration",
-            "path": "apps/office/src/sfx2/source/doc/objsh.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0133 API and identifiers resolve to exact local and pinned upstream symbols.",
-          "status": "pass",
-          "upstream": {
-            "marker": "void SfxObjectShell::SetModified",
-            "path": "sfx2/source/doc/objmisc.cxx"
-          }
-        },
-        "ownership": {
-          "local": {
-            "marker": "contentGeneration",
-            "path": "apps/office/src/sfx2/source/doc/objsh.ts"
-          },
-          "method": "api-invariant",
-          "rationale": "The bounded CAP-0133 owner is checked at the mapped local and upstream implementation boundary.",
-          "status": "pass",
-          "upstream": {
-            "marker": "void SfxObjectShell::SetModified",
-            "path": "sfx2/source/doc/objmisc.cxx"
-          }
-        },
-        "behavior": {
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "method": "unit-test",
-          "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        },
-        "defaults": {
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        },
-        "serialization": {
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The relevant bounded serialization or persistence representation is compared with pinned upstream evidence.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        },
-        "operationCycle": {
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        },
-        "differential": {
-          "local": {
-            "marker": "owns modified and persistence generations",
-            "path": "apps/office/src/sfx2/source/doc/objsh.test.ts"
-          },
-          "method": "source-derived-golden",
-          "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
-          "status": "pass",
-          "upstream": {
-            "marker": "testImagePropsCreateUndoAndModifyDoc",
-            "path": "sw/qa/core/undo/undo.cxx"
-          }
-        },
-        "divergences": [
-          {
-            "classification": "B",
-            "description": "LibreOffice uses modified flags, an undo save mark, and an autosave-dirty timestamp; the browser model adds explicit generations so asynchronous IndexedDB recovery writes cannot miss consecutive dirty mutations.",
-            "local": {
-              "marker": "contentGeneration",
-              "path": "docs/program/document-lifecycle.md"
-            },
-            "upstream": {
-              "marker": "void SfxObjectShell::SetModified",
-              "path": "sfx2/source/doc/objmisc.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "AutoRecovery scheduling and startup recovery prompts are wired; cross-tab arbitration, encryption, quota recovery, and native lock-file semantics remain unsupported.",
-            "local": {
-              "marker": "contentGeneration",
-              "path": "docs/program/document-lifecycle.md"
-            },
-            "upstream": {
-              "marker": "void SfxObjectShell::SetModified",
-              "path": "sfx2/source/doc/objmisc.cxx"
-            }
-          },
-          {
-            "classification": "X",
-            "description": "The generation counters are a browser-specific concurrency aid; LibreOffice upstream represents equivalent save and recovery decisions through modified flags, an undo save mark, and recovery dirty-state bookkeeping.",
-            "local": {
-              "marker": "contentGeneration",
-              "path": "docs/program/document-lifecycle.md"
-            },
-            "upstream": {
-              "marker": "void SfxObjectShell::SetModified",
-              "path": "sfx2/source/doc/objmisc.cxx"
-            }
-          }
-        ]
+      "manualContract": "Native LibreOffice recovery is intentionally outside the Vite Office browser product lifecycle; no local recovery implementation is required.",
+      "exception": {
+        "approvedBy": "User decision reaffirming 202609221113-N9GZ47",
+        "disposition": "not-implementable",
+        "reason": "browser-runtime-inapplicable",
+        "rationale": "Native crash/session recovery depends on desktop process and backup-file lifecycle not used by this browser document workflow."
       }
     },
     {
