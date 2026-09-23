@@ -1,10 +1,11 @@
 ---
 id: "202609231540-4FPJYY"
 title: "Restore Writer page descriptor and settings contracts"
-status: "DOING"
+result_summary: "Restore Writer page descriptor collections, follow-aware page layout, relevant settings, schema v15 persistence, ODT round trips, undo, and browser projection."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-23T16:05:08.914Z"
+  updated_at: "2026-09-23T16:05:25.821Z"
   updated_by: "CODER"
   note: "verified-202609231540-4FPJYY"
   attempts: 0
@@ -37,11 +38,19 @@ quality_review:
     - ".agentplane/tasks/202609231540-4FPJYY/blueprint/resolved-snapshot.json"
   findings:
     - "No acceptance-blocking defect found; full suite, typecheck, build, formatting, doctor and routing checks pass."
-commit: null
+commit:
+  hash: "ecd0f7fad581a38f1fe24abd6b447311a0a5006a"
+  message: "🧪 4FPJYY task: record verification and quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved upstream-shaped Writer page descriptor collection and relevant document settings contracts, adapt persistence/filter/UI boundaries, and verify focused behavior."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609231540-4FPJYY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: full Writer suite, focused parity tests, typecheck, build, formatting, AgentPlane doctor, routing validation, and clean implementation diff all passed."
 events:
   -
     type: "status"
@@ -62,8 +71,28 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609231540-4FPJYY"
+  -
+    type: "verify"
+    at: "2026-09-23T16:05:25.821Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609231540-4FPJYY"
+  -
+    type: "status"
+    at: "2026-09-23T16:05:25.957Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609231540-4FPJYY. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "status"
+    at: "2026-09-23T16:06:06.169Z"
+    author: "CODER"
+    from: "DONE"
+    to: "DONE"
+    note: "Verified: full Writer suite, focused parity tests, typecheck, build, formatting, AgentPlane doctor, routing validation, and clean implementation diff all passed."
 doc_version: 3
-doc_updated_at: "2026-09-23T16:05:08.998Z"
+doc_updated_at: "2026-09-23T16:06:06.171Z"
 doc_updated_by: "CODER"
 description: "Implement item 4 of docs/program/vite-office-upstream-parity-plan.md against pinned LibreOffice: page descriptor collection/identity/follow contracts and relevant document settings defaults, including current codec and ODT boundaries without legacy schema compatibility."
 sections:
@@ -141,9 +170,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-23T16:05:25.821Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609231540-4FPJYY
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T16:05:08.998Z, excerpt_hash=sha256:6cbfbb73a9cb6d90a9cb19dab626b285f9d82dc4550e2402bd6c1d80f67b3ab3
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231540-4FPJYY/blueprint/resolved-snapshot.json
+    - old_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+    - current_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609231540-4FPJYY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609231540-4FPJYY --result verified-202609231540-4FPJYY --commit ecd0f7fad581a38f1fe24abd6b447311a0a5006a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only the implementation commit and the task close commit for 202609231540-4FPJYY. No stored-schema downgrade or compatibility path is provided."
   Findings: "No findings yet."
+extensions:
+  implementation_commit:
+    hash: "8428c637d6797cec3ab8754c431a31306b0caa9c"
+    message: "🚧 4FPJYY task: restore page descriptors and settings"
 id_source: "generated"
 ---
 ## Summary
@@ -225,6 +288,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609231540-4FPJYY --result verified-202609231540-4FPJYY --commit 8428c637d6797cec3ab8754c431a31306b0caa9c
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-23T16:05:25.821Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609231540-4FPJYY
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-23T16:05:08.998Z, excerpt_hash=sha256:6cbfbb73a9cb6d90a9cb19dab626b285f9d82dc4550e2402bd6c1d80f67b3ab3
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609231540-4FPJYY/blueprint/resolved-snapshot.json
+- old_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+- current_digest: ce35217980a64d2133d364bf028b278d876fa54ecd39ba7917a899931f76110e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609231540-4FPJYY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609231540-4FPJYY --result verified-202609231540-4FPJYY --commit ecd0f7fad581a38f1fe24abd6b447311a0a5006a
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
