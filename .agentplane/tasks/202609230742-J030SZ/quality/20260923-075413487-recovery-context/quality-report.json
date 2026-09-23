@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609230742-J030SZ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-23T07:54:13.487Z",
+  "verdict": "pass",
+  "summary": "Approved ruler and pagination scope implemented and verified.",
+  "evaluated_sha": "78e9bd31303b8718022b2ab0856385d6b337059f",
+  "blueprint_digest": "9ceaf28cd7880a817823c6b0b32cf657c5489253a405e90e0f66f32910df4c6e",
+  "findings": [
+    "Per-page vertical rulers, live handles, margin-origin ticks, measured browser page breaks, and passing focused/static/browser checks."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609230742-J030SZ/README.md",
+    "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
