@@ -1,9 +1,12 @@
-/** @fileoverview Verifies explicit Writer browser-platform failures. */
+/** @fileoverview Verifies browser command ports delegate transfer policy to Writer. */
 
 import { describe, expect, it, vi } from "vitest";
 
+import { createDocument } from "../../../sfx2/source/doc/objsh";
+import { setTestCursor, setTestSelection } from "../../../test/wrtsh-test-helpers";
 import { createWriterDocument } from "../../source/core/doc/doc";
-import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
+import { SwDocShell } from "../../source/uibase/app/docsh";
+import { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
 import {
   copyWriterSelection,
   cutWriterSelection,
@@ -11,89 +14,115 @@ import {
   WriterPlatformError,
 } from "./writer-workflows";
 
-describe("WriterPlatformError", /** Registers platform-error tests. @returns Nothing. */ function definePlatformErrorTests(): void {
-  it("retains a stable machine-readable code for Sfx command completion", /** Verifies stable failure identity. @returns Nothing. */ function retainsCode(): void {
-    const error = new WriterPlatformError("storage-unavailable", "Browser storage is unavailable.");
-    expect(error).toMatchObject({
+/** Creates a command shell with one canonical paragraph. @param text - Initial text. @returns Writer shell. */
+function createShell(text = ""): SwWrtShell {
+  const document = createWriterDocument();
+  document.paragraphs[0]?.InsertText(text, 0);
+  return new SwWrtShell(
+    new SwDocShell(
+      document,
+      createDocument({ id: "transfer-workflow", suiteId: "writer", title: "Transfer" }),
+    ),
+  );
+}
+
+describe("Writer clipboard commands", /** Registers platform-port tests. @returns Nothing. */ function defineTests(): void {
+  it("retains a stable browser-platform failure code", /** Checks clipboard failure identity. @returns Nothing. */ function retainsCode(): void {
+    expect(
+      new WriterPlatformError("storage-unavailable", "Browser storage is unavailable."),
+    ).toMatchObject({
       code: "storage-unavailable",
-      message: "Browser storage is unavailable.",
       name: "WriterPlatformError",
     });
   });
 
-  it("rejects a browser-handled Cut when the canonical SwPaM is collapsed", /** Verifies model deletion remains authoritative after native transfer handling. @returns Completion after rejection. */ async function rejectsCollapsedHandledCut(): Promise<void> {
-    const shell = {
-      CreateTransferable: vi.fn(),
-      DeleteSelection: /** Represents a collapsed persistent cursor. @returns False. */ () => false,
-    } as unknown as SwWrtShell;
-    await expect(
-      cutWriterSelection(shell, vi.fn(), { clipboardHandled: true }),
-    ).rejects.toMatchObject({
+  it("rejects Copy and Cut at a collapsed PaM without writing", /** Checks source-owned selection preconditions. @returns Completion after rejection. */ async function rejectsCollapsedSelection(): Promise<void> {
+    const shell = createShell("Body");
+    const write = vi.fn();
+    await expect(copyWriterSelection(shell, write)).rejects.toMatchObject({
       code: "selection-required",
     });
+    await expect(cutWriterSelection(shell, write)).rejects.toMatchObject({
+      code: "selection-required",
+    });
+    expect(write).not.toHaveBeenCalled();
+    expect(shell.GetActiveParagraph().GetText()).toBe("Body");
   });
 
-  it("rejects Copy when the canonical SwPaM is collapsed", /** Verifies Copy requires a persistent Writer selection. @returns Completion after rejection. */ async function rejectsCollapsedCopy(): Promise<void> {
-    const shell = {
-      CreateTransferable: vi.fn(
-        /** Creates an empty transferable. @returns Transferable without a selection. */ () => ({
-          CreateSelection:
-            /** Reports the collapsed selection. @returns No transferable selection. */ () =>
-              undefined,
-        }),
+  it("deletes only after a successful asynchronous Cut write", /** Checks upstream Copy-before-Delete order and failure atomicity. @returns Completion after both attempts. */ async function cutsAfterWrite(): Promise<void> {
+    const shell = createShell("Body");
+    setTestSelection(shell, {
+      mark: { paragraphId: "p-1", offset: 0 },
+      point: { paragraphId: "p-1", offset: 4 },
+    });
+    await expect(
+      cutWriterSelection(
+        shell,
+        /** Rejects the browser write. @returns Rejected write. */ async function rejectWrite(): Promise<void> {
+          throw new Error("denied");
+        },
       ),
-    } as unknown as SwWrtShell;
-    await expect(copyWriterSelection(shell, vi.fn())).rejects.toMatchObject({
-      code: "selection-required",
-    });
-  });
-
-  it("rejects empty browser clipboard payloads before Writer mutation", /** Verifies browser paste adaptation fails before calling the shell. @returns Completion after rejection. */ async function rejectsEmptyPaste(): Promise<void> {
-    const shell = { PasteAtCursor: vi.fn() } as unknown as SwWrtShell;
-    const readRichClipboard = vi.fn(
-      /** Returns an empty clipboard payload. @returns Empty rich/plain values. */ async () => ({
-        html: "",
-        plainText: "",
-      }),
-    );
-    await expect(pasteWriterClipboard(shell, readRichClipboard)).rejects.toMatchObject({
-      code: "clipboard-empty",
-    });
-    await expect(
-      pasteWriterClipboard(shell, readRichClipboard, { clipboardHandled: true }),
-    ).rejects.toMatchObject({
-      code: "clipboard-empty",
-    });
-    expect(shell.PasteAtCursor).not.toHaveBeenCalled();
-  });
-
-  it("accepts a browser-parsed paste supplied by the native edit window", /** Verifies the already-read clipboard branch converts through the target pool. @returns Completion after insertion. */ async function acceptsNativePaste(): Promise<void> {
-    const paragraph = createWriterDocument().paragraphs[0];
-    if (paragraph === undefined) throw new Error("Writer paste fixture has no paragraph.");
-    const pasteAtCursor = vi.fn();
-    const shell = {
-      GetActiveParagraph: /** Returns the target pool owner. @returns Fixture paragraph. */ () =>
-        paragraph,
-      PasteAtCursor: pasteAtCursor,
-    } as unknown as SwWrtShell;
-    await pasteWriterClipboard(shell, vi.fn(), {
-      paste: {
-        isBlock: false,
-        paragraphs: [
-          {
-            listKind: "none",
-            listLevel: 0,
-            runs: [
-              {
-                attributes: { bold: false, italic: false, underline: false },
-                text: "x",
-              },
-            ],
-          },
-        ],
-        source: "plain-text",
+    ).rejects.toThrow("denied");
+    expect(shell.GetActiveParagraph().GetText()).toBe("Body");
+    const write = vi.fn(
+      /** Confirms deletion has not started before the write resolves. @returns Completed write. */ async function confirmWriteOrder(): Promise<void> {
+        expect(shell.GetActiveParagraph().GetText()).toBe("Body");
       },
+    );
+    await cutWriterSelection(shell, write);
+    expect(write).toHaveBeenCalledWith(expect.objectContaining({ plainText: "Body" }));
+    expect(shell.GetActiveParagraph().GetText()).toBe("");
+    expect(shell.Undo()).toBe(true);
+    expect(shell.GetActiveParagraph().GetText()).toBe("Body");
+  });
+
+  it("does not cut a different selection after an asynchronous write", /** Checks the selected Writer range remains the transfer target. @returns Completion after rejecting a moved selection. */ async function preservesMovedSelection(): Promise<void> {
+    const shell = createShell("Body");
+    setTestSelection(shell, {
+      mark: { paragraphId: "p-1", offset: 0 },
+      point: { paragraphId: "p-1", offset: 4 },
     });
-    expect(pasteAtCursor).toHaveBeenCalledOnce();
+    let release: (() => void) | undefined;
+    const pending = new Promise<void>(
+      /** Captures the browser write acknowledgement. @param resolve - Completes the write. @returns Nothing. */ (
+        resolve,
+      ) => {
+        release = resolve;
+      },
+    );
+    const cut = cutWriterSelection(
+      shell,
+      /** Waits for browser acknowledgement. @returns Pending write. */ function writeLater(): Promise<void> {
+        return pending;
+      },
+    );
+    setTestCursor(shell, "p-1", 2);
+    release?.();
+    await expect(cut).rejects.toMatchObject({ code: "selection-required" });
+    expect(shell.GetActiveParagraph().GetText()).toBe("Body");
+  });
+
+  it("rejects empty browser clipboard data before Writer mutation", /** Checks empty transfer handling. @returns Completion after rejection. */ async function rejectsEmptyPaste(): Promise<void> {
+    const shell = createShell("Body");
+    await expect(
+      pasteWriterClipboard(
+        shell,
+        /** Returns an empty browser clipboard. @returns Empty MIME pair. */ async function readEmptyClipboard() {
+          return { html: "", plainText: "" };
+        },
+      ),
+    ).rejects.toMatchObject({ code: "clipboard-empty" });
+    expect(shell.GetActiveParagraph().GetText()).toBe("Body");
+  });
+
+  it("converts browser-parsed data through the target Writer pool", /** Checks a menu Paste path. @returns Completion after insertion. */ async function acceptsPaste(): Promise<void> {
+    const shell = createShell();
+    await pasteWriterClipboard(
+      shell,
+      /** Returns a rich browser clipboard. @returns Rich MIME pair. */ async function readRichClipboard() {
+        return { html: "<strong>Rich</strong>", plainText: "Plain" };
+      },
+    );
+    expect(shell.GetActiveParagraph().GetText()).toBe("Rich");
   });
 });

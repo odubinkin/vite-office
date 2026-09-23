@@ -107,6 +107,7 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
   it("rejects stale DOM positions and empty browser transfers", /** Checks rejects stale DOM positions and empty browser transfers. @returns Test callback result. */ () => {
     const editWindow = {
       SetSelection: vi.fn(/** Runs the test callback. @returns Test callback result. */ () => true),
+      CopyTransfer: vi.fn(),
       CreateSelectionTransfer: vi.fn(
         /** Runs the test callback. @returns Test callback result. */ () => undefined,
       ),
@@ -125,7 +126,7 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
         point: { paragraphId: string; offset: number; nodeIndex?: number };
         mark?: { paragraphId: string; offset: number; nodeIndex?: number };
       }) => boolean;
-      WriteTransfer: (event: React.ClipboardEvent<HTMLElement>) => boolean;
+      WriteTransfer: (event: React.ClipboardEvent<HTMLElement>, cut: boolean) => void;
     };
     expect(boundary.ApplySelection({ point: { paragraphId: "missing", offset: 0 } })).toBe(false);
     expect(
@@ -143,11 +144,19 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
     const synchronize = vi
       .spyOn(adapter as unknown as { SynchronizeSelection: () => boolean }, "SynchronizeSelection")
       .mockReturnValue(true);
+    const copyEvent = { preventDefault: vi.fn(), clipboardData: { setData: vi.fn() } };
+    boundary.WriteTransfer(copyEvent as unknown as React.ClipboardEvent<HTMLElement>, false);
+    expect(copyEvent.preventDefault).toHaveBeenCalledOnce();
+    expect(editWindow.CopyTransfer).toHaveBeenCalledOnce();
+    editWindow.CopyTransfer.mockImplementationOnce(
+      /** Represents a failed native clipboard writer. @returns Nothing. */ () => {
+        throw new Error("native write failed");
+      },
+    );
     expect(
-      boundary.WriteTransfer({
-        preventDefault: vi.fn(),
-      } as unknown as React.ClipboardEvent<HTMLElement>),
-    ).toBe(false);
+      /** Runs the failed native write. @returns Nothing. */ () =>
+        boundary.WriteTransfer(copyEvent as unknown as React.ClipboardEvent<HTMLElement>, false),
+    ).toThrow("native write failed");
     const drag = {
       dataTransfer: {
         getData: /** Runs the test callback. @returns Test callback result. */ () => "",

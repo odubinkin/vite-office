@@ -4,9 +4,10 @@ import type React from "react";
 
 import type { SwEditWin, SwEditWindowSelection } from "../../source/uibase/docvw/edtwin";
 import {
-  createBrowserWriterPaste,
+  createWriterTransferDocument,
   readBrowserWriterClipboardPaste,
 } from "./writer-clipboard-events";
+import { WriterTransferError } from "../../source/uibase/dochdl/swdtflvr";
 import { BrowserWriterPointerSelectionController } from "./writer-geometry";
 import { BrowserWriterSelectionMapper } from "./writer-selection";
 import type { WriterCursorSelection } from "./writer-selection-types";
@@ -120,14 +121,14 @@ export class BrowserWriterEditWindow {
     /** Replaces native copy serialization with the Writer transfer. @param event - React clipboard event. @returns Nothing. */ (
       event: React.ClipboardEvent<HTMLElement>,
     ): void => {
-      this.WriteTransfer(event);
+      this.WriteTransfer(event, false);
     };
 
   public readonly HandleCut =
     /** Writes and deletes the current Writer selection. @param event - React clipboard event. @returns Nothing. */ (
       event: React.ClipboardEvent<HTMLElement>,
     ): void => {
-      if (this.WriteTransfer(event)) this.editWindow.DeleteSelection();
+      this.WriteTransfer(event, true);
     };
 
   public readonly HandlePaste =
@@ -137,12 +138,7 @@ export class BrowserWriterEditWindow {
       if (!this.SynchronizeSelection()) return;
       const paste = readBrowserWriterClipboardPaste(event.clipboardData, this.environment.document);
       event.preventDefault();
-      if (paste !== undefined)
-        this.editWindow.PasteTransfer(
-          /** Converts the browser record through the target item pool. @param paragraph - Active Writer paragraph. @returns Native paste document. */ (
-            paragraph,
-          ) => createBrowserWriterPaste(paragraph, paste),
-        );
+      if (paste !== undefined) this.editWindow.PasteTransfer(createWriterTransferDocument(paste));
     };
 
   public readonly HandleDragStart =
@@ -167,12 +163,7 @@ export class BrowserWriterEditWindow {
       if (!this.SynchronizeSelection()) return;
       const paste = readBrowserWriterClipboardPaste(event.dataTransfer, this.environment.document);
       event.preventDefault();
-      if (paste !== undefined)
-        this.editWindow.PasteTransfer(
-          /** Converts the browser record through the target item pool. @param paragraph - Active Writer paragraph. @returns Native paste document. */ (
-            paragraph,
-          ) => createBrowserWriterPaste(paragraph, paste),
-        );
+      if (paste !== undefined) this.editWindow.PasteTransfer(createWriterTransferDocument(paste));
     };
 
   public readonly HandleClick =
@@ -298,14 +289,20 @@ export class BrowserWriterEditWindow {
       : { contentIndex: position.offset, nodeIndex: position.nodeIndex };
   }
 
-  /** Writes a Writer selection into a clipboard event. @param event - React clipboard event. @returns Whether transfer data was written. */
-  private WriteTransfer(event: React.ClipboardEvent<HTMLElement>): boolean {
-    if (!this.SynchronizeSelection()) return false;
-    const payload = this.editWindow.CreateSelectionTransfer();
-    if (payload === undefined) return false;
+  /** Writes a Writer selection into a clipboard event. @param event - React clipboard event. @param cut - Whether to remove the selection after writing. @returns Nothing. */
+  private WriteTransfer(event: React.ClipboardEvent<HTMLElement>, cut: boolean): void {
     event.preventDefault();
-    this.SetTransferData(event.clipboardData, payload);
-    return true;
+    if (!this.SynchronizeSelection()) return;
+    try {
+      const write =
+        /** Writes both native MIME representations. @param payload - Writer transfer pair. @returns Nothing. */ (
+          payload: Readonly<{ html: string; plainText: string }>,
+        ): void => this.SetTransferData(event.clipboardData, payload);
+      if (cut) this.editWindow.CutTransfer(write);
+      else this.editWindow.CopyTransfer(write);
+    } catch (error) {
+      if (!(error instanceof WriterTransferError)) throw error;
+    }
   }
 
   /** Writes supported Writer MIME representations. @param data - Native transfer. @param payload - Writer transfer payload. @returns Nothing. */

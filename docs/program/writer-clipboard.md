@@ -34,7 +34,10 @@ retains implemented direct character formatting as semantic `strong`, `em`,
 single-underline spans, font-family spans, and sanitized foreground/highlight
 styles, including a selected
 partial span whose shared semantic ancestor would otherwise be lost by browser
-range cloning. [`copyRichText`](../../apps/office/src/vcl/browser/browser-clipboard.ts)
+range cloning. Selected hyperlinks retain their destinations in rich HTML. The
+browser reader imports `http`, `https`, `mailto`, and relative destinations and
+discards script and data URL destinations.
+[`copyRichText`](../../apps/office/src/vcl/browser/browser-clipboard.ts)
 prefers `navigator.clipboard.write` with `ClipboardItem`; another rich-text
 editor can therefore retain the currently implemented paragraph formatting.
 When that API is absent or rejects the write, `copyPlainText` uses
@@ -60,21 +63,32 @@ only its selected text, preventing a fragment from being falsely promoted to a
 complete list. Neither path serializes screen-reader descriptions nor the
 marker-only DOM sibling.
 
-Copy does not alter the live Writer document, transaction history,
-properties, or browser-local snapshot. A missing selection reports **Select
-text to copy.** rather than serializing the whole document implicitly. Cut first
-writes the same paired clipboard data, then removes one non-empty selection inside
-one Writer paragraph as an undoable `SwUndoDelete` transition. Paste replaces
-one same-paragraph selection or inserts at a collapsed Writer caret. Native Paste
-reads its `ClipboardEvent` synchronously; menu and toolbar Paste use a
-user-initiated `navigator.clipboard.read` request, with `readText` fallback.
+`SwTransferable` owns the supported Copy, Cut, format preference, and Paste
+target policy, following `SwTransferable::Copy`, `Cut`, and `Paste` in the pinned
+`swdtflvr.cxx`. Copy leaves the live document and undo history untouched. A
+missing selection reports **Select text to copy.** Cut writes the MIME pair
+before deleting the canonical range; a rejected write leaves the document
+untouched. Paste replaces a ranged selection or inserts at a collapsed Writer
+caret as one undoable action. Native Paste reads its `ClipboardEvent`
+synchronously; menu and toolbar Paste use a user-initiated
+`navigator.clipboard.read` request, with `readText` fallback.
 
-Paste accepts plain text and a strict rich subset: `strong`, `em`, single
+| Entry point | Browser operation | Writer transfer action | Failure or undo |
+| --- | --- | --- | --- |
+| Edit menu, toolbar, keyboard Copy | Asynchronous Clipboard API write, with plain fallback | `SwTransferable.Copy` prepares the selected rich/plain pair | Missing selection or failed write leaves the document untouched |
+| Native `copy` | Synchronous `ClipboardEvent` MIME write | The same `SwTransferable.Copy` | Browser default is canceled; no Writer mutation |
+| Edit menu, toolbar, keyboard Cut | Asynchronous Clipboard API write | `SwTransferable.Cut` deletes only after the write succeeds | Failed write preserves the selection; successful deletion is undoable |
+| Native `cut` | Synchronous `ClipboardEvent` MIME write | The same `SwTransferable.Cut` | Browser default is canceled; deletion is undoable |
+| Edit menu, toolbar, keyboard Paste | Asynchronous Clipboard API read | HTML is preferred when safe visible content is imported; otherwise plain text is inserted at the current Writer PaM | Empty or failed read leaves the document untouched; insertion is undoable |
+| Native `paste`, drop | Synchronous event MIME read; drop also maps pointer coordinates to a Writer PaM | The same format selection and `SwTransferable.Paste` target conversion | Empty transfer is ignored; successful insertion is undoable |
+| Drag start | Synchronous `DataTransfer` MIME write | `SwTransferable.CreateSelection` prepares the same rich/plain pair | No selection yields no transfer |
+
+Paste accepts plain text and a strict rich subset: `strong`, `em`, safe links, single
 underline, font family, foreground/highlight, paragraphs, and semantic nested
 `ul`/`ol`/`li` structure. Unsupported tags are reduced to visible text; script
 and style elements are discarded, CSS values are sanitized, and clipboard HTML
 is never mounted in the editable document. The browser slice deliberately does
-not yet support arbitrary cross-paragraph Cut/Paste, RTF, images, objects,
+not yet support RTF, images, objects,
 tables, Paste Special, multi-range transfer, or ODT/DOCX transfer filters.
 
 The pinned LibreOffice `sw/uiconfig/swriter/menubar/menubar.xml` declares

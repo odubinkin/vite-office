@@ -22,12 +22,44 @@ describe("Writer HTML transfer import", /** Groups bounded HTML filter tests. @r
             { attributes: { bold: true, italic: false, underline: false }, text: "Bold " },
             { attributes: { bold: true, italic: true, underline: false }, text: "italic" },
             { attributes: { bold: false, italic: false, underline: true }, text: "under" },
-            { attributes: { bold: false, italic: false, underline: false }, text: "\nlink" },
+            { attributes: { bold: false, italic: false, underline: false }, text: "\n" },
+            {
+              attributes: { bold: false, italic: false, underline: false },
+              hyperlink: { url: "https://invalid.example" },
+              text: "link",
+            },
           ],
         },
       ],
       source: "html",
     });
+  });
+
+  it("discards unsafe anchor destinations while retaining text", /** Checks browser URL safety at the transfer boundary. @returns Nothing. */ function rejectsUnsafeHyperlinks(): void {
+    const paste = parseWriterClipboardPaste(
+      '<a href="javascript:alert(1)">unsafe</a><a href="https://example.com">safe</a>',
+      "fallback",
+      document,
+    );
+    expect(paste?.paragraphs[0]?.runs).toEqual([
+      { attributes: { bold: false, italic: false, underline: false }, text: "unsafe" },
+      {
+        attributes: { bold: false, italic: false, underline: false },
+        hyperlink: { url: "https://example.com" },
+        text: "safe",
+      },
+    ]);
+    const control = parseWriterClipboardPaste(
+      '<a href="https://example.com&#10;broken">control</a><a href="//example.com">protocol-relative</a>',
+      "",
+      document,
+    );
+    expect(control?.paragraphs[0]?.runs).toEqual([
+      {
+        attributes: { bold: false, italic: false, underline: false },
+        text: "controlprotocol-relative",
+      },
+    ]);
   });
 
   it("retains semantic block and nested-list order", /** Verifies paragraph and list import order. @returns Nothing. */ function importsStructuredHtml(): void {

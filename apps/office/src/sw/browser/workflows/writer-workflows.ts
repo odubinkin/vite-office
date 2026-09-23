@@ -8,12 +8,12 @@ import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shel
 import type { DocumentExportPort, DocumentOpenPort } from "../../../svl/source/misc/storage";
 import type { RichClipboardPayload } from "../../../vcl/browser/browser-clipboard";
 import type { WriterSnapshotState } from "../storage/writer-storage";
-import { parseWriterClipboardPaste, type WriterClipboardPaste } from "../filter/html/swhtml";
+import { parseWriterClipboardPaste } from "../filter/html/swhtml";
+import { createWriterTransferDocument } from "../editor/writer-clipboard-events";
 import type { WriterClipboardSelection } from "../../source/uibase/dochdl/swdtflvr";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import type { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
-import { createBrowserWriterPaste } from "../editor/writer-clipboard-events";
-import { createWriterInterface, getWriterCommandArguments } from "../../sdi/swriter";
+import { createWriterInterface } from "../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import {
   exportWriterTextToPort,
@@ -22,17 +22,6 @@ import {
   saveWriterOdtToPort,
   saveWriterToPrimaryPort,
 } from "./writer-document-io";
-
-/** Browser Cut request after native clipboard-event adaptation. */
-export interface WriterCutCommandArguments {
-  readonly clipboardHandled?: boolean;
-}
-
-/** Browser Paste request after native clipboard-event adaptation. */
-export interface WriterPasteCommandArguments {
-  readonly clipboardHandled?: boolean;
-  readonly paste?: WriterClipboardPaste;
-}
 
 /** Browser capabilities injected by the Writer module composition root. */
 export interface WriterSessionServices {
@@ -49,7 +38,7 @@ export interface WriterSessionServices {
 export class WriterPlatformError extends Error {
   /** Creates an explicit browser-platform failure. @param code - Stable failure category. @param message - User-presentable detail. @returns Nothing. */
   public constructor(
-    readonly code: "clipboard-empty" | "selection-required" | "storage-unavailable",
+    readonly code: "clipboard-empty" | "storage-unavailable",
     message: string,
   ) {
     super(message);
@@ -62,45 +51,27 @@ export async function copyWriterSelection(
   wrtShell: SwWrtShell,
   copyRichText: WriterSessionServices["copyRichText"],
 ): Promise<void> {
-  const selection = wrtShell.CreateTransferable().CreateSelection();
-  if (selection === undefined)
-    throw new WriterPlatformError("selection-required", "Select text to copy.");
-  await copyRichText(selection);
+  await wrtShell.CreateTransferable().Copy(copyRichText);
 }
 
-/** Copies when needed and then deletes the canonical selection. @param wrtShell - Editing shell. @param copyRichText - Browser write port. @param request - Adapted native Cut request. @returns Completion after deletion. */
+/** Writes through the browser port while Writer owns delete-after-copy. @param wrtShell - Editing shell. @param copyRichText - Browser write port. @returns Completion after deletion. */
 export async function cutWriterSelection(
   wrtShell: SwWrtShell,
   copyRichText: WriterSessionServices["copyRichText"],
-  request?: WriterCutCommandArguments,
 ): Promise<void> {
-  if (!request?.clipboardHandled) await copyWriterSelection(wrtShell, copyRichText);
-  if (!wrtShell.DeleteSelection())
-    throw new WriterPlatformError("selection-required", "Select text to cut.");
+  await wrtShell.CreateTransferable().Cut(copyRichText);
 }
 
-/** Inserts an adapted or asynchronously read browser clipboard payload. @param wrtShell - Editing shell. @param readRichClipboard - Browser read port. @param request - Adapted Paste request. @returns Completion after insertion. */
+/** Reads browser clipboard data and hands its parsed record to Writer transfer ownership. @param wrtShell - Editing shell. @param readRichClipboard - Browser read port. @returns Completion after insertion. */
 export async function pasteWriterClipboard(
   wrtShell: SwWrtShell,
   readRichClipboard: WriterSessionServices["readRichClipboard"],
-  request?: WriterPasteCommandArguments,
 ): Promise<void> {
-  let paste: WriterClipboardPaste;
-  if (request?.paste !== undefined) paste = request.paste;
-  else if (request?.clipboardHandled === true)
+  const clipboard = await readRichClipboard();
+  const paste = parseWriterClipboardPaste(clipboard.html, clipboard.plainText, globalThis.document);
+  if (paste === undefined)
     throw new WriterPlatformError("clipboard-empty", "Clipboard has no text to paste.");
-  else {
-    const clipboard = await readRichClipboard();
-    const parsed = parseWriterClipboardPaste(
-      clipboard.html,
-      clipboard.plainText,
-      globalThis.document,
-    );
-    if (parsed === undefined)
-      throw new WriterPlatformError("clipboard-empty", "Clipboard has no text to paste.");
-    paste = parsed;
-  }
-  wrtShell.PasteAtCursor(createBrowserWriterPaste(wrtShell.GetActiveParagraph(), paste));
+  wrtShell.CreateTransferable().Paste(createWriterTransferDocument(paste));
 }
 
 /** Browser-owned Sfx shell that terminates file, storage, and clipboard commands at adapters. */
@@ -180,23 +151,13 @@ export class WriterWorkflowCommandShell {
         {
           capabilityId: "CAP-0110",
           /** Cuts the canonical Writer selection through the browser clipboard adapter. @param _context - Bound workflow context. @param arguments_ - Sfx request items. @returns Completion after deletion. */
-          execute: (_context, arguments_): Promise<void> =>
-            cutWriterSelection(
-              wrtShell,
-              ports.copyRichText,
-              getWriterCommandArguments<WriterCutCommandArguments>(arguments_),
-            ),
+          execute: (): Promise<void> => cutWriterSelection(wrtShell, ports.copyRichText),
           id: WRITER_COMMAND_IDS.cut,
         },
         {
           capabilityId: "CAP-0110",
           /** Pastes browser clipboard content through Writer operations. @param _context - Bound workflow context. @param arguments_ - Sfx request items. @returns Completion after insertion. */
-          execute: (_context, arguments_): Promise<void> =>
-            pasteWriterClipboard(
-              wrtShell,
-              ports.readRichClipboard,
-              getWriterCommandArguments<WriterPasteCommandArguments>(arguments_),
-            ),
+          execute: (): Promise<void> => pasteWriterClipboard(wrtShell, ports.readRichClipboard),
           id: WRITER_COMMAND_IDS.paste,
         },
       ]),

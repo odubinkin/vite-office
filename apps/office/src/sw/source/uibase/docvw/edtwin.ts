@@ -5,7 +5,7 @@
 
 import { SwPosition } from "../../core/crsr/pam";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import type { WriterClipboardSelection } from "../dochdl/swdtflvr";
+import type { WriterClipboardSelection, WriterTransferDocument } from "../dochdl/swdtflvr";
 import type { WriterPasteDocument } from "../wrtsh/wrtsh-paste";
 import type { SwWrtShell } from "../wrtsh/wrtsh";
 import { SwTextNode as SwTextNodeClass } from "../../core/txtnode/ndtxt";
@@ -140,14 +140,25 @@ export class SwEditWin {
     return this.wrtShell.CreateTransferable().CreateSelection();
   }
 
+  /** Copies the current Writer selection through a native event writer. @param write - Synchronous MIME writer. @returns Nothing. */
+  public CopyTransfer(write: (selection: WriterClipboardSelection) => void): void {
+    this.wrtShell.CreateTransferable().Copy(write);
+  }
+
+  /** Writes the current transfer and then removes its selection. @param write - Synchronous MIME writer. @returns Nothing. */
+  public CutTransfer(write: (selection: WriterClipboardSelection) => void): void {
+    this.wrtShell.CreateTransferable().Cut(write);
+    this.invalidateBindings();
+  }
+
   /** Inserts a sanitized transfer document at the current PaM. @param paste - Parsed transfer document. @returns Whether the document changed. */
   public Paste(paste: WriterPasteDocument): boolean {
     return this.Complete(this.wrtShell.PasteAtCursor(paste));
   }
 
-  /** Lets an outer transfer adapter create a pool-owned native document, then inserts it through this edit window. @param prepare - Browser-neutral transfer conversion callback. @returns Whether the document changed. */
-  public PasteTransfer(prepare: (paragraph: SwTextNode) => WriterPasteDocument): boolean {
-    return this.Paste(prepare(this.wrtShell.GetActiveParagraph()));
+  /** Inserts a Writer transfer document into the current target pool through the shell. @param paste - Writer-owned transfer document. @returns Whether the document changed. */
+  public PasteTransfer(paste: WriterTransferDocument): boolean {
+    return this.Complete(this.wrtShell.CreateTransferable().Paste(paste));
   }
 
   /** Resolves one platform endpoint without exposing SwNode identity outside this owner. @param position - Current node/content coordinates. @returns Registered Writer position or undefined. */

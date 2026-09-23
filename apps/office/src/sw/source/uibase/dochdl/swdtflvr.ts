@@ -6,14 +6,17 @@
 import { serializeWriterClipboardPlainText } from "../../filter/ascii/ascatr";
 import { serializeWriterClipboardHtml } from "../../filter/html/htmlnumwriter";
 import type { WriterTransferParagraph } from "../../filter/basflt/writer-transfer";
-import type { SwPaM, SwPosition } from "../../core/crsr/pam";
+import type { SwPosition } from "../../core/crsr/pam";
 import type { SwDoc } from "../../core/doc/doc";
+import type { SwNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import {
+  createWriterTextFragment,
   projectWriterTextRuns,
   splitWriterTextRuns,
   type WriterTextRun,
 } from "../../core/txtnode/text-run-projection";
+import type { SwWrtShell } from "../wrtsh/wrtsh";
 
 /** Describes the two clipboard representations emitted for a visible Writer selection. */
 export interface WriterClipboardSelection {
@@ -21,22 +24,123 @@ export interface WriterClipboardSelection {
   readonly plainText: string;
 }
 
+/** Writer-owned text and list transfer awaiting insertion in a target document pool. */
+export interface WriterTransferDocument {
+  readonly isBlock: boolean;
+  readonly paragraphs: readonly Readonly<{
+    listKind: "bullet" | "none" | "numbered";
+    listLevel: number;
+    runs: readonly WriterTextRun[];
+  }>[];
+}
+
+/** Transfer failure reported by command completion without coupling Writer to a browser API. */
+export class WriterTransferError extends Error {
+  public readonly code = "selection-required";
+
+  /** Creates a selection failure. @returns Nothing. */
+  public constructor() {
+    super("Select text to copy.");
+    this.name = "WriterTransferError";
+  }
+}
+
 /** Model-owned transferable created from the shell SwPaM, independent of rendered DOM. */
 export class SwTransferable {
-  /** Creates transfer serialization over the canonical document and shell cursor. @param document - Writer document model. @param pam - Persistent point-and-mark selection. @returns Nothing. */
-  public constructor(
-    private readonly document: SwDoc,
-    private readonly pam: SwPaM,
-  ) {}
+  /** Creates transfer serialization over the canonical editing shell. @param shell - Writer shell owning the persistent PaM and target. @returns Nothing. */
+  public constructor(private readonly shell: SwWrtShell) {}
+
+  /** Chooses the supported rich or plain insertion format after the browser filter has inspected HTML. @param richAvailable - Whether HTML imported as safe visible Writer content. @param plainAvailable - Whether plain text exists. @returns Preferred supported format. */
+  public static SelectPasteFormat(
+    richAvailable: boolean,
+    plainAvailable: boolean,
+  ): "html" | "plain-text" | undefined {
+    if (richAvailable) return "html";
+    return plainAvailable ? "plain-text" : undefined;
+  }
+
+  /** Writes the current selection through a caller-owned transfer port. @param write - Platform write operation. @returns Completion after the write. */
+  public Copy(
+    write: (selection: WriterClipboardSelection) => void | Promise<void>,
+  ): void | Promise<void> {
+    const selection = this.CreateSelection();
+    if (selection === undefined) throw new WriterTransferError();
+    return write(selection);
+  }
+
+  /** Copies before deleting, matching upstream SwTransferable::Cut. @param write - Platform write operation. @returns Completion after a successful cut. */
+  public Cut(
+    write: (selection: WriterClipboardSelection) => void | Promise<void>,
+  ): void | Promise<void> {
+    const pam = this.shell.GetCursor();
+    const point = pam.GetPoint();
+    const mark = pam.GetMark();
+    const expected = {
+      markNode: mark.GetNode(),
+      markOffset: mark.GetContentIndex(),
+      pointNode: point.GetNode(),
+      pointOffset: point.GetContentIndex(),
+    };
+    const result = this.Copy(write);
+    if (result === undefined) {
+      this.DeleteSelection(expected);
+      return;
+    }
+    return result.then(
+      /** Removes the selection only after the platform accepts the transfer. @returns Nothing. */ () => {
+        this.DeleteSelection(expected);
+      },
+    );
+  }
+
+  /** Inserts an imported transfer into the current Writer target pool and PaM. @param paste - Sanitized transfer record. @returns Whether the document changed. */
+  public Paste(paste: WriterTransferDocument): boolean {
+    const paragraph = this.shell.GetActiveParagraph();
+    return this.shell.PasteAtCursor({
+      isBlock: paste.isBlock,
+      paragraphs: paste.paragraphs.map(
+        /** Constructs a native paragraph in the target document pool. @param item - Imported paragraph. @returns Native paste paragraph. */ (
+          item,
+        ) => ({
+          fragment: createWriterTextFragment(paragraph, item.runs),
+          listKind: item.listKind,
+          listLevel: item.listLevel,
+        }),
+      ),
+    });
+  }
+
+  /** Deletes only the range whose content was transferred, including after an asynchronous browser write. @param expected - Point and mark at transfer time. @returns Nothing. */
+  private DeleteSelection(
+    expected: Readonly<{
+      markNode: SwNode;
+      markOffset: number;
+      pointNode: SwNode;
+      pointOffset: number;
+    }>,
+  ): void {
+    const pam = this.shell.GetCursor();
+    if (
+      !pam.HasMark() ||
+      pam.GetPoint().GetNode() !== expected.pointNode ||
+      pam.GetPoint().GetContentIndex() !== expected.pointOffset ||
+      pam.GetMark().GetNode() !== expected.markNode ||
+      pam.GetMark().GetContentIndex() !== expected.markOffset ||
+      !this.shell.DeleteSelection()
+    )
+      throw new WriterTransferError();
+  }
 
   /** Serializes the canonical Writer selection through the bounded HTML/ASCII writers. @returns Paired MIME payload or undefined for an empty selection. */
   public CreateSelection(): WriterClipboardSelection | undefined {
-    if (!this.pam.HasMark()) return undefined;
-    const ordered = orderPositions(this.document, this.pam.GetPoint(), this.pam.GetMark());
-    const startIndex = this.document.paragraphs.indexOf(ordered.start.GetNode() as SwTextNode);
-    const endIndex = this.document.paragraphs.indexOf(ordered.end.GetNode() as SwTextNode);
+    const document = this.shell.GetDoc();
+    const pam = this.shell.GetCursor();
+    if (!pam.HasMark()) return undefined;
+    const ordered = orderPositions(document, pam.GetPoint(), pam.GetMark());
+    const startIndex = document.paragraphs.indexOf(ordered.start.GetNode() as SwTextNode);
+    const endIndex = document.paragraphs.indexOf(ordered.end.GetNode() as SwTextNode);
     if (startIndex < 0 || endIndex < 0) return undefined;
-    const paragraphs = this.document.paragraphs.slice(startIndex, endIndex + 1).map(
+    const paragraphs = document.paragraphs.slice(startIndex, endIndex + 1).map(
       /** Prepares one selected model paragraph. @param paragraph - Selected text node. @param relativeIndex - Index within the selected slice. @returns Format-writer paragraph input. */ (
         paragraph,
         relativeIndex,
@@ -119,6 +223,8 @@ function serializeRuns(runs: readonly WriterTextRun[]): string {
         let html = escapeWriterClipboardHtml(run.text);
         if (run.attributes.bold) html = `<strong>${html}</strong>`;
         if (run.attributes.italic) html = `<em>${html}</em>`;
+        if (run.hyperlink !== undefined)
+          html = `<a href="${escapeWriterClipboardHtml(run.hyperlink.url)}">${html}</a>`;
         const styles = [
           run.attributes.color === undefined || run.attributes.color === "auto"
             ? ""

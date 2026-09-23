@@ -14,6 +14,8 @@ import type {
   WriterClipboardPaste,
   WriterClipboardPasteParagraph,
 } from "../../../source/filter/html/html-filter-types";
+import { SwTransferable } from "../../../source/uibase/dochdl/swdtflvr";
+import type { WriterHyperlink } from "../../../source/core/txtnode/fmtinfmt";
 
 export type {
   WriterClipboardPaste,
@@ -32,6 +34,9 @@ export function parseWriterClipboardPaste(
   plainText: string,
   document: Document,
 ): WriterClipboardPaste | undefined {
+  let rich:
+    | Readonly<{ isBlock: boolean; paragraphs: readonly WriterClipboardPasteParagraph[] }>
+    | undefined;
   if (html.trim().length > 0) {
     const container = document.createElement("div");
     container.innerHTML = html;
@@ -44,9 +49,11 @@ export function parseWriterClipboardPaste(
       ) ||
       container.textContent === ""
     )
-      return { ...parsed, source: "html" };
+      rich = parsed;
   }
-  if (plainText.length === 0) return undefined;
+  const format = SwTransferable.SelectPasteFormat(rich !== undefined, plainText.length > 0);
+  if (format === "html") return { ...rich, source: "html" } as WriterClipboardPaste;
+  if (format === undefined) return undefined;
   const lines = plainText.split(/\r\n?|\n/u);
   return {
     isBlock: lines.length > 1,
@@ -161,16 +168,41 @@ function parseWriterClipboardHtml(
         runs.push({ attributes: inheritedAttributes, text: "\n" });
         return;
       }
+      const children = parseWriterClipboardHtml(
+        node,
+        getWriterClipboardNodeAttributes(node, inheritedAttributes),
+        excludeLists,
+      );
+      const hyperlink = node.tagName === "A" ? getWriterClipboardHyperlink(node) : undefined;
       runs.push(
-        ...parseWriterClipboardHtml(
-          node,
-          getWriterClipboardNodeAttributes(node, inheritedAttributes),
-          excludeLists,
+        ...children.map(
+          /** Adds the safe anchor destination to imported runs. @param run - Child run. @returns Run with optional hyperlink. */ (
+            run,
+          ) =>
+            hyperlink === undefined || run.hyperlink !== undefined ? run : { ...run, hyperlink },
         ),
       );
     },
   );
   return normalizeWriterTextRuns(runs);
+}
+
+/** Reads an anchor destination while excluding script and data URLs from the browser transfer boundary. @param element - Imported anchor. @returns Safe bounded hyperlink or undefined. */
+function getWriterClipboardHyperlink(element: HTMLElement): WriterHyperlink | undefined {
+  const url = element.getAttribute("href")?.trim();
+  if (url === undefined || url.length === 0) return undefined;
+  const scheme = /^[a-z][a-z\d+.-]*:/iu.exec(url)?.[0].toLowerCase();
+  if (scheme !== undefined && !["http:", "https:", "mailto:"].includes(scheme)) return undefined;
+  if (
+    url.startsWith("//") ||
+    Array.from(url).some(
+      /** Finds control characters forbidden in transferred destinations. @param character - One URL character. @returns Whether it is a control character. */ (
+        character,
+      ) => character.charCodeAt(0) < 32,
+    )
+  )
+    return undefined;
+  return { url };
 }
 
 /** Maps the allowlisted HTML inline subset to Writer direct attributes. @param element - Current inline element. @param inheritedAttributes - Parent attributes. @returns Effective Writer attributes. */

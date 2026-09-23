@@ -119,7 +119,7 @@ export class SwWrtShell extends SwModify {
   }
   /** Creates a model-based transfer object over the current persistent selection. @returns Transfer object. */
   public CreateTransferable(): SwTransferable {
-    return new SwTransferable(this.GetDoc(), this.cursor);
+    return new SwTransferable(this);
   }
   /** Returns the Writer editing command shell for top-priority frame registration. @returns SfxShell adapter. */
   public GetCommandShell(): SfxShell {

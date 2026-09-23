@@ -9,7 +9,6 @@ import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import { SwUndoPageDesc, SwUndoRulerIndent } from "../../core/undo/SwUndoPageDesc";
 import { SwDocShell } from "../app/docsh";
-import { SwTransferable } from "../dochdl/swdtflvr";
 import { SwWrtShell } from "./wrtsh";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
@@ -902,14 +901,5 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
       point: { offset: 0, paragraphId: "p-1" },
     });
     expect(emptyParagraphs.CreateTransferable().CreateSelection()).toBeUndefined();
-
-    const foreign = createShell("foreign");
-    setTestSelection(foreign, {
-      mark: { offset: 0, paragraphId: "p-1" },
-      point: { offset: 7, paragraphId: "p-1" },
-    });
-    expect(
-      new SwTransferable(shell.GetDoc(), foreign.GetCursor()).CreateSelection(),
-    ).toBeUndefined();
   });
 });
