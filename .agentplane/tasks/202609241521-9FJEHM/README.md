@@ -4,7 +4,7 @@ title: "Add canonical inline bookmarks and soft page breaks"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -41,7 +41,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-09-24T17:32:25.378Z"
+doc_updated_at: "2026-09-24T20:18:50.862Z"
 doc_updated_by: "CODER"
 description: "Phase 3: Writer mark/hint state, nested links, Worker transfer, export and bookmark/break UI controls."
 sections:
@@ -59,7 +59,7 @@ sections:
     1. `npm run verify` passes.
     2. `collapsed_bookmark.odt`, `hyperlink.odt` and `tdf94882.odt` tests assert ranges/targets/positions through reimport.
     3. UI tests create, navigate, rename and remove bookmarks and exercise break/hyperlink controls.
-    4. Private sample retains eight bookmarks and nine soft breaks at logical positions; record diagnostics and deltas.
+    4. Private sample retains eight bookmarks and six body-paragraph soft breaks at logical positions; record diagnostics and deltas. The three table-owned soft breaks move to phase 5 by user approval.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
@@ -91,7 +91,7 @@ Canonical bookmark positions, soft page-break hints and nested links; Worker tra
 1. `npm run verify` passes.
 2. `collapsed_bookmark.odt`, `hyperlink.odt` and `tdf94882.odt` tests assert ranges/targets/positions through reimport.
 3. UI tests create, navigate, rename and remove bookmarks and exercise break/hyperlink controls.
-4. Private sample retains eight bookmarks and nine soft breaks at logical positions; record diagnostics and deltas.
+4. Private sample retains eight bookmarks and six body-paragraph soft breaks at logical positions; record diagnostics and deltas. The three table-owned soft breaks move to phase 5 by user approval.
 
 ## Verification
 

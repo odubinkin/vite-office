@@ -135,9 +135,10 @@ and dialog behavior following `insertbreak.ui`; keep an imported soft page break
 distinct from a user-inserted hard break. Reuse the existing hyperlink dialog
 for any link-editing extension.
 
-**Gate:** all 8 bookmarks and 9 soft page breaks in the local source remain at
-the same logical positions after import/export/reimport; links retain their
-targets and displayed text.
+**Gate:** all 8 bookmarks and the 6 soft page breaks in body paragraphs remain
+at the same logical positions after import/export/reimport; links retain their
+targets and displayed text. The 3 soft page breaks owned by the table are
+verified with the canonical table graph in phase 5.
 UI tests must create, navigate, rename, and remove bookmarks and exercise the
 applicable break and hyperlink controls.
 
@@ -182,7 +183,8 @@ support arrives.
 
 **Gate:** the imported table has exactly 5 rows and 15 cells with ordered cell
 content, visible boundaries and widths, usable selection, and a structural
-export/reimport round trip. Existing paragraph/list tests remain green.
+export/reimport round trip. Its 3 soft page breaks retain their logical
+table/cell positions after import/export/reimport. Existing paragraph/list tests remain green.
 UI tests must insert a table, edit its properties, and verify those changes
 after reopening.
 
