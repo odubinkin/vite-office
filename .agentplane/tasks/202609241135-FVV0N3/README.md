@@ -1,10 +1,11 @@
 ---
 id: "202609241135-FVV0N3"
 title: "F8 Restore Writer layout measurement ownership"
-status: "DOING"
+result_summary: "Writer layout owns paragraph semantics while browser supplies device line geometry."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -41,11 +42,16 @@ quality_review:
     - "apps/office/src/sw/source/core/layout/newfrm.test.ts"
   findings:
     - "Full verify passed: 485 office tests, 98 inventory tests, 14 E2E and 100% coverage; source and runtime mappings updated."
-commit: null
+commit:
+  hash: "9c2384ef9e149ac1f5d991c569b4f1eda780cf4e"
+  message: "🧩 FVV0N3 code: bind layout to canonical Writer nodes"
 comments:
   -
     author: "CODER"
     body: "Start: bind Writer layout to canonical nodes and narrow browser line measurements."
+  -
+    author: "CODER"
+    body: "Verified: canonical Writer node layout inputs and narrow browser line measurements pass full verification."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Core layout now derives spacing, style, keep and line-number flags from current SwDoc; browser supplies only measured line geometry. Full npm run verify and git diff --check passed (485 office tests, 98 inventory tests, 14 E2E, 100% coverage)."
+  -
+    type: "status"
+    at: "2026-09-24T13:41:48.488Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: canonical Writer node layout inputs and narrow browser line measurements pass full verification."
 doc_version: 3
-doc_updated_at: "2026-09-24T13:41:33.888Z"
+doc_updated_at: "2026-09-24T13:41:48.490Z"
 doc_updated_by: "CODER"
 description: "Implement F8: keep browser measurement behind a device port and persistent Writer frame ownership in core layout/text."
 sections:
