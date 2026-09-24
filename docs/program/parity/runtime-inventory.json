@@ -103,7 +103,9 @@
         ],
         "justification": "Renders one accessible suite link for the office application launcher. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "SuiteCard"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -127,7 +129,9 @@
         ],
         "justification": "Mounts the React application into a caller-provided browser root with an explicit missing-root failure. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "mountApplication"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -152,7 +156,9 @@
         ],
         "justification": "Composes the pathname-routed browser-office launcher and full-page suite workspaces at the LibreOffice `framework/source/services/desktop.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "Desktop"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -177,7 +183,9 @@
         ],
         "justification": "Defines the browser module-manager suite inventory presented by the foundation workbench without claiming feature parity. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createOfficeModuleDescriptors"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -228,7 +236,9 @@
         ],
         "justification": "Provides the single browser locale service to the React presentation tree without owning document or command behavior.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "BrowserLocalizationProvider"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -253,7 +263,9 @@
         ],
         "justification": "Adapts the application localization service to React context without owning document or command behavior.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "useBrowserLocalization"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -278,7 +290,9 @@
         ],
         "justification": "Owns browser locale selection and catalog fallback outside LibreOffice implementation paths.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createBrowserLocalizationService"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -305,7 +319,9 @@
         ],
         "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "CommandMenuBar"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -332,7 +348,10 @@
         ],
         "justification": "Projects generated toolbar placements through frame-owned Sfx command state and dispatch.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "CommandButton",
+          "CommandToolbarItems"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -357,7 +376,11 @@
         ],
         "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createBrowserCommandSource",
+          "useBrowserCommandState",
+          "useBrowserCommandPresentation"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -384,7 +407,9 @@
         ],
         "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "useCommandShortcuts"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -409,7 +434,10 @@
         ],
         "justification": "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "normalizeCommandShortcut",
+          "getBrowserShortcut"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -494,7 +522,11 @@
         ],
         "justification": "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "normalizeLocale",
+          "resolveMessage",
+          "interpolateMessage"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -520,7 +552,12 @@
         ],
         "justification": "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createWorkerClientState",
+          "issueWorkerRequest",
+          "cancelWorkerRequest",
+          "classifyWorkerResult"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -709,7 +746,8 @@
         "justification": "Ports the bounded frame-owned command state query and invalidation facade.",
         "knownViolations": [],
         "localSymbols": [
-          "SfxBindings"
+          "SfxBindings",
+          "deriveParameterizedSlotState"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sfx2/source/control/bindings.cxx",
@@ -761,19 +799,21 @@
       ],
       "semantic": {
         "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
+        "contractStatus": "divergent",
         "defaultStatus": "not-applicable",
-        "divergenceClass": "none",
+        "divergenceClass": "P",
         "evidence": [
-          "apps/office/src/sfx2/source/control/dispatch.ts#SfxDispatcher",
-          "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx#SfxDispatcher"
+          "apps/office/src/sfx2/source/control/dispatch.ts#GetCommands",
+          "apps/office/src/sfx2/source/control/dispatch.test.ts#GetCommands",
+          "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx#SfxDispatcher::GetSlot"
         ],
-        "justification": "Owns only the bounded Sfx shell stack, slot resolution, and SfxRequest execution contract; slot/interface metadata and browser Promise observation have separate owners.",
+        "justification": "P2 confirmed extra public alias: GetCommands returns GetSlots unchanged and has no production caller. The pinned SfxDispatcher slot interface exposes GetSlots; remove the local alias after its one test is updated. Other dispatch behavior remains unverified.",
         "knownViolations": [],
         "localSymbols": [
-          "SfxDispatcher"
+          "SfxDispatcher",
+          "isPromiseLike"
         ],
-        "sourceResponsibility": "aligned",
+        "sourceResponsibility": "divergent",
         "upstreamFile": "sfx2/source/control/dispatch.cxx",
         "upstreamSymbols": [
           "SfxDispatcher",
@@ -869,7 +909,8 @@
         "localSymbols": [
           "SfxRequest",
           "createRequestArguments",
-          "createRequestReturnItem"
+          "createRequestReturnItem",
+          "parseCommandUrlArguments"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sfx2/source/control/request.cxx",
@@ -1008,7 +1049,8 @@
           "SfxObjectShell",
           "SetModified",
           "SaveCompleted",
-          "SetHistorySavePosition"
+          "SetHistorySavePosition",
+          "createDocument"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "include/sfx2/objsh.hxx",
@@ -1348,7 +1390,11 @@
         ],
         "justification": "Composes the browser Writer session from document, shell, frame, persistence, and presentation adapters without claiming the upstream swmodule implementation path.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createWriterBrowserSessionServices",
+          "createWriterDocumentSession",
+          "createWriterModuleFactory"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1378,7 +1424,9 @@
         ],
         "justification": "Projects canonical Writer text nodes into browser DOM descendants that inherit editability from one root host; it no longer claims native SwEditWin ownership.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "WriterEditableParagraph"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1400,17 +1448,22 @@
         "CAP-0134"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
+        "behaviorStatus": "divergent",
         "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#WriterPlainTextEditor"
+          "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#showLineNumbers",
+          "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#createSwPageFrames",
+          "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#SwLineNumberInfo::SwLineNumberInfo",
+          "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx#SwTextFrame"
         ],
-        "justification": "Renders immutable paragraphs in one contenteditable host and binds exactly one stable BrowserWriterEditWindow to the DOM-neutral SwEditWin owner.",
+        "justification": "P0 confirmed ownership gap: React computes line-number paint from showLineNumbers and invokes createSwPageFrames during render. Pinned SwLineNumberInfo is document-owned and sw/source/core/text/txtfrm.cxx plus layout/newfrm.cxx own line and page formatting. DOM measurement and painting remain valid browser device work.",
         "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
+        "localSymbols": [
+          "WriterPlainTextEditor"
+        ],
+        "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -1465,7 +1518,10 @@
         ],
         "justification": "Parses native DataTransfer MIME values at the single browser edit-window boundary; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "readBrowserWriterClipboardPaste",
+          "createWriterTransferDocument"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1490,7 +1546,9 @@
         ],
         "justification": "Contains the optional browser caretRangeFromPoint geometry fallback behind an injected surface; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "getBrowserWriterCaretFromPoint"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1539,14 +1597,16 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/editor/writer-page-pagination.ts#getWriterParagraphGap"
+          "apps/office/src/sw/browser/editor/writer-page-pagination.ts#getWriterParagraphGap",
+          "apps/office/src/sw/source/core/text/txtfrm.ts#getSwTextFrameGap",
+          "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx#SwTextFrame"
         ],
-        "justification": "Converts Writer-owned adjacent text-frame spacing from twips to browser points; page breaks are produced by Writer layout frames.",
+        "justification": "P2 confirmed redundant conversion: getWriterParagraphGap converts an immutable paragraph projection back into SwTextFrameInput only to call core getSwTextFrameGap. The conversion duplicates a layout boundary; pinned core text and layout own adjacent frame spacing.",
         "knownViolations": [],
         "localSymbols": [
           "getWriterParagraphGap"
         ],
-        "sourceResponsibility": "browser-owned",
+        "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -1599,7 +1659,14 @@
         ],
         "justification": "Renders immutable current paragraph values together with alignment and list controls backed by generated commands and persistent bindings state.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "getWriterDomSelection",
+          "restoreWriterDomSelection",
+          "getWriterCollapsedCaretOffset",
+          "restoreWriterCollapsedCaret",
+          "getWriterSameParagraphSelection",
+          "getWriterCollapsedParagraphCaret"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1625,7 +1692,9 @@
         ],
         "justification": "The bounded import follows the upstream swhtml ownership boundary, while browser DOM parsing remains an explicit platform divergence from LibreOffice's SvParser-based implementation.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "parseWriterClipboardPaste"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1651,7 +1720,9 @@
         ],
         "justification": "Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with transferables, stale-result rejection, cancellation, timeout, and deterministic termination. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createBrowserOdtFilterService"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1710,6 +1781,36 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0109",
+        "CAP-0125"
+      ],
+      "semantic": {
+        "behaviorStatus": "divergent",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "unverified",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx#WriterAdvancedFormattingControls",
+          "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx#fromParagraph",
+          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SvxTabStopItem"
+        ],
+        "justification": "P1 confirmed browser ownership gap: the React dialog derives paragraph formatting drafts and fixed line-spacing choices locally. Pinned SwTextShell owns tab-stop item conversion and commit semantics; React should retain only draft state and accessibility interaction. Exact supported command defaults remain unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterAdvancedFormattingControls"
+        ],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1730,7 +1831,9 @@
         ],
         "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "WriterCommandToolbar"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1757,7 +1860,9 @@
         ],
         "justification": "Presents browser document selection, computer ODT/TXT import, browser copy creation, and ODT/TXT export. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "WriterFileDialog"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1787,7 +1892,9 @@
         ],
         "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "WriterFormattingToolbar"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1812,7 +1919,9 @@
         ],
         "justification": "Contains React and browser DOM adaptation behind Writer hyperlink command and model boundaries; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "WriterHyperlinkDialog"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1838,7 +1947,10 @@
         ],
         "justification": "Adapts the pinned PageFormatPage controls and validation boundary to an accessible React dialog while leaving page geometry in SwDoc.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "WriterPageStyleDialog",
+          "swapOrientation"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1868,7 +1980,10 @@
         ],
         "justification": "Renders immutable current paragraph values together with alignment and list controls backed by generated commands and persistent bindings state.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "getSidebarIcon",
+          "WriterParagraphProperties"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1921,7 +2036,10 @@
         ],
         "justification": "Projects SwRuler/SvxRuler page-margin and paragraph-indent semantics into browser pointer controls without moving canonical values into React state.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "WriterRulers",
+          "WriterVerticalRuler"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1947,7 +2065,9 @@
         ],
         "justification": "Contains React or browser DOM adaptation behind Writer command and model boundaries; no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "WriterWorkspaceChrome"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1972,7 +2092,9 @@
         ],
         "justification": "This existing module is classified for exhaustive runtime inventory coverage; no new parity claim is made by the browser autosave task.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "selectWriterCommandResource"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -1994,9 +2116,35 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts#writerBrowserMenuPlacements"
+          "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts#writerBrowserMenuPlacements",
+          "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts#writerMenuPlacements"
         ],
-        "justification": "Exports the supported generated Writer menubar verbatim so no second handwritten presentation policy can hide an implemented command.",
+        "justification": "P2 confirmed pass-through boundary: this module reexports generated writerMenuPlacements with no browser transformation or independent command behavior. Its callers can use the generated uiconfig owner directly; command presentation remains a valid React boundary.",
+        "knownViolations": [],
+        "localSymbols": [],
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts#WriterRulerLaneContext"
+        ],
+        "justification": "React context carries only an HTMLElement ruler lane and scrollTop for browser painting. It stores no Writer ruler model values or command policy, so this DOM geometry port has no native source owner.",
         "knownViolations": [],
         "localSymbols": [],
         "sourceResponsibility": "browser-owned",
@@ -2029,7 +2177,9 @@
           "WriterPresentationProjection",
           "WriterViewSnapshot",
           "WriterViewProjection",
-          "WriterViewStore"
+          "WriterViewStore",
+          "projectWriterLineHeight",
+          "projectWriterLineHeightItem"
         ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
@@ -2060,17 +2210,24 @@
         "CAP-0135"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
+        "behaviorStatus": "divergent",
         "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
+        "defaultStatus": "divergent",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/presentation/writer-view.tsx#WriterWorkbenchProps"
+          "apps/office/src/sw/browser/presentation/writer-view.tsx#showLineNumbers",
+          "apps/office/src/sw/browser/presentation/writer-view.tsx#RES_PARATR_TABSTOP",
+          "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#SwDoc::SetLineNumberInfo",
+          "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem"
         ],
-        "justification": "Contains the React projection of SwView behind Writer shell, command, and model boundaries; no native LibreOffice source file is claimed as its owner.",
+        "justification": "P0 confirmed: React stores showLineNumbers and creates integer tab-stop items directly. Pinned SwDoc::SetLineNumberInfo and SwLineNumberInfo own line-number state and count-by=5; pinned SwTextShell works with SvxTabStopItem. React presentation is a browser boundary, but these model and command responsibilities belong in sw/source.",
         "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
+        "localSymbols": [
+          "WriterWorkbench",
+          "presentWriterStatus",
+          "presentWriterCommandError"
+        ],
+        "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -2150,7 +2307,10 @@
         ],
         "justification": "Exports ODT and TXT through browser download ports; native Save is intentionally absent.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "saveWriterOdtToPort",
+          "exportWriterTextToPort"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -2204,7 +2364,13 @@
         ],
         "justification": "Adapts dirty Writer shell generations to ODT IndexedDB saves and refuses empty documents. This browser policy is an intentional upstream divergence and must not be rewritten by parity work.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "hasWriterContent",
+          "autosaveWriter",
+          "saveWriterAsBrowserCopy",
+          "openBrowserWriterDocument",
+          "openWriterText"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -2235,7 +2401,11 @@
         ],
         "justification": "Owns the browser-only Sfx shell for file, clipboard, download, and IndexedDB commands while file and durable-storage ports terminate in writer-document-io and transfer creation remains owned by SwTransferable/SwWrtShell.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "copyWriterSelection",
+          "cutWriterSelection",
+          "pasteWriterClipboard"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -2336,7 +2506,8 @@
         "localSymbols": [
           "SwAtomicModelHint",
           "SwModelTransactionHint",
-          "SwModelHint"
+          "SwModelHint",
+          "hasSwModelHintKind"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/inc/hints.hxx",
@@ -2372,7 +2543,9 @@
           "getWriterOdfStyleName",
           "getWriterParagraphStyleDefinition",
           "getWriterParagraphStyleId",
-          "getWriterStyleIdFromOdfName"
+          "getWriterStyleIdFromOdfName",
+          "getWriterAvailableParagraphStyleDefinition",
+          "encodeWriterOdfStyleName"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/doc/poolfmt.cxx",
@@ -2522,20 +2695,21 @@
       ],
       "semantic": {
         "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
-        "divergenceClass": "none",
+        "contractStatus": "divergent",
+        "defaultStatus": "divergent",
+        "divergenceClass": "P",
         "evidence": [
-          "apps/office/src/sw/source/core/attr/swatrset.ts#SwAttrPool",
-          "vendor/libreoffice-reference/sw/source/core/attr/swatrset.cxx#SwAttrPool"
+          "apps/office/src/sw/source/core/attr/swatrset.ts#RES_PARATR_TABSTOP",
+          "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem",
+          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SvxTabStopItem"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/core/attr/swatrset.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "P0 confirmed: RES_PARATR_TABSTOP is registered as SfxInt16Item or SfxInt16ListItem, while pinned sw/source/core/bastyp/init.cxx registers SvxTabStopItem with default-stop alignment and fill semantics. SwAttrPool item identity and default are therefore different; other pool operations remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SwAttrPool",
           "SwAttrSet"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "divergent",
         "upstreamFile": "sw/source/core/attr/swatrset.cxx",
         "upstreamSymbols": [
           "SwAttrPool",
@@ -2705,7 +2879,8 @@
         "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/DocumentSettingManager.cxx; Phase 2 preserves the bounded upstream manager boundary.",
         "knownViolations": [],
         "localSymbols": [
-          "DocumentSettingManager"
+          "DocumentSettingManager",
+          "getDefaultDocumentSettings"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/doc/DocumentSettingManager.cxx",
@@ -2799,7 +2974,9 @@
           "WriterDefaultFontType",
           "DefaultFontDevice",
           "getDefaultFont",
-          "getWriterFontScript"
+          "getWriterFontScript",
+          "getDefaultFontSelection",
+          "getWriterDefaultFontLanguage"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/core/doc/DocumentStylePoolManager.cxx",
@@ -2869,7 +3046,8 @@
           "WriterParagraphStyle",
           "SwFormatColl",
           "SwTextFormatColl",
-          "isWriterParagraphStyle"
+          "isWriterParagraphStyle",
+          "createWriterTextFormatColl"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/doc/fmtcol.cxx",
@@ -2901,7 +3079,13 @@
         ],
         "justification": "Owns the storage-neutral pooled-item graph codec used by canonical Writer graph serialization without adding persistence methods to SfxPoolItem subclasses.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "encodeSfxPoolItem",
+          "encodeSfxItemSet",
+          "decodeSfxPoolItem",
+          "decodeSfxItemSet",
+          "decodeSwFormatINetFormat"
+        ],
         "sourceResponsibility": "unverified",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -2975,7 +3159,8 @@
         "knownViolations": [],
         "localSymbols": [
           "SwNumFormat",
-          "SwNumRule"
+          "SwNumRule",
+          "getWriterParagraphListMarker"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/core/doc/number.cxx",
@@ -2998,20 +3183,19 @@
       "semantic": {
         "behaviorStatus": "unverified",
         "contractStatus": "unverified",
-        "defaultStatus": "parity",
-        "divergenceClass": "none",
+        "defaultStatus": "divergent",
+        "divergenceClass": "P",
         "evidence": [
-          "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts#getWriterParagraphStyleDefaults",
-          "apps/office/src/sw/inc/poolfmt.test.ts#materializes source-derived item defaults and script slots",
-          "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx#lcl_SetHeadline"
+          "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts#RES_PARATR_TABSTOP",
+          "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem"
         ],
-        "justification": "Ports the implemented non-HTML Writer paragraph-style switch branches, exact twip sizes and spacing, and synchronized Western/CJK/CTL item defaults. Style families requiring unsupported item classes remain name-only and unclaimed.",
+        "justification": "P0 confirmed for the tab-stop branch: paragraph style defaults materialize RES_PARATR_TABSTOP as SfxInt16Item, whereas pinned sw/source/core/bastyp/init.cxx uses SvxTabStopItem. Existing source-derived assertions for other style defaults remain narrow and do not prove this item default.",
         "knownViolations": [],
         "localSymbols": [
           "getWriterParagraphStyleDefaults",
           "applyWriterParagraphStyleDefaults"
         ],
-        "sourceResponsibility": "aligned",
+        "sourceResponsibility": "divergent",
         "upstreamFile": "sw/source/core/doc/DocumentStylePoolManager.cxx",
         "upstreamSymbols": [
           "DocumentStylePoolManager::GetTextCollFromPool",
@@ -3035,12 +3219,17 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/source/core/doc/writer-document-codec.ts#WriterDocumentRecord"
+          "apps/office/src/sw/source/core/doc/writer-document-codec.ts#encodeWriterDocument",
+          "apps/office/src/sw/source/core/doc/writer-document-codec.ts#decodeWriterDocument",
+          "apps/office/src/sw/source/filter/xml/odt-transfer.ts#OdtWriterTransferRecord"
         ],
-        "justification": "Encodes and decodes the Writer graph for ODT Worker structured-clone transfer only; IndexedDB persistence stores complete ODT bytes.",
+        "justification": "P1 boundary debt: this structured-clone codec mirrors the SwDoc graph for Worker transfer inside core/doc. Its browser transport responsibility should move to the browser filter boundary after supported pool-item round trips are proven lossless; canonical SwDoc ownership remains upstream-shaped.",
         "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "unverified",
+        "localSymbols": [
+          "encodeWriterDocument",
+          "decodeWriterDocument"
+        ],
+        "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -3128,20 +3317,20 @@
       ],
       "semantic": {
         "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
+        "contractStatus": "divergent",
         "defaultStatus": "unverified",
-        "divergenceClass": "none",
+        "divergenceClass": "P",
         "evidence": [
           "apps/office/src/sw/source/core/layout/newfrm.ts#createSwPageFrames",
           "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx#InsertNewPage"
         ],
-        "justification": "Creates physical page frames and places measured text-frame fragments for the supported paragraph slice; full upstream layout semantics remain unverified.",
+        "justification": "P0 confirmed architectural gap: createSwPageFrames returns an immutable page array with a bounded keep-with-next rule, whereas pinned sw/source/core/layout/newfrm.cxx creates connected page frames within the persistent layout tree. Exact browser geometry remains unmeasured and behavior unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SwPageFrame",
           "createSwPageFrames"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "divergent",
         "upstreamFile": "sw/source/core/layout/newfrm.cxx",
         "upstreamSymbols": [
           "InsertNewPage"
@@ -3172,7 +3361,10 @@
         "localSymbols": [
           "SwPageDesc",
           "WriterPageDescriptorValue",
-          "createDefaultWriterPageDescriptor"
+          "createDefaultWriterPageDescriptor",
+          "equalWriterPageDescriptors",
+          "applyWriterPaperFormat",
+          "validateWriterPageDescriptor"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/layout/pagedesc.cxx",
@@ -3227,14 +3419,14 @@
       ],
       "semantic": {
         "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
+        "contractStatus": "divergent",
         "defaultStatus": "unverified",
-        "divergenceClass": "none",
+        "divergenceClass": "P",
         "evidence": [
           "apps/office/src/sw/source/core/text/txtfrm.ts#SwTextFrame",
           "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx#SwTextFrame"
         ],
-        "justification": "Represents master and follow fragments over one unchanged source text node with measured line boundaries; broader upstream text-frame behavior remains unverified.",
+        "justification": "P0 bounded architecture gap: SwTextFrame is a value projection over measured lines rather than a registered, invalidatable frame in the pinned Writer layout graph. Supported line geometry behavior has not yet been compared at multiple widths and font metrics.",
         "knownViolations": [],
         "localSymbols": [
           "SwTextLine",
@@ -3242,7 +3434,7 @@
           "getSwTextFrameGap",
           "makeSwTextFrame"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "divergent",
         "upstreamFile": "sw/source/core/text/txtfrm.cxx",
         "upstreamSymbols": [
           "SwTextFrame"
@@ -3346,7 +3538,10 @@
           "WRITER_CHARACTER_FORMATS",
           "WriterCharacterFormat",
           "WRITER_PARAGRAPH_ALIGNMENTS",
-          "SwTextNode"
+          "SwTextNode",
+          "getWriterPreviousGraphemeBoundary",
+          "getWriterNextGraphemeBoundary",
+          "isWriterParagraphAlignment"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/txtnode/ndtxt.cxx",
@@ -3376,7 +3571,16 @@
         ],
         "justification": "Projects canonical text and hints into a stack-specific immutable DTO without claiming an upstream model responsibility.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createWriterTextRuns",
+          "getWriterTextFromRuns",
+          "copyWriterTextRangeRuns",
+          "projectWriterTextRuns",
+          "createWriterTextFragment",
+          "normalizeWriterTextRuns",
+          "normalizeWriterCharacterAttributes",
+          "splitWriterTextRuns"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -3407,7 +3611,9 @@
           "WriterCharacterAttributes",
           "SwFormatAutoFormat",
           "SwTextAttr",
-          "createSwFormatAutoFormat"
+          "createSwFormatAutoFormat",
+          "createWriterCharacterItemSet",
+          "projectWriterCharacterAttributes"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/txtnode/txatbase.cxx",
@@ -3504,7 +3710,9 @@
         "knownViolations": [],
         "localSymbols": [
           "SwUndoAttr",
-          "SwUndoParagraphFormat"
+          "SwUndoParagraphFormat",
+          "CreateWriterFontUndo",
+          "CreateWriterFontSizeUndo"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/undo/unattr.cxx",
@@ -3582,7 +3790,9 @@
           "CopyTextFragment",
           "CopyUndoFragment",
           "GetUndoFragmentLength",
-          "ReplaceUndoRange"
+          "ReplaceUndoRange",
+          "DeleteUndoRange",
+          "GetFragmentPayloadSize"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/undo/undobj.cxx",
@@ -3865,7 +4075,12 @@
         ],
         "justification": "Defines the neutral asynchronous ODT filter service used by SwDocShell and by the Dedicated Worker adapter while retaining package/xmloff/sw ownership inside the filter. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createOdtFilterDocument",
+          "restoreOdtFilterDocument",
+          "createInlineOdtFilterService",
+          "normalizeOdtFilterError"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -3887,12 +4102,17 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/source/filter/xml/odt-transfer.ts#OdtWriterTransferRecord"
+          "apps/office/src/sw/source/filter/xml/odt-transfer.ts#OdtWriterTransferRecord",
+          "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts#createBrowserOdtFilterService",
+          "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx#XMLReader::Read"
         ],
-        "justification": "Defines the versioned ODT Worker envelope around a structured-clone Writer graph; durable browser storage contains ODT bytes, not this envelope.",
+        "justification": "P1 confirmed misplaced browser transport: this module defines structured-clone Worker envelopes beside the upstream-shaped XML filter. Pinned sw/source/filter/xml owns ODT import/export semantics; browser Worker transport belongs under sw/browser/filter/xml without changing save behavior.",
         "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
+        "localSymbols": [
+          "createOdtWriterTransfer",
+          "restoreOdtWriterTransfer"
+        ],
+        "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -4636,7 +4856,8 @@
           "isWriterCursorOffset",
           "getWriterSelectedTextRange",
           "createWriterUndoCursorState",
-          "createWriterCollapsedCursorState"
+          "createWriterCollapsedCursorState",
+          "getWriterSelectedTextRanges"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/uibase/wrtsh/select.cxx",
@@ -4716,7 +4937,8 @@
           "writerMenuPlacements",
           "WRITER_COMMAND_IDS",
           "writerMenuCommandIds",
-          "writerUserCommands"
+          "writerUserCommands",
+          "getWriterParagraphStyleCommandId"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -4845,7 +5067,9 @@
         ],
         "justification": "Defines local typed composition data without claiming a LibreOffice implementation source.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "normalizeWriterToolbarItems"
+        ],
         "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -4902,7 +5126,21 @@
         ],
         "justification": "Resolves fixture identifiers only in tests and converts them immediately to canonical SwPosition, SwPaM, and node-reference operations.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "getTestParagraph",
+          "setTestCursor",
+          "setTestSelection",
+          "getTestSelection",
+          "handleTestInput",
+          "fixtureReplaceRange",
+          "toggleTestFormat",
+          "setTestHyperlink",
+          "fixtureSplitParagraph",
+          "fixtureMergeParagraphWithPrevious",
+          "fixtureMergeParagraphWithNext",
+          "pasteTestSelection",
+          "getNodeId"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -4929,7 +5167,11 @@
         ],
         "justification": "Copies plain and bounded rich text through browser Clipboard APIs with a local plain-text fallback for static browser deployments. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "copyPlainText",
+          "copyRichText",
+          "readRichClipboard"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -4956,7 +5198,12 @@
         ],
         "justification": "Implements a browser-only text Blob download adapter with injectable DOM and object-URL capabilities for deterministic tests. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createDownloadFilename",
+          "downloadBytes",
+          "downloadPlainText",
+          "createBrowserDocumentExportPort"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -4982,7 +5229,11 @@
         ],
         "justification": "Implements browser-only file selection and byte reading behind injectable DOM capabilities. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "selectBrowserFile",
+          "readBrowserFile",
+          "createBrowserDocumentOpenPort"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -5007,7 +5258,9 @@
         ],
         "justification": "Adapts synchronous CSS Font Loading availability checks to Writer's narrow VCL-like default-font device contract.",
         "knownViolations": [],
-        "localSymbols": [],
+        "localSymbols": [
+          "createBrowserDefaultFontDevice"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -5049,15 +5302,16 @@
         "CAP-0128"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
+        "behaviorStatus": "divergent",
         "contractStatus": "unverified",
         "defaultStatus": "unverified",
-        "divergenceClass": "none",
+        "divergenceClass": "P",
         "evidence": [
           "apps/office/src/xmloff/source/core/xml-parser.ts#parseOdfXmlStream",
-          "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream"
+          "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream",
+          "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::processingInstruction"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sax/source/fastparser/fastparser.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "P1 confirmed: the local parser rejects every XML processing instruction, while pinned sax/source/fastparser/fastparser.cxx forwards it and xmloff/source/core/xmlimp.cxx handles it without altering the imported document. Other XML and resource-limit behavior remains unverified.",
         "knownViolations": [],
         "localSymbols": [
           "DEFAULT_ODF_XML_LIMITS",
@@ -5065,7 +5319,7 @@
           "SvXMLImportContext",
           "parseOdfXmlStream"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "divergent",
         "upstreamFile": "sax/source/fastparser/fastparser.cxx",
         "upstreamSymbols": [
           "FastSaxParserImpl",
@@ -5276,7 +5530,12 @@
           "OdfParagraphAlignment",
           "OdfListLevelKind",
           "XMLTextExportSource",
-          "exportTextParagraphs"
+          "exportTextParagraphs",
+          "exportListLevelLayout",
+          "exportParagraphAttributes",
+          "exportParagraphPropertyChildren",
+          "escapeXml",
+          "exportCharacterAttributes"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "xmloff/source/text/txtparae.cxx",

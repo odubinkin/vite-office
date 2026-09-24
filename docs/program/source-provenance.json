@@ -1683,6 +1683,31 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterAdvancedFormattingControls",
+            "path": "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx",
+      "localSymbols": [
+        "WriterAdvancedFormattingControls",
+        "WriterParagraphFormatValue"
+      ],
+      "rationale": "React renders accessible paragraph and character formatting controls with browser-local dialog drafts. Its current line-spacing and tab policy is a recorded P1 ownership gap to move to Writer shell and pooled items.",
+      "responsibilities": [
+        "Render color, line-spacing, paragraph, tab, flow, and line-number controls and collect dialog drafts."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM presentation replace native VCL controls and dialogs."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterCommandToolbar",
             "path": "apps/office/src/sw/browser/presentation/WriterCommandToolbar.tsx"
           }
@@ -1915,6 +1940,30 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterRulerLaneContext",
+            "path": "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts",
+      "localSymbols": [
+        "WriterRulerLaneContext"
+      ],
+      "rationale": "React context carries the ruler HTMLElement lane and document scroll position for browser painting; it owns no Writer document or ruler command policy.",
+      "responsibilities": [
+        "Share ruler lane DOM element and scroll position with paged Writer presentation."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "The DOM lane and React context are browser presentation machinery without a native source-file counterpart."
       },
       "status": "local-only"
     },

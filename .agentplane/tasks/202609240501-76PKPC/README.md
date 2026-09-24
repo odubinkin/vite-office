@@ -4,7 +4,7 @@ title: "Audit implemented runtime against pinned LibreOffice"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +18,7 @@ verify:
   - "npm run inventory:parity"
 plan_approval:
   state: "approved"
-  updated_at: "2026-09-24T05:02:11.474Z"
+  updated_at: "2026-09-24T05:27:52.369Z"
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
@@ -32,6 +32,12 @@ comments:
   -
     author: "CODER"
     body: "Start: audit all implemented browser-relevant runtime operations against pinned LibreOffice and update existing parity data with precise evidence."
+  -
+    author: "CODER"
+    body: "Blocked: completing the approved inventory stage requires adding two source-provenance data records outside the narrow task scope, while the full verification gate also has an existing oversized Writer test. Awaiting scope and gate decisions."
+  -
+    author: "CODER"
+    body: "Start: resume approved P0 parity inventory audit with source-provenance data coverage and defer full operation closure to the final gate."
 events:
   -
     type: "status"
@@ -40,8 +46,22 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: audit all implemented browser-relevant runtime operations against pinned LibreOffice and update existing parity data with precise evidence."
+  -
+    type: "status"
+    at: "2026-09-24T05:15:36.391Z"
+    author: "CODER"
+    from: "DOING"
+    to: "BLOCKED"
+    note: "Blocked: completing the approved inventory stage requires adding two source-provenance data records outside the narrow task scope, while the full verification gate also has an existing oversized Writer test. Awaiting scope and gate decisions."
+  -
+    type: "status"
+    at: "2026-09-24T05:28:01.915Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: resume approved P0 parity inventory audit with source-provenance data coverage and defer full operation closure to the final gate."
 doc_version: 3
-doc_updated_at: "2026-09-24T05:02:20.690Z"
+doc_updated_at: "2026-09-24T05:34:44.574Z"
 doc_updated_by: "CODER"
 description: "Stage 1 of docs/program/vite-office-upstream-parity-plan.md: record operation-level contracts, defaults, upstream symbols, evidence and discrepancies in existing parity inventory data only"
 sections:
@@ -49,14 +69,30 @@ sections:
     Audit implemented runtime against pinned LibreOffice
 
     Stage 1 of docs/program/vite-office-upstream-parity-plan.md: record operation-level contracts, defaults, upstream symbols, evidence and discrepancies in existing parity inventory data only
-  Scope: "Audit the 167 production modules and 45 Writer command records against vendor/libreoffice-reference at 9bc445578031fecf56086729d8e4940c77e14d65. Change only docs/program/parity/runtime-inventory.json and docs/program/parity/writer-command-slice.json data. Do not change schemas, validators, generators, implementation, recovery, autosave, or browser save flows. No network."
-  Plan: "1. Enumerate implemented exports and commands from the existing inventory and source. 2. Trace each reachable operation to the pinned LibreOffice owner and compare contracts/defaults with local code and tests. 3. Add granular evidence and prioritized discrepancies to the existing inventory data without promoting unsupported claims. 4. Validate inventory and provenance, record verification, then close the stage."
-  Verify Steps: "1. Check every reachable export, default, command, and artifact for pinned upstream file and symbol, local owner, contract, default, and operation-level assertion or differential fixture; retain unverified statuses only with explicit unsupported or evidence gaps, and record prioritized discrepancies. 2. Run npm run inventory:parity, npm run check:source-tree, and npm run check:source-provenance; all must pass. 3. Run npm run verify and record any pre-existing baseline failures separately. 4. Review git diff to confirm only the two inventory data files and Agentplane task records changed; check git status --short --untracked-files=all."
+  Scope: "Stage 1 P0 audit within the approved parity program: inventory all current production module paths and exported function names; compare tab-stop item identity and defaults, document-owned line numbering, and layout ownership against the pinned LibreOffice checkout; record source-confirmed P1/P2 discrepancies found during the same review. Change data only in docs/program/parity/runtime-inventory.json and docs/program/source-provenance.json, plus Agentplane records. The remaining operation-level audit across all implemented modules moves to stage 8 before final closure. No schemas, validators, generators, application code, network, recovery, autosave, or browser save changes."
+  Plan: "1. Lock exact local export and source-owner inventory. 2. Check tab-stop, line-number, and layout P0 responsibilities against pinned LibreOffice symbols, retaining narrow evidence and explicit gaps. 3. Add the two missing browser provenance entries. 4. Validate inventory and full repository gate after the independent file-size task. 5. Leave full operation-level closure for stage 8."
+  Verify Steps: "1. Confirm all discovered production modules appear in both runtime inventory and source provenance, and that all exported local function names appear in localSymbols; inspect P0 records for exact pinned upstream source markers and truthful unverified versus divergent statuses. 2. Run npm run inventory:parity, npm run check:source-tree, and npm run check:source-provenance; all must pass. 3. Run npm run verify after the separate file-size repair task; all checks must pass. 4. Review git diff and git status --short --untracked-files=all; only approved data and task records may change for this stage."
   Verification: |-
-    <!-- BEGIN VERIFICATION RESULTS -->
-    <!-- END VERIFICATION RESULTS -->
-  Rollback Plan: "Revert only the stage 1 inventory data and task close commit, then rerun inventory:parity, check:source-tree, and check:source-provenance."
-  Findings: "Initial baseline: 92 contract, 131 behavior, and 78 default statuses are unverified; these are evidence gaps, not confirmed defects. Existing task 202609231700-TZMGXV reports unrelated full verify failures. Preserve these distinctions during the audit."
+    Command: pinned source marker check across tab-stop, line-number, layout, and XML discrepancy entries. Result: pass. Evidence: every newly cited marker exists in local or pinned source. Scope: P0/P1 source assertions.
+
+    Command: exported-function inventory comparison. Result: pass. Evidence: all 216 exported function names from 169 production modules appear in localSymbols; two previously missing module records added. Scope: runtime path and local export coverage, not semantic parity.
+
+    Command: npm run inventory:parity; npm run check:source-tree; npm run check:source-provenance. Result: pass. Evidence: 169 inventory and provenance records, 102 mapped upstream mechanisms, 48 browser adaptations, 19 local infrastructure modules; 106 pinned source paths; no semantic AST violations. Scope: authored data and pinned provenance.
+
+    Command: npm run verify. Result: pass after separate Writer shell test split task. Evidence: 443 office tests and 96 inventory tests with 100% coverage; 13 browser tests; all static and parity checks pass. Scope: full repository gate.
+
+    Command: git diff --check. Result: pass. Scope: current task changes. Full operation-level parity audit remains explicitly scheduled for stage 8.
+  Rollback Plan: "Revert stage 1 inventory and source-provenance data changes and the associated task close commit, then rerun inventory:parity and source-provenance checks."
+  Findings: |-
+    Initial baseline: 92 contract, 131 behavior, and 78 default statuses are unverified; these are evidence gaps, not confirmed defects. Existing task 202609231700-TZMGXV reports unrelated full verify failures. Preserve these distinctions during the audit.
+
+    - Observation: The 167-record baseline omitted two tracked production modules and 143 exported function names; 101 exported functions in upstream-shaped modules use different local names, so exact symbol matching cannot establish semantic parity.
+      Impact: Stage 1 requires manual operation-level comparison before all unverified statuses can be closed; the current inventory update is a bounded evidence and discrepancy pass, not a parity claim.
+      Resolution: Added the two missing module records, enumerated exported local functions, and recorded eight source-confirmed divergences. Continue subsystem audits and keep remaining statuses unverified until pinned assertions are checked.
+
+    - Observation: Adding the two missing runtime module records makes check:source-provenance fail because source-provenance.json lacks those exact paths; npm run verify separately stops at a pre-existing 1010-line wrtsh.test.ts file-size failure.
+      Impact: The first-stage verification contract cannot pass with the current narrow two-file scope; source-provenance data must be updated, and the independent file-size gate needs a separate task or an approved exception.
+      Resolution: Requested explicit approval to extend stage 1 to source-provenance.json and to split the oversized test in a separate task. No schema or validator changes were made.
 id_source: "generated"
 ---
 ## Summary
@@ -67,25 +103,40 @@ Stage 1 of docs/program/vite-office-upstream-parity-plan.md: record operation-le
 
 ## Scope
 
-Audit the 167 production modules and 45 Writer command records against vendor/libreoffice-reference at 9bc445578031fecf56086729d8e4940c77e14d65. Change only docs/program/parity/runtime-inventory.json and docs/program/parity/writer-command-slice.json data. Do not change schemas, validators, generators, implementation, recovery, autosave, or browser save flows. No network.
+Stage 1 P0 audit within the approved parity program: inventory all current production module paths and exported function names; compare tab-stop item identity and defaults, document-owned line numbering, and layout ownership against the pinned LibreOffice checkout; record source-confirmed P1/P2 discrepancies found during the same review. Change data only in docs/program/parity/runtime-inventory.json and docs/program/source-provenance.json, plus Agentplane records. The remaining operation-level audit across all implemented modules moves to stage 8 before final closure. No schemas, validators, generators, application code, network, recovery, autosave, or browser save changes.
 
 ## Plan
 
-1. Enumerate implemented exports and commands from the existing inventory and source. 2. Trace each reachable operation to the pinned LibreOffice owner and compare contracts/defaults with local code and tests. 3. Add granular evidence and prioritized discrepancies to the existing inventory data without promoting unsupported claims. 4. Validate inventory and provenance, record verification, then close the stage.
+1. Lock exact local export and source-owner inventory. 2. Check tab-stop, line-number, and layout P0 responsibilities against pinned LibreOffice symbols, retaining narrow evidence and explicit gaps. 3. Add the two missing browser provenance entries. 4. Validate inventory and full repository gate after the independent file-size task. 5. Leave full operation-level closure for stage 8.
 
 ## Verify Steps
 
-1. Check every reachable export, default, command, and artifact for pinned upstream file and symbol, local owner, contract, default, and operation-level assertion or differential fixture; retain unverified statuses only with explicit unsupported or evidence gaps, and record prioritized discrepancies. 2. Run npm run inventory:parity, npm run check:source-tree, and npm run check:source-provenance; all must pass. 3. Run npm run verify and record any pre-existing baseline failures separately. 4. Review git diff to confirm only the two inventory data files and Agentplane task records changed; check git status --short --untracked-files=all.
+1. Confirm all discovered production modules appear in both runtime inventory and source provenance, and that all exported local function names appear in localSymbols; inspect P0 records for exact pinned upstream source markers and truthful unverified versus divergent statuses. 2. Run npm run inventory:parity, npm run check:source-tree, and npm run check:source-provenance; all must pass. 3. Run npm run verify after the separate file-size repair task; all checks must pass. 4. Review git diff and git status --short --untracked-files=all; only approved data and task records may change for this stage.
 
 ## Verification
 
-<!-- BEGIN VERIFICATION RESULTS -->
-<!-- END VERIFICATION RESULTS -->
+Command: pinned source marker check across tab-stop, line-number, layout, and XML discrepancy entries. Result: pass. Evidence: every newly cited marker exists in local or pinned source. Scope: P0/P1 source assertions.
+
+Command: exported-function inventory comparison. Result: pass. Evidence: all 216 exported function names from 169 production modules appear in localSymbols; two previously missing module records added. Scope: runtime path and local export coverage, not semantic parity.
+
+Command: npm run inventory:parity; npm run check:source-tree; npm run check:source-provenance. Result: pass. Evidence: 169 inventory and provenance records, 102 mapped upstream mechanisms, 48 browser adaptations, 19 local infrastructure modules; 106 pinned source paths; no semantic AST violations. Scope: authored data and pinned provenance.
+
+Command: npm run verify. Result: pass after separate Writer shell test split task. Evidence: 443 office tests and 96 inventory tests with 100% coverage; 13 browser tests; all static and parity checks pass. Scope: full repository gate.
+
+Command: git diff --check. Result: pass. Scope: current task changes. Full operation-level parity audit remains explicitly scheduled for stage 8.
 
 ## Rollback Plan
 
-Revert only the stage 1 inventory data and task close commit, then rerun inventory:parity, check:source-tree, and check:source-provenance.
+Revert stage 1 inventory and source-provenance data changes and the associated task close commit, then rerun inventory:parity and source-provenance checks.
 
 ## Findings
 
 Initial baseline: 92 contract, 131 behavior, and 78 default statuses are unverified; these are evidence gaps, not confirmed defects. Existing task 202609231700-TZMGXV reports unrelated full verify failures. Preserve these distinctions during the audit.
+
+- Observation: The 167-record baseline omitted two tracked production modules and 143 exported function names; 101 exported functions in upstream-shaped modules use different local names, so exact symbol matching cannot establish semantic parity.
+  Impact: Stage 1 requires manual operation-level comparison before all unverified statuses can be closed; the current inventory update is a bounded evidence and discrepancy pass, not a parity claim.
+  Resolution: Added the two missing module records, enumerated exported local functions, and recorded eight source-confirmed divergences. Continue subsystem audits and keep remaining statuses unverified until pinned assertions are checked.
+
+- Observation: Adding the two missing runtime module records makes check:source-provenance fail because source-provenance.json lacks those exact paths; npm run verify separately stops at a pre-existing 1010-line wrtsh.test.ts file-size failure.
+  Impact: The first-stage verification contract cannot pass with the current narrow two-file scope; source-provenance data must be updated, and the independent file-size gate needs a separate task or an approved exception.
+  Resolution: Requested explicit approval to extend stage 1 to source-provenance.json and to split the oversized test in a separate task. No schema or validator changes were made.
