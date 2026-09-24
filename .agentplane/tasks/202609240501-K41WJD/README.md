@@ -1,10 +1,10 @@
 ---
 id: "202609240501-K41WJD"
 title: "Restore Writer shell and UI command contracts"
-status: "TODO"
+status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 1
+revision: 5
 origin:
   system: "manual"
 depends_on:
@@ -14,9 +14,9 @@ tags:
 verify:
   - "npm run verify"
 plan_approval:
-  state: "pending"
-  updated_at: null
-  updated_by: null
+  state: "approved"
+  updated_at: "2026-09-24T07:17:30.432Z"
+  updated_by: "ORCHESTRATOR"
   note: null
 verification:
   state: "pending"
@@ -24,10 +24,21 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-comments: []
-events: []
+commit: null
+comments:
+  -
+    author: "CODER"
+    body: "Start: move paragraph and ruler command policy into Writer shells with binding-backed state."
+events:
+  -
+    type: "status"
+    at: "2026-09-24T07:17:43.165Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: move paragraph and ruler command policy into Writer shells with binding-backed state."
 doc_version: 3
-doc_updated_at: "2026-09-24T05:01:33.549Z"
+doc_updated_at: "2026-09-24T07:17:43.165Z"
 doc_updated_by: "CODER"
 description: "Stage 4: move paragraph and ruler policy, validation, command state and dialog commit behavior from React into upstream-shaped shells and bindings"
 sections:
@@ -39,15 +50,15 @@ sections:
     - In scope: Stage 4: move paragraph and ruler policy, validation, command state and dialog commit behavior from React into upstream-shaped shells and bindings.
     - Out of scope: unrelated refactors not required for "Restore Writer shell and UI command contracts".
   Plan: |-
-    1. Implement the change for "Restore Writer shell and UI command contracts".
-    2. Run required checks and capture verification evidence.
-    3. Finalize task findings and finish with traceable commit metadata.
+    1. Compare the supported paragraph dialog, line-spacing, tab-stop, ruler, and command-state branches with pinned SwTextShell, SwWrtShell, SwView, editeng items, and ruler sources. Keep browser gesture coordinates and drafts in React.
+    2. Move tab-stop preservation, pooled item construction, value validation and multi-paragraph undoable dialog application into SwTextShell/SwWrtShell. React submits primitive draft values; cancelled or unchanged dialogs create no model action.
+    3. Route ruler page-margin, paragraph-indent and tab-stop gestures as deltas or positions into shell methods; shell applies bounds and item transitions. Use existing SfxBindings state and generated command resources for supported menu/toolbar/shortcut actions.
+    4. Add focused mixed-selection, unchanged, invalid, cancelled, pointer/keyboard and undo/redo tests for supported branches; update parity/provenance data only for verified ownership. Run npm run verify. Browser save UI/workflows and autosave stay unchanged.
   Verify Steps: |-
-    PLANNER fallback scaffold. Replace with task-specific acceptance checks when PLANNER context is available.
-
-    1. Run `npm run verify`. Expected: it succeeds and confirms the requested outcome for this task.
-    2. Review the changed artifact or behavior for the `code` task. Expected: the requested outcome is visible and matches the approved scope.
-    3. Compare the final result against the task summary and touched scope. Expected: remaining follow-up is either resolved or explicit in ## Findings.
+    1. No production React component creates pooled paragraph items or commits ruler model values. SwTextShell/SwWrtShell own conversion, validation, preservation of tab adjustment/leader fields, and one undo group for a multi-item or mixed selection edit. Source excerpts and focused assertions identify the pinned upstream responsibility.
+    2. Paragraph dialog Cancel leaves state/history unchanged; OK with unchanged values is a no-op; invalid tab/spacing inputs do not mutate; edited tab stops retain existing alignment/leader when positions remain. Ruler pointer commits and dialog values go through shell APIs and undo/redo works.
+    3. Existing menu, toolbar, accelerator and status surfaces resolve generated resources and live SfxBindings state for every supported command; focused keyboard and pointer tests confirm enabled/checked behavior. Browser save workflow and autosave have no changed paths.
+    4. Run npm run verify, update existing inventory/provenance data with bounded evidence, and inspect the task-scoped diff and clean tracked state.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
     <!-- END VERIFICATION RESULTS -->
@@ -70,17 +81,17 @@ Stage 4: move paragraph and ruler policy, validation, command state and dialog c
 
 ## Plan
 
-1. Implement the change for "Restore Writer shell and UI command contracts".
-2. Run required checks and capture verification evidence.
-3. Finalize task findings and finish with traceable commit metadata.
+1. Compare the supported paragraph dialog, line-spacing, tab-stop, ruler, and command-state branches with pinned SwTextShell, SwWrtShell, SwView, editeng items, and ruler sources. Keep browser gesture coordinates and drafts in React.
+2. Move tab-stop preservation, pooled item construction, value validation and multi-paragraph undoable dialog application into SwTextShell/SwWrtShell. React submits primitive draft values; cancelled or unchanged dialogs create no model action.
+3. Route ruler page-margin, paragraph-indent and tab-stop gestures as deltas or positions into shell methods; shell applies bounds and item transitions. Use existing SfxBindings state and generated command resources for supported menu/toolbar/shortcut actions.
+4. Add focused mixed-selection, unchanged, invalid, cancelled, pointer/keyboard and undo/redo tests for supported branches; update parity/provenance data only for verified ownership. Run npm run verify. Browser save UI/workflows and autosave stay unchanged.
 
 ## Verify Steps
 
-PLANNER fallback scaffold. Replace with task-specific acceptance checks when PLANNER context is available.
-
-1. Run `npm run verify`. Expected: it succeeds and confirms the requested outcome for this task.
-2. Review the changed artifact or behavior for the `code` task. Expected: the requested outcome is visible and matches the approved scope.
-3. Compare the final result against the task summary and touched scope. Expected: remaining follow-up is either resolved or explicit in ## Findings.
+1. No production React component creates pooled paragraph items or commits ruler model values. SwTextShell/SwWrtShell own conversion, validation, preservation of tab adjustment/leader fields, and one undo group for a multi-item or mixed selection edit. Source excerpts and focused assertions identify the pinned upstream responsibility.
+2. Paragraph dialog Cancel leaves state/history unchanged; OK with unchanged values is a no-op; invalid tab/spacing inputs do not mutate; edited tab stops retain existing alignment/leader when positions remain. Ruler pointer commits and dialog values go through shell APIs and undo/redo works.
+3. Existing menu, toolbar, accelerator and status surfaces resolve generated resources and live SfxBindings state for every supported command; focused keyboard and pointer tests confirm enabled/checked behavior. Browser save workflow and autosave have no changed paths.
+4. Run npm run verify, update existing inventory/provenance data with bounded evidence, and inspect the task-scoped diff and clean tracked state.
 
 ## Verification
 
