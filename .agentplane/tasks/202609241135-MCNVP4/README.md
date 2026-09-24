@@ -1,10 +1,11 @@
 ---
 id: "202609241135-MCNVP4"
 title: "F6 Resolve source identity and filename divergences"
-status: "DOING"
+result_summary: "Renamed upstream-owned modules, moved selection helpers to core, corrected composite source claims, and documented five concrete exceptions."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
     - "apps/office/src/sw/source/core/undo/undobj.ts"
   findings:
     - "Eleven historical filenames aligned to upstream, retired selection helper dissolved into core owners, false source mappings corrected, and five explicit constraints retained. Full verify passed."
-commit: null
+commit:
+  hash: "897be126d8873bf11ad873f3079b55f3a248ed59"
+  message: "🧩 MCNVP4 task: persist quality review"
 comments:
   -
     author: "CODER"
     body: "Start: audit and resolve all remaining filename/source identity divergences."
+  -
+    author: "CODER"
+    body: "Verified: all F6 source identity divergences resolved and npm run verify passed."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "All remaining source identity divergences audited; renamed, relocated, or documented with concrete constraints. Full npm run verify and git diff --check passed."
+  -
+    type: "status"
+    at: "2026-09-24T12:43:45.411Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: all F6 source identity divergences resolved and npm run verify passed."
 doc_version: 3
-doc_updated_at: "2026-09-24T12:43:14.323Z"
+doc_updated_at: "2026-09-24T12:43:45.413Z"
 doc_updated_by: "CODER"
 description: "Implement F6: review all 20 source-provenance filename divergences and fix ownership or record concrete browser/TypeScript necessity."
 sections:
@@ -113,6 +126,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: "Audited all 17 filename divergence records. Eleven historical names were replaced with pinned upstream basenames; retired select.ts was removed by placing cursor-range logic in core/crsr/pam.ts, undo cursor snapshots in core/undo/undobj.ts, and IME state in wrtsh1.ts. Two composite modules (WriterDialogController and SwViewCommandShell) were reclassified local-only rather than claiming unrelated upstream source owners. Five remaining filename exceptions now document concrete injected-device, TypeScript-port, or generated-resource constraints. Imports, E2E and fixture tests, source-tree, provenance, runtime inventory and command-slice evidence were updated. Focused tests: 40 and 41 passed. npm run verify passed: 482 office tests, 98 inventory tests, 14 E2E tests, 100% coverage in both suites, static build and all gates. git diff --check passed. No network used."
+extensions:
+  implementation_commit:
+    hash: "34c8be798f5c12f265d41b012855f8cf22236478"
+    message: "🧩 MCNVP4 code: align source filenames with upstream ownership"
 id_source: "generated"
 ---
 ## Summary
