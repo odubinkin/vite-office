@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241521-XXW124",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T16:04:05.289Z",
+  "verdict": "pass",
+  "summary": "Phase 0 meets its diagnostic and privacy gate on the reviewed implementation commit.",
+  "evaluated_sha": "1bfc64705bdfe92411ab4789bbf2065eb5f45df2",
+  "blueprint_digest": "e2c1867ebc5654f3973d2c8553970bbbb55fb260f7a076dfe28b015a176b72bb",
+  "findings": [
+    "The callback records structural XML paths, stream and frequency without attribute values; default import warnings remain covered by existing tests.",
+    "The authorized private sample produced a numeric semantic baseline and 490 categorized warning occurrences; source bytes and text remain outside Git and tests."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241521-XXW124/README.md",
+    "docs/program/certification-odt-diagnostic-baseline.md",
+    "scripts/libreoffice-inventory/odt-import-diagnostics.test.ts",
+    "npm run verify: pass on commit 1bfc64705bdfe92411ab4789bbf2065eb5f45df2"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Semantic gaps measured here remain assigned to phases 1-6."
+  ]
+}
