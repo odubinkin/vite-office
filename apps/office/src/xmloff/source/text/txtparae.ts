@@ -114,6 +114,12 @@ export interface XMLTextParagraphSource {
   readonly leftMargin?: number;
   readonly list?: XMLTextListSource;
   readonly listGeometryWins?: boolean;
+  /** Zero-width Writer marks and imported pagination hints in UTF-16 coordinates. */
+  readonly markers?: readonly Readonly<{
+    kind: "bookmark" | "soft-page-break";
+    name?: string;
+    offset: number;
+  }>[];
   readonly paragraphProperties?: OdfParagraphProperties;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly runs: readonly XMLTextRunSource[];
@@ -458,13 +464,39 @@ function exportParagraphElement(
         ) as string);
   let content = "";
   let activeHyperlink: OdfHyperlink | undefined;
+  const markers = paragraph.markers ?? [];
+  let markerIndex = 0;
+  let textOffset = 0;
+  const encodeWithMarkers =
+    /** Writes markers while preserving the surrounding run and hyperlink structure. @param text - Run text. @param start - Run start. @returns Escaped content. */
+    (text: string, start: number): string => {
+      let encoded = "";
+      let localOffset = 0;
+      while (
+        markerIndex < markers.length &&
+        (markers[markerIndex] as { offset: number }).offset < start + text.length
+      ) {
+        const marker = markers[markerIndex] as {
+          kind: "bookmark" | "soft-page-break";
+          name?: string;
+          offset: number;
+        };
+        if (marker.offset < start + localOffset) throw new Error("ODF marker order is invalid.");
+        encoded += exportText(text.slice(localOffset, marker.offset - start));
+        encoded += exportMarker(marker);
+        localOffset = marker.offset - start;
+        markerIndex += 1;
+      }
+      return encoded + exportText(text.slice(localOffset));
+    };
   for (const run of paragraph.runs) {
     if (JSON.stringify(run.hyperlink) !== JSON.stringify(activeHyperlink)) {
       if (activeHyperlink !== undefined) content += "</text:a>";
       activeHyperlink = run.hyperlink;
       if (activeHyperlink !== undefined) content += exportHyperlinkStart(activeHyperlink);
     }
-    const encoded = exportText(run.text);
+    const encoded = encodeWithMarkers(run.text, textOffset);
+    textOffset += run.text.length;
     if (equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph)))
       content += encoded;
     else {
@@ -473,9 +505,29 @@ function exportParagraphElement(
     }
   }
   if (activeHyperlink !== undefined) content += "</text:a>";
+  while (markerIndex < markers.length) {
+    const marker = markers[markerIndex] as {
+      kind: "bookmark" | "soft-page-break";
+      name?: string;
+      offset: number;
+    };
+    if (marker.offset !== textOffset) throw new Error("ODF marker is outside its paragraph.");
+    content += exportMarker(marker);
+    markerIndex += 1;
+  }
   return paragraph.style === "heading-1"
     ? `<text:h text:outline-level="1" text:style-name="${styleName}">${content}</text:h>`
     : `<text:p text:style-name="${styleName}">${content}</text:p>`;
+}
+
+/** Emits one zero-width Writer marker. @param marker - Canonical position. @returns ODF element. */
+function exportMarker(
+  marker: Readonly<{ kind: "bookmark" | "soft-page-break"; name?: string; offset: number }>,
+): string {
+  if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
+  if (marker.name === undefined || marker.name.trim().length === 0)
+    throw new Error("ODF bookmark name is invalid.");
+  return `<text:bookmark text:name="${escapeXml(marker.name)}"/>`;
 }
 
 /** Emits the supported upstream hyperlink attributes. @param hyperlink - Link metadata. @returns Opening text:a tag. */

@@ -47,6 +47,11 @@ export interface XMLParagraphListState {
 /** Canonical paragraph operation surface used by SAX callbacks. */
 export interface XMLParagraphImportTarget {
   appendText(text: string, properties: OdfCharacterProperties, hyperlink?: OdfHyperlink): void;
+  addBookmark(name: string): void;
+  addBookmarkStart(name: string): void;
+  addBookmarkEnd(name: string): void;
+  addSoftPageBreak(): void;
+  finishParagraph(): void;
 }
 
 /** Model-facing import surface implemented by Writer's SwXMLImport. */
@@ -160,6 +165,11 @@ export class XMLParaContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     return createInlineContext(this.target, this.paragraph, this.inherited, element, attributes);
+  }
+
+  /** Verifies that every range marker was closed. @returns Nothing. */
+  public override endFastElement(): void {
+    this.paragraph.finishParagraph();
   }
 }
 
@@ -294,7 +304,42 @@ function createInlineContext(
       hyperlink,
     );
   }
+  if (
+    element === XMLToken.TEXT_BOOKMARK ||
+    element === XMLToken.TEXT_BOOKMARK_START ||
+    element === XMLToken.TEXT_BOOKMARK_END
+  ) {
+    attributes.assertOnly([XMLToken.TEXT_NAME], "bookmark");
+    const name = attributes.get(XMLToken.TEXT_NAME);
+    if (name === null) throw new Error("ODF bookmark requires text:name.");
+    return new XMLMarkerContext(
+      /** Inserts the named bookmark marker. @returns Nothing. */ () => {
+        if (element === XMLToken.TEXT_BOOKMARK_START) paragraph.addBookmarkStart(name);
+        else if (element === XMLToken.TEXT_BOOKMARK_END) paragraph.addBookmarkEnd(name);
+        else paragraph.addBookmark(name);
+      },
+    );
+  }
+  if (element === XMLToken.TEXT_SOFT_PAGE_BREAK) {
+    attributes.assertOnly([], "soft page break");
+    return new XMLMarkerContext(
+      /** Inserts a soft page break marker. @returns Nothing. */ () => paragraph.addSoftPageBreak(),
+    );
+  }
   return null;
+}
+
+/** Applies one zero-width structural marker at the current text offset. */
+class XMLMarkerContext extends SvXMLImportContext {
+  /** Stores the canonical marker callback. @param insert - Model operation. @returns Nothing. */
+  public constructor(private readonly insert: () => void) {
+    super();
+  }
+
+  /** Retains the marker without inserting a display character. @returns Nothing. */
+  public override startFastElement(): void {
+    this.insert();
+  }
 }
 
 /** Imports a text:span nested inside one hyperlink. */

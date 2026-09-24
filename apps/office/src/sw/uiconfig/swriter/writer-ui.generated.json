@@ -18,6 +18,8 @@
     "fontName": ".uno:CharFontName",
     "fontHeight": ".uno:FontHeight",
     "hyperlinkDialog": ".uno:HyperlinkDialog",
+    "insertBookmark": ".uno:InsertBookmark",
+    "insertBreak": ".uno:InsertBreak",
     "headingOne": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles",
     "italic": ".uno:Italic",
     "lineSpacing": ".uno:LineSpacing",
@@ -70,6 +72,8 @@
     { "capabilityId": "CAP-0125", "commandUrl": ".uno:LineSpacing" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementIndent" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:HyperlinkDialog" },
+    { "capabilityId": "CAP-0113", "commandUrl": ".uno:InsertBookmark" },
+    { "capabilityId": "CAP-0112", "commandUrl": ".uno:InsertBreak" },
     { "capabilityId": "CAP-0114", "commandUrl": ".uno:AddDirect" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:Open" },
     { "capabilityId": "CAP-0136", "commandUrl": ".uno:PageDialog" },
@@ -325,6 +329,40 @@
       "showsDialog": true,
       "shortcuts": ["Ctrl+K", "Meta+K"],
       "slotId": 5678
+    },
+    ".uno:InsertBookmark": {
+      "browserOwned": false,
+      "argumentSchema": ["Bookmark:SfxStringItem", "BookmarkText:SfxStringItem"],
+      "capabilityId": "CAP-0113",
+      "controlLabel": "Bookmark",
+      "label": "Bookmark",
+      "iconName": "lc_insertbookmark.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 20302
+    },
+    ".uno:InsertBreak": {
+      "browserOwned": false,
+      "argumentSchema": [
+        "Kind:SfxInt16Item",
+        "TemplateName:SfxStringItem",
+        "PageNumber:SfxUInt16Item",
+        "PageNumberFilled:SfxBoolItem"
+      ],
+      "capabilityId": "CAP-0112",
+      "controlLabel": "Manual Break",
+      "label": "Manual Break",
+      "iconName": "lc_insertbreak.svg",
+      "placements": ["sw/uiconfig/swriter/menubar/menubar.xml"],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 20304
     },
     ".uno:Italic": {
       "browserOwned": false,
@@ -818,6 +856,19 @@
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/standardbar.xml"
       ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:InsertBookmark",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/standardbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:InsertBreak",
+      "sources": ["sw/uiconfig/swriter/menubar/menubar.xml"]
     },
     {
       "classification": "supported-upstream",
@@ -2126,22 +2177,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:InsertMenu", ".uno:BreaksMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertBreak",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:InsertMenu"],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:BreaksMenu",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
       "context": [".uno:InsertMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:InsertGraphic",
@@ -2441,14 +2476,6 @@
       "context": [".uno:InsertMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:InsertCaptionDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:InsertMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:InsertBookmark",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -5392,14 +5419,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:InsertBookmark",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:InsertReferenceField",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/standardbar.xml"
@@ -6301,7 +6320,17 @@
       },
       {
         "id": ".uno:InsertMenu",
-        "items": [{ "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true }],
+        "items": [
+          {
+            "id": ".uno:BreaksMenu",
+            "items": [{ "commandUrl": ".uno:InsertBreak", "kind": "command", "visible": true }],
+            "kind": "menu",
+            "label": "More Breaks"
+          },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true },
+          { "commandUrl": ".uno:InsertBookmark", "kind": "command", "visible": true }
+        ],
         "kind": "menu",
         "label": "Insert"
       },
@@ -6411,7 +6440,8 @@
       { "commandUrl": ".uno:Undo", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Redo", "kind": "command", "visible": true },
       { "kind": "separator" },
-      { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true }
+      { "commandUrl": ".uno:HyperlinkDialog", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:InsertBookmark", "kind": "command", "visible": true }
     ],
     "textobjectbar": [
       { "commandUrl": ".uno:StyleApply", "kind": "command", "visible": true },
@@ -7294,18 +7324,6 @@
       },
       {
         "classification": "X",
-        "context": [".uno:InsertMenu", ".uno:BreaksMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertBreak"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:InsertMenu"],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:BreaksMenu"
-      },
-      {
-        "classification": "X",
         "context": [".uno:InsertMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertGraphic"
@@ -7531,12 +7549,6 @@
         "context": [".uno:InsertMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertCaptionDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:InsertMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertBookmark"
       },
       {
         "classification": "X",
@@ -9696,12 +9708,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:InsertEndnote"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:InsertBookmark"
       },
       {
         "classification": "X",

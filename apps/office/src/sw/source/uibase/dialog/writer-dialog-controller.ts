@@ -17,6 +17,27 @@ export interface WriterHyperlinkDialogResult {
   readonly hyperlink: WriterHyperlink;
   readonly text: string;
 }
+/** Insert/Edit Bookmark request following the pinned Writer bookmark dialog. */
+export interface WriterBookmarkDialogRequest {
+  readonly commandUrl: string;
+  readonly kind: "bookmark";
+  readonly names: readonly string[];
+  readonly selectedName?: string;
+}
+/** One accepted bookmark operation. */
+export type WriterBookmarkDialogResult = Readonly<
+  | { action: "create" | "navigate" | "remove"; name: string }
+  | { action: "rename"; name: string; newName: string }
+>;
+/** Insert Break request; the supported Writer slice exposes a hard page break. */
+export interface WriterBreakDialogRequest {
+  readonly commandUrl: string;
+  readonly kind: "insert-break";
+}
+/** Accepted break kind. */
+export interface WriterBreakDialogResult {
+  readonly breakKind: "page";
+}
 /** Page Style child-window request initialized from the Standard page descriptor. */
 export interface WriterPageDialogRequest {
   readonly commandUrl: string;
@@ -45,10 +66,18 @@ export interface WriterParagraphDialogResult {
 
 /** Every Writer child-window request supported by the presenter. */
 export type WriterDialogRequest =
-  WriterHyperlinkDialogRequest | WriterPageDialogRequest | WriterParagraphDialogRequest;
+  | WriterHyperlinkDialogRequest
+  | WriterBookmarkDialogRequest
+  | WriterBreakDialogRequest
+  | WriterPageDialogRequest
+  | WriterParagraphDialogRequest;
 /** Every accepted result supported by the Writer dialog presenter. */
 export type WriterDialogResult =
-  WriterHyperlinkDialogResult | WriterPageDialogResult | WriterParagraphDialogResult;
+  | WriterHyperlinkDialogResult
+  | WriterBookmarkDialogResult
+  | WriterBreakDialogResult
+  | WriterPageDialogResult
+  | WriterParagraphDialogResult;
 /** Observable snapshot published by the Writer dialog controller. */
 export type WriterDialogSnapshot = ReturnType<WriterDialogController["GetSnapshot"]>;
 
@@ -71,6 +100,33 @@ export class WriterDialogController {
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterHyperlinkDialogResult)
+      : undefined;
+  }
+
+  /** Requests bookmark creation, navigation or editing. @param commandUrl - Insert Bookmark command. @param names - Current mark names. @param selectedName - Mark at the caret. @returns Accepted operation or cancellation. */
+  public async RequestBookmarkDialog(
+    commandUrl: string,
+    names: readonly string[],
+    selectedName?: string,
+  ): Promise<WriterBookmarkDialogResult | undefined> {
+    const completion = await this.controller.Request({
+      commandUrl,
+      kind: "bookmark",
+      names,
+      ...(selectedName === undefined ? {} : { selectedName }),
+    });
+    return completion.kind === "accepted"
+      ? (completion.result as WriterBookmarkDialogResult)
+      : undefined;
+  }
+
+  /** Requests the supported hard page break. @param commandUrl - Insert Break command. @returns Accepted break or cancellation. */
+  public async RequestBreakDialog(
+    commandUrl: string,
+  ): Promise<WriterBreakDialogResult | undefined> {
+    const completion = await this.controller.Request({ commandUrl, kind: "insert-break" });
+    return completion.kind === "accepted"
+      ? (completion.result as WriterBreakDialogResult)
       : undefined;
   }
 

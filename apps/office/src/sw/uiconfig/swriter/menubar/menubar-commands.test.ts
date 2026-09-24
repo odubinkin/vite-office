@@ -48,6 +48,7 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       WRITER_COMMAND_IDS.undo,
       WRITER_COMMAND_IDS.redo,
       WRITER_COMMAND_IDS.hyperlinkDialog,
+      WRITER_COMMAND_IDS.insertBookmark,
     ]);
     expect(
       writerTextObjectBarItems.some(

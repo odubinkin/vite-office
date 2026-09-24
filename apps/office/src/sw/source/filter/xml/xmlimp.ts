@@ -495,8 +495,39 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
 
 /** Applies SAX character callbacks directly to one canonical text node. */
 class SwXMLParagraphTarget implements XMLParagraphImportTarget {
+  private readonly openBookmarks = new Map<string, number>();
   /** Wraps one live text node. @param node - Canonical node. @returns Paragraph target. */
   public constructor(private readonly node: SwTextNode) {}
+
+  /** Registers one collapsed bookmark at the current paragraph offset. @param name - ODF name. @returns Nothing. */
+  public addBookmark(name: string): void {
+    this.node.GetDoc().GetIDocumentMarkAccess().MakeMark(this.node, this.node.Len(), name);
+  }
+
+  /** Begins a range bookmark; the bounded slice preserves collapsed ranges. @param name - ODF name. @returns Nothing. */
+  public addBookmarkStart(name: string): void {
+    if (this.openBookmarks.has(name)) throw new Error(`ODF bookmark start is duplicated: ${name}`);
+    this.openBookmarks.set(name, this.node.Len());
+  }
+
+  /** Completes a collapsed range bookmark. @param name - ODF name. @returns Nothing. */
+  public addBookmarkEnd(name: string): void {
+    const start = this.openBookmarks.get(name);
+    if (start === undefined) throw new Error(`ODF bookmark end has no start: ${name}`);
+    if (start !== this.node.Len()) throw new Error("ODF ranged bookmarks are unsupported.");
+    this.openBookmarks.delete(name);
+    this.addBookmark(name);
+  }
+
+  /** Registers an imported soft page hint at the current offset. @returns Nothing. */
+  public addSoftPageBreak(): void {
+    this.node.GetDoc().GetIDocumentMarkAccess().AddSoftPageBreak(this.node, this.node.Len());
+  }
+
+  /** Rejects a range with no closing marker. @returns Nothing. */
+  public finishParagraph(): void {
+    if (this.openBookmarks.size > 0) throw new Error("ODF bookmark start has no end.");
+  }
 
   /** Appends SAX text with effective attributes. @param text - Character data. @param properties - Effective formatting. @param hyperlink - Optional enclosing hyperlink. @returns Nothing. */
   public appendText(

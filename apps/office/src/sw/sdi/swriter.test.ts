@@ -48,6 +48,7 @@ describe("generated Writer slots", /** Exercises generated SDI identities and or
       ".uno:Undo",
       ".uno:Redo",
       ".uno:HyperlinkDialog",
+      ".uno:InsertBookmark",
     ]);
   });
 

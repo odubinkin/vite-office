@@ -16,6 +16,7 @@ export type SwAtomicModelHint =
   | Readonly<{ kind: "document-replaced" }>
   | Readonly<{ kind: "document-state-changed" }>
   | Readonly<{ kind: "line-number-info-changed" }>
+  | Readonly<{ kind: "mark-changed" }>
   | Readonly<{
       kind: "format-inheritance-changed";
       formatId: string;

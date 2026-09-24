@@ -2064,6 +2064,33 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/presentation/WriterBookmarkDialog.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0113"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterBookmarkDialog.tsx#WriterBookmarkDialog"
+        ],
+        "justification": "Adapts pinned insertbookmark.ui and bookmarkmenu.ui to accessible browser controls; marks remain in SwDoc.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterBookmarkDialog"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/presentation/WriterColorControl.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -2202,6 +2229,33 @@
         "knownViolations": [],
         "localSymbols": [
           "WriterHyperlinkDialog"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx#WriterInsertBreakDialog"
+        ],
+        "justification": "Adapts pinned insertbreak.ui for the supported hard page-break command.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterInsertBreakDialog"
         ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
@@ -3364,6 +3418,38 @@
           "SwDoc::getReferenceCount"
         ],
         "expectedBaseClass": null
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/docbm.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0113"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/docbm.ts#DocumentMarkAccess",
+          "vendor/libreoffice-reference/sw/source/core/doc/docbm.cxx#MarkManager::makeMark"
+        ],
+        "justification": "Owns the bounded collapsed-bookmark and retained soft-page-position slice; broader upstream MarkManager behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwBookmark",
+          "DocumentMarkAccess"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/doc/docbm.cxx",
+        "upstreamSymbols": [
+          "MarkManager::makeMark",
+          "MarkManager::renameMark"
+        ]
       }
     },
     {

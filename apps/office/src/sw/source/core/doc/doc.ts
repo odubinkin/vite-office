@@ -5,6 +5,7 @@ import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
+import { DocumentMarkAccess } from "./docbm";
 import { DocumentListsManager } from "./DocumentListsManager";
 import { DocumentSettingManager } from "./DocumentSettingManager";
 import { DocumentStateManager } from "./DocumentStateManager";
@@ -32,6 +33,7 @@ export interface SwDocOptions {
 export class SwDoc {
   private readonly attrPool: SwAttrPool;
   private readonly contentOperationsManager: DocumentContentOperationsManager;
+  private readonly markAccess: DocumentMarkAccess;
   private readonly listsManager: DocumentListsManager;
   private readonly settingManager = new DocumentSettingManager();
   private readonly stateManager = new DocumentStateManager();
@@ -54,6 +56,7 @@ export class SwDoc {
     this.listsManager = new DocumentListsManager(this.stateManager);
     this.nodes = new SwNodes(this);
     this.contentOperationsManager = new DocumentContentOperationsManager(this);
+    this.markAccess = new DocumentMarkAccess(this);
     if (options?.createInitialTextNode !== false && createInitialTextNode !== false)
       this.nodes.MakeTextNode();
   }
@@ -152,6 +155,10 @@ export class SwDoc {
   /** Returns content-operation ownership. @returns Content manager. */
   public GetDocumentContentOperationsManager(): DocumentContentOperationsManager {
     return this.contentOperationsManager;
+  }
+  /** Returns the document-owned bookmark and soft-break position manager. @returns Mark access. */
+  public GetIDocumentMarkAccess(): DocumentMarkAccess {
+    return this.markAccess;
   }
   /** Returns list and numbering ownership. @returns List manager. */
   public GetDocumentListsManager(): DocumentListsManager {

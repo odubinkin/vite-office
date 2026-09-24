@@ -1,11 +1,13 @@
 /** @fileoverview Exercises Writer text-shell commands through generated slots. */
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Local test fixtures keep setup and assertions concise. */
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createRequestArguments, SfxRequest } from "../../../../sfx2/source/control/request";
 import { createWriterDocument } from "../../core/doc/doc";
+import { SwPosition } from "../../core/crsr/pam";
+import { RES_BREAK } from "../../../inc/hintids";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
@@ -43,6 +45,64 @@ import type { WriterParagraphFormatValue } from "./textsh1";
 }
 
 describe("Writer text-shell commands", /** Groups Writer text-shell commands. @returns Test callback result. */ () => {
+  it("creates, navigates, renames and removes bookmarks and inserts a hard break through Writer slots", /** Checks the generated bookmark and break commands against canonical positions. @returns Completion. */ async () => {
+    const { dialogs, runValue, shell } = createFixture();
+    shell.Insert("AlphaBeta");
+    const paragraph = shell.GetActiveParagraph();
+    shell.SetPaM(new SwPosition(paragraph, 5));
+    const create = runValue(WRITER_COMMAND_IDS.insertBookmark) as Promise<boolean>;
+    expect(dialogs.GetSnapshot()?.request.kind).toBe("bookmark");
+    expect(dialogs.Complete(dialogs.GetSnapshot()!.id, { action: "create", name: "Middle" })).toBe(
+      true,
+    );
+    expect(await create).toBe(true);
+    const marks = shell.GetDoc().GetIDocumentMarkAccess();
+    expect(marks.FindMark("Middle")?.GetPosition().GetContentIndex()).toBe(5);
+    shell.SetPaM(new SwPosition(paragraph, 0));
+    expect(
+      runValue(WRITER_COMMAND_IDS.insertBookmark, {
+        bookmark: { action: "navigate", name: "Middle" },
+      }),
+    ).toBe(true);
+    expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(5);
+    expect(
+      runValue(WRITER_COMMAND_IDS.insertBookmark, {
+        bookmark: { action: "rename", name: "Middle", newName: "Renamed" },
+      }),
+    ).toBe(true);
+    expect(marks.FindMark("Renamed")?.GetPosition().GetContentIndex()).toBe(5);
+    expect(
+      runValue(WRITER_COMMAND_IDS.insertBookmark, {
+        bookmark: { action: "remove", name: "Renamed" },
+      }),
+    ).toBe(true);
+    expect(marks.GetBookmarks()).toHaveLength(0);
+    expect(
+      runValue(WRITER_COMMAND_IDS.insertBookmark, {
+        bookmark: { action: "navigate", name: "missing" },
+      }),
+    ).toBe(false);
+    const cancelledBookmark = runValue(WRITER_COMMAND_IDS.insertBookmark) as Promise<boolean>;
+    expect(dialogs.Cancel(dialogs.GetSnapshot()!.id)).toBe(true);
+    expect(await cancelledBookmark).toBe(false);
+    const directBreak = runValue(WRITER_COMMAND_IDS.insertBreak, { breakKind: "page" });
+    expect(directBreak).toBe(true);
+    const breakRequest = runValue(WRITER_COMMAND_IDS.insertBreak) as Promise<boolean>;
+    expect(dialogs.GetSnapshot()?.request.kind).toBe("insert-break");
+    expect(dialogs.Cancel(dialogs.GetSnapshot()!.id)).toBe(true);
+    expect(await breakRequest).toBe(false);
+    shell.SetPaM(new SwPosition(shell.GetDoc().paragraphs[0]!, 1));
+    const acceptedBreak = runValue(WRITER_COMMAND_IDS.insertBreak) as Promise<boolean>;
+    expect(dialogs.Complete(dialogs.GetSnapshot()!.id, { breakKind: "page" })).toBe(true);
+    expect(await acceptedBreak).toBe(true);
+    expect(shell.GetDoc().paragraphs).toHaveLength(3);
+    expect(shell.GetDoc().paragraphs[2]?.GetAttr(RES_BREAK).QueryValue()).toBe(4);
+    shell.SetPaM(new SwPosition(shell.GetDoc().paragraphs[0]!, 1));
+    const split = vi.spyOn(shell, "SplitNode").mockReturnValueOnce(false);
+    expect(runValue(WRITER_COMMAND_IDS.insertBreak, { breakKind: "page" })).toBe(false);
+    split.mockRestore();
+    shell.GetDocShell().Close();
+  });
   it("validates page flow values through the paragraph shell", /** Checks accepted page breaks and rejected page references. @returns Nothing. */ () => {
     const { shell } = createFixture();
     const slot = shell

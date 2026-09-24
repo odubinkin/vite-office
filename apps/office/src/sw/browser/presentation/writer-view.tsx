@@ -6,6 +6,8 @@ import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { WriterAdvancedFormattingControls } from "./WriterAdvancedFormattingControls";
 import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
+import { WriterBookmarkDialog } from "./WriterBookmarkDialog";
+import { WriterInsertBreakDialog } from "./WriterInsertBreakDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { WriterFileDialog } from "./WriterFileDialog";
 import type {
@@ -304,6 +306,42 @@ export function WriterWorkbench({
                 hyperlink,
                 text,
               });
+            }
+          }
+        />
+      )}
+      {dialogRequest?.request.kind !== "bookmark" ? null : (
+        <WriterBookmarkDialog
+          names={dialogRequest.request.names}
+          {...(dialogRequest.request.selectedName === undefined
+            ? {}
+            : { selectedName: dialogRequest.request.selectedName })}
+          onCancel={
+            /** Cancels the bookmark request. @returns Nothing. */
+            () => {
+              dialogController.Cancel(dialogRequest.id);
+            }
+          }
+          onSubmit={
+            /** Applies one bookmark choice. @param result - Accepted operation. @returns Nothing. */
+            (result) => {
+              dialogController.Complete(dialogRequest.id, result);
+            }
+          }
+        />
+      )}
+      {dialogRequest?.request.kind !== "insert-break" ? null : (
+        <WriterInsertBreakDialog
+          onCancel={
+            /** Cancels Insert Break. @returns Nothing. */
+            () => {
+              dialogController.Cancel(dialogRequest.id);
+            }
+          }
+          onSubmit={
+            /** Inserts a hard page break. @returns Nothing. */
+            () => {
+              dialogController.Complete(dialogRequest.id, { breakKind: "page" });
             }
           }
         />

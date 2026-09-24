@@ -63,6 +63,7 @@ interface WriterTextNodeRecord {
   readonly formatCollId: WriterParagraphStyle;
   readonly hints: readonly WriterTextHintRecord[];
   readonly listGeometryWins?: boolean;
+  readonly softPageBreaks?: readonly number[];
   readonly text: string;
 }
 
@@ -83,6 +84,7 @@ type WriterTextHintRecord =
 
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
+  readonly bookmarks?: readonly Readonly<{ name: string; nodeIndex: number; offset: number }>[];
   readonly documentSettings: Readonly<Record<DocumentSettingId, boolean>>;
   readonly lineNumberInfo?: SwLineNumberInfoValue;
   readonly locale: string;
@@ -99,6 +101,19 @@ export interface WriterDocumentRecord {
 /** Encodes the model at the browser boundary. @param document - Canonical graph. @returns Current record. */
 export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
   return {
+    bookmarks: document
+      .GetIDocumentMarkAccess()
+      .GetBookmarks()
+      .map(
+        /** Encodes one live collapsed Writer mark. @param mark - Mark. @returns Primitive position. */
+        (mark) => ({
+          name: mark.GetName(),
+          nodeIndex: document.paragraphs.indexOf(
+            mark.GetPosition().GetNode() as (typeof document.paragraphs)[number],
+          ),
+          offset: mark.GetPosition().GetContentIndex(),
+        }),
+      ),
     documentSettings: document.GetDocumentSettingManager().GetValues(),
     lineNumberInfo: document.GetLineNumberInfo().QueryValue(),
     locale: document.GetLocale(),
@@ -173,6 +188,27 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
           autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
           formatCollId: node.GetTextFormatColl().id,
           ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
+          ...(document
+            .GetIDocumentMarkAccess()
+            .GetSoftPageBreaks()
+            .some(
+              /** Selects hints on this node. @param position - Soft boundary. @returns Whether owned. */
+              (position) => position.GetNode() === node,
+            )
+            ? {
+                softPageBreaks: document
+                  .GetIDocumentMarkAccess()
+                  .GetSoftPageBreaks()
+                  .filter(
+                    /** Selects hints on this node. @param position - Soft boundary. @returns Whether owned. */
+                    (position) => position.GetNode() === node,
+                  )
+                  .map(
+                    /** Encodes a UTF-16 offset. @param position - Soft boundary. @returns Offset. */
+                    (position) => position.GetContentIndex(),
+                  ),
+              }
+            : {}),
           hints:
             node
               .GetpSwpHints()
@@ -324,6 +360,16 @@ export function decodeWriterDocument(
       position.Dispose();
     }
     document.GetDocumentListsManager().RegisterListItem(node);
+    for (const offset of nodeRecord.softPageBreaks ?? [])
+      document.GetIDocumentMarkAccess().AddSoftPageBreak(node, offset);
+  }
+  if (record.bookmarks !== undefined) {
+    if (!Array.isArray(record.bookmarks)) throw new Error("Stored Writer bookmarks are invalid.");
+    for (const mark of record.bookmarks) {
+      const node = document.paragraphs[mark.nodeIndex];
+      if (node === undefined) throw new Error("Stored Writer bookmark position is invalid.");
+      document.GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
+    }
   }
   if (document.paragraphs.length === 0)
     throw new Error("Stored Writer document has no body text node.");

@@ -56,6 +56,7 @@ import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undob
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
+import type { WriterBookmarkDialogResult } from "../dialog/writer-dialog-controller";
 import { canChangeWriterParagraphListLevel } from "../../core/edit/ednumber";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { getWriterSelectedTextRanges } from "../../core/crsr/pam";
@@ -90,6 +91,7 @@ export interface SwTextShellTarget {
   readonly NumUpDown: (down: boolean) => boolean;
   readonly Redo: () => boolean;
   readonly SetPaM: (point: SwPosition, mark?: SwPosition) => boolean;
+  readonly SplitNode: () => boolean;
   readonly SetPaintLineNumbers: (paint: boolean) => boolean;
   readonly SetPendingCharacterItems: (items: SfxItemSet) => void;
   readonly Undo: () => boolean;
@@ -207,6 +209,42 @@ export class SwTextShell {
   /** Returns the uniform hyperlink at the active selection or caret. @returns Hyperlink or undefined. */
   public GetHyperlinkAtCursor(): WriterHyperlink | undefined {
     return getWriterHyperlinkAtCursor(this.target.GetDoc(), this.target.GetCursor());
+  }
+
+  /** Returns document bookmarks in position order. @returns Names. */
+  public GetBookmarkNames(): readonly string[] {
+    return this.target.GetDoc().GetIDocumentMarkAccess().GetBookmarkNames();
+  }
+
+  /** Returns the collapsed mark exactly at the caret. @returns Name, when present. */
+  public GetBookmarkAtCursor(): string | undefined {
+    return this.target
+      .GetDoc()
+      .GetIDocumentMarkAccess()
+      .FindMarkAtPosition(this.target.GetCursor().GetPoint())
+      ?.GetName();
+  }
+
+  /** Applies one bookmark dialog choice to canonical marks and cursor. @param result - Accepted operation. @returns Whether model or cursor changed. */
+  public ApplyBookmarkOperation(result: WriterBookmarkDialogResult): boolean {
+    const marks = this.target.GetDoc().GetIDocumentMarkAccess();
+    if (result.action === "navigate") {
+      const mark = marks.FindMark(result.name);
+      if (mark === undefined) return false;
+      return this.target.SetPaM(mark.GetPosition().clone());
+    }
+    if (result.action === "remove") return marks.DeleteMark(result.name);
+    if (result.action === "rename") return marks.RenameMark(result.name, result.newName);
+    const point = this.target.GetCursor().GetPoint();
+    marks.MakeMark(point.GetNode() as SwTextNode, point.GetContentIndex(), result.name);
+    return true;
+  }
+
+  /** Inserts a hard page boundary through Writer paragraph structure. @returns Whether inserted. */
+  public InsertHardPageBreak(): boolean {
+    const point = this.target.GetCursor().GetPoint();
+    if (point.GetContentIndex() > 0 && !this.target.SplitNode()) return false;
+    return this.SetParagraphItem(new SfxInt16Item(RES_BREAK, 4));
   }
 
   /** Applies or removes a hyperlink through the text shell. @param hyperlink - Link metadata. @param text - Optional inserted text. @param range - Optional resolved range. @returns Whether changed. */
@@ -784,6 +822,40 @@ export function createWriterTextCommandRegistry(
       id: WRITER_COMMAND_IDS.editHyperlink,
       /** Enables editing only for a uniform selected or caret link. @returns Whether enabled. */
       isEnabled: (): boolean => target.GetHyperlinkAtCursor() !== undefined,
+    },
+    {
+      capabilityId: "CAP-0113",
+      /** Opens the upstream-shaped bookmark dialog or applies a typed operation. @param _context - Bound shell. @param arguments_ - Optional test/dispatch fields. @returns Operation result. */
+      execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
+        const args = getWriterCommandArguments<{ bookmark?: WriterBookmarkDialogResult }>(
+          arguments_,
+        );
+        if (args?.bookmark !== undefined) return target.ApplyBookmarkOperation(args.bookmark);
+        return dialogController
+          .RequestBookmarkDialog(
+            WRITER_COMMAND_IDS.insertBookmark,
+            target.GetBookmarkNames(),
+            target.GetBookmarkAtCursor(),
+          )
+          .then(
+            /** Applies an accepted bookmark action. @param result - Dialog result. @returns Whether changed. */
+            (result) => (result === undefined ? false : target.ApplyBookmarkOperation(result)),
+          );
+      },
+      id: WRITER_COMMAND_IDS.insertBookmark,
+    },
+    {
+      capabilityId: "CAP-0112",
+      /** Opens Insert Break and inserts a hard page break after acceptance. @param _context - Bound shell. @param arguments_ - Optional direct break kind. @returns Operation result. */
+      execute: (_context, arguments_: unknown): boolean | Promise<boolean> => {
+        const args = getWriterCommandArguments<{ breakKind?: "page" }>(arguments_);
+        if (args?.breakKind === "page") return target.InsertHardPageBreak();
+        return dialogController.RequestBreakDialog(WRITER_COMMAND_IDS.insertBreak).then(
+          /** Applies the supported break kind. @param result - Dialog result. @returns Whether changed. */
+          (result) => result?.breakKind === "page" && target.InsertHardPageBreak(),
+        );
+      },
+      id: WRITER_COMMAND_IDS.insertBreak,
     },
     {
       capabilityId: "CAP-0135",

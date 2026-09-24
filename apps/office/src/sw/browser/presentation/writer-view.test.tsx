@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Local test fixtures keep setup and assertions concise. */
 
 import { describe, expect, it, vi } from "vitest";
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import {
   projectWriterLineHeight,
   projectWriterLineHeightItem,
@@ -43,6 +43,8 @@ import {
   RES_PARATR_WIDOWS,
 } from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
+import { readOdtDocument } from "../../source/filter/xml/swxml";
+import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 import { WriterWorkbench } from "./writer-view";
 import type { WriterAutosaveController } from "../workflows/writer-autosave";
 
@@ -78,6 +80,119 @@ const getText =
   ) => fallback;
 
 describe("Writer browser presentation", /** Groups presentation tests. @returns Nothing. */ () => {
+  it("creates, navigates, renames and removes bookmarks and inserts a hard page break from Insert", /** Verifies the full menu/dialog/model path and ODT persistence. @returns Completion. */ async () => {
+    const session = createWriterDocumentSession();
+    const shell = session.view.GetWrtShell();
+    shell.Insert("AlphaBeta");
+    const paragraph = shell.GetActiveParagraph();
+    shell.SetPaM(new SwPosition(paragraph, 5));
+    const rendered = render(<WriterWorkbench isActive view={session.view} />);
+    const openInsert =
+      /** Opens one Insert menu command. @param label - Menu item name. @returns Nothing. */
+      (label: RegExp): void => {
+        fireEvent.click(screen.getByRole("button", { name: "Insert" }));
+        if (label.source.includes("Manual Break"))
+          fireEvent.mouseEnter(screen.getByRole("menuitem", { name: "More Breaks" }));
+        fireEvent.click(screen.getByRole("menuitem", { name: label }));
+      };
+    openInsert(/Bookmark/);
+    let dialog = screen.getByRole("dialog", { name: "Bookmark" });
+    fireEvent.keyDown(dialog, { key: "ArrowDown" });
+    fireEvent.submit(within(dialog).getByRole("button", { name: "Insert" }).closest("form")!);
+    expect(screen.getByRole("dialog", { name: "Bookmark" })).toBe(dialog);
+    fireEvent.keyDown(dialog, { key: "Escape" });
+    expect(screen.queryByRole("dialog", { name: "Bookmark" })).toBeNull();
+    await act(
+      /** Flushes the canceled shell request. @returns Completion. */ async () => undefined,
+    );
+    openInsert(/Bookmark/);
+    dialog = screen.getByRole("dialog", { name: "Bookmark" });
+    fireEvent.change(within(dialog).getByLabelText("Name"), { target: { value: "Middle" } });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Insert" }));
+    await waitFor(
+      /** Waits for the shell action. @returns Nothing. */
+      () =>
+        expect(
+          session.docShell
+            .GetDoc()
+            .GetIDocumentMarkAccess()
+            .FindMark("Middle")
+            ?.GetPosition()
+            .GetContentIndex(),
+        ).toBe(5),
+    );
+    shell.SetPaM(new SwPosition(paragraph, 0));
+    openInsert(/Bookmark/);
+    dialog = screen.getByRole("dialog", { name: "Bookmark" });
+    fireEvent.change(within(dialog).getByLabelText("Name"), { target: { value: "Middle" } });
+    fireEvent.submit(within(dialog).getByRole("button", { name: "Insert" }).closest("form")!);
+    expect(session.docShell.GetDoc().GetIDocumentMarkAccess().GetBookmarks()).toHaveLength(1);
+    fireEvent.change(within(dialog).getByLabelText("Existing bookmarks"), {
+      target: { value: "Middle" },
+    });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Go to" }));
+    await waitFor(
+      /** Checks bookmark navigation. @returns Nothing. */
+      () => expect(shell.GetCursor().GetPoint().GetContentIndex()).toBe(5),
+    );
+    openInsert(/Bookmark/);
+    dialog = screen.getByRole("dialog", { name: "Bookmark" });
+    fireEvent.change(within(dialog).getByLabelText("Existing bookmarks"), {
+      target: { value: "Middle" },
+    });
+    fireEvent.change(within(dialog).getByLabelText("Name"), { target: { value: "Renamed" } });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Rename" }));
+    await waitFor(
+      /** Checks rename. @returns Nothing. */
+      () =>
+        expect(
+          session.docShell.GetDoc().GetIDocumentMarkAccess().FindMark("Renamed"),
+        ).toBeDefined(),
+    );
+    const saved = writeOdtDocument(session.docShell.GetDoc(), { title: "Bookmarks" });
+    const reopened = await readOdtDocument(saved, { title: "Bookmarks" }, undefined, {
+      onDiagnostic:
+        /** Captures no expected diagnostics for this generated ODT. @returns Nothing. */
+        () => undefined,
+    });
+    expect(
+      reopened.document
+        .GetIDocumentMarkAccess()
+        .FindMark("Renamed")
+        ?.GetPosition()
+        .GetContentIndex(),
+    ).toBe(5);
+    openInsert(/Bookmark/);
+    dialog = screen.getByRole("dialog", { name: "Bookmark" });
+    fireEvent.change(within(dialog).getByLabelText("Existing bookmarks"), {
+      target: { value: "Renamed" },
+    });
+    fireEvent.click(within(dialog).getByRole("button", { name: "Delete" }));
+    await waitFor(
+      /** Checks deletion. @returns Nothing. */
+      () =>
+        expect(session.docShell.GetDoc().GetIDocumentMarkAccess().GetBookmarks()).toHaveLength(0),
+    );
+    openInsert(/Manual Break/);
+    let breakDialog = screen.getByRole("dialog", { name: "Insert Break" });
+    fireEvent.keyDown(breakDialog, { key: "ArrowDown" });
+    fireEvent.keyDown(breakDialog, { key: "Escape" });
+    expect(screen.queryByRole("dialog", { name: "Insert Break" })).toBeNull();
+    await act(
+      /** Flushes the canceled break request. @returns Completion. */ async () => undefined,
+    );
+    openInsert(/Manual Break/);
+    breakDialog = screen.getByRole("dialog", { name: "Insert Break" });
+    expect(within(breakDialog).getByRole("radio", { name: "Page break" })).toBeChecked();
+    fireEvent.click(within(breakDialog).getByRole("button", { name: "Insert" }));
+    await waitFor(
+      /** Checks the hard-break item on the trailing paragraph. @returns Nothing. */
+      () =>
+        expect(session.docShell.GetDoc().paragraphs[1]?.GetAttr(RES_BREAK).QueryValue()).toBe(4),
+    );
+    rendered.unmount();
+    session.Close();
+  });
   it("connects advanced toolbar controls to Writer paragraph items", /** Verifies UI to model formatting. @returns Nothing. */ async () => {
     const session = createWriterDocumentSession();
     const rendered = render(<WriterWorkbench isActive view={session.view} />);

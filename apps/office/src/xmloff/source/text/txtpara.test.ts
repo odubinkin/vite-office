@@ -68,11 +68,48 @@ function source(paragraphs: readonly XMLTextParagraphSource[]): XMLTextExportSou
   };
 }
 
+it("rejects invalid marker positions and names at the ODF export boundary", /** Checks that malformed canonical positions cannot silently move during save. @returns Nothing. */ () => {
+  const paragraph: XMLTextParagraphSource = {
+    style: "Standard",
+    runs: [{ text: "abc", properties: plain }],
+    markers: [{ kind: "soft-page-break", offset: 4 }],
+  };
+  expect(
+    /** Saves an out-of-bounds hint. @returns Invalid export. */ () =>
+      exportTextParagraphs(source([paragraph])),
+  ).toThrow("outside its paragraph");
+  expect(
+    /** Saves an unnamed mark. @returns Invalid export. */ () =>
+      exportTextParagraphs(source([{ ...paragraph, markers: [{ kind: "bookmark", offset: 1 }] }])),
+  ).toThrow("name is invalid");
+  expect(
+    /** Saves markers in reverse order. @returns Invalid export. */ () =>
+      exportTextParagraphs(
+        source([
+          {
+            ...paragraph,
+            markers: [
+              { kind: "soft-page-break", offset: 2 },
+              { kind: "soft-page-break", offset: 1 },
+            ],
+          },
+        ]),
+      ),
+  ).toThrow("order is invalid");
+  expect(exportTextParagraphs(source([{ ...paragraph, markers: [] }]))).toBeDefined();
+  expect(
+    exportTextParagraphs(
+      source([{ ...paragraph, markers: [{ kind: "soft-page-break", offset: 3 }] }]),
+    ).body,
+  ).toContain("abc<text:soft-page-break/>");
+});
+
 /** Canonical paragraph operations captured by the fake Writer target. */
 interface ImportedParagraph {
   alignment?: XMLTextParagraphSource["alignment"];
   leftMargin?: number;
   list?: XMLParagraphListState;
+  markers?: { kind: "bookmark" | "soft-page-break"; name?: string; offset: number }[];
   paragraphProperties?: OdfParagraphProperties;
   properties?: Partial<OdfCharacterProperties>;
   runs: {
@@ -110,7 +147,42 @@ function importBody(
         style,
       };
       paragraphs.push(paragraph);
+      /** Returns the current UTF-16 paragraph length. @returns Text length. */
+      function currentOffset(): number {
+        return paragraph.runs.reduce(
+          /** Adds one run's UTF-16 length. @param sum - Previous length. @param run - Text run. @returns New length. */
+          (sum, run) => sum + run.text.length,
+          0,
+        );
+      }
       return {
+        /** Records a collapsed bookmark at the current text length. @param name - Bookmark name. @returns Nothing. */
+        addBookmark(name): void {
+          (paragraph.markers ??= []).push({
+            kind: "bookmark",
+            name,
+            offset: currentOffset(),
+          });
+        },
+        /** Records a pending range start. @param name - Name. @returns Nothing. */
+        addBookmarkStart(name): void {
+          (paragraph.markers ??= []).push({
+            kind: "bookmark",
+            name,
+            offset: currentOffset(),
+          });
+        },
+        /** Completes the test target's collapsed range. @returns Nothing. */
+        addBookmarkEnd(): void {},
+        /** Records a soft pagination hint at the current text length. @returns Nothing. */
+        addSoftPageBreak(): void {
+          (paragraph.markers ??= []).push({
+            kind: "soft-page-break",
+            offset: currentOffset(),
+          });
+        },
+        /** Completes one test paragraph. @returns Nothing. */
+        finishParagraph(): void {},
         /** Appends text, merging adjacent equal runs like SwTextNode. @param text - Text. @param runProperties - Effective properties. @param hyperlink - Optional hyperlink metadata. @returns Nothing. */
         appendText(text, runProperties, hyperlink): void {
           const previous = paragraph.runs.at(-1);

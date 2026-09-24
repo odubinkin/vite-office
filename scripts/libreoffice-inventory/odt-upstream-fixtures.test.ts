@@ -38,8 +38,34 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
     function normalizeParagraph(paragraph): object {
       return {
         alignment: paragraph.GetParagraphAlignment(),
+        bookmarks: document
+          .GetIDocumentMarkAccess()
+          .GetBookmarks()
+          .filter(
+            /** Selects this paragraph's marks. @param mark - Bookmark. @returns Match. */ (mark) =>
+              mark.GetPosition().GetNode() === paragraph,
+          )
+          .map(
+            /** Projects a mark. @param mark - Bookmark. @returns Name and offset. */ (mark) => ({
+              name: mark.GetName(),
+              offset: mark.GetPosition().GetContentIndex(),
+            }),
+          ),
         list: projectWriterParagraphList(paragraph),
         runs: projectWriterTextRuns(paragraph),
+        softPageBreaks: document
+          .GetIDocumentMarkAccess()
+          .GetSoftPageBreaks()
+          .filter(
+            /** Selects this paragraph's breaks. @param position - Break position. @returns Match. */ (
+              position,
+            ) => position.GetNode() === paragraph,
+          )
+          .map(
+            /** Projects break offset. @param position - Break position. @returns Offset. */ (
+              position,
+            ) => position.GetContentIndex(),
+          ),
         style: paragraph.GetParagraphStyle(),
         text: paragraph.GetText(),
       };
@@ -48,6 +74,98 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
 }
 
 describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createSwDoc assertions in upstream odffeatures.cxx with local semantic assertions. @returns Nothing. */, () => {
+  for (const fixture of [
+    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 124 },
+    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 131 },
+  ] as const)
+    it(`preserves inline positions from ${fixture.file}` /** Checks pinned bookmark/soft-break positions through Writer ODT export and reimport. @returns Completion. */, async () => {
+      const diagnostics: { name: string }[] = [];
+      const imported = await readOdtDocument(
+        new Uint8Array(fs.readFileSync(path.join("apps/office/src", fixture.file))),
+        { title: fixture.file },
+        undefined,
+        {
+          onDiagnostic:
+            /** Collects import diagnostics. @param diagnostic - Diagnostic. @returns New count. */ (
+              diagnostic,
+            ) => diagnostics.push(diagnostic),
+        },
+      );
+      expect(diagnostics).toHaveLength(fixture.warnings);
+      expect(
+        diagnostics.some(
+          /** Detects a marker diagnostic. @param diagnostic - Diagnostic. @returns Match. */ (
+            diagnostic,
+          ) =>
+            [
+              "text:bookmark",
+              "text:bookmark-start",
+              "text:bookmark-end",
+              "text:soft-page-break",
+            ].includes(diagnostic.name),
+        ),
+      ).toBe(false);
+      expect(imported.document.paragraphs).toHaveLength(1);
+      const marks = imported.document.GetIDocumentMarkAccess();
+      if (fixture.name === undefined) {
+        expect(marks.GetBookmarks()).toHaveLength(0);
+        expect(
+          marks
+            .GetSoftPageBreaks()
+            .map(
+              /** Projects break offset. @param position - Break position. @returns Offset. */ (
+                position,
+              ) => position.GetContentIndex(),
+            ),
+        ).toEqual([0]);
+      } else {
+        expect(
+          marks
+            .GetBookmarks()
+            .map(
+              /** Projects a mark. @param mark - Bookmark. @returns Name and offset. */ (mark) => [
+                mark.GetName(),
+                mark.GetPosition().GetContentIndex(),
+              ],
+            ),
+        ).toEqual([[fixture.name, 0]]);
+        expect(marks.GetSoftPageBreaks()).toHaveLength(0);
+      }
+      const reopenedDiagnostics: { name: string }[] = [];
+      const reopened = await readOdtDocument(
+        writeOdtDocument(imported.document, { title: fixture.file }),
+        { title: fixture.file },
+        undefined,
+        {
+          onDiagnostic:
+            /** Collects export diagnostics. @param diagnostic - Diagnostic. @returns New count. */ (
+              diagnostic,
+            ) => reopenedDiagnostics.push(diagnostic),
+        },
+      );
+      expect(
+        reopenedDiagnostics
+          .map(
+            /** Projects diagnostic name. @param diagnostic - Diagnostic. @returns Name. */ (
+              diagnostic,
+            ) => diagnostic.name,
+          )
+          .sort(),
+      ).toEqual(
+        Array.from(
+          { length: 4 },
+          /** Lists expected font diagnostics. @returns Names. */ () => [
+            "style:font-name-asian",
+            "style:font-name-complex",
+          ],
+        )
+          .flat()
+          .sort(),
+      );
+      expect(normalizeWriterSemantics(reopened.document)).toEqual(
+        normalizeWriterSemantics(imported.document),
+      );
+    });
   it("keeps tdf114287.odt list and paragraph print bounds after reopening", /** Mirrors upstream exact layout assertions against the local ODT. @returns Completion after export and reopening. */ async () => {
     const file = "apps/office/src/sw/qa/extras/odfexport/data/tdf114287.odt";
     const imported = await readOdtDocument(new Uint8Array(fs.readFileSync(file)), { title: file });

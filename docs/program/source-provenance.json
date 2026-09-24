@@ -1845,6 +1845,27 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterBookmarkDialog",
+            "path": "apps/office/src/sw/browser/presentation/WriterBookmarkDialog.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterBookmarkDialog.tsx",
+      "rationale": "Adapts pinned insertbookmark.ui and bookmarkmenu.ui to accessible browser controls; marks remain in SwDoc.",
+      "responsibilities": [
+        "Renders WriterBookmarkDialog and forwards accepted commands to Writer shell ownership."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM controls replace native VCL dialog widgets."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterColorControl",
             "path": "apps/office/src/sw/browser/presentation/WriterColorControl.tsx"
           }
@@ -1977,6 +1998,27 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM and React replace the native VCL presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterInsertBreakDialog",
+            "path": "apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx",
+      "rationale": "Adapts the pinned insertbreak.ui to an accessible browser dialog for hard page breaks while retaining the authoritative break item in the Writer document model.",
+      "responsibilities": [
+        "Renders WriterInsertBreakDialog and forwards accepted commands to Writer shell ownership."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM controls replace native VCL dialog widgets."
       },
       "status": "local-only"
     },
@@ -2963,6 +3005,40 @@
       "upstreamSymbols": [
         "lcl_SetDfltFont",
         "OutputDevice::GetDefaultFont"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "DocumentMarkAccess",
+            "path": "apps/office/src/sw/source/core/doc/docbm.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "MarkManager::makeMark",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docbm.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/docbm.ts",
+      "localSymbols": [
+        "SwBookmark",
+        "DocumentMarkAccess"
+      ],
+      "omittedResponsibilities": [
+        "Ranged bookmarks, fieldmarks, UNO marks and native layout-derived pagination are outside this bounded slice."
+      ],
+      "preservedResponsibilities": [
+        "Owns named collapsed Writer marks and registered zero-width positions through document edits."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/docbm.cxx",
+      "upstreamSymbols": [
+        "MarkManager::makeMark",
+        "MarkManager::renameMark"
       ]
     },
     {

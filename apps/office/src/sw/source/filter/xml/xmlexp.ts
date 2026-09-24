@@ -209,11 +209,45 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
   const hasDirectLeftMargin =
     node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_TEXTLEFT, false) !== undefined;
   const paragraphProperties = getParagraphProperties(node.GetpSwAttrSet());
+  const marks = node.GetDoc().GetIDocumentMarkAccess();
+  const markers = [
+    ...marks
+      .GetBookmarks()
+      .filter(
+        /** Selects bookmarks on this paragraph. @param mark - Mark. @returns Whether owned. */
+        (mark) => mark.GetPosition().GetNode() === node,
+      )
+      .map(
+        /** Projects a bookmark to ODF. @param mark - Mark. @returns Neutral marker. */
+        (mark) => ({
+          kind: "bookmark" as const,
+          name: mark.GetName(),
+          offset: mark.GetPosition().GetContentIndex(),
+        }),
+      ),
+    ...marks
+      .GetSoftPageBreaks()
+      .filter(
+        /** Selects soft hints on this paragraph. @param position - Hint. @returns Whether owned. */
+        (position) => position.GetNode() === node,
+      )
+      .map(
+        /** Projects one soft hint. @param position - Hint. @returns Neutral marker. */
+        (position) => ({
+          kind: "soft-page-break" as const,
+          offset: position.GetContentIndex(),
+        }),
+      ),
+  ].sort(
+    /** Orders zero-width markers by content offset. @param left - First. @param right - Second. @returns Signed order. */
+    (left, right) => left.offset - right.offset,
+  );
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
   return {
     ...(alignment === undefined ? {} : { alignment }),
     ...(hasDirectLeftMargin ? { leftMargin: node.GetParagraphTextLeftMargin() } : {}),
     ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
+    ...(markers.length === 0 ? {} : { markers }),
     ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
     inheritedProperties: getCharacterProperties(
       node.GetSwAttrSet(),

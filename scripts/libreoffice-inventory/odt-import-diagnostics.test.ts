@@ -4,7 +4,10 @@ import fs from "node:fs";
 import { describe, expect, it } from "vitest";
 import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../apps/office/src/package/source/zipapi/ZipOutputStream";
-import { ODT_XML_STREAM_BYTE_LIMIT } from "../../apps/office/src/sw/source/filter/xml/swxml";
+import {
+  ODT_XML_STREAM_BYTE_LIMIT,
+  readOdtDocument,
+} from "../../apps/office/src/sw/source/filter/xml/swxml";
 import {
   parseOdfXmlStream,
   SvXMLImportContext,
@@ -90,7 +93,7 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     expect(JSON.stringify(diagnostics)).not.toMatch(/PRIVATE|HIDDEN/u);
   });
 
-  it("classifies synthetic bookmark and soft break markers as lost structure", /** Checks marker triage. @returns Completion after import. */ async () => {
+  it("recognizes synthetic bookmark and soft break markers in canonical Writer positions", /** Checks marker triage and model ownership. @returns Completion after import. */ async () => {
     const content = await new ZipFile(fixture).readTextEntry("content.xml");
     const changed = content.replace(
       "</text:p>",
@@ -101,17 +104,28 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     const report = await diagnoseOdtImport(bytes);
     expect(report.xml["text:bookmark"]).toBe(1);
     expect(report.xml["text:soft-page-break"]).toBe(1);
-    expect(report.diagnostics).toContainEqual(
-      expect.objectContaining({
-        kind: "unknown-element",
-        name: "text:bookmark",
-        loss: "structure",
-      }),
+    expect(
+      report.diagnostics.some(
+        /** Looks for false marker loss reports. @param diagnostic - Import diagnostic. @returns Whether marker was rejected. */ (
+          diagnostic,
+        ) => diagnostic.name === "text:bookmark" || diagnostic.name === "text:soft-page-break",
+      ),
+    ).toBe(false);
+    const imported = await readOdtDocument(bytes, { title: "Synthetic markers" });
+    const marks = imported.document.GetIDocumentMarkAccess();
+    expect(marks.FindMark("test-mark")?.GetPosition().GetContentIndex()).toBe(12);
+    expect(marks.GetSoftPageBreaks()[0]?.GetContentIndex()).toBe(12);
+    const unknownAttribute = content.replace(
+      "</text:p>",
+      '<text:bookmark text:name="test-mark" xmlns:foreign="urn:foreign" foreign:extra="ignored"/></text:p>',
     );
-    expect(report.diagnostics).toContainEqual(
+    const attributeReport = await diagnoseOdtImport(
+      await replaceFixtureEntry("content.xml", new TextEncoder().encode(unknownAttribute)),
+    );
+    expect(attributeReport.diagnostics).toContainEqual(
       expect.objectContaining({
-        kind: "unknown-element",
-        name: "text:soft-page-break",
+        kind: "unknown-attribute",
+        name: "foreign:extra",
         loss: "structure",
       }),
     );
