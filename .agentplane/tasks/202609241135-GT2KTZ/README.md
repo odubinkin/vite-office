@@ -1,10 +1,11 @@
 ---
 id: "202609241135-GT2KTZ"
 title: "F5 Simplify Writer presentation layers"
-status: "DOING"
+result_summary: "Writer advanced controls split by interaction without duplicate model authority."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -41,11 +42,16 @@ quality_review:
     - "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.test.tsx"
   findings:
     - "Full npm run verify passed: 484 office tests, 98 inventory tests, 14 E2E, 100% coverage; provenance and inventory include both browser presenters."
-commit: null
+commit:
+  hash: "ea4e3c8f0ac3391233d92f4b54b1f02e876a1e1e"
+  message: "🧩 GT2KTZ code: split Writer formatting presenters"
 comments:
   -
     author: "CODER"
     body: "Start: split Writer presentation by interaction while preserving bindings and controller ownership."
+  -
+    author: "CODER"
+    body: "Verified: focused formatting presenters and exact browser boundary inventory pass full verification."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Focused color and paragraph presenters preserve one bindings command bridge and one dialog request; full npm run verify and git diff --check passed (484 office tests, 98 inventory tests, 14 E2E, 100% coverage)."
+  -
+    type: "status"
+    at: "2026-09-24T13:22:23.432Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: focused formatting presenters and exact browser boundary inventory pass full verification."
 doc_version: 3
-doc_updated_at: "2026-09-24T13:22:04.092Z"
+doc_updated_at: "2026-09-24T13:22:23.434Z"
 doc_updated_by: "CODER"
 description: "Implement F5: split oversized controls by interaction and remove duplicate wrappers/state while preserving command bridge and accessibility."
 sections:
