@@ -8,6 +8,8 @@ export { ODF_NAMESPACES } from "../core/xmltoken";
 export interface OdfCharacterProperties {
   readonly color?: string;
   readonly fontFamily?: string;
+  readonly fontFamilyAsian?: string;
+  readonly fontFamilyComplex?: string;
   /** Absolute font height in twips. */
   readonly fontSizeTwips?: number;
   readonly highlight?: string;
@@ -917,7 +919,17 @@ export function exportCharacterAttributes(
       ? ""
       : fontFaceName === undefined
         ? ` fo:font-family="${escapeXml(properties.fontFamily)}"`
-        : ` style:font-name="${escapeXml(fontFaceName(properties.fontFamily))}" style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamily))}" style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamily))}"`,
+        : ` style:font-name="${escapeXml(fontFaceName(properties.fontFamily))}" style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian ?? properties.fontFamily))}" style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex ?? properties.fontFamily))}"`,
+    properties.fontFamily === undefined &&
+    properties.fontFamilyAsian !== undefined &&
+    fontFaceName !== undefined
+      ? ` style:font-name-asian="${escapeXml(fontFaceName(properties.fontFamilyAsian))}"`
+      : "",
+    properties.fontFamily === undefined &&
+    properties.fontFamilyComplex !== undefined &&
+    fontFaceName !== undefined
+      ? ` style:font-name-complex="${escapeXml(fontFaceName(properties.fontFamilyComplex))}"`
+      : "",
     properties.fontSizeTwips === undefined
       ? ""
       : ` fo:font-size="${properties.fontSizeTwips / 20}pt"`,

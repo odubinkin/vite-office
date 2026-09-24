@@ -36,8 +36,20 @@ export class SwXMLWriter {
   ): Uint8Array {
     const encoder = new TextEncoder();
     const output = new ZipOutputStream();
+    const fonts = document.GetEmbeddedFonts();
     output.putNextEntry("mimetype", encoder.encode(ODT_MIMETYPE));
-    output.putNextEntry("META-INF/manifest.xml", encoder.encode(createOdtManifestXml()));
+    output.putNextEntry(
+      "META-INF/manifest.xml",
+      encoder.encode(
+        createOdtManifestXml(
+          fonts.map(
+            /** Projects a font path. @param font - Document font. @returns Package path. */ (
+              font,
+            ) => font.path,
+          ),
+        ),
+      ),
+    );
     checkpoint(control, "styles");
     output.putNextEntry("styles.xml", encoder.encode(exportStylesXml(document)));
     checkpoint(control, "content");
@@ -50,6 +62,11 @@ export class SwXMLWriter {
       "meta.xml",
       encoder.encode(exportMetaXml(metadata.title, document.GetLocale())),
     );
+    for (const font of fonts) {
+      if (font.bytes === undefined)
+        throw new Error(`ODF embedded font bytes are missing: ${font.path}`);
+      output.putNextEntry(font.path, font.bytes);
+    }
     checkpoint(control, "package");
     const bytes = output.finish();
     if (bytes.length > (control.maxOutputBytes ?? ODT_EXPORT_BYTE_LIMIT))

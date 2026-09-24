@@ -3,7 +3,7 @@
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition } from "../../../source/core/crsr/pam";
-import { SwDoc } from "../../../source/core/doc/doc";
+import { SwDoc, type WriterEmbeddedFont } from "../../../source/core/doc/doc";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import type { DefaultFontDevice } from "../../../source/core/doc/default-font";
 import {
@@ -85,6 +85,7 @@ type WriterTextHintRecord =
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly bookmarks?: readonly Readonly<{ name: string; nodeIndex: number; offset: number }>[];
+  readonly embeddedFonts?: readonly WriterEmbeddedFont[];
   readonly documentSettings: Readonly<Record<DocumentSettingId, boolean>>;
   readonly lineNumberInfo?: SwLineNumberInfoValue;
   readonly locale: string;
@@ -101,6 +102,7 @@ export interface WriterDocumentRecord {
 /** Encodes the model at the browser boundary. @param document - Canonical graph. @returns Current record. */
 export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
   return {
+    embeddedFonts: document.GetEmbeddedFonts(),
     bookmarks: document
       .GetIDocumentMarkAccess()
       .GetBookmarks()
@@ -262,6 +264,19 @@ export function decodeWriterDocument(
     ...(defaultFontDevice === undefined ? {} : { defaultFontDevice }),
     locale: record.locale,
   });
+  for (const font of record.embeddedFonts ?? []) {
+    if (
+      typeof font.path !== "string" ||
+      typeof font.faceName !== "string" ||
+      typeof font.familyName !== "string" ||
+      typeof font.format !== "string" ||
+      (font.bytes !== undefined && !(font.bytes instanceof Uint8Array))
+    )
+      throw new Error("Stored Writer embedded font is invalid.");
+    document.RegisterEmbeddedFont(font);
+    if (font.bytes !== undefined)
+      document.SetEmbeddedFontBytes(font.path, font.bytes, font.canLoad === true);
+  }
   if (record.lineNumberInfo !== undefined)
     document.SetLineNumberInfo(SwLineNumberInfo.FromValue(record.lineNumberInfo));
   const firstPageDescriptor = record.pageDescriptors[0];

@@ -5,6 +5,7 @@ import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAut
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, RES_CHRATR_FONT } from "../../../inc/hintids";
 import type { SwDoc } from "../../core/doc/doc";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
+import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
 
 /** Collects pool defaults and every direct Writer font item in deterministic family order. @param document - Source document. @returns Populated font pool. */
 export function createWriterFontAutoStylePool(document: SwDoc): XMLFontAutoStylePool {
@@ -21,9 +22,14 @@ export function createWriterFontAutoStylePool(document: SwDoc): XMLFontAutoStyle
       if (item instanceof SvxFontItem) families.push(item.GetFamilyName());
     for (const run of projectWriterTextRuns(node))
       if (run.attributes.fontFamily !== undefined) families.push(run.attributes.fontFamily);
+    for (const hint of node.GetpSwpHints()?.entries() ?? [])
+      if (hint.format instanceof SwFormatAutoFormat)
+        for (const item of hint.format.GetStyleHandle().entries())
+          if (item instanceof SvxFontItem) families.push(item.GetFamilyName());
   }
   families.sort();
   const fonts = new XMLFontAutoStylePool();
   for (const family of families) fonts.Add(family);
+  for (const font of document.GetEmbeddedFonts()) fonts.AddEmbedded(font);
   return fonts;
 }

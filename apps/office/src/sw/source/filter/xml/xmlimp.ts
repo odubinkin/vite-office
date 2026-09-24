@@ -62,7 +62,7 @@ import type { SwFormat } from "../../core/attr/format";
 import { LineNumberPosition, SwLineNumberInfo } from "../../../inc/lineinfo";
 import type { OdfLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingImportContext";
 import { SwPosition } from "../../core/crsr/pam";
-import { SwDoc } from "../../core/doc/doc";
+import { SwDoc, type WriterEmbeddedFont } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import { SwNumFormat, SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -257,6 +257,11 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     if (existing !== undefined && existing !== familyName)
       throw new Error(`Conflicting ODF font face: ${name}`);
     this.fontFaces.set(name, familyName);
+  }
+
+  /** Retains one package-backed font declaration for ZIP resolution after XML import. @param font - ODF face URI. @returns Nothing. */
+  public registerEmbeddedFont(font: WriterEmbeddedFont): void {
+    this.document.RegisterEmbeddedFont(font);
   }
 
   /** Resolves pinned built-in paragraph-style names without coupling xmloff to Writer. @param styleName - ODF name. @returns Model identity. */
@@ -801,8 +806,11 @@ function putCharacterProperties(
 ): void {
   if (properties.color !== undefined) put(new SfxStringItem(RES_CHRATR_COLOR, properties.color));
   if (properties.fontFamily !== undefined)
-    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
-      put(new SvxFontItem(properties.fontFamily, which));
+    put(new SvxFontItem(properties.fontFamily, RES_CHRATR_FONT));
+  const asianFamily = properties.fontFamilyAsian ?? properties.fontFamily;
+  if (asianFamily !== undefined) put(new SvxFontItem(asianFamily, RES_CHRATR_CJK_FONT));
+  const complexFamily = properties.fontFamilyComplex ?? properties.fontFamily;
+  if (complexFamily !== undefined) put(new SvxFontItem(complexFamily, RES_CHRATR_CTL_FONT));
   if (properties.fontSizeTwips !== undefined)
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       put(new SvxFontHeightItem(properties.fontSizeTwips, which));

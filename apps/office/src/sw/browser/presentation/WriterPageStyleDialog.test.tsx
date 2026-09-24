@@ -1,6 +1,7 @@
 /** @fileoverview Verifies page geometry editing and validation in the Writer dialog. */
 
 import { fireEvent, render, screen } from "@testing-library/react";
+import fs from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
 import {
@@ -8,8 +9,44 @@ import {
   WRITER_PAPER_SIZES,
 } from "../../source/core/layout/pagedesc";
 import { swapOrientation, WriterPageStyleDialog } from "./WriterPageStyleDialog";
+import { readOdtDocument } from "../../source/filter/xml/swxml";
+import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
 
 describe("Writer Page Style dialog", /** Groups Writer Page Style dialog. @returns Test callback result. */ () => {
+  it("inspects and edits an upstream ODT page descriptor through save and reopen", /** Checks imported geometry in the existing Page tab. @returns Completion. */ async () => {
+    const bytes = new Uint8Array(
+      fs.readFileSync("src/sw/qa/extras/embedded_fonts/data/embedded-font-props.odt"),
+    );
+    const metadata = { title: "Page fixture" };
+    const options = {
+      onDiagnostic: /** Suppresses unrelated upstream diagnostics. @returns Nothing. */ () =>
+        undefined,
+    };
+    const opened = await readOdtDocument(bytes, metadata, undefined, options);
+    const initial = opened.document.GetPageDesc().GetValue();
+    const onSubmit = vi.fn(
+      /** Applies the dialog result to canonical page state. @param value - Accepted descriptor. @returns Nothing. */ (
+        value: typeof initial,
+      ) => opened.document.ChgPageDesc(value),
+    );
+    render(<WriterPageStyleDialog initialValue={initial} onCancel={vi.fn()} onSubmit={onSubmit} />);
+    expect(screen.getByLabelText("Width (cm)")).toHaveValue(
+      Number(((initial.width * 2.54) / 1440).toFixed(2)),
+    );
+    fireEvent.change(screen.getByLabelText("Left (cm)"), { target: { value: "3" } });
+    fireEvent.click(screen.getByText("OK"));
+    expect(onSubmit).toHaveBeenCalledOnce();
+    const reopened = await readOdtDocument(
+      writeOdtDocument(opened.document, metadata),
+      metadata,
+      undefined,
+      options,
+    );
+    expect(reopened.document.GetPageDesc().GetValue().leftMargin).toBe(
+      Math.round((3 * 1440) / 2.54),
+    );
+  });
+
   it("keeps selected paper dimensions consistent with landscape orientation", /** Checks keeps selected paper dimensions consistent with landscape orientation. @returns Test callback result. */ () => {
     const onSubmit = vi.fn();
     const initialValue = createDefaultWriterPageDescriptor("en-US").GetValue();

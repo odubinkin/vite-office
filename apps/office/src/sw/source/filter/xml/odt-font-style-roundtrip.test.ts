@@ -40,6 +40,43 @@ async function rewriteStylesXml(
 }
 
 describe("Writer ODT font and style compatibility", /** Groups file compatibility tests. @returns Nothing. */ () => {
+  it("keeps Latin, Asian and complex-script family identities separate", /** Mirrors Writer's three SvxFontItem slots in named styles. @returns Completion. */ async () => {
+    const writer = createWriterDocument();
+    const style = writer.GetTextFormatColl("text-body");
+    style.SetFormatAttr(new SvxFontItem("Latin Serif", RES_CHRATR_FONT));
+    style.SetFormatAttr(new SvxFontItem("Asian Serif", RES_CHRATR_CJK_FONT));
+    style.SetFormatAttr(new SvxFontItem("Complex Serif", RES_CHRATR_CTL_FONT));
+    const metadata = { title: "Script families" };
+    const saved = writeOdtDocument(writer, metadata);
+    const stylesXml = await new ZipFile(saved).readTextEntry("styles.xml");
+    expect(stylesXml).toContain('style:font-name-asian="Asian Serif"');
+    expect(stylesXml).toContain('style:font-name-complex="Complex Serif"');
+    const reopened = await readOdtDocument(saved, metadata);
+    const imported = reopened.document.GetTextFormatColl("text-body").GetAttrSet();
+    expect((imported.Get(RES_CHRATR_FONT, true) as SvxFontItem).GetFamilyName()).toBe(
+      "Latin Serif",
+    );
+    expect((imported.Get(RES_CHRATR_CJK_FONT, true) as SvxFontItem).GetFamilyName()).toBe(
+      "Asian Serif",
+    );
+    expect((imported.Get(RES_CHRATR_CTL_FONT, true) as SvxFontItem).GetFamilyName()).toBe(
+      "Complex Serif",
+    );
+    for (const attribute of ["font-name-asian", "font-name-complex"]) {
+      const invalid = await rewriteStylesXml(
+        saved,
+        /** Breaks one declared script face reference. @param styles - Named-style XML. @returns Invalid XML. */ (
+          styles,
+        ) =>
+          styles.replace(
+            new RegExp(`style:${attribute}="[^"]+"`, "u"),
+            `style:${attribute}="Missing"`,
+          ),
+      );
+      await expect(readOdtDocument(invalid, metadata)).rejects.toThrow("ODF XML is malformed");
+    }
+  });
+
   it("preserves LibreOffice-declared Title parents across export and import", /** Verifies named-style parent linkage follows the ODF declaration instead of the built-in pool default. @returns Nothing. */ async () => {
     const writer = createWriterDocument();
     writer.GetTextFormatColl("title");

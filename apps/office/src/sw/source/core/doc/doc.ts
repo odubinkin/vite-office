@@ -29,6 +29,18 @@ export interface SwDocOptions {
   readonly locale?: string;
 }
 
+/** One package-backed Writer font face; bytes are attached only after manifest and ZIP validation. */
+export interface WriterEmbeddedFont {
+  readonly faceName: string;
+  readonly familyName: string;
+  readonly path: string;
+  readonly format: string;
+  readonly weight: "normal" | "bold";
+  readonly style: "normal" | "italic";
+  readonly bytes?: Uint8Array;
+  readonly canLoad?: boolean;
+}
+
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
   private readonly attrPool: SwAttrPool;
@@ -43,6 +55,7 @@ export class SwDoc {
   private readonly locale: string;
   private lineNumberInfo = new SwLineNumberInfo();
   private readonly pageDescs: SwPageDesc[];
+  private readonly embeddedFonts = new Map<string, WriterEmbeddedFont>();
   public readonly nodes: SwNodes;
 
   /** Creates the canonical fixed sections and optionally one empty body node. @param createInitialTextNode - Whether to create initial body content. @returns Nothing. */
@@ -64,6 +77,35 @@ export class SwDoc {
   /** Returns the document locale used for script-specific defaults. @returns BCP 47 locale. */
   public GetLocale(): string {
     return this.locale;
+  }
+  /** Registers a package font declaration before its ZIP entry is read. @param font - Declared face and package path. @returns Nothing. */
+  public RegisterEmbeddedFont(font: WriterEmbeddedFont): void {
+    const existing = this.embeddedFonts.get(font.path);
+    if (existing !== undefined) {
+      if (
+        existing.faceName !== font.faceName ||
+        existing.familyName !== font.familyName ||
+        existing.weight !== font.weight ||
+        existing.style !== font.style ||
+        existing.format !== font.format
+      )
+        throw new Error(`Conflicting ODF embedded font: ${font.path}`);
+      return;
+    }
+    this.embeddedFonts.set(font.path, { ...font });
+  }
+  /** Attaches validated package bytes and embedding permission. @param path - ZIP entry name. @param bytes - Bounded font data. @param canLoad - Whether the font permits viewing. @returns Nothing. */
+  public SetEmbeddedFontBytes(path: string, bytes: Uint8Array, canLoad: boolean): void {
+    const declared = this.embeddedFonts.get(path);
+    if (declared === undefined) throw new Error(`Unknown ODF embedded font: ${path}`);
+    this.embeddedFonts.set(path, { ...declared, bytes: bytes.slice(), canLoad });
+  }
+  /** Returns independent package font records for export, transfer, and browser loading. @returns Font records. */
+  public GetEmbeddedFonts(): readonly WriterEmbeddedFont[] {
+    return [...this.embeddedFonts.values()].map(
+      /** Protects document-owned bytes. @param font - Stored font. @returns Independent record. */
+      (font) => ({ ...font, ...(font.bytes === undefined ? {} : { bytes: font.bytes.slice() }) }),
+    );
   }
   /** Returns a copy of the document-owned line-number configuration. @returns Line-number settings. */
   public GetLineNumberInfo(): SwLineNumberInfo {

@@ -616,6 +616,8 @@ function importCharacterProperties(
     [
       XMLToken.FO_FONT_WEIGHT,
       XMLToken.STYLE_FONT_NAME,
+      XMLToken.STYLE_FONT_NAME_ASIAN,
+      XMLToken.STYLE_FONT_NAME_COMPLEX,
       XMLToken.FO_FONT_FAMILY,
       XMLToken.FO_FONT_SIZE,
       XMLToken.FO_FONT_STYLE,
@@ -634,6 +636,8 @@ function importCharacterProperties(
   );
   const weight = attributes.get(XMLToken.FO_FONT_WEIGHT);
   const faceName = attributes.get(XMLToken.STYLE_FONT_NAME);
+  const asianFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_ASIAN);
+  const complexFaceName = attributes.get(XMLToken.STYLE_FONT_NAME_COMPLEX);
   const fallbackFontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
   const fontSize = attributes.get(XMLToken.FO_FONT_SIZE);
   const posture = attributes.get(XMLToken.FO_FONT_STYLE);
@@ -675,6 +679,13 @@ function importCharacterProperties(
   const declaredFontFamily = faceName === null ? undefined : target.getFontFace(faceName);
   if (faceName !== null && declaredFontFamily === undefined)
     throw new Error(`Undefined ODF font face: ${faceName}`);
+  const asianFontFamily = asianFaceName === null ? undefined : target.getFontFace(asianFaceName);
+  if (asianFaceName !== null && asianFontFamily === undefined)
+    throw new Error(`Undefined ODF Asian font face: ${asianFaceName}`);
+  const complexFontFamily =
+    complexFaceName === null ? undefined : target.getFontFace(complexFaceName);
+  if (complexFaceName !== null && complexFontFamily === undefined)
+    throw new Error(`Undefined ODF complex font face: ${complexFaceName}`);
   const fontFamily = declaredFontFamily ?? fallbackFontFamily?.replace(/^(['"])(.*)\1$/, "$2");
   let fontSizeTwips: number | undefined;
   if (fontSize !== null) {
@@ -689,6 +700,8 @@ function importCharacterProperties(
   return {
     ...(useWindowColor === true ? { color: "auto" } : color === null ? {} : { color }),
     ...(fontFamily === undefined || fontFamily.trim().length === 0 ? {} : { fontFamily }),
+    ...(asianFontFamily === undefined ? {} : { fontFamilyAsian: asianFontFamily }),
+    ...(complexFontFamily === undefined ? {} : { fontFamilyComplex: complexFontFamily }),
     ...(fontSizeTwips === undefined ? {} : { fontSizeTwips }),
     ...(highlight === null ? {} : { highlight }),
     ...(weight === null ? {} : { bold: weight === "bold" }),

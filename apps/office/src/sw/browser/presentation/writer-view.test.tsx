@@ -27,6 +27,7 @@ import { SwFormatPageDesc } from "../../source/core/attr/fmtpdsc";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
+import { projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
 import {
   RES_CHRATR_COLOR,
@@ -80,6 +81,91 @@ const getText =
   ) => fallback;
 
 describe("Writer browser presentation", /** Groups presentation tests. @returns Nothing. */ () => {
+  it("exposes a package font and reports a stable fallback when browser loading is unavailable", /** Checks the font selector without silently replacing the imported family. @returns Completion. */ async () => {
+    const session = createWriterDocumentSession();
+    const doc = session.docShell.GetDoc();
+    const restrictedBytes = new Uint8Array(38);
+    const fontHeader = new DataView(restrictedBytes.buffer);
+    fontHeader.setUint32(0, 0x00010000);
+    fontHeader.setUint16(4, 1);
+    fontHeader.setUint32(12, 0x4f532f32);
+    fontHeader.setUint32(20, 28);
+    fontHeader.setUint32(24, 10);
+    fontHeader.setUint16(36, 0x0002);
+    doc.RegisterEmbeddedFont({
+      faceName: "Package Serif",
+      familyName: "Package Serif",
+      path: "Fonts/Package_Serif.ttf",
+      format: "truetype",
+      weight: "normal",
+      style: "normal",
+    });
+    doc.SetEmbeddedFontBytes("Fonts/Package_Serif.ttf", restrictedBytes, false);
+    doc.RegisterEmbeddedFont({
+      faceName: "Package Sans",
+      familyName: "Package Sans",
+      path: "Fonts/Package_Sans.ttf",
+      format: "truetype",
+      weight: "normal",
+      style: "normal",
+    });
+    doc.SetEmbeddedFontBytes("Fonts/Package_Sans.ttf", restrictedBytes, false);
+    session.view.GetWrtShell().Insert("Font sample");
+    const node = doc.paragraphs[0]!;
+    session.view.GetWrtShell().SetPaM(new SwPosition(node, node.Len()), new SwPosition(node, 0));
+    const rendered = render(<WriterWorkbench isActive view={session.view} />);
+    const selector = screen.getByLabelText("Font name") as HTMLSelectElement;
+    expect(within(selector).getByRole("option", { name: "Package Serif" })).toBeInTheDocument();
+    fireEvent.change(selector, { target: { value: "Package Serif" } });
+    await waitFor(
+      /** Observes command state and font fallback. @returns Nothing. */ () => {
+        expect(selector.value).toBe("Package Serif");
+        expect(
+          screen.getByText("Embedded font unavailable; using Liberation Serif fallback"),
+        ).toHaveAttribute("role", "status");
+      },
+    );
+    const reopenedFont = await readOdtDocument(
+      writeOdtDocument(doc, { title: "Font selector" }),
+      { title: "Font selector" },
+      undefined,
+      {
+        onDiagnostic: /** Suppresses unrelated ODF declarations. @returns Nothing. */ () =>
+          undefined,
+      },
+    );
+    expect(
+      projectWriterTextRuns(reopenedFont.document.paragraphs[0]!)[0]?.attributes.fontFamily,
+    ).toBe("Package Serif");
+    const replacement = createWriterDocument();
+    replacement.RegisterEmbeddedFont({
+      faceName: "Replacement Serif",
+      familyName: "Replacement Serif",
+      path: "Fonts/Replacement.ttf",
+      format: "truetype",
+      weight: "normal",
+      style: "normal",
+    });
+    replacement.SetEmbeddedFontBytes("Fonts/Replacement.ttf", new Uint8Array([3]), false);
+    act(
+      /** Switches the active model to exercise document-scoped font revocation. @returns Nothing. */ () => {
+        session.docShell.ReplaceDocument(
+          replacement,
+          createDocument({ id: "replacement", suiteId: "writer", title: "Replacement" }),
+          { kind: "untitled", name: "Replacement" },
+        );
+      },
+    );
+    expect(
+      within(screen.getByLabelText("Font name")).getByRole("option", { name: "Replacement Serif" }),
+    ).toBeInTheDocument();
+    expect(
+      within(screen.getByLabelText("Font name")).queryByRole("option", { name: "Package Serif" }),
+    ).toBeNull();
+    rendered.unmount();
+    session.Close();
+  });
+
   it("creates, navigates, renames and removes bookmarks and inserts a hard page break from Insert", /** Verifies the full menu/dialog/model path and ODT persistence. @returns Completion. */ async () => {
     const session = createWriterDocumentSession();
     const shell = session.view.GetWrtShell();

@@ -75,8 +75,8 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
 
 describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createSwDoc assertions in upstream odffeatures.cxx with local semantic assertions. @returns Nothing. */, () => {
   for (const fixture of [
-    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 124 },
-    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 131 },
+    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 95 },
+    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 106 },
   ] as const)
     it(`preserves inline positions from ${fixture.file}` /** Checks pinned bookmark/soft-break positions through Writer ODT export and reimport. @returns Completion. */, async () => {
       const diagnostics: { name: string }[] = [];
@@ -143,25 +143,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
             ) => reopenedDiagnostics.push(diagnostic),
         },
       );
-      expect(
-        reopenedDiagnostics
-          .map(
-            /** Projects diagnostic name. @param diagnostic - Diagnostic. @returns Name. */ (
-              diagnostic,
-            ) => diagnostic.name,
-          )
-          .sort(),
-      ).toEqual(
-        Array.from(
-          { length: 4 },
-          /** Lists expected font diagnostics. @returns Names. */ () => [
-            "style:font-name-asian",
-            "style:font-name-complex",
-          ],
-        )
-          .flat()
-          .sort(),
-      );
+      expect(reopenedDiagnostics).toHaveLength(0);
       expect(normalizeWriterSemantics(reopened.document)).toEqual(
         normalizeWriterSemantics(imported.document),
       );

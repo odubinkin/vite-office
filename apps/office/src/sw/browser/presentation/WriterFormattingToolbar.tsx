@@ -46,6 +46,8 @@ const icons = new Map<string, CommandIcon>([
 export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps {
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
   readonly advancedControls?: React.ReactNode;
+  readonly embeddedFontFamilies?: readonly string[];
+  readonly fontAvailability?: Readonly<Record<string, boolean>>;
 }
 
 /** Renders the complete Writer text toolbar. Its generic indent commands select list-level or paragraph-margin behavior in the text shell. @param props - Shared command surface and shell context. @returns Toolbar item fragment. */
@@ -54,6 +56,8 @@ export function WriterFormattingToolbar({
   paragraphStyleOptions,
   resolveArguments,
   advancedControls,
+  embeddedFontFamilies = [],
+  fontAvailability = {},
 }: WriterFormattingToolbarProps): React.JSX.Element {
   const localization = useBrowserLocalization();
   const getCommandResource =
@@ -84,6 +88,8 @@ export function WriterFormattingToolbar({
               localization,
               paragraphStyleOptions,
               resolveArguments,
+              embeddedFontFamilies,
+              fontAvailability,
             );
           }
         }
@@ -114,7 +120,7 @@ function getWriterButtonContent(commandUrl: string): React.ReactNode {
   return undefined;
 }
 
-/** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param localization - Browser localization service. @param paragraphStyleOptions - Binding-backed style selector options. @param resolveArguments - Browser argument adapter. @returns Rendered special item. */
+/** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param localization - Browser localization service. @param paragraphStyleOptions - Binding-backed style selector options. @param resolveArguments - Browser argument adapter. @param embeddedFontFamilies - Package font families. @param fontAvailability - Browser load status. @returns Rendered special item. */
 function renderSpecialToolbarItem(
   placement: Extract<
     WriterToolbarItemPlacement,
@@ -125,6 +131,8 @@ function renderSpecialToolbarItem(
   localization: BrowserLocalizationService,
   paragraphStyleOptions: readonly WriterParagraphStyleOption[],
   resolveArguments: BrowserCommandSurfaceProps["resolveArguments"],
+  embeddedFontFamilies: readonly string[],
+  fontAvailability: Readonly<Record<string, boolean>>,
 ): React.ReactNode {
   const item = placement;
   if (item.kind === "font-select")
@@ -136,6 +144,8 @@ function renderSpecialToolbarItem(
         key={item.commandId}
         label={getCommandResource(item.commandId).controlLabel}
         resolveArguments={resolveArguments}
+        embeddedFontFamilies={embeddedFontFamilies}
+        fontAvailability={fontAvailability}
       />
     );
   if (item.kind === "font-size-select")
@@ -261,12 +271,16 @@ function FontNameSelect({
   getCommandResource,
   label,
   resolveArguments,
+  embeddedFontFamilies,
+  fontAvailability,
 }: {
   readonly commandId: string;
   readonly commandSource: BrowserCommandSurfaceProps["commandSource"];
   readonly getCommandResource: (commandUrl: string) => WriterCommandResource;
   readonly label: string;
   readonly resolveArguments: BrowserCommandSurfaceProps["resolveArguments"];
+  readonly embeddedFontFamilies: readonly string[];
+  readonly fontAvailability: Readonly<Record<string, boolean>>;
 }): React.JSX.Element {
   const [fonts, setFonts] = useState<readonly string[]>(FALLBACK_FONT_FAMILIES);
   const selected = String(
@@ -289,7 +303,9 @@ function FontNameSelect({
     [],
   );
   /* v8 ignore next -- Imported fonts outside the device list are retained for round-trip fidelity. */
-  const options = fonts.includes(selected) ? fonts : [selected, ...fonts];
+  const options = [...new Set([selected, ...embeddedFontFamilies, ...fonts])];
+  const unavailable =
+    embeddedFontFamilies.includes(selected) && fontAvailability[selected] === false;
   return (
     <label className="contents">
       <span className="sr-only">{label}</span>
@@ -319,6 +335,11 @@ function FontNameSelect({
           ),
         )}
       </select>
+      {unavailable ? (
+        <span role="status" className="text-xs text-amber-700">
+          Embedded font unavailable; using Liberation Serif fallback
+        </span>
+      ) : null}
     </label>
   );
 }

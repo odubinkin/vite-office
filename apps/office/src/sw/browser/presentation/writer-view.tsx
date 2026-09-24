@@ -35,6 +35,8 @@ import { selectWriterCommandResource } from "./writer-command-presentation";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
+import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
+import type { SwDoc } from "../../source/core/doc/doc";
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
@@ -87,6 +89,33 @@ export function WriterWorkbench({
     presentationStore.Subscribe,
     presentationStore.GetSnapshot,
     presentationStore.GetSnapshot,
+  );
+  const activeDocument = view.GetDocShell().GetDoc();
+  const [fontAvailability, setFontAvailability] = useState<{
+    document: SwDoc;
+    values: Readonly<Record<string, boolean>>;
+  }>();
+  useEffect(
+    /** Installs only fonts owned by the active document, then revokes them on replacement. @returns Revocation. */
+    () =>
+      installWriterEmbeddedFonts(
+        activeDocument.GetEmbeddedFonts(),
+        undefined,
+        undefined,
+        /** Records browser font availability. @param family - Document family. @param available - Load result. @returns Nothing. */
+        (family, available) =>
+          setFontAvailability(
+            /** Updates only the active document's font state. @param previous - Earlier state. @returns Updated availability. */
+            (previous) => ({
+              document: activeDocument,
+              values: {
+                ...(previous?.document === activeDocument ? previous.values : {}),
+                [family]: available,
+              },
+            }),
+          ),
+      ),
+    [activeDocument],
   );
   const dialogController = view.GetDialogController();
   const dialogRequest = useSyncExternalStore(
@@ -160,6 +189,16 @@ export function WriterWorkbench({
         documentTitle={snapshot.documentState.title}
         formattingToolbar={
           <WriterFormattingToolbar
+            embeddedFontFamilies={activeDocument
+              .GetEmbeddedFonts()
+              .map(
+                /** Projects one resource family. @param font - Embedded face. @returns Family. */ (
+                  font,
+                ) => font.familyName,
+              )}
+            fontAvailability={
+              fontAvailability?.document === activeDocument ? fontAvailability.values : {}
+            }
             advancedControls={
               <WriterAdvancedFormattingControls
                 key={dialogRequest?.request.kind === "paragraph" ? dialogRequest.id : "closed"}

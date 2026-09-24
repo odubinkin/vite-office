@@ -395,6 +395,8 @@ function getCharacterProperties(
     ) => set.GetItemIfSet(which, inherited) !== undefined,
   );
   const font = set.GetItemIfSet(RES_CHRATR_FONT, inherited);
+  const asianFont = set.GetItemIfSet(RES_CHRATR_CJK_FONT, inherited);
+  const complexFont = set.GetItemIfSet(RES_CHRATR_CTL_FONT, inherited);
   if (
     !inherited &&
     !directWeight &&
@@ -403,7 +405,9 @@ function getCharacterProperties(
     !directFontSize &&
     color === undefined &&
     highlight === undefined &&
-    font === undefined
+    font === undefined &&
+    asianFont === undefined &&
+    complexFont === undefined
   )
     return undefined;
   const weight = set.Get(RES_CHRATR_WEIGHT, inherited);
@@ -443,6 +447,10 @@ function getCharacterProperties(
   return {
     ...(color instanceof SfxStringItem ? { color: color.GetValue() } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
+    ...(asianFont instanceof SvxFontItem ? { fontFamilyAsian: asianFont.GetFamilyName() } : {}),
+    ...(complexFont instanceof SvxFontItem
+      ? { fontFamilyComplex: complexFont.GetFamilyName() }
+      : {}),
     ...(explicitFontSize ? { fontSizeTwips: fontSize.GetHeight() } : {}),
     ...(highlight instanceof SfxStringItem ? { highlight: highlight.GetValue() } : {}),
     ...(inherited || directWeight ? { bold: weight.GetBoolValue() } : {}),

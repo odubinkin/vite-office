@@ -5105,6 +5105,27 @@
       "evidence": {
         "local": [
           {
+            "marker": "installWriterEmbeddedFonts",
+            "path": "apps/office/src/vcl/browser/embedded-font-loader.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/vcl/browser/embedded-font-loader.ts",
+      "rationale": "Adapts Writer package font resources to the browser FontFace API with document-scoped revocation and a visible fallback status.",
+      "responsibilities": [
+        "Loads only validated viewable font bytes into the browser and removes the faces when the document closes."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "The FontFace API replaces the native VCL embedded fonts manager for browser rendering."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "export class FontList",
             "path": "apps/office/src/vcl/browser/font-list.ts"
           }

@@ -25,6 +25,21 @@ import {
 
 const plain: OdfCharacterProperties = { bold: false, italic: false, underline: false };
 
+it("exports script-only font face references independently", /** Preserves a complex-script override without manufacturing a Latin name. @returns Nothing. */ () => {
+  const faceName =
+    /** Uses the family as the test face name. @param family - Font family. @returns Face name. */ (
+      family: string,
+    ): string => family;
+  expect(exportCharacterAttributes({ fontFamilyAsian: "Asian Face" }, faceName)).toBe(
+    ' style:font-name-asian="Asian Face"',
+  );
+  expect(exportCharacterAttributes({ fontFamilyComplex: "Complex Face" }, faceName)).toBe(
+    ' style:font-name-complex="Complex Face"',
+  );
+  expect(exportCharacterAttributes({ fontFamilyAsian: "Asian Face" })).toBe("");
+  expect(exportCharacterAttributes({ fontFamilyComplex: "Complex Face" })).toBe("");
+});
+
 it("falls back to Standard for an undeclared built-in heading", /** Covers the bounded style resolver when a named definition is absent. @returns Nothing. */ () => {
   const resolved = resolveParagraphStyle("Heading_20_1", true, {
     getStyle: /** Has no named definitions. @returns No style. */ () => undefined,

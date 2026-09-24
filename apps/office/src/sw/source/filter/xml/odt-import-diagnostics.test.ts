@@ -24,11 +24,18 @@ describe("ODT structural diagnostic callback", /** Groups diagnostic routing ass
         (diagnostic) => diagnostics.push(diagnostic),
     });
     expect(imported.document.paragraphs).toHaveLength(1);
-    expect(diagnostics).toContainEqual(
+    expect(diagnostics).not.toContainEqual(
       expect.objectContaining({
         kind: "unsupported-attribute",
         stream: "content.xml",
         name: "style:font-family-generic",
+      }),
+    );
+    expect(diagnostics).toContainEqual(
+      expect.objectContaining({
+        kind: "unknown-attribute",
+        stream: "styles.xml",
+        name: "style:font-size-asian",
       }),
     );
   });
