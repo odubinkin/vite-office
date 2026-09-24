@@ -1,10 +1,11 @@
 ---
 id: "202609240501-GVMCJY"
 title: "Restore ODT XML and package contracts"
-status: "DOING"
+result_summary: "Canonical ODT filter contract and browser Worker clone boundary restored."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -42,11 +43,16 @@ quality_review:
     - "/tmp/vite-office-stage6-verify.log"
   findings:
     - "Pinned XML processing instructions and comments import; ODT service now uses SwDoc; Worker clone codecs live in browser; full verification passes."
-commit: null
+commit:
+  hash: "7f2485b1f1c9e5a02e6796706a0641ae56ee51af"
+  message: "🗂️ GVMCJY task: record ODT parity verification"
 comments:
   -
     author: "CODER"
     body: "Start: compare pinned LibreOffice ODT contracts, repair demonstrated differences, isolate Worker transport, and verify."
+  -
+    author: "CODER"
+    body: "Verified: Stage 6 ODT XML and Worker boundary code at 47aa91e44d67 passes npm run verify; source-backed XML fixture and canonical SwDoc service assertions pass."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned SvXMLImport processing instructions and browser Worker boundary checked; npm run verify passed with 470 office tests at 100% coverage, 96 inventory tests, 14 browser tests, source tree and provenance."
+  -
+    type: "status"
+    at: "2026-09-24T08:28:02.229Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Stage 6 ODT XML and Worker boundary code at 47aa91e44d67 passes npm run verify; source-backed XML fixture and canonical SwDoc service assertions pass."
 doc_version: 3
-doc_updated_at: "2026-09-24T08:27:36.517Z"
+doc_updated_at: "2026-09-24T08:28:02.231Z"
 doc_updated_by: "CODER"
 description: "Stage 6: audit supported ODT streams and properties, repair demonstrated differences including processing instructions, and isolate Worker transport"
 sections:
@@ -123,6 +136,10 @@ sections:
     - Observation: Legal ODT comments and processing instructions were rejected; source filter contracts exposed Worker graph records.
       Impact: Valid ODTs could fail import, and shell/filter ownership crossed into browser transport.
       Resolution: Accepted inert XML lexical events, moved clone codecs and envelope into sw/browser/filter/xml, and changed shell/filter contracts to canonical SwDoc.
+extensions:
+  implementation_commit:
+    hash: "47aa91e44d677c96423249c12273e447a5948910"
+    message: "🧩 GVMCJY code: isolate ODT Worker graph transfer and accept legal XML events"
 id_source: "generated"
 ---
 ## Summary
