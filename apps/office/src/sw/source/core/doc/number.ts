@@ -245,6 +245,8 @@ export interface WriterNumberingParagraph {
   readonly GetNumRule?: () => SwNumRule | undefined;
   /** Canonical list-tree counter supplied by SwTextNode. */
   readonly GetListItemNumber?: () => number | undefined;
+  /** Canonical list visibility flag supplied by SwTextNode. */
+  readonly IsCountedInList?: () => boolean;
   /** Primitive bullet marker supplied by a presentation projection. */
   readonly bulletChar?: string;
   /** Primitive marker calculated before crossing the presentation boundary. */
@@ -264,7 +266,8 @@ export function getWriterParagraphListMarker(
 ): string | undefined {
   const kind = paragraph.GetListKind?.() ?? paragraph.list?.kind ?? "none";
   const level = paragraph.GetAttrListLevel?.() ?? paragraph.list?.level ?? 0;
-  if (!paragraphs.includes(paragraph) || kind === "none") return undefined;
+  if (!paragraphs.includes(paragraph) || kind === "none" || paragraph.IsCountedInList?.() === false)
+    return undefined;
   if (paragraph.listMarker !== undefined) return paragraph.listMarker;
   if (kind === "bullet")
     return (

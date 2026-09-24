@@ -3117,9 +3117,11 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/doc/list.ts#WRITER_PARAGRAPH_LIST_KINDS",
-          "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::SwList"
+          "vendor/libreoffice-reference/sw/source/core/doc/list.cxx#SwList::SwList",
+          "apps/office/src/sw/source/core/doc/list-invariants.test.ts#revalidates restart and counted changes",
+          "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx#SwNumberTreeNode::ValidateChildren"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/list.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "The bounded counter-tree paths for restart, uncounted items and level reparenting have source-backed assertions. Broader SwList responsibilities and unsupported native document ranges remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "WRITER_PARAGRAPH_LIST_KINDS",
@@ -3162,9 +3164,10 @@
         "evidence": [
           "apps/office/src/sw/source/core/doc/number.ts#SwNumFormat",
           "apps/office/src/sw/source/core/doc/number.test.ts#validatesRules",
-          "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule::MakeNumString"
+          "vendor/libreoffice-reference/sw/source/core/doc/number.cxx#SwNumRule::MakeNumString",
+          "apps/office/src/sw/source/core/doc/list-invariants.test.ts#starts after an uncounted first item"
         ],
-        "justification": "Models the exact current bullet and Arabic-numbering subset with ten levels, label-alignment spacing, include-upper-levels, prefix/suffix, restart values, bullet fonts, and model-owned label construction. Other numbering types are rejected before mutation and remain unclaimed.",
+        "justification": "The supported bullet and Arabic-numbering subset includes source-backed suppression of visible markers for uncounted list items. Other numbering types and broader SwNumRule behavior remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SwNumFormat",
@@ -3579,9 +3582,11 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/txtnode/ndtxt.ts#SwTextNode",
-          "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode"
+          "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode",
+          "apps/office/src/sw/source/core/doc/list-invariants.test.ts#revalidates restart and counted changes",
+          "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::SetCountedInList"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/core/txtnode/ndtxt.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Source-backed tests cover the reachable list item transitions: restart invalidation, list counted state, rule/list-id registration, level reparenting, and list item capture/restore. Other SwTextNode operations remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "WRITER_CHARACTER_FORMATS",

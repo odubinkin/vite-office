@@ -17,6 +17,7 @@ import {
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_ISCOUNTED,
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_RESTARTVALUE,
@@ -191,24 +192,40 @@ export class SwTextNode extends SwContentNode {
   public SetAttrListLevel(level: number): void {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`Writer list level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
+    const listId = this.GetListId();
+    const list = this.GetDoc().GetDocumentListsManager().GetListByName(listId);
+    if (level !== this.GetAttrListLevel()) list?.RemoveListItem(this);
     if (level === 0) this.ResetAttr(RES_PARATR_LIST_LEVEL);
     else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, level));
+    if (level !== list?.GetListItem(this)?.level && list !== undefined)
+      list.InsertListItem(this, level);
   }
 
   /** Sets Writer's direct list restart attributes. @param restart - Whether this item restarts. @param value - Optional explicit start value. @returns Nothing. */
   public SetListRestart(restart: boolean, value?: number): void {
+    if (restart && value !== undefined && (!Number.isInteger(value) || value < 0 || value > 32_767))
+      throw new Error("Writer list restart value is outside the supported range.");
     if (!restart) {
       this.ResetAttr(RES_PARATR_LIST_ISRESTART);
       this.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
-      return;
+    } else {
+      this.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISRESTART, true));
+      if (value === undefined) this.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
+      else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, value));
     }
-    this.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISRESTART, true));
-    if (value === undefined) this.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
-    else {
-      if (!Number.isInteger(value) || value < 0 || value > 32_767)
-        throw new Error("Writer list restart value is outside the supported range.");
-      this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, value));
-    }
+    this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId())?.InvalidateListTree();
+  }
+
+  /** Applies Writer's RES_PARATR_LIST_ISCOUNTED flag. @param counted - Whether this list item advances numbering. @returns Nothing. */
+  public SetCountedInList(counted: boolean): void {
+    if (counted) this.ResetAttr(RES_PARATR_LIST_ISCOUNTED);
+    else this.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, false));
+    this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId())?.InvalidateListTree();
+  }
+
+  /** Reports the effective list-counted flag. @returns Whether numbering advances. */
+  public IsCountedInList(): boolean {
+    return (this.GetAttr(RES_PARATR_LIST_ISCOUNTED) as SfxBoolItem).GetValue();
   }
 
   /** Reports Writer's list restart flag. @returns Restart state. */
@@ -242,14 +259,36 @@ export class SwTextNode extends SwContentNode {
 
   /** Sets or resets RES_PARATR_LIST_ID. @param listId - Direct list identity. @returns Nothing. */
   public SetListId(listId: string): void {
-    if (listId.length === 0) this.ResetAttr(RES_PARATR_LIST_ID);
-    else this.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, listId));
+    this.ApplyListIdentityChange(
+      /** Stores the new direct list identity. @returns Nothing. */ () => {
+        if (listId.length === 0) this.ResetAttr(RES_PARATR_LIST_ID);
+        else this.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, listId));
+      },
+    );
   }
 
   /** Sets or resets RES_PARATR_NUMRULE without changing list id or level. @param ruleName - Document rule name. @returns Nothing. */
   public SetNumRule(ruleName: string): void {
-    if (ruleName.length === 0) this.ResetAttr(RES_PARATR_NUMRULE);
-    else this.SetAttr(new SwNumRuleItem(ruleName));
+    this.ApplyListIdentityChange(
+      /** Stores the new direct rule identity. @returns Nothing. */ () => {
+        if (ruleName.length === 0) this.ResetAttr(RES_PARATR_NUMRULE);
+        else this.SetAttr(new SwNumRuleItem(ruleName));
+      },
+    );
+  }
+
+  /** Mirrors Writer's list removal/reinsertion around rule or list-id changes. @param change - Direct attribute mutation. @returns Nothing. */
+  private ApplyListIdentityChange(change: () => void): void {
+    const beforeId = this.GetListId();
+    const beforeRule = this.GetNumRuleName();
+    change();
+    const afterId = this.GetListId();
+    const afterRule = this.GetNumRuleName();
+    if (beforeId === afterId && beforeRule === afterRule) return;
+    const lists = this.GetDoc().GetDocumentListsManager();
+    if (beforeId.length > 0) lists.GetListByName(beforeId)?.RemoveListItem(this);
+    if (this.GetNumRule() !== undefined && afterId.length > 0)
+      lists.CreateList(afterRule, afterId).InsertListItem(this, this.GetAttrListLevel());
   }
 
   /** Returns the paragraph's text format collection identity. @returns Paragraph style identity. */
@@ -286,6 +325,7 @@ export class SwTextNode extends SwContentNode {
       RES_PARATR_LIST_LEVEL,
       RES_PARATR_LIST_ISRESTART,
       RES_PARATR_LIST_RESTARTVALUE,
+      RES_PARATR_LIST_ISCOUNTED,
     ])
       this.ResetAttr(which);
     this.SetAttr(items);
@@ -307,6 +347,7 @@ export class SwTextNode extends SwContentNode {
       RES_PARATR_LIST_LEVEL,
       RES_PARATR_LIST_ISRESTART,
       RES_PARATR_LIST_RESTARTVALUE,
+      RES_PARATR_LIST_ISCOUNTED,
     ]) {
       const item = attributes?.GetItemIfSet(which, false);
       if (item !== undefined) captured.Put(item);
@@ -327,7 +368,7 @@ export class SwTextNode extends SwContentNode {
   /** Returns the model-owned visible list label after validating the number tree. @returns Bullet or formatted numeric label. */
   public GetListLabel(): string | undefined {
     const rule = this.GetNumRule();
-    if (rule === undefined) return undefined;
+    if (rule === undefined || !this.IsCountedInList()) return undefined;
     const level = this.GetAttrListLevel();
     const format = rule.GetNumFormat(level);
     if (format.GetNumberingType() === "char-special") return format.GetBulletChar();

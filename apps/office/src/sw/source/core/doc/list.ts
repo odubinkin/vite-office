@@ -88,8 +88,12 @@ export class SwList {
       const start = textNode.IsListRestart()
         ? textNode.GetActualListStartValue()
         : (textNode.GetNumRule()?.GetNumFormat(level).GetStart() ?? 1);
-      counters[level] =
-        textNode.IsListRestart() || counters[level] === 0 ? start : (counters[level] as number) + 1;
+      if (textNode.IsCountedInList())
+        counters[level] =
+          textNode.IsListRestart() || counters[level] === 0
+            ? start
+            : (counters[level] as number) + 1;
+      else if (counters[level] === 0) counters[level] = start - 1;
       for (let child = level + 1; child <= WRITER_MAX_LIST_LEVEL; child += 1) counters[child] = 0;
       node.SetNumber(counters[level] as number);
     }

@@ -219,9 +219,9 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     const unregistered = document.nodes.MakeTextNode();
     unregistered.SetNumRule(ruleName);
     unregistered.SetListId(first?.GetListId() as string);
-    expect(unregistered.GetListLabel()).toBeUndefined();
+    expect(unregistered.GetListLabel()).toBe("3.");
     unregistered.SetListId("missing-list");
-    expect(unregistered.GetListLabel()).toBeUndefined();
+    expect(unregistered.GetListLabel()).toBe("1.");
     expect(getWriterParagraphListMarker(document.paragraphs, second)).toBe("2.");
     expect(nested.GetActualListStartValue()).toBe(1);
     applyWriterParagraphList(nested, { kind: "numbered", level: 0 });

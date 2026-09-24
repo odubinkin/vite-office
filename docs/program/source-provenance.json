@@ -2880,7 +2880,7 @@
         "Upstream obligations outside SwList::SwList, std::move, uno::RuntimeException, SwList::~SwList and the bounded SwList and WriterParagraphList contracts remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Ports the bounded document-owned SwList registration, invalidation, and counter-tree behavior while isolating boundary projection/conversion from item-set based SwTextNode and undo mutation contracts."
+        "Ports bounded document-owned SwList registration, invalidation, and counter-tree behavior, including the reachable uncounted-item transition, while keeping boundary projection separate from canonical item-set mutation."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/doc/list.cxx",
@@ -3334,7 +3334,7 @@
         "Upstream obligations outside SwTextNode, SwNodes::MakeTextNode, SwTextNode::SwTextNode, sw::TextNodeNotificationSuppressor and the bounded item-set, range-hint, and WriterCharacterFormat contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements Writer text nodes, canonical text, paragraph items, and range hints at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary."
+        "Implements canonical Writer text, paragraph items, range hints and bounded list attribute transitions (restart, counted flag, rule/list identity and level) at the pinned ndtxt.cxx ownership boundary."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
