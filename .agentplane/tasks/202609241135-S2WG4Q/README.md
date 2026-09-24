@@ -1,10 +1,11 @@
 ---
 id: "202609241135-S2WG4Q"
 title: "F2 Route Writer formatting controls through Sfx slots"
-status: "DOING"
+result_summary: "Writer advanced formatting now uses Sfx command dispatch and one dialog request owner."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -41,11 +42,16 @@ quality_review:
     - "apps/office/src/sw/source/uibase/shells/textsh1.test.ts"
   findings:
     - "Full npm run verify passed: 484 office tests, 98 inventory tests, 14 E2E, 100% coverage; git diff --check passed."
-commit: null
+commit:
+  hash: "23d97c8736c8fb6fa61206bab46e8cf378b1e1fe"
+  message: "🧩 S2WG4Q code: route Writer formatting through Sfx slots"
 comments:
   -
     author: "CODER"
     body: "Start: route advanced Writer formatting through pinned Sfx commands and one dialog request owner."
+  -
+    author: "CODER"
+    body: "Verified: pinned formatting slots, bindings state and paragraph-dialog ownership pass full verification."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned Writer formatting slots, bindings state, and one paragraph-dialog request owner verified; npm run verify and git diff --check passed (484 office tests, 98 inventory tests, 14 E2E, 100% coverage)."
+  -
+    type: "status"
+    at: "2026-09-24T13:13:22.995Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: pinned formatting slots, bindings state and paragraph-dialog ownership pass full verification."
 doc_version: 3
-doc_updated_at: "2026-09-24T13:12:31.297Z"
+doc_updated_at: "2026-09-24T13:13:22.996Z"
 doc_updated_by: "CODER"
 description: "Implement F2: route color, spacing, paragraph format and line-number controls through bindings and a single dialog request owner."
 sections:
