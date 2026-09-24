@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202609231700-TZMGXV",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T07:49:05.465Z",
+  "verdict": "pass",
+  "summary": "Previously landed Writer transfer ownership passes focused suites and the current full repository verification.",
+  "evaluated_sha": "9718e06ad7fa072d0ad1195404a3b66161d078c2",
+  "blueprint_digest": "928b25acfddf28cbd20adc15b1be6ccd21e4c063f9a64f08ccf598afdf41a5e5",
+  "findings": [
+    "Pinned SwTransferable owns format choice and insertion policy; browser adapters retain clipboard and DOM I/O. Earlier repository-wide gate failures were repaired by later scoped tasks."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609231700-TZMGXV/README.md",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
+    "/tmp/vite-office-stage4-verify.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
