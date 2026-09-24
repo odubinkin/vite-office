@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240501-GVMCJY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T08:27:41.704Z",
+  "verdict": "pass",
+  "summary": "Stage 6 canonical ODT filter and Worker boundary verified.",
+  "evaluated_sha": "47aa91e44d677c96423249c12273e447a5948910",
+  "blueprint_digest": "02877714d3114a5231e47c354ba21a71f0d657fbfd8205ffe738a9cc0d8d18f0",
+  "findings": [
+    "Pinned XML processing instructions and comments import; ODT service now uses SwDoc; Worker clone codecs live in browser; full verification passes."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240501-GVMCJY/README.md",
+    "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+    "apps/office/src/sw/browser/filter/xml/odt-transfer.ts",
+    "/tmp/vite-office-stage6-verify.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

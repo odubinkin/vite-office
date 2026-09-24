@@ -4,7 +4,7 @@ title: "Restore ODT XML and package contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -19,11 +19,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T08:27:36.433Z"
+  updated_by: "CODER"
+  note: "Pinned SvXMLImport processing instructions and browser Worker boundary checked; npm run verify passed with 470 office tests at 100% coverage, 96 inventory tests, 14 browser tests, source tree and provenance."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T08:27:41.704Z"
+  updated_by: "EVALUATOR"
+  note: "Stage 6 canonical ODT filter and Worker boundary verified."
+  evaluated_sha: "47aa91e44d677c96423249c12273e447a5948910"
+  blueprint_digest: "02877714d3114a5231e47c354ba21a71f0d657fbfd8205ffe738a9cc0d8d18f0"
+  evidence_refs:
+    - ".agentplane/tasks/202609240501-GVMCJY/README.md"
+    - ".agentplane/tasks/202609240501-GVMCJY/quality/20260924-082741704-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609240501-GVMCJY/quality/20260924-082741704-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609240501-GVMCJY/quality/20260924-082741704-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609240501-GVMCJY/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts"
+    - "apps/office/src/sw/browser/filter/xml/odt-transfer.ts"
+    - "/tmp/vite-office-stage6-verify.log"
+  findings:
+    - "Pinned XML processing instructions and comments import; ODT service now uses SwDoc; Worker clone codecs live in browser; full verification passes."
 commit: null
 comments:
   -
@@ -37,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: compare pinned LibreOffice ODT contracts, repair demonstrated differences, isolate Worker transport, and verify."
+  -
+    type: "verify"
+    at: "2026-09-24T08:27:36.433Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pinned SvXMLImport processing instructions and browser Worker boundary checked; npm run verify passed with 470 office tests at 100% coverage, 96 inventory tests, 14 browser tests, source tree and provenance."
 doc_version: 3
-doc_updated_at: "2026-09-24T08:08:13.488Z"
+doc_updated_at: "2026-09-24T08:27:36.517Z"
 doc_updated_by: "CODER"
 description: "Stage 6: audit supported ODT streams and properties, repair demonstrated differences including processing instructions, and isolate Worker transport"
 sections:
@@ -61,11 +85,44 @@ sections:
     4. Existing inventory/provenance data accurately describe changes; npm run verify passes and final tracked state is clean.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T08:27:36.433Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pinned SvXMLImport processing instructions and browser Worker boundary checked; npm run verify passed with 470 office tests at 100% coverage, 96 inventory tests, 14 browser tests, source tree and provenance.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T08:08:13.488Z, excerpt_hash=sha256:b50b22b37b37e7338e8f35f4fef6563cb45fd6512ca556ca6bd202f446710968
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-GVMCJY/blueprint/resolved-snapshot.json
+    - old_digest: 02877714d3114a5231e47c354ba21a71f0d657fbfd8205ffe738a9cc0d8d18f0
+    - current_digest: 02877714d3114a5231e47c354ba21a71f0d657fbfd8205ffe738a9cc0d8d18f0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609240501-GVMCJY
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609240501-GVMCJY
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: Legal ODT comments and processing instructions were rejected; source filter contracts exposed Worker graph records.
+      Impact: Valid ODTs could fail import, and shell/filter ownership crossed into browser transport.
+      Resolution: Accepted inert XML lexical events, moved clone codecs and envelope into sw/browser/filter/xml, and changed shell/filter contracts to canonical SwDoc.
 id_source: "generated"
 ---
 ## Summary
@@ -96,6 +153,36 @@ Stage 6: audit supported ODT streams and properties, repair demonstrated differe
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T08:27:36.433Z — VERIFY — ok
+
+By: CODER
+
+Note: Pinned SvXMLImport processing instructions and browser Worker boundary checked; npm run verify passed with 470 office tests at 100% coverage, 96 inventory tests, 14 browser tests, source tree and provenance.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T08:08:13.488Z, excerpt_hash=sha256:b50b22b37b37e7338e8f35f4fef6563cb45fd6512ca556ca6bd202f446710968
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-GVMCJY/blueprint/resolved-snapshot.json
+- old_digest: 02877714d3114a5231e47c354ba21a71f0d657fbfd8205ffe738a9cc0d8d18f0
+- current_digest: 02877714d3114a5231e47c354ba21a71f0d657fbfd8205ffe738a9cc0d8d18f0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609240501-GVMCJY
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609240501-GVMCJY
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -104,3 +191,7 @@ Stage 6: audit supported ODT streams and properties, repair demonstrated differe
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: Legal ODT comments and processing instructions were rejected; source filter contracts exposed Worker graph records.
+  Impact: Valid ODTs could fail import, and shell/filter ownership crossed into browser transport.
+  Resolution: Accepted inert XML lexical events, moved clone codecs and envelope into sw/browser/filter/xml, and changed shell/filter contracts to canonical SwDoc.
