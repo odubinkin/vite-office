@@ -1,15 +1,15 @@
 /** @fileoverview Browser device port supplying shaped visual lines to Writer text frames. */
 
-import type { SwTextFrameInput, SwTextLine } from "../../source/core/text/txtfrm";
+import type { SwTextFrameMeasurement, SwTextLine } from "../../source/core/text/txtfrm";
 import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
 
-/** Packages browser line measurements and projected Writer values for the core formatter. @param paragraphs - Immutable view paragraphs. @param measuredLines - DOM Range output by node identity. @returns Core frame inputs. */
-export function createWriterTextFrameInputs(
+/** Packages only browser line measurements for the core formatter. @param paragraphs - Immutable view paragraphs. @param measuredLines - DOM Range output by node identity. @returns Device geometry in document order. */
+export function createWriterLineMeasurements(
   paragraphs: readonly WriterParagraphProjection[],
   measuredLines: ReadonlyMap<string, readonly SwTextLine[]>,
-): readonly SwTextFrameInput[] {
+): readonly SwTextFrameMeasurement[] {
   return paragraphs.map(
-    /** Converts one measured paragraph to core twips. @param paragraph - View paragraph. @returns Text-frame input. */
+    /** Converts one measured paragraph to device twips. @param paragraph - View paragraph. @returns Line measurement. */
     (paragraph) => ({
       id: paragraph.id,
       lines: measuredLines.get(paragraph.id) ?? [
@@ -19,12 +19,6 @@ export function createWriterTextFrameInputs(
           height: paragraph.computedStyle.fontSizePt * paragraph.computedStyle.lineHeight * 20,
         },
       ],
-      lowerSpacing: paragraph.computedStyle.lowerSpacingPt * 20,
-      style: paragraph.style,
-      contextualSpacing: paragraph.computedStyle.contextualSpacing ?? false,
-      upperSpacing: paragraph.computedStyle.upperSpacingPt * 20,
-      keepWithNext: paragraph.computedStyle.keepWithNext ?? false,
-      countLineNumbers: paragraph.computedStyle.countLineNumbers ?? true,
     }),
   );
 }

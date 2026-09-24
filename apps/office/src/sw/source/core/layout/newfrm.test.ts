@@ -8,6 +8,10 @@ import { SwRootFrame } from "./newfrm";
 import { createWriterDocument } from "../doc/doc";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { getSwTextFrameGap, makeSwTextFrame, type SwTextFrameInput } from "../text/txtfrm";
+import { createSwTextFrameInputs } from "../text/txtfrm";
+import { SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { RES_KEEP, RES_LINENUMBER, RES_UL_SPACE } from "../../../inc/hintids";
 
 const standardPage = createDefaultWriterPageDescriptor("en-GB").GetValue();
 
@@ -210,8 +214,39 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
 });
 
 describe("persistent Writer layout root", /** Checks core layout identity over device measurements. @returns Nothing. */ () => {
+  it("reads spacing and flow flags from canonical pooled items", /** Verifies node ownership over device-only lines. @returns Nothing. */ () => {
+    const document = createWriterDocument();
+    const first = document.paragraphs[0];
+    if (first === undefined) throw new Error("Writer document has no first paragraph");
+    const second = document.GetNodes().MakeTextNode();
+    first.SetAttr(new SvxULSpaceItem(120, 60, RES_UL_SPACE, true));
+    second.SetAttr(new SvxULSpaceItem(240, 80, RES_UL_SPACE));
+    second.SetAttr(new SfxBoolItem(RES_KEEP, true));
+    second.SetAttr(new SfxBoolItem(RES_LINENUMBER, false));
+    const measurements = [paragraph("first", 1), paragraph("second", 1)];
+    expect(createSwTextFrameInputs(document, measurements)).toMatchObject([
+      { id: "first", upperSpacing: 120, lowerSpacing: 60, contextualSpacing: true },
+      {
+        id: "second",
+        upperSpacing: 240,
+        lowerSpacing: 80,
+        keepWithNext: true,
+        countLineNumbers: false,
+      },
+    ]);
+    const firstMeasurement = measurements[0];
+    if (firstMeasurement === undefined) throw new Error("Missing first line measurement");
+    expect(
+      /** Rejects measurements for a different document revision. @returns Layout inputs. */ () =>
+        createSwTextFrameInputs(document, [firstMeasurement]),
+    ).toThrow("measurements must match");
+  });
   it("keeps unchanged frame identities and invalidates only changed measurements", /** Exercises core frame reconciliation and document invalidation. @returns Nothing. */ () => {
-    const root = new SwRootFrame();
+    const document = createWriterDocument();
+    document.GetNodes().MakeTextNode();
+    const root = new SwRootFrame(
+      /** Resolves the test document. @returns Canonical document. */ () => document,
+    );
     const info = new SwLineNumberInfo();
     info.SetPaintLineNumbers(true);
     info.SetCountBy(1);
@@ -265,7 +300,10 @@ describe("persistent Writer layout root", /** Checks core layout identity over d
   });
 
   it("uses browser-measured width and font changes for page breaks and follow numbering", /** Compares measured line counts and heights across page descriptors. @returns Nothing. */ () => {
-    const root = new SwRootFrame();
+    const document = createWriterDocument();
+    const root = new SwRootFrame(
+      /** Resolves the test document. @returns Canonical document. */ () => document,
+    );
     const info = new SwLineNumberInfo();
     info.SetPaintLineNumbers(true);
     const narrowPage = { ...standardPage, height: 1100, topMargin: 100, bottomMargin: 100 };

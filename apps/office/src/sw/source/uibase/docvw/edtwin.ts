@@ -5,6 +5,7 @@
 
 import { SwPosition } from "../../core/crsr/pam";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import type { SwDoc } from "../../core/doc/doc";
 import type { WriterClipboardSelection, WriterTransferDocument } from "../dochdl/swdtflvr";
 import type { WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { SwWrtShell } from "../wrtsh/wrtsh1";
@@ -40,6 +41,11 @@ export class SwEditWin {
     invalidateBindings?: () => void,
   ) {
     this.invalidateBindings = invalidateBindings ?? ignoreEditWindowInvalidation;
+  }
+
+  /** Resolves the current canonical document for the view's persistent layout root. @returns Active Writer document. */
+  public GetDoc(): SwDoc {
+    return this.wrtShell.GetDoc();
   }
 
   /** Applies a current SwNodes selection to the shell PaM. @param selection - Point and optional mark. @returns Whether every endpoint was accepted. */

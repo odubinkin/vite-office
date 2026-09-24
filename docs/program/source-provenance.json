@@ -1535,7 +1535,7 @@
       "localPath": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
       "rationale": "Binds exactly one stable BrowserWriterEditWindow to immutable React paragraph projections and one logical contenteditable host.",
       "responsibilities": [
-        "Renders Writer paragraphs and forwards DOM events without constructing Writer mutation closures."
+        "Renders Writer paragraphs, supplies DOM line measurements to the view-owned core layout root, and forwards DOM events without constructing Writer mutation closures."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1617,9 +1617,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/browser/editor/writer-line-measurement.ts",
-      "rationale": "Uses browser DOM Range geometry to supply shaped visual line boundaries and heights to Writer-owned text frames. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
+      "rationale": "Uses DOM Range to supply only shaped visual line boundaries and heights; SwRootFrame reads paragraph semantics from the canonical SwDoc.",
       "responsibilities": [
-        "Measures styled browser text lines and packages device geometry for core formatting without owning page breaks."
+        "Measures styled browser text lines and packages only device geometry in document order."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -3369,7 +3369,7 @@
         "Native frames for tables, anchored objects, footnotes, and page-style families beyond the supported Standard page remain outside this slice."
       ],
       "preservedResponsibilities": [
-        "Keeps a persistent root over supported page and text frames, reconciles unchanged frame identities, invalidates on model/device changes, and projects line numbers."
+        "Keeps a persistent root bound to the current SwDoc, reads canonical node layout values after browser line measurement, and owns supported page/text frames, identity and line numbering."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/layout/newfrm.cxx",
@@ -3499,7 +3499,9 @@
       "localSymbols": [
         "SwTextLine",
         "SwTextFrame",
-        "makeSwTextFrame"
+        "makeSwTextFrame",
+        "SwTextFrameMeasurement",
+        "createSwTextFrameInputs"
       ],
       "omittedResponsibilities": [
         "Native text shaping, fly objects, footnotes, and other unsupported frame behaviors remain outside the paragraph slice."

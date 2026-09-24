@@ -3,13 +3,16 @@
 import type { WriterPageDescriptorValue } from "./pagedesc";
 import { WRITER_PAPER_SIZES } from "./pagedesc";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import type { SwDoc } from "../doc/doc";
 import {
+  createSwTextFrameInputs,
   getSwTextFrameGap,
   makeSwTextFrame,
   projectSwLineNumbers,
   type SwLineNumberMark,
   type SwTextFrame,
   type SwTextFrameInput,
+  type SwTextFrameMeasurement,
   type SwTextFrameSettings,
   type SwTextLine,
 } from "../text/txtfrm";
@@ -74,18 +77,22 @@ export class SwRootFrame {
   private inputSignatures = new Map<string, string>();
   private revision = 0;
 
+  /** Binds the root to its current Writer document while allowing document-shell replacement. @param getDocument - Active canonical document. @returns Nothing. */
+  public constructor(private readonly getDocument: () => SwDoc) {}
+
   /** Invalidates the formatted graph after a document or style change. @returns Nothing. */
   public Invalidate(): void {
     this.dirty = true;
   }
 
-  /** Formats measured text into stable page frames and line-number marks. @param paragraphs - Browser device measurements and Writer paragraph values. @param descriptor - Page descriptor graph. @param settings - Writer spacing settings. @param lineInfo - Document line-number settings. @returns Immutable current layout. */
+  /** Formats measured text into stable page frames and line-number marks. @param measurements - Browser device line geometry only. @param descriptor - Page descriptor graph. @param settings - Writer spacing settings. @param lineInfo - Document line-number settings. @returns Immutable current layout. */
   public Format(
-    paragraphs: readonly SwTextFrameInput[],
+    measurements: readonly SwTextFrameMeasurement[],
     descriptor: WriterPageDescriptorValue | SwPageDescriptorLayout,
     settings: SwTextFrameSettings | undefined,
     lineInfo: SwLineNumberInfoValue,
   ): SwRootFrameSnapshot {
+    const paragraphs = createSwTextFrameInputs(this.getDocument(), measurements);
     const signature = JSON.stringify([paragraphs, descriptor, settings, lineInfo]);
     if (!this.dirty && this.signature === signature && this.snapshot !== undefined)
       return this.snapshot;

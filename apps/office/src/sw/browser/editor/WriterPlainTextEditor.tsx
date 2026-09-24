@@ -14,7 +14,7 @@ import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedes
 import { SwRootFrame, type SwPageDescriptorLayout } from "../../source/core/layout/newfrm";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../inc/lineinfo";
 import type { SwTextFrameSettings, SwTextLine } from "../../source/core/text/txtfrm";
-import { createWriterTextFrameInputs, measureWriterTextLines } from "./writer-line-measurement";
+import { createWriterLineMeasurements, measureWriterTextLines } from "./writer-line-measurement";
 
 /** Defines immutable render values plus the persistent Writer edit-window owner. */
 export interface WriterPlainTextEditorProps {
@@ -41,7 +41,11 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const [measurementRevision, setMeasurementRevision] = useState(0);
   const [testLayout] = useState(
     /** Supplies a persistent layout root when the editor is mounted without a SwView. @returns Layout root. */
-    () => new SwRootFrame(),
+    () =>
+      new SwRootFrame(
+        /** Resolves the detached editor's current document. @returns Canonical document. */ () =>
+          props.editWindow.GetDoc(),
+      ),
   );
   const [paragraphElements] = useState(
     /** Creates the stable paragraph projection registry. @returns Empty paragraph registry. */ () =>
@@ -87,10 +91,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const [measuredLines, setMeasuredLines] = useState<ReadonlyMap<string, readonly SwTextLine[]>>(
     /** Starts without browser line measurements. @returns Empty line map. */ () => new Map(),
   );
-  const inputs = createWriterTextFrameInputs(props.paragraphs, measuredLines);
+  const measurements = createWriterLineMeasurements(props.paragraphs, measuredLines);
   const lineInfo = props.lineNumberInfo ?? new SwLineNumberInfo().QueryValue();
   const layout = (props.layout ?? testLayout).Format(
-    inputs,
+    measurements,
     props.pageDescriptors === undefined
       ? props.pageDescriptor
       : { descriptors: props.pageDescriptors, initialName: props.pageDescriptor.name },

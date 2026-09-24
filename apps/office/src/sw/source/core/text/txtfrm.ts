@@ -2,6 +2,10 @@
 
 import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import type { SwPageFrame } from "../layout/newfrm";
+import type { SwDoc } from "../doc/doc";
+import { SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { RES_KEEP, RES_LINENUMBER, RES_UL_SPACE } from "../../../inc/hintids";
 
 /** One visible line-number glyph positioned within a text-frame fragment. */
 export interface SwLineNumberMark {
@@ -60,6 +64,12 @@ export interface SwTextLine {
 }
 
 /** Measurement of one text node supplied by the active device. */
+export interface SwTextFrameMeasurement {
+  readonly id: string;
+  readonly lines: readonly SwTextLine[];
+}
+
+/** Core layout values of one canonical text node paired with device-shaped lines. */
 export interface SwTextFrameInput {
   readonly id: string;
   readonly lines: readonly SwTextLine[];
@@ -69,6 +79,36 @@ export interface SwTextFrameInput {
   readonly upperSpacing: number;
   readonly keepWithNext?: boolean;
   readonly countLineNumbers?: boolean;
+}
+
+/** Reads layout-owned values from canonical Writer nodes, pairing them only with measured lines. @param document - Active Writer document. @param measurements - Browser device line geometry in document order. @returns Core frame inputs. */
+export function createSwTextFrameInputs(
+  document: SwDoc,
+  measurements: readonly SwTextFrameMeasurement[],
+): readonly SwTextFrameInput[] {
+  if (measurements.length === 0) return [];
+  const nodes = document.paragraphs;
+  if (nodes.length !== measurements.length)
+    throw new Error("Writer layout measurements must match the current text nodes.");
+  return nodes.map(
+    /** Pairs one node's pooled values with its device lines. @param node - Canonical node. @param index - Document order. @returns Core frame input. */ (
+      node,
+      index,
+    ) => {
+      const measurement = measurements[index] as SwTextFrameMeasurement;
+      const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
+      return {
+        id: measurement.id,
+        lines: measurement.lines,
+        lowerSpacing: spacing.GetLower(),
+        style: node.GetParagraphStyle(),
+        contextualSpacing: spacing.GetContext(),
+        upperSpacing: spacing.GetUpper(),
+        keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
+        countLineNumbers: (node.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
+      };
+    },
+  );
 }
 
 /** Document settings consumed by the supported paragraph-spacing path. */

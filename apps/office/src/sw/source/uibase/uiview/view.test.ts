@@ -56,6 +56,7 @@ describe("SwView frame ownership", /** Groups SwView frame ownership. @returns T
     );
     const view = new SwView(shell);
     const layout = view.GetLayout();
+    expect(view.GetEditWin().GetDoc()).toBe(document);
     const input = [
       {
         id: "node",

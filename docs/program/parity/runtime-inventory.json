@@ -1640,7 +1640,7 @@
         "divergenceClass": "B",
         "evidence": [
           "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#showLineNumbers",
-          "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#createSwPageFrames",
+          "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx#createWriterLineMeasurements",
           "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#SwLineNumberInfo::SwLineNumberInfo",
           "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx#SwTextFrame"
         ],
@@ -1758,10 +1758,10 @@
           "apps/office/src/sw/browser/editor/writer-line-measurement.ts#measureWriterTextLines",
           "apps/office/e2e/writer-layout-ratios.spec.ts#Writer keeps measured page breaks across device pixel ratios"
         ],
-        "justification": "Supplies browser DOM Range lines and unit conversion to a persistent Writer-owned layout root; Chromium page breaks are checked at device pixel ratios 1 and 2.",
+        "justification": "DOM Range and device font metrics stay at the browser boundary; this module supplies only line offsets and heights, while core reads paragraph semantics from SwDoc.",
         "knownViolations": [],
         "localSymbols": [
-          "createWriterTextFrameInputs",
+          "createWriterLineMeasurements",
           "measureWriterTextLines"
         ],
         "sourceResponsibility": "browser-owned",
@@ -3720,7 +3720,7 @@
           "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx#SwRootFrame::SwRootFrame",
           "apps/office/e2e/writer-layout-ratios.spec.ts#Writer keeps measured page breaks across device pixel ratios"
         ],
-        "justification": "Stage 3 adds a persistent SwRootFrame that reconciles supported page/text-frame identity, invalidates on model and device changes, and owns line-number projection. Native connected frame registration and unsupported content remain outside this browser slice; module-wide parity is unverified.",
+        "justification": "Persistent SwRootFrame resolves the current SwDoc and receives only device line geometry; supported page/text-frame identity and line numbering remain core-owned. Native connected frame registration and unsupported content remain outside this slice.",
         "knownViolations": [],
         "localSymbols": [
           "SwPageFrame",
@@ -3856,16 +3856,19 @@
         "evidence": [
           "apps/office/src/sw/source/core/text/txtfrm.ts#SwTextFrame",
           "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx#SwTextFrame",
-          "apps/office/src/sw/source/core/text/txtfrm.test.ts#Writer line numbering on text frames"
+          "apps/office/src/sw/source/core/text/txtfrm.test.ts#Writer line numbering on text frames",
+          "apps/office/src/sw/source/core/layout/newfrm.test.ts#reads spacing and flow flags from canonical pooled items"
         ],
-        "justification": "Core text frames own supported paragraph gap, master/follow ranges, and page-aware line numbering; SwRootFrame retains frame identity across device updates. Native text shaping and registration remain outside this browser slice.",
+        "justification": "Core reads supported paragraph spacing, style and flow flags from pooled SwTextNode items, then pairs them with browser device line geometry. Native text shaping and registration remain outside this browser slice.",
         "knownViolations": [],
         "localSymbols": [
           "SwTextLine",
           "SwTextFrame",
           "getSwTextFrameGap",
           "makeSwTextFrame",
-          "projectSwLineNumbers"
+          "projectSwLineNumbers",
+          "SwTextFrameMeasurement",
+          "createSwTextFrameInputs"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/core/text/txtfrm.cxx",

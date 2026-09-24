@@ -30,7 +30,10 @@ export class SwView {
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
   private readonly editWindow: SwEditWin;
-  private readonly layout = new SwRootFrame();
+  private readonly layout = new SwRootFrame(
+    /** Resolves the current document after New/Open replaces the shell graph. @returns Active Writer document. */ () =>
+      this.docShell.GetDoc(),
+  );
   private readonly wrtShellSubscription: () => void;
 
   /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @returns Nothing. */

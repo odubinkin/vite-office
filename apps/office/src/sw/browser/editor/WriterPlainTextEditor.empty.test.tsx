@@ -18,7 +18,13 @@ describe("empty Writer page", /** Groups empty Writer page. @returns Test callba
       <WriterPlainTextEditor
         activeParagraphId=""
         cursorSelection={{ point: { paragraphId: "", offset: 0 } }}
-        editWindow={{ FocusNode: vi.fn() } as unknown as SwEditWin}
+        editWindow={
+          {
+            FocusNode: vi.fn(),
+            GetDoc: /** Resolves the empty-page document. @returns Canonical document. */ () =>
+              createWriterDocument(),
+          } as unknown as SwEditWin
+        }
         pageDescriptor={createDefaultWriterPageDescriptor("en-US").GetValue()}
         paragraphs={[]}
       />,
@@ -42,7 +48,13 @@ describe("empty Writer page", /** Groups empty Writer page. @returns Test callba
       <WriterPlainTextEditor
         activeParagraphId={projected.activeParagraph.id}
         cursorSelection={projected.cursorSelection}
-        editWindow={{ FocusNode: vi.fn() } as unknown as SwEditWin}
+        editWindow={
+          {
+            FocusNode: vi.fn(),
+            GetDoc: /** Resolves the measurement document. @returns Canonical document. */ () =>
+              document,
+          } as unknown as SwEditWin
+        }
         pageDescriptor={projected.pageDescriptor}
         paragraphs={projected.paragraphs}
       />,

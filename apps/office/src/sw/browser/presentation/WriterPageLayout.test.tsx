@@ -14,8 +14,34 @@ import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { WriterRulers, WriterVerticalRuler } from "./WriterRulers";
 import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import type { WriterParagraphProjection } from "./writer-view-projection";
+import { createWriterDocument } from "../../source/core/doc/doc";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
+import { RES_LINENUMBER } from "../../inc/hintids";
 
 const page = createDefaultWriterPageDescriptor("en-GB").GetValue();
+
+/** Gives detached browser fixtures canonical text nodes for layout ownership. @param paragraphs - Rendered paragraph fixtures. @returns Edit-window port. */
+function layoutEditWindow(paragraphs: readonly WriterParagraphProjection[]): SwEditWin {
+  const document = createWriterDocument();
+  paragraphs.forEach(
+    /** Creates each source node in presentation order. @param paragraph - Browser fixture. @param index - Source index. @returns Nothing. */ (
+      paragraph,
+      index,
+    ) => {
+      const node = index === 0 ? document.paragraphs[0] : document.GetNodes().MakeTextNode();
+      if (node === undefined) throw new Error("Writer document has no first paragraph");
+      node.SetText(paragraph.text);
+      if (paragraph.computedStyle.countLineNumbers === false)
+        node.SetAttr(new SfxBoolItem(RES_LINENUMBER, false));
+    },
+  );
+  return {
+    FocusNode: vi.fn(),
+    SetSelection: vi.fn(),
+    GetDoc: /** Resolves the detached editor document. @returns Canonical document. */ () =>
+      document,
+  } as unknown as SwEditWin;
+}
 
 /** Adapts test paragraph fixtures to core gap inputs. @param previous - Previous paragraph. @param current - Current paragraph. @param settings - Spacing options. @returns Gap in points. */
 function gapPt(
@@ -115,22 +141,23 @@ describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisio
 
 describe("Writer imported formatting controls", /** Covers visual line numbers and ruler tab stops. @returns Nothing. */ () => {
   it("shows only participating paragraphs in continuous line numbering", /** Checks paragraph participation in the editor. @returns Nothing. */ () => {
+    const paragraphs = [
+      {
+        ...paragraph("p1", "first"),
+        computedStyle: { ...paragraph("p1", "first").computedStyle, countLineNumbers: true },
+      },
+      {
+        ...paragraph("p2", "second"),
+        computedStyle: { ...paragraph("p2", "second").computedStyle, countLineNumbers: false },
+      },
+    ];
     const { container } = render(
       <WriterPlainTextEditor
         activeParagraphId="p1"
         cursorSelection={{ point: { paragraphId: "p1", offset: 0 } }}
-        editWindow={{ FocusNode: vi.fn(), SetSelection: vi.fn() } as unknown as SwEditWin}
+        editWindow={layoutEditWindow(paragraphs)}
         pageDescriptor={page}
-        paragraphs={[
-          {
-            ...paragraph("p1", "first"),
-            computedStyle: { ...paragraph("p1", "first").computedStyle, countLineNumbers: true },
-          },
-          {
-            ...paragraph("p2", "second"),
-            computedStyle: { ...paragraph("p2", "second").computedStyle, countLineNumbers: false },
-          },
-        ]}
+        paragraphs={paragraphs}
         showLineNumbers
         lineNumberInfo={{ ...new SwLineNumberInfo().QueryValue(), countBy: 1 }}
       />,
@@ -413,6 +440,7 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
 
   it("docks page rulers at the canvas edge and keeps their page-relative origins through scrolling", /** Verifies the fixed lane and page origins. @returns Nothing. */ () => {
     const tinyPage = { ...page, bottomMargin: 100, height: 650, topMargin: 100 };
+    const paragraphs = [paragraph("p1", "first"), paragraph("p2", "second")];
     const { container } = render(
       <WriterWorkspaceChrome
         documentTitle="Document"
@@ -430,9 +458,9 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
         <WriterPlainTextEditor
           activeParagraphId="p1"
           cursorSelection={{ point: { paragraphId: "p1", offset: 0 } }}
-          editWindow={{ FocusNode: vi.fn(), SetSelection: vi.fn() } as unknown as SwEditWin}
+          editWindow={layoutEditWindow(paragraphs)}
           pageDescriptor={tinyPage}
-          paragraphs={[paragraph("p1", "first"), paragraph("p2", "second")]}
+          paragraphs={paragraphs}
           verticalRuler={<WriterVerticalRuler onPageChange={vi.fn()} page={tinyPage} />}
         />
       </WriterWorkspaceChrome>,
@@ -562,13 +590,14 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     });
     try {
       const shortPage = { ...page, bottomMargin: 100, height: 1100, topMargin: 100 };
+      const paragraphs = [paragraph("split", "abcdefghij")];
       const { container, unmount } = render(
         <WriterPlainTextEditor
           activeParagraphId="split"
           cursorSelection={{ point: { paragraphId: "split", offset: 8 } }}
-          editWindow={{ FocusNode: vi.fn(), SetSelection: vi.fn() } as unknown as SwEditWin}
+          editWindow={layoutEditWindow(paragraphs)}
           pageDescriptor={shortPage}
-          paragraphs={[paragraph("split", "abcdefghij")]}
+          paragraphs={paragraphs}
         />,
       );
       await waitFor(
