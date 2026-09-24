@@ -1,10 +1,11 @@
 ---
 id: "202609241135-RF2T8B"
 title: "F3 Move Writer edit and transfer operations to upstream owners"
-status: "DOING"
+result_summary: "Moved Writer edit, paste and transfer DTO ownership with verified imports"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
     - "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts"
   findings:
     - "All references and source records resolve to active files; source tree, type, lint, unit, browser, ODT and build checks pass."
-commit: null
+commit:
+  hash: "457787b78cd5ad7e2ec3542a79725532a99ada7e"
+  message: "🧩 RF2T8B task: persist quality review"
 comments:
   -
     author: "CODER"
     body: "Start: implement F3 ownership corrections against pinned Writer edit and transfer modules, preserving the browser boundary."
+  -
+    author: "CODER"
+    body: "Verified: Writer edit and transfer responsibilities now reside in pinned owners or the filter boundary; all declared checks and quality review passed."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "F3 model editing and transfer ownership now matches pinned Writer modules; full npm run verify passed with 100% coverage and 14 browser scenarios."
+  -
+    type: "status"
+    at: "2026-09-24T12:17:10.005Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer edit and transfer responsibilities now reside in pinned owners or the filter boundary; all declared checks and quality review passed."
 doc_version: 3
-doc_updated_at: "2026-09-24T12:16:21.382Z"
+doc_updated_at: "2026-09-24T12:17:10.007Z"
 doc_updated_by: "CODER"
 description: "Implement F3: put edit and transfer logic under upstream-corresponding core/edit and uibase/dochdl owners; keep browser DTOs at boundaries."
 sections:
@@ -122,6 +135,10 @@ sections:
     Command: npm run verify. Result: pass. Evidence: 482 office unit tests, 98 inventory tests, both coverage groups 100%, 14 browser tests, static build, source-tree, provenance and inventory gates passed. Scope: full F3 ownership and transfer refactor.
     Command: npm exec --workspace @vite-office/office -- vitest run src/sw/source/uibase/dochdl/swdtflvr.test.ts src/sw/source/uibase/wrtsh/wrtsh-transfer.test.ts src/sw/source/uibase/wrtsh/wrtsh.test.ts src/sw/source/core/txtnode/ndtxt.test.ts src/sw/browser/filter/html. Result: pass. Evidence: 28 focused tests. Scope: clipboard, hyperlink, HTML and text-run behavior.
     Command: git diff --check; node .agentplane/policy/check-routing.mjs. Result: pass. Evidence: no whitespace errors; routing OK. Scope: task diff and source-tree path data.
+extensions:
+  implementation_commit:
+    hash: "2fea3c136b0d379ae5219db1a42246ef0191df2a"
+    message: "🧩 RF2T8B code: restore Writer edit and transfer ownership"
 id_source: "generated"
 ---
 ## Summary
