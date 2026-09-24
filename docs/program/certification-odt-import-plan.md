@@ -58,7 +58,10 @@ declarations with no user-configurable document effect need no new dialog.
 ## Ordered implementation work
 
 Each numbered phase should be a bounded AgentPlane task with its own tests and
-parity evidence. Later phases depend on the earlier model and diagnostics work.
+parity evidence. Every phase that adds document behavior must include at least
+one automated test opening a relevant ODT file from the pinned LibreOffice
+upstream test corpus, alongside focused synthetic tests and UI tests. Later
+phases depend on the earlier model and diagnostics work.
 
 ### 0. Reproduce and classify the import diagnostics
 
@@ -201,14 +204,51 @@ itself is insufficient.
 
 ## Verification approach
 
-- Commit only minimized synthetic fixtures derived from the observed XML shapes;
-  keep the original ODT and its embedded fonts outside Git.
+- Keep the original ODT and its embedded fonts outside Git. Use minimized
+  synthetic fixtures for edge cases **and** pinned upstream ODT files for
+  feature-level regression tests.
 - Add context-level tests for each new token/attribute and model-level tests for
   canonical state, malformed values, and import/export/reimport.
 - Add UI tests for commands, dialogs, keyboard/accessibility behavior, and
   persistence of edits.
-- Use the pinned upstream ODF import tests as behavior references, while retaining
-  existing ZIP/XML size, depth, expansion, and path-traversal limits.
+- Reuse the pattern in
+  `scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts`: load the real
+  upstream ODT bytes, assert specific canonical content and layout, export,
+  reopen, and compare supported semantics. Extend the test's semantic
+  projection when adding bookmarks, page breaks, fonts, or tables; paragraph
+  text alone must not count as coverage for those features. Existing examples
+  include `feature_text*.odt`, `tdf114287.odt`, `styles.odt`,
+  `hyperlink.odt`, and list fixtures. Do not broadly suppress `console.warn`
+  in the new cases; assert the allowed diagnostics explicitly.
+- For every new upstream fixture, record the exact path and test case in the
+  pinned checkout, the expected assertion, license/provenance review, parity ID,
+  and reason for selecting it. Copy a fixture into the tracked QA tree only
+  after the baseline provenance gate permits it. Pin checks to the baseline
+  commit; do not rely on a developer's ignored `vendor/` checkout in CI.
+- Preserve existing ZIP/XML size, depth, expansion, and path-traversal limits.
 - Run the local sample acceptance check after each phase and record warning
   counts plus semantic deltas; do not merge a phase whose warnings fall only
   because logs were suppressed.
+
+### Upstream ODT coverage to add by phase
+
+The filenames below are candidate source-backed fixtures in the pinned
+LibreOffice checkout, not a claim that the current importer can open them.
+Select the smallest fixture that exercises the implemented slice, inspect its
+actual XML and upstream assertions, and document any unrelated features before
+copying it into the tracked QA tree. An unsuitable candidate must be replaced
+with another upstream ODT, not with a synthetic-only test.
+
+| Phase | Upstream ODT coverage and source test | Required local assertion |
+| --- | --- | --- |
+| 0: baseline | Existing `sw/qa/extras/odfimport/data/feature_text.odt`, `sw/qa/extras/odfimport/data/feature_text_bold.odt`, and `sw/qa/extras/odfimport/data/feature_text_italic.odt` in `odffeatures.cxx`; existing list, style, and hyperlink fixtures in `odt-upstream-fixtures.test.ts` | Keep the existing import/export/reimport tests running and record current diagnostics for each file. |
+| 1: declarations | Reuse `sw/qa/uitest/data/styles.odt` from `styleInspector.py`, plus an upstream ODT that actually contains the targeted `loext` or font declaration after XML inspection | Assert that the declaration is recognized or intentionally ignored without changing canonical semantics; reject invalid semantic values. |
+| 2: scalar properties | Existing `sw/qa/extras/odfexport/data/tdf114287.odt` from `odfexport4.cxx`, and `styles.odt` | Assert paragraph print bounds, inherited/direct style properties, and the values shown in Paragraph/Page Style controls after opening. Add another upstream ODT if these do not contain a newly supported property. |
+| 3: inline markers | `sw/qa/extras/uiwriter/data/collapsed_bookmark.odt` from `uiwriter4.cxx`; existing `sw/qa/extras/tiledrendering/data/hyperlink.odt` from `tiledrendering.cxx`; `sw/qa/extras/odfimport/data/tdf94882.odt` from `odfimport.cxx` (contains `text:soft-page-break`) | Assert bookmark positions and edit stability, hyperlink ranges/targets, and soft page-break positions through export/reimport. Confirm the relevant UI opens on imported values. |
+| 4: fonts and pages | `sw/qa/extras/embedded_fonts/data/embed-unrestricted1.odt` and `embedded-font-props.odt` from `embedded_fonts.cxx`; `tdf114287.odt` for page geometry | Assert font-face resolution or deterministic fallback, page descriptor values, rendered metrics, and font/Page Style control state after opening and reopening. |
+| 5: tables | `sw/qa/extras/odfimport/data/tdf41542_borderlessPadding.odt` from `odfimport.cxx`; `sw/qa/extras/indexing/data/IndexingExport_Tables.odt` from `IndexingExportTest.cxx` | Assert ordered row/cell paragraphs, cell padding/borders, layout, editing, and structural export/reimport. Add an upstream fixture for any supported table property absent from these files. |
+| 6: closure | A representative upstream ODT from each prior phase, run together with the private local certification sample | Assert no loss of supported semantics and no unexpected warnings across the fixture matrix, the UI workflow, and repeated save/reopen. |
+
+Each phase's verification record must name the upstream ODT test command and
+result. UI tests remain separate because opening an ODT does not prove that its
+settings can be changed through the interface.
