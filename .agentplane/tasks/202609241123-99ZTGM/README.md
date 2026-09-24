@@ -4,7 +4,7 @@ title: "Plan parity for implemented LibreOffice functionality"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-24T11:28:57.400Z"
+  updated_at: "2026-09-24T11:29:57.634Z"
   updated_by: "CODER"
-  note: "Reviewed all 175 runtime modules by current subsystem/classification and all 45 Writer records; checked nine concrete findings against local and pinned source; preserved browser recovery/autosave/save UI exclusions. Prettier, diff check, routing, path checks and doctor passed; doctor has only pre-existing warnings."
+  note: "Final wording corrected to keep XML import contexts in xmloff while moving shared SAX parser responsibility to sax. Parity plan, path references, counts, exclusions, formatting and routing checks reviewed after the correction."
   attempts: 0
 commit: null
 comments:
@@ -41,8 +41,20 @@ events:
     author: "CODER"
     state: "ok"
     note: "Reviewed all 175 runtime modules by current subsystem/classification and all 45 Writer records; checked nine concrete findings against local and pinned source; preserved browser recovery/autosave/save UI exclusions. Prettier, diff check, routing, path checks and doctor passed; doctor has only pre-existing warnings."
+  -
+    type: "verify"
+    at: "2026-09-24T11:29:25.420Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609241123-99ZTGM"
+  -
+    type: "verify"
+    at: "2026-09-24T11:29:57.634Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final wording corrected to keep XML import contexts in xmloff while moving shared SAX parser responsibility to sax. Parity plan, path references, counts, exclusions, formatting and routing checks reviewed after the correction."
 doc_version: 3
-doc_updated_at: "2026-09-24T11:28:57.479Z"
+doc_updated_at: "2026-09-24T11:29:57.715Z"
 doc_updated_by: "CODER"
 description: "Audit implemented functionality and inventory against pinned upstream; write a concrete parity remediation plan for existing scope, including UI refactor artifacts and stated browser exceptions."
 sections:
@@ -85,6 +97,66 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-09-24T11:29:25.420Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609241123-99ZTGM
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T11:28:57.479Z, excerpt_hash=sha256:296027980705a192a3f3c5edbaab4fceb0bfb6306c9c550c62e52887b2226c00
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241123-99ZTGM/blueprint/resolved-snapshot.json
+    - old_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+    - current_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241123-99ZTGM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241123-99ZTGM --result verified-202609241123-99ZTGM --commit da1e8f5f1ea04bae7eea816c4fe79d354b389fdf
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-24T11:29:57.634Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final wording corrected to keep XML import contexts in xmloff while moving shared SAX parser responsibility to sax. Parity plan, path references, counts, exclusions, formatting and routing checks reviewed after the correction.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T11:29:25.510Z, excerpt_hash=sha256:296027980705a192a3f3c5edbaab4fceb0bfb6306c9c550c62e52887b2226c00
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241123-99ZTGM/blueprint/resolved-snapshot.json
+    - old_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+    - current_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241123-99ZTGM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241123-99ZTGM --result verified-202609241123-99ZTGM --commit da1e8f5f1ea04bae7eea816c4fe79d354b389fdf
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -144,6 +216,66 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-24T11:29:25.420Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609241123-99ZTGM
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T11:28:57.479Z, excerpt_hash=sha256:296027980705a192a3f3c5edbaab4fceb0bfb6306c9c550c62e52887b2226c00
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241123-99ZTGM/blueprint/resolved-snapshot.json
+- old_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+- current_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241123-99ZTGM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241123-99ZTGM --result verified-202609241123-99ZTGM --commit da1e8f5f1ea04bae7eea816c4fe79d354b389fdf
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-24T11:29:57.634Z — VERIFY — ok
+
+By: CODER
+
+Note: Final wording corrected to keep XML import contexts in xmloff while moving shared SAX parser responsibility to sax. Parity plan, path references, counts, exclusions, formatting and routing checks reviewed after the correction.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T11:29:25.510Z, excerpt_hash=sha256:296027980705a192a3f3c5edbaab4fceb0bfb6306c9c550c62e52887b2226c00
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241123-99ZTGM/blueprint/resolved-snapshot.json
+- old_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+- current_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241123-99ZTGM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241123-99ZTGM --result verified-202609241123-99ZTGM --commit da1e8f5f1ea04bae7eea816c4fe79d354b389fdf
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
