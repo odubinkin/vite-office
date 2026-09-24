@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241123-99ZTGM",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T11:30:08.164Z",
+  "verdict": "pass",
+  "summary": "Plan covers current implemented runtime and defines evidence-based upstream parity work without changing approved browser behavior or inventory mechanisms.",
+  "evaluated_sha": "6359cd1ccdc67d3782736658d86b4ae7a59137bc",
+  "blueprint_digest": "838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066",
+  "findings": [
+    "175 runtime modules and 45 capability records are reconciled to current inventory counts; nine prioritized findings cite local and pinned upstream source and distinguish confirmed divergence from audit hypotheses.",
+    "Follow-up gates require model, contract, default, file-layout and UI command parity while preserving recovery, autosave and save UI decisions."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241123-99ZTGM/README.md",
+    "docs/program/vite-office-upstream-parity-plan.md",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/parity/writer-command-slice.json",
+    "prettier --check, git diff --check, check-routing, ap doctor, local path checks"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Most module-level semantic statuses remain unverified until the planned follow-up implementation tasks."
+  ]
+}
