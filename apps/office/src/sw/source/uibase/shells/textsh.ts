@@ -45,7 +45,7 @@ import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undob
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
-import { canChangeWriterParagraphIndent, changeWriterParagraphIndent } from "../wrtsh/wrtsh-indent";
+import { canChangeWriterParagraphListLevel } from "../../core/edit/ednumber";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../wrtsh/wrtsh-hyperlink";
 import {
   getWriterSelectedTextRange,
@@ -76,7 +76,10 @@ export interface SwTextShellTarget {
     }>;
   }>;
   readonly GetPendingCharacterItems: () => SfxItemSet;
+  readonly IsMoveLeftMargin: (right: boolean, modulus?: boolean) => boolean;
+  readonly MoveLeftMargin: (right: boolean, modulus?: boolean) => boolean;
   readonly NotifySelectionChanged: () => void;
+  readonly NumUpDown: (down: boolean) => boolean;
   readonly Redo: () => boolean;
   readonly SetPaM: (point: SwPosition, mark?: SwPosition) => boolean;
   readonly SetPendingCharacterItems: (items: SfxItemSet) => void;
@@ -516,14 +519,19 @@ export class SwTextShell {
     );
   }
 
-  /** Executes Writer's context-sensitive text indent command. @param increase - Direction. @returns Whether changed. */
-  public ChangeParagraphIndent(increase: boolean): boolean {
-    return changeWriterParagraphIndent(this.target, increase);
+  /** Executes Writer's context-sensitive text indent command. @param increase - Direction. @param modulus - Snap to the document tab grid. @returns Whether changed. */
+  public ChangeParagraphIndent(increase: boolean, modulus = true): boolean {
+    const paragraph = this.target.GetActiveParagraph();
+    if (paragraph.GetListKind() !== "none") return this.target.NumUpDown(increase);
+    return this.target.MoveLeftMargin(increase, modulus);
   }
 
   /** Reports whether the text indent command has an available transition. @param increase - Direction. @returns Whether enabled. */
   public CanChangeParagraphIndent(increase: boolean): boolean {
-    return canChangeWriterParagraphIndent(this.target.GetActiveParagraph(), increase);
+    const paragraph = this.target.GetActiveParagraph();
+    if (paragraph.GetListKind() !== "none")
+      return canChangeWriterParagraphListLevel(this.target, increase ? "demote" : "promote");
+    return this.target.IsMoveLeftMargin(increase);
   }
 
   /** Returns the active paragraph for command state. @returns Active text node. */

@@ -5,7 +5,6 @@ import { createSfxShell, type SfxShell } from "../../../../sfx2/source/control/s
 import {
   isWriterParagraphListKind,
   createWriterListItemSet,
-  WRITER_MAX_LIST_LEVEL,
   type WriterParagraphListKind,
 } from "../../core/doc/list";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -24,10 +23,11 @@ import type { SwUndoCursorState } from "../../core/undo/undobj";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterInterface } from "../../../sdi/swriter";
-import { changeWriterParagraphListLevel } from "../wrtsh/wrtsh-indent";
-
-/** Identifies the two executable Writer list-level commands. */
-export type WriterListLevelCommand = "demote" | "promote";
+import {
+  canChangeWriterParagraphListLevel,
+  changeWriterParagraphListLevel,
+  type WriterListLevelCommand,
+} from "../../core/edit/ednumber";
 
 /** Minimal SwWrtShell surface consumed by the active list context. */
 export interface SwListShellTarget {
@@ -55,6 +55,11 @@ export class SwListShell {
   /** Executes a list-level operation. @param command - Promote or demote. @returns Whether changed. */
   public Execute(command: WriterListLevelCommand): boolean {
     return changeWriterParagraphListLevel(this.wrtShell, command);
+  }
+
+  /** Reports whether every selected list node can move in this direction. @param command - Level direction. @returns Whether enabled. */
+  public CanExecute(command: WriterListLevelCommand): boolean {
+    return canChangeWriterParagraphListLevel(this.wrtShell, command);
   }
 
   /** Applies or removes the active paragraph's bounded list rule. @param kind - Next list kind. @returns Whether changed. */
@@ -120,11 +125,6 @@ export class SwListShell {
     );
   }
 
-  /** Returns the active list level. @returns Zero-based level. */
-  public GetLevel(): number {
-    return this.wrtShell.GetActiveParagraph().GetAttrListLevel();
-  }
-
   /** Returns the active paragraph list family. @returns Current list kind. */
   public GetKind(): WriterParagraphListKind {
     return this.wrtShell.GetActiveParagraph().GetListKind();
@@ -173,10 +173,7 @@ function createListCommandRegistry(target: SwListShell): SfxInterface<SwListShel
           id,
           isEnabled:
             /** Computes context-sensitive list enablement. @returns Whether enabled. */ (): boolean =>
-              target.IsInList() &&
-              (command === "promote"
-                ? target.GetLevel() > 0
-                : target.GetLevel() < WRITER_MAX_LIST_LEVEL),
+              target.CanExecute(command),
         };
       },
     ),

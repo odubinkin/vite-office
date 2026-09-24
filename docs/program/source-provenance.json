@@ -64,11 +64,6 @@
       "stackNecessity": "responsibility-split"
     },
     {
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
-      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates command transitions while preserving the reviewed SID_INC_INDENT branch from the broader textsh1.cxx unit.",
-      "stackNecessity": "responsibility-split"
-    },
-    {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
       "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates transfer orchestration from SwWrtShell while preserving upstream swdtflvr.cxx SwTransferable::Paste responsibility.",
       "stackNecessity": "responsibility-split"
@@ -2964,6 +2959,40 @@
       "evidence": {
         "local": [
           {
+            "marker": "getMovedLeftMargin",
+            "path": "apps/office/src/sw/source/core/doc/docfmt.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwDoc::MoveLeftMargin",
+            "path": "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "localSymbols": [
+        "SW_DEFAULT_INDENT_DISTANCE",
+        "getMoveLeftMarginDistance",
+        "getMovedLeftMargin"
+      ],
+      "omittedResponsibilities": [
+        "Native table and multiple-selection-ring layout operations are outside the implemented browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Computes tab-distance-based text-left margin changes from the document default tab item."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/doc/docfmt.cxx",
+      "upstreamSymbols": [
+        "SwDoc::MoveLeftMargin"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "WRITER_PARAGRAPH_STYLES",
             "path": "apps/office/src/sw/source/core/doc/fmtcol.ts"
           }
@@ -3189,6 +3218,76 @@
         "SwNodes::SwNodes",
         "SwNodes::~SwNodes",
         "SwNodes::ChgNode"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "createMoveLeftMarginAction",
+            "path": "apps/office/src/sw/source/core/edit/edattr.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwEditShell::MoveLeftMargin",
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/edattr.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/edit/edattr.ts",
+      "localSymbols": [
+        "getMoveLeftMarginNodes",
+        "isMoveLeftMargin",
+        "createMoveLeftMarginAction"
+      ],
+      "omittedResponsibilities": [
+        "Native table and multiple-selection-ring layout operations are outside the implemented browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Traverses selected text nodes, guards the frame width and groups margin undo transitions."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/edit/edattr.cxx",
+      "upstreamSymbols": [
+        "SwEditShell::IsMoveLeftMargin",
+        "SwEditShell::MoveLeftMargin"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "changeWriterParagraphListLevel",
+            "path": "apps/office/src/sw/source/core/edit/ednumber.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwEditShell::NumUpDown",
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/edit/ednumber.ts",
+      "localSymbols": [
+        "WriterIndentTarget",
+        "WriterListLevelCommand",
+        "canChangeWriterParagraphListLevel",
+        "changeWriterParagraphListLevel"
+      ],
+      "omittedResponsibilities": [
+        "Multiple selection rings and unsupported native list-rule operations remain outside the browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Changes the supported active list paragraph level through a numbering undo action."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/edit/ednumber.cxx",
+      "upstreamSymbols": [
+        "SwEditShell::NumUpDown"
       ]
     },
     {
@@ -4337,8 +4436,7 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/shells/listsh.ts",
       "localSymbols": [
-        "SwListShell",
-        "WriterListLevelCommand"
+        "SwListShell"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwListShell::InitInterface_Impl, SwListShell::Execute, SwListShell::GetState, SwListShell::SwListShell and the bounded WriterListLevelCommand identity remain intentionally omitted."
@@ -4592,45 +4690,6 @@
       "upstreamPath": "sw/source/core/edit/editsh.cxx",
       "upstreamSymbols": [
         "SwEditShell::InsertURL"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "changeWriterParagraphIndent",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SID_INC_INDENT",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
-      "localSymbols": [
-        "WRITER_PARAGRAPH_INDENT_STEP",
-        "WriterIndentTarget",
-        "changeWriterParagraphListLevel",
-        "changeWriterParagraphIndent",
-        "canChangeWriterParagraphIndent"
-      ],
-      "omittedResponsibilities": [
-        "Native keyboard modifiers, table selections, layout-frame checks, and multi-selection indent behavior outside the bounded browser Writer command slice remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Preserves the text-shell decision between list-level movement and paragraph left-margin movement for the supported indent commands."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
-      "upstreamSymbols": [
-        "SwTextShell::Execute",
-        "SID_INC_INDENT",
-        "NumUpDown",
-        "MoveLeftMargin"
       ]
     },
     {

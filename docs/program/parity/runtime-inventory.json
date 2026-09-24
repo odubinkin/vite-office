@@ -3241,6 +3241,41 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0107",
+        "CAP-0125"
+      ],
+      "semantic": {
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "parity",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/doc/docfmt.ts#getMovedLeftMargin",
+          "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx#SwDoc::MoveLeftMargin",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#uses document-default tabs across the selected paragraph range as one undo action",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#honors unsnapped indent requests and the upstream frame-width guard"
+        ],
+        "justification": "Bounded indent calculation, selected text-node traversal, default tab distance, undo and page-body width guard are asserted against pinned upstream symbols; native selection rings and table frames remain outside scope.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SW_DEFAULT_INDENT_DISTANCE",
+          "getMoveLeftMarginDistance",
+          "getMovedLeftMargin"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/core/doc/docfmt.cxx",
+        "upstreamSymbols": [
+          "SwDoc::MoveLeftMargin"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/doc/fmtcol.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -3463,6 +3498,77 @@
           "SwNodes::SwNodes",
           "SwNodes::~SwNodes",
           "SwNodes::ChgNode"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/edattr.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0107",
+        "CAP-0125"
+      ],
+      "semantic": {
+        "behaviorStatus": "parity",
+        "contractStatus": "parity",
+        "defaultStatus": "parity",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/edit/edattr.ts#createMoveLeftMarginAction",
+          "vendor/libreoffice-reference/sw/source/core/edit/edattr.cxx#SwEditShell::MoveLeftMargin",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#uses document-default tabs across the selected paragraph range as one undo action",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts#honors unsnapped indent requests and the upstream frame-width guard"
+        ],
+        "justification": "Bounded indent calculation, selected text-node traversal, default tab distance, undo and page-body width guard are asserted against pinned upstream symbols; native selection rings and table frames remain outside scope.",
+        "knownViolations": [],
+        "localSymbols": [
+          "getMoveLeftMarginNodes",
+          "isMoveLeftMargin",
+          "createMoveLeftMarginAction"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/core/edit/edattr.cxx",
+        "upstreamSymbols": [
+          "SwEditShell::IsMoveLeftMargin",
+          "SwEditShell::MoveLeftMargin"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/ednumber.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "writer-shell",
+      "capabilityIds": [
+        "CAP-0107",
+        "CAP-0125"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/edit/ednumber.ts#changeWriterParagraphListLevel",
+          "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx#SwEditShell::NumUpDown",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts#routesContextualIndent"
+        ],
+        "justification": "Bounded active-list NumUpDown branch follows pinned ednumber.cxx; selection-ring list behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterIndentTarget",
+          "WriterListLevelCommand",
+          "canChangeWriterParagraphListLevel",
+          "changeWriterParagraphListLevel"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/edit/ednumber.cxx",
+        "upstreamSymbols": [
+          "SwEditShell::NumUpDown"
         ]
       }
     },
@@ -4659,8 +4765,7 @@
         "justification": "The supported list-kind and list-level commands execute and query state through a dedicated top-priority SwListShell using generated upstream slots and canonical Writer undo actions.",
         "knownViolations": [],
         "localSymbols": [
-          "SwListShell",
-          "WriterListLevelCommand"
+          "SwListShell"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/uibase/shells/listsh.cxx",
@@ -4927,44 +5032,6 @@
         "upstreamFile": "sw/source/core/edit/editsh.cxx",
         "upstreamSymbols": [
           "SwEditShell::InsertURL"
-        ]
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "writer-shell",
-      "capabilityIds": [
-        "CAP-0107",
-        "CAP-0125"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
-        "divergenceClass": "none",
-        "evidence": [
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts#changeWriterParagraphIndent",
-          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SID_INC_INDENT"
-        ],
-        "justification": "Mapped provenance remains semantically unverified against the SID_INC_INDENT branch in sw/source/uibase/shells/textsh1.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
-        "knownViolations": [],
-        "localSymbols": [
-          "WRITER_PARAGRAPH_INDENT_STEP",
-          "WriterIndentTarget",
-          "changeWriterParagraphListLevel",
-          "changeWriterParagraphIndent",
-          "canChangeWriterParagraphIndent"
-        ],
-        "sourceResponsibility": "unverified",
-        "upstreamFile": "sw/source/uibase/shells/textsh1.cxx",
-        "upstreamSymbols": [
-          "SwTextShell::Execute",
-          "SID_INC_INDENT",
-          "NumUpDown",
-          "MoveLeftMargin"
         ]
       }
     },
@@ -5830,16 +5897,8 @@
   ],
   "internalOperations": [
     {
-      "id": "writer.internal.change-writer-paragraph-indent",
-      "modulePath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
-      "symbol": "changeWriterParagraphIndent",
-      "classification": "upstream-mechanism",
-      "capabilityId": "CAP-0125",
-      "description": "Exported non-command mutation helper changeWriterParagraphIndent owned by apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts."
-    },
-    {
       "id": "writer.internal.change-writer-paragraph-list-level",
-      "modulePath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.ts",
+      "modulePath": "apps/office/src/sw/source/core/edit/ednumber.ts",
       "symbol": "changeWriterParagraphListLevel",
       "classification": "upstream-mechanism",
       "capabilityId": "CAP-0107",

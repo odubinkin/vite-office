@@ -18,7 +18,8 @@ import type {
   WriterParagraphAlignment,
 } from "../../core/txtnode/ndtxt";
 import type { WriterParagraphListKind } from "../../core/doc/list";
-import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
+import { SwListShell } from "../shells/listsh";
+import type { WriterListLevelCommand } from "../../core/edit/ednumber";
 import { SwTextShell, type WriterParagraphFormatValue } from "../shells/textsh";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
 import type { SwDocShell } from "../app/docsh";
@@ -35,6 +36,7 @@ import { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE, RES_PARATR_TABSTOP } from "../../
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwWrtShellEditingOperations } from "./wrtsh-editing";
+import { createMoveLeftMarginAction, isMoveLeftMargin } from "../../core/edit/edattr";
 import type { WriterPasteDocument } from "./wrtsh-paste";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
@@ -486,9 +488,31 @@ export class SwWrtShell extends SwModify {
     return this.listShell.Execute(command);
   }
 
-  /** Executes the text-shell indent command: list levels for list items and a direct left margin otherwise. @param increase - Whether to increase indentation. @returns Whether content changed. */
-  public ChangeParagraphIndent(increase: boolean): boolean {
-    return this.textShell.ChangeParagraphIndent(increase);
+  /** Executes the text-shell indent command: list levels for list items and a direct left margin otherwise. @param increase - Whether to increase indentation. @param modulus - Snap to the document tab grid. @returns Whether content changed. */
+  public ChangeParagraphIndent(increase: boolean, modulus = true): boolean {
+    return this.textShell.ChangeParagraphIndent(increase, modulus);
+  }
+
+  /** Executes the upstream edit-shell margin operation on the whole selected node range. @param right - Increase direction. @param modulus - Snap to default tabs. @returns Whether changed. */
+  public MoveLeftMargin(right: boolean, modulus = true): boolean {
+    const action = createMoveLeftMarginAction(
+      this.GetDoc(),
+      this.GetCursor(),
+      right,
+      modulus,
+      this.CaptureCursorState(),
+    );
+    return action === undefined ? false : this.ApplyAction(action);
+  }
+
+  /** Reports upstream edit-shell margin availability for the selected node range. @param right - Increase direction. @param modulus - Snap to default tabs. @returns Whether enabled. */
+  public IsMoveLeftMargin(right: boolean, modulus = true): boolean {
+    return isMoveLeftMargin(this.GetDoc(), this.GetCursor(), right, modulus);
+  }
+
+  /** Changes a list paragraph by one numbering level. @param down - Demote when true. @returns Whether changed. */
+  public NumUpDown(down: boolean): boolean {
+    return this.listShell.Execute(down ? "demote" : "promote");
   }
   /** Applies named page geometry as one Writer undo action. @param value - Replacement geometry. @param descriptorName - Target identity. @returns Whether it changed. */
   public SetPageDescriptor(value: WriterPageDescriptorValue, descriptorName = value.name): boolean {
