@@ -1,6 +1,8 @@
 /** @fileoverview Creates Writer page frames from measured text-frame lines. */
 
 import type { WriterPageDescriptorValue } from "./pagedesc";
+import { WRITER_PAPER_SIZES } from "./pagedesc";
+import type { SwTextNode } from "../txtnode/ndtxt";
 import {
   getSwTextFrameGap,
   makeSwTextFrame,
@@ -18,6 +20,34 @@ export interface SwPageFrame {
   readonly descriptor: WriterPageDescriptorValue;
   readonly number: number;
   readonly textFrames: readonly SwTextFrame[];
+}
+
+/** Writer text-frame print bounds relative to the page body's left edge, in twips. */
+export interface SwTextPrintBounds {
+  readonly left: number;
+  readonly right: number;
+}
+
+/** Resolves first-line print bounds after paragraph/list indentation precedence. @param paragraph - Canonical text node. @param page - Physical page descriptor. @returns Writer-relative bounds. */
+export function projectSwTextPrintBounds(
+  paragraph: SwTextNode,
+  page: WriterPageDescriptorValue,
+): SwTextPrintBounds {
+  const format = paragraph.GetNumRule()?.GetNumFormat(paragraph.GetAttrListLevel());
+  const left =
+    format !== undefined &&
+    (paragraph.DoesListGeometryWin() || paragraph.GetParagraphTextLeftMargin() === 0)
+      ? format.GetIndentAt() + format.GetFirstLineIndent()
+      : paragraph.GetParagraphTextLeftMargin() + paragraph.GetParagraphFirstLineIndent();
+  const physicalWidth =
+    page.paperFormat === "A4" &&
+    page.width === (page.landscape ? WRITER_PAPER_SIZES.A4.height : WRITER_PAPER_SIZES.A4.width)
+      ? Math.floor(((page.landscape ? 297 : 210) * 1440) / 25.4)
+      : page.width;
+  return {
+    left,
+    right: physicalWidth - page.leftMargin - page.rightMargin - paragraph.GetParagraphRightMargin(),
+  };
 }
 
 /** Immutable descriptor graph supplied to DOM-neutral page-frame creation. */

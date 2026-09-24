@@ -203,6 +203,7 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
     ...(alignment === undefined ? {} : { alignment }),
     ...(hasDirectLeftMargin ? { leftMargin: node.GetParagraphTextLeftMargin() } : {}),
     ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
+    ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
     inheritedProperties: getCharacterProperties(
       node.GetSwAttrSet(),
       true,

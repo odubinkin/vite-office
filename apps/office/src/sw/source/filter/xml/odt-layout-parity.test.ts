@@ -1,7 +1,9 @@
 /** @fileoverview Verifies ODT layout attributes used by LibreOffice Writer. */
 /* eslint-disable @typescript-eslint/no-non-null-assertion -- Test fixture documents provide the first paragraph. */
 
-import { describe, expect, it } from "vitest";
+import fs from "node:fs";
+import path from "node:path";
+import { describe, expect, it, vi } from "vitest";
 
 import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
 import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
@@ -10,6 +12,15 @@ import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { RES_CHRATR_FONTSIZE, RES_PARATR_LINESPACING, RES_UL_SPACE } from "../../../inc/hintids";
 import { exportContentXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
+import { readOdtDocument } from "./swxml";
+import { writeOdtDocument } from "./wrtxml";
+import { projectSwTextPrintBounds } from "../../core/layout/newfrm";
+import { WriterViewProjection } from "../../../browser/presentation/writer-view-projection";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import {
+  decodeWriterDocument,
+  encodeWriterDocument,
+} from "../../../browser/filter/xml/writer-document-codec";
 
 const namespaces = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
 const metadata = createDocument({ id: "odt-layout", suiteId: "writer", title: "Layout" });
@@ -25,6 +36,66 @@ function content(automaticStyles: string, body: string): string {
 }
 
 describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns Nothing. */ () => {
+  it("preserves tdf114287 exact print bounds across ODT export", /** Mirrors upstream list and paragraph geometry assertions. @returns Completion after ODT reopen. */ async () => {
+    const warning = vi
+      .spyOn(console, "warn")
+      .mockImplementation(
+        /** Suppresses diagnostics for unrelated fixture properties. @returns Nothing. */ () =>
+          undefined,
+      );
+    try {
+      const file = path.resolve("src/sw/qa/extras/odfexport/data/tdf114287.odt");
+      const bytes = new Uint8Array(fs.readFileSync(file));
+      const imported = await readOdtDocument(bytes, metadata);
+      /** Checks upstream numbering, paragraph, and print metrics. @param document - Imported Writer graph. @returns Nothing. */
+      function assertGeometry(document: typeof imported.document): void {
+        const [second, ninth, sixteenth] = [1, 8, 15].map(
+          /** Selects one upstream one-based paragraph. @param index - Zero-based index. @returns Text node. */ (
+            index,
+          ) => document.paragraphs[index],
+        );
+        if (second === undefined || ninth === undefined || sixteenth === undefined)
+          throw new Error("tdf114287 fixture has fewer than 16 paragraphs");
+        const format = second.GetNumRule()?.GetNumFormat(0);
+        const mm100 =
+          /** Converts Writer twips to hundredths of a millimetre. @param twips - Writer length. @returns mm100 length. */ (
+            twips: number,
+          ) => Math.round((twips * 2540) / 1440);
+        expect(mm100(format?.GetFirstLineIndent() ?? 0)).toBe(-700);
+        expect(mm100(format?.GetIndentAt() ?? 0)).toBe(1330);
+        expect(ninth.GetNumRuleName()).toBe(second.GetNumRuleName());
+        expect(sixteenth.GetNumRuleName()).toBe(second.GetNumRuleName());
+        for (const paragraph of [second, ninth, sixteenth]) {
+          expect(mm100(paragraph.GetParagraphFirstLineIndent())).toBe(-1000);
+          expect(mm100(paragraph.GetParagraphTextLeftMargin())).toBe(5001);
+          expect(mm100(paragraph.GetParagraphRightMargin())).toBe(0);
+        }
+        const page = document.GetPageDesc().GetValue();
+        expect(projectSwTextPrintBounds(second, page)).toEqual({ left: 2268, right: 11339 });
+        expect(projectSwTextPrintBounds(ninth, page)).toEqual({ left: 2268, right: 11339 });
+        expect(projectSwTextPrintBounds(sixteenth, page)).toEqual({ left: 357, right: 11339 });
+      }
+      assertGeometry(imported.document);
+      const sixteenth = imported.document.paragraphs[15];
+      if (sixteenth === undefined) throw new Error("tdf114287 fixture has no sixteenth paragraph");
+      const view = new WriterViewProjection().Project(
+        imported.document,
+        sixteenth,
+        new SwPaM(new SwPosition(sixteenth, 0)),
+        metadata,
+      );
+      expect(view.paragraphs[15]?.listGeometryWins).toBe(true);
+      assertGeometry(decodeWriterDocument(encodeWriterDocument(imported.document)));
+      const reopened = await readOdtDocument(
+        writeOdtDocument(imported.document, { title: imported.title }),
+        metadata,
+      );
+      assertGeometry(reopened.document);
+    } finally {
+      warning.mockRestore();
+    }
+  });
+
   it("applies paragraph default style before named style overrides", /** Verifies shared defaults reach canonical paragraph items. @returns Nothing. */ () => {
     const definitions =
       '<style:default-style style:family="paragraph"><style:paragraph-properties fo:line-height="140%"/><style:text-properties fo:font-size="12pt"/></style:default-style>';

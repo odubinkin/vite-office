@@ -44,6 +44,23 @@ it("rejects a cycle through a built-in paragraph style", /** Covers named-style 
   ).toThrow("Cyclic ODF paragraph style");
 });
 
+it("resolves list indentation precedence on a built-in paragraph style", /** Covers direct and inherited margin placement. @returns Nothing. */ () => {
+  for (const [definition, expected] of [
+    [{ family: "paragraph", listStyleName: "L" }, true],
+    [{ family: "paragraph", listStyleName: "L", leftMargin: 720 }, false],
+    [
+      { family: "paragraph", listStyleName: "L", paragraphProperties: { firstLineIndent: -360 } },
+      false,
+    ],
+  ] as const) {
+    const resolved = resolveParagraphStyle("Standard", false, {
+      getStyle: /** Provides the tested Standard style. @returns Style definition. */ () =>
+        definition,
+    });
+    expect(resolved.listGeometryWins).toBe(expected);
+  }
+});
+
 /** Creates a reiterable test source. @param paragraphs - Paragraph fixtures. @returns Export source. */
 function source(paragraphs: readonly XMLTextParagraphSource[]): XMLTextExportSource {
   return {

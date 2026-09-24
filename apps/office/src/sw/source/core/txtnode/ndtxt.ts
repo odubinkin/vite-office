@@ -112,6 +112,7 @@ export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[numb
 export class SwTextNode extends SwContentNode {
   private mText: string;
   private pSwpHints: SwpHints | undefined;
+  private listGeometryWins = false;
 
   /** Creates a text node in one Writer content section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered paragraph style. @param text - Initial canonical text. @returns Nothing. */
   public constructor(
@@ -127,6 +128,16 @@ export class SwTextNode extends SwContentNode {
   /** Returns the canonical node text. @returns Canonical text. */
   public GetText(): string {
     return this.mText;
+  }
+
+  /** Reports whether a list style overrides paragraph indentation inherited from an ancestor style. @returns List precedence. */
+  public DoesListGeometryWin(): boolean {
+    return this.listGeometryWins;
+  }
+
+  /** Stores the imported style cascade's list indentation precedence. @param value - List precedence. @returns Nothing. */
+  public SetListGeometryWins(value: boolean): void {
+    this.listGeometryWins = value;
   }
 
   /** Returns text length in UTF-16 code units, matching Writer content indices. @returns UTF-16 length. */
@@ -635,6 +646,7 @@ export class SwTextNode extends SwContentNode {
     if (direct !== undefined) clone.SetAttr(direct);
     clone.SetText(this.mText);
     if (this.pSwpHints !== undefined) clone.SetTextHints(this.pSwpHints);
+    clone.SetListGeometryWins(this.listGeometryWins);
     return clone;
   }
 

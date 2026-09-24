@@ -62,6 +62,7 @@ interface WriterTextNodeRecord {
   readonly autoAttributes: readonly SfxPoolItemSnapshot[];
   readonly formatCollId: WriterParagraphStyle;
   readonly hints: readonly WriterTextHintRecord[];
+  readonly listGeometryWins?: boolean;
   readonly text: string;
 }
 
@@ -171,6 +172,7 @@ export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
         return {
           autoAttributes: direct === undefined ? [] : encodeSfxItemSet(direct),
           formatCollId: node.GetTextFormatColl().id,
+          ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
           hints:
             node
               .GetpSwpHints()
@@ -298,6 +300,7 @@ export function decodeWriterDocument(
       throw new Error("Stored Writer paragraph style is invalid.");
     const node = document.nodes.MakeTextNode();
     node.ChgFormatColl(document.GetTextFormatColl(nodeRecord.formatCollId));
+    node.SetListGeometryWins(nodeRecord.listGeometryWins === true);
     for (const item of nodeRecord.autoAttributes)
       node.SetAttr(document.GetAttrPool().CreateItem(item));
     const hints = nodeRecord.hints.map(

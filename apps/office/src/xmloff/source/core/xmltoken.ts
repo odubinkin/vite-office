@@ -145,6 +145,7 @@ export enum XMLToken {
   META_EDITING_DURATION,
   META_DOCUMENT_STATISTIC,
   XML_ID,
+  STYLE_LIST_STYLE_NAME,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -181,6 +182,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "class", XMLToken.STYLE_CLASS],
   [ODF_NAMESPACES.style, "next-style-name", XMLToken.STYLE_NEXT_STYLE_NAME],
   [ODF_NAMESPACES.style, "parent-style-name", XMLToken.STYLE_PARENT_STYLE_NAME],
+  [ODF_NAMESPACES.style, "list-style-name", XMLToken.STYLE_LIST_STYLE_NAME],
   [ODF_NAMESPACES.style, "page-layout-name", XMLToken.STYLE_PAGE_LAYOUT_NAME],
   [ODF_NAMESPACES.style, "print-orientation", XMLToken.STYLE_PRINT_ORIENTATION],
   [ODF_NAMESPACES.style, "num-format", XMLToken.STYLE_NUM_FORMAT],

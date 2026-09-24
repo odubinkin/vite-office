@@ -65,6 +65,7 @@ export interface WriterParagraphProjection {
   readonly id: string;
   readonly list: WriterParagraphList;
   readonly listLayout?: WriterParagraphListLayout;
+  readonly listGeometryWins?: boolean;
   readonly listId: string;
   readonly listMarker?: string;
   readonly textLeftMargin: number;
@@ -240,6 +241,7 @@ export class WriterViewProjection {
                   listTabPositionPt: listFormat.GetListtabPos() / 20,
                 }),
               }),
+          ...(node.DoesListGeometryWin() ? { listGeometryWins: true } : {}),
           listId: node.GetListId(),
           ...(listMarker === undefined ? {} : { listMarker }),
           numRuleName: node.GetNumRuleName(),

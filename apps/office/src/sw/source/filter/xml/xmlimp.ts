@@ -368,7 +368,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     this.titleSeen = true;
   }
 
-  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param list - Optional list state. @returns Paragraph target. */
+  /** Creates and configures one canonical text node. @param style - Writer style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param list - Optional list state. @param listGeometryWins - Whether list geometry overrides inherited paragraph indentation. @returns Paragraph target. */
   public createParagraph(
     style: XMLParagraphStyle,
     alignment: OdfParagraphAlignment | undefined,
@@ -376,10 +376,12 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     paragraphProperties: OdfParagraphProperties | undefined,
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
+    listGeometryWins: boolean,
   ): XMLParagraphImportTarget {
     this.paragraphCount += 1;
     const node = this.document.nodes.MakeTextNode();
     node.ChgFormatColl(this.document.GetTextFormatColl(style));
+    node.SetListGeometryWins(listGeometryWins);
     if (alignment !== undefined) node.SetParagraphAlignment(alignment);
     if (leftMargin !== undefined) node.SetParagraphTextLeftMargin(leftMargin);
     if (paragraphProperties !== undefined)
@@ -464,7 +466,7 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     if (this.officeTextCount !== 1)
       throw new Error("ODF content must contain exactly one office:text.");
     if (this.paragraphCount === 0)
-      this.createParagraph("default", undefined, undefined, undefined, undefined, undefined);
+      this.createParagraph("default", undefined, undefined, undefined, undefined, undefined, false);
   }
 }
 

@@ -158,6 +158,7 @@ class XMLStyleContext extends SvXMLImportContext {
         XMLToken.STYLE_CLASS,
         XMLToken.STYLE_NEXT_STYLE_NAME,
         XMLToken.STYLE_PARENT_STYLE_NAME,
+        XMLToken.STYLE_LIST_STYLE_NAME,
       ],
       "style",
     );
@@ -167,11 +168,13 @@ class XMLStyleContext extends SvXMLImportContext {
     const displayName = attributes.get(XMLToken.STYLE_DISPLAY_NAME) ?? undefined;
     const nextStyleName = attributes.get(XMLToken.STYLE_NEXT_STYLE_NAME) ?? undefined;
     const parentStyleName = attributes.get(XMLToken.STYLE_PARENT_STYLE_NAME) ?? undefined;
+    const listStyleName = attributes.get(XMLToken.STYLE_LIST_STYLE_NAME) ?? undefined;
     this.definition = {
       ...(displayName === undefined ? {} : { displayName }),
       family: this.supported ? (family as "paragraph" | "text") : "text",
       ...(nextStyleName === undefined ? {} : { nextStyleName }),
       ...(parentStyleName === undefined ? {} : { parentStyleName }),
+      ...(listStyleName === undefined ? {} : { listStyleName }),
     };
   }
 

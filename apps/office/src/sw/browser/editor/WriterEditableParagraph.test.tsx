@@ -59,6 +59,43 @@ function paragraph(color?: string, highlight?: string): WriterParagraphProjectio
 }
 
 describe("Writer editable paragraph colors", /** Groups color rendering tests. @returns Nothing. */ () => {
+  it("positions list markers from the paragraph or list style according to ODT precedence", /** Checks both tdf114287 indentation routes. @returns Nothing. */ () => {
+    const source = paragraph();
+    const item: WriterParagraphProjection = {
+      ...source,
+      computedStyle: { ...source.computedStyle, firstLineIndentPt: -28.35 },
+      list: { kind: "numbered", level: 0 },
+      listLayout: {
+        firstLineIndentPt: -19.85,
+        indentAtPt: 37.7,
+        labelFollowedBy: "listtab",
+        listTabPositionPt: 19.85,
+      },
+      textLeftMargin: 2835,
+    };
+    const view = render(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        listMarker="1."
+        paragraph={item}
+        retainElement={/** Ignores mounted text. @returns Nothing. */ () => undefined}
+      />,
+    );
+    const marker = screen.getByTestId("writer-list-marker-color-paragraph");
+    expect(marker.parentElement).toHaveStyle({ marginInlineStart: "113.4pt" });
+    expect(Number.parseFloat(marker.style.width)).toBeCloseTo(28.35);
+    view.rerender(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        listMarker="1."
+        paragraph={{ ...item, listGeometryWins: true }}
+        retainElement={/** Ignores mounted text. @returns Nothing. */ () => undefined}
+      />,
+    );
+    expect(marker.parentElement).toHaveStyle({ marginInlineStart: "17.85pt" });
+  });
   it("places enabled line numbers beside the paragraph", /** Verifies line-number presentation. @returns Nothing. */ () => {
     render(
       <WriterEditableParagraph

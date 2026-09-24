@@ -105,6 +105,7 @@ export interface XMLTextParagraphSource {
   /** Direct text-left margin in twips. */
   readonly leftMargin?: number;
   readonly list?: XMLTextListSource;
+  readonly listGeometryWins?: boolean;
   readonly paragraphProperties?: OdfParagraphProperties;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly runs: readonly XMLTextRunSource[];
@@ -176,7 +177,8 @@ export class XMLTextParagraphExport {
         paragraph.alignment !== undefined ||
         paragraph.leftMargin !== undefined ||
         paragraph.paragraphProperties !== undefined ||
-        paragraph.properties !== undefined
+        paragraph.properties !== undefined ||
+        paragraph.listGeometryWins === true
       ) {
         const key = paragraphStyleKey(
           getOdfStyleName(paragraph),
@@ -184,6 +186,7 @@ export class XMLTextParagraphExport {
           paragraph.leftMargin,
           paragraph.paragraphProperties,
           paragraph.properties,
+          paragraph.listGeometryWins === true ? paragraph.list?.rule.name : undefined,
         );
         if (!paragraphStyleNames.has(key))
           paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
@@ -200,13 +203,27 @@ export class XMLTextParagraphExport {
         },
       );
     }
+    const listStyleNames = new Map(
+      [...listRules.keys()].map(
+        /** Names one automatic list style. @param ruleName - Canonical rule name. @param index - Rule order. @returns Name pair. */ (
+          ruleName,
+          index,
+        ) => [ruleName, `L${index + 1}`] as const,
+      ),
+    );
     const paragraphStyles = [...paragraphStyleNames].map(
       /** Emits one automatic paragraph style. @param entry - Internal key and ODF name. @returns Style XML. */
       (entry) => {
         const [key, name] = entry;
-        const [style, alignment, leftMargin, paragraphPropertiesKey, propertiesKey] = key.split(
-          ":",
-        ) as [XMLParagraphStyle, OdfParagraphAlignment | "", string, string, string];
+        const [style, alignment, leftMargin, paragraphPropertiesKey, propertiesKey, listRule] =
+          key.split(":") as [
+            XMLParagraphStyle,
+            OdfParagraphAlignment | "",
+            string,
+            string,
+            string,
+            string,
+          ];
         const parent = style;
         const paragraphAttributes = [
           ...(alignment === "" ? [] : [`fo:text-align="${exportAlignment(alignment)}"`]),
@@ -224,6 +241,13 @@ export class XMLTextParagraphExport {
           Object.keys(properties).length === 0
             ? ""
             : `<style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/>`;
+        if (listRule !== "") {
+          const listStyle = listStyleNames.get(listRule);
+          /* v8 ignore next -- The collected paragraph and list-rule maps share one source pass. */
+          if (listStyle === undefined) throw new Error(`Missing ODF list style: ${listRule}`);
+          const baseName = `${name}Base`;
+          return `<style:style style:name="${baseName}" style:family="paragraph" style:parent-style-name="${parent}">${paragraphProperties}${textProperties}</style:style><style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${baseName}" style:list-style-name="${listStyle}"/>`;
+        }
         return `<style:style style:name="${name}" style:family="paragraph" style:parent-style-name="${parent}">${paragraphProperties}${textProperties}</style:style>`;
       },
     );
@@ -235,12 +259,10 @@ export class XMLTextParagraphExport {
         return `<style:style style:name="${name}" style:family="text"><style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/></style:style>`;
       },
     );
-    const listStyleNames = new Map<string, string>();
     const listStyles = [...listRules.values()].map(
       /** Emits one automatic ODF list style. @param rule - Writer numbering rule. @param index - Stable style index. @returns Style XML. */
-      (rule, index) => {
-        const name = `L${index + 1}`;
-        listStyleNames.set(rule.name, name);
+      (rule) => {
+        const name = listStyleNames.get(rule.name) as string;
         const levels = rule.formats
           .map(
             /** Emits one list-level style. @param kind - Marker family. @param level - Zero-based Writer level. @returns Level XML. */
@@ -409,7 +431,8 @@ function exportParagraphElement(
     paragraph.alignment === undefined &&
     paragraph.leftMargin === undefined &&
     paragraph.paragraphProperties === undefined &&
-    paragraph.properties === undefined
+    paragraph.properties === undefined &&
+    paragraph.listGeometryWins !== true
       ? baseStyleName
       : (paragraphStyleNames.get(
           paragraphStyleKey(
@@ -418,6 +441,7 @@ function exportParagraphElement(
             paragraph.leftMargin,
             paragraph.paragraphProperties,
             paragraph.properties,
+            paragraph.listGeometryWins === true ? paragraph.list?.rule.name : undefined,
           ),
         ) as string);
   let content = "";
@@ -494,15 +518,16 @@ function createXmlId(value: string, used: Set<string>): string {
   return candidate;
 }
 
-/** Creates an automatic paragraph style deduplication key. @param style - Parent style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @returns Key. */
+/** Creates an automatic paragraph style deduplication key. @param style - Parent style. @param alignment - Direct alignment. @param leftMargin - Direct text-left margin. @param paragraphProperties - Direct paragraph properties. @param properties - Direct character properties. @param listGeometryRule - Higher-priority list rule. @returns Key. */
 function paragraphStyleKey(
   style: XMLParagraphStyle,
   alignment?: OdfParagraphAlignment,
   leftMargin?: number,
   paragraphProperties?: OdfParagraphProperties,
   properties?: Partial<OdfCharacterProperties>,
+  listGeometryRule?: string,
 ): string {
-  return `${style}:${alignment ?? ""}:${leftMargin ?? ""}:${paragraphPropertiesKey(paragraphProperties)}:${partialCharacterPropertiesKey(properties)}`;
+  return `${style}:${alignment ?? ""}:${leftMargin ?? ""}:${paragraphPropertiesKey(paragraphProperties)}:${partialCharacterPropertiesKey(properties)}:${listGeometryRule ?? ""}`;
 }
 
 /** Creates a stable key for direct paragraph deltas. @param properties - Direct paragraph properties. @returns Key. */

@@ -19,6 +19,7 @@ export interface OdfStyleDefinition {
   readonly family: "paragraph" | "text";
   /** Direct text-left margin imported from paragraph properties, in twips. */
   readonly leftMargin?: number;
+  readonly listStyleName?: string;
   readonly paragraphProperties?: OdfParagraphProperties;
   readonly nextStyleName?: string;
   readonly parentStyleName?: string;
@@ -57,6 +58,7 @@ export interface XMLTextImportTarget {
     paragraphProperties: OdfParagraphProperties | undefined,
     properties: Partial<OdfCharacterProperties> | undefined,
     list: XMLParagraphListState | undefined,
+    listGeometryWins: boolean,
   ): XMLParagraphImportTarget;
   getListRule(styleName: string): XMLTextListRule | undefined;
   getStyle(styleName: string): OdfStyleDefinition | undefined;
@@ -138,6 +140,7 @@ export class XMLParaContext extends SvXMLImportContext {
       resolved.paragraphProperties,
       resolved.properties,
       list,
+      resolved.listGeometryWins === true,
     );
   }
 
@@ -434,6 +437,7 @@ interface ResolvedParagraphStyle {
   readonly alignment?: OdfParagraphAlignment;
   readonly effectiveProperties?: Partial<OdfCharacterProperties>;
   readonly leftMargin?: number;
+  readonly listGeometryWins: boolean;
   readonly paragraphProperties?: OdfParagraphProperties;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly style: XMLParagraphStyle;
@@ -446,7 +450,7 @@ export function resolveParagraphStyle(
   target: Pick<XMLTextImportTarget, "getStyle" | "resolveBuiltInParagraphStyle">,
   seen = new Set<string>(),
 ): ResolvedParagraphStyle {
-  if (name === "") return { style: heading ? "heading-1" : "default" };
+  if (name === "") return { listGeometryWins: false, style: heading ? "heading-1" : "default" };
   const builtInStyle =
     target.resolveBuiltInParagraphStyle?.(name) ??
     (name === "Standard" ? "default" : name === "Heading_20_1" ? "heading-1" : undefined);
@@ -457,7 +461,10 @@ export function resolveParagraphStyle(
     const parent: ResolvedParagraphStyle =
       builtInStyle !== "default"
         ? resolveParagraphStyle(definition?.parentStyleName ?? "Standard", heading, target, seen)
-        : { style: heading ? ("heading-1" as const) : ("default" as const) };
+        : {
+            listGeometryWins: false,
+            style: heading ? ("heading-1" as const) : ("default" as const),
+          };
     return {
       ...(definition?.alignment === undefined && parent.alignment === undefined
         ? {}
@@ -465,6 +472,11 @@ export function resolveParagraphStyle(
       ...(definition?.leftMargin === undefined && parent.leftMargin === undefined
         ? {}
         : { leftMargin: definition?.leftMargin ?? parent.leftMargin }),
+      listGeometryWins:
+        definition?.listStyleName === undefined
+          ? parent.listGeometryWins
+          : definition.leftMargin === undefined &&
+            definition.paragraphProperties?.firstLineIndent === undefined,
       ...(definition?.properties === undefined && parent.effectiveProperties === undefined
         ? {}
         : { effectiveProperties: { ...parent.effectiveProperties, ...definition?.properties } }),
@@ -497,6 +509,11 @@ export function resolveParagraphStyle(
     ...(definition.leftMargin === undefined && parent.leftMargin === undefined
       ? {}
       : { leftMargin: definition.leftMargin ?? parent.leftMargin }),
+    listGeometryWins:
+      definition.listStyleName === undefined
+        ? parent.listGeometryWins
+        : definition.leftMargin === undefined &&
+          definition.paragraphProperties?.firstLineIndent === undefined,
     ...(definition.paragraphProperties === undefined && parent.paragraphProperties === undefined
       ? {}
       : {

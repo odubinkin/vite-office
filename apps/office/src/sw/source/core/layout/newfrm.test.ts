@@ -3,8 +3,9 @@
 import { describe, expect, it } from "vitest";
 
 import { createDefaultWriterPageDescriptor } from "./pagedesc";
-import { createSwPageFrames } from "./newfrm";
+import { createSwPageFrames, projectSwTextPrintBounds } from "./newfrm";
 import { SwRootFrame } from "./newfrm";
+import { createWriterDocument } from "../doc/doc";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { getSwTextFrameGap, makeSwTextFrame, type SwTextFrameInput } from "../text/txtfrm";
 
@@ -33,6 +34,26 @@ function paragraph(id: string, count: number, height = 300): SwTextFrameInput {
 }
 
 describe("Writer text and page frames", /** Groups Writer page-frame tests. @returns Nothing. */ () => {
+  it("projects physical print widths for portrait, landscape, and custom paper", /** Verifies paper-size rounding independent of paragraph text. @returns Nothing. */ () => {
+    const node = createWriterDocument().paragraphs[0];
+    if (node === undefined) throw new Error("Writer document has no first paragraph");
+    expect(projectSwTextPrintBounds(node, standardPage)).toEqual({ left: 0, right: 9637 });
+    expect(
+      projectSwTextPrintBounds(node, {
+        ...standardPage,
+        width: 16838,
+        height: 11906,
+        landscape: true,
+      }),
+    ).toEqual({ left: 0, right: 14569 });
+    expect(
+      projectSwTextPrintBounds(node, { ...standardPage, paperFormat: "Letter", width: 12240 }),
+    ).toEqual({ left: 0, right: 9972 });
+    expect(projectSwTextPrintBounds(node, { ...standardPage, width: 12000 })).toEqual({
+      left: 0,
+      right: 9732,
+    });
+  });
   it("moves a kept paragraph with the next paragraph", /** Handles Writer formatting state.  @returns Callback result. */ () => {
     const page = { ...standardPage, height: 1000, topMargin: 100, bottomMargin: 100 };
     const inputs = [

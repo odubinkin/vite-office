@@ -19,6 +19,7 @@ import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrt
 import { SwDocShell } from "../../apps/office/src/sw/source/uibase/app/docsh";
 import { SwWrtShell } from "../../apps/office/src/sw/source/uibase/wrtsh/wrtsh";
 import { SwPosition } from "../../apps/office/src/sw/source/core/crsr/pam";
+import { projectSwTextPrintBounds } from "../../apps/office/src/sw/source/core/layout/newfrm";
 import { WRITER_COMMAND_IDS } from "../../apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands";
 
 const fixtureRoot = path.resolve("apps/office/src/sw/qa/extras/odfimport/data");
@@ -47,6 +48,41 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
 }
 
 describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createSwDoc assertions in upstream odffeatures.cxx with local semantic assertions. @returns Nothing. */, () => {
+  it("keeps tdf114287.odt list and paragraph print bounds after reopening", /** Mirrors upstream exact layout assertions against the local ODT. @returns Completion after export and reopening. */ async () => {
+    const file = "apps/office/src/sw/qa/extras/odfexport/data/tdf114287.odt";
+    const imported = await readOdtDocument(new Uint8Array(fs.readFileSync(file)), { title: file });
+    /** Checks the three upstream text frames. @param document - Imported Writer document. @returns Nothing. */
+    function assertBounds(document: SwDoc): void {
+      const page = document.GetPageDesc().GetValue();
+      const paragraphs = [1, 8, 15].map(
+        /** Selects one upstream paragraph. @param index - Zero-based index. @returns Text node. */ (
+          index,
+        ) => {
+          const paragraph = document.paragraphs[index];
+          if (paragraph === undefined) throw new Error("tdf114287 fixture is incomplete");
+          return paragraph;
+        },
+      );
+      expect(
+        paragraphs.map(
+          /** Projects one exact print bound. @param paragraph - Selected node. @returns Twip bounds. */ (
+            paragraph,
+          ) => projectSwTextPrintBounds(paragraph, page),
+        ),
+      ).toEqual([
+        { left: 2268, right: 11339 },
+        { left: 2268, right: 11339 },
+        { left: 357, right: 11339 },
+      ]);
+    }
+    assertBounds(imported.document);
+    const reopened = await readOdtDocument(
+      writeOdtDocument(imported.document, { title: imported.title }),
+      { title: file },
+    );
+    assertBounds(reopened.document);
+  });
+
   it("continues tdf113213_addToList.odt and restores the original list with one Undo", /** Mirrors upstream command and Undo assertions against a local ODT. @returns Completion after reopening. */ async () => {
     const file = "apps/office/src/sw/qa/extras/uiwriter/data/tdf113213_addToList.odt";
     const metadata = createDocument({ id: "upstream:tdf113213", suiteId: "writer", title: file });
