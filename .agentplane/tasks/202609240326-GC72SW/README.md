@@ -4,7 +4,7 @@ title: "Improve Writer ruler guides, ticks, snapping, and vertical placement"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -23,6 +23,24 @@ verification:
   updated_by: "CODER"
   note: "Focused Writer ruler tests pass (27 across 3 files); TypeScript, ESLint, JSDoc, file-size, diff check, and doctor pass. Verified 1 mm ticks against the vendored LibreOffice centimetre ruler unit."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T03:36:41.952Z"
+  updated_by: "EVALUATOR"
+  note: "Approved Writer ruler UI scope is implemented and locally verified."
+  evaluated_sha: "b1ce3078b1b9d650c5cbfa35c846f66a5362e4ac"
+  blueprint_digest: "835f7fa9f95255af72bdf520ceeb126781ea8df93b8f166042af0ea8e92be1ba"
+  evidence_refs:
+    - ".agentplane/tasks/202609240326-GC72SW/README.md"
+    - ".agentplane/tasks/202609240326-GC72SW/quality/20260924-033641952-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609240326-GC72SW/quality/20260924-033641952-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609240326-GC72SW/quality/20260924-033641952-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609240326-GC72SW/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx: 9 focused tests pass"
+    - "Writer page-layout, menu-bar, and view tests: 27 pass; office typecheck, ESLint, JSDoc, file-size, ap doctor, and policy routing pass"
+    - "Implementation commit b1ce3078b1b9; clean git status"
+  findings:
+    - "The drag overlay tracks snapped ruler positions across document pages and clears on release or cancel; vertical ruler segments render in the fixed canvas edge lane."
 commit: null
 comments:
   -
