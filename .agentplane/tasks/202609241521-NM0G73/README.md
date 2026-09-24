@@ -4,7 +4,7 @@ title: "Recognize harmless ODT declarations and style attributes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -27,6 +27,23 @@ verification:
   updated_by: "CODER"
   note: "Full verification passed; declaration classification preserved canonical semantics and retained semantic diagnostics."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T16:23:08.488Z"
+  updated_by: "EVALUATOR"
+  note: "Upstream-aligned declaration classification is complete and verified."
+  evaluated_sha: "159b4ae159dd09c07617a61f9b24399a8250e5fd"
+  blueprint_digest: "d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f"
+  evidence_refs:
+    - ".agentplane/tasks/202609241521-NM0G73/README.md"
+    - ".agentplane/tasks/202609241521-NM0G73/quality/20260924-162308488-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241521-NM0G73/quality/20260924-162308488-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241521-NM0G73/quality/20260924-162308488-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241521-NM0G73/blueprint/resolved-snapshot.json"
+    - ".agentplane/tmp/verify-phase1.log"
+    - "docs/program/certification-odt-declaration-classification.md"
+  findings:
+    - "Harmless metadata declarations are explicitly ignored; semantic unimplemented properties retain diagnostics. Canonical import of the authorized sample is unchanged."
 commit: null
 comments:
   -

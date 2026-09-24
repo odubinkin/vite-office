@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241521-NM0G73",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T16:23:08.488Z",
+  "verdict": "pass",
+  "summary": "Upstream-aligned declaration classification is complete and verified.",
+  "evaluated_sha": "159b4ae159dd09c07617a61f9b24399a8250e5fd",
+  "blueprint_digest": "d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f",
+  "findings": [
+    "Harmless metadata declarations are explicitly ignored; semantic unimplemented properties retain diagnostics. Canonical import of the authorized sample is unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241521-NM0G73/README.md",
+    ".agentplane/tmp/verify-phase1.log",
+    "docs/program/certification-odt-declaration-classification.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
