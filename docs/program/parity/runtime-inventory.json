@@ -1429,16 +1429,19 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/svl/source/notify/broadcast.ts#SfxBroadcaster",
-          "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::Broadcast"
+          "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::Broadcast",
+          "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::AddListener",
+          "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::RemoveListener",
+          "apps/office/src/svl/source/notify/notify.test.ts#notifies a listener reusing a future vacant slot during broadcast"
         ],
-        "justification": "Mapped provenance remains semantically unverified against svl/source/notify/SfxBroadcaster.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Broadcast now keeps the pinned initial slot count and reuses removal slots, so a newly registered listener in a future vacant slot receives the current hint. The wider lifetime, duplicate and dying-hint contracts remain unverified for this browser subset.",
         "knownViolations": [],
         "localSymbols": [
           "SfxHint",
           "SfxListenerTarget",
           "SfxBroadcaster"
         ],
-        "sourceResponsibility": "unverified",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "svl/source/notify/SfxBroadcaster.cxx",
         "upstreamSymbols": [
           "SfxBroadcaster::AddListener",

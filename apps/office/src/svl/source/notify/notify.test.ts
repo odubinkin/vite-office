@@ -73,6 +73,36 @@ describe("Sfx notification graph", /** Registers notification tests. @returns No
     expect(values).toEqual([]);
   });
 
+  it("notifies a listener reusing a future vacant slot during broadcast", /** Checks pinned SfxBroadcaster slot reuse and initial iteration length. @returns Nothing. */ () => {
+    const broadcaster = new SfxBroadcaster<TestHint>();
+    const deliveries: string[] = [];
+    const replacement: SfxListenerTarget<TestHint> = {
+      BroadcasterDying: /** Ignores destruction. @returns Nothing. */ () => undefined,
+      Notify: /** Records a replacement-slot delivery. @returns Nothing. */ () => {
+        deliveries.push("replacement");
+      },
+    };
+    const removed: SfxListenerTarget<TestHint> = {
+      BroadcasterDying: /** Ignores destruction. @returns Nothing. */ () => undefined,
+      Notify: /** Records an obsolete delivery. @returns Nothing. */ () => {
+        deliveries.push("removed");
+      },
+    };
+    const replacing: SfxListenerTarget<TestHint> = {
+      BroadcasterDying: /** Ignores destruction. @returns Nothing. */ () => undefined,
+      Notify: /** Reuses the next listener slot. @returns Nothing. */ () => {
+        deliveries.push("first");
+        broadcaster.RemoveListener(removed);
+        broadcaster.AddListener(replacement);
+      },
+    };
+    broadcaster.AddListener(replacing);
+    broadcaster.AddListener(removed);
+    expect(broadcaster.RemoveListener(replacement)).toBe(false);
+    broadcaster.Broadcast({ kind: "changed", value: 1 });
+    expect(deliveries).toEqual(["first", "replacement"]);
+  });
+
   it("aggregates nested SwModify changes into one bounded transaction", /** Verifies aggregation and disposal. @returns Nothing. */ () => {
     const source = new SwModify();
     const hints: SwModelHint[] = [];
