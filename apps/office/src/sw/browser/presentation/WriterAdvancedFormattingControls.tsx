@@ -2,6 +2,16 @@
 import { useState } from "react";
 import type { WriterParagraphComputedStyle } from "./writer-view-projection";
 import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh1";
+import type {
+  WriterParagraphDialogRequest,
+  WriterParagraphDialogResult,
+} from "../../source/uibase/dialog/writer-dialog-controller";
+import {
+  useBrowserCommandPresentation,
+  type BrowserCommandSource,
+} from "../../../framework/browser/presentation/command-surface";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
+import type { WriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
 
 const SWATCHES = [
   "#000000",
@@ -26,41 +36,61 @@ const SWATCHES = [
 
 /** Renders Writer color palettes, line spacing, and the tabbed paragraph dialog. @param props - Current formatting and callbacks. @returns Formatting controls. */
 export function WriterAdvancedFormattingControls({
-  color,
-  highlight,
+  commandSource,
+  getCommandResource,
   paragraph,
-  onColor,
-  onLineSpacing,
-  onParagraphFormat,
-  showLineNumbers,
-  onShowLineNumbersChange,
+  dialogRequest,
+  onDialogCancel,
+  onDialogSubmit,
 }: Readonly<{
-  color: string;
-  highlight: string;
+  commandSource: BrowserCommandSource;
+  getCommandResource: (commandUrl: string) => WriterCommandResource;
   paragraph: WriterParagraphComputedStyle;
-  onColor: (property: "color" | "highlight", value: string) => void;
-  onLineSpacing: (percent: number) => void;
-  onParagraphFormat: (value: WriterParagraphFormatValue) => void;
-  showLineNumbers: boolean;
-  onShowLineNumbersChange: (value: boolean) => void;
+  dialogRequest?: Readonly<{ id: number; request: WriterParagraphDialogRequest }>;
+  onDialogCancel: (id: number) => void;
+  onDialogSubmit: (id: number, value: WriterParagraphDialogResult) => void;
 }>): React.JSX.Element {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const colorCommand = useBrowserCommandPresentation(
+    commandSource,
+    WRITER_COMMAND_IDS.color,
+    getCommandResource,
+  );
+  const highlightCommand = useBrowserCommandPresentation(
+    commandSource,
+    WRITER_COMMAND_IDS.charBackColor,
+    getCommandResource,
+  );
+  const spacingCommand = useBrowserCommandPresentation(
+    commandSource,
+    WRITER_COMMAND_IDS.lineSpacing,
+    getCommandResource,
+  );
+  const paragraphCommand = useBrowserCommandPresentation(
+    commandSource,
+    WRITER_COMMAND_IDS.paragraphDialog,
+    getCommandResource,
+  );
   const [activeTab, setActiveTab] = useState<"spacing" | "flow" | "tabs">("spacing");
-  const [showLineNumbersDraft, setShowLineNumbersDraft] = useState(showLineNumbers);
+  const [showLineNumbersDraft, setShowLineNumbersDraft] = useState(
+    dialogRequest?.request.paintLineNumbers ?? false,
+  );
   const [draft, setDraft] = useState<WriterParagraphFormatValue>(
     /** Handles Writer formatting state.  @returns Callback result. */ () =>
-      fromParagraph(paragraph),
+      dialogRequest?.request.initialValue ?? fromParagraph(paragraph),
   );
   const [tabPositionText, setTabPositionText] = useState("");
   const [selectedTab, setSelectedTab] = useState<number | undefined>();
   const openDialog =
     /** Handles Writer formatting state.  @returns Callback result. */ (): void => {
-      setDraft(fromParagraph(paragraph));
-      setTabPositionText("");
-      setSelectedTab(undefined);
-      setShowLineNumbersDraft(showLineNumbers);
-      setActiveTab("spacing");
-      setDialogOpen(true);
+      commandSource.Execute(WRITER_COMMAND_IDS.paragraphDialog);
+    };
+  const onColor =
+    /** Dispatches the selected character color. @param property - Target color slot. @param value - Selected color. @returns Nothing. */
+    (property: "color" | "highlight", value: string): void => {
+      commandSource.Execute(
+        property === "color" ? WRITER_COMMAND_IDS.color : WRITER_COMMAND_IDS.charBackColor,
+        { color: value },
+      );
     };
   return (
     <>
@@ -69,29 +99,37 @@ export function WriterAdvancedFormattingControls({
         aria-label="Character colors"
       >
         <ColorControl
-          label="Font Color"
+          label={colorCommand.resource.controlLabel}
           property="color"
-          value={color}
+          value={
+            typeof colorCommand.selectedValue === "string" ? colorCommand.selectedValue : "auto"
+          }
           fallback="#000000"
+          disabled={!colorCommand.enabled}
           onColor={onColor}
         />
         <ColorControl
-          label="Character Highlighting"
+          label={highlightCommand.resource.controlLabel}
           property="highlight"
-          value={highlight}
+          value={
+            typeof highlightCommand.selectedValue === "string"
+              ? highlightCommand.selectedValue
+              : "transparent"
+          }
           fallback="#ffff00"
+          disabled={!highlightCommand.enabled}
           onColor={onColor}
         />
       </div>
       <label className="flex items-center gap-1 text-xs text-slate-700">
-        <span className="sr-only">Line Spacing</span>
+        <span className="sr-only">{spacingCommand.resource.controlLabel}</span>
         <select
-          aria-label="Line Spacing"
+          aria-label={spacingCommand.resource.controlLabel}
           className="h-8 rounded border border-slate-300 bg-white px-1"
+          disabled={!spacingCommand.enabled}
           value={
-            paragraph.lineSpacingMode === "proportional" &&
-            [100, 115, 150, 200].includes(paragraph.lineSpacingValue ?? 100)
-              ? paragraph.lineSpacingValue
+            [100, 115, 150, 200].includes(Number(spacingCommand.selectedValue))
+              ? Number(spacingCommand.selectedValue)
               : "custom"
           }
           onChange={
@@ -100,7 +138,9 @@ export function WriterAdvancedFormattingControls({
             ) =>
               event.target.value === "custom"
                 ? openDialog()
-                : onLineSpacing(Number(event.target.value))
+                : commandSource.Execute(WRITER_COMMAND_IDS.lineSpacing, {
+                    percent: Number(event.target.value),
+                  })
           }
         >
           <option value={100}>Single</option>
@@ -112,19 +152,20 @@ export function WriterAdvancedFormattingControls({
       </label>
       <button
         className="h-8 rounded border border-slate-300 bg-white px-2 text-xs hover:bg-slate-100"
+        disabled={!paragraphCommand.enabled}
         onClick={openDialog}
         type="button"
       >
-        Paragraph…
+        {paragraphCommand.resource.label}…
       </button>
-      {dialogOpen ? (
+      {dialogRequest !== undefined ? (
         <div
           className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4"
           onMouseDown={
             /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
               event,
             ) => {
-              if (event.target === event.currentTarget) setDialogOpen(false);
+              if (event.target === event.currentTarget) onDialogCancel(dialogRequest.id);
             }
           }
         >
@@ -421,7 +462,7 @@ export function WriterAdvancedFormattingControls({
                 className="rounded border px-3 py-1"
                 onClick={
                   /** Handles Writer formatting state.  @returns Callback result. */ () =>
-                    setDialogOpen(false)
+                    onDialogCancel(dialogRequest.id)
                 }
                 type="button"
               >
@@ -431,9 +472,10 @@ export function WriterAdvancedFormattingControls({
                 className="rounded bg-indigo-700 px-3 py-1 text-white"
                 onClick={
                   /** Handles Writer formatting state.  @returns Callback result. */ () => {
-                    onParagraphFormat(draft);
-                    onShowLineNumbersChange(showLineNumbersDraft);
-                    setDialogOpen(false);
+                    onDialogSubmit(dialogRequest.id, {
+                      paragraphFormat: draft,
+                      paintLineNumbers: showLineNumbersDraft,
+                    });
                   }
                 }
                 type="button"
@@ -501,21 +543,22 @@ function ColorControl({
   property,
   value,
   fallback,
+  disabled,
   onColor,
 }: Readonly<{
   label: string;
   property: "color" | "highlight";
   value: string;
   fallback: string;
+  disabled: boolean;
   onColor: (property: "color" | "highlight", value: string) => void;
 }>): React.JSX.Element {
-  const [lastColor, setLastColor] = useState(fallback);
+  const currentColor = value === "auto" || value === "transparent" ? fallback : value;
   const marker = property === "color" ? "A" : "▨";
   const apply =
     /** Handles Writer formatting state. @param next - Input value. @returns Callback result. */ (
       next: string,
     ): void => {
-      setLastColor(next);
       onColor(property, next);
     };
   return (
@@ -523,8 +566,10 @@ function ColorControl({
       <button
         aria-label={label}
         className="flex h-8 w-8 flex-col items-center justify-center rounded-l border border-slate-300 bg-white text-base font-bold"
+        disabled={disabled}
         onClick={
-          /** Handles Writer formatting state.  @returns Callback result. */ () => apply(lastColor)
+          /** Handles Writer formatting state.  @returns Callback result. */ () =>
+            apply(currentColor)
         }
         type="button"
       >
@@ -532,7 +577,7 @@ function ColorControl({
         <span
           className="h-1 w-5"
           style={{
-            backgroundColor: value === "auto" || value === "transparent" ? lastColor : value,
+            backgroundColor: currentColor,
           }}
         />
       </button>
@@ -553,6 +598,7 @@ function ColorControl({
                 <button
                   aria-label={`${label} ${swatch}`}
                   className="h-6 w-6 rounded border border-slate-400"
+                  disabled={disabled}
                   key={swatch}
                   onClick={
                     /** Handles Writer formatting state.  @returns Callback result. */ () =>
@@ -566,6 +612,7 @@ function ColorControl({
           </div>
           <button
             className="mt-2 w-full rounded border px-2 py-1 text-left text-xs"
+            disabled={disabled}
             onClick={
               /** Handles Writer formatting state.  @returns Callback result. */ () =>
                 apply(property === "color" ? "auto" : "transparent")
@@ -578,13 +625,14 @@ function ColorControl({
             Custom Color
             <input
               aria-label={`${label} custom color`}
+              disabled={disabled}
               onChange={
                 /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
                   event,
                 ) => apply(event.target.value)
               }
               type="color"
-              value={lastColor}
+              value={currentColor}
             />
           </label>
         </div>

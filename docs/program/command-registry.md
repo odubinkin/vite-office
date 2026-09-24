@@ -29,3 +29,12 @@ state rather than maintaining a second command registry. `SfxControllerItem` in
 stable slot snapshot and one bindings subscription per visible control; the
 browser hook disposes it with the presenter. Generated Writer menu placement is
 used directly, without an additional handwritten command filter.
+
+The Writer text toolbar keeps the pinned `.uno:Color`, `.uno:CharBackColor`,
+and `.uno:LineSpacing` identities and labels from `textobjectbar.xml`. The
+browser groups their palette and selector controls after the compact generated
+toolbar so they remain usable at narrow widths. The normally hidden
+`.uno:ParagraphDialog` toolbar item is exposed beside that group as an
+accessible browser button; it dispatches the same generated slot as the menu.
+Its paragraph draft, including the browser's line-number visibility control,
+is committed through one shell-owned dialog request.

@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { WriterAdvancedFormattingControls } from "./WriterAdvancedFormattingControls";
-import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { WriterFileDialog } from "./WriterFileDialog";
@@ -138,9 +137,6 @@ export function WriterWorkbench({
     () => createBrowserCommandSource(view.GetViewFrame()),
     [view],
   );
-  const pendingColors = projectWriterCharacterAttributes(
-    view.GetWrtShell().GetPendingCharacterItems(),
-  );
   const getLocalizedCommandResource = useCallback(
     /** Resolves generated command metadata through the application locale service. @param commandUrl - Canonical command URL. @returns Localized resource. */
     (commandUrl: string) => {
@@ -164,37 +160,23 @@ export function WriterWorkbench({
           <WriterFormattingToolbar
             advancedControls={
               <WriterAdvancedFormattingControls
-                color={pendingColors.color ?? "auto"}
-                highlight={pendingColors.highlight ?? "transparent"}
+                key={dialogRequest?.request.kind === "paragraph" ? dialogRequest.id : "closed"}
+                commandSource={commandSource}
+                getCommandResource={getLocalizedCommandResource}
                 paragraph={snapshot.activeParagraph.computedStyle}
-                onColor={
-                  /** Handles Writer formatting state. @param property - Input value. @param value - Input value. @returns Callback result. */ (
-                    property,
+                {...(dialogRequest?.request.kind === "paragraph"
+                  ? { dialogRequest: { id: dialogRequest.id, request: dialogRequest.request } }
+                  : {})}
+                onDialogCancel={
+                  /** Cancels the exact paragraph request. @param id - Request identity. @returns Nothing. */ (
+                    id,
+                  ) => dialogController.Cancel(id)
+                }
+                onDialogSubmit={
+                  /** Completes the exact paragraph request. @param id - Request identity. @param value - Accepted draft. @returns Nothing. */ (
+                    id,
                     value,
-                  ) => {
-                    view.GetWrtShell().SetCharacterColor(property, value);
-                  }
-                }
-                onLineSpacing={
-                  /** Handles Writer formatting state. @param percent - Input value. @returns Callback result. */ (
-                    percent,
-                  ) => {
-                    view.GetWrtShell().SetLineSpacingPercent(percent);
-                  }
-                }
-                onParagraphFormat={
-                  /** Commits accepted paragraph values. @param value - Dialog draft. @returns Nothing. */ (
-                    value,
-                  ) => {
-                    view.GetWrtShell().ApplyParagraphFormat(value);
-                  }
-                }
-                showLineNumbers={snapshot.lineNumberInfo.paintLineNumbers}
-                onShowLineNumbersChange={
-                  /** Commits document-owned line-number state through the shell. @param paint - Visible state. @returns Nothing. */
-                  (paint) => {
-                    view.GetWrtShell().SetPaintLineNumbers(paint);
-                  }
+                  ) => dialogController.Complete(id, value)
                 }
               />
             }

@@ -1,7 +1,13 @@
 /** @fileoverview Checks the Writer formatting palettes and paragraph dialog. */
 import { fireEvent, render, screen } from "@testing-library/react";
+import { useMemo, useRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { WriterAdvancedFormattingControls } from "./WriterAdvancedFormattingControls";
+import { WriterAdvancedFormattingControls as CommandAdvancedFormattingControls } from "./WriterAdvancedFormattingControls";
+import type { BrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
+import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
+import { getWriterCommandResource } from "../../uiconfig/swriter/writer-command-resources";
+import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh1";
+import type { WriterParagraphDialogRequest } from "../../source/uibase/dialog/writer-dialog-controller";
 import type { WriterParagraphComputedStyle } from "./writer-view-projection";
 
 const paragraph: WriterParagraphComputedStyle = {
@@ -20,7 +26,149 @@ const paragraph: WriterParagraphComputedStyle = {
   keepWithNext: false,
 };
 
+/** Adapts the existing presentation scenarios to one controlled dialog request and slot source. @param props - Presentation callbacks and state. @returns Controlled formatting surface. */
+function WriterAdvancedFormattingControls({
+  color,
+  highlight,
+  paragraph,
+  onColor,
+  onLineSpacing,
+  onParagraphFormat,
+  showLineNumbers,
+  onShowLineNumbersChange,
+}: Readonly<{
+  color: string;
+  highlight: string;
+  paragraph: WriterParagraphComputedStyle;
+  onColor: (property: "color" | "highlight", value: string) => void;
+  onLineSpacing: (percent: number) => void;
+  onParagraphFormat: (value: WriterParagraphFormatValue) => void;
+  showLineNumbers: boolean;
+  onShowLineNumbersChange: (value: boolean) => void;
+}>): React.JSX.Element {
+  const [request, setRequest] = useState<
+    Readonly<{ id: number; request: WriterParagraphDialogRequest }> | undefined
+  >();
+  const nextId = useRef(0);
+  const source = useMemo<BrowserCommandSource>(
+    /** Builds a stable command source for the current test inputs. @returns Slot source. */ () => ({
+      /** Supplies a stable bindings snapshot for one command. @param commandUrl - Slot identity. @returns Controller item. */
+      CreateControllerItem(commandUrl) {
+        const value =
+          commandUrl === WRITER_COMMAND_IDS.color
+            ? color
+            : commandUrl === WRITER_COMMAND_IDS.charBackColor
+              ? highlight
+              : commandUrl === WRITER_COMMAND_IDS.lineSpacing
+                ? paragraph.lineSpacingMode === "proportional"
+                  ? (paragraph.lineSpacingValue ?? 100)
+                  : "custom"
+                : undefined;
+        const state = { enabled: true, value };
+        return {
+          /** Releases the test controller. @returns Nothing. */ Dispose() {},
+          /** Reads the current slot value. @returns Command state. */ GetState() {
+            return state;
+          },
+          /** Subscribes to an immutable test snapshot. @returns Unsubscribe. */ Subscribe() {
+            return /** Releases the test subscription. @returns Nothing. */ () => undefined;
+          },
+        };
+      },
+      /** Emulates the active slot source. @param commandUrl - Slot identity. @param arguments_ - Command arguments. @returns Dispatch result. */
+      Execute(commandUrl, arguments_) {
+        if (
+          commandUrl === WRITER_COMMAND_IDS.color ||
+          commandUrl === WRITER_COMMAND_IDS.charBackColor
+        )
+          onColor(
+            commandUrl === WRITER_COMMAND_IDS.color ? "color" : "highlight",
+            (arguments_ as { color: string }).color,
+          );
+        else if (commandUrl === WRITER_COMMAND_IDS.lineSpacing)
+          onLineSpacing((arguments_ as { percent: number }).percent);
+        else if (commandUrl === WRITER_COMMAND_IDS.paragraphDialog) {
+          const style = paragraph;
+          setRequest({
+            id: ++nextId.current,
+            request: {
+              commandUrl,
+              kind: "paragraph",
+              paintLineNumbers: showLineNumbers,
+              initialValue: {
+                upperPt: style.upperSpacingPt,
+                lowerPt: style.lowerSpacingPt,
+                contextual: style.contextualSpacing ?? false,
+                lineMode: style.lineSpacingMode ?? "proportional",
+                lineValue: style.lineSpacingValue ?? 100,
+                fontIndependent: style.fontIndependentLineSpacing ?? false,
+                tabStopsPt:
+                  style.tabStopsPt ??
+                  (style.tabStopPositionPt === undefined ? [] : [style.tabStopPositionPt]),
+                keepWithNext: style.keepWithNext ?? false,
+                countLineNumbers: style.countLineNumbers ?? true,
+              },
+            },
+          });
+        }
+        return { commandId: commandUrl, status: "executed", value: true };
+      },
+      /** Resolves a test command. @returns No descriptor. */ QueryCommand() {
+        return undefined;
+      },
+    }),
+    [color, highlight, paragraph, onColor, onLineSpacing, showLineNumbers],
+  );
+  return (
+    <CommandAdvancedFormattingControls
+      key={request?.id ?? "closed"}
+      commandSource={source}
+      getCommandResource={getWriterCommandResource}
+      paragraph={paragraph}
+      {...(request === undefined ? {} : { dialogRequest: request })}
+      onDialogCancel={
+        /** Cancels the active test request. @param id - Request identity. @returns Nothing. */ (
+          id,
+        ) => {
+          expect(id).toBe(request?.id);
+          setRequest(undefined);
+        }
+      }
+      onDialogSubmit={
+        /** Commits the accepted draft. @param id - Request identity. @param value - Submitted settings. @returns Nothing. */ (
+          id,
+          value,
+        ) => {
+          expect(id).toBe(request?.id);
+          onParagraphFormat(value.paragraphFormat);
+          onShowLineNumbersChange(value.paintLineNumbers);
+          setRequest(undefined);
+        }
+      }
+    />
+  );
+}
+
 describe("Writer advanced formatting controls", /** Handles Writer formatting state.  @returns Callback result. */ () => {
+  it("uses palette defaults when bindings have no selected color", /** Checks empty slot state. @returns Nothing. */ () => {
+    const onColor = vi.fn();
+    render(
+      <WriterAdvancedFormattingControls
+        color={undefined as unknown as string}
+        highlight={undefined as unknown as string}
+        paragraph={paragraph}
+        onColor={onColor}
+        onLineSpacing={vi.fn()}
+        onParagraphFormat={vi.fn()}
+        showLineNumbers={false}
+        onShowLineNumbersChange={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Font Color" }));
+    fireEvent.click(screen.getByRole("button", { name: "Character Highlighting Color" }));
+    expect(onColor).toHaveBeenCalledWith("color", "#000000");
+    expect(onColor).toHaveBeenCalledWith("highlight", "#ffff00");
+  });
   it("applies palette colors and paragraph dialog values", /** Handles Writer formatting state.  @returns Callback result. */ () => {
     const onColor = vi.fn();
     const onLineSpacing = vi.fn();
@@ -84,11 +232,11 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
         onShowLineNumbersChange={onShowLineNumbersChange}
       />,
     );
-    fireEvent.click(screen.getByLabelText("Character Highlighting palette"));
+    fireEvent.click(screen.getByLabelText("Character Highlighting Color palette"));
     fireEvent.click(screen.getByText("No Highlight"));
     expect(onColor).toHaveBeenCalledWith("highlight", "transparent");
-    fireEvent.click(screen.getByRole("button", { name: "Character Highlighting" }));
-    fireEvent.change(screen.getByLabelText("Character Highlighting custom color"), {
+    fireEvent.click(screen.getByRole("button", { name: "Character Highlighting Color" }));
+    fireEvent.change(screen.getByLabelText("Character Highlighting Color custom color"), {
       target: { value: "#00ff00" },
     });
     expect(onColor).toHaveBeenCalledWith("highlight", "#00ff00");

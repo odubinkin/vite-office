@@ -1831,9 +1831,9 @@
         "WriterAdvancedFormattingControls",
         "WriterParagraphFormatValue"
       ],
-      "rationale": "React renders accessible paragraph and character formatting controls with browser-local dialog drafts. Its current line-spacing and tab policy is a recorded P1 ownership gap to move to Writer shell and pooled items.",
+      "rationale": "Presents bindings-backed Writer color, line-spacing and paragraph slots and edits only the transient draft of a shell-owned paragraph dialog request.",
       "responsibilities": [
-        "Render color, line-spacing, paragraph, tab, flow, and line-number controls and collect dialog drafts."
+        "Presents bindings-backed Writer color, line-spacing and paragraph slots and edits only the transient draft of a shell-owned paragraph dialog request."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -4290,9 +4290,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
-      "rationale": "Composes the SfxDialogController request lifecycle with Writer hyperlink and page-dialog data so an external presenter can complete requests; the pinned SwTextShell::Execute owns launching slots, not this composition.",
+      "rationale": "Composes the SfxDialogController request lifecycle with Writer hyperlink, page-style, and paragraph-dialog data so an external presenter can complete one shell-owned request; the pinned shell slots own execution.",
       "responsibilities": [
-        "Composes the SfxDialogController request lifecycle with Writer hyperlink and page-dialog data so an external presenter can complete requests; the pinned SwTextShell::Execute owns launching slots, not this composition."
+        "Composes the SfxDialogController request lifecycle with Writer hyperlink, page-style, and paragraph-dialog data so an external presenter can complete one shell-owned request; the pinned shell slots own execution."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",

@@ -15,6 +15,13 @@ export const writerTextObjectBarItems: readonly WriterToolbarItemPlacement[] =
       ): readonly WriterToolbarItemPlacement[] => {
         if (item.kind === "separator") return [{ kind: "separator" }];
         if (item.kind !== "command" || !item.visible) return [];
+        // The compact browser color palettes and spacing selector are rendered as one advanced group.
+        if (
+          item.commandUrl === generated.commandAliases.color ||
+          item.commandUrl === generated.commandAliases.charBackColor ||
+          item.commandUrl === generated.commandAliases.lineSpacing
+        )
+          return [];
         if (item.commandUrl === generated.commandAliases.fontName)
           return [
             {

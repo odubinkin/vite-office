@@ -3,6 +3,7 @@
 import { SfxDialogController } from "../../../../sfx2/source/dialog/basedlgs";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
+import type { WriterParagraphFormatValue } from "../shells/textsh1";
 
 /** Hyperlink child-window request initialized entirely by the Writer shell. */
 export interface WriterHyperlinkDialogRequest {
@@ -28,9 +29,25 @@ export interface WriterPageDialogResult {
 }
 
 /** Every Writer child-window request supported by the browser presenter. */
-export type WriterDialogRequest = WriterHyperlinkDialogRequest | WriterPageDialogRequest;
+/** Paragraph dialog request initialized by the text shell. */
+export interface WriterParagraphDialogRequest {
+  readonly commandUrl: string;
+  readonly initialValue: WriterParagraphFormatValue;
+  readonly paintLineNumbers: boolean;
+  readonly kind: "paragraph";
+}
+/** Accepted paragraph dialog values. */
+export interface WriterParagraphDialogResult {
+  readonly paragraphFormat: WriterParagraphFormatValue;
+  readonly paintLineNumbers: boolean;
+}
+
+/** Every Writer child-window request supported by the presenter. */
+export type WriterDialogRequest =
+  WriterHyperlinkDialogRequest | WriterPageDialogRequest | WriterParagraphDialogRequest;
 /** Every accepted result supported by the Writer dialog presenter. */
-export type WriterDialogResult = WriterHyperlinkDialogResult | WriterPageDialogResult;
+export type WriterDialogResult =
+  WriterHyperlinkDialogResult | WriterPageDialogResult | WriterParagraphDialogResult;
 /** Observable snapshot published by the Writer dialog controller. */
 export type WriterDialogSnapshot = ReturnType<WriterDialogController["GetSnapshot"]>;
 
@@ -68,6 +85,23 @@ export class WriterDialogController {
     });
     return completion.kind === "accepted"
       ? (completion.result as WriterPageDialogResult)
+      : undefined;
+  }
+
+  /** Requests paragraph settings from the presenter. @param commandUrl - Originating slot. @param initialValue - Current paragraph values. @param paintLineNumbers - Current document line-number visibility. @returns Accepted values or undefined. */
+  public async RequestParagraphDialog(
+    commandUrl: string,
+    initialValue: WriterParagraphFormatValue,
+    paintLineNumbers: boolean,
+  ): Promise<WriterParagraphDialogResult | undefined> {
+    const completion = await this.controller.Request({
+      commandUrl,
+      initialValue,
+      kind: "paragraph",
+      paintLineNumbers,
+    });
+    return completion.kind === "accepted"
+      ? (completion.result as WriterParagraphDialogResult)
       : undefined;
   }
 

@@ -4673,6 +4673,7 @@
       "suite": "writer",
       "subsystem": "dispatch",
       "capabilityIds": [
+        "CAP-0125",
         "CAP-0135"
       ],
       "semantic": {
@@ -4681,7 +4682,8 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "A",
         "evidence": [
-          "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts#WriterDialogController"
+          "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts#WriterDialogController",
+          "apps/office/src/sw/source/uibase/shells/textsh1.test.ts#routes color, spacing, and paragraph dialog through generated slot state"
         ],
         "justification": "TypeScript command or dialog request composition; the upstream SwTextShell and SwView operations are mapped in their own source owners.",
         "knownViolations": [],
@@ -4821,6 +4823,7 @@
         "CAP-0107",
         "CAP-0109",
         "CAP-0112",
+        "CAP-0125",
         "CAP-0135"
       ],
       "semantic": {
@@ -4830,7 +4833,8 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/uibase/shells/textsh1.ts#SwTextShell",
-          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SwTextShell::Execute"
+          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SwTextShell::Execute",
+          "apps/office/src/sw/source/uibase/shells/textsh1.test.ts#routes color, spacing, and paragraph dialog through generated slot state"
         ],
         "justification": "Owns supported text, character, paragraph, history, indent, and hyperlink execute/state semantics as a dedicated text context shell while SwWrtShell supplies cursor and action primitives.",
         "knownViolations": [],

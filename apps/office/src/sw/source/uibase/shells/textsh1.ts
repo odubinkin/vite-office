@@ -9,6 +9,7 @@ import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import {
   SvxLineSpacingItem,
+  SvxTabAdjust,
   SvxTabStop,
   SvxTabStopItem,
   SvxULSpaceItem,
@@ -33,6 +34,7 @@ import {
   type WriterCharacterAttributes,
 } from "../../core/txtnode/txatbase";
 import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
+import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import {
   CreateWriterFontSizeUndo,
   CreateWriterFontUndo,
@@ -64,6 +66,7 @@ export interface SwTextShellTarget {
   readonly GetDefaultFontFamily: () => string;
   readonly GetDefaultFontSizePt: () => number;
   readonly GetDoc: () => import("../../core/doc/doc").SwDoc;
+  readonly GetLineNumberInfo: () => SwLineNumberInfo;
   readonly GetDocShell: () => Readonly<{
     GetUndoManager(): Readonly<{
       BreakUndoGrouping(): void;
@@ -78,6 +81,7 @@ export interface SwTextShellTarget {
   readonly NumUpDown: (down: boolean) => boolean;
   readonly Redo: () => boolean;
   readonly SetPaM: (point: SwPosition, mark?: SwPosition) => boolean;
+  readonly SetPaintLineNumbers: (paint: boolean) => boolean;
   readonly SetPendingCharacterItems: (items: SfxItemSet) => void;
   readonly Undo: () => boolean;
 }
@@ -379,6 +383,45 @@ export class SwTextShell {
   public SetLineSpacingPercent(percent: number): boolean {
     if (!Number.isInteger(percent) || percent < 0) return false;
     return this.SetParagraphItem(new SvxLineSpacingItem(percent, RES_PARATR_LINESPACING));
+  }
+
+  /** Reads paragraph-dialog values from the active pooled items. @returns Primitive current paragraph format. */
+  public GetParagraphFormat(): WriterParagraphFormatValue {
+    const paragraph = this.target.GetActiveParagraph();
+    const spacing = paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
+    const lineSpacing = paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+    const tabStops = paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    return {
+      upperPt: spacing.GetUpper() / 20,
+      lowerPt: spacing.GetLower() / 20,
+      contextual: spacing.GetContext(),
+      lineMode: lineSpacing.GetMode(),
+      lineValue: lineSpacing.GetValue(),
+      fontIndependent: lineSpacing.IsFontIndependent(),
+      tabStopsPt: tabStops
+        .GetStops()
+        .filter(
+          /** Keeps authored stops. @param stop - Candidate tab. @returns Whether explicit. */ (
+            stop,
+          ) => stop.GetAdjustment() !== SvxTabAdjust.Default,
+        )
+        .map(
+          /** Converts to points. @param stop - Explicit tab. @returns Point position. */ (stop) =>
+            stop.GetTabPos() / 20,
+        ),
+      keepWithNext: (paragraph.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
+      countLineNumbers: (paragraph.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
+    };
+  }
+
+  /** Reads document line-number visibility for the paragraph presenter. @returns Whether line numbers are painted. */
+  public IsPaintLineNumbers(): boolean {
+    return this.target.GetLineNumberInfo().IsPaintLineNumbers();
+  }
+
+  /** Applies line-number visibility through the Writer document owner. @param paint - Visible state. @returns Whether changed. */
+  public SetPaintLineNumbers(paint: boolean): boolean {
+    return this.target.SetPaintLineNumbers(paint);
   }
 
   /** Replaces tab positions while retaining unchanged stops' alignment and leader. @param positions - Twip positions. @returns Whether changed. */
@@ -683,6 +726,60 @@ export function createWriterTextCommandRegistry(
         (target.GetPendingCharacterAttributes().fontSizeTwips ??
           target.GetDefaultFontSizePt() * 20) / 20,
       id: WRITER_COMMAND_IDS.fontHeight,
+    },
+    ...(["color", "highlight"] as const).map(
+      /** Creates one character color slot. @param property - Foreground or highlight. @returns Slot descriptor. */
+      (property) => ({
+        capabilityId: "CAP-0109" as const,
+        /** Applies the requested color through SwTextShell. @param _context - Bound shell. @param arguments_ - Color argument. @returns Whether changed. */
+        execute: (_context: SwTextShell, arguments_: unknown): boolean => {
+          const color = getWriterCommandArguments<Readonly<{ color?: string }>>(arguments_)?.color;
+          return color === undefined ? false : target.SetCharacterColor(property, color);
+        },
+        /** Reads the current color slot value. @returns Color or automatic marker. */
+        getStateValue: (): string =>
+          target.GetPendingCharacterAttributes()[property] ??
+          (property === "color" ? "auto" : "transparent"),
+        id: property === "color" ? WRITER_COMMAND_IDS.color : WRITER_COMMAND_IDS.charBackColor,
+      }),
+    ),
+    {
+      capabilityId: "CAP-0125",
+      /** Applies a proportional line-spacing choice. @param _context - Bound shell. @param arguments_ - Percent argument. @returns Whether changed. */
+      execute: (_context, arguments_: unknown): boolean => {
+        const percent =
+          getWriterCommandArguments<Readonly<{ percent?: number }>>(arguments_)?.percent;
+        return percent === undefined ? false : target.SetLineSpacingPercent(percent);
+      },
+      /** Reads the active proportional spacing, or the custom sentinel. @returns Slot value. */
+      getStateValue: (): number | "custom" => {
+        const spacing = active().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+        return spacing.GetMode() === "proportional" ? spacing.GetValue() : "custom";
+      },
+      id: WRITER_COMMAND_IDS.lineSpacing,
+    },
+    {
+      capabilityId: "CAP-0125",
+      /** Opens one shell-owned paragraph dialog and applies only accepted values. @returns Whether formatting changed. */
+      execute: (): Promise<boolean> =>
+        dialogController
+          .RequestParagraphDialog(
+            WRITER_COMMAND_IDS.paragraphDialog,
+            target.GetParagraphFormat(),
+            target.IsPaintLineNumbers(),
+          )
+          .then(
+            /** Applies accepted dialog data through Writer owners. @param result - Accepted value or cancellation. @returns Whether changed. */
+            (result) => {
+              if (result === undefined) return false;
+              const paragraphChanged = target.ApplyParagraphFormat(result.paragraphFormat);
+              const lineNumbersChanged = target.SetPaintLineNumbers(result.paintLineNumbers);
+              return paragraphChanged || lineNumbersChanged;
+            },
+          ),
+      /** Exposes current paragraph values to bindings. @returns Current format. */
+      getStateValue: (): WriterParagraphFormatValue => target.GetParagraphFormat(),
+      id: WRITER_COMMAND_IDS.paragraphDialog,
     },
     ...(["left", "center", "right", "justify"] as const).map(
       /** Creates one paragraph-alignment descriptor. @param alignment - Supported alignment. @returns Command descriptor. */

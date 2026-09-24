@@ -102,4 +102,73 @@ describe("Writer text-shell commands", /** Groups Writer text-shell commands. @r
     ).toBe(true);
     shell.GetDocShell().Close();
   });
+
+  it("routes color, spacing, and paragraph dialog through generated slot state", /** Verifies the pinned text toolbar slots and one dialog owner. @returns Test callback result. */ async () => {
+    const { dialogs, runValue, shell } = createFixture();
+    const state =
+      /** Reads one generated slot state. @param commandUrl - Command URL. @returns Bound slot state. */ (
+        commandUrl: string,
+      ) => {
+        const slot = shell.GetCommandShell().GetInterface().GetSlot(commandUrl)!;
+        return shell.GetCommandShell().ResolveSlot(slot.slotId)!.getState();
+      };
+    expect(runValue(WRITER_COMMAND_IDS.color, { color: "#ff0000" })).toBe(false);
+    expect(state(WRITER_COMMAND_IDS.color).value).toBe("#ff0000");
+    expect(runValue(WRITER_COMMAND_IDS.charBackColor, { color: "#00ff00" })).toBe(false);
+    expect(state(WRITER_COMMAND_IDS.charBackColor).value).toBe("#00ff00");
+    expect(runValue(WRITER_COMMAND_IDS.color)).toBe(false);
+    expect(runValue(WRITER_COMMAND_IDS.lineSpacing, { percent: 150 })).toBe(true);
+    expect(state(WRITER_COMMAND_IDS.lineSpacing).value).toBe(150);
+    expect(runValue(WRITER_COMMAND_IDS.lineSpacing)).toBe(false);
+    expect(runValue(WRITER_COMMAND_IDS.lineSpacing, { percent: -1 })).toBe(false);
+
+    const cancelled = runValue(WRITER_COMMAND_IDS.paragraphDialog) as Promise<boolean>;
+    const request = dialogs.GetSnapshot()!;
+    expect(request.request.kind).toBe("paragraph");
+    if (request.request.kind !== "paragraph") throw new Error("Expected paragraph request");
+    expect(request.request.initialValue.lineValue).toBe(150);
+    expect(state(WRITER_COMMAND_IDS.paragraphDialog).value).toMatchObject({ lineValue: 150 });
+    expect(dialogs.Cancel(request.id)).toBe(true);
+    expect(await cancelled).toBe(false);
+
+    const accepted = runValue(WRITER_COMMAND_IDS.paragraphDialog) as Promise<boolean>;
+    const next = dialogs.GetSnapshot()!;
+    if (next.request.kind !== "paragraph") throw new Error("Expected paragraph request");
+    expect(
+      dialogs.Complete(next.id, {
+        paragraphFormat: { ...next.request.initialValue, upperPt: 6 },
+        paintLineNumbers: true,
+      }),
+    ).toBe(true);
+    expect(await accepted).toBe(true);
+    expect(state(WRITER_COMMAND_IDS.paragraphDialog).value).toMatchObject({ upperPt: 6 });
+    expect(shell.GetLineNumberInfo().IsPaintLineNumbers()).toBe(true);
+    const visibilityOnly = runValue(WRITER_COMMAND_IDS.paragraphDialog) as Promise<boolean>;
+    const visibilityRequest = dialogs.GetSnapshot()!;
+    if (visibilityRequest.request.kind !== "paragraph")
+      throw new Error("Expected paragraph request");
+    dialogs.Complete(visibilityRequest.id, {
+      paragraphFormat: visibilityRequest.request.initialValue,
+      paintLineNumbers: false,
+    });
+    expect(await visibilityOnly).toBe(true);
+    const unchanged = runValue(WRITER_COMMAND_IDS.paragraphDialog) as Promise<boolean>;
+    const unchangedRequest = dialogs.GetSnapshot()!;
+    if (unchangedRequest.request.kind !== "paragraph")
+      throw new Error("Expected paragraph request");
+    dialogs.Complete(unchangedRequest.id, {
+      paragraphFormat: unchangedRequest.request.initialValue,
+      paintLineNumbers: false,
+    });
+    expect(await unchanged).toBe(false);
+    expect(
+      shell.ApplyParagraphFormat({
+        ...unchangedRequest.request.initialValue,
+        lineMode: "fixed",
+        lineValue: 240,
+      }),
+    ).toBe(true);
+    expect(state(WRITER_COMMAND_IDS.lineSpacing).value).toBe("custom");
+    shell.GetDocShell().Close();
+  });
 });

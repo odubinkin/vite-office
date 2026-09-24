@@ -6,6 +6,8 @@
     "alignLeft": ".uno:StartPara",
     "alignRight": ".uno:EndPara",
     "bold": ".uno:Bold",
+    "color": ".uno:Color",
+    "charBackColor": ".uno:CharBackColor",
     "copy": ".uno:Copy",
     "cut": ".uno:Cut",
     "defaultParagraphStyle": ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles",
@@ -18,10 +20,12 @@
     "hyperlinkDialog": ".uno:HyperlinkDialog",
     "headingOne": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles",
     "italic": ".uno:Italic",
+    "lineSpacing": ".uno:LineSpacing",
     "increaseIndent": ".uno:IncrementIndent",
     "newDocument": ".uno:AddDirect",
     "openOdt": ".uno:Open",
     "pageDialog": ".uno:PageDialog",
+    "paragraphDialog": ".uno:ParagraphDialog",
     "orderedList": ".uno:DefaultNumbering",
     "continueNumbering": ".uno:ContinueNumbering",
     "paste": ".uno:Paste",
@@ -46,6 +50,8 @@
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:StartPara" },
     { "capabilityId": "CAP-0112", "commandUrl": ".uno:EndPara" },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Bold" },
+    { "capabilityId": "CAP-0109", "commandUrl": ".uno:Color" },
+    { "capabilityId": "CAP-0109", "commandUrl": ".uno:CharBackColor" },
     { "capabilityId": "CAP-0106", "commandUrl": ".uno:Copy" },
     { "capabilityId": "CAP-0110", "commandUrl": ".uno:Cut" },
     {
@@ -61,11 +67,13 @@
       "commandUrl": ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles"
     },
     { "capabilityId": "CAP-0109", "commandUrl": ".uno:Italic" },
+    { "capabilityId": "CAP-0125", "commandUrl": ".uno:LineSpacing" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementIndent" },
     { "capabilityId": "CAP-0135", "commandUrl": ".uno:HyperlinkDialog" },
     { "capabilityId": "CAP-0114", "commandUrl": ".uno:AddDirect" },
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:Open" },
     { "capabilityId": "CAP-0136", "commandUrl": ".uno:PageDialog" },
+    { "capabilityId": "CAP-0125", "commandUrl": ".uno:ParagraphDialog" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultNumbering" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:ContinueNumbering" },
     { "capabilityId": "CAP-0110", "commandUrl": ".uno:Paste" },
@@ -147,6 +155,34 @@
       "showsDialog": false,
       "shortcuts": ["Ctrl+B", "Meta+B"],
       "slotId": 10009
+    },
+    ".uno:Color": {
+      "browserOwned": false,
+      "argumentSchema": ["color:string"],
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Font Color",
+      "label": "Font Color",
+      "iconName": "lc_color.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10017
+    },
+    ".uno:CharBackColor": {
+      "browserOwned": false,
+      "argumentSchema": ["color:string"],
+      "capabilityId": "CAP-0109",
+      "controlLabel": "Character Highlighting Color",
+      "label": "Character Highlighting Color",
+      "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 11153
     },
     ".uno:Copy": {
       "browserOwned": false,
@@ -306,6 +342,18 @@
       "shortcuts": ["Ctrl+I", "Meta+I"],
       "slotId": 10008
     },
+    ".uno:LineSpacing": {
+      "browserOwned": false,
+      "argumentSchema": ["percent:number"],
+      "capabilityId": "CAP-0125",
+      "controlLabel": "Line Spacing",
+      "label": "Line Spacing",
+      "placements": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 10033
+    },
     ".uno:AddDirect": {
       "browserOwned": false,
       "argumentSchema": [],
@@ -353,6 +401,23 @@
       "showsDialog": true,
       "shortcuts": ["Alt+Shift+P"],
       "slotId": 20452
+    },
+    ".uno:ParagraphDialog": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0125",
+      "controlLabel": "Paragraph",
+      "label": "Paragraph",
+      "iconName": "lc_paragraphdialog.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": true,
+      "shortcuts": [],
+      "slotId": 10297
     },
     ".uno:DefaultNumbering": {
       "browserOwned": false,
@@ -677,6 +742,19 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:Color",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:CharBackColor",
+      "sources": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:Copy",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -751,6 +829,11 @@
     },
     {
       "classification": "supported-upstream",
+      "commandUrl": ".uno:LineSpacing",
+      "sources": ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"]
+    },
+    {
+      "classification": "supported-upstream",
       "commandUrl": ".uno:AddDirect",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
@@ -770,6 +853,15 @@
       "commandUrl": ".uno:PageDialog",
       "sources": [
         "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ParagraphDialog",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
         "sw/uiconfig/swriter/popupmenu/text.xml"
       ]
     },
@@ -2925,14 +3017,6 @@
       "context": [".uno:FormatMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:FontDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ParagraphDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -5556,22 +5640,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:Color",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:CharBackColor",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:BackgroundColor",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
@@ -5605,14 +5673,6 @@
       "context": [],
       "entryKind": "command",
       "sourceUrl": ".uno:SetOutline",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:LineSpacing",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
     },
@@ -5661,14 +5721,6 @@
       "context": [],
       "entryKind": "command",
       "sourceUrl": ".uno:FontDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ParagraphDialog",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/textobjectbar.xml"
     },
@@ -5964,14 +6016,6 @@
       "classification": "X",
       "context": [".uno:ParagraphMenu"],
       "entryKind": "command",
-      "sourceUrl": ".uno:ParagraphDialog",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:ParagraphMenu"],
-      "entryKind": "command",
       "sourceUrl": ".uno:TextBodyParaStyle",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
@@ -6021,14 +6065,6 @@
       "context": [".uno:ParagraphMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:EditStyle",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "menu",
-      "sourceUrl": ".uno:ParagraphMenu",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
     },
@@ -6291,6 +6327,7 @@
             "label": "Spacing"
           },
           { "kind": "separator" },
+          { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true },
           {
             "id": ".uno:FormatBulletsMenu",
             "items": [
@@ -6338,6 +6375,12 @@
       { "commandUrl": ".uno:Paste", "kind": "command", "visible": true },
       { "kind": "separator" },
       {
+        "id": ".uno:ParagraphMenu",
+        "items": [{ "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": true }],
+        "kind": "menu",
+        "label": "Paragraph"
+      },
+      {
         "id": ".uno:NumberingMenu",
         "items": [
           { "commandUrl": ".uno:RemoveBullets", "kind": "command", "visible": true },
@@ -6381,6 +6424,9 @@
       { "commandUrl": ".uno:Italic", "kind": "command", "visible": true },
       { "commandUrl": ".uno:Underline", "kind": "command", "visible": true },
       { "kind": "separator" },
+      { "commandUrl": ".uno:Color", "kind": "command", "visible": true },
+      { "commandUrl": ".uno:CharBackColor", "kind": "command", "visible": true },
+      { "kind": "separator" },
       { "commandUrl": ".uno:StartPara", "kind": "command", "visible": true },
       { "commandUrl": ".uno:CenterPara", "kind": "command", "visible": true },
       { "commandUrl": ".uno:EndPara", "kind": "command", "visible": true },
@@ -6392,7 +6438,10 @@
       { "commandUrl": ".uno:IncrementIndent", "kind": "command", "visible": true },
       { "commandUrl": ".uno:DecrementIndent", "kind": "command", "visible": true },
       { "kind": "separator" },
-      { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": false }
+      { "commandUrl": ".uno:LineSpacing", "kind": "command", "visible": true },
+      { "kind": "separator" },
+      { "commandUrl": ".uno:SelectAll", "kind": "command", "visible": false },
+      { "commandUrl": ".uno:ParagraphDialog", "kind": "command", "visible": false }
     ]
   },
   "unsupported": {
@@ -7914,12 +7963,6 @@
         "context": [".uno:FormatMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:FontDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ParagraphDialog"
       },
       {
         "classification": "X",
@@ -9822,13 +9865,6 @@
         "entryKind": "command",
         "sourceUrl": ".uno:SmallCaps"
       },
-      { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Color" },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:CharBackColor"
-      },
       {
         "classification": "X",
         "context": [],
@@ -9858,12 +9894,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:SetOutline"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:LineSpacing"
       },
       { "classification": "X", "context": [], "entryKind": "command", "sourceUrl": ".uno:Spacing" },
       {
@@ -9895,12 +9925,6 @@
         "context": [],
         "entryKind": "command",
         "sourceUrl": ".uno:FontDialog"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ParagraphDialog"
       }
     ],
     "sw/uiconfig/swriter/toolbar/numobjectbar.xml": [
@@ -10116,12 +10140,6 @@
         "classification": "X",
         "context": [".uno:ParagraphMenu"],
         "entryKind": "command",
-        "sourceUrl": ".uno:ParagraphDialog"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:ParagraphMenu"],
-        "entryKind": "command",
         "sourceUrl": ".uno:TextBodyParaStyle"
       },
       {
@@ -10159,12 +10177,6 @@
         "context": [".uno:ParagraphMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:EditStyle"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "menu",
-        "sourceUrl": ".uno:ParagraphMenu"
       },
       {
         "classification": "X",

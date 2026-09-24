@@ -69,7 +69,7 @@ const getText =
   ) => fallback;
 
 describe("Writer browser presentation", /** Groups presentation tests. @returns Nothing. */ () => {
-  it("connects advanced toolbar controls to Writer paragraph items", /** Verifies UI to model formatting. @returns Nothing. */ () => {
+  it("connects advanced toolbar controls to Writer paragraph items", /** Verifies UI to model formatting. @returns Nothing. */ async () => {
     const session = createWriterDocumentSession();
     const rendered = render(<WriterWorkbench isActive view={session.view} />);
     const shell = session.view.GetWrtShell();
@@ -93,6 +93,13 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     fireEvent.click(screen.getByLabelText("Keep with next paragraph"));
     fireEvent.click(screen.getByLabelText("Show line numbers"));
     fireEvent.click(screen.getByText("OK"));
+    await waitFor(
+      /** Waits for the shell-owned dialog request to finish. @returns Nothing. */ () => {
+        expect(
+          (shell.GetActiveParagraph().GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper(),
+        ).toBe(120);
+      },
+    );
     expect((shell.GetActiveParagraph().GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(
       120,
     );
@@ -103,6 +110,13 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       ),
     ).toEqual([720, 1440]);
     expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+    fireEvent.click(screen.getByText("Paragraph…"));
+    fireEvent.click(screen.getByText("Cancel"));
+    await waitFor(
+      /** Waits for cancellation to release the shell dialog request. @returns Nothing. */ () => {
+        expect(screen.queryByRole("dialog")).toBeNull();
+      },
+    );
     const rulerSurface = screen.getByLabelText("Writer horizontal ruler")
       .firstElementChild as HTMLElement;
     fireEvent.click(rulerSurface, { clientX: 240 });
@@ -113,6 +127,13 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
     fireEvent.click(screen.getByText("Delete All"));
     fireEvent.click(screen.getByText("OK"));
+    await waitFor(
+      /** Waits for the accepted tab-stop update. @returns Nothing. */ () => {
+        expect(
+          (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).Count(),
+        ).toBe(0);
+      },
+    );
     expect((shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).Count()).toBe(
       0,
     );
