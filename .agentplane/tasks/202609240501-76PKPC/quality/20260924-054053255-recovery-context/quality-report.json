@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240501-76PKPC",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T05:40:53.255Z",
+  "verdict": "pass",
+  "summary": "P0 inventory and source provenance cover the implemented runtime with pinned discrepancy evidence.",
+  "evaluated_sha": "14247ae1063210e328e09b993aa6dfec5a16c7bc",
+  "blueprint_digest": "1de3d953373c4f5c824d79ecd9744455677d28ad7215141b96c0e403198cd044",
+  "findings": [
+    "All 169 modules and 216 exported functions are inventoried; P0 divergences remain explicit, and full operation parity is reserved for stage 8."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240501-76PKPC/README.md",
+    "docs/program/parity/runtime-inventory.json",
+    "docs/program/source-provenance.json",
+    "npm run verify",
+    "ap doctor",
+    "node .agentplane/policy/check-routing.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
