@@ -4,7 +4,7 @@ title: "Restore Writer shell and UI command contracts"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -19,11 +19,28 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T07:47:09.516Z"
+  updated_by: "CODER"
+  note: "Full npm run verify passed: 464 office tests at 100% coverage, 96 inventory tests at 100% coverage, 14 Chromium E2E; formatting, lint, types, source provenance, inventory and static build pass. Focused shell tests cover mixed selection, invalid/no-op drafts, tab metadata, ruler deltas and undo/redo."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T07:47:19.471Z"
+  updated_by: "EVALUATOR"
+  note: "Writer shell now owns accepted paragraph and ruler transitions with preserved tab metadata and undo grouping; full verification passes."
+  evaluated_sha: "1868190ae4cfbcca0ba7c7215735a7be7816d4a4"
+  blueprint_digest: "75e172fad03634ca0ba69e041ef0441e83b59dba0497700bf2e8eef798efd863"
+  evidence_refs:
+    - ".agentplane/tasks/202609240501-K41WJD/README.md"
+    - ".agentplane/tasks/202609240501-K41WJD/quality/20260924-074719471-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609240501-K41WJD/quality/20260924-074719471-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609240501-K41WJD/quality/20260924-074719471-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609240501-K41WJD/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paragraph-ruler.test.ts"
+    - "/tmp/vite-office-stage4-verify.log"
+  findings:
+    - "React submits primitive drafts and pointer gestures; mixed paragraph metadata, invalid/no-op values, cancel, ruler undo/redo and command surfaces are covered."
 commit: null
 comments:
   -
@@ -37,8 +54,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: move paragraph and ruler command policy into Writer shells with binding-backed state."
+  -
+    type: "verify"
+    at: "2026-09-24T07:47:09.516Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full npm run verify passed: 464 office tests at 100% coverage, 96 inventory tests at 100% coverage, 14 Chromium E2E; formatting, lint, types, source provenance, inventory and static build pass. Focused shell tests cover mixed selection, invalid/no-op drafts, tab metadata, ruler deltas and undo/redo."
 doc_version: 3
-doc_updated_at: "2026-09-24T07:17:43.165Z"
+doc_updated_at: "2026-09-24T07:47:09.608Z"
 doc_updated_by: "CODER"
 description: "Stage 4: move paragraph and ruler policy, validation, command state and dialog commit behavior from React into upstream-shaped shells and bindings"
 sections:
@@ -61,6 +84,36 @@ sections:
     4. Run npm run verify, update existing inventory/provenance data with bounded evidence, and inspect the task-scoped diff and clean tracked state.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T07:47:09.516Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full npm run verify passed: 464 office tests at 100% coverage, 96 inventory tests at 100% coverage, 14 Chromium E2E; formatting, lint, types, source provenance, inventory and static build pass. Focused shell tests cover mixed selection, invalid/no-op drafts, tab metadata, ruler deltas and undo/redo.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T07:17:43.165Z, excerpt_hash=sha256:9d5f52650434817f3e285e5cc6bf7b8e5914f14b6b29f5fd69b5476514956615
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-K41WJD/blueprint/resolved-snapshot.json
+    - old_digest: 75e172fad03634ca0ba69e041ef0441e83b59dba0497700bf2e8eef798efd863
+    - current_digest: 75e172fad03634ca0ba69e041ef0441e83b59dba0497700bf2e8eef798efd863
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609240501-K41WJD
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609240501-K41WJD
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -96,6 +149,36 @@ Stage 4: move paragraph and ruler policy, validation, command state and dialog c
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T07:47:09.516Z — VERIFY — ok
+
+By: CODER
+
+Note: Full npm run verify passed: 464 office tests at 100% coverage, 96 inventory tests at 100% coverage, 14 Chromium E2E; formatting, lint, types, source provenance, inventory and static build pass. Focused shell tests cover mixed selection, invalid/no-op drafts, tab metadata, ruler deltas and undo/redo.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T07:17:43.165Z, excerpt_hash=sha256:9d5f52650434817f3e285e5cc6bf7b8e5914f14b6b29f5fd69b5476514956615
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-K41WJD/blueprint/resolved-snapshot.json
+- old_digest: 75e172fad03634ca0ba69e041ef0441e83b59dba0497700bf2e8eef798efd863
+- current_digest: 75e172fad03634ca0ba69e041ef0441e83b59dba0497700bf2e8eef798efd863
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609240501-K41WJD
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609240501-K41WJD
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
