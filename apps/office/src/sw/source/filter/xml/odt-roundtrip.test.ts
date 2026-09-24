@@ -829,7 +829,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     try {
       expect(importWriterXml(styles, content, metadata()).document.paragraphs).toHaveLength(1);
       expect(warn).toHaveBeenCalledWith(
-        "Unknown ODF attribute ignored: style:default-outline-level",
+        "Unsupported ODF style attribute ignored: style:default-outline-level",
       );
       expect(warn).toHaveBeenCalledWith("Unsupported ODF style attribute ignored: fo:color");
     } finally {

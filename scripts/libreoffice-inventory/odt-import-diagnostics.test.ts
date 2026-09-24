@@ -34,7 +34,7 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     expect(report.canonical.paragraphs).toBe(1);
     expect(report.diagnostics).toContainEqual(
       expect.objectContaining({
-        kind: "unknown-attribute",
+        kind: "unsupported-attribute",
         stream: "content.xml",
         name: "style:font-family-generic",
         loss: "styling",

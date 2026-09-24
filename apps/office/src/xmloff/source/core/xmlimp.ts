@@ -28,15 +28,17 @@ export interface OdfXmlParseOptions extends FastXmlParseOptions {
 export class FastAttributeList {
   private readonly byToken = new Map<XMLToken, string>();
 
-  /** Tokenizes SAX attributes. @param attributes - Namespace-resolved source attributes. @param path - Current XML element path. @param onDiagnostic - Optional structural sink. @returns A tokenized list. */
+  /** Tokenizes SAX attributes. @param attributes - Namespace-resolved source attributes. @param path - Current XML element path. @param onDiagnostic - Optional structural sink. @param ignoreUnknown - Whether an owning ignore context discards these attributes. @returns A tokenized list. */
   public constructor(
     private readonly attributes: readonly SaxesAttributeNS[],
     private readonly path = "",
     private readonly onDiagnostic?: (diagnostic: OdfXmlDiagnostic) => void,
+    ignoreUnknown = false,
   ) {
     for (const attribute of attributes) {
       const token = getXMLToken(attribute.uri, attribute.local);
       if (token === XMLToken.UNKNOWN) {
+        if (ignoreUnknown) continue;
         if (this.onDiagnostic)
           this.onDiagnostic({ kind: "unknown-attribute", path, name: attribute.name });
         else console.warn(`Unknown ODF attribute ignored: ${attribute.name}`);
@@ -79,6 +81,11 @@ export class FastAttributeList {
 
 /** Base fast import context; null child results declare rejection. */
 export abstract class SvXMLImportContext {
+  /** Declares a child whose attributes are intentionally metadata-only. @param _element - Child token. @returns Whether unknown attributes are ignored. */
+  public ignoreUnknownAttributesForChild(_element: XMLToken): boolean {
+    void _element;
+    return false;
+  }
   /** Receives a known start element. @param _element - Element token. @param _attributes - Attributes. @returns Nothing. */
   public startFastElement(_element: XMLToken, _attributes: FastAttributeList): void {
     void _element;
@@ -116,6 +123,14 @@ export abstract class SvXMLImportContext {
 
 /** Explicit policy for a known ignored subtree. */
 export class SvXMLIgnoreContext extends SvXMLImportContext {
+  /** Creates an ignored subtree. @param metadataOnly - Whether even unknown attributes have no document effect. @returns Context. */
+  public constructor(private readonly metadataOnly = false) {
+    super();
+  }
+  /** Applies the explicitly selected ignore policy to descendants. @returns Whether to ignore unknown attributes. */
+  public override ignoreUnknownAttributesForChild(): boolean {
+    return this.metadataOnly;
+  }
   /** Ignores a known descendant. @returns This subtree context. */
   public override createFastChildContext(): SvXMLImportContext {
     return this;
@@ -163,13 +178,14 @@ export function parseOdfXmlStream(
               (frame) => frame.name,
             )
             .join("/")}/${tag.name}`;
+          const parent = stack[stack.length - 1];
           const fastAttributes = new FastAttributeList(
             attributes,
             activePath,
             options.onDiagnostic,
+            parent?.context.ignoreUnknownAttributesForChild(getXMLToken(tag.uri, tag.local)),
           );
           const token = getXMLToken(tag.uri, tag.local);
-          const parent = stack[stack.length - 1];
           const context =
             parent === undefined
               ? token === XMLToken.UNKNOWN

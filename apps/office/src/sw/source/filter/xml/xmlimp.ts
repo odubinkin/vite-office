@@ -613,6 +613,10 @@ class SwXMLBodyContext extends SvXMLImportContext {
 
 /** Imports metadata while explicitly ignoring the known generator element. */
 class XMLMetaContext extends SvXMLImportContext {
+  /** Ignores only metadata fields without canonical Writer effect. @param element - Child token. @returns Whether metadata-only. */
+  public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
+    return ignoredMetadataChildren.has(element);
+  }
   /** Creates a metadata context. @param xmlImport - Import owner. @returns Context. */
   public constructor(private readonly xmlImport: SwXMLImport) {
     super();
@@ -643,7 +647,7 @@ class XMLMetaContext extends SvXMLImportContext {
         },
       );
     }
-    if (ignoredMetadataChildren.has(element)) return new SvXMLIgnoreContext();
+    if (ignoredMetadataChildren.has(element)) return new SvXMLIgnoreContext(true);
     return null;
   }
 }

@@ -4,7 +4,7 @@ title: "Recognize harmless ODT declarations and style attributes"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -22,10 +22,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: "User requested implementation of the seven ordered phases in docs/program/certification-odt-import-plan.md; outside-repo sample access remains pending separate authorization."
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T16:22:48.510Z"
+  updated_by: "CODER"
+  note: "Full verification passed; declaration classification preserved canonical semantics and retained semantic diagnostics."
   attempts: 0
 commit: null
 comments:
@@ -40,8 +40,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: recognize observed harmless ODT declarations using pinned xmloff contexts and source-backed fixtures."
+  -
+    type: "verify"
+    at: "2026-09-24T16:22:48.510Z"
+    author: "CODER"
+    state: "ok"
+    note: "Full verification passed; declaration classification preserved canonical semantics and retained semantic diagnostics."
 doc_version: 3
-doc_updated_at: "2026-09-24T16:05:13.640Z"
+doc_updated_at: "2026-09-24T16:22:48.582Z"
 doc_updated_by: "CODER"
 description: "Phase 1: exact namespace token/context recognition and intentional metadata ignore classification, preserving invalid semantic diagnostics."
 sections:
@@ -62,11 +68,41 @@ sections:
     4. Every ignored field has an upstream source and tested harmless classification; malformed values remain errors/diagnostics.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T16:22:48.510Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Full verification passed; declaration classification preserved canonical semantics and retained semantic diagnostics.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T16:22:41.174Z, excerpt_hash=sha256:f0df7c1dc2c1b127fb6ce9efc5f4486ab5b4fe891b0d8d331a4592c21472d5aa
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-NM0G73/blueprint/resolved-snapshot.json
+    - old_digest: d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f
+    - current_digest: d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241521-NM0G73
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609241521-NM0G73
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "Verification: npm run verify passed. App Vitest: 495 tests, 100% coverage; inventory Vitest: 107 tests, 100% coverage; Playwright: 14 tests. Focused declaration/roundtrip/diagnostic tests: 20 passed; inventory fixture/diagnostic tests: 15 passed. Authorized private ODT local diagnostic only: warning occurrences 490 to 445, grouped warnings 184 to 173, canonical model and XML projection unchanged. Semantic unsupported properties remain explicit diagnostics. Private ODT is not a tracked test fixture."
 id_source: "generated"
 ---
 ## Summary
@@ -96,6 +132,36 @@ Exact namespace token and owning-context handling for observed harmless declarat
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T16:22:48.510Z — VERIFY — ok
+
+By: CODER
+
+Note: Full verification passed; declaration classification preserved canonical semantics and retained semantic diagnostics.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T16:22:41.174Z, excerpt_hash=sha256:f0df7c1dc2c1b127fb6ce9efc5f4486ab5b4fe891b0d8d331a4592c21472d5aa
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-NM0G73/blueprint/resolved-snapshot.json
+- old_digest: d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f
+- current_digest: d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241521-NM0G73
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609241521-NM0G73
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -104,3 +170,5 @@ Exact namespace token and owning-context handling for observed harmless declarat
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Verification: npm run verify passed. App Vitest: 495 tests, 100% coverage; inventory Vitest: 107 tests, 100% coverage; Playwright: 14 tests. Focused declaration/roundtrip/diagnostic tests: 20 passed; inventory fixture/diagnostic tests: 15 passed. Authorized private ODT local diagnostic only: warning occurrences 490 to 445, grouped warnings 184 to 173, canonical model and XML projection unchanged. Semantic unsupported properties remain explicit diagnostics. Private ODT is not a tracked test fixture.

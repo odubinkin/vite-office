@@ -89,6 +89,11 @@ interface ActiveList {
 export class XMLTextBodyContext extends SvXMLImportContext {
   private readonly lists: ListImportState = { generatedListId: 0, listIds: new Map() };
 
+  /** Sequence declarations carry no modeled effect without sequence fields. @param element - Child token. @returns Whether declaration-only. */
+  public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
+    return element === XMLToken.TEXT_SEQUENCE_DECLS;
+  }
+
   /** Creates a body context. @param target - Writer import target. @returns Context. */
   public constructor(private readonly target: XMLTextImportTarget) {
     super();
@@ -103,7 +108,7 @@ export class XMLTextBodyContext extends SvXMLImportContext {
       return new XMLParaContext(this.target, element, attributes);
     if (element === XMLToken.TEXT_LIST)
       return new XMLListContext(this.target, attributes, this.lists);
-    if (element === XMLToken.TEXT_SEQUENCE_DECLS) return new SvXMLIgnoreContext();
+    if (element === XMLToken.TEXT_SEQUENCE_DECLS) return new SvXMLIgnoreContext(true);
     return null;
   }
 }

@@ -26,7 +26,7 @@ describe("ODT structural diagnostic callback", /** Groups diagnostic routing ass
     expect(imported.document.paragraphs).toHaveLength(1);
     expect(diagnostics).toContainEqual(
       expect.objectContaining({
-        kind: "unknown-attribute",
+        kind: "unsupported-attribute",
         stream: "content.xml",
         name: "style:font-family-generic",
       }),

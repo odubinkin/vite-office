@@ -45,6 +45,10 @@ export interface OdfPageLayout {
 
 /** Imports style and numbering definitions before document references. */
 export class XMLStylesContext extends SvXMLImportContext {
+  /** Ignores only theme declaration attributes; numbering and layout remain diagnostic. @param element - Child token. @returns Whether metadata-only. */
+  public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
+    return element === XMLToken.LOEXT_THEME;
+  }
   /** Creates a style container. @param target - Definition consumer. @returns Context. */
   public constructor(private readonly target: XMLStyleImportTarget) {
     super();
@@ -68,6 +72,7 @@ export class XMLStylesContext extends SvXMLImportContext {
         /** Registers document line-number settings. @param value - Imported value. @returns Nothing. */
         (value) => this.target.registerLineNumbering(value),
       );
+    if (element === XMLToken.LOEXT_THEME) return new SvXMLIgnoreContext(true);
     if (ignoredStyleDefinitions.has(element)) return new SvXMLIgnoreContext();
     return null;
   }
@@ -556,6 +561,25 @@ function importCharacterProperties(
   attributes: FastAttributeList,
   target: XMLStyleImportTarget,
 ): Partial<OdfCharacterProperties> {
+  attributes.assertOnly(
+    [
+      XMLToken.FO_FONT_WEIGHT,
+      XMLToken.STYLE_FONT_NAME,
+      XMLToken.FO_FONT_FAMILY,
+      XMLToken.FO_FONT_SIZE,
+      XMLToken.FO_FONT_STYLE,
+      XMLToken.STYLE_TEXT_UNDERLINE_STYLE,
+      XMLToken.STYLE_TEXT_UNDERLINE_WIDTH,
+      XMLToken.FO_COLOR,
+      XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
+      XMLToken.FO_BACKGROUND_COLOR,
+      XMLToken.STYLE_FONT_WEIGHT_ASIAN,
+      XMLToken.STYLE_FONT_WEIGHT_COMPLEX,
+      XMLToken.STYLE_FONT_STYLE_ASIAN,
+      XMLToken.STYLE_FONT_STYLE_COMPLEX,
+    ],
+    "text properties",
+  );
   const weight = attributes.get(XMLToken.FO_FONT_WEIGHT);
   const faceName = attributes.get(XMLToken.STYLE_FONT_NAME);
   const fallbackFontFamily = attributes.get(XMLToken.FO_FONT_FAMILY);
