@@ -248,6 +248,31 @@ export class SwpHints {
     );
   }
 
+  /** Applies a foreground or highlight color to every selected native character segment. */
+  /** Handles Writer formatting state. @param textLength - Input value. @param start - Input value. @param end - Input value. @param property - Input value. @param value - Input value. @param inherited - Input value. @returns Callback result. */ public setCharacterColor(
+    textLength: number,
+    start: number,
+    end: number,
+    property: "color" | "highlight",
+    value: string,
+    inherited: SfxItemSet,
+  ): SwpHints {
+    return this.replaceCharacterRange(
+      textLength,
+      start,
+      end,
+      this.collectCharacterSegments(textLength, start, end, inherited).map(
+        /** Handles Writer formatting state. @param segment - Input value. @returns Callback result. */ (
+          segment,
+        ) => ({
+          ...segment,
+          attributes: { ...segment.attributes, [property]: value },
+        }),
+      ),
+      inherited,
+    );
+  }
+
   /** Queries one supported character item over a native range. @param textLength - Complete text length. @param start - Inclusive range start. @param end - Exclusive range end. @param format - Queried item group. @param inherited - Node/style items. @returns Uniform or mixed state. */
   public getCharacterFormatState(
     textLength: number,

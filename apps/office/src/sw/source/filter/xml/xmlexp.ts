@@ -19,7 +19,12 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import {
+  SfxBoolItem,
+  SfxInt16Item,
+  SfxInt16ListItem,
+  SfxStringItem,
+} from "../../../../svl/source/items/poolitem";
 import {
   escapeXml,
   exportCharacterAttributes,
@@ -393,7 +398,9 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (right !== undefined && !(right instanceof SvxRightMarginItem)) ||
     (spacing !== undefined && !(spacing instanceof SvxULSpaceItem)) ||
     (lineSpacing !== undefined && !(lineSpacing instanceof SvxLineSpacingItem)) ||
-    (tabStop !== undefined && !(tabStop instanceof SfxInt16Item)) ||
+    (tabStop !== undefined &&
+      !(tabStop instanceof SfxInt16Item) &&
+      !(tabStop instanceof SfxInt16ListItem)) ||
     (keep !== undefined && !(keep instanceof SfxBoolItem)) ||
     (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem))
   )
@@ -425,6 +432,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     ...(tabStop instanceof SfxInt16Item && tabStop.GetValue() >= 0
       ? { tabStopPosition: tabStop.GetValue() }
       : {}),
+    ...(tabStop instanceof SfxInt16ListItem ? { tabStops: tabStop.GetValues() } : {}),
     ...(keep instanceof SfxBoolItem ? { keepWithNext: keep.GetValue() } : {}),
     ...(lineNumber instanceof SfxBoolItem ? { countLineNumbers: lineNumber.GetValue() } : {}),
   };

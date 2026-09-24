@@ -4,6 +4,20 @@ import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
+import {
+  WriterAdvancedFormattingControls,
+  type WriterParagraphFormatValue,
+} from "./WriterAdvancedFormattingControls";
+import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../editeng/source/items/paraitem";
+import { SfxBoolItem, SfxInt16Item, SfxInt16ListItem } from "../../../svl/source/items/poolitem";
+import {
+  RES_KEEP,
+  RES_LINENUMBER,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
+  RES_UL_SPACE,
+} from "../../inc/hintids";
+import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { WriterFileDialog } from "./WriterFileDialog";
@@ -67,6 +81,7 @@ export function WriterWorkbench({
   autosave,
 }: WriterWorkbenchProps): React.JSX.Element {
   const localization = useBrowserLocalization();
+  const [showLineNumbers, setShowLineNumbers] = useState(false);
   const [presentationStore] = useState(
     /** Reuses the session store or owns one browser-local store for an injected view. @returns Presentation store. */ () =>
       viewStore ?? new WriterViewStore(view),
@@ -134,6 +149,43 @@ export function WriterWorkbench({
     () => createBrowserCommandSource(view.GetViewFrame()),
     [view],
   );
+  const pendingColors = projectWriterCharacterAttributes(
+    view.GetWrtShell().GetPendingCharacterItems(),
+  );
+  const applyParagraphFormat =
+    /** Handles Writer formatting state. @param value - Input value. @returns Callback result. */ (
+      value: WriterParagraphFormatValue,
+    ): void => {
+      const shell = view.GetWrtShell();
+      const spacing = new SvxULSpaceItem(
+        Math.round(value.upperPt * 20),
+        Math.round(value.lowerPt * 20),
+        RES_UL_SPACE,
+        value.contextual,
+      );
+      const lineSpacing = new SvxLineSpacingItem(
+        value.lineValue,
+        RES_PARATR_LINESPACING,
+        value.lineMode,
+        value.fontIndependent,
+      );
+      const tabPositions = value.tabStopsPt.map(
+        /** Handles Writer formatting state. @param position - Input value. @returns Callback result. */ (
+          position,
+        ) => Math.round(position * 20),
+      );
+      const tabs =
+        tabPositions.length > 1
+          ? new SfxInt16ListItem(RES_PARATR_TABSTOP, tabPositions)
+          : new SfxInt16Item(RES_PARATR_TABSTOP, tabPositions[0] ?? -1);
+      shell.SetParagraphItems([
+        spacing,
+        lineSpacing,
+        tabs,
+        new SfxBoolItem(RES_KEEP, value.keepWithNext),
+        new SfxBoolItem(RES_LINENUMBER, value.countLineNumbers),
+      ]);
+    };
   const getLocalizedCommandResource = useCallback(
     /** Resolves generated command metadata through the application locale service. @param commandUrl - Canonical command URL. @returns Localized resource. */
     (commandUrl: string) => {
@@ -155,6 +207,33 @@ export function WriterWorkbench({
         documentTitle={snapshot.documentState.title}
         formattingToolbar={
           <WriterFormattingToolbar
+            advancedControls={
+              <WriterAdvancedFormattingControls
+                color={pendingColors.color ?? "auto"}
+                highlight={pendingColors.highlight ?? "transparent"}
+                paragraph={snapshot.activeParagraph.computedStyle}
+                onColor={
+                  /** Handles Writer formatting state. @param property - Input value. @param value - Input value. @returns Callback result. */ (
+                    property,
+                    value,
+                  ) => {
+                    view.GetWrtShell().SetCharacterColor(property, value);
+                  }
+                }
+                onLineSpacing={
+                  /** Handles Writer formatting state. @param percent - Input value. @returns Callback result. */ (
+                    percent,
+                  ) => {
+                    view
+                      .GetWrtShell()
+                      .SetParagraphItem(new SvxLineSpacingItem(percent, RES_PARATR_LINESPACING));
+                  }
+                }
+                onParagraphFormat={applyParagraphFormat}
+                showLineNumbers={showLineNumbers}
+                onShowLineNumbersChange={setShowLineNumbers}
+              />
+            }
             commandSource={commandSource}
             paragraphStyleOptions={snapshot.paragraphStyleOptions}
             resolveArguments={resolveCommandArguments}
@@ -207,6 +286,30 @@ export function WriterWorkbench({
                 view.GetWrtShell().SetParagraphRulerIndents(value);
               }
             }
+            onTabStopsChange={
+              /** Handles Writer formatting state. @param positionsPt - Input value. @returns Callback result. */ (
+                positionsPt,
+              ) => {
+                const positions = positionsPt
+                  .filter(
+                    /** Handles Writer formatting state. @param position - Input value. @returns Callback result. */ (
+                      position,
+                    ) => position > 0,
+                  )
+                  .map(
+                    /** Handles Writer formatting state. @param position - Input value. @returns Callback result. */ (
+                      position,
+                    ) => Math.round(position * 20),
+                  );
+                view
+                  .GetWrtShell()
+                  .SetParagraphItem(
+                    positions.length > 1
+                      ? new SfxInt16ListItem(RES_PARATR_TABSTOP, positions)
+                      : new SfxInt16Item(RES_PARATR_TABSTOP, positions[0] ?? -1),
+                  );
+              }
+            }
             page={snapshot.pageDescriptor}
             paragraph={snapshot.activeParagraph}
           />
@@ -227,6 +330,7 @@ export function WriterWorkbench({
           pageDescriptors={snapshot.pageDescriptors}
           paragraphSpacingSettings={snapshot.paragraphSpacingSettings}
           paragraphs={snapshot.paragraphs}
+          showLineNumbers={showLineNumbers}
           verticalRuler={
             snapshot.isVerticalRulerVisible ? (
               <WriterVerticalRuler

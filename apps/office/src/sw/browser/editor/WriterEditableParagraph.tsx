@@ -21,6 +21,7 @@ export interface WriterEditableParagraphProps {
   readonly fragmentStart?: number;
   readonly topSpacingPt?: number;
   readonly isFollow?: boolean;
+  readonly lineNumbers?: readonly Readonly<{ number: number; topPt: number }>[];
   readonly retainElement: (paragraphId: string, element: HTMLParagraphElement | null) => void;
 }
 
@@ -36,6 +37,7 @@ export function WriterEditableParagraph({
   fragmentStart = 0,
   topSpacingPt,
   isFollow = false,
+  lineNumbers,
   retainElement,
 }: WriterEditableParagraphProps): React.JSX.Element {
   const paragraphElement = useRef<HTMLParagraphElement | null>(null);
@@ -51,12 +53,27 @@ export function WriterEditableParagraph({
   const markerWidthPt = Math.max(0, contentStartPt - markerStartPt);
   return (
     <div
-      className="shrink-0"
+      className="relative shrink-0"
       data-active={isActive}
       style={{
         marginBlockStart: `${topSpacingPt ?? getWriterParagraphGap(previousParagraph, paragraph, paragraphSpacingSettings)}pt`,
       }}
     >
+      {lineNumbers?.map(
+        /** Handles Writer formatting state. @param entry - Input value. @returns Callback result. */ (
+          entry,
+        ) => (
+          <span
+            aria-hidden="true"
+            className="absolute -left-10 w-8 text-right text-xs text-slate-400"
+            contentEditable={false}
+            key={entry.number}
+            style={{ top: `${entry.topPt}pt` }}
+          >
+            {entry.number}
+          </span>
+        ),
+      )}
       <span className="sr-only" id={styleDescriptionId} contentEditable={false}>
         Paragraph style: {paragraph.styleDisplayName}
         {listMarker === undefined

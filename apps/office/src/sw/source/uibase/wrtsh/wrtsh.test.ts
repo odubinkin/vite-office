@@ -6,8 +6,18 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import { projectWriterParagraphList } from "../../core/doc/list";
 import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
+import { SfxBoolItem, SfxInt16ListItem } from "../../../../svl/source/items/poolitem";
+import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
+import {
+  RES_KEEP,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
+  RES_UL_SPACE,
+} from "../../../inc/hintids";
 import { SwUndoPageDesc, SwUndoRulerIndent } from "../../core/undo/SwUndoPageDesc";
+import { SwUndoParagraphItem } from "../../core/undo/unattr";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
@@ -37,6 +47,99 @@ function createShell(text = ""): SwWrtShell {
 }
 
 describe("Writer canonical input shell", /** Registers canonical cursor and input tests. @returns Nothing. */ function defineWriterInputShellTests(): void {
+  it("applies colors and paragraph properties with undo and redo", /** Handles Writer formatting state.  @returns Callback result. */ () => {
+    const shell = createShell("colored text");
+    expect(
+      /** Rejects a malformed direct color. @returns Whether Writer changed. */ () =>
+        shell.SetCharacterColor("color", "bad"),
+    ).toThrow("six-digit hex");
+    setTestSelection(shell, {
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 7, paragraphId: "p-1" },
+    });
+    expect(shell.SetCharacterColor("color", "#cc2200")).toBe(true);
+    expect(shell.SetCharacterColor("highlight", "#ffff00")).toBe(true);
+    expect(shell.SetCharacterColor("highlight", "#ffff00")).toBe(false);
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.attributes).toMatchObject({
+      color: "#cc2200",
+      highlight: "#ffff00",
+    });
+    expect(shell.Undo()).toBe(true);
+    expect(
+      projectWriterTextRuns(shell.GetActiveParagraph())[0]?.attributes.highlight,
+    ).toBeUndefined();
+    expect(shell.Redo()).toBe(true);
+    expect(projectWriterTextRuns(shell.GetActiveParagraph())[0]?.attributes.highlight).toBe(
+      "#ffff00",
+    );
+    expect(shell.SetParagraphItem(new SvxLineSpacingItem(150, RES_PARATR_LINESPACING))).toBe(true);
+    expect(shell.SetParagraphItem(new SvxULSpaceItem(120, 240, RES_UL_SPACE, true))).toBe(true);
+    expect(shell.SetParagraphItem(new SfxInt16ListItem(RES_PARATR_TABSTOP, [720, 1440]))).toBe(
+      true,
+    );
+    expect(shell.SetParagraphItem(new SfxBoolItem(RES_KEEP, true))).toBe(true);
+    expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+    expect(shell.Undo()).toBe(true);
+    expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(false);
+    expect(shell.Redo()).toBe(true);
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16ListItem).GetValues(),
+    ).toEqual([720, 1440]);
+    const node = shell.GetActiveParagraph();
+    const cursor = shell.CaptureCursorState();
+    expect(
+      new SwUndoParagraphItem(
+        node,
+        undefined,
+        new SfxBoolItem(RES_KEEP, true),
+        cursor,
+        cursor,
+      ).GetPayloadSize(),
+    ).toBe(2);
+    expect(shell.SetParagraphItem(new SfxBoolItem(RES_KEEP, false))).toBe(true);
+    expect(shell.Undo()).toBe(true);
+    expect((node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+    expect(shell.Redo()).toBe(true);
+    expect((node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(false);
+    expect(shell.SetParagraphItem(new SfxBoolItem(RES_KEEP, false))).toBe(false);
+  });
+  it("colors a selection spanning paragraphs in one undo step", /** Checks multi-paragraph color application. @returns Nothing. */ () => {
+    const shell = createShell("firstsecond");
+    const secondId = fixtureSplitParagraph(shell, "p-1", 5);
+    setTestSelection(shell, {
+      mark: { offset: 2, paragraphId: "p-1" },
+      point: { offset: 3, paragraphId: secondId },
+    });
+    expect(shell.SetCharacterColor("color", "#123456")).toBe(true);
+    expect(
+      projectWriterTextRuns(shell.GetDoc().paragraphs[0] as SwTextNode).some(
+        /** Detects colored text in the first paragraph. @param run - Text run. @returns Whether colored. */ (
+          run,
+        ) => run.attributes.color === "#123456",
+      ),
+    ).toBe(true);
+    expect(
+      projectWriterTextRuns(shell.GetDoc().paragraphs[1] as SwTextNode).some(
+        /** Detects colored text in the second paragraph. @param run - Text run. @returns Whether colored. */ (
+          run,
+        ) => run.attributes.color === "#123456",
+      ),
+    ).toBe(true);
+    expect(shell.Undo()).toBe(true);
+    expect(
+      shell
+        .GetDoc()
+        .paragraphs.every(
+          /** Confirms color rollback on every selected paragraph. @param node - Paragraph. @returns Whether clear. */ (
+            node,
+          ) =>
+            projectWriterTextRuns(node).every(
+              /** Checks one text run. @param run - Text run. @returns Whether clear. */ (run) =>
+                run.attributes.color === undefined,
+            ),
+        ),
+    ).toBe(true);
+  });
   it("applies page geometry and ruler indents through Writer undo", /** Verifies page and ruler actions plus payloads. @returns Nothing. */ () => {
     const shell = createShell("Body");
     const initialPage = shell.GetDoc().GetPageDesc().GetValue();

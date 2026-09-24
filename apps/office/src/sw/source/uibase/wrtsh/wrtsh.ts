@@ -3,6 +3,7 @@
 import type { SfxShell } from "../../../../sfx2/source/control/dispatch";
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
@@ -363,6 +364,28 @@ export class SwWrtShell extends SwModify {
   /** Applies a font height. @param fontSizePt - Selected height in points. @returns Whether document content changed. */
   public SetFontSize(fontSizePt: number): boolean {
     return this.textShell.SetFontSize(fontSizePt);
+  }
+
+  /** Applies a foreground or highlight color through the text shell. */
+  /** Handles Writer formatting state. @param property - Input value. @param value - Input value. @returns Callback result. */ public SetCharacterColor(
+    property: "color" | "highlight",
+    value: string,
+  ): boolean {
+    return this.textShell.SetCharacterColor(property, value);
+  }
+
+  /** Applies a direct paragraph item through the text shell. */
+  /** Handles Writer formatting state. @param item - Input value. @returns Callback result. */ public SetParagraphItem(
+    item: SfxPoolItem,
+  ): boolean {
+    return this.textShell.SetParagraphItem(item);
+  }
+
+  /** Applies one paragraph dialog transaction through the text shell. */
+  /** Handles Writer formatting state. @param items - Input value. @returns Callback result. */ public SetParagraphItems(
+    items: readonly SfxPoolItem[],
+  ): boolean {
+    return this.textShell.SetParagraphItems(items);
   }
 
   /** Applies paragraph alignment through one shell-owned history transition. @param alignment - Next alignment. @returns Whether content changed. */

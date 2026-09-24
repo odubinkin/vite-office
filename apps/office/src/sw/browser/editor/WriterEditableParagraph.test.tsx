@@ -59,6 +59,23 @@ function paragraph(color?: string, highlight?: string): WriterParagraphProjectio
 }
 
 describe("Writer editable paragraph colors", /** Groups color rendering tests. @returns Nothing. */ () => {
+  it("places enabled line numbers beside the paragraph", /** Verifies line-number presentation. @returns Nothing. */ () => {
+    render(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        listMarker={undefined}
+        paragraph={paragraph()}
+        lineNumbers={[
+          { number: 1, topPt: 0 },
+          { number: 2, topPt: 14 },
+        ]}
+        retainElement={/** Ignores the mounted node. @returns Nothing. */ () => undefined}
+      />,
+    );
+    expect(screen.getByText("1")).toHaveStyle({ top: "0pt" });
+    expect(screen.getByText("2")).toHaveStyle({ top: "14pt" });
+  });
   it("renders a compact list marker and semantic hyperlink separately from body text", /** Checks renders a compact list marker and semantic hyperlink separately from body text. @returns Test callback result. */ () => {
     const source = paragraph();
     const view = render(

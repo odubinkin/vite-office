@@ -54,6 +54,39 @@ export function createSwPageFrames(
   let used = 0;
   for (const [paragraphIndex, paragraph] of paragraphs.entries()) {
     const gap = getSwTextFrameGap(paragraphs[paragraphIndex - 1], paragraph, settings);
+    const nextParagraph = paragraphs[paragraphIndex + 1];
+    const currentPage = pages[pages.length - 1] as SwTextFrame[];
+    const currentDescriptor = pageDescriptors[pages.length - 1] as WriterPageDescriptorValue;
+    const availableHeight =
+      currentDescriptor.height - currentDescriptor.topMargin - currentDescriptor.bottomMargin;
+    const wholeParagraphHeight = paragraph.lines.reduce(
+      /** Handles Writer formatting state. @param sum - Input value. @param line - Input value. @returns Callback result. */ (
+        sum,
+        line,
+      ) => sum + line.height,
+      0,
+    );
+    const nextFirstLine = nextParagraph?.lines[0];
+    if (
+      paragraph.keepWithNext &&
+      nextParagraph !== undefined &&
+      nextFirstLine !== undefined &&
+      currentPage.length > 0 &&
+      wholeParagraphHeight + nextFirstLine.height <= availableHeight &&
+      used +
+        gap +
+        wholeParagraphHeight +
+        getSwTextFrameGap(paragraph, nextParagraph, settings) +
+        nextFirstLine.height >
+        availableHeight
+    ) {
+      pages.push([]);
+      activeDescriptor = descriptorByName.get(activeDescriptor.followName);
+      if (activeDescriptor === undefined)
+        throw new Error("Writer layout follow page descriptor is missing.");
+      pageDescriptors.push(activeDescriptor.value);
+      used = 0;
+    }
     let firstLine = 0;
     while (firstLine < paragraph.lines.length) {
       const page = pages[pages.length - 1] as SwTextFrame[];

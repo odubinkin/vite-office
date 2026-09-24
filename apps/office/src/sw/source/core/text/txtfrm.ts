@@ -15,6 +15,8 @@ export interface SwTextFrameInput {
   readonly style: string;
   readonly contextualSpacing: boolean;
   readonly upperSpacing: number;
+  readonly keepWithNext?: boolean;
+  readonly countLineNumbers?: boolean;
 }
 
 /** Document settings consumed by the supported paragraph-spacing path. */

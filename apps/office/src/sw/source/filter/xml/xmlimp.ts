@@ -22,6 +22,7 @@ import {
 import {
   SfxBoolItem,
   SfxInt16Item,
+  SfxInt16ListItem,
   SfxStringItem,
   type SfxPoolItem,
 } from "../../../../svl/source/items/poolitem";
@@ -765,8 +766,10 @@ function putParagraphProperties(
         properties.fontIndependentLineSpacing === true,
       ),
     );
-  if (properties.tabStopPosition !== undefined)
-    put(new SfxInt16Item(RES_PARATR_TABSTOP, properties.tabStopPosition));
+  const singleTabStop = properties.tabStopPosition ?? properties.tabStops?.[0];
+  if (properties.tabStops !== undefined && properties.tabStops.length > 1)
+    put(new SfxInt16ListItem(RES_PARATR_TABSTOP, properties.tabStops));
+  else if (singleTabStop !== undefined) put(new SfxInt16Item(RES_PARATR_TABSTOP, singleTabStop));
   if (properties.keepWithNext !== undefined)
     put(new SfxBoolItem(RES_KEEP, properties.keepWithNext));
   if (properties.countLineNumbers !== undefined)

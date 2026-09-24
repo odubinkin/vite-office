@@ -137,6 +137,62 @@ export class SfxInt16Item extends SfxPoolItem {
   }
 }
 
+/** Ordered paragraph tab positions stored as one pooled item. */
+export class SfxInt16ListItem extends SfxPoolItem {
+  private readonly values: readonly number[];
+
+  /** Creates sorted, unique tab stops. @param which - Item identity. @param values - Twip positions. */
+  /** Handles Writer formatting state. @param which - Input value. @param values - Input value. @returns Callback result. */ public constructor(
+    which: number,
+    values: readonly number[],
+  ) {
+    super(which);
+    if (
+      values.some(
+        /** Handles Writer formatting state. @param value - Input value. @returns Callback result. */ (
+          value,
+        ) => !Number.isInteger(value) || value < 0 || value > 32767,
+      )
+    )
+      throw new Error("Tab positions must fit the non-negative signed 16-bit range.");
+    this.values = Object.freeze(
+      [...new Set(values)].sort(
+        /** Handles Writer formatting state. @param left - Input value. @param right - Input value. @returns Callback result. */ (
+          left,
+          right,
+        ) => left - right,
+      ),
+    );
+  }
+
+  /** Returns the tab positions. @returns Twip positions. */
+  public GetValues(): readonly number[] {
+    return this.values;
+  }
+  /** Clones this pooled item. @returns Independent tab list. */
+  public Clone(): SfxInt16ListItem {
+    return new SfxInt16ListItem(this.Which(), this.values);
+  }
+  /** Compares tab positions and item identity. @param other - Candidate item. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SfxInt16ListItem &&
+      other.Which() === this.Which() &&
+      this.values.length === other.values.length &&
+      this.values.every(
+        /** Handles Writer formatting state. @param value - Input value. @param index - Input value. @returns Callback result. */ (
+          value,
+          index,
+        ) => value === other.values[index],
+      )
+    );
+  }
+  /** Returns persisted tab positions. @returns Twip positions. */
+  public QueryValue(): readonly number[] {
+    return this.values;
+  }
+}
+
 /** Boolean SfxPoolItem used by request arguments, return values, and checked state. */
 export class SfxBoolItem extends SfxPoolItem {
   /** Creates a boolean item. @param which - Item identity. @param value - Boolean value. @returns Nothing. */

@@ -86,6 +86,103 @@ describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisio
   });
 });
 
+describe("Writer imported formatting controls", /** Covers visual line numbers and ruler tab stops. @returns Nothing. */ () => {
+  it("shows only participating paragraphs in continuous line numbering", /** Checks paragraph participation in the editor. @returns Nothing. */ () => {
+    const { container } = render(
+      <WriterPlainTextEditor
+        activeParagraphId="p1"
+        cursorSelection={{ point: { paragraphId: "p1", offset: 0 } }}
+        editWindow={{ FocusNode: vi.fn(), SetSelection: vi.fn() } as unknown as SwEditWin}
+        pageDescriptor={page}
+        paragraphs={[
+          {
+            ...paragraph("p1", "first"),
+            computedStyle: { ...paragraph("p1", "first").computedStyle, countLineNumbers: true },
+          },
+          {
+            ...paragraph("p2", "second"),
+            computedStyle: { ...paragraph("p2", "second").computedStyle, countLineNumbers: false },
+          },
+        ]}
+        showLineNumbers
+      />,
+    );
+    expect(container.querySelectorAll("article span[aria-hidden='true']")).toHaveLength(1);
+    expect(container.querySelector("article span[aria-hidden='true']")?.textContent).toBe("1");
+  });
+
+  it("adds and drags tab markers on the horizontal ruler", /** Checks ruler tab-stop callbacks. @returns Nothing. */ () => {
+    const onTabStopsChange = vi.fn();
+    const item = paragraph("tabbed", "Text");
+    const { container } = render(
+      <WriterRulers
+        horizontalVisible
+        onPageChange={vi.fn()}
+        onParagraphIndentChange={vi.fn()}
+        onTabStopsChange={onTabStopsChange}
+        page={page}
+        paragraph={{ ...item, computedStyle: { ...item.computedStyle, tabStopsPt: [36] } }}
+      />,
+    );
+    const rulerSurface = container.querySelector(
+      '[aria-label="Writer horizontal ruler"] > div',
+    ) as HTMLElement;
+    fireEvent.click(rulerSurface, { clientX: 240 });
+    expect(onTabStopsChange).toHaveBeenCalledWith([36, expect.any(Number)]);
+    fireEvent.click(rulerSurface, { clientX: 0 });
+    expect(onTabStopsChange).toHaveBeenCalledTimes(1);
+    const handle = screen.getByRole("button", { name: "Tab stop 1" });
+    fireEvent.pointerDown(handle, { clientX: 100 });
+    fireEvent.pointerUp(window, { clientX: 115 });
+    expect(onTabStopsChange).toHaveBeenCalledWith([expect.any(Number)]);
+  });
+
+  it("retains other tab stops when dragging a marker", /** Checks multi-stop ruler editing. @returns Nothing. */ () => {
+    const onTabStopsChange = vi.fn();
+    const item = paragraph("tabbed", "Text");
+    const { container, rerender } = render(
+      <WriterRulers
+        horizontalVisible
+        onPageChange={vi.fn()}
+        onParagraphIndentChange={vi.fn()}
+        onTabStopsChange={onTabStopsChange}
+        page={page}
+        paragraph={{ ...item, computedStyle: { ...item.computedStyle, tabStopsPt: [36, 72] } }}
+      />,
+    );
+    const handle = screen.getByRole("button", { name: "Tab stop 1" });
+    fireEvent.pointerDown(handle, { clientX: 100 });
+    fireEvent.pointerUp(window, { clientX: 115 });
+    expect(onTabStopsChange).toHaveBeenCalledWith([expect.any(Number), 72]);
+    rerender(
+      <WriterRulers
+        horizontalVisible
+        onPageChange={vi.fn()}
+        onParagraphIndentChange={vi.fn()}
+        onTabStopsChange={onTabStopsChange}
+        page={page}
+        paragraph={{ ...item, computedStyle: { ...item.computedStyle, tabStopsPt: undefined } }}
+      />,
+    );
+    const rulerSurface = container.querySelector(
+      '[aria-label="Writer horizontal ruler"] > div',
+    ) as HTMLElement;
+    fireEvent.click(rulerSurface, { clientX: 240 });
+    expect(onTabStopsChange).toHaveBeenLastCalledWith([expect.any(Number)]);
+    rerender(
+      <WriterRulers
+        horizontalVisible
+        onPageChange={vi.fn()}
+        onParagraphIndentChange={vi.fn()}
+        page={page}
+        paragraph={item}
+      />,
+    );
+    fireEvent.click(rulerSurface, { clientX: 240 });
+    expect(onTabStopsChange).toHaveBeenCalledTimes(2);
+  });
+});
+
 /** Creates the minimum complete paragraph projection used by browser pagination and ruler tests. @param id - Projection identity. @param text - Paragraph text. @returns Paragraph projection. */
 function paragraph(id: string, text: string): WriterParagraphProjection {
   return {
@@ -331,6 +428,56 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     expect(document.querySelectorAll('[data-ruler-guide="y"]')).toHaveLength(1);
     fireEvent.pointerCancel(window);
     expect(document.querySelector('[data-ruler-guide="y"]')).toBeNull();
+    const canvasRect = vi.spyOn(canvas, "getBoundingClientRect").mockReturnValue({
+      top: 0,
+      bottom: 100,
+      left: 0,
+      right: 100,
+      width: 100,
+      height: 100,
+    } as DOMRect);
+    const pageRect = vi.spyOn(pages[1] as HTMLElement, "getBoundingClientRect").mockReturnValue({
+      top: 200,
+      bottom: 300,
+      left: 0,
+      right: 100,
+      width: 100,
+      height: 100,
+    } as DOMRect);
+    fireEvent.pointerDown(rulers[1]?.querySelector('[aria-label="Top page margin"]') as Element, {
+      clientY: 100,
+    });
+    expect(document.querySelector('[data-ruler-guide="y"]')).toBeNull();
+    fireEvent.pointerCancel(window);
+    pageRect.mockReturnValue({
+      top: 50,
+      bottom: 150,
+      left: 0,
+      right: 100,
+      width: 100,
+      height: 100,
+    } as DOMRect);
+    fireEvent.pointerDown(rulers[1]?.querySelector('[aria-label="Top page margin"]') as Element, {
+      clientY: 100,
+    });
+    fireEvent.pointerMove(window, { clientY: 200 });
+    expect(document.querySelector('[data-ruler-guide="y"]')).toBeNull();
+    fireEvent.pointerCancel(window);
+    pageRect.mockReturnValue({
+      top: -20,
+      bottom: 50,
+      left: 0,
+      right: 100,
+      width: 100,
+      height: 70,
+    } as DOMRect);
+    fireEvent.pointerDown(rulers[1]?.querySelector('[aria-label="Top page margin"]') as Element, {
+      clientY: 100,
+    });
+    expect(document.querySelector('[data-ruler-guide="y"]')).toBeNull();
+    fireEvent.pointerCancel(window);
+    canvasRect.mockRestore();
+    pageRect.mockRestore();
   });
 
   it("creates page frames from measured text lines", /** Keeps physical page breaks owned by Writer layout. @returns Nothing. */ () => {

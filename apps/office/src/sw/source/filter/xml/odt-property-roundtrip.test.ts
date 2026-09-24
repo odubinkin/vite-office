@@ -5,7 +5,12 @@ import { describe, expect, it } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import {
+  SfxBoolItem,
+  SfxInt16Item,
+  SfxInt16ListItem,
+  SfxStringItem,
+} from "../../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_COLOR,
   RES_CHRATR_HIGHLIGHT,
@@ -42,6 +47,20 @@ async function rewriteEntry(
 }
 
 describe("Writer ODT mapped pooled properties", /** Groups symmetric property tests. @returns Nothing. */ () => {
+  it("round-trips multiple paragraph tab positions", /** Handles Writer formatting state.  @returns Callback result. */ async () => {
+    const writer = createWriterDocument();
+    writer.paragraphs[0]?.SetAttr(new SfxInt16ListItem(RES_PARATR_TABSTOP, [720, 1440]));
+    const bytes = writeOdtDocument(writer, metadata);
+    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    expect(content).toContain('<style:tab-stop style:position="1.27cm"/>');
+    expect(content).toContain('<style:tab-stop style:position="2.54cm"/>');
+    const reopened = await readOdtDocument(bytes, metadata);
+    expect(
+      (
+        reopened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SfxInt16ListItem
+      ).GetValues(),
+    ).toEqual([720, 1440]);
+  });
   it("round-trips colors, highlight, tab stops, keep-with-next, and line-number participation", /** Verifies direct node and range items survive package serialization. @returns Completion after import. */ async () => {
     const writer = createWriterDocument();
     const paragraph = writer.paragraphs[0];
@@ -175,22 +194,25 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     tabWriter.paragraphs[0]?.SetAttr(new SfxInt16Item(RES_PARATR_TABSTOP, 720));
     tabWriter.GetDfltTextFormatColl().SetFormatAttr(new SfxInt16Item(RES_PARATR_TABSTOP, 360));
     const tabBytes = writeOdtDocument(tabWriter, metadata);
-    await expect(
-      readOdtDocument(
-        await rewriteEntry(
-          tabBytes,
-          "content.xml",
-          /** Adds a second modeled tab stop. @param xml - Content stream. @returns Changed stream. */ (
-            xml,
-          ) =>
-            xml.replace(
-              "</style:tab-stops>",
-              '<style:tab-stop style:position="2cm"/></style:tab-stops>',
-            ),
-        ),
-        metadata,
+    const multiTabOpened = await readOdtDocument(
+      await rewriteEntry(
+        tabBytes,
+        "content.xml",
+        /** Adds a second modeled tab stop. @param xml - Content stream. @returns Changed stream. */ (
+          xml,
+        ) =>
+          xml.replace(
+            "</style:tab-stops>",
+            '<style:tab-stop style:position="2cm"/></style:tab-stops>',
+          ),
       ),
-    ).rejects.toThrow("multiple tab stops");
+      metadata,
+    );
+    expect(
+      (
+        multiTabOpened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SfxInt16ListItem
+      ).GetValues(),
+    ).toEqual([720, 1134]);
     await expect(
       readOdtDocument(
         await rewriteEntry(

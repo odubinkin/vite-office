@@ -53,6 +53,7 @@ export interface OdfParagraphProperties {
   readonly rightMargin?: number;
   /** Single bounded tab-stop position represented by the Writer item, in twips. */
   readonly tabStopPosition?: number;
+  readonly tabStops?: readonly number[];
   readonly upperSpacing?: number;
 }
 
@@ -504,7 +505,7 @@ function paragraphPropertiesKey(properties?: OdfParagraphProperties): string {
       ? ""
       : Number(properties.fontIndependentLineSpacing),
     properties?.contextualSpacing === undefined ? "" : Number(properties.contextualSpacing),
-    properties?.tabStopPosition,
+    properties?.tabStops?.join("|") ?? properties?.tabStopPosition,
     properties?.keepWithNext === undefined ? "" : Number(properties.keepWithNext),
     properties?.countLineNumbers === undefined ? "" : Number(properties.countLineNumbers),
   ]
@@ -518,6 +519,7 @@ function paragraphPropertiesKey(properties?: OdfParagraphProperties): string {
 
 /** Restores paragraph properties from an internal key. @param key - Paragraph key. @returns Properties. */
 function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
+  const fields = key.split(",");
   const [
     firstLineIndent,
     rightMargin,
@@ -529,16 +531,14 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
     lineSpacingTwips,
     fontIndependentLineSpacing,
     contextualSpacing,
-    tabStopPosition,
+    rawTabStops,
     keepWithNext,
     countLineNumbers,
-  ] = key
-    .split(",")
-    .map(
-      /** Decodes one optional paragraph metric. @param value - Stable field. @returns Metric. */ (
-        value,
-      ) => (value === "" ? undefined : Number(value)),
-    );
+  ] = fields.map(
+    /** Decodes one optional paragraph metric. @param value - Stable field. @returns Metric. */ (
+      value,
+    ) => (value === "" ? undefined : Number(value)),
+  );
   return {
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
     ...(rightMargin === undefined ? {} : { rightMargin }),
@@ -552,7 +552,11 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
       ? {}
       : { fontIndependentLineSpacing: fontIndependentLineSpacing === 1 }),
     ...(contextualSpacing === undefined ? {} : { contextualSpacing: contextualSpacing === 1 }),
-    ...(tabStopPosition === undefined ? {} : { tabStopPosition }),
+    ...(fields[10]?.includes("|")
+      ? { tabStops: fields[10].split("|").map(Number) }
+      : rawTabStops === undefined
+        ? {}
+        : { tabStopPosition: rawTabStops }),
     ...(keepWithNext === undefined ? {} : { keepWithNext: keepWithNext === 1 }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers: countLineNumbers === 1 }),
   };
@@ -602,9 +606,12 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
 
 /** Emits child elements of supported ODF paragraph properties. @param properties - Direct properties. @returns XML fragment. */
 export function exportParagraphPropertyChildren(properties: OdfParagraphProperties): string {
-  return properties.tabStopPosition === undefined
+  const positions =
+    properties.tabStops ??
+    (properties.tabStopPosition === undefined ? [] : [properties.tabStopPosition]);
+  return positions.length === 0
     ? ""
-    : `<style:tab-stops><style:tab-stop style:position="${exportOdfLength(properties.tabStopPosition)}"/></style:tab-stops>`;
+    : `<style:tab-stops>${positions.map(/** Handles Writer formatting state. @param position - Input value. @returns Callback result. */ (position) => `<style:tab-stop style:position="${exportOdfLength(position)}"/>`).join("")}</style:tab-stops>`;
 }
 
 /** Serializes a bounded twip margin as an ODF centimetre length. @param twips - Margin in twips. @returns ODF length. */

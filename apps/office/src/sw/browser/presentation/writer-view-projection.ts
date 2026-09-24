@@ -26,6 +26,7 @@ import {
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
 import { SfxStringItem } from "../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxInt16Item, SfxInt16ListItem } from "../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_COLOR,
   RES_CHRATR_FONT,
@@ -36,6 +37,9 @@ import {
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
+  RES_KEEP,
+  RES_LINENUMBER,
   RES_UL_SPACE,
 } from "../../inc/hintids";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
@@ -92,6 +96,13 @@ export interface WriterParagraphComputedStyle {
   readonly fontWeight: 400 | 700;
   readonly highlight?: string;
   readonly lineHeight: number;
+  readonly lineSpacingMode?: "proportional" | "fixed" | "minimum" | "leading";
+  readonly lineSpacingValue?: number;
+  readonly fontIndependentLineSpacing?: boolean;
+  readonly tabStopPositionPt?: number | undefined;
+  readonly tabStopsPt?: readonly number[] | undefined;
+  readonly keepWithNext?: boolean;
+  readonly countLineNumbers?: boolean;
   readonly lowerSpacingPt: number;
   readonly rightMarginPt: number;
   readonly upperSpacingPt: number;
@@ -162,6 +173,20 @@ export class WriterViewProjection {
         const listFormat =
           list.kind === "none" ? undefined : node.GetNumRule()?.GetNumFormat(list.level);
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
+        const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+        const tabItem = node.GetAttr(RES_PARATR_TABSTOP);
+        const tabStopsPt =
+          tabItem instanceof SfxInt16ListItem
+            ? tabItem
+                .GetValues()
+                .map(
+                  /** Converts a tab position from twips to points. @param value - Position in twips. @returns Position in points. */ (
+                    value,
+                  ) => value / 20,
+                )
+            : tabItem instanceof SfxInt16Item && tabItem.GetValue() >= 0
+              ? [tabItem.GetValue() / 20]
+              : [];
         const color = (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue();
         const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
         let runOffset = 0;
@@ -186,9 +211,16 @@ export class WriterViewProjection {
               : 400,
             ...(highlight === "transparent" ? {} : { highlight }),
             lineHeight: projectWriterLineHeightItem(
-              node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
+              lineSpacing,
               (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,
             ),
+            lineSpacingMode: lineSpacing.GetMode(),
+            lineSpacingValue: lineSpacing.GetValue(),
+            fontIndependentLineSpacing: lineSpacing.IsFontIndependent(),
+            tabStopPositionPt: tabStopsPt[0],
+            tabStopsPt,
+            keepWithNext: (node.GetAttr(RES_KEEP) as SfxBoolItem).GetValue(),
+            countLineNumbers: (node.GetAttr(RES_LINENUMBER) as SfxBoolItem).GetValue(),
             lowerSpacingPt: spacing.GetLower() / 20,
             rightMarginPt:
               (node.GetAttr(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight() / 20,

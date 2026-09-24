@@ -21,10 +21,8 @@ export class XMLTextPropertySetContext extends SvXMLImportContext {
   }
 }
 
-/** Imports the single tab stop represented by the bounded Writer pooled item. */
+/** Imports ordered paragraph tab stops. */
 class XMLTabStopsContext extends SvXMLImportContext {
-  private seen = false;
-
   /** Creates a tab-stop container. @param setTabStop - Imported position sink. @returns Nothing. */
   public constructor(private readonly setTabStop: (position: number) => void) {
     super();
@@ -36,8 +34,6 @@ class XMLTabStopsContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element !== XMLToken.STYLE_TAB_STOP) return null;
-    if (this.seen) throw new Error("Unsupported ODF paragraph with multiple tab stops.");
-    this.seen = true;
     attributes.assertOnly([XMLToken.STYLE_POSITION], "tab stop");
     this.setTabStop(
       importOdfLength(

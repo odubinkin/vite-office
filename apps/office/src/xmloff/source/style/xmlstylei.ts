@@ -181,9 +181,16 @@ class XMLStyleContext extends SvXMLImportContext {
       this.leftMargin = importLeftMargin(attributes);
       this.paragraphProperties = importParagraphProperties(attributes);
       return new XMLTextPropertySetContext(
-        /** Retains the single tab-stop value in the paragraph property set. @param tabStopPosition - Imported twip position. @returns Nothing. */
-        (tabStopPosition) => {
-          this.paragraphProperties = { ...this.paragraphProperties, tabStopPosition };
+        /** Retains ordered tab-stop values in the paragraph property set. */
+        /** Handles Writer formatting state. @param tabStopPosition - Input value. @returns Callback result. */ (
+          tabStopPosition,
+        ) => {
+          const tabStops = [...(this.paragraphProperties?.tabStops ?? []), tabStopPosition];
+          this.paragraphProperties = {
+            ...this.paragraphProperties,
+            tabStops,
+            ...(tabStops.length === 1 ? { tabStopPosition } : {}),
+          };
         },
       );
     }

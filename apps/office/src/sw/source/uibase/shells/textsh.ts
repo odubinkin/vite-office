@@ -5,6 +5,7 @@ import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwPosition } from "../../core/crsr/pam";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type {
@@ -23,6 +24,7 @@ import {
   CreateWriterFontUndo,
   SwUndoAttr,
   SwUndoParagraphFormat,
+  SwUndoParagraphItem,
 } from "../../core/undo/unattr";
 import { SwUndoFormatColl } from "../../core/undo/unfmco";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
@@ -246,6 +248,101 @@ export class SwTextShell {
           this.target.CaptureCursorState(),
         ),
     );
+  }
+
+  /** Applies foreground or highlight color at the caret or over selected text. @param property - Color attribute. @param value - Hex color or automatic marker. @returns Whether selected text changed. */
+  public SetCharacterColor(property: "color" | "highlight", value: string): boolean {
+    if (
+      value !== (property === "color" ? "auto" : "transparent") &&
+      !/^#[0-9a-fA-F]{6}$/.test(value)
+    )
+      throw new Error("Writer color must be a six-digit hex value or its automatic marker.");
+    const before = this.target.CaptureCursorState();
+    const selected = getWriterSelectedTextRanges(this.target.GetCursor());
+    this.target.SetPendingCharacterItems(
+      createWriterCharacterItemSet(this.target.GetDoc().GetAttrPool(), {
+        ...this.GetPendingCharacterAttributes(),
+        [property]: value,
+      }),
+    );
+    if (selected === undefined || selected.length === 0) {
+      this.target.GetDocShell().GetUndoManager().BreakUndoGrouping();
+      this.target.NotifySelectionChanged();
+      return false;
+    }
+    return this.ApplySelectedFontChange(
+      selected,
+      /** Handles Writer formatting state. @param range - Input value. @returns Callback result. */ (
+        range,
+      ) => {
+        const original = range.node.CaptureTextFragment(range.start, range.end);
+        const replacement = range.node.CreateColorTextFragment(
+          range.start,
+          range.end,
+          property,
+          value,
+        );
+        return original.hints.equals(replacement.hints)
+          ? undefined
+          : new SwUndoAttr(
+              range.node,
+              range.start,
+              original,
+              replacement,
+              before,
+              this.target.CaptureCursorState(),
+            );
+      },
+    );
+  }
+
+  /** Applies an item to active or selected paragraphs in one history entry. @param item - Paragraph attribute. @returns Whether a paragraph changed. */
+  public SetParagraphItem(item: SfxPoolItem): boolean {
+    return this.SetParagraphItems([item]);
+  }
+
+  /** Applies paragraph dialog attributes in one history entry. @param items - Paragraph attributes. @returns Whether a paragraph changed. */
+  public SetParagraphItems(items: readonly SfxPoolItem[]): boolean {
+    const selected = getWriterSelectedTextRanges(this.target.GetCursor());
+    const paragraphs =
+      selected === undefined || selected.length === 0
+        ? [this.target.GetActiveParagraph()]
+        : [
+            ...new Set(
+              selected.map(
+                /** Handles Writer formatting state. @param range - Input value. @returns Callback result. */ (
+                  range,
+                ) => range.node,
+              ),
+            ),
+          ];
+    const cursor = this.target.CaptureCursorState();
+    const actions = paragraphs.flatMap(
+      /** Handles Writer formatting state. @param paragraph - Input value. @returns Callback result. */ (
+        paragraph,
+      ) =>
+        items.flatMap(
+          /** Handles Writer formatting state. @param item - Input value. @returns Callback result. */ (
+            item,
+          ) => {
+            if (paragraph.GetAttr(item.Which()).equals(item)) return [];
+            return [
+              new SwUndoParagraphItem(
+                paragraph,
+                paragraph.GetSwAttrSet().GetItemIfSet(item.Which(), false),
+                item,
+                cursor,
+                cursor,
+              ),
+            ];
+          },
+        ),
+    );
+    if (actions.length === 0) return false;
+    if (actions.length === 1) return this.target.ApplyAction(actions[0] as SwUndoParagraphItem);
+    const action = new SfxListUndoAction<SwUndoRedoContext>("Paragraph Formatting");
+    for (const child of actions) action.AddAction(child);
+    return this.target.ApplyAction(action);
   }
 
   /** Applies all non-no-op per-paragraph font actions as one Writer history entry. @param ranges - Selected ranges. @param createAction - Per-range action factory. @returns Whether content changed. */

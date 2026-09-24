@@ -45,6 +45,7 @@ const icons = new Map<string, CommandIcon>([
 /** Inputs shared by the complete Writer text formatting toolbar. */
 export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps {
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
+  readonly advancedControls?: React.ReactNode;
 }
 
 /** Renders the complete Writer text toolbar. Its generic indent commands select list-level or paragraph-margin behavior in the text shell. @param props - Shared command surface and shell context. @returns Toolbar item fragment. */
@@ -52,6 +53,7 @@ export function WriterFormattingToolbar({
   commandSource,
   paragraphStyleOptions,
   resolveArguments,
+  advancedControls,
 }: WriterFormattingToolbarProps): React.JSX.Element {
   const localization = useBrowserLocalization();
   const getCommandResource =
@@ -61,31 +63,34 @@ export function WriterFormattingToolbar({
       return selectWriterCommandResource(localization, commandUrl);
     };
   return (
-    <CommandToolbarItems
-      buttonClassName="grid size-8 place-items-center rounded-md border border-slate-300 bg-white text-sm font-bold text-slate-700 transition hover:border-indigo-400 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:border-indigo-700 data-[active=true]:bg-indigo-700 data-[active=true]:text-white"
-      commandSource={commandSource}
-      getButtonContent={getWriterButtonContent}
-      getCommandResource={getCommandResource}
-      icons={icons}
-      items={writerTextObjectBarItems}
-      renderSpecialItem={
-        /** Renders Writer selector placements. @param item - Generic special placement. @returns Writer selector. */ (
-          item,
-        ) => {
-          /* v8 ignore next -- Generated Writer resources call this hook only for the two special placement kinds. */
-          if (!isWriterSpecialToolbarPlacement(item)) return null;
-          return renderSpecialToolbarItem(
+    <>
+      <CommandToolbarItems
+        buttonClassName="grid size-8 place-items-center rounded-md border border-slate-300 bg-white text-sm font-bold text-slate-700 transition hover:border-indigo-400 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:border-indigo-700 data-[active=true]:bg-indigo-700 data-[active=true]:text-white"
+        commandSource={commandSource}
+        getButtonContent={getWriterButtonContent}
+        getCommandResource={getCommandResource}
+        icons={icons}
+        items={writerTextObjectBarItems}
+        renderSpecialItem={
+          /** Renders Writer selector placements. @param item - Generic special placement. @returns Writer selector. */ (
             item,
-            commandSource,
-            getCommandResource,
-            localization,
-            paragraphStyleOptions,
-            resolveArguments,
-          );
+          ) => {
+            /* v8 ignore next -- Generated Writer resources call this hook only for the two special placement kinds. */
+            if (!isWriterSpecialToolbarPlacement(item)) return null;
+            return renderSpecialToolbarItem(
+              item,
+              commandSource,
+              getCommandResource,
+              localization,
+              paragraphStyleOptions,
+              resolveArguments,
+            );
+          }
         }
-      }
-      resolveArguments={resolveArguments}
-    />
+        resolveArguments={resolveArguments}
+      />
+      {advancedControls}
+    </>
   );
 }
 

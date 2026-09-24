@@ -4,7 +4,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { projectWriterLineHeight, projectWriterLineHeightItem } from "./writer-view-projection";
-import { SvxLineSpacingItem } from "../../../editeng/source/items/paraitem";
+import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../editeng/source/items/paraitem";
 import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwView } from "../../source/uibase/uiview/view";
@@ -12,10 +12,23 @@ import { presentWriterCommandError, presentWriterStatus } from "./writer-view";
 import type { WriterViewSnapshot } from "./writer-view-projection";
 import { WriterViewProjection } from "./writer-view-projection";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import { SfxStringItem } from "../../../svl/source/items/poolitem";
+import {
+  SfxBoolItem,
+  SfxInt16Item,
+  SfxInt16ListItem,
+  SfxStringItem,
+} from "../../../svl/source/items/poolitem";
 import { createWriterDocument } from "../../source/core/doc/doc";
+import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
-import { RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_PARATR_LINESPACING } from "../../inc/hintids";
+import {
+  RES_CHRATR_COLOR,
+  RES_CHRATR_HIGHLIGHT,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
+  RES_UL_SPACE,
+  RES_KEEP,
+} from "../../inc/hintids";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "./writer-view";
 import type { WriterAutosaveController } from "../workflows/writer-autosave";
@@ -52,6 +65,63 @@ const getText =
   ) => fallback;
 
 describe("Writer browser presentation", /** Groups presentation tests. @returns Nothing. */ () => {
+  it("connects advanced toolbar controls to Writer paragraph items", /** Verifies UI to model formatting. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const rendered = render(<WriterWorkbench isActive view={session.view} />);
+    const shell = session.view.GetWrtShell();
+    fireEvent.click(screen.getByLabelText("Font Color palette"));
+    fireEvent.click(screen.getByLabelText("Font Color #ff0000"));
+    expect(projectWriterCharacterAttributes(shell.GetPendingCharacterItems()).color).toBe(
+      "#ff0000",
+    );
+    fireEvent.change(screen.getByLabelText("Line Spacing"), { target: { value: "150" } });
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).GetValue(),
+    ).toBe(150);
+    fireEvent.click(screen.getByText("Paragraph…"));
+    fireEvent.change(screen.getByLabelText("Above paragraph (pt)"), { target: { value: "6" } });
+    fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
+    fireEvent.change(screen.getByLabelText("Position (pt)"), { target: { value: "36" } });
+    fireEvent.click(screen.getByText("New"));
+    fireEvent.change(screen.getByLabelText("Position (pt)"), { target: { value: "72" } });
+    fireEvent.click(screen.getByText("New"));
+    fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
+    fireEvent.click(screen.getByLabelText("Keep with next paragraph"));
+    fireEvent.click(screen.getByLabelText("Show line numbers"));
+    fireEvent.click(screen.getByText("OK"));
+    expect((shell.GetActiveParagraph().GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(
+      120,
+    );
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16ListItem).GetValues(),
+    ).toEqual([720, 1440]);
+    expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+    const rulerSurface = screen.getByLabelText("Writer horizontal ruler")
+      .firstElementChild as HTMLElement;
+    fireEvent.click(rulerSurface, { clientX: 240 });
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16ListItem).GetValues(),
+    ).toHaveLength(3);
+    fireEvent.click(screen.getByText("Paragraph…"));
+    fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
+    fireEvent.click(screen.getByText("Delete All"));
+    fireEvent.click(screen.getByText("OK"));
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16Item).GetValue(),
+    ).toBe(-1);
+    fireEvent.click(rulerSurface, { clientX: 240 });
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16Item).GetValue(),
+    ).toBeGreaterThan(0);
+    const tabHandle = screen.getByRole("button", { name: "Tab stop 1" });
+    fireEvent.pointerDown(tabHandle, { clientX: 100 });
+    fireEvent.pointerUp(window, { clientX: -1000 });
+    expect(
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16Item).GetValue(),
+    ).toBe(-1);
+    rendered.unmount();
+    session.Close();
+  });
   it("adds Writer proportional leading to the natural browser line-box estimate", /** Checks proportional leading projection. @returns Nothing. */ () => {
     expect(projectWriterLineHeight(0)).toBe(1.15);
     expect(projectWriterLineHeight(100)).toBe(1.15);
@@ -92,6 +162,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const node = document.paragraphs[0]!;
     node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
     node.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#fedcba"));
+    node.SetAttr(new SfxInt16ListItem(RES_PARATR_TABSTOP, [720, 1440]));
     const cursor = new SwPaM(new SwPosition(node, 0));
     const projected = new WriterViewProjection().Project(
       document,
@@ -102,7 +173,17 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(projected.activeParagraph.computedStyle).toMatchObject({
       color: "#123456",
       highlight: "#fedcba",
+      tabStopsPt: [36, 72],
     });
+    node.SetAttr(new SfxInt16Item(RES_PARATR_TABSTOP, 960));
+    expect(
+      new WriterViewProjection().Project(
+        document,
+        node,
+        cursor,
+        createDocument({ id: "one-tab", suiteId: "writer", title: "One Tab" }),
+      ).activeParagraph.computedStyle.tabStopsPt,
+    ).toEqual([48]);
   });
   it("presents save, open, failure and modified states from the owned medium", /** Checks presents save, open, failure and modified states from the owned medium. @returns Test callback result. */ () => {
     const view = failureView();

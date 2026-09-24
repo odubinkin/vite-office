@@ -639,6 +639,27 @@ export class SwTextNode extends SwContentNode {
     };
   }
 
+  /** Creates a native fragment with a requested foreground or highlight color. */
+  /** Handles Writer formatting state. @param start - Input value. @param end - Input value. @param property - Input value. @param value - Input value. @returns Callback result. */ public CreateColorTextFragment(
+    start: number,
+    end: number,
+    property: "color" | "highlight",
+    value: string,
+  ): SwTextFragment {
+    const fragment = this.CaptureTextFragment(start, end);
+    return {
+      text: fragment.text,
+      hints: fragment.hints.setCharacterColor(
+        fragment.text.length,
+        0,
+        fragment.text.length,
+        property,
+        value,
+        this.GetSwAttrSet(),
+      ),
+    };
+  }
+
   /** Creates a native fragment with replacement hyperlink metadata. @param start - Inclusive source offset. @param end - Exclusive source offset. @param hyperlink - Replacement hyperlink or undefined. @returns Native formatted fragment. */
   public CreateHyperlinkTextFragment(
     start: number,

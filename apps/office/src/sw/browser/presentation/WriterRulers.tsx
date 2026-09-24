@@ -20,12 +20,14 @@ export interface WriterRulersProps {
   ) => void;
   readonly page: WriterPageDescriptorValue;
   readonly paragraph: WriterParagraphProjection;
+  readonly onTabStopsChange?: (positionsPt: readonly number[]) => void;
 }
 
 /** Renders physical centimetre ticks and draggable Writer margin/indent markers. @param props - Geometry, paragraph, visibility, and commit callbacks. @returns Writer rulers. */
 export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
   const pageWidth = props.page.width / TWIPS_PER_CSS_PIXEL;
   const paragraphLeft = props.paragraph.textLeftMargin;
+  const tabStopsPt = props.paragraph.computedStyle.tabStopsPt ?? [];
   const firstLine = props.paragraph.computedStyle.firstLineIndentPt * 20;
   const paragraphRight = props.paragraph.computedStyle.rightMarginPt * 20;
   return (
@@ -39,6 +41,20 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
           <div
             className="relative mx-auto h-full bg-white text-[9px] text-slate-500"
             style={{ width: pageWidth }}
+            onClick={
+              /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
+                event,
+              ) => {
+                if (event.target !== event.currentTarget || props.onTabStopsChange === undefined)
+                  return;
+                const positionPt = Math.round(
+                  ((event.clientX - event.currentTarget.getBoundingClientRect().left) * 15) / 20 -
+                    props.page.leftMargin / 20 -
+                    paragraphLeft / 20,
+                );
+                if (positionPt > 0) props.onTabStopsChange([...tabStopsPt, positionPt]);
+              }
+            }
           >
             <div
               className="absolute inset-y-0 left-0 bg-slate-300/80"
@@ -146,6 +162,37 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
                   })
               }
             />
+            {tabStopsPt.map(
+              /** Handles Writer formatting state. @param positionPt - Input value. @param index - Input value. @returns Callback result. */ (
+                positionPt,
+                index,
+              ) => (
+                <RulerHandle
+                  ariaLabel={`Tab stop ${index + 1}`}
+                  axis="x"
+                  className="h-3 w-2 border-b-2 border-l-2 border-indigo-700"
+                  edge="bottom"
+                  key={`${positionPt}-${index}`}
+                  origin={props.page.leftMargin / TWIPS_PER_CSS_PIXEL}
+                  position={
+                    (props.page.leftMargin + paragraphLeft + positionPt * 20) / TWIPS_PER_CSS_PIXEL
+                  }
+                  onCommit={
+                    /** Handles Writer formatting state. @param delta - Input value. @returns Callback result. */ (
+                      delta,
+                    ) =>
+                      props.onTabStopsChange?.(
+                        tabStopsPt.map(
+                          /** Handles Writer formatting state. @param value - Input value. @param stopIndex - Input value. @returns Callback result. */ (
+                            value,
+                            stopIndex,
+                          ) => (stopIndex === index ? Math.max(0, value + delta / 20) : value),
+                        ),
+                      )
+                  }
+                />
+              ),
+            )}
           </div>
         </div>
       ) : null}
@@ -338,9 +385,11 @@ function renderDragGuides(
   position: number,
   pageIndex: number | null,
 ): React.JSX.Element {
-  const canvas = workspace.querySelector<HTMLElement>('[aria-label="Writer document canvas"]');
-  const canvasRect = canvas?.getBoundingClientRect();
-  const pages = canvas?.querySelectorAll<HTMLElement>("[data-writer-page]") ?? [];
+  const canvas = workspace.querySelector<HTMLElement>(
+    '[aria-label="Writer document canvas"]',
+  ) as HTMLElement;
+  const canvasRect = canvas.getBoundingClientRect();
+  const pages = canvas.querySelectorAll<HTMLElement>("[data-writer-page]");
   return (
     <div aria-hidden="true" data-ruler-guide-layer="true">
       {[...pages].map(
@@ -350,12 +399,11 @@ function renderDragGuides(
         ) => {
           if (axis === "y" && pageIndex !== null && index !== pageIndex) return null;
           const rect = page.getBoundingClientRect();
-          const top = Math.max(rect.top, canvasRect?.top ?? rect.top);
-          const bottom = Math.min(rect.bottom, canvasRect?.bottom ?? rect.bottom);
+          const top = Math.max(rect.top, canvasRect.top);
+          const bottom = Math.min(rect.bottom, canvasRect.bottom);
           if (bottom <= top && rect.height > 0) return null;
           if (
             axis === "y" &&
-            canvasRect !== undefined &&
             rect.height > 0 &&
             (rect.top + position < canvasRect.top || rect.top + position > canvasRect.bottom)
           )

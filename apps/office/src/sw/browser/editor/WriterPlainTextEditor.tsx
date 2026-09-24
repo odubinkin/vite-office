@@ -29,6 +29,7 @@ export interface WriterPlainTextEditorProps {
   readonly pageDescriptors?: SwPageDescriptorLayout["descriptors"];
   readonly paragraphSpacingSettings?: SwTextFrameSettings;
   readonly verticalRuler?: ReactNode;
+  readonly showLineNumbers?: boolean;
 }
 
 /** Renders one root `contenteditable` and forwards browser events to one stable controller. @param props - Immutable projection and edit-window owner. @returns Logical Writer document editing host. */
@@ -99,6 +100,8 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       style: paragraph.style,
       contextualSpacing: paragraph.computedStyle.contextualSpacing ?? false,
       upperSpacing: paragraph.computedStyle.upperSpacingPt * 20,
+      keepWithNext: paragraph.computedStyle.keepWithNext ?? false,
+      countLineNumbers: paragraph.computedStyle.countLineNumbers ?? true,
     }),
   );
   const pages = createSwPageFrames(
@@ -113,6 +116,22 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       /** Indexes one view paragraph. @param paragraph - View paragraph. @returns Key and paragraph pair. */ (
         paragraph,
       ) => [paragraph.id, paragraph],
+    ),
+  );
+  let nextLineNumber = 1;
+  const lineNumbersByParagraph = new Map(
+    inputs.map(
+      /** Assigns document line numbers to one measured paragraph. @param input - Measured paragraph. @param index - Paragraph index. @returns Paragraph ID and numbers. */ (
+        input,
+        index,
+      ) => {
+        const counted = props.paragraphs[index]?.computedStyle.countLineNumbers !== false;
+        const numbers = input.lines.map(
+          /** Numbers one visual line when the paragraph participates. @returns Number or undefined. */ () =>
+            counted ? nextLineNumber++ : undefined,
+        );
+        return [input.id, numbers] as const;
+      },
     ),
   );
 
@@ -327,6 +346,24 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                   ) => {
                     const paragraph = paragraphById.get(frame.nodeId) as WriterParagraph;
                     const index = props.paragraphs.indexOf(paragraph);
+                    const lines = (inputs[index] as SwTextFrameInput).lines;
+                    let offsetPt = 0;
+                    const lineNumbers = props.showLineNumbers
+                      ? lines.flatMap(
+                          /** Projects numbers in this page fragment. @param line - Visual line. @param lineIndex - Index in the paragraph. @returns Zero or one number. */ (
+                            line,
+                            lineIndex,
+                          ) => {
+                            if (line.end <= frame.start) return [];
+                            const topPt = offsetPt;
+                            offsetPt += line.height / 20;
+                            const number = lineNumbersByParagraph.get(paragraph.id)?.[lineIndex];
+                            return number !== undefined && line.end <= frame.end
+                              ? [{ number, topPt }]
+                              : [];
+                          },
+                        )
+                      : [];
                     return (
                       <WriterEditableParagraph
                         index={index}
@@ -339,6 +376,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                         fragmentEnd={frame.end}
                         topSpacingPt={frame.topSpacing / 20}
                         isFollow={frame.follow}
+                        lineNumbers={lineNumbers}
                         retainElement={
                           /** Retains the DOM identity used by SwEditWin. @param paragraphId - Projection identity. @param element - Mounted paragraph or null. @returns Nothing. */ (
                             paragraphId,

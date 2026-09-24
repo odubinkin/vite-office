@@ -31,6 +31,33 @@ function paragraph(id: string, count: number, height = 300): SwTextFrameInput {
 }
 
 describe("Writer text and page frames", /** Groups Writer page-frame tests. @returns Nothing. */ () => {
+  it("moves a kept paragraph with the next paragraph", /** Handles Writer formatting state.  @returns Callback result. */ () => {
+    const page = { ...standardPage, height: 1000, topMargin: 100, bottomMargin: 100 };
+    const inputs = [
+      paragraph("first", 1, 300),
+      { ...paragraph("kept", 1, 300), keepWithNext: true },
+      paragraph("next", 1, 300),
+    ];
+    expect(
+      createSwPageFrames(inputs, page).map(
+        /** Handles Writer formatting state. @param frame - Input value. @returns Callback result. */ (
+          frame,
+        ) =>
+          frame.textFrames.map(
+            /** Handles Writer formatting state. @param part - Input value. @returns Callback result. */ (
+              part,
+            ) => part.nodeId,
+          ),
+      ),
+    ).toEqual([["first"], ["kept", "next"]]);
+    expect(
+      /** Attempts layout with a missing follow style. @returns Layout frames. */ () =>
+        createSwPageFrames(inputs, {
+          descriptors: [{ followName: "Missing", value: page }],
+          initialName: page.name,
+        }),
+    ).toThrow("follow page descriptor is missing");
+  });
   it("splits one long paragraph into master and follows without changing node identity", /** Verifies follow chains. @returns Nothing. */ () => {
     const page = { ...standardPage, height: 1100, topMargin: 100, bottomMargin: 100 };
     const frames = createSwPageFrames([paragraph("node", 8)], page);

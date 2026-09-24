@@ -1,6 +1,7 @@
 /** @fileoverview Implements direct character and paragraph attribute undo from pinned LibreOffice unattr.cxx. */
 
 import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../txtnode/ndtxt";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import {
   CopyTextFragment,
   CopyUndoFragment,
@@ -57,6 +58,37 @@ export class SwUndoAttr extends SwUndo {
       this.start + GetUndoFragmentLength(this.beforeFragment),
       this.afterFragment,
     );
+  }
+}
+
+/** Reversible replacement of one direct paragraph item, retaining inherited state. */
+export class SwUndoParagraphItem extends SwUndo {
+  /** Stores the direct item before and after a paragraph edit. @param paragraph - Target node. @param beforeItem - Previous direct item. @param afterItem - Replacement item. @param before - Prior cursor. @param after - Result cursor. */
+  /** Handles Writer formatting state. @param paragraph - Input value. @param beforeItem - Input value. @param afterItem - Input value. @param before - Input value. @param after - Input value. @returns Callback result. */ public constructor(
+    private readonly paragraph: SwTextNode,
+    private readonly beforeItem: SfxPoolItem | undefined,
+    private readonly afterItem: SfxPoolItem,
+    before: SwUndoCursorState,
+    after: SwUndoCursorState,
+  ) {
+    super("Paragraph Formatting", before, after);
+  }
+
+  /** Reports the scalar item pair. @returns Payload units. */
+  public override GetPayloadSize(): number {
+    return 2;
+  }
+
+  /** Restores the previous direct or inherited item. @param context - Undo context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    const node = GetUndoTextNode(context.GetDoc(), this.paragraph);
+    if (this.beforeItem === undefined) node.ResetAttr(this.afterItem.Which());
+    else node.SetAttr(this.beforeItem);
+  }
+
+  /** Applies the replacement item. @param context - Undo context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    GetUndoTextNode(context.GetDoc(), this.paragraph).SetAttr(this.afterItem);
   }
 }
 
