@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241521-GAQ2CN",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T21:04:39.759Z",
+  "verdict": "pass",
+  "summary": "Embedded font resources, script family identity, page geometry and UI controls satisfy phase 4.",
+  "evaluated_sha": "2e62d3a028df0ea71f05de7e7322fa72f4515e54",
+  "blueprint_digest": "ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba",
+  "findings": [
+    "Full verification and upstream/private ODT round trips passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241521-GAQ2CN/README.md",
+    "docs/program/certification-odt-font-page-parity.md"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

@@ -4,7 +4,7 @@ title: "Complete embedded fonts and page resources"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -22,11 +22,27 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: "User requested implementation of the seven ordered phases in docs/program/certification-odt-import-plan.md; outside-repo sample access remains pending separate authorization."
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T21:04:49.919Z"
+  updated_by: "CODER"
+  note: "verified-202609241521-GAQ2CN"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T21:04:39.759Z"
+  updated_by: "EVALUATOR"
+  note: "Embedded font resources, script family identity, page geometry and UI controls satisfy phase 4."
+  evaluated_sha: "2e62d3a028df0ea71f05de7e7322fa72f4515e54"
+  blueprint_digest: "ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba"
+  evidence_refs:
+    - ".agentplane/tasks/202609241521-GAQ2CN/README.md"
+    - ".agentplane/tasks/202609241521-GAQ2CN/quality/20260924-210439759-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241521-GAQ2CN/quality/20260924-210439759-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241521-GAQ2CN/quality/20260924-210439759-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241521-GAQ2CN/blueprint/resolved-snapshot.json"
+    - "docs/program/certification-odt-font-page-parity.md"
+  findings:
+    - "Full verification and upstream/private ODT round trips passed."
 commit: null
 comments:
   -
@@ -40,8 +56,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-09-24T21:04:32.657Z"
+    author: "CODER"
+    state: "ok"
+    note: "npm run verify passed; 522 app tests and 109 inventory tests at 100% coverage, 14 e2e. Pinned embedded-font fixtures and private sample retain font bytes, script identities, page geometry and paragraph metrics after reopen; warnings 371 to 327."
+  -
+    type: "verify"
+    at: "2026-09-24T21:04:49.919Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609241521-GAQ2CN"
 doc_version: 3
-doc_updated_at: "2026-09-24T20:20:45.051Z"
+doc_updated_at: "2026-09-24T21:04:49.968Z"
 doc_updated_by: "CODER"
 description: "Phase 4: manifest-validated font declarations, deterministic fallback, page descriptor geometry and editable UI."
 sections:
@@ -62,6 +90,66 @@ sections:
     4. Private sample geometry/font metrics and warning deltas are recorded.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T21:04:32.657Z — VERIFY — ok
+
+    By: CODER
+
+    Note: npm run verify passed; 522 app tests and 109 inventory tests at 100% coverage, 14 e2e. Pinned embedded-font fixtures and private sample retain font bytes, script identities, page geometry and paragraph metrics after reopen; warnings 371 to 327.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T20:20:45.051Z, excerpt_hash=sha256:cd580cefa1ed67a398364dfb0d7c4f6dd0e7a874cf55a91ed9fc6657d9e78a04
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-GAQ2CN/blueprint/resolved-snapshot.json
+    - old_digest: ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba
+    - current_digest: ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241521-GAQ2CN
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609241521-GAQ2CN
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-09-24T21:04:49.919Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609241521-GAQ2CN
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T21:04:32.714Z, excerpt_hash=sha256:cd580cefa1ed67a398364dfb0d7c4f6dd0e7a874cf55a91ed9fc6657d9e78a04
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-GAQ2CN/blueprint/resolved-snapshot.json
+    - old_digest: ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba
+    - current_digest: ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241521-GAQ2CN
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241521-GAQ2CN --result verified-202609241521-GAQ2CN --commit 2e62d3a028df0ea71f05de7e7322fa72f4515e54
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -96,6 +184,66 @@ Manifest validated embedded-font resources and page descriptor geometry, determi
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T21:04:32.657Z — VERIFY — ok
+
+By: CODER
+
+Note: npm run verify passed; 522 app tests and 109 inventory tests at 100% coverage, 14 e2e. Pinned embedded-font fixtures and private sample retain font bytes, script identities, page geometry and paragraph metrics after reopen; warnings 371 to 327.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T20:20:45.051Z, excerpt_hash=sha256:cd580cefa1ed67a398364dfb0d7c4f6dd0e7a874cf55a91ed9fc6657d9e78a04
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-GAQ2CN/blueprint/resolved-snapshot.json
+- old_digest: ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba
+- current_digest: ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241521-GAQ2CN
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609241521-GAQ2CN
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-24T21:04:49.919Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609241521-GAQ2CN
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T21:04:32.714Z, excerpt_hash=sha256:cd580cefa1ed67a398364dfb0d7c4f6dd0e7a874cf55a91ed9fc6657d9e78a04
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-GAQ2CN/blueprint/resolved-snapshot.json
+- old_digest: ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba
+- current_digest: ba23ebf313dcd32eb452cd3d4baf2cff79775a03f812178315891bab0abb5aba
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241521-GAQ2CN
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241521-GAQ2CN --result verified-202609241521-GAQ2CN --commit 2e62d3a028df0ea71f05de7e7322fa72f4515e54
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
