@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241135-B0BX10",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T14:15:48.610Z",
+  "verdict": "pass",
+  "summary": "Browser Writer transfer retains upstream copy-before-delete and rich-before-string ordering within supported HTML/plain text formats.",
+  "evaluated_sha": "99e9962432d72b4b78375431cc4dadd5da4140a1",
+  "blueprint_digest": "bcc73f095cf8756048626daaa23d56015db7f6ad1428c1367d05f7eaf4e0fb2d",
+  "findings": [
+    "Verified selection ownership, copy/cut failures and MIME order with focused tests; full npm run verify passed. RTF/RICHTEXT/MARKDOWN and native object flavors remain explicit unsupported scope in inventory/provenance."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241135-B0BX10/README.md",
+    "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts",
+    "apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
