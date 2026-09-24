@@ -2218,7 +2218,8 @@
           "apps/office/src/sw/browser/presentation/writer-view.tsx#showLineNumbers",
           "apps/office/src/sw/browser/presentation/writer-view.tsx#RES_PARATR_TABSTOP",
           "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#SwDoc::SetLineNumberInfo",
-          "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem"
+          "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem",
+          "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#m_nCountBy( 5 )"
         ],
         "justification": "P0 confirmed: React stores showLineNumbers and creates integer tab-stop items directly. Pinned SwDoc::SetLineNumberInfo and SwLineNumberInfo own line-number state and count-by=5; pinned SwTextShell works with SvxTabStopItem. React presentation is a browser boundary, but these model and command responsibilities belong in sw/source.",
         "knownViolations": [],
@@ -2701,7 +2702,8 @@
         "evidence": [
           "apps/office/src/sw/source/core/attr/swatrset.ts#RES_PARATR_TABSTOP",
           "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem",
-          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SvxTabStopItem"
+          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SvxTabStopItem",
+          "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SVX_TAB_DEFDIST"
         ],
         "justification": "P0 confirmed: RES_PARATR_TABSTOP is registered as SfxInt16Item or SfxInt16ListItem, while pinned sw/source/core/bastyp/init.cxx registers SvxTabStopItem with default-stop alignment and fill semantics. SwAttrPool item identity and default are therefore different; other pool operations remain unverified.",
         "knownViolations": [],
