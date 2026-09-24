@@ -1,10 +1,11 @@
 ---
 id: "202609241521-D5QMQG"
 title: "Complete scalar paragraph character and page properties"
-status: "DOING"
+result_summary: "Scalar paragraph and page properties are implemented and documented."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -23,9 +24,9 @@ plan_approval:
   note: "User requested implementation of the seven ordered phases in docs/program/certification-odt-import-plan.md; outside-repo sample access remains pending separate authorization."
 verification:
   state: "ok"
-  updated_at: "2026-09-24T17:31:21.036Z"
+  updated_at: "2026-09-24T17:31:56.330Z"
   updated_by: "CODER"
-  note: "Full npm run verify passed; pinned ODT feature, inherited/direct/invalid round-trip, UI reopen, and private diagnostic checks passed."
+  note: "Scalar paragraph and page properties are implemented and documented."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "docs/program/certification-odt-scalar-style-parity.md"
   findings:
     - "Full verify passes; pinned upstream fixtures and local diagnostic show stable semantic projection and fewer expected warnings."
-commit: null
+commit:
+  hash: "3058c44ad8ed571a9a915f1fa26ce76d113de1a9"
+  message: "🧪 D5QMQG code: implement scalar ODT properties and Writer controls"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: full repository gate and upstream ODT/UI round trips passed."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full npm run verify passed; pinned ODT feature, inherited/direct/invalid round-trip, UI reopen, and private diagnostic checks passed."
+  -
+    type: "verify"
+    at: "2026-09-24T17:31:56.330Z"
+    author: "CODER"
+    state: "ok"
+    note: "Scalar paragraph and page properties are implemented and documented."
+  -
+    type: "status"
+    at: "2026-09-24T17:31:56.485Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: full repository gate and upstream ODT/UI round trips passed."
 doc_version: 3
-doc_updated_at: "2026-09-24T17:31:21.118Z"
+doc_updated_at: "2026-09-24T17:31:56.485Z"
 doc_updated_by: "CODER"
 description: "Phase 2: upstream-mapped scalar style items, inheritance, import/export, rendering and Writer controls/dialogs."
 sections:
@@ -113,6 +132,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-09-24T17:31:56.330Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Scalar paragraph and page properties are implemented and documented.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T17:31:21.118Z, excerpt_hash=sha256:91a0f46fb20a79b6a3ab612a00fcbbe13ffba7bfb02594bad108cdc548d6c82c
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-D5QMQG/blueprint/resolved-snapshot.json
+    - old_digest: 29112ac133fdfb5bbdea2e818f62d24d7e12330971fae6f40a128c8835e93131
+    - current_digest: 29112ac133fdfb5bbdea2e818f62d24d7e12330971fae6f40a128c8835e93131
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241521-D5QMQG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241521-D5QMQG --result verified-202609241521-D5QMQG --commit b62d5a2ef460f1caf49d128f22fa6af0b736f698
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -177,6 +226,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-24T17:31:56.330Z — VERIFY — ok
+
+By: CODER
+
+Note: Scalar paragraph and page properties are implemented and documented.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T17:31:21.118Z, excerpt_hash=sha256:91a0f46fb20a79b6a3ab612a00fcbbe13ffba7bfb02594bad108cdc548d6c82c
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-D5QMQG/blueprint/resolved-snapshot.json
+- old_digest: 29112ac133fdfb5bbdea2e818f62d24d7e12330971fae6f40a128c8835e93131
+- current_digest: 29112ac133fdfb5bbdea2e818f62d24d7e12330971fae6f40a128c8835e93131
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241521-D5QMQG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241521-D5QMQG --result verified-202609241521-D5QMQG --commit b62d5a2ef460f1caf49d128f22fa6af0b736f698
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
