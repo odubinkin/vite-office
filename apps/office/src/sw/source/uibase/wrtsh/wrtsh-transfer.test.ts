@@ -24,7 +24,7 @@ function createShell(text = ""): SwWrtShell {
   return new SwWrtShell(new SwDocShell(document, documentState));
 }
 
-describe("Writer shell transferable", /** Registers model transfer tests. @returns Nothing. */ function defineWriterShellTransferTests(): void {
+describe("Writer shell clipboard transfer", /** Registers model transfer tests. @returns Nothing. */ function defineWriterShellTransferTests(): void {
   it("creates clipboard transfer data from the shell SwPaM without rendered DOM", /** Verifies model-owned transfer serialization. @returns Nothing. */ function createsModelTransfer(): void {
     const shell = createShell("alpha beta");
     setTestSelection(shell, {
