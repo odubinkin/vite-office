@@ -224,28 +224,113 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     expect(rightIndent.style.bottom).toBe("0px");
   });
 
-  it("anchors each vertical ruler to its rendered page and starts tick zero at the text margins", /** Verifies page ownership and origins. @returns Nothing. */ () => {
+  it("shows tenth-centimetre ticks and a snapped drag guide over the page", /** Checks visual and committed ruler positions share one increment. @returns Nothing. */ () => {
+    const onPageChange = vi.fn();
+    const onParagraphIndentChange = vi.fn();
+    render(
+      <WriterWorkspaceChrome
+        documentTitle="Document"
+        formattingToolbar={null}
+        isPropertiesSidebarVisible={false}
+        isStatusBarVisible={false}
+        menuBar={null}
+        onDocumentTitleChange={vi.fn()}
+        propertiesSidebar={null}
+        rulers={
+          <WriterRulers
+            horizontalVisible
+            onPageChange={onPageChange}
+            onParagraphIndentChange={onParagraphIndentChange}
+            page={page}
+            paragraph={paragraph("p1", "Text")}
+          />
+        }
+        status="Ready"
+        toolbar={null}
+      >
+        <section data-writer-page="1" />
+      </WriterWorkspaceChrome>,
+    );
+    const ruler = screen.getByRole("toolbar", { name: "Writer horizontal ruler" });
+    const ticks = ruler.querySelectorAll("span");
+    const zero = [...ticks].find(
+      /** Finds the origin label. @param tick - Ruler tick. @returns Whether it labels zero. */ (
+        tick,
+      ) => tick.textContent === "0",
+    );
+    expect(zero).toBeDefined();
+    expect(
+      [...ticks].some(
+        /** Finds a minor division. @param tick - Ruler tick. @returns Whether it is minor. */ (
+          tick,
+        ) => tick.style.height === "4px",
+      ),
+    ).toBe(true);
+    const handle = screen.getByRole("button", { name: "Left page margin" });
+    fireEvent.pointerDown(handle, { clientX: 100 });
+    fireEvent.pointerMove(window, { clientX: 107 });
+    expect(handle.style.left).toBe(`${page.leftMargin / 15 + 2 * (1440 / 2.54 / 10 / 15)}px`);
+    expect(document.querySelector('[data-ruler-guide="x"]')).not.toBeNull();
+    fireEvent.pointerUp(window, { clientX: 107 });
+    expect(onPageChange).toHaveBeenCalledWith({ ...page, leftMargin: page.leftMargin + 113 });
+    expect(document.querySelector('[data-ruler-guide="x"]')).toBeNull();
+    fireEvent.pointerDown(screen.getByRole("button", { name: "Paragraph left indent" }), {
+      clientX: 100,
+    });
+    fireEvent.pointerUp(window, { clientX: 107 });
+    expect(onParagraphIndentChange).toHaveBeenCalledWith({ firstLine: 60, left: 227, right: 80 });
+  });
+
+  it("docks page rulers at the canvas edge and keeps their page-relative origins through scrolling", /** Verifies the fixed lane and page origins. @returns Nothing. */ () => {
     const tinyPage = { ...page, bottomMargin: 100, height: 650, topMargin: 100 };
     const { container } = render(
-      <WriterPlainTextEditor
-        activeParagraphId="p1"
-        cursorSelection={{ point: { paragraphId: "p1", offset: 0 } }}
-        editWindow={{ FocusNode: vi.fn(), SetSelection: vi.fn() } as unknown as SwEditWin}
-        pageDescriptor={tinyPage}
-        paragraphs={[paragraph("p1", "first"), paragraph("p2", "second")]}
-        verticalRuler={<WriterVerticalRuler onPageChange={vi.fn()} page={tinyPage} />}
-      />,
+      <WriterWorkspaceChrome
+        documentTitle="Document"
+        formattingToolbar={null}
+        isPropertiesSidebarVisible={false}
+        isStatusBarVisible={false}
+        isVerticalRulerVisible
+        menuBar={null}
+        onDocumentTitleChange={vi.fn()}
+        propertiesSidebar={null}
+        rulers={null}
+        status="Ready"
+        toolbar={null}
+      >
+        <WriterPlainTextEditor
+          activeParagraphId="p1"
+          cursorSelection={{ point: { paragraphId: "p1", offset: 0 } }}
+          editWindow={{ FocusNode: vi.fn(), SetSelection: vi.fn() } as unknown as SwEditWin}
+          pageDescriptor={tinyPage}
+          paragraphs={[paragraph("p1", "first"), paragraph("p2", "second")]}
+          verticalRuler={<WriterVerticalRuler onPageChange={vi.fn()} page={tinyPage} />}
+        />
+      </WriterWorkspaceChrome>,
     );
     const pages = container.querySelectorAll("[data-writer-page]");
+    const lane = screen.getByLabelText("Writer vertical ruler lane");
+    const canvas = screen.getByRole("region", { name: "Writer document canvas" });
     expect(pages).toHaveLength(2);
-    for (const pageElement of pages) {
-      const ruler = pageElement.parentElement?.querySelector(
-        '[aria-label="Writer vertical ruler"]',
+    expect(lane.parentElement).toBe(canvas.parentElement);
+    expect(canvas.querySelector('[aria-label="Writer vertical ruler"]')).toBeNull();
+    const rulers = lane.querySelectorAll('[aria-label="Writer vertical ruler"]');
+    expect(rulers).toHaveLength(2);
+    for (const ruler of rulers) {
+      const zero = [...ruler.querySelectorAll("span")].find(
+        /** Finds the page origin. @param tick - Ruler tick. @returns Whether it labels zero. */ (
+          tick,
+        ) => tick.textContent === "0",
       );
-      expect(ruler).not.toBeNull();
-      expect(ruler?.querySelector("span")?.style.top).toBe(`${tinyPage.topMargin / 15}px`);
-      expect(ruler?.querySelector("span")?.textContent).toBe("0");
+      expect(zero?.style.top).toBe(`${tinyPage.topMargin / 15}px`);
     }
+    fireEvent.scroll(canvas, { target: { scrollTop: 25 } });
+    expect((lane.firstElementChild as HTMLElement).style.transform).toBe("translateY(-25px)");
+    fireEvent.pointerDown(rulers[1]?.querySelector('[aria-label="Top page margin"]') as Element, {
+      clientY: 100,
+    });
+    expect(document.querySelectorAll('[data-ruler-guide="y"]')).toHaveLength(1);
+    fireEvent.pointerCancel(window);
+    expect(document.querySelector('[data-ruler-guide="y"]')).toBeNull();
   });
 
   it("creates page frames from measured text lines", /** Keeps physical page breaks owned by Writer layout. @returns Nothing. */ () => {

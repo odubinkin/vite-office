@@ -5,6 +5,7 @@
 
 import { useState, type ReactNode } from "react";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import { WriterRulerLaneContext } from "./writer-ruler-lane-context";
 
 /** Defines the content injected into stable Writer workspace chrome regions. */
 export interface WriterWorkspaceChromeProps {
@@ -22,6 +23,8 @@ export interface WriterWorkspaceChromeProps {
   readonly isPropertiesSidebarVisible: boolean;
   /** Upstream-shaped horizontal and vertical ruler projections. */
   readonly rulers: ReactNode;
+  /** Whether the fixed left ruler lane is shown. */
+  readonly isVerticalRulerVisible?: boolean;
   /** Whether the Writer status bar is rendered below the document canvas. */
   readonly isStatusBarVisible: boolean;
   /** Current contextual controls and feedback placed in the Writer properties sidebar. */
@@ -41,6 +44,7 @@ export interface WriterWorkspaceChromeProps {
  * @param props.onDocumentTitleChange - Applies a committed document title.
  * @param props.formattingToolbar - Implemented formatting controls positioned below the standard toolbar.
  * @param props.isPropertiesSidebarVisible - Whether the contextual sidebar remains visible beside the canvas.
+ * @param props.isVerticalRulerVisible - Whether the fixed left ruler lane is shown.
  * @param props.rulers - Horizontal and vertical measurement chrome.
  * @param props.isStatusBarVisible - Whether the status feedback row remains visible below the canvas.
  * @param props.menuBar - Functional Writer menus placed beside the document title row.
@@ -54,6 +58,7 @@ export function WriterWorkspaceChrome({
   documentTitle,
   formattingToolbar,
   isPropertiesSidebarVisible,
+  isVerticalRulerVisible = false,
   isStatusBarVisible,
   menuBar,
   onDocumentTitleChange,
@@ -65,6 +70,8 @@ export function WriterWorkspaceChrome({
   const localization = useBrowserLocalization();
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [draftTitle, setDraftTitle] = useState(documentTitle);
+  const [rulerLane, setRulerLane] = useState<HTMLElement | null>(null);
+  const [canvasScrollTop, setCanvasScrollTop] = useState(0);
 
   /** Commits the normalized title draft and closes the inline editor. @returns Nothing. */
   function commitTitle(): void {
@@ -157,13 +164,29 @@ export function WriterWorkspaceChrome({
       >
         <div className="grid min-h-0 min-w-0 flex-1 grid-cols-[auto_minmax(0,1fr)] grid-rows-[auto_minmax(0,1fr)] lg:col-start-1">
           {rulers}
+          {isVerticalRulerVisible ? (
+            <div
+              aria-label="Writer vertical ruler lane"
+              className="relative col-start-1 row-start-2 w-8 overflow-hidden border-r border-slate-300 bg-white"
+              ref={setRulerLane}
+            />
+          ) : null}
           <div
             aria-label="Writer document canvas"
             className="col-start-2 row-start-2 min-h-0 min-w-0 overscroll-contain overflow-auto bg-slate-200/70 p-5 sm:p-8"
             data-layout-mode="paged"
+            onScroll={
+              /** Tracks document scrolling for the fixed ruler lane. @param event - Canvas scroll event. @returns Nothing. */ (
+                event,
+              ) => setCanvasScrollTop(event.currentTarget.scrollTop)
+            }
             role="region"
           >
-            {children}
+            <WriterRulerLaneContext.Provider
+              value={{ lane: rulerLane, scrollTop: canvasScrollTop }}
+            >
+              {children}
+            </WriterRulerLaneContext.Provider>
           </div>
         </div>
         {isPropertiesSidebarVisible ? (

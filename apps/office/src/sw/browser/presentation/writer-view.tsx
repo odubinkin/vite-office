@@ -161,6 +161,7 @@ export function WriterWorkbench({
           />
         }
         isPropertiesSidebarVisible={snapshot.isPropertiesSidebarVisible}
+        isVerticalRulerVisible={snapshot.isVerticalRulerVisible}
         isStatusBarVisible={snapshot.isStatusBarVisible}
         menuBar={
           <CommandMenuBar

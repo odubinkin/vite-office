@@ -1,8 +1,9 @@
 /** @fileoverview Projects Writer paragraphs through one browser implementation of SwEditWin. */
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { WriterRulerLaneContext } from "../presentation/writer-ruler-lane-context";
 
 import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
 import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
@@ -32,6 +33,7 @@ export interface WriterPlainTextEditorProps {
 
 /** Renders one root `contenteditable` and forwards browser events to one stable controller. @param props - Immutable projection and edit-window owner. @returns Logical Writer document editing host. */
 export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.JSX.Element {
+  const rulerLane = useContext(WriterRulerLaneContext);
   const rootElement = useRef<HTMLElement | null>(null);
   const measurementHost = useRef<HTMLDivElement | null>(null);
   const measurementRootRef = useRef<ShadowRoot | null>(null);
@@ -192,6 +194,31 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
 
   return (
     <>
+      {props.verticalRuler && rulerLane.lane
+        ? createPortal(
+            <div
+              className="pt-5 sm:pt-8"
+              style={{ transform: `translateY(-${rulerLane.scrollTop}px)` }}
+            >
+              {pages.map(
+                /** Mirrors each page in the fixed ruler lane. @param page - Physical page frame. @param index - Zero-based page index. @returns Ruler segment. */ (
+                  page,
+                  index,
+                ) => (
+                  <div
+                    className={index < pages.length - 1 ? "mb-6" : ""}
+                    data-ruler-page-index={index}
+                    key={`ruler-page-${index}`}
+                    style={{ height: page.descriptor.height / 15, position: "relative" }}
+                  >
+                    {props.verticalRuler}
+                  </div>
+                ),
+              )}
+            </div>,
+            rulerLane.lane,
+          )
+        : null}
       <div
         ref={
           /** Isolates measurement text from document queries and selection. @param element - Measurement host. @returns Nothing. */ (
@@ -280,7 +307,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
             pageIndex,
           ) => (
             <div className="relative" key={`page-${pageIndex}`}>
-              {props.verticalRuler}
               <section
                 aria-label={`Page ${pageIndex + 1}`}
                 className="box-border flex shrink-0 flex-col overflow-hidden bg-white shadow-xl shadow-slate-400/30"
