@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240501-JB34TJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T07:15:00.238Z",
+  "verdict": "pass",
+  "summary": "Persistent SwRootFrame owns supported pagination, frame identity, invalidation and line-number projection; browser supplies measured lines.",
+  "evaluated_sha": "f83cd505a0573804ffefe8dcea7f72e49378ef93",
+  "blueprint_digest": "48d5c6df190400b23e5c96c320d1403a6601a790caeaa858f58ec0627632e5f5",
+  "findings": [
+    "Native connected frame registration, tables and anchored objects remain outside the browser slice and module-wide parity remains unverified."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240501-JB34TJ/README.md",
+    "apps/office/src/sw/source/core/layout/newfrm.test.ts",
+    "apps/office/src/sw/source/uibase/uiview/view.test.ts",
+    "apps/office/e2e/writer-layout-ratios.spec.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

@@ -4,7 +4,7 @@ title: "Restore Writer core layout ownership"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -20,11 +20,29 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T07:14:54.266Z"
+  updated_by: "CODER"
+  note: "npm run verify passed: 461 office tests and 96 inventory tests at 100% coverage, 14 Chromium E2E tests including DPR 1/2, static build, source tree/provenance; scoped diff reviewed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T07:15:00.238Z"
+  updated_by: "EVALUATOR"
+  note: "Persistent SwRootFrame owns supported pagination, frame identity, invalidation and line-number projection; browser supplies measured lines."
+  evaluated_sha: "f83cd505a0573804ffefe8dcea7f72e49378ef93"
+  blueprint_digest: "48d5c6df190400b23e5c96c320d1403a6601a790caeaa858f58ec0627632e5f5"
+  evidence_refs:
+    - ".agentplane/tasks/202609240501-JB34TJ/README.md"
+    - ".agentplane/tasks/202609240501-JB34TJ/quality/20260924-071500238-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609240501-JB34TJ/quality/20260924-071500238-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609240501-JB34TJ/quality/20260924-071500238-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609240501-JB34TJ/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/source/core/layout/newfrm.test.ts"
+    - "apps/office/src/sw/source/uibase/uiview/view.test.ts"
+    - "apps/office/e2e/writer-layout-ratios.spec.ts"
+  findings:
+    - "Native connected frame registration, tables and anchored objects remain outside the browser slice and module-wide parity remains unverified."
 commit: null
 comments:
   -
@@ -38,8 +56,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: restore core-owned Writer frame graph and browser measurement boundary."
+  -
+    type: "verify"
+    at: "2026-09-24T07:14:54.266Z"
+    author: "CODER"
+    state: "ok"
+    note: "npm run verify passed: 461 office tests and 96 inventory tests at 100% coverage, 14 Chromium E2E tests including DPR 1/2, static build, source tree/provenance; scoped diff reviewed."
 doc_version: 3
-doc_updated_at: "2026-09-24T06:50:31.138Z"
+doc_updated_at: "2026-09-24T07:14:54.381Z"
 doc_updated_by: "CODER"
 description: "Stage 3: move line metrics, frame graph, invalidation, flow, pagination and line numbering to sw/source/core; keep browser measurement as device port"
 sections:
@@ -62,6 +86,36 @@ sections:
     4. Run npm run verify and inspect the task-scoped diff and clean tracked state.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T07:14:54.266Z — VERIFY — ok
+
+    By: CODER
+
+    Note: npm run verify passed: 461 office tests and 96 inventory tests at 100% coverage, 14 Chromium E2E tests including DPR 1/2, static build, source tree/provenance; scoped diff reviewed.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T06:50:31.138Z, excerpt_hash=sha256:55fa967d99e44a218202c16b7356b1c9fe4a28b7799217d7c965eef350c38aea
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-JB34TJ/blueprint/resolved-snapshot.json
+    - old_digest: 48d5c6df190400b23e5c96c320d1403a6601a790caeaa858f58ec0627632e5f5
+    - current_digest: 48d5c6df190400b23e5c96c320d1403a6601a790caeaa858f58ec0627632e5f5
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609240501-JB34TJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609240501-JB34TJ
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -97,6 +151,36 @@ Stage 3: move line metrics, frame graph, invalidation, flow, pagination and line
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T07:14:54.266Z — VERIFY — ok
+
+By: CODER
+
+Note: npm run verify passed: 461 office tests and 96 inventory tests at 100% coverage, 14 Chromium E2E tests including DPR 1/2, static build, source tree/provenance; scoped diff reviewed.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T06:50:31.138Z, excerpt_hash=sha256:55fa967d99e44a218202c16b7356b1c9fe4a28b7799217d7c965eef350c38aea
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-JB34TJ/blueprint/resolved-snapshot.json
+- old_digest: 48d5c6df190400b23e5c96c320d1403a6601a790caeaa858f58ec0627632e5f5
+- current_digest: 48d5c6df190400b23e5c96c320d1403a6601a790caeaa858f58ec0627632e5f5
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609240501-JB34TJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609240501-JB34TJ
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
