@@ -4,7 +4,7 @@ title: "F3 Move Writer edit and transfer operations to upstream owners"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,24 @@ verification:
   updated_by: "CODER"
   note: "F3 model editing and transfer ownership now matches pinned Writer modules; full npm run verify passed with 100% coverage and 14 browser scenarios."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T12:16:48.797Z"
+  updated_by: "EVALUATOR"
+  note: "F3 moved hyperlink editing, paste orchestration, text-node projection and transfer DTO normalization to their pinned or explicit filter owners."
+  evaluated_sha: "2fea3c136b0d379ae5219db1a42246ef0191df2a"
+  blueprint_digest: "991bbd9eaf8b9eb21ea14fd2b5af4018679a95fbe79bc3377ef743d1d0d4b722"
+  evidence_refs:
+    - ".agentplane/tasks/202609241135-RF2T8B/README.md"
+    - ".agentplane/tasks/202609241135-RF2T8B/quality/20260924-121648797-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241135-RF2T8B/quality/20260924-121648797-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241135-RF2T8B/quality/20260924-121648797-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241135-RF2T8B/blueprint/resolved-snapshot.json"
+    - "npm run verify: 482 office tests, 98 inventory tests, 14 browser tests, 100% coverage"
+    - "apps/office/src/sw/source/core/edit/editsh.ts"
+    - "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts"
+  findings:
+    - "All references and source records resolve to active files; source tree, type, lint, unit, browser, ODT and build checks pass."
 commit: null
 comments:
   -
