@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240339-HJQ7QX",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T04:31:10.065Z",
+  "verdict": "pass",
+  "summary": "Writer formatting controls and ODT paths are implemented and verified.",
+  "evaluated_sha": "ccc1df74542e0075ef1acb07f03d7220b5070a97",
+  "blueprint_digest": "0329d87b49c14d199e6a15db90330c8cc252e89ff658693da7504873a6e1d483",
+  "findings": [
+    "No blocking issues in the reviewed diff; the color button accessible name was corrected after E2E exposed a selector collision."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240339-HJQ7QX/README.md",
+    "commit ccc1df74542e0075ef1acb07f03d7220b5070a97",
+    "npm run test:coverage -w @vite-office/office: 443 pass, 100% coverage",
+    "npm run test:e2e: 13 pass",
+    "npm run build -w @vite-office/office: pass"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
