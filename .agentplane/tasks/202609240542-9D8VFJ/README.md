@@ -1,6 +1,6 @@
 ---
-id: "202609240501-JB34TJ"
-title: "Restore Writer core layout ownership"
+id: "202609240542-9D8VFJ"
+title: "Restore document-owned Writer line numbering"
 status: "TODO"
 priority: "med"
 owner: "CODER"
@@ -8,10 +8,11 @@ revision: 1
 origin:
   system: "manual"
 depends_on:
-  - "202609240501-ZNDC30"
-  - "202609240542-9D8VFJ"
+  - "202609240501-76PKPC"
 tags:
   - "code"
+task_kind: "code"
+mutation_scope: "code"
 verify:
   - "npm run verify"
 plan_approval:
@@ -25,23 +26,22 @@ verification:
   updated_by: null
   note: null
   attempts: 0
-commit: null
 comments: []
 events: []
 doc_version: 3
-doc_updated_at: "2026-09-24T05:01:32.298Z"
+doc_updated_at: "2026-09-24T05:42:14.887Z"
 doc_updated_by: "CODER"
-description: "Stage 3: move line metrics, frame graph, invalidation, flow, pagination and line numbering to sw/source/core; keep browser measurement as device port"
+description: "Stage 2b: add pinned SwLineNumberInfo defaults and document-owned shell command state, paragraph count flags, page restarts, undo and supported ODT round trip; React reads and paints only"
 sections:
   Summary: |-
-    Restore Writer core layout ownership
+    Restore document-owned Writer line numbering
 
-    Stage 3: move line metrics, frame graph, invalidation, flow, pagination and line numbering to sw/source/core; keep browser measurement as device port
+    Stage 2b: add pinned SwLineNumberInfo defaults and document-owned shell command state, paragraph count flags, page restarts, undo and supported ODT round trip; React reads and paints only
   Scope: |-
-    - In scope: Stage 3: move line metrics, frame graph, invalidation, flow, pagination and line numbering to sw/source/core; keep browser measurement as device port.
-    - Out of scope: unrelated refactors not required for "Restore Writer core layout ownership".
+    - In scope: Stage 2b: add pinned SwLineNumberInfo defaults and document-owned shell command state, paragraph count flags, page restarts, undo and supported ODT round trip; React reads and paints only.
+    - Out of scope: unrelated refactors not required for "Restore document-owned Writer line numbering".
   Plan: |-
-    1. Implement the change for "Restore Writer core layout ownership".
+    1. Implement the change for "Restore document-owned Writer line numbering".
     2. Run required checks and capture verification evidence.
     3. Finalize task findings and finish with traceable commit metadata.
   Verify Steps: |-
@@ -61,18 +61,18 @@ id_source: "generated"
 ---
 ## Summary
 
-Restore Writer core layout ownership
+Restore document-owned Writer line numbering
 
-Stage 3: move line metrics, frame graph, invalidation, flow, pagination and line numbering to sw/source/core; keep browser measurement as device port
+Stage 2b: add pinned SwLineNumberInfo defaults and document-owned shell command state, paragraph count flags, page restarts, undo and supported ODT round trip; React reads and paints only
 
 ## Scope
 
-- In scope: Stage 3: move line metrics, frame graph, invalidation, flow, pagination and line numbering to sw/source/core; keep browser measurement as device port.
-- Out of scope: unrelated refactors not required for "Restore Writer core layout ownership".
+- In scope: Stage 2b: add pinned SwLineNumberInfo defaults and document-owned shell command state, paragraph count flags, page restarts, undo and supported ODT round trip; React reads and paints only.
+- Out of scope: unrelated refactors not required for "Restore document-owned Writer line numbering".
 
 ## Plan
 
-1. Implement the change for "Restore Writer core layout ownership".
+1. Implement the change for "Restore document-owned Writer line numbering".
 2. Run required checks and capture verification evidence.
 3. Finalize task findings and finish with traceable commit metadata.
 
