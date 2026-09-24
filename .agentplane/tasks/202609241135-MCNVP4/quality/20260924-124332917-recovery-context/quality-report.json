@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241135-MCNVP4",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T12:43:32.917Z",
+  "verdict": "pass",
+  "summary": "F6 source identity audit and filename alignment verified.",
+  "evaluated_sha": "34c8be798f5c12f265d41b012855f8cf22236478",
+  "blueprint_digest": "1f1bab0576a9d6045480daa586fd7effe898a31d0fe79f7d0f36fb48b5db21b7",
+  "findings": [
+    "Eleven historical filenames aligned to upstream, retired selection helper dissolved into core owners, false source mappings corrected, and five explicit constraints retained. Full verify passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241135-MCNVP4/README.md",
+    "docs/program/source-provenance.json",
+    "apps/office/src/sw/source/core/crsr/pam.ts",
+    "apps/office/src/sw/source/core/undo/undobj.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

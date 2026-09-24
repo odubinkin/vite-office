@@ -4,7 +4,7 @@ title: "F6 Resolve source identity and filename divergences"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,24 @@ verification:
   updated_by: "CODER"
   note: "All remaining source identity divergences audited; renamed, relocated, or documented with concrete constraints. Full npm run verify and git diff --check passed."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T12:43:32.917Z"
+  updated_by: "EVALUATOR"
+  note: "F6 source identity audit and filename alignment verified."
+  evaluated_sha: "34c8be798f5c12f265d41b012855f8cf22236478"
+  blueprint_digest: "1f1bab0576a9d6045480daa586fd7effe898a31d0fe79f7d0f36fb48b5db21b7"
+  evidence_refs:
+    - ".agentplane/tasks/202609241135-MCNVP4/README.md"
+    - ".agentplane/tasks/202609241135-MCNVP4/quality/20260924-124332917-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241135-MCNVP4/quality/20260924-124332917-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241135-MCNVP4/quality/20260924-124332917-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241135-MCNVP4/blueprint/resolved-snapshot.json"
+    - "docs/program/source-provenance.json"
+    - "apps/office/src/sw/source/core/crsr/pam.ts"
+    - "apps/office/src/sw/source/core/undo/undobj.ts"
+  findings:
+    - "Eleven historical filenames aligned to upstream, retired selection helper dissolved into core owners, false source mappings corrected, and five explicit constraints retained. Full verify passed."
 commit: null
 comments:
   -
