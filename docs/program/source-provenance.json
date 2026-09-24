@@ -1828,12 +1828,59 @@
       },
       "localPath": "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx",
       "localSymbols": [
-        "WriterAdvancedFormattingControls",
-        "WriterParagraphFormatValue"
+        "WriterAdvancedFormattingControls"
       ],
-      "rationale": "Presents bindings-backed Writer color, line-spacing and paragraph slots and edits only the transient draft of a shell-owned paragraph dialog request.",
+      "rationale": "Composes bindings-backed Writer color, line-spacing and paragraph commands; the dialog draft and palette interactions are isolated in browser presenters.",
       "responsibilities": [
-        "Presents bindings-backed Writer color, line-spacing and paragraph slots and edits only the transient draft of a shell-owned paragraph dialog request."
+        "Composes bindings-backed Writer color, line-spacing and paragraph commands; the dialog draft and palette interactions are isolated in browser presenters."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM presentation replace native VCL controls and dialogs."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterColorControl",
+            "path": "apps/office/src/sw/browser/presentation/WriterColorControl.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterColorControl.tsx",
+      "localSymbols": [
+        "WriterColorControl"
+      ],
+      "rationale": "Presents DOM color input and swatch interactions for bindings-backed Writer color commands; no model color state is owned here.",
+      "responsibilities": [
+        "Presents DOM color input and swatch interactions for bindings-backed Writer color commands; no model color state is owned here."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM presentation replace native VCL controls and dialogs."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterParagraphDialog",
+            "path": "apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterParagraphDialog.tsx",
+      "localSymbols": [
+        "WriterParagraphDialog"
+      ],
+      "rationale": "Presents the transient draft of one shell-owned paragraph dialog request; accepted values return through WriterDialogController.",
+      "responsibilities": [
+        "Presents the transient draft of one shell-owned paragraph dialog request; accepted values return through WriterDialogController."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",

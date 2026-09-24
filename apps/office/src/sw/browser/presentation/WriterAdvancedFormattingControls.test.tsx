@@ -189,8 +189,10 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByLabelText("Font Color palette"));
     fireEvent.click(screen.getByLabelText("Font Color #ff0000"));
     expect(onColor).toHaveBeenCalledWith("color", "#ff0000");
+    expect(onColor).toHaveBeenCalledTimes(1);
     fireEvent.change(screen.getByLabelText("Line Spacing"), { target: { value: "150" } });
     expect(onLineSpacing).toHaveBeenCalledWith(150);
+    expect(onLineSpacing).toHaveBeenCalledTimes(1);
     fireEvent.click(screen.getByText("Paragraph…"));
     fireEvent.mouseDown(screen.getByRole("dialog"));
     expect(screen.getByRole("dialog")).toBeInTheDocument();
@@ -210,6 +212,8 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
       }),
     );
     expect(onShowLineNumbersChange).toHaveBeenCalledWith(true);
+    expect(onParagraphFormat).toHaveBeenCalledTimes(1);
+    expect(onShowLineNumbersChange).toHaveBeenCalledTimes(1);
   });
   it("edits non-proportional spacing, resets a cancelled draft, and clears highlighting", /** Verifies additional dialog paths. @returns Nothing. */ () => {
     const onColor = vi.fn();
