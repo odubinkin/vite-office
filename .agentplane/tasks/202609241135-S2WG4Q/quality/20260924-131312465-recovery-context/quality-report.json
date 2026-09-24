@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241135-S2WG4Q",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T13:13:12.465Z",
+  "verdict": "pass",
+  "summary": "Writer formatting commands use pinned resources, Sfx slots and bindings; paragraph dialog uses one controller request.",
+  "evaluated_sha": "23d97c8736c8fb6fa61206bab46e8cf378b1e1fe",
+  "blueprint_digest": "8b07cd258827021409f03b6bebf30728add27201ee2cb7e7547ada69ed5a26fb",
+  "findings": [
+    "Full npm run verify passed: 484 office tests, 98 inventory tests, 14 E2E, 100% coverage; git diff --check passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241135-S2WG4Q/README.md",
+    "apps/office/src/sw/source/uibase/shells/textsh1.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
