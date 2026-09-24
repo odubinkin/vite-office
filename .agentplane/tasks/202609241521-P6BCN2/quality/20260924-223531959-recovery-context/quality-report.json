@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241521-P6BCN2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T22:35:31.959Z",
+  "verdict": "pass",
+  "summary": "Whole-document certification ODT acceptance satisfies the bounded compatibility gate.",
+  "evaluated_sha": "f935dc55783479e9914de7a959c2de6af8a7fd59",
+  "blueprint_digest": "9619eb0eb05dbd5981d1d8fa17b3642ef6763359fe9407991d39d6329dba0bb5",
+  "findings": [
+    "Fresh Chromium import/edit/export/reopen retained source body text and runs, nonedited cells, bookmarks, logical breaks and page geometry; second save was byte-identical. Pinned ODT matrix and full verify pass. Remaining 260 unsupported declarations are explicitly classified, summarized once in the browser, and documented without claiming complete LibreOffice layout parity."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241521-P6BCN2/README.md",
+    "docs/program/certification-odt-acceptance.md",
+    "apps/office/e2e/writer-odt-file.spec.ts",
+    "apps/office/src/sw/source/filter/xml/odt-filter-service.test.ts",
+    "npm-run-verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
