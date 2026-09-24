@@ -53,7 +53,15 @@ export class SwView {
         hint,
       ) => {
         const dependencies = getWriterHintDependencies(hint);
-        if (dependencies.includes("document")) this.layout.Invalidate();
+        if (dependencies.includes("document"))
+          for (const nested of hint.kind === "model-transaction" ? hint.hints : [hint])
+            this.layout.Invalidate(
+              "nodeIndex" in nested
+                ? nested.nodeIndex
+                : "index" in nested
+                  ? nested.index
+                  : undefined,
+            );
         this.Invalidate(...dependencies);
       },
     );

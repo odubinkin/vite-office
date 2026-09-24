@@ -4,7 +4,7 @@ title: "F9 Target Writer layout invalidation"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on:
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T13:57:11.602Z"
+  updated_by: "CODER"
+  note: "SwRootFrame invalidation uses current model/device revisions, typed geometry comparisons and targeted Writer node hints; full npm run verify and git diff --check passed (486 office tests, 98 inventory tests, 14 E2E, 100% coverage)."
   attempts: 0
 commit: null
 comments:
@@ -38,8 +38,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: replace whole-document serialization with revision and targeted frame invalidation."
+  -
+    type: "verify"
+    at: "2026-09-24T13:57:11.602Z"
+    author: "CODER"
+    state: "ok"
+    note: "SwRootFrame invalidation uses current model/device revisions, typed geometry comparisons and targeted Writer node hints; full npm run verify and git diff --check passed (486 office tests, 98 inventory tests, 14 E2E, 100% coverage)."
 doc_version: 3
-doc_updated_at: "2026-09-24T13:42:50.681Z"
+doc_updated_at: "2026-09-24T13:57:11.684Z"
 doc_updated_by: "CODER"
 description: "Implement F9: replace JSON serialization oracle with model revision and targeted dirty-frame propagation, preserving stable identity."
 sections:
@@ -54,6 +60,36 @@ sections:
   Verify Steps: "1. SwRootFrame.Format has no whole-document, paragraph or frame JSON.stringify invalidation keys; model revision, browser measurement revision and typed comparisons determine work, and Writer hints identify the earliest affected node when possible. 2. Unchanged passes reuse the snapshot; changed nodes and layout geometry reflow affected successors while unchanged page/text frames retain identity whenever placement and geometry match. Tests cover model edits, attribute changes, measurement/font/width changes, page-descriptor changes, line numbers and follow frames. 3. Browser measurement revision stays under sw/browser/editor, exact provenance/inventory data reflect the algorithm, and npm run verify plus git diff --check pass."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T13:57:11.602Z — VERIFY — ok
+
+    By: CODER
+
+    Note: SwRootFrame invalidation uses current model/device revisions, typed geometry comparisons and targeted Writer node hints; full npm run verify and git diff --check passed (486 office tests, 98 inventory tests, 14 E2E, 100% coverage).
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T13:42:50.681Z, excerpt_hash=sha256:45e10bf2a29c15c9bc07d96e907985ee482b68714f4d1a6a7ce39b73299ef588
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241135-227P0M/blueprint/resolved-snapshot.json
+    - old_digest: 756cafb50c6a178d23c2067e17d05fee85de2afb4267f68948c987d93d2c93f0
+    - current_digest: 756cafb50c6a178d23c2067e17d05fee85de2afb4267f68948c987d93d2c93f0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241135-227P0M
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609241135-227P0M
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -83,6 +119,36 @@ Replace SwRootFrame JSON.stringify invalidation and frame keys with current-docu
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T13:57:11.602Z — VERIFY — ok
+
+By: CODER
+
+Note: SwRootFrame invalidation uses current model/device revisions, typed geometry comparisons and targeted Writer node hints; full npm run verify and git diff --check passed (486 office tests, 98 inventory tests, 14 E2E, 100% coverage).
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T13:42:50.681Z, excerpt_hash=sha256:45e10bf2a29c15c9bc07d96e907985ee482b68714f4d1a6a7ce39b73299ef588
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241135-227P0M/blueprint/resolved-snapshot.json
+- old_digest: 756cafb50c6a178d23c2067e17d05fee85de2afb4267f68948c987d93d2c93f0
+- current_digest: 756cafb50c6a178d23c2067e17d05fee85de2afb4267f68948c987d93d2c93f0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241135-227P0M
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609241135-227P0M
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan

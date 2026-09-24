@@ -77,6 +77,16 @@ describe("SwView frame ownership", /** Groups SwView frame ownership. @returns T
     expect(view.GetLayout()).toBe(layout);
     view.GetWrtShell().SetParagraphStyle("heading-1");
     expect(layout.Format(input, page, undefined, info).revision).toBe(changed.revision + 1);
+    const node = document.paragraphs[0];
+    if (node === undefined) throw new Error("Missing layout paragraph");
+    document.NotifyModelChange({ kind: "attribute-set-changed", nodeIndex: node.GetIndex() });
+    const attributed = layout.Format(input, page, undefined, info);
+    document.NotifyModelChange({ kind: "node-inserted", index: node.GetIndex() });
+    expect(layout.Format(input, page, undefined, info).revision).toBe(attributed.revision + 1);
+    view
+      .GetWrtShell()
+      .CallSwClientNotify({ kind: "attribute-set-changed", nodeIndex: node.GetIndex() });
+    expect(layout.Format(input, page, undefined, info).revision).toBe(attributed.revision + 2);
     view.Close();
   });
 });

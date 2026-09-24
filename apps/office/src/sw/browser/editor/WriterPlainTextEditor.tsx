@@ -100,6 +100,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       : { descriptors: props.pageDescriptors, initialName: props.pageDescriptor.name },
     props.paragraphSpacingSettings,
     { ...lineInfo, paintLineNumbers: props.showLineNumbers ?? lineInfo.paintLineNumbers },
+    measurementRevision,
   );
   const pages = layout.pages;
   const paragraphById = new Map(
@@ -130,7 +131,14 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       ) {
         globalThis.queueMicrotask(
           /** Applies measured browser geometry after this layout pass. @returns Nothing. */ (): void => {
-            if (active) setMeasuredLines(next);
+            if (active) {
+              setMeasuredLines(next);
+              setMeasurementRevision(
+                /** Advances the device revision after line geometry changes. @param revision - Current revision. @returns Next revision. */ (
+                  revision,
+                ) => revision + 1,
+              );
+            }
           },
         );
       }

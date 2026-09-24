@@ -1535,7 +1535,7 @@
       "localPath": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
       "rationale": "Binds exactly one stable BrowserWriterEditWindow to immutable React paragraph projections and one logical contenteditable host.",
       "responsibilities": [
-        "Renders Writer paragraphs, supplies DOM line measurements to the view-owned core layout root, and forwards DOM events without constructing Writer mutation closures."
+        "Renders Writer paragraphs, supplies DOM line geometry and device revision to the view-owned core layout root, and forwards DOM events without constructing Writer mutation closures."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -3369,7 +3369,7 @@
         "Native frames for tables, anchored objects, footnotes, and page-style families beyond the supported Standard page remain outside this slice."
       ],
       "preservedResponsibilities": [
-        "Keeps a persistent root bound to the current SwDoc, reads canonical node layout values after browser line measurement, and owns supported page/text frames, identity and line numbering."
+        "Keeps a persistent root over supported page and text frames, uses model/device revisions and typed geometry comparisons for invalidation, reconciles unchanged frame identity, and projects line numbers."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/layout/newfrm.cxx",

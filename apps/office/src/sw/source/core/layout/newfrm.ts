@@ -71,62 +71,114 @@ export interface SwRootFrameSnapshot {
 
 /** Persistent Writer layout root owning page and text-frame identity over device measurements. */
 export class SwRootFrame {
-  private signature: string | undefined;
   private dirty = true;
+  private dirtyFrom = 0;
+  private lastDocument: SwDoc | undefined;
+  private lastModelRevision = -1;
+  private lastMeasurementRevision = -1;
+  private lastDescriptor: WriterPageDescriptorValue | SwPageDescriptorLayout | undefined;
+  private lastSettings: SwTextFrameSettings | undefined;
+  private lastLineInfo: SwLineNumberInfoValue | undefined;
+  private lastInputs: readonly SwTextFrameInput[] = [];
   private snapshot: SwRootFrameSnapshot | undefined;
-  private inputSignatures = new Map<string, string>();
   private revision = 0;
 
   /** Binds the root to its current Writer document while allowing document-shell replacement. @param getDocument - Active canonical document. @returns Nothing. */
   public constructor(private readonly getDocument: () => SwDoc) {}
 
-  /** Invalidates the formatted graph after a document or style change. @returns Nothing. */
-  public Invalidate(): void {
+  /** Invalidates the formatted graph from a changed Writer node onward. @param nodeIndex - Optional SwNodes index; absent means all frames. @returns Nothing. */
+  public Invalidate(nodeIndex?: number): void {
     this.dirty = true;
+    const paragraphs = this.getDocument().paragraphs;
+    const affected =
+      nodeIndex === undefined
+        ? 0
+        : paragraphs.findIndex(
+            /** Finds the first node at or after the model hint. @param node - Current node. @returns Whether affected. */ (
+              node,
+            ) => node.GetIndex() >= nodeIndex,
+          );
+    this.dirtyFrom = Math.min(this.dirtyFrom, affected < 0 ? paragraphs.length : affected);
   }
 
-  /** Formats measured text into stable page frames and line-number marks. @param measurements - Browser device line geometry only. @param descriptor - Page descriptor graph. @param settings - Writer spacing settings. @param lineInfo - Document line-number settings. @returns Immutable current layout. */
+  /** Formats measured text into stable page frames and line-number marks. @param measurements - Browser device line geometry only. @param descriptor - Page descriptor graph. @param settings - Writer spacing settings. @param lineInfo - Document line-number settings. @param measurementRevision - Browser device revision. @returns Immutable current layout. */
   public Format(
     measurements: readonly SwTextFrameMeasurement[],
     descriptor: WriterPageDescriptorValue | SwPageDescriptorLayout,
     settings: SwTextFrameSettings | undefined,
     lineInfo: SwLineNumberInfoValue,
+    measurementRevision = 0,
   ): SwRootFrameSnapshot {
-    const paragraphs = createSwTextFrameInputs(this.getDocument(), measurements);
-    const signature = JSON.stringify([paragraphs, descriptor, settings, lineInfo]);
-    if (!this.dirty && this.signature === signature && this.snapshot !== undefined)
+    const document = this.getDocument();
+    const modelRevision = document.GetDocumentStateManager().GetModelRevision();
+    const sameDescriptor = layoutDescriptorEqual(this.lastDescriptor, descriptor);
+    const sameSettings = textFrameSettingsEqual(this.lastSettings, settings);
+    const sameLineInfo = lineNumberInfoEqual(this.lastLineInfo, lineInfo);
+    if (
+      !this.dirty &&
+      this.lastDocument === document &&
+      this.lastModelRevision === modelRevision &&
+      this.lastMeasurementRevision === measurementRevision &&
+      sameDescriptor &&
+      sameSettings &&
+      sameLineInfo &&
+      measurementsMatchInputs(measurements, this.lastInputs) &&
+      this.snapshot !== undefined
+    )
       return this.snapshot;
+    const paragraphs = createSwTextFrameInputs(document, measurements);
     const previous = this.snapshot?.pages ?? [];
-    const nextInputSignatures = new Map(
-      paragraphs.map(
-        /** Captures one measured paragraph contract. @param paragraph - Device and model input. @returns Node identity and signature. */
-        (paragraph) => [paragraph.id, JSON.stringify(paragraph)] as const,
-      ),
+    const previousInputs = this.lastInputs;
+    const firstInputChange = paragraphs.findIndex(
+      /** Locates the first changed model or device input. @param paragraph - Current input. @param index - Document order. @returns Whether changed. */ (
+        paragraph,
+        index,
+      ) => !textFrameInputEqual(paragraph, previousInputs[index]),
     );
-    const reusable = new Map<string, SwTextFrame[]>();
-    for (const page of previous)
-      for (const frame of page.textFrames) {
-        const key = frameKey(frame, page.descriptor, this.inputSignatures);
-        const existing = reusable.get(key) ?? [];
-        existing.push(frame);
-        reusable.set(key, existing);
-      }
+    const affectedFrom = Math.min(
+      this.dirtyFrom,
+      firstInputChange < 0 ? paragraphs.length : firstInputChange,
+    );
+    const unchanged = new Set(
+      paragraphs
+        .filter(
+          /** Keeps nodes whose measured and model layout values match. @param paragraph - Current input. @param index - Document order. @returns Whether unchanged. */ (
+            paragraph,
+            index,
+          ) => index < affectedFrom || textFrameInputEqual(paragraph, previousInputs[index]),
+        )
+        .map(
+          /** Returns stable node identity. @param paragraph - Current input. @returns Device key. */ (
+            paragraph,
+          ) => paragraph.id,
+        ),
+    );
+    const layoutGeometryUnchanged = sameDescriptor && sameSettings;
     const pages = Object.freeze(
       createSwPageFrames(paragraphs, descriptor, settings).map(
         /** Retains unchanged frame identities after formatting. @param page - New page. @param index - Page position. @returns Reconciled page. */
         (page, index) => {
+          const oldPage = previous[index];
           const textFrames = Object.freeze(
             page.textFrames.map(
-              /** Reuses a matching source fragment. @param frame - New fragment. @returns Persistent fragment. */
-              (frame) =>
-                reusable.get(frameKey(frame, page.descriptor, nextInputSignatures))?.shift() ??
+              /** Reuses a matching source fragment at the same page position. @param frame - New fragment. @param frameIndex - Position in page. @returns Persistent fragment. */ (
                 frame,
+                frameIndex,
+              ) => {
+                const oldFrame = oldPage?.textFrames[frameIndex];
+                return layoutGeometryUnchanged &&
+                  unchanged.has(frame.nodeId) &&
+                  textFrameEqual(frame, oldFrame) &&
+                  oldPage !== undefined &&
+                  pageDescriptorEqual(page.descriptor, oldPage.descriptor)
+                  ? (oldFrame as SwTextFrame)
+                  : frame;
+              },
             ),
           );
-          const oldPage = previous[index];
           if (
             oldPage !== undefined &&
-            JSON.stringify(oldPage.descriptor) === JSON.stringify(page.descriptor) &&
+            pageDescriptorEqual(oldPage.descriptor, page.descriptor) &&
             oldPage.textFrames.length === textFrames.length &&
             textFrames.every(
               /** Tests unchanged frame identity. @param frame - Current frame. @param frameIndex - Position. @returns Whether stable. */
@@ -157,29 +209,160 @@ export class SwRootFrame {
       ),
     );
     this.revision += 1;
-    this.signature = signature;
-    this.inputSignatures = nextInputSignatures;
+    this.lastDocument = document;
+    this.lastModelRevision = modelRevision;
+    this.lastMeasurementRevision = measurementRevision;
+    this.lastDescriptor = descriptor;
+    this.lastSettings = settings;
+    this.lastLineInfo = lineInfo;
+    this.lastInputs = paragraphs;
     this.dirty = false;
+    this.dirtyFrom = Number.POSITIVE_INFINITY;
     this.snapshot = Object.freeze({ revision: this.revision, pages, lineNumbers });
     return this.snapshot;
   }
 }
 
-/** Keys an unchanged source fragment independently of its current page position. @param frame - Fragment. @param descriptor - Page geometry. @param signatures - Measured paragraph inputs. @returns Stable fragment key. */
-function frameKey(
-  frame: SwTextFrame,
-  descriptor: WriterPageDescriptorValue,
-  signatures: ReadonlyMap<string, string>,
-): string {
-  return JSON.stringify([
-    frame.nodeId,
-    frame.start,
-    frame.end,
-    frame.follow,
-    frame.topSpacing,
-    descriptor,
-    signatures.get(frame.nodeId),
-  ]);
+/** Compares physical page geometry without serializing layout state. @param left - Previous page. @param right - Current page. @returns Whether equal. */
+function pageDescriptorEqual(
+  left: WriterPageDescriptorValue,
+  right: WriterPageDescriptorValue,
+): boolean {
+  if (left === right) return true;
+  return (
+    left.name === right.name &&
+    left.paperFormat === right.paperFormat &&
+    left.width === right.width &&
+    left.height === right.height &&
+    left.landscape === right.landscape &&
+    left.leftMargin === right.leftMargin &&
+    left.rightMargin === right.rightMargin &&
+    left.topMargin === right.topMargin &&
+    left.bottomMargin === right.bottomMargin
+  );
+}
+
+/** Compares a page descriptor and its follow graph. @param left - Previous descriptor. @param right - Current descriptor. @returns Whether equal. */
+function layoutDescriptorEqual(
+  left: WriterPageDescriptorValue | SwPageDescriptorLayout | undefined,
+  right: WriterPageDescriptorValue | SwPageDescriptorLayout,
+): boolean {
+  if (left === right) return true;
+  if (left === undefined) return false;
+  if ("descriptors" in left && "descriptors" in right)
+    return (
+      left.initialName === right.initialName &&
+      left.descriptors.length === right.descriptors.length &&
+      left.descriptors.every(
+        /** Compares one page style and follow relationship. @param record - Previous record. @param index - Descriptor order. @returns Whether equal. */ (
+          record,
+          index,
+        ) =>
+          record.followName === right.descriptors[index]?.followName &&
+          pageDescriptorEqual(
+            record.value,
+            (right.descriptors[index] as (typeof right.descriptors)[number]).value,
+          ),
+      )
+    );
+  if ("descriptors" in left || "descriptors" in right) return false;
+  return pageDescriptorEqual(left, right);
+}
+
+/** Compares document paragraph-spacing switches. @param left - Previous settings. @param right - Current settings. @returns Whether equal. */
+function textFrameSettingsEqual(
+  left: SwTextFrameSettings | undefined,
+  right: SwTextFrameSettings | undefined,
+): boolean {
+  return (
+    left === right ||
+    (left !== undefined &&
+      right !== undefined &&
+      left.paraSpaceMax === right.paraSpaceMax &&
+      left.paraSpaceMaxAtPages === right.paraSpaceMaxAtPages)
+  );
+}
+
+/** Compares document line-number options. @param left - Previous options. @param right - Current options. @returns Whether equal. */
+function lineNumberInfoEqual(
+  left: SwLineNumberInfoValue | undefined,
+  right: SwLineNumberInfoValue,
+): boolean {
+  return (
+    left === right ||
+    (left !== undefined &&
+      left.divider === right.divider &&
+      left.dividerCountBy === right.dividerCountBy &&
+      left.posFromLeft === right.posFromLeft &&
+      left.countBy === right.countBy &&
+      left.position === right.position &&
+      left.paintLineNumbers === right.paintLineNumbers &&
+      left.countBlankLines === right.countBlankLines &&
+      left.countInFlys === right.countInFlys &&
+      left.restartEachPage === right.restartEachPage)
+  );
+}
+
+/** Compares shaped line geometry. @param left - Previous lines. @param right - Current lines. @returns Whether equal. */
+function textLinesEqual(left: readonly SwTextLine[], right: readonly SwTextLine[]): boolean {
+  return (
+    left === right ||
+    (left.length === right.length &&
+      left.every(
+        /** Compares one source range and height. @param line - Previous line. @param index - Line order. @returns Whether equal. */ (
+          line,
+          index,
+        ) =>
+          line.start === right[index]?.start &&
+          line.end === right[index]?.end &&
+          line.height === right[index]?.height,
+      ))
+  );
+}
+
+/** Checks current device measurements against the last formatted values. @param measurements - Current device lines. @param inputs - Previous core inputs. @returns Whether unchanged. */
+function measurementsMatchInputs(
+  measurements: readonly SwTextFrameMeasurement[],
+  inputs: readonly SwTextFrameInput[],
+): boolean {
+  return (
+    measurements.length === inputs.length &&
+    measurements.every(
+      /** Compares one device measurement. @param measurement - Current lines. @param index - Document order. @returns Whether equal. */ (
+        measurement,
+        index,
+      ) =>
+        measurement.id === inputs[index]?.id &&
+        textLinesEqual(measurement.lines, (inputs[index] as SwTextFrameInput).lines),
+    )
+  );
+}
+
+/** Compares model values and measured lines for one text node. @param left - Current input. @param right - Previous input. @returns Whether equal. */
+function textFrameInputEqual(left: SwTextFrameInput, right: SwTextFrameInput | undefined): boolean {
+  return (
+    right !== undefined &&
+    left.id === right.id &&
+    left.style === right.style &&
+    left.upperSpacing === right.upperSpacing &&
+    left.lowerSpacing === right.lowerSpacing &&
+    left.contextualSpacing === right.contextualSpacing &&
+    left.keepWithNext === right.keepWithNext &&
+    left.countLineNumbers === right.countLineNumbers &&
+    textLinesEqual(left.lines, right.lines)
+  );
+}
+
+/** Compares one frame's source range and placement. @param left - Current frame. @param right - Previous frame. @returns Whether equal. */
+function textFrameEqual(left: SwTextFrame, right: SwTextFrame | undefined): boolean {
+  return (
+    right !== undefined &&
+    left.nodeId === right.nodeId &&
+    left.start === right.start &&
+    left.end === right.end &&
+    left.follow === right.follow &&
+    left.topSpacing === right.topSpacing
+  );
 }
 
 /** Creates at least the initial page; splits a text node only at measured line boundaries. @param paragraphs - Ordered text node measurements. @param descriptor - Physical page geometry. @param settings - Paragraph spacing policy. @returns Ordered page frames. */

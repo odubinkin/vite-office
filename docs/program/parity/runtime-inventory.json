@@ -1644,7 +1644,7 @@
           "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#SwLineNumberInfo::SwLineNumberInfo",
           "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx#SwTextFrame"
         ],
-        "justification": "React supplies measured DOM glyph/line boundaries to document-owned SwRootFrame layout and paints the returned frame/line-number snapshot. The optional showLineNumbers prop mirrors document SwLineNumberInfo state; broader device rendering remains unverified.",
+        "justification": "React supplies measured line geometry and a browser device revision to the persistent Writer root; document layout values and frame identity remain in core.",
         "knownViolations": [],
         "localSymbols": [
           "WriterPlainTextEditor"
@@ -3718,9 +3718,10 @@
           "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx#InsertNewPage",
           "apps/office/src/sw/source/core/layout/newfrm.test.ts#persistent Writer layout root",
           "vendor/libreoffice-reference/sw/source/core/layout/newfrm.cxx#SwRootFrame::SwRootFrame",
-          "apps/office/e2e/writer-layout-ratios.spec.ts#Writer keeps measured page breaks across device pixel ratios"
+          "apps/office/e2e/writer-layout-ratios.spec.ts#Writer keeps measured page breaks across device pixel ratios",
+          "apps/office/src/sw/source/core/layout/newfrm.test.ts#reflows affected successors while retaining unchanged positioned frames"
         ],
-        "justification": "Persistent SwRootFrame resolves the current SwDoc and receives only device line geometry; supported page/text-frame identity and line numbering remain core-owned. Native connected frame registration and unsupported content remain outside this slice.",
+        "justification": "Persistent SwRootFrame uses current SwDoc revision, browser measurement revision, targeted Writer hints and typed value comparison to reconcile supported page/text-frame identity and line numbering. Native connected frame registration and unsupported content remain outside this slice.",
         "knownViolations": [],
         "localSymbols": [
           "SwPageFrame",

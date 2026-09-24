@@ -335,4 +335,92 @@ describe("persistent Writer layout root", /** Checks core layout identity over d
     );
     expect(smallerPage.pages).toHaveLength(10);
   });
+
+  it("reflows affected successors while retaining unchanged positioned frames", /** Checks targeted geometry propagation. @returns Nothing. */ () => {
+    const document = createWriterDocument();
+    document.GetNodes().MakeTextNode();
+    const root = new SwRootFrame(
+      /** Resolves the current document. @returns Canonical document. */ () => document,
+    );
+    const info = new SwLineNumberInfo().QueryValue();
+    const shortPage = { ...standardPage, height: 1000, topMargin: 100, bottomMargin: 100 };
+    const initial = root.Format(
+      [paragraph("first", 1, 300), paragraph("second", 1, 300)],
+      shortPage,
+      undefined,
+      info,
+      1,
+    );
+    expect(initial.pages).toHaveLength(1);
+    expect(
+      root.Format(
+        [paragraph("first", 1, 300), paragraph("second", 1, 300)],
+        { ...shortPage },
+        undefined,
+        { ...info },
+        1,
+      ),
+    ).toBe(initial);
+    const changed = root.Format(
+      [paragraph("first", 1, 700), paragraph("second", 1, 300)],
+      shortPage,
+      undefined,
+      info,
+      2,
+    );
+    expect(changed.pages).toHaveLength(2);
+    expect(changed.pages[0]?.textFrames[0]).not.toBe(initial.pages[0]?.textFrames[0]);
+    expect(changed.pages[1]?.textFrames[0]).not.toBe(initial.pages[0]?.textFrames[1]);
+    const settled = root.Format(
+      [paragraph("first", 1, 700), paragraph("second", 1, 300)],
+      shortPage,
+      undefined,
+      info,
+      3,
+    );
+    expect(settled.pages[0]?.textFrames[0]).toBe(changed.pages[0]?.textFrames[0]);
+    expect(settled.pages[1]?.textFrames[0]).toBe(changed.pages[1]?.textFrames[0]);
+    const second = document.paragraphs[1];
+    if (second === undefined) throw new Error("Missing second layout paragraph");
+    root.Invalidate(second.GetIndex());
+    const hinted = root.Format(
+      [paragraph("first", 1, 700), paragraph("second", 1, 300)],
+      shortPage,
+      undefined,
+      info,
+      3,
+    );
+    expect(hinted.pages[0]?.textFrames[0]).toBe(settled.pages[0]?.textFrames[0]);
+    root.Invalidate(Number.MAX_SAFE_INTEGER);
+    expect(
+      root.Format(
+        [paragraph("first", 1, 700), paragraph("second", 1, 300)],
+        shortPage,
+        undefined,
+        info,
+        3,
+      ).revision,
+    ).toBe(hinted.revision + 1);
+    const graph = {
+      descriptors: [{ followName: shortPage.name, value: shortPage }],
+      initialName: shortPage.name,
+    };
+    const graphLayout = root.Format(
+      [paragraph("first", 1, 700), paragraph("second", 1, 300)],
+      graph,
+      undefined,
+      info,
+      3,
+    );
+    expect(graphLayout.pages).toHaveLength(2);
+    expect(
+      root.Format(
+        [paragraph("first", 1, 700), paragraph("second", 1, 300)],
+        shortPage,
+        undefined,
+        info,
+        3,
+      ).pages,
+    ).toHaveLength(2);
+  });
 });
