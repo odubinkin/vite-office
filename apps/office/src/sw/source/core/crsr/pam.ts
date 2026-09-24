@@ -4,6 +4,7 @@
 
 import type { SwContentNode, SwNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
+import type { SwTextNode } from "../txtnode/ndtxt";
 import {
   SwContentIndex,
   type SwContentIndexAffinity,
@@ -204,4 +205,22 @@ export class SwPaM {
     const mark = this.GetMark();
     return mark.compare(this.point) <= 0 ? this.point : mark;
   }
+}
+
+/** Ordered same-node range selected by a canonical Writer PaM. */
+export interface WriterTextRange {
+  readonly end: number;
+  readonly node: SwTextNode;
+  readonly start: number;
+}
+
+/** Returns the non-empty same-node range of one Writer PaM. @param cursor - Canonical selection. @returns Range or undefined. */
+export function getWriterSelectedTextRange(cursor: SwPaM): WriterTextRange | undefined {
+  if (!cursor.HasMark()) return undefined;
+  const point = cursor.GetPoint();
+  const mark = cursor.GetMark();
+  if (point.GetNode() !== mark.GetNode()) return undefined;
+  const start = Math.min(point.GetContentIndex(), mark.GetContentIndex());
+  const end = Math.max(point.GetContentIndex(), mark.GetContentIndex());
+  return start === end ? undefined : { end, node: point.GetNode() as SwTextNode, start };
 }

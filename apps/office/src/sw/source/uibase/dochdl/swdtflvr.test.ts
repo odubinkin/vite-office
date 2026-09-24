@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
-import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 import { setTestSelection } from "../../../../test/wrtsh-test-helpers";

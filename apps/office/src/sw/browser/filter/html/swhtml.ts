@@ -8,19 +8,24 @@ import {
   createWriterTextRuns,
   normalizeWriterTextRuns,
   type WriterTextRun,
-} from "../../../source/core/txtnode/text-run-projection";
+} from "../../../source/filter/basflt/writer-transfer";
 import type { WriterCharacterAttributes } from "../../../source/core/txtnode/txatbase";
-import type {
-  WriterClipboardPaste,
-  WriterClipboardPasteParagraph,
-} from "../../../source/filter/html/html-filter-types";
 import { SwTransferable } from "../../../source/uibase/dochdl/swdtflvr";
 import type { WriterHyperlink } from "../../../source/core/txtnode/fmtinfmt";
 
-export type {
-  WriterClipboardPaste,
-  WriterClipboardPasteParagraph,
-} from "../../../source/filter/html/html-filter-types";
+/** One safe paragraph imported from a transfer document. */
+export interface WriterClipboardPasteParagraph {
+  readonly listKind: "bullet" | "none" | "numbered";
+  readonly listLevel: number;
+  readonly runs: readonly WriterTextRun[];
+}
+
+/** Bounded Writer text imported from rich or plain clipboard formats. */
+export interface WriterClipboardPaste {
+  readonly isBlock: boolean;
+  readonly paragraphs: readonly WriterClipboardPasteParagraph[];
+  readonly source: "html" | "plain-text";
+}
 
 const defaultPasteCharacterAttributes: WriterCharacterAttributes = {
   bold: false,

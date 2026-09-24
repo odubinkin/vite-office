@@ -5,15 +5,15 @@
 import { describe, expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
 
+import { projectWriterTextRuns } from "./ndtxt";
 import {
   createWriterTextRuns,
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
   getWriterTextFromRuns,
   normalizeWriterCharacterAttributes,
   normalizeWriterTextRuns,
-  projectWriterTextRuns,
   splitWriterTextRuns,
-} from "./text-run-projection";
+} from "../../filter/basflt/writer-transfer";
 
 /** Creates a compact default direct-format text run. @param text - Non-empty visible text run body. @returns Default-attribute Writer text run. */
 function defaultRun(text: string) {

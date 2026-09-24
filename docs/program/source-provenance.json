@@ -59,16 +59,6 @@
       "stackNecessity": "responsibility-split"
     },
     {
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
-      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition keeps selection-aware hyperlink actions beside SwWrtShell while preserving upstream editsh.cxx InsertURL responsibility.",
-      "stackNecessity": "responsibility-split"
-    },
-    {
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
-      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates transfer orchestration from SwWrtShell while preserving upstream swdtflvr.cxx SwTransferable::Paste responsibility.",
-      "stackNecessity": "responsibility-split"
-    },
-    {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
       "rationale": "Stack constraint: the explicit ECMAScript module name prevents collision with the retired select.ts path while preserving the reviewed SwWrtShell selection responsibility.",
       "stackNecessity": "module-resolution"
@@ -1718,7 +1708,7 @@
       "localPath": "apps/office/src/sw/browser/filter/html/swhtml.ts",
       "rationale": "Parses detached browser DOM into neutral Writer clipboard records while keeping DOM APIs outside the upstream-shaped Writer source tree and shell contracts.",
       "responsibilities": [
-        "Adapts browser HTML clipboard markup to the bounded neutral Writer HTML-filter input records."
+        "Parses detached browser HTML into bounded Writer clipboard records and owns the browser-only transfer DTO."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -2699,7 +2689,9 @@
       "localSymbols": [
         "SwNodeIndex",
         "SwPosition",
-        "SwPaM"
+        "SwPaM",
+        "WriterTextRange",
+        "getWriterSelectedTextRange"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwNodeIndex, SwPosition, SwPaM, SwPosition::SwPosition and the bounded SwNodeIndex, SwPosition, SwPaM contract remain intentionally omitted."
@@ -3260,6 +3252,39 @@
       "evidence": {
         "local": [
           {
+            "marker": "createWriterHyperlinkAction",
+            "path": "apps/office/src/sw/source/core/edit/editsh.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwEditShell::InsertURL",
+            "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/edit/editsh.ts",
+      "localSymbols": [
+        "getWriterHyperlinkAtCursor",
+        "createWriterHyperlinkAction"
+      ],
+      "omittedResponsibilities": [
+        "Native field selection, macro events, and URL execution outside bounded same-paragraph text links remain intentionally omitted."
+      ],
+      "preservedResponsibilities": [
+        "Owns supported selection-aware SwEditShell hyperlink editing and undo actions."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/edit/editsh.cxx",
+      "upstreamSymbols": [
+        "SwEditShell::InsertURL"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "changeWriterParagraphListLevel",
             "path": "apps/office/src/sw/source/core/edit/ednumber.ts"
           }
@@ -3558,7 +3583,9 @@
         "WRITER_CHARACTER_FORMATS",
         "WriterCharacterFormat",
         "WRITER_PARAGRAPH_ALIGNMENTS",
-        "SwTextNode"
+        "SwTextNode",
+        "copyWriterTextRangeRuns",
+        "projectWriterTextRuns"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwTextNode, SwNodes::MakeTextNode, SwTextNode::SwTextNode, sw::TextNodeNotificationSuppressor and the bounded item-set, range-hint, and WriterCharacterFormat contract remain intentionally omitted."
@@ -3574,27 +3601,6 @@
         "SwTextNode::SwTextNode",
         "sw::TextNodeNotificationSuppressor"
       ]
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "projectWriterTextRuns",
-            "path": "apps/office/src/sw/source/core/txtnode/text-run-projection.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/txtnode/text-run-projection.ts",
-      "rationale": "Keeps immutable browser and transfer run projection separate from canonical SwTextNode state without claiming a native LibreOffice implementation owner.",
-      "responsibilities": [
-        "Projects canonical Writer text and hints into immutable boundary runs and normalizes incoming run DTOs."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The browser product requires a derived run DTO that has no canonical Writer model counterpart."
-      },
-      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",
@@ -4009,34 +4015,13 @@
         ]
       },
       "localPath": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
-      "rationale": "Defines the neutral paragraph record passed inward from Writer transfer preparation to the bounded ASCII and HTML filter writers without making filters depend on uibase implementation modules.",
+      "rationale": "The browser HTML and clipboard adapters need a narrow, browser-neutral filter boundary for transfer DTO validation; canonical SwTextNode and SwpHints retain only text and hint ownership.",
       "responsibilities": [
-        "Defines the browser-independent Writer transfer paragraph consumed by bounded text and HTML filter serializers."
+        "Defines shared filter transfer records and normalizes untrusted browser/clipboard run DTOs before they enter canonical Writer text and hints."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
-        "rationale": "The TypeScript module graph requires a neutral structural record at the filter boundary instead of a native C++ header dependency."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterClipboardPaste",
-            "path": "apps/office/src/sw/source/filter/html/html-filter-types.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/filter/html/html-filter-types.ts",
-      "rationale": "Defines neutral structured records shared between the browser DOM adapter and Writer insertion logic so browser types never enter upstream-shaped source modules.",
-      "responsibilities": [
-        "Defines the bounded HTML clipboard transfer record consumed by Writer shell insertion."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "TypeScript requires an explicit shared record module between browser adapters and source consumers."
+        "rationale": "Structured browser transfer records have no native Writer model counterpart and remain in the filter boundary."
       },
       "status": "local-only"
     },
@@ -4367,7 +4352,13 @@
       "localPath": "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
       "localSymbols": [
         "WriterClipboardSelection",
-        "SwTransferable"
+        "SwTransferable",
+        "WriterTransferDocument",
+        "WriterTransferError",
+        "WriterPasteParagraph",
+        "WriterPasteDocument",
+        "WriterPasteOperations",
+        "pasteWriterTransfer"
       ],
       "omittedResponsibilities": [
         "The native transferable flavor matrix, embedded objects, tables, tracked changes, and non-browser exchange formats remain intentionally omitted."
@@ -4664,74 +4655,7 @@
       "evidence": {
         "local": [
           {
-            "marker": "createWriterHyperlinkAction",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwEditShell::InsertURL",
-            "path": "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
-      "localSymbols": [
-        "getWriterHyperlinkAtCursor",
-        "createWriterHyperlinkAction"
-      ],
-      "omittedResponsibilities": [
-        "Native field selection, macro events, and URL execution outside bounded same-paragraph text links remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Creates selection-aware undo actions for inserting, editing, and removing Writer hyperlink ranges."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/core/edit/editsh.cxx",
-      "upstreamSymbols": [
-        "SwEditShell::InsertURL"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "pasteWriterTransfer",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwTransferable::Paste",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
-      "localSymbols": [
-        "WriterPasteOperations",
-        "pasteWriterTransfer"
-      ],
-      "omittedResponsibilities": [
-        "Native clipboard formats, table/object insertion, comments, anchors, and paste listeners outside the bounded sanitized paragraph transfer remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Coordinates selection deletion, grouped undo, paragraph splitting, range insertion, cursor movement, and list metadata for the supported Writer paste operation."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx",
-      "upstreamSymbols": [
-        "SwTransferable::Paste",
-        "SwPasteContext"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterTextRange",
+            "marker": "getWriterSelectedTextRanges",
             "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts"
           }
         ],
@@ -4744,10 +4668,8 @@
       },
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
       "localSymbols": [
-        "WriterTextRange",
         "WriterCompositionState",
         "isWriterCursorOffset",
-        "getWriterSelectedTextRange",
         "createWriterUndoCursorState",
         "createWriterCollapsedCursorState"
       ],

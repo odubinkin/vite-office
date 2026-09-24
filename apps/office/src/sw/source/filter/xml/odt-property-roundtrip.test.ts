@@ -20,10 +20,8 @@ import {
   RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
 import { createWriterDocument } from "../../core/doc/doc";
-import {
-  createWriterTextFragment,
-  projectWriterTextRuns,
-} from "../../core/txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
+import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 

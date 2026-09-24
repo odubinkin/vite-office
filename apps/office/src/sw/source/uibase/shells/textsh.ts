@@ -20,7 +20,7 @@ import {
   RES_PARATR_TABSTOP,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
-import { SwPosition } from "../../core/crsr/pam";
+import { SwPosition, getWriterSelectedTextRange, type WriterTextRange } from "../../core/crsr/pam";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type {
   SwTextNode,
@@ -46,12 +46,8 @@ import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { canChangeWriterParagraphListLevel } from "../../core/edit/ednumber";
-import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../wrtsh/wrtsh-hyperlink";
-import {
-  getWriterSelectedTextRange,
-  getWriterSelectedTextRanges,
-  type WriterTextRange,
-} from "../wrtsh/wrtsh-selection";
+import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
+import { getWriterSelectedTextRanges } from "../wrtsh/wrtsh-selection";
 import {
   createWriterInterface,
   getWriterCommandArguments,

@@ -69,7 +69,7 @@ import {
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { getWriterOdfStyleName } from "../../../inc/poolfmt";
 import { createWriterFontAutoStylePool } from "./xmlfonte";
 import { LineNumberPosition } from "../../../inc/lineinfo";

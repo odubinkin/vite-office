@@ -1814,10 +1814,12 @@
           "apps/office/src/sw/browser/filter/html/swhtml.ts#parseWriterClipboardPaste",
           "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx#SwHTMLParser::CallParser"
         ],
-        "justification": "The bounded import follows the upstream swhtml ownership boundary, while browser DOM parsing remains an explicit platform divergence from LibreOffice's SvParser-based implementation.",
+        "justification": "Browser DOM parsing and clipboard DTOs remain at the explicit browser HTML boundary.",
         "knownViolations": [],
         "localSymbols": [
-          "parseWriterClipboardPaste"
+          "parseWriterClipboardPaste",
+          "WriterClipboardPasteParagraph",
+          "WriterClipboardPaste"
         ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
@@ -2996,7 +2998,9 @@
         "localSymbols": [
           "SwNodeIndex",
           "SwPosition",
-          "SwPaM"
+          "SwPaM",
+          "WriterTextRange",
+          "getWriterSelectedTextRange"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/crsr/pam.cxx",
@@ -3538,6 +3542,37 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/edit/editsh.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0135"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/edit/editsh.ts#createWriterHyperlinkAction",
+          "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx#SwEditShell::InsertURL"
+        ],
+        "justification": "Supported SwEditShell hyperlink action and cursor lookup now reside under the pinned editsh.cxx owner; extended native URL and field behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "getWriterHyperlinkAtCursor",
+          "createWriterHyperlinkAction"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sw/source/core/edit/editsh.cxx",
+        "upstreamSymbols": [
+          "SwEditShell::InsertURL"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/edit/ednumber.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -3851,7 +3886,9 @@
           "SwTextNode",
           "getWriterPreviousGraphemeBoundary",
           "getWriterNextGraphemeBoundary",
-          "isWriterParagraphAlignment"
+          "isWriterParagraphAlignment",
+          "copyWriterTextRangeRuns",
+          "projectWriterTextRuns"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/txtnode/ndtxt.cxx",
@@ -3861,39 +3898,6 @@
           "SwTextNode::SwTextNode",
           "sw::TextNodeNotificationSuppressor"
         ]
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/core/txtnode/text-run-projection.ts",
-      "classification": "local-infrastructure",
-      "state": "internal",
-      "suite": "writer",
-      "subsystem": "presentation-projection",
-      "capabilityIds": [],
-      "infrastructureExemption": "Derived immutable run DTOs keep browser and transfer projections outside canonical SwTextNode state.",
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/sw/source/core/txtnode/text-run-projection.ts#projectWriterTextRuns"
-        ],
-        "justification": "Projects canonical text and hints into a stack-specific immutable DTO without claiming an upstream model responsibility.",
-        "knownViolations": [],
-        "localSymbols": [
-          "createWriterTextRuns",
-          "getWriterTextFromRuns",
-          "copyWriterTextRangeRuns",
-          "projectWriterTextRuns",
-          "createWriterTextFragment",
-          "normalizeWriterTextRuns",
-          "normalizeWriterCharacterAttributes",
-          "splitWriterTextRuns"
-        ],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
       }
     },
     {
@@ -4297,36 +4301,22 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
+          "apps/office/src/sw/source/filter/basflt/writer-transfer.ts#normalizeWriterTextRuns",
           "apps/office/src/sw/source/filter/basflt/writer-transfer.ts#WriterTransferParagraph"
         ],
-        "justification": "Defines the neutral browser-independent transfer paragraph shared by Writer transfer preparation and bounded filter serializers so filter modules do not depend on uibase implementation details.",
+        "justification": "Browser-neutral filter boundary validates transfer run DTOs and shares serializer input records; canonical text and hints live in SwTextNode and SwpHints.",
         "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/filter/html/html-filter-types.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "clipboard-transfer",
-      "capabilityIds": [
-        "CAP-0110"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/source/filter/html/html-filter-types.ts#WriterClipboardPaste"
+        "localSymbols": [
+          "WriterTextRun",
+          "DEFAULT_WRITER_CHARACTER_ATTRIBUTES",
+          "createWriterTextRuns",
+          "getWriterTextFromRuns",
+          "createWriterTextFragment",
+          "normalizeWriterTextRuns",
+          "normalizeWriterCharacterAttributes",
+          "splitWriterTextRuns",
+          "WriterTransferParagraph"
         ],
-        "justification": "Defines structured-clone-safe neutral records between the browser DOM parser and Writer shell without importing browser APIs into the source tree.",
-        "knownViolations": [],
-        "localSymbols": [],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -4688,13 +4678,21 @@
         "divergenceClass": "A",
         "evidence": [
           "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts#SwTransferable",
-          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::SwTransferable"
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::SwTransferable",
+          "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts#pasteWriterTransfer",
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::Paste"
         ],
         "justification": "The bounded transfer owner now consumes only the canonical SwDoc and persistent SwPaM, matching upstream ownership while retaining a deliberately smaller browser format set.",
         "knownViolations": [],
         "localSymbols": [
           "WriterClipboardSelection",
-          "SwTransferable"
+          "SwTransferable",
+          "WriterTransferDocument",
+          "WriterTransferError",
+          "WriterPasteParagraph",
+          "WriterPasteDocument",
+          "WriterPasteOperations",
+          "pasteWriterTransfer"
         ],
         "sourceResponsibility": "aligned",
         "upstreamFile": "sw/source/uibase/dochdl/swdtflvr.cxx",
@@ -5005,70 +5003,6 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "writer-shell",
-      "capabilityIds": [
-        "CAP-0135"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
-        "divergenceClass": "none",
-        "evidence": [
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts#createWriterHyperlinkAction",
-          "vendor/libreoffice-reference/sw/source/core/edit/editsh.cxx#SwEditShell::InsertURL"
-        ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/core/edit/editsh.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
-        "knownViolations": [],
-        "localSymbols": [
-          "getWriterHyperlinkAtCursor",
-          "createWriterHyperlinkAction"
-        ],
-        "sourceResponsibility": "unverified",
-        "upstreamFile": "sw/source/core/edit/editsh.cxx",
-        "upstreamSymbols": [
-          "SwEditShell::InsertURL"
-        ]
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "writer-shell",
-      "capabilityIds": [
-        "CAP-0123",
-        "CAP-0124"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
-        "divergenceClass": "none",
-        "evidence": [
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-paste.ts#pasteWriterTransfer",
-          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::Paste"
-        ],
-        "justification": "Coordinates sanitized clipboard paragraphs through shell-owned cursor, undo, text replacement, split, and list operations without moving canonical mutations into the transfer DTO.",
-        "knownViolations": [],
-        "localSymbols": [
-          "WriterPasteOperations",
-          "pasteWriterTransfer"
-        ],
-        "sourceResponsibility": "aligned",
-        "upstreamFile": "sw/source/uibase/dochdl/swdtflvr.cxx",
-        "upstreamSymbols": [
-          "SwTransferable::Paste",
-          "SwPasteContext"
-        ]
-      }
-    },
-    {
       "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -5085,16 +5019,14 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts#WriterTextRange",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts#getWriterSelectedTextRanges",
           "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx#SwWrtShell::SelAll"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/select.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
         "knownViolations": [],
         "localSymbols": [
-          "WriterTextRange",
           "WriterCompositionState",
           "isWriterCursorOffset",
-          "getWriterSelectedTextRange",
           "createWriterUndoCursorState",
           "createWriterCollapsedCursorState",
           "getWriterSelectedTextRanges"
@@ -5906,11 +5838,11 @@
     },
     {
       "id": "writer.internal.split-writer-text-runs",
-      "modulePath": "apps/office/src/sw/source/core/txtnode/text-run-projection.ts",
+      "modulePath": "apps/office/src/sw/source/filter/basflt/writer-transfer.ts",
       "symbol": "splitWriterTextRuns",
       "classification": "local-infrastructure",
       "capabilityId": "CAP-0124",
-      "description": "Derived boundary helper splitWriterTextRuns owned outside canonical SwTextNode state."
+      "description": "Filter-boundary transfer-run split helper over normalized Writer runs."
     }
   ],
   "uiBehaviors": [

@@ -76,7 +76,7 @@ const requiredFiles = [
   "apps/office/src/sw/browser/editor/writer-selection.ts",
   "apps/office/src/sw/browser/editor/writer-selection-types.ts",
   "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
-  "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
+  "apps/office/src/sw/source/core/edit/editsh.ts",
   "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts",
   "apps/office/src/sw/source/filter/html/htmlnumwriter.ts",
   "apps/office/src/sw/source/filter/ascii/ascatr.ts",

@@ -13,7 +13,7 @@ import { SfxRequest } from "../../apps/office/src/sfx2/source/control/request";
 import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
 import type { SwDoc } from "../../apps/office/src/sw/source/core/doc/doc";
 import { projectWriterParagraphList } from "../../apps/office/src/sw/source/core/doc/list";
-import { projectWriterTextRuns } from "../../apps/office/src/sw/source/core/txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../../apps/office/src/sw/source/core/txtnode/ndtxt";
 import { readOdtDocument } from "../../apps/office/src/sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../../apps/office/src/sw/source/uibase/app/docsh";

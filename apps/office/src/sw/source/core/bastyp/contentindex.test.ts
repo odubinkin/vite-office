@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
-import { createWriterTextFragment } from "../txtnode/text-run-projection";
+import { createWriterTextFragment } from "../../filter/basflt/writer-transfer";
 import { SwContentIndex, SwContentIndexUpdateMode } from "./contentindex";
 
 /** Creates a three-paragraph Writer model with deterministic text. @returns Writer fixture. */

@@ -4,7 +4,7 @@ import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, RES_CHRATR_FONT } from "../../../inc/hintids";
 import type { SwDoc } from "../../core/doc/doc";
-import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 
 /** Collects pool defaults and every direct Writer font item in deterministic family order. @param document - Source document. @returns Populated font pool. */
 export function createWriterFontAutoStylePool(document: SwDoc): XMLFontAutoStylePool {

@@ -8,12 +8,8 @@ import { createWriterListItemSet, projectWriterParagraphList } from "../doc/list
 import { SwPosition } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../txtnode/txatbase";
-import {
-  copyWriterTextRangeRuns,
-  createWriterTextFragment,
-  projectWriterTextRuns,
-  type WriterTextRun,
-} from "../txtnode/text-run-projection";
+import { copyWriterTextRangeRuns, projectWriterTextRuns } from "../txtnode/ndtxt";
+import { createWriterTextFragment, type WriterTextRun } from "../../filter/basflt/writer-transfer";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { SwUndoDelete, SwUndoJoinParagraphs, SwUndoReplace } from "./undel";

@@ -6,10 +6,8 @@ import type { SfxObjectShellState } from "../../../sfx2/source/doc/objsh";
 import type { SfxMediumOperationStatus } from "../../../sfx2/source/doc/docfile";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
 import type { SwTextNode, WriterParagraphAlignment } from "../../source/core/txtnode/ndtxt";
-import {
-  projectWriterTextRuns,
-  type WriterTextRun,
-} from "../../source/core/txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
+import { type WriterTextRun } from "../../source/filter/basflt/writer-transfer";
 import { projectWriterParagraphList, type WriterParagraphList } from "../../source/core/doc/list";
 import type { WriterParagraphStyle } from "../../source/core/doc/fmtcol";
 import type { SwPaM } from "../../source/core/crsr/pam";

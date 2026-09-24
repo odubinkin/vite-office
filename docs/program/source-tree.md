@@ -141,7 +141,7 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/browser/presentation/WriterHyperlinkDialog.tsx` | Browser-only | Accessible hyperlink create/edit dialog behind Writer commands |
 | `sw/source/uibase/wrtsh/wrtsh.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Persistent cursor, undo orchestration, notification transactions, and command-shell facades |
 | `sw/source/uibase/wrtsh/wrtsh-editing.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Action-based text, range, paste, split, and join editing algorithms |
-| `sw/source/uibase/wrtsh/wrtsh-hyperlink.ts` | `sw/source/core/edit/editsh.cxx` | Selection-aware hyperlink insertion, replacement, and removal actions |
+| `sw/source/core/edit/editsh.ts` | `sw/source/core/edit/editsh.cxx` | Selection-aware hyperlink insertion, replacement, and removal actions |
 | `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Canonical text-node storage, item-set formatting/list mutation, hint-aware editing, and split/append |
 | `sw/source/uibase/docvw/edtwin.ts` | `sw/source/uibase/docvw/edtwin.cxx` | DOM-neutral edit-window operations and DOM-coordinate-to-`SwPaM` ownership |
 | `sw/browser/editor/browser-writer-edit-window.ts` | Browser-only | Single DOM adapter for selection, beforeinput, IME, pointer, clipboard, drag/drop, and focus |

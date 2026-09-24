@@ -8,7 +8,8 @@ import {
   encodeWriterDocument,
   encodeWriterDocument as serializeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
-import { createWriterTextFragment, projectWriterTextRuns } from "../txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../txtnode/ndtxt";
+import { createWriterTextFragment } from "../../filter/basflt/writer-transfer";
 import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
 
 import {

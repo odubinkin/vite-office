@@ -23,7 +23,8 @@ import { createWriterDocument, SwDoc, type SwDoc as WriterDocument } from "./doc
 import { SwContentNode, SwEndNode, SwNode, SwStartNode } from "../docnode/node";
 import { SwNodeIndex, SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
-import { createWriterTextFragment, projectWriterTextRuns } from "../txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../txtnode/ndtxt";
+import { createWriterTextFragment } from "../../filter/basflt/writer-transfer";
 import { SwpHints } from "../txtnode/ndhints";
 import { applyWriterParagraphList, projectWriterParagraphList } from "./list";
 import {

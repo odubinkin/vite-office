@@ -73,7 +73,7 @@ function getWriterGraphemeBoundaries(text: string): readonly number[] {
   return boundaries;
 }
 import { SwNumRuleItem } from "../para/paratr";
-import { SwpHints } from "./ndhints";
+import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { createWriterCharacterItemSet, projectWriterCharacterAttributes } from "./txatbase";
 
 /** Names the bounded direct character attributes currently supported by the browser Writer. */
@@ -810,4 +810,23 @@ function getWriterParagraphAlignment(adjust: SvxAdjust): WriterParagraphAlignmen
     default:
       return "left";
   }
+}
+
+/** Projects one native node range to immutable runs. @param node - Source node. @param start - Inclusive offset. @param end - Exclusive offset. @returns Derived runs. */
+export function copyWriterTextRangeRuns(
+  node: SwTextNode,
+  start: number,
+  end: number,
+): readonly WriterTextRunLike[] {
+  const fragment = node.CaptureTextFragment(start, end);
+  return fragment.hints.toTextRuns(fragment.text, node.GetSwAttrSet());
+}
+
+/** Projects a complete node without storing run state in SwTextNode. @param node - Canonical node. @returns Derived runs. */
+export function projectWriterTextRuns(node: SwTextNode | undefined): readonly WriterTextRunLike[] {
+  if (node === undefined) return [];
+  return (node.GetpSwpHints() ?? new SwpHints(node.GetDoc().GetAttrPool())).toTextRuns(
+    node.GetText(),
+    node.GetSwAttrSet(),
+  );
 }

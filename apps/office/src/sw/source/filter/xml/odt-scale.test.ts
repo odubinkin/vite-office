@@ -6,7 +6,7 @@ import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { exportContentXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
-import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 
 const namespaces = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}"`;
 const styles = `<?xml version="1.0"?><office:document-styles ${namespaces} office:version="1.3"><office:font-face-decls/><office:styles><style:default-style style:family="paragraph"/><style:style style:name="IgnoredTable" style:family="table"><style:text-properties/></style:style><style:style style:name="Standard" style:family="paragraph"/><style:style style:name="Heading_20_1" style:family="paragraph" style:parent-style-name="Standard"/></office:styles></office:document-styles>`;

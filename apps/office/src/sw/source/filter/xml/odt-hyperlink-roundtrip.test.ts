@@ -9,7 +9,7 @@ import { describe, expect, it } from "vitest";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
-import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 

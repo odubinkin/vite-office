@@ -6,7 +6,7 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
-import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import { SwPaM, SwPosition, type WriterTextRange } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import type { WriterParagraphStyle } from "../../core/doc/fmtcol";
@@ -30,14 +30,13 @@ import {
   createWriterCollapsedCursorState,
   createWriterUndoCursorState,
   type WriterCompositionState,
-  type WriterTextRange,
 } from "./wrtsh-selection";
 import { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE, RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwWrtShellEditingOperations } from "./wrtsh-editing";
 import { createMoveLeftMarginAction, isMoveLeftMargin } from "../../core/edit/edattr";
-import type { WriterPasteDocument } from "./wrtsh-paste";
+import type { WriterPasteDocument } from "../dochdl/swdtflvr";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { equalWriterPageDescriptors } from "../../core/layout/pagedesc";
 import {

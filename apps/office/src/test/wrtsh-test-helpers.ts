@@ -7,9 +7,9 @@ import type { WriterCharacterFormat } from "../sw/source/core/txtnode/ndtxt";
 import {
   createWriterTextFragment,
   type WriterTextRun,
-} from "../sw/source/core/txtnode/text-run-projection";
+} from "../sw/source/filter/basflt/writer-transfer";
 import type { SwTextNode } from "../sw/source/core/txtnode/ndtxt";
-import type { WriterClipboardPaste } from "../sw/source/filter/html/html-filter-types";
+import type { WriterClipboardPaste } from "../sw/browser/filter/html/swhtml";
 import type { SwWrtShell } from "../sw/source/uibase/wrtsh/wrtsh";
 
 /** Resolves one fixture ID to a document-owned text node. @param shell - Test shell. @param id - Fixture node ID. @returns Text node. */

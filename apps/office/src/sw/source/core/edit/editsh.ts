@@ -1,20 +1,17 @@
-/** @fileoverview Implements Writer hyperlink shell operations from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`. */
+/** @fileoverview Implements Writer hyperlink shell operations from pinned LibreOffice `sw/source/core/edit/editsh.cxx`. */
 
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import type { SwDoc as WriterDocument } from "../../core/doc/doc";
-import type { SwTextNode as WriterParagraph } from "../../core/txtnode/ndtxt";
-import {
-  copyWriterTextRangeRuns,
-  projectWriterTextRuns,
-} from "../../core/txtnode/text-run-projection";
-import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
-import type { SwPaM } from "../../core/crsr/pam";
-import { equalWriterHyperlinks } from "../../core/txtnode/fmtinfmt";
-import { SwUndoAttr } from "../../core/undo/unattr";
-import { SwUndoInsert } from "../../core/undo/unins";
-import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
-import { getWriterSelectedTextRange, type WriterTextRange } from "./wrtsh-selection";
+import type { SwDoc as WriterDocument } from "../doc/doc";
+import type { SwTextNode as WriterParagraph } from "../txtnode/ndtxt";
+import { copyWriterTextRangeRuns, projectWriterTextRuns } from "../txtnode/ndtxt";
+import type { WriterHyperlink } from "../txtnode/fmtinfmt";
+import type { SwPaM } from "../crsr/pam";
+import { equalWriterHyperlinks } from "../txtnode/fmtinfmt";
+import { SwUndoAttr } from "../undo/unattr";
+import { SwUndoInsert } from "../undo/unins";
+import type { SwUndoCursorState, SwUndoRedoContext } from "../undo/undobj";
+import { getWriterSelectedTextRange, type WriterTextRange } from "../crsr/pam";
 
 /** Reads one uniform selected or caret hyperlink. @param document - Active Writer document. @param selection - Persistent cursor selection. @returns Hyperlink metadata or undefined. */
 export function getWriterHyperlinkAtCursor(

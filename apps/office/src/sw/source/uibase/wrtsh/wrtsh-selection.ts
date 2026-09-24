@@ -5,7 +5,7 @@
 
 import type { SwTextNode as WriterParagraph } from "../../core/txtnode/ndtxt";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import type { SwPaM } from "../../core/crsr/pam";
+import type { SwPaM, WriterTextRange } from "../../core/crsr/pam";
 import type { SwUndoCursorState } from "../../core/undo/undobj";
 
 /** Shell-owned temporary extended-text-input state corresponding to LibreOffice SwExtTextInput. */
@@ -16,30 +16,9 @@ export interface WriterCompositionState {
   text: string;
 }
 
-/** Describes one ordered same-node range through its canonical text-node owner. */
-export interface WriterTextRange {
-  /** Exclusive UTF-16 range end relative to the text node. */
-  readonly end: number;
-  /** Document-owned text node containing both endpoints. */
-  readonly node: WriterParagraph;
-  /** Inclusive UTF-16 range start relative to the text node. */
-  readonly start: number;
-}
-
 /** Validates one stable cursor offset against its current Writer text node. @param paragraph - Target text node. @param offset - Candidate UTF-16 offset. @returns Whether the position is representable. */
 export function isWriterCursorOffset(paragraph: WriterParagraph, offset: number): boolean {
   return Number.isInteger(offset) && offset >= 0 && offset <= paragraph.Len();
-}
-
-/** Returns an ordered non-empty same-node selection. @param selection - Cursor projection. @returns Bounded range or undefined. */
-export function getWriterSelectedTextRange(cursor: SwPaM): WriterTextRange | undefined {
-  if (!cursor.HasMark()) return undefined;
-  const point = cursor.GetPoint();
-  const mark = cursor.GetMark();
-  if (point.GetNode() !== mark.GetNode()) return undefined;
-  const start = Math.min(point.GetContentIndex(), mark.GetContentIndex());
-  const end = Math.max(point.GetContentIndex(), mark.GetContentIndex());
-  return start === end ? undefined : { end, node: point.GetNode() as WriterParagraph, start };
 }
 
 /** Returns every non-empty paragraph-local range covered by an ordered Writer selection. @param cursor - Writer selection. @returns Selected paragraph ranges or undefined. */

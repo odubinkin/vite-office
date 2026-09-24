@@ -9399,7 +9399,7 @@
             "marker": "export class SwFormatINetFormat"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-hyperlink.ts",
+            "path": "apps/office/src/sw/source/core/edit/editsh.ts",
             "marker": "createWriterHyperlinkAction"
           },
           {

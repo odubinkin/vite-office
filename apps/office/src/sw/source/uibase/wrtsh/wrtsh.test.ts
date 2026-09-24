@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import { projectWriterParagraphList } from "../../core/doc/list";
-import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -25,7 +25,7 @@ import { SwUndoPageDesc, SwUndoRulerIndent } from "../../core/undo/SwUndoPageDes
 import { SwUndoParagraphItem } from "../../core/undo/unattr";
 import { SwDocShell } from "../app/docsh";
 import { SwWrtShell } from "./wrtsh";
-import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "./wrtsh-hyperlink";
+import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { isWriterCursorOffset } from "./wrtsh-selection";
 import {

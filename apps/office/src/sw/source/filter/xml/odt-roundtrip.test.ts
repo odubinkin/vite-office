@@ -32,7 +32,7 @@ import {
 } from "../../../inc/hintids";
 import { applyWriterParagraphList, projectWriterParagraphList } from "../../core/doc/list";
 import { createWriterDocument } from "../../core/doc/doc";
-import { createWriterTextFragment } from "../../core/txtnode/text-run-projection";
+import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { encodeWriterDocument } from "../../../browser/filter/xml/writer-document-codec";
 import { readOdtDocument, SwXMLReader } from "./swxml";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";

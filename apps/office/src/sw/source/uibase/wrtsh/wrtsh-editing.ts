@@ -2,7 +2,7 @@
 
 import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwPosition, type SwPaM } from "../../core/crsr/pam";
+import { SwPosition, type SwPaM, type WriterTextRange } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
 import { createWriterListItemSet } from "../../core/doc/list";
 import {
@@ -23,12 +23,11 @@ import { SwUndoSplitNode } from "../../core/undo/unspnd";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
 import type { UndoManager } from "../../core/undo/docundo";
 import { getWriterTypingCharacterClass } from "./delete";
-import type { WriterTextRange } from "./wrtsh-selection";
 import {
   pasteWriterTransfer,
   type WriterPasteDocument,
   type WriterPasteParagraph,
-} from "./wrtsh-paste";
+} from "../dochdl/swdtflvr";
 
 /** Cursor, history, and notification operations retained by SwWrtShell. */
 export interface SwWrtShellEditingPort {
