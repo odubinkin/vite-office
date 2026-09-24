@@ -1,10 +1,11 @@
 ---
 id: "202609241135-227P0M"
 title: "F9 Target Writer layout invalidation"
-status: "DOING"
+result_summary: "Writer layout invalidates from model/device revisions and typed geometry comparisons."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -41,11 +42,16 @@ quality_review:
     - "apps/office/src/sw/source/core/layout/newfrm.test.ts"
   findings:
     - "Full verify passed: 486 office tests, 98 inventory tests, 14 E2E and 100% coverage; whole-document JSON serialization removed from SwRootFrame."
-commit: null
+commit:
+  hash: "836055918e3cd77f8e6466567534025e5d91c59b"
+  message: "🧩 227P0M code: target Writer layout invalidation"
 comments:
   -
     author: "CODER"
     body: "Start: replace whole-document serialization with revision and targeted frame invalidation."
+  -
+    author: "CODER"
+    body: "Verified: targeted Writer layout invalidation and frame identity pass full verification."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "SwRootFrame invalidation uses current model/device revisions, typed geometry comparisons and targeted Writer node hints; full npm run verify and git diff --check passed (486 office tests, 98 inventory tests, 14 E2E, 100% coverage)."
+  -
+    type: "status"
+    at: "2026-09-24T13:57:33.558Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: targeted Writer layout invalidation and frame identity pass full verification."
 doc_version: 3
-doc_updated_at: "2026-09-24T13:57:11.684Z"
+doc_updated_at: "2026-09-24T13:57:33.560Z"
 doc_updated_by: "CODER"
 description: "Implement F9: replace JSON serialization oracle with model revision and targeted dirty-frame propagation, preserving stable identity."
 sections:
