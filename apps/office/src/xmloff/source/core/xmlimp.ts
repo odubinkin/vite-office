@@ -12,19 +12,34 @@ import { getXMLToken, XMLToken } from "./xmltoken";
 /** ODF import's SAX resource ceilings. */
 export type OdfXmlLimits = FastXmlLimits;
 export const DEFAULT_ODF_XML_LIMITS = DEFAULT_FAST_XML_LIMITS;
+/** Structural diagnostic emitted without attribute values or document text. */
+export interface OdfXmlDiagnostic {
+  readonly kind: "unknown-attribute" | "unsupported-attribute" | "unknown-element" | "import-error";
+  readonly path: string;
+  readonly name: string;
+  readonly stream?: string;
+}
 /** ODF import parser controls. */
-export type OdfXmlParseOptions = FastXmlParseOptions;
+export interface OdfXmlParseOptions extends FastXmlParseOptions {
+  readonly onDiagnostic?: (diagnostic: OdfXmlDiagnostic) => void;
+}
 
 /** Immutable tokenized attribute access passed to fast contexts. */
 export class FastAttributeList {
   private readonly byToken = new Map<XMLToken, string>();
 
-  /** Tokenizes SAX attributes. @param attributes - Namespace-resolved source attributes. @returns A tokenized list. */
-  public constructor(private readonly attributes: readonly SaxesAttributeNS[]) {
+  /** Tokenizes SAX attributes. @param attributes - Namespace-resolved source attributes. @param path - Current XML element path. @param onDiagnostic - Optional structural sink. @returns A tokenized list. */
+  public constructor(
+    private readonly attributes: readonly SaxesAttributeNS[],
+    private readonly path = "",
+    private readonly onDiagnostic?: (diagnostic: OdfXmlDiagnostic) => void,
+  ) {
     for (const attribute of attributes) {
       const token = getXMLToken(attribute.uri, attribute.local);
       if (token === XMLToken.UNKNOWN) {
-        console.warn(`Unknown ODF attribute ignored: ${attribute.name}`);
+        if (this.onDiagnostic)
+          this.onDiagnostic({ kind: "unknown-attribute", path, name: attribute.name });
+        else console.warn(`Unknown ODF attribute ignored: ${attribute.name}`);
         continue;
       }
       if (this.byToken.has(token)) throw new Error(`Duplicate ODF attribute: ${attribute.name}`);
@@ -49,8 +64,15 @@ export class FastAttributeList {
     const allowedSet = new Set(allowed);
     for (const attribute of this.attributes) {
       const token = getXMLToken(attribute.uri, attribute.local);
-      if (token !== XMLToken.UNKNOWN && !allowedSet.has(token))
-        console.warn(`Unsupported ODF ${owner} attribute ignored: ${attribute.name}`);
+      if (token !== XMLToken.UNKNOWN && !allowedSet.has(token)) {
+        if (this.onDiagnostic)
+          this.onDiagnostic({
+            kind: "unsupported-attribute",
+            path: this.path,
+            name: attribute.name,
+          });
+        else console.warn(`Unsupported ODF ${owner} attribute ignored: ${attribute.name}`);
+      }
     }
   }
 }
@@ -118,6 +140,7 @@ export interface SvXMLImport {
 interface ContextFrame {
   readonly context: SvXMLImportContext;
   readonly token: XMLToken;
+  readonly name: string;
 }
 
 /** Parses XML through fast import contexts. @param xml - Decoded XML. @param xmlImport - Root factory. @param options - Limits and cancellation. @returns Nothing. */
@@ -127,44 +150,62 @@ export function parseOdfXmlStream(
   options: OdfXmlParseOptions = {},
 ): void {
   const stack: ContextFrame[] = [];
-  parseFastXmlStream(
-    xml,
-    {
-      /** Creates one fast import context. @param tag - SAX tag. @param attributes - SAX attributes. @returns Nothing. */
-      open(tag, attributes): void {
-        const fastAttributes = new FastAttributeList(attributes);
-        const token = getXMLToken(tag.uri, tag.local);
-        const parent = stack[stack.length - 1];
-        const context =
-          parent === undefined
-            ? token === XMLToken.UNKNOWN
-              ? xmlImport.createUnknownContext(tag.uri, tag.local, fastAttributes)
-              : xmlImport.createFastContext(token, fastAttributes)
-            : token === XMLToken.UNKNOWN
-              ? parent.context.createUnknownChildContext(tag.uri, tag.local, fastAttributes)
-              : parent.context.createFastChildContext(token, fastAttributes);
-        if (context === null) {
-          if (parent === undefined || token !== XMLToken.UNKNOWN)
-            throw new Error(`Unsupported ODF XML element: ${tag.name}`);
-          console.warn(`Unknown ODF element ignored: ${tag.name}`);
-          stack.push({ context: new SvXMLIgnoreContext(), token });
-          return;
-        }
-        stack.push({ context, token });
-        context.startFastElement(token, fastAttributes);
+  let activePath = "";
+  try {
+    parseFastXmlStream(
+      xml,
+      {
+        /** Creates one fast import context. @param tag - SAX tag. @param attributes - SAX attributes. @returns Nothing. */
+        open(tag, attributes): void {
+          activePath = `${stack
+            .map(
+              /** Projects the QName of a context frame. @param frame - Open frame. @returns QName. */
+              (frame) => frame.name,
+            )
+            .join("/")}/${tag.name}`;
+          const fastAttributes = new FastAttributeList(
+            attributes,
+            activePath,
+            options.onDiagnostic,
+          );
+          const token = getXMLToken(tag.uri, tag.local);
+          const parent = stack[stack.length - 1];
+          const context =
+            parent === undefined
+              ? token === XMLToken.UNKNOWN
+                ? xmlImport.createUnknownContext(tag.uri, tag.local, fastAttributes)
+                : xmlImport.createFastContext(token, fastAttributes)
+              : token === XMLToken.UNKNOWN
+                ? parent.context.createUnknownChildContext(tag.uri, tag.local, fastAttributes)
+                : parent.context.createFastChildContext(token, fastAttributes);
+          if (context === null) {
+            if (parent === undefined || token !== XMLToken.UNKNOWN)
+              throw new Error(`Unsupported ODF XML element: ${tag.name}`);
+            if (options.onDiagnostic)
+              options.onDiagnostic({ kind: "unknown-element", path: activePath, name: tag.name });
+            else console.warn(`Unknown ODF element ignored: ${tag.name}`);
+            stack.push({ context: new SvXMLIgnoreContext(), token, name: tag.name });
+            return;
+          }
+          stack.push({ context, token, name: tag.name });
+          context.startFastElement(token, fastAttributes);
+        },
+        /** Delivers text to the current context. @param value - Decoded text. @returns Nothing. */
+        characters(value): void {
+          stack[stack.length - 1]?.context.characters(value);
+        },
+        /** Closes the current context. @returns Nothing. */
+        close(): void {
+          const frame = stack.pop();
+          /* v8 ignore next -- saxes never emits an unmatched close callback. */
+          if (frame === undefined) throw new Error("ODF XML context stack is invalid.");
+          frame.context.endFastElement(frame.token);
+        },
       },
-      /** Delivers text to the current context. @param value - Decoded text. @returns Nothing. */
-      characters(value): void {
-        stack[stack.length - 1]?.context.characters(value);
-      },
-      /** Closes the current context. @returns Nothing. */
-      close(): void {
-        const frame = stack.pop();
-        /* v8 ignore next -- saxes never emits an unmatched close callback. */
-        if (frame === undefined) throw new Error("ODF XML context stack is invalid.");
-        frame.context.endFastElement(frame.token);
-      },
-    },
-    options,
-  );
+      options,
+    );
+  } catch (error) {
+    options.onDiagnostic?.({ kind: "import-error", path: activePath, name: "" });
+    throw error;
+  }
 }

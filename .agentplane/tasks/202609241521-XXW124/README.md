@@ -4,7 +4,7 @@ title: "Reproduce and classify certification ODT diagnostics"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 6
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -21,10 +21,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: "User requested implementation of the seven ordered phases in docs/program/certification-odt-import-plan.md; outside-repo sample access remains pending separate authorization."
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T16:02:46.038Z"
+  updated_by: "CODER"
+  note: "Phase 0 diagnostic harness, private baseline, source-backed tests and UI command inventory verified by full npm run verify and local acceptance report."
   attempts: 0
 commit: null
 comments:
@@ -39,8 +39,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: implement privacy-safe import diagnostics and semantic baseline using pinned LibreOffice references and existing ODT fixtures."
+  -
+    type: "verify"
+    at: "2026-09-24T16:02:46.038Z"
+    author: "CODER"
+    state: "ok"
+    note: "Phase 0 diagnostic harness, private baseline, source-backed tests and UI command inventory verified by full npm run verify and local acceptance report."
 doc_version: 3
-doc_updated_at: "2026-09-24T15:23:42.078Z"
+doc_updated_at: "2026-09-24T16:02:46.110Z"
 doc_updated_by: "CODER"
 description: "Phase 0: privacy-safe import diagnostic harness, semantic baseline and upstream command/dialog matrix; use private file only with separate outside-repo approval."
 sections:
@@ -61,11 +67,57 @@ sections:
     4. Record upstream command/dialog paths and existing local controls for every planned editable property.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T16:02:46.038Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Phase 0 diagnostic harness, private baseline, source-backed tests and UI command inventory verified by full npm run verify and local acceptance report.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T16:02:37.420Z, excerpt_hash=sha256:009e204e242c3022ce448a451a292941792bc6c0f1681bd2deafcb4e4a3e8188
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-XXW124/blueprint/resolved-snapshot.json
+    - old_digest: e2c1867ebc5654f3973d2c8553970bbbb55fb260f7a076dfe28b015a176b72bb
+    - current_digest: e2c1867ebc5654f3973d2c8553970bbbb55fb260f7a076dfe28b015a176b72bb
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241521-XXW124
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609241521-XXW124
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    Command: npm run verify
+    Result: pass
+    Evidence: 490 app tests and 107 inventory tests passed at 100% coverage; 14 browser tests passed; static build, JSDoc, file-size, source-tree, provenance, invariants and parity gates passed.
+    Scope: final phase 0 code, tests, docs and existing regressions.
+
+    Command: npx vitest run scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts scripts/libreoffice-inventory/odt-import-diagnostics.test.ts
+    Result: pass
+    Evidence: 10 tests passed before the final expanded diagnostic cases; final npm run verify includes the updated 107-test inventory suite.
+    Scope: pinned upstream ODT import/export/reimport and privacy-safe diagnostics.
+
+    Command: npx tsx scripts/libreoffice-inventory/odt-import-diagnostics-cli.ts <authorized-local-odt-path> > .agentplane/tmp/certification-diagnostic.json
+    Result: pass
+    Evidence: import completed; XML 74 paragraphs/15 cells/19 links/8 bookmarks/9 soft breaks versus canonical 59 paragraphs/14 links and no table or markers; 490 warning occurrences in 184 groups. Numeric page and paragraph metrics are recorded in docs/program/certification-odt-diagnostic-baseline.md.
+    Scope: authorized private local acceptance file; source bytes and text remain outside Git and test scenarios.
+
+    Residual: phases 1-6 own all identified semantic and UI gaps; phase 0 intentionally only measured them.
 id_source: "generated"
 ---
 ## Summary
@@ -95,6 +147,36 @@ Import diagnostics in Worker/filter, privacy-safe stream/path/count report, cano
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T16:02:46.038Z — VERIFY — ok
+
+By: CODER
+
+Note: Phase 0 diagnostic harness, private baseline, source-backed tests and UI command inventory verified by full npm run verify and local acceptance report.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T16:02:37.420Z, excerpt_hash=sha256:009e204e242c3022ce448a451a292941792bc6c0f1681bd2deafcb4e4a3e8188
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-XXW124/blueprint/resolved-snapshot.json
+- old_digest: e2c1867ebc5654f3973d2c8553970bbbb55fb260f7a076dfe28b015a176b72bb
+- current_digest: e2c1867ebc5654f3973d2c8553970bbbb55fb260f7a076dfe28b015a176b72bb
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241521-XXW124
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609241521-XXW124
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -103,3 +185,20 @@ Import diagnostics in Worker/filter, privacy-safe stream/path/count report, cano
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Command: npm run verify
+Result: pass
+Evidence: 490 app tests and 107 inventory tests passed at 100% coverage; 14 browser tests passed; static build, JSDoc, file-size, source-tree, provenance, invariants and parity gates passed.
+Scope: final phase 0 code, tests, docs and existing regressions.
+
+Command: npx vitest run scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts scripts/libreoffice-inventory/odt-import-diagnostics.test.ts
+Result: pass
+Evidence: 10 tests passed before the final expanded diagnostic cases; final npm run verify includes the updated 107-test inventory suite.
+Scope: pinned upstream ODT import/export/reimport and privacy-safe diagnostics.
+
+Command: npx tsx scripts/libreoffice-inventory/odt-import-diagnostics-cli.ts <authorized-local-odt-path> > .agentplane/tmp/certification-diagnostic.json
+Result: pass
+Evidence: import completed; XML 74 paragraphs/15 cells/19 links/8 bookmarks/9 soft breaks versus canonical 59 paragraphs/14 links and no table or markers; 490 warning occurrences in 184 groups. Numeric page and paragraph metrics are recorded in docs/program/certification-odt-diagnostic-baseline.md.
+Scope: authorized private local acceptance file; source bytes and text remain outside Git and test scenarios.
+
+Residual: phases 1-6 own all identified semantic and UI gaps; phase 0 intentionally only measured them.

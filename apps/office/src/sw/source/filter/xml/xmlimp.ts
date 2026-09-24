@@ -31,6 +31,7 @@ import {
   parseOdfXmlStream,
   SvXMLIgnoreContext,
   SvXMLImportContext,
+  type OdfXmlDiagnostic,
   type OdfXmlParseOptions,
   type SvXMLImport as SvXMLImportContract,
 } from "../../../../xmloff/source/core/xmlimp";
@@ -200,7 +201,23 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   /** Parses one expected package stream. @param xml - XML text. @param expectedRoot - Required root token. @param options - Parser controls. @returns Nothing. */
   public parse(xml: string, expectedRoot: XMLToken, options: OdfXmlParseOptions): void {
     this.expectedRoot = expectedRoot;
-    parseOdfXmlStream(xml, this, options);
+    const stream =
+      expectedRoot === XMLToken.OFFICE_DOCUMENT_STYLES
+        ? "styles.xml"
+        : expectedRoot === XMLToken.OFFICE_DOCUMENT_CONTENT
+          ? "content.xml"
+          : "meta.xml";
+    const onDiagnostic = options.onDiagnostic;
+    parseOdfXmlStream(xml, this, {
+      ...options,
+      ...(onDiagnostic === undefined
+        ? {}
+        : {
+            /** Adds the owning package stream. @param diagnostic - Structural event. @returns Nothing. */
+            onDiagnostic: (diagnostic: OdfXmlDiagnostic): void =>
+              onDiagnostic({ ...diagnostic, stream }),
+          }),
+    });
   }
 
   /** Creates the root document context. @param element - Root token. @param attributes - Root attributes. @returns Root context or null. */

@@ -8,6 +8,7 @@ import {
 } from "../../../../package/source/manifest/ManifestExport";
 import { ZipFile, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
+import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";
 import { importWriterXml, type ImportedWriterDocument } from "./xmlimp";
 
 /** Maximum UTF-8 size accepted for each mandatory ODT XML stream. */
@@ -27,6 +28,8 @@ export interface OdtImportControl {
   readonly maxXmlStreamBytes?: number;
   /** Receives deterministic package/import progress. */
   readonly onProgress?: (stage: OdtImportProgressStage) => void;
+  /** Local structural diagnostics; callbacks and document content never cross Worker transfer. */
+  readonly onDiagnostic?: (diagnostic: OdfXmlDiagnostic) => void;
 }
 
 /** Reads mandatory ODT streams in LibreOffice's styles-before-content order. */
@@ -58,6 +61,7 @@ export class SwXMLReader {
       ...(control.defaultFontDevice === undefined
         ? {}
         : { defaultFontDevice: control.defaultFontDevice }),
+      ...(control.onDiagnostic === undefined ? {} : { onDiagnostic: control.onDiagnostic }),
     });
   }
 }
