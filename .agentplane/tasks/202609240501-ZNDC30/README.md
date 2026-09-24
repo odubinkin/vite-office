@@ -1,10 +1,11 @@
 ---
 id: "202609240501-ZNDC30"
 title: "Restore SvxTabStopItem in Writer formatting"
-status: "DOING"
+result_summary: "Restored pinned Writer SvxTabStopItem semantics across pool, UI, snapshots and ODT"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -20,9 +21,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-24T06:17:21.992Z"
+  updated_at: "2026-09-24T06:18:11.145Z"
   updated_by: "CODER"
-  note: "Pinned SvxTabStopItem pool/style defaults, sorted stops, alignment/leader/decimal, snapshot and ODT round trips verified; npm run verify passed (448 office tests and 96 inventory tests at 100% coverage, 13 browser E2E, static build, provenance and parity checks)."
+  note: "Restored pinned Writer SvxTabStopItem semantics across pool, UI, snapshots and ODT"
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - "npm run verify: 448 office tests and 96 inventory tests with 100% coverage; 13 E2E passed"
   findings:
     - "No remaining RES_PARATR_TABSTOP integer surrogate in production."
-commit: null
+commit:
+  hash: "0c239b673ba8b3da1e5e1f2c0732c7994a422c0a"
+  message: "🧩 ZNDC30 code: restore upstream Writer tab-stop item contract"
 comments:
   -
     author: "CODER"
     body: "Start: restore pinned SvxTabStopItem identity and defaults across Writer model, shell, supported UI and ODT paths with source-derived tests."
+  -
+    author: "CODER"
+    body: "Verified: npm run verify passed after tab-stop item migration, ODT round trips and inventory updates."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned SvxTabStopItem pool/style defaults, sorted stops, alignment/leader/decimal, snapshot and ODT round trips verified; npm run verify passed (448 office tests and 96 inventory tests at 100% coverage, 13 browser E2E, static build, provenance and parity checks)."
+  -
+    type: "verify"
+    at: "2026-09-24T06:18:11.145Z"
+    author: "CODER"
+    state: "ok"
+    note: "Restored pinned Writer SvxTabStopItem semantics across pool, UI, snapshots and ODT"
+  -
+    type: "status"
+    at: "2026-09-24T06:18:11.291Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: npm run verify passed after tab-stop item migration, ODT round trips and inventory updates."
 doc_version: 3
-doc_updated_at: "2026-09-24T06:17:22.232Z"
+doc_updated_at: "2026-09-24T06:18:11.292Z"
 doc_updated_by: "CODER"
 description: "Stage 2a: replace integer tab-stop surrogate with pinned SvxTabStopItem identity, defaults, alignment and fill through pool, shell, UI, ODT and undo"
 sections:
@@ -103,6 +122,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-09-24T06:18:11.145Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Restored pinned Writer SvxTabStopItem semantics across pool, UI, snapshots and ODT
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T06:17:22.232Z, excerpt_hash=sha256:3d7e6dc0a7779590cb862bec9d1f906220e2c9bded69b9ac51968008cd6ef3c9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-ZNDC30/blueprint/resolved-snapshot.json
+    - old_digest: cb72f5daebf5081fb696fb58a460fd884dae27eacd0c9e45d2c570cb8cf96f27
+    - current_digest: cb72f5daebf5081fb696fb58a460fd884dae27eacd0c9e45d2c570cb8cf96f27
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609240501-ZNDC30
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609240501-ZNDC30 --result verified-202609240501-ZNDC30 --commit 1e3e10039c0fb93c73968b1618c30605e9bb8ae1
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -159,6 +208,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-24T06:18:11.145Z — VERIFY — ok
+
+By: CODER
+
+Note: Restored pinned Writer SvxTabStopItem semantics across pool, UI, snapshots and ODT
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T06:17:22.232Z, excerpt_hash=sha256:3d7e6dc0a7779590cb862bec9d1f906220e2c9bded69b9ac51968008cd6ef3c9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-ZNDC30/blueprint/resolved-snapshot.json
+- old_digest: cb72f5daebf5081fb696fb58a460fd884dae27eacd0c9e45d2c570cb8cf96f27
+- current_digest: cb72f5daebf5081fb696fb58a460fd884dae27eacd0c9e45d2c570cb8cf96f27
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609240501-ZNDC30
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609240501-ZNDC30 --result verified-202609240501-ZNDC30 --commit 1e3e10039c0fb93c73968b1618c30605e9bb8ae1
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
