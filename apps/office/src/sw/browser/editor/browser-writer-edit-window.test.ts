@@ -95,7 +95,18 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
       boundary.HandleBeforeInput(empty);
       expect(empty.defaultPrevented).toBe(true);
     }
+    const cell = document.createElement("div");
+    cell.dataset.writerTableCell = "0:0";
+    cell.addEventListener("beforeinput", boundary.HandleBeforeInput);
+    const cellInput = new InputEvent("beforeinput", {
+      cancelable: true,
+      data: "cell",
+      inputType: "insertText",
+    });
+    cell.dispatchEvent(cellInput);
+    expect(cellInput.defaultPrevented).toBe(false);
     expect(editWindow.InsertText).toHaveBeenCalledWith("x");
+    expect(editWindow.InsertText).not.toHaveBeenCalledWith("cell");
     expect(editWindow.ReplaceSelection).toHaveBeenCalledWith("x");
     expect(editWindow.SplitNode).toHaveBeenCalledTimes(2);
     expect(editWindow.DeleteSelection).toHaveBeenCalledOnce();

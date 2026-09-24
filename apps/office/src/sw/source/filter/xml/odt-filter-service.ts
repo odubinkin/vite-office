@@ -6,6 +6,7 @@
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import { SwDoc } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
+import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";
 import { readOdtDocument, type OdtImportProgressStage } from "./swxml";
 import { writeOdtDocument, type OdtExportProgressStage } from "./wrtxml";
 
@@ -149,6 +150,8 @@ export class InlineOdtFilterService implements OdtFilterService {
   ): Promise<OdtFilterDocument> {
     this.Begin(options.signal);
     try {
+      let ignoredDeclarations = 0;
+      const diagnosticGroups = new Set<string>();
       const imported = await readOdtDocument(bytes, metadata, options.zipLimits, {
         ...(options.defaultFontDevice === undefined
           ? {}
@@ -160,7 +163,20 @@ export class InlineOdtFilterService implements OdtFilterService {
           /** Qualifies one import progress stage. @param stage - Writer import stage. @returns Nothing. */ (
             stage,
           ) => options.onProgress?.(`import:${stage}`),
+        onDiagnostic:
+          /** Counts unsupported SAX declarations without retaining values or content. @param diagnostic - Structural import event. @returns Nothing. */ (
+            diagnostic: OdfXmlDiagnostic,
+          ): void => {
+            ignoredDeclarations += 1;
+            diagnosticGroups.add(
+              `${diagnostic.stream}\u0000${diagnostic.path}\u0000${diagnostic.kind}\u0000${diagnostic.name}`,
+            );
+          },
       });
+      if (ignoredDeclarations > 0)
+        console.warn(
+          `ODT import ignored ${ignoredDeclarations} unsupported XML declarations in ${diagnosticGroups.size} distinct contexts; see the Writer ODT compatibility contract.`,
+        );
       return createOdtFilterDocument(imported.document, imported.title);
     } catch (error) {
       throw normalizeOdtFilterError(error);

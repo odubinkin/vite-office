@@ -89,18 +89,33 @@ mandatory XML streams larger than 16 MiB, invalid manifests, duplicate supported
 styles, unsupported semantic values, and differing Western/CJK/CTL weight or
 posture values until script-specific browser projections are implemented.
 
-Lossy export is not permitted. Paragraph item IDs outside the implemented
-alignment, list, paragraph-property, and character subset fail explicitly.
-Imported tables, images,
-fields, annotations, tracked changes, sections, objects, scripts, signatures,
-encryption, RDF, custom bullet glyphs, non-decimal numbering, and list headers
-remain unsupported. A document containing tables therefore loses the table's
-cells and their paragraphs during import; the certification regression sample
-contains one 5-row, 15-cell table, so whole-document page parity is outside
-the current paragraph-only model. Headers, footers, columns, borders, backgrounds, page numbering,
-printer trays, multiple page styles, unrelated style families, and properties
-outside the bounded Writer model are ignored during import, matching the scoped
-upstream import-context behavior instead of inventing browser document fields.
+Lossy export is not permitted for canonical properties in the implemented
+slice. Paragraph item IDs outside the implemented alignment, list,
+paragraph-property, and character subset fail explicitly. The model now also
+preserves bookmarks, hyperlinks, soft page-break positions, embedded font
+references with deterministic fallback, and ordered body tables with rows,
+columns, cell paragraphs, widths, row minimum height, uniform cell padding and
+border, and vertical alignment. These use Writer nodes rather than flattening
+table cells into body paragraphs. The table and cell soft breaks in the
+certification sample retain their logical positions through Worker transfer and
+ODT save/reopen.
+
+Images, fields, annotations, tracked changes, sections, objects, scripts,
+signatures, encryption, RDF, custom bullet glyphs, non-decimal numbering,
+merged or nested tables, and list headers remain unsupported. Table rows are
+visible at their body-order anchors but are not paginated by the page-frame
+engine; visual page count can differ from LibreOffice. Table keep-with-next,
+row splitting, full table cursor navigation and undo are not modeled. Headers,
+footers, columns, page backgrounds, printer trays, multiple page styles,
+unrelated style families, and properties outside the bounded Writer model are
+ignored during import. The [certification acceptance record](certification-odt-acceptance.md)
+distinguishes tested semantic retention from these limits.
+
+The browser filter groups unsupported XML declarations into one console
+summary per imported document. The detailed structural diagnostic callback
+continues to report every occurrence with stream and path, without values or
+document text. A quiet console does not imply that every LibreOffice style
+declaration has a browser effect.
 
 ## Browser File integration
 

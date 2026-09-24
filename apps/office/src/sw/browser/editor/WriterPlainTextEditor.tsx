@@ -224,6 +224,8 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   useLayoutEffect(
     /** Restores the shell-owned selection after canonical paragraph projection. @returns Nothing. */
     function restoreCanonicalSelection(): void {
+      /* c8 ignore next -- Chromium table editing verifies native focus retention. */
+      if (rootElement.current?.querySelector("[data-writer-table-cell]:focus") !== null) return;
       controller.RestoreSelection(props.cursorSelection);
     },
     [controller, measuredLines, props.cursorSelection, props.paragraphs],

@@ -88,7 +88,7 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     if (node === undefined) throw new Error("Writer test cell is missing.");
     node.SetText("start");
     const select = vi.fn();
-    render(<WriterEditableTable onSelectRow={select} table={table} />);
+    const { rerender } = render(<WriterEditableTable onSelectRow={select} table={table} />);
     const rendered = screen.getByRole("table", { name: "Table1" });
     expect(within(rendered).getByRole("cell")).toHaveStyle({ padding: "5.333333333333333px" });
     fireEvent.click(screen.getByRole("button", { name: "Select row 1 in Table1" }));
@@ -105,6 +105,16 @@ describe("Writer browser table controls", /** Verifies the bounded table scenari
     fireEvent.keyDown(editor, { key: "ArrowLeft" });
     fireEvent.mouseDown(editor);
     fireEvent.paste(editor);
+    const selectionsBeforeCellClick = select.mock.calls.length;
+    fireEvent.click(editor);
+    expect(select).toHaveBeenCalledTimes(selectionsBeforeCellClick);
+    editor.focus();
+    editor.textContent = "draft";
+    rerender(<WriterEditableTable onSelectRow={select} table={table} />);
+    expect(editor).toHaveTextContent("draft");
+    editor.blur();
+    rerender(<WriterEditableTable onSelectRow={select} table={table} />);
+    expect(editor).toHaveTextContent("xstart");
   });
 
   it("uses declared column widths when the table has no explicit width", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {

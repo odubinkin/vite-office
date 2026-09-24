@@ -135,3 +135,36 @@ test("Writer keeps one ODT text node across visible page fragments after reopen"
     .toBeGreaterThan(1);
   expect((await fragments.allTextContents()).join("")).toBe(text);
 });
+
+test("Writer types in a table cell and reopens the edited ODT", /** Checks native cell keyboard input and package persistence. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  await page.goto("/writer");
+  await page.getByRole("button", { name: "Insert Table" }).click();
+  await page
+    .getByRole("dialog", { name: "Insert Table" })
+    .getByRole("button", { name: "OK" })
+    .click();
+  const cell = page.locator("[data-writer-table-cell]").first();
+  await cell.click();
+  await expect(cell).toBeFocused();
+  await page.keyboard.type("typed cell");
+  await expect(cell).toHaveText("typed cell");
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("button", { name: "File", exact: true }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download ODT" }).click();
+  const savedPath = await (await pending).path();
+  if (savedPath === null) throw new Error("Chromium did not expose the table ODT download.");
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: await readFile(savedPath),
+    mimeType: "application/vnd.oasis.opendocument.text",
+    name: "edited-table.odt",
+  });
+  await expect(page.locator("[data-writer-table-row]")).toHaveCount(2);
+  await expect(page.locator("[data-writer-table] td")).toHaveCount(4);
+  await expect(page.locator("[data-writer-table-cell]").first()).toHaveText("typed cell");
+});

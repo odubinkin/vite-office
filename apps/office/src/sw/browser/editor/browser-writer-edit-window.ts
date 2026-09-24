@@ -200,6 +200,12 @@ export class BrowserWriterEditWindow {
 
   /** Routes one native input intent before browser DOM mutation. @param input - Native input event. @returns Nothing. */
   private HandleBeforeInput(input: InputEvent): void {
+    // Table boxes own their text nodes; let the cell's input handler apply the edit.
+    if (
+      input.target instanceof Element &&
+      input.target.closest("[data-writer-table-cell]") !== null
+    )
+      return;
     if (input.inputType === "insertFromComposition" && this.suppressNextCommittedInput) {
       this.suppressNextCommittedInput = false;
       input.preventDefault();

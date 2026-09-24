@@ -1,6 +1,8 @@
 /** @fileoverview Verifies the asynchronous neutral ODT filter contract used inline and in workers. */
 
-import { describe, expect, it } from "vitest";
+import fs from "node:fs";
+
+import { describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwPosition } from "../../core/crsr/pam";
@@ -27,6 +29,32 @@ function metadata() {
 }
 
 describe("ODT filter service" /** Groups asynchronous inline filter behavior. @returns Nothing. */, () => {
+  it("summarizes unsupported declarations from a pinned upstream table ODT", /** Checks one browser-facing warning while preserving the imported table. @returns Completion. */ async () => {
+    const warn = vi
+      .spyOn(console, "warn")
+      .mockImplementation(
+        /** Discards only test warning output. @returns Nothing. */ () => undefined,
+      );
+    try {
+      const bytes = new Uint8Array(
+        fs.readFileSync("src/sw/qa/extras/odfexport/data/tdf132642_keepWithNextTable.odt"),
+      );
+      const imported = await createInlineOdtFilterService().Import(bytes, metadata());
+      expect(imported.document.GetTables()).toHaveLength(1);
+      expect(
+        warn.mock.calls.filter(
+          /** Selects the aggregate filter warning. @param call - Recorded console arguments. @returns Match. */ (
+            call,
+          ) => String(call[0]).startsWith("ODT import ignored"),
+        ),
+      ).toHaveLength(1);
+      expect(warn.mock.calls.at(-1)?.[0]).toMatch(
+        /^ODT import ignored \d+ unsupported XML declarations in \d+ distinct contexts/u,
+      );
+    } finally {
+      warn.mockRestore();
+    }
+  });
   it("round-trips a neutral filter document and reports import/export stages" /** Verifies the same service contract used by the worker runtime. @returns Completion after assertions. */, async () => {
     const service = createInlineOdtFilterService();
     const document = createWriterDocument();

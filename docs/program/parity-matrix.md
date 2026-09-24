@@ -166,3 +166,18 @@ The Stage 0 tooling fails when:
 See the [test strategy](test-strategy.md),
 [documentation strategy](documentation-strategy.md), and
 [roadmap](roadmap.md) for the tasks that make these checks executable.
+
+## Certification ODT import slice
+
+The [whole-document acceptance record](certification-odt-acceptance.md) maps the
+seven ordered implementation phases to pinned LibreOffice ODT files and local
+tests. The verified slice covers paragraph properties, links, bookmarks, soft
+page breaks, embedded-font fallback, page geometry and ordered tables with
+editable cells. The source-backed table check covers structural roundtrip;
+Chromium separately verifies cell typing and save/reopen.
+
+This is bounded implementation evidence, not a `verified` claim for general
+LibreOffice Writer table or layout parity. Row pagination, merged cells,
+full list/outline labels and script-specific style metrics remain recorded
+gaps. The runtime inventory and source-provenance records retain their own
+capability status until exact upstream assertions and defaults are covered.
