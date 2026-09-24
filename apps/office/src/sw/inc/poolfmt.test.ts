@@ -1,6 +1,6 @@
 /** @fileoverview Verifies the pinned built-in Writer paragraph-style pool. */
 import { describe, expect, it } from "vitest";
-import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxStringItem } from "../../svl/source/items/poolitem";
 import {
   encodeWriterOdfStyleName,
   getWriterOdfStyleName,
@@ -24,6 +24,8 @@ import {
   SvxFirstLineIndentItem,
   SvxLineSpacingItem,
   SvxRightMarginItem,
+  SvxTabStop,
+  SvxTabStopItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
 } from "../../editeng/source/items/paraitem";
@@ -336,7 +338,8 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       (hanging.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
     ).toBe(-283);
     expect((hanging.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()).toBe(567);
-    expect((hanging.Get(RES_PARATR_TABSTOP) as SfxInt16Item).GetValue()).toBe(0);
+    expect((hanging.Get(RES_PARATR_TABSTOP) as SvxTabStopItem).At(0).GetTabPos()).toBe(0);
+    expect((hanging.Get(RES_PARATR_TABSTOP) as SvxTabStopItem).Count()).toBe(11);
     expect((heading.Get(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
     expect((caption.Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
     expect((comment.Get(RES_CHRATR_COLOR) as SfxStringItem).GetValue()).toBe("auto");
@@ -355,9 +358,12 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect(
       document.GetAttrPool().CreateItem({ which: RES_CHRATR_HIGHLIGHT, value: "transparent" }),
     ).toEqual(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
-    expect(document.GetAttrPool().CreateItem({ which: RES_PARATR_TABSTOP, value: 0 })).toEqual(
-      new SfxInt16Item(RES_PARATR_TABSTOP, 0),
-    );
+    expect(
+      document.GetAttrPool().CreateItem({
+        which: RES_PARATR_TABSTOP,
+        value: SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(0)]).QueryValue(),
+      }),
+    ).toEqual(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(0)]));
   });
 
   it("materializes the pinned HTML-mode text and heading branches", /** Verifies HTML paragraph spacing, heading sizes, font role, and posture rules from DocumentStylePoolManager.cxx. @returns Nothing. */ () => {

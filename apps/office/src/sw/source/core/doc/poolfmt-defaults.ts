@@ -9,6 +9,8 @@ import {
   SvxFirstLineIndentItem,
   SvxLineSpacingItem,
   SvxRightMarginItem,
+  SvxTabStop,
+  SvxTabStopItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
@@ -20,7 +22,7 @@ import {
   SvxPostureItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
-import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
@@ -208,8 +210,11 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(
       new SvxLineSpacingItem(defaults.lineHeightPercent, RES_PARATR_LINESPACING),
     );
-  if (defaults.tabStopTwips !== undefined)
-    collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_TABSTOP, defaults.tabStopTwips));
+  if (defaults.tabStopTwips !== undefined) {
+    const tabs = new SvxTabStopItem(RES_PARATR_TABSTOP);
+    tabs.Insert(new SvxTabStop(defaults.tabStopTwips));
+    collection.SetFormatAttr(tabs);
+  }
   if (defaults.keepWithNext !== undefined)
     collection.SetFormatAttr(new SfxBoolItem(RES_KEEP, defaults.keepWithNext));
   if (defaults.lineNumber !== undefined)

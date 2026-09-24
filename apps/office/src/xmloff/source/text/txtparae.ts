@@ -39,6 +39,14 @@ export type XMLParagraphStyle = string;
 export type OdfParagraphAlignment = "left" | "center" | "right" | "justify";
 
 /** Direct paragraph properties represented by the bounded Writer model. */
+export interface OdfTabStop {
+  readonly position: number;
+  readonly alignment: "left" | "right" | "center" | "char" | "default";
+  readonly decimal: string;
+  readonly fill: string;
+}
+
+/** Direct paragraph properties represented by the bounded Writer model. */
 export interface OdfParagraphProperties {
   readonly countLineNumbers?: boolean;
   readonly contextualSpacing?: boolean;
@@ -51,9 +59,7 @@ export interface OdfParagraphProperties {
   readonly keepWithNext?: boolean;
   readonly lowerSpacing?: number;
   readonly rightMargin?: number;
-  /** Single bounded tab-stop position represented by the Writer item, in twips. */
-  readonly tabStopPosition?: number;
-  readonly tabStops?: readonly number[];
+  readonly tabStopDetails?: readonly OdfTabStop[];
   readonly upperSpacing?: number;
 }
 
@@ -505,7 +511,9 @@ function paragraphPropertiesKey(properties?: OdfParagraphProperties): string {
       ? ""
       : Number(properties.fontIndependentLineSpacing),
     properties?.contextualSpacing === undefined ? "" : Number(properties.contextualSpacing),
-    properties?.tabStops?.join("|") ?? properties?.tabStopPosition,
+    properties?.tabStopDetails === undefined
+      ? undefined
+      : encodeURIComponent(JSON.stringify(properties.tabStopDetails)),
     properties?.keepWithNext === undefined ? "" : Number(properties.keepWithNext),
     properties?.countLineNumbers === undefined ? "" : Number(properties.countLineNumbers),
   ]
@@ -531,7 +539,7 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
     lineSpacingTwips,
     fontIndependentLineSpacing,
     contextualSpacing,
-    rawTabStops,
+    ,
     keepWithNext,
     countLineNumbers,
   ] = fields.map(
@@ -539,6 +547,7 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
       value,
     ) => (value === "" ? undefined : Number(value)),
   );
+  const tabStopsKey = fields[10] as string;
   return {
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
     ...(rightMargin === undefined ? {} : { rightMargin }),
@@ -552,11 +561,9 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
       ? {}
       : { fontIndependentLineSpacing: fontIndependentLineSpacing === 1 }),
     ...(contextualSpacing === undefined ? {} : { contextualSpacing: contextualSpacing === 1 }),
-    ...(fields[10]?.includes("|")
-      ? { tabStops: fields[10].split("|").map(Number) }
-      : rawTabStops === undefined
-        ? {}
-        : { tabStopPosition: rawTabStops }),
+    ...(tabStopsKey === ""
+      ? {}
+      : { tabStopDetails: JSON.parse(decodeURIComponent(tabStopsKey)) as OdfTabStop[] }),
     ...(keepWithNext === undefined ? {} : { keepWithNext: keepWithNext === 1 }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers: countLineNumbers === 1 }),
   };
@@ -606,12 +613,17 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
 
 /** Emits child elements of supported ODF paragraph properties. @param properties - Direct properties. @returns XML fragment. */
 export function exportParagraphPropertyChildren(properties: OdfParagraphProperties): string {
-  const positions =
-    properties.tabStops ??
-    (properties.tabStopPosition === undefined ? [] : [properties.tabStopPosition]);
-  return positions.length === 0
-    ? ""
-    : `<style:tab-stops>${positions.map(/** Handles Writer formatting state. @param position - Input value. @returns Callback result. */ (position) => `<style:tab-stop style:position="${exportOdfLength(position)}"/>`).join("")}</style:tab-stops>`;
+  if (properties.tabStopDetails !== undefined)
+    return properties.tabStopDetails.length === 0
+      ? "<style:tab-stops/>"
+      : `<style:tab-stops>${properties.tabStopDetails
+          .map(
+            /** Serializes one ODF tab. @param stop - Tab properties. @returns XML. */
+            (stop) =>
+              `<style:tab-stop style:position="${exportOdfLength(stop.position)}" style:type="${stop.alignment}"${stop.alignment === "char" ? ` style:char="${escapeXml(stop.decimal)}"` : ""}${stop.fill === " " ? "" : ` style:leader-style="${stop.fill === "." ? "dotted" : "solid"}" style:leader-text="${escapeXml(stop.fill)}"`}/>`,
+          )
+          .join("")}</style:tab-stops>`;
+  return "";
 }
 
 /** Serializes a bounded twip margin as an ODF centimetre length. @param twips - Margin in twips. @returns ODF length. */

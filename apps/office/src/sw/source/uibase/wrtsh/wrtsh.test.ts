@@ -8,8 +8,13 @@ import { projectWriterParagraphList } from "../../core/doc/list";
 import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
-import { SfxBoolItem, SfxInt16ListItem } from "../../../../svl/source/items/poolitem";
-import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../../editeng/source/items/paraitem";
+import { SfxBoolItem } from "../../../../svl/source/items/poolitem";
+import {
+  SvxLineSpacingItem,
+  SvxTabStop,
+  SvxTabStopItem,
+  SvxULSpaceItem,
+} from "../../../../editeng/source/items/paraitem";
 import {
   RES_KEEP,
   RES_PARATR_LINESPACING,
@@ -74,16 +79,21 @@ describe("Writer canonical input shell", /** Registers canonical cursor and inpu
     );
     expect(shell.SetParagraphItem(new SvxLineSpacingItem(150, RES_PARATR_LINESPACING))).toBe(true);
     expect(shell.SetParagraphItem(new SvxULSpaceItem(120, 240, RES_UL_SPACE, true))).toBe(true);
-    expect(shell.SetParagraphItem(new SfxInt16ListItem(RES_PARATR_TABSTOP, [720, 1440]))).toBe(
-      true,
-    );
+    expect(
+      shell.SetParagraphItem(
+        SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]),
+      ),
+    ).toBe(true);
     expect(shell.SetParagraphItem(new SfxBoolItem(RES_KEEP, true))).toBe(true);
     expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
     expect(shell.Undo()).toBe(true);
     expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(false);
     expect(shell.Redo()).toBe(true);
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16ListItem).GetValues(),
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops().map(
+        /** Projects a tab position. @param stop - Tab stop. @returns Twips. */
+        (stop) => stop.GetTabPos(),
+      ),
     ).toEqual([720, 1440]);
     const node = shell.GetActiveParagraph();
     const cursor = shell.CaptureCursorState();

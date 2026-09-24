@@ -4,6 +4,223 @@
 
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
+/** Pinned `SvxTabAdjust` order from `include/editeng/svxenum.hxx`. */
+export enum SvxTabAdjust {
+  Left,
+  Right,
+  Decimal,
+  Center,
+  Default,
+  End,
+}
+
+/** One positioned tab with its adjustment and leader characters. */
+export class SvxTabStop {
+  /** Creates a pinned Writer tab stop. @param position - Twip position. @param adjustment - Tab adjustment. @param decimal - Decimal separator. @param fill - Leader character. @returns Nothing. */
+  public constructor(
+    private readonly position: number,
+    private readonly adjustment: SvxTabAdjust = SvxTabAdjust.Left,
+    private readonly decimal = "\0",
+    private readonly fill = " ",
+  ) {
+    if (!Number.isInteger(position) || position < 0 || position > 2147483647)
+      throw new Error("SvxTabStop position is invalid.");
+    if (
+      !Number.isInteger(adjustment) ||
+      adjustment < SvxTabAdjust.Left ||
+      adjustment >= SvxTabAdjust.End
+    )
+      throw new Error("SvxTabStop adjustment is invalid.");
+    if (decimal.length !== 1 || fill.length !== 1)
+      throw new Error("SvxTabStop characters must contain one character.");
+  }
+
+  /** Returns the tab position in twips. @returns Position. */
+  public GetTabPos(): number {
+    return this.position;
+  }
+  /** Returns the tab adjustment. @returns Adjustment. */
+  public GetAdjustment(): SvxTabAdjust {
+    return this.adjustment;
+  }
+  /** Returns the decimal separator. @returns Separator. */
+  public GetDecimal(): string {
+    return this.decimal;
+  }
+  /** Returns the leader character. @returns Fill. */
+  public GetFill(): string {
+    return this.fill;
+  }
+  /** Compares all tab stop fields. @param other - Candidate. @returns Equality. */
+  public equals(other: SvxTabStop): boolean {
+    return (
+      this.position === other.position &&
+      this.adjustment === other.adjustment &&
+      this.decimal === other.decimal &&
+      this.fill === other.fill
+    );
+  }
+}
+
+/** Sorted tab stops with the pinned `SvxTabStopItem` item identity. */
+export class SvxTabStopItem extends SfxPoolItem {
+  private stops: SvxTabStop[] = [];
+  private defaultDistance = 0;
+
+  /** Creates ten default stops, or a counted Writer pool default. @param countOrWhich - Count for the four-argument form, otherwise WhichId. @param distance - Twip spacing. @param adjustment - Adjustment for generated stops. @param which - WhichId for the four-argument form. @returns Nothing. */
+  public constructor(
+    countOrWhich: number,
+    distance?: number,
+    adjustment?: SvxTabAdjust,
+    which?: number,
+  ) {
+    super(which ?? countOrWhich);
+    const count = which === undefined ? 10 : countOrWhich;
+    const spacing = which === undefined ? 1134 : distance;
+    const align = which === undefined ? SvxTabAdjust.Default : adjustment;
+    if (
+      !Number.isInteger(count) ||
+      count < 0 ||
+      count > 65535 ||
+      !Number.isInteger(spacing) ||
+      (spacing as number) < 0 ||
+      align === undefined ||
+      align < SvxTabAdjust.Left ||
+      align >= SvxTabAdjust.End
+    )
+      throw new Error("SvxTabStopItem constructor is invalid.");
+    for (let index = 1; index <= count; index += 1)
+      this.stops.push(new SvxTabStop(index * (spacing as number), align));
+  }
+
+  /** Creates an item from explicit stops. @param which - WhichId. @param stops - Tab stops. @param defaultDistance - Default spacing. @returns Item. */
+  public static FromStops(
+    which: number,
+    stops: readonly SvxTabStop[],
+    defaultDistance = 0,
+  ): SvxTabStopItem {
+    const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, which);
+    item.SetDefaultDistance(defaultDistance);
+    for (const stop of stops) item.Insert(stop);
+    return item;
+  }
+
+  /** Restores the complete item value after a filter or Worker transfer. @param which - WhichId. @param value - Persisted record. @returns Item. */
+  public static FromValue(which: number, value: unknown): SvxTabStopItem {
+    if (typeof value !== "object" || value === null || Array.isArray(value))
+      throw new Error("SvxTabStopItem value is invalid.");
+    const record = value as Record<string, unknown>;
+    if (!Array.isArray(record.stops) || !Number.isInteger(record.defaultDistance))
+      throw new Error("SvxTabStopItem value is invalid.");
+    const stops = record.stops.map(
+      /** Restores one tab value. @param entry - Candidate tab record. @returns Tab stop. */
+      (entry): SvxTabStop => {
+        if (typeof entry !== "object" || entry === null || Array.isArray(entry))
+          throw new Error("SvxTabStopItem tab value is invalid.");
+        const tab = entry as Record<string, unknown>;
+        if (
+          typeof tab.position !== "number" ||
+          typeof tab.adjustment !== "number" ||
+          typeof tab.decimal !== "string" ||
+          typeof tab.fill !== "string"
+        )
+          throw new Error("SvxTabStopItem tab value is invalid.");
+        return new SvxTabStop(tab.position, tab.adjustment, tab.decimal, tab.fill);
+      },
+    );
+    return SvxTabStopItem.FromStops(which, stops, record.defaultDistance as number);
+  }
+
+  /** Returns the number of explicit stops. @returns Count. */
+  public Count(): number {
+    return this.stops.length;
+  }
+  /** Returns one stop. @param index - Sorted index. @returns Stop. */
+  public At(index: number): SvxTabStop {
+    const stop = this.stops[index];
+    if (stop === undefined) throw new Error("SvxTabStopItem index is invalid.");
+    return stop;
+  }
+  /** Returns a read-only stop snapshot. @returns Stops. */
+  public GetStops(): readonly SvxTabStop[] {
+    return [...this.stops];
+  }
+  /** Finds a stop by position. @param stop - Position or stop. @returns Index or pinned not-found value. */
+  public GetPos(stop: number | SvxTabStop): number {
+    const position = typeof stop === "number" ? stop : stop.GetTabPos();
+    const index = this.stops.findIndex(
+      /** Checks one position. @param entry - Candidate tab. @returns Whether the position matches. */
+      (entry) => entry.GetTabPos() === position,
+    );
+    return index < 0 ? 65535 : index;
+  }
+  /** Replaces a stop at the same position and keeps sorted order. @param stop - Tab stop. @returns Whether inserted. */
+  public Insert(stop: SvxTabStop): boolean {
+    const index = this.GetPos(stop);
+    if (index !== 65535) this.stops.splice(index, 1);
+    this.stops.push(stop);
+    this.stops.sort(
+      /** Orders two tabs by position. @param left - First tab. @param right - Second tab. @returns Position difference. */
+      (left, right) => left.GetTabPos() - right.GetTabPos(),
+    );
+    return true;
+  }
+  /** Removes a run of stops by sorted index. @param index - First index. @param length - Count. @returns Nothing. */
+  public Remove(index: number, length = 1): void {
+    this.stops.splice(index, length);
+  }
+  /** Sets spacing for tabs without an explicit stop. @param distance - Twips. @returns Nothing. */
+  public SetDefaultDistance(distance: number): void {
+    if (!Number.isInteger(distance) || distance < 0)
+      throw new Error("SvxTabStopItem default distance is invalid.");
+    this.defaultDistance = distance;
+  }
+  /** Returns the default tab spacing. @returns Twips. */
+  public GetDefaultDistance(): number {
+    return this.defaultDistance;
+  }
+  /** Creates an independent item. @returns Clone. */
+  public Clone(): SvxTabStopItem {
+    return SvxTabStopItem.FromStops(this.Which(), this.stops, this.defaultDistance);
+  }
+  /** Compares item identity, spacing and every stop field. @param other - Candidate. @returns Equality. */
+  public equals(other: SfxPoolItem): boolean {
+    return (
+      other instanceof SvxTabStopItem &&
+      other.Which() === this.Which() &&
+      other.defaultDistance === this.defaultDistance &&
+      other.Count() === this.Count() &&
+      this.stops.every(
+        /** Compares one sorted tab. @param stop - Local tab. @param index - Sorted index. @returns Equality. */
+        (stop, index) => stop.equals(other.At(index)),
+      )
+    );
+  }
+  /** Exposes the complete persistence-safe tab contract. @returns Tab record. */
+  public QueryValue(): {
+    readonly defaultDistance: number;
+    readonly stops: readonly {
+      readonly position: number;
+      readonly adjustment: SvxTabAdjust;
+      readonly decimal: string;
+      readonly fill: string;
+    }[];
+  } {
+    return {
+      defaultDistance: this.defaultDistance,
+      stops: this.stops.map(
+        /** Encodes one tab. @param stop - Tab stop. @returns Tab record. */
+        (stop) => ({
+          position: stop.GetTabPos(),
+          adjustment: stop.GetAdjustment(),
+          decimal: stop.GetDecimal(),
+          fill: stop.GetFill(),
+        }),
+      ),
+    };
+  }
+}
+
 /** Matches the pinned SvxAdjust enumeration order. */
 export enum SvxAdjust {
   Left,

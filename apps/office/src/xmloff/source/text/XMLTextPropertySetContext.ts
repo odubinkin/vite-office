@@ -2,11 +2,12 @@
 
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xml-parser";
 import { XMLToken } from "../core/xmltoken";
+import type { OdfTabStop } from "./txtparae";
 
 /** Imports element-valued text properties such as paragraph tab stops. */
 export class XMLTextPropertySetContext extends SvXMLImportContext {
-  /** Creates a property context. @param setTabStop - Optional tab-stop sink. @returns Nothing. */
-  public constructor(private readonly setTabStop?: (position: number) => void) {
+  /** Creates a property context. @param setTabStops - Optional tab-stop sink. @returns Nothing. */
+  public constructor(private readonly setTabStops?: (stops: readonly OdfTabStop[]) => void) {
     super();
   }
 
@@ -15,16 +16,18 @@ export class XMLTextPropertySetContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element !== XMLToken.STYLE_TAB_STOPS || this.setTabStop === undefined) return null;
+    if (element !== XMLToken.STYLE_TAB_STOPS || this.setTabStops === undefined) return null;
     attributes.assertOnly([], "tab stops");
-    return new XMLTabStopsContext(this.setTabStop);
+    return new XMLTabStopsContext(this.setTabStops);
   }
 }
 
 /** Imports ordered paragraph tab stops. */
 class XMLTabStopsContext extends SvXMLImportContext {
-  /** Creates a tab-stop container. @param setTabStop - Imported position sink. @returns Nothing. */
-  public constructor(private readonly setTabStop: (position: number) => void) {
+  private readonly stops: OdfTabStop[] = [];
+
+  /** Creates a tab-stop container. @param setTabStops - Imported sequence sink. @returns Nothing. */
+  public constructor(private readonly setTabStops: (stops: readonly OdfTabStop[]) => void) {
     super();
   }
 
@@ -34,15 +37,41 @@ class XMLTabStopsContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
     if (element !== XMLToken.STYLE_TAB_STOP) return null;
-    attributes.assertOnly([XMLToken.STYLE_POSITION], "tab stop");
-    this.setTabStop(
-      importOdfLength(
+    attributes.assertOnly(
+      [
+        XMLToken.STYLE_POSITION,
+        XMLToken.STYLE_TYPE,
+        XMLToken.STYLE_CHAR,
+        XMLToken.STYLE_LEADER_STYLE,
+        XMLToken.STYLE_LEADER_TEXT,
+      ],
+      "tab stop",
+    );
+    const alignment = attributes.get(XMLToken.STYLE_TYPE) ?? "left";
+    if (!["left", "right", "center", "char", "default"].includes(alignment))
+      throw new Error("Unsupported ODF tab-stop type.");
+    const leaderStyle = attributes.get(XMLToken.STYLE_LEADER_STYLE);
+    const leaderText = attributes.get(XMLToken.STYLE_LEADER_TEXT);
+    const fill =
+      leaderStyle === null || leaderStyle === "none"
+        ? " "
+        : (leaderText?.[0] ?? (leaderStyle === "dotted" ? "." : "_"));
+    this.stops.push({
+      position: importOdfLength(
         attributes.require(XMLToken.STYLE_POSITION, "tab stop position"),
         false,
         "tab stop position",
       ),
-    );
+      alignment: alignment as OdfTabStop["alignment"],
+      decimal: attributes.get(XMLToken.STYLE_CHAR)?.[0] ?? ",",
+      fill,
+    });
     return new SvXMLIgnoreContext();
+  }
+
+  /** Publishes the complete tab sequence, including an explicit empty sequence. @returns Nothing. */
+  public override endFastElement(): void {
+    this.setTabStops(this.stops);
   }
 }
 

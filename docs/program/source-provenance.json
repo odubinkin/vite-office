@@ -124,19 +124,25 @@
       "localPath": "apps/office/src/editeng/source/items/paraitem.ts",
       "localSymbols": [
         "SvxAdjust",
-        "SvxAdjustItem"
+        "SvxAdjustItem",
+        "SvxTabAdjust",
+        "SvxTabStop",
+        "SvxTabStopItem"
       ],
       "omittedResponsibilities": [
-        "Upstream obligations outside SvxAdjust, SvxAdjustItem, SvxLineSpacingItem::CreateDefault, SvxAdjustItem::CreateDefault and the bounded SvxAdjust, SvxAdjustItem contract remain intentionally omitted."
+        "Upstream obligations outside the bounded SvxAdjust, SvxAdjustItem and SvxTabStopItem contracts remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded SvxAdjustItem paragraph-alignment value from pinned `editeng/source/items/paraitem.cxx`."
+        "Reimplements the bounded SvxAdjustItem paragraph-alignment and SvxTabStopItem tab-stop values from pinned `editeng/source/items/paraitem.cxx`."
       ],
       "status": "mapped",
       "upstreamPath": "editeng/source/items/paraitem.cxx",
       "upstreamSymbols": [
         "SvxAdjust",
         "SvxAdjustItem",
+        "SvxTabStop",
+        "SvxTabStopItem",
+        "SvxTabStopItem::Insert",
         "SvxLineSpacingItem::CreateDefault",
         "SvxAdjustItem::CreateDefault"
       ]
@@ -5125,6 +5131,7 @@
         "ODF_NAMESPACES",
         "OdfCharacterProperties",
         "OdfParagraphAlignment",
+        "OdfTabStop",
         "OdfListLevelKind",
         "XMLTextExportSource",
         "exportTextParagraphs"

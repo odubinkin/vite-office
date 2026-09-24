@@ -82,7 +82,10 @@ describe("browser Sfx item codec", /** Exercises JSON encoding at the browser bo
       value: [{ value: "nested", which: 2 }],
       which: 1,
     });
-    for (const value of [[null], [[]], [{}], [{ value: "x", which: 0 }], [{ value: {}, which: 2 }]])
+    expect(
+      encodeSfxPoolItem(new QueryValueItem({ stops: [{ position: 720, fill: "." }] })).value,
+    ).toEqual({ stops: [{ position: 720, fill: "." }] });
+    for (const value of [[null], { stops: [Infinity] }, { stops: [new Date()] }])
       expect(encodeLater(new QueryValueItem(value))).toThrow("not persistence-safe");
     const item = new QueryValueItem("x");
     expect(item.Clone().equals(new QueryValueItem("x"))).toBe(true);

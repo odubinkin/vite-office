@@ -4,7 +4,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { projectWriterLineHeight, projectWriterLineHeightItem } from "./writer-view-projection";
-import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../editeng/source/items/paraitem";
+import {
+  SvxLineSpacingItem,
+  SvxTabStop,
+  SvxTabStopItem,
+  SvxULSpaceItem,
+} from "../../../editeng/source/items/paraitem";
 import type { CommandFailure } from "../../../sfx2/source/control/dispatch";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
 import type { SwView } from "../../source/uibase/uiview/view";
@@ -12,12 +17,7 @@ import { presentWriterCommandError, presentWriterStatus } from "./writer-view";
 import type { WriterViewSnapshot } from "./writer-view-projection";
 import { WriterViewProjection } from "./writer-view-projection";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import {
-  SfxBoolItem,
-  SfxInt16Item,
-  SfxInt16ListItem,
-  SfxStringItem,
-} from "../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxStringItem } from "../../../svl/source/items/poolitem";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
@@ -93,32 +93,35 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       120,
     );
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16ListItem).GetValues(),
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops().map(
+        /** Projects a tab position. @param stop - Tab stop. @returns Twips. */
+        (stop) => stop.GetTabPos(),
+      ),
     ).toEqual([720, 1440]);
     expect((shell.GetActiveParagraph().GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
     const rulerSurface = screen.getByLabelText("Writer horizontal ruler")
       .firstElementChild as HTMLElement;
     fireEvent.click(rulerSurface, { clientX: 240 });
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16ListItem).GetValues(),
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).GetStops(),
     ).toHaveLength(3);
     fireEvent.click(screen.getByText("Paragraph…"));
     fireEvent.click(screen.getByRole("tab", { name: "Tabs" }));
     fireEvent.click(screen.getByText("Delete All"));
     fireEvent.click(screen.getByText("OK"));
-    expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16Item).GetValue(),
-    ).toBe(-1);
+    expect((shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).Count()).toBe(
+      0,
+    );
     fireEvent.click(rulerSurface, { clientX: 240 });
     expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16Item).GetValue(),
+      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).At(0).GetTabPos(),
     ).toBeGreaterThan(0);
     const tabHandle = screen.getByRole("button", { name: "Tab stop 1" });
     fireEvent.pointerDown(tabHandle, { clientX: 100 });
     fireEvent.pointerUp(window, { clientX: -1000 });
-    expect(
-      (shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SfxInt16Item).GetValue(),
-    ).toBe(-1);
+    expect((shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).Count()).toBe(
+      0,
+    );
     rendered.unmount();
     session.Close();
   });
@@ -162,7 +165,9 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const node = document.paragraphs[0]!;
     node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
     node.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#fedcba"));
-    node.SetAttr(new SfxInt16ListItem(RES_PARATR_TABSTOP, [720, 1440]));
+    node.SetAttr(
+      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]),
+    );
     const cursor = new SwPaM(new SwPosition(node, 0));
     const projected = new WriterViewProjection().Project(
       document,
@@ -175,7 +180,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       highlight: "#fedcba",
       tabStopsPt: [36, 72],
     });
-    node.SetAttr(new SfxInt16Item(RES_PARATR_TABSTOP, 960));
+    node.SetAttr(SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [new SvxTabStop(960)]));
     expect(
       new WriterViewProjection().Project(
         document,

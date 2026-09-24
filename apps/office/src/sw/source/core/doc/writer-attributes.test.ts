@@ -15,6 +15,9 @@ import {
   SvxAdjust,
   SvxAdjustItem,
   SvxLineSpacingItem,
+  SvxTabAdjust,
+  SvxTabStop,
+  SvxTabStopItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
@@ -28,12 +31,7 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
-import {
-  SfxBoolItem,
-  SfxInt16Item,
-  SfxInt16ListItem,
-  SfxStringItem,
-} from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_PARATR_ADJUST,
   RES_MARGIN_TEXTLEFT,
@@ -483,16 +481,25 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     const node = writer.paragraphs[0] as NonNullable<(typeof writer.paragraphs)[number]>;
     node.SetAttr(new SvxULSpaceItem(240, 120, RES_UL_SPACE, true));
     node.SetAttr(new SvxLineSpacingItem(360, RES_PARATR_LINESPACING, "fixed", true));
-    node.SetAttr(new SfxInt16ListItem(RES_PARATR_TABSTOP, [720, 1440]));
+    node.SetAttr(
+      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, [
+        new SvxTabStop(720, SvxTabAdjust.Right),
+        new SvxTabStop(1440, SvxTabAdjust.Decimal, ".", "."),
+      ]),
+    );
     const restored = decodeWriterDocument(encodeWriterDocument(writer))
       .paragraphs[0] as typeof node;
     expect((restored.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).QueryValue()).toEqual([240, 120, 1]);
     expect((restored.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem).QueryValue()).toEqual([
       1, 360, 1,
     ]);
-    expect((restored.GetAttr(RES_PARATR_TABSTOP) as SfxInt16ListItem).GetValues()).toEqual([
-      720, 1440,
-    ]);
+    expect((restored.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).QueryValue()).toEqual({
+      defaultDistance: 0,
+      stops: [
+        { position: 720, adjustment: SvxTabAdjust.Right, decimal: "\0", fill: " " },
+        { position: 1440, adjustment: SvxTabAdjust.Decimal, decimal: ".", fill: "." },
+      ],
+    });
     const pool = writer.GetAttrPool();
     expect(
       (pool.CreateItem({ which: RES_UL_SPACE, value: [240, 120] }) as SvxULSpaceItem).GetContext(),

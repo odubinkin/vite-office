@@ -4,7 +4,11 @@
 
 /** JSON-compatible persisted value of one pooled item. */
 export type SfxPoolItemValue =
-  boolean | number | string | readonly number[] | readonly SfxPoolItemSnapshot[];
+  | boolean
+  | number
+  | string
+  | readonly SfxPoolItemValue[]
+  | { readonly [key: string]: SfxPoolItemValue };
 
 /** JSON-compatible persisted form of one pooled item. */
 export interface SfxPoolItemSnapshot {

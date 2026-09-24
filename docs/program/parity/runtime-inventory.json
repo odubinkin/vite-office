@@ -17,9 +17,11 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/editeng/source/items/paraitem.ts#SvxAdjust",
-          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxAdjust"
+          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxAdjust",
+          "apps/office/src/editeng/source/items/paraitem.test.ts#SvxTabStopItem",
+          "vendor/libreoffice-reference/editeng/source/items/paraitem.cxx#SvxTabStopItem::Insert"
         ],
-        "justification": "Mapped provenance remains semantically unverified against editeng/source/items/paraitem.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Pinned tab-stop construction, ordering, replacement, equality, clone, and the Writer pool default have focused assertions; other paragraph item contracts in this module remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SvxAdjust",
@@ -28,7 +30,10 @@
           "SvxFirstLineIndentItem",
           "SvxRightMarginItem",
           "SvxULSpaceItem",
-          "SvxLineSpacingItem"
+          "SvxLineSpacingItem",
+          "SvxTabAdjust",
+          "SvxTabStop",
+          "SvxTabStopItem"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "editeng/source/items/paraitem.cxx",
@@ -40,6 +45,9 @@
           "SvxFirstLineIndentItem",
           "SvxRightMarginItem",
           "SvxULSpaceItem"
+          ,"SvxTabStop",
+          "SvxTabStopItem",
+          "SvxTabStopItem::Insert"
         ]
       }
     },
@@ -2221,7 +2229,7 @@
           "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem",
           "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#m_nCountBy( 5 )"
         ],
-        "justification": "P0 confirmed: React stores showLineNumbers and creates integer tab-stop items directly. Pinned SwDoc::SetLineNumberInfo and SwLineNumberInfo own line-number state and count-by=5; pinned SwTextShell works with SvxTabStopItem. React presentation is a browser boundary, but these model and command responsibilities belong in sw/source.",
+        "justification": "P0 line-number ownership remains: React stores showLineNumbers. Tab-stop item identity now matches SvxTabStopItem, while React still creates the item directly instead of submitting a shell-owned command. Pinned SwDoc::SetLineNumberInfo and SwLineNumberInfo own line-number state and count-by=5.",
         "knownViolations": [],
         "localSymbols": [
           "WriterWorkbench",
@@ -2696,22 +2704,22 @@
       ],
       "semantic": {
         "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
-        "defaultStatus": "divergent",
-        "divergenceClass": "P",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/attr/swatrset.ts#RES_PARATR_TABSTOP",
           "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem",
           "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SvxTabStopItem",
           "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SVX_TAB_DEFDIST"
         ],
-        "justification": "P0 confirmed: RES_PARATR_TABSTOP is registered as SfxInt16Item or SfxInt16ListItem, while pinned sw/source/core/bastyp/init.cxx registers SvxTabStopItem with default-stop alignment and fill semantics. SwAttrPool item identity and default are therefore different; other pool operations remain unverified.",
+        "justification": "RES_PARATR_TABSTOP now registers SvxTabStopItem with the pinned 1134-twip default stop, and snapshot decoding restores its full value. Other SwAttrPool and SwAttrSet operations remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SwAttrPool",
           "SwAttrSet"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/attr/swatrset.cxx",
         "upstreamSymbols": [
           "SwAttrPool",
@@ -3185,19 +3193,19 @@
       "semantic": {
         "behaviorStatus": "unverified",
         "contractStatus": "unverified",
-        "defaultStatus": "divergent",
-        "divergenceClass": "P",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
         "evidence": [
           "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts#RES_PARATR_TABSTOP",
           "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem"
         ],
-        "justification": "P0 confirmed for the tab-stop branch: paragraph style defaults materialize RES_PARATR_TABSTOP as SfxInt16Item, whereas pinned sw/source/core/bastyp/init.cxx uses SvxTabStopItem. Existing source-derived assertions for other style defaults remain narrow and do not prove this item default.",
+        "justification": "Paragraph style defaults now materialize the pinned SvxTabStopItem including ten generated default stops and the style's explicit zero stop. Other style defaults retain narrow source-derived assertions and remain unverified at module level.",
         "knownViolations": [],
         "localSymbols": [
           "getWriterParagraphStyleDefaults",
           "applyWriterParagraphStyleDefaults"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/doc/DocumentStylePoolManager.cxx",
         "upstreamSymbols": [
           "DocumentStylePoolManager::GetTextCollFromPool",
@@ -5485,7 +5493,7 @@
           "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#Writer ODT mapped pooled properties",
           "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx#XMLTextPropertySetContext::createFastChildContext"
         ],
-        "justification": "Preserves upstream element-valued text-property context ownership for the currently modeled single Writer tab-stop item; unmodeled text columns, complex colors, and drop caps are not claimed.",
+        "justification": "Preserves upstream element-valued text-property context ownership for the supported Writer tab-stop sequence, including alignment, leader, decimal character, and explicit empty sequence; unmodeled text columns, complex colors, and drop caps are not claimed.",
         "knownViolations": [],
         "localSymbols": [
           "XMLTextPropertySetContext",
@@ -5530,6 +5538,7 @@
         "localSymbols": [
           "OdfCharacterProperties",
           "OdfParagraphAlignment",
+          "OdfTabStop",
           "OdfListLevelKind",
           "XMLTextExportSource",
           "exportTextParagraphs",

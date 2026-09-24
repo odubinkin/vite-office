@@ -17,6 +17,8 @@ import {
   SvxFirstLineIndentItem,
   SvxLineSpacingItem,
   SvxRightMarginItem,
+  SvxTabAdjust,
+  SvxTabStopItem,
   SvxULSpaceItem,
 } from "../../../editeng/source/items/paraitem";
 import {
@@ -26,7 +28,7 @@ import {
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
 import { SfxStringItem } from "../../../svl/source/items/poolitem";
-import { SfxBoolItem, SfxInt16Item, SfxInt16ListItem } from "../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_COLOR,
   RES_CHRATR_FONT,
@@ -174,19 +176,17 @@ export class WriterViewProjection {
           list.kind === "none" ? undefined : node.GetNumRule()?.GetNumFormat(list.level);
         const spacing = node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem;
         const lineSpacing = node.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
-        const tabItem = node.GetAttr(RES_PARATR_TABSTOP);
-        const tabStopsPt =
-          tabItem instanceof SfxInt16ListItem
-            ? tabItem
-                .GetValues()
-                .map(
-                  /** Converts a tab position from twips to points. @param value - Position in twips. @returns Position in points. */ (
-                    value,
-                  ) => value / 20,
-                )
-            : tabItem instanceof SfxInt16Item && tabItem.GetValue() >= 0
-              ? [tabItem.GetValue() / 20]
-              : [];
+        const tabItem = node.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+        const tabStopsPt = tabItem
+          .GetStops()
+          .filter(
+            /** Excludes generated default stops from explicit ruler markers. @param stop - Writer tab stop. @returns Whether explicit. */
+            (stop) => stop.GetAdjustment() !== SvxTabAdjust.Default,
+          )
+          .map(
+            /** Converts a tab position from twips to points. @param stop - Writer tab stop. @returns Position in points. */
+            (stop) => stop.GetTabPos() / 20,
+          );
         const color = (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue();
         const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
         let runOffset = 0;

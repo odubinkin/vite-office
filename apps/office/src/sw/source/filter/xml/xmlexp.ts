@@ -8,6 +8,8 @@ import {
   SvxFirstLineIndentItem,
   SvxLineSpacingItem,
   SvxRightMarginItem,
+  SvxTabAdjust,
+  SvxTabStopItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
@@ -19,12 +21,7 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import {
-  SfxBoolItem,
-  SfxInt16Item,
-  SfxInt16ListItem,
-  SfxStringItem,
-} from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   escapeXml,
   exportCharacterAttributes,
@@ -398,9 +395,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (right !== undefined && !(right instanceof SvxRightMarginItem)) ||
     (spacing !== undefined && !(spacing instanceof SvxULSpaceItem)) ||
     (lineSpacing !== undefined && !(lineSpacing instanceof SvxLineSpacingItem)) ||
-    (tabStop !== undefined &&
-      !(tabStop instanceof SfxInt16Item) &&
-      !(tabStop instanceof SfxInt16ListItem)) ||
+    (tabStop !== undefined && !(tabStop instanceof SvxTabStopItem)) ||
     (keep !== undefined && !(keep instanceof SfxBoolItem)) ||
     (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem))
   )
@@ -429,10 +424,28 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
           fontIndependentLineSpacing: lineSpacing.IsFontIndependent(),
         }
       : {}),
-    ...(tabStop instanceof SfxInt16Item && tabStop.GetValue() >= 0
-      ? { tabStopPosition: tabStop.GetValue() }
+    ...(tabStop instanceof SvxTabStopItem
+      ? {
+          tabStopDetails: tabStop.GetStops().map(
+            /** Projects one Writer tab to ODF properties. @param stop - Writer tab stop. @returns ODF tab. */
+            (stop) => ({
+              position: stop.GetTabPos(),
+              alignment:
+                stop.GetAdjustment() === SvxTabAdjust.Right
+                  ? ("right" as const)
+                  : stop.GetAdjustment() === SvxTabAdjust.Center
+                    ? ("center" as const)
+                    : stop.GetAdjustment() === SvxTabAdjust.Decimal
+                      ? ("char" as const)
+                      : stop.GetAdjustment() === SvxTabAdjust.Default
+                        ? ("default" as const)
+                        : ("left" as const),
+              decimal: stop.GetDecimal(),
+              fill: stop.GetFill(),
+            }),
+          ),
+        }
       : {}),
-    ...(tabStop instanceof SfxInt16ListItem ? { tabStops: tabStop.GetValues() } : {}),
     ...(keep instanceof SfxBoolItem ? { keepWithNext: keep.GetValue() } : {}),
     ...(lineNumber instanceof SfxBoolItem ? { countLineNumbers: lineNumber.GetValue() } : {}),
   };

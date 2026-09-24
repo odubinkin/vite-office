@@ -6,6 +6,9 @@ import {
   SvxFirstLineIndentItem,
   SvxLineSpacingItem,
   SvxRightMarginItem,
+  SvxTabAdjust,
+  SvxTabStop,
+  SvxTabStopItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
@@ -21,8 +24,6 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import {
   SfxBoolItem,
-  SfxInt16Item,
-  SfxInt16ListItem,
   SfxStringItem,
   type SfxPoolItem,
 } from "../../../../svl/source/items/poolitem";
@@ -766,10 +767,30 @@ function putParagraphProperties(
         properties.fontIndependentLineSpacing === true,
       ),
     );
-  const singleTabStop = properties.tabStopPosition ?? properties.tabStops?.[0];
-  if (properties.tabStops !== undefined && properties.tabStops.length > 1)
-    put(new SfxInt16ListItem(RES_PARATR_TABSTOP, properties.tabStops));
-  else if (singleTabStop !== undefined) put(new SfxInt16Item(RES_PARATR_TABSTOP, singleTabStop));
+  if (properties.tabStopDetails !== undefined)
+    put(
+      SvxTabStopItem.FromStops(
+        RES_PARATR_TABSTOP,
+        properties.tabStopDetails.map(
+          /** Builds an upstream Writer tab from ODF properties. @param stop - ODF tab. @returns Writer tab. */
+          (stop) =>
+            new SvxTabStop(
+              stop.position,
+              stop.alignment === "right"
+                ? SvxTabAdjust.Right
+                : stop.alignment === "center"
+                  ? SvxTabAdjust.Center
+                  : stop.alignment === "char"
+                    ? SvxTabAdjust.Decimal
+                    : stop.alignment === "default"
+                      ? SvxTabAdjust.Default
+                      : SvxTabAdjust.Left,
+              stop.decimal,
+              stop.fill,
+            ),
+        ),
+      ),
+    );
   if (properties.keepWithNext !== undefined)
     put(new SfxBoolItem(RES_KEEP, properties.keepWithNext));
   if (properties.countLineNumbers !== undefined)

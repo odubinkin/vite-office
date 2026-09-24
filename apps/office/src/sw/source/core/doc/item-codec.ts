@@ -29,26 +29,13 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
 function isSfxPoolItemValue(value: unknown): value is SfxPoolItemSnapshot["value"] {
   return (
     typeof value === "boolean" ||
-    typeof value === "number" ||
+    (typeof value === "number" && Number.isFinite(value)) ||
     typeof value === "string" ||
-    (Array.isArray(value) &&
-      (value.every(
-        /** Narrows one numeric tuple member. @param entry - Candidate member. @returns Whether numeric. */ (
-          entry,
-        ) => typeof entry === "number",
-      ) ||
-        value.every(isSfxPoolItemSnapshot)))
-  );
-}
-
-/** Validates one recursively encoded pooled item. @param value - Candidate nested item. @returns Whether it is a valid snapshot. */
-function isSfxPoolItemSnapshot(value: unknown): value is SfxPoolItemSnapshot {
-  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
-  const candidate = value as Partial<SfxPoolItemSnapshot>;
-  return (
-    Number.isInteger(candidate.which) &&
-    (candidate.which as number) > 0 &&
-    isSfxPoolItemValue(candidate.value)
+    (Array.isArray(value) && value.every(isSfxPoolItemValue)) ||
+    (typeof value === "object" &&
+      value !== null &&
+      Object.getPrototypeOf(value) === Object.prototype &&
+      Object.values(value).every(isSfxPoolItemValue))
   );
 }
 

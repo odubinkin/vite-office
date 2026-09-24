@@ -8,8 +8,13 @@ import {
   WriterAdvancedFormattingControls,
   type WriterParagraphFormatValue,
 } from "./WriterAdvancedFormattingControls";
-import { SvxLineSpacingItem, SvxULSpaceItem } from "../../../editeng/source/items/paraitem";
-import { SfxBoolItem, SfxInt16Item, SfxInt16ListItem } from "../../../svl/source/items/poolitem";
+import {
+  SvxLineSpacingItem,
+  SvxTabStop,
+  SvxTabStopItem,
+  SvxULSpaceItem,
+} from "../../../editeng/source/items/paraitem";
+import { SfxBoolItem } from "../../../svl/source/items/poolitem";
 import {
   RES_KEEP,
   RES_LINENUMBER,
@@ -53,6 +58,20 @@ export interface WriterWorkbenchProps {
   readonly fileDialogs?: WriterFileDialogController;
   readonly services?: WriterSessionServices;
   readonly autosave?: WriterAutosaveController;
+}
+
+/** Builds edited tab stops while retaining adjustment and leader fields for unchanged positions. @param positions - New twip positions. @param current - Active item. @returns Writer item. */
+function editedTabStops(positions: readonly number[], current: unknown): SvxTabStopItem {
+  return SvxTabStopItem.FromStops(
+    RES_PARATR_TABSTOP,
+    positions.map(
+      /** Keeps the existing stop when its position is unchanged. @param position - Twips. @returns Tab stop. */
+      (position) =>
+        current instanceof SvxTabStopItem && current.GetPos(position) !== 65535
+          ? current.At(current.GetPos(position))
+          : new SvxTabStop(position),
+    ),
+  );
 }
 
 const subscribeNoDialog =
@@ -174,10 +193,10 @@ export function WriterWorkbench({
           position,
         ) => Math.round(position * 20),
       );
-      const tabs =
-        tabPositions.length > 1
-          ? new SfxInt16ListItem(RES_PARATR_TABSTOP, tabPositions)
-          : new SfxInt16Item(RES_PARATR_TABSTOP, tabPositions[0] ?? -1);
+      const tabs = editedTabStops(
+        tabPositions,
+        shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP),
+      );
       shell.SetParagraphItems([
         spacing,
         lineSpacing,
@@ -304,9 +323,10 @@ export function WriterWorkbench({
                 view
                   .GetWrtShell()
                   .SetParagraphItem(
-                    positions.length > 1
-                      ? new SfxInt16ListItem(RES_PARATR_TABSTOP, positions)
-                      : new SfxInt16Item(RES_PARATR_TABSTOP, positions[0] ?? -1),
+                    editedTabStops(
+                      positions,
+                      view.GetWrtShell().GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP),
+                    ),
                   );
               }
             }

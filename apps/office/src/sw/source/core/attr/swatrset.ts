@@ -8,6 +8,8 @@ import {
   SvxFirstLineIndentItem,
   SvxLineSpacingItem,
   SvxRightMarginItem,
+  SvxTabAdjust,
+  SvxTabStopItem,
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
@@ -23,12 +25,7 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
-import {
-  SfxBoolItem,
-  SfxInt16Item,
-  SfxInt16ListItem,
-  SfxStringItem,
-} from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONTSIZE,
@@ -142,12 +139,9 @@ export class SwAttrPool extends SfxItemPool {
       },
     );
     this.RegisterDefaultItem(
-      new SfxInt16Item(RES_PARATR_TABSTOP, -1),
-      /** Restores the bounded tab-stop position. @param value - Persisted twips. @returns Integer item. */
-      (value) =>
-        Array.isArray(value)
-          ? new SfxInt16ListItem(RES_PARATR_TABSTOP, value.map(Number))
-          : new SfxInt16Item(RES_PARATR_TABSTOP, Number(value)),
+      new SvxTabStopItem(1, 1134, SvxTabAdjust.Default, RES_PARATR_TABSTOP),
+      /** Restores Writer tab stops. @param value - Persisted stop record. @returns Tab-stop item. */
+      (value) => SvxTabStopItem.FromValue(RES_PARATR_TABSTOP, value),
     );
     this.RegisterDefaultItem(
       new SvxTextLeftMarginItem(0, RES_MARGIN_TEXTLEFT),
