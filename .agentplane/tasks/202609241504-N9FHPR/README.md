@@ -1,10 +1,11 @@
 ---
 id: "202609241504-N9FHPR"
 title: "Add upstream ODT fixture tests to certification plan"
-status: "DOING"
+result_summary: "Plan upstream ODT fixture regression tests for certification import phases"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -43,11 +44,16 @@ quality_review:
   findings:
     - "Candidate matrix covers all seven phases with existing and verified pinned fixture paths, semantic assertions, source-test mapping, and provenance gates."
     - "The soft page-break candidate tdf94882.odt was confirmed to contain the element and to be referenced by odfimport.cxx."
-commit: null
+commit:
+  hash: "675cc431ddfeaec7dc650cd852733f4289355071"
+  message: "📝 N9FHPR docs: require upstream ODT fixture tests by phase"
 comments:
   -
     author: "DOCS"
     body: "Start: document upstream ODT fixture tests for each planned feature phase."
+  -
+    author: "DOCS"
+    body: "Verified: added phase-specific pinned upstream ODT fixture tests to the certification import plan, with semantic, UI, provenance, and diagnostic gates."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "DOCS"
     state: "ok"
     note: "Updated plan requires phase-mapped pinned upstream ODT fixture tests with semantic round trips, provenance, diagnostic assertions, and separate UI tests; paths and docs checks pass."
+  -
+    type: "status"
+    at: "2026-09-24T15:09:37.432Z"
+    author: "DOCS"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: added phase-specific pinned upstream ODT fixture tests to the certification import plan, with semantic, UI, provenance, and diagnostic gates."
 doc_version: 3
-doc_updated_at: "2026-09-24T15:08:25.884Z"
+doc_updated_at: "2026-09-24T15:09:37.434Z"
 doc_updated_by: "DOCS"
 description: "Update the certification ODT implementation plan so every new feature phase requires tests on pinned upstream ODT files, aligned with existing fixture-test patterns and provenance rules."
 sections:
