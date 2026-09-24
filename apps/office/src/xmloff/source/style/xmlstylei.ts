@@ -233,6 +233,7 @@ class XMLListStyleContext extends SvXMLImportContext {
   private readonly bulletChars: (string | undefined)[] = Array.from({ length: 10 });
   private readonly formats: (OdfListLevelKind | undefined)[] = Array.from({ length: 10 });
   private readonly levelLayouts: (OdfListLevelLayout | undefined)[] = Array.from({ length: 10 });
+  private readonly suffixes: (string | undefined)[] = Array.from({ length: 10 });
   private readonly name: string;
   private readonly ruleName: string;
 
@@ -280,6 +281,7 @@ class XMLListStyleContext extends SvXMLImportContext {
       const suffix = attributes.get(XMLToken.STYLE_NUM_SUFFIX);
       if (suffix !== null && suffix !== ".")
         throw new Error(`Unsupported ODF numbering suffix: ${suffix}`);
+      this.suffixes[level - 1] = suffix ?? "";
     }
     this.formats[level - 1] = kind;
     return new XMLListLevelContext(
@@ -320,6 +322,10 @@ class XMLListStyleContext extends SvXMLImportContext {
         (format) => format ?? fallback,
       ),
       levelLayouts: this.levelLayouts,
+      suffixes: this.suffixes.map(
+        /** Completes omitted levels from the declared fallback. @param suffix - Level suffix. @returns Complete suffix. */
+        (suffix) => suffix ?? this.suffixes[this.formats.indexOf(fallback)] ?? ".",
+      ),
       name: this.ruleName,
     });
   }

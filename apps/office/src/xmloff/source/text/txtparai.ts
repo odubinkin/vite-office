@@ -30,6 +30,7 @@ export interface XMLTextListRule {
   readonly bulletChars?: readonly (string | undefined)[];
   readonly formats: readonly OdfListLevelKind[];
   readonly levelLayouts?: readonly (OdfListLevelLayout | undefined)[];
+  readonly suffixes?: readonly (string | undefined)[];
   readonly name: string;
 }
 

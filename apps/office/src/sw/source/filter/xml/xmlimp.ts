@@ -311,6 +311,8 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
           /** Detects a conflicting canonical level. @param kind - Imported kind. @param level - Level. @returns Whether conflicting. */
           (kind, level) =>
             existing.GetNumFormat(level).GetKind() !== kind ||
+            (kind === "numbered" &&
+              existing.GetNumFormat(level).GetSuffix() !== (rule.suffixes?.[level] ?? ".")) ||
             (kind === "bullet" &&
               existing.GetNumFormat(level).GetBulletChar() !==
                 (rule.bulletChars?.[level] ?? "•")) ||
@@ -341,6 +343,8 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
               indentAt,
               listTabPosition: indentAt,
               ...rule.levelLayouts?.[level],
+              /* v8 ignore next -- Streaming list-style parser always supplies suffixes for declared numeric levels. */
+              ...(kind === "numbered" ? { suffix: rule.suffixes?.[level] ?? "." } : {}),
             });
           },
         ),

@@ -9,14 +9,19 @@ import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 
 import { createDocument } from "../../apps/office/src/sfx2/source/doc/objsh";
+import { SfxRequest } from "../../apps/office/src/sfx2/source/control/request";
 import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
 import type { SwDoc } from "../../apps/office/src/sw/source/core/doc/doc";
 import { projectWriterParagraphList } from "../../apps/office/src/sw/source/core/doc/list";
 import { projectWriterTextRuns } from "../../apps/office/src/sw/source/core/txtnode/text-run-projection";
 import { readOdtDocument } from "../../apps/office/src/sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrtxml";
+import { SwDocShell } from "../../apps/office/src/sw/source/uibase/app/docsh";
+import { SwWrtShell } from "../../apps/office/src/sw/source/uibase/wrtsh/wrtsh";
+import { SwPosition } from "../../apps/office/src/sw/source/core/crsr/pam";
+import { WRITER_COMMAND_IDS } from "../../apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands";
 
-const fixtureRoot = path.resolve("vendor/libreoffice-reference/sw/qa/extras/odfimport/data");
+const fixtureRoot = path.resolve("apps/office/src/sw/qa/extras/odfimport/data");
 
 /** Exact pinned fixtures and their supported first-run semantics. */
 const fixtures = [
@@ -42,6 +47,55 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
 }
 
 describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createSwDoc assertions in upstream odffeatures.cxx with local semantic assertions. @returns Nothing. */, () => {
+  it("continues tdf113213_addToList.odt and restores the original list with one Undo", /** Mirrors upstream command and Undo assertions against a local ODT. @returns Completion after reopening. */ async () => {
+    const file = "apps/office/src/sw/qa/extras/uiwriter/data/tdf113213_addToList.odt";
+    const metadata = createDocument({ id: "upstream:tdf113213", suiteId: "writer", title: file });
+    const imported = await readOdtDocument(new Uint8Array(fs.readFileSync(file)), metadata);
+    const shell = new SwWrtShell(new SwDocShell(imported.document, metadata));
+    const paragraphs = imported.document.paragraphs;
+    const first = paragraphs[0];
+    const penultimate = paragraphs[4];
+    const last = paragraphs[5];
+    if (first === undefined || penultimate === undefined || last === undefined)
+      throw new Error("Continue Numbering fixture has fewer than six paragraphs");
+    expect(first.GetListLabel()).toBe("1");
+    expect(last.GetListLabel()).toBe("1.");
+    const originalListId = last.GetListId();
+    const originalRule = last.GetNumRuleName();
+    expect(last.IsListRestart()).toBe(true);
+    shell.SetPaM(new SwPosition(last, last.Len()), new SwPosition(penultimate, 0));
+    const slot = shell
+      .GetListShell()
+      .GetCommandShell()
+      .GetInterface()
+      .GetSlot(WRITER_COMMAND_IDS.continueNumbering);
+    expect(slot).toBeDefined();
+    if (slot === undefined) throw new Error("Continue Numbering slot was not generated");
+    const command = shell.GetListShell().GetCommandShell().ResolveSlot(slot.slotId);
+    expect(command?.execute(new SfxRequest(slot.slotId))).toMatchObject({
+      status: "executed",
+      value: true,
+    });
+    expect(penultimate.GetListId()).toBe(first.GetListId());
+    expect(last.GetListId()).toBe(first.GetListId());
+    expect(last.GetNumRuleName()).toBe(first.GetNumRuleName());
+    expect(last.IsListRestart()).toBe(false);
+    expect(last.GetListLabel()).toBe("3");
+    expect(shell.Undo()).toBe(true);
+    expect(last.GetListLabel()).toBe("1.");
+    expect(last.GetListId()).toBe(originalListId);
+    expect(last.GetNumRuleName()).toBe(originalRule);
+    expect(last.IsListRestart()).toBe(true);
+    expect(shell.Redo()).toBe(true);
+    expect(last.GetListLabel()).toBe("3");
+    const reopened = await readOdtDocument(
+      writeOdtDocument(imported.document, { title: imported.title }),
+      metadata,
+    );
+    expect(reopened.document.paragraphs[0]?.GetListLabel()).toBe("1");
+    expect(reopened.document.paragraphs[5]?.GetListLabel()).toBe("3");
+  });
+
   for (const fixture of fixtures)
     it(`imports and semantically round-trips ${fixture.file}` /** Verifies the supported text and character properties from one upstream-generated ODT. @returns Completion after import/export/import. */, async () => {
       const bytes = new Uint8Array(fs.readFileSync(path.join(fixtureRoot, fixture.file)));
@@ -125,9 +179,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         () => undefined,
       );
       try {
-        const bytes = new Uint8Array(
-          fs.readFileSync(path.join("vendor/libreoffice-reference", fixture.file)),
-        );
+        const bytes = new Uint8Array(fs.readFileSync(path.join("apps/office/src", fixture.file)));
         const imported = await readOdtDocument(bytes, { title: "Pinned Writer fixture" });
         fixture.assert(imported.document);
         const normalized = writeOdtDocument(imported.document, { title: "Phase 7 parity" });

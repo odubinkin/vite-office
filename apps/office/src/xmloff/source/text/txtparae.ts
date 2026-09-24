@@ -81,6 +81,7 @@ export interface XMLTextListRuleSource {
   /** Per-level marker families in zero-based Writer order. */
   readonly formats: readonly OdfListLevelKind[];
   readonly levelLayouts?: readonly (OdfListLevelLayout | undefined)[];
+  readonly suffixes?: readonly (string | undefined)[];
   /** Canonical SwNumRule name. */
   readonly name: string;
 }
@@ -154,6 +155,12 @@ export class XMLTextParagraphExport {
               (kind, index) =>
                 kind === "bullet" &&
                 (existing.bulletChars?.[index] ?? "•") !== (list.rule.bulletChars?.[index] ?? "•"),
+            ) ||
+            existing.formats.some(
+              /** Detects a conflicting numeric suffix. @param kind - Existing kind. @param index - Level. @returns Whether conflicting. */
+              (kind, index) =>
+                kind === "numbered" &&
+                (existing.suffixes?.[index] ?? ".") !== (list.rule.suffixes?.[index] ?? "."),
             ) ||
             existing.formats.some(
               /** Detects conflicting list geometry. @param _kind - Level kind. @param index - Level index. @returns Whether layouts differ. */
@@ -243,7 +250,7 @@ export class XMLTextParagraphExport {
               const attributes =
                 kind === "bullet"
                   ? ` text:bullet-char="${escapeXml(rule.bulletChars?.[level] ?? "•")}"`
-                  : ' style:num-format="1"';
+                  : ` style:num-format="1"${rule.suffixes?.[level] === "" ? "" : ' style:num-suffix="."'}`;
               const layout = exportListLevelLayout(rule.levelLayouts?.[level], level);
               return layout === ""
                 ? `<${element} text:level="${level + 1}"${attributes}/>`
@@ -456,6 +463,8 @@ function assertList(list: XMLTextListSource): void {
     throw new Error("ODF list rule must define ten Writer levels.");
   if (list.rule.bulletChars !== undefined && list.rule.bulletChars.length !== 10)
     throw new Error("ODF list rule must define ten Writer bullet characters.");
+  if (list.rule.suffixes !== undefined && list.rule.suffixes.length !== 10)
+    throw new Error("ODF list rule must define ten Writer suffixes.");
   list.rule.bulletChars?.forEach(
     /** Validates one upstream-shaped character-special marker. @param bulletChar - Marker value. @returns Nothing. */
     (bulletChar) => {

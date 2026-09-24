@@ -23,6 +23,7 @@
     "openOdt": ".uno:Open",
     "pageDialog": ".uno:PageDialog",
     "orderedList": ".uno:DefaultNumbering",
+    "continueNumbering": ".uno:ContinueNumbering",
     "paste": ".uno:Paste",
     "promote": ".uno:IncrementLevel",
     "redo": ".uno:Redo",
@@ -66,6 +67,7 @@
     { "capabilityId": "CAP-0113", "commandUrl": ".uno:Open" },
     { "capabilityId": "CAP-0136", "commandUrl": ".uno:PageDialog" },
     { "capabilityId": "CAP-0105", "commandUrl": ".uno:DefaultNumbering" },
+    { "capabilityId": "CAP-0105", "commandUrl": ".uno:ContinueNumbering" },
     { "capabilityId": "CAP-0110", "commandUrl": ".uno:Paste" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:IncrementLevel" },
     { "capabilityId": "CAP-0102", "commandUrl": ".uno:Redo" },
@@ -368,6 +370,23 @@
       "showsDialog": false,
       "shortcuts": ["F12"],
       "slotId": 20144
+    },
+    ".uno:ContinueNumbering": {
+      "browserOwned": false,
+      "argumentSchema": [],
+      "capabilityId": "CAP-0105",
+      "controlLabel": "Add to List",
+      "label": "Add to List",
+      "iconName": "lc_continuenumbering.svg",
+      "placements": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml"
+      ],
+      "semantics": "action",
+      "showsDialog": false,
+      "shortcuts": [],
+      "slotId": 21836
     },
     ".uno:Paste": {
       "browserOwned": false,
@@ -761,6 +780,15 @@
         "sw/uiconfig/swriter/menubar/menubar.xml",
         "sw/uiconfig/swriter/toolbar/textobjectbar.xml",
         "sw/uiconfig/swriter/toolbar/numobjectbar.xml"
+      ]
+    },
+    {
+      "classification": "supported-upstream",
+      "commandUrl": ".uno:ContinueNumbering",
+      "sources": [
+        "sw/uiconfig/swriter/menubar/menubar.xml",
+        "sw/uiconfig/swriter/toolbar/numobjectbar.xml",
+        "sw/uiconfig/swriter/popupmenu/text.xml"
       ]
     },
     {
@@ -2969,14 +2997,6 @@
       "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
       "entryKind": "command",
       "sourceUrl": ".uno:NumberingStart",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ContinueNumbering",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/menubar/menubar.xml"
     },
@@ -5720,14 +5740,6 @@
       "classification": "X",
       "context": [],
       "entryKind": "command",
-      "sourceUrl": ".uno:ContinueNumbering",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/toolbar/numobjectbar.xml"
-    },
-    {
-      "classification": "X",
-      "context": [],
-      "entryKind": "command",
       "sourceUrl": ".uno:JumpDownThisLevel",
       "reason": "outside-p1-supported-command-slice",
       "sourcePath": "sw/uiconfig/swriter/toolbar/numobjectbar.xml"
@@ -6086,14 +6098,6 @@
     },
     {
       "classification": "X",
-      "context": [".uno:NumberingMenu"],
-      "entryKind": "command",
-      "sourceUrl": ".uno:ContinueNumbering",
-      "reason": "outside-p1-supported-command-slice",
-      "sourcePath": "sw/uiconfig/swriter/popupmenu/text.xml"
-    },
-    {
-      "classification": "X",
       "context": [],
       "entryKind": "command",
       "sourceUrl": ".uno:InsertAnnotation",
@@ -6295,7 +6299,9 @@
               { "commandUrl": ".uno:DefaultNumbering", "kind": "command", "visible": true },
               { "kind": "separator" },
               { "commandUrl": ".uno:DecrementLevel", "kind": "command", "visible": true },
-              { "commandUrl": ".uno:IncrementLevel", "kind": "command", "visible": true }
+              { "commandUrl": ".uno:IncrementLevel", "kind": "command", "visible": true },
+              { "kind": "separator" },
+              { "commandUrl": ".uno:ContinueNumbering", "kind": "command", "visible": true }
             ],
             "kind": "menu",
             "label": "Lists"
@@ -6321,6 +6327,8 @@
       { "commandUrl": ".uno:DecrementLevel", "kind": "command", "visible": true },
       { "commandUrl": ".uno:IncrementLevel", "kind": "command", "visible": true },
       { "kind": "separator" },
+      { "commandUrl": ".uno:ContinueNumbering", "kind": "command", "visible": true },
+      { "kind": "separator" },
       { "commandUrl": ".uno:DefaultBullet", "kind": "command", "visible": false },
       { "commandUrl": ".uno:DefaultNumbering", "kind": "command", "visible": false }
     ],
@@ -6335,7 +6343,9 @@
           { "commandUrl": ".uno:RemoveBullets", "kind": "command", "visible": true },
           { "kind": "separator" },
           { "commandUrl": ".uno:IncrementLevel", "kind": "command", "visible": true },
-          { "commandUrl": ".uno:DecrementLevel", "kind": "command", "visible": true }
+          { "commandUrl": ".uno:DecrementLevel", "kind": "command", "visible": true },
+          { "kind": "separator" },
+          { "commandUrl": ".uno:ContinueNumbering", "kind": "command", "visible": true }
         ],
         "kind": "menu",
         "label": "List"
@@ -7958,12 +7968,6 @@
         "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:NumberingStart"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:FormatMenu", ".uno:FormatBulletsMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ContinueNumbering"
       },
       {
         "classification": "X",
@@ -9947,12 +9951,6 @@
         "classification": "X",
         "context": [],
         "entryKind": "command",
-        "sourceUrl": ".uno:ContinueNumbering"
-      },
-      {
-        "classification": "X",
-        "context": [],
-        "entryKind": "command",
         "sourceUrl": ".uno:JumpDownThisLevel"
       },
       {
@@ -10215,12 +10213,6 @@
         "context": [".uno:NumberingMenu"],
         "entryKind": "command",
         "sourceUrl": ".uno:NumberingStart"
-      },
-      {
-        "classification": "X",
-        "context": [".uno:NumberingMenu"],
-        "entryKind": "command",
-        "sourceUrl": ".uno:ContinueNumbering"
       },
       {
         "classification": "X",

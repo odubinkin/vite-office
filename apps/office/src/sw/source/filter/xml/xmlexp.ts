@@ -241,6 +241,11 @@ function projectParagraph(node: SwTextNode): XMLTextParagraphSource {
                   };
                 },
               ),
+              suffixes: Array.from(
+                { length: WRITER_MAX_LIST_LEVEL + 1 },
+                /** Projects one numeric label suffix. @param _unused - Array value. @param index - Writer list level. @returns Suffix when numbered. */
+                (_unused, index) => rule.GetNumFormat(index).GetSuffix(),
+              ),
               name: rule.GetName(),
             },
           },

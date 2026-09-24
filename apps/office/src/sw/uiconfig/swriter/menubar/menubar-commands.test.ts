@@ -72,6 +72,8 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
     expect(writerNumObjectBarItems).toEqual([
       { commandId: WRITER_COMMAND_IDS.demote, kind: "command" },
       { commandId: WRITER_COMMAND_IDS.promote, kind: "command" },
+      { kind: "separator" },
+      { commandId: WRITER_COMMAND_IDS.continueNumbering, kind: "command" },
     ]);
     expect(
       normalizeWriterToolbarItems([

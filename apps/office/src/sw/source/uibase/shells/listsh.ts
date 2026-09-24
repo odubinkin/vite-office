@@ -9,8 +9,19 @@ import {
   type WriterParagraphListKind,
 } from "../../core/doc/list";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { SwUndoInsNum } from "../../core/undo/unnum";
+import type { SwDoc } from "../../core/doc/doc";
+import type { SwPaM } from "../../core/crsr/pam";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import type { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import {
+  RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_RESTARTVALUE,
+} from "../../../inc/hintids";
+import { SwNumRuleItem } from "../../core/para/paratr";
+import { SwUndoContinueNumbering, SwUndoInsNum } from "../../core/undo/unnum";
 import type { SwUndoCursorState } from "../../core/undo/undobj";
+import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { createWriterInterface } from "../../../sdi/swriter";
 import { changeWriterParagraphListLevel } from "../wrtsh/wrtsh-indent";
@@ -20,9 +31,11 @@ export type WriterListLevelCommand = "demote" | "promote";
 
 /** Minimal SwWrtShell surface consumed by the active list context. */
 export interface SwListShellTarget {
-  readonly ApplyAction: (action: SwUndoInsNum) => boolean;
+  readonly ApplyAction: (action: SfxUndoAction<SwUndoRedoContext>) => boolean;
   readonly CaptureCursorState: () => SwUndoCursorState;
   readonly GetActiveParagraph: () => SwTextNode;
+  readonly GetCursor: () => SwPaM;
+  readonly GetDoc: () => SwDoc;
 }
 
 /** Context-sensitive shell that owns list execution and state. */
@@ -60,6 +73,50 @@ export class SwListShell {
         cursor,
         cursor,
       ),
+    );
+  }
+
+  /** Continues the nearest preceding compatible list for the current selected list range. @returns Whether a list was joined. */
+  public ContinueNumbering(): boolean {
+    const paragraphs = this.wrtShell.GetDoc().paragraphs;
+    const cursor = this.wrtShell.GetCursor();
+    const pointIndex = paragraphs.indexOf(cursor.GetPoint().GetNode() as SwTextNode);
+    const markIndex = paragraphs.indexOf(cursor.GetMark().GetNode() as SwTextNode);
+    /* v8 ignore next -- Shell cursor endpoints always belong to the live document. */
+    if (pointIndex < 0 || markIndex < 0) return false;
+    const start = Math.min(pointIndex, markIndex);
+    const end = Math.max(pointIndex, markIndex);
+    const active = this.wrtShell.GetActiveParagraph();
+    const currentId = active.GetListId();
+    const kind = active.GetListKind();
+    if (kind === "none") return false;
+    const selected = paragraphs.slice(start, end + 1).filter(
+      /** Keeps only items belonging to the active list. @param node - Candidate paragraph. @returns Whether selected. */
+      (node) => node.GetListId() === currentId && node.GetListKind() === kind,
+    );
+    const first = paragraphs.indexOf(selected[0] as SwTextNode);
+    const previous = paragraphs
+      .slice(0, first)
+      .reverse()
+      .find(
+        /** Finds the nearest different list with the same marker family. @param node - Earlier paragraph. @returns Whether compatible. */
+        (node) => node.GetListKind() === kind && node.GetListId() !== currentId,
+      );
+    if (previous === undefined) return false;
+    const items = selected.map(
+      /** Builds one exact list-item transition. @param node - Selected paragraph. @returns Before and after sets. */
+      (node) => {
+        const before = node.CaptureListItems();
+        const after = before.Clone();
+        after.Put(new SwNumRuleItem(previous.GetNumRuleName()));
+        after.Put(new SfxStringItem(RES_PARATR_LIST_ID, previous.GetListId()));
+        after.ClearItem(RES_PARATR_LIST_ISRESTART);
+        after.ClearItem(RES_PARATR_LIST_RESTARTVALUE);
+        return { paragraph: node, before, after };
+      },
+    );
+    return this.wrtShell.ApplyAction(
+      new SwUndoContinueNumbering(items, this.wrtShell.CaptureCursorState()),
     );
   }
 
@@ -123,5 +180,15 @@ function createListCommandRegistry(target: SwListShell): SfxInterface<SwListShel
         };
       },
     ),
+    {
+      capabilityId: "CAP-0105" as const,
+      execute:
+        /** Joins the selected list to the nearest earlier one. @returns Whether changed. */ () =>
+          target.ContinueNumbering(),
+      id: WRITER_COMMAND_IDS.continueNumbering,
+      isEnabled:
+        /** Checks that the active paragraph has a list. @returns Whether eligible. */ () =>
+          target.IsInList(),
+    },
   ]);
 }

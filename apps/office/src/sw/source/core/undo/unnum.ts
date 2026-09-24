@@ -68,3 +68,46 @@ export class SwUndoNumLevel extends SwUndoParagraphList {
     super("List Level", paragraph, beforeList, afterList, before, after);
   }
 }
+
+/** One selected paragraph's list state before and after continuing an earlier list. */
+export interface SwContinuedListItem {
+  readonly paragraph: SwTextNode;
+  readonly before: SfxItemSet;
+  readonly after: SfxItemSet;
+}
+
+/** Reassigns a selected list range as one reversible Continue Numbering command. */
+export class SwUndoContinueNumbering extends SwUndo {
+  private readonly items: readonly SwContinuedListItem[];
+
+  /** Retains independent item sets for one atomic list join. @param items - Selected list transitions. @param cursor - Persistent shell selection. @returns Nothing. */
+  public constructor(items: readonly SwContinuedListItem[], cursor: SwUndoCursorState) {
+    super("Continue Numbering", cursor, cursor);
+    this.items = items.map(
+      /** Captures one independent transition. @param item - Source transition. @returns Owned transition. */ (
+        item,
+      ) => ({
+        paragraph: item.paragraph,
+        before: item.before.Clone(),
+        after: item.after.Clone(),
+      }),
+    );
+  }
+
+  /** Estimates retained list-item payload. @returns Scalar item units. */
+  public override GetPayloadSize(): number {
+    return this.items.length * 12;
+  }
+
+  /** Restores all selected paragraphs to their original list. @param context - Active Writer context. @returns Nothing. */
+  protected override UndoImpl(context: SwUndoRedoContext): void {
+    for (const item of this.items)
+      GetUndoTextNode(context.GetDoc(), item.paragraph).SetListItems(item.before);
+  }
+
+  /** Continues the earlier list across the selected range. @param context - Active Writer context. @returns Nothing. */
+  protected override RedoImpl(context: SwUndoRedoContext): void {
+    for (const item of this.items)
+      GetUndoTextNode(context.GetDoc(), item.paragraph).SetListItems(item.after);
+  }
+}

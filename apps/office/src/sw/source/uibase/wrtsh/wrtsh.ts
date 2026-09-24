@@ -476,6 +476,11 @@ export class SwWrtShell extends SwModify {
     return this.listShell.SetParagraphListKind(kind);
   }
 
+  /** Continues the selected list from the nearest earlier list. @returns Whether a list was joined. */
+  public ContinueNumbering(): boolean {
+    return this.listShell.ContinueNumbering();
+  }
+
   /** Promotes or demotes the active list paragraph. @param command - Level transition. @returns Whether content changed. */
   public ChangeParagraphListLevel(command: WriterListLevelCommand): boolean {
     return this.listShell.Execute(command);

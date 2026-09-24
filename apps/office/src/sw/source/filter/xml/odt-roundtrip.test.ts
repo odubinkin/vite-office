@@ -519,6 +519,12 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           '<text:list-style style:name="DotAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="CircleAlias" style:display-name="Dots"><text:list-level-style-bullet text:level="1" text:bullet-char="●"/></text:list-style>',
         ),
     ).toThrow("Conflicting ODF list rule");
+    expect(
+      /** Rejects aliases whose visible number suffixes disagree. @returns Invalid document. */ () =>
+        importWithListStyle(
+          '<text:list-style style:name="PlainAlias" style:display-name="Numbers"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style><text:list-style style:name="DottedAlias" style:display-name="Numbers"><text:list-level-style-number text:level="1" style:num-format="1" style:num-suffix="."/></text:list-style>',
+        ),
+    ).toThrow("Conflicting ODF list rule");
   });
 
   it("maps every supported SvxAdjust variant and rejects invalid adjustment items" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
