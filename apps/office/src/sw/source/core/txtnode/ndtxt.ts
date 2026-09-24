@@ -9,7 +9,12 @@ import {
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/source/items/paraitem";
-import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import {
+  SfxBoolItem,
+  SfxInt16Item,
+  SfxStringItem,
+  type SfxPoolItem,
+} from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   RES_PARATR_ADJUST,
@@ -83,6 +88,16 @@ export type WriterCharacterFormat = (typeof WRITER_CHARACTER_FORMATS)[number];
 export interface SwTextFragment {
   readonly text: string;
   readonly hints: SwpHints;
+}
+
+/** Effective attributes used to reconcile one text node with its document list tree. */
+interface SwTextNodeListState {
+  readonly id: string;
+  readonly ruleName: string;
+  readonly level: number;
+  readonly restart: boolean;
+  readonly restartValue: number | undefined;
+  readonly counted: boolean;
 }
 
 /** Enumerates the bounded paragraph alignments represented by RES_PARATR_ADJUST. */
@@ -192,13 +207,8 @@ export class SwTextNode extends SwContentNode {
   public SetAttrListLevel(level: number): void {
     if (!Number.isInteger(level) || level < 0 || level > WRITER_MAX_LIST_LEVEL)
       throw new Error(`Writer list level is outside 0-${WRITER_MAX_LIST_LEVEL}.`);
-    const listId = this.GetListId();
-    const list = this.GetDoc().GetDocumentListsManager().GetListByName(listId);
-    if (level !== this.GetAttrListLevel()) list?.RemoveListItem(this);
     if (level === 0) this.ResetAttr(RES_PARATR_LIST_LEVEL);
     else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, level));
-    if (level !== list?.GetListItem(this)?.level && list !== undefined)
-      list.InsertListItem(this, level);
   }
 
   /** Sets Writer's direct list restart attributes. @param restart - Whether this item restarts. @param value - Optional explicit start value. @returns Nothing. */
@@ -213,14 +223,12 @@ export class SwTextNode extends SwContentNode {
       if (value === undefined) this.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
       else this.SetAttr(new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, value));
     }
-    this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId())?.InvalidateListTree();
   }
 
   /** Applies Writer's RES_PARATR_LIST_ISCOUNTED flag. @param counted - Whether this list item advances numbering. @returns Nothing. */
   public SetCountedInList(counted: boolean): void {
     if (counted) this.ResetAttr(RES_PARATR_LIST_ISCOUNTED);
     else this.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, false));
-    this.GetDoc().GetDocumentListsManager().GetListByName(this.GetListId())?.InvalidateListTree();
   }
 
   /** Reports the effective list-counted flag. @returns Whether numbering advances. */
@@ -259,36 +267,71 @@ export class SwTextNode extends SwContentNode {
 
   /** Sets or resets RES_PARATR_LIST_ID. @param listId - Direct list identity. @returns Nothing. */
   public SetListId(listId: string): void {
-    this.ApplyListIdentityChange(
-      /** Stores the new direct list identity. @returns Nothing. */ () => {
-        if (listId.length === 0) this.ResetAttr(RES_PARATR_LIST_ID);
-        else this.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, listId));
-      },
-    );
+    if (listId.length === 0) this.ResetAttr(RES_PARATR_LIST_ID);
+    else this.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, listId));
   }
 
   /** Sets or resets RES_PARATR_NUMRULE without changing list id or level. @param ruleName - Document rule name. @returns Nothing. */
   public SetNumRule(ruleName: string): void {
-    this.ApplyListIdentityChange(
-      /** Stores the new direct rule identity. @returns Nothing. */ () => {
-        if (ruleName.length === 0) this.ResetAttr(RES_PARATR_NUMRULE);
-        else this.SetAttr(new SwNumRuleItem(ruleName));
-      },
-    );
+    if (ruleName.length === 0) this.ResetAttr(RES_PARATR_NUMRULE);
+    else this.SetAttr(new SwNumRuleItem(ruleName));
   }
 
-  /** Mirrors Writer's list removal/reinsertion around rule or list-id changes. @param change - Direct attribute mutation. @returns Nothing. */
-  private ApplyListIdentityChange(change: () => void): void {
-    const beforeId = this.GetListId();
-    const beforeRule = this.GetNumRuleName();
-    change();
-    const afterId = this.GetListId();
-    const afterRule = this.GetNumRuleName();
-    if (beforeId === afterId && beforeRule === afterRule) return;
+  /** Reconciles direct list attributes like pinned HandleSetAttrAtTextNode. @param itemOrSet - Direct pooled item or set. @returns Whether an item changed. */
+  public override SetAttr(itemOrSet: SfxPoolItem | SfxItemSet): boolean {
+    const before = this.CaptureEffectiveListState();
+    const changed = super.SetAttr(itemOrSet);
+    if (changed) this.ReconcileListState(before);
+    return changed;
+  }
+
+  /** Reconciles a cleared direct list attribute. @param which - Direct WhichId. @returns Whether an item was removed. */
+  public override ResetAttr(which: number): boolean {
+    const before = this.CaptureEffectiveListState();
+    const changed = super.ResetAttr(which);
+    if (changed) this.ReconcileListState(before);
+    return changed;
+  }
+
+  /** Reconciles every list attribute after a full direct reset. @returns Number of removed items. */
+  public override ResetAllAttr(): number {
+    const before = this.CaptureEffectiveListState();
+    const removed = super.ResetAllAttr();
+    if (removed > 0) this.ReconcileListState(before);
+    return removed;
+  }
+
+  /** Captures effective list attributes before one node mutation. @returns List transition state. */
+  private CaptureEffectiveListState(): SwTextNodeListState {
+    return {
+      id: this.GetListId(),
+      ruleName: this.GetNumRuleName(),
+      level: this.GetAttrListLevel(),
+      restart: this.IsListRestart(),
+      restartValue: this.HasAttrListRestartValue() ? this.GetAttrListRestartValue() : undefined,
+      counted: this.IsCountedInList(),
+    };
+  }
+
+  /** Updates registered number-tree nodes after direct item-set mutation. @param before - Effective attributes before the mutation. @returns Nothing. */
+  private ReconcileListState(before: SwTextNodeListState): void {
+    if (this.GetNodes().indexOfOrUndefined(this) === undefined) return;
+    const after = this.CaptureEffectiveListState();
     const lists = this.GetDoc().GetDocumentListsManager();
-    if (beforeId.length > 0) lists.GetListByName(beforeId)?.RemoveListItem(this);
-    if (this.GetNumRule() !== undefined && afterId.length > 0)
-      lists.CreateList(afterRule, afterId).InsertListItem(this, this.GetAttrListLevel());
+    if (before.id !== after.id || before.ruleName !== after.ruleName) {
+      if (before.id.length > 0) lists.GetListByName(before.id)?.RemoveListItem(this);
+      if (this.GetNumRule() !== undefined && after.id.length > 0)
+        lists.CreateList(after.ruleName, after.id).InsertListItem(this, after.level);
+      return;
+    }
+    const list = lists.GetListByName(after.id);
+    if (before.level !== after.level) list?.InsertListItem(this, after.level);
+    else if (
+      before.restart !== after.restart ||
+      before.restartValue !== after.restartValue ||
+      before.counted !== after.counted
+    )
+      list?.InvalidateListTree();
   }
 
   /** Returns the paragraph's text format collection identity. @returns Paragraph style identity. */
@@ -316,9 +359,6 @@ export class SwTextNode extends SwContentNode {
 
   /** Replaces the canonical numbering/list item subset captured by Writer undo. @param items - Direct list items. @returns Nothing. */
   public SetListItems(items: SfxItemSet): void {
-    const previousListId = this.GetListId();
-    if (previousListId.length > 0)
-      this.GetDoc().GetDocumentListsManager().GetListByName(previousListId)?.RemoveListItem(this);
     for (const which of [
       RES_PARATR_NUMRULE,
       RES_PARATR_LIST_ID,
@@ -329,12 +369,6 @@ export class SwTextNode extends SwContentNode {
     ])
       this.ResetAttr(which);
     this.SetAttr(items);
-    const listId = this.GetListId();
-    if (this.GetNumRule() !== undefined && listId.length > 0)
-      this.GetDoc()
-        .GetDocumentListsManager()
-        .CreateList(this.GetNumRuleName(), listId)
-        .InsertListItem(this, this.GetAttrListLevel());
   }
 
   /** Captures direct numbering/list items for exact undo/redo. @returns Independent item set. */

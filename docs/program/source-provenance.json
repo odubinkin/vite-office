@@ -3334,7 +3334,7 @@
         "Upstream obligations outside SwTextNode, SwNodes::MakeTextNode, SwTextNode::SwTextNode, sw::TextNodeNotificationSuppressor and the bounded item-set, range-hint, and WriterCharacterFormat contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements canonical Writer text, paragraph items, range hints and bounded list attribute transitions (restart, counted flag, rule/list identity and level) at the pinned ndtxt.cxx ownership boundary."
+        "Implements canonical Writer text, paragraph items, range hints and list attribute transitions through direct SetAttr/ResetAttr reconciliation at the pinned ndtxt.cxx ownership boundary."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

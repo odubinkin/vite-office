@@ -3,10 +3,17 @@
 import { describe, expect, it } from "vitest";
 
 import { createWriterDocument } from "./doc";
-import { applyWriterParagraphList } from "./list";
-import { getWriterParagraphListMarker } from "./number";
-import { SfxStringItem } from "../../../../svl/source/items/poolitem";
-import { RES_PARATR_LIST_ID } from "../../../inc/hintids";
+import { applyWriterParagraphList, WRITER_LIST_WHICH_RANGES } from "./list";
+import { getWriterParagraphListMarker, SwNumRule } from "./number";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import {
+  RES_PARATR_LIST_ID,
+  RES_PARATR_LIST_ISCOUNTED,
+  RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_LEVEL,
+  RES_PARATR_LIST_RESTARTVALUE,
+} from "../../../inc/hintids";
 import { SwNumRuleItem } from "../para/paratr";
 
 describe("Writer list attribute invariants", /** Registers source-backed list tests. @returns Nothing. */ () => {
@@ -66,7 +73,7 @@ describe("Writer list attribute invariants", /** Registers source-backed list te
     expect(list?.GetListItemNumber(second)).toBe(2);
   });
 
-  it("starts after an uncounted first item and tolerates restored unregistered list attributes", /** Checks the bounded counter-tree first-child rule and incomplete restore states. @returns Nothing. */ () => {
+  it("starts after an uncounted first item and registers restored direct list attributes", /** Checks the bounded counter-tree first-child rule and pinned HandleSetAttrAtTextNode. @returns Nothing. */ () => {
     const document = createWriterDocument();
     const first = document.paragraphs[0];
     if (first === undefined) throw new Error("Writer fixture has no first paragraph.");
@@ -80,8 +87,49 @@ describe("Writer list attribute invariants", /** Registers source-backed list te
     const restored = document.nodes.MakeTextNode();
     restored.SetAttr(new SwNumRuleItem(first.GetNumRuleName()));
     restored.SetAttr(new SfxStringItem(RES_PARATR_LIST_ID, "restored-list"));
-    expect(restored.GetListLabel()).toBeUndefined();
+    expect(restored.GetListLabel()).toBe("1.");
     document.GetDocumentListsManager().CreateList(first.GetNumRuleName(), "restored-list");
-    expect(restored.GetListLabel()).toBeUndefined();
+    expect(restored.GetListLabel()).toBe("1.");
+  });
+
+  it("reconciles direct item and item-set transitions like HandleSetAttrAtTextNode", /** Checks registration, level, count, restart and reset at the pooled-item boundary. @returns Nothing. */ () => {
+    const document = createWriterDocument();
+    const first = document.paragraphs[0];
+    if (first === undefined) throw new Error("Writer fixture has no first paragraph.");
+    const second = document.nodes.MakeTextNode();
+    applyWriterParagraphList(first, { kind: "numbered", level: 0 });
+    const direct = new SfxItemSet(document.GetAttrPool(), WRITER_LIST_WHICH_RANGES);
+    direct.Put(new SwNumRuleItem(first.GetNumRuleName()));
+    direct.Put(new SfxStringItem(RES_PARATR_LIST_ID, first.GetListId()));
+    second.SetAttr(direct);
+    expect(second.GetListLabel()).toBe("2.");
+    second.SetAttr(new SfxInt16Item(RES_PARATR_LIST_LEVEL, 1));
+    expect(second.GetListItemNumber()).toBe(1);
+    second.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, false));
+    expect(second.GetListLabel()).toBeUndefined();
+    second.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, true));
+    second.SetAttr(new SfxBoolItem(RES_PARATR_LIST_ISRESTART, true));
+    second.SetAttr(new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, 5));
+    expect(second.GetListItemNumber()).toBe(5);
+    second.ResetAttr(RES_PARATR_LIST_ISRESTART);
+    second.ResetAttr(RES_PARATR_LIST_RESTARTVALUE);
+    expect(second.GetListItemNumber()).toBe(1);
+    second.ResetAllAttr();
+    expect(second.GetListItemNumber()).toBeUndefined();
+  });
+
+  it("does not invent a label for a prepared but unattached text node", /** Preserves canonical list registration during split preparation. @returns Nothing. */ () => {
+    const document = createWriterDocument();
+    const first = document.paragraphs[0];
+    if (first === undefined) throw new Error("Writer fixture has no first paragraph.");
+    applyWriterParagraphList(first, { kind: "numbered", level: 0 });
+    const trailing = first.SplitContent(0);
+    expect(trailing.GetListLabel()).toBeUndefined();
+    document
+      .GetDocumentListsManager()
+      .AddNumRule(new SwNumRule("orphan-rule", "numbered", "orphan-list"));
+    trailing.SetNumRule("orphan-rule");
+    trailing.SetListId("");
+    expect(trailing.GetListLabel()).toBeUndefined();
   });
 });

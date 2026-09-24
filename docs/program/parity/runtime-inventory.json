@@ -3588,9 +3588,11 @@
           "apps/office/src/sw/source/core/txtnode/ndtxt.ts#SwTextNode",
           "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode",
           "apps/office/src/sw/source/core/doc/list-invariants.test.ts#revalidates restart and counted changes",
-          "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::SetCountedInList"
+          "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#SwTextNode::SetCountedInList",
+          "apps/office/src/sw/source/core/doc/list-invariants.test.ts#reconciles direct item and item-set transitions like HandleSetAttrAtTextNode",
+          "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx#HandleSetAttrAtTextNode"
         ],
-        "justification": "Source-backed tests cover the reachable list item transitions: restart invalidation, list counted state, rule/list-id registration, level reparenting, and list item capture/restore. Other SwTextNode operations remain unverified.",
+        "justification": "Source-backed tests cover direct SetAttr/ResetAttr list registration, level, counted and restart transitions plus list item capture/restore. Other SwTextNode operations remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "WRITER_CHARACTER_FORMATS",
