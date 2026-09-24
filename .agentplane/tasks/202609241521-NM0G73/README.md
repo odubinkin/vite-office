@@ -1,10 +1,11 @@
 ---
 id: "202609241521-NM0G73"
 title: "Recognize harmless ODT declarations and style attributes"
-status: "DOING"
+result_summary: "Classified declaration metadata and retained semantic diagnostics."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -23,9 +24,9 @@ plan_approval:
   note: "User requested implementation of the seven ordered phases in docs/program/certification-odt-import-plan.md; outside-repo sample access remains pending separate authorization."
 verification:
   state: "ok"
-  updated_at: "2026-09-24T16:22:48.510Z"
+  updated_at: "2026-09-24T16:23:21.845Z"
   updated_by: "CODER"
-  note: "Full verification passed; declaration classification preserved canonical semantics and retained semantic diagnostics."
+  note: "Classified declaration metadata and retained semantic diagnostics."
   attempts: 0
 quality_review:
   state: "pass"
@@ -44,11 +45,16 @@ quality_review:
     - "docs/program/certification-odt-declaration-classification.md"
   findings:
     - "Harmless metadata declarations are explicitly ignored; semantic unimplemented properties retain diagnostics. Canonical import of the authorized sample is unchanged."
-commit: null
+commit:
+  hash: "159b4ae159dd09c07617a61f9b24399a8250e5fd"
+  message: "🧪 NM0G73 code: classify harmless ODT declarations"
 comments:
   -
     author: "CODER"
     body: "Start: recognize observed harmless ODT declarations using pinned xmloff contexts and source-backed fixtures."
+  -
+    author: "CODER"
+    body: "Verified: full npm run verify and local sample diagnostic passed."
 events:
   -
     type: "status"
@@ -63,8 +69,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full verification passed; declaration classification preserved canonical semantics and retained semantic diagnostics."
+  -
+    type: "verify"
+    at: "2026-09-24T16:23:21.845Z"
+    author: "CODER"
+    state: "ok"
+    note: "Classified declaration metadata and retained semantic diagnostics."
+  -
+    type: "status"
+    at: "2026-09-24T16:23:21.983Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: full npm run verify and local sample diagnostic passed."
 doc_version: 3
-doc_updated_at: "2026-09-24T16:22:48.582Z"
+doc_updated_at: "2026-09-24T16:23:21.984Z"
 doc_updated_by: "CODER"
 description: "Phase 1: exact namespace token/context recognition and intentional metadata ignore classification, preserving invalid semantic diagnostics."
 sections:
@@ -113,6 +132,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-09-24T16:23:21.845Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Classified declaration metadata and retained semantic diagnostics.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T16:22:48.582Z, excerpt_hash=sha256:f0df7c1dc2c1b127fb6ce9efc5f4486ab5b4fe891b0d8d331a4592c21472d5aa
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-NM0G73/blueprint/resolved-snapshot.json
+    - old_digest: d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f
+    - current_digest: d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241521-NM0G73
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241521-NM0G73 --result verified-202609241521-NM0G73 --commit 0cc664e91751fa9c0cfd13953059eac45f3d4f5f
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -177,6 +226,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-24T16:23:21.845Z — VERIFY — ok
+
+By: CODER
+
+Note: Classified declaration metadata and retained semantic diagnostics.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T16:22:48.582Z, excerpt_hash=sha256:f0df7c1dc2c1b127fb6ce9efc5f4486ab5b4fe891b0d8d331a4592c21472d5aa
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-NM0G73/blueprint/resolved-snapshot.json
+- old_digest: d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f
+- current_digest: d2d070347a41d772e0cd33f144be5be1e1096347b8af26e9e3d8614188b6c37f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241521-NM0G73
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241521-NM0G73 --result verified-202609241521-NM0G73 --commit 0cc664e91751fa9c0cfd13953059eac45f3d4f5f
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
