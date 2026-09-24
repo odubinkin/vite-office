@@ -94,13 +94,13 @@ describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisio
         { ...first, computedStyle: { ...first.computedStyle, contextualSpacing: false } },
         second,
       ),
-    ).toBe(12);
+    ).toBe(24);
     expect(
       gapPt(first, {
         ...second,
         computedStyle: { ...second.computedStyle, contextualSpacing: false },
       }),
-    ).toBe(12);
+    ).toBe(24);
     expect(
       gapPt(
         {
@@ -109,13 +109,13 @@ describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisio
         },
         second,
       ),
-    ).toBe(4);
+    ).toBe(16);
     expect(
       gapPt(first, {
         ...second,
         computedStyle: { ...second.computedStyle, upperSpacingPt: 4, contextualSpacing: false },
       }),
-    ).toBe(4);
+    ).toBe(16);
     expect(gapPt({ ...first, style: "heading-1" }, second)).toBe(24);
     expect(
       gapPt(

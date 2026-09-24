@@ -195,7 +195,24 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
     const second = { ...paragraph("b", 1), contextualSpacing: true, upperSpacing: 100 };
     expect(getSwTextFrameGap(first, second)).toBe(0);
     expect(getSwTextFrameGap(undefined, second)).toBe(100);
-    expect(getSwTextFrameGap({ ...first, contextualSpacing: false }, second)).toBe(200);
+    expect(getSwTextFrameGap({ ...first, contextualSpacing: false }, second)).toBe(300);
+    expect(getSwTextFrameGap(first, { ...second, contextualSpacing: false })).toBe(300);
+    expect(
+      getSwTextFrameGap({ ...first, contextualSpacing: false }, second, {
+        paraSpaceMax: false,
+        paraSpaceMaxAtPages: true,
+      }),
+    ).toBe(200);
+    expect(
+      getSwTextFrameGap(
+        first,
+        { ...second, contextualSpacing: false },
+        {
+          paraSpaceMax: false,
+          paraSpaceMaxAtPages: true,
+        },
+      ),
+    ).toBe(100);
     expect(getSwTextFrameGap(first, { ...second, style: "heading" })).toBe(300);
     expect(
       getSwTextFrameGap(

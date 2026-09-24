@@ -144,6 +144,11 @@ export class SwTransferable {
     const startIndex = document.paragraphs.indexOf(ordered.start.GetNode() as SwTextNode);
     const endIndex = document.paragraphs.indexOf(ordered.end.GetNode() as SwTextNode);
     if (startIndex < 0 || endIndex < 0) return undefined;
+    if (
+      startIndex === endIndex &&
+      ordered.start.GetContentIndex() === ordered.end.GetContentIndex()
+    )
+      return undefined;
     const paragraphs = document.paragraphs.slice(startIndex, endIndex + 1).map(
       /** Prepares one selected model paragraph. @param paragraph - Selected text node. @param relativeIndex - Index within the selected slice. @returns Format-writer paragraph input. */ (
         paragraph,
@@ -178,14 +183,6 @@ export class SwTransferable {
         };
       },
     );
-    if (
-      paragraphs.every(
-        /** Tests whether one prepared paragraph has no visible text. @param paragraph - Prepared transfer paragraph. @returns Whether its text is empty. */ (
-          paragraph,
-        ) => paragraph.text.length === 0,
-      )
-    )
-      return undefined;
     return {
       html: serializeWriterClipboardHtml(paragraphs),
       plainText: serializeWriterClipboardPlainText(paragraphs),

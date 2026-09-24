@@ -141,9 +141,10 @@ export function getSwTextFrameGap(
   if (previous === undefined) return settings.paraSpaceMaxAtPages ? current.upperSpacing : 0;
   const sameStyle = previous.style === current.style;
   if (sameStyle && previous.contextualSpacing && current.contextualSpacing) return 0;
+  if (settings.paraSpaceMax) return previous.lowerSpacing + current.upperSpacing;
   const lower = sameStyle && previous.contextualSpacing ? 0 : previous.lowerSpacing;
   const upper = sameStyle && current.contextualSpacing ? 0 : current.upperSpacing;
-  return settings.paraSpaceMax ? lower + upper : Math.max(lower, upper);
+  return Math.max(lower, upper);
 }
 
 /** Makes one frame from a consecutive range of measured lines. @param input - Source text node lines. @param firstLine - First line index. @param lastLine - Last line index. @param topSpacing - Gap before the frame. @returns Master or follow frame. */

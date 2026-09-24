@@ -70,6 +70,25 @@ describe("Writer shell clipboard transfer", /** Registers model transfer tests. 
       mark: { offset: 0, paragraphId: emptySecondId },
       point: { offset: 0, paragraphId: "p-1" },
     });
+    const emptyTransfer = emptyParagraphs.CreateTransferable();
+    expect(emptyTransfer.CreateSelection()).toMatchObject({
+      html: expect.stringContaining("<p"),
+      plainText: "\n",
+    });
+    let copied = "";
+    emptyTransfer.Cut(
+      /** Captures a paragraph-break-only clipboard payload. @param selection - Writer selection. @returns Nothing. */ (
+        selection,
+      ) => {
+        copied = selection.plainText;
+      },
+    );
+    expect(copied).toBe("\n");
+    expect(emptyParagraphs.GetDoc().paragraphs).toHaveLength(1);
+    setTestSelection(emptyParagraphs, {
+      mark: { offset: 0, paragraphId: "p-1" },
+      point: { offset: 0, paragraphId: "p-1" },
+    });
     expect(emptyParagraphs.CreateTransferable().CreateSelection()).toBeUndefined();
   });
 });
