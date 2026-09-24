@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240501-23YVPN",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T08:38:06.418Z",
+  "verdict": "pass",
+  "summary": "Stage 7 redundant adapters removed and path data reconciled.",
+  "evaluated_sha": "97032880b4d58be0c83d23dcedc169a3582d7800",
+  "blueprint_digest": "0f77f2de6ea0920bce10f33520696beac08be3923720a90c26003bd3c6263eb6",
+  "findings": [
+    "Unused Sfx alias and generated menubar pass-through deleted; retained transforms have real filter, clipboard, DOM or React consumers; full verification passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240501-23YVPN/README.md",
+    "apps/office/src/sfx2/source/control/dispatch.ts",
+    "docs/program/source-provenance.json",
+    "/tmp/vite-office-stage7-verify.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
