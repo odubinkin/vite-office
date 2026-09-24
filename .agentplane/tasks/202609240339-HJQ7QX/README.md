@@ -1,10 +1,11 @@
 ---
 id: "202609240339-HJQ7QX"
 title: "Expose imported Writer formatting controls"
-status: "DOING"
+result_summary: "verified-202609240339-HJQ7QX"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-24T04:30:53.344Z"
+  updated_at: "2026-09-24T04:31:34.348Z"
   updated_by: "CODER"
   note: "verified-202609240339-HJQ7QX"
   attempts: 0
@@ -41,11 +42,16 @@ quality_review:
     - "npm run build -w @vite-office/office: pass"
   findings:
     - "No blocking issues in the reviewed diff; the color button accessible name was corrected after E2E exposed a selector collision."
-commit: null
+commit:
+  hash: "5b2d8b407b26ad34bfa9384d543986e2e70ed1f9"
+  message: "🧩 HJQ7QX task: record quality review"
 comments:
   -
     author: "CODER"
     body: "Start: Implement approved Writer formatting controls, canonical editing behavior, ODT round trips, and focused verification."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609240339-HJQ7QX. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,8 +72,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609240339-HJQ7QX"
+  -
+    type: "verify"
+    at: "2026-09-24T04:31:34.348Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609240339-HJQ7QX"
+  -
+    type: "status"
+    at: "2026-09-24T04:31:34.532Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609240339-HJQ7QX. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-24T04:30:53.420Z"
+doc_updated_at: "2026-09-24T04:31:34.533Z"
 doc_updated_by: "CODER"
 description: "Add LibreOffice Writer-style UI and editing commands for text color, highlight, line and paragraph spacing, tab stops, keep-with-next, and line numbering participation; preserve ODT round trips."
 sections:
@@ -161,11 +180,45 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-24T04:31:34.348Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609240339-HJQ7QX
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T04:30:53.420Z, excerpt_hash=sha256:02ca425bdcd877b8fd28dedc06d6ba20bb3d7d8932af5f8271010a7985be1262
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240339-HJQ7QX/blueprint/resolved-snapshot.json
+    - old_digest: 0329d87b49c14d199e6a15db90330c8cc252e89ff658693da7504873a6e1d483
+    - current_digest: 0329d87b49c14d199e6a15db90330c8cc252e89ff658693da7504873a6e1d483
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609240339-HJQ7QX
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609240339-HJQ7QX --result verified-202609240339-HJQ7QX --commit 5b2d8b407b26ad34bfa9384d543986e2e70ed1f9
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "ccc1df74542e0075ef1acb07f03d7220b5070a97"
+    message: "🧩 HJQ7QX task: add Writer formatting controls"
 id_source: "generated"
 ---
 ## Summary
@@ -263,6 +316,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609240339-HJQ7QX --result verified-202609240339-HJQ7QX --commit ccc1df74542e0075ef1acb07f03d7220b5070a97
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-24T04:31:34.348Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609240339-HJQ7QX
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T04:30:53.420Z, excerpt_hash=sha256:02ca425bdcd877b8fd28dedc06d6ba20bb3d7d8932af5f8271010a7985be1262
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240339-HJQ7QX/blueprint/resolved-snapshot.json
+- old_digest: 0329d87b49c14d199e6a15db90330c8cc252e89ff658693da7504873a6e1d483
+- current_digest: 0329d87b49c14d199e6a15db90330c8cc252e89ff658693da7504873a6e1d483
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609240339-HJQ7QX
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609240339-HJQ7QX --result verified-202609240339-HJQ7QX --commit 5b2d8b407b26ad34bfa9384d543986e2e70ed1f9
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
