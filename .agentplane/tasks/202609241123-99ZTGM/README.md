@@ -4,7 +4,7 @@ title: "Plan parity for implemented LibreOffice functionality"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -17,10 +17,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T11:28:57.400Z"
+  updated_by: "CODER"
+  note: "Reviewed all 175 runtime modules by current subsystem/classification and all 45 Writer records; checked nine concrete findings against local and pinned source; preserved browser recovery/autosave/save UI exclusions. Prettier, diff check, routing, path checks and doctor passed; doctor has only pre-existing warnings."
   attempts: 0
 commit: null
 comments:
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: audit implemented runtime and inventory against pinned LibreOffice; write scoped parity plan with UI cleanup and preserve explicit browser decisions."
+  -
+    type: "verify"
+    at: "2026-09-24T11:28:57.400Z"
+    author: "CODER"
+    state: "ok"
+    note: "Reviewed all 175 runtime modules by current subsystem/classification and all 45 Writer records; checked nine concrete findings against local and pinned source; preserved browser recovery/autosave/save UI exclusions. Prettier, diff check, routing, path checks and doctor passed; doctor has only pre-existing warnings."
 doc_version: 3
-doc_updated_at: "2026-09-24T11:24:06.223Z"
+doc_updated_at: "2026-09-24T11:28:57.479Z"
 doc_updated_by: "CODER"
 description: "Audit implemented functionality and inventory against pinned upstream; write a concrete parity remediation plan for existing scope, including UI refactor artifacts and stated browser exceptions."
 sections:
@@ -51,11 +57,41 @@ sections:
   Verify Steps: "1. Every active runtime subsystem and all 45 current Writer capability records are accounted for in the analysis; concrete findings cite local and pinned upstream paths, or are labeled as verification work rather than established divergence. 2. The plan explicitly excludes inventory schema/tooling changes and preserves the requested recovery, autosave, and save UI behavior. 3. Run node .agentplane/policy/check-routing.mjs and ap doctor; check all referenced local and upstream paths, markdown format, and git diff/status."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T11:28:57.400Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Reviewed all 175 runtime modules by current subsystem/classification and all 45 Writer records; checked nine concrete findings against local and pinned source; preserved browser recovery/autosave/save UI exclusions. Prettier, diff check, routing, path checks and doctor passed; doctor has only pre-existing warnings.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T11:28:56.935Z, excerpt_hash=sha256:296027980705a192a3f3c5edbaab4fceb0bfb6306c9c550c62e52887b2226c00
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241123-99ZTGM/blueprint/resolved-snapshot.json
+    - old_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+    - current_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241123-99ZTGM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609241123-99ZTGM
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "Command: ./node_modules/.bin/prettier --check docs/program/vite-office-upstream-parity-plan.md; Result: pass; Evidence: file uses repository Prettier style; Scope: new parity plan. Command: git diff --check; Result: pass; Evidence: no whitespace errors; Scope: parity plan. Command: node .agentplane/policy/check-routing.mjs; Result: pass; Evidence: policy routing OK; Scope: repo policy unaffected. Command: ap doctor; Result: pass with two existing warnings (managed hook shim, old DONE task commit) and two infos; Scope: repository workflow health. Command: local path-reference checks; Result: pass; Evidence: referenced exact paths and short upstream basenames resolve in the pinned checkout; Scope: parity plan. Inventory counts checked from current JSON: 175 runtime modules, 45 capability records (43 verified, 2 exceptions). No inventory schema or mechanism was changed. Only the requested docs file is changed as a product artifact."
 id_source: "generated"
 ---
 ## Summary
@@ -80,6 +116,36 @@ Audit implemented functionality and inventory against pinned upstream; write a c
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T11:28:57.400Z — VERIFY — ok
+
+By: CODER
+
+Note: Reviewed all 175 runtime modules by current subsystem/classification and all 45 Writer records; checked nine concrete findings against local and pinned source; preserved browser recovery/autosave/save UI exclusions. Prettier, diff check, routing, path checks and doctor passed; doctor has only pre-existing warnings.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T11:28:56.935Z, excerpt_hash=sha256:296027980705a192a3f3c5edbaab4fceb0bfb6306c9c550c62e52887b2226c00
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241123-99ZTGM/blueprint/resolved-snapshot.json
+- old_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+- current_digest: 838fe795c17ee05a06acedae5da335d1d896c280cbaa8c37bb14781365d84066
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241123-99ZTGM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609241123-99ZTGM
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -88,3 +154,5 @@ Audit implemented functionality and inventory against pinned upstream; write a c
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+Command: ./node_modules/.bin/prettier --check docs/program/vite-office-upstream-parity-plan.md; Result: pass; Evidence: file uses repository Prettier style; Scope: new parity plan. Command: git diff --check; Result: pass; Evidence: no whitespace errors; Scope: parity plan. Command: node .agentplane/policy/check-routing.mjs; Result: pass; Evidence: policy routing OK; Scope: repo policy unaffected. Command: ap doctor; Result: pass with two existing warnings (managed hook shim, old DONE task commit) and two infos; Scope: repository workflow health. Command: local path-reference checks; Result: pass; Evidence: referenced exact paths and short upstream basenames resolve in the pinned checkout; Scope: parity plan. Inventory counts checked from current JSON: 175 runtime modules, 45 capability records (43 verified, 2 exceptions). No inventory schema or mechanism was changed. Only the requested docs file is changed as a product artifact.
