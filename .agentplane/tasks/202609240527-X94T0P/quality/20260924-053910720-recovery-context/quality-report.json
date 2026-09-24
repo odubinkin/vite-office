@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240527-X94T0P",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T05:39:10.720Z",
+  "verdict": "pass",
+  "summary": "Writer shell test split preserves assertions and all checks pass.",
+  "evaluated_sha": "9b92d51cca63fb1974abdcc501078614a1c9e5a7",
+  "blueprint_digest": "5c0a8d261ed3992efe1b43fe29122bfaf90554d4353ff027c6160015bbf94b6c",
+  "findings": [
+    "Focused test and full npm run verify pass; original file is below the size limit."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240527-X94T0P/README.md",
+    "apps/office/src/sw/source/uibase/wrtsh/wrtsh-transfer.test.ts",
+    "npm run verify",
+    "ap doctor",
+    "node .agentplane/policy/check-routing.mjs"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
