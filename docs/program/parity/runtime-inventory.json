@@ -1198,9 +1198,11 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/svl/source/items/poolitem.ts#SfxPoolItemValue",
-          "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#SfxPoolItem"
+          "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#SfxPoolItem",
+          "vendor/libreoffice-reference/svl/source/items/poolitem.cxx#SfxPoolItem::SfxPoolItem",
+          "apps/office/src/svl/source/items/itemset.test.ts#validates, clones, compares, and serializes string and integer items"
         ],
-        "justification": "Mapped provenance remains semantically unverified against svl/source/items/poolitem.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "Pinned SfxPoolItem accepts WhichId zero for transient/request values and asserts the SHRT_MAX ceiling; source-backed tests now distinguish that from SfxItemSet storage ranges. Broader pool-item behavior remains unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SfxPoolItemValue",

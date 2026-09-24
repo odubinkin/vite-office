@@ -20,12 +20,13 @@ export interface SfxPoolItemSnapshot {
 
 /** Base value object stored by SfxItemPool and SfxItemSet. */
 export abstract class SfxPoolItem {
-  /** Creates one item for a concrete WhichId. @param which - Positive Writer/SVL item identity. @returns Nothing. */
+  /** Creates one item for a concrete WhichId or zero-valued request return. @param which - Bounded Writer/SVL item identity. @returns Nothing. */
   protected constructor(private readonly which: number) {
-    if (!Number.isInteger(which) || which <= 0) throw new Error("SfxPoolItem WhichId is invalid.");
+    if (!Number.isInteger(which) || which < 0 || which > 32767)
+      throw new Error("SfxPoolItem WhichId is invalid.");
   }
 
-  /** Returns this item's WhichId. @returns Positive item identity. */
+  /** Returns this item's WhichId. @returns Item identity, including zero for request values. */
   public Which(): number {
     return this.which;
   }

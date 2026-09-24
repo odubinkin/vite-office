@@ -1227,7 +1227,7 @@
         "Upstream obligations outside SfxPoolItem, DefaultItemInstanceManager::find, SfxPoolItem::getItemInstanceManager, SfxPoolItem::SfxPoolItem and the bounded SfxPoolItemValue, SfxPoolItemSnapshot, SfxPoolItem contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Reimplements the bounded SfxPoolItem value hierarchy from pinned `svl/source/items/poolitem.cxx`."
+        "Ports bounded SfxPoolItem value and WhichId construction semantics, including zero-valued request items and the SHRT_MAX ceiling, from pinned poolitem.cxx."
       ],
       "status": "mapped",
       "upstreamPath": "svl/source/items/poolitem.cxx",

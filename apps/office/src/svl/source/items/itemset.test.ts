@@ -10,7 +10,13 @@ import {
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
 import { SfxItemPool } from "./itempool";
 import { SfxItemSet, SfxItemState } from "./itemset";
-import { SfxBoolItem, SfxInt16Item, SfxInt16ListItem, SfxStringItem } from "./poolitem";
+import {
+  SfxBoolItem,
+  SfxInt16Item,
+  SfxInt16ListItem,
+  SfxStringItem,
+  SfxUnoAnyItem,
+} from "./poolitem";
 
 /** Registers two simple test WhichIds. @returns Prepared item pool. */
 function createPool(): SfxItemPool {
@@ -80,9 +86,18 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
       value: 12,
       which: 2,
     });
+    expect(new SfxStringItem(0, "request return").Which()).toBe(0);
+    expect(new SfxUnoAnyItem(0, true).Clone().Which()).toBe(0);
     expect(
       throwing(
-        /** Creates a zero WhichId. @returns Invalid item. */ () => new SfxStringItem(0, "x"),
+        /** Rejects a zero WhichId as a stored pool item. @returns Invalid mutation. */ () =>
+          new SfxItemSet(createPool(), [[1, 2]]).Put(new SfxStringItem(0, "request return")),
+      ),
+    ).toThrow("does not accept WhichId");
+    expect(
+      throwing(
+        /** Creates a WhichId above the pinned SHRT_MAX ceiling. @returns Invalid item. */ () =>
+          new SfxStringItem(32768, "x"),
       ),
     ).toThrow("WhichId");
     expect(
