@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240948-5BCBDY",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T10:16:06.658Z",
+  "verdict": "pass",
+  "summary": "Continue Numbering ODT regression and local fixtures are implemented and verified.",
+  "evaluated_sha": "bddae073566a8948eebfb806dddb205e49b8c5b4",
+  "blueprint_digest": "4795a69e63c56d1c73a3a82c1ff8a75597545deb523caf3753315b51eecf4df1",
+  "findings": [
+    "Real ODT command, one-step Undo/Redo, and export/reopen assertions pass; generated command and suffix semantics have dedicated checks; full npm run verify passed at 100% coverage."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240948-5BCBDY/README.md",
+    "/tmp/vite-office-verify-1.log",
+    "apps/office/src/sw/source/uibase/shells/listsh-odt.test.ts",
+    "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
