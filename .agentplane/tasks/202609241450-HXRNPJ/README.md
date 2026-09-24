@@ -1,10 +1,11 @@
 ---
 id: "202609241450-HXRNPJ"
 title: "Plan certification ODT import support"
-status: "DOING"
+result_summary: "verified-202609241450-HXRNPJ"
+status: "DONE"
 priority: "med"
 owner: "DOCS"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-24T15:00:17.160Z"
+  updated_at: "2026-09-24T15:00:51.403Z"
   updated_by: "CODER"
   note: "verified-202609241450-HXRNPJ"
   attempts: 0
@@ -41,11 +42,16 @@ quality_review:
   findings:
     - "Seven phases distinguish parser diagnostics, scalar properties, structural markers, font/page resources, canonical tables, and whole-document acceptance; each feature phase specifies semantic and UI gates."
     - "The plan treats the source ODT as private and does not copy its text or embedded assets."
-commit: null
+commit:
+  hash: "545f95cc000237a66548819244f903735d9d356d"
+  message: "📝 HXRNPJ docs: plan certification ODT import and UI"
 comments:
   -
     author: "DOCS"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609241450-HXRNPJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -66,9 +72,22 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609241450-HXRNPJ"
+  -
+    type: "verify"
+    at: "2026-09-24T15:00:51.403Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609241450-HXRNPJ"
+  -
+    type: "status"
+    at: "2026-09-24T15:00:51.548Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609241450-HXRNPJ. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-24T15:00:17.268Z"
-doc_updated_by: "DOCS"
+doc_updated_at: "2026-09-24T15:00:51.548Z"
+doc_updated_by: "CODER"
 description: "Document an ordered, upstream-aligned implementation plan for attributes and entities needed to fully open the supplied certification ODT."
 sections:
   Summary: |-
@@ -135,6 +154,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202609241450-HXRNPJ --result verified-202609241450-HXRNPJ --commit 545f95cc000237a66548819244f903735d9d356d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-09-24T15:00:51.403Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609241450-HXRNPJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T15:00:17.268Z, excerpt_hash=sha256:5bf4efc664c5807442f6b726be12ed9183e4b0568ba51d3c924a40e41bd5605b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241450-HXRNPJ/blueprint/resolved-snapshot.json
+    - old_digest: 2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e
+    - current_digest: 2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241450-HXRNPJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241450-HXRNPJ --result verified-202609241450-HXRNPJ --commit 2a3ca59c1c9d46def023777d8b5c705329559124
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -229,6 +278,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609241450-HXRNPJ --result verified-202609241450-HXRNPJ --commit 545f95cc000237a66548819244f903735d9d356d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-24T15:00:51.403Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609241450-HXRNPJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T15:00:17.268Z, excerpt_hash=sha256:5bf4efc664c5807442f6b726be12ed9183e4b0568ba51d3c924a40e41bd5605b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241450-HXRNPJ/blueprint/resolved-snapshot.json
+- old_digest: 2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e
+- current_digest: 2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241450-HXRNPJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241450-HXRNPJ --result verified-202609241450-HXRNPJ --commit 2a3ca59c1c9d46def023777d8b5c705329559124
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
