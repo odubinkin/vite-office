@@ -1,10 +1,11 @@
 ---
 id: "202609240501-JB34TJ"
 title: "Restore Writer core layout ownership"
-status: "DOING"
+result_summary: "Writer core now owns persistent page and text frames for the supported browser slice"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
     - "apps/office/e2e/writer-layout-ratios.spec.ts"
   findings:
     - "Native connected frame registration, tables and anchored objects remain outside the browser slice and module-wide parity remains unverified."
-commit: null
+commit:
+  hash: "a6269bd2c9d7574451d799ae3e83586e0065dd68"
+  message: "🧾 JB34TJ task: record verified Writer layout evidence"
 comments:
   -
     author: "CODER"
     body: "Start: restore core-owned Writer frame graph and browser measurement boundary."
+  -
+    author: "CODER"
+    body: "Verified: persistent Writer core frame root, device measurements, pagination, numbering, and DPR parity passed npm run verify."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "npm run verify passed: 461 office tests and 96 inventory tests at 100% coverage, 14 Chromium E2E tests including DPR 1/2, static build, source tree/provenance; scoped diff reviewed."
+  -
+    type: "status"
+    at: "2026-09-24T07:15:48.074Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: persistent Writer core frame root, device measurements, pagination, numbering, and DPR parity passed npm run verify."
 doc_version: 3
-doc_updated_at: "2026-09-24T07:14:54.381Z"
+doc_updated_at: "2026-09-24T07:15:48.076Z"
 doc_updated_by: "CODER"
 description: "Stage 3: move line metrics, frame graph, invalidation, flow, pagination and line numbering to sw/source/core; keep browser measurement as device port"
 sections:
@@ -121,6 +134,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "f83cd505a0573804ffefe8dcea7f72e49378ef93"
+    message: "🧩 JB34TJ code: move Writer layout ownership into core frames"
 id_source: "generated"
 ---
 ## Summary
