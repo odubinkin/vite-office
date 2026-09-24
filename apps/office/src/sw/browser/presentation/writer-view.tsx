@@ -350,6 +350,7 @@ export function WriterWorkbench({
           activeParagraphId={snapshot.activeParagraph.id}
           cursorSelection={snapshot.cursorSelection}
           editWindow={view.GetEditWin()}
+          layout={view.GetLayout()}
           pageDescriptor={snapshot.pageDescriptor}
           pageDescriptors={snapshot.pageDescriptors}
           paragraphSpacingSettings={snapshot.paragraphSpacingSettings}

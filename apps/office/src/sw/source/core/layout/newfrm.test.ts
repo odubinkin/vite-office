@@ -4,6 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import { createDefaultWriterPageDescriptor } from "./pagedesc";
 import { createSwPageFrames } from "./newfrm";
+import { SwRootFrame } from "./newfrm";
+import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { getSwTextFrameGap, makeSwTextFrame, type SwTextFrameInput } from "../text/txtfrm";
 
 const standardPage = createDefaultWriterPageDescriptor("en-GB").GetValue();
@@ -183,5 +185,95 @@ describe("Writer text and page frames", /** Groups Writer page-frame tests. @ret
     expect(
       /** Attempts an invalid line range. @returns Never. */ () => makeSwTextFrame(first, 1, 0, 0),
     ).toThrow(/non-empty/);
+  });
+});
+
+describe("persistent Writer layout root", /** Checks core layout identity over device measurements. @returns Nothing. */ () => {
+  it("keeps unchanged frame identities and invalidates only changed measurements", /** Exercises core frame reconciliation and document invalidation. @returns Nothing. */ () => {
+    const root = new SwRootFrame();
+    const info = new SwLineNumberInfo();
+    info.SetPaintLineNumbers(true);
+    info.SetCountBy(1);
+    const inputs = [paragraph("first", 1), paragraph("second", 1)];
+    const first = root.Format(inputs, standardPage, undefined, info.QueryValue());
+    expect(Object.isFrozen(first)).toBe(true);
+    expect(Object.isFrozen(first.pages[0])).toBe(true);
+    expect(Object.isFrozen(first.lineNumbers[0]?.[0]?.[0])).toBe(true);
+    expect(first.lineNumbers[0]).toEqual([
+      [{ number: 1, topTwips: 0 }],
+      [{ number: 2, topTwips: 0 }],
+    ]);
+    expect(
+      root.Format(
+        inputs.map(
+          /** Copies one measured input. @param input - Existing input. @returns Equivalent input. */ (
+            input,
+          ) => ({ ...input }),
+        ),
+        standardPage,
+        undefined,
+        info.QueryValue(),
+      ),
+    ).toBe(first);
+    root.Invalidate();
+    const invalidated = root.Format(inputs, standardPage, undefined, info.QueryValue());
+    expect(invalidated.revision).toBe(first.revision + 1);
+    expect(invalidated.pages[0]).toBe(first.pages[0]);
+
+    const changed = root.Format(
+      [paragraph("first", 1, 450), paragraph("second", 1)],
+      standardPage,
+      undefined,
+      info.QueryValue(),
+    );
+    expect(changed.pages[0]?.textFrames[0]).not.toBe(first.pages[0]?.textFrames[0]);
+    expect(changed.pages[0]?.textFrames[1]).toBe(first.pages[0]?.textFrames[1]);
+    expect(changed.pages[0]).not.toBe(first.pages[0]);
+    const resized = root.Format(
+      inputs,
+      { ...standardPage, width: standardPage.width - 720 },
+      undefined,
+      info.QueryValue(),
+    );
+    expect(resized.pages[0]?.textFrames[1]).not.toBe(changed.pages[0]?.textFrames[1]);
+
+    info.SetPaintLineNumbers(false);
+    const hidden = root.Format(inputs, standardPage, undefined, info.QueryValue());
+    expect(hidden.lineNumbers).toEqual([[[], []]]);
+    expect(hidden.revision).toBe(resized.revision + 1);
+  });
+
+  it("uses browser-measured width and font changes for page breaks and follow numbering", /** Compares measured line counts and heights across page descriptors. @returns Nothing. */ () => {
+    const root = new SwRootFrame();
+    const info = new SwLineNumberInfo();
+    info.SetPaintLineNumbers(true);
+    const narrowPage = { ...standardPage, height: 1100, topMargin: 100, bottomMargin: 100 };
+    const wideMeasure = [paragraph("node", 8, 300)];
+    const wide = root.Format(wideMeasure, narrowPage, undefined, info.QueryValue());
+    expect(
+      wide.pages.map(
+        /** Reads follow status. @param page - Physical page. @returns First frame follow status. */ (
+          page,
+        ) => page.textFrames[0]?.follow,
+      ),
+    ).toEqual([false, true, true]);
+    expect(wide.lineNumbers[1]?.[0]).toEqual([{ number: 5, topTwips: 300 }]);
+    const narrowMeasure = [paragraph("node", 10, 300)];
+    const narrow = root.Format(narrowMeasure, narrowPage, undefined, info.QueryValue());
+    expect(narrow.pages).toHaveLength(4);
+    const largerFont = root.Format(
+      [paragraph("node", 10, 450)],
+      narrowPage,
+      undefined,
+      info.QueryValue(),
+    );
+    expect(largerFont.pages).toHaveLength(5);
+    const smallerPage = root.Format(
+      [paragraph("node", 10, 450)],
+      { ...narrowPage, height: 900 },
+      undefined,
+      info.QueryValue(),
+    );
+    expect(smallerPage.pages).toHaveLength(10);
   });
 });

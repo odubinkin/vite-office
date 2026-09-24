@@ -20,6 +20,7 @@ import { SwEditWin } from "../docvw/edtwin";
 import { SwViewCommandShell } from "../shells/viewsh";
 import { SwWrtShell } from "../wrtsh/wrtsh";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
+import { SwRootFrame } from "../../core/layout/newfrm";
 
 /** Persistent Writer view joining SwDocShell, SwWrtShell, and frame dispatch. */
 export class SwView {
@@ -29,6 +30,7 @@ export class SwView {
   private readonly viewOptions: SwViewOption;
   private readonly wrtShell: SwWrtShell;
   private readonly editWindow: SwEditWin;
+  private readonly layout = new SwRootFrame();
   private readonly wrtShellSubscription: () => void;
 
   /** Creates one persistent view over a persistent document shell. @param docShell - Owning Writer document shell. @returns Nothing. */
@@ -46,7 +48,11 @@ export class SwView {
     this.wrtShellSubscription = this.wrtShell.Subscribe(
       /** Converts typed Writer hints into dispatcher dependency invalidation. @param hint - Typed Writer hint. @returns Nothing. */ (
         hint,
-      ) => this.Invalidate(...getWriterHintDependencies(hint)),
+      ) => {
+        const dependencies = getWriterHintDependencies(hint);
+        if (dependencies.includes("document")) this.layout.Invalidate();
+        this.Invalidate(...dependencies);
+      },
     );
   }
 
@@ -69,6 +75,11 @@ export class SwView {
   /** Returns the platform-neutral Writer edit-window owner. @returns Persistent edit window. */
   public GetEditWin(): SwEditWin {
     return this.editWindow;
+  }
+
+  /** Returns the persistent core layout root for browser device measurements. @returns Layout root. */
+  public GetLayout(): SwRootFrame {
+    return this.layout;
   }
 
   /** Returns the view-owned typed child-window request controller. @returns Writer dialog controller. */

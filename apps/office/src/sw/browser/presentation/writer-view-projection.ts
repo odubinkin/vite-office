@@ -47,6 +47,7 @@ import {
 } from "../../inc/hintids";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
+import { projectWriterLineHeightItem } from "../../source/core/text/itrform2";
 
 /** Browser selector metadata projected outside React from the Writer style pool. */
 export interface WriterParagraphStyleOption {
@@ -314,31 +315,6 @@ export class WriterViewProjection {
         paraSpaceMaxAtPages: document.GetDocumentSettingManager().get("PARA_SPACE_MAX_AT_PAGES"),
       }),
     });
-  }
-}
-
-/** Mirrors Writer's additive proportional leading with a browser font-size fallback for its VCL line metrics. @param percent - SvxLineSpacingItem percentage. @returns CSS line-height multiplier. */
-export function projectWriterLineHeight(percent: number): number {
-  const resolved = percent === 0 ? 100 : Math.max(50, percent);
-  // itrform2.cxx adds (resolved - 100)% of text height to the natural line box.
-  // VCL's ascent/descent is unavailable in CSS; Writer's 1.15 font-size fallback
-  // from frmtool.cxx supplies the base, while the leading stays additive.
-  return Math.max(0.05, Math.round((1.15 + (resolved - 100) / 100) * 100) / 100);
-}
-
-/** Projects a Writer line-spacing rule onto the browser line box. @param item - Canonical rule. @param fontSizePt - Paragraph font size. @returns CSS multiplier. */
-export function projectWriterLineHeightItem(item: SvxLineSpacingItem, fontSizePt: number): number {
-  const natural = 1.15;
-  const valuePt = item.GetValue() / 20;
-  switch (item.GetMode()) {
-    case "fixed":
-      return Math.max(0.05, valuePt / fontSizePt);
-    case "minimum":
-      return Math.max(natural, valuePt / fontSizePt);
-    case "leading":
-      return natural + valuePt / fontSizePt;
-    case "proportional":
-      return projectWriterLineHeight(item.GetValue());
   }
 }
 

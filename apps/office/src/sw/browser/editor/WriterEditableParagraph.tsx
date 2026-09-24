@@ -6,8 +6,6 @@ import type {
   WriterParagraphProjection as WriterParagraph,
   WriterProjectedTextRun,
 } from "../presentation/writer-view-projection";
-import { getWriterParagraphGap } from "./writer-page-pagination";
-import type { SwTextFrameSettings } from "../../source/core/text/txtfrm";
 
 /** Immutable projection properties for one Writer text node. */
 export interface WriterEditableParagraphProps {
@@ -15,8 +13,6 @@ export interface WriterEditableParagraphProps {
   readonly index: number;
   readonly listMarker: string | undefined;
   readonly paragraph: WriterParagraph;
-  readonly paragraphSpacingSettings?: SwTextFrameSettings | undefined;
-  readonly previousParagraph?: WriterParagraph | undefined;
   readonly fragmentEnd?: number;
   readonly fragmentStart?: number;
   readonly topSpacingPt?: number;
@@ -31,8 +27,6 @@ export function WriterEditableParagraph({
   isActive,
   listMarker,
   paragraph,
-  paragraphSpacingSettings,
-  previousParagraph,
   fragmentEnd = paragraph.text.length,
   fragmentStart = 0,
   topSpacingPt,
@@ -56,7 +50,7 @@ export function WriterEditableParagraph({
       className="relative shrink-0"
       data-active={isActive}
       style={{
-        marginBlockStart: `${topSpacingPt ?? getWriterParagraphGap(previousParagraph, paragraph, paragraphSpacingSettings)}pt`,
+        marginBlockStart: `${topSpacingPt ?? 0}pt`,
       }}
     >
       {lineNumbers?.map(

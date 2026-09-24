@@ -153,10 +153,7 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
         isActive
         listMarker="•"
         paragraph={item}
-        previousParagraph={{
-          ...paragraph(),
-          computedStyle: { ...paragraph().computedStyle, lowerSpacingPt: 12 },
-        }}
+        topSpacingPt={20}
         retainElement={/** Ignores the mounted node. @returns Nothing. */ () => undefined}
       />,
     );

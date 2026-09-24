@@ -11,21 +11,17 @@ import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
-import { createSwPageFrames, type SwPageDescriptorLayout } from "../../source/core/layout/newfrm";
+import { SwRootFrame, type SwPageDescriptorLayout } from "../../source/core/layout/newfrm";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../inc/lineinfo";
-import type {
-  SwTextFrameInput,
-  SwTextFrameSettings,
-  SwTextLine,
-} from "../../source/core/text/txtfrm";
-import { projectSwLineNumbers } from "../../source/core/text/txtfrm";
-import { measureWriterTextLines } from "./writer-line-measurement";
+import type { SwTextFrameSettings, SwTextLine } from "../../source/core/text/txtfrm";
+import { createWriterTextFrameInputs, measureWriterTextLines } from "./writer-line-measurement";
 
 /** Defines immutable render values plus the persistent Writer edit-window owner. */
 export interface WriterPlainTextEditorProps {
   readonly activeParagraphId: string;
   readonly cursorSelection: WriterCursorSelection;
   readonly editWindow: SwEditWin;
+  readonly layout?: SwRootFrame;
   readonly paragraphs: readonly WriterParagraph[];
   readonly pageDescriptor: WriterPageDescriptorValue;
   readonly pageDescriptors?: SwPageDescriptorLayout["descriptors"];
@@ -43,6 +39,10 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const measurementRootRef = useRef<ShadowRoot | null>(null);
   const [measurementRoot, setMeasurementRoot] = useState<ShadowRoot | null>(null);
   const [measurementRevision, setMeasurementRevision] = useState(0);
+  const [testLayout] = useState(
+    /** Supplies a persistent layout root when the editor is mounted without a SwView. @returns Layout root. */
+    () => new SwRootFrame(),
+  );
   const [paragraphElements] = useState(
     /** Creates the stable paragraph projection registry. @returns Empty paragraph registry. */ () =>
       new Map<string, HTMLParagraphElement>(),
@@ -87,33 +87,17 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const [measuredLines, setMeasuredLines] = useState<ReadonlyMap<string, readonly SwTextLine[]>>(
     /** Starts without browser line measurements. @returns Empty line map. */ () => new Map(),
   );
-  const inputs: readonly SwTextFrameInput[] = props.paragraphs.map(
-    /** Adapts one projection to a Writer text-frame input. @param paragraph - View paragraph. @returns Writer frame input. */ (
-      paragraph,
-    ) => ({
-      id: paragraph.id,
-      lines: measuredLines.get(paragraph.id) ?? [
-        {
-          start: 0,
-          end: paragraph.text.length,
-          height: paragraph.computedStyle.fontSizePt * paragraph.computedStyle.lineHeight * 20,
-        },
-      ],
-      lowerSpacing: paragraph.computedStyle.lowerSpacingPt * 20,
-      style: paragraph.style,
-      contextualSpacing: paragraph.computedStyle.contextualSpacing ?? false,
-      upperSpacing: paragraph.computedStyle.upperSpacingPt * 20,
-      keepWithNext: paragraph.computedStyle.keepWithNext ?? false,
-      countLineNumbers: paragraph.computedStyle.countLineNumbers ?? true,
-    }),
-  );
-  const pages = createSwPageFrames(
+  const inputs = createWriterTextFrameInputs(props.paragraphs, measuredLines);
+  const lineInfo = props.lineNumberInfo ?? new SwLineNumberInfo().QueryValue();
+  const layout = (props.layout ?? testLayout).Format(
     inputs,
     props.pageDescriptors === undefined
       ? props.pageDescriptor
       : { descriptors: props.pageDescriptors, initialName: props.pageDescriptor.name },
     props.paragraphSpacingSettings,
+    { ...lineInfo, paintLineNumbers: props.showLineNumbers ?? lineInfo.paintLineNumbers },
   );
+  const pages = layout.pages;
   const paragraphById = new Map(
     props.paragraphs.map(
       /** Indexes one view paragraph. @param paragraph - View paragraph. @returns Key and paragraph pair. */ (
@@ -121,11 +105,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       ) => [paragraph.id, paragraph],
     ),
   );
-  const lineInfo = props.lineNumberInfo ?? new SwLineNumberInfo().QueryValue();
-  const numberedFrames = projectSwLineNumbers(pages, inputs, {
-    ...lineInfo,
-    paintLineNumbers: props.showLineNumbers ?? lineInfo.paintLineNumbers,
-  });
+  const numberedFrames = layout.lineNumbers;
 
   useLayoutEffect(
     /** Supplies Writer with browser-shaped line boundaries after the measurement projection mounts. @returns Nothing. */
@@ -272,7 +252,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                       key={`measure-${paragraph.id}`}
                       listMarker={paragraph.listMarker}
                       paragraph={paragraph}
-                      paragraphSpacingSettings={props.paragraphSpacingSettings}
+                      topSpacingPt={0}
                       retainElement={
                         /** Retains the measurement paragraph. @param _id - Source node ID. @param element - Mounted element. @returns Nothing. */ (
                           _id,
@@ -353,7 +333,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                         key={`${paragraph.id}:${frame.start}`}
                         listMarker={paragraph.listMarker}
                         paragraph={paragraph}
-                        paragraphSpacingSettings={props.paragraphSpacingSettings}
                         fragmentStart={frame.start}
                         fragmentEnd={frame.end}
                         topSpacingPt={frame.topSpacing / 20}

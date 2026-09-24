@@ -3,7 +3,10 @@
 
 import { describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { projectWriterLineHeight, projectWriterLineHeightItem } from "./writer-view-projection";
+import {
+  projectWriterLineHeight,
+  projectWriterLineHeightItem,
+} from "../../source/core/text/itrform2";
 import {
   SvxLineSpacingItem,
   SvxTabStop,

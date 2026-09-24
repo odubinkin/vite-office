@@ -4,11 +4,14 @@ import type { WriterPageDescriptorValue } from "./pagedesc";
 import {
   getSwTextFrameGap,
   makeSwTextFrame,
+  projectSwLineNumbers,
+  type SwLineNumberMark,
   type SwTextFrame,
   type SwTextFrameInput,
   type SwTextFrameSettings,
   type SwTextLine,
 } from "../text/txtfrm";
+import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
 
 /** One physical page and its ordered text-frame fragments. */
 export interface SwPageFrame {
@@ -24,6 +27,122 @@ export interface SwPageDescriptorLayout {
     value: WriterPageDescriptorValue;
   }>[];
   readonly initialName: string;
+}
+
+/** Immutable result of one core formatting pass. */
+export interface SwRootFrameSnapshot {
+  readonly revision: number;
+  readonly pages: readonly SwPageFrame[];
+  readonly lineNumbers: readonly (readonly (readonly SwLineNumberMark[])[])[];
+}
+
+/** Persistent Writer layout root owning page and text-frame identity over device measurements. */
+export class SwRootFrame {
+  private signature: string | undefined;
+  private dirty = true;
+  private snapshot: SwRootFrameSnapshot | undefined;
+  private inputSignatures = new Map<string, string>();
+  private revision = 0;
+
+  /** Invalidates the formatted graph after a document or style change. @returns Nothing. */
+  public Invalidate(): void {
+    this.dirty = true;
+  }
+
+  /** Formats measured text into stable page frames and line-number marks. @param paragraphs - Browser device measurements and Writer paragraph values. @param descriptor - Page descriptor graph. @param settings - Writer spacing settings. @param lineInfo - Document line-number settings. @returns Immutable current layout. */
+  public Format(
+    paragraphs: readonly SwTextFrameInput[],
+    descriptor: WriterPageDescriptorValue | SwPageDescriptorLayout,
+    settings: SwTextFrameSettings | undefined,
+    lineInfo: SwLineNumberInfoValue,
+  ): SwRootFrameSnapshot {
+    const signature = JSON.stringify([paragraphs, descriptor, settings, lineInfo]);
+    if (!this.dirty && this.signature === signature && this.snapshot !== undefined)
+      return this.snapshot;
+    const previous = this.snapshot?.pages ?? [];
+    const nextInputSignatures = new Map(
+      paragraphs.map(
+        /** Captures one measured paragraph contract. @param paragraph - Device and model input. @returns Node identity and signature. */
+        (paragraph) => [paragraph.id, JSON.stringify(paragraph)] as const,
+      ),
+    );
+    const reusable = new Map<string, SwTextFrame[]>();
+    for (const page of previous)
+      for (const frame of page.textFrames) {
+        const key = frameKey(frame, page.descriptor, this.inputSignatures);
+        const existing = reusable.get(key) ?? [];
+        existing.push(frame);
+        reusable.set(key, existing);
+      }
+    const pages = Object.freeze(
+      createSwPageFrames(paragraphs, descriptor, settings).map(
+        /** Retains unchanged frame identities after formatting. @param page - New page. @param index - Page position. @returns Reconciled page. */
+        (page, index) => {
+          const textFrames = Object.freeze(
+            page.textFrames.map(
+              /** Reuses a matching source fragment. @param frame - New fragment. @returns Persistent fragment. */
+              (frame) =>
+                reusable.get(frameKey(frame, page.descriptor, nextInputSignatures))?.shift() ??
+                frame,
+            ),
+          );
+          const oldPage = previous[index];
+          if (
+            oldPage !== undefined &&
+            JSON.stringify(oldPage.descriptor) === JSON.stringify(page.descriptor) &&
+            oldPage.textFrames.length === textFrames.length &&
+            textFrames.every(
+              /** Tests unchanged frame identity. @param frame - Current frame. @param frameIndex - Position. @returns Whether stable. */
+              (frame, frameIndex) => frame === oldPage.textFrames[frameIndex],
+            )
+          )
+            return oldPage;
+          return Object.freeze({ ...page, textFrames });
+        },
+      ),
+    );
+    const lineNumbers = Object.freeze(
+      projectSwLineNumbers(pages, paragraphs, lineInfo).map(
+        /** Freezes marks on one page. @param page - Page marks. @returns Immutable marks. */
+        (page) =>
+          Object.freeze(
+            page.map(
+              /** Freezes marks on one text fragment. @param frame - Fragment marks. @returns Immutable marks. */
+              (frame) =>
+                Object.freeze(
+                  frame.map(
+                    /** Freezes one mark. @param mark - Line-number mark. @returns Immutable mark. */
+                    (mark) => Object.freeze(mark),
+                  ),
+                ),
+            ),
+          ),
+      ),
+    );
+    this.revision += 1;
+    this.signature = signature;
+    this.inputSignatures = nextInputSignatures;
+    this.dirty = false;
+    this.snapshot = Object.freeze({ revision: this.revision, pages, lineNumbers });
+    return this.snapshot;
+  }
+}
+
+/** Keys an unchanged source fragment independently of its current page position. @param frame - Fragment. @param descriptor - Page geometry. @param signatures - Measured paragraph inputs. @returns Stable fragment key. */
+function frameKey(
+  frame: SwTextFrame,
+  descriptor: WriterPageDescriptorValue,
+  signatures: ReadonlyMap<string, string>,
+): string {
+  return JSON.stringify([
+    frame.nodeId,
+    frame.start,
+    frame.end,
+    frame.follow,
+    frame.topSpacing,
+    descriptor,
+    signatures.get(frame.nodeId),
+  ]);
 }
 
 /** Creates at least the initial page; splits a text node only at measured line boundaries. @param paragraphs - Ordered text node measurements. @param descriptor - Physical page geometry. @param settings - Paragraph spacing policy. @returns Ordered page frames. */

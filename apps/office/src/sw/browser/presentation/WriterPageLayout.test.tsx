@@ -3,8 +3,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { getWriterParagraphGap } from "../editor/writer-page-pagination";
 import { createSwPageFrames } from "../../source/core/layout/newfrm";
+import { getSwTextFrameGap, type SwTextFrameSettings } from "../../source/core/text/txtfrm";
 import { SwLineNumberInfo } from "../../inc/lineinfo";
 import { getWriterDomSelection } from "../editor/writer-selection";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
@@ -16,6 +16,32 @@ import { WriterWorkspaceChrome } from "./WriterWorkspaceChrome";
 import type { WriterParagraphProjection } from "./writer-view-projection";
 
 const page = createDefaultWriterPageDescriptor("en-GB").GetValue();
+
+/** Adapts test paragraph fixtures to core gap inputs. @param previous - Previous paragraph. @param current - Current paragraph. @param settings - Spacing options. @returns Gap in points. */
+function gapPt(
+  previous: WriterParagraphProjection | undefined,
+  current: WriterParagraphProjection,
+  settings?: SwTextFrameSettings,
+): number {
+  const input =
+    /** Projects one test fixture. @param paragraph - Paragraph fixture. @returns Core spacing input. */ (
+      paragraph: WriterParagraphProjection,
+    ) => ({
+      id: paragraph.id,
+      lines: [],
+      lowerSpacing: paragraph.computedStyle.lowerSpacingPt * 20,
+      upperSpacing: paragraph.computedStyle.upperSpacingPt * 20,
+      style: paragraph.style,
+      contextualSpacing: paragraph.computedStyle.contextualSpacing ?? false,
+    });
+  return (
+    getSwTextFrameGap(
+      previous === undefined ? undefined : input(previous),
+      input(current),
+      settings,
+    ) / 20
+  );
+}
 
 describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisions. @returns Nothing. */ () => {
   it("uses configured additive spacing and suppresses contextual gaps for matching styles", /** Checks normal and contextual gap formulas. @returns Nothing. */ () => {
@@ -35,22 +61,22 @@ describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisio
         contextualSpacing: true,
       },
     };
-    expect(getWriterParagraphGap(undefined, second)).toBe(12);
-    expect(getWriterParagraphGap(first, second)).toBe(0);
+    expect(gapPt(undefined, second)).toBe(12);
+    expect(gapPt(first, second)).toBe(0);
     expect(
-      getWriterParagraphGap(
+      gapPt(
         { ...first, computedStyle: { ...first.computedStyle, contextualSpacing: false } },
         second,
       ),
     ).toBe(12);
     expect(
-      getWriterParagraphGap(first, {
+      gapPt(first, {
         ...second,
         computedStyle: { ...second.computedStyle, contextualSpacing: false },
       }),
     ).toBe(12);
     expect(
-      getWriterParagraphGap(
+      gapPt(
         {
           ...first,
           computedStyle: { ...first.computedStyle, lowerSpacingPt: 4, contextualSpacing: false },
@@ -59,27 +85,27 @@ describe("Writer paragraph gaps", /** Covers upstream contextual spacing decisio
       ),
     ).toBe(4);
     expect(
-      getWriterParagraphGap(first, {
+      gapPt(first, {
         ...second,
         computedStyle: { ...second.computedStyle, upperSpacingPt: 4, contextualSpacing: false },
       }),
     ).toBe(4);
-    expect(getWriterParagraphGap({ ...first, style: "heading-1" }, second)).toBe(24);
+    expect(gapPt({ ...first, style: "heading-1" }, second)).toBe(24);
     expect(
-      getWriterParagraphGap(
+      gapPt(
         { ...first, computedStyle: { ...first.computedStyle, contextualSpacing: false } },
         { ...second, computedStyle: { ...second.computedStyle, contextualSpacing: false } },
       ),
     ).toBe(24);
     expect(
-      getWriterParagraphGap(
+      gapPt(
         { ...first, computedStyle: { ...first.computedStyle, contextualSpacing: false } },
         { ...second, computedStyle: { ...second.computedStyle, contextualSpacing: false } },
         { paraSpaceMax: false, paraSpaceMaxAtPages: false },
       ),
     ).toBe(12);
     expect(
-      getWriterParagraphGap(undefined, second, {
+      gapPt(undefined, second, {
         paraSpaceMax: true,
         paraSpaceMaxAtPages: false,
       }),
