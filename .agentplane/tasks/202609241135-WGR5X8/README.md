@@ -1,10 +1,11 @@
 ---
 id: "202609241135-WGR5X8"
 title: "F1 Align Writer indent with MoveLeftMargin and NumUpDown"
-status: "DOING"
+result_summary: "Aligned Writer indent ownership, selection behavior and evidence"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx"
   findings:
     - "Document-default tab distance, selected text nodes, list levels, undo, modifier and page-body width guard have focused assertions; native table frames and multiple selection rings remain outside the browser slice."
-commit: null
+commit:
+  hash: "71e4df0254744e1419d1f672c0bc322fac0f34e5"
+  message: "🧩 WGR5X8 task: persist quality review"
 comments:
   -
     author: "CODER"
     body: "Start: implement F1 from the approved upstream parity plan, preserving pinned Writer indent ownership and behavior."
+  -
+    author: "CODER"
+    body: "Verified: Writer indent uses pinned selection and document-default tab behavior; all declared checks and quality review passed."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609241135-WGR5X8"
+  -
+    type: "status"
+    at: "2026-09-24T12:01:33.937Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer indent uses pinned selection and document-default tab behavior; all declared checks and quality review passed."
 doc_version: 3
-doc_updated_at: "2026-09-24T12:00:44.611Z"
+doc_updated_at: "2026-09-24T12:01:33.939Z"
 doc_updated_by: "CODER"
 description: "Implement F1 from docs/program/vite-office-upstream-parity-plan.md: use upstream text shell dispatch, SwEditShell and SwDoc ownership, document tab defaults, selected paragraphs, layout bounds and undo."
 sections:
@@ -157,6 +170,10 @@ sections:
     Command: npm run verify. Result: pass. Evidence: 482 office unit tests, 98 inventory tests, both coverage sets 100%, 14 browser tests, static build, source tree, provenance and inventory gates passed. Scope: full repository verification of F1.
     Command: npx vitest run apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts. Result: pass. Evidence: 5 focused tests for document default tabs, selection, numbering, undo, modifier and frame width. Scope: F1 Writer indent behavior.
     Command: git diff --check; ap doctor. Result: pass. Evidence: no whitespace errors; doctor exited 0 with unrelated existing hook and historical task warnings. Scope: task diff and repository health.
+extensions:
+  implementation_commit:
+    hash: "1ef936099ec6f52446217082b872c087b1714f1a"
+    message: "🧩 WGR5X8 code: align Writer indent ownership and selection behavior"
 id_source: "generated"
 ---
 ## Summary
