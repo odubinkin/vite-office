@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241521-9FJEHM",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T20:19:42.550Z",
+  "verdict": "pass",
+  "summary": "Phase-3 inline marker implementation matches the approved bounded Writer scope and all declared checks pass.",
+  "evaluated_sha": "bc5370b27280355d941863014cf46029688c8fec",
+  "blueprint_digest": "bc0e6901ec7f00e195372e7fc893b38ae197a3ea79c7115680003f55a95bfcb8",
+  "findings": [
+    "Document-owned marks and soft pagination hints retain positions through edits, Worker transfer and ODT reimport; bookmark and break UI paths are tested."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241521-9FJEHM/README.md",
+    ".agentplane/tmp/phase3-verify.log",
+    "docs/program/certification-odt-inline-marker-parity.md",
+    "2e183a1"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Three table-owned soft page breaks require the phase-5 canonical table graph under the user's approved gate change."
+  ]
+}
