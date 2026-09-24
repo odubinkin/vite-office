@@ -1,0 +1,93 @@
+---
+id: "202609241135-MCNVP4"
+title: "F6 Resolve source identity and filename divergences"
+status: "DOING"
+priority: "high"
+owner: "CODER"
+revision: 5
+origin:
+  system: "manual"
+depends_on:
+  - "202609241135-JV2933"
+tags:
+  - "code"
+  - "parity"
+verify:
+  - "npm run verify"
+plan_approval:
+  state: "approved"
+  updated_at: "2026-09-24T12:30:24.133Z"
+  updated_by: "ORCHESTRATOR"
+  note: null
+verification:
+  state: "pending"
+  updated_at: null
+  updated_by: null
+  note: null
+  attempts: 0
+commit: null
+comments:
+  -
+    author: "CODER"
+    body: "Start: audit and resolve all remaining filename/source identity divergences."
+events:
+  -
+    type: "status"
+    at: "2026-09-24T12:30:30.795Z"
+    author: "CODER"
+    from: "TODO"
+    to: "DOING"
+    note: "Start: audit and resolve all remaining filename/source identity divergences."
+doc_version: 3
+doc_updated_at: "2026-09-24T12:30:30.795Z"
+doc_updated_by: "CODER"
+description: "Implement F6: review all 20 source-provenance filename divergences and fix ownership or record concrete browser/TypeScript necessity."
+sections:
+  Summary: |-
+    F6 Resolve source identity and filename divergences
+
+    Implement F6: review all 20 source-provenance filename divergences and fix ownership or record concrete browser/TypeScript necessity.
+  Scope: |-
+    - In scope: Implement F6: review all 20 source-provenance filename divergences and fix ownership or record concrete browser/TypeScript necessity.
+    - Out of scope: unrelated refactors not required for "F6 Resolve source identity and filename divergences".
+  Plan: "Audit all 17 remaining filename divergence entries after F1/F3/F4. Rename mechanically safe mismatches to pinned upstream filenames and move browser-only dialog adaptation to browser ownership. Preserve intentional generated-resource and TypeScript decomposition exceptions only with concrete rationale tied to actual module composition or generated files. Update imports, tests, source provenance and inventory data, then run focused and full verification."
+  Verify Steps: "1. Review every current filenameDivergences entry against its pinned upstream source and current implementation. Rename or move files when there is no concrete stack constraint; retain only specific documented browser, generated resource, or TypeScript decomposition exceptions. No compatibility wrapper solely for an old path. 2. Update exact source provenance, runtime inventory, source tree, and all imports for active ownership; confirm no stale retired paths remain. 3. Run focused tests for touched modules, npm run verify, and git diff --check."
+  Verification: |-
+    <!-- BEGIN VERIFICATION RESULTS -->
+    <!-- END VERIFICATION RESULTS -->
+  Rollback Plan: |-
+    - Revert task-related commit(s).
+    - Re-run required checks to confirm rollback safety.
+  Findings: ""
+id_source: "generated"
+---
+## Summary
+
+F6 Resolve source identity and filename divergences
+
+Implement F6: review all 20 source-provenance filename divergences and fix ownership or record concrete browser/TypeScript necessity.
+
+## Scope
+
+- In scope: Implement F6: review all 20 source-provenance filename divergences and fix ownership or record concrete browser/TypeScript necessity.
+- Out of scope: unrelated refactors not required for "F6 Resolve source identity and filename divergences".
+
+## Plan
+
+Audit all 17 remaining filename divergence entries after F1/F3/F4. Rename mechanically safe mismatches to pinned upstream filenames and move browser-only dialog adaptation to browser ownership. Preserve intentional generated-resource and TypeScript decomposition exceptions only with concrete rationale tied to actual module composition or generated files. Update imports, tests, source provenance and inventory data, then run focused and full verification.
+
+## Verify Steps
+
+1. Review every current filenameDivergences entry against its pinned upstream source and current implementation. Rename or move files when there is no concrete stack constraint; retain only specific documented browser, generated resource, or TypeScript decomposition exceptions. No compatibility wrapper solely for an old path. 2. Update exact source provenance, runtime inventory, source tree, and all imports for active ownership; confirm no stale retired paths remain. 3. Run focused tests for touched modules, npm run verify, and git diff --check.
+
+## Verification
+
+<!-- BEGIN VERIFICATION RESULTS -->
+<!-- END VERIFICATION RESULTS -->
+
+## Rollback Plan
+
+- Revert task-related commit(s).
+- Re-run required checks to confirm rollback safety.
+
+## Findings
