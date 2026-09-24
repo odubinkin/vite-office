@@ -1,10 +1,11 @@
 ---
 id: "202609231700-TZMGXV"
 title: "Consolidate Writer transfer workflow ownership"
-status: "DOING"
+result_summary: "Consolidated Writer transfer policy under SwTransferable and shell with browser clipboard I/O at the adapter boundary."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -39,11 +40,16 @@ quality_review:
     - "/tmp/vite-office-stage4-verify.log"
   findings:
     - "Pinned SwTransferable owns format choice and insertion policy; browser adapters retain clipboard and DOM I/O. Earlier repository-wide gate failures were repaired by later scoped tasks."
-commit: null
+commit:
+  hash: "9718e06ad7fa072d0ad1195404a3b66161d078c2"
+  message: "🧩 TZMGXV task: record transfer verification after baseline repairs"
 comments:
   -
     author: "CODER"
     body: "Start: Consolidate Writer transfer policy and native browser clipboard paths against pinned LibreOffice ownership, with focused tests and full verification."
+  -
+    author: "CODER"
+    body: "Verified: landed Writer transfer ownership passes focused suites and full repository verification after baseline repairs; implementation is 3c5aa0b."
 events:
   -
     type: "status"
@@ -64,8 +70,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Rechecked landed transfer commit 3c5aa0b: six focused transfer/HTML/browser edit/workflow/editor suites pass (31 tests); current npm run verify passes, including 464 office tests at 100% coverage, 14 Chromium E2E, source/provenance/inventory/static checks. Prior repository-wide blockers have been repaired by subsequent scoped tasks; transfer paths remain committed and working tree clean."
+  -
+    type: "status"
+    at: "2026-09-24T07:49:45.994Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: landed Writer transfer ownership passes focused suites and full repository verification after baseline repairs; implementation is 3c5aa0b."
 doc_version: 3
-doc_updated_at: "2026-09-24T07:48:29.296Z"
+doc_updated_at: "2026-09-24T07:49:45.996Z"
 doc_updated_by: "CODER"
 description: "Implement section 7 transfer and browser workflow ownership audit against pinned LibreOffice swdtflvr.cxx"
 sections:
