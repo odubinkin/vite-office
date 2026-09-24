@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240542-9D8VFJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T06:47:27.798Z",
+  "verdict": "pass",
+  "summary": "Pinned Writer line-number defaults, ownership, page-aware counting, ODF and snapshot round trips implemented and verified.",
+  "evaluated_sha": "6de07b8b27db6a455daf4c62fe2fdd550790bec3",
+  "blueprint_digest": "65e0a885e101e8cc130782aef441c11bfbd712edc345754afc6f3b05d3082aa8",
+  "findings": [
+    "Global number format is bounded to Arabic display; native character-style and fly-frame rendering remain outside the browser slice."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240542-9D8VFJ/README.md",
+    "apps/office/src/sw/inc/lineinfo.test.ts",
+    "apps/office/src/sw/source/core/text/txtfrm.test.ts",
+    "apps/office/src/sw/source/filter/xml/odt-line-numbering.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
