@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241450-HXRNPJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T15:00:34.069Z",
+  "verdict": "pass",
+  "summary": "The documentation plan matches the supplied ODT inventory, orders work by complexity, preserves upstream ownership, and includes UI implementation and acceptance for configurable features.",
+  "evaluated_sha": "545f95cc000237a66548819244f903735d9d356d",
+  "blueprint_digest": "2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e",
+  "findings": [
+    "Seven phases distinguish parser diagnostics, scalar properties, structural markers, font/page resources, canonical tables, and whole-document acceptance; each feature phase specifies semantic and UI gates.",
+    "The plan treats the source ODT as private and does not copy its text or embedded assets."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241450-HXRNPJ/README.md",
+    "docs/program/certification-odt-import-plan.md",
+    "node .agentplane/policy/check-routing.mjs: policy routing OK",
+    "ap doctor: OK with pre-existing warnings"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Exact console-message counts require phase 0 runtime capture; this plan uses a read-only static XML inventory."
+  ]
+}

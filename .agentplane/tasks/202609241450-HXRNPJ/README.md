@@ -4,7 +4,7 @@ title: "Plan certification ODT import support"
 status: "DOING"
 priority: "med"
 owner: "DOCS"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,29 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-24T14:59:31.587Z"
-  updated_by: "DOCS"
-  note: "Documentation plan checked against the supplied ODT inventory and current import code; links resolve, phases include upstream-equivalent UI, policy routing and doctor pass."
+  updated_at: "2026-09-24T15:00:17.160Z"
+  updated_by: "CODER"
+  note: "verified-202609241450-HXRNPJ"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T15:00:34.069Z"
+  updated_by: "EVALUATOR"
+  note: "The documentation plan matches the supplied ODT inventory, orders work by complexity, preserves upstream ownership, and includes UI implementation and acceptance for configurable features."
+  evaluated_sha: "545f95cc000237a66548819244f903735d9d356d"
+  blueprint_digest: "2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e"
+  evidence_refs:
+    - ".agentplane/tasks/202609241450-HXRNPJ/README.md"
+    - ".agentplane/tasks/202609241450-HXRNPJ/quality/20260924-150034069-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241450-HXRNPJ/quality/20260924-150034069-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241450-HXRNPJ/quality/20260924-150034069-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241450-HXRNPJ/blueprint/resolved-snapshot.json"
+    - "docs/program/certification-odt-import-plan.md"
+    - "node .agentplane/policy/check-routing.mjs: policy routing OK"
+    - "ap doctor: OK with pre-existing warnings"
+  findings:
+    - "Seven phases distinguish parser diagnostics, scalar properties, structural markers, font/page resources, canonical tables, and whole-document acceptance; each feature phase specifies semantic and UI gates."
+    - "The plan treats the source ODT as private and does not copy its text or embedded assets."
 commit: null
 comments:
   -
@@ -41,8 +60,14 @@ events:
     author: "DOCS"
     state: "ok"
     note: "Documentation plan checked against the supplied ODT inventory and current import code; links resolve, phases include upstream-equivalent UI, policy routing and doctor pass."
+  -
+    type: "verify"
+    at: "2026-09-24T15:00:17.160Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609241450-HXRNPJ"
 doc_version: 3
-doc_updated_at: "2026-09-24T14:59:31.670Z"
+doc_updated_at: "2026-09-24T15:00:17.268Z"
 doc_updated_by: "DOCS"
 description: "Document an ordered, upstream-aligned implementation plan for attributes and entities needed to fully open the supplied certification ODT."
 sections:
@@ -85,6 +110,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-09-24T15:00:17.160Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609241450-HXRNPJ
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T14:59:31.670Z, excerpt_hash=sha256:5bf4efc664c5807442f6b726be12ed9183e4b0568ba51d3c924a40e41bd5605b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241450-HXRNPJ/blueprint/resolved-snapshot.json
+    - old_digest: 2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e
+    - current_digest: 2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241450-HXRNPJ
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241450-HXRNPJ --result verified-202609241450-HXRNPJ --commit 545f95cc000237a66548819244f903735d9d356d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -149,6 +204,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-24T15:00:17.160Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609241450-HXRNPJ
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T14:59:31.670Z, excerpt_hash=sha256:5bf4efc664c5807442f6b726be12ed9183e4b0568ba51d3c924a40e41bd5605b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241450-HXRNPJ/blueprint/resolved-snapshot.json
+- old_digest: 2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e
+- current_digest: 2a086d0fdc7c95bb59f7e5c084aaaf4f8b10377bdd031bb3af99d550fc155f6e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241450-HXRNPJ
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241450-HXRNPJ --result verified-202609241450-HXRNPJ --commit 545f95cc000237a66548819244f903735d9d356d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
