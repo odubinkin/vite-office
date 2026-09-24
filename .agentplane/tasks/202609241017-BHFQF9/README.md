@@ -1,10 +1,11 @@
 ---
 id: "202609241017-BHFQF9"
 title: "Port tdf114287 ODT print bounds regression"
-status: "DOING"
+result_summary: "Ported exact tdf114287 ODT layout regression"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "npm run verify"
   findings:
     - "Paragraph and list style precedence yields the upstream bounds for paragraphs 2, 9, and 16; the result survives ODT export, worker graph transfer, and browser projection; full npm run verify passed."
-commit: null
+commit:
+  hash: "05760d9574ba900d8eaeb887105bdb9217f7de04"
+  message: "🧩 BHFQF9 task: persist quality review"
 comments:
   -
     author: "CODER"
     body: "Start: implement exact ODT list and paragraph print-bound precedence with export/reopen regression."
+  -
+    author: "CODER"
+    body: "Verified: exact tdf114287 print bounds, list and paragraph metrics, ODT export/reopen parity, worker transfer, browser rendering, and full repository checks."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Local tdf114287 exact print bounds, numbering and paragraph metrics, ODT export/reopen, worker codec, and browser marker precedence passed; npm run verify passed at 100% coverage and 14 browser tests; ap doctor OK."
+  -
+    type: "status"
+    at: "2026-09-24T10:32:36.446Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: exact tdf114287 print bounds, list and paragraph metrics, ODT export/reopen parity, worker transfer, browser rendering, and full repository checks."
 doc_version: 3
-doc_updated_at: "2026-09-24T10:31:34.387Z"
+doc_updated_at: "2026-09-24T10:32:36.447Z"
 doc_updated_by: "CODER"
 description: "Implement exact Writer list-versus-paragraph print bounds for the repository-owned tdf114287.odt fixture, including ODT export/reopen parity."
 sections:
@@ -114,6 +127,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "b6ba7e66c86344d51a3cfe8fec6874929109b357"
+    message: "🧩 BHFQF9 code: preserve ODT list print bounds"
 id_source: "generated"
 ---
 ## Summary
