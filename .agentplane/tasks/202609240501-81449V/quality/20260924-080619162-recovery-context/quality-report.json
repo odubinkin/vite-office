@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240501-81449V",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T08:06:19.162Z",
+  "verdict": "pass",
+  "summary": "Stage 5 Writer list invariants restored and full verification passed.",
+  "evaluated_sha": "60f7c0bcd760e5397faf29f72c08491de852d9ec",
+  "blueprint_digest": "bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce",
+  "findings": [
+    "Pinned source behavior for counted list items, restart invalidation, list registration and level reparenting has focused assertions; 467 office tests and 14 browser tests passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240501-81449V/README.md",
+    "apps/office/src/sw/source/core/doc/list-invariants.test.ts",
+    "/tmp/vite-office-stage5-verify.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

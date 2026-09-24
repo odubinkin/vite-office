@@ -4,7 +4,7 @@ title: "Restore list selection undo and transfer invariants"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -20,11 +20,28 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: "Approved as the Stage 5 work unit within the user-approved upstream parity plan."
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T08:06:13.693Z"
+  updated_by: "CODER"
+  note: "Pinned ndtxt.cxx and SwNumberTree.cxx counter, restart and counted transitions checked by focused tests; npm run verify passed with 467 office tests at 100% coverage, inventory coverage and 14 browser tests."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T08:06:19.162Z"
+  updated_by: "EVALUATOR"
+  note: "Stage 5 Writer list invariants restored and full verification passed."
+  evaluated_sha: "60f7c0bcd760e5397faf29f72c08491de852d9ec"
+  blueprint_digest: "bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce"
+  evidence_refs:
+    - ".agentplane/tasks/202609240501-81449V/README.md"
+    - ".agentplane/tasks/202609240501-81449V/quality/20260924-080619162-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609240501-81449V/quality/20260924-080619162-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609240501-81449V/quality/20260924-080619162-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609240501-81449V/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/source/core/doc/list-invariants.test.ts"
+    - "/tmp/vite-office-stage5-verify.log"
+  findings:
+    - "Pinned source behavior for counted list items, restart invalidation, list registration and level reparenting has focused assertions; 467 office tests and 14 browser tests passed."
 commit: null
 comments:
   -
@@ -38,8 +55,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: audit reachable list, selection, undo and transfer invariants against pinned LibreOffice and repair source-backed mismatches."
+  -
+    type: "verify"
+    at: "2026-09-24T08:06:13.693Z"
+    author: "CODER"
+    state: "ok"
+    note: "Pinned ndtxt.cxx and SwNumberTree.cxx counter, restart and counted transitions checked by focused tests; npm run verify passed with 467 office tests at 100% coverage, inventory coverage and 14 browser tests."
 doc_version: 3
-doc_updated_at: "2026-09-24T07:50:43.455Z"
+doc_updated_at: "2026-09-24T08:06:13.775Z"
 doc_updated_by: "CODER"
 description: "Stage 5: verify and repair reachable list, PaM, text node, undo and clipboard transitions against pinned Writer source; respect active transfer task"
 sections:
@@ -62,11 +85,44 @@ sections:
     4. Update existing inventory/provenance data accurately; npm run verify passes, and the task-scoped diff and final tracked state are clean.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T08:06:13.693Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Pinned ndtxt.cxx and SwNumberTree.cxx counter, restart and counted transitions checked by focused tests; npm run verify passed with 467 office tests at 100% coverage, inventory coverage and 14 browser tests.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T07:50:43.455Z, excerpt_hash=sha256:3989f922de7bcbb7ad3441411c700d30dffbe47e71c483d9d9f8f9b372b93e17
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-81449V/blueprint/resolved-snapshot.json
+    - old_digest: bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce
+    - current_digest: bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609240501-81449V
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609240501-81449V
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: |-
+    - Observation: Direct list identity, level, restart and counted transitions could leave numbering registration or counters stale.
+      Impact: Visible labels and undo-restored list state could disagree with SwDoc canonical attributes.
+      Resolution: Registered/reparented list nodes, invalidated counters, preserved counted items in snapshots and added source-backed assertions.
 id_source: "generated"
 ---
 ## Summary
@@ -97,6 +153,36 @@ Stage 5: verify and repair reachable list, PaM, text node, undo and clipboard tr
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T08:06:13.693Z — VERIFY — ok
+
+By: CODER
+
+Note: Pinned ndtxt.cxx and SwNumberTree.cxx counter, restart and counted transitions checked by focused tests; npm run verify passed with 467 office tests at 100% coverage, inventory coverage and 14 browser tests.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T07:50:43.455Z, excerpt_hash=sha256:3989f922de7bcbb7ad3441411c700d30dffbe47e71c483d9d9f8f9b372b93e17
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-81449V/blueprint/resolved-snapshot.json
+- old_digest: bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce
+- current_digest: bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609240501-81449V
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609240501-81449V
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -105,3 +191,7 @@ Stage 5: verify and repair reachable list, PaM, text node, undo and clipboard tr
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+- Observation: Direct list identity, level, restart and counted transitions could leave numbering registration or counters stale.
+  Impact: Visible labels and undo-restored list state could disagree with SwDoc canonical attributes.
+  Resolution: Registered/reparented list nodes, invalidated counters, preserved counted items in snapshots and added source-backed assertions.
