@@ -4,7 +4,7 @@ title: "Port tdf114287 ODT print bounds regression"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,24 @@ verification:
   updated_by: "CODER"
   note: "Local tdf114287 exact print bounds, numbering and paragraph metrics, ODT export/reopen, worker codec, and browser marker precedence passed; npm run verify passed at 100% coverage and 14 browser tests; ap doctor OK."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T10:32:16.030Z"
+  updated_by: "EVALUATOR"
+  note: "Exact tdf114287 print bounds and ODT roundtrip parity are implemented and verified."
+  evaluated_sha: "b6ba7e66c86344d51a3cfe8fec6874929109b357"
+  blueprint_digest: "d7c4aff4bae5a44b34c1d6065b2b76dffede014d2f29c683b0d543d705e29925"
+  evidence_refs:
+    - ".agentplane/tasks/202609241017-BHFQF9/README.md"
+    - ".agentplane/tasks/202609241017-BHFQF9/quality/20260924-103216030-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241017-BHFQF9/quality/20260924-103216030-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241017-BHFQF9/quality/20260924-103216030-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241017-BHFQF9/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts"
+    - "apps/office/src/sw/browser/editor/WriterEditableParagraph.test.tsx"
+    - "npm run verify"
+  findings:
+    - "Paragraph and list style precedence yields the upstream bounds for paragraphs 2, 9, and 16; the result survives ODT export, worker graph transfer, and browser projection; full npm run verify passed."
 commit: null
 comments:
   -

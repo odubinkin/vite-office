@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241017-BHFQF9",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T10:32:16.030Z",
+  "verdict": "pass",
+  "summary": "Exact tdf114287 print bounds and ODT roundtrip parity are implemented and verified.",
+  "evaluated_sha": "b6ba7e66c86344d51a3cfe8fec6874929109b357",
+  "blueprint_digest": "d7c4aff4bae5a44b34c1d6065b2b76dffede014d2f29c683b0d543d705e29925",
+  "findings": [
+    "Paragraph and list style precedence yields the upstream bounds for paragraphs 2, 9, and 16; the result survives ODT export, worker graph transfer, and browser projection; full npm run verify passed."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241017-BHFQF9/README.md",
+    "apps/office/src/sw/source/filter/xml/odt-layout-parity.test.ts",
+    "apps/office/src/sw/browser/editor/WriterEditableParagraph.test.tsx",
+    "npm run verify"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
