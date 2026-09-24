@@ -1,10 +1,11 @@
 ---
 id: "202609241135-B0BX10"
 title: "F7 Complete browser-relevant SwTransferable contract"
-status: "DOING"
+result_summary: "Aligned supported Writer clipboard behavior to pinned SwTransferable ownership; explicit unsupported flavor scope recorded."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on:
@@ -42,11 +43,16 @@ quality_review:
     - "apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts"
   findings:
     - "Verified selection ownership, copy/cut failures and MIME order with focused tests; full npm run verify passed. RTF/RICHTEXT/MARKDOWN and native object flavors remain explicit unsupported scope in inventory/provenance."
-commit: null
+commit:
+  hash: "99e9962432d72b4b78375431cc4dadd5da4140a1"
+  message: "🧩 B0BX10 code: align browser Writer transfer ordering and selection"
 comments:
   -
     author: "CODER"
     body: "Start: Compare pinned Writer transfer formats and ordering, repair browser clipboard selection ownership, and verify failure behavior against focused tests."
+  -
+    author: "CODER"
+    body: "Verified: supported Writer HTML/plain transfer ordering, browser selection ownership and Copy/Cut failure behavior pass focused and full checks."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "npm run verify passed: 488 office tests, 98 inventory tests, 14 browser E2E cases, static build, JSDoc, inventory/provenance and 100% coverage; focused clipboard tests and git diff --check passed."
+  -
+    type: "status"
+    at: "2026-09-24T14:15:57.697Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: supported Writer HTML/plain transfer ordering, browser selection ownership and Copy/Cut failure behavior pass focused and full checks."
 doc_version: 3
-doc_updated_at: "2026-09-24T14:15:21.732Z"
+doc_updated_at: "2026-09-24T14:15:57.699Z"
 doc_updated_by: "CODER"
 description: "Implement F7: compare browser-relevant clipboard formats, ordering, ownership and errors to pinned swdtflvr and add missing behavior."
 sections:
