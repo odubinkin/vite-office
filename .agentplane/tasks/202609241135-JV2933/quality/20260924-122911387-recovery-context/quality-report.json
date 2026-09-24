@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241135-JV2933",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T12:29:11.387Z",
+  "verdict": "pass",
+  "summary": "F4 ownership split verified.",
+  "evaluated_sha": "e61c9c767ae6e3a2c39d8a7ec190d991ae6987c1",
+  "blueprint_digest": "f7accd33451087f531e61ab009eed69748f5717d135641f58e63d68e8c10f0ba",
+  "findings": [
+    "SAX event engine now resides under sax; ODF contexts stay under xmloff; browser keyboard, locale and Worker adapters reside under framework/browser with exact provenance and inventory records."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241135-JV2933/README.md",
+    "apps/office/src/sax/source/fastparser/fastparser.ts",
+    "apps/office/src/xmloff/source/core/xml-parser.ts",
+    "docs/program/source-provenance.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

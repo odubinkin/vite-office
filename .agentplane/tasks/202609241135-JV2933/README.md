@@ -4,7 +4,7 @@ title: "F4 Place SAX parser and platform adaptations at correct boundaries"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -25,6 +25,24 @@ verification:
   updated_by: "CODER"
   note: "F4 ownership split and exact provenance/inventory mappings verified by npm run verify and git diff --check."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T12:29:11.387Z"
+  updated_by: "EVALUATOR"
+  note: "F4 ownership split verified."
+  evaluated_sha: "e61c9c767ae6e3a2c39d8a7ec190d991ae6987c1"
+  blueprint_digest: "f7accd33451087f531e61ab009eed69748f5717d135641f58e63d68e8c10f0ba"
+  evidence_refs:
+    - ".agentplane/tasks/202609241135-JV2933/README.md"
+    - ".agentplane/tasks/202609241135-JV2933/quality/20260924-122911387-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241135-JV2933/quality/20260924-122911387-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241135-JV2933/quality/20260924-122911387-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241135-JV2933/blueprint/resolved-snapshot.json"
+    - "apps/office/src/sax/source/fastparser/fastparser.ts"
+    - "apps/office/src/xmloff/source/core/xml-parser.ts"
+    - "docs/program/source-provenance.json"
+  findings:
+    - "SAX event engine now resides under sax; ODF contexts stay under xmloff; browser keyboard, locale and Worker adapters reside under framework/browser with exact provenance and inventory records."
 commit: null
 comments:
   -
