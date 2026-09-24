@@ -1,10 +1,11 @@
 ---
 id: "202609240501-K41WJD"
 title: "Restore Writer shell and UI command contracts"
-status: "DOING"
+result_summary: "Restored supported Writer shell formatting and ruler command ownership with source-aligned tab metadata and undo."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -41,11 +42,16 @@ quality_review:
     - "/tmp/vite-office-stage4-verify.log"
   findings:
     - "React submits primitive drafts and pointer gestures; mixed paragraph metadata, invalid/no-op values, cancel, ruler undo/redo and command surfaces are covered."
-commit: null
+commit:
+  hash: "230f2cc923e7187bd42f23367ad8f57ef629d1c5"
+  message: "🧩 K41WJD task: record shell and UI parity verification"
 comments:
   -
     author: "CODER"
     body: "Start: move paragraph and ruler command policy into Writer shells with binding-backed state."
+  -
+    author: "CODER"
+    body: "Verified: Writer shell owns paragraph dialog conversion and ruler mutations; full verify and evaluator pass."
 events:
   -
     type: "status"
@@ -60,8 +66,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Full npm run verify passed: 464 office tests at 100% coverage, 96 inventory tests at 100% coverage, 14 Chromium E2E; formatting, lint, types, source provenance, inventory and static build pass. Focused shell tests cover mixed selection, invalid/no-op drafts, tab metadata, ruler deltas and undo/redo."
+  -
+    type: "status"
+    at: "2026-09-24T07:47:38.491Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Writer shell owns paragraph dialog conversion and ruler mutations; full verify and evaluator pass."
 doc_version: 3
-doc_updated_at: "2026-09-24T07:47:09.608Z"
+doc_updated_at: "2026-09-24T07:47:38.493Z"
 doc_updated_by: "CODER"
 description: "Stage 4: move paragraph and ruler policy, validation, command state and dialog commit behavior from React into upstream-shaped shells and bindings"
 sections:
@@ -119,6 +132,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "1868190ae4cfbcca0ba7c7215735a7be7816d4a4"
+    message: "🧩 K41WJD code: restore Writer shell formatting and ruler ownership"
 id_source: "generated"
 ---
 ## Summary
