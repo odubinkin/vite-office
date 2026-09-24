@@ -3,8 +3,8 @@
 
 import { describe, expect, it } from "vitest";
 
-import { SwPaM, SwPosition } from "../../core/crsr/pam";
-import { createWriterDocument } from "../../core/doc/doc";
+import { SwPaM, SwPosition } from "./pam";
+import { createWriterDocument } from "../doc/doc";
 
 describe("Writer selected text ranges", /** Groups Writer selected text ranges. @returns Test callback result. */ () => {
   it("rejects a selection whose endpoints belong to different documents", /** Checks rejects a selection whose endpoints belong to different documents. @returns Test callback result. */ () => {

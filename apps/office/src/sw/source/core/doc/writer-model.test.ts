@@ -40,7 +40,7 @@ import {
   equalWriterHyperlinks,
   normalizeWriterHyperlink,
   SwFormatINetFormat,
-} from "../txtnode/fmtinfmt";
+} from "../txtnode/fmtatr2";
 
 const bold: WriterCharacterAttributes = { bold: true, italic: false, underline: false };
 const italic: WriterCharacterAttributes = { bold: false, italic: true, underline: false };

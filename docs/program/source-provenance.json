@@ -4,89 +4,29 @@
   "baselineTag": "libreoffice-26.8.0.2",
   "filenameDivergences": [
     {
-      "localPath": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts",
-      "rationale": "Stack constraint: one exported ECMAScript controller module needs an unambiguous stable import name while preserving the bounded SfxDialogController lifecycle implemented by upstream basedlgs.cxx.",
-      "stackNecessity": "responsibility-split"
-    },
-    {
-      "localPath": "apps/office/src/svl/source/notify/broadcast.ts",
-      "rationale": "Stack constraint: case-stable ECMAScript imports use the lowercase broadcast.ts path while preserving the reviewed SfxBroadcaster responsibility implemented by upstream SfxBroadcaster.cxx.",
-      "stackNecessity": "module-resolution"
-    },
-    {
-      "localPath": "apps/office/src/svl/source/notify/listener.ts",
-      "rationale": "Stack constraint: the ECMAScript module path avoids the upstream C++ abbreviation while preserving the reviewed SfxListener responsibility implemented by upstream lstner.cxx.",
-      "stackNecessity": "module-resolution"
-    },
-    {
-      "localPath": "apps/office/src/sw/source/core/bastyp/contentindex.ts",
-      "rationale": "Stack constraint: the ECMAScript module path disambiguates Writer content indexes from other index modules while preserving the reviewed registry/update responsibility implemented by upstream index.cxx.",
-      "stackNecessity": "module-resolution"
-    },
-    {
       "localPath": "apps/office/src/sw/source/core/doc/default-font.ts",
-      "rationale": "Stack constraint: the browser device adapter must remain outside domain core, so this module isolates Writer's lcl_SetDfltFont policy from DocumentStylePoolManager.cxx.",
+      "rationale": "The injected DefaultFontDevice contract keeps Writer default-font selection in core while vcl/browser owns font enumeration; poolfmt-defaults.ts consumes this policy without importing a browser device.",
       "stackNecessity": "browser-boundary"
     },
     {
       "localPath": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
-      "rationale": "Stack constraint: source-derived defaults are generated as a separately auditable ECMAScript data module beside DocumentStylePoolManager while preserving its upstream switch responsibility.",
-      "stackNecessity": "generated-resource-boundary"
-    },
-    {
-      "localPath": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
-      "rationale": "Stack constraint: the ECMAScript module exposes the upstream fmtinfmt.hxx contract directly while implementing the reviewed SwFormatINetFormat behavior from fmtatr2.cxx.",
-      "stackNecessity": "module-resolution"
-    },
-    {
-      "localPath": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
-      "rationale": "Stack constraint: asynchronous browser dialogs require a typed request boundary separated from the broader SwTextShell::Execute implementation in upstream textsh1.cxx.",
-      "stackNecessity": "browser-boundary"
-    },
-    {
-      "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts",
-      "rationale": "Stack constraint: the supported ECMAScript shell excludes unavailable native branches while mapping the bounded execute/state subset from upstream textsh1.cxx.",
-      "stackNecessity": "responsibility-split"
-    },
-    {
-      "localPath": "apps/office/src/sw/source/uibase/shells/viewsh.ts",
-      "rationale": "Stack constraint: dispatcher registration is an explicit ECMAScript module boundary, separated from the broader SwView implementation in upstream view.cxx.",
+      "rationale": "This TypeScript module builds the supported style-pool item sets from editeng and svl classes while default-font.ts independently defines the injectable device-resolution policy; fmtcol.ts consumes the constructed defaults.",
       "stackNecessity": "responsibility-split"
     },
     {
       "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-editing.ts",
-      "rationale": "Stack constraint: the bounded ECMAScript shell decomposition isolates structural editing algorithms from SwWrtShell cursor and notification ownership while preserving the reviewed wrtsh1.cxx responsibility.",
+      "rationale": "SwWrtShellEditingOperations operates through SwWrtShellEditingPort, so structural edit algorithms can use cursor and undo callbacks without importing the shell class and creating a static module cycle.",
       "stackNecessity": "responsibility-split"
     },
     {
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
-      "rationale": "Stack constraint: the explicit ECMAScript module name prevents collision with the retired select.ts path while preserving the reviewed SwWrtShell selection responsibility.",
-      "stackNecessity": "module-resolution"
-    },
-    {
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
-      "rationale": "Stack constraint: the primary ECMAScript SwWrtShell module is the stable import root for bounded companion modules while preserving the reviewed wrtsh1.cxx responsibility.",
-      "stackNecessity": "module-resolution"
-    },
-    {
       "localPath": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
-      "rationale": "Stack constraint: generated menu XML is consumed through a typed ECMAScript command-identity module while preserving the reviewed .uno:PickList responsibility from menubar.xml.",
+      "rationale": "The pinned menubar.xml command identities are emitted as typed TypeScript constants for static imports by the browser bundle; XML cannot be imported as that contract.",
       "stackNecessity": "generated-resource-boundary"
     },
     {
       "localPath": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
-      "rationale": "Stack constraint: the browser bundle requires one generated ECMAScript resource loader combining supported metadata from pinned Writer menu, toolbar, accelerator, and XCU catalogs.",
+      "rationale": "The resource generator combines pinned menu, toolbar, accelerator and XCU inputs into one typed TypeScript loader for browser command metadata; no single upstream XML file contains this composite.",
       "stackNecessity": "generated-resource-boundary"
-    },
-    {
-      "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
-      "rationale": "Stack constraint: the ECMAScript import context adapter has a descriptive filename while preserving the reviewed SvXMLImport responsibility in upstream xmlimp.cxx.",
-      "stackNecessity": "responsibility-split"
-    },
-    {
-      "localPath": "apps/office/src/xmloff/source/style/xmlstylei.ts",
-      "rationale": "Stack constraint: separate ECMAScript import and export modules require an import-specific suffix while preserving the reviewed SvXMLStylesContext responsibility in upstream xmlstyle.cxx.",
-      "stackNecessity": "responsibility-split"
     }
   ],
   "entries": [
@@ -1007,7 +947,7 @@
         "local": [
           {
             "marker": "SfxDialogController",
-            "path": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts"
+            "path": "apps/office/src/sfx2/source/dialog/basedlgs.ts"
           }
         ],
         "upstream": [
@@ -1017,7 +957,7 @@
           }
         ]
       },
-      "localPath": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts",
+      "localPath": "apps/office/src/sfx2/source/dialog/basedlgs.ts",
       "localSymbols": [
         "SfxDialogController"
       ],
@@ -1436,7 +1376,7 @@
         "local": [
           {
             "marker": "SfxBroadcaster",
-            "path": "apps/office/src/svl/source/notify/broadcast.ts"
+            "path": "apps/office/src/svl/source/notify/SfxBroadcaster.ts"
           }
         ],
         "upstream": [
@@ -1446,7 +1386,7 @@
           }
         ]
       },
-      "localPath": "apps/office/src/svl/source/notify/broadcast.ts",
+      "localPath": "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
       "localSymbols": [
         "SfxHint",
         "SfxListenerTarget",
@@ -1473,7 +1413,7 @@
         "local": [
           {
             "marker": "SfxListener",
-            "path": "apps/office/src/svl/source/notify/listener.ts"
+            "path": "apps/office/src/svl/source/notify/lstner.ts"
           }
         ],
         "upstream": [
@@ -1483,7 +1423,7 @@
           }
         ]
       },
-      "localPath": "apps/office/src/svl/source/notify/listener.ts",
+      "localPath": "apps/office/src/svl/source/notify/lstner.ts",
       "localSymbols": [
         "SfxListener"
       ],
@@ -2672,7 +2612,7 @@
         "local": [
           {
             "marker": "SwContentIndex",
-            "path": "apps/office/src/sw/source/core/bastyp/contentindex.ts"
+            "path": "apps/office/src/sw/source/core/bastyp/index.ts"
           }
         ],
         "upstream": [
@@ -2682,7 +2622,7 @@
           }
         ]
       },
-      "localPath": "apps/office/src/sw/source/core/bastyp/contentindex.ts",
+      "localPath": "apps/office/src/sw/source/core/bastyp/index.ts",
       "localSymbols": [
         "SwContentIndexOwnerKind",
         "SwContentIndexUpdateMode",
@@ -2725,7 +2665,9 @@
         "SwPosition",
         "SwPaM",
         "WriterTextRange",
-        "getWriterSelectedTextRange"
+        "getWriterSelectedTextRange",
+        "isWriterCursorOffset",
+        "getWriterSelectedTextRanges"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwNodeIndex, SwPosition, SwPaM, SwPosition::SwPosition and the bounded SwNodeIndex, SwPosition, SwPaM contract remain intentionally omitted."
@@ -3530,7 +3472,7 @@
         "local": [
           {
             "marker": "SwFormatINetFormat",
-            "path": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts"
+            "path": "apps/office/src/sw/source/core/txtnode/fmtatr2.ts"
           }
         ],
         "upstream": [
@@ -3540,7 +3482,7 @@
           }
         ]
       },
-      "localPath": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
+      "localPath": "apps/office/src/sw/source/core/txtnode/fmtatr2.ts",
       "localSymbols": [
         "WriterHyperlink",
         "normalizeWriterHyperlink",
@@ -3844,7 +3786,9 @@
         "CopyTextFragment",
         "CopyUndoFragment",
         "GetUndoFragmentLength",
-        "ReplaceUndoRange"
+        "ReplaceUndoRange",
+        "createWriterUndoCursorState",
+        "createWriterCollapsedCursorState"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwUndo, SwUndRng::SwUndRng, SwUndRng::SetValues, SwUndRng::SetPaM and the bounded SwUndoCursorPosition, SwUndoCursorState, SwUndoRedoContext contract remain intentionally omitted."
@@ -4336,36 +4280,25 @@
       ]
     },
     {
-      "classification": "upstream-mechanism",
+      "classification": "local-infrastructure",
       "evidence": {
         "local": [
           {
             "marker": "WriterDialogController",
             "path": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts"
           }
-        ],
-        "upstream": [
-          {
-            "marker": "SwTextShell::Execute",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx"
-          }
         ]
       },
       "localPath": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
-      "localSymbols": [
-        "WriterDialogController"
+      "rationale": "Composes the SfxDialogController request lifecycle with Writer hyperlink and page-dialog data so an external presenter can complete requests; the pinned SwTextShell::Execute owns launching slots, not this composition.",
+      "responsibilities": [
+        "Composes the SfxDialogController request lifecycle with Writer hyperlink and page-dialog data so an external presenter can complete requests; the pinned SwTextShell::Execute owns launching slots, not this composition."
       ],
-      "omittedResponsibilities": [
-        "Upstream obligations outside SwTextShell::Execute and the bounded WriterDialogController contract remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Preserves Writer ownership of hyperlink child-window requests initiated by normal slot execution."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
-      "upstreamSymbols": [
-        "SwTextShell::Execute"
-      ]
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The TypeScript command composition has no single native implementation unit."
+      },
+      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",
@@ -4484,7 +4417,7 @@
         "local": [
           {
             "marker": "SwTextShell",
-            "path": "apps/office/src/sw/source/uibase/shells/textsh.ts"
+            "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts"
           }
         ],
         "upstream": [
@@ -4494,7 +4427,7 @@
           }
         ]
       },
-      "localPath": "apps/office/src/sw/source/uibase/shells/textsh.ts",
+      "localPath": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
       "localSymbols": [
         "SwTextShell",
         "createWriterTextCommandRegistry"
@@ -4513,37 +4446,25 @@
       ]
     },
     {
-      "classification": "upstream-mechanism",
+      "classification": "local-infrastructure",
       "evidence": {
         "local": [
           {
             "marker": "SwViewCommandShell",
-            "path": "apps/office/src/sw/source/uibase/shells/viewsh.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwView::SwView",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx"
+            "path": "apps/office/src/sw/source/uibase/shells/view.ts"
           }
         ]
       },
-      "localPath": "apps/office/src/sw/source/uibase/shells/viewsh.ts",
-      "localSymbols": [
-        "SwViewCommandShell",
-        "createWriterViewCommandRegistry"
+      "localPath": "apps/office/src/sw/source/uibase/shells/view.ts",
+      "rationale": "Composes a Writer view command registry with the generic SfxShell dispatcher; the persistent SwView implementation is separately mapped at sw/source/uibase/uiview/view.ts.",
+      "responsibilities": [
+        "Composes a Writer view command registry with the generic SfxShell dispatcher; the persistent SwView implementation is separately mapped at sw/source/uibase/uiview/view.ts."
       ],
-      "omittedResponsibilities": [
-        "Native VCL view construction and unsupported view slots remain omitted."
-      ],
-      "preservedResponsibilities": [
-        "Separates supported view slot registration from SwView frame and lifecycle coordination."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/uiview/view.cxx",
-      "upstreamSymbols": [
-        "SwView::SwView"
-      ]
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The TypeScript command composition has no single native implementation unit."
+      },
+      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",
@@ -4689,43 +4610,8 @@
       "evidence": {
         "local": [
           {
-            "marker": "getWriterSelectedTextRanges",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts"
-          }
-        ],
-        "upstream": [
-          {
-            "marker": "SwWrtShell::SelAll",
-            "path": "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
-      "localSymbols": [
-        "WriterCompositionState",
-        "isWriterCursorOffset",
-        "createWriterUndoCursorState",
-        "createWriterCollapsedCursorState"
-      ],
-      "omittedResponsibilities": [
-        "Upstream visual, table and object selection modes outside the bounded text SwPaM projection contract remain intentionally omitted."
-      ],
-      "preservedResponsibilities": [
-        "Defines direction-preserving Writer point-and-mark projections and validates their text-node coordinates."
-      ],
-      "status": "mapped",
-      "upstreamPath": "sw/source/uibase/wrtsh/select.cxx",
-      "upstreamSymbols": [
-        "SwWrtShell::SelAll"
-      ]
-    },
-    {
-      "classification": "upstream-mechanism",
-      "evidence": {
-        "local": [
-          {
             "marker": "SwWrtShell",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
           }
         ],
         "upstream": [
@@ -4735,10 +4621,11 @@
           }
         ]
       },
-      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+      "localPath": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
       "localSymbols": [
         "SwWrtShell",
-        "SwWrtShellHistory"
+        "SwWrtShellHistory",
+        "WriterCompositionState"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SwWrtShell, UITestLogger::getInstance, SvxAutoCorrCfg::Get, SwWrtShell::NoEdit and the bounded SwWrtShell contract remain intentionally omitted."
@@ -5083,7 +4970,7 @@
         "local": [
           {
             "marker": "parseOdfXmlStream",
-            "path": "apps/office/src/xmloff/source/core/xml-parser.ts"
+            "path": "apps/office/src/xmloff/source/core/xmlimp.ts"
           }
         ],
         "upstream": [
@@ -5093,7 +4980,7 @@
           }
         ]
       },
-      "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
+      "localPath": "apps/office/src/xmloff/source/core/xmlimp.ts",
       "localSymbols": [
         "FastAttributeList",
         "SvXMLImportContext",
@@ -5223,7 +5110,7 @@
         "local": [
           {
             "marker": "XMLStylesContext",
-            "path": "apps/office/src/xmloff/source/style/xmlstylei.ts"
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.ts"
           }
         ],
         "upstream": [
@@ -5233,7 +5120,7 @@
           }
         ]
       },
-      "localPath": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+      "localPath": "apps/office/src/xmloff/source/style/xmlstyle.ts",
       "localSymbols": [
         "XMLStyleImportTarget",
         "XMLStylesContext"

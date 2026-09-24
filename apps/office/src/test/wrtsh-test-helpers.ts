@@ -2,7 +2,7 @@
 
 import type { WriterCursorSelection } from "../sw/browser/editor/writer-selection-types";
 import { SwPosition } from "../sw/source/core/crsr/pam";
-import type { WriterHyperlink } from "../sw/source/core/txtnode/fmtinfmt";
+import type { WriterHyperlink } from "../sw/source/core/txtnode/fmtatr2";
 import type { WriterCharacterFormat } from "../sw/source/core/txtnode/ndtxt";
 import {
   createWriterTextFragment,
@@ -10,7 +10,7 @@ import {
 } from "../sw/source/filter/basflt/writer-transfer";
 import type { SwTextNode } from "../sw/source/core/txtnode/ndtxt";
 import type { WriterClipboardPaste } from "../sw/browser/filter/html/swhtml";
-import type { SwWrtShell } from "../sw/source/uibase/wrtsh/wrtsh";
+import type { SwWrtShell } from "../sw/source/uibase/wrtsh/wrtsh1";
 
 /** Resolves one fixture ID to a document-owned text node. @param shell - Test shell. @param id - Fixture node ID. @returns Text node. */
 export function getTestParagraph(shell: SwWrtShell, id: string) {

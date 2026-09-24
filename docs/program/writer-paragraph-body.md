@@ -10,7 +10,7 @@ before the end-of-content sentinel. The thin
 exposes construction, model types, and persistence serialization only.
 Interactive insertion, replacement, splitting, joining, formatting, and list
 changes mutate the live graph through
-[`SwWrtShell`](../../apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts) and its
+[`SwWrtShell`](../../apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts) and its
 `SwUndo*` actions. Paragraph alignment, list rule name, list identity,
 and list level are `SfxPoolItem` deltas in a lazy `SwAttrSet`, not parallel node
 fields. Each paragraph registers in a document-owned `SwTextFormatColl`;

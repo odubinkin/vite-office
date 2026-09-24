@@ -11,7 +11,7 @@ import { projectWriterCharacterAttributes } from "../txtnode/txatbase";
 import { copyWriterTextRangeRuns, projectWriterTextRuns } from "../txtnode/ndtxt";
 import { createWriterTextFragment, type WriterTextRun } from "../../filter/basflt/writer-transfer";
 import { SwDocShell } from "../../uibase/app/docsh";
-import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
+import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { SwUndoDelete, SwUndoJoinParagraphs, SwUndoReplace } from "./undel";
 import { SwUndoFormatColl } from "./unfmco";
 import { SwUndoInsert } from "./unins";

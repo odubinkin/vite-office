@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { SwDocShell } from "../../source/uibase/app/docsh";
-import { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
+import { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
 import { IndexedDbWriterOdtStore } from "../storage/writer-odt-store";
 import {

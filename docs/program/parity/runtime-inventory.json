@@ -995,7 +995,7 @@
       }
     },
     {
-      "path": "apps/office/src/sfx2/source/dialog/dialogcontroller.ts",
+      "path": "apps/office/src/sfx2/source/dialog/basedlgs.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",
@@ -1009,7 +1009,7 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sfx2/source/dialog/dialogcontroller.ts#SfxDialogController",
+          "apps/office/src/sfx2/source/dialog/basedlgs.ts#SfxDialogController",
           "vendor/libreoffice-reference/sfx2/source/dialog/basedlgs.cxx#SfxDialogController"
         ],
         "justification": "Ports the bounded asynchronous dialog-controller lifecycle while leaving rendering to the browser adapter.",
@@ -1448,7 +1448,7 @@
       }
     },
     {
-      "path": "apps/office/src/svl/source/notify/broadcast.ts",
+      "path": "apps/office/src/svl/source/notify/SfxBroadcaster.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",
@@ -1462,7 +1462,7 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/svl/source/notify/broadcast.ts#SfxBroadcaster",
+          "apps/office/src/svl/source/notify/SfxBroadcaster.ts#SfxBroadcaster",
           "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::Broadcast",
           "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::AddListener",
           "vendor/libreoffice-reference/svl/source/notify/SfxBroadcaster.cxx#SfxBroadcaster::RemoveListener",
@@ -1486,7 +1486,7 @@
       }
     },
     {
-      "path": "apps/office/src/svl/source/notify/listener.ts",
+      "path": "apps/office/src/svl/source/notify/lstner.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",
@@ -1500,7 +1500,7 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/svl/source/notify/listener.ts#SfxListener",
+          "apps/office/src/svl/source/notify/lstner.ts#SfxListener",
           "vendor/libreoffice-reference/svl/source/notify/lstner.cxx#SfxListener::StartListening"
         ],
         "justification": "Mapped provenance remains semantically unverified against svl/source/notify/lstner.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
@@ -2440,8 +2440,8 @@
         "divergenceClass": "B",
         "evidence": [
           "apps/office/src/sw/browser/presentation/writer-view.tsx#WriterWorkbench",
-          "apps/office/src/sw/source/uibase/shells/textsh.ts#SwTextShell",
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts#SwWrtShell"
+          "apps/office/src/sw/source/uibase/shells/textsh1.ts#SwTextShell",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts#SwWrtShell"
         ],
         "justification": "Browser presentation submits primitive paragraph drafts and ruler gestures to Writer shells. Document-owned line numbering and SvxTabStopItem construction have moved out of React; this entry claims only the browser projection boundary.",
         "knownViolations": [],
@@ -2975,7 +2975,7 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/core/bastyp/contentindex.ts",
+      "path": "apps/office/src/sw/source/core/bastyp/index.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "writer",
@@ -2989,7 +2989,7 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/core/bastyp/contentindex.ts#SwContentIndex",
+          "apps/office/src/sw/source/core/bastyp/index.ts#SwContentIndex",
           "vendor/libreoffice-reference/sw/source/core/bastyp/index.cxx#SwContentIndexReg::Update"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/core/bastyp/index.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
@@ -3034,7 +3034,9 @@
           "SwPosition",
           "SwPaM",
           "WriterTextRange",
-          "getWriterSelectedTextRange"
+          "getWriterSelectedTextRange",
+          "isWriterCursorOffset",
+          "getWriterSelectedTextRanges"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/crsr/pam.cxx",
@@ -3624,7 +3626,7 @@
         "evidence": [
           "apps/office/src/sw/source/core/edit/ednumber.ts#changeWriterParagraphListLevel",
           "vendor/libreoffice-reference/sw/source/core/edit/ednumber.cxx#SwEditShell::NumUpDown",
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts#routesContextualIndent"
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts#routesContextualIndent"
         ],
         "justification": "Bounded active-list NumUpDown branch follows pinned ednumber.cxx; selection-ring list behavior remains unverified.",
         "knownViolations": [],
@@ -3817,7 +3819,7 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
+      "path": "apps/office/src/sw/source/core/txtnode/fmtatr2.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "writer",
@@ -3832,7 +3834,7 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts#SwFormatINetFormat",
+          "apps/office/src/sw/source/core/txtnode/fmtatr2.ts#SwFormatINetFormat",
           "vendor/libreoffice-reference/sw/source/core/txtnode/fmtatr2.cxx#SwFormatINetFormat::SwFormatINetFormat"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/core/txtnode/fmtatr2.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
@@ -4140,7 +4142,9 @@
           "GetUndoFragmentLength",
           "ReplaceUndoRange",
           "DeleteUndoRange",
-          "GetFragmentPayloadSize"
+          "GetFragmentPayloadSize",
+          "createWriterUndoCursorState",
+          "createWriterCollapsedCursorState"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/undo/undobj.cxx",
@@ -4664,7 +4668,7 @@
     },
     {
       "path": "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts",
-      "classification": "upstream-mechanism",
+      "classification": "local-infrastructure",
       "state": "active",
       "suite": "writer",
       "subsystem": "dispatch",
@@ -4672,24 +4676,21 @@
         "CAP-0135"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
-        "divergenceClass": "none",
+        "divergenceClass": "A",
         "evidence": [
-          "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts#WriterDialogController",
-          "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SwTextShell::Execute"
+          "apps/office/src/sw/source/uibase/dialog/writer-dialog-controller.ts#WriterDialogController"
         ],
-        "justification": "Models the Writer-owned hyperlink child-window request initiated by normal slot execution.",
+        "justification": "TypeScript command or dialog request composition; the upstream SwTextShell and SwView operations are mapped in their own source owners.",
         "knownViolations": [],
         "localSymbols": [
           "WriterDialogController"
         ],
-        "sourceResponsibility": "unverified",
-        "upstreamFile": "sw/source/uibase/shells/textsh1.cxx",
-        "upstreamSymbols": [
-          "SwTextShell::Execute"
-        ]
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
       }
     },
     {
@@ -4810,7 +4811,7 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/uibase/shells/textsh.ts",
+      "path": "apps/office/src/sw/source/uibase/shells/textsh1.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "writer",
@@ -4828,7 +4829,7 @@
         "defaultStatus": "not-applicable",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/shells/textsh.ts#SwTextShell",
+          "apps/office/src/sw/source/uibase/shells/textsh1.ts#SwTextShell",
           "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SwTextShell::Execute"
         ],
         "justification": "Owns supported text, character, paragraph, history, indent, and hyperlink execute/state semantics as a dedicated text context shell while SwWrtShell supplies cursor and action primitives.",
@@ -4847,8 +4848,8 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/uibase/shells/viewsh.ts",
-      "classification": "upstream-mechanism",
+      "path": "apps/office/src/sw/source/uibase/shells/view.ts",
+      "classification": "local-infrastructure",
       "state": "active",
       "suite": "writer",
       "subsystem": "command-shell",
@@ -4858,25 +4859,22 @@
         "CAP-0104"
       ],
       "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
-        "divergenceClass": "none",
+        "divergenceClass": "A",
         "evidence": [
-          "apps/office/src/sw/source/uibase/shells/viewsh.ts#SwViewCommandShell",
-          "vendor/libreoffice-reference/sw/source/uibase/uiview/view.cxx#SwView"
+          "apps/office/src/sw/source/uibase/shells/view.ts#SwViewCommandShell"
         ],
-        "justification": "Owns registration of the supported new-document, select-all, and view-option slots outside SwView; browser file, storage, and clipboard commands are registered by the browser workflow shell.",
+        "justification": "TypeScript command or dialog request composition; the upstream SwTextShell and SwView operations are mapped in their own source owners.",
         "knownViolations": [],
         "localSymbols": [
           "SwViewCommandShell",
           "createWriterViewCommandRegistry"
         ],
-        "sourceResponsibility": "aligned",
-        "upstreamFile": "sw/source/uibase/uiview/view.cxx",
-        "upstreamSymbols": [
-          "SwView"
-        ]
+        "sourceResponsibility": "divergent",
+        "upstreamFile": null,
+        "upstreamSymbols": []
       }
     },
     {
@@ -5037,43 +5035,7 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts",
-      "classification": "upstream-mechanism",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "writer-shell",
-      "capabilityIds": [
-        "CAP-0102",
-        "CAP-0105",
-        "CAP-0134"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "unverified",
-        "defaultStatus": "unverified",
-        "divergenceClass": "none",
-        "evidence": [
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh-selection.ts#getWriterSelectedTextRanges",
-          "vendor/libreoffice-reference/sw/source/uibase/wrtsh/select.cxx#SwWrtShell::SelAll"
-        ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/select.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
-        "knownViolations": [],
-        "localSymbols": [
-          "WriterCompositionState",
-          "isWriterCursorOffset",
-          "createWriterUndoCursorState",
-          "createWriterCollapsedCursorState",
-          "getWriterSelectedTextRanges"
-        ],
-        "sourceResponsibility": "unverified",
-        "upstreamFile": "sw/source/uibase/wrtsh/select.cxx",
-        "upstreamSymbols": [
-          "SwWrtShell::SelAll"
-        ]
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+      "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "writer",
@@ -5098,14 +5060,15 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts#SwWrtShell",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts#SwWrtShell",
           "vendor/libreoffice-reference/sw/source/uibase/wrtsh/wrtsh1.cxx#SwWrtShell"
         ],
         "justification": "Mapped provenance remains semantically unverified against sw/source/uibase/wrtsh/wrtsh1.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
         "knownViolations": [],
         "localSymbols": [
           "SwWrtShell",
-          "SwWrtShellHistory"
+          "SwWrtShellHistory",
+          "WriterCompositionState"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/uibase/wrtsh/wrtsh1.cxx",
@@ -5498,7 +5461,7 @@
       }
     },
     {
-      "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+      "path": "apps/office/src/xmloff/source/core/xmlimp.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",
@@ -5513,7 +5476,7 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/xmloff/source/core/xml-parser.ts#parseOdfXmlStream",
+          "apps/office/src/xmloff/source/core/xmlimp.ts#parseOdfXmlStream",
           "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::processingInstruction",
           "apps/office/src/sax/source/fastparser/fastparser.test.ts#ignores comments and processing instructions as the upstream import does"
         ],
@@ -5635,7 +5598,7 @@
       }
     },
     {
-      "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+      "path": "apps/office/src/xmloff/source/style/xmlstyle.ts",
       "classification": "upstream-mechanism",
       "state": "active",
       "suite": "shared",
@@ -5650,7 +5613,7 @@
         "defaultStatus": "unverified",
         "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/xmloff/source/style/xmlstylei.ts#XMLStylesContext",
+          "apps/office/src/xmloff/source/style/xmlstyle.ts#XMLStylesContext",
           "vendor/libreoffice-reference/xmloff/source/style/xmlstyle.cxx#SvXMLStylesContext::createFastChildContext"
         ],
         "justification": "Mapped provenance remains semantically unverified against xmloff/source/style/xmlstyle.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",

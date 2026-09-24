@@ -20,7 +20,7 @@ import {
   splitWriterTextRuns,
   type WriterTextRun,
 } from "../../filter/basflt/writer-transfer";
-import type { SwWrtShell } from "../wrtsh/wrtsh";
+import type { SwWrtShell } from "../wrtsh/wrtsh1";
 
 /** Describes the two clipboard representations emitted for a visible Writer selection. */
 export interface WriterClipboardSelection {

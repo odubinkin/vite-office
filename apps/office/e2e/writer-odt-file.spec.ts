@@ -10,7 +10,7 @@ import { createWriterDocument } from "../src/sw/source/core/doc/doc";
 import { SwPosition } from "../src/sw/source/core/crsr/pam";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
-import { SwWrtShell } from "../src/sw/source/uibase/wrtsh/wrtsh";
+import { SwWrtShell } from "../src/sw/source/uibase/wrtsh/wrtsh1";
 
 test("Writer opens and saves a bounded ODT file" /** Verifies the browser platform boundary feeds SwDocShell and receives its serialized package. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns A promise fulfilled after the downloaded ODT is inspected. */, async function opensAndSavesOdt({
   page,

@@ -1,7 +1,7 @@
 /** @fileoverview Implements bounded SwModify/SwClient registration from pinned `sw/inc/calbck.hxx`. */
 
-import { SfxBroadcaster, type SfxListenerTarget } from "../../svl/source/notify/broadcast";
-import { SfxListener } from "../../svl/source/notify/listener";
+import { SfxBroadcaster, type SfxListenerTarget } from "../../svl/source/notify/SfxBroadcaster";
+import { SfxListener } from "../../svl/source/notify/lstner";
 import type { SwAtomicModelHint, SwModelHint } from "./hints";
 
 /** One Writer client registered at no more than one SwModify. */

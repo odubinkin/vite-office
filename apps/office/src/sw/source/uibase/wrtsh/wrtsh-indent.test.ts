@@ -6,7 +6,7 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
 import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh";
+import { SwWrtShell } from "./wrtsh1";
 import {
   fixtureSplitParagraph,
   setTestCursor,

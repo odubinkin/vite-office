@@ -1,6 +1,6 @@
 /** @fileoverview Implements streaming ODF style and numbering contexts from xmloff. */
 
-import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xml-parser";
+import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import type {
   OdfCharacterProperties,

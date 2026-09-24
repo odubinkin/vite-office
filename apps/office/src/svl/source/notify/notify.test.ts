@@ -4,8 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import { SwClient, SwModify } from "../../../sw/inc/calbck";
 import { hasSwModelHintKind, type SwModelHint } from "../../../sw/inc/hints";
-import { SfxBroadcaster, type SfxHint, type SfxListenerTarget } from "./broadcast";
-import { SfxListener } from "./listener";
+import { SfxBroadcaster, type SfxHint, type SfxListenerTarget } from "./SfxBroadcaster";
+import { SfxListener } from "./lstner";
 
 /** Minimal typed hint used by notification fixtures. */
 interface TestHint extends SfxHint {

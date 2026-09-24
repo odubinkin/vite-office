@@ -1,7 +1,7 @@
 /** @fileoverview Typed Writer dialog requests completed by an external presentation adapter. */
 
-import { SfxDialogController } from "../../../../sfx2/source/dialog/dialogcontroller";
-import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
+import { SfxDialogController } from "../../../../sfx2/source/dialog/basedlgs";
+import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 
 /** Hyperlink child-window request initialized entirely by the Writer shell. */

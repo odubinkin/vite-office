@@ -9,7 +9,7 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
-import { SwWrtShell } from "../wrtsh/wrtsh";
+import { SwWrtShell } from "../wrtsh/wrtsh1";
 
 /** Runs the createFixture test helper. @returns Test callback result. */ function createFixture() {
   const dialogs = new WriterDialogController();

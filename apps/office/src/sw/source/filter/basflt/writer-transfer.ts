@@ -1,6 +1,6 @@
 /** @fileoverview Normalizes browser and filter text-run transfer records at the Writer filter boundary. */
 
-import { equalWriterHyperlinks, normalizeWriterHyperlink } from "../../core/txtnode/fmtinfmt";
+import { equalWriterHyperlinks, normalizeWriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "../../core/txtnode/ndhints";
 import type { SwTextFragment, SwTextNode } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";

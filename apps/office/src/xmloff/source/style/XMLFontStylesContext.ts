@@ -1,6 +1,6 @@
 /** @fileoverview Implements LibreOffice-shaped office:font-face-decls import contexts. */
 
-import { FastAttributeList, SvXMLImportContext } from "../core/xml-parser";
+import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 
 /** Consumer of imported font-face declarations. */

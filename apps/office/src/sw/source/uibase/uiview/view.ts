@@ -17,8 +17,8 @@ import { SwViewOption } from "../../../inc/viewopt";
 import { SwDocShell } from "../app/docsh";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwEditWin } from "../docvw/edtwin";
-import { SwViewCommandShell } from "../shells/viewsh";
-import { SwWrtShell } from "../wrtsh/wrtsh";
+import { SwViewCommandShell } from "../shells/view";
+import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwRootFrame } from "../../core/layout/newfrm";
 

@@ -292,7 +292,7 @@
             "marker": "class SwUndoAttr"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "ApplyAction"
           }
         ],
@@ -1018,7 +1018,7 @@
             "marker": "getWriterParagraphListMarker"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "SetParagraphListKind"
           },
           {
@@ -1052,7 +1052,7 @@
             "marker": "renders bullets"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
             "marker": "routes formatting and list commands"
           },
           {
@@ -1550,7 +1550,7 @@
             "marker": "WriterListLevelCommand"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "ChangeParagraphListLevel"
           },
           {
@@ -1572,7 +1572,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
             "marker": "routes formatting and list commands"
           },
           {
@@ -1619,7 +1619,7 @@
           "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Promote or demote one active list paragraph.",
           "local": {
             "marker": "routes formatting and list commands",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "upstream": {
             "marker": "test_bullets_and_numbering_button_move",
@@ -1663,7 +1663,7 @@
         "behavior": {
           "local": {
             "marker": "routes formatting and list commands",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "unit-test",
           "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
@@ -1676,7 +1676,7 @@
         "defaults": {
           "local": {
             "marker": "routes formatting and list commands",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "source-derived-golden",
           "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
@@ -1694,7 +1694,7 @@
         "operationCycle": {
           "local": {
             "marker": "routes formatting and list commands",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "source-derived-golden",
           "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
@@ -1707,7 +1707,7 @@
         "differential": {
           "local": {
             "marker": "routes formatting and list commands",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "source-derived-golden",
           "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
@@ -2082,7 +2082,7 @@
             "marker": "export class SwTextAttr"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "ToggleCharacterFormat"
           },
           {
@@ -2116,7 +2116,7 @@
             "marker": "toggles a selected range"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
             "marker": "routes formatting and list commands"
           },
           {
@@ -2155,7 +2155,7 @@
           },
           {
             "path": "docs/program/source-tree.md",
-            "marker": "wrtsh.ts"
+            "marker": "wrtsh1.ts"
           }
         ]
       },
@@ -2364,7 +2364,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "public ReplaceRange"
           },
           {
@@ -2390,7 +2390,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
             "marker": "pastes structured list paragraphs"
           },
           {
@@ -2441,7 +2441,7 @@
           "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Replace or remove one selection through bounded clipboard transfer.",
           "local": {
             "marker": "pastes structured list paragraphs",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "upstream": {
             "marker": "dispatchCommand(mxComponent, u\".uno:Cut\"",
@@ -2459,7 +2459,7 @@
         "contract": {
           "local": {
             "marker": "public ReplaceRange",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
           },
           "method": "api-invariant",
           "rationale": "The bounded CAP-0110 API and identifiers resolve to exact local and pinned upstream symbols.",
@@ -2472,7 +2472,7 @@
         "ownership": {
           "local": {
             "marker": "public ReplaceRange",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
           },
           "method": "api-invariant",
           "rationale": "The bounded CAP-0110 owner is checked at the mapped local and upstream implementation boundary.",
@@ -2485,7 +2485,7 @@
         "behavior": {
           "local": {
             "marker": "pastes structured list paragraphs",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "unit-test",
           "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
@@ -2498,7 +2498,7 @@
         "defaults": {
           "local": {
             "marker": "pastes structured list paragraphs",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "source-derived-golden",
           "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
@@ -2516,7 +2516,7 @@
         "operationCycle": {
           "local": {
             "marker": "pastes structured list paragraphs",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "source-derived-golden",
           "rationale": "The applicable mutation, undo/redo, export, or reopen stages are exercised by the mapped bounded test.",
@@ -2529,7 +2529,7 @@
         "differential": {
           "local": {
             "marker": "pastes structured list paragraphs",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "source-derived-golden",
           "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
@@ -3246,7 +3246,7 @@
             "marker": "createOdtManifestXml"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+            "path": "apps/office/src/xmloff/source/core/xmlimp.ts",
             "marker": "parseOdfXmlStream"
           },
           {
@@ -3262,7 +3262,7 @@
             "marker": "export class XMLFontStylesContext"
           },
           {
-            "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.ts",
             "marker": "XMLStylesContext"
           },
           {
@@ -4817,7 +4817,7 @@
             "marker": "export class SwTextAttr"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "ToggleCharacterFormat"
           },
           {
@@ -4847,7 +4847,7 @@
             "marker": "toggles a selected range"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
             "marker": "routes formatting and list commands"
           },
           {
@@ -4882,7 +4882,7 @@
           },
           {
             "path": "docs/program/source-tree.md",
-            "marker": "wrtsh.ts"
+            "marker": "wrtsh1.ts"
           }
         ]
       },
@@ -5083,7 +5083,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts",
             "marker": "public ReplaceRange"
           },
           {
@@ -5109,7 +5109,7 @@
         ],
         "tests": [
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
             "marker": "pastes structured list paragraphs"
           },
           {
@@ -5160,7 +5160,7 @@
           "assertion": "The pinned upstream and local assertion markers cover this atomic operation: Intercept one native Copy, Cut, or Paste event.",
           "local": {
             "marker": "pastes structured list paragraphs",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "upstream": {
             "marker": "dispatchCommand(mxComponent, u\".uno:Cut\"",
@@ -5178,7 +5178,7 @@
         "contract": {
           "local": {
             "marker": "public ReplaceRange",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
           },
           "method": "api-invariant",
           "rationale": "The bounded CAP-0120 API and identifiers resolve to exact local and pinned upstream symbols.",
@@ -5191,7 +5191,7 @@
         "ownership": {
           "local": {
             "marker": "public ReplaceRange",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts"
           },
           "method": "api-invariant",
           "rationale": "The bounded CAP-0120 owner is checked at the mapped local and upstream implementation boundary.",
@@ -5204,7 +5204,7 @@
         "behavior": {
           "local": {
             "marker": "pastes structured list paragraphs",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "browser-test",
           "rationale": "The mapped local assertion exercises the same bounded operation as the pinned upstream assertion.",
@@ -5217,7 +5217,7 @@
         "defaults": {
           "local": {
             "marker": "pastes structured list paragraphs",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "source-derived-golden",
           "rationale": "The local default-state expectation is derived from the pinned upstream assertion before explicit user settings.",
@@ -5240,7 +5240,7 @@
         "differential": {
           "local": {
             "marker": "pastes structured list paragraphs",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "method": "source-derived-golden",
           "rationale": "No runnable pinned LibreOffice binary is present; the focused local golden is derived from the exact pinned upstream test assertion.",
@@ -5405,7 +5405,7 @@
             "marker": "createOdtManifestXml"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+            "path": "apps/office/src/xmloff/source/core/xmlimp.ts",
             "marker": "parseOdfXmlStream"
           },
           {
@@ -5413,7 +5413,7 @@
             "marker": "getXMLToken"
           },
           {
-            "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.ts",
             "marker": "XMLStylesContext"
           },
           {
@@ -7261,7 +7261,7 @@
             "marker": "createOdtManifestXml"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+            "path": "apps/office/src/xmloff/source/core/xmlimp.ts",
             "marker": "parseOdfXmlStream"
           },
           {
@@ -7273,7 +7273,7 @@
             "marker": "export class XMLFontStylesContext"
           },
           {
-            "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.ts",
             "marker": "XMLStylesContext"
           },
           {
@@ -7699,7 +7699,7 @@
             "marker": "createOdtManifestXml"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+            "path": "apps/office/src/xmloff/source/core/xmlimp.ts",
             "marker": "parseOdfXmlStream"
           },
           {
@@ -7711,7 +7711,7 @@
             "marker": "export class XMLFontAutoStylePool"
           },
           {
-            "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.ts",
             "marker": "XMLStylesContext"
           },
           {
@@ -8141,7 +8141,7 @@
             "marker": "createOdtManifestXml"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.ts",
+            "path": "apps/office/src/xmloff/source/core/xmlimp.ts",
             "marker": "parseOdfXmlStream"
           },
           {
@@ -8149,7 +8149,7 @@
             "marker": "getXMLToken"
           },
           {
-            "path": "apps/office/src/xmloff/source/style/xmlstylei.ts",
+            "path": "apps/office/src/xmloff/source/style/xmlstyle.ts",
             "marker": "XMLStylesContext"
           },
           {
@@ -9395,7 +9395,7 @@
       "local": {
         "implementation": [
           {
-            "path": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts",
+            "path": "apps/office/src/sw/source/core/txtnode/fmtatr2.ts",
             "marker": "export class SwFormatINetFormat"
           },
           {
@@ -9429,7 +9429,7 @@
             "marker": "projects overlapping character formatting and hyperlink ranges"
           },
           {
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts",
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts",
             "marker": "edits complete hyperlink ranges"
           },
           {
@@ -9485,7 +9485,7 @@
           "assertion": "Insert, standard-toolbar, Ctrl/Cmd+K, Edit, Remove, Undo, save, and reopen paths share the Writer ranged-attribute model.",
           "local": {
             "marker": "edits complete hyperlink ranges",
-            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh.test.ts"
+            "path": "apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts"
           },
           "upstream": {
             "marker": "hyperlink.odt",
@@ -9503,7 +9503,7 @@
         "contract": {
           "local": {
             "marker": "export class SwFormatINetFormat",
-            "path": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts"
+            "path": "apps/office/src/sw/source/core/txtnode/fmtatr2.ts"
           },
           "method": "api-invariant",
           "rationale": "The bounded CAP-0135 API and identifiers resolve to exact local and pinned upstream symbols.",
@@ -9516,7 +9516,7 @@
         "ownership": {
           "local": {
             "marker": "export class SwFormatINetFormat",
-            "path": "apps/office/src/sw/source/core/txtnode/fmtinfmt.ts"
+            "path": "apps/office/src/sw/source/core/txtnode/fmtatr2.ts"
           },
           "method": "api-invariant",
           "rationale": "The bounded CAP-0135 owner is checked at the mapped local and upstream implementation boundary.",

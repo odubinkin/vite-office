@@ -17,7 +17,7 @@ import {
   normalizeWriterHyperlink,
   SwFormatINetFormat,
   type WriterHyperlink,
-} from "./fmtinfmt";
+} from "./fmtatr2";
 
 /** Stores direct-format text portions in deterministic start/end/which order. */
 export class SwpHints {

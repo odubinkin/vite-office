@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "../wrtsh/wrtsh";
+import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { SwEditWin } from "./edtwin";
 
 /** Creates one edit window over a canonical Writer shell. @returns Edit-window fixture. */

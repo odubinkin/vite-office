@@ -19,7 +19,7 @@ import {
   RES_UL_SPACE,
 } from "../../../inc/hintids";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh";
+import { SwWrtShell } from "./wrtsh1";
 import {
   fixtureSplitParagraph,
   setTestCursor,

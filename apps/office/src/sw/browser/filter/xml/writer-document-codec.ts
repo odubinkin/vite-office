@@ -16,7 +16,7 @@ import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
 import type { WriterParagraphListKind } from "../../../source/core/doc/list";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 import { SwpHints } from "../../../source/core/txtnode/ndhints";
-import { SwFormatINetFormat } from "../../../source/core/txtnode/fmtinfmt";
+import { SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
 import { SwFormatAutoFormat, SwTextAttr } from "../../../source/core/txtnode/txatbase";
 import type { WriterPageDescriptorValue } from "../../../source/core/layout/pagedesc";
 import type { DocumentSettingId } from "../../../source/core/doc/DocumentSettingManager";

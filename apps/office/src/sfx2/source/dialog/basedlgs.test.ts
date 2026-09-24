@@ -2,7 +2,7 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import { SfxDialogController } from "./dialogcontroller";
+import { SfxDialogController } from "./basedlgs";
 
 describe("SfxDialogController", /** Groups typed dialog lifecycle behavior. @returns Nothing. */ function defineDialogControllerTests(): void {
   it("publishes one request and completes only its matching identity", /** Verifies accepted completion and identity checks. @returns Completion after promise resolution. */ async function completesMatchingDialog(): Promise<void> {

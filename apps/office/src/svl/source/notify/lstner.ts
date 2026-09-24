@@ -1,6 +1,6 @@
 /** @fileoverview Implements the bounded SfxListener contract from pinned `svl/source/notify/lstner.cxx`. */
 
-import { SfxBroadcaster, type SfxHint, type SfxListenerTarget } from "./broadcast";
+import { SfxBroadcaster, type SfxHint, type SfxListenerTarget } from "./SfxBroadcaster";
 
 /** Typed M:N listener that owns its reciprocal broadcaster registrations. */
 export abstract class SfxListener<Hint extends SfxHint> implements SfxListenerTarget<Hint> {

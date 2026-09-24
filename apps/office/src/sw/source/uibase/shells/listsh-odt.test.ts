@@ -12,7 +12,7 @@ import { readOdtDocument } from "../../filter/xml/swxml";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "../wrtsh/wrtsh";
+import { SwWrtShell } from "../wrtsh/wrtsh1";
 
 describe("Writer Continue Numbering ODT regression", /** Groups real ODT command assertions. @returns Nothing. */ () => {
   it("joins the selected list and restores it with one Undo", /** Verifies atomic list adoption and export. @returns Completion after reopening. */ async () => {

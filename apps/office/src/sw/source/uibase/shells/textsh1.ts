@@ -32,7 +32,7 @@ import {
   projectWriterCharacterAttributes,
   type WriterCharacterAttributes,
 } from "../../core/txtnode/txatbase";
-import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
+import type { WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import {
   CreateWriterFontSizeUndo,
   CreateWriterFontUndo,
@@ -47,7 +47,7 @@ import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-co
 import type { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { canChangeWriterParagraphListLevel } from "../../core/edit/ednumber";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
-import { getWriterSelectedTextRanges } from "../wrtsh/wrtsh-selection";
+import { getWriterSelectedTextRanges } from "../../core/crsr/pam";
 import {
   createWriterInterface,
   getWriterCommandArguments,

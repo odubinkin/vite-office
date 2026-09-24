@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { parseOdfXmlStream, type SvXMLImportContext } from "../core/xml-parser";
+import { parseOdfXmlStream, type SvXMLImportContext } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
 import {
   escapeXml,

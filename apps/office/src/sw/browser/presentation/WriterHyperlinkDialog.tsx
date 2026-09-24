@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-import type { WriterHyperlink } from "../../source/core/txtnode/fmtinfmt";
+import type { WriterHyperlink } from "../../source/core/txtnode/fmtatr2";
 
 /** Hyperlink dialog properties. */
 export interface WriterHyperlinkDialogProps {

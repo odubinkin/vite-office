@@ -35,8 +35,8 @@ import { type SwTextFormatColl, type WriterParagraphStyle } from "../doc/fmtcol"
 import { type SwNumRule } from "../doc/number";
 import { SwContentNode, type SwStartNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
-import { SwContentIndexUpdateMode } from "../bastyp/contentindex";
-import type { WriterHyperlink } from "./fmtinfmt";
+import { SwContentIndexUpdateMode } from "../bastyp/index";
+import type { WriterHyperlink } from "./fmtatr2";
 
 /** Finds the grapheme start immediately before a caret. @param text - Paragraph text. @param offset - Current UTF-16 caret offset. @returns Previous grapheme boundary. */
 export function getWriterPreviousGraphemeBoundary(text: string, offset: number): number {

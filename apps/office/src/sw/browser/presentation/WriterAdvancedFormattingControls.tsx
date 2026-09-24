@@ -1,7 +1,7 @@
 /** @fileoverview Writer-style color palettes and paragraph formatting controls. */
 import { useState } from "react";
 import type { WriterParagraphComputedStyle } from "./writer-view-projection";
-import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh";
+import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh1";
 
 const SWATCHES = [
   "#000000",

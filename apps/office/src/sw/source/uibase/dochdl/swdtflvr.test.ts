@@ -7,7 +7,7 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "../wrtsh/wrtsh";
+import { SwWrtShell } from "../wrtsh/wrtsh1";
 import { setTestSelection } from "../../../../test/wrtsh-test-helpers";
 
 describe("SwTransferable", /** Groups model-owned transfer tests. @returns Nothing. */ function defineWriterTransferableTests(): void {

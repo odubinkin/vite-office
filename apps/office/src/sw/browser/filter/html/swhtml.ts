@@ -11,7 +11,7 @@ import {
 } from "../../../source/filter/basflt/writer-transfer";
 import type { WriterCharacterAttributes } from "../../../source/core/txtnode/txatbase";
 import { SwTransferable } from "../../../source/uibase/dochdl/swdtflvr";
-import type { WriterHyperlink } from "../../../source/core/txtnode/fmtinfmt";
+import type { WriterHyperlink } from "../../../source/core/txtnode/fmtatr2";
 
 /** One safe paragraph imported from a transfer document. */
 export interface WriterClipboardPasteParagraph {

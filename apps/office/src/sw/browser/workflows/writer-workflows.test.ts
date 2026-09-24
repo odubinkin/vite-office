@@ -6,7 +6,7 @@ import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { setTestCursor, setTestSelection } from "../../../test/wrtsh-test-helpers";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { SwDocShell } from "../../source/uibase/app/docsh";
-import { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh";
+import { SwWrtShell } from "../../source/uibase/wrtsh/wrtsh1";
 import {
   copyWriterSelection,
   cutWriterSelection,

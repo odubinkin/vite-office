@@ -9,7 +9,7 @@ import {
   SwContentIndex,
   type SwContentIndexAffinity,
   type SwContentIndexOwnerKind,
-} from "../bastyp/contentindex";
+} from "../bastyp/index";
 
 /** Tracks a node through structural array changes by retaining its object identity. */
 export class SwNodeIndex {
@@ -223,4 +223,42 @@ export function getWriterSelectedTextRange(cursor: SwPaM): WriterTextRange | und
   const start = Math.min(point.GetContentIndex(), mark.GetContentIndex());
   const end = Math.max(point.GetContentIndex(), mark.GetContentIndex());
   return start === end ? undefined : { end, node: point.GetNode() as SwTextNode, start };
+}
+
+/** Validates one stable cursor offset against its current Writer text node. @param paragraph - Target text node. @param offset - Candidate UTF-16 offset. @returns Whether the position is representable. */
+export function isWriterCursorOffset(paragraph: SwTextNode, offset: number): boolean {
+  return Number.isInteger(offset) && offset >= 0 && offset <= paragraph.Len();
+}
+
+/** Returns every non-empty paragraph-local range covered by an ordered Writer selection. @param cursor - Writer selection. @returns Selected paragraph ranges or undefined. */
+export function getWriterSelectedTextRanges(cursor: SwPaM): readonly WriterTextRange[] | undefined {
+  if (!cursor.HasMark()) return undefined;
+  const point = cursor.GetPoint();
+  const mark = cursor.GetMark();
+  const first = point.compare(mark) <= 0 ? point : mark;
+  const last = first === point ? mark : point;
+  const firstNode = first.GetNode() as SwTextNode;
+  const lastNode = last.GetNode() as SwTextNode;
+  // SwPaM.Assign validates that both endpoints belong to one SwNodes graph.
+  return firstNode
+    .GetDoc()
+    .paragraphs.filter(
+      /** Keeps only body paragraphs within the inclusive Writer node span. @param node - Body paragraph. @returns Whether selected. */ (
+        node,
+      ) => node.GetIndex() >= firstNode.GetIndex() && node.GetIndex() <= lastNode.GetIndex(),
+    )
+    .map(
+      /** Converts one selected paragraph to its local bounded range. @param node - Selected paragraph. @returns Local range. */ (
+        node,
+      ) => ({
+        end: node === lastNode ? last.GetContentIndex() : node.Len(),
+        node,
+        start: node === firstNode ? first.GetContentIndex() : 0,
+      }),
+    )
+    .filter(
+      /** Excludes zero-width boundary paragraphs without discarding the enclosing selection. @param range - Candidate range. @returns Whether non-empty. */ (
+        range,
+      ) => range.start < range.end,
+    );
 }

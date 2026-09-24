@@ -24,10 +24,10 @@ import {
 import { SwUndoPageDesc, SwUndoRulerIndent } from "../../core/undo/SwUndoPageDesc";
 import { SwUndoParagraphItem } from "../../core/undo/unattr";
 import { SwDocShell } from "../app/docsh";
-import { SwWrtShell } from "./wrtsh";
+import { SwWrtShell } from "./wrtsh1";
 import { createWriterHyperlinkAction, getWriterHyperlinkAtCursor } from "../../core/edit/editsh";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
-import { isWriterCursorOffset } from "./wrtsh-selection";
+import { isWriterCursorOffset } from "../../core/crsr/pam";
 import {
   getTestSelection,
   handleTestInput,

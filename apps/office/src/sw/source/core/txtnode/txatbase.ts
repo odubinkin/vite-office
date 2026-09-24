@@ -36,7 +36,7 @@ import {
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
-import { SwFormatINetFormat } from "./fmtinfmt";
+import { SwFormatINetFormat } from "./fmtatr2";
 
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 export { RES_TXTATR_INETFMT } from "../../../inc/hintids";

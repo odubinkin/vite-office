@@ -6,7 +6,7 @@ import { SwDoc } from "../doc/doc";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterTextFragment } from "../../filter/basflt/writer-transfer";
-import { SwContentIndex, SwContentIndexUpdateMode } from "./contentindex";
+import { SwContentIndex, SwContentIndexUpdateMode } from "./index";
 
 /** Creates a three-paragraph Writer model with deterministic text. @returns Writer fixture. */
 function createIndexFixture(): SwDoc {

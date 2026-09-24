@@ -17,7 +17,7 @@ import { projectWriterTextRuns } from "../../apps/office/src/sw/source/core/txtn
 import { readOdtDocument } from "../../apps/office/src/sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../../apps/office/src/sw/source/uibase/app/docsh";
-import { SwWrtShell } from "../../apps/office/src/sw/source/uibase/wrtsh/wrtsh";
+import { SwWrtShell } from "../../apps/office/src/sw/source/uibase/wrtsh/wrtsh1";
 import { SwPosition } from "../../apps/office/src/sw/source/core/crsr/pam";
 import { projectSwTextPrintBounds } from "../../apps/office/src/sw/source/core/layout/newfrm";
 import { WRITER_COMMAND_IDS } from "../../apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands";

@@ -30,6 +30,38 @@ export interface SwUndoCursorState {
   readonly point: SwUndoCursorPosition;
 }
 
+/** Creates an undo cursor state from canonical node references. @param point - Moving endpoint node. @param pointOffset - Moving endpoint offset. @param mark - Optional fixed endpoint node. @param markOffset - Optional fixed endpoint offset. @param activeParagraph - Active node. @param pendingCharacterItems - Pending caret attributes. @returns Complete undo cursor state. */
+export function createWriterUndoCursorState(
+  point: SwTextNode,
+  pointOffset: number,
+  mark: SwTextNode | undefined,
+  markOffset: number | undefined,
+  activeParagraph: SwTextNode,
+  pendingCharacterItems: SfxItemSet,
+): SwUndoCursorState {
+  return {
+    activeParagraph,
+    ...(mark === undefined || markOffset === undefined
+      ? {}
+      : { mark: { node: mark, offset: markOffset } }),
+    pendingCharacterItems: pendingCharacterItems.Clone(),
+    point: { node: point, offset: pointOffset },
+  };
+}
+
+/** Creates a collapsed undo cursor endpoint. @param paragraph - Target node. @param offset - UTF-16 content offset. @param pendingCharacterItems - Pending caret attributes. @returns Complete undo cursor state. */
+export function createWriterCollapsedCursorState(
+  paragraph: SwTextNode,
+  offset: number,
+  pendingCharacterItems: SfxItemSet,
+): SwUndoCursorState {
+  return {
+    activeParagraph: paragraph,
+    pendingCharacterItems: pendingCharacterItems.Clone(),
+    point: { node: paragraph, offset },
+  };
+}
+
 /** Context supplied by SwWrtShell while one Writer action is undone or redone. */
 export interface SwUndoRedoContext {
   /** Returns the current canonical document graph. @returns Active SwDoc. */

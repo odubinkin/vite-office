@@ -6,7 +6,7 @@ import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { createWriterDocument } from "../src/sw/source/core/doc/doc";
 import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../src/sw/source/uibase/app/docsh";
-import { SwWrtShell } from "../src/sw/source/uibase/wrtsh/wrtsh";
+import { SwWrtShell } from "../src/sw/source/uibase/wrtsh/wrtsh1";
 
 test("Writer keeps measured page breaks across device pixel ratios", /** Opens one document with two device scales. @param root0 - Playwright fixtures. @param root0.browser - Chromium browser. @returns Completion after both page counts. */ async ({
   browser,

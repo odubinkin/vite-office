@@ -6,7 +6,7 @@ import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { WRITER_TEXT_NODE_WHICH_RANGES } from "../../../inc/hintids";
 import { SwAttrSet } from "../attr/swatrset";
-import { SwContentIndexRegistry } from "../bastyp/contentindex";
+import { SwContentIndexRegistry } from "../bastyp/index";
 import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { SwNodes } from "./nodes";
 

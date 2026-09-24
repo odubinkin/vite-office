@@ -8,7 +8,7 @@ import {
   SvXMLIgnoreContext,
   SvXMLImportContext,
   type SvXMLImport,
-} from "../../../xmloff/source/core/xml-parser";
+} from "../../../xmloff/source/core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../../../xmloff/source/core/xmltoken";
 
 /** Context that records every delivered event. */

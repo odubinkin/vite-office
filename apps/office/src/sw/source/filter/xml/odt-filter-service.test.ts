@@ -6,7 +6,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SwPosition } from "../../core/crsr/pam";
 import { createWriterDocument, SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
-import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
+import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import {
   createInlineOdtFilterService,
   createOdtFilterDocument,

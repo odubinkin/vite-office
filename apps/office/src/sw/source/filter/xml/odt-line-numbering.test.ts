@@ -6,7 +6,7 @@ import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { LineNumberPosition } from "../../../inc/lineinfo";
-import { FastAttributeList } from "../../../../xmloff/source/core/xml-parser";
+import { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { XMLLineNumberingImportContext } from "../../../../xmloff/source/text/XMLLineNumberingImportContext";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";

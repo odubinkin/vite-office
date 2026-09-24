@@ -7,10 +7,7 @@ import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
 import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
-import {
-  normalizeWriterHyperlink,
-  SwFormatINetFormat,
-} from "../../../source/core/txtnode/fmtinfmt";
+import { normalizeWriterHyperlink, SwFormatINetFormat } from "../../../source/core/txtnode/fmtatr2";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */

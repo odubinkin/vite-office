@@ -1,6 +1,6 @@
 /** @fileoverview Imports supported ODF line-number settings at the pinned XMLLineNumberingImportContext boundary. */
 
-import { FastAttributeList, SvXMLImportContext } from "../core/xml-parser";
+import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import { importOdfLength } from "./XMLTextPropertySetContext";
 

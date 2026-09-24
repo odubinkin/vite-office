@@ -1,6 +1,6 @@
 /** @fileoverview Defines bounded typed Writer model hints from pinned `sw/inc/hints.hxx`. */
 
-import type { SfxHint } from "../../svl/source/notify/broadcast";
+import type { SfxHint } from "../../svl/source/notify/SfxBroadcaster";
 
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =

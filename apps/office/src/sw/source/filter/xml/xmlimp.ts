@@ -33,13 +33,13 @@ import {
   SvXMLImportContext,
   type OdfXmlParseOptions,
   type SvXMLImport as SvXMLImportContract,
-} from "../../../../xmloff/source/core/xml-parser";
+} from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import {
   XMLFontStylesContext,
   type XMLFontStylesImportTarget,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
-import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstylei";
+import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
 import type {
   OdfCharacterProperties,
   OdfHyperlink,

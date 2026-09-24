@@ -7,7 +7,7 @@ import { SwPosition } from "../../core/crsr/pam";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { WriterClipboardSelection, WriterTransferDocument } from "../dochdl/swdtflvr";
 import type { WriterPasteDocument } from "../dochdl/swdtflvr";
-import type { SwWrtShell } from "../wrtsh/wrtsh";
+import type { SwWrtShell } from "../wrtsh/wrtsh1";
 import { SwTextNode as SwTextNodeClass } from "../../core/txtnode/ndtxt";
 
 /** Performs no invalidation for detached/test edit windows. @returns Nothing. */

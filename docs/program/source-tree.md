@@ -119,7 +119,7 @@ The same table now also includes the active ODT file-command boundary.
 | `vcl/browser/browser-file.ts` | Browser-only | Sandboxed user file selection and byte reading without document ownership |
 | `vcl/browser/browser-download.ts` | Browser-only | Sandboxed byte and plain-text download dispatch |
 | `sax/source/fastparser/fastparser.ts` | `sax/source/fastparser/fastparser.cxx` | Bounded namespace-aware SAX event stream, DTD rejection, and resource ceilings |
-| `xmloff/source/core/xml-parser.ts` | `xmloff/source/core/xmlimp.cxx` | Tokenized attributes and fast XML import context ownership |
+| `xmloff/source/core/xmlimp.ts` | `xmloff/source/core/xmlimp.cxx` | Tokenized attributes and fast XML import context ownership |
 | `xmloff/source/text/XMLTextPropertySetContext.ts` | `xmloff/source/text/XMLTextPropertySetContext.cxx` | Element-valued text-property import, currently the canonical Writer tab-stop item |
 | `xmloff/source/text/txtparae.ts` | `xmloff/source/text/txtparae.cxx` | Neutral ODF paragraph, inline, list-style, and nested-list export |
 | `xmloff/source/text/txtparai.ts` | `xmloff/source/text/txtparai.cxx` | Neutral ODF paragraph, inline, and recursive list import |
@@ -134,13 +134,13 @@ The same table now also includes the active ODT file-command boundary.
 | `sw/source/core/docnode/nodes.ts` | `sw/source/core/docnode/nodes.cxx` | Ordered nodes and LibreOffice-matching fixed section sentinels |
 | `sw/source/core/crsr/pam.ts` | `sw/source/core/crsr/pam.cxx` | Model positions and directional point/mark ranges |
 | `sw/source/core/txtnode/ndhints.ts` | `sw/source/core/txtnode/ndhints.cxx` | Start-sorted item-set-backed text attribute hints and derived browser runs |
-| `sw/source/core/txtnode/fmtinfmt.ts` | `sw/source/core/txtnode/fmtatr2.cxx` / `sw/inc/fmtinfmt.hxx` | `SwFormatINetFormat` hyperlink range metadata and snapshots |
+| `sw/source/core/txtnode/fmtatr2.ts` | `sw/source/core/txtnode/fmtatr2.cxx` / `sw/inc/fmtinfmt.hxx` | `SwFormatINetFormat` hyperlink range metadata and snapshots |
 | `sw/source/core/txtnode/txatbase.ts` | `sw/source/core/txtnode/txatbase.cxx` | `SwTextAttr` ranges and `SfxItemSet`-backed `SwFormatAutoFormat` items |
 | `sw/source/core/doc/DocumentContentOperationsManager.ts` | `sw/source/core/doc/DocumentContentOperationsManager.cxx` | Bounded same-text-node Insert, Delete, and Replace operations through `SwPaM` |
 | `sw/source/uibase/shells/listsh.ts` | `sw/source/uibase/shells/listsh.cxx` | Bounded Promote and Demote command identity |
 | `sw/browser/accelerators/writer-shortcuts.ts` | Browser-only | Global keyboard-event adaptation to the shared dispatcher |
 | `sw/browser/presentation/WriterHyperlinkDialog.tsx` | Browser-only | Accessible hyperlink create/edit dialog behind Writer commands |
-| `sw/source/uibase/wrtsh/wrtsh.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Persistent cursor, undo orchestration, notification transactions, and command-shell facades |
+| `sw/source/uibase/wrtsh/wrtsh1.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Persistent cursor, undo orchestration, notification transactions, and command-shell facades |
 | `sw/source/uibase/wrtsh/wrtsh-editing.ts` | `sw/source/uibase/wrtsh/wrtsh1.cxx` | Action-based text, range, paste, split, and join editing algorithms |
 | `sw/source/core/edit/editsh.ts` | `sw/source/core/edit/editsh.cxx` | Selection-aware hyperlink insertion, replacement, and removal actions |
 | `sw/source/core/txtnode/ndtxt.ts` | `sw/source/core/txtnode/ndtxt.cxx` | Canonical text-node storage, item-set formatting/list mutation, hint-aware editing, and split/append |
