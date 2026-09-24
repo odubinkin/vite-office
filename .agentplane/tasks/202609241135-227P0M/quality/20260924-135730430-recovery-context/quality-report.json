@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241135-227P0M",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T13:57:30.430Z",
+  "verdict": "pass",
+  "summary": "Writer layout uses model and device revisions with typed frame comparisons and targeted node hints.",
+  "evaluated_sha": "836055918e3cd77f8e6466567534025e5d91c59b",
+  "blueprint_digest": "756cafb50c6a178d23c2067e17d05fee85de2afb4267f68948c987d93d2c93f0",
+  "findings": [
+    "Full verify passed: 486 office tests, 98 inventory tests, 14 E2E and 100% coverage; whole-document JSON serialization removed from SwRootFrame."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241135-227P0M/README.md",
+    "apps/office/src/sw/source/core/layout/newfrm.test.ts"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
