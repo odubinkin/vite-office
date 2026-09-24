@@ -1,10 +1,11 @@
 ---
 id: "202609241521-Q9V21Y"
 title: "Implement canonical Writer table slice"
-status: "DOING"
+result_summary: "verified-202609241521-Q9V21Y"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 12
 origin:
   system: "manual"
 depends_on:
@@ -23,7 +24,7 @@ plan_approval:
   note: "User requested implementation of the seven ordered phases in docs/program/certification-odt-import-plan.md; outside-repo sample access remains pending separate authorization."
 verification:
   state: "ok"
-  updated_at: "2026-09-24T22:02:48.933Z"
+  updated_at: "2026-09-24T22:03:23.249Z"
   updated_by: "CODER"
   note: "verified-202609241521-Q9V21Y"
   attempts: 0
@@ -46,11 +47,16 @@ quality_review:
     - "npm-run-verify"
   findings:
     - "Pinned tdf132642_keepWithNextTable.odt replaced unsuitable candidates after source inspection; structural, Worker and UI roundtrips are covered. Private acceptance retained 5 rows, 15 cells and all three table-owned breaks. Row pagination and merged cells remain documented limits."
-commit: null
+commit:
+  hash: "652f6db77ff26405e1df1c5075126acf5bb9dc9e"
+  message: "🧪 Q9V21Y task: record table parity verification"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609241521-Q9V21Y. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -71,8 +77,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202609241521-Q9V21Y"
+  -
+    type: "verify"
+    at: "2026-09-24T22:03:23.249Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609241521-Q9V21Y"
+  -
+    type: "status"
+    at: "2026-09-24T22:03:23.382Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609241521-Q9V21Y. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-24T22:02:48.984Z"
+doc_updated_at: "2026-09-24T22:03:23.382Z"
 doc_updated_by: "CODER"
 description: "Phase 5: upstream-shaped SwTable rows/cells/styles, layout/editing, Worker transfer, export and table UI."
 sections:
@@ -154,11 +173,45 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-09-24T22:03:23.249Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609241521-Q9V21Y
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T22:02:48.984Z, excerpt_hash=sha256:be487fbfc16303b8b922e6fb3054189d49f1531214af71c17f64e3b451fb1428
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-Q9V21Y/blueprint/resolved-snapshot.json
+    - old_digest: 3f39ee7d95b14f8f0b6f84c642f8d345e3c2c9765faede0b02c52f9d508feb49
+    - current_digest: 3f39ee7d95b14f8f0b6f84c642f8d345e3c2c9765faede0b02c52f9d508feb49
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241521-Q9V21Y
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241521-Q9V21Y --result verified-202609241521-Q9V21Y --commit 652f6db77ff26405e1df1c5075126acf5bb9dc9e
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: ""
+extensions:
+  implementation_commit:
+    hash: "21b8e80e250b83526cc049d349e6459c4573a97b"
+    message: "🚧 Q9V21Y task: implement canonical Writer table slice"
 id_source: "generated"
 ---
 ## Summary
@@ -242,6 +295,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202609241521-Q9V21Y --result verified-202609241521-Q9V21Y --commit 21b8e80e250b83526cc049d349e6459c4573a97b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-09-24T22:03:23.249Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609241521-Q9V21Y
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T22:02:48.984Z, excerpt_hash=sha256:be487fbfc16303b8b922e6fb3054189d49f1531214af71c17f64e3b451fb1428
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241521-Q9V21Y/blueprint/resolved-snapshot.json
+- old_digest: 3f39ee7d95b14f8f0b6f84c642f8d345e3c2c9765faede0b02c52f9d508feb49
+- current_digest: 3f39ee7d95b14f8f0b6f84c642f8d345e3c2c9765faede0b02c52f9d508feb49
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241521-Q9V21Y
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241521-Q9V21Y --result verified-202609241521-Q9V21Y --commit 652f6db77ff26405e1df1c5075126acf5bb9dc9e
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
