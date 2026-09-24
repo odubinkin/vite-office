@@ -44,8 +44,8 @@
           "SvxAdjustItem::CreateDefault",
           "SvxFirstLineIndentItem",
           "SvxRightMarginItem",
-          "SvxULSpaceItem"
-          ,"SvxTabStop",
+          "SvxULSpaceItem",
+          "SvxTabStop",
           "SvxTabStopItem",
           "SvxTabStopItem::Insert"
         ]
@@ -1771,7 +1771,7 @@
         "CAP-0125"
       ],
       "semantic": {
-        "behaviorStatus": "divergent",
+        "behaviorStatus": "unverified",
         "contractStatus": "not-applicable",
         "defaultStatus": "unverified",
         "divergenceClass": "B",
@@ -1780,12 +1780,12 @@
           "apps/office/src/sw/browser/presentation/WriterAdvancedFormattingControls.tsx#fromParagraph",
           "vendor/libreoffice-reference/sw/source/uibase/shells/textsh1.cxx#SvxTabStopItem"
         ],
-        "justification": "P1 confirmed browser ownership gap: the React dialog derives paragraph formatting drafts and fixed line-spacing choices locally. Pinned SwTextShell owns tab-stop item conversion and commit semantics; React should retain only draft state and accessibility interaction. Exact supported command defaults remain unverified.",
+        "justification": "React owns draft controls and accessibility interaction. Accepted primitive values pass to SwTextShell for validation, pooled item construction, tab metadata preservation, and undo grouping. Exact full upstream dialog defaults remain unverified.",
         "knownViolations": [],
         "localSymbols": [
           "WriterAdvancedFormattingControls"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -2014,7 +2014,7 @@
         "evidence": [
           "apps/office/src/sw/browser/presentation/WriterRulers.tsx#WriterRulers"
         ],
-        "justification": "Projects SwRuler/SvxRuler page-margin and paragraph-indent semantics into browser pointer controls without moving canonical values into React state.",
+        "justification": "Projects Writer page geometry and paragraph markers into pointer handles; commits only drag deltas and tab positions to SwWrtShell, which owns clamping, item mutation, and undo.",
         "knownViolations": [],
         "localSymbols": [
           "WriterRulers",
@@ -2188,25 +2188,23 @@
         "CAP-0135"
       ],
       "semantic": {
-        "behaviorStatus": "divergent",
+        "behaviorStatus": "unverified",
         "contractStatus": "not-applicable",
-        "defaultStatus": "divergent",
+        "defaultStatus": "not-applicable",
         "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/sw/browser/presentation/writer-view.tsx#showLineNumbers",
-          "apps/office/src/sw/browser/presentation/writer-view.tsx#RES_PARATR_TABSTOP",
-          "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#SwDoc::SetLineNumberInfo",
-          "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx#SvxTabStopItem",
-          "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#m_nCountBy( 5 )"
+          "apps/office/src/sw/browser/presentation/writer-view.tsx#WriterWorkbench",
+          "apps/office/src/sw/source/uibase/shells/textsh.ts#SwTextShell",
+          "apps/office/src/sw/source/uibase/wrtsh/wrtsh.ts#SwWrtShell"
         ],
-        "justification": "P0 line-number ownership remains: React stores showLineNumbers. Tab-stop item identity now matches SvxTabStopItem, while React still creates the item directly instead of submitting a shell-owned command. Pinned SwDoc::SetLineNumberInfo and SwLineNumberInfo own line-number state and count-by=5.",
+        "justification": "Browser presentation submits primitive paragraph drafts and ruler gestures to Writer shells. Document-owned line numbering and SvxTabStopItem construction have moved out of React; this entry claims only the browser projection boundary.",
         "knownViolations": [],
         "localSymbols": [
           "WriterWorkbench",
           "presentWriterStatus",
           "presentWriterCommandError"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
       }

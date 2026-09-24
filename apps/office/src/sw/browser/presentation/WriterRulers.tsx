@@ -14,13 +14,15 @@ const MINOR_TICK_PIXELS = MINOR_TICK_TWIPS / TWIPS_PER_CSS_PIXEL;
 /** Model values and Writer command callbacks consumed by both rulers. */
 export interface WriterRulersProps {
   readonly horizontalVisible: boolean;
-  readonly onPageChange: (value: WriterPageDescriptorValue) => void;
+  readonly onPageChange: (edge: "left" | "right" | "top" | "bottom", deltaTwips: number) => void;
   readonly onParagraphIndentChange: (
-    value: Readonly<{ firstLine: number; left: number; right: number }>,
+    edge: "left" | "firstLine" | "right",
+    deltaTwips: number,
   ) => void;
   readonly page: WriterPageDescriptorValue;
   readonly paragraph: WriterParagraphProjection;
-  readonly onTabStopsChange?: (positionsPt: readonly number[]) => void;
+  readonly onTabStopAdd?: (positionTwips: number) => void;
+  readonly onTabStopMove?: (index: number, deltaTwips: number) => void;
 }
 
 /** Renders physical centimetre ticks and draggable Writer margin/indent markers. @param props - Geometry, paragraph, visibility, and commit callbacks. @returns Writer rulers. */
@@ -45,14 +47,15 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
                 event,
               ) => {
-                if (event.target !== event.currentTarget || props.onTabStopsChange === undefined)
+                if (event.target !== event.currentTarget || props.onTabStopAdd === undefined)
                   return;
-                const positionPt = Math.round(
-                  ((event.clientX - event.currentTarget.getBoundingClientRect().left) * 15) / 20 -
-                    props.page.leftMargin / 20 -
-                    paragraphLeft / 20,
+                const position = Math.round(
+                  (event.clientX - event.currentTarget.getBoundingClientRect().left) *
+                    TWIPS_PER_CSS_PIXEL -
+                    props.page.leftMargin -
+                    paragraphLeft,
                 );
-                if (positionPt > 0) props.onTabStopsChange([...tabStopsPt, positionPt]);
+                if (position > 0) props.onTabStopAdd(position);
               }
             }
           >
@@ -78,14 +81,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               onCommit={
                 /** Commits the left page margin. @param delta - Drag delta in twips. @returns Nothing. */ (
                   delta,
-                ) =>
-                  props.onPageChange({
-                    ...props.page,
-                    leftMargin: clampMargin(
-                      props.page.leftMargin + delta,
-                      props.page.width - props.page.rightMargin,
-                    ),
-                  })
+                ) => props.onPageChange("left", delta)
               }
             />
             <RulerHandle
@@ -97,14 +93,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               onCommit={
                 /** Commits the right page margin. @param delta - Drag delta in twips. @returns Nothing. */ (
                   delta,
-                ) =>
-                  props.onPageChange({
-                    ...props.page,
-                    rightMargin: clampMargin(
-                      props.page.rightMargin - delta,
-                      props.page.width - props.page.leftMargin,
-                    ),
-                  })
+                ) => props.onPageChange("right", delta)
               }
             />
             <RulerHandle
@@ -117,12 +106,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               onCommit={
                 /** Commits the paragraph left indent. @param delta - Drag delta in twips. @returns Nothing. */ (
                   delta,
-                ) =>
-                  props.onParagraphIndentChange({
-                    firstLine,
-                    left: Math.max(0, paragraphLeft + delta),
-                    right: paragraphRight,
-                  })
+                ) => props.onParagraphIndentChange("left", delta)
               }
             />
             <RulerHandle
@@ -134,12 +118,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               onCommit={
                 /** Commits the first-line indent. @param delta - Drag delta in twips. @returns Nothing. */ (
                   delta,
-                ) =>
-                  props.onParagraphIndentChange({
-                    firstLine: firstLine + delta,
-                    left: paragraphLeft,
-                    right: paragraphRight,
-                  })
+                ) => props.onParagraphIndentChange("firstLine", delta)
               }
             />
             <RulerHandle
@@ -154,12 +133,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
               onCommit={
                 /** Commits the paragraph right indent. @param delta - Drag delta in twips. @returns Nothing. */ (
                   delta,
-                ) =>
-                  props.onParagraphIndentChange({
-                    firstLine,
-                    left: paragraphLeft,
-                    right: Math.max(0, paragraphRight - delta),
-                  })
+                ) => props.onParagraphIndentChange("right", delta)
               }
             />
             {tabStopsPt.map(
@@ -180,15 +154,7 @@ export function WriterRulers(props: WriterRulersProps): React.JSX.Element {
                   onCommit={
                     /** Handles Writer formatting state. @param delta - Input value. @returns Callback result. */ (
                       delta,
-                    ) =>
-                      props.onTabStopsChange?.(
-                        tabStopsPt.map(
-                          /** Handles Writer formatting state. @param value - Input value. @param stopIndex - Input value. @returns Callback result. */ (
-                            value,
-                            stopIndex,
-                          ) => (stopIndex === index ? Math.max(0, value + delta / 20) : value),
-                        ),
-                      )
+                    ) => props.onTabStopMove?.(index, delta)
                   }
                 />
               ),
@@ -205,7 +171,7 @@ export function WriterVerticalRuler({
   onPageChange,
   page,
 }: Readonly<{
-  onPageChange: (value: WriterPageDescriptorValue) => void;
+  onPageChange: (edge: "left" | "right" | "top" | "bottom", deltaTwips: number) => void;
   page: WriterPageDescriptorValue;
 }>): React.JSX.Element {
   return (
@@ -234,11 +200,7 @@ export function WriterVerticalRuler({
         onCommit={
           /** Commits the top page margin. @param delta - Drag delta in twips. @returns Nothing. */ (
             delta,
-          ) =>
-            onPageChange({
-              ...page,
-              topMargin: clampMargin(page.topMargin + delta, page.height - page.bottomMargin),
-            })
+          ) => onPageChange("top", delta)
         }
       />
       <RulerHandle
@@ -250,11 +212,7 @@ export function WriterVerticalRuler({
         onCommit={
           /** Commits the bottom page margin. @param delta - Drag delta in twips. @returns Nothing. */ (
             delta,
-          ) =>
-            onPageChange({
-              ...page,
-              bottomMargin: clampMargin(page.bottomMargin - delta, page.height - page.topMargin),
-            })
+          ) => onPageChange("bottom", delta)
         }
       />
     </div>
@@ -484,9 +442,4 @@ function startDrag(
   globalThis.addEventListener("pointermove", move);
   globalThis.addEventListener("pointerup", finish);
   globalThis.addEventListener("pointercancel", cancel);
-}
-
-/** Keeps a dragged margin inside the page while retaining a minimum text area. @param value - Candidate margin. @param oppositeBoundary - Available opposite edge. @returns Clamped margin. */
-function clampMargin(value: number, oppositeBoundary: number): number {
-  return Math.max(0, Math.min(value, oppositeBoundary - 567));
 }

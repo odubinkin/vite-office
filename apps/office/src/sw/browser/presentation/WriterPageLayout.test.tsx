@@ -140,14 +140,16 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
   });
 
   it("adds and drags tab markers on the horizontal ruler", /** Checks ruler tab-stop callbacks. @returns Nothing. */ () => {
-    const onTabStopsChange = vi.fn();
+    const onTabStopAdd = vi.fn();
+    const onTabStopMove = vi.fn();
     const item = paragraph("tabbed", "Text");
     const { container } = render(
       <WriterRulers
         horizontalVisible
         onPageChange={vi.fn()}
         onParagraphIndentChange={vi.fn()}
-        onTabStopsChange={onTabStopsChange}
+        onTabStopAdd={onTabStopAdd}
+        onTabStopMove={onTabStopMove}
         page={page}
         paragraph={{ ...item, computedStyle: { ...item.computedStyle, tabStopsPt: [36] } }}
       />,
@@ -156,24 +158,26 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
       '[aria-label="Writer horizontal ruler"] > div',
     ) as HTMLElement;
     fireEvent.click(rulerSurface, { clientX: 240 });
-    expect(onTabStopsChange).toHaveBeenCalledWith([36, expect.any(Number)]);
+    expect(onTabStopAdd).toHaveBeenCalledWith(expect.any(Number));
     fireEvent.click(rulerSurface, { clientX: 0 });
-    expect(onTabStopsChange).toHaveBeenCalledTimes(1);
+    expect(onTabStopAdd).toHaveBeenCalledTimes(1);
     const handle = screen.getByRole("button", { name: "Tab stop 1" });
     fireEvent.pointerDown(handle, { clientX: 100 });
     fireEvent.pointerUp(window, { clientX: 115 });
-    expect(onTabStopsChange).toHaveBeenCalledWith([expect.any(Number)]);
+    expect(onTabStopMove).toHaveBeenCalledWith(0, 237);
   });
 
   it("retains other tab stops when dragging a marker", /** Checks multi-stop ruler editing. @returns Nothing. */ () => {
-    const onTabStopsChange = vi.fn();
+    const onTabStopAdd = vi.fn();
+    const onTabStopMove = vi.fn();
     const item = paragraph("tabbed", "Text");
     const { container, rerender } = render(
       <WriterRulers
         horizontalVisible
         onPageChange={vi.fn()}
         onParagraphIndentChange={vi.fn()}
-        onTabStopsChange={onTabStopsChange}
+        onTabStopAdd={onTabStopAdd}
+        onTabStopMove={onTabStopMove}
         page={page}
         paragraph={{ ...item, computedStyle: { ...item.computedStyle, tabStopsPt: [36, 72] } }}
       />,
@@ -181,13 +185,14 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
     const handle = screen.getByRole("button", { name: "Tab stop 1" });
     fireEvent.pointerDown(handle, { clientX: 100 });
     fireEvent.pointerUp(window, { clientX: 115 });
-    expect(onTabStopsChange).toHaveBeenCalledWith([expect.any(Number), 72]);
+    expect(onTabStopMove).toHaveBeenCalledWith(0, 237);
     rerender(
       <WriterRulers
         horizontalVisible
         onPageChange={vi.fn()}
         onParagraphIndentChange={vi.fn()}
-        onTabStopsChange={onTabStopsChange}
+        onTabStopAdd={onTabStopAdd}
+        onTabStopMove={onTabStopMove}
         page={page}
         paragraph={{ ...item, computedStyle: { ...item.computedStyle, tabStopsPt: undefined } }}
       />,
@@ -196,7 +201,7 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
       '[aria-label="Writer horizontal ruler"] > div',
     ) as HTMLElement;
     fireEvent.click(rulerSurface, { clientX: 240 });
-    expect(onTabStopsChange).toHaveBeenLastCalledWith([expect.any(Number)]);
+    expect(onTabStopAdd).toHaveBeenLastCalledWith(expect.any(Number));
     rerender(
       <WriterRulers
         horizontalVisible
@@ -207,7 +212,7 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
       />,
     );
     fireEvent.click(rulerSurface, { clientX: 240 });
-    expect(onTabStopsChange).toHaveBeenCalledTimes(2);
+    expect(onTabStopAdd).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -397,13 +402,13 @@ describe("Writer physical page browser UI", /** Registers page-layout UI cases. 
     expect(handle.style.left).toBe(`${page.leftMargin / 15 + 2 * (1440 / 2.54 / 10 / 15)}px`);
     expect(document.querySelector('[data-ruler-guide="x"]')).not.toBeNull();
     fireEvent.pointerUp(window, { clientX: 107 });
-    expect(onPageChange).toHaveBeenCalledWith({ ...page, leftMargin: page.leftMargin + 113 });
+    expect(onPageChange).toHaveBeenCalledWith("left", 113);
     expect(document.querySelector('[data-ruler-guide="x"]')).toBeNull();
     fireEvent.pointerDown(screen.getByRole("button", { name: "Paragraph left indent" }), {
       clientX: 100,
     });
     fireEvent.pointerUp(window, { clientX: 107 });
-    expect(onParagraphIndentChange).toHaveBeenCalledWith({ firstLine: 60, left: 227, right: 80 });
+    expect(onParagraphIndentChange).toHaveBeenCalledWith("left", 107);
   });
 
   it("docks page rulers at the canvas edge and keeps their page-relative origins through scrolling", /** Verifies the fixed lane and page origins. @returns Nothing. */ () => {

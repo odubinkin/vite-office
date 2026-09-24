@@ -5,7 +5,20 @@ import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem, type SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import {
+  SvxLineSpacingItem,
+  SvxTabStop,
+  SvxTabStopItem,
+  SvxULSpaceItem,
+} from "../../../../editeng/source/items/paraitem";
+import {
+  RES_KEEP,
+  RES_LINENUMBER,
+  RES_PARATR_LINESPACING,
+  RES_PARATR_TABSTOP,
+  RES_UL_SPACE,
+} from "../../../inc/hintids";
 import { SwPosition } from "../../core/crsr/pam";
 import { isWriterParagraphStyle, type WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type {
@@ -67,6 +80,19 @@ export interface SwTextShellTarget {
   readonly SetPaM: (point: SwPosition, mark?: SwPosition) => boolean;
   readonly SetPendingCharacterItems: (items: SfxItemSet) => void;
   readonly Undo: () => boolean;
+}
+
+/** Primitive values accepted by the supported Writer paragraph dialog. */
+export interface WriterParagraphFormatValue {
+  readonly upperPt: number;
+  readonly lowerPt: number;
+  readonly contextual: boolean;
+  readonly lineMode: "proportional" | "fixed" | "minimum" | "leading";
+  readonly lineValue: number;
+  readonly fontIndependent: boolean;
+  readonly tabStopsPt: readonly number[];
+  readonly keepWithNext: boolean;
+  readonly countLineNumbers: boolean;
 }
 
 /** Dedicated text context shell owning its execute/state registration. */
@@ -301,8 +327,104 @@ export class SwTextShell {
     return this.SetParagraphItems([item]);
   }
 
+  /** Applies the supported paragraph dialog through pooled items and one undo entry. @param value - Accepted primitive draft. @returns Whether formatting changed. */
+  public ApplyParagraphFormat(value: WriterParagraphFormatValue): boolean {
+    if (
+      !Number.isFinite(value.upperPt) ||
+      value.upperPt < 0 ||
+      !Number.isFinite(value.lowerPt) ||
+      value.lowerPt < 0 ||
+      !Number.isInteger(value.lineValue) ||
+      value.lineValue < 0 ||
+      !["proportional", "fixed", "minimum", "leading"].includes(value.lineMode)
+    )
+      return false;
+    const positions = value.tabStopsPt.map(
+      /** Converts a dialog position to twips. @param position - Position in points. @returns Twips. */ (
+        position,
+      ) => Math.round(position * 20),
+    );
+    if (
+      positions.some(
+        /** Rejects positions outside the supported range. @param position - Twips. @returns Whether invalid. */ (
+          position,
+        ) => !Number.isInteger(position) || position <= 0 || position > 32767,
+      )
+    )
+      return false;
+    return this.ApplyParagraphItems(
+      /** Builds each selected paragraph's items. @param paragraph - Selected paragraph. @returns Pooled items. */ (
+        paragraph,
+      ) => [
+        new SvxULSpaceItem(
+          Math.round(value.upperPt * 20),
+          Math.round(value.lowerPt * 20),
+          RES_UL_SPACE,
+          value.contextual,
+        ),
+        new SvxLineSpacingItem(
+          value.lineValue,
+          RES_PARATR_LINESPACING,
+          value.lineMode,
+          value.fontIndependent,
+        ),
+        this.CreateTabStops(positions, paragraph),
+        new SfxBoolItem(RES_KEEP, value.keepWithNext),
+        new SfxBoolItem(RES_LINENUMBER, value.countLineNumbers),
+      ],
+    );
+  }
+
+  /** Applies the toolbar's proportional line-spacing value. @param percent - Percent. @returns Whether changed. */
+  public SetLineSpacingPercent(percent: number): boolean {
+    if (!Number.isInteger(percent) || percent < 0) return false;
+    return this.SetParagraphItem(new SvxLineSpacingItem(percent, RES_PARATR_LINESPACING));
+  }
+
+  /** Replaces tab positions while retaining unchanged stops' alignment and leader. @param positions - Twip positions. @returns Whether changed. */
+  public SetTabStopPositions(positions: readonly number[]): boolean {
+    if (
+      positions.some(
+        /** Rejects positions outside the supported range. @param position - Twips. @returns Whether invalid. */ (
+          position,
+        ) => !Number.isInteger(position) || position <= 0 || position > 32767,
+      )
+    )
+      return false;
+    return this.SetParagraphItem(this.CreateTabStops(positions));
+  }
+
+  /** Builds the item against a paragraph's tab metadata. @param positions - Valid twip positions. @param paragraph - Source paragraph. @returns Pooled item. */
+  private CreateTabStops(
+    positions: readonly number[],
+    paragraph = this.target.GetActiveParagraph(),
+  ): SvxTabStopItem {
+    const current = paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    return SvxTabStopItem.FromStops(
+      RES_PARATR_TABSTOP,
+      positions.map(
+        /** Retains metadata at unchanged positions. @param position - Twips. @returns Tab stop. */ (
+          position,
+        ) =>
+          current.GetPos(position) !== 65535
+            ? current.At(current.GetPos(position))
+            : new SvxTabStop(position),
+      ),
+      current.GetDefaultDistance(),
+    );
+  }
+
   /** Applies paragraph dialog attributes in one history entry. @param items - Paragraph attributes. @returns Whether a paragraph changed. */
   public SetParagraphItems(items: readonly SfxPoolItem[]): boolean {
+    return this.ApplyParagraphItems(
+      /** Reuses the direct item set for each paragraph. @returns Items. */ () => items,
+    );
+  }
+
+  /** Builds selected paragraph actions with each paragraph's own item state. @param createItems - Item factory. @returns Whether changed. */
+  private ApplyParagraphItems(
+    createItems: (paragraph: SwTextNode) => readonly SfxPoolItem[],
+  ): boolean {
     const selected = getWriterSelectedTextRanges(this.target.GetCursor());
     const paragraphs =
       selected === undefined || selected.length === 0
@@ -321,7 +443,7 @@ export class SwTextShell {
       /** Handles Writer formatting state. @param paragraph - Input value. @returns Callback result. */ (
         paragraph,
       ) =>
-        items.flatMap(
+        createItems(paragraph).flatMap(
           /** Handles Writer formatting state. @param item - Input value. @returns Callback result. */ (
             item,
           ) => {

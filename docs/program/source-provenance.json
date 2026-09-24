@@ -1855,9 +1855,9 @@
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/WriterRulers.tsx",
-      "rationale": "Projects Writer page margins and paragraph indents into browser pointer handles while leaving authoritative geometry and undo transactions in Writer-owned model objects.",
+      "rationale": "Projects Writer ruler handles in the browser and emits pointer deltas/positions while SwWrtShell applies authoritative page, indent, and tab-stop transitions.",
       "responsibilities": [
-        "Presents page-margin and paragraph-indent handles for the browser Writer workspace."
+        "Presents accessible page-margin, paragraph-indent, and tab-stop handles for the browser Writer workspace."
       ],
       "stackDivergence": {
         "kind": "browser-adaptation",
@@ -1984,7 +1984,7 @@
         ]
       },
       "localPath": "apps/office/src/sw/browser/presentation/writer-view.tsx",
-      "rationale": "Renders the Writer view as a browser-owned React projection of the upstream-shaped SwView shell. No native LibreOffice source file is claimed as its owner.",
+      "rationale": "Renders the persistent SwView as a browser React projection and submits primitive paragraph drafts and ruler gestures to Writer shell methods. No native LibreOffice source file is claimed as its owner.",
       "responsibilities": [
         "Renders the Writer view as a browser-owned React projection of the upstream-shaped SwView shell."
       ],
@@ -4270,7 +4270,7 @@
         "Native-only text-shell slots and unsupported Writer feature families remain omitted."
       ],
       "preservedResponsibilities": [
-        "Owns supported character, paragraph, hyperlink, indent, and history execute/state semantics while SwWrtShell supplies cursor and action primitives."
+        "Owns supported character, paragraph, hyperlink, indent, and history execute/state semantics; converts accepted paragraph drafts to pooled items and groups selected-paragraph undo actions while SwWrtShell supplies cursor and action primitives."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/shells/textsh1.cxx",
@@ -4619,7 +4619,7 @@
         "Upstream obligations outside SwWrtShell, UITestLogger::getInstance, SvxAutoCorrCfg::Get, SwWrtShell::NoEdit and the bounded SwWrtShell contract remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice `sw/source/uibase/wrtsh/wrtsh1.cxx`."
+        "Implements the persistent Writer editing shell and SwPaM ownership from pinned LibreOffice sw/source/uibase/wrtsh/wrtsh1.cxx, including ruler page and paragraph transitions delegated to its undo actions."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/wrtsh/wrtsh1.cxx",

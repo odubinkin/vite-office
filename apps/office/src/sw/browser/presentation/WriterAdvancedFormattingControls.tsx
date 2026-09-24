@@ -1,6 +1,7 @@
 /** @fileoverview Writer-style color palettes and paragraph formatting controls. */
 import { useState } from "react";
 import type { WriterParagraphComputedStyle } from "./writer-view-projection";
+import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh";
 
 const SWATCHES = [
   "#000000",
@@ -22,19 +23,6 @@ const SWATCHES = [
   "#d9ead3",
   "#cfe2f3",
 ] as const;
-
-/** Editable paragraph values shown in the Writer paragraph dialog. */
-export interface WriterParagraphFormatValue {
-  readonly upperPt: number;
-  readonly lowerPt: number;
-  readonly contextual: boolean;
-  readonly lineMode: "proportional" | "fixed" | "minimum" | "leading";
-  readonly lineValue: number;
-  readonly fontIndependent: boolean;
-  readonly tabStopsPt: readonly number[];
-  readonly keepWithNext: boolean;
-  readonly countLineNumbers: boolean;
-}
 
 /** Renders Writer color palettes, line spacing, and the tabbed paragraph dialog. @param props - Current formatting and callbacks. @returns Formatting controls. */
 export function WriterAdvancedFormattingControls({

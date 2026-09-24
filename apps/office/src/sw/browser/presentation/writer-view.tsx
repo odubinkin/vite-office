@@ -4,24 +4,7 @@ import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 
 
 import { WriterCommandToolbar } from "./WriterCommandToolbar";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
-import {
-  WriterAdvancedFormattingControls,
-  type WriterParagraphFormatValue,
-} from "./WriterAdvancedFormattingControls";
-import {
-  SvxLineSpacingItem,
-  SvxTabStop,
-  SvxTabStopItem,
-  SvxULSpaceItem,
-} from "../../../editeng/source/items/paraitem";
-import { SfxBoolItem } from "../../../svl/source/items/poolitem";
-import {
-  RES_KEEP,
-  RES_LINENUMBER,
-  RES_PARATR_LINESPACING,
-  RES_PARATR_TABSTOP,
-  RES_UL_SPACE,
-} from "../../inc/hintids";
+import { WriterAdvancedFormattingControls } from "./WriterAdvancedFormattingControls";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
@@ -58,20 +41,6 @@ export interface WriterWorkbenchProps {
   readonly fileDialogs?: WriterFileDialogController;
   readonly services?: WriterSessionServices;
   readonly autosave?: WriterAutosaveController;
-}
-
-/** Builds edited tab stops while retaining adjustment and leader fields for unchanged positions. @param positions - New twip positions. @param current - Active item. @returns Writer item. */
-function editedTabStops(positions: readonly number[], current: unknown): SvxTabStopItem {
-  return SvxTabStopItem.FromStops(
-    RES_PARATR_TABSTOP,
-    positions.map(
-      /** Keeps the existing stop when its position is unchanged. @param position - Twips. @returns Tab stop. */
-      (position) =>
-        current instanceof SvxTabStopItem && current.GetPos(position) !== 65535
-          ? current.At(current.GetPos(position))
-          : new SvxTabStop(position),
-    ),
-  );
 }
 
 const subscribeNoDialog =
@@ -170,40 +139,6 @@ export function WriterWorkbench({
   const pendingColors = projectWriterCharacterAttributes(
     view.GetWrtShell().GetPendingCharacterItems(),
   );
-  const applyParagraphFormat =
-    /** Handles Writer formatting state. @param value - Input value. @returns Callback result. */ (
-      value: WriterParagraphFormatValue,
-    ): void => {
-      const shell = view.GetWrtShell();
-      const spacing = new SvxULSpaceItem(
-        Math.round(value.upperPt * 20),
-        Math.round(value.lowerPt * 20),
-        RES_UL_SPACE,
-        value.contextual,
-      );
-      const lineSpacing = new SvxLineSpacingItem(
-        value.lineValue,
-        RES_PARATR_LINESPACING,
-        value.lineMode,
-        value.fontIndependent,
-      );
-      const tabPositions = value.tabStopsPt.map(
-        /** Handles Writer formatting state. @param position - Input value. @returns Callback result. */ (
-          position,
-        ) => Math.round(position * 20),
-      );
-      const tabs = editedTabStops(
-        tabPositions,
-        shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP),
-      );
-      shell.SetParagraphItems([
-        spacing,
-        lineSpacing,
-        tabs,
-        new SfxBoolItem(RES_KEEP, value.keepWithNext),
-        new SfxBoolItem(RES_LINENUMBER, value.countLineNumbers),
-      ]);
-    };
   const getLocalizedCommandResource = useCallback(
     /** Resolves generated command metadata through the application locale service. @param commandUrl - Canonical command URL. @returns Localized resource. */
     (commandUrl: string) => {
@@ -242,12 +177,16 @@ export function WriterWorkbench({
                   /** Handles Writer formatting state. @param percent - Input value. @returns Callback result. */ (
                     percent,
                   ) => {
-                    view
-                      .GetWrtShell()
-                      .SetParagraphItem(new SvxLineSpacingItem(percent, RES_PARATR_LINESPACING));
+                    view.GetWrtShell().SetLineSpacingPercent(percent);
                   }
                 }
-                onParagraphFormat={applyParagraphFormat}
+                onParagraphFormat={
+                  /** Commits accepted paragraph values. @param value - Dialog draft. @returns Nothing. */ (
+                    value,
+                  ) => {
+                    view.GetWrtShell().ApplyParagraphFormat(value);
+                  }
+                }
                 showLineNumbers={snapshot.lineNumberInfo.paintLineNumbers}
                 onShowLineNumbersChange={
                   /** Commits document-owned line-number state through the shell. @param paint - Visible state. @returns Nothing. */
@@ -296,42 +235,34 @@ export function WriterWorkbench({
           <WriterRulers
             horizontalVisible={snapshot.isHorizontalRulerVisible}
             onPageChange={
-              /** Applies ruler-owned page geometry. @param pageDescriptor - Replacement descriptor. @returns Nothing. */ (
-                pageDescriptor,
+              /** Applies a page ruler gesture. @param edge - Dragged margin. @param delta - Twip delta. @returns Nothing. */ (
+                edge,
+                delta,
               ) => {
-                view.GetWrtShell().SetPageDescriptor(pageDescriptor);
+                view.GetWrtShell().AdjustPageMargin(edge, delta);
               }
             }
             onParagraphIndentChange={
-              /** Applies ruler-owned direct paragraph indents. @param value - Replacement indents. @returns Nothing. */ (
-                value,
+              /** Applies a paragraph ruler gesture. @param edge - Dragged indent. @param delta - Twip delta. @returns Nothing. */ (
+                edge,
+                delta,
               ) => {
-                view.GetWrtShell().SetParagraphRulerIndents(value);
+                view.GetWrtShell().AdjustParagraphRulerIndent(edge, delta);
               }
             }
-            onTabStopsChange={
-              /** Handles Writer formatting state. @param positionsPt - Input value. @returns Callback result. */ (
-                positionsPt,
+            onTabStopAdd={
+              /** Adds a ruler tab through the shell. @param position - Twip position. @returns Nothing. */ (
+                position,
               ) => {
-                const positions = positionsPt
-                  .filter(
-                    /** Handles Writer formatting state. @param position - Input value. @returns Callback result. */ (
-                      position,
-                    ) => position > 0,
-                  )
-                  .map(
-                    /** Handles Writer formatting state. @param position - Input value. @returns Callback result. */ (
-                      position,
-                    ) => Math.round(position * 20),
-                  );
-                view
-                  .GetWrtShell()
-                  .SetParagraphItem(
-                    editedTabStops(
-                      positions,
-                      view.GetWrtShell().GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP),
-                    ),
-                  );
+                view.GetWrtShell().AddRulerTabStop(position);
+              }
+            }
+            onTabStopMove={
+              /** Moves a ruler tab through the shell. @param index - Stop index. @param delta - Twip delta. @returns Nothing. */ (
+                index,
+                delta,
+              ) => {
+                view.GetWrtShell().MoveRulerTabStop(index, delta);
               }
             }
             page={snapshot.pageDescriptor}
@@ -361,9 +292,9 @@ export function WriterWorkbench({
             snapshot.isVerticalRulerVisible ? (
               <WriterVerticalRuler
                 onPageChange={
-                  /** Commits vertical-ruler page geometry. @param pageDescriptor - Updated page geometry. @returns Nothing. */
-                  (pageDescriptor) => {
-                    view.GetWrtShell().SetPageDescriptor(pageDescriptor);
+                  /** Commits a vertical-ruler margin gesture. @param edge - Dragged edge. @param delta - Twip delta. @returns Nothing. */
+                  (edge, delta) => {
+                    view.GetWrtShell().AdjustPageMargin(edge, delta);
                   }
                 }
                 page={snapshot.pageDescriptor}

@@ -19,7 +19,8 @@ import type {
 } from "../../core/txtnode/ndtxt";
 import type { WriterParagraphListKind } from "../../core/doc/list";
 import { SwListShell, type WriterListLevelCommand } from "../shells/listsh";
-import { SwTextShell } from "../shells/textsh";
+import { SwTextShell, type WriterParagraphFormatValue } from "../shells/textsh";
+import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/source/items/paraitem";
 import type { SwDocShell } from "../app/docsh";
 import { SwTransferable } from "../dochdl/swdtflvr";
 import type { SwUndoCursorState, SwUndoRedoContext } from "../../core/undo/undobj";
@@ -30,7 +31,7 @@ import {
   type WriterCompositionState,
   type WriterTextRange,
 } from "./wrtsh-selection";
-import { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE } from "../../../inc/hintids";
+import { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE, RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { WriterDialogController } from "../dialog/writer-dialog-controller";
 import { SwWrtShellEditingOperations } from "./wrtsh-editing";
@@ -403,6 +404,63 @@ export class SwWrtShell extends SwModify {
     return this.textShell.SetParagraphItems(items);
   }
 
+  /** Commits accepted paragraph dialog values in one undo entry. @param value - Primitive dialog draft. @returns Whether changed. */
+  public ApplyParagraphFormat(value: WriterParagraphFormatValue): boolean {
+    return this.textShell.ApplyParagraphFormat(value);
+  }
+
+  /** Applies proportional line spacing. @param percent - Percent. @returns Whether changed. */
+  public SetLineSpacingPercent(percent: number): boolean {
+    return this.textShell.SetLineSpacingPercent(percent);
+  }
+
+  /** Replaces explicit tab positions through the text shell. @param positions - Twip positions. @returns Whether changed. */
+  public SetTabStopPositions(positions: readonly number[]): boolean {
+    return this.textShell.SetTabStopPositions(positions);
+  }
+
+  /** Adds a ruler tab at an absolute position. @param position - Twip position. @returns Whether changed. */
+  public AddRulerTabStop(position: number): boolean {
+    const current = this.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    const positions = current
+      .GetStops()
+      .map(
+        /** Reads a tab position. @param stop - Existing stop. @returns Twips. */ (stop) =>
+          stop.GetTabPos(),
+      );
+    return this.SetTabStopPositions([...positions, position]);
+  }
+
+  /** Moves one displayed tab marker by its drag delta. @param index - Sorted stop index. @param delta - Twip delta. @returns Whether changed. */
+  public MoveRulerTabStop(index: number, delta: number): boolean {
+    const current = this.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
+    if (
+      !Number.isInteger(index) ||
+      index < 0 ||
+      index >= current.Count() ||
+      !Number.isFinite(delta)
+    )
+      return false;
+    const position = Math.round(current.At(index).GetTabPos() + delta);
+    if (position > 32767) return false;
+    const stops = current
+      .GetStops()
+      .flatMap(
+        /** Repositions or removes only the dragged stop. @param stop - Existing stop. @param stopIndex - Sorted index. @returns Retained stops. */ (
+          stop,
+          stopIndex,
+        ) =>
+          stopIndex !== index
+            ? [stop]
+            : position <= 0
+              ? []
+              : [new SvxTabStop(position, stop.GetAdjustment(), stop.GetDecimal(), stop.GetFill())],
+      );
+    return this.SetParagraphItem(
+      SvxTabStopItem.FromStops(RES_PARATR_TABSTOP, stops, current.GetDefaultDistance()),
+    );
+  }
+
   /** Applies paragraph alignment through one shell-owned history transition. @param alignment - Next alignment. @returns Whether content changed. */
   public SetParagraphAlignment(alignment: WriterParagraphAlignment): boolean {
     return this.textShell.SetParagraphAlignment(alignment);
@@ -436,6 +494,38 @@ export class SwWrtShell extends SwModify {
     const cursor = this.CaptureCursorState();
     return this.ApplyAction(new SwUndoPageDesc(before, value, cursor, cursor, descriptorName));
   }
+  /** Applies a page ruler drag to the current descriptor. @param edge - Dragged margin. @param delta - Twip drag delta. @returns Whether changed. */
+  public AdjustPageMargin(edge: "left" | "right" | "top" | "bottom", delta: number): boolean {
+    if (!Number.isFinite(delta)) return false;
+    const page = this.GetDoc().GetPageDesc().GetValue();
+    const clamp =
+      /** Keeps a minimum text area. @param value - Candidate margin. @param oppositeBoundary - Opposite edge. @returns Clamped margin. */ (
+        value: number,
+        oppositeBoundary: number,
+      ): number => Math.max(0, Math.min(value, oppositeBoundary - 567));
+    switch (edge) {
+      case "left":
+        return this.SetPageDescriptor({
+          ...page,
+          leftMargin: clamp(page.leftMargin + delta, page.width - page.rightMargin),
+        });
+      case "right":
+        return this.SetPageDescriptor({
+          ...page,
+          rightMargin: clamp(page.rightMargin - delta, page.width - page.leftMargin),
+        });
+      case "top":
+        return this.SetPageDescriptor({
+          ...page,
+          topMargin: clamp(page.topMargin + delta, page.height - page.bottomMargin),
+        });
+      case "bottom":
+        return this.SetPageDescriptor({
+          ...page,
+          bottomMargin: clamp(page.bottomMargin - delta, page.height - page.topMargin),
+        });
+    }
+  }
   /** Applies direct active-paragraph ruler indents as one Writer undo action. @param value - Replacement indent tuple. @returns Whether it changed. */
   public SetParagraphRulerIndents(value: WriterParagraphIndentValue): boolean {
     const paragraph = this.GetActiveParagraph();
@@ -452,6 +542,27 @@ export class SwWrtShell extends SwModify {
       return false;
     const cursor = this.CaptureCursorState();
     return this.ApplyAction(new SwUndoRulerIndent(paragraph, before, value, cursor, cursor));
+  }
+  /** Applies one paragraph ruler drag to the active paragraph. @param edge - Dragged marker. @param delta - Twip drag delta. @returns Whether changed. */
+  public AdjustParagraphRulerIndent(edge: "left" | "firstLine" | "right", delta: number): boolean {
+    if (!Number.isFinite(delta)) return false;
+    const paragraph = this.GetActiveParagraph();
+    const before = {
+      firstLine: paragraph.GetParagraphFirstLineIndent(),
+      left: paragraph.GetParagraphTextLeftMargin(),
+      right: paragraph.GetParagraphRightMargin(),
+    };
+    switch (edge) {
+      case "left":
+        return this.SetParagraphRulerIndents({ ...before, left: Math.max(0, before.left + delta) });
+      case "firstLine":
+        return this.SetParagraphRulerIndents({ ...before, firstLine: before.firstLine + delta });
+      case "right":
+        return this.SetParagraphRulerIndents({
+          ...before,
+          right: Math.max(0, before.right - delta),
+        });
+    }
   }
 
   /** Reports whether the text-shell indent command has an available transition. @param increase - Whether to increase indentation. @returns Whether enabled. */
