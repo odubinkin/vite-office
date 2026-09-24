@@ -4,7 +4,7 @@ title: "Audit implemented runtime against pinned LibreOffice"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -22,10 +22,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T05:35:16.874Z"
+  updated_by: "CODER"
+  note: "P0 inventory and source provenance cover 169 modules and 216 exported functions; pinned markers, parity checks, and full npm run verify pass; remaining operation audit is stage 8."
   attempts: 0
 commit: null
 comments:
@@ -60,8 +60,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: resume approved P0 parity inventory audit with source-provenance data coverage and defer full operation closure to the final gate."
+  -
+    type: "verify"
+    at: "2026-09-24T05:35:16.874Z"
+    author: "CODER"
+    state: "ok"
+    note: "P0 inventory and source provenance cover 169 modules and 216 exported functions; pinned markers, parity checks, and full npm run verify pass; remaining operation audit is stage 8."
 doc_version: 3
-doc_updated_at: "2026-09-24T05:34:44.574Z"
+doc_updated_at: "2026-09-24T05:35:16.956Z"
 doc_updated_by: "CODER"
 description: "Stage 1 of docs/program/vite-office-upstream-parity-plan.md: record operation-level contracts, defaults, upstream symbols, evidence and discrepancies in existing parity inventory data only"
 sections:
@@ -82,6 +88,39 @@ sections:
     Command: npm run verify. Result: pass after separate Writer shell test split task. Evidence: 443 office tests and 96 inventory tests with 100% coverage; 13 browser tests; all static and parity checks pass. Scope: full repository gate.
 
     Command: git diff --check. Result: pass. Scope: current task changes. Full operation-level parity audit remains explicitly scheduled for stage 8.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T05:35:16.874Z — VERIFY — ok
+
+    By: CODER
+
+    Note: P0 inventory and source provenance cover 169 modules and 216 exported functions; pinned markers, parity checks, and full npm run verify pass; remaining operation audit is stage 8.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T05:34:44.574Z, excerpt_hash=sha256:90ff73fbf8d6327bcdb1569d316e5291a0f4b5e45ea7b516d663c13985420877
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-76PKPC/blueprint/resolved-snapshot.json
+    - old_digest: 1de3d953373c4f5c824d79ecd9744455677d28ad7215141b96c0e403198cd044
+    - current_digest: 1de3d953373c4f5c824d79ecd9744455677d28ad7215141b96c0e403198cd044
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609240501-76PKPC
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609240501-76PKPC
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert stage 1 inventory and source-provenance data changes and the associated task close commit, then rerun inventory:parity and source-provenance checks."
   Findings: |-
     Initial baseline: 92 contract, 131 behavior, and 78 default statuses are unverified; these are evidence gaps, not confirmed defects. Existing task 202609231700-TZMGXV reports unrelated full verify failures. Preserve these distinctions during the audit.
@@ -124,6 +163,39 @@ Command: npm run inventory:parity; npm run check:source-tree; npm run check:sour
 Command: npm run verify. Result: pass after separate Writer shell test split task. Evidence: 443 office tests and 96 inventory tests with 100% coverage; 13 browser tests; all static and parity checks pass. Scope: full repository gate.
 
 Command: git diff --check. Result: pass. Scope: current task changes. Full operation-level parity audit remains explicitly scheduled for stage 8.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T05:35:16.874Z — VERIFY — ok
+
+By: CODER
+
+Note: P0 inventory and source provenance cover 169 modules and 216 exported functions; pinned markers, parity checks, and full npm run verify pass; remaining operation audit is stage 8.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T05:34:44.574Z, excerpt_hash=sha256:90ff73fbf8d6327bcdb1569d316e5291a0f4b5e45ea7b516d663c13985420877
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-76PKPC/blueprint/resolved-snapshot.json
+- old_digest: 1de3d953373c4f5c824d79ecd9744455677d28ad7215141b96c0e403198cd044
+- current_digest: 1de3d953373c4f5c824d79ecd9744455677d28ad7215141b96c0e403198cd044
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609240501-76PKPC
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609240501-76PKPC
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
