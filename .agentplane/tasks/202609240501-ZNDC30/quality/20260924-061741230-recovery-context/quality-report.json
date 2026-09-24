@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202609240501-ZNDC30",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T06:17:41.230Z",
+  "verdict": "pass",
+  "summary": "Upstream tab-stop item identity, pinned defaults, ODT fields and empty sequence are implemented with focused tests and full verify.",
+  "evaluated_sha": "0c239b673ba8b3da1e5e1f2c0732c7994a422c0a",
+  "blueprint_digest": "cb72f5daebf5081fb696fb58a460fd884dae27eacd0c9e45d2c570cb8cf96f27",
+  "findings": [
+    "No remaining RES_PARATR_TABSTOP integer surrogate in production."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609240501-ZNDC30/README.md",
+    "apps/office/src/editeng/source/items/paraitem.test.ts",
+    "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+    "npm run verify: 448 office tests and 96 inventory tests with 100% coverage; 13 E2E passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Writer line numbering and shell-owned UI command conversion remain in separately approved follow-up tasks."
+  ]
+}
