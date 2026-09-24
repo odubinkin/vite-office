@@ -2,6 +2,7 @@
 
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
+import { XMLTableContext, type XMLTableImportTarget } from "../table/XMLTableImport";
 import type {
   OdfCharacterProperties,
   OdfHyperlink,
@@ -113,6 +114,8 @@ export class XMLTextBodyContext extends SvXMLImportContext {
       return new XMLParaContext(this.target, element, attributes);
     if (element === XMLToken.TEXT_LIST)
       return new XMLListContext(this.target, attributes, this.lists);
+    if (element === XMLToken.TABLE_TABLE && "beginTable" in this.target)
+      return new XMLTableContext(this.target as XMLTableImportTarget, attributes);
     if (element === XMLToken.TEXT_SEQUENCE_DECLS) return new SvXMLIgnoreContext(true);
     return null;
   }

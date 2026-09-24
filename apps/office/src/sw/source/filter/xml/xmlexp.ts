@@ -75,6 +75,7 @@ import {
 } from "../../../inc/hintids";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import type { SwDoc } from "../../core/doc/doc";
+import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { getWriterOdfStyleName } from "../../../inc/poolfmt";
@@ -82,7 +83,7 @@ import { createWriterFontAutoStylePool } from "./xmlfonte";
 import { LineNumberPosition } from "../../../inc/lineinfo";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
 
-const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}"`;
+const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc): string {
@@ -174,7 +175,47 @@ export function exportContentXml(
     {
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
       *paragraphs(): Iterable<XMLTextParagraphSource> {
-        for (const node of document.paragraphs) yield projectParagraph(node);
+        for (const block of document.nodes.getBodyContent()) {
+          if (block instanceof SwTableNode) {
+            for (const row of block.GetTable().GetTabLines())
+              for (const cell of row.GetTabBoxes())
+                for (const node of cell.GetParagraphs()) yield projectParagraph(node);
+          } else yield projectParagraph(block);
+        }
+      },
+      /** Iterates ordered direct body blocks and projects table cells through the same text exporter. @returns Body blocks. */
+      *blocks() {
+        for (const block of document.nodes.getBodyContent()) {
+          if (!(block instanceof SwTableNode)) {
+            yield { kind: "paragraph" as const, paragraph: projectParagraph(block) };
+            continue;
+          }
+          const table = block.GetTable();
+          yield {
+            kind: "table" as const,
+            table: {
+              name: table.GetName(),
+              format: table.GetFormat(),
+              columnWidths: table.GetColumnWidths(),
+              softPageBreakRows: table.GetSoftPageBreakRows(),
+              rows: table.GetTabLines().map(
+                /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ (
+                  row,
+                ) => ({
+                  format: row.GetFormat(),
+                  cells: row.GetTabBoxes().map(
+                    /** Projects one canonical Writer table value. @param argument1 - Callback input. @returns Callback result. */ (
+                      cell,
+                    ) => ({
+                      format: cell.GetFormat(),
+                      paragraphs: cell.GetParagraphs().map(projectParagraph),
+                    }),
+                  ),
+                }),
+              ),
+            },
+          };
+        }
       },
     },
     isCancelled,

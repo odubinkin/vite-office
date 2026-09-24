@@ -26,6 +26,7 @@ import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import { SwFormatPageDesc } from "../../source/core/attr/fmtpdsc";
 import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { createWriterDocument } from "../../source/core/doc/doc";
+import { SwDoc } from "../../source/core/doc/doc";
 import { projectWriterCharacterAttributes } from "../../source/core/txtnode/txatbase";
 import { projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
@@ -81,6 +82,112 @@ const getText =
   ) => fallback;
 
 describe("Writer browser presentation", /** Groups presentation tests. @returns Nothing. */ () => {
+  it("renders an imported table before the first body paragraph", /** Verifies the bounded table scenario.  @returns Callback result. */ () => {
+    const session = createWriterDocumentSession();
+    const document = new SwDoc(false);
+    const table = document.nodes.MakeTableNode("OpeningTable");
+    table.AddColumnWidth(1500);
+    document.nodes.AppendTableRow(table, 1);
+    document.nodes.MakeTextNode("After table");
+    act(
+      /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
+        session.docShell.ReplaceDocument(
+          document,
+          createDocument({ id: "opening-table", suiteId: "writer", title: "Opening table" }),
+          { kind: "untitled", name: "Opening table" },
+        ),
+    );
+    const rendered = render(<WriterWorkbench isActive view={session.view} />);
+    expect(screen.getByRole("table", { name: "OpeningTable" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Writer document text" })).toHaveTextContent(
+      "After table",
+    );
+    rendered.unmount();
+    session.Close();
+  });
+  it("does not apply stale table properties after the document changes", /** Covers document replacement while Table Properties is open. @returns Nothing. */ () => {
+    const session = createWriterDocumentSession();
+    const rendered = render(<WriterWorkbench isActive view={session.view} />);
+    fireEvent.click(screen.getByRole("button", { name: "Insert Table" }));
+    fireEvent.click(
+      within(screen.getByRole("dialog", { name: "Insert Table" })).getByRole("button", {
+        name: "OK",
+      }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+    const replacement = createWriterDocument();
+    act(
+      /** Switches documents while the table dialog is open. @returns Nothing. */ () =>
+        session.docShell.ReplaceDocument(
+          replacement,
+          createDocument({ id: "replacement-table", suiteId: "writer", title: "Replacement" }),
+          { kind: "untitled", name: "Replacement" },
+        ),
+    );
+    fireEvent.click(within(screen.getByRole("dialog")).getByRole("button", { name: "OK" }));
+    expect(replacement.GetTables()).toHaveLength(0);
+    rendered.unmount();
+    session.Close();
+  });
+  it("inserts, selects, edits and reopens a canonical Writer table", /** Verifies the bounded table scenario.  @returns Callback result. */ async () => {
+    const session = createWriterDocumentSession();
+    const rendered = render(<WriterWorkbench isActive view={session.view} />);
+    fireEvent.click(screen.getByRole("button", { name: "Insert Table" }));
+    fireEvent.click(
+      within(screen.getByRole("dialog", { name: "Insert Table" })).getByRole("button", {
+        name: "Cancel",
+      }),
+    );
+    expect(screen.queryByRole("dialog", { name: "Insert Table" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Insert Table" }));
+    let dialog = screen.getByRole("dialog", { name: "Insert Table" });
+    fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Rows" }), {
+      target: { value: "2" },
+    });
+    fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Columns" }), {
+      target: { value: "3" },
+    });
+    fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+    const table = session.docShell.GetDoc().GetTables()[0];
+    expect(table?.GetTabLines()).toHaveLength(2);
+    expect(table?.GetTabLines()[0]?.GetTabBoxes()).toHaveLength(3);
+    expect(screen.getByRole("table", { name: "Table1" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Select row 2 in Table1" }));
+    fireEvent.click(screen.getByRole("button", { name: "Table Properties" }));
+    dialog = screen.getByRole("dialog", { name: "Table Properties" });
+    fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Column 1 width (cm)" }), {
+      target: { value: "4" },
+    });
+    fireEvent.change(within(dialog).getByRole("spinbutton", { name: "Minimum row height (cm)" }), {
+      target: { value: "1" },
+    });
+    fireEvent.change(within(dialog).getByRole("combobox", { name: "Cell vertical alignment" }), {
+      target: { value: "bottom" },
+    });
+    fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+    expect(table?.GetColumnWidths()[0]).toBe(2268);
+    expect(table?.GetTabLines()[1]?.GetFormat().minHeight).toBe(567);
+    expect(table?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetFormat().verticalAlign).toBe("bottom");
+    const cell = screen.getByLabelText("Row 2 column 1 paragraph 1");
+    cell.textContent = "Edited cell";
+    fireEvent.input(cell);
+    expect(table?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText()).toBe(
+      "Edited cell",
+    );
+    const bytes = writeOdtDocument(session.docShell.GetDoc(), { title: "Inserted table" });
+    const reopened = await readOdtDocument(bytes, { title: "Inserted table" });
+    expect(
+      reopened.document
+        .GetTables()[0]
+        ?.GetTabLines()[1]
+        ?.GetTabBoxes()[0]
+        ?.GetParagraphs()[0]
+        ?.GetText(),
+    ).toBe("Edited cell");
+    expect(reopened.document.GetTables()[0]?.GetColumnWidths()[0]).toBe(2268);
+    rendered.unmount();
+    session.Close();
+  });
   it("exposes a package font and reports a stable fallback when browser loading is unavailable", /** Checks the font selector without silently replacing the imported family. @returns Completion. */ async () => {
     const session = createWriterDocumentSession();
     const doc = session.docShell.GetDoc();

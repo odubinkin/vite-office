@@ -9,6 +9,7 @@ import { WriterHyperlinkDialog } from "./WriterHyperlinkDialog";
 import { WriterBookmarkDialog } from "./WriterBookmarkDialog";
 import { WriterInsertBreakDialog } from "./WriterInsertBreakDialog";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
+import { WriterTableDialog, type WriterTableDialogValue } from "./WriterTableDialog";
 import { WriterFileDialog } from "./WriterFileDialog";
 import type {
   WriterFileDialogController,
@@ -37,6 +38,7 @@ import type { SwView } from "../../source/uibase/uiview/view";
 import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
 import { installWriterEmbeddedFonts } from "../../../vcl/browser/embedded-font-loader";
 import type { SwDoc } from "../../source/core/doc/doc";
+import type { SwTable } from "../../source/core/table/swtable";
 
 /** Properties selecting a persistent Writer view for projection. */
 export interface WriterWorkbenchProps {
@@ -91,6 +93,71 @@ export function WriterWorkbench({
     presentationStore.GetSnapshot,
   );
   const activeDocument = view.GetDocShell().GetDoc();
+  const [selectedTable, setSelectedTable] = useState<SwTable>();
+  const [selectedTableRow, setSelectedTableRow] = useState<number>();
+  const [tableDialog, setTableDialog] = useState<"insert" | "properties">();
+  const currentTable =
+    selectedTable !== undefined && activeDocument.GetTables().includes(selectedTable)
+      ? selectedTable
+      : undefined;
+  const availableTableWidth =
+    snapshot.pageDescriptor.width -
+    snapshot.pageDescriptor.leftMargin -
+    snapshot.pageDescriptor.rightMargin;
+  const submitTable =
+    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+      value: WriterTableDialogValue,
+    ): void => {
+      if (tableDialog === "insert") {
+        const table = activeDocument.nodes.MakeTableNode(
+          `Table${activeDocument.GetTables().length + 1}`,
+          { width: value.width, align: "left" },
+          view.GetWrtShell().GetActiveParagraph(),
+        );
+        for (const columnWidth of value.columnWidths) table.AddColumnWidth(columnWidth);
+        for (let row = 0; row < value.rows; row += 1)
+          activeDocument.nodes.AppendTableRow(
+            table,
+            value.columns,
+            { minHeight: value.minRowHeight },
+            Array.from(
+              { length: value.columns },
+              /** Handles the browser table interaction.  @returns Callback result. */ () => ({
+                padding: value.padding,
+                border: value.border,
+                verticalAlign: value.verticalAlign,
+              }),
+            ),
+          );
+        setSelectedTable(table);
+        setSelectedTableRow(0);
+      } else if (currentTable !== undefined) {
+        currentTable.SetFormat({ ...currentTable.GetFormat(), width: value.width });
+        value.columnWidths.forEach(
+          /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+            width,
+            index,
+          ) => currentTable.SetColumnWidth(index, width),
+        );
+        const rowIndex = selectedTableRow as number;
+        const rows = currentTable.GetTabLines().slice(rowIndex, rowIndex + 1);
+        for (const row of rows) {
+          row.SetFormat({ ...row.GetFormat(), minHeight: value.minRowHeight });
+          for (const cell of row.GetTabBoxes())
+            cell.SetFormat({
+              ...cell.GetFormat(),
+              padding: value.padding,
+              border: value.border,
+              verticalAlign: value.verticalAlign,
+            });
+        }
+        activeDocument.NotifyModelChange({
+          kind: "node-content-changed",
+          nodeIndex: currentTable.GetTableNode().GetIndex(),
+        });
+      }
+      setTableDialog(undefined);
+    };
   const [fontAvailability, setFontAvailability] = useState<{
     document: SwDoc;
     values: Readonly<Record<string, boolean>>;
@@ -296,10 +363,36 @@ export function WriterWorkbench({
         }
         status={presentWriterStatus(view, snapshot, localization.GetText.bind(localization))}
         toolbar={
-          <WriterCommandToolbar
-            commandSource={commandSource}
-            resolveArguments={resolveCommandArguments}
-          />
+          <>
+            <WriterCommandToolbar
+              commandSource={commandSource}
+              resolveArguments={resolveCommandArguments}
+            />
+            <button
+              aria-label="Insert Table"
+              className="rounded border border-slate-300 px-2 py-1 text-sm"
+              onClick={
+                /** Handles the browser table interaction.  @returns Callback result. */ () =>
+                  setTableDialog("insert")
+              }
+              type="button"
+            >
+              Insert Table
+            </button>
+            {currentTable === undefined ? null : (
+              <button
+                aria-label="Table Properties"
+                className="rounded border border-slate-300 px-2 py-1 text-sm"
+                onClick={
+                  /** Handles the browser table interaction.  @returns Callback result. */ () =>
+                    setTableDialog("properties")
+                }
+                type="button"
+              >
+                Table Properties
+              </button>
+            )}
+          </>
         }
       >
         <WriterPlainTextEditor
@@ -311,6 +404,17 @@ export function WriterWorkbench({
           pageDescriptors={snapshot.pageDescriptors}
           paragraphSpacingSettings={snapshot.paragraphSpacingSettings}
           paragraphs={snapshot.paragraphs}
+          {...(currentTable === undefined ? {} : { selectedTable: currentTable })}
+          {...(selectedTableRow === undefined ? {} : { selectedTableRow })}
+          onSelectTableRow={
+            /** Handles the browser table interaction. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ (
+              table,
+              row,
+            ) => {
+              setSelectedTable(table);
+              setSelectedTableRow(row);
+            }
+          }
           showLineNumbers={snapshot.lineNumberInfo.paintLineNumbers}
           lineNumberInfo={snapshot.lineNumberInfo}
           verticalRuler={
@@ -328,6 +432,19 @@ export function WriterWorkbench({
           }
         />
       </WriterWorkspaceChrome>
+      {tableDialog === undefined ? null : (
+        <WriterTableDialog
+          {...(tableDialog === "properties" && currentTable !== undefined
+            ? { table: currentTable }
+            : {})}
+          availableWidth={availableTableWidth}
+          onCancel={
+            /** Handles the browser table interaction.  @returns Callback result. */ () =>
+              setTableDialog(undefined)
+          }
+          onSubmit={submitTable}
+        />
+      )}
       {dialogRequest?.request.kind !== "hyperlink" ? null : (
         <WriterHyperlinkDialog
           {...(dialogRequest.request.initialHyperlink === undefined

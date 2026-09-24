@@ -23,6 +23,7 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_CJK_FONT,
@@ -44,6 +45,8 @@ import {
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_WIDOWS,
   RES_PARATR_TABSTOP,
   RES_UL_SPACE,
   RES_KEEP,
@@ -63,6 +66,8 @@ export interface WriterParagraphStyleDefaults {
   readonly italic?: true;
   readonly keepWithNext?: true;
   readonly lineNumber?: false;
+  readonly orphans?: number;
+  readonly widows?: number;
   readonly lineHeightPercent?: number;
   readonly lowerTwips?: number;
   readonly rightTwips?: number;
@@ -114,6 +119,8 @@ export function getWriterParagraphStyleDefaults(
     };
   }
   switch (id) {
+    case "table-contents":
+      return { lineNumber: false, orphans: 0, widows: 0 };
     case "text-body":
       return { lineHeightPercent: 115, lowerTwips: htmlMode ? HTML_PARSPACE_TWIPS : 7 * 20 };
     case "first-line-indent":
@@ -220,6 +227,10 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(new SfxBoolItem(RES_KEEP, defaults.keepWithNext));
   if (defaults.lineNumber !== undefined)
     collection.SetFormatAttr(new SfxBoolItem(RES_LINENUMBER, defaults.lineNumber));
+  if (defaults.orphans !== undefined)
+    collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_ORPHANS, defaults.orphans));
+  if (defaults.widows !== undefined)
+    collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_WIDOWS, defaults.widows));
   if (defaults.autoColor !== undefined)
     collection.SetFormatAttr(new SfxStringItem(RES_CHRATR_COLOR, "auto"));
   if (defaults.transparentHighlight !== undefined)

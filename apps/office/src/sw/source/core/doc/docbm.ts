@@ -129,7 +129,7 @@ export class DocumentMarkAccess {
 
   /** Rejects positions from a different Writer graph. @param node - Candidate node. @returns Nothing. */
   private assertNode(node: SwTextNode): void {
-    if (node.GetDoc() !== this.document || !this.document.paragraphs.includes(node))
+    if (node.GetDoc() !== this.document || node.GetNodes().indexOfOrUndefined(node) === undefined)
       throw new Error("Writer mark position belongs to another document.");
   }
 

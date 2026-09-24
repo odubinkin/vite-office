@@ -1619,6 +1619,35 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "editing-view",
+      "capabilityIds": [
+        "CAP-0111",
+        "CAP-0117"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/editor/WriterEditableTable.tsx#WriterEditableTable"
+        ],
+        "justification": "Projects canonical SwTable rows and editable SwTextNode cell paragraphs into the browser page.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterEditableTable",
+          "editWriterTableCell"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -2402,6 +2431,35 @@
         "localSymbols": [
           "WriterRulers",
           "WriterVerticalRuler"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "browser-presentation",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx#WriterTableDialog"
+        ],
+        "justification": "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph.",
+        "knownViolations": [],
+        "localSymbols": [
+          "WriterTableDialog",
+          "WriterTableDialogValue"
         ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
@@ -3925,6 +3983,39 @@
       }
     },
     {
+      "path": "apps/office/src/sw/source/core/table/swtable.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111",
+        "CAP-0123"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/core/table/swtable.ts#SwTable",
+          "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx#SwTable::SwTable"
+        ],
+        "justification": "Owns ordered Writer table rows, cells, geometry and pagination boundaries.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwTable",
+          "SwTableLine",
+          "SwTableBox"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/core/table/swtable.cxx",
+        "upstreamSymbols": [
+          "SwTable::SwTable"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/source/core/text/itrform2.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -4801,6 +4892,37 @@
           "SwXMLBodyContext_Impl::createFastChildContext",
           "SwXMLDocContext_Impl::SwXMLDocContext_Impl",
           "SwXMLDocContext_Impl::createFastChildContext"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/source/filter/xml/xmltbli.ts#SwXMLTableImport",
+          "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx#SwXMLTableContext"
+        ],
+        "justification": "Delegates SAX table events into canonical Writer rows, cells, styles and page hints while retaining the pinned XML table import ownership boundary.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SwXMLTableImport"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/source/filter/xml/xmltbli.cxx",
+        "upstreamSymbols": [
+          "SwXMLTableContext"
         ]
       }
     },
@@ -5839,6 +5961,71 @@
         "upstreamSymbols": [
           "SvXMLStylesContext",
           "SvXMLStylesContext::createFastChildContext"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0129"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/table/XMLTableExport.ts#XMLTableExportSource",
+          "vendor/libreoffice-reference/xmloff/source/table/XMLTableExport.cxx#XMLTableExport::exportTable"
+        ],
+        "justification": "Emits bounded table automatic styles and ordered table body XML from canonical Writer blocks.",
+        "knownViolations": [],
+        "localSymbols": [
+          "XMLTableExportSource",
+          "exportTableBlocks"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/table/XMLTableExport.cxx",
+        "upstreamSymbols": [
+          "XMLTableExport::exportTable"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/table/XMLTableImport.ts#XMLTableStyleContext",
+          "vendor/libreoffice-reference/xmloff/source/table/XMLTableImport.cxx#XMLTableImportContext::ImportRow"
+        ],
+        "justification": "Imports bounded ODF table style, column, row, cell and paragraph SAX contexts.",
+        "knownViolations": [],
+        "localSymbols": [
+          "XMLTableStyleContext",
+          "XMLTableContext",
+          "XMLTableImportTarget"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/table/XMLTableImport.cxx",
+        "upstreamSymbols": [
+          "XMLTableImportContext::ImportRow"
         ]
       }
     },

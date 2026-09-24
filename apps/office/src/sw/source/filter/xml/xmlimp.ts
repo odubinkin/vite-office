@@ -43,6 +43,8 @@ import {
   type XMLFontStylesImportTarget,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
+import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
+import { SwXMLTableImport } from "./xmltbli";
 import type {
   OdfCharacterProperties,
   OdfHyperlink,
@@ -55,7 +57,6 @@ import {
   type OdfStyleDefinition,
   type XMLParagraphImportTarget,
   type XMLParagraphListState,
-  type XMLTextImportTarget,
   type XMLTextListRule,
 } from "../../../../xmloff/source/text/txtparai";
 import type { SwFormat } from "../../core/attr/format";
@@ -183,7 +184,10 @@ export function importWriterXml(
 }
 
 /** Writer import coordinator matching upstream SwXMLImport context ownership. */
-class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontStylesImportTarget {
+class SwXMLImport
+  extends SwXMLTableImport
+  implements SvXMLImportContract, XMLTableImportTarget, XMLFontStylesImportTarget
+{
   private lineNumberingSeen = false;
   private expectedRoot = XMLToken.UNKNOWN;
   private officeTextCount = 0;
@@ -202,7 +206,9 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   public language: string | undefined;
 
   /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @returns Coordinator. */
-  public constructor(public readonly document: SwDoc) {}
+  public constructor(document: SwDoc) {
+    super(document);
+  }
 
   /** Parses one expected package stream. @param xml - XML text. @param expectedRoot - Required root token. @param options - Parser controls. @returns Nothing. */
   public parse(xml: string, expectedRoot: XMLToken, options: OdfXmlParseOptions): void {
@@ -406,8 +412,14 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
     list: XMLParagraphListState | undefined,
     listGeometryWins: boolean,
   ): XMLParagraphImportTarget {
-    this.paragraphCount += 1;
-    const node = this.document.nodes.MakeTextNode();
+    const cell = this.activeCell;
+    if (cell === undefined) this.paragraphCount += 1;
+    const node =
+      cell === undefined
+        ? this.document.nodes.MakeTextNode()
+        : this.cellParagraphCount++ === 0
+          ? (cell.GetParagraphs()[0] as SwTextNode)
+          : this.document.nodes.AppendTableCellParagraph(cell);
     node.ChgFormatColl(this.document.GetTextFormatColl(style));
     node.SetListGeometryWins(listGeometryWins);
     if (alignment !== undefined) node.SetParagraphAlignment(alignment);

@@ -3,8 +3,16 @@
  */
 
 import type { SwDoc } from "../doc/doc";
-import { SwEndNode, SwStartNode, type SwNode } from "./node";
+import { SwEndNode, SwStartNode, SwTableBoxStartNode, SwTableNode, type SwNode } from "./node";
 import { SwTextNode } from "../txtnode/ndtxt";
+import {
+  SwTable,
+  SwTableBox,
+  SwTableLine,
+  type SwTableBoxFormat,
+  type SwTableFormat,
+  type SwTableLineFormat,
+} from "../table/swtable";
 
 /** Owns every Writer model node and the fixed non-content/content section sentinels. */
 export class SwNodes {
@@ -79,14 +87,83 @@ export class SwNodes {
 
   /** Returns all regular body text nodes without exposing section sentinels to the view. @returns Ordered body text nodes. */
   public getTextNodes(): readonly SwTextNode[] {
-    const start = this.endOfRedlines.GetIndex() + 1;
-    const end = this.endOfContent.GetIndex();
-    return this.nodeArray.slice(start, end).filter(
+    return this.getBodyContent().filter(
       /** Narrows body nodes to text nodes. @param node - Ordered body candidate. @returns True only for SwTextNode. */
       function isTextNode(node): node is SwTextNode {
         return node instanceof SwTextNode;
       },
     );
+  }
+
+  /** Returns direct body paragraphs and tables in document order. @returns Ordered body blocks. */
+  public getBodyContent(): readonly (SwTextNode | SwTableNode)[] {
+    const bodyStart = this.endOfContent.StartOfSectionNode();
+    return this.nodeArray
+      .slice(this.endOfRedlines.GetIndex() + 1, this.endOfContent.GetIndex())
+      .filter(
+        /** Keeps only direct children of the body section. @param node - Candidate. @returns Whether a direct body block. */
+        (node): node is SwTextNode | SwTableNode =>
+          (node instanceof SwTextNode || node instanceof SwTableNode) &&
+          node.StartOfSectionNode() === bodyStart,
+      );
+  }
+
+  /** Inserts a table section after an optional body paragraph. @param name - Table identity. @param format - Physical table geometry. @param after - Optional body predecessor. @returns Canonical table. */
+  public MakeTableNode(name: string, format: SwTableFormat = {}, after?: SwTextNode): SwTable {
+    if (after !== undefined && !this.getTextNodes().includes(after))
+      throw new Error("Writer table insertion needs a body paragraph in this document.");
+    const node = new SwTableNode(this, this.endOfContent.StartOfSectionNode());
+    const end = new SwEndNode(this, node);
+    node.setEndOfSection(end);
+    this.nodeArray.splice(
+      after === undefined ? this.endOfContent.GetIndex() : after.GetIndex() + 1,
+      0,
+      node,
+      end,
+    );
+    const table = new SwTable(node, name, format);
+    node.SetTable(table);
+    this.document.NotifyModelChange({ index: node.GetIndex(), kind: "node-inserted" });
+    return table;
+  }
+
+  /** Appends one row and its cell sections to a table. @param table - Owning table. @param columnCount - Number of cells. @param lineFormat - Row geometry. @param boxFormats - Cell geometry by column. @returns New row. */
+  public AppendTableRow(
+    table: SwTable,
+    columnCount: number,
+    lineFormat: SwTableLineFormat = {},
+    boxFormats: readonly SwTableBoxFormat[] = [],
+  ): SwTableLine {
+    if (!Number.isInteger(columnCount) || columnCount < 1)
+      throw new Error("Writer table row needs at least one cell.");
+    const tableNode = table.GetTableNode();
+    if (tableNode.GetNodes() !== this) throw new Error("Writer table belongs to another document.");
+    const line = new SwTableLine(lineFormat);
+    for (let column = 0; column < columnCount; column += 1) {
+      const start = new SwTableBoxStartNode(this, tableNode);
+      const paragraph = new SwTextNode(this, start, this.document.GetDfltTextFormatColl());
+      const end = new SwEndNode(this, start);
+      start.setEndOfSection(end);
+      this.nodeArray.splice(tableNode.EndOfSectionNode().GetIndex(), 0, start, paragraph, end);
+      const box = new SwTableBox(start, boxFormats[column]);
+      box.AddParagraph(paragraph);
+      line.AddBox(box);
+    }
+    table.AddLine(line);
+    this.document.NotifyModelChange({ index: tableNode.GetIndex(), kind: "node-inserted" });
+    return line;
+  }
+
+  /** Adds another paragraph within an existing cell section. @param box - Cell. @returns New paragraph. */
+  public AppendTableCellParagraph(box: SwTableBox): SwTextNode {
+    const start = box.GetStartNode();
+    if (start.GetNodes() !== this)
+      throw new Error("Writer table cell belongs to another document.");
+    const paragraph = new SwTextNode(this, start, this.document.GetDfltTextFormatColl());
+    this.nodeArray.splice(start.EndOfSectionNode().GetIndex(), 0, paragraph);
+    box.AddParagraph(paragraph);
+    this.document.NotifyModelChange({ index: paragraph.GetIndex(), kind: "node-inserted" });
+    return paragraph;
   }
 
   /** Inserts a new text node immediately before the content end sentinel. @param text - Initial text. @returns Inserted text node. */

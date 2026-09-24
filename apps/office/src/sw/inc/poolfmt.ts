@@ -273,6 +273,16 @@ export function getWriterAvailableParagraphStyleDefinition(
   );
 }
 
+/** Resolves an exposed pool style or Writer's internal Table Contents style. @param id - Pool style identity. @returns Materializable definition. */
+export function getWriterMaterializedParagraphStyleDefinition(
+  id: string,
+): WriterParagraphStyleDefinition | undefined {
+  return (
+    getWriterAvailableParagraphStyleDefinition(id) ??
+    (id === "table-contents" ? getWriterParagraphStyleDefinition(id) : undefined)
+  );
+}
+
 /** Encodes a Writer programmatic style name like SvXMLUnitConverter::encodeStyleName. @param name - Programmatic name. @returns XML style name. */
 export function encodeWriterOdfStyleName(name: string): string {
   let encoded = "";

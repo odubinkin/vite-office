@@ -11,6 +11,7 @@ import type {
 } from "../text/txtparae";
 import type { OdfStyleDefinition, XMLTextListRule } from "../text/txtparai";
 import { importOdfLength, XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
+import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
 import {
   XMLLineNumberingImportContext,
   type OdfLineNumberingConfiguration,
@@ -24,6 +25,7 @@ const ignoredStyleDefinitions = new Set([
 
 /** Consumer of completed style definitions; Writer stores canonical results. */
 export interface XMLStyleImportTarget {
+  registerTableStyle(name: string, style: OdfTableStyle): void;
   registerLineNumbering(value: OdfLineNumberingConfiguration): void;
   getFontFace(name: string): string | undefined;
   registerListStyle(styleName: string, rule: XMLTextListRule): void;
@@ -61,7 +63,17 @@ export class XMLStylesContext extends SvXMLImportContext {
   ): SvXMLImportContext | null {
     if (element === XMLToken.STYLE_DEFAULT_STYLE)
       return new XMLStyleContext(this.target, attributes, true);
-    if (element === XMLToken.STYLE_STYLE) return new XMLStyleContext(this.target, attributes);
+    if (element === XMLToken.STYLE_STYLE) {
+      const family = attributes.get(XMLToken.STYLE_FAMILY);
+      if (
+        family === "table" ||
+        family === "table-column" ||
+        family === "table-row" ||
+        family === "table-cell"
+      )
+        return new XMLTableStyleContext(this.target, attributes);
+      return new XMLStyleContext(this.target, attributes);
+    }
     if (element === XMLToken.TEXT_LIST_STYLE)
       return new XMLListStyleContext(this.target, attributes);
     if (element === XMLToken.STYLE_PAGE_LAYOUT)

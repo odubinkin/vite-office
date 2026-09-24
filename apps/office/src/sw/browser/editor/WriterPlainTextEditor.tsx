@@ -1,6 +1,6 @@
 /** @fileoverview Projects Writer paragraphs through one browser implementation of SwEditWin. */
 
-import { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { WriterRulerLaneContext } from "../presentation/writer-ruler-lane-context";
@@ -9,6 +9,9 @@ import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
 import type { WriterParagraphProjection as WriterParagraph } from "../presentation/writer-view-projection";
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
+import { WriterEditableTable } from "./WriterEditableTable";
+import { SwTableNode } from "../../source/core/docnode/node";
+import type { SwTable } from "../../source/core/table/swtable";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import { SwRootFrame, type SwPageDescriptorLayout } from "../../source/core/layout/newfrm";
@@ -29,6 +32,9 @@ export interface WriterPlainTextEditorProps {
   readonly verticalRuler?: ReactNode;
   readonly showLineNumbers?: boolean;
   readonly lineNumberInfo?: SwLineNumberInfoValue;
+  readonly selectedTable?: SwTable;
+  readonly selectedTableRow?: number;
+  readonly onSelectTableRow?: (table: SwTable, row: number) => void;
 }
 
 /** Renders one root `contenteditable` and forwards browser events to one stable controller. @param props - Immutable projection and edit-window owner. @returns Logical Writer document editing host. */
@@ -111,6 +117,42 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     ),
   );
   const numberedFrames = layout.lineNumbers;
+  const tableAfter = new Map<string, SwTable[]>();
+  const tablesBefore: SwTable[] = [];
+  let previousParagraphId: string | undefined;
+  for (const block of props.editWindow.GetDoc().nodes.getBodyContent()) {
+    if (block instanceof SwTableNode) {
+      const target =
+        previousParagraphId === undefined
+          ? tablesBefore
+          : (tableAfter.get(previousParagraphId) ?? []);
+      target.push(block.GetTable());
+      if (previousParagraphId !== undefined) tableAfter.set(previousParagraphId, target);
+    } else
+      previousParagraphId = props.paragraphs.find(
+        /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+          paragraph,
+        ) => paragraph.nodeIndex === block.GetIndex(),
+      )?.id;
+  }
+  const lastFrame = new Map<string, string>();
+  for (const [pageIndex, page] of pages.entries())
+    for (const frame of page.textFrames) lastFrame.set(frame.nodeId, `${pageIndex}:${frame.start}`);
+  const renderTable =
+    /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+      table: SwTable,
+    ): React.JSX.Element => (
+      <WriterEditableTable
+        key={table.GetName()}
+        table={table}
+        selectedRow={props.selectedTable === table ? props.selectedTableRow : undefined}
+        onSelectRow={
+          /** Handles the browser table interaction. @param argument1 - Callback input. @returns Callback result. */ (
+            row,
+          ) => props.onSelectTableRow?.(table, row)
+        }
+      />
+    );
 
   useLayoutEffect(
     /** Supplies Writer with browser-shaped line boundaries after the measurement projection mounts. @returns Nothing. */
@@ -324,6 +366,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                   width: page.descriptor.width / 15,
                 }}
               >
+                {pageIndex === 0 ? tablesBefore.map(renderTable) : null}
                 {page.textFrames.map(
                   /** Renders one Writer text-frame fragment on the current page. @param frame - Writer fragment. @param frameIndex - Fragment index. @returns Browser paragraph. */ (
                     frame,
@@ -339,28 +382,32 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                       (mark) => ({ number: mark.number, topPt: mark.topTwips / 20 }),
                     );
                     return (
-                      <WriterEditableParagraph
-                        index={index}
-                        isActive={paragraph.id === props.activeParagraphId}
-                        key={`${paragraph.id}:${frame.start}`}
-                        listMarker={paragraph.listMarker}
-                        paragraph={paragraph}
-                        fragmentStart={frame.start}
-                        fragmentEnd={frame.end}
-                        topSpacingPt={frame.topSpacing / 20}
-                        isFollow={frame.follow}
-                        lineNumbers={lineNumbers}
-                        retainElement={
-                          /** Retains the DOM identity used by SwEditWin. @param paragraphId - Projection identity. @param element - Mounted paragraph or null. @returns Nothing. */ (
-                            paragraphId,
-                            element,
-                          ) => {
-                            const key = `${paragraphId}:${frame.start}`;
-                            if (element === null) paragraphElements.delete(key);
-                            else paragraphElements.set(key, element);
+                      <Fragment key={`${paragraph.id}:${frame.start}`}>
+                        <WriterEditableParagraph
+                          index={index}
+                          isActive={paragraph.id === props.activeParagraphId}
+                          listMarker={paragraph.listMarker}
+                          paragraph={paragraph}
+                          fragmentStart={frame.start}
+                          fragmentEnd={frame.end}
+                          topSpacingPt={frame.topSpacing / 20}
+                          isFollow={frame.follow}
+                          lineNumbers={lineNumbers}
+                          retainElement={
+                            /** Retains the DOM identity used by SwEditWin. @param paragraphId - Projection identity. @param element - Mounted paragraph or null. @returns Nothing. */ (
+                              paragraphId,
+                              element,
+                            ) => {
+                              const key = `${paragraphId}:${frame.start}`;
+                              if (element === null) paragraphElements.delete(key);
+                              else paragraphElements.set(key, element);
+                            }
                           }
-                        }
-                      />
+                        />
+                        {lastFrame.get(frame.nodeId) === `${pageIndex}:${frame.start}`
+                          ? tableAfter.get(frame.nodeId)?.map(renderTable)
+                          : null}
+                      </Fragment>
                     );
                   },
                 )}

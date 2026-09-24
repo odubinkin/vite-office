@@ -43,9 +43,9 @@ test("Writer menu keyboard navigation and accessible application chrome" /**
   await page.getByRole("button", { name: "File" }).click();
   await expect(page.getByRole("menu", { name: "File menu" })).toContainText("Save");
   await page.getByRole("button", { name: "File" }).press("Escape");
-  await page.getByRole("button", { name: "Insert" }).click();
+  await writerMenuBar.getByRole("button", { exact: true, name: "Insert" }).click();
   await expect(page.getByRole("menuitem", { exact: true, name: "Hyperlink…" })).toBeVisible();
-  await page.getByRole("button", { name: "Insert" }).press("Escape");
+  await writerMenuBar.getByRole("button", { exact: true, name: "Insert" }).press("Escape");
   await expect(writerMenuBar.getByRole("button")).toHaveText([
     "File",
     "Edit",

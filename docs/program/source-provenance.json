@@ -1527,6 +1527,27 @@
       "evidence": {
         "local": [
           {
+            "marker": "WriterEditableTable",
+            "path": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/editor/WriterEditableTable.tsx",
+      "rationale": "Projects canonical SwTable rows and editable SwTextNode cell paragraphs into the browser page.",
+      "responsibilities": [
+        "Projects canonical SwTable rows and editable SwTextNode cell paragraphs into the browser page."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM controls replace the native VCL table presentation boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "WriterPlainTextEditor",
             "path": "apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx"
           }
@@ -2104,6 +2125,27 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "DOM pointer handles replace native Writer and VCL ruler widgets."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterTableDialog",
+            "path": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/presentation/WriterTableDialog.tsx",
+      "rationale": "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph.",
+      "responsibilities": [
+        "Presents bounded Insert Table and Table Properties controls over the canonical Writer table graph."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "React and DOM controls replace the native VCL table presentation boundary."
       },
       "status": "local-only"
     },
@@ -3559,6 +3601,40 @@
       "evidence": {
         "local": [
           {
+            "marker": "SwTable",
+            "path": "apps/office/src/sw/source/core/table/swtable.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwTable::SwTable",
+            "path": "vendor/libreoffice-reference/sw/source/core/table/swtable.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/core/table/swtable.ts",
+      "localSymbols": [
+        "SwTable",
+        "SwTableLine",
+        "SwTableBox"
+      ],
+      "omittedResponsibilities": [
+        "Full LibreOffice table features outside the bounded certification table slice remain pending."
+      ],
+      "preservedResponsibilities": [
+        "Owns ordered Writer table rows, cells, geometry and pagination boundaries."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/core/table/swtable.cxx",
+      "upstreamSymbols": [
+        "SwTable::SwTable"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "projectWriterLineHeightItem",
             "path": "apps/office/src/sw/source/core/text/itrform2.ts"
           }
@@ -4399,6 +4475,38 @@
         "SwXMLBodyContext_Impl::createFastChildContext",
         "SwXMLDocContext_Impl::SwXMLDocContext_Impl",
         "SwXMLDocContext_Impl::createFastChildContext"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SwXMLTableImport",
+            "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwXMLTableContext",
+            "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmltbli.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "localSymbols": [
+        "SwXMLTableImport"
+      ],
+      "omittedResponsibilities": [
+        "Full LibreOffice table import outside the bounded certification table slice remains pending."
+      ],
+      "preservedResponsibilities": [
+        "Coordinates bounded table SAX events into canonical SwTable sections."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/source/filter/xml/xmltbli.cxx",
+      "upstreamSymbols": [
+        "SwXMLTableContext"
       ]
     },
     {
@@ -5314,6 +5422,73 @@
       "upstreamSymbols": [
         "SvXMLStylesContext",
         "SvXMLStylesContext::createFastChildContext"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "XMLTableExportSource",
+            "path": "apps/office/src/xmloff/source/table/XMLTableExport.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "XMLTableExport::exportTable",
+            "path": "vendor/libreoffice-reference/xmloff/source/table/XMLTableExport.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+      "localSymbols": [
+        "XMLTableExportSource",
+        "exportTableBlocks"
+      ],
+      "omittedResponsibilities": [
+        "Full LibreOffice table features outside the bounded certification table slice remain pending."
+      ],
+      "preservedResponsibilities": [
+        "Emits bounded table automatic styles and ordered table body XML from canonical Writer blocks."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/table/XMLTableExport.cxx",
+      "upstreamSymbols": [
+        "XMLTableExport::exportTable"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "XMLTableStyleContext",
+            "path": "apps/office/src/xmloff/source/table/XMLTableImport.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "XMLTableImportContext::ImportRow",
+            "path": "vendor/libreoffice-reference/xmloff/source/table/XMLTableImport.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/table/XMLTableImport.ts",
+      "localSymbols": [
+        "XMLTableStyleContext",
+        "XMLTableContext",
+        "XMLTableImportTarget"
+      ],
+      "omittedResponsibilities": [
+        "Full LibreOffice table features outside the bounded certification table slice remain pending."
+      ],
+      "preservedResponsibilities": [
+        "Imports bounded ODF table style, column, row, cell and paragraph SAX contexts."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/table/XMLTableImport.cxx",
+      "upstreamSymbols": [
+        "XMLTableImportContext::ImportRow"
       ]
     },
     {

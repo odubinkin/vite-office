@@ -3,6 +3,7 @@
  */
 
 export { ODF_NAMESPACES } from "../core/xmltoken";
+import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
 
 /** Direct character properties supported by the bounded text exporter. */
 export interface OdfCharacterProperties {
@@ -132,6 +133,7 @@ export interface XMLTextParagraphSource {
 /** Reiterable model-facing source; definitions are collected before body references. */
 export interface XMLTextExportSource {
   paragraphs(): Iterable<XMLTextParagraphSource>;
+  blocks?(): Iterable<XMLTextExportBlock>;
 }
 
 /** Serialized automatic styles and paragraph body fragment. */
@@ -303,16 +305,40 @@ export class XMLTextParagraphExport {
         return `<text:list-style style:name="${name}" style:display-name="${escapeXml(rule.name)}">${levels}</text:list-style>`;
       },
     );
-    const body = exportParagraphBody(
-      source.paragraphs(),
-      paragraphStyleNames,
-      characterStyleNames,
-      listStyleNames,
-      isCancelled,
-    );
+    const rendered =
+      source.blocks === undefined
+        ? {
+            body: exportParagraphBody(
+              source.paragraphs(),
+              paragraphStyleNames,
+              characterStyleNames,
+              listStyleNames,
+              isCancelled,
+            ),
+            automaticStyles: "",
+          }
+        : exportTableBlocks(
+            source.blocks(),
+            /** Processes one ODF table value. @param argument1 - Callback input. @returns Callback result. */ (
+              paragraphs,
+            ) =>
+              exportParagraphBody(
+                paragraphs,
+                paragraphStyleNames,
+                characterStyleNames,
+                listStyleNames,
+                isCancelled,
+              ),
+            isCancelled,
+          );
     return {
-      automaticStyles: [...paragraphStyles, ...characterStyles, ...listStyles].join(""),
-      body,
+      automaticStyles: [
+        ...paragraphStyles,
+        ...characterStyles,
+        ...listStyles,
+        rendered.automaticStyles,
+      ].join(""),
+      body: rendered.body,
     };
   }
 }
@@ -782,7 +808,7 @@ export function exportParagraphPropertyChildren(properties: OdfParagraphProperti
 }
 
 /** Serializes a bounded twip margin as an ODF centimetre length. @param twips - Margin in twips. @returns ODF length. */
-function exportOdfLength(twips: number): string {
+export function exportOdfLength(twips: number): string {
   const centimetres = (twips * 2.54) / 1440;
   return `${Number(centimetres.toFixed(4))}cm`;
 }

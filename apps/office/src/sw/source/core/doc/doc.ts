@@ -3,7 +3,9 @@
 import { SwAttrPool } from "../attr/swatrset";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
+import { SwTableNode } from "../docnode/node";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import type { SwTable } from "../table/swtable";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import { DocumentMarkAccess } from "./docbm";
 import { DocumentListsManager } from "./DocumentListsManager";
@@ -261,6 +263,16 @@ export class SwDoc {
   /** Returns body text nodes. @returns Ordered body content. */
   public get paragraphs(): readonly SwTextNode[] {
     return this.nodes.getTextNodes();
+  }
+  /** Returns canonical tables in direct body order. @returns Table graphs. */
+  public GetTables(): readonly SwTable[] {
+    return this.nodes
+      .getBodyContent()
+      .flatMap(
+        /** Projects a body table node. @param node - Body block. @returns Zero or one table. */ (
+          node,
+        ) => (node instanceof SwTableNode ? [node.GetTable()] : []),
+      );
   }
   /** Runs one semantic model transaction. @param mutation - Mutation callback. @returns Callback result. */
   public RunModelTransaction<Result>(mutation: () => Result): Result {

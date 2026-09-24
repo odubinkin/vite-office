@@ -9,6 +9,7 @@ import { SwAttrSet } from "../attr/swatrset";
 import { SwContentIndexRegistry } from "../bastyp/index";
 import { SwTextFormatColl, type SwFormatColl } from "../doc/fmtcol";
 import type { SwNodes } from "./nodes";
+import type { SwTable } from "../table/swtable";
 
 /** Identifies the node categories implemented by the current Writer model slice. */
 export type SwNodeType = "end" | "start" | "text";
@@ -91,6 +92,35 @@ export class SwStartNode extends SwNode {
   public EndOfSectionNode(): SwEndNode {
     if (this.endOfSection === undefined) throw new Error("SwStartNode has no end sentinel.");
     return this.endOfSection;
+  }
+}
+
+/** Begins one table section in the ordered Writer node array. */
+export class SwTableNode extends SwStartNode {
+  private table: SwTable | undefined;
+
+  /** Creates a table start node. @param nodes - Owning array. @param parent - Body section. @returns Nothing. */
+  public constructor(nodes: SwNodes, parent: SwStartNode) {
+    super(nodes, parent);
+  }
+
+  /** Attaches the canonical table graph. @param table - Table owned by this section. @returns Nothing. */
+  public SetTable(table: SwTable): void {
+    this.table = table;
+  }
+
+  /** Returns the canonical table graph. @returns Table. */
+  public GetTable(): SwTable {
+    if (this.table === undefined) throw new Error("SwTableNode has no table.");
+    return this.table;
+  }
+}
+
+/** Begins one table cell section inside its table node. */
+export class SwTableBoxStartNode extends SwStartNode {
+  /** Creates a cell section. @param nodes - Owning array. @param table - Containing table section. @returns Nothing. */
+  public constructor(nodes: SwNodes, table: SwTableNode) {
+    super(nodes, table);
   }
 }
 

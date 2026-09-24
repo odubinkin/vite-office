@@ -85,6 +85,10 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       expect(collection.GetNextTextFormatColl().id).toBe(style.followId);
     }
     expect(document.GetTextFormatColls()).toHaveLength(26);
+    expect(document.GetTextFormatColl("table-contents").DerivedFrom()).toBe(
+      document.GetDfltTextFormatColl(),
+    );
+    expect(document.GetTextFormatColls()).toHaveLength(27);
     expect(document.GetTextFormatColl("heading-1").GetAssignedOutlineStyleLevel()).toBe(0);
     expect(document.GetTextFormatColl("heading-10").GetAssignedOutlineStyleLevel()).toBe(9);
     expect(
