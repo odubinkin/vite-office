@@ -1,10 +1,11 @@
 ---
 id: "202609241135-JV2933"
 title: "F4 Place SAX parser and platform adaptations at correct boundaries"
-status: "DOING"
+result_summary: "SAX engine and browser adapters placed at matching source boundaries with exact inventory mappings."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -43,11 +44,16 @@ quality_review:
     - "docs/program/source-provenance.json"
   findings:
     - "SAX event engine now resides under sax; ODF contexts stay under xmloff; browser keyboard, locale and Worker adapters reside under framework/browser with exact provenance and inventory records."
-commit: null
+commit:
+  hash: "05e216ff47e4c09e1f5b6550ca1f6e23a8e623cd"
+  message: "🧩 JV2933 task: persist quality review"
 comments:
   -
     author: "CODER"
     body: "Start: correct F4 SAX and framework platform ownership against pinned modules while retaining xmloff contexts."
+  -
+    author: "CODER"
+    body: "Verified: F4 ownership split passes full npm run verify and git diff --check."
 events:
   -
     type: "status"
@@ -62,8 +68,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "F4 ownership split and exact provenance/inventory mappings verified by npm run verify and git diff --check."
+  -
+    type: "status"
+    at: "2026-09-24T12:29:24.550Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: F4 ownership split passes full npm run verify and git diff --check."
 doc_version: 3
-doc_updated_at: "2026-09-24T12:28:48.247Z"
+doc_updated_at: "2026-09-24T12:29:24.552Z"
 doc_updated_by: "CODER"
 description: "Implement F4: move shared SAX engine to sax/source/fastparser and DOM locale Worker adapters to browser directories."
 sections:
@@ -119,6 +132,10 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: "F4 split: SAX event delivery and limits moved to sax/source/fastparser/fastparser.ts; tokenized ODF import contexts remain in xmloff/source/core/xml-parser.ts. Browser keyboard, locale and Worker adapters moved under framework/browser. Updated imports, source-tree, provenance and runtime inventory data; added sax to the static dependency graph. Focused tests: 13 passed. npm run verify: passed (482 office tests, 98 inventory tests, 14 browser E2E tests, both coverage suites 100%, build and all gates). git diff --check: passed. No network used."
+extensions:
+  implementation_commit:
+    hash: "e61c9c767ae6e3a2c39d8a7ec190d991ae6987c1"
+    message: "🧩 JV2933 code: align SAX and browser adapter ownership"
 id_source: "generated"
 ---
 ## Summary
