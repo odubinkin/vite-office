@@ -24,6 +24,7 @@ describe("Writer uiconfig resources" /** Groups pure Writer resource tests. @ret
       ),
     ).toEqual(["picklist", "editmenu", "viewmenu", "insertmenu", "formatmenu", "formatstylesmenu"]);
     expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.bold);
+    expect(writerMenuCommandIds).toContain(WRITER_COMMAND_IDS.toggleHorizontalRuler);
     expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.alignLeft);
     expect(writerMenuCommandIds).not.toContain(WRITER_COMMAND_IDS.underline);
     expect(

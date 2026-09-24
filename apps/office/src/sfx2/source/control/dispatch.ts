@@ -155,11 +155,6 @@ export class SfxDispatcher {
     return slots;
   }
 
-  /** Compatibility projection for presentation adapters migrating to GetSlots. @returns Active slots. */
-  public GetCommands(): readonly SfxSlot<unknown>[] {
-    return this.GetSlots();
-  }
-
   /** Browser adapters use generated accelerator metadata without owning dispatch behavior. @param shortcut - Canonical accelerator. @returns Resolved command. */
   public FindCommandByShortcut(shortcut: string): ResolvedShellCommand | undefined {
     const slot = this.GetSlots().find(

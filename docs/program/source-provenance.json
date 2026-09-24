@@ -1975,27 +1975,6 @@
       "evidence": {
         "local": [
           {
-            "marker": "writerBrowserMenuPlacements",
-            "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts",
-      "rationale": "Exposes the supported generated Writer menubar unchanged at the browser presentation boundary. This boundary is browser-owned and has no direct native LibreOffice counterpart; Writer model semantics stay in the core modules.",
-      "responsibilities": [
-        "Prevents a second handwritten policy from filtering implemented generated commands."
-      ],
-      "stackDivergence": {
-        "kind": "browser-adaptation",
-        "rationale": "Browser DOM and React replace the native VCL presentation boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "browser-adaptation",
-      "evidence": {
-        "local": [
-          {
             "marker": "WriterRulerLaneContext",
             "path": "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts"
           }

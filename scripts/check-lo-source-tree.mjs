@@ -108,7 +108,6 @@ const requiredFiles = [
   "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
   "apps/office/src/sw/browser/editor/browser-writer-edit-window.ts",
   "apps/office/src/sw/source/uibase/docvw/edtwin.ts",
-  "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts",
   "apps/office/src/sw/browser/composition/writer-module.tsx",
   "apps/office/src/sw/sdi/swriter.ts",
   "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",

@@ -807,21 +807,21 @@
       ],
       "semantic": {
         "behaviorStatus": "unverified",
-        "contractStatus": "divergent",
+        "contractStatus": "unverified",
         "defaultStatus": "not-applicable",
-        "divergenceClass": "P",
+        "divergenceClass": "none",
         "evidence": [
-          "apps/office/src/sfx2/source/control/dispatch.ts#GetCommands",
-          "apps/office/src/sfx2/source/control/dispatch.test.ts#GetCommands",
+          "apps/office/src/sfx2/source/control/dispatch.ts#GetSlots",
+          "apps/office/src/sfx2/source/control/dispatch.test.ts#GetSlots",
           "vendor/libreoffice-reference/sfx2/source/control/dispatch.cxx#SfxDispatcher::GetSlot"
         ],
-        "justification": "P2 confirmed extra public alias: GetCommands returns GetSlots unchanged and has no production caller. The pinned SfxDispatcher slot interface exposes GetSlots; remove the local alias after its one test is updated. Other dispatch behavior remains unverified.",
+        "justification": "Removed the unused GetCommands alias; active slot discovery remains in SfxDispatcher.GetSlots with a source-backed assertion. Broader dispatch behavior remains unverified.",
         "knownViolations": [],
         "localSymbols": [
           "SfxDispatcher",
           "isPromiseLike"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sfx2/source/control/dispatch.cxx",
         "upstreamSymbols": [
           "SfxDispatcher",
@@ -1456,7 +1456,7 @@
         "CAP-0134"
       ],
       "semantic": {
-        "behaviorStatus": "divergent",
+        "behaviorStatus": "unverified",
         "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
         "divergenceClass": "B",
@@ -1466,12 +1466,12 @@
           "vendor/libreoffice-reference/sw/source/core/doc/lineinfo.cxx#SwLineNumberInfo::SwLineNumberInfo",
           "vendor/libreoffice-reference/sw/source/core/text/txtfrm.cxx#SwTextFrame"
         ],
-        "justification": "P0 confirmed ownership gap: React computes line-number paint from showLineNumbers and invokes createSwPageFrames during render. Pinned SwLineNumberInfo is document-owned and sw/source/core/text/txtfrm.cxx plus layout/newfrm.cxx own line and page formatting. DOM measurement and painting remain valid browser device work.",
+        "justification": "React supplies measured DOM glyph/line boundaries to document-owned SwRootFrame layout and paints the returned frame/line-number snapshot. The optional showLineNumbers prop mirrors document SwLineNumberInfo state; broader device rendering remains unverified.",
         "knownViolations": [],
         "localSymbols": [
           "WriterPlainTextEditor"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -2174,33 +2174,6 @@
       }
     },
     {
-      "path": "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts",
-      "classification": "browser-adaptation",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "browser-presentation",
-      "capabilityIds": [
-        "CAP-0104",
-        "CAP-0115"
-      ],
-      "semantic": {
-        "behaviorStatus": "unverified",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/browser/presentation/writer-command-surfaces.ts#writerBrowserMenuPlacements",
-          "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts#writerMenuPlacements"
-        ],
-        "justification": "P2 confirmed pass-through boundary: this module reexports generated writerMenuPlacements with no browser transformation or independent command behavior. Its callers can use the generated uiconfig owner directly; command presentation remains a valid React boundary.",
-        "knownViolations": [],
-        "localSymbols": [],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
       "path": "apps/office/src/sw/browser/presentation/writer-ruler-lane-context.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -2242,7 +2215,7 @@
         "evidence": [
           "apps/office/src/sw/browser/presentation/writer-view-projection.ts#WriterViewStore"
         ],
-        "justification": "Projects live Writer nodes into immutable render values and current SwNodes coordinates without exposing node resolution or mutation closures to React.",
+        "justification": "Projects live Writer nodes into immutable render values at the React boundary; canonical SwDoc nodes and layout frames retain mutation and pagination ownership.",
         "knownViolations": [],
         "localSymbols": [
           "WriterParagraphProjection",
@@ -2252,7 +2225,7 @@
           "WriterViewProjection",
           "WriterViewStore"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -3106,13 +3079,13 @@
           "apps/office/src/sw/source/core/doc/doc.ts#SwDoc",
           "vendor/libreoffice-reference/sw/source/core/doc/doc.cxx#SwDoc"
         ],
-        "justification": "Mapped provenance remains semantically unverified against sw/source/core/doc/doc.cxx; recorded Phase 0 checks prevent path or symbol evidence from being treated as parity.",
+        "justification": "SwDoc has a mapped upstream owner; module-wide model and default behavior remain unverified beyond the bounded assertions in the command inventory.",
         "knownViolations": [],
         "localSymbols": [
           "SwDoc",
           "createWriterDocument"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "unverified",
         "upstreamFile": "sw/source/core/doc/doc.cxx",
         "upstreamSymbols": [
           "SwDoc",

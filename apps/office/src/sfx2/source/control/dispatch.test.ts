@@ -242,7 +242,6 @@ describe("SfxDispatcher", /** Defines dispatcher tests. @returns Nothing. */ () 
             slot.commandUrl,
         ),
     ).toEqual(["shared.greet", "shared.save"]);
-    expect(dispatcher.GetCommands()).toEqual(dispatcher.GetSlots());
     expect(/** Pushes a duplicate shell. @returns Nothing. */ () => dispatcher.Push(upper)).toThrow(
       "already active",
     );

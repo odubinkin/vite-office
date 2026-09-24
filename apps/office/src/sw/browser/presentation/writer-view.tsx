@@ -26,9 +26,11 @@ import {
 } from "../../../framework/browser/presentation/command-surface";
 import { useCommandShortcuts } from "../../../framework/browser/presentation/use-command-shortcuts";
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
-import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
+import {
+  WRITER_COMMAND_IDS,
+  writerMenuPlacements,
+} from "../../uiconfig/swriter/menubar/menubar-commands";
 import { selectWriterCommandResource } from "./writer-command-presentation";
-import { writerBrowserMenuPlacements } from "./writer-command-surfaces";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import type { SwView } from "../../source/uibase/uiview/view";
 import { WriterViewStore, type WriterViewSnapshot } from "./writer-view-projection";
@@ -216,7 +218,7 @@ export function WriterWorkbench({
               ) => localization.GetText(`writer.menu.${id}.label`, fallback)
             }
             idPrefix="writer"
-            menus={writerBrowserMenuPlacements}
+            menus={writerMenuPlacements}
             resolveArguments={resolveCommandArguments}
           />
         }
