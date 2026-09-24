@@ -1,10 +1,11 @@
 ---
 id: "202609241521-P6BCN2"
 title: "Close certification ODT whole-document acceptance"
-status: "DOING"
+result_summary: "canonical Writer ODT acceptance and documentation verified"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -46,11 +47,16 @@ quality_review:
     - "npm-run-verify"
   findings:
     - "Fresh Chromium import/edit/export/reopen retained source body text and runs, nonedited cells, bookmarks, logical breaks and page geometry; second save was byte-identical. Pinned ODT matrix and full verify pass. Remaining 260 unsupported declarations are explicitly classified, summarized once in the browser, and documented without claiming complete LibreOffice layout parity."
-commit: null
+commit:
+  hash: "f935dc55783479e9914de7a959c2de6af8a7fd59"
+  message: "🚧 P6BCN2 task: close certification ODT compatibility acceptance"
 comments:
   -
     author: "CODER"
     body: "Start: close whole-document ODT acceptance and compatibility contract."
+  -
+    author: "CODER"
+    body: "Verified: whole-document certification ODT acceptance and compatibility contract pass the declared checks."
 events:
   -
     type: "status"
@@ -65,8 +71,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "npm run verify passed: 537 app tests at 100% coverage, 109 inventory tests, 15 Chromium e2e and all static/docs/source checks. Pinned phase 0-5 ODT matrix and source-backed table service test passed. Authorized private ODT Open/edit/Export/reopen in fresh Chromium sessions retained 59 body paragraphs and runs, 5 rows/15 cells, 8 bookmarks, 8 paragraph/cell breaks, table-owned break, and page geometry; second saved package was byte-identical. One browser warning summarizes 260 detailed unsupported declarations in 119 contexts; remaining style and list omissions are documented."
+  -
+    type: "status"
+    at: "2026-09-24T22:36:09.859Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: whole-document certification ODT acceptance and compatibility contract pass the declared checks."
 doc_version: 3
-doc_updated_at: "2026-09-24T22:35:16.610Z"
+doc_updated_at: "2026-09-24T22:36:09.861Z"
 doc_updated_by: "CODER"
 description: "Phase 6: private sample Open/render/edit/Save As/reopen acceptance, upstream fixture matrix and documented ODT contract/parity limitations."
 sections:
