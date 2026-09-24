@@ -1,10 +1,11 @@
 ---
 id: "202609240501-23YVPN"
 title: "Align upstream paths and remove redundant adapters"
-status: "DOING"
+result_summary: "Redundant Sfx and menu adapters removed; mapped path data reconciled."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on:
@@ -42,11 +43,16 @@ quality_review:
     - "/tmp/vite-office-stage7-verify.log"
   findings:
     - "Unused Sfx alias and generated menubar pass-through deleted; retained transforms have real filter, clipboard, DOM or React consumers; full verification passed."
-commit: null
+commit:
+  hash: "b16e31503fc663882705fe27185ce09c8ec655c4"
+  message: "🗂️ 23YVPN task: record adapter audit verification"
 comments:
   -
     author: "CODER"
     body: "Start: trace adapter callers, remove proven residue, reconcile paths, and verify."
+  -
+    author: "CODER"
+    body: "Verified: Stage 7 adapter removal at 97032880b4d5 passes npm run verify and source tree/provenance checks; remaining mapped splits have documented stack necessity."
 events:
   -
     type: "status"
@@ -61,8 +67,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "GetCommands had no production caller; generated menubar pass-through removed; reverse page adapter already absent. Twenty remaining filename divergences have existing stack-necessity records and paths. npm run verify passed with 469 office tests, 96 inventory tests, 14 browser tests and 100% coverage."
+  -
+    type: "status"
+    at: "2026-09-24T08:38:18.990Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Stage 7 adapter removal at 97032880b4d5 passes npm run verify and source tree/provenance checks; remaining mapped splits have documented stack necessity."
 doc_version: 3
-doc_updated_at: "2026-09-24T08:37:59.576Z"
+doc_updated_at: "2026-09-24T08:38:18.992Z"
 doc_updated_by: "CODER"
 description: "Stage 7: remove confirmed unused aliases and DTO adapters; update source provenance and runtime inventory data without deleting browser ports"
 sections:
@@ -123,6 +136,10 @@ sections:
     - Observation: Obsolete aliases and stale parity descriptions obscured upstream ownership.
       Impact: Extra exported surfaces and inventory records could be mistaken for implemented policy.
       Resolution: Removed alias/reexport and duplicate test, routed view to generated uiconfig, and corrected inventory/provenance data.
+extensions:
+  implementation_commit:
+    hash: "97032880b4d58be0c83d23dcedc169a3582d7800"
+    message: "🧩 23YVPN code: remove redundant dispatch and menu adapters"
 id_source: "generated"
 ---
 ## Summary
