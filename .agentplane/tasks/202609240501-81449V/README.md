@@ -1,10 +1,11 @@
 ---
 id: "202609240501-81449V"
 title: "Restore list selection undo and transfer invariants"
-status: "DOING"
+result_summary: "verified-202609240501-81449V"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on:
@@ -21,9 +22,9 @@ plan_approval:
   note: "Approved as the Stage 5 work unit within the user-approved upstream parity plan."
 verification:
   state: "ok"
-  updated_at: "2026-09-24T08:06:13.693Z"
+  updated_at: "2026-09-24T08:06:40.589Z"
   updated_by: "CODER"
-  note: "Pinned ndtxt.cxx and SwNumberTree.cxx counter, restart and counted transitions checked by focused tests; npm run verify passed with 467 office tests at 100% coverage, inventory coverage and 14 browser tests."
+  note: "verified-202609240501-81449V"
   attempts: 0
 quality_review:
   state: "pass"
@@ -42,11 +43,16 @@ quality_review:
     - "/tmp/vite-office-stage5-verify.log"
   findings:
     - "Pinned source behavior for counted list items, restart invalidation, list registration and level reparenting has focused assertions; 467 office tests and 14 browser tests passed."
-commit: null
+commit:
+  hash: "60f7c0bcd760e5397faf29f72c08491de852d9ec"
+  message: "🧩 81449V code: restore Writer list counter invariants"
 comments:
   -
     author: "CODER"
     body: "Start: audit reachable list, selection, undo and transfer invariants against pinned LibreOffice and repair source-backed mismatches."
+  -
+    author: "CODER"
+    body: "Verified: verified-202609240501-81449V. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -61,8 +67,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "Pinned ndtxt.cxx and SwNumberTree.cxx counter, restart and counted transitions checked by focused tests; npm run verify passed with 467 office tests at 100% coverage, inventory coverage and 14 browser tests."
+  -
+    type: "verify"
+    at: "2026-09-24T08:06:40.589Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609240501-81449V"
+  -
+    type: "status"
+    at: "2026-09-24T08:06:40.799Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202609240501-81449V. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-09-24T08:06:13.775Z"
+doc_updated_at: "2026-09-24T08:06:40.801Z"
 doc_updated_by: "CODER"
 description: "Stage 5: verify and repair reachable list, PaM, text node, undo and clipboard transitions against pinned Writer source; respect active transfer task"
 sections:
@@ -113,6 +132,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-09-24T08:06:40.589Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609240501-81449V
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T08:06:13.775Z, excerpt_hash=sha256:3989f922de7bcbb7ad3441411c700d30dffbe47e71c483d9d9f8f9b372b93e17
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-81449V/blueprint/resolved-snapshot.json
+    - old_digest: bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce
+    - current_digest: bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609240501-81449V
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609240501-81449V --result verified-202609240501-81449V --commit e62bbb2cefa80e757a22dbad3199a52612a34a7b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -181,6 +230,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-24T08:06:40.589Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609240501-81449V
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T08:06:13.775Z, excerpt_hash=sha256:3989f922de7bcbb7ad3441411c700d30dffbe47e71c483d9d9f8f9b372b93e17
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609240501-81449V/blueprint/resolved-snapshot.json
+- old_digest: bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce
+- current_digest: bacfb03d975cfaabc4392c26373dadc7a8bd673d04355189ae3e925c492cacce
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609240501-81449V
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609240501-81449V --result verified-202609240501-81449V --commit e62bbb2cefa80e757a22dbad3199a52612a34a7b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
