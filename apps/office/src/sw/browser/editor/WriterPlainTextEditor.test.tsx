@@ -443,12 +443,12 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     selection.addRange(cutRange);
     const cutClipboardData = { getData: vi.fn(), setData: vi.fn() };
     fireEvent.cut(paragraph, { clipboardData: cutClipboardData });
-    expect(cutClipboardData.setData).toHaveBeenNthCalledWith(1, "text/plain", "Cut me");
     expect(cutClipboardData.setData).toHaveBeenNthCalledWith(
-      2,
+      1,
       "text/html",
       expect.stringContaining("Cut me"),
     );
+    expect(cutClipboardData.setData).toHaveBeenNthCalledWith(2, "text/plain", "Cut me");
     expect(paragraph).toHaveTextContent("");
     const cutParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     fireEvent.paste(cutParagraph, {

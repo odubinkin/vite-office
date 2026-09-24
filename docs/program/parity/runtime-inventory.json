@@ -4776,10 +4776,14 @@
         "evidence": [
           "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts#SwTransferable",
           "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::SwTransferable",
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::PrepareForCopyTextRange",
+          "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::Cut",
+          "apps/office/src/sw/browser/editor/browser-writer-edit-window.test.ts#writes HTML before plain text for Writer copy and drag",
+          "apps/office/src/sw/source/uibase/dochdl/swdtflvr.test.ts#keeps selected content when transfer writing fails or the selection changes",
           "apps/office/src/sw/source/uibase/dochdl/swdtflvr.ts#pasteWriterTransfer",
           "vendor/libreoffice-reference/sw/source/uibase/dochdl/swdtflvr.cxx#SwTransferable::Paste"
         ],
-        "justification": "The bounded transfer owner now consumes only the canonical SwDoc and persistent SwPaM, matching upstream ownership while retaining a deliberately smaller browser format set.",
+        "justification": "The bounded transfer owner consumes canonical SwDoc/SwPaM state and copies before deleting, matching upstream ownership and Cut order. The browser adapter writes HTML before STRING and leaves foreign DOM selections to the browser. Upstream also advertises RTF, desktop RICHTEXT/MARKDOWN, embedded sources and selection-dependent native object formats; this implementation remains limited to its existing HTML/STRING text slice.",
         "knownViolations": [],
         "localSymbols": [
           "WriterClipboardSelection",

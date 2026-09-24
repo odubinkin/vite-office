@@ -149,6 +149,13 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
     boundary.WriteTransfer(copyEvent as unknown as React.ClipboardEvent<HTMLElement>, false);
     expect(copyEvent.preventDefault).toHaveBeenCalledOnce();
     expect(editWindow.CopyTransfer).toHaveBeenCalledOnce();
+    synchronize.mockReturnValue(false);
+    const foreignCopy = { preventDefault: vi.fn(), clipboardData: { setData: vi.fn() } };
+    boundary.WriteTransfer(foreignCopy as unknown as React.ClipboardEvent<HTMLElement>, false);
+    boundary.WriteTransfer(foreignCopy as unknown as React.ClipboardEvent<HTMLElement>, true);
+    expect(foreignCopy.preventDefault).not.toHaveBeenCalled();
+    expect(editWindow.CopyTransfer).toHaveBeenCalledOnce();
+    synchronize.mockReturnValue(true);
     editWindow.CopyTransfer.mockImplementationOnce(
       /** Represents a failed native clipboard writer. @returns Nothing. */ () => {
         throw new Error("native write failed");
@@ -190,5 +197,50 @@ describe("browser Writer edit window links", /** Groups browser Writer edit wind
     adapter.HandleDragStart(drag);
     adapter.HandleDrop(drag);
     expect(drag.preventDefault).toHaveBeenCalledOnce();
+  });
+
+  it("writes HTML before plain text for Writer copy and drag", /** Checks upstream rich-before-string format order at the browser port. @returns Nothing. */ () => {
+    const payload = { html: "<p>Writer</p>", plainText: "Writer" };
+    const editWindow = {
+      CopyTransfer: vi.fn(
+        /** Writes the selected Writer payload. @param write - Browser clipboard writer. @returns Nothing. */ (
+          write: (selection: typeof payload) => void,
+        ): void => write(payload),
+      ),
+      CreateSelectionTransfer: vi.fn(
+        /** Supplies the drag payload. @returns Writer selection. */ () => payload,
+      ),
+    };
+    const adapter = new BrowserWriterEditWindow(
+      editWindow as unknown as SwEditWin,
+      {
+        document,
+        getSelection: /** Reads the active DOM selection. @returns Browser selection. */ () =>
+          window.getSelection(),
+      },
+      /** Resolves no mounted paragraph for this transfer test. @returns No paragraph. */ () =>
+        undefined,
+    );
+    vi.spyOn(
+      adapter as unknown as { SynchronizeSelection: () => boolean },
+      "SynchronizeSelection",
+    ).mockReturnValue(true);
+    const setData = vi.fn();
+    adapter.HandleCopy({
+      preventDefault: vi.fn(),
+      clipboardData: { setData },
+    } as unknown as React.ClipboardEvent<HTMLElement>);
+    expect(setData.mock.calls).toEqual([
+      ["text/html", payload.html],
+      ["text/plain", payload.plainText],
+    ]);
+    setData.mockClear();
+    adapter.HandleDragStart({
+      dataTransfer: { setData },
+    } as unknown as React.DragEvent<HTMLElement>);
+    expect(setData.mock.calls).toEqual([
+      ["text/html", payload.html],
+      ["text/plain", payload.plainText],
+    ]);
   });
 });

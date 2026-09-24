@@ -4377,10 +4377,10 @@
         "pasteWriterTransfer"
       ],
       "omittedResponsibilities": [
-        "The native transferable flavor matrix, embedded objects, tables, tracked changes, and non-browser exchange formats remain intentionally omitted."
+        "Upstream RTF, desktop RICHTEXT and MARKDOWN text flavors are not implemented by the bounded browser transfer filters; native embedded/object/table flavors, tracked changes and other exchange formats are also omitted."
       ],
       "preservedResponsibilities": [
-        "Prepares bounded transfer content exclusively from SwDoc and SwPaM model state, mirroring LibreOffice Writer's sw/source/uibase/dochdl/swdtflvr.cxx ownership boundary."
+        "Prepares HTML/STRING transfer content exclusively from SwDoc and SwPaM model state, copies before deleting on cut, and prefers rich HTML to plain text in the browser port, mirroring LibreOffice Writer's sw/source/uibase/dochdl/swdtflvr.cxx ownership boundary."
       ],
       "status": "mapped",
       "upstreamPath": "sw/source/uibase/dochdl/swdtflvr.cxx",

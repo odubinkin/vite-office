@@ -500,12 +500,12 @@ describe("WriterMenuBar" /** Groups Writer menu and clipboard integration tests.
     fireEvent.copy(documentBody, {
       clipboardData: { setData },
     });
-    expect(setData).toHaveBeenNthCalledWith(1, "text/plain", "Keyboard copied heading");
     expect(setData).toHaveBeenNthCalledWith(
-      2,
+      1,
       "text/html",
       '<p style="text-align: center; font-size: 1.5rem; font-weight: 700; line-height: 2.25rem;"><span style="font-family: Liberation Sans"><strong>Keyboard copied heading</strong></span></p>',
     );
+    expect(setData).toHaveBeenNthCalledWith(2, "text/plain", "Keyboard copied heading");
     expect(setData).not.toHaveBeenCalledWith(
       "text/plain",
       expect.stringContaining("Paragraph style:"),

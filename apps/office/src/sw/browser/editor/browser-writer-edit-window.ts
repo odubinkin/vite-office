@@ -291,8 +291,8 @@ export class BrowserWriterEditWindow {
 
   /** Writes a Writer selection into a clipboard event. @param event - React clipboard event. @param cut - Whether to remove the selection after writing. @returns Nothing. */
   private WriteTransfer(event: React.ClipboardEvent<HTMLElement>, cut: boolean): void {
-    event.preventDefault();
     if (!this.SynchronizeSelection()) return;
+    event.preventDefault();
     try {
       const write =
         /** Writes both native MIME representations. @param payload - Writer transfer pair. @returns Nothing. */ (
@@ -310,7 +310,7 @@ export class BrowserWriterEditWindow {
     data: DataTransfer,
     payload: Readonly<{ html: string; plainText: string }>,
   ): void {
-    data.setData("text/plain", payload.plainText);
     data.setData("text/html", payload.html);
+    data.setData("text/plain", payload.plainText);
   }
 }
