@@ -4,7 +4,7 @@ title: "F1 Align Writer indent with MoveLeftMargin and NumUpDown"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -20,10 +20,28 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-09-24T12:00:23.477Z"
+  updated_at: "2026-09-24T12:00:44.514Z"
   updated_by: "CODER"
-  note: "F1 selected-range indent and list-level behavior match the pinned Writer slice; full npm run verify passed with 100% coverage and 14 browser tests."
+  note: "verified-202609241135-WGR5X8"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T12:01:02.364Z"
+  updated_by: "EVALUATOR"
+  note: "Pinned Writer indent branch is implemented at matching text shell, edit shell and document formatting boundaries for the supported browser slice."
+  evaluated_sha: "1ef936099ec6f52446217082b872c087b1714f1a"
+  blueprint_digest: "15b8dbd5744417230b5a0200aa0bfe5b4d4d7c419ef5ca81cb0d173e03a30002"
+  evidence_refs:
+    - ".agentplane/tasks/202609241135-WGR5X8/README.md"
+    - ".agentplane/tasks/202609241135-WGR5X8/quality/20260924-120102364-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241135-WGR5X8/quality/20260924-120102364-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241135-WGR5X8/quality/20260924-120102364-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241135-WGR5X8/blueprint/resolved-snapshot.json"
+    - "npm run verify: 482 office tests, 98 inventory tests, 14 browser tests, 100% coverage"
+    - "apps/office/src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts"
+    - "vendor/libreoffice-reference/sw/source/core/doc/docfmt.cxx"
+  findings:
+    - "Document-default tab distance, selected text nodes, list levels, undo, modifier and page-body width guard have focused assertions; native table frames and multiple selection rings remain outside the browser slice."
 commit: null
 comments:
   -
@@ -43,8 +61,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "F1 selected-range indent and list-level behavior match the pinned Writer slice; full npm run verify passed with 100% coverage and 14 browser tests."
+  -
+    type: "verify"
+    at: "2026-09-24T12:00:44.514Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202609241135-WGR5X8"
 doc_version: 3
-doc_updated_at: "2026-09-24T12:00:23.571Z"
+doc_updated_at: "2026-09-24T12:00:44.611Z"
 doc_updated_by: "CODER"
 description: "Implement F1 from docs/program/vite-office-upstream-parity-plan.md: use upstream text shell dispatch, SwEditShell and SwDoc ownership, document tab defaults, selected paragraphs, layout bounds and undo."
 sections:
@@ -93,6 +117,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-09-24T12:00:44.514Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202609241135-WGR5X8
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T12:00:23.571Z, excerpt_hash=sha256:e01f683435dda87c908d2092fd547dad38e00ef131fd1108dfbd0ef2f1c27fdf
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241135-WGR5X8/blueprint/resolved-snapshot.json
+    - old_digest: 15b8dbd5744417230b5a0200aa0bfe5b4d4d7c419ef5ca81cb0d173e03a30002
+    - current_digest: 15b8dbd5744417230b5a0200aa0bfe5b4d4d7c419ef5ca81cb0d173e03a30002
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241135-WGR5X8
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202609241135-WGR5X8 --result verified-202609241135-WGR5X8 --commit 1ef936099ec6f52446217082b872c087b1714f1a
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -159,6 +213,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-09-24T12:00:44.514Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202609241135-WGR5X8
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T12:00:23.571Z, excerpt_hash=sha256:e01f683435dda87c908d2092fd547dad38e00ef131fd1108dfbd0ef2f1c27fdf
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241135-WGR5X8/blueprint/resolved-snapshot.json
+- old_digest: 15b8dbd5744417230b5a0200aa0bfe5b4d4d7c419ef5ca81cb0d173e03a30002
+- current_digest: 15b8dbd5744417230b5a0200aa0bfe5b4d4d7c419ef5ca81cb0d173e03a30002
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241135-WGR5X8
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202609241135-WGR5X8 --result verified-202609241135-WGR5X8 --commit 1ef936099ec6f52446217082b872c087b1714f1a
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
