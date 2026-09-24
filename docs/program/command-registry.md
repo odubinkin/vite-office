@@ -17,7 +17,7 @@ dispatcher never manufactures one. Browser extensions use their separately
 reserved IDs.
 
 Shortcut normalization belongs to
-[`keymapping.ts`](../../apps/office/src/framework/source/accelerators/keymapping.ts).
+[`keymapping.ts`](../../apps/office/src/framework/browser/accelerators/keymapping.ts).
 Promise pending/error observation belongs to the browser-only
 [`browser-dispatcher.ts`](../../apps/office/src/framework/browser/dispatch/browser-dispatcher.ts),
 so core Sfx execution has no browser operation state.

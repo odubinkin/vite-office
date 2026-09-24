@@ -1,33 +1,19 @@
-/** @fileoverview Drives bounded ODF SAX events through LibreOffice-shaped fast contexts. */
+/** @fileoverview Adapts the bounded SAX stream to LibreOffice-shaped XML import contexts. */
 
-import { SaxesParser, type SaxesAttributeNS, type SaxesTagNS } from "saxes";
+import type { SaxesAttributeNS } from "saxes";
+import {
+  parseFastXmlStream,
+  DEFAULT_FAST_XML_LIMITS,
+  type FastXmlLimits,
+  type FastXmlParseOptions,
+} from "../../../sax/source/fastparser/fastparser";
 import { getXMLToken, XMLToken } from "./xmltoken";
 
-/** Resource ceilings for one decoded ODF XML stream. */
-export interface OdfXmlLimits {
-  readonly maxAttributes: number;
-  readonly maxCharacters: number;
-  readonly maxDepth: number;
-  readonly maxElements: number;
-}
-
-/** Conservative default parser ceilings. */
-export const DEFAULT_ODF_XML_LIMITS: OdfXmlLimits = {
-  maxAttributes: 1_000_000,
-  maxCharacters: 16 * 1024 * 1024,
-  maxDepth: 256,
-  maxElements: 1_000_000,
-};
-
-const preservedDiagnosticPrefixes = [
-  "ODF ",
-  "ODT ",
-  "Unsupported ODF",
-  "Unsupported script-specific ODF",
-  "Duplicate ODF",
-  "Cyclic ODF",
-  "Conflicting ODF",
-];
+/** ODF import's SAX resource ceilings. */
+export type OdfXmlLimits = FastXmlLimits;
+export const DEFAULT_ODF_XML_LIMITS = DEFAULT_FAST_XML_LIMITS;
+/** ODF import parser controls. */
+export type OdfXmlParseOptions = FastXmlParseOptions;
 
 /** Immutable tokenized attribute access passed to fast contexts. */
 export class FastAttributeList {
@@ -128,132 +114,57 @@ export interface SvXMLImport {
   ): SvXMLImportContext | null;
 }
 
-/** Cooperative parser controls. */
-export interface OdfXmlParseOptions {
-  readonly isCancelled?: () => boolean;
-  readonly limits?: Partial<OdfXmlLimits>;
-}
-
 /** One owned context stack frame. */
 interface ContextFrame {
   readonly context: SvXMLImportContext;
   readonly token: XMLToken;
 }
 
-/** Parses without retaining an XML tree. @param xml - Decoded XML. @param xmlImport - Root factory. @param options - Limits and cancellation. @returns Nothing. */
+/** Parses XML through fast import contexts. @param xml - Decoded XML. @param xmlImport - Root factory. @param options - Limits and cancellation. @returns Nothing. */
 export function parseOdfXmlStream(
   xml: string,
   xmlImport: SvXMLImport,
   options: OdfXmlParseOptions = {},
 ): void {
-  const limits = { ...DEFAULT_ODF_XML_LIMITS, ...options.limits };
-  validateLimits(limits);
   const stack: ContextFrame[] = [];
-  let attributesSeen = 0;
-  let charactersSeen = 0;
-  let elementsSeen = 0;
-  let rootsSeen = 0;
-  const parser = new SaxesParser({ xmlns: true });
-  parser.on(
-    "doctype",
-    /** Rejects document types. @returns Never. */ () => {
-      throw new Error("ODF document type declarations are unsupported.");
-    },
-  );
-  parser.on(
-    "opentag",
-    /** Opens one context frame. @param tag - SAX tag. @returns Nothing. */ (tag: SaxesTagNS) => {
-      checkpoint(options);
-      if (stack.length >= limits.maxDepth) throw new Error("ODF XML exceeds depth limit.");
-      if (++elementsSeen > limits.maxElements) throw new Error("ODF XML exceeds element limit.");
-      const attributes = Object.values(tag.attributes).filter(
-        /** Removes namespace declarations. @param attribute - SAX attribute. @returns Whether semantic. */
-        (attribute: SaxesAttributeNS) => attribute.uri !== "http://www.w3.org/2000/xmlns/",
-      );
-      attributesSeen += attributes.length;
-      if (attributesSeen > limits.maxAttributes)
-        throw new Error("ODF XML exceeds attribute limit.");
-      const fastAttributes = new FastAttributeList(attributes);
-      const token = getXMLToken(tag.uri, tag.local);
-      const parent = stack[stack.length - 1];
-      const context =
-        parent === undefined
-          ? (rootsSeen++,
-            token === XMLToken.UNKNOWN
+  parseFastXmlStream(
+    xml,
+    {
+      /** Creates one fast import context. @param tag - SAX tag. @param attributes - SAX attributes. @returns Nothing. */
+      open(tag, attributes): void {
+        const fastAttributes = new FastAttributeList(attributes);
+        const token = getXMLToken(tag.uri, tag.local);
+        const parent = stack[stack.length - 1];
+        const context =
+          parent === undefined
+            ? token === XMLToken.UNKNOWN
               ? xmlImport.createUnknownContext(tag.uri, tag.local, fastAttributes)
-              : xmlImport.createFastContext(token, fastAttributes))
-          : token === XMLToken.UNKNOWN
-            ? parent.context.createUnknownChildContext(tag.uri, tag.local, fastAttributes)
-            : parent.context.createFastChildContext(token, fastAttributes);
-      if (context === null) {
-        if (parent === undefined || token !== XMLToken.UNKNOWN)
-          throw new Error(`Unsupported ODF XML element: ${tag.name}`);
-        console.warn(`Unknown ODF element ignored: ${tag.name}`);
-        stack.push({ context: new SvXMLIgnoreContext(), token });
-        return;
-      }
-      stack.push({ context, token });
-      context.startFastElement(token, fastAttributes);
+              : xmlImport.createFastContext(token, fastAttributes)
+            : token === XMLToken.UNKNOWN
+              ? parent.context.createUnknownChildContext(tag.uri, tag.local, fastAttributes)
+              : parent.context.createFastChildContext(token, fastAttributes);
+        if (context === null) {
+          if (parent === undefined || token !== XMLToken.UNKNOWN)
+            throw new Error(`Unsupported ODF XML element: ${tag.name}`);
+          console.warn(`Unknown ODF element ignored: ${tag.name}`);
+          stack.push({ context: new SvXMLIgnoreContext(), token });
+          return;
+        }
+        stack.push({ context, token });
+        context.startFastElement(token, fastAttributes);
+      },
+      /** Delivers text to the current context. @param value - Decoded text. @returns Nothing. */
+      characters(value): void {
+        stack[stack.length - 1]?.context.characters(value);
+      },
+      /** Closes the current context. @returns Nothing. */
+      close(): void {
+        const frame = stack.pop();
+        /* v8 ignore next -- saxes never emits an unmatched close callback. */
+        if (frame === undefined) throw new Error("ODF XML context stack is invalid.");
+        frame.context.endFastElement(frame.token);
+      },
     },
+    options,
   );
-  const characters =
-    /** Dispatches bounded character data. @param value - Decoded text. @returns Nothing. */ (
-      value: string,
-    ): void => {
-      charactersSeen += value.length;
-      if (charactersSeen > limits.maxCharacters)
-        throw new Error("ODF XML exceeds character limit.");
-      checkpoint(options);
-      stack[stack.length - 1]?.context.characters(value);
-    };
-  parser.on("text", characters);
-  parser.on("cdata", characters);
-  parser.on(
-    "comment",
-    /** Ignores lexical comments while retaining cancellation checks. @returns Nothing. */ () => {
-      checkpoint(options);
-    },
-  );
-  parser.on(
-    "processinginstruction",
-    /** Matches SvXMLImport::processingInstruction's inert handler. @returns Nothing. */ () => {
-      checkpoint(options);
-    },
-  );
-  parser.on(
-    "closetag",
-    /** Closes one context frame. @returns Nothing. */ () => {
-      checkpoint(options);
-      const frame = stack.pop();
-      /* v8 ignore next -- saxes never emits an unmatched close callback. */
-      if (frame === undefined) throw new Error("ODF XML context stack is invalid.");
-      frame.context.endFastElement(frame.token);
-    },
-  );
-  try {
-    parser.write(xml).close();
-  } catch (error) {
-    if (
-      error instanceof Error &&
-      preservedDiagnosticPrefixes.some(
-        /** Matches one importer-owned diagnostic family. @param prefix - Stable prefix. @returns Whether matched. */
-        (prefix) => error.message.startsWith(prefix),
-      )
-    )
-      throw error;
-    throw new Error("ODF XML is malformed.", { cause: error });
-  }
-  /* v8 ignore next -- saxes rejects empty, multi-root, and unclosed streams before returning. */
-  if (rootsSeen !== 1 || stack.length !== 0) throw new Error("ODF XML has no complete root.");
-}
-
-/** Observes cooperative cancellation. @param options - Parser controls. @returns Nothing. */
-function checkpoint(options: OdfXmlParseOptions): void {
-  if (options.isCancelled?.() === true) throw new Error("ODT operation was cancelled.");
-}
-
-/** Validates positive integer ceilings. @param limits - Complete limits. @returns Nothing. */
-function validateLimits(limits: OdfXmlLimits): void {
-  for (const [name, value] of Object.entries(limits))
-    if (!Number.isInteger(value) || value < 1) throw new Error(`ODF XML ${name} limit is invalid.`);
 }

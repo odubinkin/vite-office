@@ -19,6 +19,9 @@ describe("runtime ownership boundaries", /** Registers runtime ownership boundar
     expect(getRuntimeOwnershipLayer("vcl/browser/browser-file.ts")).toBe("browser");
     expect(getRuntimeOwnershipLayer("sfx2/source/control/dispatch.ts")).toBe("sfx");
     expect(getRuntimeOwnershipLayer("svl/source/undo/undo.ts")).toBe("upstream-mechanism");
+    expect(getRuntimeOwnershipLayer("sax/source/fastparser/fastparser.ts")).toBe(
+      "upstream-mechanism",
+    );
   });
 
   it("rejects reverse browser and inner-layer dependencies", /** Verifies forbidden dependency directions. @returns Nothing. */ function rejectsReverseEdges(): void {

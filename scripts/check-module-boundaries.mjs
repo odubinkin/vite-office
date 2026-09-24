@@ -8,17 +8,28 @@ import process from "node:process";
 import ts from "typescript";
 
 const sourceRoot = path.resolve("apps/office/src");
-const moduleNames = ["editeng", "framework", "package", "sfx2", "svl", "sw", "vcl", "xmloff"];
+const moduleNames = [
+  "editeng",
+  "framework",
+  "package",
+  "sax",
+  "sfx2",
+  "svl",
+  "sw",
+  "vcl",
+  "xmloff",
+];
 const knownModules = new Set(moduleNames);
 const allowedEdges = new Map([
   ["editeng", new Set(["svl"])],
   ["framework", new Set(["sfx2", "svl"])],
   ["package", new Set()],
+  ["sax", new Set()],
   ["sfx2", new Set(["svl"])],
   ["svl", new Set()],
   ["sw", new Set(["editeng", "framework", "package", "sfx2", "svl", "vcl", "xmloff"])],
   ["vcl", new Set(["svl"])],
-  ["xmloff", new Set()],
+  ["xmloff", new Set(["sax"])],
 ]);
 const suiteModules = new Set(["sw"]);
 const browserPackageImports = ["lucide-react", "react", "react-dom"];

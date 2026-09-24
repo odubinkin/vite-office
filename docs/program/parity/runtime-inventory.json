@@ -94,6 +94,34 @@
       }
     },
     {
+      "path": "apps/office/src/framework/browser/accelerators/keymapping.ts",
+      "classification": "browser-adaptation",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "accelerators",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/accelerators/keymapping.ts#BrowserShortcutEvent"
+        ],
+        "justification": "Browser-owned keyboard, Intl locale, or Worker adaptation with no direct native source mapping.",
+        "knownViolations": [],
+        "localSymbols": [
+          "normalizeCommandShortcut",
+          "getBrowserShortcut"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/framework/browser/app/SuiteCard.tsx",
       "classification": "local-infrastructure",
       "state": "active",
@@ -307,6 +335,35 @@
       }
     },
     {
+      "path": "apps/office/src/framework/browser/localization/messages.ts",
+      "classification": "browser-adaptation",
+      "state": "foundation",
+      "suite": "shared",
+      "subsystem": "application-services",
+      "capabilityIds": [
+        "CAP-0101"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/framework/browser/localization/messages.ts#MessageCatalog"
+        ],
+        "justification": "Browser-owned keyboard, Intl locale, or Worker adaptation with no direct native source mapping.",
+        "knownViolations": [],
+        "localSymbols": [
+          "normalizeLocale",
+          "resolveMessage",
+          "interpolateMessage"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx",
       "classification": "browser-adaptation",
       "state": "active",
@@ -424,29 +481,32 @@
       }
     },
     {
-      "path": "apps/office/src/framework/source/accelerators/keymapping.ts",
-      "classification": "local-infrastructure",
+      "path": "apps/office/src/framework/browser/workers/worker-protocol.ts",
+      "classification": "browser-adaptation",
       "state": "active",
       "suite": "shared",
-      "subsystem": "accelerators",
+      "subsystem": "application-services",
       "capabilityIds": [
-        "CAP-0101"
+        "CAP-0101",
+        "CAP-0113"
       ],
       "semantic": {
         "behaviorStatus": "not-applicable",
         "contractStatus": "not-applicable",
         "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
+        "divergenceClass": "B",
         "evidence": [
-          "apps/office/src/framework/source/accelerators/keymapping.ts#BrowserShortcutEvent"
+          "apps/office/src/framework/browser/workers/worker-protocol.ts#WORKER_PROTOCOL_VERSION"
         ],
-        "justification": "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+        "justification": "Browser-owned keyboard, Intl locale, or Worker adaptation with no direct native source mapping.",
         "knownViolations": [],
         "localSymbols": [
-          "normalizeCommandShortcut",
-          "getBrowserShortcut"
+          "createWorkerClientState",
+          "issueWorkerRequest",
+          "cancelWorkerRequest",
+          "classifyWorkerResult"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -509,66 +569,6 @@
           "OWeakObject::release",
           "svtools::ConfigItems"
         ]
-      }
-    },
-    {
-      "path": "apps/office/src/framework/source/services/messages.ts",
-      "classification": "local-infrastructure",
-      "state": "foundation",
-      "suite": "shared",
-      "subsystem": "application-services",
-      "capabilityIds": [
-        "CAP-0101"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/framework/source/services/messages.ts#MessageCatalog"
-        ],
-        "justification": "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-        "knownViolations": [],
-        "localSymbols": [
-          "normalizeLocale",
-          "resolveMessage",
-          "interpolateMessage"
-        ],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/framework/source/services/worker-protocol.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "shared",
-      "subsystem": "application-services",
-      "capabilityIds": [
-        "CAP-0101",
-        "CAP-0113"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "A",
-        "evidence": [
-          "apps/office/src/framework/source/services/worker-protocol.ts#WORKER_PROTOCOL_VERSION"
-        ],
-        "justification": "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-        "knownViolations": [],
-        "localSymbols": [
-          "createWorkerClientState",
-          "issueWorkerRequest",
-          "cancelWorkerRequest",
-          "classifyWorkerResult"
-        ],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
       }
     },
     {
@@ -729,6 +729,40 @@
           "ThreadPool::createThreadTaskTag",
           "ZipOutputStream::~ZipOutputStream",
           "ZipOutputStream::setEntry"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/sax/source/fastparser/fastparser.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0128"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sax/source/fastparser/fastparser.ts#parseFastXmlStream",
+          "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream",
+          "apps/office/src/sax/source/fastparser/fastparser.test.ts#ignores comments and processing instructions as the upstream import does"
+        ],
+        "justification": "Pinned SAX fast parser owns bounded event delivery and resource ceilings; browser SAX dependency replaces expat. Broader SAX behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "DEFAULT_FAST_XML_LIMITS",
+          "parseFastXmlStream"
+        ],
+        "sourceResponsibility": "aligned",
+        "upstreamFile": "sax/source/fastparser/fastparser.cxx",
+        "upstreamSymbols": [
+          "FastSaxParserImpl",
+          "FastSaxParserImpl::parseStream"
         ]
       }
     },
@@ -5480,24 +5514,20 @@
         "divergenceClass": "none",
         "evidence": [
           "apps/office/src/xmloff/source/core/xml-parser.ts#parseOdfXmlStream",
-          "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream",
           "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::processingInstruction",
-          "apps/office/src/xmloff/source/core/xml-parser.test.ts#ignores comments and processing instructions as the upstream import does",
-          "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts#imports legal comments and processing instructions in ODT XML streams"
+          "apps/office/src/sax/source/fastparser/fastparser.test.ts#ignores comments and processing instructions as the upstream import does"
         ],
-        "justification": "Pinned SvXMLImport::processingInstruction is inert; source-backed parser tests now accept legal processing instructions and comments while retaining DTD, malformed-input and resource ceilings. Broader SAX behavior remains unverified.",
+        "justification": "Pinned xmloff import contexts own tokenized attributes and context dispatch; the SAX event engine now lives under sax. Broader XML import behavior remains unverified.",
         "knownViolations": [],
         "localSymbols": [
-          "DEFAULT_ODF_XML_LIMITS",
           "FastAttributeList",
           "SvXMLImportContext",
           "parseOdfXmlStream"
         ],
         "sourceResponsibility": "aligned",
-        "upstreamFile": "sax/source/fastparser/fastparser.cxx",
+        "upstreamFile": "xmloff/source/core/xmlimp.cxx",
         "upstreamSymbols": [
-          "FastSaxParserImpl",
-          "FastSaxParserImpl::parseStream"
+          "SvXMLImport::processingInstruction"
         ]
       }
     },

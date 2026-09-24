@@ -4,7 +4,7 @@ title: "F4 Place SAX parser and platform adaptations at correct boundaries"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on:
@@ -20,10 +20,10 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-09-24T12:28:47.484Z"
+  updated_by: "CODER"
+  note: "F4 ownership split and exact provenance/inventory mappings verified by npm run verify and git diff --check."
   attempts: 0
 commit: null
 comments:
@@ -38,8 +38,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: correct F4 SAX and framework platform ownership against pinned modules while retaining xmloff contexts."
+  -
+    type: "verify"
+    at: "2026-09-24T12:28:47.484Z"
+    author: "CODER"
+    state: "ok"
+    note: "F4 ownership split and exact provenance/inventory mappings verified by npm run verify and git diff --check."
 doc_version: 3
-doc_updated_at: "2026-09-24T12:17:27.077Z"
+doc_updated_at: "2026-09-24T12:28:48.247Z"
 doc_updated_by: "CODER"
 description: "Implement F4: move shared SAX engine to sax/source/fastparser and DOM locale Worker adapters to browser directories."
 sections:
@@ -60,11 +66,41 @@ sections:
     3. npm run verify and git diff --check pass.
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-09-24T12:28:47.484Z — VERIFY — ok
+
+    By: CODER
+
+    Note: F4 ownership split and exact provenance/inventory mappings verified by npm run verify and git diff --check.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T12:28:42.475Z, excerpt_hash=sha256:324c4e2a448c6575c9fb15267c97d75f74e4ada39c92c00992ada605e23f6e59
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241135-JV2933/blueprint/resolved-snapshot.json
+    - old_digest: f7accd33451087f531e61ab009eed69748f5717d135641f58e63d68e8c10f0ba
+    - current_digest: f7accd33451087f531e61ab009eed69748f5717d135641f58e63d68e8c10f0ba
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202609241135-JV2933
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202609241135-JV2933
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: ""
+  Findings: "F4 split: SAX event delivery and limits moved to sax/source/fastparser/fastparser.ts; tokenized ODF import contexts remain in xmloff/source/core/xml-parser.ts. Browser keyboard, locale and Worker adapters moved under framework/browser. Updated imports, source-tree, provenance and runtime inventory data; added sax to the static dependency graph. Focused tests: 13 passed. npm run verify: passed (482 office tests, 98 inventory tests, 14 browser E2E tests, both coverage suites 100%, build and all gates). git diff --check: passed. No network used."
 id_source: "generated"
 ---
 ## Summary
@@ -93,6 +129,36 @@ Implement F4: move shared SAX engine to sax/source/fastparser and DOM locale Wor
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-09-24T12:28:47.484Z — VERIFY — ok
+
+By: CODER
+
+Note: F4 ownership split and exact provenance/inventory mappings verified by npm run verify and git diff --check.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-09-24T12:28:42.475Z, excerpt_hash=sha256:324c4e2a448c6575c9fb15267c97d75f74e4ada39c92c00992ada605e23f6e59
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202609241135-JV2933/blueprint/resolved-snapshot.json
+- old_digest: f7accd33451087f531e61ab009eed69748f5717d135641f58e63d68e8c10f0ba
+- current_digest: f7accd33451087f531e61ab009eed69748f5717d135641f58e63d68e8c10f0ba
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202609241135-JV2933
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202609241135-JV2933
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -101,3 +167,5 @@ Implement F4: move shared SAX engine to sax/source/fastparser and DOM locale Wor
 - Re-run required checks to confirm rollback safety.
 
 ## Findings
+
+F4 split: SAX event delivery and limits moved to sax/source/fastparser/fastparser.ts; tokenized ODF import contexts remain in xmloff/source/core/xml-parser.ts. Browser keyboard, locale and Worker adapters moved under framework/browser. Updated imports, source-tree, provenance and runtime inventory data; added sax to the static dependency graph. Focused tests: 13 passed. npm run verify: passed (482 office tests, 98 inventory tests, 14 browser E2E tests, both coverage suites 100%, build and all gates). git diff --check: passed. No network used.

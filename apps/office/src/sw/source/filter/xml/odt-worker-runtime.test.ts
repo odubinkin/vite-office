@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   issueWorkerRequest,
   createWorkerClientState,
-} from "../../../../framework/source/services/worker-protocol";
+} from "../../../../framework/browser/workers/worker-protocol";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument, SwDoc } from "../../core/doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";

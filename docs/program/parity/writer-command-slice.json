@@ -3310,7 +3310,7 @@
             "marker": "new OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+            "path": "apps/office/src/framework/browser/workers/worker-protocol.ts",
             "marker": "WORKER_PROTOCOL_VERSION"
           },
           {
@@ -3356,7 +3356,7 @@
             "marker": "model-facing ODF text export contexts"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+            "path": "apps/office/src/sax/source/fastparser/fastparser.test.ts",
             "marker": "ODF fast SAX parser"
           },
           {
@@ -5457,7 +5457,7 @@
             "marker": "new OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+            "path": "apps/office/src/framework/browser/workers/worker-protocol.ts",
             "marker": "WORKER_PROTOCOL_VERSION"
           },
           {
@@ -5503,7 +5503,7 @@
             "marker": "model-facing ODF text export contexts"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+            "path": "apps/office/src/sax/source/fastparser/fastparser.test.ts",
             "marker": "ODF fast SAX parser"
           },
           {
@@ -7317,7 +7317,7 @@
             "marker": "new OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+            "path": "apps/office/src/framework/browser/workers/worker-protocol.ts",
             "marker": "WORKER_PROTOCOL_VERSION"
           },
           {
@@ -7363,7 +7363,7 @@
             "marker": "model-facing ODF text export contexts"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+            "path": "apps/office/src/sax/source/fastparser/fastparser.test.ts",
             "marker": "ODF fast SAX parser"
           },
           {
@@ -7759,7 +7759,7 @@
             "marker": "new OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+            "path": "apps/office/src/framework/browser/workers/worker-protocol.ts",
             "marker": "WORKER_PROTOCOL_VERSION"
           },
           {
@@ -7805,7 +7805,7 @@
             "marker": "model-facing ODF text export contexts"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+            "path": "apps/office/src/sax/source/fastparser/fastparser.test.ts",
             "marker": "ODF fast SAX parser"
           },
           {
@@ -8193,7 +8193,7 @@
             "marker": "new OdtWorkerRuntime"
           },
           {
-            "path": "apps/office/src/framework/source/services/worker-protocol.ts",
+            "path": "apps/office/src/framework/browser/workers/worker-protocol.ts",
             "marker": "WORKER_PROTOCOL_VERSION"
           },
           {
@@ -8239,7 +8239,7 @@
             "marker": "model-facing ODF text export contexts"
           },
           {
-            "path": "apps/office/src/xmloff/source/core/xml-parser.test.ts",
+            "path": "apps/office/src/sax/source/fastparser/fastparser.test.ts",
             "marker": "ODF fast SAX parser"
           },
           {

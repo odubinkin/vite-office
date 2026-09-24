@@ -1,5 +1,5 @@
 /**
- * @fileoverview Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary.
+ * @fileoverview Adapts browser keyboard events to canonical command-registry shortcut strings.
  */
 
 /** Describes the browser keyboard fields needed for platform-neutral shortcut adaptation. */

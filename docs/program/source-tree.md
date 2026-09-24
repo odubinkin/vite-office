@@ -118,7 +118,8 @@ The same table now also includes the active ODT file-command boundary.
 | `package/source/manifest/ManifestExport.ts` | `package/source/manifest/ManifestExport.cxx` | ODF 1.3 manifest stream |
 | `vcl/browser/browser-file.ts` | Browser-only | Sandboxed user file selection and byte reading without document ownership |
 | `vcl/browser/browser-download.ts` | Browser-only | Sandboxed byte and plain-text download dispatch |
-| `xmloff/source/core/xml-parser.ts` | `sax/source/fastparser/fastparser.cxx` | Worker-safe namespace-aware SAX tree with DTD and depth rejection |
+| `sax/source/fastparser/fastparser.ts` | `sax/source/fastparser/fastparser.cxx` | Bounded namespace-aware SAX event stream, DTD rejection, and resource ceilings |
+| `xmloff/source/core/xml-parser.ts` | `xmloff/source/core/xmlimp.cxx` | Tokenized attributes and fast XML import context ownership |
 | `xmloff/source/text/XMLTextPropertySetContext.ts` | `xmloff/source/text/XMLTextPropertySetContext.cxx` | Element-valued text-property import, currently the canonical Writer tab-stop item |
 | `xmloff/source/text/txtparae.ts` | `xmloff/source/text/txtparae.cxx` | Neutral ODF paragraph, inline, list-style, and nested-list export |
 | `xmloff/source/text/txtparai.ts` | `xmloff/source/text/txtparai.cxx` | Neutral ODF paragraph, inline, and recursive list import |

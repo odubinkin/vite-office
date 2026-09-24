@@ -10,7 +10,7 @@ import {
   type WorkerProgress,
   type WorkerRequest,
   type WorkerResult,
-} from "../../../../framework/source/services/worker-protocol";
+} from "../../../../framework/browser/workers/worker-protocol";
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
 import {
   createInlineOdtFilterService,

@@ -80,8 +80,8 @@
     },
     {
       "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
-      "rationale": "Stack constraint: the browser SAX dependency is exposed through an explicit ECMAScript parser adapter while preserving the reviewed context-stack responsibility from upstream fastparser.cxx.",
-      "stackNecessity": "browser-boundary"
+      "rationale": "Stack constraint: the ECMAScript import context adapter has a descriptive filename while preserving the reviewed SvXMLImport responsibility in upstream xmlimp.cxx.",
+      "stackNecessity": "responsibility-split"
     },
     {
       "localPath": "apps/office/src/xmloff/source/style/xmlstylei.ts",
@@ -173,6 +173,27 @@
         "SvxFontItem",
         "SvxWeightItem"
       ]
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
+            "marker": "BrowserShortcutEvent",
+            "path": "apps/office/src/framework/browser/accelerators/keymapping.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/accelerators/keymapping.ts",
+      "rationale": "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary. This is a browser-owned adaptation without a direct native source mapping.",
+      "responsibilities": [
+        "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser keyboard, Intl locale, and Worker APIs replace native framework services."
+      },
+      "status": "local-only"
     },
     {
       "classification": "local-infrastructure",
@@ -347,6 +368,27 @@
       "evidence": {
         "local": [
           {
+            "marker": "MessageCatalog",
+            "path": "apps/office/src/framework/browser/localization/messages.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/framework/browser/localization/messages.ts",
+      "rationale": "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling. This is a browser-owned adaptation without a direct native source mapping.",
+      "responsibilities": [
+        "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling."
+      ],
+      "stackDivergence": {
+        "kind": "browser-adaptation",
+        "rationale": "Browser keyboard, Intl locale, and Worker APIs replace native framework services."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "browser-adaptation",
+      "evidence": {
+        "local": [
+          {
             "marker": "CommandMenuBar",
             "path": "apps/office/src/framework/browser/presentation/CommandMenuBar.tsx"
           }
@@ -432,23 +474,23 @@
       "status": "local-only"
     },
     {
-      "classification": "local-infrastructure",
+      "classification": "browser-adaptation",
       "evidence": {
         "local": [
           {
-            "marker": "BrowserShortcutEvent",
-            "path": "apps/office/src/framework/source/accelerators/keymapping.ts"
+            "marker": "WORKER_PROTOCOL_VERSION",
+            "path": "apps/office/src/framework/browser/workers/worker-protocol.ts"
           }
         ]
       },
-      "localPath": "apps/office/src/framework/source/accelerators/keymapping.ts",
-      "rationale": "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
+      "localPath": "apps/office/src/framework/browser/workers/worker-protocol.ts",
+      "rationale": "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling. This is a browser-owned adaptation without a direct native source mapping.",
       "responsibilities": [
-        "Adapts browser keyboard events to canonical command-registry shortcut strings at the LibreOffice `framework/source/accelerators/keymapping.cxx` ownership boundary."
+        "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling."
       ],
       "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
+        "kind": "browser-adaptation",
+        "rationale": "Browser keyboard, Intl locale, and Worker APIs replace native framework services."
       },
       "status": "local-only"
     },
@@ -527,48 +569,6 @@
         "OWeakObject::release",
         "svtools::ConfigItems"
       ]
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "MessageCatalog",
-            "path": "apps/office/src/framework/source/services/messages.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/source/services/messages.ts",
-      "rationale": "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Defines pure browser locale normalization, message catalog fallback, and placeholder interpolation without UI or translation-corpus coupling."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WORKER_PROTOCOL_VERSION",
-            "path": "apps/office/src/framework/source/services/worker-protocol.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/framework/source/services/worker-protocol.ts",
-      "rationale": "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling. The module composes local application contracts without reproducing one bounded LibreOffice source responsibility, so it carries no upstream mapping.",
-      "responsibilities": [
-        "Defines structured-clone browser worker request sequencing, cancellation, progress, typed failure, and stale-result classification without suite coupling."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The local composition boundary has no single native implementation unit and therefore remains explicit infrastructure."
-      },
-      "status": "local-only"
     },
     {
       "classification": "local-infrastructure",
@@ -734,6 +734,40 @@
         "ThreadPool::createThreadTaskTag",
         "ZipOutputStream::~ZipOutputStream",
         "ZipOutputStream::setEntry"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "parseFastXmlStream",
+            "path": "apps/office/src/sax/source/fastparser/fastparser.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "FastSaxParserImpl::parseStream",
+            "path": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sax/source/fastparser/fastparser.ts",
+      "localSymbols": [
+        "DEFAULT_FAST_XML_LIMITS",
+        "parseFastXmlStream"
+      ],
+      "omittedResponsibilities": [
+        "Upstream expat integration, UNO services, and thread-local parser state remain omitted."
+      ],
+      "preservedResponsibilities": [
+        "Preserves bounded namespace-aware SAX event delivery, DTD rejection, inert comments and processing instructions, cancellation, and resource ceilings from the pinned fast parser."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sax/source/fastparser/fastparser.cxx",
+      "upstreamSymbols": [
+        "FastSaxParserImpl",
+        "FastSaxParserImpl::parseStream"
       ]
     },
     {
@@ -5054,29 +5088,27 @@
         ],
         "upstream": [
           {
-            "marker": "FastSaxParserImpl::parseStream",
-            "path": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx"
+            "marker": "SvXMLImport::processingInstruction",
+            "path": "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx"
           }
         ]
       },
       "localPath": "apps/office/src/xmloff/source/core/xml-parser.ts",
       "localSymbols": [
-        "DEFAULT_ODF_XML_LIMITS",
         "FastAttributeList",
         "SvXMLImportContext",
         "parseOdfXmlStream"
       ],
       "omittedResponsibilities": [
-        "Upstream expat integration, UNO services, thread-local parser state, and vocabularies outside the bounded Writer ODF subset remain intentionally omitted."
+        "The complete LibreOffice XML import vocabulary and UNO services remain omitted in the supported Writer subset."
       ],
       "preservedResponsibilities": [
-        "Preserves fast context creation, tokenized attributes, ordered start/character/end callbacks, inert processing instructions and comments, stack ownership, unknown-element policy, and bounded parsing from the pinned SAX fast parser."
+        "Preserves tokenized attributes, fast import context creation, stack ownership, unknown-element policy, and ordered callbacks at the xmloff import boundary."
       ],
       "status": "mapped",
-      "upstreamPath": "sax/source/fastparser/fastparser.cxx",
+      "upstreamPath": "xmloff/source/core/xmlimp.cxx",
       "upstreamSymbols": [
-        "FastSaxParserImpl",
-        "FastSaxParserImpl::parseStream"
+        "SvXMLImport::processingInstruction"
       ]
     },
     {

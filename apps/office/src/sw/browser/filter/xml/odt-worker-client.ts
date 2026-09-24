@@ -13,7 +13,7 @@ import {
   type WorkerFailure,
   type WorkerProgress,
   type WorkerResult,
-} from "../../../../framework/source/services/worker-protocol";
+} from "../../../../framework/browser/workers/worker-protocol";
 import {
   OdtFilterError,
   type OdtFilterOperationOptions,

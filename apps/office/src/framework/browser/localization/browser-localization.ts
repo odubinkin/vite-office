@@ -5,7 +5,7 @@ import {
   normalizeLocale,
   resolveMessage,
   type LocaleCatalogs,
-} from "../../source/services/messages";
+} from "./messages";
 
 /** Locale service shared by every browser presentation surface. */
 export class BrowserLocalizationService {
