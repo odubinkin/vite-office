@@ -4,6 +4,7 @@ import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem"
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwPosition } from "../crsr/pam";
 import { SwDoc } from "./doc";
+import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../../inc/lineinfo";
 import type { DefaultFontDevice } from "./default-font";
 import { isWriterParagraphStyle, SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
 import { SwNumFormat, SwNumRule } from "./number";
@@ -78,6 +79,7 @@ type WriterTextHintRecord =
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly documentSettings: Readonly<Record<DocumentSettingId, boolean>>;
+  readonly lineNumberInfo?: SwLineNumberInfoValue;
   readonly locale: string;
   readonly numRules: readonly WriterNumberRuleRecord[];
   readonly pageDescriptors: readonly Readonly<{
@@ -93,6 +95,7 @@ export interface WriterDocumentRecord {
 export function encodeWriterDocument(document: SwDoc): WriterDocumentRecord {
   return {
     documentSettings: document.GetDocumentSettingManager().GetValues(),
+    lineNumberInfo: document.GetLineNumberInfo().QueryValue(),
     locale: document.GetLocale(),
     numRules: document.GetNumRuleTable().map(
       /** Encodes one document rule. @param rule - Model rule. @returns Primitive rule record. */ (
@@ -217,6 +220,8 @@ export function decodeWriterDocument(
     ...(defaultFontDevice === undefined ? {} : { defaultFontDevice }),
     locale: record.locale,
   });
+  if (record.lineNumberInfo !== undefined)
+    document.SetLineNumberInfo(SwLineNumberInfo.FromValue(record.lineNumberInfo));
   const firstPageDescriptor = record.pageDescriptors[0];
   if (
     firstPageDescriptor === undefined ||

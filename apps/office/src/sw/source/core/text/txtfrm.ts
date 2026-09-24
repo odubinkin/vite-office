@@ -1,5 +1,57 @@
 /** @fileoverview Writer text-frame fragments over one unchanged text node, after browser line layout. */
 
+import type { SwLineNumberInfoValue } from "../../../inc/lineinfo";
+import type { SwPageFrame } from "../layout/newfrm";
+
+/** One visible line-number glyph positioned within a text-frame fragment. */
+export interface SwLineNumberMark {
+  readonly number: number;
+  readonly topTwips: number;
+}
+
+/** Projects page-aware line numbers after device measurement and core pagination. @param pages - Physical page frames. @param inputs - Measured text nodes. @param info - Document settings. @returns Marks aligned to page and frame indices. */
+export function projectSwLineNumbers(
+  pages: readonly SwPageFrame[],
+  inputs: readonly SwTextFrameInput[],
+  info: SwLineNumberInfoValue,
+): readonly (readonly (readonly SwLineNumberMark[])[])[] {
+  const byId = new Map(
+    inputs.map(
+      /** Indexes one measured node. @param input - Text-node measurement. @returns Key and input. */
+      (input) => [input.id, input] as const,
+    ),
+  );
+  let count = 0;
+  return pages.map(
+    /** Numbers one physical page. @param page - Page frame. @returns Marks by text fragment. */
+    (page) => {
+      if (info.restartEachPage) count = 0;
+      return page.textFrames.map(
+        /** Numbers one text-frame fragment. @param frame - Fragment. @returns Visible marks. */
+        (frame) => {
+          const input = byId.get(frame.nodeId);
+          if (input === undefined) throw new Error("Line-number frame has no measured text node.");
+          const marks: SwLineNumberMark[] = [];
+          let topTwips = 0;
+          for (const line of input.lines) {
+            if (line.start < frame.start || line.end > frame.end) continue;
+            if (
+              input.countLineNumbers !== false &&
+              (info.countBlankLines || line.start < line.end)
+            ) {
+              count += 1;
+              if (info.paintLineNumbers && info.countBy > 0 && count % info.countBy === 0)
+                marks.push({ number: count, topTwips });
+            }
+            topTwips += line.height;
+          }
+          return marks;
+        },
+      );
+    },
+  );
+}
+
 /** One shaped visual line, in source-node UTF-16 coordinates and Writer twips. */
 export interface SwTextLine {
   readonly end: number;

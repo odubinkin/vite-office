@@ -58,6 +58,8 @@ import {
   type XMLTextListRule,
 } from "../../../../xmloff/source/text/txtparai";
 import type { SwFormat } from "../../core/attr/format";
+import { LineNumberPosition, SwLineNumberInfo } from "../../../inc/lineinfo";
+import type { OdfLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingImportContext";
 import { SwPosition } from "../../core/crsr/pam";
 import { SwDoc } from "../../core/doc/doc";
 import { SwNumFormat, SwNumRule } from "../../core/doc/number";
@@ -168,6 +170,7 @@ export function importWriterXml(
 
 /** Writer import coordinator matching upstream SwXMLImport context ownership. */
 class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontStylesImportTarget {
+  private lineNumberingSeen = false;
   private expectedRoot = XMLToken.UNKNOWN;
   private officeTextCount = 0;
   private paragraphCount = 0;
@@ -240,6 +243,32 @@ class SwXMLImport implements SvXMLImportContract, XMLTextImportTarget, XMLFontSt
   public registerStyle(name: string, definition: OdfStyleDefinition): void {
     if (this.styles.has(name)) throw new Error(`Duplicate ODF style: ${name}`);
     this.styles.set(name, definition);
+  }
+
+  /** Applies global ODF line numbering to the canonical Writer document. @param value - Imported configuration. @returns Nothing. */
+  public registerLineNumbering(value: OdfLineNumberingConfiguration): void {
+    if (this.lineNumberingSeen) throw new Error("Duplicate ODF line numbering configuration.");
+    this.lineNumberingSeen = true;
+    this.document.SetLineNumberInfo(
+      new SwLineNumberInfo({
+        countBlankLines: value.countBlankLines,
+        countBy: value.countBy,
+        countInFlys: value.countInFlys,
+        divider: value.divider,
+        dividerCountBy: value.dividerCountBy,
+        paintLineNumbers: value.paintLineNumbers,
+        posFromLeft: value.posFromLeft,
+        position:
+          value.position === "right"
+            ? LineNumberPosition.Right
+            : value.position === "inside"
+              ? LineNumberPosition.Inside
+              : value.position === "outside"
+                ? LineNumberPosition.Outside
+                : LineNumberPosition.Left,
+        restartEachPage: value.restartEachPage,
+      }),
+    );
   }
 
   /** Registers the paragraph-family default shared by all named paragraph styles. @param definition - Parsed default. @returns Nothing. */

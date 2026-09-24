@@ -1,6 +1,7 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
 
 import type { SwDoc } from "../../source/core/doc/doc";
+import type { SwLineNumberInfoValue } from "../../inc/lineinfo";
 import type { SfxObjectShellState } from "../../../sfx2/source/doc/objsh";
 import type { SfxMediumOperationStatus } from "../../../sfx2/source/doc/docfile";
 import type { WriterCursorSelection } from "../editor/writer-selection-types";
@@ -116,6 +117,7 @@ export interface WriterPresentationProjection {
   readonly activeParagraphIndex: number;
   readonly cursorSelection: WriterCursorSelection;
   readonly documentState: SfxObjectShellState;
+  readonly lineNumberInfo: SwLineNumberInfoValue;
   readonly modelRevision: number;
   readonly paragraphs: readonly WriterParagraphProjection[];
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
@@ -287,6 +289,7 @@ export class WriterViewProjection {
       activeParagraphIndex,
       cursorSelection: Object.freeze(cursorSelection),
       documentState: Object.freeze({ ...documentState }),
+      lineNumberInfo: Object.freeze(document.GetLineNumberInfo().QueryValue()),
       modelRevision: document.GetDocumentStateManager().GetModelRevision(),
       paragraphs: Object.freeze(paragraphs),
       paragraphStyleOptions,

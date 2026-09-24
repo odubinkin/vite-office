@@ -12,11 +12,13 @@ import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
 import { createSwPageFrames, type SwPageDescriptorLayout } from "../../source/core/layout/newfrm";
+import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../inc/lineinfo";
 import type {
   SwTextFrameInput,
   SwTextFrameSettings,
   SwTextLine,
 } from "../../source/core/text/txtfrm";
+import { projectSwLineNumbers } from "../../source/core/text/txtfrm";
 import { measureWriterTextLines } from "./writer-line-measurement";
 
 /** Defines immutable render values plus the persistent Writer edit-window owner. */
@@ -30,6 +32,7 @@ export interface WriterPlainTextEditorProps {
   readonly paragraphSpacingSettings?: SwTextFrameSettings;
   readonly verticalRuler?: ReactNode;
   readonly showLineNumbers?: boolean;
+  readonly lineNumberInfo?: SwLineNumberInfoValue;
 }
 
 /** Renders one root `contenteditable` and forwards browser events to one stable controller. @param props - Immutable projection and edit-window owner. @returns Logical Writer document editing host. */
@@ -118,22 +121,11 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
       ) => [paragraph.id, paragraph],
     ),
   );
-  let nextLineNumber = 1;
-  const lineNumbersByParagraph = new Map(
-    inputs.map(
-      /** Assigns document line numbers to one measured paragraph. @param input - Measured paragraph. @param index - Paragraph index. @returns Paragraph ID and numbers. */ (
-        input,
-        index,
-      ) => {
-        const counted = props.paragraphs[index]?.computedStyle.countLineNumbers !== false;
-        const numbers = input.lines.map(
-          /** Numbers one visual line when the paragraph participates. @returns Number or undefined. */ () =>
-            counted ? nextLineNumber++ : undefined,
-        );
-        return [input.id, numbers] as const;
-      },
-    ),
-  );
+  const lineInfo = props.lineNumberInfo ?? new SwLineNumberInfo().QueryValue();
+  const numberedFrames = projectSwLineNumbers(pages, inputs, {
+    ...lineInfo,
+    paintLineNumbers: props.showLineNumbers ?? lineInfo.paintLineNumbers,
+  });
 
   useLayoutEffect(
     /** Supplies Writer with browser-shaped line boundaries after the measurement projection mounts. @returns Nothing. */
@@ -341,29 +333,19 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                 }}
               >
                 {page.textFrames.map(
-                  /** Renders one Writer text-frame fragment on the current page. @param frame - Writer fragment. @returns Browser paragraph. */ (
+                  /** Renders one Writer text-frame fragment on the current page. @param frame - Writer fragment. @param frameIndex - Fragment index. @returns Browser paragraph. */ (
                     frame,
+                    frameIndex,
                   ) => {
                     const paragraph = paragraphById.get(frame.nodeId) as WriterParagraph;
                     const index = props.paragraphs.indexOf(paragraph);
-                    const lines = (inputs[index] as SwTextFrameInput).lines;
-                    let offsetPt = 0;
-                    const lineNumbers = props.showLineNumbers
-                      ? lines.flatMap(
-                          /** Projects numbers in this page fragment. @param line - Visual line. @param lineIndex - Index in the paragraph. @returns Zero or one number. */ (
-                            line,
-                            lineIndex,
-                          ) => {
-                            if (line.end <= frame.start) return [];
-                            const topPt = offsetPt;
-                            offsetPt += line.height / 20;
-                            const number = lineNumbersByParagraph.get(paragraph.id)?.[lineIndex];
-                            return number !== undefined && line.end <= frame.end
-                              ? [{ number, topPt }]
-                              : [];
-                          },
-                        )
-                      : [];
+                    const marks = (numberedFrames[pageIndex] as (typeof numberedFrames)[number])[
+                      frameIndex
+                    ] as (typeof numberedFrames)[number][number];
+                    const lineNumbers = marks.map(
+                      /** Converts a Writer line mark to browser points. @param mark - Core mark. @returns Visual position. */
+                      (mark) => ({ number: mark.number, topPt: mark.topTwips / 20 }),
+                    );
                     return (
                       <WriterEditableParagraph
                         index={index}

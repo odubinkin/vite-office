@@ -11,16 +11,20 @@ import type {
 } from "../text/txtparae";
 import type { OdfStyleDefinition, XMLTextListRule } from "../text/txtparai";
 import { importOdfLength, XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
+import {
+  XMLLineNumberingImportContext,
+  type OdfLineNumberingConfiguration,
+} from "../text/XMLLineNumberingImportContext";
 
 const ignoredStyleDefinitions = new Set([
   XMLToken.STYLE_DEFAULT_PAGE_LAYOUT,
   XMLToken.TEXT_OUTLINE_STYLE,
-  XMLToken.TEXT_LINENUMBERING_CONFIGURATION,
   XMLToken.TEXT_NOTES_CONFIGURATION,
 ]);
 
 /** Consumer of completed style definitions; Writer stores canonical results. */
 export interface XMLStyleImportTarget {
+  registerLineNumbering(value: OdfLineNumberingConfiguration): void;
   getFontFace(name: string): string | undefined;
   registerListStyle(styleName: string, rule: XMLTextListRule): void;
   registerDefaultStyle(definition: OdfStyleDefinition): void;
@@ -58,6 +62,12 @@ export class XMLStylesContext extends SvXMLImportContext {
       return new XMLListStyleContext(this.target, attributes);
     if (element === XMLToken.STYLE_PAGE_LAYOUT)
       return new XMLPageLayoutContext(this.target, attributes);
+    if (element === XMLToken.TEXT_LINENUMBERING_CONFIGURATION)
+      return new XMLLineNumberingImportContext(
+        attributes,
+        /** Registers document line-number settings. @param value - Imported value. @returns Nothing. */
+        (value) => this.target.registerLineNumbering(value),
+      );
     if (ignoredStyleDefinitions.has(element)) return new SvXMLIgnoreContext();
     return null;
   }

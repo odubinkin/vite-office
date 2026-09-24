@@ -71,6 +71,8 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
 import { getWriterOdfStyleName } from "../../../inc/poolfmt";
 import { createWriterFontAutoStylePool } from "./xmlfonte";
+import { LineNumberPosition } from "../../../inc/lineinfo";
+import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
 
 const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}"`;
 
@@ -135,7 +137,19 @@ export function exportStylesXml(document: SwDoc): string {
       `<style:master-page style:name="${escapeXml(descriptor.GetName())}" style:page-layout-name="${layoutName}"${follow}/>`,
     );
   }
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}</office:styles><office:automatic-styles>${pageLayouts.join("")}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
+  const lineInfo = document.GetLineNumberInfo().QueryValue();
+  const lineNumbering = exportLineNumberingConfiguration({
+    ...lineInfo,
+    position:
+      lineInfo.position === LineNumberPosition.Right
+        ? "right"
+        : lineInfo.position === LineNumberPosition.Inside
+          ? "inside"
+          : lineInfo.position === LineNumberPosition.Outside
+            ? "outside"
+            : "left",
+  });
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}${lineNumbering}</office:styles><office:automatic-styles>${pageLayouts.join("")}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
 }
 
 /** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @returns Complete XML. */

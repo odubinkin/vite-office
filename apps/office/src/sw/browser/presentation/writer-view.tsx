@@ -100,7 +100,6 @@ export function WriterWorkbench({
   autosave,
 }: WriterWorkbenchProps): React.JSX.Element {
   const localization = useBrowserLocalization();
-  const [showLineNumbers, setShowLineNumbers] = useState(false);
   const [presentationStore] = useState(
     /** Reuses the session store or owns one browser-local store for an injected view. @returns Presentation store. */ () =>
       viewStore ?? new WriterViewStore(view),
@@ -249,8 +248,13 @@ export function WriterWorkbench({
                   }
                 }
                 onParagraphFormat={applyParagraphFormat}
-                showLineNumbers={showLineNumbers}
-                onShowLineNumbersChange={setShowLineNumbers}
+                showLineNumbers={snapshot.lineNumberInfo.paintLineNumbers}
+                onShowLineNumbersChange={
+                  /** Commits document-owned line-number state through the shell. @param paint - Visible state. @returns Nothing. */
+                  (paint) => {
+                    view.GetWrtShell().SetPaintLineNumbers(paint);
+                  }
+                }
               />
             }
             commandSource={commandSource}
@@ -350,7 +354,8 @@ export function WriterWorkbench({
           pageDescriptors={snapshot.pageDescriptors}
           paragraphSpacingSettings={snapshot.paragraphSpacingSettings}
           paragraphs={snapshot.paragraphs}
-          showLineNumbers={showLineNumbers}
+          showLineNumbers={snapshot.lineNumberInfo.paintLineNumbers}
+          lineNumberInfo={snapshot.lineNumberInfo}
           verticalRuler={
             snapshot.isVerticalRulerVisible ? (
               <WriterVerticalRuler

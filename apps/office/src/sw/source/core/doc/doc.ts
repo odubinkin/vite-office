@@ -1,6 +1,7 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 
 import { SwAttrPool } from "../attr/swatrset";
+import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
@@ -38,6 +39,7 @@ export class SwDoc {
   private readonly undoManager = new UndoManager(this);
   private readonly defaultFontDevice: DefaultFontDevice | undefined;
   private readonly locale: string;
+  private lineNumberInfo = new SwLineNumberInfo();
   private readonly pageDescs: SwPageDesc[];
   public readonly nodes: SwNodes;
 
@@ -59,6 +61,17 @@ export class SwDoc {
   /** Returns the document locale used for script-specific defaults. @returns BCP 47 locale. */
   public GetLocale(): string {
     return this.locale;
+  }
+  /** Returns a copy of the document-owned line-number configuration. @returns Line-number settings. */
+  public GetLineNumberInfo(): SwLineNumberInfo {
+    return this.lineNumberInfo.Clone();
+  }
+  /** Stores a line-number configuration and invalidates the document projection. @param info - New settings. @returns Whether changed. */
+  public SetLineNumberInfo(info: SwLineNumberInfo): boolean {
+    if (this.lineNumberInfo.equals(info)) return false;
+    this.lineNumberInfo = info.Clone();
+    this.NotifyModelChange({ kind: "line-number-info-changed" });
+    return true;
   }
   /** Returns one document-owned page descriptor by stable collection position. @param index - Descriptor position. @returns Page descriptor. */
   public GetPageDesc(index = 0): SwPageDesc {

@@ -8,6 +8,7 @@ import { SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import type { SwDoc as WriterDocument } from "../../core/doc/doc";
+import type { SwLineNumberInfo } from "../../../inc/lineinfo";
 import type { WriterParagraphStyle } from "../../core/doc/fmtcol";
 import type { WriterHyperlink } from "../../core/txtnode/fmtinfmt";
 import type {
@@ -113,6 +114,20 @@ export class SwWrtShell extends SwModify {
   public GetDoc(): WriterDocument {
     this.docShell.EnsureOpen();
     return this.docShell.GetDoc();
+  }
+  /** Returns document-owned line-number state. @returns Independent configuration. */
+  public GetLineNumberInfo(): SwLineNumberInfo {
+    return this.GetDoc().GetLineNumberInfo();
+  }
+  /** Replaces the document line-number configuration. @param info - New configuration. @returns Whether changed. */
+  public SetLineNumberInfo(info: SwLineNumberInfo): boolean {
+    return this.GetDoc().SetLineNumberInfo(info);
+  }
+  /** Changes line-number painting through the Writer shell. @param paint - Visible state. @returns Whether changed. */
+  public SetPaintLineNumbers(paint: boolean): boolean {
+    const info = this.GetLineNumberInfo();
+    info.SetPaintLineNumbers(paint);
+    return this.SetLineNumberInfo(info);
   }
   /** Returns the persistent point-and-mark cursor identity. @returns Current SwPaM. */
   public GetCursor(): SwPaM {

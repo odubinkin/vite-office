@@ -2528,6 +2528,37 @@
       }
     },
     {
+      "path": "apps/office/src/sw/inc/lineinfo.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-model",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sw/inc/lineinfo.ts#SwLineNumberInfo",
+          "vendor/libreoffice-reference/sw/inc/lineinfo.hxx#SwLineNumberInfo"
+        ],
+        "justification": "Bounded Stage 2 line-number behavior has focused tests; the full upstream contract remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "LineNumberPosition",
+          "SwLineNumberInfo"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sw/inc/lineinfo.hxx",
+        "upstreamSymbols": [
+          "SwLineNumberInfo"
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sw/inc/poolfmt.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -5470,6 +5501,66 @@
         "upstreamSymbols": [
           "SvXMLStylesContext",
           "SvXMLStylesContext::createFastChildContext"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/XMLLineNumberingExport.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/text/XMLLineNumberingExport.ts#exportLineNumberingConfiguration",
+          "vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingExport.cxx#XMLLineNumberingExport::Export"
+        ],
+        "justification": "Bounded Stage 2 line-number behavior has focused tests; the full upstream contract remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "exportLineNumberingConfiguration"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/text/XMLLineNumberingExport.cxx",
+        "upstreamSymbols": [
+          "XMLLineNumberingExport::Export"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts#XMLLineNumberingImportContext",
+          "vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingImportContext.cxx#XMLLineNumberingImportContext::CreateAndInsert"
+        ],
+        "justification": "Bounded Stage 2 line-number behavior has focused tests; the full upstream contract remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "XMLLineNumberingImportContext"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "xmloff/source/text/XMLLineNumberingImportContext.cxx",
+        "upstreamSymbols": [
+          "XMLLineNumberingImportContext::CreateAndInsert"
         ]
       }
     },

@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { getWriterParagraphGap } from "../editor/writer-page-pagination";
 import { createSwPageFrames } from "../../source/core/layout/newfrm";
+import { SwLineNumberInfo } from "../../inc/lineinfo";
 import { getWriterDomSelection } from "../editor/writer-selection";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
 import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
@@ -105,6 +106,7 @@ describe("Writer imported formatting controls", /** Covers visual line numbers a
           },
         ]}
         showLineNumbers
+        lineNumberInfo={{ ...new SwLineNumberInfo().QueryValue(), countBy: 1 }}
       />,
     );
     expect(container.querySelectorAll("article span[aria-hidden='true']")).toHaveLength(1);

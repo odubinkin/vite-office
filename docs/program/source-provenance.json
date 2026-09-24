@@ -2260,6 +2260,39 @@
       "evidence": {
         "local": [
           {
+            "marker": "SwLineNumberInfo",
+            "path": "apps/office/src/sw/inc/lineinfo.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SwLineNumberInfo",
+            "path": "vendor/libreoffice-reference/sw/inc/lineinfo.hxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/inc/lineinfo.ts",
+      "localSymbols": [
+        "LineNumberPosition",
+        "SwLineNumberInfo"
+      ],
+      "omittedResponsibilities": [
+        "Native SwClient style tracking and fly-frame layout are outside the browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Keeps the pinned line-number defaults and copyable document-owned configuration."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sw/inc/lineinfo.hxx",
+      "upstreamSymbols": [
+        "SwLineNumberInfo"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "WRITER_PARAGRAPH_STYLE_POOL",
             "path": "apps/office/src/sw/inc/poolfmt.ts"
           }
@@ -5074,6 +5107,70 @@
       "upstreamSymbols": [
         "SvXMLStylesContext",
         "SvXMLStylesContext::createFastChildContext"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "exportLineNumberingConfiguration",
+            "path": "apps/office/src/xmloff/source/text/XMLLineNumberingExport.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "XMLLineNumberingExport::Export",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingExport.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/text/XMLLineNumberingExport.ts",
+      "localSymbols": [
+        "exportLineNumberingConfiguration"
+      ],
+      "omittedResponsibilities": [
+        "Non-Arabic numbering styles and native UNO style properties are outside the browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Writes the supported document-level ODF line-number attributes and separator."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/text/XMLLineNumberingExport.cxx",
+      "upstreamSymbols": [
+        "XMLLineNumberingExport::Export"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "XMLLineNumberingImportContext",
+            "path": "apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "XMLLineNumberingImportContext::CreateAndInsert",
+            "path": "vendor/libreoffice-reference/xmloff/source/text/XMLLineNumberingImportContext.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/xmloff/source/text/XMLLineNumberingImportContext.ts",
+      "localSymbols": [
+        "XMLLineNumberingImportContext"
+      ],
+      "omittedResponsibilities": [
+        "Non-Arabic numbering styles and native UNO style properties are outside the browser slice."
+      ],
+      "preservedResponsibilities": [
+        "Imports the supported ODF line-number attributes and optional separator before publishing document settings."
+      ],
+      "status": "mapped",
+      "upstreamPath": "xmloff/source/text/XMLLineNumberingImportContext.cxx",
+      "upstreamSymbols": [
+        "XMLLineNumberingImportContext::CreateAndInsert"
       ]
     },
     {
