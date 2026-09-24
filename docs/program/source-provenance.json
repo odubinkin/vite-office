@@ -1601,6 +1601,48 @@
       "status": "local-only"
     },
     {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "encodeSfxPoolItem",
+            "path": "apps/office/src/sw/browser/filter/xml/item-codec.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/filter/xml/item-codec.ts",
+      "rationale": "Encodes pooled item values only for the browser Worker structured-clone boundary.",
+      "responsibilities": [
+        "Encodes and restores the bounded pooled-item and item-set graph."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "Dedicated Worker structured-clone encoding is a browser execution boundary and is not part of the native SfxPoolItem value contract."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "OdtWriterTransferRecord",
+            "path": "apps/office/src/sw/browser/filter/xml/odt-transfer.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/filter/xml/odt-transfer.ts",
+      "rationale": "Defines the versioned ODT Worker structured-clone envelope around the internal Writer graph representation, independent of IndexedDB ODT bytes.",
+      "responsibilities": [
+        "Versions and validates the Worker envelope while delegating graph encoding and decoding to writer-document-codec.ts."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "Dedicated Worker structured-clone transport is a browser-only filter execution boundary."
+      },
+      "status": "local-only"
+    },
+    {
       "classification": "browser-adaptation",
       "evidence": {
         "local": [
@@ -1660,6 +1702,27 @@
       "stackDivergence": {
         "kind": "browser-adaptation",
         "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
+      },
+      "status": "local-only"
+    },
+    {
+      "classification": "local-infrastructure",
+      "evidence": {
+        "local": [
+          {
+            "marker": "WriterDocumentRecord",
+            "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "rationale": "Defines a browser Worker graph transfer representation; ODT filter and SwDocShell retain canonical SwDoc contracts.",
+      "responsibilities": [
+        "Encodes and decodes the Writer graph for the ODT Worker message boundary."
+      ],
+      "stackDivergence": {
+        "kind": "local-infrastructure",
+        "rationale": "The browser-specific WriterDocumentRecord boundary has no single native LibreOffice implementation unit and therefore remains explicit."
       },
       "status": "local-only"
     },
@@ -2826,27 +2889,6 @@
       ]
     },
     {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "encodeSfxPoolItem",
-            "path": "apps/office/src/sw/source/core/doc/item-codec.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/doc/item-codec.ts",
-      "rationale": "Keeps canonical pooled-item graph encoding outside SfxPoolItem subclasses for reuse by graph boundary codecs.",
-      "responsibilities": [
-        "Encodes and restores the bounded pooled-item and item-set graph."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "JSON persistence is a browser storage adaptation and is not part of the native SfxPoolItem value contract."
-      },
-      "status": "local-only"
-    },
-    {
       "classification": "upstream-mechanism",
       "evidence": {
         "local": [
@@ -2964,27 +3006,6 @@
         "lcl_SetHeadline",
         "lcl_SetDfltFont"
       ]
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "WriterDocumentRecord",
-            "path": "apps/office/src/sw/source/core/doc/writer-document-codec.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/core/doc/writer-document-codec.ts",
-      "rationale": "Defines a structured-clone Writer graph representation for ODT Worker transfer; it is not used by browser document persistence.",
-      "responsibilities": [
-        "Encodes and decodes the Writer graph for the ODT Worker message boundary."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "The browser-specific WriterDocumentRecord boundary has no single native LibreOffice implementation unit and therefore remains explicit."
-      },
-      "status": "local-only"
     },
     {
       "classification": "upstream-mechanism",
@@ -3856,34 +3877,13 @@
         ]
       },
       "localPath": "apps/office/src/sw/source/filter/xml/odt-filter-service.ts",
-      "rationale": "Defines the neutral asynchronous ODT filter service used by SwDocShell and by the Dedicated Worker adapter while retaining package/xmloff/sw ownership inside the filter. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "rationale": "Defines the asynchronous ODT filter contract over canonical SwDoc and title; browser Worker transport owns clone conversion separately.",
       "responsibilities": [
-        "Defines the neutral asynchronous ODT filter service used by SwDocShell and by the Dedicated Worker adapter while retaining package/xmloff/sw ownership inside the filter."
+        "Provides asynchronous ODT import/export over the canonical SwDoc graph with progress and cancellation."
       ],
       "stackDivergence": {
         "kind": "local-infrastructure",
         "rationale": "Browser DOM, React, Worker, storage, or lifecycle APIs replace the corresponding native platform boundary."
-      },
-      "status": "local-only"
-    },
-    {
-      "classification": "local-infrastructure",
-      "evidence": {
-        "local": [
-          {
-            "marker": "OdtWriterTransferRecord",
-            "path": "apps/office/src/sw/source/filter/xml/odt-transfer.ts"
-          }
-        ]
-      },
-      "localPath": "apps/office/src/sw/source/filter/xml/odt-transfer.ts",
-      "rationale": "Defines the versioned ODT Worker structured-clone envelope around the internal Writer graph representation, independent of IndexedDB ODT bytes.",
-      "responsibilities": [
-        "Versions and validates the Worker envelope while delegating graph encoding and decoding to writer-document-codec.ts."
-      ],
-      "stackDivergence": {
-        "kind": "local-infrastructure",
-        "rationale": "Dedicated Worker structured-clone transport is a browser-only filter execution boundary."
       },
       "status": "local-only"
     },
@@ -4979,7 +4979,7 @@
         "Upstream expat integration, UNO services, thread-local parser state, and vocabularies outside the bounded Writer ODF subset remain intentionally omitted."
       ],
       "preservedResponsibilities": [
-        "Preserves fast context creation, tokenized attributes, ordered start/character/end callbacks, stack ownership, unknown-element policy, and bounded parsing from the pinned SAX fast parser."
+        "Preserves fast context creation, tokenized attributes, ordered start/character/end callbacks, inert processing instructions and comments, stack ownership, unknown-element policy, and bounded parsing from the pinned SAX fast parser."
       ],
       "status": "mapped",
       "upstreamPath": "sax/source/fastparser/fastparser.cxx",

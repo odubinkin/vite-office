@@ -108,7 +108,7 @@ The Writer workbench exposes Open with browser and computer tabs, Save As for a 
 browser copy, and Export for ODT and TXT downloads. Browser import and export
 cross a version-one Dedicated Worker protocol using transferable `ArrayBuffer`
 payloads. `odt-transfer.ts` owns the Worker-only graph envelope around
-`WriterDocumentRecord` from `sw/source/core/doc/writer-document-codec.ts`.
+`WriterDocumentRecord` from `sw/browser/filter/xml/writer-document-codec.ts`.
 This structured-clone codec is not used by IndexedDB persistence: the browser
 stores complete ODT bytes and does not read old JSON snapshot records.
 The shared

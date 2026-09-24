@@ -17,9 +17,13 @@ import {
   normalizeOdtFilterError,
   type OdtFilterErrorCategory,
   type OdtFilterProgressStage,
-  type OdtFilterDocument,
   type OdtFilterService,
 } from "../../../source/filter/xml/odt-filter-service";
+import {
+  createOdtWorkerDocument,
+  restoreOdtWorkerDocument,
+  type OdtWorkerDocument,
+} from "./odt-transfer";
 
 /** Import request transferred into the worker. */
 export interface OdtWorkerImportRequest {
@@ -31,7 +35,7 @@ export interface OdtWorkerImportRequest {
 
 /** Export request carrying a structured-clone Writer snapshot. */
 export interface OdtWorkerExportRequest {
-  readonly document: OdtFilterDocument;
+  readonly document: OdtWorkerDocument;
   readonly operation: "export";
 }
 
@@ -40,7 +44,7 @@ export type OdtWorkerRequestPayload = OdtWorkerExportRequest | OdtWorkerImportRe
 
 /** Neutral import result validated again by SwDocShell. */
 export interface OdtWorkerImportResult {
-  readonly document: OdtFilterDocument;
+  readonly document: OdtWorkerDocument;
   readonly operation: "import";
 }
 
@@ -95,9 +99,12 @@ export class OdtWorkerRuntime {
               : { zipLimits: request.payload.zipLimits }),
           },
         );
-        this.PostResult(request.id, { document, operation: "import" });
+        this.PostResult(request.id, {
+          document: createOdtWorkerDocument(document),
+          operation: "import",
+        });
       } else {
-        const bytes = await service.Export(request.payload.document, {
+        const bytes = await service.Export(restoreOdtWorkerDocument(request.payload.document), {
           onProgress: this.PostProgress.bind(this, request.id),
         });
         const buffer = exactArrayBuffer(bytes);

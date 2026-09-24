@@ -5,7 +5,7 @@ import {
   decodeSfxItemSet,
   encodeSfxItemSet,
   encodeSfxPoolItem,
-} from "../../../sw/source/core/doc/item-codec";
+} from "../../../sw/browser/filter/xml/item-codec";
 
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
 import { SfxItemPool } from "./itempool";

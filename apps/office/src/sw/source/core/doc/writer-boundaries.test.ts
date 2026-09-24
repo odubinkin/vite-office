@@ -3,7 +3,10 @@
 import { describe, expect, it } from "vitest";
 import { DocumentSettingManager, getDefaultDocumentSettings } from "./DocumentSettingManager";
 import { SwDoc } from "./doc";
-import { decodeWriterDocument, encodeWriterDocument } from "./writer-document-codec";
+import {
+  decodeWriterDocument,
+  encodeWriterDocument,
+} from "../../../browser/filter/xml/writer-document-codec";
 
 describe("Writer document boundaries", /** Registers malformed document tests. @returns Nothing. */ () => {
   it("validates document settings and page descriptor identity", /** Checks model guards. @returns Nothing. */ () => {

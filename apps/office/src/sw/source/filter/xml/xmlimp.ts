@@ -62,6 +62,7 @@ import { LineNumberPosition, SwLineNumberInfo } from "../../../inc/lineinfo";
 import type { OdfLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingImportContext";
 import { SwPosition } from "../../core/crsr/pam";
 import { SwDoc } from "../../core/doc/doc";
+import type { DefaultFontDevice } from "../../core/doc/default-font";
 import { SwNumFormat, SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { WRITER_PAPER_SIZES } from "../../core/layout/pagedesc";
@@ -148,7 +149,7 @@ export function importWriterXml(
   contentXml: string,
   metadata: Readonly<{ title: string; locale?: string }>,
   metaXml?: string,
-  options: OdfXmlParseOptions = {},
+  options: OdfXmlParseOptions & { readonly defaultFontDevice?: DefaultFontDevice } = {},
 ): ImportedWriterDocument {
   let locale = metadata.locale ?? "en-US";
   if (metaXml !== undefined) {
@@ -156,7 +157,15 @@ export function importWriterXml(
     metadataImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
     locale = metadataImport.language ?? locale;
   }
-  const xmlImport = new SwXMLImport(new SwDoc({ createInitialTextNode: false, locale }));
+  const xmlImport = new SwXMLImport(
+    new SwDoc({
+      createInitialTextNode: false,
+      locale,
+      ...(options.defaultFontDevice === undefined
+        ? {}
+        : { defaultFontDevice: options.defaultFontDevice }),
+    }),
+  );
   xmlImport.parse(stylesXml, XMLToken.OFFICE_DOCUMENT_STYLES, options);
   xmlImport.finishNamedStyles();
   xmlImport.parse(contentXml, XMLToken.OFFICE_DOCUMENT_CONTENT, options);

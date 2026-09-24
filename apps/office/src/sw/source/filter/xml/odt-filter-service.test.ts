@@ -13,7 +13,13 @@ import {
   normalizeOdtFilterError,
   OdtFilterError,
 } from "./odt-filter-service";
-import { createOdtWriterTransfer, restoreOdtWriterTransfer } from "./odt-transfer";
+import {
+  createOdtWorkerDocument,
+  createOdtWriterTransfer,
+  restoreOdtWorkerDocument,
+  restoreOdtWriterTransfer,
+  type OdtWorkerDocument,
+} from "../../../browser/filter/xml/odt-transfer";
 
 /** Creates deterministic Writer metadata. @returns New metadata. */
 function metadata() {
@@ -60,24 +66,28 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
       "import:metadata",
       "import:mapping",
     ]);
-    expect(imported.document).toMatchObject({
-      graph: { swModelVersion: 15, textNodes: [{ hints: [], text: "worker body" }] },
-      transferVersion: 5,
-    });
-    expect(imported.document).not.toHaveProperty("document");
+    expect(imported.document).toBeInstanceOf(SwDoc);
+    expect(imported.document.paragraphs[0]?.GetText()).toBe("worker body");
   });
 
   it("preserves document language through ODT and worker transfer", /** Verifies document locale through package and graph transfer. @returns Completion after assertions. */ async () => {
     const service = createInlineOdtFilterService();
     const source = new SwDoc({ locale: "ja-JP" });
     const bytes = await service.Export(createOdtFilterDocument(source, "Japanese"));
-    const transferred = await service.Import(bytes, { title: "Japanese", locale: "en-US" });
     const device = {
       getDefaultFont: /** Resolves the test family. @returns Family. */ () => "Source Han Sans",
     };
-    const restored = restoreOdtWriterTransfer(transferred.document, device);
+    const transferred = await service.Import(
+      bytes,
+      { title: "Japanese", locale: "en-US" },
+      { defaultFontDevice: device },
+    );
+    const restored = transferred.document;
     expect(restored.GetLocale()).toBe("ja-JP");
     expect(restored.GetDefaultFontDevice()).toBe(device);
+    expect(
+      restoreOdtWriterTransfer(createOdtWriterTransfer(restored), device).GetDefaultFontDevice(),
+    ).toBe(device);
     expect(restored.GetPageDesc().GetValue().paperFormat).toBe("A4");
     service.Close();
   });
@@ -146,6 +156,23 @@ describe("ODT filter service" /** Groups asynchronous inline filter behavior. @r
         /** Restores one malformed worker transfer. @returns Invalid result. */ () =>
           restoreOdtWriterTransfer(transfer),
       ).toThrow("schema is unsupported");
+  });
+
+  it("rejects malformed Worker document metadata before graph restoration", /** Keeps clone validation in the browser boundary. @returns Nothing. */ () => {
+    const transfer = createOdtWorkerDocument(
+      createOdtFilterDocument(createWriterDocument(), "Title"),
+    );
+    for (const invalid of [
+      null,
+      [],
+      {},
+      { ...transfer, metadata: null },
+      { ...transfer, metadata: { title: 1 } },
+    ])
+      expect(
+        /** Restores invalid Worker metadata. @returns Invalid document. */ () =>
+          restoreOdtWorkerDocument(invalid as OdtWorkerDocument),
+      ).toThrow("metadata is invalid");
   });
 
   it("owns and validates a rich worker graph independently from durable storage" /** Covers worker-only styles, items, numbering, and both hint variants. @returns Nothing. */, () => {

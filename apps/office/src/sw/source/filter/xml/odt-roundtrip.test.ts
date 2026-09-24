@@ -33,7 +33,7 @@ import {
 import { applyWriterParagraphList, projectWriterParagraphList } from "../../core/doc/list";
 import { createWriterDocument } from "../../core/doc/doc";
 import { createWriterTextFragment } from "../../core/txtnode/text-run-projection";
-import { encodeWriterDocument } from "../../core/doc/writer-document-codec";
+import { encodeWriterDocument } from "../../../browser/filter/xml/writer-document-codec";
 import { readOdtDocument, SwXMLReader } from "./swxml";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml, parseOdfXml } from "./xmlimp";
@@ -90,6 +90,21 @@ function findZipSignature(bytes: Uint8Array, signature: number): number {
 }
 
 describe("Writer ODF XML filters" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
+  it("imports legal comments and processing instructions in ODT XML streams", /** Matches pinned SvXMLImport's inert processing-instruction handler. @returns Imported graph. */ async () => {
+    const original = basicOdt();
+    const archive = new ZipFile(original);
+    const content = await archive.readTextEntry("content.xml");
+    const styles = await archive.readTextEntry("styles.xml");
+    const meta = await archive.readTextEntry("meta.xml");
+    const candidate = await rewritePackage(original, {
+      "content.xml": content.replace("<office:text>", "<office:text><!--comment--><?stage data?>"),
+      "styles.xml": styles.replace("<office:styles>", "<office:styles><?style data?>"),
+      "meta.xml": meta.replace("<office:meta>", "<office:meta><!--metadata-->"),
+    });
+    const imported = await readOdtDocument(candidate, metadata());
+    expect(imported.document.paragraphs).toHaveLength(1);
+  });
+
   it("round-trips Standard page geometry through page-layout and master-page", /** Verifies custom page-layout serialization. @returns A fulfilled import promise. */ async () => {
     const writer = createWriterDocument();
     const page = {

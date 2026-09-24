@@ -23,6 +23,7 @@ import {
   type OdtFilterService,
 } from "../../../source/filter/xml/odt-filter-service";
 import type { OdtWorkerRequestPayload, OdtWorkerResultPayload } from "./odt-worker-runtime";
+import { createOdtWorkerDocument, restoreOdtWorkerDocument } from "./odt-transfer";
 
 /** Default wall-clock ceiling for one browser ODT operation. */
 export const ODT_WORKER_TIMEOUT_MS = 30_000;
@@ -86,7 +87,11 @@ export class OdtWorkerClient implements OdtFilterService {
     document: OdtFilterDocument,
     options: OdtFilterOperationOptions = {},
   ): Promise<Uint8Array> {
-    const result = await this.Run({ document, operation: "export" }, [], options);
+    const result = await this.Run(
+      { document: createOdtWorkerDocument(document), operation: "export" },
+      [],
+      options,
+    );
     if (result.operation !== "export")
       throw new OdtFilterError("protocol", "ODT worker returned the wrong result kind.");
     return new Uint8Array(result.bytes);
@@ -111,7 +116,7 @@ export class OdtWorkerClient implements OdtFilterService {
     );
     if (result.operation !== "import")
       throw new OdtFilterError("protocol", "ODT worker returned the wrong result kind.");
-    return result.document;
+    return restoreOdtWorkerDocument(result.document, options.defaultFontDevice);
   }
 
   /** Issues one latest-only request. @param payload - Operation payload. @param transfer - Ownership transfers. @param options - Cancellation/progress controls. @returns Terminal worker payload. */

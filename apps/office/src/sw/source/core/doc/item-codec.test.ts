@@ -10,7 +10,7 @@ import {
   decodeSfxPoolItem,
   encodeSfxItemSet,
   encodeSfxPoolItem,
-} from "./item-codec";
+} from "../../../browser/filter/xml/item-codec";
 
 /** Test item exposing a chosen QueryValue for persistence validation. */
 class QueryValueItem extends SfxPoolItem {

@@ -210,14 +210,14 @@ export function parseOdfXmlStream(
   parser.on("cdata", characters);
   parser.on(
     "comment",
-    /** Rejects comments. @returns Never. */ () => {
-      throw new Error("Unsupported ODF XML comment.");
+    /** Ignores lexical comments while retaining cancellation checks. @returns Nothing. */ () => {
+      checkpoint(options);
     },
   );
   parser.on(
     "processinginstruction",
-    /** Rejects processing instructions. @returns Never. */ () => {
-      throw new Error("Unsupported ODF XML processing instruction.");
+    /** Matches SvXMLImport::processingInstruction's inert handler. @returns Nothing. */ () => {
+      checkpoint(options);
     },
   );
   parser.on(

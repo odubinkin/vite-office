@@ -1,7 +1,7 @@
 /** @fileoverview Verifies bounded LibreOffice character item value contracts. */
 
 import { describe, expect, it } from "vitest";
-import { encodeSfxPoolItem } from "../../../sw/source/core/doc/item-codec";
+import { encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
 
 import { SfxInt16Item } from "../../../svl/source/items/poolitem";
 import {

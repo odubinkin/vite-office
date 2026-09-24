@@ -7,6 +7,7 @@ import {
   ODT_MIMETYPE,
 } from "../../../../package/source/manifest/ManifestExport";
 import { ZipFile, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
+import type { DefaultFontDevice } from "../../core/doc/default-font";
 import { importWriterXml, type ImportedWriterDocument } from "./xmlimp";
 
 /** Maximum UTF-8 size accepted for each mandatory ODT XML stream. */
@@ -18,6 +19,8 @@ export type OdtImportProgressStage =
 
 /** Cooperative worker controls inspected between bounded import stages. */
 export interface OdtImportControl {
+  /** Device supplying locale-dependent Writer font defaults. */
+  readonly defaultFontDevice?: DefaultFontDevice;
   /** Reports whether the request is no longer applicable. */
   readonly isCancelled?: () => boolean;
   /** Optional stricter per-XML-stream byte ceiling. */
@@ -52,6 +55,9 @@ export class SwXMLReader {
     checkpoint(control, "mapping");
     return importWriterXml(stylesXml, contentXml, metadata, metaXml, {
       ...(control.isCancelled === undefined ? {} : { isCancelled: control.isCancelled }),
+      ...(control.defaultFontDevice === undefined
+        ? {}
+        : { defaultFontDevice: control.defaultFontDevice }),
     });
   }
 }

@@ -227,11 +227,16 @@ export class SwDocShell extends SfxObjectShell {
         title: metadata.title,
         locale: this.defaultLocale,
       },
-      options,
+      {
+        ...options,
+        ...(this.defaultFontDevice === undefined
+          ? {}
+          : { defaultFontDevice: this.defaultFontDevice }),
+      },
     );
     if (requestGeneration !== this.odtRequestGeneration)
       throw new OdtFilterError("stale", "ODT open result is stale.");
-    const loaded = restoreOdtFilterDocument(transfer, this.defaultFontDevice);
+    const loaded = restoreOdtFilterDocument(transfer);
     const loadedState: SfxObjectShellState = Object.freeze({
       ...metadata,
       isModified: false,

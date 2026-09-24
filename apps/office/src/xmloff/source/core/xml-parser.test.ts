@@ -180,7 +180,23 @@ describe("ODF fast SAX parser", /** Groups fast parser tests. @returns Nothing. 
     }
   });
 
-  it("rejects DTDs, comments, malformed XML, cancellation, and every resource limit", /** Verifies parser guards. @returns Nothing. */ () => {
+  it("ignores comments and processing instructions as the upstream import does", /** Verifies legal lexical events leave context callbacks unchanged. @returns Nothing. */ () => {
+    const events: string[] = [];
+    parseOdfXmlStream(
+      `<?xml version="1.0"?><office:text xmlns:office="${ODF_NAMESPACES.office}" xmlns:text="${ODF_NAMESPACES.text}"><!--before--><text:p>A<?stage test?><!---->B</text:p></office:text>`,
+      recordingImport(events),
+    );
+    expect(events).toEqual([
+      `start:${XMLToken.OFFICE_TEXT}:`,
+      `start:${XMLToken.TEXT_P}:`,
+      "text:A",
+      "text:B",
+      `end:${XMLToken.TEXT_P}`,
+      `end:${XMLToken.OFFICE_TEXT}`,
+    ]);
+  });
+
+  it("rejects DTDs, malformed XML, cancellation, and every resource limit", /** Verifies parser guards. @returns Nothing. */ () => {
     const ignore: SvXMLImport = {
       /** Ignores known roots. @returns Ignore context. */
       createFastContext(): SvXMLImportContext {
@@ -195,14 +211,6 @@ describe("ODF fast SAX parser", /** Groups fast parser tests. @returns Nothing. 
       /** Parses a DTD. @returns Nothing. */ () =>
         parseOdfXmlStream("<!DOCTYPE root><root/>", ignore),
     ).toThrow("document type");
-    expect(
-      /** Parses a comment. @returns Nothing. */ () =>
-        parseOdfXmlStream("<root><!--x--></root>", ignore),
-    ).toThrow("comment");
-    expect(
-      /** Parses a processing instruction. @returns Nothing. */ () =>
-        parseOdfXmlStream("<root><?stage test?></root>", ignore),
-    ).toThrow("processing instruction");
     expect(
       /** Parses malformed XML. @returns Nothing. */ () =>
         parseOdfXmlStream("<root><child></root>", ignore),

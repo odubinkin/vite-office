@@ -11,6 +11,7 @@ import {
   type OdtWorkerTransport,
 } from "../../../browser/filter/xml/odt-worker-client";
 import { createOdtFilterDocument } from "./odt-filter-service";
+import { createOdtWorkerDocument } from "../../../browser/filter/xml/odt-transfer";
 
 /** Deterministic Worker transport test double. */
 class FakeWorker implements OdtWorkerTransport {
@@ -72,7 +73,11 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
     const source = new Uint8Array([1, 2, 3]);
     const progress: string[] = [];
     const importedSnapshot = snapshot();
+    const device = {
+      getDefaultFont: /** Resolves the test font. @returns Family. */ () => "Browser font",
+    };
     const importing = client.Import(source, metadata(), {
+      defaultFontDevice: device,
       onProgress:
         /** Records one accepted worker stage. @param stage - Qualified stage. @returns New array length. */ (
           stage,
@@ -91,11 +96,12 @@ describe("ODT worker client" /** Groups client transport behavior. @returns Noth
     worker.emit({ id: importId, protocol: 1, stage: "import:package", type: "progress" });
     worker.emit({
       id: importId,
-      payload: { document: importedSnapshot, operation: "import" },
+      payload: { document: createOdtWorkerDocument(importedSnapshot), operation: "import" },
       protocol: 1,
       type: "result",
     });
-    await expect(importing).resolves.toEqual(importedSnapshot);
+    await expect(importing).resolves.toMatchObject({ title: importedSnapshot.title });
+    expect((await importing).document.GetDefaultFontDevice()).toBe(device);
     expect(progress).toEqual(["import:package"]);
 
     const exporting = client.Export(importedSnapshot);

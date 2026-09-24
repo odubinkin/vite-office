@@ -2,20 +2,24 @@
 
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwPosition } from "../crsr/pam";
-import { SwDoc } from "./doc";
+import { SwPosition } from "../../../source/core/crsr/pam";
+import { SwDoc } from "../../../source/core/doc/doc";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../../inc/lineinfo";
-import type { DefaultFontDevice } from "./default-font";
-import { isWriterParagraphStyle, SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
-import { SwNumFormat, SwNumRule } from "./number";
+import type { DefaultFontDevice } from "../../../source/core/doc/default-font";
+import {
+  isWriterParagraphStyle,
+  SwTextFormatColl,
+  type WriterParagraphStyle,
+} from "../../../source/core/doc/fmtcol";
+import { SwNumFormat, SwNumRule } from "../../../source/core/doc/number";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
-import type { WriterParagraphListKind } from "./list";
+import type { WriterParagraphListKind } from "../../../source/core/doc/list";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
-import { SwpHints } from "../txtnode/ndhints";
-import { SwFormatINetFormat } from "../txtnode/fmtinfmt";
-import { SwFormatAutoFormat, SwTextAttr } from "../txtnode/txatbase";
-import type { WriterPageDescriptorValue } from "../layout/pagedesc";
-import type { DocumentSettingId } from "./DocumentSettingManager";
+import { SwpHints } from "../../../source/core/txtnode/ndhints";
+import { SwFormatINetFormat } from "../../../source/core/txtnode/fmtinfmt";
+import { SwFormatAutoFormat, SwTextAttr } from "../../../source/core/txtnode/txatbase";
+import type { WriterPageDescriptorValue } from "../../../source/core/layout/pagedesc";
+import type { DocumentSettingId } from "../../../source/core/doc/DocumentSettingManager";
 import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
 
 /** Primitive graph record for one numbering level. */

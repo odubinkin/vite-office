@@ -1681,6 +1681,69 @@
       }
     },
     {
+      "path": "apps/office/src/sw/browser/filter/xml/item-codec.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "storage-contract",
+      "capabilityIds": [
+        "CAP-0112",
+        "CAP-0131"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/filter/xml/item-codec.ts#encodeSfxPoolItem"
+        ],
+        "justification": "Worker-only pooled-item graph codec outside SfxPoolItem; canonical pool items remain in svl and editeng.",
+        "knownViolations": [],
+        "localSymbols": [
+          "encodeSfxPoolItem",
+          "encodeSfxItemSet",
+          "decodeSfxPoolItem",
+          "decodeSfxItemSet",
+          "decodeSwFormatINetFormat"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/odt-transfer.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "odf-filter",
+      "capabilityIds": [
+        "CAP-0113",
+        "CAP-0130"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/filter/xml/odt-transfer.ts#OdtWriterTransferRecord",
+          "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts#createBrowserOdtFilterService",
+          "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx#XMLReader::Read"
+        ],
+        "justification": "Worker-only envelope and graph conversion live in sw/browser/filter/xml; the ODT filter and SwDocShell consume canonical SwDoc graphs.",
+        "knownViolations": [],
+        "localSymbols": [
+          "createOdtWriterTransfer",
+          "restoreOdtWriterTransfer"
+        ],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
       "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
       "classification": "browser-adaptation",
       "state": "active",
@@ -1755,6 +1818,36 @@
         "justification": "Installs the Writer ODT filter runtime in the Vite-emitted Dedicated Worker. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
         "knownViolations": [],
         "localSymbols": [],
+        "sourceResponsibility": "browser-owned",
+        "upstreamFile": null,
+        "upstreamSymbols": []
+      }
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "classification": "local-infrastructure",
+      "state": "active",
+      "suite": "writer",
+      "subsystem": "document-lifecycle",
+      "capabilityIds": [
+        "CAP-0111"
+      ],
+      "semantic": {
+        "behaviorStatus": "not-applicable",
+        "contractStatus": "not-applicable",
+        "defaultStatus": "not-applicable",
+        "divergenceClass": "B",
+        "evidence": [
+          "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts#encodeWriterDocument",
+          "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts#decodeWriterDocument",
+          "apps/office/src/sw/browser/filter/xml/odt-transfer.ts#OdtWriterTransferRecord"
+        ],
+        "justification": "Worker structured-clone graph codec lives in the browser boundary; SwDoc remains the canonical model and filter interfaces accept SwDoc.",
+        "knownViolations": [],
+        "localSymbols": [
+          "encodeWriterDocument",
+          "decodeWriterDocument"
+        ],
         "sourceResponsibility": "browser-owned",
         "upstreamFile": null,
         "upstreamSymbols": []
@@ -3069,38 +3162,6 @@
       }
     },
     {
-      "path": "apps/office/src/sw/source/core/doc/item-codec.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "storage-contract",
-      "capabilityIds": [
-        "CAP-0112",
-        "CAP-0131"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/source/core/doc/item-codec.ts#encodeSfxPoolItem"
-        ],
-        "justification": "Owns the storage-neutral pooled-item graph codec used by canonical Writer graph serialization without adding persistence methods to SfxPoolItem subclasses.",
-        "knownViolations": [],
-        "localSymbols": [
-          "encodeSfxPoolItem",
-          "encodeSfxItemSet",
-          "decodeSfxPoolItem",
-          "decodeSfxItemSet",
-          "decodeSwFormatINetFormat"
-        ],
-        "sourceResponsibility": "unverified",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
       "path": "apps/office/src/sw/source/core/doc/list.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -3214,36 +3275,6 @@
           "lcl_SetHeadline",
           "lcl_SetDfltFont"
         ]
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/core/doc/writer-document-codec.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "document-lifecycle",
-      "capabilityIds": [
-        "CAP-0111"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/source/core/doc/writer-document-codec.ts#encodeWriterDocument",
-          "apps/office/src/sw/source/core/doc/writer-document-codec.ts#decodeWriterDocument",
-          "apps/office/src/sw/source/filter/xml/odt-transfer.ts#OdtWriterTransferRecord"
-        ],
-        "justification": "P1 boundary debt: this structured-clone codec mirrors the SwDoc graph for Worker transfer inside core/doc. Its browser transport responsibility should move to the browser filter boundary after supported pool-item round trips are proven lossless; canonical SwDoc ownership remains upstream-shaped.",
-        "knownViolations": [],
-        "localSymbols": [
-          "encodeWriterDocument",
-          "decodeWriterDocument"
-        ],
-        "sourceResponsibility": "divergent",
-        "upstreamFile": null,
-        "upstreamSymbols": []
       }
     },
     {
@@ -4127,7 +4158,7 @@
         "evidence": [
           "apps/office/src/sw/source/filter/xml/odt-filter-service.ts#OdtFilterProgressStage"
         ],
-        "justification": "Defines the neutral asynchronous ODT filter service used by SwDocShell and by the Dedicated Worker adapter while retaining package/xmloff/sw ownership inside the filter. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+        "justification": "Shell and filter service exchange canonical SwDoc and title; only sw/browser/filter/xml adapts that graph to Worker clone records. Async cancellation remains a browser execution concern.",
         "knownViolations": [],
         "localSymbols": [
           "createOdtFilterDocument",
@@ -4136,37 +4167,6 @@
           "normalizeOdtFilterError"
         ],
         "sourceResponsibility": "browser-owned",
-        "upstreamFile": null,
-        "upstreamSymbols": []
-      }
-    },
-    {
-      "path": "apps/office/src/sw/source/filter/xml/odt-transfer.ts",
-      "classification": "local-infrastructure",
-      "state": "active",
-      "suite": "writer",
-      "subsystem": "odf-filter",
-      "capabilityIds": [
-        "CAP-0113",
-        "CAP-0130"
-      ],
-      "semantic": {
-        "behaviorStatus": "not-applicable",
-        "contractStatus": "not-applicable",
-        "defaultStatus": "not-applicable",
-        "divergenceClass": "B",
-        "evidence": [
-          "apps/office/src/sw/source/filter/xml/odt-transfer.ts#OdtWriterTransferRecord",
-          "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts#createBrowserOdtFilterService",
-          "vendor/libreoffice-reference/sw/source/filter/xml/swxml.cxx#XMLReader::Read"
-        ],
-        "justification": "P1 confirmed misplaced browser transport: this module defines structured-clone Worker envelopes beside the upstream-shaped XML filter. Pinned sw/source/filter/xml owns ODT import/export semantics; browser Worker transport belongs under sw/browser/filter/xml without changing save behavior.",
-        "knownViolations": [],
-        "localSymbols": [
-          "createOdtWriterTransfer",
-          "restoreOdtWriterTransfer"
-        ],
-        "sourceResponsibility": "divergent",
         "upstreamFile": null,
         "upstreamSymbols": []
       }
@@ -5356,16 +5356,18 @@
         "CAP-0128"
       ],
       "semantic": {
-        "behaviorStatus": "divergent",
+        "behaviorStatus": "unverified",
         "contractStatus": "unverified",
         "defaultStatus": "unverified",
-        "divergenceClass": "P",
+        "divergenceClass": "none",
         "evidence": [
           "apps/office/src/xmloff/source/core/xml-parser.ts#parseOdfXmlStream",
           "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream",
-          "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::processingInstruction"
+          "vendor/libreoffice-reference/xmloff/source/core/xmlimp.cxx#SvXMLImport::processingInstruction",
+          "apps/office/src/xmloff/source/core/xml-parser.test.ts#ignores comments and processing instructions as the upstream import does",
+          "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts#imports legal comments and processing instructions in ODT XML streams"
         ],
-        "justification": "P1 confirmed: the local parser rejects every XML processing instruction, while pinned sax/source/fastparser/fastparser.cxx forwards it and xmloff/source/core/xmlimp.cxx handles it without altering the imported document. Other XML and resource-limit behavior remains unverified.",
+        "justification": "Pinned SvXMLImport::processingInstruction is inert; source-backed parser tests now accept legal processing instructions and comments while retaining DTD, malformed-input and resource ceilings. Broader SAX behavior remains unverified.",
         "knownViolations": [],
         "localSymbols": [
           "DEFAULT_ODF_XML_LIMITS",
@@ -5373,7 +5375,7 @@
           "SvXMLImportContext",
           "parseOdfXmlStream"
         ],
-        "sourceResponsibility": "divergent",
+        "sourceResponsibility": "aligned",
         "upstreamFile": "sax/source/fastparser/fastparser.cxx",
         "upstreamSymbols": [
           "FastSaxParserImpl",

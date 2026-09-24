@@ -1,5 +1,5 @@
 /**
- * @fileoverview Browser persistence codec for the bounded SfxPoolItem graph.
+ * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
 
@@ -10,7 +10,10 @@ import {
   type SfxPoolItem,
   type SfxPoolItemSnapshot,
 } from "../../../../svl/source/items/poolitem";
-import { normalizeWriterHyperlink, SwFormatINetFormat } from "../txtnode/fmtinfmt";
+import {
+  normalizeWriterHyperlink,
+  SwFormatINetFormat,
+} from "../../../source/core/txtnode/fmtinfmt";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */

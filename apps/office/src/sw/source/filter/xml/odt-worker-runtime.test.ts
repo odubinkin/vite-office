@@ -13,6 +13,11 @@ import { SwWrtShell } from "../../uibase/wrtsh/wrtsh";
 import { writeOdtDocument } from "./wrtxml";
 import { createOdtFilterDocument, restoreOdtFilterDocument } from "./odt-filter-service";
 import {
+  createOdtWorkerDocument,
+  restoreOdtWorkerDocument,
+  type OdtWorkerDocument,
+} from "../../../browser/filter/xml/odt-transfer";
+import {
   OdtWorkerRuntime,
   type OdtWorkerRequestPayload,
   type OdtWorkerRuntimeScope,
@@ -78,9 +83,10 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     );
     const result = await terminal(scope);
     expect(result.type).toBe("result");
-    const transferred = (result.payload as { document: ReturnType<typeof createOdtFilterDocument> })
-      .document;
-    expect(restoreOdtFilterDocument(transferred).document.GetLocale()).toBe("ar-SA");
+    const transferred = (result.payload as { document: OdtWorkerDocument }).document;
+    expect(
+      restoreOdtFilterDocument(restoreOdtWorkerDocument(transferred)).document.GetLocale(),
+    ).toBe("ar-SA");
   });
 
   it("imports into a neutral filter document with ordered progress" /** Verifies worker-side ZIP/XML work. @returns Completion after result. */, async () => {
@@ -133,7 +139,9 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     runtime.HandleMessage(
       request({
         operation: "export",
-        document: createOdtFilterDocument(createWriterDocument(), metadata().title),
+        document: createOdtWorkerDocument(
+          createOdtFilterDocument(createWriterDocument(), metadata().title),
+        ),
       }),
     );
     const result = await terminal(scope);

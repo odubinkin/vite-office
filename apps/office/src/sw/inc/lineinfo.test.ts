@@ -6,7 +6,7 @@ import { createWriterDocument } from "../source/core/doc/doc";
 import {
   decodeWriterDocument,
   encodeWriterDocument,
-} from "../source/core/doc/writer-document-codec";
+} from "../browser/filter/xml/writer-document-codec";
 import { createWriterDocumentSession } from "../browser/composition/writer-module";
 import { SfxBoolItem } from "../../svl/source/items/poolitem";
 import { RES_LINENUMBER } from "./hintids";

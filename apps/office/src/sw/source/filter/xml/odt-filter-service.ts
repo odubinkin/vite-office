@@ -1,16 +1,11 @@
 /**
- * @fileoverview Defines the neutral asynchronous ODT filter service used by SwDocShell and by
+ * @fileoverview Defines the canonical asynchronous ODT filter service used by SwDocShell and by
  * remote execution adapters while retaining package/xmloff/sw ownership inside the filter.
  */
 
 import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
-import type { SwDoc } from "../../core/doc/doc";
+import { SwDoc } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
-import {
-  createOdtWriterTransfer,
-  restoreOdtWriterTransfer,
-  type OdtWriterTransferRecord,
-} from "./odt-transfer";
 import { readOdtDocument, type OdtImportProgressStage } from "./swxml";
 import { writeOdtDocument, type OdtExportProgressStage } from "./wrtxml";
 
@@ -48,44 +43,43 @@ export interface OdtFilterOperationOptions {
   readonly onProgress?: (stage: OdtFilterProgressStage) => void;
   /** Optional stricter ZIP input limits used by tests or callers. */
   readonly zipLimits?: ZipFileLimits;
+  /** Output device retained when constructing an imported graph on this side of the Worker boundary. */
+  readonly defaultFontDevice?: DefaultFontDevice;
 }
 
-/** Neutral serialized document boundary accepted by inline and remote filter adapters. */
+/** Canonical document boundary accepted by inline and remote filter adapters. */
 export interface OdtFilterDocument {
-  readonly document: OdtWriterTransferRecord;
-  readonly metadata: Readonly<{ title: string }>;
+  readonly document: SwDoc;
+  readonly title: string;
 }
 
-/** Captures the canonical graph for filter adaptation without shell lifecycle state. @param document - Canonical Writer graph. @param title - Shell-owned title copied as filter metadata. @returns Cloneable filter input. */
+/** Captures the canonical graph for filter adaptation without shell lifecycle state. @param document - Canonical Writer graph. @param title - Shell-owned title copied as filter metadata. @returns Filter input. */
 export function createOdtFilterDocument(document: SwDoc, title: string): OdtFilterDocument {
-  return { document: createOdtWriterTransfer(document), metadata: { title } };
+  return { document, title };
 }
 
-/** Restores a filter transfer into a canonical graph and filter metadata. @param input - Cloneable filter value. @param defaultFontDevice - Current output device. @returns Decoded graph and title. */
-export function restoreOdtFilterDocument(
-  input: OdtFilterDocument,
-  defaultFontDevice?: DefaultFontDevice,
-): {
+/** Validates a canonical filter result before shell adoption. @param input - Filter result. @returns Document and title. */
+export function restoreOdtFilterDocument(input: OdtFilterDocument): {
   readonly document: SwDoc;
   readonly title: string;
 } {
-  if (!isRecord(input) || !isRecord(input.metadata) || typeof input.metadata.title !== "string")
+  if (!isRecord(input) || !(input.document instanceof SwDoc) || typeof input.title !== "string")
     throw new Error("ODT filter document metadata is invalid.");
   return {
-    document: restoreOdtWriterTransfer(input.document, defaultFontDevice),
-    title: input.metadata.title,
+    document: input.document,
+    title: input.title,
   };
 }
 
-/** Asynchronous filter contract returning structured-clone values only. */
+/** Asynchronous filter contract over the canonical Writer graph. */
 export interface OdtFilterService {
   /** Cancels the current request without closing the reusable service. @returns Nothing. */
   Cancel(): void;
   /** Releases worker/runtime resources and rejects pending work. @returns Nothing. */
   Close(): void;
-  /** Exports one validated Writer transfer. @param input - Canonical graph transfer without lifecycle DTOs. @param options - Cancellation/progress controls. @returns Complete STORE-only ODT bytes. */
+  /** Exports one Writer graph. @param input - Canonical graph without lifecycle state. @param options - Cancellation/progress controls. @returns Complete STORE-only ODT bytes. */
   Export(input: OdtFilterDocument, options?: OdtFilterOperationOptions): Promise<Uint8Array>;
-  /** Imports one ODT into a neutral validated transfer. @param bytes - Complete package bytes. @param metadata - Fallback filter metadata. @param options - Cancellation/progress/resource controls. @returns Candidate graph transfer for main-thread validation. */
+  /** Imports one ODT into a Writer graph. @param bytes - Complete package bytes. @param metadata - Fallback filter metadata. @param options - Cancellation/progress/resource controls. @returns Candidate graph for shell adoption. */
   Import(
     bytes: Uint8Array,
     metadata: Readonly<{ title: string; locale?: string }>,
@@ -121,7 +115,7 @@ export class InlineOdtFilterService implements OdtFilterService {
     this.closed = true;
   }
 
-  /** Exports through the existing Writer XML/package filter. @param input - Validated filter transfer. @param options - Cooperative controls. @returns ODT bytes. */
+  /** Exports through the existing Writer XML/package filter. @param input - Canonical document. @param options - Cooperative controls. @returns ODT bytes. */
   public async Export(
     input: OdtFilterDocument,
     options: OdtFilterOperationOptions = {},
@@ -147,7 +141,7 @@ export class InlineOdtFilterService implements OdtFilterService {
     }
   }
 
-  /** Imports through the existing package/XML filter and serializes the candidate graph. @param bytes - Complete package. @param metadata - Fallback metadata. @param options - Cooperative controls. @returns Candidate filter transfer. */
+  /** Imports through the existing package/XML filter. @param bytes - Complete package. @param metadata - Fallback metadata. @param options - Cooperative controls. @returns Candidate graph. */
   public async Import(
     bytes: Uint8Array,
     metadata: Readonly<{ title: string; locale?: string }>,
@@ -156,6 +150,9 @@ export class InlineOdtFilterService implements OdtFilterService {
     this.Begin(options.signal);
     try {
       const imported = await readOdtDocument(bytes, metadata, options.zipLimits, {
+        ...(options.defaultFontDevice === undefined
+          ? {}
+          : { defaultFontDevice: options.defaultFontDevice }),
         isCancelled:
           /** Reads the current cooperative cancellation flag. @returns Whether import must stop. */ () =>
             this.IsCancelled(options.signal),
