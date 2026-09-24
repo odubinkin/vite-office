@@ -8,7 +8,7 @@ import { projectWriterParagraphList } from "../../core/doc/list";
 import { projectWriterTextRuns } from "../../core/txtnode/text-run-projection";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
-import { SfxBoolItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import {
   SvxLineSpacingItem,
   SvxTabStop,

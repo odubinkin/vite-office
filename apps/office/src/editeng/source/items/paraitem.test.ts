@@ -2,7 +2,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { SfxBoolItem } from "../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "./paraitem";
 
 const which = 200;

@@ -9,7 +9,7 @@ import {
   SvxULSpaceItem,
 } from "../../../../editeng/source/items/paraitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createWriterDocument } from "../../core/doc/doc";

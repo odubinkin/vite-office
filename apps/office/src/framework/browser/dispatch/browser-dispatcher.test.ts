@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { SfxInterface } from "../../../sfx2/source/control/objface";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { createSfxShell } from "../../../sfx2/source/control/shell";
-import { SfxStringItem } from "../../../svl/source/items/poolitem";
+import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { BrowserSfxDispatcher } from "./browser-dispatcher";
 
 describe("BrowserSfxDispatcher", /** Defines browser dispatch tests. @returns Nothing. */ () => {

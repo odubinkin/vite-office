@@ -13,11 +13,8 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import {
-  SfxPoolItem,
-  SfxStringItem,
-  type SfxPoolItemSnapshot,
-} from "../../../../svl/source/items/poolitem";
+import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONT,

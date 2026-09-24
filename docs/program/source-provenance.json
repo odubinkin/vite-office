@@ -1097,6 +1097,40 @@
       "evidence": {
         "local": [
           {
+            "marker": "SfxUnoAnyItem",
+            "path": "apps/office/src/sfx2/source/view/frame.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxUnoAnyItem::operator==",
+            "path": "vendor/libreoffice-reference/sfx2/source/view/frame.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/sfx2/source/view/frame.ts",
+      "localSymbols": [
+        "SfxUnoAnyItem"
+      ],
+      "omittedResponsibilities": [
+        "Native pooling, UNO mutation and presentation paths outside the bounded SfxUnoAnyItem request value contract remain unimplemented."
+      ],
+      "preservedResponsibilities": [
+        "Implements bounded SfxUnoAnyItem construction, value, always-unequal comparison and clone behavior at the pinned sfx2/source/view/frame.cxx owner."
+      ],
+      "status": "mapped",
+      "upstreamPath": "sfx2/source/view/frame.cxx",
+      "upstreamSymbols": [
+        "SfxUnoAnyItem",
+        "SfxUnoAnyItem::Clone",
+        "SfxUnoAnyItem::operator=="
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
             "marker": "SfxViewFrame",
             "path": "apps/office/src/sfx2/source/view/viewfrm.ts"
           }
@@ -1123,6 +1157,72 @@
       "upstreamSymbols": [
         "SfxViewFrame::Construct_Impl",
         "SfxViewFrame::Close"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxBoolItem",
+            "path": "apps/office/src/svl/source/items/cenumitm.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxBoolItem::Clone",
+            "path": "vendor/libreoffice-reference/svl/source/items/cenumitm.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/items/cenumitm.ts",
+      "localSymbols": [
+        "SfxBoolItem"
+      ],
+      "omittedResponsibilities": [
+        "Native pooling, UNO mutation and presentation paths outside the bounded SfxBoolItem value contract remain unimplemented."
+      ],
+      "preservedResponsibilities": [
+        "Implements bounded SfxBoolItem construction, value, equality and clone behavior at the pinned svl/source/items/cenumitm.cxx owner."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/items/cenumitm.cxx",
+      "upstreamSymbols": [
+        "SfxBoolItem",
+        "SfxBoolItem::Clone"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxInt16Item",
+            "path": "apps/office/src/svl/source/items/intitem.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxInt16Item::Clone",
+            "path": "vendor/libreoffice-reference/svl/source/items/intitem.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/items/intitem.ts",
+      "localSymbols": [
+        "SfxInt16Item"
+      ],
+      "omittedResponsibilities": [
+        "Native pooling, UNO mutation and presentation paths outside the bounded SfxInt16Item value contract remain unimplemented."
+      ],
+      "preservedResponsibilities": [
+        "Implements bounded SfxInt16Item construction, value, equality and clone behavior at the pinned svl/source/items/intitem.cxx owner."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/items/intitem.cxx",
+      "upstreamSymbols": [
+        "SfxInt16Item",
+        "SfxInt16Item::Clone"
       ]
     },
     {
@@ -1219,9 +1319,7 @@
       "localSymbols": [
         "SfxPoolItemValue",
         "SfxPoolItemSnapshot",
-        "SfxPoolItem",
-        "SfxStringItem",
-        "SfxInt16Item"
+        "SfxPoolItem"
       ],
       "omittedResponsibilities": [
         "Upstream obligations outside SfxPoolItem, DefaultItemInstanceManager::find, SfxPoolItem::getItemInstanceManager, SfxPoolItem::SfxPoolItem and the bounded SfxPoolItemValue, SfxPoolItemSnapshot, SfxPoolItem contract remain intentionally omitted."
@@ -1236,6 +1334,39 @@
         "DefaultItemInstanceManager::find",
         "SfxPoolItem::getItemInstanceManager",
         "SfxPoolItem::SfxPoolItem"
+      ]
+    },
+    {
+      "classification": "upstream-mechanism",
+      "evidence": {
+        "local": [
+          {
+            "marker": "SfxStringItem",
+            "path": "apps/office/src/svl/source/items/stritem.ts"
+          }
+        ],
+        "upstream": [
+          {
+            "marker": "SfxStringItem::Clone",
+            "path": "vendor/libreoffice-reference/svl/source/items/stritem.cxx"
+          }
+        ]
+      },
+      "localPath": "apps/office/src/svl/source/items/stritem.ts",
+      "localSymbols": [
+        "SfxStringItem"
+      ],
+      "omittedResponsibilities": [
+        "Native pooling, UNO mutation and presentation paths outside the bounded SfxStringItem value contract remain unimplemented."
+      ],
+      "preservedResponsibilities": [
+        "Implements bounded SfxStringItem construction, value, equality and clone behavior at the pinned svl/source/items/stritem.cxx owner."
+      ],
+      "status": "mapped",
+      "upstreamPath": "svl/source/items/stritem.cxx",
+      "upstreamSymbols": [
+        "SfxStringItem",
+        "SfxStringItem::Clone"
       ]
     },
     {

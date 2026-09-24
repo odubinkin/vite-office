@@ -3,7 +3,8 @@
 import { describe, expect, it } from "vitest";
 
 import { SfxRequest } from "../../sfx2/source/control/request";
-import { SfxStringItem, SfxUnoAnyItem } from "../../svl/source/items/poolitem";
+import { SfxStringItem } from "../../svl/source/items/stritem";
+import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
 import generated from "../uiconfig/swriter/writer-ui.generated.json" with { type: "json" };
 import {
   createWriterInterface,

@@ -22,11 +22,9 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
-import {
-  SfxBoolItem,
-  SfxStringItem,
-  type SfxPoolItem,
-} from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { createWriterCharacterItemSet } from "../../core/txtnode/txatbase";
 import {
   FastAttributeList,

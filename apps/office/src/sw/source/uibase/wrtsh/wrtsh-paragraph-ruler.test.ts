@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { SfxBoolItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import {
   SvxLineSpacingItem,
   SvxTabAdjust,

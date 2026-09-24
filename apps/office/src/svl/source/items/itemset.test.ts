@@ -10,13 +10,10 @@ import {
 import { SvxAdjust, SvxAdjustItem } from "../../../editeng/source/items/paraitem";
 import { SfxItemPool } from "./itempool";
 import { SfxItemSet, SfxItemState } from "./itemset";
-import {
-  SfxBoolItem,
-  SfxInt16Item,
-  SfxInt16ListItem,
-  SfxStringItem,
-  SfxUnoAnyItem,
-} from "./poolitem";
+import { SfxBoolItem } from "./cenumitm";
+import { SfxInt16Item } from "./intitem";
+import { SfxStringItem } from "./stritem";
+import { SfxUnoAnyItem } from "../../../sfx2/source/view/frame";
 
 /** Registers two simple test WhichIds. @returns Prepared item pool. */
 function createPool(): SfxItemPool {
@@ -44,24 +41,6 @@ function throwing(operation: () => unknown): () => unknown {
 }
 
 describe("SfxPoolItem values" /** Groups concrete item value-object tests. @returns Nothing; Vitest registers tests. */, function definePoolItemTests(): void {
-  it("normalizes, clones, and validates ordered tab positions", /** Verifies the tab-stop value contract. @returns Nothing. */ () => {
-    const item = new SfxInt16ListItem(69, [1440, 720, 720]);
-    expect(item.GetValues()).toEqual([720, 1440]);
-    expect(item.QueryValue()).toEqual([720, 1440]);
-    expect(item.Clone()).not.toBe(item);
-    expect(item.Clone().equals(item)).toBe(true);
-    expect(item.equals(new SfxInt16ListItem(70, [720, 1440]))).toBe(false);
-    expect(item.equals(new SfxInt16ListItem(69, [720]))).toBe(false);
-    expect(item.equals(new SfxInt16ListItem(69, [720, 1450]))).toBe(false);
-    expect(item.equals(new SfxInt16Item(69, 720))).toBe(false);
-    for (const invalid of [-1, 32768, 1.5])
-      expect(
-        throwing(
-          /** Creates an invalid tab item. @returns Invalid item. */ () =>
-            new SfxInt16ListItem(69, [invalid]),
-        ),
-      ).toThrow("Tab positions");
-  });
   it("validates, clones, compares, and serializes string and integer items" /** Covers primitive pooled-item contracts and bounds. @returns Nothing; assertions inspect values. */, function verifiesPrimitiveItems(): void {
     const stringItem = new SfxStringItem(1, "value");
     const integerItem = new SfxInt16Item(2, 12);
@@ -87,6 +66,10 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
       which: 2,
     });
     expect(new SfxStringItem(0, "request return").Which()).toBe(0);
+    expect(new SfxStringItem().QueryValue()).toBe("");
+    expect(new SfxStringItem().Which()).toBe(0);
+    expect(new SfxInt16Item().QueryValue()).toBe(0);
+    expect(new SfxInt16Item().Which()).toBe(0);
     expect(new SfxUnoAnyItem(0, true).Clone().Which()).toBe(0);
     expect(
       throwing(
@@ -125,6 +108,8 @@ describe("SfxPoolItem values" /** Groups concrete item value-object tests. @retu
 
   it("implements the boolean request and state item value contract" /** Verifies boolean item cloning, values, and equality. @returns Nothing. */, () => {
     const item = new SfxBoolItem(3, true);
+    expect(new SfxBoolItem().QueryValue()).toBe(false);
+    expect(new SfxBoolItem().Which()).toBe(0);
     expect(item.GetValue()).toBe(true);
     expect(item.QueryValue()).toBe(true);
     expect(item.Clone()).not.toBe(item);

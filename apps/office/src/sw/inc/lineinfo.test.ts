@@ -8,7 +8,7 @@ import {
   encodeWriterDocument,
 } from "../browser/filter/xml/writer-document-codec";
 import { createWriterDocumentSession } from "../browser/composition/writer-module";
-import { SfxBoolItem } from "../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../svl/source/items/cenumitm";
 import { RES_LINENUMBER } from "./hintids";
 import { LineNumberPosition, SwLineNumberInfo } from "./lineinfo";
 

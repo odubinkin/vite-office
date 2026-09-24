@@ -96,7 +96,11 @@ The same table now also includes the active ODT file-command boundary.
 | --- | --- | --- |
 | `editeng/source/items/paraitem.ts` | `editeng/source/items/paraitem.cxx` | `SvxAdjustItem` paragraph-alignment value |
 | `editeng/source/items/textitem.ts` | `editeng/source/items/textitem.cxx` | `SvxWeightItem`, `SvxPostureItem`, and `SvxUnderlineItem` character values |
-| `svl/source/items/poolitem.ts` | `svl/source/items/poolitem.cxx` | Base and primitive pooled item values |
+| `svl/source/items/poolitem.ts` | `svl/source/items/poolitem.cxx` | Base pooled item identity and WhichId bounds |
+| `svl/source/items/stritem.ts` | `svl/source/items/stritem.cxx` | String pooled item values |
+| `svl/source/items/intitem.ts` | `svl/source/items/intitem.cxx` | Signed integer pooled item values |
+| `svl/source/items/cenumitm.ts` | `svl/source/items/cenumitm.cxx` | Boolean pooled item values |
+| `sfx2/source/view/frame.ts` | `sfx2/source/view/frame.cxx` | Request-scoped UNO Any item |
 | `sw/source/core/doc/doc.ts` | `sw/source/core/doc/doc.cxx`, `docnew.cxx` | Final `SwDoc` aggregate composing document managers without a parallel Writer facade |
 | `sw/source/core/doc/DocumentListsManager.ts` | `sw/source/core/doc/DocumentListsManager.cxx` | Document list and numbering-rule ownership |
 | `sw/source/core/doc/DocumentSettingManager.ts` | `sw/source/core/doc/DocumentSettingManager.cxx` | Document setting ownership |

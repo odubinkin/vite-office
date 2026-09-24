@@ -5,7 +5,8 @@ import { createSfxShell } from "../../../../sfx2/source/control/shell";
 import type { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { SfxListUndoAction, type SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SfxBoolItem, type SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import {
   SvxLineSpacingItem,
   SvxTabStop,

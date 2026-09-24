@@ -22,7 +22,8 @@ import {
   SvxPostureItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
-import { SfxBoolItem, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,

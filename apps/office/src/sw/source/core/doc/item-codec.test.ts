@@ -4,7 +4,9 @@ import { describe, expect, it } from "vitest";
 
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SfxPoolItem, SfxStringItem, SfxUnoAnyItem } from "../../../../svl/source/items/poolitem";
+import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
 import {
   decodeSfxItemSet,
   decodeSfxPoolItem,

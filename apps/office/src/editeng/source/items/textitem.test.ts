@@ -3,7 +3,7 @@
 import { describe, expect, it } from "vitest";
 import { encodeSfxPoolItem } from "../../../sw/browser/filter/xml/item-codec";
 
-import { SfxInt16Item } from "../../../svl/source/items/poolitem";
+import { SfxInt16Item } from "../../../svl/source/items/intitem";
 import {
   SvxFirstLineIndentItem,
   SvxLineSpacingItem,

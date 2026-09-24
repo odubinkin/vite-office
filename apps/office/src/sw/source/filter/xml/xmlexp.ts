@@ -21,7 +21,8 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SfxBoolItem, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   escapeXml,
   exportCharacterAttributes,

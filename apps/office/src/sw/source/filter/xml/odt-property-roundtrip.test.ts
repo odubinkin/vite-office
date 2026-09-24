@@ -10,7 +10,8 @@ import {
   SvxTabStop,
   SvxTabStopItem,
 } from "../../../../editeng/source/items/paraitem";
-import { SfxBoolItem, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_COLOR,
   RES_CHRATR_HIGHLIGHT,

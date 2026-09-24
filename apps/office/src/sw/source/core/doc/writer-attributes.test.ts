@@ -31,7 +31,9 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
-import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_PARATR_ADJUST,
   RES_MARGIN_TEXTLEFT,

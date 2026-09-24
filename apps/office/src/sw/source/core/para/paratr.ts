@@ -2,7 +2,8 @@
  * @fileoverview Reimplements the bounded Writer paragraph pool items from pinned `sw/source/core/para/paratr.cxx`.
  */
 
-import { SfxStringItem, type SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 
 /** Stores the name of the SwNumRule applied to a paragraph. */

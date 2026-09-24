@@ -1,6 +1,7 @@
 /** @fileoverview Verifies the pinned built-in Writer paragraph-style pool. */
 import { describe, expect, it } from "vitest";
-import { SfxBoolItem, SfxStringItem } from "../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../svl/source/items/cenumitm";
+import { SfxStringItem } from "../../svl/source/items/stritem";
 import {
   encodeWriterOdfStyleName,
   getWriterOdfStyleName,

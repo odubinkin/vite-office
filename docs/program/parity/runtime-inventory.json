@@ -1068,6 +1068,41 @@
       }
     },
     {
+      "path": "apps/office/src/sfx2/source/view/frame.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "dispatch",
+      "capabilityIds": [
+        "CAP-0101",
+        "CAP-0115"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/sfx2/source/view/frame.ts#SfxUnoAnyItem",
+          "vendor/libreoffice-reference/sfx2/source/view/frame.cxx#SfxUnoAnyItem::Clone",
+          "vendor/libreoffice-reference/sfx2/source/view/frame.cxx#SfxUnoAnyItem::operator==",
+          "apps/office/src/sfx2/source/control/request.test.ts#carries structured UNO arguments in SfxUnoAnyItem"
+        ],
+        "justification": "The pinned SfxUnoAnyItem always compares unequal, including to its clone; the local request item now preserves this contract. Broader class behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxUnoAnyItem"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "sfx2/source/view/frame.cxx",
+        "upstreamSymbols": [
+          "SfxUnoAnyItem",
+          "SfxUnoAnyItem::Clone",
+          "SfxUnoAnyItem::operator=="
+        ]
+      }
+    },
+    {
       "path": "apps/office/src/sfx2/source/view/viewfrm.ts",
       "classification": "upstream-mechanism",
       "state": "active",
@@ -1109,6 +1144,72 @@
           "SfxViewFrame",
           "SfxViewFrame::GetDispatcher",
           "SfxViewFrame::GetBindings"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/svl/source/items/cenumitm.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/svl/source/items/cenumitm.ts#SfxBoolItem",
+          "vendor/libreoffice-reference/svl/source/items/cenumitm.cxx#SfxBoolItem::Clone",
+          "vendor/libreoffice-reference/include/svl/eitem.hxx#SfxBoolItem",
+          "apps/office/src/svl/source/items/itemset.test.ts#validates, clones, compares, and serializes string and integer items"
+        ],
+        "justification": "Concrete SfxBoolItem value and cloning live at the matching pinned source owner; the zero/false constructor default follows include/svl/eitem.hxx. Broader class behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxBoolItem"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "svl/source/items/cenumitm.cxx",
+        "upstreamSymbols": [
+          "SfxBoolItem",
+          "SfxBoolItem::Clone"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/svl/source/items/intitem.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/svl/source/items/intitem.ts#SfxInt16Item",
+          "vendor/libreoffice-reference/svl/source/items/intitem.cxx#SfxInt16Item::Clone",
+          "vendor/libreoffice-reference/include/svl/intitem.hxx#SfxInt16Item",
+          "apps/office/src/svl/source/items/itemset.test.ts#validates, clones, compares, and serializes string and integer items"
+        ],
+        "justification": "Concrete SfxInt16Item value and cloning live at the matching pinned source owner; the zero/zero constructor default follows include/svl/intitem.hxx. Broader class behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxInt16Item"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "svl/source/items/intitem.cxx",
+        "upstreamSymbols": [
+          "SfxInt16Item",
+          "SfxInt16Item::Clone"
         ]
       }
     },
@@ -1207,9 +1308,7 @@
         "localSymbols": [
           "SfxPoolItemValue",
           "SfxPoolItemSnapshot",
-          "SfxPoolItem",
-          "SfxStringItem",
-          "SfxInt16Item"
+          "SfxPoolItem"
         ],
         "sourceResponsibility": "unverified",
         "upstreamFile": "svl/source/items/poolitem.cxx",
@@ -1218,6 +1317,39 @@
           "DefaultItemInstanceManager::find",
           "SfxPoolItem::getItemInstanceManager",
           "SfxPoolItem::SfxPoolItem"
+        ]
+      }
+    },
+    {
+      "path": "apps/office/src/svl/source/items/stritem.ts",
+      "classification": "upstream-mechanism",
+      "state": "active",
+      "suite": "shared",
+      "subsystem": "formatting-model",
+      "capabilityIds": [
+        "CAP-0112"
+      ],
+      "semantic": {
+        "behaviorStatus": "unverified",
+        "contractStatus": "unverified",
+        "defaultStatus": "unverified",
+        "divergenceClass": "none",
+        "evidence": [
+          "apps/office/src/svl/source/items/stritem.ts#SfxStringItem",
+          "vendor/libreoffice-reference/svl/source/items/stritem.cxx#SfxStringItem::Clone",
+          "vendor/libreoffice-reference/include/svl/stritem.hxx#SfxStringItem",
+          "apps/office/src/svl/source/items/itemset.test.ts#validates, clones, compares, and serializes string and integer items"
+        ],
+        "justification": "Concrete SfxStringItem value and cloning live at the matching pinned source owner; the zero/empty constructor default follows include/svl/stritem.hxx. Broader class behavior remains unverified.",
+        "knownViolations": [],
+        "localSymbols": [
+          "SfxStringItem"
+        ],
+        "sourceResponsibility": "unverified",
+        "upstreamFile": "svl/source/items/stritem.cxx",
+        "upstreamSymbols": [
+          "SfxStringItem",
+          "SfxStringItem::Clone"
         ]
       }
     },

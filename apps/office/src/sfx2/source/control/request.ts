@@ -3,13 +3,11 @@
  * `sfx2/source/control/request.cxx`.
  */
 
-import {
-  SfxBoolItem,
-  SfxInt16Item,
-  SfxPoolItem,
-  SfxStringItem,
-  SfxUnoAnyItem,
-} from "../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../svl/source/items/intitem";
+import { SfxPoolItem } from "../../../svl/source/items/poolitem";
+import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { SfxUnoAnyItem } from "../view/frame";
 
 /** One slot invocation with item arguments, completion state, and an optional return item. */
 export class SfxRequest {

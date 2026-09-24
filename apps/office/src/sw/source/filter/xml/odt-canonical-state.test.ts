@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { RES_CHRATR_WEIGHT, RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { createWriterDocument } from "../../core/doc/doc";

@@ -2,7 +2,9 @@
 
 import { describe, expect, it } from "vitest";
 
-import { SfxBoolItem, SfxStringItem, SfxUnoAnyItem } from "../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
+import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { SfxUnoAnyItem } from "../view/frame";
 import { SfxRequest } from "./request";
 
 describe("SfxRequest", /** Exercises request lifecycle and validation. @returns Nothing. */ () => {
@@ -19,13 +21,14 @@ describe("SfxRequest", /** Exercises request lifecycle and validation. @returns 
     expect(request.GetReturnValue()).toBe(result);
   });
 
-  it("carries structured UNO arguments in SfxUnoAnyItem", /** Verifies Any cloning and identity semantics. @returns Nothing. */ () => {
+  it("carries structured UNO arguments in SfxUnoAnyItem", /** Verifies pinned Any cloning and non-comparable semantics. @returns Nothing. */ () => {
     const value = { Name: "CharFontName", Value: "Noto Serif" };
     const item = new SfxUnoAnyItem(55, value);
     expect(item.GetValue()).toBe(value);
     expect(item.QueryValue()).toBe(value);
     expect(item.Clone()).not.toBe(item);
-    expect(item.Clone().equals(item)).toBe(true);
+    expect(item.Clone().equals(item)).toBe(false);
+    expect(item.equals(item)).toBe(false);
     expect(item.equals(new SfxUnoAnyItem(55, {}))).toBe(false);
   });
 

@@ -2,7 +2,8 @@
 
 import { SfxInterface } from "../../sfx2/source/control/objface";
 import type { SfxSlotDefinition } from "../../sfx2/source/control/msg";
-import { SfxUnoAnyItem, type SfxPoolItem } from "../../svl/source/items/poolitem";
+import { SfxUnoAnyItem } from "../../sfx2/source/view/frame";
+import { type SfxPoolItem } from "../../svl/source/items/poolitem";
 import type { WriterHyperlink } from "../source/core/txtnode/fmtinfmt";
 import { getWriterCommandResource } from "../uiconfig/swriter/writer-command-resources";
 import generated from "../uiconfig/swriter/writer-ui.generated.json" with { type: "json" };

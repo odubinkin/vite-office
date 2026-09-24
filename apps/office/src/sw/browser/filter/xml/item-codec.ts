@@ -5,11 +5,8 @@
 
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import {
-  SfxUnoAnyItem,
-  type SfxPoolItem,
-  type SfxPoolItemSnapshot,
-} from "../../../../svl/source/items/poolitem";
+import { SfxUnoAnyItem } from "../../../../sfx2/source/view/frame";
+import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import {
   normalizeWriterHyperlink,
   SwFormatINetFormat,

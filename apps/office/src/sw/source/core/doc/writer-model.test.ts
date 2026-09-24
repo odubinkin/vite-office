@@ -12,7 +12,7 @@ import {
 
 import { FontWeight, SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SfxInt16Item } from "../../../../svl/source/items/poolitem";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
   RES_CHRATR_WEIGHT,
   RES_TXTATR_INETFMT,

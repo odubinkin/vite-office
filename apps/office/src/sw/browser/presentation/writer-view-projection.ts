@@ -28,8 +28,8 @@ import {
   SvxPostureItem,
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
-import { SfxStringItem } from "../../../svl/source/items/poolitem";
-import { SfxBoolItem } from "../../../svl/source/items/poolitem";
+import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import {
   RES_CHRATR_COLOR,
   RES_CHRATR_FONT,

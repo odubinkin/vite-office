@@ -2,7 +2,9 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import { SfxBoolItem, SfxInt16Item, SfxStringItem } from "../../../svl/source/items/poolitem";
+import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../svl/source/items/intitem";
+import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { SfxDispatcher } from "./dispatch";
 import { SfxInterface } from "./objface";
 import { SfxRequest } from "./request";
