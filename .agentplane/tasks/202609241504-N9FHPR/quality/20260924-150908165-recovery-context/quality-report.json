@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202609241504-N9FHPR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-09-24T15:09:08.165Z",
+  "verdict": "pass",
+  "summary": "The plan now requires source-backed upstream ODT fixture tests for every behavior phase and preserves separate synthetic and UI verification.",
+  "evaluated_sha": "675cc431ddfeaec7dc650cd852733f4289355071",
+  "blueprint_digest": "756380676220f8c30229b50a9ba7098c66a848741394a6b7d7cbc0bc19623ab6",
+  "findings": [
+    "Candidate matrix covers all seven phases with existing and verified pinned fixture paths, semantic assertions, source-test mapping, and provenance gates.",
+    "The soft page-break candidate tdf94882.odt was confirmed to contain the element and to be referenced by odfimport.cxx."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202609241504-N9FHPR/README.md",
+    "docs/program/certification-odt-import-plan.md",
+    "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
+    "Pinned fixture path check: eleven paths exist",
+    "node .agentplane/policy/check-routing.mjs: pass",
+    "ap doctor: OK"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Candidate ODTs may contain unrelated features; each phase must inspect its selected file before adding a runnable test."
+  ]
+}

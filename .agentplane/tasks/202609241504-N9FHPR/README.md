@@ -4,7 +4,7 @@ title: "Add upstream ODT fixture tests to certification plan"
 status: "DOING"
 priority: "med"
 owner: "DOCS"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -22,6 +22,27 @@ verification:
   updated_by: "DOCS"
   note: "Updated plan requires phase-mapped pinned upstream ODT fixture tests with semantic round trips, provenance, diagnostic assertions, and separate UI tests; paths and docs checks pass."
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-09-24T15:09:08.165Z"
+  updated_by: "EVALUATOR"
+  note: "The plan now requires source-backed upstream ODT fixture tests for every behavior phase and preserves separate synthetic and UI verification."
+  evaluated_sha: "675cc431ddfeaec7dc650cd852733f4289355071"
+  blueprint_digest: "756380676220f8c30229b50a9ba7098c66a848741394a6b7d7cbc0bc19623ab6"
+  evidence_refs:
+    - ".agentplane/tasks/202609241504-N9FHPR/README.md"
+    - ".agentplane/tasks/202609241504-N9FHPR/quality/20260924-150908165-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202609241504-N9FHPR/quality/20260924-150908165-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202609241504-N9FHPR/quality/20260924-150908165-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202609241504-N9FHPR/blueprint/resolved-snapshot.json"
+    - "docs/program/certification-odt-import-plan.md"
+    - "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts"
+    - "Pinned fixture path check: eleven paths exist"
+    - "node .agentplane/policy/check-routing.mjs: pass"
+    - "ap doctor: OK"
+  findings:
+    - "Candidate matrix covers all seven phases with existing and verified pinned fixture paths, semantic assertions, source-test mapping, and provenance gates."
+    - "The soft page-break candidate tdf94882.odt was confirmed to contain the element and to be referenced by odfimport.cxx."
 commit: null
 comments:
   -
